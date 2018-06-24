@@ -1,6 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "toolcore:blocks/flax_plant2"
-  }
-}

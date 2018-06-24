@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Getter(value = AccessLevel.PUBLIC, onMethod = @__({@Nonnull}))
+@Getter(value = AccessLevel.PUBLIC)
 public abstract class ItemPart {
 
     protected static final ResourceLocation BLANK_TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "items/blank");
@@ -272,7 +272,7 @@ public abstract class ItemPart {
         JsonElement elementStats = json.get("stats");
         if (elementStats.isJsonArray()) {
             JsonArray array = elementStats.getAsJsonArray();
-            array.forEach(element -> {
+            for (JsonElement element : array) {
                 JsonObject obj = element.getAsJsonObject();
                 String name = obj.has("name") ? JsonUtils.getString(obj, "name") : "";
                 ItemStat stat = ItemStat.ALL_STATS.get(name);
@@ -283,7 +283,7 @@ public abstract class ItemPart {
                     String id = "mat_" + this.getUnlocalizedName() + "_" + stat.getUnlocalizedName() + (this.stats.get(stat).size() + 1);
                     this.stats.put(stat, new StatInstance(id, value, op));
                 }
-            });
+            }
         }
 
         // Read crafting item data

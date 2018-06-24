@@ -22,6 +22,7 @@ public class ModRecipes implements IRegistrationHandler<IRecipe> {
         // Finish loading material data.
         // Pre-init is too early, init is too late... We need items to be registered, but not recipes.
         PartRegistry.getValues().forEach(ItemPart::init);
+        PartRegistry.resetVisiblePartCaches();
 
         RecipeMaker recipes = reg.recipes;
         for (ICoreItem item : ModItems.toolClasses.values()) {

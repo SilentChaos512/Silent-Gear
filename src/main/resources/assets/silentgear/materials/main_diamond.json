@@ -1,0 +1,41 @@
+{
+    "type": "main",
+    "stats": [
+        {"name": "durability",      "value": 1561},
+        {"name": "enchantability",  "value":   10},
+        {"name": "harvest_level",   "value":    3},
+        {"name": "harvest_speed",   "value":    8},
+        {"name": "melee_damage",    "value":    3},
+        {"name": "magic_damage",    "value":    1},
+        {"name": "attack_speed",    "value":  0.0},
+        {"name": "armor",           "value":   20},
+        {"name": "armor_toughness", "value":    8},
+        {"name": "magic_armor",     "value":    4},
+        {"name": "ranged_damage",   "value":    2},
+        {"name": "ranged_speed",    "value": -0.2},
+        {"name": "rarity",          "value":   40}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "minecraft:diamond",
+            "data": 0,
+            "oredict": "gemDiamond"
+        },
+        "small": {
+            "item": "silentgear:crafting_item",
+            "data": 4,
+            "oredict": "nuggetDiamond"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "diamond",
+        "texture_color": "FFFFFF",
+        "broken_color": "33EBCB"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 3,
+        "tool_blacklist": []
+    }
+}

@@ -59,8 +59,8 @@ public class Config extends ConfigBase {
     }
 
     public void onPreInit(FMLPreInitializationEvent event) {
-        this.directory = new File(event.getModConfigurationDirectory().getPath(), "silentchaos512/toolcore/");
-        config = new Configuration(new File(directory.getPath(), "toolcore.cfg"));
+        this.directory = new File(event.getModConfigurationDirectory().getPath(), "silentchaos512/" + SilentGear.MOD_ID + "/");
+        config = new Configuration(new File(directory.getPath(), SilentGear.MOD_ID + ".cfg"));
         new File(directory.getPath(), "materials/").mkdirs();
         new File(directory.getPath(), "equipment/").mkdirs();
     }

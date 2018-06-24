@@ -1,8 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "toolcore:items/upgrade_base",
-    "layer1": "toolcore:items/upgrade_diamond"
-  }
-}
-

@@ -139,4 +139,9 @@ public final class PartRegistry {
         }
         return visibleRods;
     }
+
+    public static void resetVisiblePartCaches() {
+        visibleMains = null;
+        visibleRods = null;
+    }
 }

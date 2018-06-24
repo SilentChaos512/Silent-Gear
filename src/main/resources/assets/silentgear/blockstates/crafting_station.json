@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "silentgear:crafting_station",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "silentgear:crafting_station"
+    },
+    "facing=east": {
+      "model": "silentgear:crafting_station",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "silentgear:crafting_station",
+      "y": 90
+    }
+  }
+}

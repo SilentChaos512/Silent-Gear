@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "silentgear:blocks/flax_plant3"
+  }
+}

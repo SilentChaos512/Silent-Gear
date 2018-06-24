@@ -1,0 +1,32 @@
+{
+    "type": "rod",
+    "stats": [
+        {"name": "durability",      "value":  0.1, "op": "MUL2"},
+        {"name": "enchantability",  "value":  0.1, "op": "MUL2"},
+        {"name": "harvest_level",   "value":    0, "op": "ADD"},
+        {"name": "harvest_speed",   "value": -0.1, "op": "MUL2"},
+        {"name": "melee_damage",    "value":  0.2, "op": "MUL2"},
+        {"name": "magic_damage",    "value": -0.2, "op": "MUL2"},
+        {"name": "attack_speed",    "value":  0.0, "op": "ADD"},
+        {"name": "ranged_damage",   "value":  0.0, "op": "MUL2"},
+        {"name": "ranged_speed",    "value":  0.0, "op": "MUL2"},
+        {"name": "rarity",          "value":    5}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "silentgear:crafting_item",
+            "data": 2,
+            "oredict": "stickStone"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "stone",
+        "texture_color": "ffffff"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 1,
+        "tool_blacklist": []
+    }
+}
