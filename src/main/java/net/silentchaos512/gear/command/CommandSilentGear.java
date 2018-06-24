@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 
 import javax.annotation.Nullable;
@@ -17,7 +18,7 @@ import java.util.List;
 public class CommandSilentGear extends CommandBase {
 
     enum SubCommand {
-        RESET_MODEL_CACHES;
+        RESET_MODEL_CACHES, REGISTRY_ANALYZE;
 
         @Nullable
         static SubCommand fromArgs(String arg) {
@@ -62,6 +63,12 @@ public class CommandSilentGear extends CommandBase {
             int total = EquipmentClientHelper.modelCache.size();
             EquipmentClientHelper.modelCache.clear();
             tell(sender, "Reset gear model caches, removed " + total + " objects", false);
+        } else if (subCommand == SubCommand.REGISTRY_ANALYZE) {
+            tell(sender, "PartRegistry.all: " + PartRegistry.getValues().size(), false);
+            tell(sender, "PartRegistry.mains: " + PartRegistry.getMains().size(), false);
+            tell(sender, "PartRegistry.rods: " + PartRegistry.getRods().size(), false);
+            tell(sender, "PartRegistry.visibleMains: " + PartRegistry.getVisibleMains().size(), false);
+            tell(sender, "PartRegistry.visibleRods: " + PartRegistry.getVisibleRods().size(), false);
         }
     }
 

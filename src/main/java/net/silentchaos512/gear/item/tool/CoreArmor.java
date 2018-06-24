@@ -12,18 +12,24 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.gear.util.EquipmentData;
 import net.silentchaos512.gear.util.EquipmentHelper;
 import net.silentchaos512.lib.item.ItemArmorSL;
+import net.silentchaos512.lib.registry.RecipeMaker;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -138,9 +144,30 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
     }
 
     @Override
+    public void addRecipes(RecipeMaker recipes) {
+        Ingredient blueprint = new Ingredient(ModItems.blueprint.getStack(getItemClassName())) {
+            @Override
+            public boolean apply(ItemStack stack) {
+                return stack.getItem() instanceof IBlueprint && ((IBlueprint) stack.getItem()).getOutputInfo(stack).gear == getItem();
+            }
+        };
+        for (ItemPartMain part : PartRegistry.getVisibleMains()) {
+            ItemStack result = construct(this, part.getCraftingStack());
+            Object[] inputs = new Object[getConfig().getHeadCount() + 1];
+            inputs[0] = blueprint;
+            for (int i = 1; i < inputs.length; ++i) {
+                inputs[i] = part.getCraftingStack();
+            }
+            String recipeKey = getItemClassName() + "_example_" + part.getKey().toString().replaceAll(":", "_");
+            recipes.addShapelessOre(recipeKey, result, inputs);
+        }
+    }
+
+    @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        // TODO
-        super.getSubItems(tab, subItems);
+        if (this.isInCreativeTab(tab))
+            for (ItemPartMain part : PartRegistry.getVisibleMains())
+                subItems.add(construct(this, part.getCraftingStack()));
     }
 
     //endregion
