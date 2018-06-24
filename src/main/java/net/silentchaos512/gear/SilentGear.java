@@ -12,7 +12,9 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.silentchaos512.gear.command.CommandSilentGear;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.network.MessageExtraBlockBreak;
 import net.silentchaos512.lib.SilentLib;
@@ -80,5 +82,11 @@ public class SilentGear {
     public void postInit(FMLPostInitializationEvent event) {
 
         proxy.postInit(registry, event);
+    }
+
+    @EventHandler
+    public void onServerLoad(FMLServerStartingEvent event) {
+
+        event.registerServerCommand(new CommandSilentGear());
     }
 }

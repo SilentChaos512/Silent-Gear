@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
@@ -25,17 +26,14 @@ import net.silentchaos512.gear.util.EquipmentHelper;
 import net.silentchaos512.lib.item.ItemArmorSL;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CoreArmor extends ItemArmorSL implements ICoreArmor {
 
     // Just using my own UUIDs, ItemArmor can keep being stingy.
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("cfea1f82-ab07-40ed-8384-045446707a98"), UUID.fromString("9f441293-6f6e-461f-a3e2-3cad0c06f3a5"), UUID.fromString("4c90545f-c314-4db4-8a60-dac8b3a132a2"), UUID.fromString("f96e4ac9-ab1d-423b-8392-d820d12fc454")};
     // sum = 1, starts with boots
-    private static final float[] ABSORPTION_RATIO_BY_SLOT = { 0.175f, 0.3f, 0.4f, 0.125f };
+    private static final float[] ABSORPTION_RATIO_BY_SLOT = {0.175f, 0.3f, 0.4f, 0.125f};
     // Same values as in ItemArmor.
     private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
 
@@ -149,11 +147,22 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
 
     //region Client-side methods
 
-    @Nullable
+    private Map<ResourceLocation, String> textureCache = new HashMap<>();
+
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        // FIXME
-        return super.getArmorTexture(stack, entity, slot, type);
+        ResourceLocation key = getPrimaryPart(stack).getKey();
+        if (!textureCache.containsKey(key)) {
+            String str = key.getResourceDomain() + ":textures/armor/" + key.getResourcePath().replaceFirst("^main_", "")
+                    + (slot == EntityEquipmentSlot.LEGS ? "_2" : "_1") + ".png";
+            textureCache.put(key, str);
+        }
+        return textureCache.get(key);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return EquipmentHelper.getItemStackDisplayName(stack);
     }
 
     @Override

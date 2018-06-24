@@ -221,13 +221,7 @@ public class ToolModel implements IModel {
 
         @Override
         public boolean accepts(@Nonnull ResourceLocation modelLocation) {
-            boolean matchesPath = false;
-            for (String toolClass : ModItems.toolClasses.keySet()) {
-                if (modelLocation.getResourcePath().equals(toolClass)) {
-                    matchesPath = true;
-                    break;
-                }
-            }
+            boolean matchesPath = ModItems.toolClasses.keySet().stream().anyMatch(s -> modelLocation.getResourcePath().equals(s));
             return modelLocation.getResourceDomain().equals(SilentGear.MOD_ID) && matchesPath;
         }
 
@@ -266,13 +260,13 @@ public class ToolModel implements IModel {
             BowPartString partBowstring = itemTool.getBowstringPart(stack);
 
             int animationFrame = getAnimationFrame(stack, world, entity);
-            String key = EquipmentClientHelper.getModelKey(stack, animationFrame);
+            String key = itemTool.getModelKey(stack, animationFrame);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
 
             // DEBUG:
             // model.cache.clear();
 
-            if (!model.cache.containsKey(key)) {
+            if (!EquipmentClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 // Populate the map builder with textures, function handles null checks
                 processTexture(stack, toolClass, "head", partHead, animationFrame, isBroken, builder);
@@ -285,17 +279,17 @@ public class ToolModel implements IModel {
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
-                model.cache.put(key, bakedModel);
+                EquipmentClientHelper.modelCache.put(key, bakedModel);
 
                 // Color cache
-                ColorHandlers.toolColorCache.put(key, Arrays.asList(partRod, partHead, partGuard, partTip, partBowstring).stream()
+                ColorHandlers.gearColorCache.put(key, Arrays.asList(partRod, partHead, partGuard, partTip, partBowstring).stream()
                         .filter(Objects::nonNull)
                         .map(part -> part.getColor(stack, animationFrame)).toArray(Integer[]::new));
 
                 return bakedModel;
             }
 
-            return model.cache.get(key);
+            return EquipmentClientHelper.modelCache.get(key);
         }
 
         private void processTexture(ItemStack stack, String toolClass, String partPosition, ItemPart part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
@@ -310,6 +304,7 @@ public class ToolModel implements IModel {
 
                 if (texture != null)
                     builder.put(partPosition, texture.toString());
+                SilentGear.log.debug(texture);
             }
         }
 
@@ -331,10 +326,13 @@ public class ToolModel implements IModel {
         }
     }
 
-    private static final class Baked extends AbstractToolModel {
+    public static final class Baked extends AbstractToolModel {
+
+        public static Baked instance;
 
         public Baked(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format, ImmutableMap<TransformType, TRSRTransformation> transforms, Map<String, IBakedModel> cache) {
             super(parent, immutableList, format, transforms, cache);
+            instance = this;
         }
 
         @Nonnull

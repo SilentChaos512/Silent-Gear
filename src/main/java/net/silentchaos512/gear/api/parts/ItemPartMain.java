@@ -16,8 +16,9 @@ public final class ItemPartMain extends ItemPart {
 
     public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame, String subtype) {
         String frameStr = "bow".equals(toolClass) && animationFrame == 3 ? "_3" : "";
-        // items/toolClass/subtype_suffix
-        return new ResourceLocation(this.key.getResourceDomain(), "items/" + toolClass + "/" + subtype + "_" + this.textureSuffix + frameStr);
+        String subtypePrefix = subtype + (subtype.isEmpty() ? "" : "_");
+        String path = "items/" + toolClass + "/" + subtypePrefix + this.textureSuffix + frameStr;
+        return new ResourceLocation(this.key.getResourceDomain(), path);
     }
 
     @Override

@@ -21,7 +21,6 @@ import java.util.Map;
 
 public abstract class AbstractToolModel extends LayeredBakedModel {
 
-    protected final Map<String, IBakedModel> cache;
     protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 
     public AbstractToolModel(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format,
@@ -31,7 +30,6 @@ public abstract class AbstractToolModel extends LayeredBakedModel {
         super(parent, immutableList, format);
 
         this.transforms = itemTransforms();
-        this.cache = cache;
     }
 
     @Nonnull

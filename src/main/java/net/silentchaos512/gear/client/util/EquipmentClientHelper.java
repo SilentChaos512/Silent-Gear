@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.client.util;
 
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,12 +23,15 @@ import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.LocalizationHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class EquipmentClientHelper {
+
+    public static Map<String, IBakedModel> modelCache = new HashMap<>();
 
     public static void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
 
@@ -52,7 +56,7 @@ public class EquipmentClientHelper {
             TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
             tooltip.add("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue)));
 
-            if (item instanceof ICoreTool && flag.isAdvanced()) {
+            if (flag.isAdvanced()) {
                 // ICoreTool itemTool = (ICoreTool) item;
                 // tooltip.add(itemTool.getItemClassName());
                 NBTTagCompound tagCompound = StackHelper.getTagCompound(stack, true);
@@ -129,6 +133,7 @@ public class EquipmentClientHelper {
         return map;
     }
 
+    @Deprecated
     public static String getModelKey(ItemStack stack, int animationFrame) {
 
         if (!(stack.getItem() instanceof ICoreItem))

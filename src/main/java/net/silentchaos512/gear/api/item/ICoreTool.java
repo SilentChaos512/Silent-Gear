@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.*;
@@ -12,10 +13,7 @@ import net.silentchaos512.gear.util.EquipmentData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public interface ICoreTool extends ICoreItem {
 
@@ -132,5 +130,20 @@ public interface ICoreTool extends ICoreItem {
         boolean rodCheck = config.getRodCount() == 0 || (!rod.isEmpty() && config.getRodCount() == rodCount);
         boolean bowstringCheck = config.getBowstringCount() == 0 || (!bowstring.isEmpty() && config.getBowstringCount() == bowstringCount);
         return headCheck && rodCheck && bowstringCheck && tipCount <= 1 && otherCount <= 1;
+    }
+
+    @Override
+    default ItemPart[] getRenderParts(ItemStack stack) {
+        ItemPart partHead = getPrimaryHeadPart(stack);
+        ItemPart partGuard = hasSwordGuard() ? getSecondaryPart(stack) : null;
+        ItemPart partRod = getRodPart(stack);
+        ItemPart partTip = getTipPart(stack);
+        ItemPart partBowstring = getBowstringPart(stack);
+        List<ItemPart> list = Lists.newArrayList(partHead, partGuard, partRod, partTip, partBowstring);
+        return list.stream().filter(Objects::nonNull).toArray(ItemPart[]::new);
+    }
+
+    default boolean hasSwordGuard() {
+        return "sword".equals(getItemClassName());
     }
 }

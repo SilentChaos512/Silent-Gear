@@ -21,6 +21,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.ItemPartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 
 import javax.annotation.Nonnull;
@@ -44,7 +45,7 @@ public class ToolHeadModel implements IModel {
         this.textureGuard = null;
     }
 
-    public ToolHeadModel(ResourceLocation textureHead, ResourceLocation textureGuard) {
+    public ToolHeadModel(@Nullable ResourceLocation textureHead, @Nullable ResourceLocation textureGuard) {
         this.textureHead = textureHead;
         this.textureGuard = textureGuard;
     }
@@ -173,10 +174,10 @@ public class ToolHeadModel implements IModel {
             ItemPartMain primaryPart = ModItems.toolHead.getPrimaryPart(stack);
             ItemPartMain secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
 
-            String key = toolClass + "|" + (primaryPart == null ? "null" : primaryPart.getModelIndex(0))
+            String key = toolClass +"_head|" + (primaryPart == null ? "null" : primaryPart.getModelIndex(0))
                     + (secondaryPart == null ? "" : "|" + secondaryPart.getModelIndex(0));
 
-            if (!model.cache.containsKey(key)) {
+            if (!EquipmentClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 ResourceLocation textureHead = primaryPart == null ? null : primaryPart.getTexture(stack, toolClass, 0, "head");
                 ResourceLocation textureGuard = secondaryPart == null ? null : secondaryPart.getTexture(stack, toolClass, 0, "guard");
@@ -190,18 +191,21 @@ public class ToolHeadModel implements IModel {
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
-                model.cache.put(key, bakedModel);
+                EquipmentClientHelper.modelCache.put(key, bakedModel);
                 return bakedModel;
             }
 
-            return model.cache.get(key);
+            return EquipmentClientHelper.modelCache.get(key);
         }
     }
 
-    private static final class Baked extends AbstractToolModel {
+    public static final class Baked extends AbstractToolModel {
+
+        public static Baked instance;
 
         public Baked(IModel parent, ImmutableList<BakedQuad> quads, VertexFormat format, ImmutableMap<TransformType, TRSRTransformation> transforms, Map<String, IBakedModel> cache) {
             super(parent, buildQuadList(quads), format, transforms, cache);
+            instance = this;
         }
 
         @Override

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.item;
 
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.ItemPartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -34,5 +35,10 @@ public interface ICoreArmor extends ICoreItem {
         if (data != null)
             return (ItemPartMain) data.part;
         return ModMaterials.mainWood;
+    }
+
+    @Override
+    default ItemPart[] getRenderParts(ItemStack stack) {
+        return new ItemPart[] {getPrimaryPart(stack)};
     }
 }

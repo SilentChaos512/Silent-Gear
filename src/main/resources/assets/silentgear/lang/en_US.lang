@@ -82,6 +82,20 @@ item.silentgear:shovel.nameProper=%s Shovel
 item.silentgear:sword.name=Sword
 item.silentgear:sword.nameProper=%s Sword
 
+# Armor
+
+item.silentgear:helmet.name=Helmet
+item.silentgear:helmet.nameProper=%s Helmet
+
+item.silentgear:chestplate.name=Chestplate
+item.silentgear:chestplate.nameProper=%s Chestplate
+
+item.silentgear:leggings.name=Leggings
+item.silentgear:leggings.nameProper=%s Leggings
+
+item.silentgear:boots.name=Boots
+item.silentgear:boots.nameProper=%s Boots
+
 
 
 #########

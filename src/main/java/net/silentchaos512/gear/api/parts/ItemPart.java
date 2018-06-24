@@ -213,6 +213,7 @@ public abstract class ItemPart {
 
     @Override
     public String toString() {
+        // TODO: Update ItemPart#toString
         String str = "ItemPart{";
         str += "Key: " + this.key + ", ";
         str += "CraftingStack: " + this.craftingStack + ", ";
@@ -310,25 +311,25 @@ public abstract class ItemPart {
         JsonElement elementDisplay = json.get("display");
         if (elementDisplay.isJsonObject()) {
             JsonObject obj = elementDisplay.getAsJsonObject();
-            if (obj.has("hidden"))
-                this.hidden = JsonUtils.getBoolean(obj, "hidden");
-            if (obj.has("texture_color"))
-                this.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
-            if (obj.has("broken_color"))
-                this.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
-            if (obj.has("name_color"))
-                this.nameColor = TextFormatting.getValueByName(obj.get("name_color").getAsString());
-        }
-
-        // Availability (enabled, tier, blacklisting)
-        JsonElement elementAvailability = json.get("availability");
-        if (elementAvailability.isJsonObject()) {
-            JsonObject obj = elementAvailability.getAsJsonObject();
-            this.enabled = obj.has("enabled") ? JsonUtils.getBoolean(obj, "enabled") : this.enabled;
-            this.tier = obj.has("tier") ? JsonUtils.getInt(obj, "tier") : this.tier;
-            // TODO: blacklist
-        }
+        if (obj.has("hidden"))
+            this.hidden = JsonUtils.getBoolean(obj, "hidden");
+        if (obj.has("texture_color"))
+            this.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
+        if (obj.has("broken_color"))
+            this.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
+        if (obj.has("name_color"))
+            this.nameColor = TextFormatting.getValueByName(obj.get("name_color").getAsString());
     }
+
+    // Availability (enabled, tier, blacklisting)
+    JsonElement elementAvailability = json.get("availability");
+        if (elementAvailability.isJsonObject()) {
+        JsonObject obj = elementAvailability.getAsJsonObject();
+        this.enabled = obj.has("enabled") ? JsonUtils.getBoolean(obj, "enabled") : this.enabled;
+        this.tier = obj.has("tier") ? JsonUtils.getInt(obj, "tier") : this.tier;
+        // TODO: blacklist
+    }
+}
 
     protected int readColorCode(String str) {
         try {

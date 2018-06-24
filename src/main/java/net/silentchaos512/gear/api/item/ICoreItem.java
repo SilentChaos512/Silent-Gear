@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.EquipmentData;
@@ -18,6 +19,8 @@ import java.util.Set;
  * Interface for all equipment items, including tools and armor.
  */
 public interface ICoreItem extends IStatItem {
+
+    //region Item properties and construction
 
     default ItemStack construct(Item item, ItemStack... materials) {
 
@@ -44,16 +47,16 @@ public interface ICoreItem extends IStatItem {
         return null;
     }
 
+    // TODO: Rename to getGearClass
     default String getItemClassName() {
 
         ResourceLocation registryName = getItem().getRegistryName();
         return registryName == null ? "unknown" : registryName.getResourcePath();
     }
 
-    default int getAnimationFrames() {
+    //endregion
 
-        return 1;
-    }
+    //region Stats and config
 
     @Override
     default float getStat(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
@@ -73,4 +76,28 @@ public interface ICoreItem extends IStatItem {
     ConfigOptionEquipment getConfig();
 
     boolean matchesRecipe(@Nonnull Collection<ItemStack> parts);
+
+    //endregion
+
+    //region Client-side stuff
+
+    default int getAnimationFrames() {
+
+        return 1;
+    }
+
+    default String getModelKey(int animationFrame, ItemPart... parts) {
+        StringBuilder builder = new StringBuilder(getItemClassName());
+        for (ItemPart part : parts)
+            builder.append("|").append(part == null ? "n" : part.getModelIndex(animationFrame));
+        return builder.toString();
+    }
+
+    default String getModelKey(ItemStack stack, int animationFrame) {
+        return getModelKey(animationFrame, getRenderParts(stack));
+    }
+
+    ItemPart[] getRenderParts(ItemStack stack);
+
+    //endregion
 }
