@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "toolcore:items/blueprint_book"
+  }
+}
+

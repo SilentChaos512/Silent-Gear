@@ -1,0 +1,36 @@
+{
+    "type": "main",
+    "stats": [
+        {"name": "durability",      "value":  59},
+        {"name": "enchantability",  "value":  15},
+        {"name": "harvest_level",   "value":   0},
+        {"name": "harvest_speed",   "value":   2},
+        {"name": "melee_damage",    "value":   0},
+        {"name": "magic_damage",    "value":   0},
+        {"name": "attack_speed",    "value": 0.0},
+        {"name": "armor",           "value":   7},
+        {"name": "armor_toughness", "value":   0},
+        {"name": "magic_armor",     "value":   1},
+        {"name": "ranged_damage",   "value":   0},
+        {"name": "ranged_speed",    "value": 0.0},
+        {"name": "rarity",          "value":   0}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "minecraft:planks",
+            "data": 0,
+            "oredict": "plankWood"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "wood",
+        "texture_color": "FFFFFF",
+        "broken_color": "866526"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 0,
+        "tool_blacklist": []
+    }
+}

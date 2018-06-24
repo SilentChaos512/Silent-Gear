@@ -1,0 +1,31 @@
+{
+    "type": "tip",
+    "stats": [
+        {"name": "durability",      "value": 512, "op": "ADD"},
+        {"name": "enchantability",  "value":   2, "op": "ADD"},
+        {"name": "harvest_level",   "value":   2, "op": "MAX"},
+        {"name": "harvest_speed",   "value": 2.0, "op": "ADD"},
+        {"name": "melee_damage",    "value": 1.0, "op": "ADD"},
+        {"name": "magic_damage",    "value": 2.0, "op": "ADD"},
+        {"name": "attack_speed",    "value": 0.0, "op": "ADD"},
+        {"name": "ranged_damage",   "value": 1.0, "op": "ADD"},
+        {"name": "ranged_speed",    "value": 0.0, "op": "ADD"},
+        {"name": "rarity",          "value":  17}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "toolcore:tip_upgrade",
+            "data": 3
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "emerald",
+        "texture_color": "ffffff",
+        "name_color": "dark_green"
+    },
+    "availability": {
+        "enabled": true,
+        "tool_blacklist": []
+    }
+}

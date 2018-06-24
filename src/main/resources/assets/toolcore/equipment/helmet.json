@@ -1,0 +1,16 @@
+{
+    "modifiers": [
+        {"name": "durability",          "value": 0.0, "op": "MUL1"},
+        {"name": "repair_efficiency",   "value": 0.0, "op": "MUL1"},
+        {"name": "enchantability",      "value": 0.0, "op": "MUL1"},
+        {"name": "armor",               "value": 0.0, "op": "MUL1"},
+        {"name": "armor_toughness",     "value": 0.0, "op": "MUL1"},
+        {"name": "magic_armor",         "value": 0.0, "op": "MUL1"}
+    ],
+    "base_modifiers": {
+        "repair_efficiency": 1.0
+    },
+    "crafting": {
+        "head_count": 5
+    }
+}

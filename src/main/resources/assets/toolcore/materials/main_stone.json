@@ -1,0 +1,36 @@
+{
+    "type": "main",
+    "stats": [
+        {"name": "durability",      "value":  131},
+        {"name": "enchantability",  "value":    5},
+        {"name": "harvest_level",   "value":    1},
+        {"name": "harvest_speed",   "value":    4},
+        {"name": "melee_damage",    "value":    1},
+        {"name": "magic_damage",    "value":    0},
+        {"name": "attack_speed",    "value":  0.0},
+        {"name": "armor",           "value":    5},
+        {"name": "armor_toughness", "value":    0},
+        {"name": "magic_armor",     "value":    0},
+        {"name": "ranged_damage",   "value":    0},
+        {"name": "ranged_speed",    "value": -0.2},
+        {"name": "rarity",          "value":    5}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "minecraft:cobblestone",
+            "data": 0,
+            "oredict": "cobblestone"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "stone",
+        "texture_color": "FFFFFF",
+        "broken_color": "9A9A9A"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 1,
+        "tool_blacklist": []
+    }
+}
