@@ -23,7 +23,7 @@ import net.silentchaos512.gear.config.Config;
 
 import java.util.Iterator;
 
-public class EquipmentHelper {
+public class GearHelper {
 
     // ==========================================================================
     // Mining, using, repairing, etc
@@ -33,7 +33,7 @@ public class EquipmentHelper {
         if (isBroken(stack))
             return 0.25f;
 
-        float speed = EquipmentData.getStat(stack, CommonItemStats.HARVEST_SPEED);
+        float speed = GearData.getStat(stack, CommonItemStats.HARVEST_SPEED);
 
         // Tool effective on block?
         if (stack.getItem().canHarvestBlock(state, stack)) {
@@ -66,9 +66,7 @@ public class EquipmentHelper {
         if (isBroken(stack))
             return 1f;
 
-        float val = EquipmentData.getStat(stack, CommonItemStats.MELEE_DAMAGE);
-        // if (stack.getItem() instanceof ICoreTool)
-        // val += ((ICoreTool) stack.getItem()).getMeleeDamageModifier();
+        float val = GearData.getStat(stack, CommonItemStats.MELEE_DAMAGE);
         return val < 0 ? 0 : val;
     }
 
@@ -76,9 +74,7 @@ public class EquipmentHelper {
         if (isBroken(stack))
             return 0f;
 
-        float val = EquipmentData.getStat(stack, CommonItemStats.MAGIC_DAMAGE);
-        // if (stack.getItem() instanceof ICoreTool)
-        // val += ((ICoreTool) stack.getItem()).getMagicDamageModifier();
+        float val = GearData.getStat(stack, CommonItemStats.MAGIC_DAMAGE);
         return val < 0 ? 0 : val;
     }
 
@@ -86,11 +82,10 @@ public class EquipmentHelper {
         if (!(stack.getItem() instanceof ICoreTool))
             return 0.0f;
 
-        // float base = ((ICoreTool) stack.getItem()).getAttackSpeedModifier();
-        float speed = EquipmentData.getStat(stack, CommonItemStats.ATTACK_SPEED);
+        float speed = GearData.getStat(stack, CommonItemStats.ATTACK_SPEED);
         if (isBroken(stack))
             speed += 0.7f;
-        return /* base + */ speed;
+        return speed;
     }
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
@@ -126,12 +121,12 @@ public class EquipmentHelper {
     }
 
     public static boolean getIsRepairable(ItemStack stack, ItemStack material) {
-        ItemPartData data = EquipmentData.getPrimaryPart(stack);
+        ItemPartData data = GearData.getPrimaryPart(stack);
         ItemPartData dataMaterial = ItemPartData.fromStack(material);
         return data != null && dataMaterial != null && data.part.getTier() <= dataMaterial.part.getTier();
     }
 
-    public static void attemptDamageTool(ItemStack stack, int amount, EntityLivingBase entityLiving) {
+    public static void attemptDamage(ItemStack stack, int amount, EntityLivingBase entityLiving) {
         if (isUnbreakable(stack) || (entityLiving instanceof EntityPlayer && ((EntityPlayer) entityLiving).capabilities.isCreativeMode))
             return;
 
@@ -143,7 +138,7 @@ public class EquipmentHelper {
         if (isBroken(stack)) {
             // The item broke
             entityLiving.renderBrokenItemStack(stack);
-            EquipmentData.recalculateStats(stack);
+            GearData.recalculateStats(stack);
         } else if (Config.toolsBreakPermanently && wouldBreak) {
             entityLiving.renderBrokenItemStack(stack);
             stack.shrink(1);
@@ -151,7 +146,7 @@ public class EquipmentHelper {
     }
 
     public static boolean isBroken(ItemStack stack) {
-        // if (tool.getItem() instanceof ItemGemArrow) {
+        // if (gear.getItem() instanceof ItemGemArrow) {
         // // Quick hack for arrow coloring.
         // return true;
         // }
@@ -178,7 +173,7 @@ public class EquipmentHelper {
     public static boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
         // TODO
         if (!isBroken(stack))
-            attemptDamageTool(stack, 1, entityLiving);
+            attemptDamage(stack, 1, entityLiving);
         return true;
     }
 
@@ -192,7 +187,7 @@ public class EquipmentHelper {
         if (!isBroken) {
             int currentDmg = stack.getItemDamage();
             int maxDmg = stack.getMaxDamage();
-            attemptDamageTool(stack, isTool ? 2 : (isSword || isShield ? 1 : 0), attacker);
+            attemptDamage(stack, isTool ? 2 : (isSword || isShield ? 1 : 0), attacker);
 
             if (isBroken(stack))
                 attacker.renderBrokenItemStack(stack);
@@ -211,7 +206,7 @@ public class EquipmentHelper {
     }
 
     public static EnumRarity getRarity(ItemStack stack) {
-        int rarity = EquipmentData.getStatInt(stack, CommonItemStats.RARITY);
+        int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
         if (rarity < 20)
             return EnumRarity.COMMON;
         if (rarity < 40)
@@ -225,11 +220,11 @@ public class EquipmentHelper {
 
     public static String getItemStackDisplayName(ItemStack stack) {
         ICoreItem item = (ICoreItem) stack.getItem();
-        ItemPartData data = EquipmentData.getPrimaryPart(stack);
+        ItemPartData data = GearData.getPrimaryPart(stack);
         if (data == null || data.part == null)
             return SilentGear.localization.getLocalizedString(stack.getUnlocalizedName() + ".name");
         String partName = data.part.getLocalizedName(data, ItemStack.EMPTY);
-        return SilentGear.localization.getItemSubText(item.getItemClassName(), "nameProper", partName);
+        return SilentGear.localization.getItemSubText(item.getGearClass(), "nameProper", partName);
     }
 
     public static class EventHandler {

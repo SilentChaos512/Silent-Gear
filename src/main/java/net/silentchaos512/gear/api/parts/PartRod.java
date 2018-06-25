@@ -3,9 +3,9 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public final class ToolPartRod extends ItemPart {
+public final class PartRod extends ItemPart {
 
-    public ToolPartRod(ResourceLocation resource) {
+    public PartRod(ResourceLocation resource) {
         super(resource);
     }
 

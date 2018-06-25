@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.item.tool;
+package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemSpade;
@@ -7,8 +7,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IRegistryObject;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 public class CoreShovel extends ItemSpade implements IRegistryObject, ICoreTool {
 
     public CoreShovel() {
-        super(EquipmentData.FAKE_MATERIAL);
+        super(GearData.FAKE_MATERIAL);
         setUnlocalizedName(getFullName());
     }
 
@@ -49,17 +49,17 @@ public class CoreShovel extends ItemSpade implements IRegistryObject, ICoreTool 
     @Nonnull
     @Override
     public String getName() {
-        return getItemClassName();
+        return getGearClass();
     }
 
     @Override
-    public String getItemClassName() {
+    public String getGearClass() {
         return "shovel";
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return EquipmentHelper.getItemStackDisplayName(stack);
+        return GearHelper.getItemStackDisplayName(stack);
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.recipe.RecipeBaseSL;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,10 +26,8 @@ public class RecipeModularItem extends RecipeBaseSL {
 
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
-        ItemStack result = getRecipeOutput();
         Collection<ItemStack> parts = getComponents(inv);
         List<ItemPartData> data = new ArrayList<>();
-        ItemStack toolHeadDebug = ItemStack.EMPTY;
 
         boolean foundRod = false;
         boolean foundBowstring = false;
@@ -36,25 +35,23 @@ public class RecipeModularItem extends RecipeBaseSL {
         for (ItemStack stack : parts) {
             ItemPart part = PartRegistry.get(stack);
             if (stack.getItem() instanceof ToolHead) {
-                toolHeadDebug = stack;
                 ToolHead itemToolHead = (ToolHead) stack.getItem();
-                if (!itemToolHead.getToolClass(stack).equals(this.item.getItemClassName()))
+                if (!itemToolHead.getToolClass(stack).equals(this.item.getGearClass()))
                     return ItemStack.EMPTY;
                 data.addAll(itemToolHead.getAllParts(stack));
-            } else if (part instanceof ToolPartRod) {
+            } else if (part instanceof PartRod) {
                 if (!foundRod)
                     data.add(ItemPartData.fromStack(stack));
                 foundRod = true;
-            } else if (part instanceof BowPartString) {
+            } else if (part instanceof PartBowstring) {
                 if (!foundBowstring)
                     data.add(ItemPartData.fromStack(stack));
                 foundBowstring = true;
-            } else if (part instanceof ToolPartTip) {
+            } else if (part instanceof PartTip) {
                 if (!foundTip)
                     data.add(ItemPartData.fromStack(stack));
                 foundTip = true;
             }
-            // TODO
         }
 
         return this.item.construct((Item) this.item, data);
@@ -66,6 +63,7 @@ public class RecipeModularItem extends RecipeBaseSL {
         return item.matchesRecipe(parts);
     }
 
+    @Nonnull
     @Override
     public ItemStack getRecipeOutput() {
         return new ItemStack((Item) this.item);
@@ -74,9 +72,9 @@ public class RecipeModularItem extends RecipeBaseSL {
     private Collection<ItemStack> getComponents(InventoryCrafting inv) {
         List<ItemStack> parts = new ArrayList<>();
         parts.addAll(getComponents(inv, s -> s.getItem() instanceof ToolHead));
-        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof ToolPartRod));
-        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof BowPartString));
-        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof ToolPartTip));
+        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof PartRod));
+        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof PartBowstring));
+        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof PartTip));
         return parts;
     }
 

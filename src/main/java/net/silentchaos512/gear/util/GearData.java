@@ -13,9 +13,9 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.lib.PartDataList;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
-import net.silentchaos512.gear.api.parts.ToolPartRod;
-import net.silentchaos512.gear.api.parts.ToolPartTip;
+import net.silentchaos512.gear.api.parts.PartMain;
+import net.silentchaos512.gear.api.parts.PartRod;
+import net.silentchaos512.gear.api.parts.PartTip;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -29,11 +29,11 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.UUID;
 
-public class EquipmentData {
+public class GearData {
 
     /**
-     * A fake material for tools. Tools need a tool material, even if it's not used. Unfortunately, some mods still
-     * reference the tool material instead of calling the appropriate methods.
+     * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately, some mods still
+     * reference the gear material instead of calling the appropriate methods.
      */
     public static final ToolMaterial FAKE_MATERIAL = EnumHelper.addToolMaterial("silentgems:fake_material", 1, 512, 5.12f, 5.12f, 32);
 
@@ -51,6 +51,11 @@ public class EquipmentData {
     public static final int MAX_ROD_PARTS = 1;
     public static final int MAX_TIP_PARTS = 1;
 
+    /**
+     * Recalculate gear stats and setup NBT. This should be call ANY TIME an item is modified!
+     *
+     * @param stack
+     */
     public static void recalculateStats(ItemStack stack) {
         getUUID(stack);
 
@@ -168,11 +173,11 @@ public class EquipmentData {
                 NBTTagCompound partCompound = (NBTTagCompound) nbt;
                 ItemPartData data = ItemPartData.readFromNBT(partCompound);
                 if (data != null) {
-                    if (data.part instanceof ItemPartMain && ++mainsFound <= MAX_MAIN_PARTS)
+                    if (data.part instanceof PartMain && ++mainsFound <= MAX_MAIN_PARTS)
                         list.add(data);
-                    else if (data.part instanceof ToolPartRod && ++rodsFound <= MAX_ROD_PARTS)
+                    else if (data.part instanceof PartRod && ++rodsFound <= MAX_ROD_PARTS)
                         list.add(data);
-                    else if (data.part instanceof ToolPartTip && ++tipsFound <= MAX_TIP_PARTS)
+                    else if (data.part instanceof PartTip && ++tipsFound <= MAX_TIP_PARTS)
                         list.add(data);
                     else
                         list.add(data);
@@ -212,23 +217,23 @@ public class EquipmentData {
             return null;
 
         ItemPartData data = ItemPartData.readFromNBT((NBTTagCompound) nbt);
-        if (data.part instanceof ItemPartMain)
+        if (data != null && data.part instanceof PartMain)
             return data;
 
         return null;
     }
 
-    public static void addUpgradePart(ItemStack equipment, ItemStack partStack) {
+    public static void addUpgradePart(ItemStack gear, ItemStack partStack) {
         ItemPartData partData = ItemPartData.fromStack(partStack);
         if (partData == null || partData.part == null)
             return;
 
-        PartDataList parts = getConstructionParts(equipment);
+        PartDataList parts = getConstructionParts(gear);
         // Only one tip upgrade allowed
-        parts.removeIf(data -> data.part instanceof ToolPartTip && partData.part instanceof ToolPartTip);
+        parts.removeIf(data -> data.part instanceof PartTip && partData.part instanceof PartTip);
 
         parts.add(partData);
-        writeConstructionParts(equipment, parts);
+        writeConstructionParts(gear, parts);
     }
 
     public static void writeConstructionParts(ItemStack stack, Collection<ItemPartData> parts) {
@@ -240,11 +245,17 @@ public class EquipmentData {
         tags.setTag(NBT_CONSTRUCTION_PARTS, tagList);
     }
 
-    public static UUID getUUID(ItemStack equipment) {
-        if (!(equipment.getItem() instanceof ICoreItem))
+    /**
+     * Gets the item's UUID, creating it if it doesn't have one yet.
+     *
+     * @param gear ItemStack of an ICoreItem
+     * @return The UUID, or null if gear's item is not an ICoreItem
+     */
+    public static UUID getUUID(ItemStack gear) {
+        if (!(gear.getItem() instanceof ICoreItem))
             return null;
 
-        NBTTagCompound tags = StackHelper.getTagCompound(equipment, true);
+        NBTTagCompound tags = StackHelper.getTagCompound(gear, true);
         if (!tags.hasUniqueId(NBT_UUID)) {
             UUID uuid = UUID.randomUUID();
             tags.setUniqueId(NBT_UUID, uuid);
@@ -266,6 +277,9 @@ public class EquipmentData {
     public static class EventHandler {
 
         public static EventHandler INSTANCE = new EventHandler();
+
+        private EventHandler() {
+        }
 
         @SubscribeEvent
         public void onPlayerLoggedIn(PlayerLoggedInEvent event) {

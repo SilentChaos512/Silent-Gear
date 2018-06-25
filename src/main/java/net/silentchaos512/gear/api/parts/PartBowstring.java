@@ -3,9 +3,9 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public final class BowPartString extends ItemPart {
+public final class PartBowstring extends ItemPart {
 
-    public BowPartString(ResourceLocation resource) {
+    public PartBowstring(ResourceLocation resource) {
         super(resource);
     }
 

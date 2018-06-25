@@ -13,17 +13,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Used to register tool parts, and match parts to item stacks.
+ * Used to register gear parts, and match parts to item stacks.
  *
  * @author SilentChaos512
  */
 public final class PartRegistry {
 
     private static Map<String, ItemPart> map = new THashMap<>();
-    private static List<ItemPartMain> mains = null;
-    private static List<ToolPartRod> rods = null;
-    private static List<ItemPartMain> visibleMains = null;
-    private static List<ToolPartRod> visibleRods = null;
+    private static List<PartMain> mains = null;
+    private static List<PartRod> rods = null;
+    private static List<PartMain> visibleMains = null;
+    private static List<PartRod> visibleRods = null;
     private static Map<String, ItemPart> STACK_TO_PART = new THashMap<>();
 
     private PartRegistry() {
@@ -39,7 +39,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets the tool part that matches the ItemStack. Also checks the ore dictionary for parts that have an ore dictionary
+     * Gets the gear part that matches the ItemStack. Also checks the ore dictionary for parts that have an ore dictionary
      * key.
      *
      * @param stack
@@ -64,7 +64,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Registers a tool part.
+     * Registers a gear part.
      *
      * @param part
      */
@@ -101,11 +101,11 @@ public final class PartRegistry {
     /**
      * Gets a list of registered ToolPartMains in the order they are registered (used for sub-item display).
      */
-    public static List<ItemPartMain> getMains() {
+    public static List<PartMain> getMains() {
         if (mains == null) {
             mains = map.values().stream()
-                    .filter(p -> p instanceof ItemPartMain)
-                    .map(ItemPartMain.class::cast).collect(ImmutableList.toImmutableList());
+                    .filter(p -> p instanceof PartMain)
+                    .map(PartMain.class::cast).collect(ImmutableList.toImmutableList());
         }
         return mains;
     }
@@ -113,29 +113,29 @@ public final class PartRegistry {
     /**
      * Gets a list of registered ToolPartRods in the order they are registered.
      */
-    public static List<ToolPartRod> getRods() {
+    public static List<PartRod> getRods() {
         if (rods == null) {
             rods = map.values().stream()
-                    .filter(p -> p instanceof ToolPartRod)
-                    .map(ToolPartRod.class::cast).collect(ImmutableList.toImmutableList());
+                    .filter(p -> p instanceof PartRod)
+                    .map(PartRod.class::cast).collect(ImmutableList.toImmutableList());
         }
         return rods;
     }
 
-    public static List<ItemPartMain> getVisibleMains() {
+    public static List<PartMain> getVisibleMains() {
         if (visibleMains == null) {
             visibleMains = map.values().stream()
-                    .filter(p -> p instanceof ItemPartMain && !p.isBlacklisted() && !p.isHidden())
-                    .map(ItemPartMain.class::cast).collect(ImmutableList.toImmutableList());
+                    .filter(p -> p instanceof PartMain && !p.isBlacklisted() && !p.isHidden())
+                    .map(PartMain.class::cast).collect(ImmutableList.toImmutableList());
         }
         return visibleMains;
     }
 
-    public static List<ToolPartRod> getVisibleRods() {
+    public static List<PartRod> getVisibleRods() {
         if (visibleRods == null) {
             visibleRods = map.values().stream()
-                    .filter(p -> p instanceof  ToolPartRod && !p.isBlacklisted() && !p.isHidden())
-                    .map(ToolPartRod.class::cast).collect(ImmutableList.toImmutableList());
+                    .filter(p -> p instanceof PartRod && !p.isBlacklisted() && !p.isHidden())
+                    .map(PartRod.class::cast).collect(ImmutableList.toImmutableList());
         }
         return visibleRods;
     }

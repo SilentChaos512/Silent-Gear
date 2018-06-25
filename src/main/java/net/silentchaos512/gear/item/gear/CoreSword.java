@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.item.tool;
+package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
@@ -24,8 +24,8 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IRegistryObject;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
@@ -36,7 +36,7 @@ import java.util.Map;
 public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon {
 
     public CoreSword() {
-        super(EquipmentData.FAKE_MATERIAL);
+        super(GearData.FAKE_MATERIAL);
         setUnlocalizedName(getFullName());
         setNoRepair();
     }
@@ -49,41 +49,41 @@ public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
     }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return EquipmentHelper.getIsRepairable(toRepair, repair);
+        return GearHelper.getIsRepairable(toRepair, repair);
     }
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        return EquipmentHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        return EquipmentHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hitEntity(stack, target, attacker);
     }
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return EquipmentHelper.getAttributeModifiers(slot, stack);
+        return GearHelper.getAttributeModifiers(slot, stack);
     }
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, EntityPlayer player) {
         boolean canceled = super.onBlockStartBreak(stack, pos, player);
         if (!canceled) {
-            EquipmentHelper.onBlockStartBreak(stack, pos, player);
+            GearHelper.onBlockStartBreak(stack, pos, player);
         }
         return canceled;
     }
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        EquipmentHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.DURABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
     }
 
     @Override
@@ -112,12 +112,12 @@ public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon
     @Override
     public EnumRarity getRarity(ItemStack stack) {
         // return super.getRarity(stack);
-        return EquipmentHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return EquipmentHelper.getItemStackDisplayName(stack);
+        return GearHelper.getItemStackDisplayName(stack);
     }
 
     @Override
@@ -153,11 +153,11 @@ public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon
     @Nonnull
     @Override
     public String getName() {
-        return getItemClassName();
+        return getGearClass();
     }
 
     @Override
-    public String getItemClassName() {
+    public String getGearClass() {
         return "sword";
     }
 

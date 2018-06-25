@@ -22,7 +22,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
@@ -90,21 +90,20 @@ public abstract class ItemPart {
     public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
         if (stat == CommonItemStats.HARVEST_LEVEL)
             return StatInstance.Operation.MAX;
-        else if (this instanceof ItemPartMain)
+        else if (this instanceof PartMain)
             return StatInstance.Operation.AVG;
         else if (stat == CommonItemStats.ATTACK_SPEED || stat == CommonItemStats.RARITY)
             return StatInstance.Operation.ADD;
-        else if (this instanceof ToolPartRod)
+        else if (this instanceof PartRod)
             return StatInstance.Operation.MUL2;
-        else if (this instanceof ToolPartTip)
+        else if (this instanceof PartTip)
             return StatInstance.Operation.ADD;
 
-        // TODO
         return StatInstance.Operation.ADD;
     }
 
-    public int getRepairAmount(ItemStack equipment, ItemPartData part) {
-        // TODO
+    public int getRepairAmount(ItemStack gear, ItemPartData part) {
+        // TODO getRepairAmount
         // float durability = part.getStatModifier(CommonItemStats.DURABILITY).getValue();
         // return (int) (durability / 2);
         return 1;
@@ -127,7 +126,7 @@ public abstract class ItemPart {
     public boolean matchesForDecorating(ItemStack partRep, boolean matchOreDict) {
         if (!craftingOreDictName.isEmpty()) {
             String nuggetName = craftingOreDictName.replaceFirst("gem|ingot", "nugget");
-            // TODO?
+            // TODO matchesForDecorating?
         }
         return matchesForCrafting(partRep, matchOreDict);
     }
@@ -136,7 +135,7 @@ public abstract class ItemPart {
         return isBlacklisted(this.craftingStack);
     }
 
-    public boolean isBlacklisted(ItemStack partStack) {
+    public boolean isBlacklisted(ItemStack partRep) {
         return !this.enabled;
     }
 
@@ -147,10 +146,10 @@ public abstract class ItemPart {
     /**
      * Gets a texture to use based on the item class
      *
-     * @param equipment The equipment item (tool/weapon/armor)
-     * @param toolClass The tool class string (pickaxe/sword/etc.)
+     * @param gear The equipment item (tool/weapon/armor)
+     * @param gearClass The gear class string (pickaxe/sword/etc.)
      */
-    public abstract ResourceLocation getTexture(ItemStack equipment, String toolClass, int animationFrame);
+    public abstract ResourceLocation getTexture(ItemStack gear, String gearClass, int animationFrame);
 
     public ResourceLocation getTexture(ItemStack equipment, String toolClass) {
         return getTexture(equipment, toolClass, 0);
@@ -159,11 +158,11 @@ public abstract class ItemPart {
     /**
      * Gets a texture to use for a broken item based on the item class
      *
-     * @param equipment The equipment item (tool/weapon/armor)
-     * @param toolClass The tool class string (pickaxe/sword/etc.)
+     * @param gear The equipment item (tool/weapon/armor)
+     * @param gearClass The gear class string (pickaxe/sword/etc.)
      */
-    public ResourceLocation getBrokenTexture(ItemStack equipment, String toolClass) {
-        return getTexture(equipment, toolClass);
+    public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
+        return getTexture(gear, gearClass);
     }
 
     /**
@@ -173,8 +172,8 @@ public abstract class ItemPart {
         return this.modelIndex + (animationFrame == 3 ? "_3" : "");
     }
 
-    public int getColor(ItemStack equipment, int animationFrame) {
-        if (!equipment.isEmpty() && EquipmentHelper.isBroken(equipment))
+    public int getColor(ItemStack gear, int animationFrame) {
+        if (!gear.isEmpty() && GearHelper.isBroken(gear))
             return this.brokenColor;
         return this.textureColor;
     }
@@ -183,10 +182,10 @@ public abstract class ItemPart {
      * Adds information to the tooltip of an equipment item
      *
      * @param data      The data of the part
-     * @param equipment The equipment (tool/weapon/armor) stack
+     * @param gear The equipment (tool/weapon/armor) stack
      * @param tooltip   Current tooltip lines
      */
-    public void addInformation(ItemPartData data, ItemStack equipment, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
     }
 
     /**
@@ -200,9 +199,9 @@ public abstract class ItemPart {
      * Gets a localized name for the part, suitable for display
      *
      * @param data      The data of the part
-     * @param equipment The equipment (tool/weapon/armor) stack
+     * @param gear The equipment (tool/weapon/armor) stack
      */
-    public String getLocalizedName(ItemPartData data, ItemStack equipment) {
+    public String getLocalizedName(ItemPartData data, ItemStack gear) {
         return /* nameColor + */ SilentGear.localization.getLocalizedString(getUnlocalizedName());
     }
 
@@ -213,12 +212,11 @@ public abstract class ItemPart {
 
     @Override
     public String toString() {
-        // TODO: Update ItemPart#toString
         String str = "ItemPart{";
         str += "Key: " + this.key + ", ";
         str += "CraftingStack: " + this.craftingStack + ", ";
         str += "CraftingOreDictName: '" + this.craftingOreDictName + "', ";
-        // str += "Tier: " + getTier();
+        str += "Tier: " + getTier();
         str += "}";
         return str;
     }

@@ -3,9 +3,9 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public final class ItemPartMain extends ItemPart {
+public final class PartMain extends ItemPart {
 
-    public ItemPartMain(ResourceLocation resource) {
+    public PartMain(ResourceLocation resource) {
         super(resource);
     }
 
@@ -22,8 +22,8 @@ public final class ItemPartMain extends ItemPart {
     }
 
     @Override
-    public ResourceLocation getBrokenTexture(ItemStack stack, String toolClass) {
-        return new ResourceLocation(this.key.getResourceDomain(), "items/" + toolClass + "/_broken");
+    public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
+        return new ResourceLocation(this.key.getResourceDomain(), "items/" + gearClass + "/_broken");
     }
 
     @Override

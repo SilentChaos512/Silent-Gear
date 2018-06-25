@@ -13,12 +13,12 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.LocalizationHelper;
 import net.silentchaos512.lib.util.StackHelper;
@@ -43,22 +43,22 @@ public class EquipmentClientHelper {
 
             ICoreItem item = (ICoreItem) stack.getItem();
 
-            if (EquipmentHelper.isBroken(stack)) {
+            if (GearHelper.isBroken(stack)) {
                 tooltip.add(1, TextFormatting.RED + loc.getMiscText("broken"));
             }
 
             // Let parts add information if they need to
-            for (ItemPartData data : EquipmentData.getConstructionParts(stack)) {
+            for (ItemPartData data : GearData.getConstructionParts(stack)) {
                 data.part.addInformation(data, stack, world, tooltip, flag.isAdvanced());
             }
 
-            float synergyDisplayValue = EquipmentData.getSynergyDisplayValue(stack);
+            float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
             TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
             tooltip.add("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue)));
 
             if (flag.isAdvanced()) {
                 // ICoreTool itemTool = (ICoreTool) item;
-                // tooltip.add(itemTool.getItemClassName());
+                // tooltip.add(itemTool.getGearClass());
                 NBTTagCompound tagCompound = StackHelper.getTagCompound(stack, true);
                 if (tagCompound.hasKey("debug_modelkey")) {
                     tooltip.add(TextFormatting.DARK_GRAY + tagCompound.getString("debug_modelkey"));
@@ -71,7 +71,7 @@ public class EquipmentClientHelper {
                 tooltip.add(strStats);
                 // Display only stats relevant to the item class
                 for (ItemStat stat : item.getRelevantStats(stack)) {
-                    float statValue = EquipmentData.getStat(stack, stat);
+                    float statValue = GearData.getStat(stack, stat);
 
                     StatInstance inst = new StatInstance("display_" + stat.getUnlocalizedName(), statValue, StatInstance.Operation.AVG);
                     String nameStr = "- " + stat.displayColor + loc.getLocalizedString("stat", stat.getUnlocalizedName() + ".name");
@@ -92,9 +92,9 @@ public class EquipmentClientHelper {
             String strConstruction = TextFormatting.GOLD + loc.getMiscText("tooltip.construction.name");
             if (altDown) {
                 tooltip.add(strConstruction);
-                for (ItemPartData data : EquipmentData.getConstructionParts(stack)) {
+                for (ItemPartData data : GearData.getConstructionParts(stack)) {
                     String str = data.part.getLocalizedName(data, stack);
-                    if (data.part instanceof ItemPartMain)
+                    if (data.part instanceof PartMain)
                         str += TextFormatting.DARK_GRAY + " (" + data.grade.getLocalizedName() + ")";
                     tooltip.add("- " + str);
                 }
@@ -110,7 +110,7 @@ public class EquipmentClientHelper {
         Map<String, ItemPart> map = new LinkedHashMap<>();
 
         ICoreTool item = (ICoreTool) stack.getItem();
-        String itemClass = item.getItemClassName();
+        String itemClass = item.getGearClass();
         boolean hasGuard = "sword".equals(itemClass);
 
         ItemPart partHead = item.getPrimaryHeadPart(stack);
@@ -140,7 +140,7 @@ public class EquipmentClientHelper {
             return "null";
 
         ICoreItem item = (ICoreItem) stack.getItem();
-        return getModelKey(item.getItemClassName(), animationFrame, EquipmentHelper.isBroken(stack),
+        return getModelKey(item.getGearClass(), animationFrame, GearHelper.isBroken(stack),
                 getRenderParts(stack).values().toArray(new ItemPart[0]));
     }
 

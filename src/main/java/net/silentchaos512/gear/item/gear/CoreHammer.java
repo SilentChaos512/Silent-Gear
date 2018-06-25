@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.item.tool;
+package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -39,7 +39,7 @@ public class CoreHammer extends CorePickaxe {
     }
 
     @Override
-    public String getItemClassName() {
+    public String getGearClass() {
         return "hammer";
     }
 

@@ -3,11 +3,11 @@ package net.silentchaos512.gear.api.item;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.init.ModMaterials;
-import net.silentchaos512.gear.util.EquipmentData;
+import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -30,10 +30,10 @@ public interface ICoreArmor extends ICoreItem {
         return RELEVANT_STATS;
     }
 
-    default ItemPartMain getPrimaryPart(@Nonnull ItemStack stack) {
-        ItemPartData data = EquipmentData.getPrimaryPart(stack);
+    default PartMain getPrimaryPart(@Nonnull ItemStack stack) {
+        ItemPartData data = GearData.getPrimaryPart(stack);
         if (data != null)
-            return (ItemPartMain) data.part;
+            return (PartMain) data.part;
         return ModMaterials.mainWood;
     }
 

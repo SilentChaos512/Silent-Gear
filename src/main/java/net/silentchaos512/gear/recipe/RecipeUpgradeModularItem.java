@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
-import net.silentchaos512.gear.util.EquipmentData;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.recipe.RecipeBaseSL;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ public class RecipeUpgradeModularItem extends RecipeBaseSL {
             return ItemStack.EMPTY;
 
         for (ItemStack upgrade : upgrades)
-            EquipmentData.addUpgradePart(tool, upgrade);
-        EquipmentData.recalculateStats(tool);
+            GearData.addUpgradePart(tool, upgrade);
+        GearData.recalculateStats(tool);
         return tool;
     }
 

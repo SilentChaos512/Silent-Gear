@@ -40,7 +40,7 @@ public class ConfigOptionEquipment {
 
     public <T extends ICoreItem> ConfigOptionEquipment(T item) {
         this.item = item;
-        this.name = item.getItemClassName();
+        this.name = item.getGearClass();
     }
 
     public ConfigOptionEquipment loadValue(Configuration config) {
@@ -50,7 +50,7 @@ public class ConfigOptionEquipment {
     @Nonnull
     public StatInstance getBaseModifier(ItemStat stat) {
         float value = this.baseModifiers.containsKey(stat) ? this.baseModifiers.get(stat) : 0;
-        return new StatInstance(this.item.getItemClassName() + "_basemod", value, Operation.ADD);
+        return new StatInstance(this.item.getGearClass() + "_basemod", value, Operation.ADD);
     }
 
     @Nonnull
@@ -80,19 +80,19 @@ public class ConfigOptionEquipment {
 
     private void loadJsonResources() {
         // Main resource file in JAR
-        String path = "assets/" + SilentGear.MOD_ID + "/equipment/" + item.getItemClassName() + ".json";
+        String path = "assets/" + SilentGear.MOD_ID + "/equipment/" + item.getGearClass() + ".json";
         SilentGear.log.info("Loading equipment asset file: " + path);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path), "UTF-8"))) {
             readResourceFile(reader);
         } catch (Exception e) {
             SilentGear.log.severe("Error loading resource file! Either Silent screwed up or the JAR has been modified.");
             SilentGear.log.severe("    item: " + item);
-            SilentGear.log.severe("    item type: " + item.getItemClassName());
+            SilentGear.log.severe("    item type: " + item.getGearClass());
             e.printStackTrace();
         }
 
         // Override in config folder
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(Config.INSTANCE.directory.getPath(), "equipment/" + item.getItemClassName() + ".json")))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(Config.INSTANCE.directory.getPath(), "equipment/" + item.getGearClass() + ".json")))) {
             readResourceFile(reader);
         } catch (FileNotFoundException ex) {
             // Ignore
@@ -115,7 +115,7 @@ public class ConfigOptionEquipment {
                 if (stat != null) {
                     float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
                     Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : Operation.MUL1;
-                    String id = this.item.getItemClassName() + "_mod_" + stat.getUnlocalizedName();
+                    String id = this.item.getGearClass() + "_mod_" + stat.getUnlocalizedName();
                     this.modifiers.put(stat, new StatInstance(id, value, op));
                 }
             }

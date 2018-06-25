@@ -26,9 +26,9 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.tool.CoreBow;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.item.gear.CoreBow;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
@@ -149,8 +149,8 @@ public class ToolModel implements IModel {
                         builder.add(texBroken);
 
                     // Guard texture for swords
-                    if (hasGuard && part instanceof ItemPartMain) {
-                        ResourceLocation texGuard = ((ItemPartMain) part).getTexture(ItemStack.EMPTY, toolClass, frame, "guard");
+                    if (hasGuard && part instanceof PartMain) {
+                        ResourceLocation texGuard = ((PartMain) part).getTexture(ItemStack.EMPTY, toolClass, frame, "guard");
                         SilentGear.log.info("      +guard: " + texGuard);
                         if (texGuard != null)
                             builder.add(texGuard);
@@ -249,15 +249,15 @@ public class ToolModel implements IModel {
             ToolModel.Baked model = (ToolModel.Baked) originalModel;
 
             ICoreTool itemTool = (ICoreTool) stack.getItem();
-            String toolClass = itemTool.getItemClassName();
+            String toolClass = itemTool.getGearClass();
             boolean hasGuard = "sword".equals(toolClass);
-            boolean isBroken = EquipmentHelper.isBroken(stack);
+            boolean isBroken = GearHelper.isBroken(stack);
 
-            ItemPartMain partHead = itemTool.getPrimaryHeadPart(stack);
-            ItemPartMain partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
-            ToolPartRod partRod = itemTool.getRodPart(stack);
-            ToolPartTip partTip = itemTool.getTipPart(stack);
-            BowPartString partBowstring = itemTool.getBowstringPart(stack);
+            PartMain partHead = itemTool.getPrimaryHeadPart(stack);
+            PartMain partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
+            PartRod partRod = itemTool.getRodPart(stack);
+            PartTip partTip = itemTool.getTipPart(stack);
+            PartBowstring partBowstring = itemTool.getBowstringPart(stack);
 
             int animationFrame = getAnimationFrame(stack, world, entity);
             String key = itemTool.getModelKey(stack, animationFrame);
@@ -297,8 +297,8 @@ public class ToolModel implements IModel {
                 ResourceLocation texture;
                 if (isBroken)
                     texture = part.getBrokenTexture(stack, toolClass);
-                else if (part instanceof ItemPartMain)
-                    texture = ((ItemPartMain) part).getTexture(stack, toolClass, animationFrame, partPosition);
+                else if (part instanceof PartMain)
+                    texture = ((PartMain) part).getTexture(stack, toolClass, animationFrame, partPosition);
                 else
                     texture = part.getTexture(stack, toolClass, animationFrame);
 
@@ -310,7 +310,7 @@ public class ToolModel implements IModel {
 
         private int getAnimationFrame(ItemStack stack, World world, EntityLivingBase entity) {
             if (stack.getItem() instanceof CoreBow) {
-                UUID uuid = EquipmentData.getUUID(stack);
+                UUID uuid = GearData.getUUID(stack);
                 if (bowPull.containsKey(uuid)) {
                     float pull = bowPull.get(uuid);
                     if (pull > 0.9f)

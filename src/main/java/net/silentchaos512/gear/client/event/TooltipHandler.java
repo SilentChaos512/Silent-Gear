@@ -8,7 +8,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -46,7 +46,7 @@ public class TooltipHandler {
                 if (!modifiers.isEmpty()) {
                     StatInstance inst = stat.computeForDisplay(0, modifiers);
                     boolean isZero = inst.getValue() == 0;
-                    if (part instanceof ItemPartMain && stat == CommonItemStats.HARVEST_LEVEL)
+                    if (part instanceof PartMain && stat == CommonItemStats.HARVEST_LEVEL)
                         isZero = false;
 
                     if (!isZero || event.getFlags() == TooltipFlags.ADVANCED) {

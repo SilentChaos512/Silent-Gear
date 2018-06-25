@@ -21,7 +21,7 @@ import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.lib.MaterialGrade;
 import net.silentchaos512.gear.api.lib.PartDataList;
 import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -29,7 +29,7 @@ import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
-import net.silentchaos512.gear.util.EquipmentData;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.item.ItemSL;
 import net.silentchaos512.lib.registry.RecipeMaker;
 import net.silentchaos512.lib.util.LocalizationHelper;
@@ -69,7 +69,7 @@ public class ToolHead extends ItemSL implements IStatItem {
         tags.setString(NBT_TOOL_CLASS, toolClass);
 
         NBTTagList tagList = new NBTTagList();
-        parts.stream().filter(data -> data.part instanceof ItemPartMain)
+        parts.stream().filter(data -> data.part instanceof PartMain)
                 .map(data -> data.writeToNBT(new NBTTagCompound()))
                 .forEach(tagList::appendTag);
         tags.setTag(NBT_MATERIALS, tagList);
@@ -81,7 +81,7 @@ public class ToolHead extends ItemSL implements IStatItem {
     /**
      * Create a stack with a single part. Best for sub-items.
      */
-    private ItemStack getStack(String toolClass, ItemPartMain part, boolean isExample) {
+    private ItemStack getStack(String toolClass, PartMain part, boolean isExample) {
         boolean hasGuard = "sword".equals(toolClass);
 
         ItemStack result = new ItemStack(this);
@@ -104,8 +104,8 @@ public class ToolHead extends ItemSL implements IStatItem {
 
     private void writeStatCache(ItemStack stack, PartDataList parts) {
         ICoreItem item = ModItems.toolClasses.get(getToolClass(stack));
-        double synergy = EquipmentData.calculateSynergyValue(parts, parts.getUniqueParts(true));
-        Multimap<ItemStat, StatInstance> stats = EquipmentData.getStatModifiers(item, parts, synergy);
+        double synergy = GearData.calculateSynergyValue(parts, parts.getUniqueParts(true));
+        Multimap<ItemStat, StatInstance> stats = GearData.getStatModifiers(item, parts, synergy);
 
         NBTTagCompound tags = new NBTTagCompound();
         for (ItemStat stat : stats.keySet()) {
@@ -117,7 +117,7 @@ public class ToolHead extends ItemSL implements IStatItem {
     }
 
     /**
-     * Get the tool class this item matches.
+     * Get the gear class this item matches.
      */
     @Nonnull
     public String getToolClass(ItemStack stack) {
@@ -125,10 +125,10 @@ public class ToolHead extends ItemSL implements IStatItem {
     }
 
     /**
-     * Get the primary (first) part the tool head was constructed with.
+     * Get the primary (first) part the gear head was constructed with.
      */
     @Nullable
-    public ItemPartMain getPrimaryPart(ItemStack stack) {
+    public PartMain getPrimaryPart(ItemStack stack) {
         NBTTagCompound tags = getData(stack);
         if (!tags.hasKey(NBT_MATERIALS))
             return ModMaterials.mainWood;
@@ -136,11 +136,11 @@ public class ToolHead extends ItemSL implements IStatItem {
         if (tagList.tagCount() == 0)
             return ModMaterials.mainWood;
         NBTTagCompound partTags = tagList.getCompoundTagAt(0);
-        return (ItemPartMain) ItemPartData.readFromNBT(partTags).part;
+        return (PartMain) ItemPartData.readFromNBT(partTags).part;
     }
 
     @Nullable
-    public ItemPartMain getSecondaryPart(ItemStack stack) {
+    public PartMain getSecondaryPart(ItemStack stack) {
         NBTTagCompound tags = getData(stack);
         if (!tags.hasKey(NBT_MATERIALS))
             return ModMaterials.mainWood;
@@ -148,11 +148,11 @@ public class ToolHead extends ItemSL implements IStatItem {
         if (tagList.tagCount() < 2)
             return ModMaterials.mainWood;
         NBTTagCompound partTags = tagList.getCompoundTagAt(1);
-        return (ItemPartMain) ItemPartData.readFromNBT(partTags).part;
+        return (PartMain) ItemPartData.readFromNBT(partTags).part;
     }
 
     /**
-     * Get all parts the tool head was constructed with.
+     * Get all parts the gear head was constructed with.
      */
     @Nonnull
     public Collection<ItemPartData> getAllParts(ItemStack stack) {
@@ -205,9 +205,9 @@ public class ToolHead extends ItemSL implements IStatItem {
             list.add("- " + data.part.getLocalizedName(data, ItemStack.EMPTY));
 
         ICoreItem toolItem = ModItems.toolClasses.get(toolClass);
-        // TODO: We're constructing a rod-less tool each time to get stats. Is that bad?
+        // TODO: We're constructing a rod-less gear each time to get stats. Is that bad?
         ItemStack constructed = toolItem.construct((Item) toolItem, getAllParts(stack));
-        EquipmentData.recalculateStats(constructed);
+        GearData.recalculateStats(constructed);
         EquipmentClientHelper.addInformation(constructed, world, list, flag);
     }
 
@@ -221,7 +221,7 @@ public class ToolHead extends ItemSL implements IStatItem {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         if (this.isInCreativeTab(tab))
             for (String toolClass : ModItems.toolClasses.keySet())
-                for (ItemPartMain part : PartRegistry.getVisibleMains())
+                for (PartMain part : PartRegistry.getVisibleMains())
                     list.add(getStack(toolClass, part, true));
     }
 
@@ -234,7 +234,7 @@ public class ToolHead extends ItemSL implements IStatItem {
                     return stack.getItem() instanceof IBlueprint && ((IBlueprint) stack.getItem()).getOutputInfo(stack).gear == item;
                 }
             };
-            for (ItemPartMain part : PartRegistry.getVisibleMains()) {
+            for (PartMain part : PartRegistry.getVisibleMains()) {
                 ItemStack result = getStack(toolClass, part, true);
                 Object[] inputs = new Object[item.getConfig().getHeadCount() + 1];
                 inputs[0] = blueprint;

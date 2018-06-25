@@ -19,7 +19,7 @@ import net.minecraftforge.client.model.*;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.init.ModItems;
@@ -89,7 +89,7 @@ public class ToolHeadModel implements IModel {
     public Collection<ResourceLocation> getTextures() {
         ImmutableList.Builder<ResourceLocation> builder = ImmutableList.builder();
         for (String toolClass : ModItems.toolClasses.keySet()) {
-            for (ItemPartMain part : PartRegistry.getMains()) {
+            for (PartMain part : PartRegistry.getMains()) {
                 ResourceLocation textureHead = part.getTexture(ItemStack.EMPTY, toolClass, 0, "head");
                 if (textureHead != null)
                     builder.add(textureHead);
@@ -171,8 +171,8 @@ public class ToolHeadModel implements IModel {
             String toolClass = ModItems.toolHead.getToolClass(stack);
             boolean hasGuard = "sword".equals(toolClass);
 
-            ItemPartMain primaryPart = ModItems.toolHead.getPrimaryPart(stack);
-            ItemPartMain secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
+            PartMain primaryPart = ModItems.toolHead.getPrimaryPart(stack);
+            PartMain secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
 
             String key = toolClass +"_head|" + (primaryPart == null ? "null" : primaryPart.getModelIndex(0))
                     + (secondaryPart == null ? "" : "|" + secondaryPart.getModelIndex(0));

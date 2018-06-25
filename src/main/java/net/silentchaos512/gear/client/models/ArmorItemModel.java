@@ -22,11 +22,11 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nullable;
@@ -77,7 +77,7 @@ public class ArmorItemModel implements IModel {
     public Collection<ResourceLocation> getTextures() {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
         for (String armorClass : ModItems.armorClasses.keySet()) {
-            for (ItemPartMain part : PartRegistry.getMains()) {
+            for (PartMain part : PartRegistry.getMains()) {
                 // Basic texture
                 ResourceLocation textureMain = part.getTexture(ItemStack.EMPTY, armorClass, 0, "main");
                 if (textureMain != null)
@@ -167,10 +167,10 @@ public class ArmorItemModel implements IModel {
             ArmorItemModel.Baked model = (ArmorItemModel.Baked) originalModel;
 
             ICoreArmor itemArmor = (ICoreArmor) stack.getItem();
-            String armorClass = itemArmor.getItemClassName();
-            boolean isBroken = EquipmentHelper.isBroken(stack);
+            String armorClass = itemArmor.getGearClass();
+            boolean isBroken = GearHelper.isBroken(stack);
 
-            ItemPartMain primaryPart = itemArmor.getPrimaryPart(stack);
+            PartMain primaryPart = itemArmor.getPrimaryPart(stack);
 
             String key = itemArmor.getModelKey(0, primaryPart);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
@@ -196,8 +196,8 @@ public class ArmorItemModel implements IModel {
                 ResourceLocation texture;
                 if (isBroken)
                     texture = part.getBrokenTexture(stack, toolClass);
-                else if (part instanceof ItemPartMain)
-                    texture = ((ItemPartMain) part).getTexture(stack, toolClass, 0, partPosition);
+                else if (part instanceof PartMain)
+                    texture = ((PartMain) part).getTexture(stack, toolClass, 0, partPosition);
                 else
                     texture = part.getTexture(stack, toolClass, 0);
 

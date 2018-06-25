@@ -3,9 +3,9 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public final class ToolPartGrip extends ItemPart implements IUpgradePart {
+public final class PartGrip extends ItemPart implements IUpgradePart {
 
-    public ToolPartGrip(ResourceLocation resource) {
+    public PartGrip(ResourceLocation resource) {
         super(resource);
     }
 

@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.item.tool;
+package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
@@ -14,14 +14,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -30,8 +28,8 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IRegistryObject;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
@@ -40,13 +38,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTool {
+public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
 
-    public static final Set<Material> BASE_EFFECTIVE_MATERIALS = Sets.newHashSet(Material.ANVIL, Material.ICE, Material.IRON, Material.PACKED_ICE, Material.ROCK);
-    public static final Material[] EXTRA_EFFECTIVE_MATERIALS = {Material.ROCK, Material.CIRCUITS, Material.GLASS, Material.PISTON, Material.REDSTONE_LIGHT};
+    public static final Set<Material> BASE_EFFECTIVE_MATERIALS = Sets.newHashSet(Material.GOURD, Material.WOOD);
+    public static final Material[] EXTRA_EFFECTIVE_MATERIALS = {Material.WOOD, Material.LEAVES, Material.PLANTS, Material.VINE};
 
-    public CorePickaxe() {
-        super(EquipmentData.FAKE_MATERIAL);
+    public CoreMattock() {
+        super(GearData.FAKE_MATERIAL);
         setUnlocalizedName(getFullName());
         setNoRepair();
     }
@@ -54,57 +52,49 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
     @Nonnull
     @Override
     public ConfigOptionEquipment getConfig() {
-        return Config.pickaxe;
+        return Config.mattock;
     }
-
-    /*
-     * ItemTool overrides
-     */
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        return EquipmentHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
+        return GearHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
     }
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
-        if (super.getHarvestLevel(stack, toolClass, player, state) < 0 || EquipmentHelper.isBroken(stack))
+        if (!("shovel".equals(toolClass) || "axe".equals(toolClass)) || GearHelper.isBroken(stack))
             return -1;
-        return EquipmentData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+        return GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
     }
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return EquipmentHelper.isBroken(stack) ? ImmutableSet.of() : super.getToolClasses(stack);
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.of("shovel", "axe");
     }
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
     }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return EquipmentHelper.getIsRepairable(toRepair, repair);
+        return GearHelper.getIsRepairable(toRepair, repair);
     }
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        return EquipmentHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        return EquipmentHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hitEntity(stack, target, attacker);
     }
-
-    /*
-     * Item overrides
-     */
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return EquipmentHelper.getAttributeModifiers(slot, stack);
+        return GearHelper.getAttributeModifiers(slot, stack);
     }
 
     // Forge ItemStack-sensitive version
@@ -137,22 +127,38 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
+
+        if (GearHelper.isBroken(stack))
+            return EnumActionResult.PASS;
+
         // TODO
+
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+    }
+
+    @Override
+    protected void setBlock(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state) {
+        worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+        if (!worldIn.isRemote) {
+            worldIn.setBlockState(pos, state, 11);
+            GearHelper.attemptDamage(stack, 1, player);
+        }
     }
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, EntityPlayer player) {
         boolean canceled = super.onBlockStartBreak(stack, pos, player);
         if (!canceled) {
-            return EquipmentHelper.onBlockStartBreak(stack, pos, player);
+            GearHelper.onBlockStartBreak(stack, pos, player);
         }
         return canceled;
     }
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        EquipmentHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
     }
 
     @Override
@@ -163,7 +169,7 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.DURABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
     }
 
     @Override
@@ -180,13 +186,12 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {
-        // return super.getRarity(stack);
-        return EquipmentHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return EquipmentHelper.getItemStackDisplayName(stack);
+        return GearHelper.getItemStackDisplayName(stack);
     }
 
     @Override
@@ -206,10 +211,6 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
         super.getSubItems(tab, items);
     }
 
-    /*
-     * IRegistryObject
-     */
-
     @Override
     public void addRecipes(RecipeMaker recipes) {
     }
@@ -223,19 +224,19 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
         return SilentGear.MOD_ID;
     }
 
-    @Nonnull
     @Override
     public String getName() {
-        return getItemClassName();
-    }
-
-    @Override
-    public String getItemClassName() {
-        return "pickaxe";
+        return "mattock";
     }
 
     @Override
     public void getModels(Map<Integer, ModelResourceLocation> models) {
+        // TODO Auto-generated method stub
         models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
+    }
+
+    @Override
+    public String getGearClass() {
+        return "mattock";
     }
 }

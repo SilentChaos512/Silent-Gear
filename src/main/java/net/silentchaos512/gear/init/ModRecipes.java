@@ -26,7 +26,7 @@ public class ModRecipes implements IRegistrationHandler<IRecipe> {
 
         RecipeMaker recipes = reg.recipes;
         for (ICoreItem item : ModItems.toolClasses.values()) {
-            recipes.addCustomRecipe("core_" + item.getItemClassName(), new RecipeModularItem(item));
+            recipes.addCustomRecipe("core_" + item.getGearClass(), new RecipeModularItem(item));
         }
         recipes.addCustomRecipe("head_blueprint", new RecipeBlueprintCrafting(ModItems.toolHead));
         recipes.addCustomRecipe("upgrade_core_item", new RecipeUpgradeModularItem());

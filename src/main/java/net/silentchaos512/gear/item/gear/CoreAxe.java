@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.item.tool;
+package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
@@ -14,12 +14,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -28,8 +30,8 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IRegistryObject;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
@@ -38,13 +40,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
+public class CoreAxe extends ItemAxe implements IRegistryObject, ICoreTool {
 
     public static final Set<Material> BASE_EFFECTIVE_MATERIALS = Sets.newHashSet(Material.GOURD, Material.WOOD);
     public static final Material[] EXTRA_EFFECTIVE_MATERIALS = {Material.WOOD, Material.LEAVES, Material.PLANTS, Material.VINE};
 
-    public CoreMattock() {
-        super(EquipmentData.FAKE_MATERIAL);
+    public CoreAxe() {
+        super(GearData.FAKE_MATERIAL, 0f, 0f);
         setUnlocalizedName(getFullName());
         setNoRepair();
     }
@@ -52,54 +54,65 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
     @Nonnull
     @Override
     public ConfigOptionEquipment getConfig() {
-        return Config.mattock;
+        return Config.axe;
     }
+
+    /*
+     * ItemTool overrides
+     */
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        return EquipmentHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
+        return GearHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
     }
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
-        if (!("shovel".equals(toolClass) || "axe".equals(toolClass)) || EquipmentHelper.isBroken(stack))
+        if (super.getHarvestLevel(stack, toolClass, player, state) < 0 || GearHelper.isBroken(stack))
             return -1;
-        return EquipmentData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+        return GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
     }
 
+    @Nonnull
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return EquipmentHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.of("shovel", "axe");
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : super.getToolClasses(stack);
     }
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return EquipmentHelper.getIsRepairable(toRepair, repair);
+    public boolean getIsRepairable(ItemStack toRepair, @Nonnull ItemStack repair) {
+        return GearHelper.getIsRepairable(toRepair, repair);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        return EquipmentHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+    public boolean onBlockDestroyed(@Nonnull ItemStack stack, World worldIn, @Nonnull IBlockState state, @Nonnull BlockPos pos, @Nonnull EntityLivingBase entityLiving) {
+        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        return EquipmentHelper.hitEntity(stack, target, attacker);
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, @Nonnull EntityLivingBase attacker) {
+        return GearHelper.hitEntity(stack, target, attacker);
     }
 
+    /*
+     * Item overrides
+     */
+
+    @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return EquipmentHelper.getAttributeModifiers(slot, stack);
+    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot slot, ItemStack stack) {
+        return GearHelper.getAttributeModifiers(slot, stack);
     }
 
     // Forge ItemStack-sensitive version
     @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack tool) {
+    public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack tool) {
+
         return canHarvestBlock(state, getStatInt(tool, CommonItemStats.HARVEST_LEVEL));
     }
 
@@ -127,38 +140,22 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
-
-        if (EquipmentHelper.isBroken(stack))
-            return EnumActionResult.PASS;
-
         // TODO
-
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
-    }
-
-    @Override
-    protected void setBlock(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state) {
-        worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-        if (!worldIn.isRemote) {
-            worldIn.setBlockState(pos, state, 11);
-            EquipmentHelper.attemptDamageTool(stack, 1, player);
-        }
     }
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, EntityPlayer player) {
         boolean canceled = super.onBlockStartBreak(stack, pos, player);
         if (!canceled) {
-            EquipmentHelper.onBlockStartBreak(stack, pos, player);
+            return GearHelper.onBlockStartBreak(stack, pos, player);
         }
         return canceled;
     }
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        EquipmentHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
     }
 
     @Override
@@ -169,7 +166,7 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.DURABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
     }
 
     @Override
@@ -184,14 +181,16 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
         return super.hasEffect(stack);
     }
 
+    @Nonnull
     @Override
     public EnumRarity getRarity(ItemStack stack) {
-        return EquipmentHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
+    @Nonnull
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return EquipmentHelper.getItemStackDisplayName(stack);
+    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
+        return GearHelper.getItemStackDisplayName(stack);
     }
 
     @Override
@@ -211,6 +210,10 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
         super.getSubItems(tab, items);
     }
 
+    /*
+     * IRegistryObject
+     */
+
     @Override
     public void addRecipes(RecipeMaker recipes) {
     }
@@ -221,22 +224,23 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
 
     @Override
     public String getModId() {
+
         return SilentGear.MOD_ID;
     }
 
+    @Nonnull
     @Override
     public String getName() {
-        return "mattock";
+        return getGearClass();
+    }
+
+    @Override
+    public String getGearClass() {
+        return "axe";
     }
 
     @Override
     public void getModels(Map<Integer, ModelResourceLocation> models) {
-        // TODO Auto-generated method stub
         models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
-    }
-
-    @Override
-    public String getItemClassName() {
-        return "mattock";
     }
 }

@@ -12,7 +12,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.BlueprintBook;
-import net.silentchaos512.gear.item.tool.*;
+import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.item.ItemGuideBookSL;
 import net.silentchaos512.lib.item.ItemSL;
 import net.silentchaos512.lib.registry.IRegistrationHandler;

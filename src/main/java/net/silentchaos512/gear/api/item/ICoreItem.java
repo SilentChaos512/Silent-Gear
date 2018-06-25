@@ -8,7 +8,7 @@ import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.util.EquipmentData;
+import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -36,8 +36,8 @@ public interface ICoreItem extends IStatItem {
     default ItemStack construct(Item item, Collection<ItemPartData> parts) {
 
         ItemStack result = new ItemStack(item);
-        EquipmentData.writeConstructionParts(result, parts);
-        EquipmentData.recalculateStats(result);
+        GearData.writeConstructionParts(result, parts);
+        GearData.recalculateStats(result);
         return result;
     }
 
@@ -47,8 +47,7 @@ public interface ICoreItem extends IStatItem {
         return null;
     }
 
-    // TODO: Rename to getGearClass
-    default String getItemClassName() {
+    default String getGearClass() {
 
         ResourceLocation registryName = getItem().getRegistryName();
         return registryName == null ? "unknown" : registryName.getResourcePath();
@@ -61,13 +60,13 @@ public interface ICoreItem extends IStatItem {
     @Override
     default float getStat(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
 
-        return EquipmentData.getStat(stack, stat);
+        return GearData.getStat(stack, stat);
     }
 
     @Override
     default int getStatInt(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
 
-        return Math.round(EquipmentData.getStat(stack, stat));
+        return Math.round(GearData.getStat(stack, stat));
     }
 
     Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack);
@@ -87,7 +86,7 @@ public interface ICoreItem extends IStatItem {
     }
 
     default String getModelKey(int animationFrame, ItemPart... parts) {
-        StringBuilder builder = new StringBuilder(getItemClassName());
+        StringBuilder builder = new StringBuilder(getGearClass());
         for (ItemPart part : parts)
             builder.append("|").append(part == null ? "n" : part.getModelIndex(animationFrame));
         return builder.toString();

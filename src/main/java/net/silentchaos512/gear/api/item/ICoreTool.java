@@ -9,7 +9,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.ToolHead;
-import net.silentchaos512.gear.util.EquipmentData;
+import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,45 +33,45 @@ public interface ICoreTool extends ICoreItem {
         return RELEVANT_STATS;
     }
 
-    default ItemPartMain getPrimaryHeadPart(@Nonnull ItemStack stack) {
+    default PartMain getPrimaryHeadPart(@Nonnull ItemStack stack) {
 
-        ItemPartData data = EquipmentData.getPrimaryPart(stack);
+        ItemPartData data = GearData.getPrimaryPart(stack);
         if (data != null)
-            return (ItemPartMain) data.part;
+            return (PartMain) data.part;
         return ModMaterials.mainWood;
     }
 
-    default ItemPartMain getSecondaryPart(@Nonnull ItemStack stack) {
+    default PartMain getSecondaryPart(@Nonnull ItemStack stack) {
 
-        ItemPartData data = EquipmentData.getSecondaryPart(stack);
+        ItemPartData data = GearData.getSecondaryPart(stack);
         if (data != null)
-            return (ItemPartMain) data.part;
+            return (PartMain) data.part;
         return ModMaterials.mainWood;
     }
 
-    default ToolPartRod getRodPart(@Nonnull ItemStack stack) {
+    default PartRod getRodPart(@Nonnull ItemStack stack) {
 
-        for (ItemPartData data : EquipmentData.getConstructionParts(stack))
-            if (data.part instanceof ToolPartRod)
-                return (ToolPartRod) data.part;
+        for (ItemPartData data : GearData.getConstructionParts(stack))
+            if (data.part instanceof PartRod)
+                return (PartRod) data.part;
         return ModMaterials.rodWood;
     }
 
     @Nullable
-    default ToolPartTip getTipPart(@Nonnull ItemStack stack) {
+    default PartTip getTipPart(@Nonnull ItemStack stack) {
 
-        for (ItemPartData data : EquipmentData.getConstructionParts(stack))
-            if (data.part instanceof ToolPartTip)
-                return (ToolPartTip) data.part;
+        for (ItemPartData data : GearData.getConstructionParts(stack))
+            if (data.part instanceof PartTip)
+                return (PartTip) data.part;
         return null;
     }
 
     @Nullable
-    default BowPartString getBowstringPart(@Nonnull ItemStack stack) {
+    default PartBowstring getBowstringPart(@Nonnull ItemStack stack) {
 
-        for (ItemPartData data : EquipmentData.getConstructionParts(stack))
-            if (data.part instanceof BowPartString)
-                return (BowPartString) data.part;
+        for (ItemPartData data : GearData.getConstructionParts(stack))
+            if (data.part instanceof PartBowstring)
+                return (PartBowstring) data.part;
         return null;
     }
 
@@ -94,22 +94,22 @@ public interface ICoreTool extends ICoreItem {
                 if (!head.isEmpty())
                     return false;
                 String headClass = ((ToolHead) stack.getItem()).getToolClass(stack);
-                if (!headClass.equals(this.getItemClassName()))
+                if (!headClass.equals(this.getGearClass()))
                     return false;
                 head = stack;
-            } else if (part instanceof ToolPartRod) {
+            } else if (part instanceof PartRod) {
                 // Rod
                 if (!rod.isEmpty() && part != PartRegistry.get(rod))
                     return false;
                 ++rodCount;
                 rod = stack;
-            } else if (part instanceof BowPartString) {
+            } else if (part instanceof PartBowstring) {
                 // Bowstring
                 if (!bowstring.isEmpty() && part != PartRegistry.get(bowstring))
                     return false;
                 ++bowstringCount;
                 bowstring = stack;
-            } else if (part instanceof ToolPartTip) {
+            } else if (part instanceof PartTip) {
                 // Tipped upgrade
                 ++tipCount;
             } else if (part != null) {
@@ -122,9 +122,6 @@ public interface ICoreTool extends ICoreItem {
         }
 
         ConfigOptionEquipment config = getConfig();
-
-//    if (config.item == ModItems.bow)
-//      SilentGear.log.debug(config.getHeadCount(), config.getRodCount(), config.getBowstringCount(), head, rod, rodCount, bowstring, bowstringCount);
 
         boolean headCheck = !head.isEmpty();
         boolean rodCheck = config.getRodCount() == 0 || (!rod.isEmpty() && config.getRodCount() == rodCount);
@@ -144,6 +141,6 @@ public interface ICoreTool extends ICoreItem {
     }
 
     default boolean hasSwordGuard() {
-        return "sword".equals(getItemClassName());
+        return "sword".equals(getGearClass());
     }
 }

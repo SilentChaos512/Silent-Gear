@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.item.tool;
+package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,8 +27,8 @@ import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IRegistryObject;
 import net.silentchaos512.lib.registry.RecipeMaker;
 import net.silentchaos512.lib.util.StackHelper;
@@ -65,14 +65,14 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
     }
 
     public float getArrowDamage(ItemStack stack) {
-        return EquipmentData.getStat(stack, CommonItemStats.RANGED_DAMAGE);
+        return GearData.getStat(stack, CommonItemStats.RANGED_DAMAGE);
     }
 
     @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
         if (player.world.isRemote) {
             float pull = (stack.getMaxItemUseDuration() - player.getItemInUseCount()) / getDrawDelay(stack);
-            ToolModel.bowPull.put(EquipmentData.getUUID(stack), pull);
+            ToolModel.bowPull.put(GearData.getUUID(stack), pull);
         }
         super.onUsingTick(stack, player, count);
     }
@@ -103,7 +103,7 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
 
         boolean hasAmmo = StackHelper.isValid(findAmmo(player))
                 || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-        boolean isBroken = EquipmentHelper.isBroken(stack);
+        boolean isBroken = GearHelper.isBroken(stack);
 
         if (isBroken)
             return new ActionResult<>(EnumActionResult.PASS, stack);
@@ -125,7 +125,7 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
         if (worldIn.isRemote) {
-            ToolModel.bowPull.remove(EquipmentData.getUUID(stack));
+            ToolModel.bowPull.remove(GearData.getUUID(stack));
         }
 
         if (entityLiving instanceof EntityPlayer) {
@@ -198,7 +198,7 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.DURABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
     }
 
     @Override
@@ -215,12 +215,12 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {
-        return EquipmentHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return EquipmentHelper.getItemStackDisplayName(stack);
+        return GearHelper.getItemStackDisplayName(stack);
     }
 
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -235,22 +235,22 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
     }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return EquipmentHelper.getIsRepairable(toRepair, repair);
+        return GearHelper.getIsRepairable(toRepair, repair);
     }
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        EquipmentHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+        GearHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override
     public boolean onEntityItemUpdate(EntityItem entityItem) {
-        return EquipmentHelper.onEntityItemUpdate(entityItem);
+        return GearHelper.onEntityItemUpdate(entityItem);
     }
 
     @Override
@@ -269,11 +269,11 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
     @Nonnull
     @Override
     public String getName() {
-        return getItemClassName();
+        return getGearClass();
     }
 
     @Override
-    public String getItemClassName() {
+    public String getGearClass() {
         return "bow";
     }
 

@@ -7,9 +7,9 @@ import net.silentchaos512.gear.api.lib.ItemPartData;
 
 import java.util.List;
 
-public final class ToolPartTip extends ItemPart implements IUpgradePart {
+public final class PartTip extends ItemPart implements IUpgradePart {
 
-    public ToolPartTip(ResourceLocation resource) {
+    public PartTip(ResourceLocation resource) {
         super(resource);
     }
 
@@ -20,13 +20,13 @@ public final class ToolPartTip extends ItemPart implements IUpgradePart {
     }
 
     @Override
-    public ResourceLocation getBrokenTexture(ItemStack stack, String toolClass) {
+    public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
         return ItemPart.BLANK_TEXTURE;
     }
 
     @Override
-    public void addInformation(ItemPartData data, ItemStack stack, World world, List<String> tooltip, boolean advanced) {
-        tooltip.add(1, getLocalizedName(data, stack));
+    public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+        tooltip.add(1, getLocalizedName(data, gear));
     }
 
     @Override

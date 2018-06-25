@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.item.tool;
+package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.parts.ItemPartMain;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.EquipmentClientHelper;
@@ -26,8 +26,8 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
-import net.silentchaos512.gear.util.EquipmentData;
-import net.silentchaos512.gear.util.EquipmentHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.item.ItemArmorSL;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
@@ -53,11 +53,11 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
     //region Stats and attributes
 
     public double getArmorProtection(ItemStack stack) {
-        return ABSORPTION_RATIO_BY_SLOT[armorType.getIndex()] * EquipmentData.getStat(stack, CommonItemStats.ARMOR);
+        return ABSORPTION_RATIO_BY_SLOT[armorType.getIndex()] * GearData.getStat(stack, CommonItemStats.ARMOR);
     }
 
     public double getArmorToughness(ItemStack stack) {
-        return EquipmentData.getStat(stack, CommonItemStats.ARMOR_TOUGHNESS);
+        return GearData.getStat(stack, CommonItemStats.ARMOR_TOUGHNESS);
     }
 
     private static double getGenericArmorProtection(ItemStack stack) {
@@ -122,7 +122,7 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
     @Override
     public int getMaxDamage(ItemStack stack) {
         int tier = 0; // TODO
-        int x = EquipmentData.getStatInt(stack, CommonItemStats.DURABILITY);
+        int x = GearData.getStatInt(stack, CommonItemStats.DURABILITY);
         float y = (1.8f * x + 1515) / 131;
         float z = y * (tier + 1f) / 2f;
         return (int) (MAX_DAMAGE_ARRAY[armorType.getIndex()] * z);
@@ -130,35 +130,35 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return EquipmentHelper.getIsRepairable(toRepair, repair);
+        return GearHelper.getIsRepairable(toRepair, repair);
     }
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return EquipmentData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
     }
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        EquipmentHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+        GearHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override
     public void addRecipes(RecipeMaker recipes) {
-        Ingredient blueprint = new Ingredient(ModItems.blueprint.getStack(getItemClassName())) {
+        Ingredient blueprint = new Ingredient(ModItems.blueprint.getStack(getGearClass())) {
             @Override
             public boolean apply(ItemStack stack) {
                 return stack.getItem() instanceof IBlueprint && ((IBlueprint) stack.getItem()).getOutputInfo(stack).gear == getItem();
             }
         };
-        for (ItemPartMain part : PartRegistry.getVisibleMains()) {
+        for (PartMain part : PartRegistry.getVisibleMains()) {
             ItemStack result = construct(this, part.getCraftingStack());
             Object[] inputs = new Object[getConfig().getHeadCount() + 1];
             inputs[0] = blueprint;
             for (int i = 1; i < inputs.length; ++i) {
                 inputs[i] = part.getCraftingStack();
             }
-            String recipeKey = getItemClassName() + "_example_" + part.getKey().toString().replaceAll(":", "_");
+            String recipeKey = getGearClass() + "_example_" + part.getKey().toString().replaceAll(":", "_");
             recipes.addShapelessOre(recipeKey, result, inputs);
         }
     }
@@ -166,7 +166,7 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if (this.isInCreativeTab(tab))
-            for (ItemPartMain part : PartRegistry.getVisibleMains())
+            for (PartMain part : PartRegistry.getVisibleMains())
                 subItems.add(construct(this, part.getCraftingStack()));
     }
 
@@ -189,7 +189,7 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return EquipmentHelper.getItemStackDisplayName(stack);
+        return GearHelper.getItemStackDisplayName(stack);
     }
 
     @Override
