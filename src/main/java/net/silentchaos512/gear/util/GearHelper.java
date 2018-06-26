@@ -3,6 +3,7 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -11,56 +12,26 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartMain;
+import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.config.Config;
 
-import java.util.Iterator;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class GearHelper {
 
-    // ==========================================================================
-    // Mining, using, repairing, etc
-    // ==========================================================================
-
-    public static float getDestroySpeed(ItemStack stack, IBlockState state, Material[] extraMaterials) {
-        if (isBroken(stack))
-            return 0.25f;
-
-        float speed = GearData.getStat(stack, CommonItemStats.HARVEST_SPEED);
-
-        // Tool effective on block?
-        if (stack.getItem().canHarvestBlock(state, stack)) {
-            return speed;
-        }
-
-        for (String type : stack.getItem().getToolClasses(stack)) {
-            try {
-                if (state.getBlock().isToolEffective(type, state)) {
-                    return speed;
-                }
-            } catch (IllegalArgumentException ex) {
-                return 1f;
-            }
-        }
-
-        if (extraMaterials != null) {
-            for (Material material : extraMaterials) {
-                if (state.getMaterial() == material) {
-                    return speed;
-                }
-            }
-        }
-
-        // Tool ineffective.
-        return 1f;
-    }
+    //region Attribute modifiers
 
     public static float getMeleeDamageModifier(ItemStack stack) {
         if (isBroken(stack))
@@ -120,6 +91,11 @@ public class GearHelper {
         }
     }
 
+    //endregion
+
+
+    //region Damage and repair
+
     public static boolean getIsRepairable(ItemStack stack, ItemStack material) {
         ItemPartData data = GearData.getPrimaryPart(stack);
         ItemPartData dataMaterial = ItemPartData.fromStack(material);
@@ -165,35 +141,56 @@ public class GearHelper {
         return stack.getMaxDamage() >= CommonItemStats.DURABILITY.getMaximumValue();
     }
 
+    //endregion
+
+    public static float getDestroySpeed(ItemStack stack, IBlockState state, @Nullable Set<Material> extraMaterials) {
+        if (isBroken(stack))
+            return 0.25f;
+
+        float speed = GearData.getStat(stack, CommonItemStats.HARVEST_SPEED);
+
+        // Tool effective on block?
+        if (stack.getItem().canHarvestBlock(state, stack)) {
+            return speed;
+        }
+
+        // Check tool classes
+        for (String type : stack.getItem().getToolClasses(stack)) {
+            if (state.getBlock().isToolEffective(type, state)) {
+                return speed;
+            }
+        }
+
+        // Check extra materials
+        if (extraMaterials != null && extraMaterials.contains(state.getMaterial())) {
+            return speed;
+        }
+
+        // Tool ineffective.
+        return 1f;
+    }
+
+    @Deprecated
     public static boolean onBlockStartBreak(ItemStack stack, BlockPos pos, EntityPlayer player) {
-        // TODO
+        // Used for statistics
         return false;
     }
 
     public static boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        // TODO
-        if (!isBroken(stack))
-            attemptDamage(stack, 1, entityLiving);
+        if (!isBroken(stack) && stack.getItem() instanceof ICoreTool) {
+            int damage = ((ICoreTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
+            attemptDamage(stack, damage, entityLiving);
+        }
         return true;
     }
 
     public static boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        // TODO
-        boolean isSword = stack.getItem() instanceof ItemSword;
-        boolean isShield = stack.getItem() instanceof ItemShield;
-        boolean isTool = stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemHoe;
         boolean isBroken = isBroken(stack);
-
-        if (!isBroken) {
-            int currentDmg = stack.getItemDamage();
-            int maxDmg = stack.getMaxDamage();
-            attemptDamage(stack, isTool ? 2 : (isSword || isShield ? 1 : 0), attacker);
-
-            if (isBroken(stack))
-                attacker.renderBrokenItemStack(stack);
+        if (!isBroken && stack.getItem() instanceof ICoreTool) {
+            int damage = ((ICoreTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
+            attemptDamage(stack, damage, attacker);
         }
-
-        return !isBroken && isTool;
+        return !isBroken;
     }
 
     public static void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
@@ -205,17 +202,22 @@ public class GearHelper {
         return false;
     }
 
-    public static EnumRarity getRarity(ItemStack stack) {
-        int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
-        if (rarity < 20)
-            return EnumRarity.COMMON;
-        if (rarity < 40)
-            return EnumRarity.UNCOMMON;
-        if (rarity < 60)
-            return EnumRarity.RARE;
-        if (rarity < 80)
-            return EnumRarity.EPIC;
-        return SilentGear.RARITY_LEGENDARY;
+    private static Map<String, List<ItemStack>> subItemCache = new HashMap<>();
+
+    public static void getSubItems(ICoreItem item, CreativeTabs tab, NonNullList<ItemStack> subitems) {
+        if (!subItemCache.containsKey(item.getGearClass())) {
+            List<ItemStack> list = new ArrayList<>();
+            // TODO: How should we handle gear subitems?
+            for (PartMain part : PartRegistry.getVisibleMains()) {
+                list.add(item.construct(item.getItem(), part.getCraftingStack()));
+            }
+            subItemCache.put(item.getGearClass(), list);
+        }
+        subitems.addAll(subItemCache.get(item.getGearClass()));
+    }
+
+    public static void resetSubItemsCache() {
+        subItemCache.clear();
     }
 
     public static String getItemStackDisplayName(ItemStack stack) {

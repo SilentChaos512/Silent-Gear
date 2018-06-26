@@ -31,7 +31,8 @@ public class ModItems implements IRegistrationHandler<Item> {
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
 
-    public static Blueprint blueprint = new Blueprint();
+    public static Blueprint blueprint = new Blueprint("blueprint", false);
+    public static Blueprint template = new Blueprint("template", true);
     public static BlueprintBook blueprintBook = new BlueprintBook();
     public static TipUpgrade tipUpgrade = new TipUpgrade();
     public static CraftingItem crafting = new CraftingItem();
@@ -47,6 +48,7 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static CoreAxe axe = new CoreAxe();
     public static CoreHammer hammer = new CoreHammer();
     public static CoreMattock mattock = new CoreMattock();
+    public static CoreSickle sickle = new CoreSickle();
     public static CoreBow bow = new CoreBow();
 
     public static CoreArmor helmet = new CoreArmor(EntityEquipmentSlot.HEAD, "helmet");
@@ -58,31 +60,33 @@ public class ModItems implements IRegistrationHandler<Item> {
     public void registerAll(SRegistry reg) {
         reg.registerItem(guideBook);
 
-        reg.registerItem(blueprint).setCreativeTab(SilentGear.creativeTab);
-        reg.registerItem(blueprintBook).setCreativeTab(SilentGear.creativeTab);
-        reg.registerItem(tipUpgrade).setCreativeTab(SilentGear.creativeTab);
-        reg.registerItem(crafting).setCreativeTab(SilentGear.creativeTab);
-        reg.registerItem(dye).setCreativeTab(SilentGear.creativeTab);
-        reg.registerItem(flaxseeds).setCreativeTab(SilentGear.creativeTab);
-        reg.registerItem(flaxFiber).setCreativeTab(SilentGear.creativeTab);
+        reg.registerItem(blueprint);
+        reg.registerItem(template);
+        reg.registerItem(blueprintBook);
+        reg.registerItem(tipUpgrade);
+        reg.registerItem(crafting);
+        reg.registerItem(dye);
+        reg.registerItem(flaxseeds);
+        reg.registerItem(flaxFiber);
 
-        reg.registerItem(toolHead).setCreativeTab(SilentGear.creativeTab);
+        reg.registerItem(toolHead);
 
-        registerTool(reg, sword).setCreativeTab(SilentGear.creativeTab);
-        registerTool(reg, pickaxe).setCreativeTab(SilentGear.creativeTab);
-        registerTool(reg, shovel).setCreativeTab(SilentGear.creativeTab);
-        registerTool(reg, axe).setCreativeTab(SilentGear.creativeTab);
-        registerTool(reg, hammer).setCreativeTab(SilentGear.creativeTab);
-        registerTool(reg, mattock).setCreativeTab(SilentGear.creativeTab);
-        registerTool(reg, bow).setCreativeTab(SilentGear.creativeTab);
+        registerTool(reg, sword);
+        registerTool(reg, pickaxe);
+        registerTool(reg, shovel);
+        registerTool(reg, axe);
+        registerTool(reg, hammer);
+        registerTool(reg, mattock);
+        registerTool(reg, sickle);
+        registerTool(reg, bow);
 
-        registerArmor(reg, helmet).setCreativeTab(SilentGear.creativeTab);
-        registerArmor(reg, chestplate).setCreativeTab(SilentGear.creativeTab);
-        registerArmor(reg, leggings).setCreativeTab(SilentGear.creativeTab);
-        registerArmor(reg, boots).setCreativeTab(SilentGear.creativeTab);
+        registerArmor(reg, helmet);
+        registerArmor(reg, chestplate);
+        registerArmor(reg, leggings);
+        registerArmor(reg, boots);
 
         // Extra initializations
-        blueprint.initSubtypes();
+        Blueprint.initSubtypes();
 
         // Extra recipes
         RecipeMaker recipes = SilentGear.registry.recipes;

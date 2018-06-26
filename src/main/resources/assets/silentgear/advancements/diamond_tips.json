@@ -18,7 +18,8 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "silentgear:tip_upgrade"
+                        "item": "silentgear:tip_upgrade",
+                        "data": 2
                     }
                 ]
             }

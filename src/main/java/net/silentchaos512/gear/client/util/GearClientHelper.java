@@ -119,6 +119,14 @@ public class GearClientHelper {
         return SilentGear.RARITY_LEGENDARY;
     }
 
+    public static boolean hasEffect(ItemStack stack) {
+        return stack.isItemEnchanted();
+    }
+
+    public static boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return !oldStack.equals(newStack);
+    }
+
     public static Map<String, ItemPart> getRenderParts(ItemStack stack) {
 
         Map<String, ItemPart> map = new LinkedHashMap<>();

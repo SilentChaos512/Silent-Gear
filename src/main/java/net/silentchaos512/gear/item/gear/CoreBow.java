@@ -1,17 +1,19 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
@@ -30,7 +32,6 @@ import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IRegistryObject;
-import net.silentchaos512.lib.registry.RecipeMaker;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
@@ -52,6 +53,29 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
     public ConfigOptionEquipment getConfig() {
         return Config.bow;
     }
+
+    @Override
+    public String getModId() {
+        return SilentGear.MOD_ID;
+    }
+
+    @Nonnull
+    @Override
+    public String getName() {
+        return getGearClass();
+    }
+
+    @Override
+    public String getGearClass() {
+        return "bow";
+    }
+
+    @Override
+    public void getModels(Map<Integer, ModelResourceLocation> models) {
+        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
+    }
+
+    //region Bow stuff
 
     @Override
     public float getDrawDelay(ItemStack stack) {
@@ -94,8 +118,8 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
             return ItemStack.EMPTY;
         }
     }
-
     // Same as vanilla bow, except it can be fired without arrows with infinity.
+
     @Nonnull
     @Override
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer player, @Nonnull EnumHand hand) {
@@ -196,46 +220,18 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
         }
     }
 
-    @Override
-    public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
-    }
+    //endregion
+
+    //region Standard tool overrides
 
     @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        // TODO Auto-generated method stub
-        return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
-    }
-
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        // TODO Auto-generated method stub
-        return super.hasEffect(stack);
-    }
-
-    @Override
-    public EnumRarity getRarity(ItemStack stack) {
-        return GearClientHelper.getRarity(stack);
-    }
-
-    @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
-    }
-
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        // TODO Auto-generated method stub
-        super.getSubItems(tab, items);
-    }
-
-    @Override
-    public int getItemEnchantability(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        return GearHelper.getAttributeModifiers(slot, stack);
     }
 
     @Override
@@ -244,41 +240,44 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+    public int getItemEnchantability(ItemStack stack) {
+        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
     }
 
     @Override
-    public boolean onEntityItemUpdate(EntityItem entityItem) {
-        return GearHelper.onEntityItemUpdate(entityItem);
+    public String getItemStackDisplayName(ItemStack stack) {
+        return GearHelper.getItemStackDisplayName(stack);
     }
 
     @Override
-    public void addRecipes(RecipeMaker recipes) {
+    public int getMaxDamage(ItemStack stack) {
+        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
     }
 
     @Override
-    public void addOreDict() {
+    public EnumRarity getRarity(ItemStack stack) {
+        return GearClientHelper.getRarity(stack);
     }
 
     @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return getGearClass();
+    public boolean hasEffect(ItemStack stack) {
+        return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public String getGearClass() {
-        return "bow";
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        GearHelper.getSubItems(this, tab, items);
     }
 
     @Override
-    public void getModels(Map<Integer, ModelResourceLocation> models) {
-        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
+    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
     }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+    }
+
+    //endregion
 }

@@ -2,17 +2,14 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -31,7 +28,6 @@ import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IRegistryObject;
-import net.silentchaos512.lib.registry.RecipeMaker;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -40,8 +36,8 @@ import java.util.Set;
 
 public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
 
-    public static final Set<Material> BASE_EFFECTIVE_MATERIALS = Sets.newHashSet(Material.GOURD, Material.WOOD);
-    public static final Material[] EXTRA_EFFECTIVE_MATERIALS = {Material.WOOD, Material.LEAVES, Material.PLANTS, Material.VINE};
+    private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.GOURD, Material.WOOD);
+    private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANTS, Material.VINE);
 
     public CoreMattock() {
         super(GearData.FAKE_MATERIAL);
@@ -56,73 +52,24 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
+    public String getModId() {
+        return SilentGear.MOD_ID;
+    }
+
+    @Nonnull
+    @Override
+    public String getName() {
+        return getGearClass();
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
-        if (!("shovel".equals(toolClass) || "axe".equals(toolClass)) || GearHelper.isBroken(stack))
-            return -1;
-        return GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+    public String getGearClass() {
+        return "mattock";
     }
 
     @Override
-    public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.of("shovel", "axe");
-    }
-
-    @Override
-    public int getItemEnchantability(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
-    }
-
-    @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-    }
-
-    @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
-    }
-
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return GearHelper.getAttributeModifiers(slot, stack);
-    }
-
-    // Forge ItemStack-sensitive version
-    @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack tool) {
-        return canHarvestBlock(state, getStatInt(tool, CommonItemStats.HARVEST_LEVEL));
-    }
-
-    // Vanilla version... Not good because we can't get the actual harvest level.
-    @Override
-    public boolean canHarvestBlock(IBlockState state) {
-        // Assume a very high level since we can't get the actual value.
-        return canHarvestBlock(state, 10);
-    }
-
-    protected boolean canHarvestBlock(IBlockState state, int toolLevel) {
-        // Wrong harvest level?
-        if (state.getBlock().getHarvestLevel(state) > toolLevel)
-            return false;
-        // Included in base materials?
-        if (BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
-            return true;
-        // Included in extra materials?
-        for (Material mat : EXTRA_EFFECTIVE_MATERIALS)
-            if (mat.equals(state.getMaterial()))
-                return true;
-
-        return super.canHarvestBlock(state);
+    public void getModels(Map<Integer, ModelResourceLocation> models) {
+        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
     }
 
     @Override
@@ -147,46 +94,65 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
         }
     }
 
+    //region Harvest tool overrides
+
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, EntityPlayer player) {
-        boolean canceled = super.onBlockStartBreak(stack, pos, player);
-        if (!canceled) {
-            GearHelper.onBlockStartBreak(stack, pos, player);
-        }
-        return canceled;
+    public boolean canHarvestBlock(IBlockState state, ItemStack tool) {
+        // Forge ItemStack-sensitive version
+        return canHarvestBlock(state, getStatInt(tool, CommonItemStats.HARVEST_LEVEL));
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+    public boolean canHarvestBlock(IBlockState state) {
+        // Vanilla version... Not good because we can't get the actual harvest level.
+        // Assume a very high level since we can't get the actual value.
+        return canHarvestBlock(state, 10);
+    }
+
+    private boolean canHarvestBlock(IBlockState state, int toolLevel) {
+        // Wrong harvest level?
+        if (state.getBlock().getHarvestLevel(state) > toolLevel)
+            return false;
+        // Included in base or extra materials?
+        if (BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()) || EXTRA_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
+            return true;
+        return super.canHarvestBlock(state);
+    }
+
+    //endregion
+
+    //region Standard tool overrides
+
+    @Override
+    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public boolean onEntityItemUpdate(EntityItem entityItem) {
-        // TODO Auto-generated method stub
-        return super.onEntityItemUpdate(entityItem);
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        return GearHelper.getAttributeModifiers(slot, stack);
     }
 
     @Override
-    public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+        return GearHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
     }
 
     @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        // TODO Auto-generated method stub
-        return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+    public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
+        if (super.getHarvestLevel(stack, toolClass, player, state) < 0 || GearHelper.isBroken(stack))
+            return -1;
+        return GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
-        // TODO
-        return super.hasEffect(stack);
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return GearHelper.getIsRepairable(toRepair, repair);
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack stack) {
-        return GearClientHelper.getRarity(stack);
+    public int getItemEnchantability(ItemStack stack) {
+        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
     }
 
     @Override
@@ -195,48 +161,49 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+    public int getMaxDamage(ItemStack stack) {
+        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
     }
 
     @Override
-    public FontRenderer getFontRenderer(ItemStack stack) {
-        // return CustomFontRenderer.INSTANCE;
-        return super.getFontRenderer(stack);
+    public EnumRarity getRarity(ItemStack stack) {
+        return GearClientHelper.getRarity(stack);
+    }
+
+    @Override
+    public Set<String> getToolClasses(ItemStack stack) {
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : super.getToolClasses(stack);
+    }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return GearClientHelper.hasEffect(stack);
+    }
+
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        return GearHelper.hitEntity(stack, target, attacker);
     }
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        // TODO Auto-generated method stub
-        super.getSubItems(tab, items);
+        GearHelper.getSubItems(this, tab, items);
     }
 
     @Override
-    public void addRecipes(RecipeMaker recipes) {
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
-    public void addOreDict() {
+    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
     }
 
     @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
 
-    @Override
-    public String getName() {
-        return "mattock";
-    }
-
-    @Override
-    public void getModels(Map<Integer, ModelResourceLocation> models) {
-        // TODO Auto-generated method stub
-        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
-    }
-
-    @Override
-    public String getGearClass() {
-        return "mattock";
-    }
+    //endregion
 }

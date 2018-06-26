@@ -28,6 +28,7 @@ hs_err_pid*
 *.iml
 .gradle/
 build/
+image_test/
 libs/
 
 # Just in case...

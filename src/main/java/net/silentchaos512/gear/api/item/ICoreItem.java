@@ -3,7 +3,6 @@ package net.silentchaos512.gear.api.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -47,11 +46,7 @@ public interface ICoreItem extends IStatItem {
         return null;
     }
 
-    default String getGearClass() {
-
-        ResourceLocation registryName = getItem().getRegistryName();
-        return registryName == null ? "unknown" : registryName.getResourcePath();
-    }
+    String getGearClass();
 
     //endregion
 

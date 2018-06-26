@@ -1,7 +1,12 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.Lists;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -31,6 +36,20 @@ public interface ICoreTool extends ICoreItem {
     default Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack) {
 
         return RELEVANT_STATS;
+    }
+
+    /**
+     * The base damage done to the item when breaking a block, not considering enchantments
+     */
+    default int getDamageOnBlockBreak(ItemStack gear, World world, IBlockState state, BlockPos pos) {
+        return state.getMaterial() != Material.LEAVES && state.getBlockHardness(world, pos) > 0 ? 1 : 0;
+    }
+
+    /**
+     * The base damage done to the item when attacking an entity
+     */
+    default int getDamageOnHitEntity(ItemStack gear, EntityLivingBase target, EntityLivingBase attacker) {
+        return 2;
     }
 
     default PartMain getPrimaryHeadPart(@Nonnull ItemStack stack) {

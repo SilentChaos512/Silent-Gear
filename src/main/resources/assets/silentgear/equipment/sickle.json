@@ -13,7 +13,7 @@
     ],
     "base_modifiers": {
         "melee_damage": 1.0,
-        "attack_speed": -2.8,
+        "attack_speed": -1.8,
         "repair_efficiency": 1.0
     },
     "crafting": {

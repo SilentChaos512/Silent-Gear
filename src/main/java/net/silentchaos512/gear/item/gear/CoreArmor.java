@@ -50,6 +50,11 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
         setNoRepair();
     }
 
+    @Override
+    public String getGearClass() {
+        return getName();
+    }
+
     //region Stats and attributes
 
     public double getArmorProtection(ItemStack stack) {
@@ -166,8 +171,7 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if (this.isInCreativeTab(tab))
-            for (PartMain part : PartRegistry.getVisibleMains())
-                subItems.add(construct(this, part.getCraftingStack()));
+            GearHelper.getSubItems(this, tab, subItems);
     }
 
     //endregion

@@ -46,6 +46,7 @@ item.silentgear:tool_head.hammer=Hammer Head
 item.silentgear:tool_head.mattock=Mattock Head
 item.silentgear:tool_head.pickaxe=Pickaxe Head
 item.silentgear:tool_head.shovel=Shovel Head
+item.silentgear:tool_head.sickle=Sickle Blade
 item.silentgear:tool_head.sword=Sword Blade & Crossguard
 
 # Crafting Item
@@ -79,6 +80,9 @@ item.silentgear:pickaxe.nameProper=%s Pickaxe
 
 item.silentgear:shovel.name=Shovel
 item.silentgear:shovel.nameProper=%s Shovel
+
+item.silentgear:sickle.name=Sickle
+item.silentgear:sickle.nameProper=%s Sickle
 
 item.silentgear:sword.name=Sword
 item.silentgear:sword.nameProper=%s Sword

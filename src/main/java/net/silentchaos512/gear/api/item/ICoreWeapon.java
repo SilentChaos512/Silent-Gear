@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -24,5 +25,10 @@ public interface ICoreWeapon extends ICoreTool {
     default Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack) {
 
         return RELEVANT_STATS;
+    }
+
+    @Override
+    default int getDamageOnHitEntity(ItemStack gear, EntityLivingBase target, EntityLivingBase attacker) {
+        return 1;
     }
 }

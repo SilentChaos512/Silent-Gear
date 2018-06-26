@@ -1,2 +1,26 @@
 {
+    "display": {
+        "icon": {
+            "item": "silentgear:pickaxe"
+        },
+        "title": {
+            "translate": "advancements.silentgear:pickaxe.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear:pickaxe.description"
+        }
+    },
+    "parent": "silentgear:root",
+    "criteria": {
+        "get_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:pickaxe"
+                    }
+                ]
+            }
+        }
+    }
 }
