@@ -2,6 +2,7 @@ package net.silentchaos512.gear.client.util;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class EquipmentClientHelper {
+public class GearClientHelper {
 
     public static Map<String, IBakedModel> modelCache = new HashMap<>();
 
@@ -103,6 +104,19 @@ public class EquipmentClientHelper {
                 tooltip.add(strConstruction);
             }
         }
+    }
+
+    public static EnumRarity getRarity(ItemStack stack) {
+        int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
+        if (rarity < 20)
+            return EnumRarity.COMMON;
+        if (rarity < 40)
+            return EnumRarity.UNCOMMON;
+        if (rarity < 60)
+            return EnumRarity.RARE;
+        if (rarity < 80)
+            return EnumRarity.EPIC;
+        return SilentGear.RARITY_LEGENDARY;
     }
 
     public static Map<String, ItemPart> getRenderParts(ItemStack stack) {

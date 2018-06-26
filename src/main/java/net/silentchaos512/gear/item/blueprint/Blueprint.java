@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,6 +12,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.PartDataList;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.gear.init.ModItems;
@@ -26,26 +28,30 @@ import java.util.function.Function;
 
 public class Blueprint extends ItemSL implements IBlueprint {
 
-    private static final String NBT_TOOL_CLASS = "ToolClass";
-    protected static final String NAME = "blueprint";
+    private static final String NBT_GEAR_CLASS = "GearClass";
+    private static final String NAME = "blueprint";
 
-    private Map<String, Function<PartDataList, ItemStack>> crafting = new HashMap<>();
-    private Map<String, IBlueprint.Output> outputs = new HashMap<>();
+    private static Map<String, Function<PartDataList, ItemStack>> crafting = new HashMap<>();
+    private static Map<String, IBlueprint.Output> outputs = new HashMap<>();
 
-    public Blueprint() {
+    public final boolean singleUse;
 
-        super(1, SilentGear.MOD_ID, NAME);
-        setContainerItem(this);
+    public Blueprint(String name, boolean singleUse) {
+        super(1, SilentGear.MOD_ID, name);
+
+        this.singleUse = singleUse;
+        if (!singleUse)
+            setContainerItem(this);
     }
 
-    public void initSubtypes() {
+    public static void initSubtypes() {
         ModItems.toolClasses.forEach((key, item) -> addBlueprintType(key, ModItems.toolHead,
                 partDataList -> ModItems.toolHead.getStack(key, partDataList)));
         ModItems.armorClasses.forEach((key, item) -> addBlueprintType(key, item.getItem(),
                 partDataList -> item.construct(item.getItem(), partDataList)));
     }
 
-    public void addBlueprintType(String key, Item item, Function<PartDataList, ItemStack> function) {
+    private static void addBlueprintType(String key, Item item, Function<PartDataList, ItemStack> function) {
         crafting.put(key, function);
         ICoreItem gear = item instanceof ICoreItem ? (ICoreItem) item : ModItems.toolClasses.get(key);
         outputs.put(key, new IBlueprint.Output(key, item, gear));
@@ -62,20 +68,20 @@ public class Blueprint extends ItemSL implements IBlueprint {
     }
 
     public String getOutputItemType(ItemStack blueprint) {
-        return StackHelper.getTagCompound(blueprint, true).getString(NBT_TOOL_CLASS);
+        return StackHelper.getTagCompound(blueprint, true).getString(NBT_GEAR_CLASS);
     }
 
     public ItemStack getStack(String toolClass) {
 
         ItemStack result = new ItemStack(this);
         NBTTagCompound tags = StackHelper.getTagCompound(result, true);
-        tags.setString(NBT_TOOL_CLASS, toolClass);
+        tags.setString(NBT_GEAR_CLASS, toolClass);
         return result;
     }
 
     @Override
     public void addRecipes(RecipeMaker recipes) {
-        ItemStack paper = ModItems.crafting.blueprintPaper;
+        Object paper = !singleUse ? ModItems.crafting.blueprintPaper : Blocks.STONE;
         String stick = "stickWood";
         List<String> added = new ArrayList<>();
 
@@ -86,6 +92,11 @@ public class Blueprint extends ItemSL implements IBlueprint {
         addRecipe(recipes, added, "axe", "pp", "ps", " s", 'p', paper, 's', stick);
         addRecipe(recipes, added, "hammer", "ppp", "ppp", "psp", 'p', paper, 's', stick);
         addRecipe(recipes, added, "mattock", "pp ", "psp", " s ", 'p', paper, 's', stick);
+
+        addRecipe(recipes, added, "helmet", "ppp", "psp", 'p', paper, 's', stick);
+        addRecipe(recipes, added, "chestplate", "psp", "ppp", "ppp", 'p', paper, 's', stick);
+        addRecipe(recipes, added, "leggings", "ppp", "psp", "p p", 'p', paper, 's', stick);
+        addRecipe(recipes, added, "boots", "psp", "p p", 'p', paper, 's', stick);
 
         // Report missing recipes!
         for (String str : ModItems.toolClasses.keySet())
@@ -109,6 +120,12 @@ public class Blueprint extends ItemSL implements IBlueprint {
 
         // Output item class
         IBlueprint.Output output = outputs.get(itemClass);
+        if (output == null) {
+            list.add(TextFormatting.RED + loc.getItemSubText(NAME, "invalid"));
+            list.add(TextFormatting.RED + "class=" + itemClass);
+            return;
+        }
+
         String key = output.item.getUnlocalizedName() + "." + (output.item instanceof ToolHead ? itemClass : "name");
         list.add(TextFormatting.AQUA + loc.getLocalizedString(key));
         if (flag.isAdvanced()) {
@@ -129,6 +146,9 @@ public class Blueprint extends ItemSL implements IBlueprint {
         }
 
         // Item recipe
+        if (!(output.gear instanceof ICoreTool)) {
+            return;
+        }
         list.add("");
         if (KeyTrackerSL.isAltDown()) {
             String locToolName = loc.getItemSubText(itemClass, "name");

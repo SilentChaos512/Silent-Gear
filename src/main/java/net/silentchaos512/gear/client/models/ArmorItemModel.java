@@ -24,7 +24,7 @@ import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
-import net.silentchaos512.gear.client.util.EquipmentClientHelper;
+import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.StackHelper;
@@ -175,7 +175,7 @@ public class ArmorItemModel implements IModel {
             String key = itemArmor.getModelKey(0, primaryPart);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
 
-            if (!EquipmentClientHelper.modelCache.containsKey(key)) {
+            if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
 
                 processTexture(stack, armorClass, "main", primaryPart, isBroken, builder);
@@ -184,11 +184,11 @@ public class ArmorItemModel implements IModel {
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
                         Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
-                EquipmentClientHelper.modelCache.put(key, bakedModel);
+                GearClientHelper.modelCache.put(key, bakedModel);
                 return bakedModel;
             }
 
-            return EquipmentClientHelper.modelCache.get(key);
+            return GearClientHelper.modelCache.get(key);
         }
 
         private void processTexture(ItemStack stack, String toolClass, String partPosition, ItemPart part, boolean isBroken, ImmutableMap.Builder<String, String> builder) {

@@ -63,6 +63,7 @@ public class SilentGear {
 
         localization = new LocalizationHelper(MOD_ID).setReplaceAmpersand(true);
         SilentLib.instance.registerLocalizationHelperForMod(MOD_ID, localization);
+        registry.setDefaultCreativeTab(creativeTab);
 
         network = new NetworkHandlerSL(MOD_ID);
         network.register(MessageExtraBlockBreak.class, Side.CLIENT);

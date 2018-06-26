@@ -21,7 +21,7 @@ import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
-import net.silentchaos512.gear.client.util.EquipmentClientHelper;
+import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModItems;
@@ -194,7 +194,7 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
 
     @Override
     public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
-        EquipmentClientHelper.addInformation(stack, world, list, flag);
+        GearClientHelper.addInformation(stack, world, list, flag);
     }
 
     //endregion

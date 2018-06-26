@@ -24,7 +24,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.client.ColorHandlers;
-import net.silentchaos512.gear.client.util.EquipmentClientHelper;
+import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.gear.CoreBow;
 import net.silentchaos512.gear.util.GearData;
@@ -266,7 +266,7 @@ public class ToolModel implements IModel {
             // DEBUG:
             // model.cache.clear();
 
-            if (!EquipmentClientHelper.modelCache.containsKey(key)) {
+            if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 // Populate the map builder with textures, function handles null checks
                 processTexture(stack, toolClass, "head", partHead, animationFrame, isBroken, builder);
@@ -279,7 +279,7 @@ public class ToolModel implements IModel {
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
-                EquipmentClientHelper.modelCache.put(key, bakedModel);
+                GearClientHelper.modelCache.put(key, bakedModel);
 
                 // Color cache
                 ColorHandlers.gearColorCache.put(key, Arrays.asList(partRod, partHead, partGuard, partTip, partBowstring).stream()
@@ -289,7 +289,7 @@ public class ToolModel implements IModel {
                 return bakedModel;
             }
 
-            return EquipmentClientHelper.modelCache.get(key);
+            return GearClientHelper.modelCache.get(key);
         }
 
         private void processTexture(ItemStack stack, String toolClass, String partPosition, ItemPart part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {

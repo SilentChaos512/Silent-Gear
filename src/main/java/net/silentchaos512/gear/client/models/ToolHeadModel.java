@@ -21,7 +21,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
-import net.silentchaos512.gear.client.util.EquipmentClientHelper;
+import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 
 import javax.annotation.Nonnull;
@@ -177,7 +177,7 @@ public class ToolHeadModel implements IModel {
             String key = toolClass +"_head|" + (primaryPart == null ? "null" : primaryPart.getModelIndex(0))
                     + (secondaryPart == null ? "" : "|" + secondaryPart.getModelIndex(0));
 
-            if (!EquipmentClientHelper.modelCache.containsKey(key)) {
+            if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 ResourceLocation textureHead = primaryPart == null ? null : primaryPart.getTexture(stack, toolClass, 0, "head");
                 ResourceLocation textureGuard = secondaryPart == null ? null : secondaryPart.getTexture(stack, toolClass, 0, "guard");
@@ -191,11 +191,11 @@ public class ToolHeadModel implements IModel {
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
-                EquipmentClientHelper.modelCache.put(key, bakedModel);
+                GearClientHelper.modelCache.put(key, bakedModel);
                 return bakedModel;
             }
 
-            return EquipmentClientHelper.modelCache.get(key);
+            return GearClientHelper.modelCache.get(key);
         }
     }
 

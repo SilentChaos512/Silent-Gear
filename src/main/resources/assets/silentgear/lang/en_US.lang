@@ -19,6 +19,7 @@ item.silentgear:blueprint.itemRecipe1=%s recipe:
 item.silentgear:blueprint.itemRecipe2=%dx %s
 item.silentgear:blueprint.canMix=Material mixing possible!
 item.silentgear:blueprint.noMixing=Mixed materials only allowed in crafting station
+item.silentgear:blueprint.invalid=Invalid
 
 item.silentgear:blueprint_book.name=Blueprint Book
 
@@ -153,8 +154,11 @@ material.silentgear:rod_wood.name=Wood Rod
 
 material.silentgear:tip_diamond.name=Diamond-Tipped
 material.silentgear:tip_emerald.name=Emerald-Tipped
+material.silentgear:tip_glowstone.name=Glowstone-Coated
 material.silentgear:tip_gold.name=Gold-Tipped
 material.silentgear:tip_iron.name=Iron-Tipped
+material.silentgear:tip_lapis.name=Lapis-Coated
+material.silentgear:tip_redstone.name=Redstone-Coated
 
 part.silentgear:type.bowstring=Bowstring
 part.silentgear:type.grip=Grip

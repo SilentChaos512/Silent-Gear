@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:tip_upgrade"
+        },
+        "title": {
+            "translate": "advancements.silentgear:iron_tips.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear:iron_tips.description"
+        }
+    },
+    "parent": "silentgear:pickaxe",
+    "criteria": {
+        "get_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:tip_upgrade"
+                    }
+                ]
+            }
+        }
+    }
+}

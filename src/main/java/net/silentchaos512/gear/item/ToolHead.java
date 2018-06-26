@@ -25,7 +25,7 @@ import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.client.util.EquipmentClientHelper;
+import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
@@ -208,7 +208,7 @@ public class ToolHead extends ItemSL implements IStatItem {
         // TODO: We're constructing a rod-less gear each time to get stats. Is that bad?
         ItemStack constructed = toolItem.construct((Item) toolItem, getAllParts(stack));
         GearData.recalculateStats(constructed);
-        EquipmentClientHelper.addInformation(constructed, world, list, flag);
+        GearClientHelper.addInformation(constructed, world, list, flag);
     }
 
     @Override

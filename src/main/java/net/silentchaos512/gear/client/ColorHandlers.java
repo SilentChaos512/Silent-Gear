@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.client.util.EquipmentClientHelper;
+import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class ColorHandlers {
             if (!(stack.getItem() instanceof ICoreItem) || tintIndex < 0)
                 return 0xFFFFFF;
 
-            String modelKey = EquipmentClientHelper.getModelKey(stack, 0);
+            String modelKey = GearClientHelper.getModelKey(stack, 0);
             Integer[] colors = gearColorCache.get(modelKey);
 
             if (colors != null && tintIndex < colors.length) {

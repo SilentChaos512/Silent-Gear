@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
-import net.silentchaos512.gear.client.util.EquipmentClientHelper;
+import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
@@ -181,7 +181,7 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
     @Override
     public EnumRarity getRarity(ItemStack stack) {
         // return super.getRarity(stack);
-        return GearHelper.getRarity(stack);
+        return GearClientHelper.getRarity(stack);
     }
 
     @Override
@@ -191,7 +191,7 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
 
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        EquipmentClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
