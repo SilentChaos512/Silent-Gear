@@ -38,8 +38,6 @@ item.silentgear:tip_upgrade_lapis.name=Lapis-Coated Upgrade
 item.silentgear:tip_upgrade_redstone.name=Redstone-Coated Upgrade
 
 item.silentgear:tool_head.name=Tool Head (Unknown)
-item.silentgear:tool_head.isExample1=Example output (modular recipe)
-item.silentgear:tool_head.isExample2=If you crafted this, something went wrong!
 item.silentgear:tool_head.axe=Axe Head
 item.silentgear:tool_head.bow=Bow Limbs
 item.silentgear:tool_head.hammer=Hammer Head
@@ -183,4 +181,6 @@ misc.silentgear:tooltip.altForConstruction=Construction &8<Press Alt>
 misc.silentgear:tooltip.ctrlForStats=Stats &8<Press Ctrl>
 
 misc.silentgear:broken=You broke it!
+misc.silentgear:exampleOutput1=Example output (modular recipe)
+misc.silentgear:exampleOutput2=If you crafted this, something went wrong!
 misc.silentgear:poorlyMade=This item is poorly made and will not last long

@@ -37,19 +37,19 @@ public class GearData {
      */
     public static final ToolMaterial FAKE_MATERIAL = EnumHelper.addToolMaterial("silentgems:fake_material", 1, 512, 5.12f, 5.12f, 32);
 
-    public static final String NBT_ROOT = "ToolCore_Data";
-    public static final String NBT_ROOT_CONSTRUCTION = "Construction";
-    public static final String NBT_ROOT_PROPERTIES = "Properties";
-    public static final String NBT_ROOT_STATISTICS = "Statistics";
+    private static final String NBT_ROOT = "ToolCore_Data";
+    private static final String NBT_ROOT_CONSTRUCTION = "Construction";
+    private static final String NBT_ROOT_PROPERTIES = "Properties";
 
-    public static final String NBT_CONSTRUCTION_PARTS = "Parts";
-    public static final String NBT_LOCK_STATS = "LockStats";
-    public static final String NBT_SYNERGY_DISPLAY = "synergy";
-    public static final String NBT_UUID = "ToolCore_UUID";
+    private static final String NBT_CONSTRUCTION_PARTS = "Parts";
+    private static final String NBT_LOCK_STATS = "LockStats";
+    private static final String NBT_IS_EXAMPLE = "IsExample";
+    private static final String NBT_SYNERGY_DISPLAY = "synergy";
+    private static final String NBT_UUID = "ToolCore_UUID";
 
-    public static final int MAX_MAIN_PARTS = 9;
-    public static final int MAX_ROD_PARTS = 1;
-    public static final int MAX_TIP_PARTS = 1;
+    private static final int MAX_MAIN_PARTS = 9;
+    private static final int MAX_ROD_PARTS = 1;
+    private static final int MAX_TIP_PARTS = 1;
 
     /**
      * Recalculate gear stats and setup NBT. This should be call ANY TIME an item is modified!
@@ -272,6 +272,14 @@ public class GearData {
         if (!rootTag.hasKey(compoundKey))
             rootTag.setTag(compoundKey, new NBTTagCompound());
         return rootTag.getCompoundTag(compoundKey);
+    }
+
+    static void setExampleTag(ItemStack stack, boolean value) {
+        getData(stack, NBT_ROOT_CONSTRUCTION).setBoolean(NBT_IS_EXAMPLE, value);
+    }
+
+    public static boolean isExampleGear(ItemStack stack) {
+        return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_IS_EXAMPLE);
     }
 
     public static class EventHandler {

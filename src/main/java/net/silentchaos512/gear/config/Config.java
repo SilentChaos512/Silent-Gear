@@ -37,6 +37,7 @@ public class Config extends ConfigBase {
 
     private static List<ConfigOptionEquipment> equipmentConfigs = new ArrayList<>();
     public static ConfigOptionEquipment sword = forEquipment(ModItems.sword);
+    public static ConfigOptionEquipment dagger = forEquipment(ModItems.dagger);
     public static ConfigOptionEquipment pickaxe = forEquipment(ModItems.pickaxe);
     public static ConfigOptionEquipment shovel = forEquipment(ModItems.shovel);
     public static ConfigOptionEquipment axe = forEquipment(ModItems.axe);

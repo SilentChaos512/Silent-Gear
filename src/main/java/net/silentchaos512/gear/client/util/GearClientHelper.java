@@ -48,6 +48,11 @@ public class GearClientHelper {
                 tooltip.add(1, TextFormatting.RED + loc.getMiscText("broken"));
             }
 
+            if (GearData.isExampleGear(stack)) {
+                tooltip.add(1, TextFormatting.RED + loc.getMiscText("exampleOutput1"));
+                tooltip.add(2, TextFormatting.RED + loc.getMiscText("exampleOutput2"));
+            }
+
             // Let parts add information if they need to
             for (ItemPartData data : GearData.getConstructionParts(stack)) {
                 data.part.addInformation(data, stack, world, tooltip, flag.isAdvanced());

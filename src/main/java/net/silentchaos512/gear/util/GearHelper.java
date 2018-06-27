@@ -209,7 +209,9 @@ public class GearHelper {
             List<ItemStack> list = new ArrayList<>();
             // TODO: How should we handle gear subitems?
             for (PartMain part : PartRegistry.getVisibleMains()) {
-                list.add(item.construct(item.getItem(), part.getCraftingStack()));
+                ItemStack stack = item.construct(item.getItem(), part.getCraftingStack());
+                GearData.setExampleTag(stack, true);
+                list.add(stack);
             }
             subItemCache.put(item.getGearClass(), list);
         }

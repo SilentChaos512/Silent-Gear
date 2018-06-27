@@ -43,6 +43,7 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static ToolHead toolHead = new ToolHead();
 
     public static CoreSword sword = new CoreSword();
+    public static CoreDagger dagger = new CoreDagger();
     public static CorePickaxe pickaxe = new CorePickaxe();
     public static CoreShovel shovel = new CoreShovel();
     public static CoreAxe axe = new CoreAxe();
@@ -72,6 +73,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         reg.registerItem(toolHead);
 
         registerTool(reg, sword);
+        registerTool(reg, dagger);
         registerTool(reg, pickaxe);
         registerTool(reg, shovel);
         registerTool(reg, axe);
