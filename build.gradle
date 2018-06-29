@@ -1,0 +1,466 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+        maven {
+            name = 'gradle'
+            url 'https://plugins.gradle.org/m2/'
+        }
+        maven {
+            name = 'sonatype'
+            url = 'https://oss.sonatype.org/content/groups/public'
+        }
+    }
+    dependencies {
+        classpath "net.minecraftforge.gradle:${project.fg_version}"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.2.+'
+    }
+}
+
+plugins {
+//id "com.github.spotbugs" version "1.6.1"
+//id "com.jaredsburrows.checkerframework" version "0.2.1"
+    id "com.matthewprenger.cursegradle" version "1.0.10"
+    id "org.sonarqube" version "2.6.2"
+    // for lombok
+    id 'net.ltgt.apt' version '0.10'
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'maven-publish'
+apply plugin: 'org.sonarqube'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'jacoco'
+//apply plugin: 'spotbugs'
+//apply plugin: 'com.jaredsburrows.checkerframework'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile('org.junit.jupiter:junit-jupiter-api:5.2.+')
+    testCompile('org.junit.platform:junit-platform-launcher:1.2.+')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.+')
+    testCompile('org.mockito:mockito-core:2.+')
+}
+
+project.afterEvaluate {
+    def junitPlatformTestTask = project.tasks.getByName('junitPlatformTest')
+
+    // configure jacoco to analyze the junitPlatformTest task
+    jacoco {
+        // this tool version is compatible with
+        toolVersion = '0.8.1'
+        applyTo junitPlatformTestTask
+    }
+
+    // create junit platform jacoco task
+    project.task(type: JacocoReport, "junitPlatformJacocoReport",
+            {
+                sourceDirectories = files("./src/main")
+                classDirectories = files("$buildDir/classes/main")
+                executionData junitPlatformTestTask
+            })
+}
+
+junitPlatform {
+    // platformVersion '1.2.0'
+    // logManager 'org.apache.logging.log4j.jul.LogManager'
+    reportsDir file("${project.buildDir}/test-results/junit-platform")
+    // enableStandardTestTask true
+    // selectors (optional)
+    // filters (optional)
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs = [
+            '-Xlint:deprecation', // deprecation, rawtypes, cast, unchecked, all
+//  '-Xdiags:verbose',
+//  '-Werror'
+    ]
+}
+
+javadoc {
+    failOnError = false
+}
+
+test {
+//  useJUnitPlatform()
+/*
+    useJUnitPlatform {
+    includeTags 'fast', 'smoke & feature-a'
+    // excludeTags 'slow', 'ci'
+    includeEngines 'junit-jupiter'
+    // excludeEngines 'junit-vintage'
+  }
+*/
+}
+
+def mod_file = getModFile()
+def short_version = getVersion('VERSION', mod_file)
+version = mc_version + '-' + short_version
+def display_version = short_version
+def build_num = getBuildNumber()
+
+if (System.getenv().BUILD_NUMBER) {
+    version += '.' + System.getenv().BUILD_NUMBER
+    display_version += '.' + System.getenv().BUILD_NUMBER
+}
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+eclipse.project {
+    buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+    natures 'org.eclipse.buildship.core.gradleprojectnature'
+}
+
+class Secrets {
+    def data = null
+
+    def getProperty(String key) {
+        return data ? data[key] : ''
+    }
+}
+
+//import groovy.json.JsonSlurper
+//
+//def secretFile
+//if (System.getenv().SECRET_FILE) {
+//  secretFile = file System.getenv().SECRET_FILE
+//} else {
+//  secretFile = file 'secret.json'
+//}
+//
+//project.ext.secret = new Secrets()
+//if (secretFile.exists()) {
+//  secretFile.withReader {
+//    project.ext.secret.data = new JsonSlurper().parse it
+//  }
+//}
+
+minecraft {
+    version = project.forge_mc_version + '-' + project.forge_version
+    runDir = 'run'
+    mappings = project.mcp_mappings
+
+    if (project.hasProperty('signSHA1')) {
+        replace '@FINGERPRINT@', project.findProperty('signSHA1')
+    } else {
+        replace '@FINGERPRINT@', ''
+    }
+
+    replace 'SL_VERSION', project.sl_version
+
+    if (project.hasProperty('coreplugin')) {
+        clientJvmArgs += '-Dfml.coreMods.load=' + project.coreplugin
+        serverJvmArgs += '-Dfml.coreMods.load=' + project.coreplugin
+    }
+
+    if (project.hasProperty('mc_username')) {
+        clientRunArgs += ['--username', project.mc_username]
+        if (project.hasProperty('mc_password')) {
+            clientRunArgs += ['--password', project.mc_password]
+        }
+    }
+    if (project.hasProperty('mc_uuid')) {
+        clientRunArgs += ['--uuid', project.mc_uuid]
+    }
+
+    // disable server gui
+    serverRunArgs += 'nogui'
+
+    // skip the screen to confirm that you want to load a world with missing registry entries
+    serverJvmArgs += '-Dfml.doNotBackup=true'
+    clientJvmArgs += '-Dfml.doNotBackup=true'
+
+    // skip having to confirm on server
+    serverJvmArgs += '-Dfml.queryResult=confirm'
+
+    //skip jansi warnings in the log
+    serverJvmArgs += '-Dlog4j.skipJansi=true'
+    clientJvmArgs += '-Dlog4j.skipJansi=true'
+
+    if (project.hasProperty('client_args')) {
+        clientJvmArgs += project.client_args
+    }
+    if (project.hasProperty('server_args')) {
+        serverJvmArgs += project.server_args
+    }
+}
+
+task incrementBuild {
+    doFirst {
+        def versionFile = file('version.properties')
+        if (versionFile.canRead()) {
+            Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionFile))
+            build_num = versionProps['build_num'].toInteger() + 1
+            println("incrementing BuildNumber to: " + build_num)
+            versionProps['build_num'] = build_num.toString()
+            versionProps.store(versionFile.newWriter(), null)
+        } else {
+            throw new GradleException("Could not read version.properties!")
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "modmaven.k-4u.nl"
+    }
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.16.22'
+    apt 'org.projectlombok:lombok:1.16.22'
+
+    // compile against the JEI API but do not include it at runtime
+    deobfProvided "mezz.jei:jei_${project.mc_version}:${project.jei_version}:api"
+    // at runtime, use the full JEI jar
+    runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
+
+    implementation 'com.github.SilentChaos512:SilentLib:1.12-SNAPSHOT'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': short_version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+jar {
+    if (build_num > 0) {
+        classifier = build_num
+    }
+    manifest {
+        if (project.hasProperty('coreplugin')) {
+            attributes 'FMLCorePluginContainsFMLMod': 'true'
+            attributes 'FMLCorePlugin': project.coreplugin
+        }
+//      attributes 'FMLAT' : ''
+    }
+}
+
+task apiJar(type: Jar) {
+    classifier = 'apiClasses'
+    from apiClasses
+}
+
+task deobfJar(type: Jar) {
+    classifier = 'deobf'
+    from sourceSets.main.output
+}
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    // Skips if the keyStore property is missing.
+    onlyIf {
+        project.hasProperty('keyStore')
+    }
+
+    // findProperty allows us to reference the property without it existing.
+    // Using project.propName would cause the script to fail validation if
+    // the property did not exist.
+    keyStore = project.findProperty('keyStore')
+    alias = project.findProperty('keyStoreAlias')
+    storePass = project.findProperty('keyStorePass')
+    keyPass = project.findProperty('keyStoreKeyPass')
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+build.dependsOn signJar
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.getDestinationDir()
+}
+
+artifacts {
+    if (project.hasProperty('doAPIJar')) {
+        archives apiJar
+    }
+    if (project.hasProperty('doDeobfJar')) {
+        archives deobfJar
+    }
+    if (project.hasProperty('doSourceJar')) {
+        archives sourceJar
+    }
+    if (project.hasProperty('doJavadocJar')) {
+        archives javadocJar
+    }
+}
+
+publishing {
+    publications {
+//    mavenJava(MavenPublication) {
+//      groupId project.group
+//      artifactId project.archivesBaseName
+//      version project.version
+//      from components.java
+//      if (project.hasProperty('doSourceJar')) {
+//        artifact sourceJar {
+//          classifier 'sources'
+//        }
+//      }
+//      if (project.hasProperty('doAPIJar')) {
+//        artifact apiJar {
+//          classifier 'api'
+//        }
+//      }
+//      if (project.hasProperty('doDeobfJar')) {
+//        artifact deobfJar {
+//          classifier 'deobf'
+//        }
+//      }
+//      if (project.hasProperty('doJavadocJar')) {
+//        artifact javadocJar {
+//          classifier 'javadoc'
+//        }
+//      }
+//    }
+    }
+//  repositories {
+//    maven {
+//      credentials {
+//        username secret.username
+//        password secret.password
+//      }
+//      url secret.url
+//    }
+//  }
+}
+
+//curseforge {
+//  if (project.hasProperty('cf_project_id') && project.hasProperty('cf_release_type') && project.hasProperty('cf_changelog_filename') &&
+//      ((project.cf_release_type == 'alpha') || (project.cf_release_type == 'beta') || (project.cf_release_type == 'release'))) {
+//    apiKey = secret.curseforgeAPIKey
+//    project {
+//      id = project.cf_project_id
+//      changelog = file(project.cf_changelog_filename)
+//      releaseType = project.cf_release_type
+//      addGameVersion(project.mc_version)
+//      mainArtifact(jar) {
+//        displayName = "$project.description $display_version"
+//        relations {
+//          requiredLibrary 'mmd-orespawn'
+//          requiredLibrary 'base-metals'
+//          optionalLibrary 'additional-loot-tables'
+//        }
+//      }
+//      if (project.hasProperty('doAPIJar')) {
+//        addArtifact(apiJar) {
+//          displayName = "$project.description $display_version API"
+//        }
+//      }
+//      if (project.hasProperty('doSourceJar')) {
+//        addArtifact(sourceJar) {
+//          displayName = "$project.description $display_version Sources"
+//        }
+//      }
+//      if (project.hasProperty('doDeobfJar')) {
+//        addArtifact(deobfJar) {
+//          displayName = "$project.description $display_version Development"
+//        }
+//      }
+//      if (project.hasProperty('doJavadocJar')) {
+//        addArtifact(javadocJar) {
+//          displayName = "$project.description $display_version Javadoc"
+//        }
+//      }
+//    }
+//  }
+//}
+
+//sonarqube {
+//  properties {
+//    property 'sonar.host.url', secret.sonarHost
+//    property 'sonar.organization', secret.sonarOrganization
+//    property 'sonar.login', secret.sonarToken
+//    // property 'sonar.projectName', project.archivesBaseName
+//    // property 'sonar.projectKey', "$project.group:$project.archivesBaseName"
+//    // property 'sonar.branch.name', 'master-1.12'
+//    // property 'sonar.branch.target', ''
+//    property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/junit-platform/*.xml"
+//    property 'sonar.jacoco.reportPaths', "${project.buildDir}/jacoco/junitPlatformTest.exec"
+//  }
+//}
+
+String getModFile() {
+    String path = ''
+    FileTree tree = fileTree(dir: 'src/main/java')
+    tree.include '**/*.java'
+    tree.visit { element ->
+        if (element.file.isFile()) {
+            element.file.eachLine { String s ->
+                s = s.trim()
+                if (s.startsWith('@Mod(')) {
+                    path = "src/main/java/$element.relativePath"
+                }
+            }
+        }
+    }
+    return path
+}
+
+String getVersion(String type, String mod_file) {
+    String major = '0'
+    String revision = '0'
+    String patch = '0'
+    File file = file(mod_file)
+    def prefix = ~/^(?:public|protected|private) static final String $type = ".*$/
+    file.eachLine { String s ->
+        s = s.trim()
+        if (s ==~ prefix || prefix.matcher(s).matches()) {
+            String[] bits = s.split("=")
+            String interesting = bits[1].trim()
+            interesting = interesting.substring(1, interesting.length() - 2)
+            String[] pts = interesting.trim().split("\\.")
+
+            major = pts[0] ?: '0'
+            revision = pts[1] ?: '0'
+            patch = pts[2] ?: '0'
+        }
+    }
+    return "$major.$revision.$patch"
+}
+
+int getBuildNumber() {
+    def versionFile = file('version.properties')
+    if (versionFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionFile))
+        return versionProps['build_num'].toInteger()
+    } else {
+        println('version.properties file not found! Build number will be 0')
+        return 0
+    }
+}
