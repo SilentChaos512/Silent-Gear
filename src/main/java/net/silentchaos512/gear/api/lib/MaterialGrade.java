@@ -13,7 +13,7 @@ public enum MaterialGrade {
 
     NONE(0), E(2), D(4), C(6), B(8), A(12), S(16), SS(24), SSS(32);
 
-    public static final String NBT_KEY = "ToolCore_Grade";
+    public static final String NBT_KEY = SilentGear.MOD_ID + "_grade";
 
     public final int bonusPercent;
 
@@ -29,9 +29,8 @@ public enum MaterialGrade {
         return MaterialGrade.NONE;
     }
 
-    @Nonnull
     public static MaterialGrade fromString(String str) {
-        if (str != null && !str.isEmpty()) {
+        if (!str.isEmpty()) {
             for (MaterialGrade grade : values()) {
                 if (grade.name().equalsIgnoreCase(str)) {
                     return grade;
@@ -46,7 +45,6 @@ public enum MaterialGrade {
      * @param random A random object to use.
      * @return A MaterialGrade that is not NONE
      */
-    @Nonnull
     public static MaterialGrade selectRandom(Random random) {
         // If I understand the math here, 95% of the time, we should get grades between E and SS,
         // inclusive. SSS should be about 2.5% chance, I think. E picks up the 2.5% on the low end.

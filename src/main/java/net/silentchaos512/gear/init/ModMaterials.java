@@ -26,7 +26,7 @@ public class ModMaterials implements IPhasedInitializer {
         mainGold = PartRegistry.putPart(new PartMain(getPath("main_gold")));
         mainEmerald = PartRegistry.putPart(new PartMain(getPath("main_emerald")));
         mainDiamond = PartRegistry.putPart(new PartMain(getPath("main_diamond")));
-        mainTest = PartRegistry.putPart(new PartMain(getPath("main_test")));
+        //mainTest = PartRegistry.putPart(new PartMain(getPath("main_test")));
 
         rodWood = PartRegistry.putPart(new PartRod(getPath("rod_wood")));
         rodBone = PartRegistry.putPart(new PartRod(getPath("rod_bone")));

@@ -1,0 +1,11 @@
+[
+{
+  "modid": "silentgear",
+  "name": "Silent Gear",
+  "description": "Preview build",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://minecraft.curseforge.com/projects/silents-gear",
+  "authors": [ "SilentChaos512" ]
+}
+]

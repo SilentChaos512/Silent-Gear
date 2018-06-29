@@ -52,7 +52,7 @@ public interface ICoreTool extends ICoreItem {
         return 2;
     }
 
-    default PartMain getPrimaryHeadPart(@Nonnull ItemStack stack) {
+    default PartMain getPrimaryHeadPart(ItemStack stack) {
 
         ItemPartData data = GearData.getPrimaryPart(stack);
         if (data != null)
@@ -60,7 +60,7 @@ public interface ICoreTool extends ICoreItem {
         return ModMaterials.mainWood;
     }
 
-    default PartMain getSecondaryPart(@Nonnull ItemStack stack) {
+    default PartMain getSecondaryPart(ItemStack stack) {
 
         ItemPartData data = GearData.getSecondaryPart(stack);
         if (data != null)
@@ -68,7 +68,7 @@ public interface ICoreTool extends ICoreItem {
         return ModMaterials.mainWood;
     }
 
-    default PartRod getRodPart(@Nonnull ItemStack stack) {
+    default PartRod getRodPart(ItemStack stack) {
 
         for (ItemPartData data : GearData.getConstructionParts(stack))
             if (data.part instanceof PartRod)
@@ -77,7 +77,7 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Nullable
-    default PartTip getTipPart(@Nonnull ItemStack stack) {
+    default PartTip getTipPart(ItemStack stack) {
 
         for (ItemPartData data : GearData.getConstructionParts(stack))
             if (data.part instanceof PartTip)
@@ -86,7 +86,7 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Nullable
-    default PartBowstring getBowstringPart(@Nonnull ItemStack stack) {
+    default PartBowstring getBowstringPart(ItemStack stack) {
 
         for (ItemPartData data : GearData.getConstructionParts(stack))
             if (data.part instanceof PartBowstring)
@@ -95,7 +95,7 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Override
-    default boolean matchesRecipe(@Nonnull Collection<ItemStack> parts) {
+    default boolean matchesRecipe(Collection<ItemStack> parts) {
 
         ItemStack head = ItemStack.EMPTY;
         ItemStack rod = ItemStack.EMPTY;

@@ -66,9 +66,7 @@ public class PartDataList implements List<ItemPartData> {
 
     public List<ItemPartData> getParts(Predicate<ItemPartData> predicate) {
         ImmutableList.Builder<ItemPartData> builder = ImmutableList.builder();
-        for (ItemPartData data : list)
-            if (predicate.test(data))
-                builder.add(data);
+        list.stream().filter(predicate).forEach(builder::add);
         return builder.build();
     }
 

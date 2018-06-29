@@ -9,7 +9,6 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.util.GearData;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -26,15 +25,13 @@ public interface ICoreArmor extends ICoreItem {
     ));
 
     @Override
-    default Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack) {
+    default Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
     }
 
-    default PartMain getPrimaryPart(@Nonnull ItemStack stack) {
+    default PartMain getPrimaryPart(ItemStack stack) {
         ItemPartData data = GearData.getPrimaryPart(stack);
-        if (data != null)
-            return (PartMain) data.part;
-        return ModMaterials.mainWood;
+        return data != null ? (PartMain) data.part : ModMaterials.mainWood;
     }
 
     @Override

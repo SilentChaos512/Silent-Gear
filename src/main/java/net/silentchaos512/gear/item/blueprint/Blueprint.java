@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -81,7 +82,7 @@ public class Blueprint extends ItemSL implements IBlueprint {
 
     @Override
     public void addRecipes(RecipeMaker recipes) {
-        Object paper = !singleUse ? ModItems.crafting.blueprintPaper : Blocks.STONE;
+        Object paper = !singleUse ? ModItems.crafting.blueprintPaper : new ItemStack(Blocks.WOODEN_SLAB, 1, OreDictionary.WILDCARD_VALUE);
         String stick = "stickWood";
         List<String> added = new ArrayList<>();
 

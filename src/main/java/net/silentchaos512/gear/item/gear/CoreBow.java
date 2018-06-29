@@ -78,7 +78,7 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
     //region Bow stuff
 
     @Override
-    public float getDrawDelay(ItemStack stack) {
+    public float getDrawDelay(@Nonnull ItemStack stack) {
         return MathHelper.clamp(ICoreRangedWeapon.super.getDrawDelay(stack), MIN_DRAW_DELAY, MAX_DRAW_DELAY);
     }
 

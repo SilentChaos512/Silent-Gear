@@ -9,7 +9,6 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -41,9 +40,7 @@ public interface ICoreItem extends IStatItem {
     }
 
     default Item getItem() {
-        if (this instanceof Item)
-            return (Item) this;
-        return null;
+        return (Item) this;
     }
 
     String getGearClass();
@@ -53,23 +50,20 @@ public interface ICoreItem extends IStatItem {
     //region Stats and config
 
     @Override
-    default float getStat(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
-
+    default float getStat(ItemStack stack, ItemStat stat) {
         return GearData.getStat(stack, stat);
     }
 
     @Override
-    default int getStatInt(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
-
+    default int getStatInt(ItemStack stack, ItemStat stat) {
         return Math.round(GearData.getStat(stack, stat));
     }
 
-    Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack);
+    Set<ItemStat> getRelevantStats(ItemStack stack);
 
-    @Nonnull
     ConfigOptionEquipment getConfig();
 
-    boolean matchesRecipe(@Nonnull Collection<ItemStack> parts);
+    boolean matchesRecipe(Collection<ItemStack> parts);
 
     //endregion
 

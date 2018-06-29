@@ -1,0 +1,35 @@
+{
+    "type": "main",
+    "stats": [
+        {"name": "durability",      "value": 3122},
+        {"name": "enchantability",  "value":    5},
+        {"name": "harvest_level",   "value":    3},
+        {"name": "harvest_speed",   "value":    6},
+        {"name": "melee_damage",    "value":    2},
+        {"name": "magic_damage",    "value":    2},
+        {"name": "attack_speed",    "value": -0.4},
+        {"name": "armor",           "value":   20},
+        {"name": "armor_toughness", "value":    6},
+        {"name": "magic_armor",     "value":    6},
+        {"name": "ranged_damage",   "value":    0},
+        {"name": "ranged_speed",    "value": -0.4},
+        {"name": "rarity",          "value":   30}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "minecraft:obsidian",
+            "data": 0
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "obsidian",
+        "texture_color": "FFFFFF",
+        "broken_color": "FFFFFF"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 3,
+        "tool_blacklist": []
+    }
+}

@@ -25,7 +25,6 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.util.ArrayList;
@@ -354,12 +353,12 @@ public abstract class ItemPart {
         return new ItemStack(item, 1, meta);
     }
 
-    public void writeToNBT(@Nonnull NBTTagCompound tags) {
+    public void writeToNBT(NBTTagCompound tags) {
         tags.setString("Key", this.key.toString());
     }
 
     @Nullable
-    public static ItemPart fromNBT(@Nonnull NBTTagCompound tags) {
+    public static ItemPart fromNBT(NBTTagCompound tags) {
         String key = tags.getString("Key");
         return PartRegistry.get(key);
     }

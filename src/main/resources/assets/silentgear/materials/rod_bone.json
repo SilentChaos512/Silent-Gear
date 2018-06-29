@@ -14,14 +14,12 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:crafting_item",
-            "data": 2,
-            "oredict": "stickStone"
+            "item": "minecraft:bone"
         }
     },
     "display": {
         "hidden": false,
-        "texture_suffix": "stone",
+        "texture_suffix": "bone",
         "texture_color": "ffffff"
     },
     "availability": {

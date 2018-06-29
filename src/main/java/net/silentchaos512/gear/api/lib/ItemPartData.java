@@ -59,7 +59,6 @@ public class ItemPartData {
         return new ItemPartData(part, grade, craftingItem);
     }
 
-    @Nonnull
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tags) {
 
         this.part.writeToNBT(tags);

@@ -25,11 +25,12 @@ import net.silentchaos512.lib.util.LogHelper;
 
 import java.util.Random;
 
-@Mod(modid = SilentGear.MOD_ID, name = SilentGear.MOD_NAME, version = "0.0.1")
+@Mod(modid = SilentGear.MOD_ID, name = SilentGear.MOD_NAME, version = SilentGear.VERSION)
 public class SilentGear {
 
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
+    public static final String VERSION = "0.0.1";
     public static final int BUILD_NUM = 0;
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";

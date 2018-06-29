@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,7 +19,7 @@ public interface ICoreRangedWeapon extends ICoreTool {
     ));
 
     @Override
-    default Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack) {
+    default Set<ItemStat> getRelevantStats(ItemStack stack) {
 
         return RELEVANT_STATS;
     }
@@ -31,7 +30,7 @@ public interface ICoreRangedWeapon extends ICoreTool {
         return 4;
     }
 
-    default float getBaseDrawDelay(@Nonnull ItemStack stack) {
+    default float getBaseDrawDelay(ItemStack stack) {
 
         return 20;
     }
@@ -39,8 +38,7 @@ public interface ICoreRangedWeapon extends ICoreTool {
     default float getDrawDelay(ItemStack stack) {
 
         float speed = getStat(stack, CommonItemStats.RANGED_SPEED);
-        if (speed <= 0)
-            speed = 1f;
+        if (speed <= 0) speed = 1f;
         return getBaseDrawDelay(stack) / speed;
     }
 }

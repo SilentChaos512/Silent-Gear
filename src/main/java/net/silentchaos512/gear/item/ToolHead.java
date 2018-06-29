@@ -195,7 +195,7 @@ public class ToolHead extends ItemSL implements IStatItem {
 
         if (getData(stack).getBoolean(NBT_IS_EXAMPLE)) {
             list.add(TextFormatting.RED + loc.getMiscText("exampleOutput1"));
-            list.add(TextFormatting.RED + loc.getMiscText("exampleOutput1"));
+            list.add(TextFormatting.RED + loc.getMiscText("exampleOutput2"));
         }
 
         list.add(TextFormatting.AQUA + loc.getItemSubText(toolClass, "name"));
