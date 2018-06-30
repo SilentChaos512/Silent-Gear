@@ -168,7 +168,10 @@ public class CoreHammer extends CorePickaxe {
 
     public static class HammerEvents {
 
-        public static HammerEvents INSTANCE = new HammerEvents();
+        public static final HammerEvents INSTANCE = new HammerEvents();
+
+        private HammerEvents() {
+        }
 
         @SideOnly(Side.CLIENT)
         @SubscribeEvent

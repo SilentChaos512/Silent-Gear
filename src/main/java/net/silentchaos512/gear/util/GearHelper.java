@@ -233,7 +233,10 @@ public class GearHelper {
 
     public static class EventHandler {
 
-        public static EventHandler INSTANCE = new EventHandler();
+        public static final EventHandler INSTANCE = new EventHandler();
+
+        private EventHandler() {
+        }
 
         // TODO
     }

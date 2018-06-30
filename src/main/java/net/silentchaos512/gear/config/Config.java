@@ -6,6 +6,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.lib.collection.EntityMatchList;
+import net.silentchaos512.lib.collection.ItemMatchList;
 import net.silentchaos512.lib.config.ConfigBase;
 import net.silentchaos512.lib.config.ConfigMultiValueLineParser;
 
@@ -23,9 +24,16 @@ public class Config extends ConfigBase {
     /*
      * Items
      */
-    public static EntityMatchList sinewAnimals = new EntityMatchList();
-    private static final String[] SINEW_ANIMALS_DEFAULT = {"minecraft:cow", "minecraft:sheep", "minecraft:pig"};
+    public static EntityMatchList sinewAnimals = new EntityMatchList(true, false,
+            "minecraft:cow", "minecraft:sheep", "minecraft:pig");
     private static final String SINEW_ANIMALS_COMMENT = "These entities can drop sinew. It is not restricted to animals.";
+
+    public static ItemMatchList blockPlacerTools = new ItemMatchList(true, false,
+            SilentGear.RESOURCE_PREFIX + "pickaxe", SilentGear.RESOURCE_PREFIX + "shovel", SilentGear.RESOURCE_PREFIX + "axe");
+    private static final String BLOCK_PLACER_TOOLS_COMMENT = "These items will be able to place blocks by using them (right-click-to-place)";
+    public static boolean blockPlacerOnlyWhenSneaking;
+    private static final boolean BLOCK_PLACER_ONLY_WHEN_SNEAKING_DEFAULT = false;
+    private static final String BLOCK_PLACER_ONLY_WHEN_SNEAKING_COMMENT = "If true, block placing will only happen when sneaking.";
 
     public static float sinewDropRate;
     private static final float SINEW_DROP_RATE_DEFAULT = 0.2f;
@@ -83,8 +91,13 @@ public class Config extends ConfigBase {
 
             // Sinew
             String catSinew = CAT_ITEMS + SEP + "sinew";
-            sinewAnimals.loadConfig(config, "Animals That Drop Sinew", catSinew, SINEW_ANIMALS_DEFAULT, true, false, SINEW_ANIMALS_COMMENT);
+            sinewAnimals.loadConfig(config, "Animals That Drop Sinew", catSinew, SINEW_ANIMALS_COMMENT);
             sinewDropRate = loadFloat("Drop Rate", catSinew, SINEW_DROP_RATE_DEFAULT, SINEW_DROP_RATE_COMMENT);
+
+            // Block placer tools
+            String catBlockPlacerTools = CAT_ITEMS + SEP + "block_placer_tools";
+            blockPlacerTools.loadConfig(config, "Items That Place Blocks", catBlockPlacerTools, BLOCK_PLACER_TOOLS_COMMENT);
+            blockPlacerOnlyWhenSneaking = loadBoolean("Only When Sneaking", catBlockPlacerTools, BLOCK_PLACER_ONLY_WHEN_SNEAKING_DEFAULT, BLOCK_PLACER_ONLY_WHEN_SNEAKING_COMMENT);
 
             /*
              * Tools

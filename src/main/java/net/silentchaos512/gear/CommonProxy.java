@@ -12,10 +12,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.event.DropsHandler;
-import net.silentchaos512.gear.event.RepairHandler;
-import net.silentchaos512.gear.event.VanillaGearHandler;
-import net.silentchaos512.gear.event.WorldHandler;
+import net.silentchaos512.gear.event.*;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
@@ -48,12 +45,13 @@ public class CommonProxy {
         GameRegistry.registerWorldGenerator(new ModWorldGenerator(), 0);
 
         // Event Handlers
+        MinecraftForge.EVENT_BUS.register(CoreHammer.HammerEvents.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(DropsHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GearData.EventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GearHelper.EventHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(WorldHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(DropsHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(RepairHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(CoreHammer.HammerEvents.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ToolBlockPlaceHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(WorldHandler.INSTANCE);
 
         ModRecipes.INSTANCE.preInitOreDict();
 
