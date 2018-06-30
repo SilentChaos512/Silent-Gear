@@ -87,12 +87,14 @@ public class Blueprint extends ItemSL implements IBlueprint {
         List<String> added = new ArrayList<>();
 
         addRecipe(recipes, added, "sword", "p", "p", "s", 'p', paper, 's', stick);
+        addRecipe(recipes, added, "dagger", "p", "s", 'p', paper, 's', stick);
         addRecipe(recipes, added, "bow", " ps", "p s", " ps", 'p', paper, 's', stick);
         addRecipe(recipes, added, "pickaxe", "ppp", " s ", " s ", 'p', paper, 's', stick);
         addRecipe(recipes, added, "shovel", "p", "s", "s", 'p', paper, 's', stick);
         addRecipe(recipes, added, "axe", "pp", "ps", " s", 'p', paper, 's', stick);
         addRecipe(recipes, added, "hammer", "ppp", "ppp", "psp", 'p', paper, 's', stick);
         addRecipe(recipes, added, "mattock", "pp ", "psp", " s ", 'p', paper, 's', stick);
+        addRecipe(recipes, added, "sickle", " p", "pp", "s ", 'p', paper, 's', stick);
 
         addRecipe(recipes, added, "helmet", "ppp", "psp", 'p', paper, 's', stick);
         addRecipe(recipes, added, "chestplate", "psp", "ppp", "ppp", 'p', paper, 's', stick);
