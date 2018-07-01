@@ -209,7 +209,9 @@ public class GearHelper {
             List<ItemStack> list = new ArrayList<>();
             // TODO: How should we handle gear subitems?
             for (PartMain part : PartRegistry.getVisibleMains()) {
-                ItemStack stack = item.construct(item.getItem(), part.getCraftingStack());
+                ItemStack stack = "sword".equals(item.getGearClass())
+                        ? item.construct(item.getItem(), part.getCraftingStack(), part.getCraftingStack())
+                        : item.construct(item.getItem(), part.getCraftingStack());
                 GearData.setExampleTag(stack, true);
                 list.add(stack);
             }
@@ -225,7 +227,7 @@ public class GearHelper {
     public static String getItemStackDisplayName(ItemStack stack) {
         ICoreItem item = (ICoreItem) stack.getItem();
         ItemPartData data = GearData.getPrimaryPart(stack);
-        if (data == null || data.part == null)
+        if (data == null)
             return SilentGear.localization.getLocalizedString(stack.getUnlocalizedName() + ".name");
         String partName = data.part.getLocalizedName(data, ItemStack.EMPTY);
         return SilentGear.localization.getItemSubText(item.getGearClass(), "nameProper", partName);
