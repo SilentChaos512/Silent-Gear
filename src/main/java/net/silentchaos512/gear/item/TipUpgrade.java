@@ -35,7 +35,7 @@ public class TipUpgrade extends ItemSL {
         ItemPart part = PartRegistry.get(stack);
         if (part != null) {
             ItemPartData data = new ItemPartData(part, MaterialGrade.NONE, stack);
-            list.add(part.getLocalizedName(data, ItemStack.EMPTY));
+            list.add(part.getNameColor() + part.getLocalizedName(data, ItemStack.EMPTY));
         }
     }
 

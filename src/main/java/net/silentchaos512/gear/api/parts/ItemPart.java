@@ -48,7 +48,6 @@ public abstract class ItemPart {
     protected String textureSuffix;
     protected int textureColor = 0xFFFFFF;
     protected int brokenColor = 0xFFFFFF;
-    // Unused?
     protected TextFormatting nameColor = TextFormatting.GRAY;
 
     /**

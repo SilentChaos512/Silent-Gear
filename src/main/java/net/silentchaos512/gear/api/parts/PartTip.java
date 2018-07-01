@@ -26,7 +26,7 @@ public final class PartTip extends ItemPart implements IUpgradePart {
 
     @Override
     public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
-        tooltip.add(1, getLocalizedName(data, gear));
+        tooltip.add(1, getNameColor() + getLocalizedName(data, gear));
     }
 
     @Override
