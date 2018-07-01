@@ -6,7 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -31,7 +33,7 @@ public class ToolBlockPlaceHandler {
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
         // Is the item allowed to place blocks?
-        //if (stack.isEmpty() || !canToolPlaceBlock(stack)) return;
+        if (stack.isEmpty() || !canToolPlaceBlock(stack)) return;
 
         EntityPlayer player = event.getEntityPlayer();
         // Sneaking config?
@@ -83,7 +85,9 @@ public class ToolBlockPlaceHandler {
 
         int prevSize = nextStack.getCount();
         Vec3d hit = event.getHitVec();
-        ItemHelper.useItemAsPlayer(nextStack, player, world, pos, side, (float) hit.x, (float) hit.y, (float) hit.z);
+        EnumActionResult result = ItemHelper.useItemAsPlayer(nextStack, player, world, pos, side, (float) hit.x, (float) hit.y, (float) hit.z);
+        SilentGear.log.debug(result);
+        if (result == EnumActionResult.SUCCESS) player.swingArm(EnumHand.MAIN_HAND);
 
         // Don't consume blocks in creative mode
         if (player.capabilities.isCreativeMode) nextStack.setCount(prevSize);
@@ -98,7 +102,6 @@ public class ToolBlockPlaceHandler {
         Item item = stack.getItem();
         // Ignore broken tools
         if (item instanceof ICoreItem && GearHelper.isBroken(stack)) return false;
-        SilentGear.log.debug(item, Config.blockPlacerTools.matches(item));
         return Config.blockPlacerTools.matches(item);
     }
 
