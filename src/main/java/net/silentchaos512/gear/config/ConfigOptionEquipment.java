@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import gnu.trove.map.hash.THashMap;
-import jline.internal.InputStreamReader;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.util.JsonUtils;
@@ -17,10 +16,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
 import javax.annotation.Nonnull;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 

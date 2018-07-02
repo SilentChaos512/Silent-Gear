@@ -2,6 +2,7 @@
 Added: Missing blueprint recipes for daggers and sickles
 Added: Block placing with tools handler. Entirely configurable, you can set literally any item to work with this now. Defaults to Silent Gear pickaxes, shovels, and axes.
 Fixed: Example swords having wood guards
+Fixed: NoClassDefFoundError crash, jline/internal/InputStreamReader (#1)
 
 0.0.1 (preview 1, 1.12.2)
 Initial preview build
