@@ -153,7 +153,7 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {
-        return GearClientHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
     @Override

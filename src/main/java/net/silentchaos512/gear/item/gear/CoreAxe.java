@@ -154,7 +154,7 @@ public class CoreAxe extends ItemAxe implements IRegistryObject, ICoreTool {
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {
-        return GearClientHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
     @Override

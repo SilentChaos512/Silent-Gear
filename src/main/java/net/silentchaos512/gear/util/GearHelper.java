@@ -12,6 +12,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.NonNullList;
@@ -92,7 +93,6 @@ public class GearHelper {
     }
 
     //endregion
-
 
     //region Damage and repair
 
@@ -200,6 +200,19 @@ public class GearHelper {
     public static boolean onEntityItemUpdate(EntityItem entityItem) {
         // TODO
         return false;
+    }
+
+    public static EnumRarity getRarity(ItemStack stack) {
+        int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
+        if (rarity < 20)
+            return EnumRarity.COMMON;
+        if (rarity < 40)
+            return EnumRarity.UNCOMMON;
+        if (rarity < 60)
+            return EnumRarity.RARE;
+        if (rarity < 80)
+            return EnumRarity.EPIC;
+        return SilentGear.RARITY_LEGENDARY;
     }
 
     private static Map<String, List<ItemStack>> subItemCache = new HashMap<>();

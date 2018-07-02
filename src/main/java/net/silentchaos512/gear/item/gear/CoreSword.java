@@ -98,7 +98,7 @@ public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {
-        return GearClientHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
     @Override

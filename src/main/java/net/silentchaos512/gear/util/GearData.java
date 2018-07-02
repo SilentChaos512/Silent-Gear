@@ -265,10 +265,7 @@ public class GearData {
     }
 
     private static NBTTagCompound getData(ItemStack stack, String compoundKey) {
-        NBTTagCompound tagCompound = StackHelper.getTagCompound(stack, true);
-        if (!tagCompound.hasKey(NBT_ROOT))
-            tagCompound.setTag(NBT_ROOT, new NBTTagCompound());
-        NBTTagCompound rootTag = tagCompound.getCompoundTag(NBT_ROOT);
+        NBTTagCompound rootTag = stack.getOrCreateSubCompound(NBT_ROOT);
         if (!rootTag.hasKey(compoundKey))
             rootTag.setTag(compoundKey, new NBTTagCompound());
         return rootTag.getCompoundTag(compoundKey);

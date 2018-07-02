@@ -256,7 +256,7 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {
-        return GearClientHelper.getRarity(stack);
+        return GearHelper.getRarity(stack);
     }
 
     @Override

@@ -269,6 +269,7 @@ public abstract class ItemPart {
         JsonElement elementStats = json.get("stats");
         if (elementStats.isJsonArray()) {
             JsonArray array = elementStats.getAsJsonArray();
+            StatModifierMap statMap = new StatModifierMap();
             for (JsonElement element : array) {
                 JsonObject obj = element.getAsJsonObject();
                 String name = obj.has("name") ? JsonUtils.getString(obj, "name") : "";
@@ -277,10 +278,16 @@ public abstract class ItemPart {
                 if (stat != null) {
                     float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
                     Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : getDefaultStatOperation(stat);
-                    String id = "mat_" + this.getUnlocalizedName() + "_" + stat.getUnlocalizedName() + (this.stats.get(stat).size() + 1);
-                    this.stats.put(stat, new StatInstance(id, value, op));
+                    String id = "mat_" + this.getUnlocalizedName() + "_" + stat.getUnlocalizedName() + (statMap.get(stat).size() + 1);
+                    statMap.put(stat, new StatInstance(id, value, op));
                 }
             }
+
+            // Move the newly loaded modifiers into the stat map, replacing existing ones
+            statMap.forEach((stat, instance) -> {
+                this.stats.removeAll(stat);
+                this.stats.put(stat, instance);
+            });
         }
 
         // Read crafting item data
