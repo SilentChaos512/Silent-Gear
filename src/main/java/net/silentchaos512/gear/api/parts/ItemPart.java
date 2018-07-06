@@ -76,7 +76,7 @@ public abstract class ItemPart {
     // ===========================
 
     public Collection<StatInstance> getStatModifiers(ItemStat stat, ItemStack partRep) {
-        Collection<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
+        List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
         GetStatModifierEvent event = new GetStatModifierEvent(stat, mods, partRep);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
@@ -144,7 +144,7 @@ public abstract class ItemPart {
     /**
      * Gets a texture to use based on the item class
      *
-     * @param gear The equipment item (tool/weapon/armor)
+     * @param gear      The equipment item (tool/weapon/armor)
      * @param gearClass The gear class string (pickaxe/sword/etc.)
      */
     public abstract ResourceLocation getTexture(ItemStack gear, String gearClass, int animationFrame);
@@ -156,7 +156,7 @@ public abstract class ItemPart {
     /**
      * Gets a texture to use for a broken item based on the item class
      *
-     * @param gear The equipment item (tool/weapon/armor)
+     * @param gear      The equipment item (tool/weapon/armor)
      * @param gearClass The gear class string (pickaxe/sword/etc.)
      */
     public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
@@ -179,9 +179,9 @@ public abstract class ItemPart {
     /**
      * Adds information to the tooltip of an equipment item
      *
-     * @param data      The data of the part
-     * @param gear The equipment (tool/weapon/armor) stack
-     * @param tooltip   Current tooltip lines
+     * @param data    The data of the part
+     * @param gear    The equipment (tool/weapon/armor) stack
+     * @param tooltip Current tooltip lines
      */
     public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
     }
@@ -196,7 +196,7 @@ public abstract class ItemPart {
     /**
      * Gets a localized name for the part, suitable for display
      *
-     * @param data      The data of the part
+     * @param data The data of the part
      * @param gear The equipment (tool/weapon/armor) stack
      */
     public String getLocalizedName(ItemPartData data, ItemStack gear) {
