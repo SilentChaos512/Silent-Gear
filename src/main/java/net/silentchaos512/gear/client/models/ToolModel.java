@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class ToolModel implements IModel {
 
@@ -126,7 +127,7 @@ public class ToolModel implements IModel {
     public Collection<ResourceLocation> getTextures() {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
 
-        SilentGear.log.info("Getting item part textures... what could go wrong?");
+//        SilentGear.log.info("Getting item part textures... what could go wrong?");
         for (String toolClass : ModItems.toolClasses.keySet()) {
             boolean hasGuard = "sword".equals(toolClass);
             ICoreItem item = ModItems.toolClasses.get(toolClass);
@@ -138,20 +139,20 @@ public class ToolModel implements IModel {
 
                     // Basic texture
                     ResourceLocation texBasic = part.getTexture(ItemStack.EMPTY, toolClass, frame);
-                    SilentGear.log.info(String.format("    %s, frame=%d, part=%s, tex=%s", toolClass, frame, part.getKey().getResourcePath(), texBasic));
+//                    SilentGear.log.info(String.format("    %s, frame=%d, part=%s, tex=%s", toolClass, frame, part.getKey().getResourcePath(), texBasic));
                     if (texBasic != null)
                         builder.add(texBasic);
 
                     // Broken texture
                     ResourceLocation texBroken = part.getBrokenTexture(ItemStack.EMPTY, toolClass);
-                    SilentGear.log.info("      +broken: " + texBroken);
+//                    SilentGear.log.info("      +broken: " + texBroken);
                     if (texBroken != null)
                         builder.add(texBroken);
 
                     // Guard texture for swords
                     if (hasGuard && part instanceof PartMain) {
                         ResourceLocation texGuard = ((PartMain) part).getTexture(ItemStack.EMPTY, toolClass, frame, "guard");
-                        SilentGear.log.info("      +guard: " + texGuard);
+//                        SilentGear.log.info("      +guard: " + texGuard);
                         if (texGuard != null)
                             builder.add(texGuard);
                     }
@@ -253,12 +254,6 @@ public class ToolModel implements IModel {
             boolean hasGuard = "sword".equals(toolClass);
             boolean isBroken = GearHelper.isBroken(stack);
 
-            PartMain partHead = itemTool.getPrimaryHeadPart(stack);
-            PartMain partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
-            PartRod partRod = itemTool.getRodPart(stack);
-            PartTip partTip = itemTool.getTipPart(stack);
-            PartBowstring partBowstring = itemTool.getBowstringPart(stack);
-
             int animationFrame = getAnimationFrame(stack, world, entity);
             String key = itemTool.getModelKey(stack, animationFrame);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
@@ -267,6 +262,12 @@ public class ToolModel implements IModel {
             // model.cache.clear();
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
+                PartMain partHead = itemTool.getPrimaryHeadPart(stack);
+                PartMain partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
+                PartRod partRod = itemTool.getRodPart(stack);
+                PartTip partTip = itemTool.getTipPart(stack);
+                PartBowstring partBowstring = itemTool.getBowstringPart(stack);
+
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 // Populate the map builder with textures, function handles null checks
                 processTexture(stack, toolClass, "head", partHead, animationFrame, isBroken, builder);
@@ -282,7 +283,7 @@ public class ToolModel implements IModel {
                 GearClientHelper.modelCache.put(key, bakedModel);
 
                 // Color cache
-                ColorHandlers.gearColorCache.put(key, Arrays.asList(partRod, partHead, partGuard, partTip, partBowstring).stream()
+                ColorHandlers.gearColorCache.put(key, Stream.of(partRod, partHead, partGuard, partTip, partBowstring)
                         .filter(Objects::nonNull)
                         .map(part -> part.getColor(stack, animationFrame)).toArray(Integer[]::new));
 

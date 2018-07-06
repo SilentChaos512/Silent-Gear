@@ -4,10 +4,9 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.GuideBookToolMod;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
@@ -26,7 +25,7 @@ import java.util.Map;
 public class ModItems implements IRegistrationHandler<Item> {
 
     public static final ModItems INSTANCE = new ModItems();
-    public static Map<String, ICoreItem> toolClasses = new LinkedHashMap<>();
+    public static Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
     public static Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());

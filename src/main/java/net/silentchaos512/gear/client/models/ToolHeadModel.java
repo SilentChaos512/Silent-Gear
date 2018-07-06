@@ -21,6 +21,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 
@@ -29,7 +30,9 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class ToolHeadModel implements IModel {
 
@@ -174,8 +177,7 @@ public class ToolHeadModel implements IModel {
             PartMain primaryPart = ModItems.toolHead.getPrimaryPart(stack);
             PartMain secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
 
-            String key = toolClass +"_head|" + (primaryPart == null ? "null" : primaryPart.getModelIndex(0))
-                    + (secondaryPart == null ? "" : "|" + secondaryPart.getModelIndex(0));
+            String key = ModItems.toolHead.getModelKey(toolClass, primaryPart, secondaryPart);
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
@@ -192,6 +194,12 @@ public class ToolHeadModel implements IModel {
                 textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
                 GearClientHelper.modelCache.put(key, bakedModel);
+
+                // Color cache
+                ColorHandlers.gearColorCache.put(key, Stream.of(primaryPart, secondaryPart)
+                        .filter(Objects::nonNull)
+                        .map(part -> part.getColor(ItemStack.EMPTY, 0)).toArray(Integer[]::new));
+
                 return bakedModel;
             }
 

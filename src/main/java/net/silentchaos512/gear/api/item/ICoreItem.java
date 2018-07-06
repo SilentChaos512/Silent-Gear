@@ -8,6 +8,7 @@ import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.Collection;
 import java.util.List;
@@ -74,15 +75,18 @@ public interface ICoreItem extends IStatItem {
         return 1;
     }
 
-    default String getModelKey(int animationFrame, ItemPart... parts) {
+    default String getModelKey(ItemStack stack, int animationFrame, ItemPart... parts) {
         StringBuilder builder = new StringBuilder(getGearClass());
+        if (GearHelper.isBroken(stack))
+            builder.append("_b");
+
         for (ItemPart part : parts)
             builder.append("|").append(part == null ? "n" : part.getModelIndex(animationFrame));
         return builder.toString();
     }
 
     default String getModelKey(ItemStack stack, int animationFrame) {
-        return getModelKey(animationFrame, getRenderParts(stack));
+        return getModelKey(stack, animationFrame, getRenderParts(stack));
     }
 
     ItemPart[] getRenderParts(ItemStack stack);

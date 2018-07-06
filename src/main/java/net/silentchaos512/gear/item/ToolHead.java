@@ -7,7 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -16,6 +16,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.item.IStatItem;
 import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.lib.MaterialGrade;
@@ -28,7 +29,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
-import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.item.ItemSL;
 import net.silentchaos512.lib.registry.RecipeMaker;
@@ -37,6 +37,7 @@ import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class ToolHead extends ItemSL implements IStatItem {
     /**
      * Create a stack with a single part. Best for sub-items.
      */
-    private ItemStack getStack(String toolClass, PartMain part, boolean isExample) {
+    public ItemStack getStack(String toolClass, PartMain part, boolean isExample) {
         boolean hasGuard = "sword".equals(toolClass);
 
         ItemStack result = new ItemStack(this);
@@ -188,6 +189,19 @@ public class ToolHead extends ItemSL implements IStatItem {
         return super.getItemStackDisplayName(stack);
     }
 
+    public String getModelKey(ItemStack stack) {
+        ICoreTool toolItem = ModItems.toolClasses.get(getToolClass(stack));
+        String toolClass = getToolClass(stack);
+        PartMain primary = getPrimaryPart(stack);
+        PartMain secondary = toolItem != null && toolItem.hasSwordGuard() ? getSecondaryPart(stack) : null;
+        return getModelKey(toolClass, primary, secondary);
+    }
+
+    public String getModelKey(String toolClass, ItemPart primary, ItemPart secondary) {
+        return toolClass + "_head|" + (primary == null ? "null" : primary.getModelIndex(0))
+                + (secondary == null ? "" : "|" + secondary.getModelIndex(0));
+    }
+
     @Override
     public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
         LocalizationHelper loc = SilentGear.localization;
@@ -205,10 +219,12 @@ public class ToolHead extends ItemSL implements IStatItem {
             list.add("- " + data.part.getLocalizedName(data, ItemStack.EMPTY));
 
         ICoreItem toolItem = ModItems.toolClasses.get(toolClass);
-        // TODO: We're constructing a rod-less gear each time to get stats. Is that bad?
-        ItemStack constructed = toolItem.construct((Item) toolItem, getAllParts(stack));
-        GearData.recalculateStats(constructed);
-        GearClientHelper.addInformation(constructed, world, list, flag);
+        if (toolItem != null) {
+            // TODO: We're constructing a rod-less gear each time to get stats. Is that bad?
+            ItemStack constructed = toolItem.construct((Item) toolItem, getAllParts(stack));
+            GearData.recalculateStats(constructed);
+            GearClientHelper.addInformation(constructed, world, list, flag);
+        }
     }
 
     @Override
@@ -225,15 +241,12 @@ public class ToolHead extends ItemSL implements IStatItem {
                     list.add(getStack(toolClass, part, true));
     }
 
-    @Override
-    public void addRecipes(RecipeMaker recipes) {
+    public Collection<IRecipe> getExampleRecipes() {
+        Collection<IRecipe> list = new ArrayList<>();
+        RecipeMaker recipes = SilentGear.registry.recipes;
+
         ModItems.toolClasses.forEach((toolClass, item) -> {
-            Ingredient blueprint = new Ingredient(ModItems.blueprint.getStack(toolClass)) {
-                @Override
-                public boolean apply(ItemStack stack) {
-                    return stack.getItem() instanceof IBlueprint && ((IBlueprint) stack.getItem()).getOutputInfo(stack).gear == item;
-                }
-            };
+            ItemStack blueprint = ModItems.blueprint.getStack(toolClass);
             for (PartMain part : PartRegistry.getVisibleMains()) {
                 ItemStack result = getStack(toolClass, part, true);
                 Object[] inputs = new Object[item.getConfig().getHeadCount() + 1];
@@ -241,10 +254,11 @@ public class ToolHead extends ItemSL implements IStatItem {
                 for (int i = 1; i < inputs.length; ++i) {
                     inputs[i] = part.getCraftingStack();
                 }
-                String recipeKey = "head_example_" + toolClass + "_" + part.getKey().toString().replaceAll(":", "_");
-                recipes.addShapelessOre(recipeKey, result, inputs);
+                list.add(recipes.makeShapeless(result, inputs));
             }
         });
+
+        return list;
     }
 
     @Override

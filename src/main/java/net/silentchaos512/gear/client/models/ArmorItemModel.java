@@ -172,7 +172,7 @@ public class ArmorItemModel implements IModel {
 
             PartMain primaryPart = itemArmor.getPrimaryPart(stack);
 
-            String key = itemArmor.getModelKey(0, primaryPart);
+            String key = itemArmor.getModelKey(stack, 0, primaryPart);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
