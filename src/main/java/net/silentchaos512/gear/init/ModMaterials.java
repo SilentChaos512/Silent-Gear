@@ -80,13 +80,13 @@ public class ModMaterials implements IPhasedInitializer {
             for (File file : files) {
                 SilentGear.log.info("Material file found: {}", file);
                 String name = file.getName().replace(".json", "");
+                ResourceLocation path = getPath(name);
 
                 // Add to registered parts if it doesn't exist
-                if (!PartRegistry.getKeySet().contains(name)) {
+                if (!PartRegistry.getKeySet().contains(path.toString())) {
                     Matcher match = typeRegex.matcher(name);
                     if (match.find()) {
                         String type = match.group();
-                        ResourceLocation path = getPath(name);
                         SilentGear.log.info("Trying to add part {}, type {}", path, type);
                         if ("main".equals(type))
                             PartRegistry.putPart(new PartMain(path));

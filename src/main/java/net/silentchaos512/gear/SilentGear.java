@@ -31,7 +31,7 @@ public class SilentGear {
 
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "0.0.2";
+    public static final String VERSION = "0.0.3";
     public static final int BUILD_NUM = 0;
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
