@@ -49,6 +49,7 @@ public abstract class ItemPart {
     protected int textureColor = 0xFFFFFF;
     protected int brokenColor = 0xFFFFFF;
     protected TextFormatting nameColor = TextFormatting.GRAY;
+    protected String localizedNameOverride = "";
 
     /**
      * Numerical index for model caching. This value could change any time the mod updates or new materials are added, so
@@ -65,9 +66,6 @@ public abstract class ItemPart {
         this.key = resource;
         this.textureSuffix = resource.getResourcePath().replaceFirst("[a-z]+_", "");
         this.modelIndex = ++lastModelIndex;
-    }
-
-    public void init() {
         loadJsonResources();
     }
 
@@ -200,6 +198,8 @@ public abstract class ItemPart {
      * @param gear The equipment (tool/weapon/armor) stack
      */
     public String getLocalizedName(ItemPartData data, ItemStack gear) {
+        if (!localizedNameOverride.isEmpty())
+            return localizedNameOverride;
         return /* nameColor + */ SilentGear.localization.getLocalizedString(getUnlocalizedName());
     }
 
@@ -233,16 +233,21 @@ public abstract class ItemPart {
     private void loadJsonResources() {
         // Main resource file in JAR
         String path = getResourceFileLocation();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path), "UTF-8"))) {
-            readResourceFile(reader);
-        } catch (Exception e) {
-            e.printStackTrace();
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(path);
+        if (resourceAsStream != null) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream, "UTF-8"))) {
+                readResourceFile(reader);
+                SilentGear.log.info("Successfully read {}", path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         // Override in config folder
         File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.key.getResourcePath() + ".json");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readResourceFile(reader);
+            SilentGear.log.info("Successfully read {}", file.getAbsolutePath());
         } catch (FileNotFoundException e) {
             // Ignore
         } catch (Exception e) {
@@ -314,25 +319,29 @@ public abstract class ItemPart {
         JsonElement elementDisplay = json.get("display");
         if (elementDisplay.isJsonObject()) {
             JsonObject obj = elementDisplay.getAsJsonObject();
-        if (obj.has("hidden"))
-            this.hidden = JsonUtils.getBoolean(obj, "hidden");
-        if (obj.has("texture_color"))
-            this.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
-        if (obj.has("broken_color"))
-            this.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
-        if (obj.has("name_color"))
-            this.nameColor = TextFormatting.getValueByName(obj.get("name_color").getAsString());
-    }
+            if (obj.has("hidden"))
+                this.hidden = JsonUtils.getBoolean(obj, "hidden");
+            if (obj.has("texture_suffix"))
+                this.textureSuffix = JsonUtils.getString(obj, "texture_suffix");
+            if (obj.has("texture_color"))
+                this.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
+            if (obj.has("broken_color"))
+                this.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
+            if (obj.has("name_color"))
+                this.nameColor = TextFormatting.getValueByName(obj.get("name_color").getAsString());
+            if (obj.has("override_localization"))
+                this.localizedNameOverride = JsonUtils.getString(obj, "override_localization");
+        }
 
-    // Availability (enabled, tier, blacklisting)
-    JsonElement elementAvailability = json.get("availability");
+        // Availability (enabled, tier, blacklisting)
+        JsonElement elementAvailability = json.get("availability");
         if (elementAvailability.isJsonObject()) {
-        JsonObject obj = elementAvailability.getAsJsonObject();
-        this.enabled = obj.has("enabled") ? JsonUtils.getBoolean(obj, "enabled") : this.enabled;
-        this.tier = obj.has("tier") ? JsonUtils.getInt(obj, "tier") : this.tier;
-        // TODO: blacklist
+            JsonObject obj = elementAvailability.getAsJsonObject();
+            this.enabled = obj.has("enabled") ? JsonUtils.getBoolean(obj, "enabled") : this.enabled;
+            this.tier = obj.has("tier") ? JsonUtils.getInt(obj, "tier") : this.tier;
+            // TODO: blacklist
+        }
     }
-}
 
     protected int readColorCode(String str) {
         try {

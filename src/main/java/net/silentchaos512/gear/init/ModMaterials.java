@@ -1,11 +1,18 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
+
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModMaterials implements IPhasedInitializer {
 
@@ -43,9 +50,61 @@ public class ModMaterials implements IPhasedInitializer {
 
         bowstringString = PartRegistry.putPart(new PartBowstring(getPath("bowstring_string")));
         bowstringSinew = PartRegistry.putPart(new PartBowstring(getPath("bowstring_sinew")));
+
+        UserDefined.loadUserParts();
     }
 
-    private ResourceLocation getPath(String key) {
+    @Override
+    public void init(SRegistry registry, FMLInitializationEvent event) {
+        // Update part caches
+        // All mods should have added their parts during pre-init
+        PartRegistry.resetVisiblePartCaches();
+        GearHelper.resetSubItemsCache();
+    }
+
+    private static ResourceLocation getPath(String key) {
         return new ResourceLocation(SilentGear.MOD_ID, key);
+    }
+
+    private static final class UserDefined {
+
+        static void loadUserParts() {
+            final File directory = new File(Config.INSTANCE.getDirectory(), "materials");
+            final File[] files = directory.listFiles();
+            if (!directory.isDirectory() || files == null) {
+                SilentGear.log.warn("File \"{}\" is not a directory?", directory);
+                return;
+            }
+
+            final Pattern typeRegex = Pattern.compile("^[a-z]+");
+            for (File file : files) {
+                SilentGear.log.info("Material file found: {}", file);
+                String name = file.getName().replace(".json", "");
+
+                // Add to registered parts if it doesn't exist
+                if (!PartRegistry.getKeySet().contains(name)) {
+                    Matcher match = typeRegex.matcher(name);
+                    if (match.find()) {
+                        String type = match.group();
+                        ResourceLocation path = getPath(name);
+                        SilentGear.log.info("Trying to add part {}, type {}", path, type);
+                        if ("main".equals(type))
+                            PartRegistry.putPart(new PartMain(path));
+                        else if ("rod".equals(type))
+                            PartRegistry.putPart(new PartRod(path));
+                        else if ("bowstring".equals(type))
+                            PartRegistry.putPart(new PartBowstring(path));
+                        else if ("tip".equals(type))
+                            PartRegistry.putPart(new PartTip(path));
+                        else if ("grip".equals(type))
+                            PartRegistry.putPart(new PartGrip(path));
+                        else
+                            SilentGear.log.warn("Unknown part type \"{}\" for {}", type, name);
+                    }
+                } else {
+                    SilentGear.log.info("Part already registered. Must be an override.");
+                }
+            }
+        }
     }
 }
