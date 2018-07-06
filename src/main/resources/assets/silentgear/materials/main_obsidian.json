@@ -4,7 +4,7 @@
         {"name": "durability",      "value": 3122},
         {"name": "enchantability",  "value":    5},
         {"name": "harvest_level",   "value":    3},
-        {"name": "harvest_speed",   "value":    6},
+        {"name": "harvest_speed",   "value":    4},
         {"name": "melee_damage",    "value":    2},
         {"name": "magic_damage",    "value":    2},
         {"name": "attack_speed",    "value": -0.4},

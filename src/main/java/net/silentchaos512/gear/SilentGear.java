@@ -18,6 +18,7 @@ import net.silentchaos512.gear.command.CommandSilentGear;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.network.MessageExtraBlockBreak;
 import net.silentchaos512.lib.SilentLib;
+import net.silentchaos512.lib.creativetab.CreativeTabSL;
 import net.silentchaos512.lib.network.NetworkHandlerSL;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.lib.util.LocalizationHelper;
@@ -30,7 +31,7 @@ public class SilentGear {
 
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "0.0.1";
+    public static final String VERSION = "0.0.2";
     public static final int BUILD_NUM = 0;
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
@@ -44,14 +45,7 @@ public class SilentGear {
 
     public static EnumRarity RARITY_LEGENDARY;
 
-    public static CreativeTabs creativeTab = new CreativeTabs(MOD_ID) {
-
-        @Override
-        public ItemStack getTabIconItem() {
-
-            return new ItemStack(ModItems.blueprint);
-        }
-    };
+    public static CreativeTabs creativeTab = new CreativeTabSL(MOD_ID, () -> new ItemStack(ModItems.blueprint));
 
     @Instance(MOD_ID)
     public static SilentGear instance;
@@ -65,6 +59,7 @@ public class SilentGear {
         localization = new LocalizationHelper(MOD_ID).setReplaceAmpersand(true);
         SilentLib.instance.registerLocalizationHelperForMod(MOD_ID, localization);
         registry.setDefaultCreativeTab(creativeTab);
+//        registry.recipes.setJsonHellMode(true);
 
         network = new NetworkHandlerSL(MOD_ID);
         network.register(MessageExtraBlockBreak.class, Side.CLIENT);

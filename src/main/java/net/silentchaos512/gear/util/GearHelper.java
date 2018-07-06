@@ -15,6 +15,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,6 +27,10 @@ import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.ModMaterials;
+import net.silentchaos512.lib.registry.RecipeMaker;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -244,6 +249,30 @@ public class GearHelper {
             return SilentGear.localization.getLocalizedString(stack.getUnlocalizedName() + ".name");
         String partName = data.part.getLocalizedName(data, ItemStack.EMPTY);
         return SilentGear.localization.getItemSubText(item.getGearClass(), "nameProper", partName);
+    }
+
+    public static Collection<IRecipe> getExampleRecipes(ICoreItem item) {
+        RecipeMaker recipes = SilentGear.registry.recipes;
+        Collection<IRecipe> list = new ArrayList<>();
+
+        for (PartMain part : PartRegistry.getVisibleMains()) {
+            ItemStack result = "sword".equals(item.getGearClass())
+                    ? item.construct(item.getItem(), part.getCraftingStack(), part.getCraftingStack())
+                    : item.construct(item.getItem(), part.getCraftingStack());
+            GearData.setExampleTag(result, true);
+
+            ConfigOptionEquipment config = item.getConfig();
+            List<Object> inputs = new ArrayList<>();
+            inputs.add(ModItems.toolHead.getStack(item.getGearClass(), part, false));
+            for (int i = 0; i < config.getRodCount(); ++i)
+                inputs.add(ModMaterials.rodWood.getCraftingStack());
+            for (int i = 0; i < config.getBowstringCount(); ++i)
+                inputs.add(ModMaterials.bowstringString.getCraftingStack());
+
+            list.add(recipes.makeShapeless(result, inputs.toArray()));
+        }
+
+        return list;
     }
 
     public static class EventHandler {

@@ -12,7 +12,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -25,7 +25,6 @@ import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.item.ItemArmorSL;
@@ -148,14 +147,11 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
         GearHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
-    @Override
-    public void addRecipes(RecipeMaker recipes) {
-        Ingredient blueprint = new Ingredient(ModItems.blueprint.getStack(getGearClass())) {
-            @Override
-            public boolean apply(ItemStack stack) {
-                return stack.getItem() instanceof IBlueprint && ((IBlueprint) stack.getItem()).getOutputInfo(stack).gear == getItem();
-            }
-        };
+    public Collection<IRecipe> getExampleRecipes() {
+        Collection<IRecipe> list = new ArrayList<>();
+        RecipeMaker recipes = SilentGear.registry.recipes;
+
+        ItemStack blueprint = ModItems.blueprint.getStack(getGearClass());
         for (PartMain part : PartRegistry.getVisibleMains()) {
             ItemStack result = construct(this, part.getCraftingStack());
             Object[] inputs = new Object[getConfig().getHeadCount() + 1];
@@ -163,9 +159,10 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
             for (int i = 1; i < inputs.length; ++i) {
                 inputs[i] = part.getCraftingStack();
             }
-            String recipeKey = getGearClass() + "_example_" + part.getKey().toString().replaceAll(":", "_");
-            recipes.addShapelessOre(recipeKey, result, inputs);
+            list.add(recipes.makeShapelessOre(result, inputs));
         }
+
+        return list;
     }
 
     @Override

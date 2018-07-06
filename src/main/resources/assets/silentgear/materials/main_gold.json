@@ -10,7 +10,7 @@
         {"name": "attack_speed",    "value": 0.2},
         {"name": "armor",           "value":  11},
         {"name": "armor_toughness", "value":   0},
-        {"name": "magic_armor",     "value":   6},
+        {"name": "magic_armor",     "value":   8},
         {"name": "ranged_damage",   "value":   0},
         {"name": "ranged_speed",    "value": 0.3},
         {"name": "rarity",          "value":  25}
