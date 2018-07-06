@@ -30,6 +30,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Getter(value = AccessLevel.PUBLIC)
 public abstract class ItemPart {
@@ -38,9 +39,11 @@ public abstract class ItemPart {
     private static final Gson GSON = (new GsonBuilder()).create();
 
     protected ResourceLocation key;
-    protected ItemStack craftingStack = ItemStack.EMPTY;
+    @Getter(value = AccessLevel.NONE)
+    protected Supplier<ItemStack> craftingStack = () -> ItemStack.EMPTY;
     protected String craftingOreDictName = "";
-    protected ItemStack craftingStackSmall = ItemStack.EMPTY;
+    @Getter(value = AccessLevel.NONE)
+    protected Supplier<ItemStack> craftingStackSmall = () -> ItemStack.EMPTY;
     protected String craftingOreDictNameSmall = "";
     protected int tier = 0;
     protected boolean enabled = true;
@@ -72,6 +75,14 @@ public abstract class ItemPart {
     // ===========================
     // = Stats and Miscellaneous =
     // ===========================
+
+    public ItemStack getCraftingStack() {
+        return craftingStack.get();
+    }
+
+    public ItemStack getCraftingStackSmall() {
+        return craftingStackSmall.get();
+    }
 
     public Collection<StatInstance> getStatModifiers(ItemStat stat, ItemStack partRep) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
@@ -112,7 +123,7 @@ public abstract class ItemPart {
     public boolean matchesForCrafting(ItemStack partRep, boolean matchOreDict) {
         if (StackHelper.isEmpty(partRep))
             return false;
-        if (partRep.isItemEqual(this.craftingStack))
+        if (partRep.isItemEqual(this.craftingStack.get()))
             return true;
         if (matchOreDict)
             return StackHelper.matchesOreDict(partRep, this.craftingOreDictName);
@@ -128,7 +139,7 @@ public abstract class ItemPart {
     }
 
     public boolean isBlacklisted() {
-        return isBlacklisted(this.craftingStack);
+        return isBlacklisted(this.craftingStack.get());
     }
 
     public boolean isBlacklisted(ItemStack partRep) {
@@ -212,7 +223,7 @@ public abstract class ItemPart {
     public String toString() {
         String str = "ItemPart{";
         str += "Key: " + this.key + ", ";
-        str += "CraftingStack: " + this.craftingStack + ", ";
+        str += "CraftingStack: " + this.craftingStack.get() + ", ";
         str += "CraftingOreDictName: '" + this.craftingOreDictName + "', ";
         str += "Tier: " + getTier();
         str += "}";
@@ -355,17 +366,18 @@ public abstract class ItemPart {
     /**
      * Parse ItemStack data from a JSON object
      */
-    protected ItemStack readItemData(JsonObject json) {
+    protected Supplier<ItemStack> readItemData(JsonObject json) {
         if (!json.has("item"))
-            return ItemStack.EMPTY;
+            return () -> ItemStack.EMPTY;
 
-        String itemName = JsonUtils.getString(json, "item");
-        Item item = Item.getByNameOrId(itemName);
-        if (item == null)
-            return ItemStack.EMPTY;
-        int meta = json.has("data") ? JsonUtils.getInt(json, "data") : 0;
-
-        return new ItemStack(item, 1, meta);
+        final String itemName = JsonUtils.getString(json, "item");
+        return () -> {
+            Item item = Item.getByNameOrId(itemName);
+            if (item == null)
+                return ItemStack.EMPTY;
+            int meta = json.has("data") ? JsonUtils.getInt(json, "data") : 0;
+            return new ItemStack(item, 1, meta);
+        };
     }
 
     public void writeToNBT(NBTTagCompound tags) {
