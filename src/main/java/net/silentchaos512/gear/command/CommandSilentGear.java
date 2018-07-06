@@ -22,7 +22,7 @@ import java.util.List;
 public class CommandSilentGear extends CommandBase {
 
     enum SubCommand {
-        RESET_MODEL_CACHES, REGISTRY_ANALYZE, BREAK_ITEM_IN_HAND;
+        RESET_MODEL_CACHES, REGISTRY_ANALYZE, BREAK_ITEM_IN_HAND, REPAIR_ITEM_IN_HAND;
 
         @Nullable
         static SubCommand fromArgs(String arg) {
@@ -80,6 +80,14 @@ public class CommandSilentGear extends CommandBase {
                 stack.setItemDamage(stack.getMaxDamage());
                 GearData.recalculateStats(stack);
                 tell(sender, "(╯°□°）╯︵ ┻━┻", false);
+            }
+        } else if (subCommand == SubCommand.REPAIR_ITEM_IN_HAND && sender instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) sender;
+            ItemStack stack = player.getHeldItemMainhand();
+            if (stack.getItem() instanceof ICoreItem) {
+                stack.setItemDamage(0);
+                GearData.recalculateStats(stack);
+                tell(sender, "┬─┬ノ( º _ ºノ)", false);
             }
         }
     }

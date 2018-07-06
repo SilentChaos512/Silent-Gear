@@ -18,9 +18,11 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.lib.block.BlockContainerSL;
+import net.silentchaos512.lib.block.ITileEntityBlock;
+import net.silentchaos512.lib.recipe.RecipeJsonHell;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
-public class BlockCraftingStation extends BlockContainerSL {
+public class BlockCraftingStation extends BlockContainerSL implements ITileEntityBlock {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
@@ -29,6 +31,11 @@ public class BlockCraftingStation extends BlockContainerSL {
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         setHardness(3.0f);
         setResistance(5.0f);
+    }
+
+    @Override
+    public Class<? extends TileEntity> getTileEntityClass() {
+        return TileCraftingStation.class;
     }
 
     @Override
@@ -107,6 +114,8 @@ public class BlockCraftingStation extends BlockContainerSL {
     @Override
     public void addRecipes(RecipeMaker recipes) {
         recipes.addShapedOre(getName(), new ItemStack(this), "wtw", "wuw", "wcw",
+                'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', ModItems.crafting.upgradeBase, 'c', "chestWood");
+        RecipeJsonHell.createShapedRecipe(getName(), new ItemStack(this), "wtw", "wuw", "wcw",
                 'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', ModItems.crafting.upgradeBase, 'c', "chestWood");
     }
 }
