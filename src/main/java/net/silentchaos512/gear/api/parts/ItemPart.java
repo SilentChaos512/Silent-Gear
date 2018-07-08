@@ -110,10 +110,9 @@ public abstract class ItemPart {
     }
 
     public int getRepairAmount(ItemStack gear, ItemPartData part) {
-        // TODO getRepairAmount
-        // float durability = part.getStatModifier(CommonItemStats.DURABILITY).getValue();
-        // return (int) (durability / 2);
-        return 1;
+        // Base value on material durability
+        Collection<StatInstance> mods = getStatModifiers(CommonItemStats.DURABILITY, part.craftingItem);
+        return (int) (CommonItemStats.DURABILITY.compute(0f, mods) / 2);
     }
 
     // ============

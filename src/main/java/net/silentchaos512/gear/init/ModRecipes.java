@@ -6,6 +6,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.recipe.RecipeBlueprintCrafting;
 import net.silentchaos512.gear.recipe.RecipeModularItem;
+import net.silentchaos512.gear.recipe.RecipeQuickRepair;
 import net.silentchaos512.gear.recipe.RecipeUpgradeModularItem;
 import net.silentchaos512.lib.registry.IRegistrationHandler;
 import net.silentchaos512.lib.registry.RecipeMaker;
@@ -23,6 +24,7 @@ public class ModRecipes implements IRegistrationHandler<IRecipe> {
         }
         recipes.addCustomRecipe("head_blueprint", new RecipeBlueprintCrafting(ModItems.toolHead));
         recipes.addCustomRecipe("upgrade_core_item", new RecipeUpgradeModularItem());
+        recipes.addCustomRecipe("quick_gear_repair", new RecipeQuickRepair());
     }
 
     public void preInitOreDict() {

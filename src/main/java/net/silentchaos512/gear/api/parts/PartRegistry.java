@@ -24,9 +24,11 @@ public final class PartRegistry {
     private static List<PartRod> rods = null;
     private static List<PartMain> visibleMains = null;
     private static List<PartRod> visibleRods = null;
+    // FIXME: Make into same kind of cache which can have elements removed. Fix name.
     private static Map<String, ItemPart> STACK_TO_PART = new THashMap<>();
 
     private PartRegistry() {
+        throw new IllegalAccessError("Utility class");
     }
 
     /**
@@ -77,8 +79,8 @@ public final class PartRegistry {
         return part;
     }
 
-    public static @Nullable
-    ItemPart fromDecoStack(ItemStack stack) {
+    @Nullable
+    public static ItemPart fromDecoStack(ItemStack stack) {
         if (StackHelper.isEmpty(stack))
             return null;
 
