@@ -223,6 +223,17 @@ public class GearHelper {
     private static Map<String, List<ItemStack>> subItemCache = new HashMap<>();
 
     public static void getSubItems(ICoreItem item, CreativeTabs tab, NonNullList<ItemStack> subitems) {
+        boolean inTab = false;
+        for (CreativeTabs tabInList : item.getItem().getCreativeTabs()) {
+            if (tabInList == tab) {
+                inTab = true;
+                break;
+            }
+        }
+        if (!inTab) {
+            return;
+        }
+
         if (!subItemCache.containsKey(item.getGearClass())) {
             List<ItemStack> list = new ArrayList<>();
             // TODO: How should we handle gear subitems?

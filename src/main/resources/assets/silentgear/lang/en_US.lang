@@ -1,3 +1,5 @@
+itemGroup.silentgear=Silent Gear
+
 ##########
 # Blocks #
 ##########
@@ -40,6 +42,7 @@ item.silentgear:tip_upgrade_redstone.name=Redstone-Coated Upgrade
 item.silentgear:tool_head.name=Tool Head (Unknown)
 item.silentgear:tool_head.axe=Axe Head
 item.silentgear:tool_head.bow=Bow Limbs
+item.silentgear:tool_head.dagger=Dagger Blade
 item.silentgear:tool_head.hammer=Hammer Head
 item.silentgear:tool_head.mattock=Mattock Head
 item.silentgear:tool_head.pickaxe=Pickaxe Head
@@ -66,6 +69,9 @@ item.silentgear:axe.nameProper=%s Axe
 
 item.silentgear:bow.name=Bow
 item.silentgear:bow.nameProper=%s Bow
+
+item.silentgear:dagger.name=Dagger
+item.silentgear:dagger.nameProper=%s Dagger
 
 item.silentgear:hammer.name=Hammer
 item.silentgear:hammer.nameProper=%s Hammer

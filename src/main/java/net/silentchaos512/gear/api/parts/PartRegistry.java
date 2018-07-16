@@ -24,7 +24,6 @@ public final class PartRegistry {
     private static List<PartRod> rods = null;
     private static List<PartMain> visibleMains = null;
     private static List<PartRod> visibleRods = null;
-    // FIXME: Make into same kind of cache which can have elements removed. Fix name.
     private static Map<String, ItemPart> STACK_TO_PART = new THashMap<>();
 
     private PartRegistry() {
@@ -41,11 +40,10 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets the gear part that matches the ItemStack. Also checks the ore dictionary for parts that have an ore dictionary
-     * key.
+     * Gets an {@code ItemPart} matching the stack, if one exists.
      *
-     * @param stack
-     * @return
+     * @param stack {@code ItemStack} that may or may not be an {@code ItemPart}
+     * @return The matching {@code ItemPart}, or null if there is none
      */
     @Nullable
     public static ItemPart get(ItemStack stack) {
@@ -66,9 +64,9 @@ public final class PartRegistry {
     }
 
     /**
-     * Registers a gear part.
+     * Registers a gear part (material). A part with the same key must not be registered.
      *
-     * @param part
+     * @param part The {@code ItemPart}
      */
     public static <T extends ItemPart> T putPart(@Nonnull T part) {
         String key = part.key.toString();
@@ -101,7 +99,8 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list of registered ToolPartMains in the order they are registered (used for sub-item display).
+     * Gets a list of registered ToolPartMains in the order they are registered (used for sub-item
+     * display).
      */
     public static List<PartMain> getMains() {
         if (mains == null) {
@@ -145,5 +144,10 @@ public final class PartRegistry {
     public static void resetVisiblePartCaches() {
         visibleMains = null;
         visibleRods = null;
+    }
+
+    public static void getDebugLines(List<String> list) {
+        list.add("PartRegistry.map=" + map.size());
+        list.add("PartRegistry.STACK_TO_PART=" + STACK_TO_PART.size());
     }
 }

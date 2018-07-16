@@ -1,3 +1,5 @@
+// Based on jriwanek's Forge Modding Skeleton (https://github.com/jriwanek/ForgeModdingSkeleton)
+
 buildscript {
     repositories {
         jcenter()
@@ -67,6 +69,9 @@ minecraft {
     runDir = 'run'
     mappings = project.mcp_mappings
 
+    replace "BUILD_NUM = 0", "BUILD_NUM = " + build_num
+    replaceIn "${project.archivesBaseName}.java"
+
     if (project.hasProperty('coreplugin')) {
         clientJvmArgs += '-Dfml.coreMods.load=' + project.coreplugin
         serverJvmArgs += '-Dfml.coreMods.load=' + project.coreplugin
@@ -119,13 +124,11 @@ task incrementBuild {
         }
     }
 }
+build.dependsOn incrementBuild
 
 repositories {
     jcenter()
     mavenCentral()
-    maven { // Jitpack
-        url 'https://jitpack.io'
-    }
     maven { // JEI
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
@@ -134,24 +137,30 @@ repositories {
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
     }
+    repositories {
+        maven { url 'https://maven.mcmoddev.com' }
+    }
+    maven { // Jitpack
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
     // lombok
     if (project.hasProperty('lombok_version')) {
-        compileOnly "org.projectlombok:lombok:${project.lombok_version}"
+        compile "org.projectlombok:lombok:${project.lombok_version}"
         apt "org.projectlombok:lombok:${project.lombok_version}"
     }
 
     // JEI
     if (project.hasProperty('jei_version')) {
         deobfProvided "mezz.jei:jei_${project.mc_version}:${project.jei_version}:api"
-        runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
+        //runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
     }
 
     // Silent Lib
     if (project.hasProperty('sl_version')) {
-        implementation "com.github.SilentChaos512:SilentLib:${project.sl_version}"
+        compileOnly "com.github.SilentChaos512:SilentLib:${project.sl_version}"
     }
 }
 
@@ -172,9 +181,12 @@ processResources {
 }
 
 jar {
-    build_num = getBuildNumber()
-    if (build_num > 0) {
-        classifier = build_num
+    mustRunAfter incrementBuild
+    doFirst {
+        build_num = getBuildNumber()
+        if (build_num > 0) {
+            classifier = build_num
+        }
     }
     manifest {
         if (project.hasProperty('coreplugin')) {
@@ -215,6 +227,30 @@ artifacts {
     }
 }
 
+class Secrets {
+    def data = null
+
+    def getProperty(String key) {
+        return data ? data[key] : ''
+    }
+}
+
+import groovy.json.JsonSlurper
+
+def secretFile
+if (System.getenv().SECRET_FILE) {
+    secretFile = file System.getenv().SECRET_FILE
+} else {
+    secretFile = file 'secret.json'
+}
+
+project.ext.secret = new Secrets()
+if (secretFile.exists()) {
+    secretFile.withReader {
+        project.ext.secret.data = new JsonSlurper().parse it
+    }
+}
+
 curseforge {
     if (project.hasProperty('cf_project_id') && project.hasProperty('cf_release_type') && project.hasProperty('cf_changelog_filename') &&
             ((project.cf_release_type == 'alpha') || (project.cf_release_type == 'beta') || (project.cf_release_type == 'release'))) {
@@ -225,33 +261,31 @@ curseforge {
             releaseType = project.cf_release_type
             addGameVersion(project.mc_version)
             mainArtifact(jar) {
-                displayName = "$project.description $display_version"
+//                displayName = "$project.description $display_version"
                 relations {
-                    requiredLibrary 'mmd-orespawn'
-                    requiredLibrary 'base-metals'
-                    optionalLibrary 'additional-loot-tables'
+                    requiredLibrary 'silent-lib'
                 }
             }
-            if (project.hasProperty('doAPIJar')) {
-                addArtifact(apiJar) {
-                    displayName = "$project.description $display_version API"
-                }
-            }
-            if (project.hasProperty('doSourceJar')) {
-                addArtifact(sourceJar) {
-                    displayName = "$project.description $display_version Sources"
-                }
-            }
-            if (project.hasProperty('doDeobfJar')) {
-                addArtifact(deobfJar) {
-                    displayName = "$project.description $display_version Development"
-                }
-            }
-            if (project.hasProperty('doJavadocJar')) {
-                addArtifact(javadocJar) {
-                    displayName = "$project.description $display_version Javadoc"
-                }
-            }
+//            if (project.hasProperty('doAPIJar')) {
+//                addArtifact(apiJar) {
+//                    displayName = "$project.description $display_version API"
+//                }
+//            }
+//            if (project.hasProperty('doSourceJar')) {
+//                addArtifact(sourceJar) {
+//                    displayName = "$project.description $display_version Sources"
+//                }
+//            }
+//            if (project.hasProperty('doDeobfJar')) {
+//                addArtifact(deobfJar) {
+//                    displayName = "$project.description $display_version Development"
+//                }
+//            }
+//            if (project.hasProperty('doJavadocJar')) {
+//                addArtifact(javadocJar) {
+//                    displayName = "$project.description $display_version Javadoc"
+//                }
+//            }
         }
     }
 }

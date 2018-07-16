@@ -26,13 +26,15 @@ import net.silentchaos512.lib.util.LogHelper;
 
 import java.util.Random;
 
-@Mod(modid = SilentGear.MOD_ID, name = SilentGear.MOD_NAME, version = SilentGear.VERSION)
+@Mod(modid = SilentGear.MOD_ID, name = SilentGear.MOD_NAME, version = SilentGear.VERSION, dependencies = SilentGear.DEPENDENCIES)
 public class SilentGear {
 
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "0.0.3";
+    public static final String VERSION = "0.0.4";
+    public static final String SL_VERSION = "2.3.8";
     public static final int BUILD_NUM = 0;
+    public static final String DEPENDENCIES = "required-after:silentlib@[" + SL_VERSION + ",)";
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 
@@ -85,5 +87,9 @@ public class SilentGear {
     public void onServerLoad(FMLServerStartingEvent event) {
 
         event.registerServerCommand(new CommandSilentGear());
+    }
+
+    public int getBuildNum() {
+        return BUILD_NUM;
     }
 }
