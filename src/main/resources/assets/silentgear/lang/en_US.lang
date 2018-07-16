@@ -51,16 +51,16 @@ item.silentgear:tool_head.sickle=Sickle Blade
 item.silentgear:tool_head.sword=Sword Blade & Crossguard
 
 # Crafting Item
-item.silentgear:blueprint_paper.name=Blueprint Paper
-item.silentgear:diamond_shard.name=Diamond Shard
-item.silentgear:emerald_shard.name=Emerald Shard
-item.silentgear:sinew.name=Sinew
-item.silentgear:sinew_dried.name=Dried Sinew
-item.silentgear:sinew_dried.desc=<temporary recipe>
-item.silentgear:sinew_fiber.name=Sinew Fiber
-item.silentgear:stick_iron.name=Iron Rod
-item.silentgear:stick_stone.name=Stone Rod
-item.silentgear:upgrade_base.name=Upgrade Base
+item.silentgear.blueprint_paper.name=Blueprint Paper
+item.silentgear.diamond_shard.name=Diamond Shard
+item.silentgear.emerald_shard.name=Emerald Shard
+item.silentgear.sinew.name=Sinew
+item.silentgear.sinew_dried.name=Dried Sinew
+item.silentgear.sinew_dried.desc=<temporary recipe>
+item.silentgear.sinew_fiber.name=Sinew Fiber
+item.silentgear.stick_iron.name=Iron Rod
+item.silentgear.stick_stone.name=Stone Rod
+item.silentgear.upgrade_base.name=Upgrade Base
 
 #Tools
 

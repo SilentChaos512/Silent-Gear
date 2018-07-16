@@ -2,6 +2,7 @@
 Added: Quick repair recipe, which replaces decorating
 Changed: Block placing tools now require sneaking (fixes placing blocks when click on blocks with GUIs and such)
 Changed: Crafting materials (upgrade base, rods, sinew) have individual items now, existing ones will disappear
+Fixed: Dagger localizations
 Fixed: Command usage text
 
 0.0.3 (preview 3, 1.12.2)
