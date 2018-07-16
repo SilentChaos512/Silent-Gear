@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.PartDataList;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.item.ItemSL;
@@ -82,7 +83,7 @@ public class Blueprint extends ItemSL implements IBlueprint {
 
     @Override
     public void addRecipes(RecipeMaker recipes) {
-        Object paper = !singleUse ? ModItems.crafting.blueprintPaper : new ItemStack(Blocks.WOODEN_SLAB, 1, OreDictionary.WILDCARD_VALUE);
+        Object paper = !singleUse ? CraftingItems.BLUEPRINT_PAPER.getStack() : new ItemStack(Blocks.WOODEN_SLAB, 1, OreDictionary.WILDCARD_VALUE);
         String stick = "stickWood";
         List<String> added = new ArrayList<>();
 

@@ -27,7 +27,7 @@ public class TipUpgrade extends ItemSL {
     public void addRecipes(RecipeMaker recipes) {
         for (Type type : Type.values())
             recipes.addShapelessOre(nameForType(type), new ItemStack(this, 1, type.ordinal()),
-                    ModItems.crafting.upgradeBase, type.oreName);
+                    CraftingItems.UPGRADE_BASE.getStack(), type.oreName);
     }
 
     @Override

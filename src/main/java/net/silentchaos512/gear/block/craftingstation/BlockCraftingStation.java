@@ -17,6 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.block.BlockContainerSL;
 import net.silentchaos512.lib.block.ITileEntityBlock;
 import net.silentchaos512.lib.recipe.RecipeJsonHell;
@@ -114,8 +115,8 @@ public class BlockCraftingStation extends BlockContainerSL implements ITileEntit
     @Override
     public void addRecipes(RecipeMaker recipes) {
         recipes.addShapedOre(getName(), new ItemStack(this), "wtw", "wuw", "wcw",
-                'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', ModItems.crafting.upgradeBase, 'c', "chestWood");
+                'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', CraftingItems.UPGRADE_BASE.getStack(), 'c', "chestWood");
         RecipeJsonHell.createShapedRecipe(getName(), new ItemStack(this), "wtw", "wuw", "wcw",
-                'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', ModItems.crafting.upgradeBase, 'c', "chestWood");
+                'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', CraftingItems.UPGRADE_BASE.getStack(), 'c', "chestWood");
     }
 }

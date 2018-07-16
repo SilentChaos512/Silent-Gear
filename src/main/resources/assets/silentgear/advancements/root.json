@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:crafting_item"
+            "item": "silentgear:blueprint_paper"
         },
         "title": {
             "translate": "advancements.silentgear:root.title"

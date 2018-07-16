@@ -12,6 +12,7 @@ import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
+import net.silentchaos512.lib.item.IEnumItems;
 import net.silentchaos512.lib.item.ItemGuideBookSL;
 import net.silentchaos512.lib.item.ItemSL;
 import net.silentchaos512.lib.registry.IRegistrationHandler;
@@ -34,7 +35,6 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static Blueprint template = new Blueprint("template", true);
     public static BlueprintBook blueprintBook = new BlueprintBook();
     public static TipUpgrade tipUpgrade = new TipUpgrade();
-    public static CraftingItem crafting = new CraftingItem();
     public static Dye dye = new Dye();
     public static Flaxseeds flaxseeds = new Flaxseeds();
     public static ItemSL flaxFiber = new ItemSL(1, SilentGear.MOD_ID, "flax_fiber");
@@ -64,7 +64,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         reg.registerItem(template);
         reg.registerItem(blueprintBook);
         reg.registerItem(tipUpgrade);
-        reg.registerItem(crafting);
+        IEnumItems.registerItems(CraftingItems.values(), reg);
         reg.registerItem(dye);
         reg.registerItem(flaxseeds);
         reg.registerItem(flaxFiber);
@@ -91,7 +91,7 @@ public class ModItems implements IRegistrationHandler<Item> {
 
         // Extra recipes
         RecipeMaker recipes = SilentGear.registry.recipes;
-        recipes.addShapeless("guide_book", new ItemStack(guideBook), Items.BOOK, ModItems.crafting.blueprintPaper);
+        recipes.addShapeless("guide_book", new ItemStack(guideBook), Items.BOOK, CraftingItems.BLUEPRINT_PAPER.getStack());
     }
 
     private <T extends Item & IRegistryObject & ICoreTool> T registerTool(SRegistry reg, T item) {
