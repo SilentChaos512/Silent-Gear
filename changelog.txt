@@ -1,6 +1,7 @@
 0.0.4 (preview 4, 1.12.2)
 Added: Quick repair recipe, which replaces decorating
 Changed: Crafting materials (upgrade base, rods, sinew) have individual items now, existing ones will disappear
+Fixed: Command usage text
 
 0.0.3 (preview 3, 1.12.2)
 Added: User-defined materials are now working!

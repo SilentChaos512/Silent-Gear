@@ -2,7 +2,6 @@ package net.silentchaos512.gear.command;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,7 @@ import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 
 public class CommandSilentGear extends CommandBase {
 
@@ -52,14 +52,19 @@ public class CommandSilentGear extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return TextFormatting.RED + "Usage: /" + getName() + "<reset_model_caches>";
+        StringBuilder subcommands = new StringBuilder();
+        for (SubCommand command : SubCommand.values()) {
+            subcommands.append((subcommands.length() != 0) ? ", " : "").append(command.name().toLowerCase(Locale.ROOT));
+        }
+        return TextFormatting.RED + String.format("Usage: /%s <%s>", getName(), subcommands.toString());
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
             tell(sender, getUsage(sender), false);
+            return;
         }
 
         SubCommand subCommand = SubCommand.fromArgs(args[0]);
