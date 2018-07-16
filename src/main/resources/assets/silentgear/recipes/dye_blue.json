@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "silentgear:dye",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "silentgear:flower"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

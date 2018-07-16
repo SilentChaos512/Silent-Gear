@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "silentgear:crafting_item",
+    "data": 5,
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "ore": "gemEmerald",
+      "type": "forge:ore_dict"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

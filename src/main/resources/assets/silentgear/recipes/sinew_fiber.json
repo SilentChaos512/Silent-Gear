@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "silentgear:sinew_fiber",
+    "count": 3
+  },
+  "ingredients": [
+    {
+      "item": "silentgear:dried_sinew"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

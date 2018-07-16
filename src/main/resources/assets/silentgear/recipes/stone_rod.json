@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "silentgear:stone_rod",
+    "count": 4
+  },
+  "pattern": [
+    "s",
+    "s"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "s": {
+      "ore": "cobblestone",
+      "type": "forge:ore_dict"
+    }
+  }
+}

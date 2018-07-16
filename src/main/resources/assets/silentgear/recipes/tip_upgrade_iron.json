@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "silentgear:tip_upgrade",
+    "data": 0
+  },
+  "ingredients": [
+    {
+      "item": "silentgear:upgrade_base"
+    },
+    {
+      "ore": "ingotIron",
+      "type": "forge:ore_dict"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

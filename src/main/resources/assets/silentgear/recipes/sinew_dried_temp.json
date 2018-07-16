@@ -1,0 +1,11 @@
+{
+  "result": {
+    "item": "silentgear:dried_sinew"
+  },
+  "ingredients": [
+    {
+      "item": "silentgear:sinew"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "silentgear:guide_book"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "silentgear:blueprint_paper"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}
