@@ -31,9 +31,6 @@ public class Config extends ConfigBase {
     public static ItemMatchList blockPlacerTools = new ItemMatchList(true, false,
             SilentGear.RESOURCE_PREFIX + "pickaxe", SilentGear.RESOURCE_PREFIX + "shovel", SilentGear.RESOURCE_PREFIX + "axe");
     private static final String BLOCK_PLACER_TOOLS_COMMENT = "These items will be able to place blocks by using them (right-click-to-place)";
-    public static boolean blockPlacerOnlyWhenSneaking;
-    private static final boolean BLOCK_PLACER_ONLY_WHEN_SNEAKING_DEFAULT = false;
-    private static final String BLOCK_PLACER_ONLY_WHEN_SNEAKING_COMMENT = "If true, block placing will only happen when sneaking.";
 
     public static float sinewDropRate;
     private static final float SINEW_DROP_RATE_DEFAULT = 0.2f;
@@ -97,7 +94,6 @@ public class Config extends ConfigBase {
             // Block placer tools
             String catBlockPlacerTools = CAT_ITEMS + SEP + "block_placer_tools";
             blockPlacerTools.loadConfig(config, "Items That Place Blocks", catBlockPlacerTools, BLOCK_PLACER_TOOLS_COMMENT);
-            blockPlacerOnlyWhenSneaking = loadBoolean("Only When Sneaking", catBlockPlacerTools, BLOCK_PLACER_ONLY_WHEN_SNEAKING_DEFAULT, BLOCK_PLACER_ONLY_WHEN_SNEAKING_COMMENT);
 
             /*
              * Tools

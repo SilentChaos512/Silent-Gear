@@ -15,7 +15,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.IBlockPlacer;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.config.Config;
@@ -36,8 +35,7 @@ public class ToolBlockPlaceHandler {
         if (stack.isEmpty() || !canToolPlaceBlock(stack)) return;
 
         EntityPlayer player = event.getEntityPlayer();
-        // Sneaking config?
-        if (Config.blockPlacerOnlyWhenSneaking && !player.isSneaking()) return;
+        if (!player.isSneaking()) return; // Not working?
 
         World world = event.getWorld();
         BlockPos pos = event.getPos();
@@ -86,7 +84,6 @@ public class ToolBlockPlaceHandler {
         int prevSize = nextStack.getCount();
         Vec3d hit = event.getHitVec();
         EnumActionResult result = ItemHelper.useItemAsPlayer(nextStack, player, world, pos, side, (float) hit.x, (float) hit.y, (float) hit.z);
-        SilentGear.log.debug(result);
         if (result == EnumActionResult.SUCCESS) player.swingArm(EnumHand.MAIN_HAND);
 
         // Don't consume blocks in creative mode
