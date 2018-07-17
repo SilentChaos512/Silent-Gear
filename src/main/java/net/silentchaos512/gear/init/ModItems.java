@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.GuideBookToolMod;
 import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.PartDataList;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -27,8 +28,9 @@ import java.util.function.Function;
 public class ModItems implements IRegistrationHandler<Item> {
 
     public static final ModItems INSTANCE = new ModItems();
-    public static Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
-    public static Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
+    public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
+    public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
+    public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
 
@@ -70,6 +72,9 @@ public class ModItems implements IRegistrationHandler<Item> {
         armorClasses.put("chestplate", chestplate);
         armorClasses.put("leggings", leggings);
         armorClasses.put("boots", boots);
+
+        gearClasses.putAll(toolClasses);
+        gearClasses.putAll(armorClasses);
 
         reg.registerItem(guideBook);
 

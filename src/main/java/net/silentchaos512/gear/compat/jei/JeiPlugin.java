@@ -6,8 +6,10 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.gear.CoreArmor;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 @JEIPlugin
@@ -16,7 +18,13 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
         subtypeRegistry.registerSubtypeInterpreter(ModItems.toolHead, s -> ModItems.toolHead.getSubtypeKey(s));
-//        subtypeRegistry.registerSubtypeInterpreter(ModItems.blueprint, s -> ModItems.blueprint.getOutputItemType(s));
+
+        ModItems.gearClasses.forEach(
+                (key, item) -> subtypeRegistry.registerSubtypeInterpreter(item.getItem(),
+                        stack -> {
+                            ItemPartData part = GearData.getPrimaryPart(stack);
+                            return part == null ? key : key + "|" + part.getPart().getKey().toString();
+                        }));
     }
 
     @Override
