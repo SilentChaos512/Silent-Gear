@@ -15,36 +15,36 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 
-public class TileCraftingStation extends TileInventorySL  {
+public class TileCraftingStation extends TileInventorySL {
 
-  public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {
-    NonNullList<Pair<ItemStack, IInventory>> list = NonNullList.create();
+    public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {
+        NonNullList<Pair<ItemStack, IInventory>> list = NonNullList.create();
 
-    for (EnumFacing side : Arrays.asList(null, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.EAST)) {
-      BlockPos pos = side == null ? this.pos : this.pos.offset(side);
-      TileEntity te = this.world.getTileEntity(pos);
+        for (EnumFacing side : Arrays.asList(null, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.EAST)) {
+            BlockPos pos = side == null ? this.pos : this.pos.offset(side);
+            TileEntity te = this.world.getTileEntity(pos);
 
-      if (te instanceof IInventory) {
-        IBlockState state = this.world.getBlockState(pos);
-        RayTraceResult raytrace = new RayTraceResult(new Vec3d(0, 0, 0), side, pos);
-        ItemStack stack = state.getBlock().getPickBlock(state, raytrace, world, pos, null);
+            if (te instanceof IInventory) {
+                IBlockState state = this.world.getBlockState(pos);
+                RayTraceResult raytrace = new RayTraceResult(new Vec3d(0, 0, 0), side, pos);
+                ItemStack stack = state.getBlock().getPickBlock(state, raytrace, world, pos, null);
 
-        list.add(new ImmutablePair<>(stack, (IInventory) te));
-      }
+                list.add(new ImmutablePair<>(stack, (IInventory) te));
+            }
+        }
+
+        return list;
     }
 
-    return list;
-  }
+    @Override
+    public int getSizeInventory() {
+        // TODO Auto-generated method stub
+        return 3 * 6;
+    }
 
-  @Override
-  public int getSizeInventory() {
-    // TODO Auto-generated method stub
-    return 3 * 6;
-  }
-
-  @Override
-  public String getName() {
-    // TODO Auto-generated method stub
-    return "crafting_station";
-  }
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return "crafting_station";
+    }
 }

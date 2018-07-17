@@ -14,8 +14,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade",
-            "data": 6
+            "item": "silentgear:tip_upgrade_lapis"
         }
     },
     "display": {

@@ -1,11 +1,22 @@
 {
   "result": {
-    "item": "silentgear:tip_upgrade",
-    "data": 4
+    "item": "silentgear:tip_upgrade_redstone"
   },
   "ingredients": [
     {
       "item": "silentgear:upgrade_base"
+    },
+    {
+      "ore": "dustRedstone",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "dustRedstone",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "dustRedstone",
+      "type": "forge:ore_dict"
     },
     {
       "ore": "dustRedstone",

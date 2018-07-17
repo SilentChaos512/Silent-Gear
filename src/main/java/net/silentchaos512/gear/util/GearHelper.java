@@ -259,7 +259,7 @@ public class GearHelper {
         if (data == null)
             return SilentGear.localization.getLocalizedString(stack.getUnlocalizedName() + ".name");
         String partName = data.part.getLocalizedName(data, ItemStack.EMPTY);
-        return SilentGear.localization.getItemSubText(item.getGearClass(), "nameProper", partName);
+        return SilentGear.localization.getSubText(item.getItem(), "nameProper", partName);
     }
 
     public static Collection<IRecipe> getExampleRecipes(ICoreItem item) {

@@ -22,8 +22,7 @@
             "oredict": "gemEmerald"
         },
         "small": {
-            "item": "silentgear:crafting_item",
-            "data": 5,
+            "item": "silentgear:emerald_shard",
             "oredict": "nuggetEmerald"
         }
     },

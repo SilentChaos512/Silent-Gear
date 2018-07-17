@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -19,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -27,21 +25,18 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.registry.IRegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
+public class CoreMattock extends ItemHoe implements ICoreTool {
 
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.GOURD, Material.WOOD);
     private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANTS, Material.VINE);
 
     public CoreMattock() {
         super(GearData.FAKE_MATERIAL);
-        setUnlocalizedName(getFullName());
         setNoRepair();
     }
 
@@ -52,24 +47,8 @@ public class CoreMattock extends ItemHoe implements IRegistryObject, ICoreTool {
     }
 
     @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return getGearClass();
-    }
-
-    @Override
     public String getGearClass() {
         return "mattock";
-    }
-
-    @Override
-    public void getModels(Map<Integer, ModelResourceLocation> models) {
-        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
     }
 
     @Override

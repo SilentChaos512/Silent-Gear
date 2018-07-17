@@ -8,14 +8,16 @@ import net.silentchaos512.gear.GuideBookToolMod;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.PartDataList;
-import net.silentchaos512.gear.item.*;
+import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.Flaxseeds;
+import net.silentchaos512.gear.item.TipUpgrade;
+import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.item.IEnumItems;
 import net.silentchaos512.lib.item.ItemGuideBookSL;
 import net.silentchaos512.lib.registry.IRegistrationHandler;
-import net.silentchaos512.lib.registry.IRegistryObject;
 import net.silentchaos512.lib.registry.SRegistry;
 
 import java.util.LinkedHashMap;
@@ -31,8 +33,7 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
 
     public static BlueprintBook blueprintBook = new BlueprintBook();
-    public static TipUpgrade tipUpgrade = new TipUpgrade();
-    public static Dye dye = new Dye();
+    public static Item blueDye = new Item();
     public static Flaxseeds flaxseeds = new Flaxseeds();
 
     public static ToolHead toolHead = new ToolHead();
@@ -77,12 +78,12 @@ public class ModItems implements IRegistrationHandler<Item> {
         registerBlueprints(reg, "template", true);
         reg.registerItem(blueprintBook);
 
-        reg.registerItem(tipUpgrade);
+        IEnumItems.registerItems(TipUpgrade.Type.values(), reg);
         IEnumItems.registerItems(CraftingItems.values(), reg);
-        reg.registerItem(dye);
-        reg.registerItem(flaxseeds);
+        reg.registerItem(blueDye, "blue_dye");
+        reg.registerItem(flaxseeds, "flaxseeds");
 
-        reg.registerItem(toolHead);
+        reg.registerItem(toolHead, "tool_head");
 
         // Tools/armor
         toolClasses.forEach((key, item) -> reg.registerItem(item.getItem(), key));
@@ -92,22 +93,11 @@ public class ModItems implements IRegistrationHandler<Item> {
     }
 
     private void registerOreDictEntries() {
+        OreDictionary.registerOre("dyeBlue", blueDye);
         OreDictionary.registerOre("nuggetDiamond", CraftingItems.DIAMOND_SHARD.getItem());
         OreDictionary.registerOre("nuggetEmerald", CraftingItems.EMERALD_SHARD.getItem());
         OreDictionary.registerOre("stickIron", CraftingItems.IRON_ROD.getItem());
         OreDictionary.registerOre("stickStone", CraftingItems.STONE_ROD.getItem());
-    }
-
-    private <T extends Item & IRegistryObject & ICoreTool> T registerTool(SRegistry reg, T item) {
-        reg.registerItem(item);
-        toolClasses.put(item.getName(), item);
-        return item;
-    }
-
-    private <T extends Item & IRegistryObject & ICoreArmor> T registerArmor(SRegistry reg, T item) {
-        reg.registerItem(item);
-        armorClasses.put(item.getName(), item);
-        return item;
     }
 
     private void registerBlueprints(SRegistry reg, String name, boolean singleUse) {

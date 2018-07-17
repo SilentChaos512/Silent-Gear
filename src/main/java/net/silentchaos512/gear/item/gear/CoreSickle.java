@@ -7,7 +7,6 @@ import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -39,15 +37,13 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.registry.IRegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-public class CoreSickle extends ItemTool implements IRegistryObject, ICoreTool {
+public class CoreSickle extends ItemTool implements ICoreTool {
 
     // TODO: Durability use config
     private static final int DURABILITY_USAGE = 2;
@@ -57,7 +53,6 @@ public class CoreSickle extends ItemTool implements IRegistryObject, ICoreTool {
 
     public CoreSickle() {
         super(GearData.FAKE_MATERIAL, ImmutableSet.of());
-        setUnlocalizedName(getFullName());
         setNoRepair();
     }
 
@@ -67,26 +62,9 @@ public class CoreSickle extends ItemTool implements IRegistryObject, ICoreTool {
         return Config.sickle;
     }
 
-    @Nonnull
-    @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return getGearClass();
-    }
-
     @Override
     public String getGearClass() {
         return "sickle";
-    }
-
-    @Override
-    public void getModels(@Nonnull Map<Integer, ModelResourceLocation> models) {
-        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
     }
 
     //region Sickle harvesting

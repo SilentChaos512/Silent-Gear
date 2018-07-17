@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -21,7 +20,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -29,21 +27,18 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.registry.IRegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTool {
+public class CorePickaxe extends ItemPickaxe implements ICoreTool {
 
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.ANVIL, Material.ICE, Material.IRON, Material.PACKED_ICE, Material.ROCK);
     private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.ROCK, Material.CIRCUITS, Material.GLASS, Material.PISTON, Material.REDSTONE_LIGHT);
 
     public CorePickaxe() {
         super(GearData.FAKE_MATERIAL);
-        setUnlocalizedName(getFullName());
         setNoRepair();
     }
 
@@ -54,24 +49,8 @@ public class CorePickaxe extends ItemPickaxe implements IRegistryObject, ICoreTo
     }
 
     @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return getGearClass();
-    }
-
-    @Override
     public String getGearClass() {
         return "pickaxe";
-    }
-
-    @Override
-    public void getModels(Map<Integer, ModelResourceLocation> models) {
-        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
     }
 
     //region Harvest tool overrides

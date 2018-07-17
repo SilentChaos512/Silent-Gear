@@ -14,8 +14,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade",
-            "data": 3
+            "item": "silentgear:tip_upgrade_emerald"
         }
     },
     "display": {

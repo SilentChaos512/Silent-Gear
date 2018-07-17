@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -25,8 +26,8 @@ import java.util.function.Function;
 
 public class Blueprint extends Item implements IBlueprint, ICustomMesh {
     private static final String NAME = "blueprint";
-    /** Maps gear to blueprints (not templates) */
-    private static Map<String, Blueprint> ITEMS = new HashMap<>();
+    private static Map<String, Blueprint> ITEMS_BLUEPRINT = new HashMap<>();
+    private static Map<String, Blueprint> ITEMS_TEMPLATE = new HashMap<>();
 
     private final boolean singleUse;
     @Nonnull
@@ -38,7 +39,9 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
         this.singleUse = singleUse;
         if (!singleUse) {
             setContainerItem(this);
-            ITEMS.put(gearItem.getGearClass(), this);
+            ITEMS_BLUEPRINT.put(gearItem.getGearClass(), this);
+        } else {
+            ITEMS_TEMPLATE.put(gearItem.getGearClass(), this);
         }
 
         this.gearItem = gearItem;
@@ -50,8 +53,19 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
      * @return The Blueprint item, or null if it does not exist
      */
     @Nullable
-    public static Blueprint getBlueprintForGear(ICoreItem item) {
-        return ITEMS.get(item.getGearClass());
+    public static Blueprint getBlueprintForGear(ICoreItem item, boolean singleUse) {
+        return singleUse ? ITEMS_TEMPLATE.get(item.getGearClass()) : ITEMS_BLUEPRINT.get(item.getGearClass());
+    }
+
+    @Nullable
+    public static Ingredient getBlueprintIngredientForGear(ICoreItem item) {
+        List<Blueprint> list = new ArrayList<>();
+        Blueprint blueprint = getBlueprintForGear(item, false);
+        Blueprint template = getBlueprintForGear(item, true);
+        if (blueprint != null) list.add(blueprint);
+        if (template != null) list.add(template);
+
+        return !list.isEmpty() ? Ingredient.fromItems(list.toArray(new Item[0])) : null;
     }
 
     @Override

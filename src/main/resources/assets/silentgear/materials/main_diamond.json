@@ -22,8 +22,7 @@
             "oredict": "gemDiamond"
         },
         "small": {
-            "item": "silentgear:crafting_item",
-            "data": 4,
+            "item": "silentgear:diamond_shard",
             "oredict": "nuggetDiamond"
         }
     },

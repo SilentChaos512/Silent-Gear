@@ -14,8 +14,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade",
-            "data": 5
+            "item": "silentgear:tip_upgrade_glowstone"
         }
     },
     "display": {

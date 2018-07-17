@@ -2,7 +2,6 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -15,7 +14,6 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreWeapon;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -23,17 +21,14 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.registry.IRegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Map;
 
-public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon {
+public class CoreSword extends ItemSword implements ICoreWeapon {
 
     public CoreSword() {
         super(GearData.FAKE_MATERIAL);
-        setUnlocalizedName(getFullName());
         setNoRepair();
     }
 
@@ -44,24 +39,8 @@ public class CoreSword extends ItemSword implements IRegistryObject, ICoreWeapon
     }
 
     @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return getGearClass();
-    }
-
-    @Override
     public String getGearClass() {
         return "sword";
-    }
-
-    @Override
-    public void getModels(Map<Integer, ModelResourceLocation> models) {
-        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
     }
 
     //region Standard tool overrides

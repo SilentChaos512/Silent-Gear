@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -22,7 +21,6 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.models.ToolModel;
@@ -31,20 +29,17 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.registry.IRegistryObject;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Map;
 
-public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeapon {
+public class CoreBow extends ItemBow implements ICoreRangedWeapon {
 
     public static final int MIN_DRAW_DELAY = 10;
     public static final int MAX_DRAW_DELAY = 100;
 
     public CoreBow() {
-        setUnlocalizedName(getFullName());
         setNoRepair();
     }
 
@@ -55,24 +50,8 @@ public class CoreBow extends ItemBow implements IRegistryObject, ICoreRangedWeap
     }
 
     @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return getGearClass();
-    }
-
-    @Override
     public String getGearClass() {
         return "bow";
-    }
-
-    @Override
-    public void getModels(Map<Integer, ModelResourceLocation> models) {
-        models.put(0, new ModelResourceLocation(getFullName(), "inventory"));
     }
 
     //region Bow stuff

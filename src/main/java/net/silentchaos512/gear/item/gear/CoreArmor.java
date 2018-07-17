@@ -13,6 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -27,13 +29,11 @@ import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.item.ItemArmorSL;
-import net.silentchaos512.lib.registry.RecipeMaker;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class CoreArmor extends ItemArmorSL implements ICoreArmor {
+public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     // Just using my own UUIDs, ItemArmor can keep being stingy.
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("cfea1f82-ab07-40ed-8384-045446707a98"), UUID.fromString("9f441293-6f6e-461f-a3e2-3cad0c06f3a5"), UUID.fromString("4c90545f-c314-4db4-8a60-dac8b3a132a2"), UUID.fromString("f96e4ac9-ab1d-423b-8392-d820d12fc454")};
@@ -42,16 +42,17 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
     // Same values as in ItemArmor.
     private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
 
+    private final String itemName;
+
     public CoreArmor(EntityEquipmentSlot slot, String name) {
-        super(SilentGear.MOD_ID, name, ArmorMaterial.DIAMOND, slot);
-        setRegistryName(name);
-        setUnlocalizedName(getFullName());
+        super(ArmorMaterial.DIAMOND, 0, slot);
         setNoRepair();
+        this.itemName = name;
     }
 
     @Override
     public String getGearClass() {
-        return getName();
+        return itemName;
     }
 
     //region Stats and attributes

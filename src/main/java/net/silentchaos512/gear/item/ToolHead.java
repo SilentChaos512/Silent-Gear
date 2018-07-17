@@ -33,7 +33,6 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.item.ItemSL;
 import net.silentchaos512.lib.util.LocalizationHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -43,21 +42,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ToolHead extends ItemSL implements IStatItem {
-
-    public static final String NAME = "tool_head";
+public class ToolHead extends Item implements IStatItem {
     private static final String NBT_ROOT = "ToolHeadData";
     private static final String NBT_TOOL_CLASS = "ToolClass";
     private static final String NBT_MATERIALS = "Materials";
     private static final String NBT_STAT_CACHE = "StatCache";
     private static final String NBT_IS_EXAMPLE = "IsExample";
-
-    public ToolHead() {
-        super(1, SilentGear.MOD_ID, NAME);
-        setUnlocalizedName(getFullName());
-        // temp hack for ItemSL bug
-        this.itemName = NAME;
-    }
 
     /**
      * Create a stack with the given materials. Best for getting crafting results.
@@ -184,9 +174,7 @@ public class ToolHead extends ItemSL implements IStatItem {
     public String getItemStackDisplayName(ItemStack stack) {
         String toolClass = getToolClass(stack);
         if (!toolClass.isEmpty()) {
-            String toolName = SilentGear.localization.getItemSubText(toolClass, "name");
-            // TODO
-            return SilentGear.localization.getItemSubText(getName(), toolClass);
+            return SilentGear.localization.getSubText(this, toolClass);
         }
         return super.getItemStackDisplayName(stack);
     }
@@ -209,12 +197,12 @@ public class ToolHead extends ItemSL implements IStatItem {
         LocalizationHelper loc = SilentGear.localization;
         String toolClass = getToolClass(stack);
 
+        list.add(TextFormatting.AQUA + loc.getLocalizedString("item." + SilentGear.MOD_ID + "." + toolClass + ".name"));
+
         if (getData(stack).getBoolean(NBT_IS_EXAMPLE)) {
             list.add(TextFormatting.YELLOW + loc.getMiscText("exampleOutput1"));
             list.add(TextFormatting.YELLOW + loc.getMiscText("exampleOutput2"));
         }
-
-        list.add(TextFormatting.AQUA + loc.getItemSubText(toolClass, "name"));
 
         // Materials used in crafting
         for (ItemPartData data : getAllParts(stack))

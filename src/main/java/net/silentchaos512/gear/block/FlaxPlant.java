@@ -8,24 +8,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.model.ModelLoader;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.lib.registry.IRegistryObject;
-import net.silentchaos512.lib.registry.RecipeMaker;
+import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.lib.registry.ICustomModel;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
+import java.util.Objects;
 
-public class FlaxPlant extends BlockCrops implements IRegistryObject {
-
-    public FlaxPlant() {
-        setUnlocalizedName(getName());
-    }
+public class FlaxPlant extends BlockCrops implements ICustomModel {
 
     @Nonnull
     @Override
     protected Item getCrop() {
-        return ModItems.flaxFiber;
+        return CraftingItems.FLAX_FIBER.getItem();
     }
 
     @Nonnull
@@ -53,28 +50,11 @@ public class FlaxPlant extends BlockCrops implements IRegistryObject {
     }
 
     @Override
-    public void addRecipes(@Nonnull RecipeMaker recipes) {
-    }
-
-    @Override
-    public void addOreDict() {
-    }
-
-    @Nonnull
-    @Override
-    public String getModId() {
-        return SilentGear.MOD_ID;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return "flax_plant";
-    }
-
-    @Override
-    public void getModels(@Nonnull Map<Integer, ModelResourceLocation> models) {
-        for (int i = 0; i < 4; ++i)
-            models.put(i, new ModelResourceLocation(getFullName(), "age=" + i));
+    public void registerModels() {
+        Item item = Item.getItemFromBlock(this);
+        for (int i = 0; i < 4; ++i) {
+            ModelResourceLocation model = new ModelResourceLocation(Objects.requireNonNull(getRegistryName()), "age=" + i);
+            ModelLoader.setCustomModelResourceLocation(item, i, model);
+        }
     }
 }

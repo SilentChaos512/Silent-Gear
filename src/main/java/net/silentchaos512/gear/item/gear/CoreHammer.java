@@ -27,11 +27,6 @@ import java.util.List;
 
 public class CoreHammer extends CorePickaxe {
 
-    public CoreHammer() {
-        super();
-        setUnlocalizedName(getFullName());
-    }
-
     @Nonnull
     @Override
     public ConfigOptionEquipment getConfig() {

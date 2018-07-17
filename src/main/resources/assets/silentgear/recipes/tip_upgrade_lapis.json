@@ -1,11 +1,22 @@
 {
   "result": {
-    "item": "silentgear:tip_upgrade",
-    "data": 6
+    "item": "silentgear:tip_upgrade_lapis"
   },
   "ingredients": [
     {
       "item": "silentgear:upgrade_base"
+    },
+    {
+      "ore": "gemLapis",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "gemLapis",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "gemLapis",
+      "type": "forge:ore_dict"
     },
     {
       "ore": "gemLapis",

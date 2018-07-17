@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.block.craftingstation;
 
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -16,19 +16,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.lib.block.BlockContainerSL;
 import net.silentchaos512.lib.block.ITileEntityBlock;
-import net.silentchaos512.lib.recipe.RecipeJsonHell;
-import net.silentchaos512.lib.registry.RecipeMaker;
 
-public class BlockCraftingStation extends BlockContainerSL implements ITileEntityBlock {
+public class BlockCraftingStation extends BlockContainer implements ITileEntityBlock {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public BlockCraftingStation() {
-        super(1, SilentGear.MOD_ID, "crafting_station", Material.WOOD);
+        super(Material.WOOD);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         setHardness(3.0f);
         setResistance(5.0f);
@@ -110,13 +105,5 @@ public class BlockCraftingStation extends BlockContainerSL implements ITileEntit
     @Override
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         return face == EnumFacing.DOWN || face == EnumFacing.UP;
-    }
-
-    @Override
-    public void addRecipes(RecipeMaker recipes) {
-        recipes.addShapedOre(getName(), new ItemStack(this), "wtw", "wuw", "wcw",
-                'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', CraftingItems.UPGRADE_BASE.getStack(), 'c', "chestWood");
-        RecipeJsonHell.createShapedRecipe(getName(), new ItemStack(this), "wtw", "wuw", "wcw",
-                'w', "plankWood", 't', Blocks.CRAFTING_TABLE, 'u', CraftingItems.UPGRADE_BASE.getStack(), 'c', "chestWood");
     }
 }
