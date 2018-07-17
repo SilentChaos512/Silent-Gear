@@ -1,5 +1,40 @@
 itemGroup.silentgear=Silent Gear
 
+################
+# Advancements #
+################
+
+advancements.silentgear.armor.title=Better Armor
+advancements.silentgear.armor.description=Craft any piece of armor from Silent Gear
+advancements.silentgear.blueprint_pickaxe.title=Blueprints!
+advancements.silentgear.blueprint_pickaxe.description=Craft a pickaxe blueprint or template
+advancements.silentgear.blueprint_sword.title=Swords!
+advancements.silentgear.blueprint_sword.description=Craft a sword blueprint or template
+advancements.silentgear.bow.title=A Better Bow
+advancements.silentgear.bow.description=Craft a Silent Gear bow
+advancements.silentgear.crafting_station.title=Upgrade My Crafting Table!
+advancements.silentgear.crafting_station.description=Craft a crafting station. It has some useful extra features!
+advancements.silentgear.dagger.title=Tiny Sword
+advancements.silentgear.dagger.description=Craft a dagger. Weak, but fast!
+advancements.silentgear.diamond_tips.title=Diamond-Tipped
+advancements.silentgear.diamond_tips.description=Craft a diamond-tipped upgrade, then craft it with one of your tools
+advancements.silentgear.hammer.title=Hammer Time!
+advancements.silentgear.hammer.description=Craft a hammah!
+advancements.silentgear.iron_rods.title=Durable Tool Rods
+advancements.silentgear.iron_rods.description=Craft some iron rods. Sticks aren't the only type of tool rod...
+advancements.silentgear.iron_tips.title=Iron-Tipped
+advancements.silentgear.iron_tips.description=Craft an iron-tipped upgrade, then craft it with one of your tools
+advancements.silentgear.mattock.title=Better Than Hoes
+advancements.silentgear.mattock.description=Craft a mattock for all your farming needs
+advancements.silentgear.pickaxe.title=A Better Pickaxe
+advancements.silentgear.pickaxe.description=Craft a Silent Gear pickaxe
+advancements.silentgear.root.title=Silent Gear
+advancements.silentgear.root.description=Fulfilling all your tool and armor needs
+advancements.silentgear.sickle.title=Plant Destroyer
+advancements.silentgear.sickle.description=Craft a sickle to harvest many plants at once
+advancements.silentgear.sword.title=A Better Sword
+advancements.silentgear.sword.description=Craft a Silent Gear sword
+
 ##########
 # Blocks #
 ##########

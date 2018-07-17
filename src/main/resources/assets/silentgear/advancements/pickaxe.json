@@ -4,13 +4,13 @@
             "item": "silentgear:pickaxe"
         },
         "title": {
-            "translate": "advancements.silentgear:pickaxe.title"
+            "translate": "advancements.silentgear.pickaxe.title"
         },
         "description": {
-            "translate": "advancements.silentgear:pickaxe.description"
+            "translate": "advancements.silentgear.pickaxe.description"
         }
     },
-    "parent": "silentgear:root",
+    "parent": "silentgear:blueprint_pickaxe",
     "criteria": {
         "get_item": {
             "trigger": "minecraft:inventory_changed",

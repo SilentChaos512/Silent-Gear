@@ -4,10 +4,10 @@
             "item": "silentgear:blueprint_paper"
         },
         "title": {
-            "translate": "advancements.silentgear:root.title"
+            "translate": "advancements.silentgear.root.title"
         },
         "description": {
-            "translate": "advancements.silentgear:root.description"
+            "translate": "advancements.silentgear.root.description"
         },
         "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
         "show_toast": false,

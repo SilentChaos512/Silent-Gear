@@ -1,0 +1,43 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:blueprint_sword"
+        },
+        "title": {
+            "translate": "advancements.silentgear.blueprint_sword.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.blueprint_sword.description"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "silentgear:root",
+    "criteria": {
+        "blueprint": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:blueprint_sword"
+                    }
+                ]
+            }
+        },
+        "template": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:template_sword"
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "blueprint",
+            "template"
+        ]
+    ]
+}

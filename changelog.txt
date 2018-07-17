@@ -1,6 +1,7 @@
 0.0.5 (preview 5, 1.12.2)
 Added: Blueprints/templates now display an outline of the item they craft if you are holding shift
 Added: Template textures
+Added: More advancements! And localizations for all of them
 Changed: Blueprints/templates have their own items now (old ones will disappear, sorry)
 Changed: Tip upgrades now have their own items (same story as above)
 Fixed: Many(?) missing recipes

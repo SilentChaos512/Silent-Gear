@@ -1,13 +1,13 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:tip_upgrade_iron"
+            "item": "silentgear:iron_rod"
         },
         "title": {
-            "translate": "advancements.silentgear.iron_tips.title"
+            "translate": "advancements.silentgear.iron_rods.title"
         },
         "description": {
-            "translate": "advancements.silentgear.iron_tips.description"
+            "translate": "advancements.silentgear.iron_rods.description"
         }
     },
     "parent": "silentgear:pickaxe",
@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "silentgear:tip_upgrade_iron"
+                        "item": "silentgear:iron_rod"
                     }
                 ]
             }

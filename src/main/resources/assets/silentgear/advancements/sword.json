@@ -1,23 +1,23 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:tip_upgrade_iron"
+            "item": "silentgear:sword"
         },
         "title": {
-            "translate": "advancements.silentgear.iron_tips.title"
+            "translate": "advancements.silentgear.sword.title"
         },
         "description": {
-            "translate": "advancements.silentgear.iron_tips.description"
+            "translate": "advancements.silentgear.sword.description"
         }
     },
-    "parent": "silentgear:pickaxe",
+    "parent": "silentgear:blueprint_sword",
     "criteria": {
         "get_item": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "silentgear:tip_upgrade_iron"
+                        "item": "silentgear:sword"
                     }
                 ]
             }

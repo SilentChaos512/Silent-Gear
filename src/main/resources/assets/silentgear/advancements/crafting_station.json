@@ -1,23 +1,23 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:tip_upgrade_iron"
+            "item": "silentgear:crafting_station"
         },
         "title": {
-            "translate": "advancements.silentgear.iron_tips.title"
+            "translate": "advancements.silentgear.crafting_station.title"
         },
         "description": {
-            "translate": "advancements.silentgear.iron_tips.description"
+            "translate": "advancements.silentgear.crafting_station.description"
         }
     },
-    "parent": "silentgear:pickaxe",
+    "parent": "silentgear:root",
     "criteria": {
         "get_item": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "silentgear:tip_upgrade_iron"
+                        "item": "silentgear:crafting_station"
                     }
                 ]
             }

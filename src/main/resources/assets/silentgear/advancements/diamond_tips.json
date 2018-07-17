@@ -1,14 +1,13 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:tip_upgrade",
-            "data": 2
+            "item": "silentgear:tip_upgrade_diamond"
         },
         "title": {
-            "translate": "advancements.silentgear:diamond_tips.title"
+            "translate": "advancements.silentgear.diamond_tips.title"
         },
         "description": {
-            "translate": "advancements.silentgear:diamond_tips.description"
+            "translate": "advancements.silentgear.diamond_tips.description"
         }
     },
     "parent": "silentgear:iron_tips",
@@ -18,8 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "silentgear:tip_upgrade",
-                        "data": 2
+                        "item": "silentgear:tip_upgrade_diamond"
                     }
                 ]
             }
