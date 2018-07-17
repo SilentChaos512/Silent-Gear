@@ -1,0 +1,21 @@
+{
+    "result": {
+        "item": "silentgear:template_helmet",
+        "count": 2
+    },
+    "pattern": [
+        "ppp",
+        "psp"
+    ],
+    "type": "forge:ore_shaped",
+    "key": {
+        "p": {
+            "ore": "slabWood",
+            "type": "forge:ore_dict"
+        },
+        "s": {
+            "ore": "stickWood",
+            "type": "forge:ore_dict"
+        }
+    }
+}

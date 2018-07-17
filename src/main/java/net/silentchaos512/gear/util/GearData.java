@@ -37,7 +37,7 @@ public class GearData {
      */
     public static final ToolMaterial FAKE_MATERIAL = EnumHelper.addToolMaterial("silentgems:fake_material", 1, 512, 5.12f, 5.12f, 32);
 
-    private static final String NBT_ROOT = "ToolCore_Data";
+    private static final String NBT_ROOT = "ToolCore_Data";                 // TODO: Update this
     private static final String NBT_ROOT_CONSTRUCTION = "Construction";
     private static final String NBT_ROOT_PROPERTIES = "Properties";
 

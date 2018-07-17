@@ -16,7 +16,7 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
         subtypeRegistry.registerSubtypeInterpreter(ModItems.toolHead, s -> ModItems.toolHead.getSubtypeKey(s));
-        subtypeRegistry.registerSubtypeInterpreter(ModItems.blueprint, s -> ModItems.blueprint.getOutputItemType(s));
+//        subtypeRegistry.registerSubtypeInterpreter(ModItems.blueprint, s -> ModItems.blueprint.getOutputItemType(s));
     }
 
     @Override

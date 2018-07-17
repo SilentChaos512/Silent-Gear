@@ -1,0 +1,22 @@
+{
+    "result": {
+        "item": "silentgear:template_sickle",
+        "count": 2
+    },
+    "pattern": [
+        " p",
+        "pp",
+        "s "
+    ],
+    "type": "forge:ore_shaped",
+    "key": {
+        "p": {
+            "ore": "slabWood",
+            "type": "forge:ore_dict"
+        },
+        "s": {
+            "ore": "stickWood",
+            "type": "forge:ore_dict"
+        }
+    }
+}

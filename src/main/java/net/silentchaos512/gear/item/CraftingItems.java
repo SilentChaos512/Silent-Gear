@@ -32,7 +32,8 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     EMERALD_SHARD,
     SINEW,
     DRIED_SINEW,
-    SINEW_FIBER;
+    SINEW_FIBER,
+    FLAX_FIBER;
 
     private Item item;
 

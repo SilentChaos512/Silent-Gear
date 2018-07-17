@@ -24,7 +24,7 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.item.ItemArmorSL;
@@ -149,17 +149,20 @@ public class CoreArmor extends ItemArmorSL implements ICoreArmor {
 
     public Collection<IRecipe> getExampleRecipes() {
         Collection<IRecipe> list = new ArrayList<>();
-        RecipeMaker recipes = SilentGear.registry.recipes;
 
-        ItemStack blueprint = ModItems.blueprint.getStack(getGearClass());
-        for (PartMain part : PartRegistry.getVisibleMains()) {
-            ItemStack result = construct(this, part.getCraftingStack());
-            Object[] inputs = new Object[getConfig().getHeadCount() + 1];
-            inputs[0] = blueprint;
-            for (int i = 1; i < inputs.length; ++i) {
-                inputs[i] = part.getCraftingStack();
+        Ingredient blueprint = Blueprint.getBlueprintIngredientForGear(this);
+        if (blueprint != null) {
+            for (PartMain part : PartRegistry.getVisibleMains()) {
+                ItemStack result = construct(this, part.getCraftingStack());
+                NonNullList<Ingredient> ingredients = NonNullList.create();
+                ingredients.add(blueprint);
+                for (int i = 0; i < getConfig().getHeadCount(); ++i) {
+                    ingredients.add(Ingredient.fromStacks(part.getCraftingStack()));
+                }
+                list.add(new ShapelessRecipes(SilentGear.MOD_ID, result, ingredients));
             }
-            list.add(recipes.makeShapelessOre(result, inputs));
+        } else {
+            SilentGear.log.warn("Trying to add {} example recipes, but could not find blueprint item!", getGearClass());
         }
 
         return list;

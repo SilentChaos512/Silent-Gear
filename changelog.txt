@@ -1,3 +1,9 @@
+0.0.5 (preview 5, 1.12.2)
+Added: Blueprints/templates now display an outline of the item they craft if you are holding shift
+Added: Template textures
+Changed: Blueprints/templates have their own items now (old ones will disappear, sorry)
+Fixed: Many(?) missing recipes
+
 0.0.4 (preview 4, 1.12.2)
 Added: Quick repair recipe, which replaces decorating
 Changed: Block placing tools now require sneaking (fixes placing blocks when click on blocks with GUIs and such)

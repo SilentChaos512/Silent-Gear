@@ -8,6 +8,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -29,9 +31,9 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
+import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.item.ItemSL;
-import net.silentchaos512.lib.registry.RecipeMaker;
 import net.silentchaos512.lib.util.LocalizationHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -208,8 +210,8 @@ public class ToolHead extends ItemSL implements IStatItem {
         String toolClass = getToolClass(stack);
 
         if (getData(stack).getBoolean(NBT_IS_EXAMPLE)) {
-            list.add(TextFormatting.RED + loc.getMiscText("exampleOutput1"));
-            list.add(TextFormatting.RED + loc.getMiscText("exampleOutput2"));
+            list.add(TextFormatting.YELLOW + loc.getMiscText("exampleOutput1"));
+            list.add(TextFormatting.YELLOW + loc.getMiscText("exampleOutput2"));
         }
 
         list.add(TextFormatting.AQUA + loc.getItemSubText(toolClass, "name"));
@@ -243,18 +245,21 @@ public class ToolHead extends ItemSL implements IStatItem {
 
     public Collection<IRecipe> getExampleRecipes() {
         Collection<IRecipe> list = new ArrayList<>();
-        RecipeMaker recipes = SilentGear.registry.recipes;
 
         ModItems.toolClasses.forEach((toolClass, item) -> {
-            ItemStack blueprint = ModItems.blueprint.getStack(toolClass);
-            for (PartMain part : PartRegistry.getVisibleMains()) {
-                ItemStack result = getStack(toolClass, part, true);
-                Object[] inputs = new Object[item.getConfig().getHeadCount() + 1];
-                inputs[0] = blueprint;
-                for (int i = 1; i < inputs.length; ++i) {
-                    inputs[i] = part.getCraftingStack();
+            Ingredient blueprint = Blueprint.getBlueprintIngredientForGear(item);
+            if (blueprint != null) {
+                for (PartMain part : PartRegistry.getVisibleMains()) {
+                    ItemStack result = getStack(toolClass, part, true);
+                    NonNullList<Ingredient> ingredients = NonNullList.create();
+                    ingredients.add(blueprint);
+                    for (int i = 0; i < item.getConfig().getHeadCount(); ++i) {
+                        ingredients.add(Ingredient.fromStacks(part.getCraftingStack()));
+                    }
+                    list.add(new ShapelessRecipes(SilentGear.MOD_ID, result, ingredients));
                 }
-                list.add(recipes.makeShapeless(result, inputs));
+            } else {
+                SilentGear.log.warn("Trying to add {} example recipes, but could not find blueprint item!", item.getGearClass());
             }
         });
 

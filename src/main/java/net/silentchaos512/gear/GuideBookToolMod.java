@@ -1,8 +1,7 @@
 package net.silentchaos512.gear;
 
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.guidebook.GuideBook;
 import net.silentchaos512.lib.guidebook.chapter.GuideChapter;
 import net.silentchaos512.lib.guidebook.entry.GuideEntry;
@@ -29,7 +28,7 @@ public class GuideBookToolMod extends GuideBook {
     @Override
     public void initChapters() {
 
-        new GuideChapter(this, "test", entryTest, new ItemStack(ModItems.blueprint), 0,
+        new GuideChapter(this, "test", entryTest, CraftingItems.BLUEPRINT_PAPER.getStack(), 0,
                 new PageTextOnly(this, 1),
                 new PageTextOnly(this, 2),
                 new PageTextOnly(this, 3),

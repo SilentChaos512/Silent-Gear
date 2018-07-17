@@ -14,20 +14,22 @@ tile.silentgear:flower.name=Ineedaname Flower
 # Items #
 #########
 
-item.silentgear:blueprint.name=Blueprint
+item.silentgear.blueprint.name=Blueprint
 item.silentgear:blueprint.materialAmount=Material Required: %d
+item.silentgear:blueprint.singleUse=Can be used only once
+item.silentgear:blueprint.multiUse=Can be used many times
 item.silentgear:blueprint.altForRecipe=<Hold Alt for tool recipe>
+item.silentgear:blueprint.shiftForIcon=Hold Shift to see gear icon
 item.silentgear:blueprint.itemRecipe1=%s recipe:
 item.silentgear:blueprint.itemRecipe2=%dx %s
 item.silentgear:blueprint.canMix=Material mixing possible!
 item.silentgear:blueprint.noMixing=Mixed materials only allowed in crafting station
-item.silentgear:blueprint.invalid=Invalid
+
+item.silentgear.template.name=Template
 
 item.silentgear:blueprint_book.name=Blueprint Book
 
 item.silentgear:dye.name=Blue Dye
-
-item.silentgear:flax_fiber.name=Flax Fiber
 
 item.silentgear:flaxseeds.name=Flaxseeds
 
@@ -53,13 +55,14 @@ item.silentgear:tool_head.sword=Sword Blade & Crossguard
 # Crafting Item
 item.silentgear.blueprint_paper.name=Blueprint Paper
 item.silentgear.diamond_shard.name=Diamond Shard
+item.silentgear.dried_sinew.name=Dried Sinew
+item.silentgear.dried_sinew.desc=<temporary recipe>
 item.silentgear.emerald_shard.name=Emerald Shard
+item.silentgear.flax_fiber.name=Flax Fiber
+item.silentgear.iron_rod.name=Iron Rod
 item.silentgear.sinew.name=Sinew
-item.silentgear.sinew_dried.name=Dried Sinew
-item.silentgear.sinew_dried.desc=<temporary recipe>
 item.silentgear.sinew_fiber.name=Sinew Fiber
-item.silentgear.stick_iron.name=Iron Rod
-item.silentgear.stick_stone.name=Stone Rod
+item.silentgear.stone_rod.name=Stone Rod
 item.silentgear.upgrade_base.name=Upgrade Base
 
 #Tools

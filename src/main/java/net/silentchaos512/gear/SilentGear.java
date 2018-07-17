@@ -2,7 +2,6 @@ package net.silentchaos512.gear;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.Mod;
@@ -15,10 +14,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.silentchaos512.gear.command.CommandSilentGear;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.MessageExtraBlockBreak;
 import net.silentchaos512.lib.SilentLib;
-import net.silentchaos512.lib.creativetab.CreativeTabSL;
 import net.silentchaos512.lib.network.NetworkHandlerSL;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.lib.util.LocalizationHelper;
@@ -47,7 +45,7 @@ public class SilentGear {
 
     public static EnumRarity RARITY_LEGENDARY;
 
-    public static CreativeTabs creativeTab = new CreativeTabSL(MOD_ID, () -> new ItemStack(ModItems.blueprint));
+    public static CreativeTabs creativeTab = registry.makeCreativeTab(MOD_ID, CraftingItems.BLUEPRINT_PAPER::getStack);
 
     @Instance(MOD_ID)
     public static SilentGear instance;

@@ -48,8 +48,8 @@ public class GearClientHelper {
             }
 
             if (GearData.isExampleGear(stack)) {
-                tooltip.add(1, TextFormatting.RED + loc.getMiscText("exampleOutput1"));
-                tooltip.add(2, TextFormatting.RED + loc.getMiscText("exampleOutput2"));
+                tooltip.add(1, TextFormatting.YELLOW + loc.getMiscText("exampleOutput1"));
+                tooltip.add(2, TextFormatting.YELLOW + loc.getMiscText("exampleOutput2"));
             }
 
             // Let parts add information if they need to
