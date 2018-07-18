@@ -1,16 +1,13 @@
 package net.silentchaos512.gear.api.parts;
 
 import com.google.common.collect.ImmutableList;
-import gnu.trove.map.hash.THashMap;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Used to register gear parts, and match parts to item stacks.
@@ -19,20 +16,21 @@ import java.util.Set;
  */
 public final class PartRegistry {
 
-    private static Map<String, ItemPart> map = new THashMap<>();
+    private static Map<String, ItemPart> map = new LinkedHashMap<>();
     private static List<PartMain> mains = null;
     private static List<PartRod> rods = null;
     private static List<PartMain> visibleMains = null;
     private static List<PartRod> visibleRods = null;
-    private static Map<String, ItemPart> STACK_TO_PART = new THashMap<>();
+    private static Map<String, ItemPart> STACK_TO_PART = new HashMap<>();
 
     private PartRegistry() {
         throw new IllegalAccessError("Utility class");
     }
 
     /**
-     * @param key The key the part was registered with.
-     * @return The part for the given key.
+     * Gets the part with the given key, if it exists.
+     * @param key The part name/key
+     * @return The {@link ItemPart} with the given key, or null if there is no match
      */
     @Nullable
     public static ItemPart get(String key) {
@@ -40,17 +38,27 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets an {@code ItemPart} matching the stack, if one exists.
+     * Gets the part with the given key, if it exists.
+     * @param key The part name/key
+     * @return The {@link ItemPart} with the given key, or null if there is no match
+     */
+    @Nullable
+    public static ItemPart get(ResourceLocation key) {
+        return map.get(key.toString());
+    }
+
+    /**
+     * Gets an {@link ItemPart} matching the stack, if one exists.
      *
-     * @param stack {@code ItemStack} that may or may not be an {@code ItemPart}
-     * @return The matching {@code ItemPart}, or null if there is none
+     * @param stack {@link ItemStack} that may or may not be an {@link ItemPart}
+     * @return The matching {@link ItemPart}, or null if there is none
      */
     @Nullable
     public static ItemPart get(ItemStack stack) {
         if (StackHelper.isEmpty(stack))
             return null;
 
-        String key = stack.getItem().getUnlocalizedName() + "@" + stack.getItemDamage();
+        String key = stack.getItem().getTranslationKey() + "@" + stack.getItemDamage();
         if (STACK_TO_PART.containsKey(key))
             return STACK_TO_PART.get(key);
 
@@ -66,7 +74,7 @@ public final class PartRegistry {
     /**
      * Registers a gear part (material). A part with the same key must not be registered.
      *
-     * @param part The {@code ItemPart}
+     * @param part The {@link ItemPart}
      */
     public static <T extends ItemPart> T putPart(@Nonnull T part) {
         String key = part.key.toString();
@@ -123,6 +131,9 @@ public final class PartRegistry {
         return rods;
     }
 
+    /**
+     * Gets a list of all mains that are not blacklisted or hidden
+     */
     public static List<PartMain> getVisibleMains() {
         if (visibleMains == null) {
             visibleMains = map.values().stream()
@@ -132,6 +143,9 @@ public final class PartRegistry {
         return visibleMains;
     }
 
+    /**
+     * Gets a list of all rods that are not blacklisted or hidden
+     */
     public static List<PartRod> getVisibleRods() {
         if (visibleRods == null) {
             visibleRods = map.values().stream()

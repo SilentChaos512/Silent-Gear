@@ -79,27 +79,27 @@ public class ModMaterials implements IPhasedInitializer {
             final Pattern typeRegex = Pattern.compile("^[a-z]+");
             for (File file : files) {
                 SilentGear.log.info("Material file found: {}", file);
-                String name = file.getName().replace(".json", "");
-                ResourceLocation path = getPath(name);
+                String filename = file.getName().replace(".json", "");
+                ResourceLocation name = getPath(filename);
 
                 // Add to registered parts if it doesn't exist
-                if (!PartRegistry.getKeySet().contains(path.toString())) {
-                    Matcher match = typeRegex.matcher(name);
+                if (!PartRegistry.getKeySet().contains(name.toString())) {
+                    Matcher match = typeRegex.matcher(filename);
                     if (match.find()) {
                         String type = match.group();
-                        SilentGear.log.info("Trying to add part {}, type {}", path, type);
+                        SilentGear.log.info("Trying to add part {}, type {}", name, type);
                         if ("main".equals(type))
-                            PartRegistry.putPart(new PartMain(path));
+                            PartRegistry.putPart(new PartMain(name, true));
                         else if ("rod".equals(type))
-                            PartRegistry.putPart(new PartRod(path));
+                            PartRegistry.putPart(new PartRod(name, true));
                         else if ("bowstring".equals(type))
-                            PartRegistry.putPart(new PartBowstring(path));
+                            PartRegistry.putPart(new PartBowstring(name, true));
                         else if ("tip".equals(type))
-                            PartRegistry.putPart(new PartTip(path));
+                            PartRegistry.putPart(new PartTip(name, true));
                         else if ("grip".equals(type))
-                            PartRegistry.putPart(new PartGrip(path));
+                            PartRegistry.putPart(new PartGrip(name, true));
                         else
-                            SilentGear.log.warn("Unknown part type \"{}\" for {}", type, name);
+                            SilentGear.log.warn("Unknown part type \"{}\" for {}", type, filename);
                     }
                 } else {
                     SilentGear.log.info("Part already registered. Must be an override.");

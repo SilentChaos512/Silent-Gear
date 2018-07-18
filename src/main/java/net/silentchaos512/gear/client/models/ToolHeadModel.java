@@ -146,7 +146,7 @@ public class ToolHeadModel implements IModel {
 
         @Override
         public boolean accepts(ResourceLocation modelLocation) {
-            return modelLocation.getResourceDomain().equals(SilentGear.MOD_ID) && modelLocation.getResourcePath().equals("tool_head");
+            return modelLocation.getNamespace().equals(SilentGear.MOD_ID) && modelLocation.getPath().equals("tool_head");
         }
 
         @Override

@@ -9,6 +9,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.silentchaos512.gear.api.parts.ItemPart;
+import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
 import net.silentchaos512.gear.config.Config;
@@ -64,5 +66,8 @@ public class CommonProxy {
 
     public void postInit(SRegistry registry, FMLPostInitializationEvent event) {
         registry.postInit(event);
+
+        // Log issues with registered parts
+        PartRegistry.getValues().forEach(ItemPart::postInitChecks);
     }
 }

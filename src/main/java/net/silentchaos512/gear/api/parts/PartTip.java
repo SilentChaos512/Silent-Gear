@@ -9,14 +9,18 @@ import java.util.List;
 
 public final class PartTip extends ItemPart implements IUpgradePart {
 
-    public PartTip(ResourceLocation resource) {
-        super(resource);
+    public PartTip(ResourceLocation name) {
+        super(name, false);
+    }
+
+    public PartTip(ResourceLocation name, boolean userDefined) {
+        super(name, userDefined);
     }
 
     @Override
     public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame) {
         String frameStr = "bow".equals(toolClass) && animationFrame == 3 ? "_3" : "";
-        return new ResourceLocation(this.key.getResourceDomain(), "items/" + toolClass + "/tip_" + this.textureSuffix + frameStr);
+        return new ResourceLocation(this.key.getNamespace(), "items/" + toolClass + "/tip_" + this.textureSuffix + frameStr);
     }
 
     @Override
@@ -26,7 +30,7 @@ public final class PartTip extends ItemPart implements IUpgradePart {
 
     @Override
     public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
-        tooltip.add(1, getNameColor() + getLocalizedName(data, gear));
+        tooltip.add(1, getNameColor() + getTranslatedName(data, gear));
     }
 
     @Override

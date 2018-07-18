@@ -206,7 +206,7 @@ public class ToolHead extends Item implements IStatItem {
 
         // Materials used in crafting
         for (ItemPartData data : getAllParts(stack))
-            list.add("- " + data.part.getLocalizedName(data, ItemStack.EMPTY));
+            list.add("- " + data.part.getTranslatedName(data, ItemStack.EMPTY));
 
         ICoreItem toolItem = ModItems.toolClasses.get(toolClass);
         if (toolItem != null) {

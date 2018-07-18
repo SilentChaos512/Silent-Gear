@@ -5,8 +5,12 @@ import net.minecraft.util.ResourceLocation;
 
 public final class PartMain extends ItemPart {
 
-    public PartMain(ResourceLocation resource) {
-        super(resource);
+    public PartMain(ResourceLocation name) {
+        super(name, false);
+    }
+
+    public PartMain(ResourceLocation name, boolean userDefined) {
+        super(name, userDefined);
     }
 
     @Override
@@ -18,12 +22,12 @@ public final class PartMain extends ItemPart {
         String frameStr = "bow".equals(toolClass) && animationFrame == 3 ? "_3" : "";
         String subtypePrefix = subtype + (subtype.isEmpty() ? "" : "_");
         String path = "items/" + toolClass + "/" + subtypePrefix + this.textureSuffix + frameStr;
-        return new ResourceLocation(this.key.getResourceDomain(), path);
+        return new ResourceLocation(this.key.getNamespace(), path);
     }
 
     @Override
     public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
-        return new ResourceLocation(this.key.getResourceDomain(), "items/" + gearClass + "/_broken");
+        return new ResourceLocation(this.key.getNamespace(), "items/" + gearClass + "/_broken");
     }
 
     @Override

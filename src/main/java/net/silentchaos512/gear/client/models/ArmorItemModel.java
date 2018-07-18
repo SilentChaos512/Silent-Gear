@@ -141,8 +141,8 @@ public class ArmorItemModel implements IModel {
 
         @Override
         public boolean accepts(ResourceLocation modelLocation) {
-            boolean matchesPath = ModItems.armorClasses.keySet().stream().anyMatch(s -> modelLocation.getResourcePath().equals(s));
-            return modelLocation.getResourceDomain().equals(SilentGear.MOD_ID) && matchesPath;
+            boolean matchesPath = ModItems.armorClasses.keySet().stream().anyMatch(s -> modelLocation.getPath().equals(s));
+            return modelLocation.getNamespace().equals(SilentGear.MOD_ID) && matchesPath;
         }
 
         @Override

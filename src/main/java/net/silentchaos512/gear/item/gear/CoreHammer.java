@@ -61,7 +61,7 @@ public class CoreHammer extends CorePickaxe {
                     if (player.capabilities.isCreativeMode) {
                         state.getBlock().onBlockHarvested(world, pos2, state, player);
                         if (state.getBlock().removedByPlayer(state, world, pos2, player, false)) {
-                            state.getBlock().onBlockDestroyedByPlayer(world, pos2, state);
+                            state.getBlock().onPlayerDestroy(world, pos2, state);
                         }
                     } else {
                         int xp = ForgeHooks.onBlockBreakEvent(world, ((EntityPlayerMP) player).interactionManager.getGameType(), (EntityPlayerMP) player, pos2);
@@ -69,7 +69,7 @@ public class CoreHammer extends CorePickaxe {
                         state.getBlock().onBlockHarvested(world, pos2, state, player);
                         this.onBlockDestroyed(itemstack, world, state, pos2, player);
                         if (state.getBlock().removedByPlayer(state, world, pos2, player, true)) {
-                            state.getBlock().onBlockDestroyedByPlayer(world, pos2, state);
+                            state.getBlock().onPlayerDestroy(world, pos2, state);
                             state.getBlock().harvestBlock(world, player, pos2, state, world.getTileEntity(pos2), itemstack);
                             state.getBlock().dropXpOnBlockBreak(world, pos2, xp);
                         }

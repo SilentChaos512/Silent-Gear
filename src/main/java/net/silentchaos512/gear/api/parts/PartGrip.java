@@ -5,13 +5,17 @@ import net.minecraft.util.ResourceLocation;
 
 public final class PartGrip extends ItemPart implements IUpgradePart {
 
-    public PartGrip(ResourceLocation resource) {
-        super(resource);
+    public PartGrip(ResourceLocation name) {
+        super(name, false);
+    }
+
+    public PartGrip(ResourceLocation name, boolean userDefined) {
+        super(name, userDefined);
     }
 
     @Override
     public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame) {
-        return new ResourceLocation(this.key.getResourceDomain(), "items/" + toolClass + "/grip_" + this.textureSuffix);
+        return new ResourceLocation(this.key.getNamespace(), "items/" + toolClass + "/grip_" + this.textureSuffix);
     }
 
     @Override

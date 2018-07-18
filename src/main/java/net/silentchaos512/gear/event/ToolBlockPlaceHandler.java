@@ -35,7 +35,7 @@ public class ToolBlockPlaceHandler {
         if (stack.isEmpty() || !canToolPlaceBlock(stack)) return;
 
         EntityPlayer player = event.getEntityPlayer();
-        if (!player.isSneaking()) return; // Not working?
+        if (!player.isSneaking()) return;
 
         World world = event.getWorld();
         BlockPos pos = event.getPos();

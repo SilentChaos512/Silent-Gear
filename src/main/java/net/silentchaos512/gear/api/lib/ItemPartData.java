@@ -15,13 +15,11 @@ import java.util.Collection;
 
 @Getter(value = AccessLevel.PUBLIC)
 public class ItemPartData {
-
     public final ItemPart part;
     public final MaterialGrade grade;
     public final ItemStack craftingItem;
 
     public ItemPartData(ItemPart part, MaterialGrade grade, ItemStack craftingItem) {
-
         this.part = part;
         this.grade = grade;
         this.craftingItem = craftingItem.copy();
@@ -29,28 +27,24 @@ public class ItemPartData {
     }
 
     public Collection<StatInstance> getStatModifiers(ItemStat stat) {
-
         return part.getStatModifiers(stat, craftingItem);
     }
 
     public float computeStat(ItemStat stat) {
-
         return stat.compute(0, getStatModifiers(stat));
     }
 
     @Nullable
     public static ItemPartData fromStack(ItemStack craftingItem) {
-
         ItemPart part = PartRegistry.get(craftingItem);
-        if (part == null)
-            return null;
+        if (part == null) return null;
+
         MaterialGrade grade = MaterialGrade.fromStack(craftingItem);
         return new ItemPartData(part, grade, craftingItem);
     }
 
     @Nullable
     public static ItemPartData readFromNBT(NBTTagCompound tags) {
-
         ItemPart part = ItemPart.fromNBT(tags);
         if (part == null)
             return null;
@@ -60,7 +54,6 @@ public class ItemPartData {
     }
 
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tags) {
-
         this.part.writeToNBT(tags);
         if (this.grade != MaterialGrade.NONE)
             tags.setString("Grade", this.grade.name());
@@ -72,7 +65,6 @@ public class ItemPartData {
 
     @Override
     public boolean equals(Object obj) {
-
         if (obj instanceof ItemPartData) {
             ItemPartData other = (ItemPartData) obj;
             return this.part == other.part && this.grade == other.grade && this.craftingItem.isItemEqual(other.craftingItem);

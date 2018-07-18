@@ -84,7 +84,7 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
         String itemClass = this.gearItem.getGearClass();
 
         // Output item class
-        String key = this.gearItem.getItem().getUnlocalizedName() + ".name";
+        String key = this.gearItem.getItem().getTranslationKey() + ".name";
         list.add(TextFormatting.AQUA + loc.getLocalizedString(key));
 
         // Material required for crafting
@@ -136,8 +136,8 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return super.getUnlocalizedName(stack).replaceFirst("_[a-z]+$", "");
+    public String getTranslationKey(ItemStack stack) {
+        return super.getTranslationKey(stack).replaceFirst("_[a-z]+$", "");
     }
 
     @Nonnull

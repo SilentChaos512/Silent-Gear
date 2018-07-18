@@ -98,7 +98,7 @@ public class GearClientHelper {
             if (altDown) {
                 tooltip.add(strConstruction);
                 for (ItemPartData data : GearData.getConstructionParts(stack)) {
-                    String str = data.part.getLocalizedName(data, stack);
+                    String str = data.part.getTranslatedName(data, stack);
                     if (data.part instanceof PartMain)
                         str += TextFormatting.DARK_GRAY + " (" + data.grade.getLocalizedName() + ")";
                     tooltip.add("- " + str);

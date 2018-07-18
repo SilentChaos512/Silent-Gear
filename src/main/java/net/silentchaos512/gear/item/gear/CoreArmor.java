@@ -185,7 +185,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
         ResourceLocation key = getPrimaryPart(stack).getKey();
         if (!textureCache.containsKey(key)) {
-            String str = key.getResourceDomain() + ":textures/armor/" + key.getResourcePath().replaceFirst("^main_", "")
+            String str = key.getNamespace() + ":textures/armor/" + key.getPath().replaceFirst("^main_", "")
                     + (slot == EntityEquipmentSlot.LEGS ? "_2" : "_1") + ".png";
             textureCache.put(key, str);
         }

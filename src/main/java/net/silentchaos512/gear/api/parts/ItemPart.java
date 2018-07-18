@@ -53,6 +53,7 @@ public abstract class ItemPart {
     protected int brokenColor = 0xFFFFFF;
     protected TextFormatting nameColor = TextFormatting.GRAY;
     protected String localizedNameOverride = "";
+    private final boolean userDefined;
 
     /**
      * Numerical index for model caching. This value could change any time the mod updates or new materials are added, so
@@ -65,10 +66,11 @@ public abstract class ItemPart {
     @Getter(value = AccessLevel.NONE)
     protected Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
 
-    public ItemPart(ResourceLocation resource) {
+    public ItemPart(ResourceLocation resource, boolean userDefined) {
         this.key = resource;
-        this.textureSuffix = resource.getResourcePath().replaceFirst("[a-z]+_", "");
+        this.textureSuffix = resource.getPath().replaceFirst("[a-z]+_", "");
         this.modelIndex = ++lastModelIndex;
+        this.userDefined = userDefined;
         loadJsonResources();
     }
 
@@ -195,22 +197,22 @@ public abstract class ItemPart {
     }
 
     /**
-     * Gets a key suitable for localization
+     * Gets a translation key for the part
      */
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
         return "material." + this.key.toString() + ".name";
     }
 
     /**
-     * Gets a localized name for the part, suitable for display
+     * Gets a translated name for the part, suitable for display
      *
      * @param data The data of the part
      * @param gear The equipment (tool/weapon/armor) stack
      */
-    public String getLocalizedName(ItemPartData data, ItemStack gear) {
+    public String getTranslatedName(ItemPartData data, ItemStack gear) {
         if (!localizedNameOverride.isEmpty())
             return localizedNameOverride;
-        return /* nameColor + */ SilentGear.localization.getLocalizedString(getUnlocalizedName());
+        return /* nameColor + */ SilentGear.localization.getLocalizedString(getTranslationKey());
     }
 
     /**
@@ -237,7 +239,7 @@ public abstract class ItemPart {
      * Get the location of the resource file that contains material information
      */
     protected String getResourceFileLocation() {
-        return "assets/" + this.key.getResourceDomain() + "/materials/" + this.key.getResourcePath() + ".json";
+        return "assets/" + this.key.getNamespace() + "/materials/" + this.key.getPath() + ".json";
     }
 
     private void loadJsonResources() {
@@ -254,7 +256,7 @@ public abstract class ItemPart {
         }
 
         // Override in config folder
-        File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.key.getResourcePath() + ".json");
+        File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.key.getPath() + ".json");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readResourceFile(reader);
             SilentGear.log.info("Successfully read {}", file.getAbsolutePath());
@@ -293,7 +295,7 @@ public abstract class ItemPart {
                 if (stat != null) {
                     float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
                     Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : getDefaultStatOperation(stat);
-                    String id = "mat_" + this.getUnlocalizedName() + "_" + stat.getUnlocalizedName() + (statMap.get(stat).size() + 1);
+                    String id = "mat_" + this.getTranslationKey() + "_" + stat.getUnlocalizedName() + (statMap.get(stat).size() + 1);
                     statMap.put(stat, new StatInstance(id, value, op));
                 }
             }
@@ -387,5 +389,11 @@ public abstract class ItemPart {
     public static ItemPart fromNBT(NBTTagCompound tags) {
         String key = tags.getString("Key");
         return PartRegistry.get(key);
+    }
+
+    public void postInitChecks() {
+        if (getCraftingStack().isEmpty())
+            SilentGear.log.warn("Part \"{}\"{}has no crafting item.", this.key,
+                    (this.userDefined ? " (user defined) " : " "));
     }
 }

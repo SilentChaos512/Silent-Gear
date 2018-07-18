@@ -257,8 +257,8 @@ public class GearHelper {
         ICoreItem item = (ICoreItem) stack.getItem();
         ItemPartData data = GearData.getPrimaryPart(stack);
         if (data == null)
-            return SilentGear.localization.getLocalizedString(stack.getUnlocalizedName() + ".name");
-        String partName = data.part.getLocalizedName(data, ItemStack.EMPTY);
+            return SilentGear.localization.getLocalizedString(stack.getTranslationKey() + ".name");
+        String partName = data.part.getTranslatedName(data, ItemStack.EMPTY);
         return SilentGear.localization.getSubText(item.getItem(), "nameProper", partName);
     }
 

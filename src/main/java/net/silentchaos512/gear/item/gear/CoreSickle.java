@@ -181,7 +181,7 @@ public class CoreSickle extends ItemTool implements ICoreTool {
         if (playerMP.capabilities.isCreativeMode) {
             block.onBlockHarvested(world, pos, state, player);
             if (block.removedByPlayer(state, world, pos, playerMP, false)) {
-                block.onBlockDestroyedByPlayer(world, pos, state);
+                block.onPlayerDestroy(world, pos, state);
             }
             if (!world.isRemote) {
                 playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
@@ -193,7 +193,7 @@ public class CoreSickle extends ItemTool implements ICoreTool {
             block.onBlockHarvested(world, pos, state, playerMP);
 
             if (block.removedByPlayer(state, world, pos, playerMP, true)) {
-                block.onBlockDestroyedByPlayer(world, pos, state);
+                block.onPlayerDestroy(world, pos, state);
                 block.harvestBlock(world, player, pos, state, null, sickle);
                 block.dropXpOnBlockBreak(world, pos, xpDropped);
             }
@@ -203,7 +203,7 @@ public class CoreSickle extends ItemTool implements ICoreTool {
             int meta = block.getMetaFromState(state);
             world.playEvent(2001, pos, Block.getIdFromBlock(block) + (meta << 12));
             if (block.removedByPlayer(state, world, pos, playerMP, true)) {
-                block.onBlockDestroyedByPlayer(world, pos, state);
+                block.onPlayerDestroy(world, pos, state);
             }
 
             sickle.onBlockDestroyed(world, state, pos, playerMP);

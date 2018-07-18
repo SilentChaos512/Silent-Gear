@@ -76,7 +76,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         gearClasses.putAll(toolClasses);
         gearClasses.putAll(armorClasses);
 
-        reg.registerItem(guideBook);
+        reg.registerItem(guideBook, "guide_book");
 
         // Blueprints/templates
         registerBlueprints(reg, "blueprint", false);
