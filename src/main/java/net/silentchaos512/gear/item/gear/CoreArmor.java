@@ -126,11 +126,9 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int tier = 0; // TODO
         int x = GearData.getStatInt(stack, CommonItemStats.DURABILITY);
         float y = (1.8f * x + 1515) / 131;
-        float z = y * (tier + 1f) / 2f;
-        return (int) (MAX_DAMAGE_ARRAY[armorType.getIndex()] * z);
+        return (int) (MAX_DAMAGE_ARRAY[armorType.getIndex()] * y);
     }
 
     @Override

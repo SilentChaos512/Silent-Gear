@@ -12,11 +12,11 @@ public class CommonItemStats {
 
     // Generic
     public static final ItemStat DURABILITY = new ItemStat("durability", 0f, 0f, 32767f, true, TextFormatting.BLUE).setSynergyApplies(true); // short max is 32767
-    public static final ItemStat REPAIR_EFFICIENCY = new ItemStat("repair_efficiency", 1f, 0f, 1000f, false, TextFormatting.BLUE).setHidden(true);
+    public static final ItemStat REPAIR_EFFICIENCY = new ItemStat("repair_efficiency", 1f, 0f, 1000f, false, TextFormatting.BLUE).setHidden(true).setAffectedByGrades(false);
     public static final ItemStat ENCHANTABILITY = new ItemStat("enchantability", 0f, 0f, 10000f, true, TextFormatting.BLUE).setSynergyApplies(true);
     public static final ItemStat RARITY = new ItemStat("rarity", 0f, 0f, 10000f, true, TextFormatting.BLUE).setHidden(true);
     // Harvesting Tools
-    public static final ItemStat HARVEST_LEVEL = new ItemStat("harvest_level", 0f, 0f, 10000f, true, TextFormatting.YELLOW);
+    public static final ItemStat HARVEST_LEVEL = new ItemStat("harvest_level", 0f, 0f, 10000f, true, TextFormatting.YELLOW).setAffectedByGrades(false);
     public static final ItemStat HARVEST_SPEED = new ItemStat("harvest_speed", 1f, 0f, 10000f, false, TextFormatting.YELLOW).setSynergyApplies(true);
     // Melee Weapons
     public static final ItemStat MELEE_DAMAGE = new ItemStat("melee_damage", 0f, 0f, 10000f, false, TextFormatting.GREEN).setSynergyApplies(true);

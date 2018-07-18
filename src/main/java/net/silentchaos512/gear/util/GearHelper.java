@@ -23,6 +23,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.lib.MaterialGrade;
+import net.silentchaos512.gear.api.lib.PartDataList;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -199,7 +201,25 @@ public class GearHelper {
     }
 
     public static void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        // TODO
+        if (world.getTotalWorldTime() % 20 == 0) {
+            // Any ungraded parts get a random grade
+            if (!GearData.isRandomGradingDone(stack)) {
+                // Select D, C, or B as median
+                MaterialGrade median = SilentGear.random.nextInt(100) < 20 ? MaterialGrade.D : SilentGear.random.nextInt(100) < 40 ? MaterialGrade.B : MaterialGrade.C;
+                PartDataList parts = PartDataList.of();
+                for (ItemPartData data : GearData.getConstructionParts(stack)) {
+                    if (data.grade == MaterialGrade.NONE) {
+                        MaterialGrade grade = MaterialGrade.selectRandom(SilentGear.random, median, 1.5, MaterialGrade.S);
+                        parts.add(new ItemPartData(data.part, grade, data.craftingItem));
+                    } else {
+                        parts.add(data);
+                    }
+                }
+                GearData.writeConstructionParts(stack, parts);
+                GearData.setRandomGradingDone(stack, true);
+                GearData.recalculateStats(stack);
+            }
+        }
     }
 
     public static boolean onEntityItemUpdate(EntityItem entityItem) {

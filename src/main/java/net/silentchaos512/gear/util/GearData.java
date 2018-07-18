@@ -44,6 +44,7 @@ public class GearData {
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
+    private static final String NBT_RANDOM_GRADING_DONE = "RandomGradingDone";
     private static final String NBT_SYNERGY_DISPLAY = "synergy";
     private static final String NBT_UUID = "ToolCore_UUID";
 
@@ -104,12 +105,19 @@ public class GearData {
                 stats.put(stat, item.getConfig().getStatModifier(stat));
             }
             // Part modifiers
-            int pos = 0;
+            int partCount = 0;
             for (ItemPartData partData : parts) {
-                String idSuffix = "_" + (++pos);
+                String idSuffix = "_" + (++partCount);
                 // Allow "duplicate" AVG modifiers
-                for (StatInstance inst : partData.getStatModifiers(stat))
-                    stats.put(stat, inst.getOp() == Operation.AVG ? inst.copyWithNewId(inst.getId() + idSuffix) : inst);
+                for (StatInstance inst : partData.getStatModifiers(stat)) {
+                    if (inst.getOp() == Operation.AVG) {
+                        float gradeBonus = 1f + partData.grade.bonusPercent / 100f;
+                        float statValue = inst.getValue() * gradeBonus;
+                        stats.put(stat, new StatInstance(inst.getId() + idSuffix, statValue, Operation.AVG));
+                    } else {
+                        stats.put(stat, inst);
+                    }
+                }
             }
             // Synergy bonus?
             if (stat.doesSynergyApply())
@@ -277,6 +285,14 @@ public class GearData {
 
     public static boolean isExampleGear(ItemStack stack) {
         return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_IS_EXAMPLE);
+    }
+
+    public static boolean isRandomGradingDone(ItemStack stack) {
+        return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_RANDOM_GRADING_DONE);
+    }
+
+    public static void setRandomGradingDone(ItemStack stack, boolean value) {
+        getData(stack, NBT_ROOT_CONSTRUCTION).setBoolean(NBT_RANDOM_GRADING_DONE, value);
     }
 
     public static class EventHandler {

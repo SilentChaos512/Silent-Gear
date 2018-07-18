@@ -29,8 +29,9 @@ public class ItemStat {
     @Getter(value = AccessLevel.PUBLIC)
     protected final float maximumValue;
     // TODO: Hide hidden stats!
-    protected boolean isHidden = false;
-    protected boolean synergyApplies = false;
+    private boolean isHidden = false;
+    private boolean synergyApplies = false;
+    private boolean affectedByGrades = true;
 
     public final boolean displayAsInt;
     public final TextFormatting displayColor;
@@ -161,6 +162,15 @@ public class ItemStat {
 
     public ItemStat setSynergyApplies(boolean value) {
         this.synergyApplies = value;
+        return this;
+    }
+
+    public boolean isAffectedByGrades() {
+        return affectedByGrades;
+    }
+
+    public ItemStat setAffectedByGrades(boolean value) {
+        this.affectedByGrades = value;
         return this;
     }
 
