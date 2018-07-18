@@ -36,7 +36,7 @@ public class GuideBookToolMod extends GuideBook {
     }
 
     private static final String[] QUOTES = {
-            "Test"
+            "You should have downloaded this mod from CurseForge. If not, please delete the file and download from CurseForge."
     };
 
     @Override
