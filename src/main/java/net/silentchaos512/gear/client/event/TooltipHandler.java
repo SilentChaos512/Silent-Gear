@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.LocalizationHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -36,7 +37,7 @@ public class TooltipHandler {
         LocalizationHelper loc = SilentGear.localization;
 
         if (part != null && !part.isBlacklisted(stack)) {
-            renderTooltipForPart(event, stack, part, loc);
+            onPartTooltip(event, stack, part, loc);
             return;
         }
 
@@ -47,13 +48,28 @@ public class TooltipHandler {
         }
     }
 
-    private void renderTooltipForPart(ItemTooltipEvent event, ItemStack stack, ItemPart part, LocalizationHelper loc) {
+    private void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPart part, LocalizationHelper loc) {
         event.getToolTip().add(loc.getLocalizedString("part", "type." + part.getTypeName()));
 
-        if (part instanceof PartMain) {
-            event.getToolTip().add("grade: " + MaterialGrade.fromStack(stack));
+        MaterialGrade grade = MaterialGrade.fromStack(stack);
+        if (KeyTrackerSL.isControlDown()) {
+            if (part instanceof PartMain)
+                getGradeLine(event, grade, loc);
+            event.getToolTip().add(TextFormatting.GOLD + loc.getMiscText("tooltip.stats.name"));
+            getPartStatLines(event, stack, part, loc);
+        } else {
+            if (grade != MaterialGrade.NONE && part instanceof PartMain)
+                getGradeLine(event, grade, loc);
+            event.getToolTip().add(TextFormatting.GOLD + loc.getMiscText("tooltip.ctrlForStats"));
         }
+    }
 
+    private void getGradeLine(ItemTooltipEvent event, MaterialGrade grade, LocalizationHelper loc) {
+        String line = loc.getLocalizedString("material", "gradeOnPart", grade.getTranslatedName());
+        event.getToolTip().add(TextFormatting.AQUA + line);
+    }
+
+    private void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part, LocalizationHelper loc) {
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, stack);
 
@@ -75,10 +91,9 @@ public class TooltipHandler {
                     if (modifiers.size() > 1)
                         statStr += "*";
 
-                    event.getToolTip().add(loc.getLocalizedString("stat", "displayFormat", nameStr, statStr));
+                    event.getToolTip().add("- " + loc.getLocalizedString("stat", "displayFormat", nameStr, statStr));
                 }
             }
         }
-        return;
     }
 }

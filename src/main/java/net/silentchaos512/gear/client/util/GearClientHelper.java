@@ -100,7 +100,7 @@ public class GearClientHelper {
                 for (ItemPartData data : GearData.getConstructionParts(stack)) {
                     String str = data.part.getTranslatedName(data, stack);
                     if (data.part instanceof PartMain)
-                        str += TextFormatting.DARK_GRAY + " (" + data.grade.getLocalizedName() + ")";
+                        str += TextFormatting.DARK_GRAY + " (" + data.grade.getTranslatedName() + ")";
                     tooltip.add("- " + str);
                 }
             } else {

@@ -82,7 +82,7 @@ public enum MaterialGrade {
         }
     }
 
-    public String getLocalizedName() {
+    public String getTranslatedName() {
         return SilentGear.localization.getLocalizedString("stat", "grade." + name());
     }
 }
