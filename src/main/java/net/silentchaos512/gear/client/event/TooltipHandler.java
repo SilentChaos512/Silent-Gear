@@ -7,13 +7,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.lib.MaterialGrade;
 import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.lib.util.LocalizationHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -36,35 +36,7 @@ public class TooltipHandler {
         LocalizationHelper loc = SilentGear.localization;
 
         if (part != null && !part.isBlacklisted(stack)) {
-            boolean ctrlDown = KeyTracker.isControlDown();
-            boolean shiftDown = KeyTracker.isShiftDown();
-
-            event.getToolTip().add(loc.getLocalizedString("part", "type." + part.getTypeName()));
-            for (ItemStat stat : ItemStat.ALL_STATS.values()) {
-                Collection<StatInstance> modifiers = part.getStatModifiers(stat, stack);
-
-                if (!modifiers.isEmpty()) {
-                    StatInstance inst = stat.computeForDisplay(0, modifiers);
-                    boolean isZero = inst.getValue() == 0;
-                    if (part instanceof PartMain && stat == CommonItemStats.HARVEST_LEVEL)
-                        isZero = false;
-
-                    if (!isZero || event.getFlags() == TooltipFlags.ADVANCED) {
-                        TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
-                        TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                        String nameStr = nameColor + loc.getLocalizedString("stat", stat.getUnlocalizedName() + ".name");
-                        int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
-
-                        String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");
-                        if (statStr.contains("."))
-                            statStr = statStr.replaceFirst("0+$", "");
-                        if (modifiers.size() > 1)
-                            statStr += "*";
-
-                        event.getToolTip().add(loc.getLocalizedString("stat", "displayFormat", nameStr, statStr));
-                    }
-                }
-            }
+            renderTooltipForPart(event, stack, part, loc);
             return;
         }
 
@@ -73,5 +45,40 @@ public class TooltipHandler {
         if (name != null && (VANILLA_TOOL_REGEX.matcher(name.toString()).matches() || VANILLA_ARMOR_REGEX.matcher(name.toString()).matches())) {
             event.getToolTip().add(1, TextFormatting.RED + loc.getMiscText("poorlyMade"));
         }
+    }
+
+    private void renderTooltipForPart(ItemTooltipEvent event, ItemStack stack, ItemPart part, LocalizationHelper loc) {
+        event.getToolTip().add(loc.getLocalizedString("part", "type." + part.getTypeName()));
+
+        if (part instanceof PartMain) {
+            event.getToolTip().add("grade: " + MaterialGrade.fromStack(stack));
+        }
+
+        for (ItemStat stat : ItemStat.ALL_STATS.values()) {
+            Collection<StatInstance> modifiers = part.getStatModifiers(stat, stack);
+
+            if (!modifiers.isEmpty()) {
+                StatInstance inst = stat.computeForDisplay(0, modifiers);
+                boolean isZero = inst.getValue() == 0;
+                if (part instanceof PartMain && stat == CommonItemStats.HARVEST_LEVEL)
+                    isZero = false;
+
+                if (!isZero || event.getFlags() == TooltipFlags.ADVANCED) {
+                    TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
+                    TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
+                    String nameStr = nameColor + loc.getLocalizedString("stat", stat.getUnlocalizedName() + ".name");
+                    int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
+
+                    String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");
+                    if (statStr.contains("."))
+                        statStr = statStr.replaceFirst("0+$", "");
+                    if (modifiers.size() > 1)
+                        statStr += "*";
+
+                    event.getToolTip().add(loc.getLocalizedString("stat", "displayFormat", nameStr, statStr));
+                }
+            }
+        }
+        return;
     }
 }

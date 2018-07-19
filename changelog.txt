@@ -1,3 +1,8 @@
+0.0.6 (preview 6, 1.12.2)
+Added: Part analyzer, basically the same as the material grade from Silent's Gems
+Added: Tools and armor that have ungraded parts will be assigned random grades. The grades selected have a lower average and lower maximum than those graded by the analyzer.
+Changed: The lowest material grades now reduce stats slightly, with grade C providing no bonuses. Higher grade bonuses increased.
+
 0.0.5 (preview 5, 1.12.2)
 Added: Blueprints/templates now display an outline of the item they craft if you are holding shift
 Added: Template textures
