@@ -65,8 +65,6 @@ item.silentgear.template.name=Template
 
 item.silentgear:blueprint_book.name=Blueprint Book
 
-item.silentgear.blue_dye.name=Blue Dye
-
 item.silentgear.flaxseeds.name=Flaxseeds
 
 item.silentgear.tip_upgrade_diamond.name=Diamond-Tipped Upgrade
@@ -89,6 +87,8 @@ item.silentgear.tool_head.sickle=Sickle Blade
 item.silentgear.tool_head.sword=Sword Blade & Crossguard
 
 # Crafting Item
+item.silentgear.black_dye.name=Black Dye
+item.silentgear.blue_dye.name=Blue Dye
 item.silentgear.blueprint_paper.name=Blueprint Paper
 item.silentgear.diamond_shard.name=Diamond Shard
 item.silentgear.dried_sinew.name=Dried Sinew

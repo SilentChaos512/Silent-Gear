@@ -35,7 +35,6 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
 
     public static BlueprintBook blueprintBook = new BlueprintBook();
-    public static Item blueDye = new Item();
     public static Flaxseeds flaxseeds = new Flaxseeds();
 
     public static ToolHead toolHead = new ToolHead();
@@ -85,7 +84,6 @@ public class ModItems implements IRegistrationHandler<Item> {
 
         IEnumItems.registerItems(TipUpgrade.Type.values(), reg);
         IEnumItems.registerItems(CraftingItems.values(), reg);
-        reg.registerItem(blueDye, "blue_dye");
         reg.registerItem(flaxseeds, "flaxseeds");
 
         reg.registerItem(toolHead, "tool_head");
@@ -98,7 +96,8 @@ public class ModItems implements IRegistrationHandler<Item> {
     }
 
     private void registerOreDictEntries() {
-        OreDictionary.registerOre("dyeBlue", blueDye);
+        OreDictionary.registerOre("dyeBlack", CraftingItems.BLACK_DYE.getItem());
+        OreDictionary.registerOre("dyeBlue", CraftingItems.BLUE_DYE.getItem());
         OreDictionary.registerOre("nuggetDiamond", CraftingItems.DIAMOND_SHARD.getItem());
         OreDictionary.registerOre("nuggetEmerald", CraftingItems.EMERALD_SHARD.getItem());
         OreDictionary.registerOre("stickIron", CraftingItems.IRON_ROD.getItem());

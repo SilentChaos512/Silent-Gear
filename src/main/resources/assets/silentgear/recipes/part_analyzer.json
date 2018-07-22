@@ -1,0 +1,29 @@
+{
+    "result": {
+        "item": "silentgear:part_analyzer"
+    },
+    "pattern": [
+        "qiq",
+        "ili",
+        "ggg"
+    ],
+    "type": "forge:ore_shaped",
+    "key": {
+        "q": {
+            "ore": "gemQuartz",
+            "type": "forge:ore_dict"
+        },
+        "i": {
+            "ore": "ingotIron",
+            "type": "forge:ore_dict"
+        },
+        "l": {
+            "ore": "gemLapis",
+            "type": "forge:ore_dict"
+        },
+        "g": {
+            "ore": "ingotGold",
+            "type": "forge:ore_dict"
+        }
+    }
+}

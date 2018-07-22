@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "silentgems:materialgrader", "y": 180 },
+    "facing=south": { "model": "silentgems:materialgrader" },
+    "facing=east": { "model": "silentgems:materialgrader", "y": 270 },
+    "facing=west": { "model": "silentgems:materialgrader", "y": 90 }
+  }
+}
