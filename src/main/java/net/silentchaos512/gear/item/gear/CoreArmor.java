@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
@@ -58,10 +59,12 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     //region Stats and attributes
 
     public double getArmorProtection(ItemStack stack) {
+        if (GearHelper.isBroken(stack)) return 0;
         return ABSORPTION_RATIO_BY_SLOT[armorType.getIndex()] * GearData.getStat(stack, CommonItemStats.ARMOR);
     }
 
     public double getArmorToughness(ItemStack stack) {
+        if (GearHelper.isBroken(stack)) return 0;
         return GearData.getStat(stack, CommonItemStats.ARMOR_TOUGHNESS);
     }
 
@@ -123,12 +126,21 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     //region Item overrides
 
-
     @Override
     public int getMaxDamage(ItemStack stack) {
         int x = GearData.getStatInt(stack, CommonItemStats.DURABILITY);
         float y = (1.8f * x + 1515) / 131;
         return (int) (MAX_DAMAGE_ARRAY[armorType.getIndex()] * y);
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        if (GearHelper.isUnbreakable(stack)) return;
+        int original = damage;
+        if (!Config.toolsBreakPermanently)
+            damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
+        SilentGear.log.info("{}: {} -> {}", stack, original, damage);
+        super.setDamage(stack, damage);
     }
 
     @Override

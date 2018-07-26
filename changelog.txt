@@ -1,3 +1,8 @@
+0.0.7 (preview 7, 1.12.2)
+Added: New main parts: obsidian, netherrack, and terracotta
+Fixed: Armor breaking permanently (hopefully)
+Fixed: A rare crash with hammers
+
 0.0.6 (preview 6, 1.12.2)
 Added: Part analyzer, basically the same as the material grade from Silent's Gems
 Added: Tools and armor that have ungraded parts will be assigned random grades. The grades selected have a lower average and lower maximum than those graded by the analyzer.
