@@ -18,7 +18,7 @@ public class ModMaterials implements IPhasedInitializer {
 
     public static final ModMaterials INSTANCE = new ModMaterials();
 
-    public static PartMain mainWood, mainStone, mainFlint, mainIron, mainGold, mainEmerald, mainDiamond, mainTest;
+    public static PartMain mainWood, mainStone, mainFlint, mainIron, mainGold, mainEmerald, mainDiamond, mainObsidian, mainNetherrack, mainTerracotta;
     public static PartRod rodWood, rodBone, rodStone, rodIron;
     public static PartTip tipIron, tipGold, tipDiamond, tipEmerald, tipRedstone, tipGlowstone, tipLapis;
     public static PartBowstring bowstringString, bowstringSinew;
@@ -29,10 +29,13 @@ public class ModMaterials implements IPhasedInitializer {
         mainWood = PartRegistry.putPart(new PartMain(getPath("main_wood")));
         mainStone = PartRegistry.putPart(new PartMain(getPath("main_stone")));
         mainFlint = PartRegistry.putPart(new PartMain(getPath("main_flint")));
+        mainTerracotta = PartRegistry.putPart(new PartMain(getPath("main_terracotta")));
+        mainNetherrack = PartRegistry.putPart(new PartMain(getPath("main_netherrack")));
         mainIron = PartRegistry.putPart(new PartMain(getPath("main_iron")));
         mainGold = PartRegistry.putPart(new PartMain(getPath("main_gold")));
         mainEmerald = PartRegistry.putPart(new PartMain(getPath("main_emerald")));
         mainDiamond = PartRegistry.putPart(new PartMain(getPath("main_diamond")));
+        mainObsidian = PartRegistry.putPart(new PartMain(getPath("main_obsidian")));
         //mainTest = PartRegistry.putPart(new PartMain(getPath("main_test")));
 
         rodWood = PartRegistry.putPart(new PartRod(getPath("rod_wood")));

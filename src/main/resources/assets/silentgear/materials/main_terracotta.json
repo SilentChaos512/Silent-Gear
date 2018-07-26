@@ -8,24 +8,25 @@
         {"name": "melee_damage",    "value":  1.5},
         {"name": "magic_damage",    "value":    0},
         {"name": "attack_speed",    "value":  0.2},
-        {"name": "armor",           "value":    8},
+        {"name": "armor",           "value":    9},
         {"name": "armor_toughness", "value":    0},
-        {"name": "magic_armor",     "value":    2},
+        {"name": "magic_armor",     "value":    3},
         {"name": "ranged_damage",   "value":    0},
         {"name": "ranged_speed",    "value": -0.2},
         {"name": "rarity",          "value":    7}
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:clay_ball",
+            "item": "minecraft:brick",
             "data": 0
         },
         "requires_smelting": true
     },
     "display": {
         "hidden": false,
-        "texture_suffix": "terracotta",
-        "texture_color": "ffffff"
+        "texture_suffix": "iron",
+        "texture_color": "C76245",
+        "broken_color": "C76245"
     },
     "availability": {
         "enabled": true,
