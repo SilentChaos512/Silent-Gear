@@ -33,7 +33,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.util.LocalizationHelper;
+import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
@@ -174,7 +174,7 @@ public class ToolHead extends Item implements IStatItem {
     public String getItemStackDisplayName(ItemStack stack) {
         String toolClass = getToolClass(stack);
         if (!toolClass.isEmpty()) {
-            return SilentGear.localization.getSubText(this, toolClass);
+            return SilentGear.i18n.subText(this, toolClass);
         }
         return super.getItemStackDisplayName(stack);
     }
@@ -194,14 +194,14 @@ public class ToolHead extends Item implements IStatItem {
 
     @Override
     public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
-        LocalizationHelper loc = SilentGear.localization;
+        I18nHelper i18n = SilentGear.i18n;
         String toolClass = getToolClass(stack);
 
-        list.add(TextFormatting.AQUA + loc.getLocalizedString("item." + SilentGear.MOD_ID + "." + toolClass + ".name"));
+        list.add(TextFormatting.AQUA + i18n.translate("item", toolClass + ".name"));
 
         if (getData(stack).getBoolean(NBT_IS_EXAMPLE)) {
-            list.add(TextFormatting.YELLOW + loc.getMiscText("exampleOutput1"));
-            list.add(TextFormatting.YELLOW + loc.getMiscText("exampleOutput2"));
+            list.add(TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput1"));
+            list.add(TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput2"));
         }
 
         // Materials used in crafting

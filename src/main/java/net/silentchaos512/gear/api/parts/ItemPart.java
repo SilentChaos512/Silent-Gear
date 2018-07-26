@@ -200,7 +200,7 @@ public abstract class ItemPart {
      * Gets a translation key for the part
      */
     public String getTranslationKey() {
-        return "material." + this.key.toString() + ".name";
+        return "material." + this.key.getNamespace() + "." + this.key.getPath() + ".name";
     }
 
     /**
@@ -212,7 +212,7 @@ public abstract class ItemPart {
     public String getTranslatedName(ItemPartData data, ItemStack gear) {
         if (!localizedNameOverride.isEmpty())
             return localizedNameOverride;
-        return /* nameColor + */ SilentGear.localization.getLocalizedString(getTranslationKey());
+        return /* nameColor + */ SilentGear.i18n.translate(getTranslationKey());
     }
 
     /**

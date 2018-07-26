@@ -16,10 +16,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.silentchaos512.gear.command.CommandSilentGear;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.MessageExtraBlockBreak;
-import net.silentchaos512.lib.SilentLib;
 import net.silentchaos512.lib.network.NetworkHandlerSL;
 import net.silentchaos512.lib.registry.SRegistry;
-import net.silentchaos512.lib.util.LocalizationHelper;
+import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.LogHelper;
 
 import java.util.Random;
@@ -29,7 +28,7 @@ public class SilentGear {
 
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "0.0.6";
+    public static final String VERSION = "0.0.7";
     public static final String SL_VERSION = "2.3.11";
     public static final int BUILD_NUM = 0;
     public static final String DEPENDENCIES = "required-after:silentlib@[" + SL_VERSION + ",)";
@@ -38,7 +37,7 @@ public class SilentGear {
 
     public static Random random = new Random();
     public static LogHelper log = new LogHelper(MOD_NAME, BUILD_NUM);
-    public static LocalizationHelper localization;
+    public static I18nHelper i18n = new I18nHelper(MOD_ID, log, true);
 
     public static SRegistry registry = new SRegistry(MOD_ID, log);
     public static NetworkHandlerSL network;
@@ -55,11 +54,7 @@ public class SilentGear {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
-        localization = new LocalizationHelper(MOD_ID).setReplaceAmpersand(true);
-        SilentLib.instance.registerLocalizationHelperForMod(MOD_ID, localization);
         registry.setDefaultCreativeTab(creativeTab);
-//        registry.recipes.setJsonHellMode(true);
 
         network = new NetworkHandlerSL(MOD_ID);
         network.register(MessageExtraBlockBreak.class, Side.CLIENT);

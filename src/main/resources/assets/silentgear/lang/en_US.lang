@@ -51,19 +51,19 @@ tile.silentgear.part_analyzer.name=Part Analyzer
 #########
 
 item.silentgear.blueprint.name=Blueprint
-item.silentgear:blueprint.materialAmount=Material Required: %d
-item.silentgear:blueprint.singleUse=Can be used only once
-item.silentgear:blueprint.multiUse=Can be used many times
-item.silentgear:blueprint.altForRecipe=<Hold Alt for tool recipe>
-item.silentgear:blueprint.shiftForIcon=Hold Shift to see gear icon
-item.silentgear:blueprint.itemRecipe1=%s recipe:
-item.silentgear:blueprint.itemRecipe2=%dx %s
-item.silentgear:blueprint.canMix=Material mixing possible!
-item.silentgear:blueprint.noMixing=Mixed materials only allowed in crafting station
+item.silentgear.blueprint.materialAmount=Material Required: %d
+item.silentgear.blueprint.singleUse=Can be used only once
+item.silentgear.blueprint.multiUse=Can be used many times
+item.silentgear.blueprint.altForRecipe=<Hold Alt for tool recipe>
+item.silentgear.blueprint.shiftForIcon=Hold Shift to see gear icon
+item.silentgear.blueprint.itemRecipe1=%s recipe:
+item.silentgear.blueprint.itemRecipe2=%dx %s
+item.silentgear.blueprint.canMix=Material mixing possible!
+item.silentgear.blueprint.noMixing=Mixed materials only allowed in crafting station
 
 item.silentgear.template.name=Template
 
-item.silentgear:blueprint_book.name=Blueprint Book
+item.silentgear.blueprint_book.name=Blueprint Book
 
 item.silentgear.flaxseeds.name=Flaxseeds
 
@@ -150,33 +150,33 @@ item.silentgear.boots.nameProper=%s Boots
 # Stats #
 #########
 
-stat.silentgear:displayFormat=%1$s &r&8:&r %2$s
-stat.silentgear:durabilityFormat=%1$s / %2$s
+stat.silentgear.displayFormat=%1$s §r§8:§r %2$s
+stat.silentgear.durabilityFormat=%1$s / %2$s
 
-stat.silentgear:armor.name=Armor
-stat.silentgear:armor_toughness.name=Armor Toughness
-stat.silentgear:attack_speed.name=Attack Speed
-stat.silentgear:durability.name=Durability
-stat.silentgear:enchantability.name=Enchantability
-stat.silentgear:harvest_level.name=Harvest Level
-stat.silentgear:harvest_speed.name=Harvest Speed
-stat.silentgear:magic_armor.name=Magic Armor
-stat.silentgear:magic_damage.name=Magic Damage
-stat.silentgear:melee_damage.name=Attack Damage
-stat.silentgear:ranged_damage.name=Ranged Damage
-stat.silentgear:ranged_speed.name=Ranged Speed
-stat.silentgear:repair_efficiency.name=Repair Efficiency
-stat.silentgear:rarity.name=Rarity
+stat.silentgear.armor.name=Armor
+stat.silentgear.armor_toughness.name=Armor Toughness
+stat.silentgear.attack_speed.name=Attack Speed
+stat.silentgear.durability.name=Durability
+stat.silentgear.enchantability.name=Enchantability
+stat.silentgear.harvest_level.name=Harvest Level
+stat.silentgear.harvest_speed.name=Harvest Speed
+stat.silentgear.magic_armor.name=Magic Armor
+stat.silentgear.magic_damage.name=Magic Damage
+stat.silentgear.melee_damage.name=Attack Damage
+stat.silentgear.ranged_damage.name=Ranged Damage
+stat.silentgear.ranged_speed.name=Ranged Speed
+stat.silentgear.repair_efficiency.name=Repair Efficiency
+stat.silentgear.rarity.name=Rarity
 
-stat.silentgear:grade.NONE=not graded
-stat.silentgear:grade.E=E
-stat.silentgear:grade.D=D
-stat.silentgear:grade.C=C
-stat.silentgear:grade.B=B
-stat.silentgear:grade.A=A
-stat.silentgear:grade.S=S
-stat.silentgear:grade.SS=SS
-stat.silentgear:grade.SSS=SSS
+stat.silentgear.grade.NONE=not graded
+stat.silentgear.grade.E=E
+stat.silentgear.grade.D=D
+stat.silentgear.grade.C=C
+stat.silentgear.grade.B=B
+stat.silentgear.grade.A=A
+stat.silentgear.grade.S=S
+stat.silentgear.grade.SS=SS
+stat.silentgear.grade.SSS=SSS
 
 
 
@@ -184,49 +184,64 @@ stat.silentgear:grade.SSS=SSS
 # Parts/Materials #
 ###################
 
-material.silentgear:gradeOnPart=Grade: %s
-material.silentgear:mainWithGrade=%1$s (%2$s)
-material.silentgear:main_diamond.name=Diamond
-material.silentgear:main_emerald.name=Emerald
-material.silentgear:main_flint.name=Flint
-material.silentgear:main_gold.name=Gold
-material.silentgear:main_iron.name=Iron
-material.silentgear:main_stone.name=Stone
-material.silentgear:main_wood.name=Wood
-material.silentgear:main_test.name=Test Material (Please Remove)
+material.silentgear.gradeOnPart=Grade: %s
+material.silentgear.mainWithGrade=%1$s (%2$s)
+material.silentgear.main_diamond.name=Diamond
+material.silentgear.main_emerald.name=Emerald
+material.silentgear.main_flint.name=Flint
+material.silentgear.main_gold.name=Gold
+material.silentgear.main_iron.name=Iron
+material.silentgear.main_netherrack.name=Netherrack
+material.silentgear.main_obsidian.name=Obsidian
+material.silentgear.main_stone.name=Stone
+material.silentgear.main_wood.name=Wood
+material.silentgear.main_terracotta.name=Terracotta
+material.silentgear.main_test.name=Test Material (Please Remove)
 
-material.silentgear:rod_bone.name=Bone Rod
-material.silentgear:rod_iron.name=Iron Rod
-material.silentgear:rod_stone.name=Stone Rod
-material.silentgear:rod_wood.name=Wood Rod
+material.silentgear.rod_bone.name=Bone Rod
+material.silentgear.rod_iron.name=Iron Rod
+material.silentgear.rod_stone.name=Stone Rod
+material.silentgear.rod_wood.name=Wood Rod
 
-material.silentgear:tip_diamond.name=Diamond-Tipped
-material.silentgear:tip_emerald.name=Emerald-Tipped
-material.silentgear:tip_glowstone.name=Glowstone-Coated
-material.silentgear:tip_gold.name=Gold-Tipped
-material.silentgear:tip_iron.name=Iron-Tipped
-material.silentgear:tip_lapis.name=Lapis-Coated
-material.silentgear:tip_redstone.name=Redstone-Coated
+material.silentgear.tip_diamond.name=Diamond-Tipped
+material.silentgear.tip_emerald.name=Emerald-Tipped
+material.silentgear.tip_glowstone.name=Glowstone-Coated
+material.silentgear.tip_gold.name=Gold-Tipped
+material.silentgear.tip_iron.name=Iron-Tipped
+material.silentgear.tip_lapis.name=Lapis-Coated
+material.silentgear.tip_redstone.name=Redstone-Coated
 
-part.silentgear:type.bowstring=Bowstring
-part.silentgear:type.grip=Grip
-part.silentgear:type.main=Main Part
-part.silentgear:type.rod=Tool Rod
-part.silentgear:type.tip=Tip Upgrade
+part.silentgear.type.bowstring=Bowstring
+part.silentgear.type.grip=Grip
+part.silentgear.type.main=Main Part
+part.silentgear.type.rod=Tool Rod
+part.silentgear.type.tip=Tip Upgrade
+
+
+
+#########
+# Hints #
+#########
+
+hint.silentgear.crafting_station.0=Template can only be used once. Blueprints last forever.
+hint.silentgear.crafting_station.1=When mixing materials, order matters! The first has the greatest effect, the second less, the third even less, and so on.
+hint.silentgear.crafting_station.2=Try to mix materials of the same "tier". Diamonds mix well with emeralds, but not wood or stone.
+
+
 
 ########
 # Misc #
 ########
 
-misc.silentgear:tooltip.construction.key=<Press Alt>
-misc.silentgear:tooltip.construction.name=Construction
-misc.silentgear:tooltip.stats.key=<Press Ctrl>
-misc.silentgear:tooltip.stats.name=Stats
+misc.silentgear.tooltip.construction.key=<Press Alt>
+misc.silentgear.tooltip.construction.name=Construction
+misc.silentgear.tooltip.stats.key=<Press Ctrl>
+misc.silentgear.tooltip.stats.name=Stats
 
-misc.silentgear:tooltip.altForConstruction=Construction &8<Press Alt>
-misc.silentgear:tooltip.ctrlForStats=Stats &8<Press Ctrl>
+misc.silentgear.tooltip.altForConstruction=Construction §8<Press Alt>
+misc.silentgear.tooltip.ctrlForStats=Stats §8<Press Ctrl>
 
-misc.silentgear:broken=You broke it!
-misc.silentgear:exampleOutput1=Example output (modular recipe)
-misc.silentgear:exampleOutput2=If you crafted this, something went wrong!
-misc.silentgear:poorlyMade=This item is poorly made and will not last long
+misc.silentgear.broken=You broke it!
+misc.silentgear.exampleOutput1=Example output (modular recipe)
+misc.silentgear.exampleOutput2=If you crafted this, something went wrong!
+misc.silentgear.poorlyMade=This item is poorly made and will not last long

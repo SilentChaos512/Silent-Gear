@@ -17,7 +17,7 @@ import net.silentchaos512.gear.api.lib.PartDataList;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.registry.ICustomMesh;
-import net.silentchaos512.lib.util.LocalizationHelper;
+import net.silentchaos512.lib.util.I18nHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,58 +80,58 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
 
     @Override
     public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
-        LocalizationHelper loc = SilentGear.localization;
+        I18nHelper i18n = SilentGear.i18n;
         String itemClass = this.gearItem.getGearClass();
 
         // Output item class
         String key = this.gearItem.getItem().getTranslationKey() + ".name";
-        list.add(TextFormatting.AQUA + loc.getLocalizedString(key));
+        list.add(TextFormatting.AQUA + i18n.translate(key));
 
         // Material required for crafting
         int amount = this.gearItem.getConfig().getHeadCount();
-        list.add(loc.getItemSubText(NAME, "materialAmount", amount));
+        list.add(i18n.itemSubText(NAME, "materialAmount", amount));
 
         // Single use or multiple uses?
         if (this.singleUse) {
-            list.add(TextFormatting.RED + loc.getItemSubText(NAME, "singleUse"));
+            list.add(TextFormatting.RED + i18n.itemSubText(NAME, "singleUse"));
         } else {
-            list.add(TextFormatting.GREEN + loc.getItemSubText(NAME, "multiUse"));
+            list.add(TextFormatting.GREEN + i18n.itemSubText(NAME, "multiUse"));
         }
 
         // Is mixed material allowed in this GUI?
         if (Minecraft.getMinecraft().currentScreen instanceof GuiCraftingStation) {
-            list.add(TextFormatting.GREEN + loc.getItemSubText(NAME, "canMix"));
+            list.add(TextFormatting.GREEN + i18n.itemSubText(NAME, "canMix"));
         } else {
-            list.add(TextFormatting.RED + loc.getItemSubText(NAME, "noMixing"));
+            list.add(TextFormatting.RED + i18n.itemSubText(NAME, "noMixing"));
         }
 
         // Item recipe
         if (this.gearItem instanceof ICoreTool) {
             list.add("");
             if (KeyTrackerSL.isAltDown()) {
-                String locToolName = loc.getItemSubText(itemClass, "name");
-                list.add(TextFormatting.YELLOW + loc.getItemSubText(NAME, "itemRecipe1", locToolName));
-                String toolHeadName = loc.getItemSubText("tool_head", itemClass);
-                list.add("  " + loc.getItemSubText(NAME, "itemRecipe2", 1, toolHeadName));
+                String locToolName = i18n.itemSubText(itemClass, "name");
+                list.add(TextFormatting.YELLOW + i18n.itemSubText(NAME, "itemRecipe1", locToolName));
+                String toolHeadName = i18n.itemSubText("tool_head", itemClass);
+                list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", 1, toolHeadName));
 
                 int rodCount = this.gearItem.getConfig().getRodCount();
                 if (rodCount > 0) {
-                    String partName = loc.getLocalizedString("part", "type.rod");
-                    list.add("  " + loc.getItemSubText(NAME, "itemRecipe2", rodCount, partName));
+                    String partName = i18n.translate("part", "type.rod");
+                    list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", rodCount, partName));
                 }
                 int bowstringCount = this.gearItem.getConfig().getBowstringCount();
                 if (bowstringCount > 0) {
-                    String partName = loc.getLocalizedString("part", "type.bowstring");
-                    list.add("  " + loc.getItemSubText(NAME, "itemRecipe2", bowstringCount, partName));
+                    String partName = i18n.translate("part", "type.bowstring");
+                    list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", bowstringCount, partName));
                 }
             } else {
-                list.add(TextFormatting.YELLOW + loc.getItemSubText(NAME, "altForRecipe"));
+                list.add(TextFormatting.YELLOW + i18n.itemSubText(NAME, "altForRecipe"));
             }
         }
 
         // Shift key hint
         if (!KeyTrackerSL.isShiftDown()) {
-            list.add(TextFormatting.DARK_GRAY + loc.getItemSubText(NAME, "shiftForIcon"));
+            list.add(TextFormatting.DARK_GRAY + i18n.itemSubText(NAME, "shiftForIcon"));
         }
     }
 

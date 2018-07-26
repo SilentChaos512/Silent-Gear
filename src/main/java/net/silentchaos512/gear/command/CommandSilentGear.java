@@ -119,7 +119,7 @@ public class CommandSilentGear extends CommandBase {
     private void tell(ICommandSender sender, TextFormatting format, String key, boolean fromLocalizationFile, Object... args) {
 
         String value = fromLocalizationFile
-                ? SilentGear.localization.getLocalizedString("command." + key, args)
+                ? SilentGear.i18n.translate("command." + key, args)
                 : key;
         sender.sendMessage(new TextComponentString(format + value));
     }

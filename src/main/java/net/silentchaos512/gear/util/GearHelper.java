@@ -277,9 +277,9 @@ public class GearHelper {
         ICoreItem item = (ICoreItem) stack.getItem();
         ItemPartData data = GearData.getPrimaryPart(stack);
         if (data == null)
-            return SilentGear.localization.getLocalizedString(stack.getTranslationKey() + ".name");
+            return SilentGear.i18n.translate(stack.getTranslationKey() + ".name");
         String partName = data.part.getTranslatedName(data, ItemStack.EMPTY);
-        return SilentGear.localization.getSubText(item.getItem(), "nameProper", partName);
+        return SilentGear.i18n.subText(item.getItem(), "nameProper", partName);
     }
 
     public static Collection<IRecipe> getExampleRecipes(ICoreItem item) {

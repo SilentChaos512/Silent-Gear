@@ -20,7 +20,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
-import net.silentchaos512.lib.util.LocalizationHelper;
+import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class GearClientHelper {
 
     public static void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
 
-        LocalizationHelper loc = SilentGear.localization;
+        I18nHelper i18n = SilentGear.i18n;
 
         if (stack.getItem() instanceof ICoreItem) {
             boolean ctrlDown = flag instanceof TooltipFlagTC ? ((TooltipFlagTC) flag).ctrlDown : KeyTrackerSL.isControlDown();
@@ -44,12 +44,12 @@ public class GearClientHelper {
             ICoreItem item = (ICoreItem) stack.getItem();
 
             if (GearHelper.isBroken(stack)) {
-                tooltip.add(1, TextFormatting.RED + loc.getMiscText("broken"));
+                tooltip.add(1, TextFormatting.RED + i18n.translate("misc", "broken"));
             }
 
             if (GearData.isExampleGear(stack)) {
-                tooltip.add(1, TextFormatting.YELLOW + loc.getMiscText("exampleOutput1"));
-                tooltip.add(2, TextFormatting.YELLOW + loc.getMiscText("exampleOutput2"));
+                tooltip.add(1, TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput1"));
+                tooltip.add(2, TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput2"));
             }
 
             // Let parts add information if they need to
@@ -71,7 +71,7 @@ public class GearClientHelper {
             }
 
             // Stats!
-            String strStats = TextFormatting.GOLD + loc.getMiscText("tooltip.stats.name");
+            String strStats = TextFormatting.GOLD + i18n.translate("misc", "tooltip.stats.name");
             if (ctrlDown) {
                 tooltip.add(strStats);
                 // Display only stats relevant to the item class
@@ -79,22 +79,22 @@ public class GearClientHelper {
                     float statValue = GearData.getStat(stack, stat);
 
                     StatInstance inst = new StatInstance("display_" + stat.getUnlocalizedName(), statValue, StatInstance.Operation.AVG);
-                    String nameStr = "- " + stat.displayColor + loc.getLocalizedString("stat", stat.getUnlocalizedName() + ".name");
+                    String nameStr = "- " + stat.displayColor + i18n.translate("stat", stat.getUnlocalizedName() + ".name");
                     String statStr = inst.formattedString(stat.displayAsInt ? 0 : 1, false);
                     if (stat == CommonItemStats.DURABILITY) {
                         int durabilityLeft = stack.getMaxDamage() - stack.getItemDamage();
                         int durabilityMax = stack.getMaxDamage();
-                        statStr = loc.getLocalizedString("stat", "durabilityFormat", durabilityLeft, durabilityMax);
+                        statStr = i18n.translate("stat", "durabilityFormat", durabilityLeft, durabilityMax);
                     }
-                    tooltip.add(loc.getLocalizedString("stat", "displayFormat", nameStr, statStr));
+                    tooltip.add(i18n.translate("stat", "displayFormat", nameStr, statStr));
                 }
             } else {
-                strStats += " " + TextFormatting.GRAY + loc.getMiscText("tooltip.stats.key");
+                strStats += " " + TextFormatting.GRAY + i18n.translate("misc", "tooltip.stats.key");
                 tooltip.add(strStats);
             }
 
             // Tool construction
-            String strConstruction = TextFormatting.GOLD + loc.getMiscText("tooltip.construction.name");
+            String strConstruction = TextFormatting.GOLD + i18n.translate("misc", "tooltip.construction.name");
             if (altDown) {
                 tooltip.add(strConstruction);
                 for (ItemPartData data : GearData.getConstructionParts(stack)) {
@@ -104,7 +104,7 @@ public class GearClientHelper {
                     tooltip.add("- " + str);
                 }
             } else {
-                strConstruction += " " + TextFormatting.GRAY + loc.getMiscText("tooltip.construction.key");
+                strConstruction += " " + TextFormatting.GRAY + i18n.translate("misc", "tooltip.construction.key");
                 tooltip.add(strConstruction);
             }
         }
