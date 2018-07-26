@@ -6,7 +6,8 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
@@ -23,12 +24,14 @@ public class JeiPlugin implements IModPlugin {
                 (key, item) -> subtypeRegistry.registerSubtypeInterpreter(item.getItem(),
                         stack -> {
                             ItemPartData part = GearData.getPrimaryPart(stack);
-                            return part == null ? key : key + "|" + part.getPart().getKey().toString();
+                            return part == null ? key : key + "|" + part.getPart().getRegistryName().toString();
                         }));
     }
 
     @Override
     public void register(IModRegistry registry) {
+        registry.addRecipeCatalyst(ModBlocks.craftingStation, VanillaRecipeCategoryUid.CRAFTING);
+
         // Add "example recipes". We can't allow these to be crafted, but it's helpful to have them
         // show in JEI. Some people can't read...
         registry.addRecipes(ModItems.toolHead.getExampleRecipes(), VanillaRecipeCategoryUid.CRAFTING);

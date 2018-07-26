@@ -1,7 +1,9 @@
 0.0.7 (preview 7, 1.12.2)
 Added: New main parts: obsidian, netherrack, and terracotta
+Changed: Gear can no longer be repaired with lower-tier materials
 Fixed: Armor breaking permanently (hopefully)
-Fixed: A rare crash with hammers
+Fixed: A rare(?) crash with hammers
+Fixed: JEI should now recognize the crafting station as a crafting table
 
 0.0.6 (preview 6, 1.12.2)
 Added: Part analyzer, basically the same as the material grade from Silent's Gems

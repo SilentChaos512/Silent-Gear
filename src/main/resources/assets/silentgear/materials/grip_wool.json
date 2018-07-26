@@ -4,7 +4,7 @@
         {"name": "durability",      "value":  0.1, "op": "MUL1"},
         {"name": "enchantability",  "value":  0.0, "op": "ADD"},
         {"name": "harvest_level",   "value":    0, "op": "MAX"},
-        {"name": "harvest_speed",   "value":  0.5, "op": "ADD"},
+        {"name": "harvest_speed",   "value":  0.1, "op": "MUL2"},
         {"name": "melee_damage",    "value":  0.0, "op": "ADD"},
         {"name": "magic_damage",    "value":  0.0, "op": "ADD"},
         {"name": "attack_speed",    "value":  0.0, "op": "ADD"},
