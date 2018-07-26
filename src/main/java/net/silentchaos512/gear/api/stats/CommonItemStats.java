@@ -12,6 +12,7 @@ public class CommonItemStats {
 
     // Generic
     public static final ItemStat DURABILITY = new ItemStat("durability", 0f, 0f, 32767f, true, TextFormatting.BLUE).setSynergyApplies(true); // short max is 32767
+    public static final ItemStat ARMOR_DURABILITY = new ItemStat("armor_durability", 0f, 0f, 32767f, true, TextFormatting.BLUE);
     public static final ItemStat REPAIR_EFFICIENCY = new ItemStat("repair_efficiency", 1f, 0f, 1000f, false, TextFormatting.BLUE).setHidden(true).setAffectedByGrades(false);
     public static final ItemStat ENCHANTABILITY = new ItemStat("enchantability", 0f, 0f, 10000f, true, TextFormatting.BLUE).setSynergyApplies(true);
     public static final ItemStat RARITY = new ItemStat("rarity", 0f, 0f, 10000f, true, TextFormatting.BLUE).setHidden(true);

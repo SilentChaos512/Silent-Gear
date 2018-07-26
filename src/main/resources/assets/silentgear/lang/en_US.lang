@@ -152,8 +152,10 @@ item.silentgear.boots.nameProper=%s Boots
 
 stat.silentgear.displayFormat=%1$s §r§8:§r %2$s
 stat.silentgear.durabilityFormat=%1$s / %2$s
+stat.silentgear.armorFormat=%1$s (%2$s)
 
 stat.silentgear.armor.name=Armor
+stat.silentgear.armor_durability.name=Armor Durability
 stat.silentgear.armor_toughness.name=Armor Toughness
 stat.silentgear.attack_speed.name=Attack Speed
 stat.silentgear.durability.name=Durability

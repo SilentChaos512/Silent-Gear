@@ -2,6 +2,7 @@
     "type": "main",
     "stats": [
         {"name": "durability",      "value":  198},
+        {"name": "armor_durability","value":    6},
         {"name": "enchantability",  "value":    8},
         {"name": "harvest_level",   "value":    1},
         {"name": "harvest_speed",   "value":    5},
@@ -11,7 +12,7 @@
         {"name": "armor",           "value":    8},
         {"name": "armor_toughness", "value":    0},
         {"name": "magic_armor",     "value":    4},
-        {"name": "ranged_damage",   "value":  0.1},
+        {"name": "ranged_damage",   "value":  0.5},
         {"name": "ranged_speed",    "value":  0.1},
         {"name": "rarity",          "value":   10}
     ],

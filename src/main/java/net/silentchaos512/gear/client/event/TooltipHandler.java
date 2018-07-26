@@ -88,6 +88,8 @@ public class TooltipHandler {
                         statStr = statStr.replaceFirst("0+$", "");
                     if (modifiers.size() > 1)
                         statStr += "*";
+                    if (stat == CommonItemStats.ARMOR_DURABILITY)
+                        statStr += "x";
 
                     event.getToolTip().add("- " + i18n.translate("stat", "displayFormat", nameStr, statStr));
                 }

@@ -79,13 +79,11 @@ public class ArmorItemModel implements IModel {
                 ItemPartData partData = ItemPartData.instance(part);
                 // Basic texture
                 ResourceLocation textureMain = partData.getTexture(ItemStack.EMPTY, armorClass, PartPositions.ARMOR, 0);
-                System.out.println(textureMain);
                 if (textureMain != null)
                     builder.add(textureMain);
 
                 // Broken texture
                 ResourceLocation textureBroken = partData.getBrokenTexture(ItemStack.EMPTY, armorClass, PartPositions.ARMOR);
-                System.out.println(textureBroken);
                 if (textureBroken != null)
                     builder.add(textureBroken);
             }
@@ -202,7 +200,6 @@ public class ArmorItemModel implements IModel {
 
                 if (texture != null)
                     builder.put(position.getModelIndex(), texture.toString());
-                System.out.println(texture);
             }
         }
     }

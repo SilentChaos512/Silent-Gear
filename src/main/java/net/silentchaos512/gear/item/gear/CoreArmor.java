@@ -67,7 +67,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     public double getArmorToughness(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return GearData.getStat(stack, CommonItemStats.ARMOR_TOUGHNESS);
+        return GearData.getStat(stack, CommonItemStats.ARMOR_TOUGHNESS) / 4;
     }
 
     private static double getGenericArmorProtection(ItemStack stack) {
@@ -130,18 +130,15 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int x = GearData.getStatInt(stack, CommonItemStats.DURABILITY);
-        float y = (1.8f * x + 1515) / 131;
-        return (int) (MAX_DAMAGE_ARRAY[armorType.getIndex()] * y);
+        int maxDamageFactor = GearData.getStatInt(stack, CommonItemStats.ARMOR_DURABILITY);
+        return MAX_DAMAGE_ARRAY[armorType.getIndex()] * maxDamageFactor;
     }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
         if (GearHelper.isUnbreakable(stack)) return;
-        int original = damage;
         if (!Config.toolsBreakPermanently)
             damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
-        SilentGear.log.info("{}: {} -> {}", stack, original, damage);
         super.setDamage(stack, damage);
     }
 

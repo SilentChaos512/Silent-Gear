@@ -16,6 +16,7 @@ import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
@@ -77,14 +78,35 @@ public class GearClientHelper {
                 for (ItemStat stat : item.getRelevantStats(stack)) {
                     float statValue = GearData.getStat(stack, stat);
 
+                    // Used for the total armor/toughness a full suit of armor would provide
+                    float totalArmor = -1;
+                    if (item instanceof CoreArmor) {
+                        if (stat == CommonItemStats.ARMOR) {
+                            // Armor value varies by type
+                            totalArmor = statValue;
+                            statValue = (float) ((CoreArmor) item).getArmorProtection(stack);
+                        } else if (stat == CommonItemStats.ARMOR_TOUGHNESS) {
+                            // Toughness split equally to each piece
+                            totalArmor = statValue;
+                            statValue /= 4;
+                        }
+                    }
+
                     StatInstance inst = new StatInstance("display_" + stat.getUnlocalizedName(), statValue, StatInstance.Operation.AVG);
                     String nameStr = "- " + stat.displayColor + i18n.translate("stat", stat.getUnlocalizedName() + ".name");
                     String statStr = inst.formattedString(stat.displayAsInt ? 0 : 1, false);
+
+                    // Some stat-specific formatting...
                     if (stat == CommonItemStats.DURABILITY) {
                         int durabilityLeft = stack.getMaxDamage() - stack.getItemDamage();
                         int durabilityMax = stack.getMaxDamage();
                         statStr = i18n.translate("stat", "durabilityFormat", durabilityLeft, durabilityMax);
+                    } else if (stat == CommonItemStats.ARMOR || stat == CommonItemStats.ARMOR_TOUGHNESS) {
+                        String str1 = String.format("%.1f", statValue);
+                        String str2 = String.format("%.1f", totalArmor);
+                        statStr = i18n.translate("stat", "armorFormat", str1, str2);
                     }
+
                     tooltip.add(i18n.translate("stat", "displayFormat", nameStr, statStr));
                 }
             } else {
