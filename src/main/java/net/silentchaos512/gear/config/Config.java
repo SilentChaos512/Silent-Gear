@@ -32,6 +32,10 @@ public class Config extends ConfigBase {
             SilentGear.RESOURCE_PREFIX + "pickaxe", SilentGear.RESOURCE_PREFIX + "shovel", SilentGear.RESOURCE_PREFIX + "axe");
     private static final String BLOCK_PLACER_TOOLS_COMMENT = "These items will be able to place blocks by using them (right-click-to-place)";
 
+    public static ItemMatchList itemsThatToolsCanUse = new ItemMatchList(true, false,
+            "danknull:dank_null", "xreliquary:sojourner_staff", "torchbandolier:torch_bandolier");
+    private static final String ITEMS_THAT_TOOLS_CAN_USE_COMMENT = "Items that block-placing tools can \"use\" by simulating a right-click.";
+
     public static float sinewDropRate;
     private static final float SINEW_DROP_RATE_DEFAULT = 0.2f;
     private static final String SINEW_DROP_RATE_COMMENT = "The probability an animal will drop sinew.";
@@ -92,8 +96,8 @@ public class Config extends ConfigBase {
             sinewDropRate = loadFloat("Drop Rate", catSinew, SINEW_DROP_RATE_DEFAULT, SINEW_DROP_RATE_COMMENT);
 
             // Block placer tools
-            String catBlockPlacerTools = CAT_ITEMS + SEP + "block_placer_tools";
-            blockPlacerTools.loadConfig(config, "Items That Place Blocks", catBlockPlacerTools, BLOCK_PLACER_TOOLS_COMMENT);
+            blockPlacerTools.loadConfig(config, "Items That Place Blocks", CAT_ITEMS, BLOCK_PLACER_TOOLS_COMMENT);
+            itemsThatToolsCanUse.loadConfig(config, "Items That Block Placer Tools Can Use", CAT_ITEMS, ITEMS_THAT_TOOLS_CAN_USE_COMMENT);
 
             /*
              * Tools

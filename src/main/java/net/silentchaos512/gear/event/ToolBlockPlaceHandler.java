@@ -19,7 +19,6 @@ import net.silentchaos512.gear.api.item.IBlockPlacer;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.ItemHelper;
 
 public class ToolBlockPlaceHandler {
 
@@ -78,12 +77,13 @@ public class ToolBlockPlaceHandler {
             ItemBlock itemBlock = (ItemBlock) item;
             Block block = itemBlock.getBlock();
             IBlockState state = block.getStateFromMeta(itemBlock.getMetadata(nextStack));
-            if (state.getMaterial().blocksMovement() && playerBounds.intersects(blockBounds)) return;
+            if (state.getMaterial().blocksMovement() && playerBounds.intersects(blockBounds))
+                return;
         }
 
         int prevSize = nextStack.getCount();
         Vec3d hit = event.getHitVec();
-        EnumActionResult result = ItemHelper.useItemAsPlayer(nextStack, player, world, pos, side, (float) hit.x, (float) hit.y, (float) hit.z);
+        EnumActionResult result = useItemAsPlayerMainHand(nextStack, player, world, pos, side, (float) hit.x, (float) hit.y, (float) hit.z);
         if (result == EnumActionResult.SUCCESS) player.swingArm(EnumHand.MAIN_HAND);
 
         // Don't consume blocks in creative mode
@@ -93,6 +93,14 @@ public class ToolBlockPlaceHandler {
             nextStack = ItemStack.EMPTY;
             player.inventory.setInventorySlotContents(itemSlot, ItemStack.EMPTY);
         }
+    }
+
+    private EnumActionResult useItemAsPlayerMainHand(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack currentEquipped = player.getHeldItemMainhand();
+        player.setHeldItem(EnumHand.MAIN_HAND, stack);
+        EnumActionResult result = stack.getItem().onItemUse(player, world, pos, EnumHand.MAIN_HAND, facing, hitX, hitY, hitZ);
+        player.setHeldItem(EnumHand.MAIN_HAND, currentEquipped);
+        return result;
     }
 
     private boolean canToolPlaceBlock(ItemStack stack) {
@@ -111,6 +119,6 @@ public class ToolBlockPlaceHandler {
     private boolean itemNotPlaceable(ItemStack stack) {
         return stack.isEmpty()
                 || (stack.hasTagCompound() && stack.getTagCompound().hasKey("NoPlacing"))
-                || (!(stack.getItem() instanceof ItemBlock) && !(stack.getItem() instanceof IBlockPlacer));
+                || (!(stack.getItem() instanceof ItemBlock) && !(stack.getItem() instanceof IBlockPlacer) && !Config.itemsThatToolsCanUse.matches(stack.getItem()));
     }
 }
