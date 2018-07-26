@@ -22,9 +22,9 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.lib.ItemPartData;
-import net.silentchaos512.gear.api.lib.MaterialGrade;
-import net.silentchaos512.gear.api.lib.PartDataList;
+import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -106,7 +106,7 @@ public class GearHelper {
     public static boolean getIsRepairable(ItemStack stack, ItemStack material) {
         ItemPartData data = GearData.getPrimaryPart(stack);
         ItemPartData dataMaterial = ItemPartData.fromStack(material);
-        return data != null && dataMaterial != null && data.part.getTier() <= dataMaterial.part.getTier();
+        return data != null && dataMaterial != null && data.getPart().getTier() <= dataMaterial.getPart().getTier();
     }
 
     public static void attemptDamage(ItemStack stack, int amount, EntityLivingBase entityLiving) {
@@ -208,9 +208,9 @@ public class GearHelper {
                 MaterialGrade median = SilentGear.random.nextInt(100) < 20 ? MaterialGrade.D : SilentGear.random.nextInt(100) < 40 ? MaterialGrade.B : MaterialGrade.C;
                 PartDataList parts = PartDataList.of();
                 for (ItemPartData data : GearData.getConstructionParts(stack)) {
-                    if (data.grade == MaterialGrade.NONE) {
+                    if (data.getGrade() == MaterialGrade.NONE) {
                         MaterialGrade grade = MaterialGrade.selectRandom(SilentGear.random, median, 1.5, MaterialGrade.S);
-                        parts.add(new ItemPartData(data.part, grade, data.craftingItem));
+                        parts.add(ItemPartData.instance(data.getPart(), grade, data.getCraftingItem()));
                     } else {
                         parts.add(data);
                     }
@@ -278,7 +278,7 @@ public class GearHelper {
         ItemPartData data = GearData.getPrimaryPart(stack);
         if (data == null)
             return SilentGear.i18n.translate(stack.getTranslationKey() + ".name");
-        String partName = data.part.getTranslatedName(data, ItemStack.EMPTY);
+        String partName = data.getTranslatedName(ItemStack.EMPTY);
         return SilentGear.i18n.subText(item.getItem(), "nameProper", partName);
     }
 

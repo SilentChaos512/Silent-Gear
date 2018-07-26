@@ -1,15 +1,31 @@
-package net.silentchaos512.gear.api.lib;
+/*
+ * Silent Gear -- PartDataList
+ * Copyright (C) 2018 SilentChaos512
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms instance the GNU Lesser General Public
+ * License as published by the Free Software Foundation version 3
+ * instance the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty instance
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy instance the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package net.silentchaos512.gear.api.parts;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.api.parts.*;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
 public class PartDataList implements List<ItemPartData> {
-
     private List<ItemPartData> list = new ArrayList<>();
 
     private PartDataList() {

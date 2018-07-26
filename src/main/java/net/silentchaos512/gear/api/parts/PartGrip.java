@@ -14,8 +14,13 @@ public final class PartGrip extends ItemPart implements IUpgradePart {
     }
 
     @Override
-    public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame) {
-        return new ResourceLocation(this.key.getNamespace(), "items/" + toolClass + "/grip_" + this.textureSuffix);
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+        return new ResourceLocation(this.registryName.getNamespace(), "items/" + gearClass + "/grip_" + this.textureSuffix);
+    }
+
+    @Override
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
+        return getTexture(part, gear, gearClass, PartPositions.GRIP, animationFrame);
     }
 
     @Override

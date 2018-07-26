@@ -11,11 +11,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.lib.ItemPartData;
-import net.silentchaos512.gear.api.lib.PartDataList;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRod;
-import net.silentchaos512.gear.api.parts.PartTip;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -32,8 +28,9 @@ import java.util.UUID;
 public class GearData {
 
     /**
-     * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately, some mods still
-     * reference the gear material instead of calling the appropriate methods.
+     * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately,
+     * some mods still reference the gear material instead instance calling the appropriate
+     * methods.
      */
     public static final ToolMaterial FAKE_MATERIAL = EnumHelper.addToolMaterial("silentgems:fake_material", 1, 512, 5.12f, 5.12f, 32);
 
@@ -111,7 +108,7 @@ public class GearData {
                 // Allow "duplicate" AVG modifiers
                 for (StatInstance inst : partData.getStatModifiers(stat)) {
                     if (inst.getOp() == Operation.AVG) {
-                        float gradeBonus = 1f + partData.grade.bonusPercent / 100f;
+                        float gradeBonus = 1f + partData.getGrade().bonusPercent / 100f;
                         float statValue = inst.getValue() * gradeBonus;
                         stats.put(stat, new StatInstance(inst.getId() + idSuffix, statValue, Operation.AVG));
                     } else {
@@ -127,7 +124,7 @@ public class GearData {
     }
 
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts) {
-        // First, we add a bonus for the number of unique main parts
+        // First, we add a bonus for the number instance unique main parts
         double synergy = 1.0 + 0.16 * Math.log(5 * uniqueParts.getMains().size() - 4);
         // Second, reduce synergy for difference in rarity and tier
         ItemPartData primaryMain = parts.getPrimaryMain();
@@ -136,7 +133,7 @@ public class GearData {
         int maxTier = 0;
         for (ItemPartData data : uniqueParts) {
             maxRarity = Math.max(maxRarity, data.computeStat(CommonItemStats.RARITY));
-            maxTier = Math.max(maxTier, data.part.getTier());
+            maxTier = Math.max(maxTier, data.getPart().getTier());
         }
         for (ItemPartData data : uniqueParts) {
             if (maxRarity > 0) {
@@ -144,7 +141,7 @@ public class GearData {
                 synergy -= 0.005 * Math.abs(primaryRarity - rarity);
             }
             if (maxTier > 0) {
-                int tier = data.part.getTier();
+                int tier = data.getPart().getTier();
                 synergy -= 0.16f * Math.abs(maxTier - tier);
             }
         }
@@ -181,11 +178,11 @@ public class GearData {
                 NBTTagCompound partCompound = (NBTTagCompound) nbt;
                 ItemPartData data = ItemPartData.readFromNBT(partCompound);
                 if (data != null) {
-                    if (data.part instanceof PartMain && ++mainsFound <= MAX_MAIN_PARTS)
+                    if (data.getPart() instanceof PartMain && ++mainsFound <= MAX_MAIN_PARTS)
                         list.add(data);
-                    else if (data.part instanceof PartRod && ++rodsFound <= MAX_ROD_PARTS)
+                    else if (data.getPart() instanceof PartRod && ++rodsFound <= MAX_ROD_PARTS)
                         list.add(data);
-                    else if (data.part instanceof PartTip && ++tipsFound <= MAX_TIP_PARTS)
+                    else if (data.getPart() instanceof PartTip && ++tipsFound <= MAX_TIP_PARTS)
                         list.add(data);
                     else
                         list.add(data);
@@ -210,10 +207,30 @@ public class GearData {
     }
 
     /**
+     * Gets the primary part, but only the part itself. Grade and crafting stack are omitted so that
+     * the cached ItemPartData can be retrieved instead of constructing a new one.
+     *
+     * @param stack The gear item
+     * @return Cached part data excluding grade and crafting item, or null if it does not exist.
+     */
+    @Nullable
+    public static ItemPartData getPrimaryRenderPartFast(ItemStack stack) {
+        NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
+        NBTTagList tagList = tags.getTagList(NBT_CONSTRUCTION_PARTS, 10);
+
+        NBTBase nbt = tagList.get(0);
+        if (nbt instanceof NBTTagEnd) return null;
+
+        ItemPart part = ItemPart.fromNBT((NBTTagCompound) nbt);
+        if (part == null) return null;
+        return ItemPartData.instance(part);
+    }
+
+    /**
      * Gets the main part in the given position (zero-indexed)
      *
-     * @return The part if it exists in NBT, null if the index is out of bounds, the data is invalid, or the part is not a
-     * main part.
+     * @return The part if it exists in NBT, null if the index is out instance bounds, the data is
+     * invalid, or the part is not a main part.
      */
     @Nullable
     public static ItemPartData getPartByIndex(ItemStack stack, int index) {
@@ -221,24 +238,19 @@ public class GearData {
         NBTTagList tagList = tags.getTagList(NBT_CONSTRUCTION_PARTS, 10);
 
         NBTBase nbt = tagList.get(index);
-        if (nbt instanceof NBTTagEnd)
-            return null;
+        if (nbt instanceof NBTTagEnd) return null;
 
         ItemPartData data = ItemPartData.readFromNBT((NBTTagCompound) nbt);
-        if (data != null && data.part instanceof PartMain)
-            return data;
-
-        return null;
+        return data != null && data.getPart() instanceof PartMain ? data : null;
     }
 
     public static void addUpgradePart(ItemStack gear, ItemStack partStack) {
         ItemPartData partData = ItemPartData.fromStack(partStack);
-        if (partData == null || partData.part == null)
-            return;
+        if (partData == null) return;
 
         PartDataList parts = getConstructionParts(gear);
         // Only one tip upgrade allowed
-        parts.removeIf(data -> data.part instanceof PartTip && partData.part instanceof PartTip);
+        parts.removeIf(data -> data.getPart() instanceof PartTip && partData.getPart() instanceof PartTip);
 
         parts.add(partData);
         writeConstructionParts(gear, parts);
@@ -256,7 +268,7 @@ public class GearData {
     /**
      * Gets the item's UUID, creating it if it doesn't have one yet.
      *
-     * @param gear ItemStack of an ICoreItem
+     * @param gear ItemStack instance an ICoreItem
      * @return The UUID, or null if gear's item is not an ICoreItem
      */
     public static UUID getUUID(ItemStack gear) {

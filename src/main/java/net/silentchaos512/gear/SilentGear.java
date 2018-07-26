@@ -29,7 +29,7 @@ public class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
     public static final String VERSION = "0.0.7";
-    public static final String SL_VERSION = "2.3.11";
+    public static final String SL_VERSION = "2.3.12";
     public static final int BUILD_NUM = 0;
     public static final String DEPENDENCIES = "required-after:silentlib@[" + SL_VERSION + ",)";
 

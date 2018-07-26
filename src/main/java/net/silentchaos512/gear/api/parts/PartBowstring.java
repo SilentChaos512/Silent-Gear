@@ -14,14 +14,19 @@ public final class PartBowstring extends ItemPart {
     }
 
     @Override
-    public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame) {
+    public ResourceLocation getTexture(ItemPartData part, ItemStack stack, String toolClass, IPartPosition position, int animationFrame) {
         if (!"bow".equals(toolClass))
             return BLANK_TEXTURE;
-        return new ResourceLocation(this.key.getNamespace(), "items/" + toolClass + "/bowstring_" + this.textureSuffix + "_" + animationFrame);
+        return new ResourceLocation(this.registryName.getNamespace(), "items/" + toolClass + "/bowstring_" + this.textureSuffix + "_" + animationFrame);
     }
 
     @Override
-    public String getModelIndex(int animationFrame) {
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
+        return getTexture(part, gear, gearClass, PartPositions.BOWSTRING, animationFrame);
+    }
+
+    @Override
+    public String getModelIndex(ItemPartData part, int animationFrame) {
         return this.modelIndex + "_" + animationFrame;
     }
 

@@ -175,7 +175,7 @@ public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
          */
         private int partialBlockProgress;
         /**
-         * keeps track of how many ticks this PartiallyDestroyedBlock already exists
+         * keeps track instance how many ticks this PartiallyDestroyedBlock already exists
          */
         private int createdAtWorldTick;
 

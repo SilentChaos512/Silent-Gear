@@ -11,8 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.lib.ItemPartData;
-import net.silentchaos512.gear.api.parts.ItemPart;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -54,7 +53,7 @@ public class GearClientHelper {
 
             // Let parts add information if they need to
             for (ItemPartData data : GearData.getConstructionParts(stack)) {
-                data.part.addInformation(data, stack, world, tooltip, flag.isAdvanced());
+                data.getPart().addInformation(data, stack, world, tooltip, flag.isAdvanced());
             }
 
             float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
@@ -98,9 +97,9 @@ public class GearClientHelper {
             if (altDown) {
                 tooltip.add(strConstruction);
                 for (ItemPartData data : GearData.getConstructionParts(stack)) {
-                    String str = data.part.getTranslatedName(data, stack);
-                    if (data.part instanceof PartMain)
-                        str += TextFormatting.DARK_GRAY + " (" + data.grade.getTranslatedName() + ")";
+                    String str = data.getTranslatedName(stack);
+                    if (data.getPart() instanceof PartMain)
+                        str += TextFormatting.DARK_GRAY + " (" + data.getGrade().getTranslatedName() + ")";
                     tooltip.add("- " + str);
                 }
             } else {
@@ -118,19 +117,18 @@ public class GearClientHelper {
         return !oldStack.equals(newStack);
     }
 
-    public static Map<String, ItemPart> getRenderParts(ItemStack stack) {
-
-        Map<String, ItemPart> map = new LinkedHashMap<>();
+    public static Map<String, ItemPartData> getRenderParts(ItemStack stack) {
+        Map<String, ItemPartData> map = new LinkedHashMap<>();
 
         ICoreTool item = (ICoreTool) stack.getItem();
         String itemClass = item.getGearClass();
         boolean hasGuard = "sword".equals(itemClass);
 
-        ItemPart partHead = item.getPrimaryHeadPart(stack);
-        ItemPart partGuard = hasGuard ? item.getSecondaryPart(stack) : null;
-        ItemPart partRod = item.getRodPart(stack);
-        ItemPart partTip = item.getTipPart(stack);
-        ItemPart partBowstring = item.getBowstringPart(stack);
+        ItemPartData partHead = item.getPrimaryPart(stack);
+        ItemPartData partGuard = hasGuard ? item.getSecondaryPart(stack) : null;
+        ItemPartData partRod = item.getRodPart(stack);
+        ItemPartData partTip = item.getTipPart(stack);
+        ItemPartData partBowstring = item.getBowstringPart(stack);
 
         if (partRod != null)
             map.put("rod", partRod);
@@ -144,25 +142,5 @@ public class GearClientHelper {
             map.put("bowstring", partBowstring);
 
         return map;
-    }
-
-    @Deprecated
-    public static String getModelKey(ItemStack stack, int animationFrame) {
-
-        if (!(stack.getItem() instanceof ICoreItem))
-            return "null";
-
-        ICoreItem item = (ICoreItem) stack.getItem();
-        return getModelKey(item.getGearClass(), animationFrame, GearHelper.isBroken(stack),
-                getRenderParts(stack).values().toArray(new ItemPart[0]));
-    }
-
-    public static String getModelKey(String toolClass, int animationFrame, boolean isBroken, ItemPart... parts) {
-
-        StringBuilder ret = new StringBuilder(toolClass + (isBroken ? "_b" : ""));
-        for (ItemPart part : parts)
-            if (part != null)
-                ret.append("|").append(part.getModelIndex(animationFrame));
-        return ret.toString();
     }
 }

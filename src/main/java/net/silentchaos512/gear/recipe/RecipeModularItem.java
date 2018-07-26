@@ -1,12 +1,10 @@
 package net.silentchaos512.gear.recipe;
 
-import com.google.common.base.Predicate;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.recipe.RecipeBaseSL;
@@ -15,10 +13,10 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class RecipeModularItem extends RecipeBaseSL {
-
-    public final ICoreItem item;
+    private final ICoreItem item;
 
     public RecipeModularItem(ICoreItem item) {
         this.item = item;
@@ -82,7 +80,7 @@ public class RecipeModularItem extends RecipeBaseSL {
         List<ItemStack> parts = new ArrayList<>();
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
-            if (!stack.isEmpty() && predicate.apply(stack))
+            if (!stack.isEmpty() && predicate.test(stack))
                 parts.add(stack);
         }
         return parts;

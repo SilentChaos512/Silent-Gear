@@ -7,10 +7,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.lib.MaterialGrade;
-import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -70,8 +67,9 @@ public class TooltipHandler {
     }
 
     private void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part, I18nHelper i18n) {
+        ItemPartData partData = ItemPartData.instance(part, MaterialGrade.NONE, stack);
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
-            Collection<StatInstance> modifiers = part.getStatModifiers(stat, stack);
+            Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
             if (!modifiers.isEmpty()) {
                 StatInstance inst = stat.computeForDisplay(0, modifiers);

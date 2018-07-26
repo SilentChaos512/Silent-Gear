@@ -134,24 +134,25 @@ public class ToolModel implements IModel {
 
             for (int frame = 0; frame < item.getAnimationFrames(); ++frame)
                 for (ItemPart part : PartRegistry.getValues()) {
-                    if (part.isBlacklisted())
-                        continue;
+                    if (part.isBlacklisted()) continue;
+                    ItemPartData partData = ItemPartData.instance(part);
 
                     // Basic texture
-                    ResourceLocation texBasic = part.getTexture(ItemStack.EMPTY, toolClass, frame);
+                    // position could be HEAD, but I added ANY to make it clear this is not just mains.
+                    ResourceLocation texBasic = partData.getTexture(ItemStack.EMPTY, toolClass, PartPositions.ANY, frame);
 //                    SilentGear.log.info(String.format("    %s, frame=%d, part=%s, tex=%s", toolClass, frame, part.getKey().getResourcePath(), texBasic));
                     if (texBasic != null)
                         builder.add(texBasic);
 
                     // Broken texture
-                    ResourceLocation texBroken = part.getBrokenTexture(ItemStack.EMPTY, toolClass);
+                    ResourceLocation texBroken = partData.getBrokenTexture(ItemStack.EMPTY, toolClass, PartPositions.ANY);
 //                    SilentGear.log.info("      +broken: " + texBroken);
                     if (texBroken != null)
                         builder.add(texBroken);
 
                     // Guard texture for swords
                     if (hasGuard && part instanceof PartMain) {
-                        ResourceLocation texGuard = ((PartMain) part).getTexture(ItemStack.EMPTY, toolClass, frame, "guard");
+                        ResourceLocation texGuard = partData.getTexture(ItemStack.EMPTY, toolClass, PartPositions.GUARD, frame);
 //                        SilentGear.log.info("      +guard: " + texGuard);
                         if (texGuard != null)
                             builder.add(texGuard);
@@ -262,19 +263,19 @@ public class ToolModel implements IModel {
             // model.cache.clear();
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
-                PartMain partHead = itemTool.getPrimaryHeadPart(stack);
-                PartMain partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
-                PartRod partRod = itemTool.getRodPart(stack);
-                PartTip partTip = itemTool.getTipPart(stack);
-                PartBowstring partBowstring = itemTool.getBowstringPart(stack);
+                ItemPartData partHead = itemTool.getPrimaryPart(stack);
+                ItemPartData partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
+                ItemPartData partRod = itemTool.getRodPart(stack);
+                ItemPartData partTip = itemTool.getTipPart(stack);
+                ItemPartData partBowstring = itemTool.getBowstringPart(stack);
 
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 // Populate the map builder with textures, function handles null checks
-                processTexture(stack, toolClass, "head", partHead, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, "guard", partGuard, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, "rod", partRod, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, "tip", partTip, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, "bowstring", partBowstring, animationFrame, isBroken, builder);
+                processTexture(stack, toolClass, PartPositions.HEAD, partHead, animationFrame, isBroken, builder);
+                processTexture(stack, toolClass, PartPositions.GUARD, partGuard, animationFrame, isBroken, builder);
+                processTexture(stack, toolClass, PartPositions.ROD, partRod, animationFrame, isBroken, builder);
+                processTexture(stack, toolClass, PartPositions.TIP, partTip, animationFrame, isBroken, builder);
+                processTexture(stack, toolClass, PartPositions.BOWSTRING, partBowstring, animationFrame, isBroken, builder);
 
                 IModel parent = model.getParent().retexture(builder.build());
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
@@ -293,19 +294,16 @@ public class ToolModel implements IModel {
             return GearClientHelper.modelCache.get(key);
         }
 
-        private void processTexture(ItemStack stack, String toolClass, String partPosition, ItemPart part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, ItemPartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
                 ResourceLocation texture;
                 if (isBroken)
-                    texture = part.getBrokenTexture(stack, toolClass);
-                else if (part instanceof PartMain)
-                    texture = ((PartMain) part).getTexture(stack, toolClass, animationFrame, partPosition);
+                    texture = part.getBrokenTexture(stack, toolClass, position);
                 else
-                    texture = part.getTexture(stack, toolClass, animationFrame);
+                    texture = part.getTexture(stack, toolClass, position, animationFrame);
 
                 if (texture != null)
-                    builder.put(partPosition, texture.toString());
-                SilentGear.log.debug(texture);
+                    builder.put(position.getModelIndex(), texture.toString());
             }
         }
 

@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -21,7 +21,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public interface ICoreTool extends ICoreItem {
-
     Set<ItemStat> RELEVANT_STATS = new LinkedHashSet<>(Arrays.asList(
             CommonItemStats.HARVEST_LEVEL,
             CommonItemStats.HARVEST_SPEED,
@@ -34,7 +33,6 @@ public interface ICoreTool extends ICoreItem {
 
     @Override
     default Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack) {
-
         return RELEVANT_STATS;
     }
 
@@ -52,51 +50,34 @@ public interface ICoreTool extends ICoreItem {
         return 2;
     }
 
-    default PartMain getPrimaryHeadPart(ItemStack stack) {
-
-        ItemPartData data = GearData.getPrimaryPart(stack);
-        if (data != null)
-            return (PartMain) data.part;
-        return ModMaterials.mainWood;
-    }
-
-    default PartMain getSecondaryPart(ItemStack stack) {
-
+    default ItemPartData getSecondaryPart(ItemStack stack) {
         ItemPartData data = GearData.getSecondaryPart(stack);
-        if (data != null)
-            return (PartMain) data.part;
-        return ModMaterials.mainWood;
+        if (data != null) return data;
+        return ItemPartData.instance(ModMaterials.mainWood);
     }
 
-    default PartRod getRodPart(ItemStack stack) {
-
+    default ItemPartData getRodPart(ItemStack stack) {
         for (ItemPartData data : GearData.getConstructionParts(stack))
-            if (data.part instanceof PartRod)
-                return (PartRod) data.part;
-        return ModMaterials.rodWood;
+            if (data.getPart() instanceof PartRod) return data;
+        return ItemPartData.instance(ModMaterials.rodWood);
     }
 
     @Nullable
-    default PartTip getTipPart(ItemStack stack) {
-
+    default ItemPartData getTipPart(ItemStack stack) {
         for (ItemPartData data : GearData.getConstructionParts(stack))
-            if (data.part instanceof PartTip)
-                return (PartTip) data.part;
+            if (data.getPart() instanceof PartTip) return data;
         return null;
     }
 
     @Nullable
-    default PartBowstring getBowstringPart(ItemStack stack) {
-
+    default ItemPartData getBowstringPart(ItemStack stack) {
         for (ItemPartData data : GearData.getConstructionParts(stack))
-            if (data.part instanceof PartBowstring)
-                return (PartBowstring) data.part;
+            if (data.getPart() instanceof PartBowstring) return data;
         return null;
     }
 
     @Override
     default boolean matchesRecipe(Collection<ItemStack> parts) {
-
         ItemStack head = ItemStack.EMPTY;
         ItemStack rod = ItemStack.EMPTY;
         ItemStack bowstring = ItemStack.EMPTY;
@@ -149,14 +130,14 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Override
-    default ItemPart[] getRenderParts(ItemStack stack) {
-        ItemPart partHead = getPrimaryHeadPart(stack);
-        ItemPart partGuard = hasSwordGuard() ? getSecondaryPart(stack) : null;
-        ItemPart partRod = getRodPart(stack);
-        ItemPart partTip = getTipPart(stack);
-        ItemPart partBowstring = getBowstringPart(stack);
-        List<ItemPart> list = Lists.newArrayList(partHead, partGuard, partRod, partTip, partBowstring);
-        return list.stream().filter(Objects::nonNull).toArray(ItemPart[]::new);
+    default ItemPartData[] getRenderParts(ItemStack stack) {
+        ItemPartData partHead = getPrimaryPart(stack);
+        ItemPartData partGuard = hasSwordGuard() ? getSecondaryPart(stack) : null;
+        ItemPartData partRod = getRodPart(stack);
+        ItemPartData partTip = getTipPart(stack);
+        ItemPartData partBowstring = getBowstringPart(stack);
+        List<ItemPartData> list = Lists.newArrayList(partHead, partGuard, partRod, partTip, partBowstring);
+        return list.stream().filter(Objects::nonNull).toArray(ItemPartData[]::new);
     }
 
     default boolean hasSwordGuard() {

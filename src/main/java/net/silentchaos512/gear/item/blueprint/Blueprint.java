@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.lib.PartDataList;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.registry.ICustomMesh;

@@ -14,20 +14,22 @@ public final class PartMain extends ItemPart {
     }
 
     @Override
-    public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame) {
-        return getTexture(stack, toolClass, animationFrame, "head");
-    }
-
-    public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame, String subtype) {
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String toolClass, IPartPosition position, int animationFrame) {
         String frameStr = "bow".equals(toolClass) && animationFrame == 3 ? "_3" : "";
-        String subtypePrefix = subtype + (subtype.isEmpty() ? "" : "_");
+        String partPosition = position.getTexturePrefix();
+        String subtypePrefix = partPosition + (partPosition.isEmpty() ? "" : "_");
         String path = "items/" + toolClass + "/" + subtypePrefix + this.textureSuffix + frameStr;
-        return new ResourceLocation(this.key.getNamespace(), path);
+        return new ResourceLocation(this.registryName.getNamespace(), path);
     }
 
     @Override
-    public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
-        return new ResourceLocation(this.key.getNamespace(), "items/" + gearClass + "/_broken");
+    public ResourceLocation getTexture(ItemPartData part, ItemStack stack, String toolClass, int animationFrame) {
+        return getTexture(part, stack, toolClass, PartPositions.HEAD, animationFrame);
+    }
+
+    @Override
+    public ResourceLocation getBrokenTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position) {
+        return new ResourceLocation(this.registryName.getNamespace(), "items/" + gearClass + "/_broken");
     }
 
     @Override

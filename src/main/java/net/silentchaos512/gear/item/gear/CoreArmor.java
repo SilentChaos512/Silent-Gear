@@ -21,12 +21,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -193,7 +195,9 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        ResourceLocation key = getPrimaryPart(stack).getKey();
+        ItemPartData part = GearData.getPrimaryRenderPartFast(stack);
+        if (part == null) part = ItemPartData.instance(ModMaterials.mainWood);
+        ResourceLocation key = part.getPart().getRegistryName();
         if (!textureCache.containsKey(key)) {
             String str = key.getNamespace() + ":textures/armor/" + key.getPath().replaceFirst("^main_", "")
                     + (slot == EntityEquipmentSlot.LEGS ? "_2" : "_1") + ".png";

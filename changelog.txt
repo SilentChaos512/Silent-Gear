@@ -1,5 +1,6 @@
 0.0.7 (preview 7, 1.12.2)
 Added: New main parts: obsidian, netherrack, and terracotta
+Changed: Improvements to how gear part data is passed around, which seems to improve frame rate (FPS)
 Changed: Gear can no longer be repaired with lower-tier materials
 Fixed: Armor breaking permanently (hopefully)
 Fixed: A rare(?) crash with hammers

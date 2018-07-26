@@ -3,16 +3,16 @@
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms instance the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 instance the License, or
  * (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY; without even the implied warranty instance
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy instance the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.util.GearData;
@@ -47,13 +47,13 @@ public class RecipeQuickRepair extends RecipeBaseSL {
         for (ItemStack stack : parts) {
             ItemPartData data = ItemPartData.fromStack(stack);
             if (data != null)
-                repairValue += data.part.getRepairAmount(gear, data);
+                repairValue += data.getPart().getRepairAmount(gear, data);
         }
 
         // Makes odd repair values line up better
         repairValue += 1;
 
-        // Repair efficiency of tool class
+        // Repair efficiency instance tool class
         if (gear.getItem() instanceof ICoreItem)
             repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
 
@@ -78,7 +78,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
                 ++partsCount;
                 // It needs to be a part with repair value
                 ItemPartData data = ItemPartData.fromStack(stack);
-                if (data == null || data.part.getRepairAmount(gear, data) <= 0)
+                if (data == null || data.getPart().getRepairAmount(gear, data) <= 0)
                     return false;
             }
             else {

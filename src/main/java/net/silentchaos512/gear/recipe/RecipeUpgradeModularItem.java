@@ -4,7 +4,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.lib.ItemPartData;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.recipe.RecipeBaseSL;
@@ -23,7 +23,7 @@ public class RecipeUpgradeModularItem extends RecipeBaseSL {
             ItemPartData partData = ItemPartData.fromStack(stack);
             if (stack.getItem() instanceof ICoreItem)
                 tool = stack.copy();
-            else if (partData != null && partData.part instanceof IUpgradePart)
+            else if (partData != null && partData.getPart() instanceof IUpgradePart)
                 upgrades.add(stack);
         }
 
@@ -47,7 +47,7 @@ public class RecipeUpgradeModularItem extends RecipeBaseSL {
                 if (foundTool)
                     return false;
                 foundTool = true;
-            } else if (partData != null && partData.part instanceof IUpgradePart) {
+            } else if (partData != null && partData.getPart() instanceof IUpgradePart) {
                 foundUpgrade = true;
             } else {
                 return false;

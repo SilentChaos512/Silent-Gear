@@ -21,9 +21,7 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
@@ -63,7 +61,7 @@ public class ArmorItemModel implements IModel {
         ResourceLocation main = null;
 
         if (customData.containsKey("main"))
-            main = new ResourceLocation("main");
+            main = new ResourceLocation(customData.get("main"));
 
         return new ArmorItemModel(main);
     }
@@ -78,13 +76,16 @@ public class ArmorItemModel implements IModel {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
         for (String armorClass : ModItems.armorClasses.keySet()) {
             for (PartMain part : PartRegistry.getMains()) {
+                ItemPartData partData = ItemPartData.instance(part);
                 // Basic texture
-                ResourceLocation textureMain = part.getTexture(ItemStack.EMPTY, armorClass, 0, "main");
+                ResourceLocation textureMain = partData.getTexture(ItemStack.EMPTY, armorClass, PartPositions.ARMOR, 0);
+                System.out.println(textureMain);
                 if (textureMain != null)
                     builder.add(textureMain);
 
                 // Broken texture
-                ResourceLocation textureBroken = part.getBrokenTexture(ItemStack.EMPTY, armorClass);
+                ResourceLocation textureBroken = partData.getBrokenTexture(ItemStack.EMPTY, armorClass, PartPositions.ARMOR);
+                System.out.println(textureBroken);
                 if (textureBroken != null)
                     builder.add(textureBroken);
             }
@@ -170,7 +171,7 @@ public class ArmorItemModel implements IModel {
             String armorClass = itemArmor.getGearClass();
             boolean isBroken = GearHelper.isBroken(stack);
 
-            PartMain primaryPart = itemArmor.getPrimaryPart(stack);
+            ItemPartData primaryPart = itemArmor.getPrimaryPart(stack);
 
             String key = itemArmor.getModelKey(stack, 0, primaryPart);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
@@ -178,7 +179,7 @@ public class ArmorItemModel implements IModel {
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
 
-                processTexture(stack, armorClass, "main", primaryPart, isBroken, builder);
+                processTexture(stack, armorClass, PartPositions.ARMOR, primaryPart, isBroken, builder);
 
                 IModel parent = model.getParent().retexture(builder.build());
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
@@ -191,25 +192,22 @@ public class ArmorItemModel implements IModel {
             return GearClientHelper.modelCache.get(key);
         }
 
-        private void processTexture(ItemStack stack, String toolClass, String partPosition, ItemPart part, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, ItemPartData part, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
                 ResourceLocation texture;
                 if (isBroken)
-                    texture = part.getBrokenTexture(stack, toolClass);
-                else if (part instanceof PartMain)
-                    texture = ((PartMain) part).getTexture(stack, toolClass, 0, partPosition);
+                    texture = part.getBrokenTexture(stack, toolClass, position);
                 else
-                    texture = part.getTexture(stack, toolClass, 0);
+                    texture = part.getTexture(stack, toolClass, position, 0);
 
                 if (texture != null)
-                    builder.put(partPosition, texture.toString());
-                SilentGear.log.debug(texture);
+                    builder.put(position.getModelIndex(), texture.toString());
+                System.out.println(texture);
             }
         }
     }
 
     public static final class Baked extends AbstractToolModel {
-
         public static Baked instance;
 
         public Baked(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format, ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms, Map<String, IBakedModel> cache) {

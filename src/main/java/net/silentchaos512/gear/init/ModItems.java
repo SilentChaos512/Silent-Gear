@@ -9,7 +9,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.lib.PartDataList;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.BlueprintBook;

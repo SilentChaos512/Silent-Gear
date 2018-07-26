@@ -3,7 +3,6 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.lib.ItemPartData;
 
 import java.util.List;
 
@@ -18,13 +17,18 @@ public final class PartTip extends ItemPart implements IUpgradePart {
     }
 
     @Override
-    public ResourceLocation getTexture(ItemStack stack, String toolClass, int animationFrame) {
-        String frameStr = "bow".equals(toolClass) && animationFrame == 3 ? "_3" : "";
-        return new ResourceLocation(this.key.getNamespace(), "items/" + toolClass + "/tip_" + this.textureSuffix + frameStr);
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+        String frameStr = "bow".equals(gearClass) && animationFrame == 3 ? "_3" : "";
+        return new ResourceLocation(this.registryName.getNamespace(), "items/" + gearClass + "/tip_" + this.textureSuffix + frameStr);
     }
 
     @Override
-    public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
+        return getTexture(part, gear, gearClass, animationFrame);
+    }
+
+    @Override
+    public ResourceLocation getBrokenTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position) {
         return ItemPart.BLANK_TEXTURE;
     }
 

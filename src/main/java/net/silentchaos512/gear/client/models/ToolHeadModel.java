@@ -19,7 +19,9 @@ import net.minecraftforge.client.model.*;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartMain;
+import net.silentchaos512.gear.api.parts.PartPositions;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -93,12 +95,13 @@ public class ToolHeadModel implements IModel {
         ImmutableList.Builder<ResourceLocation> builder = ImmutableList.builder();
         for (String toolClass : ModItems.toolClasses.keySet()) {
             for (PartMain part : PartRegistry.getMains()) {
-                ResourceLocation textureHead = part.getTexture(ItemStack.EMPTY, toolClass, 0, "head");
+                ItemPartData partData = ItemPartData.instance(part);
+                ResourceLocation textureHead = partData.getTexture(ItemStack.EMPTY, toolClass, PartPositions.HEAD, 0);
                 if (textureHead != null)
                     builder.add(textureHead);
 
                 if ("sword".equals(toolClass)) {
-                    ResourceLocation textureGuard = part.getTexture(ItemStack.EMPTY, toolClass, 0, "guard");
+                    ResourceLocation textureGuard = partData.getTexture(ItemStack.EMPTY, toolClass, PartPositions.GUARD, 0);
                     if (textureGuard != null)
                         builder.add(textureGuard);
                 }
@@ -174,15 +177,15 @@ public class ToolHeadModel implements IModel {
             String toolClass = ModItems.toolHead.getToolClass(stack);
             boolean hasGuard = "sword".equals(toolClass);
 
-            PartMain primaryPart = ModItems.toolHead.getPrimaryPart(stack);
-            PartMain secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
+            ItemPartData primaryPart = ModItems.toolHead.getPrimaryPart(stack);
+            ItemPartData secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
 
             String key = ModItems.toolHead.getModelKey(toolClass, primaryPart, secondaryPart);
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-                ResourceLocation textureHead = primaryPart == null ? null : primaryPart.getTexture(stack, toolClass, 0, "head");
-                ResourceLocation textureGuard = secondaryPart == null ? null : secondaryPart.getTexture(stack, toolClass, 0, "guard");
+                ResourceLocation textureHead = primaryPart == null ? null : primaryPart.getTexture(stack, toolClass, PartPositions.HEAD, 0);
+                ResourceLocation textureGuard = secondaryPart == null ? null : secondaryPart.getTexture(stack, toolClass, PartPositions.GUARD, 0);
 
                 if (textureHead != null)
                     builder.put("head", textureHead.toString());

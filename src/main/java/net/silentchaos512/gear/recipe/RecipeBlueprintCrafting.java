@@ -45,7 +45,7 @@ public class RecipeBlueprintCrafting extends RecipeBaseSL {
         int materialCount = materials.size();
         IBlueprint blueprintItem = (IBlueprint) blueprint.getItem();
 
-        // Right number of materials and nothing else?
+        // Right number instance materials and nothing else?
         if (materialCount + 1 != list.size() || materialCount != blueprintItem.getMaterialCost(blueprint)) {
             return false;
         }

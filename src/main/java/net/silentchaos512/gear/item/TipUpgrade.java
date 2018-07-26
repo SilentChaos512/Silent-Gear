@@ -4,9 +4,8 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.lib.ItemPartData;
-import net.silentchaos512.gear.api.lib.MaterialGrade;
 import net.silentchaos512.gear.api.parts.ItemPart;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.lib.item.IEnumItems;
 
@@ -22,8 +21,8 @@ public class TipUpgrade extends Item {
     public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
         ItemPart part = PartRegistry.get(stack);
         if (part != null) {
-            ItemPartData data = new ItemPartData(part, MaterialGrade.NONE, stack);
-            list.add(part.getNameColor() + part.getTranslatedName(data, ItemStack.EMPTY));
+            ItemPartData data = ItemPartData.instance(part);
+            list.add(part.getNameColor() + data.getTranslatedName(ItemStack.EMPTY));
         }
     }
 

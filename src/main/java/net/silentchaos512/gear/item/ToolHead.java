@@ -20,10 +20,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.item.IStatItem;
-import net.silentchaos512.gear.api.lib.ItemPartData;
-import net.silentchaos512.gear.api.lib.MaterialGrade;
-import net.silentchaos512.gear.api.lib.PartDataList;
-import net.silentchaos512.gear.api.parts.ItemPart;
+import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -62,7 +60,7 @@ public class ToolHead extends Item implements IStatItem {
         tags.setString(NBT_TOOL_CLASS, toolClass);
 
         NBTTagList tagList = new NBTTagList();
-        parts.stream().filter(data -> data.part instanceof PartMain)
+        parts.stream().filter(data -> data.getPart() instanceof PartMain)
                 .map(data -> data.writeToNBT(new NBTTagCompound()))
                 .forEach(tagList::appendTag);
         tags.setTag(NBT_MATERIALS, tagList);
@@ -90,7 +88,7 @@ public class ToolHead extends Item implements IStatItem {
             tagList.appendTag(partTags);
         tags.setTag(NBT_MATERIALS, tagList);
 
-        ItemPartData data = new ItemPartData(part, MaterialGrade.NONE, part.getCraftingStack());
+        ItemPartData data = ItemPartData.instance(part);
         writeStatCache(result, PartDataList.of(data));
         return result;
     }
@@ -121,27 +119,27 @@ public class ToolHead extends Item implements IStatItem {
      * Get the primary (first) part the gear head was constructed with.
      */
     @Nullable
-    public PartMain getPrimaryPart(ItemStack stack) {
+    public ItemPartData getPrimaryPart(ItemStack stack) {
         NBTTagCompound tags = getData(stack);
         if (!tags.hasKey(NBT_MATERIALS))
-            return ModMaterials.mainWood;
+            return ItemPartData.instance(ModMaterials.mainWood);
         NBTTagList tagList = tags.getTagList(NBT_MATERIALS, 10);
         if (tagList.tagCount() == 0)
-            return ModMaterials.mainWood;
+            return ItemPartData.instance(ModMaterials.mainWood);
         NBTTagCompound partTags = tagList.getCompoundTagAt(0);
-        return (PartMain) ItemPartData.readFromNBT(partTags).part;
+        return ItemPartData.readFromNBT(partTags);
     }
 
     @Nullable
-    public PartMain getSecondaryPart(ItemStack stack) {
+    public ItemPartData getSecondaryPart(ItemStack stack) {
         NBTTagCompound tags = getData(stack);
         if (!tags.hasKey(NBT_MATERIALS))
-            return ModMaterials.mainWood;
+            return ItemPartData.instance(ModMaterials.mainWood);
         NBTTagList tagList = tags.getTagList(NBT_MATERIALS, 10);
         if (tagList.tagCount() < 2)
-            return ModMaterials.mainWood;
+            return ItemPartData.instance(ModMaterials.mainWood);
         NBTTagCompound partTags = tagList.getCompoundTagAt(1);
-        return (PartMain) ItemPartData.readFromNBT(partTags).part;
+        return ItemPartData.readFromNBT(partTags);
     }
 
     /**
@@ -153,8 +151,10 @@ public class ToolHead extends Item implements IStatItem {
         NBTTagCompound tags = getData(stack);
         if (tags.hasKey(NBT_MATERIALS)) {
             NBTTagList tagList = tags.getTagList(NBT_MATERIALS, 10);
-            for (NBTBase nbt : tagList)
-                builder.add(ItemPartData.readFromNBT((NBTTagCompound) nbt));
+            for (NBTBase nbt : tagList) {
+                ItemPartData data = ItemPartData.readFromNBT((NBTTagCompound) nbt);
+                if (data != null) builder.add(data);
+            }
         }
         return builder.build();
     }
@@ -182,12 +182,12 @@ public class ToolHead extends Item implements IStatItem {
     public String getModelKey(ItemStack stack) {
         ICoreTool toolItem = ModItems.toolClasses.get(getToolClass(stack));
         String toolClass = getToolClass(stack);
-        PartMain primary = getPrimaryPart(stack);
-        PartMain secondary = toolItem != null && toolItem.hasSwordGuard() ? getSecondaryPart(stack) : null;
+        ItemPartData primary = getPrimaryPart(stack);
+        ItemPartData secondary = toolItem != null && toolItem.hasSwordGuard() ? getSecondaryPart(stack) : null;
         return getModelKey(toolClass, primary, secondary);
     }
 
-    public String getModelKey(String toolClass, ItemPart primary, ItemPart secondary) {
+    public String getModelKey(String toolClass, ItemPartData primary, ItemPartData secondary) {
         return toolClass + "_head|" + (primary == null ? "null" : primary.getModelIndex(0))
                 + (secondary == null ? "" : "|" + secondary.getModelIndex(0));
     }
@@ -206,7 +206,7 @@ public class ToolHead extends Item implements IStatItem {
 
         // Materials used in crafting
         for (ItemPartData data : getAllParts(stack))
-            list.add("- " + data.part.getTranslatedName(data, ItemStack.EMPTY));
+            list.add("- " + data.getTranslatedName(ItemStack.EMPTY));
 
         ICoreItem toolItem = ModItems.toolClasses.get(toolClass);
         if (toolItem != null) {
@@ -265,7 +265,7 @@ public class ToolHead extends Item implements IStatItem {
     }
 
     public String getSubtypeKey(ItemStack stack) {
-        ItemPart part = getPrimaryPart(stack);
+        ItemPartData part = getPrimaryPart(stack);
         return getToolClass(stack) + (part != null ? "|" + part.getModelIndex(0) : "|empty");
     }
 }

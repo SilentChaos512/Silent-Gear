@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * This piece of magic allows tools to have the enchanted glow without it being applied multiple times on each layer.
+ * This piece instance magic allows tools to have the enchanted glow without it being applied multiple times on each layer.
  * That bug has been a thorn in my side since 1.8... And as a bonus, I can control the effect color now!
  *
  * @author SilentChaos512
@@ -50,7 +50,7 @@ public class TEISREquipment extends TileEntityItemStackRenderer {
         // Mostly fixes the enchanted glint effect. Don't even ask me why this works. It's not a
         // perfect fix, but works well enough.
         if (stack.hasEffect()) {
-            // Need to render the effect on all faces of the first layer
+            // Need to render the effect on all faces instance the first layer
             this.renderEffect(layerModel, 0, null);
             // Excluding the "front" and "back" magically fixes the duplication effect. I hate you.
             Collection<EnumFacing> stupidFaces = Arrays.asList(EnumFacing.SOUTH, EnumFacing.NORTH);

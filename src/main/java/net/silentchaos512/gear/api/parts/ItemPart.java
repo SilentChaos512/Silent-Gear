@@ -15,13 +15,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
-import net.silentchaos512.gear.api.lib.ItemPartData;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -32,13 +32,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
+// TODO: javadoc
 @Getter(value = AccessLevel.PUBLIC)
 public abstract class ItemPart {
+    protected ResourceLocation registryName;
 
     protected static final ResourceLocation BLANK_TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "items/blank");
     private static final Gson GSON = (new GsonBuilder()).create();
 
-    protected ResourceLocation key;
     @Getter(value = AccessLevel.NONE)
     protected Supplier<ItemStack> craftingStack = () -> ItemStack.EMPTY;
     protected String craftingOreDictName = "";
@@ -56,8 +57,9 @@ public abstract class ItemPart {
     private final boolean userDefined;
 
     /**
-     * Numerical index for model caching. This value could change any time the mod updates or new materials are added, so
-     * don't use it for persistent data! Also good for identifying subtypes in JEI.
+     * Numerical index for model caching. This value could change any time the mod updates or new
+     * materials are added, so don't use it for persistent data! Also good for identifying subtypes
+     * in JEI.
      */
     @Getter(value = AccessLevel.NONE)
     protected int modelIndex;
@@ -66,9 +68,9 @@ public abstract class ItemPart {
     @Getter(value = AccessLevel.NONE)
     protected Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
 
-    public ItemPart(ResourceLocation resource, boolean userDefined) {
-        this.key = resource;
-        this.textureSuffix = resource.getPath().replaceFirst("[a-z]+_", "");
+    public ItemPart(ResourceLocation registryName, boolean userDefined) {
+        this.registryName = registryName;
+        this.textureSuffix = registryName.getPath().replaceFirst("[a-z]+_", "");
         this.modelIndex = ++lastModelIndex;
         this.userDefined = userDefined;
         loadJsonResources();
@@ -86,15 +88,16 @@ public abstract class ItemPart {
         return craftingStackSmall.get();
     }
 
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, ItemStack partRep) {
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, ItemPartData part) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
-        GetStatModifierEvent event = new GetStatModifierEvent(stat, mods, partRep);
+        GetStatModifierEvent event = new GetStatModifierEvent(part, stat, mods);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
     }
 
     /**
-     * Default operation to use if the resource file does not specify on operation for the given stat
+     * Default operation to use if the resource file does not specify on operation for the given
+     * stat
      */
     public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
         if (stat == CommonItemStats.HARVEST_LEVEL)
@@ -113,7 +116,9 @@ public abstract class ItemPart {
 
     public int getRepairAmount(ItemStack gear, ItemPartData part) {
         // Base value on material durability
-        Collection<StatInstance> mods = getStatModifiers(CommonItemStats.DURABILITY, part.craftingItem);
+        ItemPartData gearPrimary = GearData.getPrimaryPart(gear);
+        if (gearPrimary != null && part.part.tier < gearPrimary.part.tier) return 0;
+        Collection<StatInstance> mods = getStatModifiers(CommonItemStats.DURABILITY, part);
         return (int) (CommonItemStats.DURABILITY.compute(0f, mods) / 2);
     }
 
@@ -154,76 +159,85 @@ public abstract class ItemPart {
     /**
      * Gets a texture to use based on the item class
      *
-     * @param gear      The equipment item (tool/weapon/armor)
-     * @param gearClass The gear class string (pickaxe/sword/etc.)
+     * @param part           The part
+     * @param gear           The equipment item (tool/weapon/armor)
+     * @param gearClass      The gear class string (pickaxe/sword/etc.)
+     * @param animationFrame Animation frame, usually 0
      */
-    public abstract ResourceLocation getTexture(ItemStack gear, String gearClass, int animationFrame);
+    @Nullable
+    public abstract ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame);
 
-    public ResourceLocation getTexture(ItemStack equipment, String toolClass) {
-        return getTexture(equipment, toolClass, 0);
+    @Nullable
+    public abstract ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame);
+
+    @Nullable
+    public ResourceLocation getTexture(ItemPartData part, ItemStack equipment, String gearClass, IPartPosition position) {
+        return getTexture(part, equipment, gearClass, position, 0);
     }
 
     /**
      * Gets a texture to use for a broken item based on the item class
      *
+     * @param part      The part
      * @param gear      The equipment item (tool/weapon/armor)
      * @param gearClass The gear class string (pickaxe/sword/etc.)
      */
-    public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass) {
-        return getTexture(gear, gearClass);
+    @Nullable
+    public ResourceLocation getBrokenTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position) {
+        return getTexture(part, gear, gearClass, position, 0);
     }
 
     /**
      * Used for model caching. Be sure to include the animation frame if it matters!
      */
-    public String getModelIndex(int animationFrame) {
+    public String getModelIndex(ItemPartData part, int animationFrame) {
         return this.modelIndex + (animationFrame == 3 ? "_3" : "");
     }
 
-    public int getColor(ItemStack gear, int animationFrame) {
+    public int getColor(ItemPartData part, ItemStack gear, int animationFrame) {
         if (!gear.isEmpty() && GearHelper.isBroken(gear))
             return this.brokenColor;
         return this.textureColor;
     }
 
     /**
-     * Adds information to the tooltip of an equipment item
+     * Adds information to the tooltip instance an equipment item
      *
-     * @param data    The data of the part
+     * @param part    The data instance the part
      * @param gear    The equipment (tool/weapon/armor) stack
      * @param tooltip Current tooltip lines
      */
-    public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
     }
 
     /**
      * Gets a translation key for the part
      */
-    public String getTranslationKey() {
-        return "material." + this.key.getNamespace() + "." + this.key.getPath() + ".name";
+    public String getTranslationKey(@Nullable ItemPartData part) {
+        return "material." + this.registryName.getNamespace() + "." + this.registryName.getPath() + ".name";
     }
 
     /**
      * Gets a translated name for the part, suitable for display
      *
-     * @param data The data of the part
+     * @param part The part
      * @param gear The equipment (tool/weapon/armor) stack
      */
-    public String getTranslatedName(ItemPartData data, ItemStack gear) {
+    public String getTranslatedName(ItemPartData part, ItemStack gear) {
         if (!localizedNameOverride.isEmpty())
             return localizedNameOverride;
-        return /* nameColor + */ SilentGear.i18n.translate(getTranslationKey());
+        return /* nameColor + */ SilentGear.i18n.translate(getTranslationKey(part));
     }
 
     /**
-     * Gets a string that represents the type of part (main, rod, tip, etc.)
+     * Gets a string that represents the type instance part (main, rod, tip, etc.)
      */
     public abstract String getTypeName();
 
     @Override
     public String toString() {
         String str = "ItemPart{";
-        str += "Key: " + this.key + ", ";
+        str += "Key: " + this.registryName + ", ";
         str += "CraftingStack: " + this.craftingStack.get() + ", ";
         str += "CraftingOreDictName: '" + this.craftingOreDictName + "', ";
         str += "Tier: " + getTier();
@@ -236,10 +250,10 @@ public abstract class ItemPart {
     // ====================================
 
     /**
-     * Get the location of the resource file that contains material information
+     * Get the location instance the resource file that contains material information
      */
     protected String getResourceFileLocation() {
-        return "assets/" + this.key.getNamespace() + "/materials/" + this.key.getPath() + ".json";
+        return "assets/" + this.registryName.getNamespace() + "/materials/" + this.registryName.getPath() + ".json";
     }
 
     private void loadJsonResources() {
@@ -256,7 +270,7 @@ public abstract class ItemPart {
         }
 
         // Override in config folder
-        File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.key.getPath() + ".json");
+        File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.registryName.getPath() + ".json");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readResourceFile(reader);
             SilentGear.log.info("Successfully read {}", file.getAbsolutePath());
@@ -295,7 +309,7 @@ public abstract class ItemPart {
                 if (stat != null) {
                     float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
                     Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : getDefaultStatOperation(stat);
-                    String id = "mat_" + this.getTranslationKey() + "_" + stat.getUnlocalizedName() + (statMap.get(stat).size() + 1);
+                    String id = "mat_" + this.getTranslationKey(null) + "_" + stat.getUnlocalizedName() + (statMap.get(stat).size() + 1);
                     statMap.put(stat, new StatInstance(id, value, op));
                 }
             }
@@ -382,7 +396,7 @@ public abstract class ItemPart {
     }
 
     public void writeToNBT(NBTTagCompound tags) {
-        tags.setString("Key", this.key.toString());
+        tags.setString("Key", this.registryName.toString());
     }
 
     @Nullable
@@ -393,7 +407,7 @@ public abstract class ItemPart {
 
     public void postInitChecks() {
         if (getCraftingStack().isEmpty())
-            SilentGear.log.warn("Part \"{}\"{}has no crafting item.", this.key,
+            SilentGear.log.warn("Part \"{}\"{}has no crafting item.", this.registryName,
                     (this.userDefined ? " (user defined) " : " "));
     }
 }
