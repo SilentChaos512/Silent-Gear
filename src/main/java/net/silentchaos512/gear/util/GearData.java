@@ -29,7 +29,7 @@ public class GearData {
 
     /**
      * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately,
-     * some mods still reference the gear material instead instance calling the appropriate
+     * some mods still reference the gear material instead of calling the appropriate
      * methods.
      */
     public static final ToolMaterial FAKE_MATERIAL = EnumHelper.addToolMaterial("silentgems:fake_material", 1, 512, 5.12f, 5.12f, 32);
@@ -124,7 +124,7 @@ public class GearData {
     }
 
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts) {
-        // First, we add a bonus for the number instance unique main parts
+        // First, we add a bonus for the number of unique main parts
         double synergy = 1.0 + 0.16 * Math.log(5 * uniqueParts.getMains().size() - 4);
         // Second, reduce synergy for difference in rarity and tier
         ItemPartData primaryMain = parts.getPrimaryMain();
@@ -229,7 +229,7 @@ public class GearData {
     /**
      * Gets the main part in the given position (zero-indexed)
      *
-     * @return The part if it exists in NBT, null if the index is out instance bounds, the data is
+     * @return The part if it exists in NBT, null if the index is out of bounds, the data is
      * invalid, or the part is not a main part.
      */
     @Nullable
@@ -268,7 +268,7 @@ public class GearData {
     /**
      * Gets the item's UUID, creating it if it doesn't have one yet.
      *
-     * @param gear ItemStack instance an ICoreItem
+     * @param gear ItemStack of an ICoreItem
      * @return The UUID, or null if gear's item is not an ICoreItem
      */
     public static UUID getUUID(ItemStack gear) {

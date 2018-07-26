@@ -201,9 +201,9 @@ public abstract class ItemPart {
     }
 
     /**
-     * Adds information to the tooltip instance an equipment item
+     * Adds information to the tooltip of an equipment item
      *
-     * @param part    The data instance the part
+     * @param part    The part
      * @param gear    The equipment (tool/weapon/armor) stack
      * @param tooltip Current tooltip lines
      */
@@ -230,7 +230,7 @@ public abstract class ItemPart {
     }
 
     /**
-     * Gets a string that represents the type instance part (main, rod, tip, etc.)
+     * Gets a string that represents the type of part (main, rod, tip, etc.)
      */
     public abstract String getTypeName();
 
@@ -250,7 +250,7 @@ public abstract class ItemPart {
     // ====================================
 
     /**
-     * Get the location instance the resource file that contains material information
+     * Get the location of the resource file that contains material information
      */
     protected String getResourceFileLocation() {
         return "assets/" + this.registryName.getNamespace() + "/materials/" + this.registryName.getPath() + ".json";

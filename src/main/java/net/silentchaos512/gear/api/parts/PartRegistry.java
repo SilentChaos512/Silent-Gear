@@ -107,7 +107,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list instance registered ToolPartMains in the order they are registered (used for sub-item
+     * Gets a list of registered ToolPartMains in the order they are registered (used for sub-item
      * display).
      */
     public static List<PartMain> getMains() {
@@ -120,7 +120,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list instance registered ToolPartRods in the order they are registered.
+     * Gets a list of registered ToolPartRods in the order they are registered.
      */
     public static List<PartRod> getRods() {
         if (rods == null) {
@@ -132,7 +132,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list instance all mains that are not blacklisted or hidden
+     * Gets a list of all mains that are not blacklisted or hidden
      */
     public static List<PartMain> getVisibleMains() {
         if (visibleMains == null) {
@@ -144,7 +144,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list instance all rods that are not blacklisted or hidden
+     * Gets a list of all rods that are not blacklisted or hidden
      */
     public static List<PartRod> getVisibleRods() {
         if (visibleRods == null) {

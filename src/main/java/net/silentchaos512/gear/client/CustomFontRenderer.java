@@ -151,7 +151,7 @@ public class CustomFontRenderer extends FontRenderer {
     protected float renderUnicodeChar(char letter, boolean italic) {
 
         // special color settings through char code
-        // we use \u2700 to \u27FF, where the lower byte represents the Hue instance the color
+        // we use \u2700 to \u27FF, where the lower byte represents the Hue of the color
         if ((int) letter >= CustomFontColor.MARKER && (int) letter <= CustomFontColor.MARKER + 0xFF) {
             int value = letter & 0xFF;
             switch (state) {

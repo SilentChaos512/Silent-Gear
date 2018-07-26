@@ -19,7 +19,7 @@ public class VanillaGearHandler implements IPhasedInitializer {
     @Override
     public void postInit(SRegistry registry, FMLPostInitializationEvent event) {
         // TODO: Configs!
-        // Reduce durability instance vanilla tools to discourage use
+        // Reduce durability of vanilla tools to discourage use
         String[] toolTypes = {"pickaxe", "shovel", "axe", "sword"};
         String[] toolMaterials = {"wooden", "stone", "iron", "golden", "diamond"};
         for (String type : toolTypes) {
