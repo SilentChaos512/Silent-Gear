@@ -5,14 +5,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.GuideBookToolMod;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.lib.PartDataList;
-import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.Flaxseeds;
-import net.silentchaos512.gear.item.TipUpgrade;
-import net.silentchaos512.gear.item.ToolHead;
+import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
@@ -91,6 +89,10 @@ public class ModItems implements IRegistrationHandler<Item> {
         // Tools/armor
         toolClasses.forEach((key, item) -> reg.registerItem(item.getItem(), key));
         armorClasses.forEach((key, item) -> reg.registerItem(item.getItem(), key));
+
+        if (SilentGear.instance.getBuildNum() == 0) {
+            reg.registerItem(new TestItem(), "test_item");
+        }
 
         registerOreDictEntries();
     }

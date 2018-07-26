@@ -45,7 +45,7 @@ public class CoreHammer extends CorePickaxe {
         if (!world.isRemote && player instanceof EntityPlayerMP) {
 
             RayTraceResult rt = this.rayTrace(world, player, false);
-            if (rt.typeOfHit == RayTraceResult.Type.BLOCK) {
+            if (rt != null && rt.typeOfHit == RayTraceResult.Type.BLOCK) {
                 EnumFacing side = rt.sideHit;
 
                 List<BlockPos> extraBlocks = getExtraBlocks(world, rt, player, itemstack);
