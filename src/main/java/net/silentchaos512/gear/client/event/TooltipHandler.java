@@ -67,12 +67,12 @@ public class TooltipHandler {
     }
 
     private void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part, I18nHelper i18n) {
-        ItemPartData partData = ItemPartData.instance(part, MaterialGrade.NONE, stack);
+        ItemPartData partData = ItemPartData.instance(part, MaterialGrade.fromStack(stack), stack);
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
             if (!modifiers.isEmpty()) {
-                StatInstance inst = stat.computeForDisplay(0, modifiers);
+                StatInstance inst = stat.computeForDisplay(0, partData.getGrade(), modifiers);
                 boolean isZero = inst.getValue() == 0;
                 if (part instanceof PartMain && stat == CommonItemStats.HARVEST_LEVEL)
                     isZero = false;

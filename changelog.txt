@@ -2,6 +2,7 @@
 Added: New main parts: obsidian, netherrack, and terracotta
 Changed: Improvements to how gear part data is passed around, which seems to improve frame rate (FPS)
 Changed: Gear can no longer be repaired with lower-tier materials
+Fixed: Materials not considering grade when displaying stats
 Fixed: Armor breaking permanently (hopefully)
 Fixed: A rare(?) crash with hammers
 Fixed: JEI should now recognize the crafting station as a crafting table

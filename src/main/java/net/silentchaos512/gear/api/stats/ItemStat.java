@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
 import java.util.Collection;
@@ -130,19 +131,25 @@ public class ItemStat {
         return clampValue(f1);
     }
 
-    public StatInstance computeForDisplay(float baseValue, Collection<StatInstance> modifiers) {
+    public StatInstance computeForDisplay(float baseValue, MaterialGrade grade, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
             return new StatInstance("no_mods", baseValue, Operation.AVG);
 
         int add = 1;
         for (StatInstance inst : modifiers) {
-            if (inst.getOp() == Operation.AVG || inst.getOp() == Operation.ADD) {
+            Operation op = inst.getOp();
+            if (op == Operation.AVG || op == Operation.ADD || op == Operation.MAX) {
                 add = 0;
                 break;
             }
         }
 
         float value = compute(baseValue + add, modifiers) - add;
+        if (isAffectedByGrades()) {
+            // FIXME: This doesn't exactly match the calculations done in GearData
+            float gradeBonus = 1f + grade.bonusPercent / 100f;
+            value *= gradeBonus;
+        }
         Operation op = modifiers.iterator().next().getOp();
         return new StatInstance("display_" + this.unlocalizedName, value, op);
     }

@@ -5,6 +5,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -30,7 +31,7 @@ public class JeiPlugin implements IModPlugin {
 
     @Override
     public void register(IModRegistry registry) {
-        registry.addRecipeCatalyst(ModBlocks.craftingStation, VanillaRecipeCategoryUid.CRAFTING);
+        registry.addRecipeCatalyst(new ItemStack(ModBlocks.craftingStation), VanillaRecipeCategoryUid.CRAFTING);
 
         // Add "example recipes". We can't allow these to be crafted, but it's helpful to have them
         // show in JEI. Some people can't read...

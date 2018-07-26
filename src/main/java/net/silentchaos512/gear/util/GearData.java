@@ -107,7 +107,7 @@ public class GearData {
                 String idSuffix = "_" + (++partCount);
                 // Allow "duplicate" AVG modifiers
                 for (StatInstance inst : partData.getStatModifiers(stat)) {
-                    if (inst.getOp() == Operation.AVG) {
+                    if (inst.getOp() == Operation.AVG && stat.isAffectedByGrades()) {
                         float gradeBonus = 1f + partData.getGrade().bonusPercent / 100f;
                         float statValue = inst.getValue() * gradeBonus;
                         stats.put(stat, new StatInstance(inst.getId() + idSuffix, statValue, Operation.AVG));
