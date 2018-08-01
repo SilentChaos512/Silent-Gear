@@ -1,4 +1,7 @@
-0.1.0
+0.0.9
+Added: Katanas
+
+0.0.8
 Added: Missing textures and models
 Changed: Dried sinew is now a smelting recipe
 Fixed: Some armor items not being colored
