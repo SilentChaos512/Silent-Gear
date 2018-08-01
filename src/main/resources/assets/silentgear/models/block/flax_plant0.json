@@ -1,6 +1,6 @@
 {
-  "parent": "block/cross",
+  "parent": "block/crop",
   "textures": {
-    "cross": "silentgear:blocks/flax_plant0"
+    "crop": "silentgear:blocks/flax_plant0"
   }
 }

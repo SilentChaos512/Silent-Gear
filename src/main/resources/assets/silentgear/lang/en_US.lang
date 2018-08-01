@@ -67,6 +67,8 @@ item.silentgear.blueprint_book.name=Blueprint Book
 
 item.silentgear.flaxseeds.name=Flaxseeds
 
+item.silentgear.guide_book.name=Guide Book (WIP)
+
 item.silentgear.tip_upgrade_diamond.name=Diamond-Tipped Upgrade
 item.silentgear.tip_upgrade_emerald.name=Emerald-Tipped Upgrade
 item.silentgear.tip_upgrade_glowstone.name=Glowstone-Coated Upgrade

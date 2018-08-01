@@ -23,8 +23,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -34,13 +36,15 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
 import net.silentchaos512.lib.block.ITileEntityBlock;
+import net.silentchaos512.lib.registry.ICustomModel;
 
 import javax.annotation.Nullable;
 
-public class BlockPartAnalyzer extends BlockContainer implements ITileEntityBlock {
+public class BlockPartAnalyzer extends BlockContainer implements ITileEntityBlock, ICustomModel {
 
     private static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.4, 1);
@@ -136,5 +140,14 @@ public class BlockPartAnalyzer extends BlockContainer implements ITileEntityBloc
     @Override
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         return face == EnumFacing.DOWN;
+    }
+
+    @Override
+    public void registerModels() {
+        Item item = Item.getItemFromBlock(this);
+        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+            ModelResourceLocation model = new ModelResourceLocation(SilentGear.RESOURCE_PREFIX + "part_analyzer", "facing=" + facing.getName());
+            ModelLoader.setCustomModelResourceLocation(item, facing.getHorizontalIndex(), model);
+        }
     }
 }

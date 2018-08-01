@@ -2,22 +2,13 @@
   "forge_marker": 1,
   "defaults": {
     "model": "cross",
-    "transform": "forge:default-block"
+    "textures": {
+      "cross": "silentgear:blocks/flower"
+    },
+    "transform": "forge:default-item"
   },
   "variants": {
-    "normal": [{
-      "textures": {
-        "cross": "silentgear:blocks/flower"
-      }
-    }],
-    "inventory": [{
-    }],
-    "type": {
-      "blue": {
-        "textures": {
-          "cross": "silentgear:blocks/flower"
-        }
-      }
-    }
+    "normal": [{}],
+    "inventory": [{}]
   }
 }

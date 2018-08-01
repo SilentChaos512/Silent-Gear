@@ -12,7 +12,6 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
-import net.silentchaos512.gear.item.blueprint.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.item.IEnumItems;
 import net.silentchaos512.lib.item.ItemGuideBookSL;
@@ -32,7 +31,7 @@ public class ModItems implements IRegistrationHandler<Item> {
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
 
-    public static BlueprintBook blueprintBook = new BlueprintBook();
+//    public static BlueprintBook blueprintBook = new BlueprintBook();
     public static Flaxseeds flaxseeds = new Flaxseeds();
 
     public static ToolHead toolHead = new ToolHead();
@@ -78,7 +77,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         // Blueprints/templates
         registerBlueprints(reg, "blueprint", false);
         registerBlueprints(reg, "template", true);
-        reg.registerItem(blueprintBook);
+//        reg.registerItem(blueprintBook);
 
         IEnumItems.registerItems(TipUpgrade.Type.values(), reg);
         IEnumItems.registerItems(CraftingItems.values(), reg);
