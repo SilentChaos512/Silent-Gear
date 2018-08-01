@@ -1,3 +1,7 @@
+0.1.0
+Added: Missing textures and models
+Fixed: Some armor items not being colored
+
 0.0.7 (preview 7, 1.12.2)
 Added: New main parts: obsidian, netherrack, and terracotta
 Added: Config to specify items that work with block-placing tools. Default list includes dank/null and a couple other items.

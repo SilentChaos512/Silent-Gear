@@ -22,6 +22,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
@@ -186,6 +187,9 @@ public class ArmorItemModel implements IModel {
                 GearClientHelper.modelCache.put(key, bakedModel);
                 return bakedModel;
             }
+
+            // Color cache
+            ColorHandlers.gearColorCache.put(key, new Integer[] {primaryPart.getColor(stack, 0)});
 
             return GearClientHelper.modelCache.get(key);
         }
