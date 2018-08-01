@@ -3,6 +3,7 @@ package net.silentchaos512.gear.init;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.GuideBookToolMod;
 import net.silentchaos512.gear.SilentGear;
@@ -94,6 +95,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         }
 
         registerOreDictEntries();
+        addSmeltingRecipes();
     }
 
     private void registerOreDictEntries() {
@@ -103,6 +105,10 @@ public class ModItems implements IRegistrationHandler<Item> {
         OreDictionary.registerOre("nuggetEmerald", CraftingItems.EMERALD_SHARD.getItem());
         OreDictionary.registerOre("stickIron", CraftingItems.IRON_ROD.getItem());
         OreDictionary.registerOre("stickStone", CraftingItems.STONE_ROD.getItem());
+    }
+
+    private void addSmeltingRecipes() {
+        GameRegistry.addSmelting(CraftingItems.SINEW.getStack(), CraftingItems.DRIED_SINEW.getStack(), 0.1f);
     }
 
     private void registerBlueprints(SRegistry reg, String name, boolean singleUse) {

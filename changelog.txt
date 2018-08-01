@@ -1,5 +1,6 @@
 0.1.0
 Added: Missing textures and models
+Changed: Dried sinew is now a smelting recipe
 Fixed: Some armor items not being colored
 
 0.0.7 (preview 7, 1.12.2)
