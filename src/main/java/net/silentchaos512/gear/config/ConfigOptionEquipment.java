@@ -5,8 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import gnu.trove.map.hash.THashMap;
-import lombok.AccessLevel;
-import lombok.Getter;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.config.Configuration;
 import net.silentchaos512.gear.SilentGear;
@@ -21,18 +19,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigOptionEquipment {
-
-    public static final String[] RECIPE_INGREDIENTS = {"head_count", "rod_count", "bowstring_count"};
+    private static final String[] RECIPE_INGREDIENTS = {"head_count", "rod_count", "bowstring_count"};
 
     public final ICoreItem item;
     public final String name;
-    public boolean enabled = true;
+
+    private boolean canCraft = true;
+    private boolean isVisible = true;
 
     private Map<ItemStat, StatInstance> modifiers = new THashMap<>();
     private Map<ItemStat, Float> baseModifiers = new THashMap<>();
     private Map<String, Integer> recipe = new HashMap<>();
-    @Getter(value = AccessLevel.PUBLIC)
-    private float repairMultiplier = 1f;
+    // TODO: Configurable harvest speeds by class? Or block material?
+//    private float efficiencyAsPickaxe = 0f;
+//    private float efficiencyAsShovel = 0f;
+//    private float efficiencyAsAxe = 0f;
 
     public <T extends ICoreItem> ConfigOptionEquipment(T item) {
         this.item = item;
@@ -41,6 +42,11 @@ public class ConfigOptionEquipment {
 
     public ConfigOptionEquipment loadValue(Configuration config) {
         return loadValue(config, Config.CAT_TOOLS + Config.SEP + name);
+    }
+
+    public ConfigOptionEquipment loadValue(Configuration config, String category) {
+        loadJsonResources();
+        return this;
     }
 
     @Nonnull
@@ -56,12 +62,6 @@ public class ConfigOptionEquipment {
         return StatInstance.ZERO;
     }
 
-    public ConfigOptionEquipment loadValue(Configuration config, String category) {
-        enabled = config.get(category, "Enabled", true).getBoolean();
-        loadJsonResources();
-        return this;
-    }
-
     public int getHeadCount() {
         return this.recipe.getOrDefault("head_count", 0);
     }
@@ -72,6 +72,31 @@ public class ConfigOptionEquipment {
 
     public int getBowstringCount() {
         return this.recipe.getOrDefault("bowstring_count", 0);
+    }
+
+//    public Set<String> getToolClasses(ItemStack stack) {
+//        if (GearHelper.isBroken(stack)) return ImmutableSet.of();
+//
+//        ImmutableSet.Builder<String> builder = new ImmutableSet.Builder<>();
+//        if (efficiencyAsPickaxe > 0f) builder.add(ToolClass.PICKAXE.getName());
+//        if (efficiencyAsShovel > 0f) builder.add(ToolClass.SHOVEL.getName());
+//        if (efficiencyAsAxe > 0f) builder.add(ToolClass.AXE.getName());
+//        return builder.build();
+//    }
+
+//    public float getEfficiencyAsTool(ToolClass toolClass) {
+//        if (toolClass == ToolClass.PICKAXE) return efficiencyAsPickaxe;
+//        else if (toolClass == ToolClass.SHOVEL) return efficiencyAsShovel;
+//        else if (toolClass == ToolClass.AXE) return efficiencyAsAxe;
+//        else return 0f;
+//    }
+
+    public boolean canCraft() {
+        return this.canCraft;
+    }
+
+    public boolean isVisible() {
+        return this.isVisible;
     }
 
     private void loadJsonResources() {
@@ -128,12 +153,20 @@ public class ConfigOptionEquipment {
             }
         }
 
-        JsonElement elementProperties = json.get("crafting");
-        if (elementProperties.isJsonObject()) {
-            JsonObject obj = elementProperties.getAsJsonObject();
+        if (JsonUtils.hasField(json, "crafting")) {
+            JsonObject obj = JsonUtils.getJsonObject(json, "crafting");
             for (String type : RECIPE_INGREDIENTS)
                 if (obj.has(type))
                     this.recipe.put(type, obj.get(type).getAsInt());
+            this.canCraft = JsonUtils.getBoolean(obj, "can_craft", this.canCraft);
+            this.isVisible = JsonUtils.getBoolean(obj, "visible", this.isVisible);
         }
+
+//        if (JsonUtils.hasField(json, "tool_classes")) {
+//            JsonObject obj = JsonUtils.getJsonObject(json, "tool_classes");
+//            this.efficiencyAsPickaxe = JsonUtils.getFloat(obj, "pickaxe", this.efficiencyAsPickaxe);
+//            this.efficiencyAsShovel = JsonUtils.getFloat(obj, "shovel", this.efficiencyAsShovel);
+//            this.efficiencyAsAxe = JsonUtils.getFloat(obj, "axe", this.efficiencyAsAxe);
+//        }
     }
 }

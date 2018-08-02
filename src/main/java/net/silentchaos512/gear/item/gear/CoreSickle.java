@@ -131,24 +131,23 @@ public class CoreSickle extends ItemTool implements ICoreTool {
 
     @Override
     public boolean onBlockStartBreak(ItemStack sickle, BlockPos pos, EntityPlayer player) {
-        if (GearHelper.isBroken(sickle)) {
-            return false;
-        }
+        return onSickleStartBreak(sickle, pos, player, BREAK_RANGE);
+    }
+
+    boolean onSickleStartBreak(ItemStack sickle, BlockPos pos, EntityPlayer player, final int range) {
+        if (GearHelper.isBroken(sickle)) return false;
 
         World world = player.world;
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (!EFFECTIVE_MATERIALS.contains(state.getMaterial())) {
-            return false;
-        }
+        if (!EFFECTIVE_MATERIALS.contains(state.getMaterial())) return false;
 
         int blocksBroken = 1;
 
         final int x = pos.getX();
         final int y = pos.getY();
         final int z = pos.getZ();
-        final int range = BREAK_RANGE;
 
         for (int xPos = x - range; xPos <= x + range; ++xPos) {
             for (int zPos = z - range; zPos <= z + range; ++zPos) {

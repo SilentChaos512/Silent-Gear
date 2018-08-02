@@ -1,0 +1,26 @@
+{
+    "modifiers": [
+        {"name": "durability",          "value":  0.2, "op": "MUL1"},
+        {"name": "repair_efficiency",   "value":  0.0, "op": "MUL1"},
+        {"name": "enchantability",      "value": -0.1, "op": "MUL1"},
+        {"name": "harvest_level",       "value":    0, "op": "MAX"},
+        {"name": "harvest_speed",       "value":  0.0, "op": "MUL1"},
+        {"name": "melee_damage",        "value":  0.0, "op": "MUL1"},
+        {"name": "magic_damage",        "value":  0.0, "op": "MUL1"},
+        {"name": "attack_speed",        "value":  0.0, "op": "MUL1"},
+        {"name": "ranged_damage",       "value":  0.0, "op": "MUL1"},
+        {"name": "ranged_speed",        "value":  0.0, "op": "MUL1"}
+    ],
+    "base_modifiers": {
+        "melee_damage": 4.0,
+        "attack_speed": -2.6,
+        "repair_efficiency": 1.0
+    },
+    "crafting": {
+        "head_count": 3,
+        "rod_count": 1,
+        "bowstring_count": 0,
+        "can_craft": true,
+        "visible": true
+    }
+}

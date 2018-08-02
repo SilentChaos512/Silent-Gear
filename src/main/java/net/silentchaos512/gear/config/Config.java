@@ -48,6 +48,7 @@ public class Config extends ConfigBase {
     public static ConfigOptionEquipment sword = forEquipment(ModItems.sword);
     public static ConfigOptionEquipment dagger = forEquipment(ModItems.dagger);
     public static ConfigOptionEquipment katana = forEquipment(ModItems.katana);
+    public static ConfigOptionEquipment machete = forEquipment(ModItems.machete);
     public static ConfigOptionEquipment pickaxe = forEquipment(ModItems.pickaxe);
     public static ConfigOptionEquipment shovel = forEquipment(ModItems.shovel);
     public static ConfigOptionEquipment axe = forEquipment(ModItems.axe);

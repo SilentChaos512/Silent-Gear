@@ -40,6 +40,7 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static CoreSword sword = new CoreSword();
     public static CoreDagger dagger = new CoreDagger();
     public static CoreKatana katana = new CoreKatana();
+    public static CoreMachete machete = new CoreMachete();
     public static CorePickaxe pickaxe = new CorePickaxe();
     public static CoreShovel shovel = new CoreShovel();
     public static CoreAxe axe = new CoreAxe();
@@ -59,6 +60,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         toolClasses.put("sword", sword);
         toolClasses.put("dagger", dagger);
         toolClasses.put("katana", katana);
+        toolClasses.put("machete", machete);
         toolClasses.put("pickaxe", pickaxe);
         toolClasses.put("shovel", shovel);
         toolClasses.put("axe", axe);
