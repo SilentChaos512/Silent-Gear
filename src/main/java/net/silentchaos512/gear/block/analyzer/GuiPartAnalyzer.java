@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.init.ModBlocks;
 
 public class GuiPartAnalyzer extends GuiContainer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/analyzer.png");
@@ -43,6 +44,7 @@ public class GuiPartAnalyzer extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        this.fontRenderer.drawString(SilentGear.i18n.translatedName(ModBlocks.partAnalyzer), 28, 6, 0x404040);
     }
 
     private int getAnalyzeProgress(int scale) {

@@ -3,11 +3,13 @@ package net.silentchaos512.gear.block.craftingstation;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.client.util.TooltipFlagTC;
+import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.StackHelper;
@@ -53,6 +55,10 @@ public class GuiCraftingStation extends GuiContainer {
 //            itemX += 20;
 //        }
 
+        this.fontRenderer.drawString(SilentGear.i18n.translatedName(ModBlocks.craftingStation), 28, 6, 0x404040);
+        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "storage"), -55, 19, 0x404040);
+        this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 0x404040);
+
         // Draw crafting result tooltip
         ItemStack craftResult = this.container.craftResult.getStackInSlot(0);
         if (StackHelper.isEmpty(craftResult))
@@ -94,20 +100,23 @@ public class GuiCraftingStation extends GuiContainer {
         this.drawTexturedModalRect(xPos, yPos, 0, 0, this.xSize, this.ySize);
 
         // Internal/external inventory slots
-        int rowCount = this.tile.getSizeInventory() / 3;
-        int totalHeight = 44 + 18 * (rowCount - 2);
+        final int rowCount = this.tile.getSizeInventory() / 3;
+        final int rowWidth = 62;
+        final int totalHeight = 44 + 18 * (rowCount - 2);
         int x = xPos - 61;
         int y = yPos + (this.ySize - totalHeight) / 2;
         for (int i = 0; i < rowCount; ++i) {
             int height = i == 0 || i == rowCount - 1 ? 22 : 18;
             int ty = 194 + (i == 0 ? 0 : i == rowCount - 1 ? 40 : 22);
-            this.drawTexturedModalRect(x, y, 0, ty, 62, height);
+            this.drawTexturedModalRect(x, y, 0, ty, rowWidth, height);
             y += height;
         }
+
+        this.drawTexturedModalRect(x, y - totalHeight - 12, 0, 177, rowWidth, 15);
 
         // Tooltip background
         x = xPos + 171;
         y = yPos + 4;
-        this.drawRect(x, y, x + 80, y + 158, 0xCF000000);
+        drawRect(x, y, x + 80, y + 158, 0xCF000000);
     }
 }
