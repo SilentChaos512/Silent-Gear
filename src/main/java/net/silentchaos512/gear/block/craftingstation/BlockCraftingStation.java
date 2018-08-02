@@ -7,6 +7,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -19,8 +20,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.block.ITileEntityBlock;
 
 public class BlockCraftingStation extends BlockContainer implements ITileEntityBlock {
-
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    private static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public BlockCraftingStation() {
         super(Material.WOOD);
@@ -37,6 +37,16 @@ public class BlockCraftingStation extends BlockContainer implements ITileEntityB
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileCraftingStation();
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof TileCraftingStation) {
+            TileCraftingStation tileCraftingStation = (TileCraftingStation) tileEntity;
+            InventoryHelper.dropInventoryItems(worldIn, pos, tileCraftingStation.getInternalStorage());
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

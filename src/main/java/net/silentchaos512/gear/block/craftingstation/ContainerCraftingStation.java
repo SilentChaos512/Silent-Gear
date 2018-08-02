@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
 
 public class ContainerCraftingStation extends ContainerWorkbench {
-
     private final TileCraftingStation tile;
     private IInventory extendedInventory;
     private InventoryPlayer playerInventory;

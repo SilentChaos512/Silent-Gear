@@ -1,5 +1,6 @@
 0.0.9
 Added: Katanas
+Fixed: Crafting station losing inventory when broken (#2)
 
 0.0.8
 Added: Missing textures and models

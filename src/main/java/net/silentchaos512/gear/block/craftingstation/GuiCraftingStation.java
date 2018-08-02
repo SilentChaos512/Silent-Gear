@@ -15,7 +15,6 @@ import net.silentchaos512.lib.util.StackHelper;
 import java.util.List;
 
 public class GuiCraftingStation extends GuiContainer {
-
     private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/crafting_station.png");
 
     private final TileCraftingStation tile;

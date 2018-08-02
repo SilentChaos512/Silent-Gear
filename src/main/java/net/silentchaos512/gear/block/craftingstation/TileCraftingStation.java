@@ -16,7 +16,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Arrays;
 
 public class TileCraftingStation extends TileInventorySL {
-
     public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {
         NonNullList<Pair<ItemStack, IInventory>> list = NonNullList.create();
 
@@ -34,6 +33,10 @@ public class TileCraftingStation extends TileInventorySL {
         }
 
         return list;
+    }
+
+    public IInventory getInternalStorage() {
+        return this;
     }
 
     @Override
