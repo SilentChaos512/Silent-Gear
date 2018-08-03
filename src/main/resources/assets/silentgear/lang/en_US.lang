@@ -82,6 +82,7 @@ item.silentgear.tool_head.name=Tool Head (Unknown)
 item.silentgear.tool_head.axe=Axe Head
 item.silentgear.tool_head.bow=Bow Limbs
 item.silentgear.tool_head.dagger=Dagger Blade
+item.silentgear.tool_head.excavator=Excavator Head
 item.silentgear.tool_head.hammer=Hammer Head
 item.silentgear.tool_head.katana=Katana Blade
 item.silentgear.tool_head.machete=Machete Blade
@@ -116,6 +117,9 @@ item.silentgear.bow.nameProper=%s Bow
 
 item.silentgear.dagger.name=Dagger
 item.silentgear.dagger.nameProper=%s Dagger
+
+item.silentgear.excavator.name=Excavator
+item.silentgear.excavator.nameProper=%s Excavator
 
 item.silentgear.hammer.name=Hammer
 item.silentgear.hammer.nameProper=%s Hammer

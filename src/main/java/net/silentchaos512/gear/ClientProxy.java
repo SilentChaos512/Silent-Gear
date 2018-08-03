@@ -16,6 +16,7 @@ import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.client.renderer.TEISREquipment;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.lib.client.gui.DebugRenderOverlay;
 import net.silentchaos512.lib.registry.SRegistry;
 
@@ -32,6 +33,7 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(KeyTracker.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new IAOETool.HighlightHandler());
 
         ModelLoaderRegistry.registerLoader(ToolHeadModel.Loader.INSTANCE);
         ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);

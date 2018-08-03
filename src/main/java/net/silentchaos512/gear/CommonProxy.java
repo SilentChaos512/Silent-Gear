@@ -19,7 +19,6 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.init.ModRecipes;
-import net.silentchaos512.gear.item.gear.CoreHammer;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.world.ModWorldGenerator;
@@ -47,7 +46,6 @@ public class CommonProxy {
         GameRegistry.registerWorldGenerator(new ModWorldGenerator(), 0);
 
         // Event Handlers
-        MinecraftForge.EVENT_BUS.register(CoreHammer.HammerEvents.INSTANCE);
         MinecraftForge.EVENT_BUS.register(DropsHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GearData.EventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GearHelper.EventHandler.INSTANCE);

@@ -4,6 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -13,8 +14,8 @@ import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.network.MessageExtraBlockBreak;
+import net.silentchaos512.gear.util.IAOETool;
 
 import java.util.List;
 
@@ -75,17 +76,19 @@ public class WorldListener implements IWorldEventListener {
     @Override
     public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress) {
         EntityPlayerMP player = null;
-        for (EntityPlayerMP entityplayermp : this.server.getPlayerList().getPlayers()) {
+        for (EntityPlayerMP entityplayermp : this.server.getPlayerList().getPlayers())
             if (entityplayermp != null && entityplayermp.getEntityId() == breakerId)
                 player = entityplayermp;
-        }
-        if (player == null)
-            return;
-        if (player.getHeldItemMainhand().getItem() == ModItems.hammer) {
-            RayTraceResult rt = ModItems.hammer.rayTraceBlocks(world, player);
-            List<BlockPos> positions = ModItems.hammer.getExtraBlocks(world, rt, player, player.getHeldItemMainhand());
 
-            SilentGear.network.wrapper.sendToAllAround(new MessageExtraBlockBreak(player.getEntityId(), progress - 1, positions.toArray(new BlockPos[positions.size()])),
+        if (player == null) return;
+
+        ItemStack heldItem = player.getHeldItemMainhand();
+        if (heldItem.getItem() instanceof IAOETool) {
+            IAOETool iaoeTool = (IAOETool) heldItem.getItem();
+            RayTraceResult rt = iaoeTool.rayTraceBlocks(world, player);
+            List<BlockPos> positions = iaoeTool.getExtraBlocks(world, rt, player, heldItem);
+
+            SilentGear.network.wrapper.sendToAllAround(new MessageExtraBlockBreak(player.getEntityId(), progress - 1, positions.toArray(new BlockPos[0])),
                     new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 32D));
         }
     }

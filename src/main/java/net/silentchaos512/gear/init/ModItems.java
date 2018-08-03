@@ -45,6 +45,7 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static CoreShovel shovel = new CoreShovel();
     public static CoreAxe axe = new CoreAxe();
     public static CoreHammer hammer = new CoreHammer();
+    public static CoreExcavator excavator = new CoreExcavator();
     public static CoreMattock mattock = new CoreMattock();
     public static CoreSickle sickle = new CoreSickle();
     public static CoreBow bow = new CoreBow();
@@ -65,6 +66,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         toolClasses.put("shovel", shovel);
         toolClasses.put("axe", axe);
         toolClasses.put("hammer", hammer);
+        toolClasses.put("excavator", excavator);
         toolClasses.put("mattock", mattock);
         toolClasses.put("sickle", sickle);
         toolClasses.put("bow", bow);
@@ -77,6 +79,8 @@ public class ModItems implements IRegistrationHandler<Item> {
         gearClasses.putAll(toolClasses);
         gearClasses.putAll(armorClasses);
 
+        IEnumItems.RegistrationHelper enumItems = new IEnumItems.RegistrationHelper(reg);
+
         reg.registerItem(guideBook, "guide_book");
 
         // Blueprints/templates
@@ -84,8 +88,8 @@ public class ModItems implements IRegistrationHandler<Item> {
         registerBlueprints(reg, "template", true);
 //        reg.registerItem(blueprintBook);
 
-        IEnumItems.registerItems(TipUpgrade.Type.values(), reg);
-        IEnumItems.registerItems(CraftingItems.values(), reg);
+        enumItems.registerItems(TipUpgrade.Type.values());
+        enumItems.registerItems(CraftingItems.values());
         reg.registerItem(flaxseeds, "flaxseeds");
 
         reg.registerItem(toolHead, "tool_head");

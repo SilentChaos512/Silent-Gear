@@ -53,6 +53,7 @@ public class Config extends ConfigBase {
     public static ConfigOptionEquipment shovel = forEquipment(ModItems.shovel);
     public static ConfigOptionEquipment axe = forEquipment(ModItems.axe);
     public static ConfigOptionEquipment hammer = forEquipment(ModItems.hammer);
+    public static ConfigOptionEquipment excavator = forEquipment(ModItems.excavator);
     public static ConfigOptionEquipment mattock = forEquipment(ModItems.mattock);
     public static ConfigOptionEquipment sickle = forEquipment(ModItems.sickle);
     public static ConfigOptionEquipment bow = forEquipment(ModItems.bow);

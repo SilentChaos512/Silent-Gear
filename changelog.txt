@@ -1,6 +1,7 @@
 0.0.9
 Added: Katanas
 Added: Machetes
+Added: Excavators (AOE shovels)
 Fixed: Crafting station losing inventory when broken (#2)
 
 0.0.8
