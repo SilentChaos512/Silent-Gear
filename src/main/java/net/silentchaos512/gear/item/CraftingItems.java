@@ -34,6 +34,7 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     DRIED_SINEW,
     SINEW_FIBER,
     FLAX_FIBER,
+    FLAX_STRING,
     BLACK_DYE,
     BLUE_DYE;
 

@@ -113,6 +113,7 @@ public class ModItems implements IRegistrationHandler<Item> {
         OreDictionary.registerOre("nuggetEmerald", CraftingItems.EMERALD_SHARD.getItem());
         OreDictionary.registerOre("stickIron", CraftingItems.IRON_ROD.getItem());
         OreDictionary.registerOre("stickStone", CraftingItems.STONE_ROD.getItem());
+        OreDictionary.registerOre("string", CraftingItems.FLAX_STRING.getItem());
     }
 
     private void addSmeltingRecipes() {
