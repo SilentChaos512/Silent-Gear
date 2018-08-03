@@ -86,6 +86,9 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
         // Output item class
         String key = this.gearItem.getItem().getTranslationKey() + ".name";
         list.add(TextFormatting.AQUA + i18n.translate(key));
+        // Flavor text
+        if (this.gearItem instanceof ICoreTool)
+            list.add(TextFormatting.ITALIC + i18n.itemSubText(NAME, this.gearItem.getGearClass() + ".desc"));
 
         // Material required for crafting
         int amount = this.gearItem.getConfig().getHeadCount();
