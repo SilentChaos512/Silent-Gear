@@ -1,0 +1,37 @@
+{
+    "pools": [
+        {
+            "name": "pickaxe",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "silentgear:blueprint_pickaxe",
+                    "weight": 1
+                }
+            ]
+        },
+        {
+            "name": "shovel",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "silentgear:blueprint_shovel",
+                    "weight": 1
+                }
+            ]
+        },
+        {
+            "name": "axe",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "silentgear:blueprint_axe",
+                    "weight": 1
+                }
+            ]
+        }
+    ]
+}

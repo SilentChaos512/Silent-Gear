@@ -1,3 +1,6 @@
+0.0.10
+Added: Root advancement gives players some blueprints
+
 0.0.9
 Added: Katanas
 Added: Machetes
