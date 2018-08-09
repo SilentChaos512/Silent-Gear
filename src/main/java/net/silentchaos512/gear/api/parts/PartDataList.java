@@ -86,6 +86,14 @@ public class PartDataList implements List<ItemPartData> {
         return builder.build();
     }
 
+    /**
+     * Convenience method which wraps the part in {@link ItemPartData} for you. Useful for ungraded
+     * parts and parts without a unique crafting stack.
+     */
+    public boolean addPart(ItemPart part) {
+        return list.add(ItemPartData.instance(part));
+    }
+
     @Override
     public boolean add(ItemPartData arg0) {
         return list.add(arg0);

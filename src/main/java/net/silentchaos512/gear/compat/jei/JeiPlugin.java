@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.block.craftingstation.ContainerCraftingStation;
 import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
@@ -64,15 +65,17 @@ public class JeiPlugin implements IModPlugin {
 
         // Examples of applying upgrades, yay!
         List<IRecipe> builtRecipes = new ArrayList<>();
-        for (ICoreItem item : ModItems.toolClasses.values()) {
+        for (ICoreItem item : ModItems.gearClasses.values()) {
             ItemStack gear = getSampleStack(item);
             // Tipped upgrades
-            for (TipUpgrades tip : TipUpgrades.values()) {
-                if (tip.getPart().isValidFor(item)) {
-                    ItemStack gearWithTips = gear.copy();
-                    GearData.addUpgradePart(gearWithTips, ItemPartData.instance(tip.getPart()));
-                    GearData.recalculateStats(gearWithTips);
-                    builtRecipes.add(recipeMaker.makeShapeless(gearWithTips, gear, tip.getItem()));
+            if (item instanceof ICoreTool) {
+                for (TipUpgrades tip : TipUpgrades.values()) {
+                    if (tip.getPart().isValidFor(item)) {
+                        ItemStack gearWithTips = gear.copy();
+                        GearData.addUpgradePart(gearWithTips, ItemPartData.instance(tip.getPart()));
+                        GearData.recalculateStats(gearWithTips);
+                        builtRecipes.add(recipeMaker.makeShapeless(gearWithTips, gear, tip.getItem()));
+                    }
                 }
             }
             // Misc upgrades

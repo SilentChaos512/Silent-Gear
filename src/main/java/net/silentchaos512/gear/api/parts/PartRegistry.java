@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.api.parts;
 
 import com.google.common.collect.ImmutableList;
+import lombok.Getter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.lib.util.StackHelper;
@@ -15,13 +16,14 @@ import java.util.*;
  * @author SilentChaos512
  */
 public final class PartRegistry {
-
     private static Map<String, ItemPart> map = new LinkedHashMap<>();
     private static List<PartMain> mains = null;
     private static List<PartRod> rods = null;
     private static List<PartMain> visibleMains = null;
     private static List<PartRod> visibleRods = null;
     private static Map<String, ItemPart> STACK_TO_PART = new HashMap<>();
+    @Getter
+    private static int highestMainPartTier = 0;
 
     private PartRegistry() {
         throw new IllegalAccessError("Utility class");
@@ -81,6 +83,9 @@ public final class PartRegistry {
         if (map.containsKey(key))
             throw new IllegalArgumentException("Already have a part with key " + part.registryName);
         map.put(key, part);
+
+        if (part instanceof PartMain && part.getTier() > highestMainPartTier)
+            highestMainPartTier = part.getTier();
 
         return part;
     }

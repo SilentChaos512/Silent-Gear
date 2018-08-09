@@ -22,17 +22,14 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.MiscUpgrades;
+import net.silentchaos512.gear.item.ToolRods;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
 import javax.annotation.Nullable;
@@ -259,17 +256,21 @@ public class GearHelper {
 
         if (!subItemCache.containsKey(item.getGearClass())) {
             List<ItemStack> list = new ArrayList<>();
-            // TODO: How should we handle gear subitems?
-            for (PartMain part : PartRegistry.getVisibleMains()) {
-                ItemStack stack = "sword".equals(item.getGearClass())
-                        ? item.construct(item.getItem(), part.getCraftingStack(), part.getCraftingStack())
-                        : item.construct(item.getItem(), part.getCraftingStack());
-                GearData.setExampleTag(stack, true);
-                list.add(stack);
+            // Create a few samples of each tool type, because rendering performance is a problem on many machines.
+            for (int i = 1; i <= PartRegistry.getHighestMainPartTier(); ++i) {
+                ItemStack stack = createSampleItem(item, i);
+                if (!stack.isEmpty())
+                    list.add(stack);
             }
             subItemCache.put(item.getGearClass(), list);
         }
         subitems.addAll(subItemCache.get(item.getGearClass()));
+    }
+
+    private static ItemStack createSampleItem(ICoreItem item, int tier) {
+        ItemStack result = GearGenerator.create(item, tier);
+        GearData.setExampleTag(result, true);
+        return result;
     }
 
     public static void resetSubItemsCache() {
@@ -299,7 +300,7 @@ public class GearHelper {
             List<Object> inputs = new ArrayList<>();
             inputs.add(ModItems.toolHead.getStack(item.getGearClass(), part, false));
             for (int i = 0; i < config.getRodCount(); ++i)
-                inputs.add(ModMaterials.rodWood.getCraftingStack());
+                inputs.add(ToolRods.WOOD.getPart().getCraftingStack());
             for (int i = 0; i < config.getBowstringCount(); ++i)
                 inputs.add(ModMaterials.bowstringString.getCraftingStack());
 

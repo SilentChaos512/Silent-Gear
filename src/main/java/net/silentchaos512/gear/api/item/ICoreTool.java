@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.ToolHead;
+import net.silentchaos512.gear.item.ToolRods;
 import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
@@ -59,7 +60,7 @@ public interface ICoreTool extends ICoreItem {
     default ItemPartData getRodPart(ItemStack stack) {
         for (ItemPartData data : GearData.getConstructionParts(stack))
             if (data.getPart() instanceof PartRod) return data;
-        return ItemPartData.instance(ModMaterials.rodWood);
+        return ItemPartData.instance(ToolRods.WOOD.getPart());
     }
 
     @Nullable

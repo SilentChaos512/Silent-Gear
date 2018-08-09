@@ -14,8 +14,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.silentchaos512.gear.command.CommandSilentGear;
-import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.network.MessageExtraBlockBreak;
+import net.silentchaos512.gear.util.GearGenerator;
 import net.silentchaos512.lib.network.NetworkHandlerSL;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.lib.util.I18nHelper;
@@ -44,7 +45,8 @@ public class SilentGear {
 
     public static EnumRarity RARITY_LEGENDARY;
 
-    public static CreativeTabs creativeTab = registry.makeCreativeTab(MOD_ID, CraftingItems.BLUEPRINT_PAPER::getStack);
+    public static CreativeTabs creativeTab = registry.makeCreativeTab(MOD_ID,
+            () -> GearGenerator.create(ModItems.katana, 3));
 
     @Instance(MOD_ID)
     public static SilentGear instance;
