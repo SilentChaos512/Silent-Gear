@@ -19,7 +19,17 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.item.IColoredItem;
 
 public class TestItem extends Item implements IColoredItem {
@@ -31,5 +41,16 @@ public class TestItem extends Item implements IColoredItem {
             else if (tintIndex == 2) return 0xFFFFFF;
             return 0xFFFFFF;
         };
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+        ItemStack heldItem = playerIn.getHeldItem(handIn);
+        if (playerIn instanceof EntityPlayerMP) {
+            EntityPlayerMP playerMP = (EntityPlayerMP) playerIn;
+            LibTriggers.GENERIC_INT.trigger(playerMP, new ResourceLocation(SilentGear.MOD_ID, "test_val"), 42);
+        }
+
+        return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
     }
 }

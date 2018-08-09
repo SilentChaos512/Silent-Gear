@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:test_item"
+        },
+        "title": {
+            "translate": "advancements.silentgear.test_item.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.test_item.description"
+        }
+    },
+    "parent": "silentgear:root",
+    "criteria": {
+        "testing_custom_trigger": {
+            "trigger": "silentlib:generic_int",
+            "conditions": {
+                "type": "silentgear:test_val",
+                "value": 40
+            }
+        }
+    }
+}
