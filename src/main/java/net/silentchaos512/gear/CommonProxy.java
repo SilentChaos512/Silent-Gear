@@ -30,9 +30,9 @@ public class CommonProxy {
         CommonItemStats.init();
 
         // Registration Handlers
-        registry.addRegistrationHandler(ModBlocks.INSTANCE, Block.class);
-        registry.addRegistrationHandler(ModItems.INSTANCE, Item.class);
-        registry.addRegistrationHandler(ModRecipes.INSTANCE, IRecipe.class);
+        registry.addRegistrationHandler(ModBlocks::registerAll, Block.class);
+        registry.addRegistrationHandler(ModItems::registerAll, Item.class);
+        registry.addRegistrationHandler(ModRecipes::registerAll, IRecipe.class);
 
         // Phased Initializers
         registry.addPhasedInitializer(Config.INSTANCE);
@@ -52,8 +52,6 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(RepairHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ToolBlockPlaceHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(WorldHandler.INSTANCE);
-
-        ModRecipes.INSTANCE.preInitOreDict();
 
         registry.preInit(event);
     }

@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.init;
 
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -16,16 +16,13 @@ import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.item.IEnumItems;
 import net.silentchaos512.lib.item.ItemGuideBookSL;
-import net.silentchaos512.lib.registry.IRegistrationHandler;
 import net.silentchaos512.lib.registry.SRegistry;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class ModItems implements IRegistrationHandler<Item> {
-
-    public static final ModItems INSTANCE = new ModItems();
+public class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
@@ -55,8 +52,7 @@ public class ModItems implements IRegistrationHandler<Item> {
     public static CoreArmor leggings = new CoreArmor(EntityEquipmentSlot.LEGS, "leggings");
     public static CoreArmor boots = new CoreArmor(EntityEquipmentSlot.FEET, "boots");
 
-    @Override
-    public void registerAll(SRegistry reg) {
+    public static void registerAll(SRegistry reg) {
         // Build gear maps now because blueprints need them
         toolClasses.put("sword", sword);
         toolClasses.put("dagger", dagger);
@@ -106,7 +102,8 @@ public class ModItems implements IRegistrationHandler<Item> {
         addSmeltingRecipes();
     }
 
-    private void registerOreDictEntries() {
+    private static void registerOreDictEntries() {
+        OreDictionary.registerOre("flint", Items.FLINT);
         OreDictionary.registerOre("dyeBlack", CraftingItems.BLACK_DYE.getItem());
         OreDictionary.registerOre("dyeBlue", CraftingItems.BLUE_DYE.getItem());
         OreDictionary.registerOre("nuggetDiamond", CraftingItems.DIAMOND_SHARD.getItem());
@@ -116,11 +113,11 @@ public class ModItems implements IRegistrationHandler<Item> {
         OreDictionary.registerOre("string", CraftingItems.FLAX_STRING.getItem());
     }
 
-    private void addSmeltingRecipes() {
+    private static void addSmeltingRecipes() {
         GameRegistry.addSmelting(CraftingItems.SINEW.getStack(), CraftingItems.DRIED_SINEW.getStack(), 0.1f);
     }
 
-    private void registerBlueprints(SRegistry reg, String name, boolean singleUse) {
+    private static void registerBlueprints(SRegistry reg, String name, boolean singleUse) {
         toolClasses.forEach((key, item) -> {
             Function<PartDataList, ItemStack> funcToolHead = partList -> toolHead.getStack(key, partList);
             reg.registerItem(new Blueprint(singleUse, item, funcToolHead), name + "_" + key);
