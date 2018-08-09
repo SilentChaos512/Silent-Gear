@@ -14,20 +14,19 @@ import java.util.List;
 import java.util.Locale;
 
 public enum TipUpgrades implements IEnumItems<TipUpgrades, TipUpgrades.Item> {
-    IRON("ingotIron"),
-    GOLD("ingotGold"),
-    DIAMOND("gemDiamond"),
-    EMERALD("gemEmerald"),
-    REDSTONE("dustRedstone"),
-    GLOWSTONE("dustGlowstone"),
-    LAPIS("gemLapis");
+    IRON,
+    GOLD,
+    DIAMOND,
+    EMERALD,
+    REDSTONE,
+    GLOWSTONE,
+    LAPIS,
+    QUARTZ;
 
-    private final String oredict;
     private final TipUpgrades.Item item;
     private final PartTip part;
 
-    TipUpgrades(String oredict) {
-        this.oredict = oredict;
+    TipUpgrades() {
         this.item = new TipUpgrades.Item();
         this.part = new PartTip(new ResourceLocation(SilentGear.MOD_ID, "tip_" + name().toLowerCase(Locale.ROOT)));
     }

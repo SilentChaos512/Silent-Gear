@@ -82,6 +82,7 @@ item.silentgear.blueprint_book.name=Blueprint Book
 item.silentgear.flaxseeds.name=Flaxseeds
 
 item.silentgear.guide_book.name=Guide Book (WIP)
+item.silentgear.guide_book.desc=Silent Gear guide book
 
 item.silentgear.tip_upgrade_diamond.name=Diamond-Tipped Upgrade
 item.silentgear.tip_upgrade_emerald.name=Emerald-Tipped Upgrade
@@ -89,6 +90,7 @@ item.silentgear.tip_upgrade_glowstone.name=Glowstone-Coated Upgrade
 item.silentgear.tip_upgrade_gold.name=Gold-Tipped Upgrade
 item.silentgear.tip_upgrade_iron.name=Iron-Tipped Upgrade
 item.silentgear.tip_upgrade_lapis.name=Lapis-Coated Upgrade
+item.silentgear.tip_upgrade_quartz.name=Quartz-Tipped Upgrade
 item.silentgear.tip_upgrade_redstone.name=Redstone-Coated Upgrade
 
 # Misc upgrades
@@ -223,6 +225,11 @@ stat.silentgear.grade.SSS=SSS
 ###################
 
 material.silentgear.gradeOnPart=Grade: %s
+
+material.silentgear.bowstring_flax.name=Flax Bowstring
+material.silentgear.bowstring_sinew.name=Sinew Bowstring
+material.silentgear.bowstring_string.name=Plain Bowstring
+
 material.silentgear.mainWithGrade=%1$s (%2$s)
 material.silentgear.main_diamond.name=Diamond
 material.silentgear.main_emerald.name=Emerald
@@ -235,6 +242,9 @@ material.silentgear.main_stone.name=Stone
 material.silentgear.main_wood.name=Wood
 material.silentgear.main_terracotta.name=Terracotta
 material.silentgear.main_test.name=Test Material (Please Remove)
+
+material.silentgear.misc_red_card.name=Red Card
+material.silentgear.misc_spoon.name=Spoon
 
 material.silentgear.rod_blaze.name=Blaze Rod
 material.silentgear.rod_bone.name=Bone Rod
@@ -249,10 +259,8 @@ material.silentgear.tip_glowstone.name=Glowstone-Coated
 material.silentgear.tip_gold.name=Gold-Tipped
 material.silentgear.tip_iron.name=Iron-Tipped
 material.silentgear.tip_lapis.name=Lapis-Coated
+material.silentgear.tip_quartz.name=Quartz-Tipped
 material.silentgear.tip_redstone.name=Redstone-Coated
-
-material.silentgear.misc_red_card.name=Red Card
-material.silentgear.misc_spoon.name=Spoon
 
 part.silentgear.type.bowstring=Bowstring
 part.silentgear.type.grip=Grip
