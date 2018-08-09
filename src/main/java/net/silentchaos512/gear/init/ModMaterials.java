@@ -8,6 +8,7 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.item.TipUpgrades;
+import net.silentchaos512.gear.item.ToolRods;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
@@ -21,8 +22,6 @@ public class ModMaterials implements IPhasedInitializer {
     public static final ModMaterials INSTANCE = new ModMaterials();
 
     public static PartMain mainWood, mainStone, mainFlint, mainIron, mainGold, mainEmerald, mainDiamond, mainObsidian, mainNetherrack, mainTerracotta;
-    public static PartRod rodWood, rodBone, rodStone, rodIron;
-    public static PartTip tipIron, tipGold, tipDiamond, tipEmerald, tipRedstone, tipGlowstone, tipLapis;
     public static PartBowstring bowstringString, bowstringSinew;
 
     @Override
@@ -40,10 +39,8 @@ public class ModMaterials implements IPhasedInitializer {
         mainObsidian = PartRegistry.putPart(new PartMain(getPath("main_obsidian")));
         //mainTest = PartRegistry.putPart(new PartMain(getPath("main_test")));
 
-        rodWood = PartRegistry.putPart(new PartRod(getPath("rod_wood")));
-        rodBone = PartRegistry.putPart(new PartRod(getPath("rod_bone")));
-        rodStone = PartRegistry.putPart(new PartRod(getPath("rod_stone")));
-        rodIron = PartRegistry.putPart(new PartRod(getPath("rod_iron")));
+        for (ToolRods rod : ToolRods.values())
+            PartRegistry.putPart(rod.getPart());
 
         for (TipUpgrades tip : TipUpgrades.values())
             PartRegistry.putPart(tip.getPart());

@@ -1,0 +1,30 @@
+{
+    "type": "rod",
+    "stats": [
+        {"name": "durability",      "value":  0.4, "op": "MUL2"},
+        {"name": "enchantability",  "value":  0.6, "op": "MUL2"},
+        {"name": "harvest_level",   "value":    2, "op": "MAX"},
+        {"name": "harvest_speed",   "value":  0.1, "op": "MUL2"},
+        {"name": "melee_damage",    "value":  0.3, "op": "MUL2"},
+        {"name": "magic_damage",    "value":  0.3, "op": "MUL2"},
+        {"name": "attack_speed",    "value": -0.2, "op": "ADD"},
+        {"name": "ranged_damage",   "value":  0.3, "op": "MUL2"},
+        {"name": "ranged_speed",    "value": -0.1, "op": "MUL2"},
+        {"name": "rarity",          "value":   30}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "minecraft:blaze_rod"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "blaze",
+        "texture_color": "ffffff"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 3,
+        "tool_blacklist": []
+    }
+}

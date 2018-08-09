@@ -236,7 +236,9 @@ material.silentgear.main_wood.name=Wood
 material.silentgear.main_terracotta.name=Terracotta
 material.silentgear.main_test.name=Test Material (Please Remove)
 
+material.silentgear.rod_blaze.name=Blaze Rod
 material.silentgear.rod_bone.name=Bone Rod
+material.silentgear.rod_end.name=End Rod
 material.silentgear.rod_iron.name=Iron Rod
 material.silentgear.rod_stone.name=Stone Rod
 material.silentgear.rod_wood.name=Wood Rod
