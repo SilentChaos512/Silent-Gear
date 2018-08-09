@@ -1,0 +1,22 @@
+{
+    "type": "misc_upgrade",
+    "stats": [
+        {"name": "durability",      "value": 0.2, "op": "MUL1"},
+        {"name": "rarity",          "value":  10}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "silentgear:spoon_upgrade"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "",
+        "texture_color": "ffffff",
+        "name_color": "white"
+    },
+    "availability": {
+        "enabled": true,
+        "tool_blacklist": []
+    }
+}

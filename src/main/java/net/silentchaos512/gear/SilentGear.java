@@ -39,7 +39,7 @@ public class SilentGear {
     public static LogHelper log = new LogHelper(MOD_NAME, BUILD_NUM);
     public static I18nHelper i18n = new I18nHelper(MOD_ID, log, true);
 
-    public static SRegistry registry = new SRegistry(MOD_ID, log);
+    public static SRegistry registry = new SRegistry();
     public static NetworkHandlerSL network;
 
     public static EnumRarity RARITY_LEGENDARY;

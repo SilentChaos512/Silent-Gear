@@ -267,6 +267,8 @@ public abstract class ItemPart {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            SilentGear.log.error("ItemPart {} is missing its data file!", this.getRegistryName());
         }
 
         // Override in config folder

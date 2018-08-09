@@ -84,7 +84,8 @@ public class ModItems {
         registerBlueprints(reg, "template", true);
 //        reg.registerItem(blueprintBook);
 
-        enumItems.registerItems(TipUpgrade.Type.values());
+        enumItems.registerItems(TipUpgrades.values());
+        enumItems.registerItems(MiscUpgrades.values());
         enumItems.registerItems(CraftingItems.values());
         reg.registerItem(flaxseeds, "flaxseeds");
 

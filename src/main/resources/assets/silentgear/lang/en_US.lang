@@ -91,6 +91,10 @@ item.silentgear.tip_upgrade_iron.name=Iron-Tipped Upgrade
 item.silentgear.tip_upgrade_lapis.name=Lapis-Coated Upgrade
 item.silentgear.tip_upgrade_redstone.name=Redstone-Coated Upgrade
 
+# Misc upgrades
+item.silentgear.spoon_upgrade.name=Spoon Upgrade
+item.silentgear.spoon_upgrade.desc=Allows pickaxes to work as a shovel
+
 item.silentgear.tool_head.name=Tool Head (Unknown)
 item.silentgear.tool_head.axe=Axe Head
 item.silentgear.tool_head.bow=Bow Limbs

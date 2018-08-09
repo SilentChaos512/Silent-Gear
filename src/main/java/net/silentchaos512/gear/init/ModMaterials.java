@@ -6,6 +6,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.item.MiscUpgrades;
+import net.silentchaos512.gear.item.TipUpgrades;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
@@ -43,16 +45,14 @@ public class ModMaterials implements IPhasedInitializer {
         rodStone = PartRegistry.putPart(new PartRod(getPath("rod_stone")));
         rodIron = PartRegistry.putPart(new PartRod(getPath("rod_iron")));
 
-        tipIron = PartRegistry.putPart(new PartTip(getPath("tip_iron")));
-        tipGold = PartRegistry.putPart(new PartTip(getPath("tip_gold")));
-        tipDiamond = PartRegistry.putPart(new PartTip(getPath("tip_diamond")));
-        tipEmerald = PartRegistry.putPart(new PartTip(getPath("tip_emerald")));
-        tipRedstone = PartRegistry.putPart(new PartTip(getPath("tip_redstone")));
-        tipGlowstone = PartRegistry.putPart(new PartTip(getPath("tip_glowstone")));
-        tipLapis = PartRegistry.putPart(new PartTip(getPath("tip_lapis")));
+        for (TipUpgrades tip : TipUpgrades.values())
+            PartRegistry.putPart(tip.getPart());
 
         bowstringString = PartRegistry.putPart(new PartBowstring(getPath("bowstring_string")));
         bowstringSinew = PartRegistry.putPart(new PartBowstring(getPath("bowstring_sinew")));
+
+        for (MiscUpgrades upgrade : MiscUpgrades.values())
+            PartRegistry.putPart(upgrade.getPart());
 
         UserDefined.loadUserParts();
     }

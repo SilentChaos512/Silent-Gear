@@ -251,6 +251,10 @@ public class GearData {
         PartDataList parts = getConstructionParts(gear);
         // Only one tip upgrade allowed
         parts.removeIf(data -> data.getPart() instanceof PartTip && partData.getPart() instanceof PartTip);
+        // Other upgrades allow no exact duplicates, but any number of total upgrades
+        for (ItemPartData partInList : parts)
+            if (partInList.getPart() == partData.getPart())
+                return;
 
         parts.add(partData);
         writeConstructionParts(gear, parts);
