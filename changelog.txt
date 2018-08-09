@@ -1,4 +1,6 @@
 0.0.10
+Added: Spoon upgrade, allows pickaxes to work as shovels
+Added: Red card upgrade, allows items to break permanently (could be useful in machines that use tools...)
 Added: Root advancement gives players some blueprints
 
 0.0.9

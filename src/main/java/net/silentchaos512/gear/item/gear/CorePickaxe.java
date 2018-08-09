@@ -25,6 +25,7 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -137,7 +138,11 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : super.getToolClasses(stack);
+        if (GearHelper.isBroken(stack))
+            return ImmutableSet.of();
+        else if (GearData.hasPart(stack, MiscUpgrades.SPOON.getPart()))
+            return ImmutableSet.of("pickaxe", "shovel");
+        return super.getToolClasses(stack);
     }
 
     @Override

@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     BLUEPRINT_PAPER,
     UPGRADE_BASE,
+    ADVANCED_UPGRADE_BASE,
     STONE_ROD,
     IRON_ROD,
     DIAMOND_SHARD,

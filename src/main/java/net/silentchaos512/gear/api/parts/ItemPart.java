@@ -37,6 +37,7 @@ import java.util.function.Supplier;
 public abstract class ItemPart {
     protected ResourceLocation registryName;
 
+    public static final String NBT_KEY = "Key";
     protected static final ResourceLocation BLANK_TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "items/blank");
     private static final Gson GSON = (new GsonBuilder()).create();
 
@@ -403,7 +404,7 @@ public abstract class ItemPart {
 
     @Nullable
     public static ItemPart fromNBT(NBTTagCompound tags) {
-        String key = tags.getString("Key");
+        String key = tags.getString(NBT_KEY);
         return PartRegistry.get(key);
     }
 

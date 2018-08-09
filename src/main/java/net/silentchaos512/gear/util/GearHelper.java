@@ -32,6 +32,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
+import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.lib.registry.RecipeMaker;
 
 import javax.annotation.Nullable;
@@ -112,17 +113,19 @@ public class GearHelper {
     public static void attemptDamage(ItemStack stack, int amount, EntityLivingBase entityLiving) {
         if (isUnbreakable(stack) || (entityLiving instanceof EntityPlayer && ((EntityPlayer) entityLiving).capabilities.isCreativeMode))
             return;
+        final boolean canBreakPermanently = Config.toolsBreakPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
 
-        if (!Config.toolsBreakPermanently)
+        if (!canBreakPermanently)
             amount = Math.min(stack.getMaxDamage() - stack.getItemDamage(), amount);
         EntityPlayerMP player = entityLiving instanceof EntityPlayerMP ? (EntityPlayerMP) entityLiving : null;
         boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.random, player);
 
         if (isBroken(stack)) {
-            // The item broke
+            // The item "broke" (can still be repaired)
             entityLiving.renderBrokenItemStack(stack);
             GearData.recalculateStats(stack);
-        } else if (Config.toolsBreakPermanently && wouldBreak) {
+        } else if (canBreakPermanently && wouldBreak) {
+            // Item is gone forever, rest in pieces
             entityLiving.renderBrokenItemStack(stack);
             stack.shrink(1);
         }
@@ -134,7 +137,7 @@ public class GearHelper {
         // return true;
         // }
 
-        if (Config.toolsBreakPermanently)
+        if (Config.toolsBreakPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart()))
             return false;
 
         int maxDamage = stack.getMaxDamage();

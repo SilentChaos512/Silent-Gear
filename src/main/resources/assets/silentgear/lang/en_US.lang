@@ -92,6 +92,8 @@ item.silentgear.tip_upgrade_lapis.name=Lapis-Coated Upgrade
 item.silentgear.tip_upgrade_redstone.name=Redstone-Coated Upgrade
 
 # Misc upgrades
+item.silentgear.red_card_upgrade.name=Red Card
+item.silentgear.red_card_upgrade.desc=Allows the item to break permanently
 item.silentgear.spoon_upgrade.name=Spoon Upgrade
 item.silentgear.spoon_upgrade.desc=Allows pickaxes to work as a shovel
 
@@ -110,6 +112,7 @@ item.silentgear.tool_head.sickle=Sickle Blade
 item.silentgear.tool_head.sword=Sword Blade & Crossguard
 
 # Crafting Item
+item.silentgear.advanced_upgrade_base=Advanced Upgrade Base
 item.silentgear.black_dye.name=Black Dye
 item.silentgear.blue_dye.name=Blue Dye
 item.silentgear.blueprint_paper.name=Blueprint Paper
@@ -246,11 +249,22 @@ material.silentgear.tip_iron.name=Iron-Tipped
 material.silentgear.tip_lapis.name=Lapis-Coated
 material.silentgear.tip_redstone.name=Redstone-Coated
 
+material.silentgear.misc_red_card.name=Red Card
+material.silentgear.misc_spoon.name=Spoon
+
 part.silentgear.type.bowstring=Bowstring
 part.silentgear.type.grip=Grip
 part.silentgear.type.main=Main Part
+part.silentgear.type.misc_upgrade=Misc Upgrade
 part.silentgear.type.rod=Tool Rod
 part.silentgear.type.tip=Tip Upgrade
+
+
+
+# JEI
+
+jei.silentgear.tooltip.sample1=Sample recipe
+jei.silentgear.tooltip.sample2=Gear made with any materials will work
 
 
 

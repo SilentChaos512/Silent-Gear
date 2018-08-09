@@ -12,6 +12,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -23,10 +24,7 @@ import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class GearClientHelper {
@@ -53,7 +51,9 @@ public class GearClientHelper {
             }
 
             // Let parts add information if they need to
-            for (ItemPartData data : GearData.getConstructionParts(stack)) {
+            PartDataList constructionParts = GearData.getConstructionParts(stack);
+            Collections.reverse(constructionParts);
+            for (ItemPartData data : constructionParts) {
                 data.getPart().addInformation(data, stack, world, tooltip, flag.isAdvanced());
             }
 
@@ -118,7 +118,8 @@ public class GearClientHelper {
             String strConstruction = TextFormatting.GOLD + i18n.translate("misc", "tooltip.construction.name");
             if (altDown) {
                 tooltip.add(strConstruction);
-                for (ItemPartData data : GearData.getConstructionParts(stack)) {
+                Collections.reverse(constructionParts);
+                for (ItemPartData data : constructionParts) {
                     String str = data.getTranslatedName(stack);
                     if (data.getPart() instanceof PartMain)
                         str += TextFormatting.DARK_GRAY + " (" + data.getGrade().getTranslatedName() + ")";

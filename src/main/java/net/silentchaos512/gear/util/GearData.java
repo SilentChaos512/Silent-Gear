@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -29,8 +30,7 @@ public class GearData {
 
     /**
      * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately,
-     * some mods still reference the gear material instead of calling the appropriate
-     * methods.
+     * some mods still reference the gear material instead of calling the appropriate methods.
      */
     public static final ToolMaterial FAKE_MATERIAL = EnumHelper.addToolMaterial("silentgems:fake_material", 1, 512, 5.12f, 5.12f, 32);
 
@@ -245,19 +245,56 @@ public class GearData {
     }
 
     public static void addUpgradePart(ItemStack gear, ItemStack partStack) {
-        ItemPartData partData = ItemPartData.fromStack(partStack);
-        if (partData == null) return;
+        ItemPartData part = ItemPartData.fromStack(partStack);
+        if (part != null)
+            addUpgradePart(gear, part);
+    }
+
+    public static void addUpgradePart(ItemStack gear, ItemPartData part) {
+        if (!(gear.getItem() instanceof ICoreItem)) {
+            SilentGear.log.warn("Tried to add upgrade part to non-gear item {}", gear);
+            SilentGear.log.catching(new RuntimeException("Invalid Item type"));
+            return;
+        }
 
         PartDataList parts = getConstructionParts(gear);
         // Only one tip upgrade allowed
-        parts.removeIf(data -> data.getPart() instanceof PartTip && partData.getPart() instanceof PartTip);
+        parts.removeIf(data -> data.getPart() instanceof PartTip && part.getPart() instanceof PartTip);
+        // Make sure the upgrade is valid for the gear type
+        if (part.getPart() instanceof IUpgradePart && !((IUpgradePart) part.getPart()).isValidFor((ICoreItem) gear.getItem()))
+            return;
         // Other upgrades allow no exact duplicates, but any number of total upgrades
         for (ItemPartData partInList : parts)
-            if (partInList.getPart() == partData.getPart())
+            if (partInList.getPart() == part.getPart())
                 return;
 
-        parts.add(partData);
+        parts.add(part);
         writeConstructionParts(gear, parts);
+    }
+
+    /**
+     * Determine if the gear has the specified part. This scans the construction NBT
+     * directly for speed, no part data list is created. Compares part registry names only.
+     *
+     * @param gear The gear item
+     * @param upgrade The part to check for
+     * @return True if the item has the part in its construction, false otherwise
+     */
+    public static boolean hasPart(ItemStack gear, ItemPart upgrade) {
+        NBTTagCompound tags = getData(gear, NBT_ROOT_CONSTRUCTION);
+        NBTTagList tagList = tags.getTagList(NBT_CONSTRUCTION_PARTS, 10);
+        String upgradeName = upgrade.getRegistryName().toString();
+
+        for (NBTBase nbt : tagList) {
+            if (nbt instanceof NBTTagCompound) {
+                NBTTagCompound partCompound = (NBTTagCompound) nbt;
+                String partKey = partCompound.getString(ItemPart.NBT_KEY);
+                if (partKey.equals(upgradeName))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     public static void writeConstructionParts(ItemStack stack, Collection<ItemPartData> parts) {

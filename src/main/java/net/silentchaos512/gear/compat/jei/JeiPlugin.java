@@ -6,13 +6,29 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.block.craftingstation.ContainerCraftingStation;
+import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.ModMaterials;
+import net.silentchaos512.gear.item.MiscUpgrades;
+import net.silentchaos512.gear.item.TipUpgrades;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.lib.registry.RecipeMaker;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @JEIPlugin
 public class JeiPlugin implements IModPlugin {
@@ -31,6 +47,8 @@ public class JeiPlugin implements IModPlugin {
 
     @Override
     public void register(IModRegistry registry) {
+        RecipeMaker recipeMaker = SilentGear.registry.getRecipeMaker();
+
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.craftingStation), VanillaRecipeCategoryUid.CRAFTING);
 
         // Add "example recipes". We can't allow these to be crafted, but it's helpful to have them
@@ -41,5 +59,45 @@ public class JeiPlugin implements IModPlugin {
         for (ICoreItem item : ModItems.armorClasses.values())
             if (item instanceof CoreArmor)
                 registry.addRecipes(((CoreArmor) item).getExampleRecipes(), VanillaRecipeCategoryUid.CRAFTING);
+
+        // Examples of applying upgrades, yay!
+        List<IRecipe> builtRecipes = new ArrayList<>();
+        for (ICoreItem item : ModItems.toolClasses.values()) {
+            ItemStack gear = getSampleStack(item);
+            // Tipped upgrades
+            for (TipUpgrades tip : TipUpgrades.values()) {
+                if (tip.getPart().isValidFor(item)) {
+                    ItemStack gearWithTips = gear.copy();
+                    GearData.addUpgradePart(gearWithTips, ItemPartData.instance(tip.getPart()));
+                    GearData.recalculateStats(gearWithTips);
+                    builtRecipes.add(recipeMaker.makeShapeless(gearWithTips, gear, tip.getItem()));
+                }
+            }
+            // Misc upgrades
+            for (MiscUpgrades upgrade : MiscUpgrades.values()) {
+                if (upgrade.getPart().isValidFor(item)) {
+                    ItemStack gearWithUpgrade = gear.copy();
+                    GearData.addUpgradePart(gearWithUpgrade, ItemPartData.instance(upgrade.getPart()));
+                    GearData.recalculateStats(gearWithUpgrade);
+                    builtRecipes.add(recipeMaker.makeShapeless(gearWithUpgrade, gear, upgrade.getItem()));
+                }
+            }
+        }
+        registry.addRecipes(builtRecipes, VanillaRecipeCategoryUid.CRAFTING);
+    }
+
+    private Map<ResourceLocation, ItemStack> sampleStacks = new HashMap<>();
+
+    private ItemStack getSampleStack(ICoreItem gearItem) {
+        ResourceLocation name = gearItem.getItem().getRegistryName();
+        if (!sampleStacks.containsKey(name)) {
+            ItemStack stack = gearItem.construct(gearItem.getItem(), ModMaterials.mainIron.getCraftingStack());
+            NBTTagList tagList = new NBTTagList();
+            tagList.appendTag(new NBTTagString(SilentGear.i18n.translate("jei", "tooltip.sample1")));
+            tagList.appendTag(new NBTTagString(SilentGear.i18n.translate("jei", "tooltip.sample2")));
+            stack.getOrCreateSubCompound("display").setTag("Lore", tagList);
+            sampleStacks.put(name, stack);
+        }
+        return sampleStacks.get(name);
     }
 }
