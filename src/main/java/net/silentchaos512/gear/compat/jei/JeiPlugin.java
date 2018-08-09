@@ -37,12 +37,12 @@ public class JeiPlugin implements IModPlugin {
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
         subtypeRegistry.registerSubtypeInterpreter(ModItems.toolHead, s -> ModItems.toolHead.getSubtypeKey(s));
 
-        ModItems.gearClasses.forEach(
-                (key, item) -> subtypeRegistry.registerSubtypeInterpreter(item.getItem(),
-                        stack -> {
-                            ItemPartData part = GearData.getPrimaryPart(stack);
-                            return part == null ? key : key + "|" + part.getPart().getRegistryName().toString();
-                        }));
+//        ModItems.gearClasses.forEach(
+//                (key, item) -> subtypeRegistry.registerSubtypeInterpreter(item.getItem(),
+//                        stack -> {
+//                            ItemPartData part = GearData.getPrimaryPart(stack);
+//                            return part == null ? key : key + "|" + part.getPart().getRegistryName().toString();
+//                        }));
     }
 
     @Override
@@ -50,6 +50,8 @@ public class JeiPlugin implements IModPlugin {
         RecipeMaker recipeMaker = SilentGear.registry.getRecipeMaker();
 
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.craftingStation), VanillaRecipeCategoryUid.CRAFTING);
+        registry.getRecipeTransferRegistry().addRecipeTransferHandler(ContainerCraftingStation.class, VanillaRecipeCategoryUid.CRAFTING,
+                1, 9, 10, 36 + TileCraftingStation.SIDE_INVENTORY_SLOT_COUNT);
 
         // Add "example recipes". We can't allow these to be crafted, but it's helpful to have them
         // show in JEI. Some people can't read...

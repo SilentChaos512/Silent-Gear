@@ -16,6 +16,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Arrays;
 
 public class TileCraftingStation extends TileInventorySL {
+    public static final int SIDE_INVENTORY_SLOT_COUNT = 3 * 6;
+
     public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {
         NonNullList<Pair<ItemStack, IInventory>> list = NonNullList.create();
 
@@ -41,8 +43,7 @@ public class TileCraftingStation extends TileInventorySL {
 
     @Override
     public int getSizeInventory() {
-        // TODO Auto-generated method stub
-        return 3 * 6;
+        return SIDE_INVENTORY_SLOT_COUNT;
     }
 
     @Override
