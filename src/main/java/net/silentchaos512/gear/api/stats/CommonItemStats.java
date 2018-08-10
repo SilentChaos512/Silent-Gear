@@ -19,6 +19,7 @@ public class CommonItemStats {
     // Harvesting Tools
     public static final ItemStat HARVEST_LEVEL = new ItemStat("harvest_level", 0f, 0f, 10000f, true, TextFormatting.YELLOW).setAffectedByGrades(false);
     public static final ItemStat HARVEST_SPEED = new ItemStat("harvest_speed", 1f, 0f, 10000f, false, TextFormatting.YELLOW).setSynergyApplies(true);
+    public static final ItemStat REACH_DISTANCE = new ItemStat("reach_distance", 0f, -100f, 100f, false, TextFormatting.YELLOW).setAffectedByGrades(false);
     // Melee Weapons
     public static final ItemStat MELEE_DAMAGE = new ItemStat("melee_damage", 0f, 0f, 10000f, false, TextFormatting.GREEN).setSynergyApplies(true);
     public static final ItemStat MAGIC_DAMAGE = new ItemStat("magic_damage", 0f, 0f, 10000f, false, TextFormatting.GREEN).setSynergyApplies(true);

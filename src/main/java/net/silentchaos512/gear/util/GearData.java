@@ -273,10 +273,10 @@ public class GearData {
     }
 
     /**
-     * Determine if the gear has the specified part. This scans the construction NBT
-     * directly for speed, no part data list is created. Compares part registry names only.
+     * Determine if the gear has the specified part. This scans the construction NBT directly for
+     * speed, no part data list is created. Compares part registry names only.
      *
-     * @param gear The gear item
+     * @param gear    The gear item
      * @param upgrade The part to check for
      * @return True if the item has the part in its construction, false otherwise
      */

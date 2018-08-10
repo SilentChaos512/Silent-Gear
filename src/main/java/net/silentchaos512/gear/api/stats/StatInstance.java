@@ -28,7 +28,7 @@ public class StatInstance {
         }
     }
 
-    public static final StatInstance ZERO = new StatInstance("__zero__", 0f, StatInstance.Operation.MAX);
+    public static final StatInstance ZERO = new StatInstance("__zero__", 0f, StatInstance.Operation.ADD);
 
     private String id;
     private float value;

@@ -205,6 +205,7 @@ stat.silentgear.magic_damage.name=Magic Damage
 stat.silentgear.melee_damage.name=Attack Damage
 stat.silentgear.ranged_damage.name=Ranged Damage
 stat.silentgear.ranged_speed.name=Ranged Speed
+stat.silentgear.reach_distance.name=Reach Distance
 stat.silentgear.repair_efficiency.name=Repair Efficiency
 stat.silentgear.rarity.name=Rarity
 
