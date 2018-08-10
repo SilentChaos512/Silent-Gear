@@ -162,6 +162,6 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
 
     @Nonnull
     private ModelResourceLocation getModelFor(ItemStack stack) {
-        return !KeyTrackerSL.isShiftDown() ? modelNormal : modelWithOverlay;
+        return KeyTrackerSL.isShiftDown() ? modelNormal : modelWithOverlay;
     }
 }

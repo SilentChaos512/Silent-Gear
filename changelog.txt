@@ -1,13 +1,16 @@
 0.0.10
 Added: Blaze/end rods are now tool rods
 Added: Quartz-tipped upgrade
+Added: Reach distance stat ("reach_distance" in the JSON files)
 Added: Spoon upgrade, allows pickaxes to work as shovels
 Added: Red card upgrade, allows items to break permanently (could be useful in machines that use tools...)
 Added: Root advancement gives players some blueprints
 Added: More JEI example recipes (applying tip upgrades, for instance)
+Added: JEI info pages for many items (more to come)
 Changed: Tool/armor items now give just a few randomized samples, instead of one for each main material (less JEI lag)
 Changed: Tooltips for tool heads improved, removed some redundant information
 Fixed: Crafting station now works with the '+' (move items) button in JEI
+Numerous tweaks and minor fixes
 
 0.0.9
 Added: Katanas

@@ -108,6 +108,9 @@ public class JeiPlugin implements IModPlugin {
         // Blueprints and templates (all in one)
         registry.addIngredientInfo(ModItems.blueprints.stream().map(ItemStack::new).collect(Collectors.toList()),
                 ItemStack.class, getDescKey("blueprint"));
+        // Tipped upgrades
+        registry.addIngredientInfo(Arrays.stream(TipUpgrades.values()).map(TipUpgrades::getStack).collect(Collectors.toList()),
+                ItemStack.class, getDescKey("tip_upgrade"));
         // Tool Heads
         ModItems.toolClasses.forEach((toolClass, item) -> {
             List<ItemStack> list = new ArrayList<>();

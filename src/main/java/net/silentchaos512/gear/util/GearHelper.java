@@ -234,13 +234,16 @@ public class GearHelper {
 
     public static EnumRarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
+        if (stack.isItemEnchanted())
+            rarity += 20;
+
         if (rarity < 20)
             return EnumRarity.COMMON;
         if (rarity < 40)
             return EnumRarity.UNCOMMON;
-        if (rarity < 60)
+        if (rarity < 70)
             return EnumRarity.RARE;
-        if (rarity < 80)
+        if (rarity < 110)
             return EnumRarity.EPIC;
         return SilentGear.RARITY_LEGENDARY;
     }

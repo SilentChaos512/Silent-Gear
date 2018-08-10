@@ -3,6 +3,8 @@ package net.silentchaos512.gear;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -52,6 +54,8 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(RepairHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ToolBlockPlaceHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(WorldHandler.INSTANCE);
+
+        LootTableList.register(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"));
 
         registry.preInit(event);
     }
