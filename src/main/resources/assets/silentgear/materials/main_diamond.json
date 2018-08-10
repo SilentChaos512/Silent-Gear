@@ -31,7 +31,8 @@
         "hidden": false,
         "texture_suffix": "diamond",
         "texture_color": "FFFFFF",
-        "broken_color": "33EBCB"
+        "broken_color": "33EBCB",
+        "name_color": "aqua"
     },
     "availability": {
         "enabled": true,

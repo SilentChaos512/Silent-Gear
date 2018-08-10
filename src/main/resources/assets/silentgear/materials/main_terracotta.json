@@ -27,7 +27,8 @@
         "hidden": false,
         "texture_suffix": "iron",
         "texture_color": "C76245",
-        "broken_color": "C76245"
+        "broken_color": "C76245",
+        "name_color": "gold"
     },
     "availability": {
         "enabled": true,

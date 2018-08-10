@@ -27,7 +27,8 @@
         "hidden": false,
         "texture_suffix": "iron",
         "texture_color": "854242",
-        "broken_color": "854242"
+        "broken_color": "854242",
+        "name_color": "dark_red"
     },
     "availability": {
         "enabled": true,

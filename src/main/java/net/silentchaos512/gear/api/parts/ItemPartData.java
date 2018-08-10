@@ -23,6 +23,7 @@ import lombok.Getter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 
@@ -115,6 +116,10 @@ public class ItemPartData {
 
     public int getColor(ItemStack gear, int animationFrame) {
         return part.getColor(this, gear, animationFrame);
+    }
+
+    public TextFormatting getNameColor() {
+        return part.getNameColor();
     }
 
     public String getModelIndex(int animationFrame) {

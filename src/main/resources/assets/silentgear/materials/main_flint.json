@@ -27,7 +27,8 @@
         "hidden": false,
         "texture_suffix": "flint",
         "texture_color": "FFFFFF",
-        "broken_color": "969696"
+        "broken_color": "969696",
+        "name_color": "dark_gray"
     },
     "availability": {
         "enabled": true,

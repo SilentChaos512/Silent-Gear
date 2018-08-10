@@ -3,7 +3,8 @@
   "textures": {
     "layer0": "silentgear:items/pickaxe/rod_wood",
     "layer1": "silentgear:items/pickaxe/grip_cloth",
-    "layer2": "silentgear:items/pickaxe/head_iron"
+    "layer2": "silentgear:items/pickaxe/head_iron",
+    "layer3": "silentgear:items/pickaxe/tip_gold"
   }
 }
 

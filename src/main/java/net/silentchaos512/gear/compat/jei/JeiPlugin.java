@@ -14,6 +14,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.block.craftingstation.ContainerCraftingStation;
 import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -21,6 +22,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.item.TipUpgrades;
+import net.silentchaos512.gear.item.ToolRods;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -96,7 +98,17 @@ public class JeiPlugin implements IModPlugin {
     private ItemStack getSampleStack(ICoreItem gearItem) {
         ResourceLocation name = gearItem.getItem().getRegistryName();
         if (!sampleStacks.containsKey(name)) {
-            ItemStack stack = gearItem.construct(gearItem.getItem(), ModMaterials.mainIron.getCraftingStack());
+            PartDataList parts = PartDataList.of();
+            for (int i = 0; i < gearItem.getConfig().getHeadCount(); ++i)
+                parts.addPart(ModMaterials.mainIron);
+            if (gearItem.getConfig().getRodCount() > 0)
+                parts.addPart(ToolRods.WOOD.getPart());
+            if (gearItem.getConfig().getBowstringCount() > 0)
+                parts.addPart(ModMaterials.bowstringString);
+
+            ItemStack stack = gearItem.construct(gearItem.getItem(), parts);
+
+            // Add text to indicate this is a sample, using vanilla lore tag
             NBTTagList tagList = new NBTTagList();
             tagList.appendTag(new NBTTagString(SilentGear.i18n.translate("jei", "tooltip.sample1")));
             tagList.appendTag(new NBTTagString(SilentGear.i18n.translate("jei", "tooltip.sample2")));

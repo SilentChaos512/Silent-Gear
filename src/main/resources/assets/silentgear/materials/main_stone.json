@@ -27,7 +27,8 @@
         "hidden": false,
         "texture_suffix": "stone",
         "texture_color": "FFFFFF",
-        "broken_color": "9A9A9A"
+        "broken_color": "9A9A9A",
+        "name_color": "dark_gray"
     },
     "availability": {
         "enabled": true,

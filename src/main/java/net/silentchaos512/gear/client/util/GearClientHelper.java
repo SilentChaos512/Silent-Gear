@@ -20,7 +20,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -28,16 +27,20 @@ import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class GearClientHelper {
-
     public static Map<String, IBakedModel> modelCache = new HashMap<>();
 
     public static void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+        TooltipFlagTC flagTC = flag instanceof TooltipFlagTC ? (TooltipFlagTC) flag
+                : TooltipFlagTC.withModifierKeys(flag.isAdvanced(), true, true);
+        addInformation(stack, world, tooltip, flagTC);
+    }
 
+    public static void addInformation(ItemStack stack, World world, List<String> tooltip, TooltipFlagTC flag) {
         I18nHelper i18n = SilentGear.i18n;
 
         if (stack.getItem() instanceof ICoreItem) {
-            boolean ctrlDown = flag instanceof TooltipFlagTC ? ((TooltipFlagTC) flag).ctrlDown : KeyTrackerSL.isControlDown();
-            boolean altDown = flag instanceof TooltipFlagTC ? ((TooltipFlagTC) flag).altDown : KeyTrackerSL.isAltDown();
+            boolean ctrlDown = flag.ctrlDown;
+            boolean altDown = flag.altDown;
 
             ICoreItem item = (ICoreItem) stack.getItem();
 
@@ -72,7 +75,7 @@ public class GearClientHelper {
 
             // Stats!
             String strStats = TextFormatting.GOLD + i18n.translate("misc", "tooltip.stats.name");
-            if (ctrlDown) {
+            if (ctrlDown && flag.showStats) {
                 tooltip.add(strStats);
                 // Display only stats relevant to the item class
                 for (ItemStat stat : item.getRelevantStats(stack)) {
@@ -109,26 +112,30 @@ public class GearClientHelper {
 
                     tooltip.add(i18n.translate("stat", "displayFormat", nameStr, statStr));
                 }
-            } else {
+            } else if (flag.showStats) {
                 strStats += " " + TextFormatting.GRAY + i18n.translate("misc", "tooltip.stats.key");
                 tooltip.add(strStats);
             }
 
             // Tool construction
             String strConstruction = TextFormatting.GOLD + i18n.translate("misc", "tooltip.construction.name");
-            if (altDown) {
+            if (altDown && flag.showConstruction) {
                 tooltip.add(strConstruction);
                 Collections.reverse(constructionParts);
-                for (ItemPartData data : constructionParts) {
-                    String str = data.getTranslatedName(stack);
-                    if (data.getPart() instanceof PartMain)
-                        str += TextFormatting.DARK_GRAY + " (" + data.getGrade().getTranslatedName() + ")";
-                    tooltip.add("- " + str);
-                }
-            } else {
+                tooltipListParts(stack, tooltip, constructionParts);
+            } else if (flag.showConstruction) {
                 strConstruction += " " + TextFormatting.GRAY + i18n.translate("misc", "tooltip.construction.key");
                 tooltip.add(strConstruction);
             }
+        }
+    }
+
+    public static void tooltipListParts(ItemStack gear, List<String> tooltip, Collection<ItemPartData> parts) {
+        for (ItemPartData part : parts) {
+            String str = "- " + part.getNameColor() + part.getTranslatedName(gear);
+            if (part.getPart() instanceof PartMain)
+                str += TextFormatting.DARK_GRAY + " (" + part.getGrade().getTranslatedName() + ")";
+            tooltip.add(str);
         }
     }
 

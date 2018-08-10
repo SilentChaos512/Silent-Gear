@@ -21,7 +21,8 @@
     "display": {
         "hidden": false,
         "texture_suffix": "stone",
-        "texture_color": "ffffff"
+        "texture_color": "ffffff",
+        "name_color": "dark_gray"
     },
     "availability": {
         "enabled": true,

@@ -27,6 +27,7 @@ import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.client.util.TooltipFlagTC;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
@@ -197,23 +198,23 @@ public class ToolHead extends Item implements IStatItem {
         I18nHelper i18n = SilentGear.i18n;
         String toolClass = getToolClass(stack);
 
-        list.add(TextFormatting.AQUA + i18n.translate("item", toolClass + ".name"));
+        //list.add(TextFormatting.AQUA + i18n.translate("item", toolClass + ".name"));
+
+        // Materials used in crafting
+        GearClientHelper.tooltipListParts(stack, list, getAllParts(stack));
 
         if (getData(stack).getBoolean(NBT_IS_EXAMPLE)) {
             list.add(TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput1"));
             list.add(TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput2"));
         }
 
-        // Materials used in crafting
-        for (ItemPartData data : getAllParts(stack))
-            list.add("- " + data.getTranslatedName(ItemStack.EMPTY));
-
         ICoreItem toolItem = ModItems.toolClasses.get(toolClass);
         if (toolItem != null) {
-            // TODO: We're constructing a rod-less gear each time to get stats. Is that bad?
+            // TODO: We're constructing a rod-less tool each time to get stats. Is that bad?
             ItemStack constructed = toolItem.construct((Item) toolItem, getAllParts(stack));
             GearData.recalculateStats(constructed);
-            GearClientHelper.addInformation(constructed, world, list, flag);
+            GearClientHelper.addInformation(constructed, world, list,
+                    TooltipFlagTC.withModifierKeys(flag.isAdvanced(), true, false));
         }
     }
 

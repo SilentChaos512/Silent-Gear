@@ -27,7 +27,8 @@
         "hidden": false,
         "texture_suffix": "wood",
         "texture_color": "FFFFFF",
-        "broken_color": "866526"
+        "broken_color": "866526",
+        "name_color": "gold"
     },
     "availability": {
         "enabled": true,

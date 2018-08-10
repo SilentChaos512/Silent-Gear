@@ -20,11 +20,12 @@
     "display": {
         "hidden": false,
         "texture_suffix": "end",
-        "texture_color": "ffffff"
+        "texture_color": "ffffff",
+        "name_color": "light_purple"
     },
     "availability": {
         "enabled": true,
-        "tier": 4,
+        "tier": 3,
         "tool_blacklist": []
     }
 }
