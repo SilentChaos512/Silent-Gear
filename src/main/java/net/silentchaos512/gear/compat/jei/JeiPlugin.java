@@ -10,11 +10,14 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartMain;
+import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.block.craftingstation.ContainerCraftingStation;
 import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -27,17 +30,22 @@ import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.RecipeMaker;
+import net.silentchaos512.lib.util.StackHelper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @JEIPlugin
 public class JeiPlugin implements IModPlugin {
+    private static boolean initFailed = false;
+
+    public static boolean hasInitFailed() {
+        return initFailed;
+    }
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        initFailed = true;
         subtypeRegistry.registerSubtypeInterpreter(ModItems.toolHead, s -> ModItems.toolHead.getSubtypeKey(s));
 
 //        ModItems.gearClasses.forEach(
@@ -46,10 +54,12 @@ public class JeiPlugin implements IModPlugin {
 //                            ItemPartData part = GearData.getPrimaryPart(stack);
 //                            return part == null ? key : key + "|" + part.getPart().getRegistryName().toString();
 //                        }));
+        initFailed = false;
     }
 
     @Override
     public void register(IModRegistry registry) {
+        initFailed = true;
         RecipeMaker recipeMaker = SilentGear.registry.getRecipeMaker();
 
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.craftingStation), VanillaRecipeCategoryUid.CRAFTING);
@@ -91,6 +101,22 @@ public class JeiPlugin implements IModPlugin {
             }
         }
         registry.addRecipes(builtRecipes, VanillaRecipeCategoryUid.CRAFTING);
+
+        // Ingredient Info Pages
+        addIngredientInfoPages(registry, SilentGear.registry.getBlocks());
+        addIngredientInfoPages(registry, SilentGear.registry.getItems());
+        // Blueprints and templates (all in one)
+        registry.addIngredientInfo(ModItems.blueprints.stream().map(ItemStack::new).collect(Collectors.toList()),
+                ItemStack.class, getDescKey("blueprint"));
+        // Tool Heads
+        ModItems.toolClasses.forEach((toolClass, item) -> {
+            List<ItemStack> list = new ArrayList<>();
+            for (PartMain part : PartRegistry.getMains())
+                list.add(ModItems.toolHead.getStack(toolClass, part, true));
+            registry.addIngredientInfo(list, ItemStack.class, getDescKey("tool_head"));
+        });
+
+        initFailed = false;
     }
 
     private Map<ResourceLocation, ItemStack> sampleStacks = new HashMap<>();
@@ -116,5 +142,22 @@ public class JeiPlugin implements IModPlugin {
             sampleStacks.put(name, stack);
         }
         return sampleStacks.get(name);
+    }
+
+    private void addIngredientInfoPages(IModRegistry registry, Collection<? extends IForgeRegistryEntry<?>> list) {
+        for (IForgeRegistryEntry<?> obj : list) {
+            String key = getDescKey(Objects.requireNonNull(obj.getRegistryName()));
+            SilentGear.log.debug("JEI info page {}: {}", key, SilentGear.i18n.hasKey(key));
+            if (SilentGear.i18n.hasKey(key))
+                registry.addIngredientInfo(StackHelper.fromBlockOrItem(obj), ItemStack.class, key);
+        }
+    }
+
+    private String getDescKey(String name) {
+        return "jei." + SilentGear.MOD_ID + "." + name + ".desc";
+    }
+
+    private String getDescKey(ResourceLocation name) {
+        return "jei." + name.getNamespace() + "." + name.getPath() + ".desc";
     }
 }

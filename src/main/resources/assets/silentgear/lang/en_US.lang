@@ -273,6 +273,14 @@ part.silentgear.type.tip=Tip Upgrade
 
 # JEI
 
+jei.silentgear.blueprint.desc=Blueprints and templates are used to craft tool heads and armor. Blueprints can be reused infinitely, templates are single-use. When used in the crafting station, you can mix materials. Otherwise, the materials must all be the same. Check the tooltip of the blueprint/template for details on crafting the final item.
+jei.silentgear.crafting_station.desc=An improved crafting table which has a small internal inventory and a window which shows the tooltip of the item being crafted. Allows material mixing when crafting tool heads or armor.
+jei.silentgear.part_analyzer.desc=Determines the quality of armor/tool head materials. Requires no power or fuel. Hoppers can insert/extract items.
+jei.silentgear.red_card_upgrade.desc=Tools and armor with the red card upgrade can break like their vanilla counterparts, instead of becoming a "broken" item that can still be repaired.
+jei.silentgear.spoon_upgrade.desc=Let's your pickaxe mine dirt and such. Because reasons. No, it won't work on hammers.
+jei.silentgear.sword.desc=A classic sword with balanced damage and speed. The guard takes the appearance of the second material used in crafting.
+jei.silentgear.tool_head.desc=Tool heads, blades, bow limbs, and more! These are the core of tools and weapons, constructed with a blueprint/template and some number of main tool materials. Check the blueprint/template tooltip for more info.
+
 jei.silentgear.tooltip.sample1=Sample recipe
 jei.silentgear.tooltip.sample2=Gear made with any materials will work
 

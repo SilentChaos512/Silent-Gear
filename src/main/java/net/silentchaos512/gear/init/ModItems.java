@@ -18,7 +18,9 @@ import net.silentchaos512.lib.item.IEnumItems;
 import net.silentchaos512.lib.item.ItemGuideBookSL;
 import net.silentchaos512.lib.registry.SRegistry;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -26,6 +28,7 @@ public class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
+    public static final List<Blueprint> blueprints = new ArrayList<>();
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
 
@@ -121,11 +124,15 @@ public class ModItems {
     private static void registerBlueprints(SRegistry reg, String name, boolean singleUse) {
         toolClasses.forEach((key, item) -> {
             Function<PartDataList, ItemStack> funcToolHead = partList -> toolHead.getStack(key, partList);
-            reg.registerItem(new Blueprint(singleUse, item, funcToolHead), name + "_" + key);
+            Blueprint blueprint = new Blueprint(singleUse, item, funcToolHead);
+            blueprints.add(blueprint);
+            reg.registerItem(blueprint, name + "_" + key);
         });
         armorClasses.forEach((key, item) -> {
             Function<PartDataList, ItemStack> funcArmor = partList -> item.construct(item.getItem(), partList);
-            reg.registerItem(new Blueprint(singleUse, item, funcArmor), name + "_" + key);
+            Blueprint blueprint = new Blueprint(singleUse, item, funcArmor);
+            blueprints.add(blueprint);
+            reg.registerItem(blueprint, name + "_" + key);
         });
     }
 }
