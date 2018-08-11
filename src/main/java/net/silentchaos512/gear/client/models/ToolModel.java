@@ -248,21 +248,19 @@ public class ToolModel implements IModel {
             if (!(stack.getItem() instanceof ICoreTool))
                 return originalModel;
 
-            ToolModel.Baked model = (ToolModel.Baked) originalModel;
-
-            ICoreTool itemTool = (ICoreTool) stack.getItem();
-            String toolClass = itemTool.getGearClass();
-            boolean hasGuard = "sword".equals(toolClass);
-            boolean isBroken = GearHelper.isBroken(stack);
-
             int animationFrame = getAnimationFrame(stack, world, entity);
-            String key = itemTool.getModelKey(stack, animationFrame);
+            String key = GearData.getCachedModelKey(stack, animationFrame);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
 
             // DEBUG:
             // model.cache.clear();
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
+                ICoreTool itemTool = (ICoreTool) stack.getItem();
+                String toolClass = itemTool.getGearClass();
+                boolean hasGuard = "sword".equals(toolClass);
+                boolean isBroken = GearHelper.isBroken(stack);
+
                 ItemPartData partHead = itemTool.getPrimaryPart(stack);
                 ItemPartData partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
                 ItemPartData partRod = itemTool.getRodPart(stack);
@@ -277,6 +275,7 @@ public class ToolModel implements IModel {
                 processTexture(stack, toolClass, PartPositions.TIP, partTip, animationFrame, isBroken, builder);
                 processTexture(stack, toolClass, PartPositions.BOWSTRING, partBowstring, animationFrame, isBroken, builder);
 
+                ToolModel.Baked model = (ToolModel.Baked) originalModel;
                 IModel parent = model.getParent().retexture(builder.build());
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());

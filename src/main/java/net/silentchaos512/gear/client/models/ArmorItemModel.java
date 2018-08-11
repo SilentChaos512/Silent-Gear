@@ -25,6 +25,7 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -167,18 +168,14 @@ public class ArmorItemModel implements IModel {
             ArmorItemModel.Baked model = (ArmorItemModel.Baked) originalModel;
 
             ICoreArmor itemArmor = (ICoreArmor) stack.getItem();
-            String armorClass = itemArmor.getGearClass();
-            boolean isBroken = GearHelper.isBroken(stack);
 
-            ItemPartData primaryPart = itemArmor.getPrimaryPart(stack);
-
-            String key = itemArmor.getModelKey(stack, 0, primaryPart);
+            String key = GearData.getCachedModelKey(stack, 0);
             StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
 
-                processTexture(stack, armorClass, PartPositions.ARMOR, primaryPart, isBroken, builder);
+                processTexture(stack, itemArmor.getGearClass(), PartPositions.ARMOR, itemArmor.getPrimaryPart(stack), GearHelper.isBroken(stack), builder);
 
                 IModel parent = model.getParent().retexture(builder.build());
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
@@ -189,7 +186,7 @@ public class ArmorItemModel implements IModel {
             }
 
             // Color cache
-            ColorHandlers.gearColorCache.put(key, new Integer[] {primaryPart.getColor(stack, 0)});
+            ColorHandlers.gearColorCache.put(key, new Integer[] {itemArmor.getPrimaryPart(stack).getColor(stack, 0)});
 
             return GearClientHelper.modelCache.get(key);
         }

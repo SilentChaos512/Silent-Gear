@@ -37,6 +37,7 @@ public class GearData {
     private static final String NBT_ROOT = "ToolCore_Data";                 // TODO: Update this
     private static final String NBT_ROOT_CONSTRUCTION = "Construction";
     private static final String NBT_ROOT_PROPERTIES = "Properties";
+    private static final String NBT_ROOT_MODEL_KEYS = "ModelKeys";
 
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
@@ -91,6 +92,25 @@ public class GearData {
             propertiesCompound.setFloat(stat.getUnlocalizedName(), value);
         }
         propertiesCompound.setFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
+
+        // Save model keys for performance
+        // Remove the old keys first, then get new ones from ICoreItem
+        stack.getOrCreateSubCompound(NBT_ROOT).removeTag(NBT_ROOT_MODEL_KEYS);
+        NBTTagCompound modelKeys = getData(stack, NBT_ROOT_MODEL_KEYS);
+        for (int i = 0; i < item.getAnimationFrames(); ++i) {
+            modelKeys.setString(Integer.toString(i), item.getModelKey(stack, i, parts.toArray(new ItemPartData[0])));
+        }
+    }
+
+    public static String getCachedModelKey(ItemStack stack, int animationFrame) {
+        if (!(stack.getItem() instanceof ICoreItem))
+            return "Invalid item!";
+
+        NBTTagCompound tags = getData(stack, NBT_ROOT_MODEL_KEYS);
+        String key = Integer.toString(animationFrame);
+        if (!tags.hasKey(key))
+            tags.setString(key,  ((ICoreItem) stack.getItem()).getModelKey(stack, animationFrame));
+        return tags.getString(Integer.toString(animationFrame));
     }
 
     public static Multimap<ItemStat, StatInstance> getStatModifiers(@Nullable ICoreItem item, PartDataList parts, double synergy) {
