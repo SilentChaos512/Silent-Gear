@@ -1,3 +1,10 @@
+0.1.0
+Fixed: Broken tools still appearing broken after repair
+
+0.0.11
+Updated for Silent Lib 2.3.18
+Added: Missing texture for spoon upgrade
+
 0.0.10
 Added: Blaze/end rods are now tool rods
 Added: Quartz-tipped upgrade

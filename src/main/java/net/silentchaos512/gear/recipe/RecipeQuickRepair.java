@@ -58,6 +58,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
             repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
 
         gear.attemptDamageItem(-repairValue, SilentGear.random, null);
+        GearData.recalculateStats(gear);
         return gear;
     }
 

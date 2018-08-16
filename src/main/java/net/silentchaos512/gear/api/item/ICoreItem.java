@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModMaterials;
@@ -74,7 +75,6 @@ public interface ICoreItem extends IStatItem {
     //region Client-side stuff
 
     default int getAnimationFrames() {
-
         return 1;
     }
 
@@ -83,8 +83,20 @@ public interface ICoreItem extends IStatItem {
         if (GearHelper.isBroken(stack))
             builder.append("_b");
 
-        for (ItemPartData part : parts)
-            builder.append("|").append(part == null ? "n" : part.getModelIndex(animationFrame));
+        boolean foundMain = false;
+        for (ItemPartData part : parts) {
+            assert part.getPart() != null;
+            if (part.getPart() instanceof PartMain) {
+                // Only first main matters
+                if (!foundMain) {
+                    foundMain = true;
+                    builder.append("|").append(part.getModelIndex(animationFrame));
+                }
+            } else {
+                // Non-main
+                builder.append("|").append(part.getModelIndex(animationFrame));
+            }
+        }
         return builder.toString();
     }
 
