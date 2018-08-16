@@ -14,7 +14,8 @@
         {"name": "magic_armor",     "value":    6},
         {"name": "ranged_damage",   "value":    0},
         {"name": "ranged_speed",    "value": -0.4},
-        {"name": "rarity",          "value":   30}
+        {"name": "rarity",          "value":   30},
+        {"name": "chargeability",   "value":  0.8}
     ],
     "crafting_items": {
         "normal": {
