@@ -1,4 +1,5 @@
 0.1.0
+Added: Main materials now display their tier in the tooltip
 Fixed: Broken tools still appearing broken after repair
 
 0.0.11

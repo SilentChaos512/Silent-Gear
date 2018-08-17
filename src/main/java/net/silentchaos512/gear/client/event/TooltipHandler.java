@@ -45,7 +45,7 @@ public class TooltipHandler {
     }
 
     private void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPart part, I18nHelper i18n) {
-        event.getToolTip().add(TextFormatting.GREEN + i18n.translate("part", "type." + part.getTypeName()));
+        event.getToolTip().add(TextFormatting.GREEN + i18n.translate("part", "type." + part.getTypeName(), part.getTier()));
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTrackerSL.isControlDown()) {

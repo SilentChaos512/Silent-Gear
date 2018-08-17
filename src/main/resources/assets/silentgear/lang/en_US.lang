@@ -265,7 +265,7 @@ material.silentgear.tip_redstone.name=Redstone-Coated
 
 part.silentgear.type.bowstring=Bowstring
 part.silentgear.type.grip=Grip
-part.silentgear.type.main=Main Part
+part.silentgear.type.main=Main Part (Tier %d)
 part.silentgear.type.misc_upgrade=Misc Upgrade
 part.silentgear.type.rod=Tool Rod
 part.silentgear.type.tip=Tip Upgrade
