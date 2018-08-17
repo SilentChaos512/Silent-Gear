@@ -1,5 +1,6 @@
 0.1.0
 Added: Main materials now display their tier in the tooltip
+Changed: Hammers and excavators are faster (50% penalty instead of 75%)
 Fixed: Broken tools still appearing broken after repair
 
 0.0.11
