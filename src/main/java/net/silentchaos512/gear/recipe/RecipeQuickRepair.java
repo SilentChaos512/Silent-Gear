@@ -43,10 +43,13 @@ public class RecipeQuickRepair extends RecipeBaseSL {
         if (gear.isEmpty() || parts.isEmpty()) return ItemStack.EMPTY;
 
         int repairValue = 0;
+        int materialCount = 0;
         for (ItemStack stack : parts) {
             ItemPartData data = ItemPartData.fromStack(stack);
-            if (data != null)
+            if (data != null) {
                 repairValue += data.getPart().getRepairAmount(gear, data);
+                ++materialCount;
+            }
         }
 
         // Makes odd repair values line up better
@@ -57,6 +60,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
             repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
 
         gear.attemptDamageItem(-repairValue, SilentGear.random, null);
+//        GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);
         GearData.recalculateStats(gear);
         return gear;
     }

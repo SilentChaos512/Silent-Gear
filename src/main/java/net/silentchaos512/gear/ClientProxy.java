@@ -53,6 +53,7 @@ public class ClientProxy extends CommonProxy {
                     PartRegistry.getDebugLines(list);
                     list.add("GearClientHelper.modelCache=" + GearClientHelper.modelCache.size());
                     list.add("ColorHandlers.gearColorCache=" + ColorHandlers.gearColorCache.size());
+//                    GearStatistics.getDebugText(list);
                     return list;
                 }
 

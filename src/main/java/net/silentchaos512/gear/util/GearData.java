@@ -38,6 +38,7 @@ public class GearData {
     private static final String NBT_ROOT_CONSTRUCTION = "Construction";
     private static final String NBT_ROOT_PROPERTIES = "Properties";
     private static final String NBT_ROOT_MODEL_KEYS = "ModelKeys";
+    private static final String NBT_ROOT_STATISTICS = "Statistics";
 
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
@@ -350,6 +351,10 @@ public class GearData {
         if (!rootTag.hasKey(compoundKey))
             rootTag.setTag(compoundKey, new NBTTagCompound());
         return rootTag.getCompoundTag(compoundKey);
+    }
+
+    static NBTTagCompound getStatisticsCompound(ItemStack stack) {
+        return getData(stack, NBT_ROOT_STATISTICS);
     }
 
     static void setExampleTag(ItemStack stack, boolean value) {

@@ -182,17 +182,12 @@ public class GearHelper {
         return 1f;
     }
 
-    @Deprecated
-    public static boolean onBlockStartBreak(ItemStack stack, BlockPos pos, EntityPlayer player) {
-        // Used for statistics
-        return false;
-    }
-
     public static boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
         if (!isBroken(stack) && stack.getItem() instanceof ICoreTool) {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
             attemptDamage(stack, damage, entityLiving);
         }
+//        GearStatistics.incrementStat(stack, GearStatistics.BLOCKS_MINED);
         return true;
     }
 
