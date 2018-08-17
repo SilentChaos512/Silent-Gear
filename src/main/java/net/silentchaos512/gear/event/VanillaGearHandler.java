@@ -29,7 +29,7 @@ public class VanillaGearHandler implements IPhasedInitializer {
                 if (item != null)
                     item.setMaxDamage(item.getMaxDamage() / 10);
                 else
-                    SilentGear.log.severe("Could not find item " + key.toString());
+                    SilentGear.log.fatal("Could not find item " + key.toString());
             }
         }
 
@@ -43,7 +43,7 @@ public class VanillaGearHandler implements IPhasedInitializer {
                 if (item != null)
                     item.setMaxDamage(item.getMaxDamage() / 10);
                 else
-                    SilentGear.log.severe("Could not find item " + key.toString());
+                    SilentGear.log.fatal("Could not find item " + key.toString());
             }
         }
     }

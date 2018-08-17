@@ -10,7 +10,7 @@ import net.silentchaos512.lib.registry.SRegistry;
 
 public class ModRecipes {
     public static void registerAll(SRegistry reg) {
-        RecipeMaker recipes = reg.recipes;
+        RecipeMaker recipes = reg.getRecipeMaker();
         for (ICoreItem item : ModItems.toolClasses.values()) {
             recipes.addCustomRecipe("core_" + item.getGearClass(), new RecipeModularItem(item));
         }

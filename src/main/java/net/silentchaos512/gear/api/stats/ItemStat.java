@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.stats;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -18,11 +19,10 @@ import java.util.Map;
  * @since Experimental
  */
 public class ItemStat {
-
     public static Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
 
     @Getter(value = AccessLevel.PUBLIC)
-    protected final String unlocalizedName;
+    protected final ResourceLocation name;
     @Getter(value = AccessLevel.PUBLIC)
     protected final float defaultValue;
     @Getter(value = AccessLevel.PUBLIC)
@@ -37,8 +37,8 @@ public class ItemStat {
     public final boolean displayAsInt;
     public final TextFormatting displayColor;
 
-    public ItemStat(String unlocalizedName, float defaultValue, float minValue, float maxValue, boolean displayAsInt, TextFormatting displayColor) {
-        this.unlocalizedName = unlocalizedName;
+    public ItemStat(ResourceLocation name, float defaultValue, float minValue, float maxValue, boolean displayAsInt, TextFormatting displayColor) {
+        this.name = name;
         this.defaultValue = defaultValue;
         this.minimumValue = minValue;
         this.maximumValue = maxValue;
@@ -54,7 +54,7 @@ public class ItemStat {
             throw new IllegalArgumentException("Default value cannot be bigger than maximum value!");
         }
 
-        ALL_STATS.put(unlocalizedName, this);
+        ALL_STATS.put(name.getPath(), this);
     }
 
     public float clampValue(float value) {
@@ -151,7 +151,7 @@ public class ItemStat {
             value *= gradeBonus;
         }
         Operation op = modifiers.iterator().next().getOp();
-        return new StatInstance("display_" + this.unlocalizedName, value, op);
+        return new StatInstance("display_" + this.name, value, op);
     }
 
     public boolean isHidden() {
@@ -182,6 +182,6 @@ public class ItemStat {
     }
 
     public String toString() {
-        return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", unlocalizedName, defaultValue, minimumValue, maximumValue);
+        return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", name, defaultValue, minimumValue, maximumValue);
     }
 }

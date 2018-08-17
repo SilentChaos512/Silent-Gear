@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +56,7 @@ public final class PartRegistry {
      */
     @Nullable
     public static ItemPart get(ItemStack stack) {
-        if (StackHelper.isEmpty(stack))
+        if (stack.isEmpty())
             return null;
 
         String key = stack.getItem().getTranslationKey() + "@" + stack.getItemDamage();
@@ -92,7 +91,7 @@ public final class PartRegistry {
 
     @Nullable
     public static ItemPart fromDecoStack(ItemStack stack) {
-        if (StackHelper.isEmpty(stack))
+        if (stack.isEmpty())
             return null;
 
         for (ItemPart part : map.values()) {

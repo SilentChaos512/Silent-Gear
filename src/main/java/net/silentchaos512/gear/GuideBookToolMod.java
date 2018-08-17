@@ -13,7 +13,7 @@ public class GuideBookToolMod extends GuideBook {
 
     public GuideBookToolMod() {
 
-        super(SilentGear.MOD_ID);
+        super(SilentGear.MOD_ID, SilentGear.i18n);
         // TODO: textures?
 
         edition = SilentGear.BUILD_NUM;

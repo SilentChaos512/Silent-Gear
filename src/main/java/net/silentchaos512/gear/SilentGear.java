@@ -1,5 +1,6 @@
 package net.silentchaos512.gear;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.text.TextFormatting;
@@ -13,28 +14,36 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.command.CommandSilentGear;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.network.MessageExtraBlockBreak;
 import net.silentchaos512.gear.util.GearGenerator;
+import net.silentchaos512.lib.base.IModBase;
 import net.silentchaos512.lib.network.NetworkHandlerSL;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.LogHelper;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 @Mod(modid = SilentGear.MOD_ID, name = SilentGear.MOD_NAME, version = SilentGear.VERSION, dependencies = SilentGear.DEPENDENCIES)
-public class SilentGear {
-
+@MethodsReturnNonnullByDefault
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class SilentGear implements IModBase {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "0.0.10";
-    public static final String SL_VERSION = "2.3.16";
+    public static final String VERSION = "0.1.0";
+    public static final String SL_VERSION = "3.0.0";
     public static final int BUILD_NUM = 0;
     public static final String DEPENDENCIES = "required-after:silentlib@[" + SL_VERSION + ",)";
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
+
+    static {
+        CommonItemStats.init();
+    }
 
     public static Random random = new Random();
     public static LogHelper log = new LogHelper(MOD_NAME, BUILD_NUM);
@@ -69,20 +78,35 @@ public class SilentGear {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
         proxy.init(registry, event);
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
         proxy.postInit(registry, event);
     }
 
     @EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
-
         event.registerServerCommand(new CommandSilentGear());
+    }
+
+    @Nonnull
+    @Override
+    public String getModId() {
+        return MOD_ID;
+    }
+
+    @Nonnull
+    @Override
+    public String getModName() {
+        return MOD_NAME;
+    }
+
+    @Nonnull
+    @Override
+    public String getVersion() {
+        return VERSION;
     }
 
     public int getBuildNum() {

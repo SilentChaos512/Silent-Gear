@@ -4,23 +4,21 @@
             "item": "silentgear:test_item"
         },
         "title": {
-            "translate": "advancements.silentgear.test_item2.title"
+            "translate": "advancements.silentgear.test_item_any.title"
         },
         "description": {
-            "translate": "advancements.silentgear.test_item2.description"
+            "translate": "advancements.silentgear.test_item_any.description"
         }
     },
-    "parent": "silentgear:test_item",
+    "parent": "silentgear:test_item_int",
     "criteria": {
         "use_item_test": {
             "trigger": "silentlib:use_item",
             "conditions": {
                 "target": "any",
-                "items": [
-                    {
-                        "item": "silentgear:test_item"
-                    }
-                ]
+                "item": {
+                    "item": "silentgear:test_item"
+                }
             }
         }
     }

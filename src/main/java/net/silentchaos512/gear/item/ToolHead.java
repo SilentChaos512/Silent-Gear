@@ -102,7 +102,7 @@ public class ToolHead extends Item implements IStatItem {
         NBTTagCompound tags = new NBTTagCompound();
         for (ItemStat stat : stats.keySet()) {
             float value = stat.compute(0f, stats.get(stat));
-            tags.setFloat(stat.getUnlocalizedName(), value);
+            tags.setFloat(stat.getName().getPath(), value);
         }
         tags.setFloat("synergy", (float) synergy);
         getData(stack).setTag(NBT_STAT_CACHE, tags);
@@ -262,7 +262,7 @@ public class ToolHead extends Item implements IStatItem {
             return stat.getDefaultValue();
 
         NBTTagCompound tags = root.getCompoundTag(NBT_STAT_CACHE);
-        return tags.getFloat(stat.getUnlocalizedName());
+        return tags.getFloat(stat.getName().getPath());
     }
 
     public String getSubtypeKey(ItemStack stack) {

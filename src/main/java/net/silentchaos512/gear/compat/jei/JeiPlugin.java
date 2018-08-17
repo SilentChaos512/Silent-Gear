@@ -150,7 +150,7 @@ public class JeiPlugin implements IModPlugin {
     private void addIngredientInfoPages(IModRegistry registry, Collection<? extends IForgeRegistryEntry<?>> list) {
         for (IForgeRegistryEntry<?> obj : list) {
             String key = getDescKey(Objects.requireNonNull(obj.getRegistryName()));
-            SilentGear.log.debug("JEI info page {}: {}", key, SilentGear.i18n.hasKey(key));
+//            SilentGear.log.debug("JEI info page {}: {}", key, SilentGear.i18n.hasKey(key));
             if (SilentGear.i18n.hasKey(key))
                 registry.addIngredientInfo(StackHelper.fromBlockOrItem(obj), ItemStack.class, key);
         }

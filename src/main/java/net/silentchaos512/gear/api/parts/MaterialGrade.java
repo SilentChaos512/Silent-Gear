@@ -22,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -40,7 +39,7 @@ public enum MaterialGrade {
     }
 
     public static MaterialGrade fromStack(ItemStack stack) {
-        if (StackHelper.isValid(stack) && stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT_KEY)) {
+        if (!stack.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT_KEY)) {
             String str = stack.getTagCompound().getString(NBT_KEY);
             return fromString(str);
         }
@@ -92,7 +91,7 @@ public enum MaterialGrade {
     }
 
     public void setGradeOnStack(@Nonnull ItemStack stack) {
-        if (StackHelper.isValid(stack)) {
+        if (!stack.isEmpty()) {
             if (!stack.hasTagCompound()) {
                 stack.setTagCompound(new NBTTagCompound());
             }

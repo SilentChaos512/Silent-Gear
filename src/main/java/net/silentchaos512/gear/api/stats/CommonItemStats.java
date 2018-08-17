@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.api.stats;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.silentchaos512.gear.SilentGear;
 
 /**
  * Stats used by all equipment types.
@@ -9,28 +11,27 @@ import net.minecraft.util.text.TextFormatting;
  * @since Experimental
  */
 public class CommonItemStats {
-
     // Generic
-    public static final ItemStat DURABILITY = new ItemStat("durability", 0f, 0f, 32767f, true, TextFormatting.BLUE).setSynergyApplies(true); // short max is 32767
-    public static final ItemStat ARMOR_DURABILITY = new ItemStat("armor_durability", 0f, 0f, 32767f, true, TextFormatting.BLUE);
-    public static final ItemStat REPAIR_EFFICIENCY = new ItemStat("repair_efficiency", 1f, 0f, 1000f, false, TextFormatting.BLUE).setHidden(true).setAffectedByGrades(false);
-    public static final ItemStat ENCHANTABILITY = new ItemStat("enchantability", 0f, 0f, 10000f, true, TextFormatting.BLUE).setSynergyApplies(true);
-    public static final ItemStat RARITY = new ItemStat("rarity", 0f, 0f, 10000f, true, TextFormatting.BLUE).setHidden(true);
+    public static final ItemStat DURABILITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "durability"), 0f, 0f, 32767f, true, TextFormatting.BLUE).setSynergyApplies(true); // short max is 32767
+    public static final ItemStat ARMOR_DURABILITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "armor_durability"), 0f, 0f, 32767f, true, TextFormatting.BLUE);
+    public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "repair_efficiency"), 1f, 0f, 1000f, false, TextFormatting.BLUE).setHidden(true).setAffectedByGrades(false);
+    public static final ItemStat ENCHANTABILITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "enchantability"), 0f, 0f, 10000f, true, TextFormatting.BLUE).setSynergyApplies(true);
+    public static final ItemStat RARITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "rarity"), 0f, 0f, 10000f, true, TextFormatting.BLUE).setHidden(true);
     // Harvesting Tools
-    public static final ItemStat HARVEST_LEVEL = new ItemStat("harvest_level", 0f, 0f, 10000f, true, TextFormatting.YELLOW).setAffectedByGrades(false);
-    public static final ItemStat HARVEST_SPEED = new ItemStat("harvest_speed", 1f, 0f, 10000f, false, TextFormatting.YELLOW).setSynergyApplies(true);
-    public static final ItemStat REACH_DISTANCE = new ItemStat("reach_distance", 0f, -100f, 100f, false, TextFormatting.YELLOW).setAffectedByGrades(false);
+    public static final ItemStat HARVEST_LEVEL = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "harvest_level"), 0f, 0f, 10000f, true, TextFormatting.YELLOW).setAffectedByGrades(false);
+    public static final ItemStat HARVEST_SPEED = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "harvest_speed"), 1f, 0f, 10000f, false, TextFormatting.YELLOW).setSynergyApplies(true);
+    public static final ItemStat REACH_DISTANCE = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "reach_distance"), 0f, -100f, 100f, false, TextFormatting.YELLOW).setAffectedByGrades(false);
     // Melee Weapons
-    public static final ItemStat MELEE_DAMAGE = new ItemStat("melee_damage", 0f, 0f, 10000f, false, TextFormatting.GREEN).setSynergyApplies(true);
-    public static final ItemStat MAGIC_DAMAGE = new ItemStat("magic_damage", 0f, 0f, 10000f, false, TextFormatting.GREEN).setSynergyApplies(true);
-    public static final ItemStat ATTACK_SPEED = new ItemStat("attack_speed", 0f, -4f, 4f, false, TextFormatting.GREEN);
+    public static final ItemStat MELEE_DAMAGE = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "melee_damage"), 0f, 0f, 10000f, false, TextFormatting.GREEN).setSynergyApplies(true);
+    public static final ItemStat MAGIC_DAMAGE = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "magic_damage"), 0f, 0f, 10000f, false, TextFormatting.GREEN).setSynergyApplies(true);
+    public static final ItemStat ATTACK_SPEED = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "attack_speed"), 0f, -4f, 4f, false, TextFormatting.GREEN);
     // Ranged Weapons
-    public static final ItemStat RANGED_DAMAGE = new ItemStat("ranged_damage", 0f, 0f, 10000f, false, TextFormatting.AQUA).setSynergyApplies(true);
-    public static final ItemStat RANGED_SPEED = new ItemStat("ranged_speed", 0f, -10f, 10f, false, TextFormatting.AQUA);
+    public static final ItemStat RANGED_DAMAGE = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "ranged_damage"), 0f, 0f, 10000f, false, TextFormatting.AQUA).setSynergyApplies(true);
+    public static final ItemStat RANGED_SPEED = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "ranged_speed"), 0f, -10f, 10f, false, TextFormatting.AQUA);
     // Armor
-    public static final ItemStat ARMOR = new ItemStat("armor", 0f, 0f, 40f, false, TextFormatting.LIGHT_PURPLE).setSynergyApplies(true);
-    public static final ItemStat ARMOR_TOUGHNESS = new ItemStat("armor_toughness", 0f, 0f, 40f, false, TextFormatting.LIGHT_PURPLE).setSynergyApplies(true);
-    public static final ItemStat MAGIC_ARMOR = new ItemStat("magic_armor", 0f, 0f, 40f, false, TextFormatting.LIGHT_PURPLE).setSynergyApplies(true);
+    public static final ItemStat ARMOR = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "armor"), 0f, 0f, 40f, false, TextFormatting.LIGHT_PURPLE).setSynergyApplies(true);
+    public static final ItemStat ARMOR_TOUGHNESS = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "armor_toughness"), 0f, 0f, 40f, false, TextFormatting.LIGHT_PURPLE).setSynergyApplies(true);
+    public static final ItemStat MAGIC_ARMOR = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "magic_armor"), 0f, 0f, 40f, false, TextFormatting.LIGHT_PURPLE).setSynergyApplies(true);
 
     public static void init() {
         // NO-OP

@@ -4,10 +4,10 @@
             "item": "silentgear:test_item"
         },
         "title": {
-            "translate": "advancements.silentgear.test_item.title"
+            "translate": "advancements.silentgear.test_item_int.title"
         },
         "description": {
-            "translate": "advancements.silentgear.test_item.description"
+            "translate": "advancements.silentgear.test_item_int.description"
         }
     },
     "parent": "silentgear:root",

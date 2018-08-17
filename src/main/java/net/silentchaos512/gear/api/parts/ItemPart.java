@@ -128,7 +128,7 @@ public abstract class ItemPart {
     // ============
 
     public boolean matchesForCrafting(ItemStack partRep, boolean matchOreDict) {
-        if (StackHelper.isEmpty(partRep))
+        if (partRep.isEmpty())
             return false;
         if (partRep.isItemEqual(this.craftingStack.get()))
             return true;
@@ -312,7 +312,7 @@ public abstract class ItemPart {
                 if (stat != null) {
                     float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
                     Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : getDefaultStatOperation(stat);
-                    String id = "mat_" + this.getTranslationKey(null) + "_" + stat.getUnlocalizedName() + (statMap.get(stat).size() + 1);
+                    String id = "mat_" + this.getTranslationKey(null) + "_" + stat.getName() + (statMap.get(stat).size() + 1);
                     statMap.put(stat, new StatInstance(id, value, op));
                 }
             }

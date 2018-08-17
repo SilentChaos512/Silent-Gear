@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
 
 public final class PartMain extends ItemPart {
 
@@ -29,7 +30,7 @@ public final class PartMain extends ItemPart {
 
     @Override
     public ResourceLocation getBrokenTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position) {
-        return new ResourceLocation(this.registryName.getNamespace(), "items/" + gearClass + "/_broken");
+        return new ResourceLocation(SilentGear.MOD_ID, "items/" + gearClass + "/_broken");
     }
 
     @Override

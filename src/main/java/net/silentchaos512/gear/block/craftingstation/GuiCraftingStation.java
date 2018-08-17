@@ -12,7 +12,6 @@ import net.silentchaos512.gear.client.util.TooltipFlagTC;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
-import net.silentchaos512.lib.util.StackHelper;
 
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class GuiCraftingStation extends GuiContainer {
 
         // Draw crafting result tooltip
         ItemStack craftResult = this.container.craftResult.getStackInSlot(0);
-        if (StackHelper.isEmpty(craftResult))
+        if (craftResult.isEmpty())
             return;
 
         FontRenderer font = this.mc.fontRenderer;

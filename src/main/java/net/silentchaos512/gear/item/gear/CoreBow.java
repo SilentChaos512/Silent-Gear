@@ -29,7 +29,6 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -104,8 +103,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer player, @Nonnull EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
 
-        boolean hasAmmo = StackHelper.isValid(findAmmo(player))
-                || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
+        boolean hasAmmo = !findAmmo(player).isEmpty() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
         boolean isBroken = GearHelper.isBroken(stack);
 
         if (isBroken)
@@ -117,8 +115,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
             return ret;
 
         if (!player.capabilities.isCreativeMode && !hasAmmo) {
-            return !hasAmmo ? new ActionResult<>(EnumActionResult.FAIL, stack)
-                    : new ActionResult<>(EnumActionResult.PASS, stack);
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
         } else {
             player.setActiveHand(hand);
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
@@ -142,8 +139,8 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
             if (i < 0)
                 return;
 
-            if (StackHelper.isValid(ammo) || infiniteAmmo) {
-                if (StackHelper.isEmpty(ammo))
+            if (!ammo.isEmpty() || infiniteAmmo) {
+                if (ammo.isEmpty())
                     ammo = new ItemStack(Items.ARROW);
 
                 float velocity = getArrowVelocity(stack, i);

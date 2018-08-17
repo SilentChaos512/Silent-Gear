@@ -16,7 +16,6 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 
 public class RecipeBlueprintCrafting extends RecipeBaseSL {
-
     public Item outputType;
 
     public RecipeBlueprintCrafting(Item outputType) {

@@ -295,7 +295,7 @@ public class GearHelper {
     }
 
     public static Collection<IRecipe> getExampleRecipes(ICoreItem item) {
-        RecipeMaker recipes = SilentGear.registry.recipes;
+        RecipeMaker recipes = SilentGear.registry.getRecipeMaker();
         Collection<IRecipe> list = new ArrayList<>();
 
         for (PartMain part : PartRegistry.getVisibleMains()) {

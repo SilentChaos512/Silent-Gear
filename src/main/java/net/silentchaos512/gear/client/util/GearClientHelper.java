@@ -95,8 +95,8 @@ public class GearClientHelper {
                         }
                     }
 
-                    StatInstance inst = new StatInstance("display_" + stat.getUnlocalizedName(), statValue, StatInstance.Operation.AVG);
-                    String nameStr = "- " + stat.displayColor + i18n.translate("stat", stat.getUnlocalizedName() + ".name");
+                    StatInstance inst = new StatInstance("display_" + stat.getName(), statValue, StatInstance.Operation.AVG);
+                    String nameStr = "- " + stat.displayColor + i18n.translate("stat." + stat.getName());
                     String statStr = inst.formattedString(stat.displayAsInt ? 0 : 1, false);
 
                     // Some stat-specific formatting...

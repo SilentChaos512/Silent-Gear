@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.PartRegistry;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.event.*;
@@ -27,10 +26,7 @@ import net.silentchaos512.gear.world.ModWorldGenerator;
 import net.silentchaos512.lib.registry.SRegistry;
 
 public class CommonProxy {
-
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
-        CommonItemStats.init();
-
         // Registration Handlers
         registry.addRegistrationHandler(ModBlocks::registerAll, Block.class);
         registry.addRegistrationHandler(ModItems::registerAll, Item.class);

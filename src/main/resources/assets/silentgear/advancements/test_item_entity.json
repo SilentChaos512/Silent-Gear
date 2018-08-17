@@ -1,0 +1,25 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:test_item"
+        },
+        "title": {
+            "translate": "advancements.silentgear.test_item_entity.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.test_item_entity.description"
+        }
+    },
+    "parent": "silentgear:test_item_block",
+    "criteria": {
+        "use_item_test": {
+            "trigger": "silentlib:use_item",
+            "conditions": {
+                "target": "entity",
+                "item": {
+                    "item": "silentgear:test_item"
+                }
+            }
+        }
+    }
+}

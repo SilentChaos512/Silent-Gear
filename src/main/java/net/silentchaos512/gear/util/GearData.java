@@ -89,7 +89,7 @@ public class GearData {
         for (ItemStat stat : stats.keySet()) {
             float value = stat.compute(0f, stats.get(stat));
             // SilentGear.log.debug(stat, value);
-            propertiesCompound.setFloat(stat.getUnlocalizedName(), value);
+            propertiesCompound.setFloat(stat.getName().getPath(), value);
         }
         propertiesCompound.setFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
 
@@ -174,7 +174,7 @@ public class GearData {
 
     public static float getStat(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
         NBTTagCompound tags = getData(stack, NBT_ROOT_PROPERTIES);
-        String key = stat.getUnlocalizedName();
+        String key = stat.getName().getPath();
         if (tags.hasKey(key))
             return tags.getFloat(key);
         else

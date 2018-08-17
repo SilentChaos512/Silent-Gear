@@ -98,7 +98,7 @@ public class ClientProxy extends CommonProxy {
             SilentGear.log.warn("The JEI plugin seems to have failed. Please report with a copy of your log file.");
             event.player.sendMessage(new TextComponentString(TextFormatting.RED + "[Silent Gear] JEI plugin failed to load! Check your log for details."));
         } else {
-            SilentGear.log.debug("JEI plugin seems to have loaded correctly. Errors are still possible, check the log if unsure.");
+            SilentGear.log.debug("JEI plugin seems to have loaded correctly.");
         }
     }
 }

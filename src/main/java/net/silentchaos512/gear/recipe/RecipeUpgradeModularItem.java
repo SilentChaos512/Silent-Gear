@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeUpgradeModularItem extends RecipeBaseSL {
-
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         ItemStack tool = ItemStack.EMPTY;
@@ -34,6 +33,11 @@ public class RecipeUpgradeModularItem extends RecipeBaseSL {
             GearData.addUpgradePart(tool, upgrade);
         GearData.recalculateStats(tool);
         return tool;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return ItemStack.EMPTY;
     }
 
     @Override

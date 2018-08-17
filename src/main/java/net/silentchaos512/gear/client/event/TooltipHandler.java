@@ -13,7 +13,6 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.I18nHelper;
-import net.silentchaos512.lib.util.StackHelper;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
@@ -29,7 +28,7 @@ public class TooltipHandler {
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        ItemPart part = StackHelper.isValid(stack) ? PartRegistry.get(stack) : null;
+        ItemPart part = !stack.isEmpty() ? PartRegistry.get(stack) : null;
 
         I18nHelper i18n = SilentGear.i18n;
 
@@ -80,7 +79,7 @@ public class TooltipHandler {
                 if (!isZero || event.getFlags() == TooltipFlags.ADVANCED) {
                     TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                    String nameStr = nameColor + i18n.translate("stat", stat.getUnlocalizedName() + ".name");
+                    String nameStr = nameColor + i18n.translate("stat." + stat.getName());
                     int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
                     String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");

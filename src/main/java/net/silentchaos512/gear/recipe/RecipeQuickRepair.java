@@ -34,7 +34,6 @@ import net.silentchaos512.lib.util.StackHelper;
 import java.util.Collection;
 
 public class RecipeQuickRepair extends RecipeBaseSL {
-
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         StackList list = StackHelper.getNonEmptyStacks(inv);
@@ -60,6 +59,11 @@ public class RecipeQuickRepair extends RecipeBaseSL {
         gear.attemptDamageItem(-repairValue, SilentGear.random, null);
         GearData.recalculateStats(gear);
         return gear;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return ItemStack.EMPTY;
     }
 
     @Override

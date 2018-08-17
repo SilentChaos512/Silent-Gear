@@ -106,9 +106,9 @@ public class ConfigOptionEquipment {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path), "UTF-8"))) {
             readResourceFile(reader);
         } catch (Exception e) {
-            SilentGear.log.severe("Error loading resource file! Either Silent screwed up or the JAR has been modified.");
-            SilentGear.log.severe("    item: " + item);
-            SilentGear.log.severe("    item type: " + item.getGearClass());
+            SilentGear.log.fatal("Error loading resource file! Either Silent screwed up or the JAR has been modified.");
+            SilentGear.log.fatal("    item: " + item);
+            SilentGear.log.fatal("    item type: " + item.getGearClass());
             e.printStackTrace();
         }
 
@@ -136,7 +136,7 @@ public class ConfigOptionEquipment {
                 if (stat != null) {
                     float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
                     Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : Operation.MUL1;
-                    String id = this.item.getGearClass() + "_mod_" + stat.getUnlocalizedName();
+                    String id = this.item.getGearClass() + "_mod_" + stat.getName();
                     this.modifiers.put(stat, new StatInstance(id, value, op));
                 }
             }
@@ -146,8 +146,8 @@ public class ConfigOptionEquipment {
         if (elementBaseMods.isJsonObject()) {
             JsonObject obj = elementBaseMods.getAsJsonObject();
             for (ItemStat stat : ItemStat.ALL_STATS.values()) {
-                if (obj.has(stat.getUnlocalizedName())) {
-                    float value = obj.get(stat.getUnlocalizedName()).getAsFloat();
+                if (obj.has(stat.getName().getPath())) {
+                    float value = obj.get(stat.getName().getPath()).getAsFloat();
                     this.baseModifiers.put(stat, value);
                 }
             }

@@ -32,7 +32,6 @@ public class ModItems {
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
 
-//    public static BlueprintBook blueprintBook = new BlueprintBook();
     public static Flaxseeds flaxseeds = new Flaxseeds();
 
     public static ToolHead toolHead = new ToolHead();
@@ -56,6 +55,8 @@ public class ModItems {
     public static CoreArmor boots = new CoreArmor(EntityEquipmentSlot.FEET, "boots");
 
     public static void registerAll(SRegistry reg) {
+        guideBook.giveBookOnFirstLogin = false;
+
         // Build gear maps now because blueprints need them
         toolClasses.put("sword", sword);
         toolClasses.put("dagger", dagger);

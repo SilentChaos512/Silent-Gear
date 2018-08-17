@@ -111,7 +111,7 @@ public class Config extends ConfigBase {
 
             toolsBreakPermanently = loadBoolean("Equipment Breaks Permanently", CAT_ITEMS, TOOLS_BREAK_DEFAULT, TOOLS_BREAK_COMMENT);
         } catch (Exception ex) {
-            SilentGear.log.severe("Could not load configuration file!");
+            SilentGear.log.fatal("Could not load configuration file!");
             ex.printStackTrace();
         }
     }
