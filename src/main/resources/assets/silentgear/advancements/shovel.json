@@ -1,23 +1,23 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:crafting_station"
+            "item": "silentgear:shovel"
         },
         "title": {
-            "translate": "advancements.silentgear.crafting_station.title"
+            "translate": "advancements.silentgear.shovel.title"
         },
         "description": {
-            "translate": "advancements.silentgear.crafting_station.description"
+            "translate": "advancements.silentgear.shovel.description"
         }
     },
-    "parent": "silentgear:upgrade_base",
+    "parent": "silentgear:blueprint_pickaxe",
     "criteria": {
         "get_item": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "silentgear:crafting_station"
+                        "item": "silentgear:shovel"
                     }
                 ]
             }

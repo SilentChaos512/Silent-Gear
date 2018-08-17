@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:tip_upgrade_emerald"
+        },
+        "title": {
+            "translate": "advancements.silentgear.high_durability.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.high_durability.description"
+        }
+    },
+    "parent": "silentgear:repair_from_broken",
+    "criteria": {
+        "high_durability": {
+            "trigger": "silentlib:generic_int",
+            "conditions": {
+                "type": "silentgear:max_durability",
+                "value": 16000
+            }
+        }
+    }
+}

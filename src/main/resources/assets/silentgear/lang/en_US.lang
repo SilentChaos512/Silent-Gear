@@ -16,24 +16,32 @@ advancements.silentgear.crafting_station.title=Upgrade My Crafting Table!
 advancements.silentgear.crafting_station.description=Craft a crafting station. It has some useful extra features!
 advancements.silentgear.dagger.title=Tiny Sword
 advancements.silentgear.dagger.description=Craft a dagger. Weak, but fast!
-advancements.silentgear.diamond_tips.title=Diamond-Tipped
-advancements.silentgear.diamond_tips.description=Craft a diamond-tipped upgrade, then craft it with one of your tools
+advancements.silentgear.excavator.title=Dirt Mover 9000
+advancements.silentgear.excavator.description=Craft an excavator. Sometimes a shovel isn't enough!
 advancements.silentgear.hammer.title=Hammer Time!
 advancements.silentgear.hammer.description=Craft a hammah!
+advancements.silentgear.high_durability.title=Almost Unbreakable!
+advancements.silentgear.high_durability.description=Construct a tool with at least 16,000 durability.
 advancements.silentgear.iron_rods.title=Durable Tool Rods
 advancements.silentgear.iron_rods.description=Craft some iron rods. Sticks aren't the only type of tool rod...
-advancements.silentgear.iron_tips.title=Iron-Tipped
-advancements.silentgear.iron_tips.description=Craft an iron-tipped upgrade, then craft it with one of your tools
 advancements.silentgear.mattock.title=Better Than Hoes
 advancements.silentgear.mattock.description=Craft a mattock for all your farming needs
 advancements.silentgear.pickaxe.title=A Better Pickaxe
 advancements.silentgear.pickaxe.description=Craft a Silent Gear pickaxe
+advancements.silentgear.repair_from_broken.title=We Can Rebuild It!
+advancements.silentgear.repair_from_broken.description=Use a tool until it shatters, then repair it by crafting with main materials!
 advancements.silentgear.root.title=Silent Gear
 advancements.silentgear.root.description=Fulfilling all your tool and armor needs
+advancements.silentgear.shovel.title=A Better Shovel
+advancements.silentgear.shovel.description=Craft a Silent Gear shovel
 advancements.silentgear.sickle.title=Plant Destroyer
 advancements.silentgear.sickle.description=Craft a sickle to harvest many plants at once
 advancements.silentgear.sword.title=A Better Sword
 advancements.silentgear.sword.description=Craft a Silent Gear sword
+advancements.silentgear.tip_upgrade.title=Upgrade My Tool!
+advancements.silentgear.tip_upgrade.description=Craft a tip upgrade, then craft it with a tool or weapon.
+advancements.silentgear.upgrade_base.title=Upgrade Base
+advancements.silentgear.upgrade_base.description=You might want to make a few...
 
 ##########
 # Blocks #

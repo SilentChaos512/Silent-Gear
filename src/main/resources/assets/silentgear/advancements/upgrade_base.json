@@ -1,23 +1,24 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:crafting_station"
+            "item": "silentgear:upgrade_base"
         },
         "title": {
-            "translate": "advancements.silentgear.crafting_station.title"
+            "translate": "advancements.silentgear.upgrade_base.title"
         },
         "description": {
-            "translate": "advancements.silentgear.crafting_station.description"
-        }
+            "translate": "advancements.silentgear.upgrade_base.description"
+        },
+        "announce_to_chat": false
     },
-    "parent": "silentgear:upgrade_base",
+    "parent": "silentgear:root",
     "criteria": {
         "get_item": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "silentgear:crafting_station"
+                        "item": "silentgear:upgrade_base"
                     }
                 ]
             }

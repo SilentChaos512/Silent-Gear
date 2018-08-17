@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class GearData {
-
     /**
      * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately,
      * some mods still reference the gear material instead of calling the appropriate methods.
@@ -46,6 +45,9 @@ public class GearData {
     private static final String NBT_RANDOM_GRADING_DONE = "RandomGradingDone";
     private static final String NBT_SYNERGY_DISPLAY = "synergy";
     private static final String NBT_UUID = "ToolCore_UUID";
+
+    private static final String NBT_BROKEN_COUNT = "BrokenCount";
+    private static final String NBT_REPAIR_COUNT = "RepairCount";
 
     private static final int MAX_MAIN_PARTS = 9;
     private static final int MAX_ROD_PARTS = 1;
@@ -371,6 +373,22 @@ public class GearData {
 
     public static void setRandomGradingDone(ItemStack stack, boolean value) {
         getData(stack, NBT_ROOT_CONSTRUCTION).setBoolean(NBT_RANDOM_GRADING_DONE, value);
+    }
+
+    public static int getBrokenCount(ItemStack stack) {
+        return getData(stack, NBT_ROOT_CONSTRUCTION).getInteger(NBT_BROKEN_COUNT);
+    }
+
+    public static void incrementBrokenCount(ItemStack stack) {
+        getData(stack, NBT_ROOT_CONSTRUCTION).setInteger(NBT_BROKEN_COUNT, getBrokenCount(stack) + 1);
+    }
+
+    public static int getRepairCount(ItemStack stack) {
+        return getData(stack, NBT_ROOT_CONSTRUCTION).getInteger(NBT_REPAIR_COUNT);
+    }
+
+    public static void incrementRepairCount(ItemStack stack, int amount) {
+        getData(stack, NBT_ROOT_CONSTRUCTION).setInteger(NBT_REPAIR_COUNT, getRepairCount(stack) + amount);
     }
 
     public static class EventHandler {

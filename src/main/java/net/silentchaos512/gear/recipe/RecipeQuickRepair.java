@@ -61,6 +61,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
 
         gear.attemptDamageItem(-repairValue, SilentGear.random, null);
 //        GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);
+        GearData.incrementRepairCount(gear, materialCount);
         GearData.recalculateStats(gear);
         return gear;
     }

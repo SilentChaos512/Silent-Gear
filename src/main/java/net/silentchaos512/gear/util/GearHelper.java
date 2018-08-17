@@ -125,6 +125,7 @@ public class GearHelper {
         if (isBroken(stack)) {
             // The item "broke" (can still be repaired)
             entityLiving.renderBrokenItemStack(stack);
+            GearData.incrementBrokenCount(stack);
             GearData.recalculateStats(stack);
         } else if (canBreakPermanently && wouldBreak) {
             // Item is gone forever, rest in pieces
