@@ -203,11 +203,12 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if (index != INPUT_SLOT || stack.isEmpty()) return false;
+        if (index != INPUT_SLOT || stack.isEmpty() || (!getStackInSlot(index).isEmpty() && !getStackInSlot(index).isItemEqual(stack)))
+            return false;
 
-        ItemPart part = PartRegistry.get(stack);
         MaterialGrade grade = MaterialGrade.fromStack(stack);
-        return part instanceof PartMain && grade == MaterialGrade.NONE;
+        if (grade != MaterialGrade.NONE) return false;
+        return PartRegistry.get(stack) instanceof PartMain;
     }
 
     @Override
