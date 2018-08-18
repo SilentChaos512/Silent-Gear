@@ -1,13 +1,11 @@
 package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -16,7 +14,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
-import net.silentchaos512.lib.registry.ICustomMesh;
+import net.silentchaos512.lib.item.IColoredItem;
 import net.silentchaos512.lib.util.I18nHelper;
 
 import javax.annotation.Nonnull;
@@ -24,7 +22,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public class Blueprint extends Item implements IBlueprint, ICustomMesh {
+public class Blueprint extends Item implements IBlueprint, IColoredItem {
     private static final String NAME = "blueprint";
     private static Map<String, Blueprint> ITEMS_BLUEPRINT = new HashMap<>();
     private static Map<String, Blueprint> ITEMS_TEMPLATE = new HashMap<>();
@@ -131,11 +129,6 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
                 list.add(TextFormatting.YELLOW + i18n.itemSubText(NAME, "altForRecipe"));
             }
         }
-
-        // Shift key hint
-        if (!KeyTrackerSL.isShiftDown()) {
-            list.add(TextFormatting.DARK_GRAY + i18n.itemSubText(NAME, "shiftForIcon"));
-        }
     }
 
     @Override
@@ -143,25 +136,11 @@ public class Blueprint extends Item implements IBlueprint, ICustomMesh {
         return super.getTranslationKey(stack).replaceFirst("_[a-z]+$", "");
     }
 
-    @Nonnull
     @Override
-    public ItemMeshDefinition getCustomMesh() {
-        return this::getModelFor;
-    }
-
-    private ModelResourceLocation modelNormal, modelWithOverlay;
-
-    @Nonnull
-    @Override
-    public ResourceLocation[] getVariants() {
-        ResourceLocation registryName = Objects.requireNonNull(getRegistryName());
-        modelNormal = new ModelResourceLocation(registryName.toString().replaceFirst("_[a-z]+$", ""), "inventory");
-        modelWithOverlay = new ModelResourceLocation(registryName, "inventory");
-        return new ResourceLocation[]{modelNormal, modelWithOverlay};
-    }
-
-    @Nonnull
-    private ModelResourceLocation getModelFor(ItemStack stack) {
-        return KeyTrackerSL.isShiftDown() ? modelNormal : modelWithOverlay;
+    public IItemColor getColorHandler() {
+        return (stack, tintIndex) -> {
+            if (tintIndex == 0) return 0xFFFFFF;
+            else return this.singleUse ? 0xBAF2E2 : 0xF1F1B9;
+        };
     }
 }

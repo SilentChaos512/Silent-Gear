@@ -1,6 +1,9 @@
 0.1.0
+Updated for Silent Lib 3.0.0
 Added: Main materials now display their tier in the tooltip
 Added: More advancements!
+Changed: New machete textures
+Changed: Blueprint outline colors, remove shift function
 Changed: Hammers and excavators are faster (50% penalty instead of 75%)
 Fixed: Broken tools still appearing broken after repair
 

@@ -64,7 +64,6 @@ item.silentgear.blueprint.materialAmount=Material Required: %d
 item.silentgear.blueprint.singleUse=Can be used only once
 item.silentgear.blueprint.multiUse=Can be used many times
 item.silentgear.blueprint.altForRecipe=<Hold Alt for tool recipe>
-item.silentgear.blueprint.shiftForIcon=Hold Shift to see gear icon
 item.silentgear.blueprint.itemRecipe1=%s recipe:
 item.silentgear.blueprint.itemRecipe2=%dx %s
 item.silentgear.blueprint.canMix=Material mixing possible!
