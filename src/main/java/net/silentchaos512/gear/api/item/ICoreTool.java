@@ -64,6 +64,13 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Nullable
+    default ItemPartData getGripPart(ItemStack stack) {
+        for (ItemPartData part : GearData.getConstructionParts(stack))
+            if (part.getPart() instanceof PartGrip) return part;
+        return null;
+    }
+
+    @Nullable
     default ItemPartData getTipPart(ItemStack stack) {
         for (ItemPartData data : GearData.getConstructionParts(stack))
             if (data.getPart() instanceof PartTip) return data;

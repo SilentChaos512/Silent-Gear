@@ -13,6 +13,11 @@ public final class PartRod extends ItemPart {
     }
 
     @Override
+    public IPartPosition getPartPosition() {
+        return PartPositions.ROD;
+    }
+
+    @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
         return new ResourceLocation(this.registryName.getNamespace(), "items/" + gearClass + "/rod_" + this.textureSuffix);
     }

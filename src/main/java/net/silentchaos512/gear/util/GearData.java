@@ -178,10 +178,7 @@ public class GearData {
     public static float getStat(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
         NBTTagCompound tags = getData(stack, NBT_ROOT_PROPERTIES);
         String key = stat.getName().getPath();
-        if (tags.hasKey(key))
-            return tags.getFloat(key);
-        else
-            return stat.getDefaultValue();
+        return tags.hasKey(key) ? tags.getFloat(key) : stat.getDefaultValue();
     }
 
     public static int getStatInt(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
@@ -269,23 +266,27 @@ public class GearData {
 
     public static void addUpgradePart(ItemStack gear, ItemStack partStack) {
         ItemPartData part = ItemPartData.fromStack(partStack);
-        if (part != null)
-            addUpgradePart(gear, part);
+        if (part != null) addUpgradePart(gear, part);
     }
 
     public static void addUpgradePart(ItemStack gear, ItemPartData part) {
         if (!(gear.getItem() instanceof ICoreItem)) {
-            SilentGear.log.warn("Tried to add upgrade part to non-gear item {}", gear);
-            SilentGear.log.catching(new RuntimeException("Invalid Item type"));
-            return;
+            SilentGear.log.error("Tried to add upgrade part to non-gear item {}", gear);
+            throw new IllegalArgumentException("Invalid Item type");
         }
 
         PartDataList parts = getConstructionParts(gear);
-        // Only one tip upgrade allowed
-        parts.removeIf(data -> data.getPart() instanceof PartTip && part.getPart() instanceof PartTip);
-        // Make sure the upgrade is valid for the gear type
-        if (part.getPart() instanceof IUpgradePart && !((IUpgradePart) part.getPart()).isValidFor((ICoreItem) gear.getItem()))
-            return;
+
+        if (part.getPart() instanceof IUpgradePart) {
+            IUpgradePart upgradePart = (IUpgradePart) part.getPart();
+            // Make sure the upgrade is valid for the gear type
+            if (!upgradePart.isValidFor((ICoreItem) gear.getItem()))
+                return;
+            // Only one allowed in this position? Remove existing if needed.
+            if (upgradePart.replacesExisting())
+                parts.removeIf(p -> p.getPart().getPartPosition() == part.getPart().getPartPosition());
+        }
+
         // Other upgrades allow no exact duplicates, but any number of total upgrades
         for (ItemPartData partInList : parts)
             if (partInList.getPart() == part.getPart())

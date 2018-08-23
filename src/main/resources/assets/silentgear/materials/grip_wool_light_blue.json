@@ -1,0 +1,32 @@
+{
+    "type": "grip",
+    "stats": [
+        {"name": "durability",        "value":  0.0, "op": "MUL1"},
+        {"name": "repair_efficiency", "value":  0.2, "op": "MUL1"},
+        {"name": "enchantability",    "value":  0.0, "op": "ADD"},
+        {"name": "harvest_level",     "value":    0, "op": "MAX"},
+        {"name": "harvest_speed",     "value":  0.1, "op": "MUL1"},
+        {"name": "melee_damage",      "value":  0.0, "op": "ADD"},
+        {"name": "magic_damage",      "value":  0.0, "op": "ADD"},
+        {"name": "attack_speed",      "value":  0.2, "op": "ADD"},
+        {"name": "ranged_damage",     "value":  0.0, "op": "ADD"},
+        {"name": "ranged_speed",      "value":  0.0, "op": "ADD"},
+        {"name": "rarity",            "value":    4}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "minecraft:wool",
+            "data": 3
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "wool",
+        "texture_color": "3ab3da"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 0,
+        "tool_blacklist": []
+    }
+}

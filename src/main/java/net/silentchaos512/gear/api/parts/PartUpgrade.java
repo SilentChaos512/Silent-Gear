@@ -34,6 +34,11 @@ public class PartUpgrade extends ItemPart implements IUpgradePart {
         super(registryName, userDefined);
     }
 
+    @Override
+    public IPartPosition getPartPosition() {
+        return PartPositions.ANY;
+    }
+
     @Nullable
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {

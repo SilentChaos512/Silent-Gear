@@ -89,19 +89,6 @@ public final class PartRegistry {
         return part;
     }
 
-    @Nullable
-    public static ItemPart fromDecoStack(ItemStack stack) {
-        if (stack.isEmpty())
-            return null;
-
-        for (ItemPart part : map.values()) {
-            if (part.matchesForDecorating(stack, true)) {
-                return part;
-            }
-        }
-        return null;
-    }
-
     public static Set<String> getKeySet() {
         return map.keySet();
     }

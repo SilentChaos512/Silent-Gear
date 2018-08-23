@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class GearHelper {
-    public static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
+    private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
 
     //region Attribute modifiers
 

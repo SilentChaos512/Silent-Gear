@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.init;
 
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -14,6 +15,7 @@ import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +28,6 @@ public class ModMaterials implements IPhasedInitializer {
 
     @Override
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
-
         mainWood = PartRegistry.putPart(new PartMain(getPath("main_wood")));
         mainStone = PartRegistry.putPart(new PartMain(getPath("main_stone")));
         mainFlint = PartRegistry.putPart(new PartMain(getPath("main_flint")));
@@ -44,6 +45,10 @@ public class ModMaterials implements IPhasedInitializer {
 
         for (TipUpgrades tip : TipUpgrades.values())
             PartRegistry.putPart(tip.getPart());
+
+        for (EnumDyeColor color : EnumDyeColor.values())
+            PartRegistry.putPart(new PartGrip(getPath("grip_wool_" + color.name().toLowerCase(Locale.ROOT))));
+        PartRegistry.putPart(new PartGrip(getPath("grip_leather")));
 
         bowstringString = PartRegistry.putPart(new PartBowstring(getPath("bowstring_string")));
         bowstringSinew = PartRegistry.putPart(new PartBowstring(getPath("bowstring_sinew")));
@@ -67,7 +72,6 @@ public class ModMaterials implements IPhasedInitializer {
     }
 
     private static final class UserDefined {
-
         static void loadUserParts() {
             final File directory = new File(Config.INSTANCE.getDirectory(), "materials");
             final File[] files = directory.listFiles();

@@ -38,86 +38,38 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class ToolModel implements IModel {
-
-    public static final IModel MODEL = new ToolModel();
+    private static final IModel MODEL = new ToolModel();
+    private static final Set<IPartPosition> RENDER_ORDER = ImmutableSet.of(
+            PartPositions.ROD,
+            PartPositions.GRIP,
+            PartPositions.HEAD,
+            PartPositions.GUARD,
+            PartPositions.TIP,
+            PartPositions.BOWSTRING
+    );
 
     public static final Map<UUID, Float> bowPull = new HashMap<>();
 
-    @Nullable
-    private final ResourceLocation headTexture;
-    @Nullable
-    private final ResourceLocation guardTexture;
-    @Nullable
-    private final ResourceLocation rodTexture;
-    @Nullable
-    private final ResourceLocation tipTexture;
-    @Nullable
-    private final ResourceLocation bowstringTexture;
+    private final ImmutableMap<String, String> textures;
 
-    public ToolModel() {
-        this.headTexture = null;
-        this.guardTexture = null;
-        this.rodTexture = null;
-        this.tipTexture = null;
-        this.bowstringTexture = null;
+    private ToolModel() {
+        textures = ImmutableMap.of();
     }
 
-    public ToolModel(@Nullable ResourceLocation head, @Nullable ResourceLocation guard, @Nullable ResourceLocation rod,
-                     @Nullable ResourceLocation tip, @Nullable ResourceLocation bowstring) {
-        this.headTexture = head;
-        this.guardTexture = guard;
-        this.rodTexture = rod;
-        this.tipTexture = tip;
-        this.bowstringTexture = bowstring;
+    private ToolModel(ImmutableMap<String, String> textures) {
+        this.textures = textures;
     }
 
-    @Nonnull
     @Override
     public IModel retexture(ImmutableMap<String, String> textures) {
-        ResourceLocation head = null;
-        ResourceLocation guard = null;
-        ResourceLocation rod = null;
-        ResourceLocation tip = null;
-        ResourceLocation bowstring = null;
-
-        if (textures.containsKey("head"))
-            head = new ResourceLocation(textures.get("head"));
-        if (textures.containsKey("guard"))
-            guard = new ResourceLocation(textures.get("guard"));
-        if (textures.containsKey("rod"))
-            rod = new ResourceLocation(textures.get("rod"));
-        if (textures.containsKey("tip"))
-            tip = new ResourceLocation(textures.get("tip"));
-        if (textures.containsKey("bowstring"))
-            bowstring = new ResourceLocation(textures.get("bowstring"));
-
-        return new ToolModel(head, guard, rod, tip, bowstring);
+        return new ToolModel(textures);
     }
 
-    @Nonnull
     @Override
     public IModel process(ImmutableMap<String, String> customData) {
-        ResourceLocation head = null;
-        ResourceLocation guard = null;
-        ResourceLocation rod = null;
-        ResourceLocation tip = null;
-        ResourceLocation bowstring = null;
-
-        if (customData.containsKey("head"))
-            head = new ResourceLocation(customData.get("head"));
-        if (customData.containsKey("guard"))
-            guard = new ResourceLocation(customData.get("guard"));
-        if (customData.containsKey("rod"))
-            rod = new ResourceLocation(customData.get("rod"));
-        if (customData.containsKey("tip"))
-            tip = new ResourceLocation(customData.get("tip"));
-        if (customData.containsKey("bowstring"))
-            bowstring = new ResourceLocation(customData.get("bowstring"));
-
-        return new ToolModel(head, guard, rod, tip, bowstring);
+        return new ToolModel(customData);
     }
 
-    @Nonnull
     @Override
     public Collection<ResourceLocation> getDependencies() {
         return ImmutableList.of();
@@ -166,24 +118,15 @@ public class ToolModel implements IModel {
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         ImmutableMap<TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
-
-        TRSRTransformation transform = TRSRTransformation.identity();
-
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
-        ImmutableList.Builder<ResourceLocation> texBuilder = ImmutableList.builder();
-        if (this.rodTexture != null)
-            texBuilder.add(this.rodTexture);
-        if (this.headTexture != null)
-            texBuilder.add(this.headTexture);
-        if (this.guardTexture != null)
-            texBuilder.add(this.guardTexture);
-        if (this.tipTexture != null)
-            texBuilder.add(this.tipTexture);
-        if (this.bowstringTexture != null)
-            texBuilder.add(this.bowstringTexture);
-
-        ImmutableList<ResourceLocation> textures = texBuilder.build();
+        // Get textures in proper render order
+        ImmutableList<ResourceLocation> textures = RENDER_ORDER.stream()
+                .map(IPartPosition::getModelIndex)
+                .map(this.textures::get)
+                .filter(Objects::nonNull)
+                .map(ResourceLocation::new)
+                .collect(ImmutableList.toImmutableList());
         int layerCount = textures.size();
 
         IBakedModel model = (new ItemLayerModel(textures)).bake(state, format, bakedTextureGetter);
@@ -214,7 +157,6 @@ public class ToolModel implements IModel {
     }
 
     public static final class Loader implements ICustomModelLoader {
-
         public static Loader INSTANCE = new Loader();
 
         @Override
@@ -238,7 +180,7 @@ public class ToolModel implements IModel {
 
         public static final OverrideHandler INSTANCE = new OverrideHandler();
 
-        public OverrideHandler() {
+        OverrideHandler() {
             super(ImmutableList.of());
         }
 
@@ -264,6 +206,7 @@ public class ToolModel implements IModel {
                 ItemPartData partHead = itemTool.getPrimaryPart(stack);
                 ItemPartData partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
                 ItemPartData partRod = itemTool.getRodPart(stack);
+                ItemPartData partGrip = itemTool.getGripPart(stack);
                 ItemPartData partTip = itemTool.getTipPart(stack);
                 ItemPartData partBowstring = itemTool.getBowstringPart(stack);
 
@@ -272,6 +215,7 @@ public class ToolModel implements IModel {
                 processTexture(stack, toolClass, PartPositions.HEAD, partHead, animationFrame, isBroken, builder);
                 processTexture(stack, toolClass, PartPositions.GUARD, partGuard, animationFrame, isBroken, builder);
                 processTexture(stack, toolClass, PartPositions.ROD, partRod, animationFrame, isBroken, builder);
+                processTexture(stack, toolClass, PartPositions.GRIP, partGrip, animationFrame, isBroken, builder);
                 processTexture(stack, toolClass, PartPositions.TIP, partTip, animationFrame, isBroken, builder);
                 processTexture(stack, toolClass, PartPositions.BOWSTRING, partBowstring, animationFrame, isBroken, builder);
 
@@ -283,9 +227,11 @@ public class ToolModel implements IModel {
                 GearClientHelper.modelCache.put(key, bakedModel);
 
                 // Color cache
-                ColorHandlers.gearColorCache.put(key, Stream.of(partRod, partHead, partGuard, partTip, partBowstring)
-                        .filter(Objects::nonNull)
-                        .map(part -> part.getColor(stack, animationFrame)).toArray(Integer[]::new));
+                ColorHandlers.gearColorCache.put(key,
+                        Stream.of(partRod, partGrip, partHead, partGuard, partTip, partBowstring)
+                                .filter(Objects::nonNull)
+                                .map(part -> part.getColor(stack, animationFrame))
+                                .toArray(Integer[]::new));
 
                 return bakedModel;
             }
@@ -293,7 +239,7 @@ public class ToolModel implements IModel {
             return GearClientHelper.modelCache.get(key);
         }
 
-        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, ItemPartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, @Nullable ItemPartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
                 ResourceLocation texture;
                 if (isBroken)
@@ -306,7 +252,7 @@ public class ToolModel implements IModel {
             }
         }
 
-        private int getAnimationFrame(ItemStack stack, World world, EntityLivingBase entity) {
+        private int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
             if (stack.getItem() instanceof CoreBow) {
                 UUID uuid = GearData.getUUID(stack);
                 if (bowPull.containsKey(uuid)) {
@@ -328,7 +274,7 @@ public class ToolModel implements IModel {
 
         public static Baked instance;
 
-        public Baked(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format, ImmutableMap<TransformType, TRSRTransformation> transforms, Map<String, IBakedModel> cache) {
+        Baked(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format, ImmutableMap<TransformType, TRSRTransformation> transforms, Map<String, IBakedModel> cache) {
             super(parent, immutableList, format, transforms, cache);
             instance = this;
         }

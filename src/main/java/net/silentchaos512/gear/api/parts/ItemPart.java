@@ -137,13 +137,13 @@ public abstract class ItemPart {
         return false;
     }
 
-    public boolean matchesForDecorating(ItemStack partRep, boolean matchOreDict) {
-        if (!craftingOreDictName.isEmpty()) {
-            String nuggetName = craftingOreDictName.replaceFirst("gem|ingot", "nugget");
-            // TODO matchesForDecorating?
-        }
-        return matchesForCrafting(partRep, matchOreDict);
-    }
+    /**
+     * Gets the position the part occupies. Mainly used to prevent duplicate upgrades of one type
+     * (tips, grips). Consider returning {@link PartPositions#ANY} if position is not relevant.
+     *
+     * @return The part position (never null)
+     */
+    public abstract IPartPosition getPartPosition();
 
     public boolean isBlacklisted() {
         return isBlacklisted(this.craftingStack.get());
@@ -227,11 +227,12 @@ public abstract class ItemPart {
     public String getTranslatedName(ItemPartData part, ItemStack gear) {
         if (!localizedNameOverride.isEmpty())
             return localizedNameOverride;
-        return /* nameColor + */ SilentGear.i18n.translate(getTranslationKey(part));
+        return /* nameColor + */ SilentGear.i18n.translate(this.getTranslationKey(part));
     }
 
     /**
-     * Gets a string that represents the type of part (main, rod, tip, etc.)
+     * Gets a string that represents the type of part (main, rod, tip, etc.) Used for localization
+     * of part type/class, not the individual part.
      */
     public abstract String getTypeName();
 
@@ -389,11 +390,13 @@ public abstract class ItemPart {
             return () -> ItemStack.EMPTY;
 
         final String itemName = JsonUtils.getString(json, "item");
-        final Item item = Item.getByNameOrId(itemName);
-        if (item == null)
-            return () -> ItemStack.EMPTY;
         final int meta = json.has("data") ? JsonUtils.getInt(json, "data") : 0;
-        return () -> new ItemStack(item, 1, meta);
+        // Item likely does not exist when the ItemPart is constructed, so we need to get it lazily
+        return () -> {
+            Item item = Item.getByNameOrId(itemName);
+            if (item == null) return ItemStack.EMPTY;
+            return new ItemStack(item, 1, meta);
+        };
     }
 
     public void writeToNBT(NBTTagCompound tags) {

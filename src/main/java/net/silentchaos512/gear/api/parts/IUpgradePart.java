@@ -15,4 +15,8 @@ public interface IUpgradePart {
     default boolean isValidFor(ICoreItem gearItem) {
         return true;
     }
+
+    default boolean replacesExisting() {
+        return false;
+    }
 }

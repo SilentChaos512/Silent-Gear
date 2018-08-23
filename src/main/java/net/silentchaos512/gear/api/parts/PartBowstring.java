@@ -13,6 +13,11 @@ public final class PartBowstring extends ItemPart {
     }
 
     @Override
+    public IPartPosition getPartPosition() {
+        return PartPositions.BOWSTRING;
+    }
+
+    @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack stack, String toolClass, IPartPosition position, int animationFrame) {
         if (!"bow".equals(toolClass)) return BLANK_TEXTURE;
         return new ResourceLocation(this.registryName.getNamespace(), "items/" + toolClass + "/bowstring_"

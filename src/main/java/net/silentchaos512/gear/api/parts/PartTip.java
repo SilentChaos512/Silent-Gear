@@ -41,4 +41,14 @@ public final class PartTip extends ItemPart implements IUpgradePart {
     public String getTypeName() {
         return "tip";
     }
+
+    @Override
+    public boolean replacesExisting() {
+        return true;
+    }
+
+    @Override
+    public IPartPosition getPartPosition() {
+        return PartPositions.TIP;
+    }
 }

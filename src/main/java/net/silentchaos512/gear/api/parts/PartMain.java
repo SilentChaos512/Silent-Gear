@@ -14,6 +14,11 @@ public final class PartMain extends ItemPart {
     }
 
     @Override
+    public IPartPosition getPartPosition() {
+        return PartPositions.HEAD;
+    }
+
+    @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String toolClass, IPartPosition position, int animationFrame) {
         String frameStr = "bow".equals(toolClass) && animationFrame == 3 ? "_3" : "";
         String partPosition = position.getTexturePrefix();

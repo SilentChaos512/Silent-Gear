@@ -2,6 +2,8 @@ package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.ICoreTool;
 
 public final class PartGrip extends ItemPart implements IUpgradePart {
     public PartGrip(ResourceLocation name) {
@@ -25,5 +27,20 @@ public final class PartGrip extends ItemPart implements IUpgradePart {
     @Override
     public String getTypeName() {
         return "grip";
+    }
+
+    @Override
+    public boolean isValidFor(ICoreItem gearItem) {
+        return gearItem instanceof ICoreTool;
+    }
+
+    @Override
+    public boolean replacesExisting() {
+        return true;
+    }
+
+    @Override
+    public IPartPosition getPartPosition() {
+        return PartPositions.GRIP;
     }
 }
