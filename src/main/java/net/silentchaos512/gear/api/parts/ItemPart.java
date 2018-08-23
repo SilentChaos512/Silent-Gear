@@ -253,7 +253,7 @@ public abstract class ItemPart {
     /**
      * Get the location of the resource file that contains material information
      */
-    protected String getResourceFileLocation() {
+    private String getResourceFileLocation() {
         return "assets/" + this.registryName.getNamespace() + "/materials/" + this.registryName.getPath() + ".json";
     }
 
@@ -372,7 +372,7 @@ public abstract class ItemPart {
         }
     }
 
-    protected int readColorCode(String str) {
+    private int readColorCode(String str) {
         try {
             return UnsignedInts.parseUnsignedInt(str, 16);
         } catch (NumberFormatException ex) {
@@ -384,18 +384,16 @@ public abstract class ItemPart {
     /**
      * Parse ItemStack data from a JSON object
      */
-    protected Supplier<ItemStack> readItemData(JsonObject json) {
+    private Supplier<ItemStack> readItemData(JsonObject json) {
         if (!json.has("item"))
             return () -> ItemStack.EMPTY;
 
         final String itemName = JsonUtils.getString(json, "item");
-        return () -> {
-            Item item = Item.getByNameOrId(itemName);
-            if (item == null)
-                return ItemStack.EMPTY;
-            int meta = json.has("data") ? JsonUtils.getInt(json, "data") : 0;
-            return new ItemStack(item, 1, meta);
-        };
+        final Item item = Item.getByNameOrId(itemName);
+        if (item == null)
+            return () -> ItemStack.EMPTY;
+        final int meta = json.has("data") ? JsonUtils.getInt(json, "data") : 0;
+        return () -> new ItemStack(item, 1, meta);
     }
 
     public void writeToNBT(NBTTagCompound tags) {

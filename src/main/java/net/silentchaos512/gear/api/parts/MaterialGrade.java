@@ -27,10 +27,9 @@ import javax.annotation.Nonnull;
 import java.util.Random;
 
 public enum MaterialGrade {
-
     NONE(0), E(-8), D(-4), C(0), B(5), A(10), S(20), SS(30), SSS(40);
 
-    public static final String NBT_KEY = SilentGear.MOD_ID + "_grade";
+    private static final String NBT_KEY = SilentGear.MOD_ID + "_grade";
 
     public final int bonusPercent;
 

@@ -19,7 +19,6 @@ import java.util.Set;
  * Interface for all equipment items, including tools and armor.
  */
 public interface ICoreItem extends IStatItem {
-
     //region Item properties and construction
 
     default ItemStack construct(Item item, ItemStack... materials) {

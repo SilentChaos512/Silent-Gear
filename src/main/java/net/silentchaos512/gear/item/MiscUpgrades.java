@@ -48,7 +48,7 @@ public enum MiscUpgrades implements IEnumItems<MiscUpgrades, MiscUpgrades.Item> 
 
         this.part = new PartUpgrade(partName) {
             @Override
-            public boolean isValidFor(ICoreItem gearItem) {
+            public boolean isValidFor(@Nonnull ICoreItem gearItem) {
                 return canApplyTo.test(gearItem);
             }
         };

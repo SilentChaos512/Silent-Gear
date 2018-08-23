@@ -138,4 +138,16 @@ public class ItemPartData {
         }
         return super.equals(obj);
     }
+
+    public boolean isMain() {
+        return this.part instanceof PartMain;
+    }
+
+    public boolean isRod() {
+        return this.part instanceof PartRod;
+    }
+
+    public boolean isTip() {
+        return this.part instanceof PartTip;
+    }
 }

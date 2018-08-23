@@ -15,9 +15,7 @@ import javax.annotation.Nonnegative;
  */
 @Getter(value = AccessLevel.PUBLIC)
 public class StatInstance {
-
     public enum Operation {
-
         AVG, ADD, MUL1, MUL2, MAX;
 
         public static Operation byName(String str) {
@@ -71,8 +69,7 @@ public class StatInstance {
     }
 
     private TextFormatting getFormattedColor(float val, float whiteVal, boolean addColor) {
-        if (!addColor)
-            return TextFormatting.WHITE;
+        if (!addColor) return TextFormatting.WHITE;
         return val < whiteVal ? TextFormatting.RED : val == whiteVal ? TextFormatting.WHITE : TextFormatting.GREEN;
     }
 

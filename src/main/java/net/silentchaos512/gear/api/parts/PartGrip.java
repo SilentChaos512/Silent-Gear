@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public final class PartGrip extends ItemPart implements IUpgradePart {
-
     public PartGrip(ResourceLocation name) {
         super(name, false);
     }

@@ -52,7 +52,7 @@ public class PartDataList implements List<ItemPartData> {
 
     public PartDataList getUniqueParts(boolean mainsOnly) {
         PartDataList result = PartDataList.of();
-        for (ItemPartData data : (mainsOnly ? getMains() : list)) {
+        for (ItemPartData data : (mainsOnly ? getMains() : this.list)) {
             if (result.stream().map(ItemPartData::getPart).noneMatch(part -> part == data.part)) {
                 result.add(data);
             }
@@ -62,27 +62,27 @@ public class PartDataList implements List<ItemPartData> {
 
     @Nullable
     public ItemPartData getPrimaryMain() {
-        for (ItemPartData data : list)
+        for (ItemPartData data : this.list)
             if (data.part instanceof PartMain)
                 return data;
         return null;
     }
 
     public List<ItemPartData> getMains() {
-        return getParts(data -> data.part instanceof PartMain);
+        return getParts(ItemPartData::isMain);
     }
 
     public List<ItemPartData> getRods() {
-        return getParts(data -> data.part instanceof PartRod);
+        return getParts(ItemPartData::isRod);
     }
 
     public List<ItemPartData> getTips() {
-        return getParts(data -> data.part instanceof PartTip);
+        return getParts(ItemPartData::isTip);
     }
 
     public List<ItemPartData> getParts(Predicate<ItemPartData> predicate) {
         ImmutableList.Builder<ItemPartData> builder = ImmutableList.builder();
-        list.stream().filter(predicate).forEach(builder::add);
+        this.list.stream().filter(predicate).forEach(builder::add);
         return builder.build();
     }
 
@@ -91,122 +91,121 @@ public class PartDataList implements List<ItemPartData> {
      * parts and parts without a unique crafting stack.
      */
     public boolean addPart(ItemPart part) {
-        return list.add(ItemPartData.instance(part));
+        return this.list.add(ItemPartData.instance(part));
     }
 
     @Override
     public boolean add(ItemPartData arg0) {
-        return list.add(arg0);
+        return this.list.add(arg0);
     }
 
     @Override
     public void add(int arg0, ItemPartData arg1) {
-        list.add(arg0, arg1);
+        this.list.add(arg0, arg1);
     }
 
     @Override
     public boolean addAll(Collection<? extends ItemPartData> arg0) {
-        return list.addAll(arg0);
+        return this.list.addAll(arg0);
     }
 
     @Override
     public boolean addAll(int arg0, Collection<? extends ItemPartData> arg1) {
-
-        return list.addAll(arg0, arg1);
+        return this.list.addAll(arg0, arg1);
     }
 
     @Override
     public void clear() {
-        list.clear();
+        this.list.clear();
     }
 
     @Override
     public boolean contains(Object arg0) {
-        return list.contains(arg0);
+        return this.list.contains(arg0);
     }
 
     @Override
     public boolean containsAll(Collection<?> arg0) {
-        return list.containsAll(arg0);
+        return this.list.containsAll(arg0);
     }
 
     @Override
     public ItemPartData get(int arg0) {
-        return list.get(arg0);
+        return this.list.get(arg0);
     }
 
     @Override
     public int indexOf(Object arg0) {
-        return list.indexOf(arg0);
+        return this.list.indexOf(arg0);
     }
 
     @Override
     public boolean isEmpty() {
-        return list.isEmpty();
+        return this.list.isEmpty();
     }
 
     @Override
     public Iterator<ItemPartData> iterator() {
-        return list.iterator();
+        return this.list.iterator();
     }
 
     @Override
     public int lastIndexOf(Object arg0) {
-        return list.lastIndexOf(arg0);
+        return this.list.lastIndexOf(arg0);
     }
 
     @Override
     public ListIterator<ItemPartData> listIterator() {
-        return list.listIterator();
+        return this.list.listIterator();
     }
 
     @Override
     public ListIterator<ItemPartData> listIterator(int arg0) {
-        return list.listIterator(arg0);
+        return this.list.listIterator(arg0);
     }
 
     @Override
     public boolean remove(Object arg0) {
-        return list.remove(arg0);
+        return this.list.remove(arg0);
     }
 
     @Override
     public ItemPartData remove(int arg0) {
-        return list.remove(arg0);
+        return this.list.remove(arg0);
     }
 
     @Override
     public boolean removeAll(Collection<?> arg0) {
-        return list.removeAll(arg0);
+        return this.list.removeAll(arg0);
     }
 
     @Override
     public boolean retainAll(Collection<?> arg0) {
-        return list.retainAll(arg0);
+        return this.list.retainAll(arg0);
     }
 
     @Override
     public ItemPartData set(int arg0, ItemPartData arg1) {
-        return list.set(arg0, arg1);
+        return this.list.set(arg0, arg1);
     }
 
     @Override
     public int size() {
-        return list.size();
+        return this.list.size();
     }
 
     @Override
     public List<ItemPartData> subList(int arg0, int arg1) {
-        return list.subList(arg0, arg1);
+        return this.list.subList(arg0, arg1);
     }
 
     @Override
     public Object[] toArray() {
-        return list.toArray();
+        return this.list.toArray();
     }
 
     @Override
     public <T> T[] toArray(T[] arg0) {
-        return list.toArray(arg0);
+        return this.list.toArray(arg0);
     }
 }

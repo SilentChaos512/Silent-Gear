@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public final class PartBowstring extends ItemPart {
-
     public PartBowstring(ResourceLocation name) {
         super(name, false);
     }
@@ -15,9 +14,9 @@ public final class PartBowstring extends ItemPart {
 
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack stack, String toolClass, IPartPosition position, int animationFrame) {
-        if (!"bow".equals(toolClass))
-            return BLANK_TEXTURE;
-        return new ResourceLocation(this.registryName.getNamespace(), "items/" + toolClass + "/bowstring_" + this.textureSuffix + "_" + animationFrame);
+        if (!"bow".equals(toolClass)) return BLANK_TEXTURE;
+        return new ResourceLocation(this.registryName.getNamespace(), "items/" + toolClass + "/bowstring_"
+                + this.textureSuffix + "_" + animationFrame);
     }
 
     @Override

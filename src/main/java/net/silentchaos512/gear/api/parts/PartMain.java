@@ -5,7 +5,6 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 
 public final class PartMain extends ItemPart {
-
     public PartMain(ResourceLocation name) {
         super(name, false);
     }

@@ -10,7 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public interface ICoreWeapon extends ICoreTool {
-
     Set<ItemStat> RELEVANT_STATS = new LinkedHashSet<>(Arrays.asList(
             CommonItemStats.MELEE_DAMAGE,
             CommonItemStats.MAGIC_DAMAGE,
@@ -22,7 +21,6 @@ public interface ICoreWeapon extends ICoreTool {
 
     @Override
     default Set<ItemStat> getRelevantStats(ItemStack stack) {
-
         return RELEVANT_STATS;
     }
 

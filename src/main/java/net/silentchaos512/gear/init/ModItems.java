@@ -2,7 +2,6 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.GuideBookToolMod;
@@ -10,7 +9,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.gear.*;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
@@ -124,14 +121,14 @@ public class ModItems {
 
     private static void registerBlueprints(SRegistry reg, String name, boolean singleUse) {
         toolClasses.forEach((key, item) -> {
-            Function<PartDataList, ItemStack> funcToolHead = partList -> toolHead.getStack(key, partList);
-            Blueprint blueprint = new Blueprint(singleUse, item, funcToolHead);
+            Blueprint blueprint = new Blueprint(singleUse, item,
+                    partList -> toolHead.getStack(key, partList));
             blueprints.add(blueprint);
             reg.registerItem(blueprint, name + "_" + key);
         });
         armorClasses.forEach((key, item) -> {
-            Function<PartDataList, ItemStack> funcArmor = partList -> item.construct(item.getItem(), partList);
-            Blueprint blueprint = new Blueprint(singleUse, item, funcArmor);
+            Blueprint blueprint = new Blueprint(singleUse, item,
+                    partList -> item.construct(item.getItem(), partList));
             blueprints.add(blueprint);
             reg.registerItem(blueprint, name + "_" + key);
         });

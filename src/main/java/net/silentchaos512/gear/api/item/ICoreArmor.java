@@ -10,7 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public interface ICoreArmor extends ICoreItem {
-
     Set<ItemStat> RELEVANT_STATS = new LinkedHashSet<>(Arrays.asList(
             CommonItemStats.ARMOR,
             CommonItemStats.MAGIC_ARMOR,

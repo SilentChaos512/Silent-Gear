@@ -24,7 +24,7 @@ public final class PartTip extends ItemPart implements IUpgradePart {
 
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
-        return getTexture(part, gear, gearClass, animationFrame);
+        return getTexture(part, gear, gearClass, PartPositions.TIP, animationFrame);
     }
 
     @Override

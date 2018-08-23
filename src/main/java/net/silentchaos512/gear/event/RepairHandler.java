@@ -25,7 +25,6 @@ public class RepairHandler {
     @SubscribeEvent
     public void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
         if (!(event.crafting.getItem() instanceof ICoreItem)) return;
-        SilentGear.log.info("ItemCraftedEvent caught!");
 
         if (event.player instanceof EntityPlayerMP) {
             // Try to trigger some advancments

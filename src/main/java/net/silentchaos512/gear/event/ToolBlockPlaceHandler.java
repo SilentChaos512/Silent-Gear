@@ -15,7 +15,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.silentchaos512.gear.api.item.IBlockPlacer;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearHelper;
@@ -119,6 +118,6 @@ public class ToolBlockPlaceHandler {
     private boolean itemNotPlaceable(ItemStack stack) {
         return stack.isEmpty()
                 || (stack.hasTagCompound() && stack.getTagCompound().hasKey("NoPlacing"))
-                || (!(stack.getItem() instanceof ItemBlock) && !(stack.getItem() instanceof IBlockPlacer) && !Config.itemsThatToolsCanUse.matches(stack.getItem()));
+                || (!(stack.getItem() instanceof ItemBlock) && !Config.itemsThatToolsCanUse.matches(stack.getItem()));
     }
 }

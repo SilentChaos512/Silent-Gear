@@ -8,6 +8,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @author SilentChaos512
  * @since Experimental
  */
+@ParametersAreNonnullByDefault
 public class ItemStat {
     public static Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
 
@@ -46,18 +48,18 @@ public class ItemStat {
         this.displayAsInt = displayAsInt;
         this.displayColor = displayColor;
 
-        if (minimumValue > maximumValue) {
+        if (this.minimumValue > this.maximumValue) {
             throw new IllegalArgumentException("Minimum value cannot be bigger than maximum value!");
-        } else if (defaultValue < minimumValue) {
+        } else if (this.defaultValue < this.minimumValue) {
             throw new IllegalArgumentException("Default value cannot be lower than minimum value!");
-        } else if (defaultValue > maximumValue) {
+        } else if (this.defaultValue > this.maximumValue) {
             throw new IllegalArgumentException("Default value cannot be bigger than maximum value!");
         }
 
         ALL_STATS.put(name.getPath(), this);
     }
 
-    public float clampValue(float value) {
+    private float clampValue(float value) {
         value = MathHelper.clamp(value, minimumValue, maximumValue);
         return value;
     }
