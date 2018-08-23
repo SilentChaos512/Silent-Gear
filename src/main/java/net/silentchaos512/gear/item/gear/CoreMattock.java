@@ -31,9 +31,9 @@ import java.util.List;
 import java.util.Set;
 
 public class CoreMattock extends ItemHoe implements ICoreTool {
-
-    private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.GOURD, Material.WOOD);
-    private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANTS, Material.VINE);
+    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES,
+            Material.PLANTS, Material.VINE, Material.GRASS, Material.GROUND, Material.CLAY,
+            Material.SAND, Material.SNOW, Material.GOURD, Material.WOOD);
 
     public CoreMattock() {
         super(GearData.FAKE_MATERIAL);
@@ -57,8 +57,6 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
 
         if (GearHelper.isBroken(stack))
             return EnumActionResult.PASS;
-
-        // TODO
 
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
@@ -92,10 +90,8 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
         // Wrong harvest level?
         if (state.getBlock().getHarvestLevel(state) > toolLevel)
             return false;
-        // Included in base or extra materials?
-        if (BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()) || EXTRA_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
-            return true;
-        return super.canHarvestBlock(state);
+        // Included in effective materials?
+        return EFFECTIVE_MATERIALS.contains(state.getMaterial()) || super.canHarvestBlock(state);
     }
 
     //endregion
@@ -114,14 +110,16 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
+        return GearHelper.getDestroySpeed(stack, state, EFFECTIVE_MATERIALS);
     }
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
-        if (super.getHarvestLevel(stack, toolClass, player, state) < 0 || GearHelper.isBroken(stack))
-            return -1;
-        return GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+        if (GearHelper.isBroken(stack)) return -1;
+        int harvestLevel = GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+        return !EFFECTIVE_MATERIALS.contains(state.getMaterial())
+                || state.getBlock().getHarvestLevel(state) > harvestLevel
+                ? -1 : harvestLevel; // ?
     }
 
     @Override
@@ -151,7 +149,7 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : super.getToolClasses(stack);
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.of("shovel", "axe");
     }
 
     @Override

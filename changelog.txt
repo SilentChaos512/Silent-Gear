@@ -5,6 +5,7 @@ Added: More advancements!
 Changed: New machete textures
 Changed: Blueprint outline colors, remove shift function
 Changed: Hammers and excavators are faster (50% penalty instead of 75%)
+Fixed: Mattocks not actually working as shovels or axes
 Fixed: Broken tools still appearing broken after repair
 
 0.0.11
