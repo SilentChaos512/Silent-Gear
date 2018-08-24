@@ -134,6 +134,18 @@ public class GearHelper {
         }
     }
 
+    // Used by setDamage in gear items to prevent other mods from breaking them
+    public static int calcDamageClamped(ItemStack stack, int damage) {
+        if (isUnbreakable(stack)) return 0;
+        final boolean canBreakPermanently = Config.toolsBreakPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
+
+        if (!canBreakPermanently) {
+            if (damage > stack.getItemDamage()) damage = Math.min(stack.getMaxDamage(), damage);
+            else damage = Math.max(0, damage);
+        }
+        return damage;
+    }
+
     public static boolean isBroken(ItemStack stack) {
         // if (gear.getItem() instanceof ItemGemArrow) {
         // // Quick hack for arrow coloring.

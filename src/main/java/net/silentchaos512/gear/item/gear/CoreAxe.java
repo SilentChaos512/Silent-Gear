@@ -126,6 +126,14 @@ public class CoreAxe extends ItemAxe implements ICoreTool {
     }
 
     @Override
+    public void setDamage(ItemStack stack, int damage) {
+        super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
+        if (GearHelper.isBroken(stack)) {
+            GearData.recalculateStats(stack);
+        }
+    }
+
+    @Override
     public int getMaxDamage(ItemStack stack) {
         return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
     }
