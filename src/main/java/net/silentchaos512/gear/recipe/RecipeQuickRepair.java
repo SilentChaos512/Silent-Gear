@@ -96,6 +96,6 @@ public class RecipeQuickRepair extends RecipeBaseSL {
             }
         }
 
-        return partsCount > 0;
+        return !gear.isEmpty() && partsCount > 0;
     }
 }

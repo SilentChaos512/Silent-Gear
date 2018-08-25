@@ -1,5 +1,6 @@
 0.1.1
 Added: Wool and leather grips (craft leather or a block of wool with an existing tool)
+Fixed: Quick repair recipe matching when it shouldn't, causing some recipes to stop working (#3)
 Fixed: Some tools being broken by other mods (axes on bonsai pots, for example)
 
 0.1.0
