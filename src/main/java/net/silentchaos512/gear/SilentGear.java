@@ -28,7 +28,11 @@ import net.silentchaos512.lib.util.LogHelper;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-@Mod(modid = SilentGear.MOD_ID, name = SilentGear.MOD_NAME, version = SilentGear.VERSION, dependencies = SilentGear.DEPENDENCIES)
+@Mod(modid = SilentGear.MOD_ID,
+        name = SilentGear.MOD_NAME,
+        version = SilentGear.VERSION,
+        dependencies = SilentGear.DEPENDENCIES,
+        guiFactory = "net.silentchaos512.gear.client.gui.GuiFactorySGear")
 @MethodsReturnNonnullByDefault
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SilentGear implements IModBase {
@@ -45,16 +49,16 @@ public class SilentGear implements IModBase {
         CommonItemStats.init();
     }
 
-    public static Random random = new Random();
-    public static LogHelper log = new LogHelper(MOD_NAME, BUILD_NUM);
-    public static I18nHelper i18n = new I18nHelper(MOD_ID, log, true);
+    public static final Random random = new Random();
+    public static final LogHelper log = new LogHelper(MOD_NAME, BUILD_NUM);
+    public static final I18nHelper i18n = new I18nHelper(MOD_ID, log, true);
 
-    public static SRegistry registry = new SRegistry();
+    public static final SRegistry registry = new SRegistry();
     public static NetworkHandlerSL network;
 
     public static EnumRarity RARITY_LEGENDARY;
 
-    public static CreativeTabs creativeTab = registry.makeCreativeTab(MOD_ID,
+    public static final CreativeTabs creativeTab = registry.makeCreativeTab(MOD_ID,
             () -> GearGenerator.create(ModItems.katana, 3));
 
     @Instance(MOD_ID)
@@ -109,7 +113,13 @@ public class SilentGear implements IModBase {
         return VERSION;
     }
 
+    @Override
     public int getBuildNum() {
         return BUILD_NUM;
+    }
+
+    @Override
+    public LogHelper getLog() {
+        return log;
     }
 }

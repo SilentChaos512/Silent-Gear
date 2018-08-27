@@ -4,6 +4,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -95,11 +96,16 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (JeiPlugin.hasInitFailed()) {
-            SilentGear.log.warn("The JEI plugin seems to have failed. Please report with a copy of your log file.");
-            event.player.sendMessage(new TextComponentString(TextFormatting.RED + "[Silent Gear] JEI plugin failed to load! Check your log for details."));
+        if (Loader.isModLoaded("jei")) {
+            if (JeiPlugin.hasInitFailed()) {
+                String msg = "The JEI plugin seems to have failed. Some recipes may not be visible. Please report with a copy of your log file.";
+                SilentGear.log.error(msg);
+                event.player.sendMessage(new TextComponentString(TextFormatting.RED + "[Silent Gear] " + msg));
+            } else {
+                SilentGear.log.info("JEI plugin seems to have loaded correctly.");
+            }
         } else {
-            SilentGear.log.debug("JEI plugin seems to have loaded correctly.");
+            SilentGear.log.info("JEI is not installed?");
         }
     }
 }

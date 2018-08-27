@@ -11,52 +11,46 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.util.I18nHelper;
 
 import java.util.Collection;
-import java.util.regex.Pattern;
 
 public class TooltipHandler {
-
     public static TooltipHandler INSTANCE = new TooltipHandler();
-
-    // TODO: Probably need more control for vanilla gear nerfing...
-    private static Pattern VANILLA_TOOL_REGEX = Pattern.compile("^minecraft:(wooden|stone|iron|golden|diamond)_(pickaxe|shovel|axe|sword|hoe)");
-    private static Pattern VANILLA_ARMOR_REGEX = Pattern.compile("^minecraft:(leather|chainmail|iron|golden|diamond)_(helmet|chestplate|leggings|boots)");
 
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         ItemPart part = !stack.isEmpty() ? PartRegistry.get(stack) : null;
 
-        I18nHelper i18n = SilentGear.i18n;
-
         if (part != null && !part.isBlacklisted(stack)) {
-            onPartTooltip(event, stack, part, i18n);
+            onPartTooltip(event, stack, part);
             return;
         }
 
-        // Nerfed vanilla gear?
+        // Nerfed gear?
         ResourceLocation name = stack.getItem().getRegistryName();
-        if (name != null && (VANILLA_TOOL_REGEX.matcher(name.toString()).matches() || VANILLA_ARMOR_REGEX.matcher(name.toString()).matches())) {
-            event.getToolTip().add(1, TextFormatting.RED + i18n.translate("misc", "poorlyMade"));
+        if (name != null && Config.nerfedGear.contains(name.toString())) {
+            event.getToolTip().add(1, TextFormatting.RED + SilentGear.i18n.translate("misc", "poorlyMade"));
         }
     }
 
-    private void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPart part, I18nHelper i18n) {
-        event.getToolTip().add(TextFormatting.GREEN + i18n.translate("part", "type." + part.getTypeName(), part.getTier()));
+    private void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
+        event.getToolTip().add(TextFormatting.GREEN + SilentGear.i18n.translate("part", "type." + part.getTypeName(), part.getTier()));
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTrackerSL.isControlDown()) {
             if (part instanceof PartMain)
-                getGradeLine(event, grade, i18n);
-            event.getToolTip().add(TextFormatting.GOLD + i18n.translate("misc", "tooltip.stats.name") + TextFormatting.RESET + TextFormatting.ITALIC + " (Silent Gear)");
-            getPartStatLines(event, stack, part, i18n);
+                getGradeLine(event, grade, SilentGear.i18n);
+            event.getToolTip().add(TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.stats.name")
+                    + TextFormatting.RESET + TextFormatting.ITALIC + " (Silent Gear)");
+            getPartStatLines(event, stack, part);
         } else {
             if (grade != MaterialGrade.NONE && part instanceof PartMain)
-                getGradeLine(event, grade, i18n);
-            event.getToolTip().add(TextFormatting.GOLD + i18n.translate("misc", "tooltip.ctrlForStats"));
+                getGradeLine(event, grade, SilentGear.i18n);
+            event.getToolTip().add(TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.ctrlForStats"));
         }
     }
 
@@ -65,7 +59,7 @@ public class TooltipHandler {
         event.getToolTip().add(TextFormatting.AQUA + line);
     }
 
-    private void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part, I18nHelper i18n) {
+    private void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
         ItemPartData partData = ItemPartData.instance(part, MaterialGrade.fromStack(stack), stack);
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
@@ -79,7 +73,7 @@ public class TooltipHandler {
                 if (!isZero || event.getFlags() == TooltipFlags.ADVANCED) {
                     TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                    String nameStr = nameColor + i18n.translate("stat." + stat.getName());
+                    String nameStr = nameColor + SilentGear.i18n.translate("stat." + stat.getName());
                     int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
                     String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");
@@ -90,7 +84,7 @@ public class TooltipHandler {
                     if (stat == CommonItemStats.ARMOR_DURABILITY)
                         statStr += "x";
 
-                    event.getToolTip().add("- " + i18n.translate("stat", "displayFormat", nameStr, statStr));
+                    event.getToolTip().add("- " + SilentGear.i18n.translate("stat", "displayFormat", nameStr, statStr));
                 }
             }
         }

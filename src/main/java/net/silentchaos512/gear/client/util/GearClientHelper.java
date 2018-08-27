@@ -20,7 +20,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import java.util.*;
@@ -36,8 +35,6 @@ public class GearClientHelper {
     }
 
     public static void addInformation(ItemStack stack, World world, List<String> tooltip, TooltipFlagTC flag) {
-        I18nHelper i18n = SilentGear.i18n;
-
         if (stack.getItem() instanceof ICoreItem) {
             boolean ctrlDown = flag.ctrlDown;
             boolean altDown = flag.altDown;
@@ -45,12 +42,12 @@ public class GearClientHelper {
             ICoreItem item = (ICoreItem) stack.getItem();
 
             if (GearHelper.isBroken(stack)) {
-                tooltip.add(1, TextFormatting.RED + i18n.translate("misc", "broken"));
+                tooltip.add(1, TextFormatting.RED + SilentGear.i18n.translate("misc", "broken"));
             }
 
             if (GearData.isExampleGear(stack)) {
-                tooltip.add(1, TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput1"));
-                tooltip.add(2, TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput2"));
+                tooltip.add(1, TextFormatting.YELLOW + SilentGear.i18n.translate("misc", "exampleOutput1"));
+                tooltip.add(2, TextFormatting.YELLOW + SilentGear.i18n.translate("misc", "exampleOutput2"));
             }
 
             // Let parts add information if they need to
@@ -74,7 +71,7 @@ public class GearClientHelper {
             }
 
             // Stats!
-            String strStats = TextFormatting.GOLD + i18n.translate("misc", "tooltip.stats.name");
+            String strStats = TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.stats.name");
             if (ctrlDown && flag.showStats) {
                 tooltip.add(strStats);
                 // Display only stats relevant to the item class
@@ -96,35 +93,35 @@ public class GearClientHelper {
                     }
 
                     StatInstance inst = new StatInstance("display_" + stat.getName(), statValue, StatInstance.Operation.AVG);
-                    String nameStr = "- " + stat.displayColor + i18n.translate("stat." + stat.getName());
+                    String nameStr = "- " + stat.displayColor + SilentGear.i18n.translate("stat." + stat.getName());
                     String statStr = inst.formattedString(stat.displayAsInt ? 0 : 1, false);
 
                     // Some stat-specific formatting...
                     if (stat == CommonItemStats.DURABILITY) {
                         int durabilityLeft = stack.getMaxDamage() - stack.getItemDamage();
                         int durabilityMax = stack.getMaxDamage();
-                        statStr = i18n.translate("stat", "durabilityFormat", durabilityLeft, durabilityMax);
+                        statStr = SilentGear.i18n.translate("stat", "durabilityFormat", durabilityLeft, durabilityMax);
                     } else if (stat == CommonItemStats.ARMOR || stat == CommonItemStats.ARMOR_TOUGHNESS) {
                         String str1 = String.format("%.1f", statValue);
                         String str2 = String.format("%.1f", totalArmor);
-                        statStr = i18n.translate("stat", "armorFormat", str1, str2);
+                        statStr = SilentGear.i18n.translate("stat", "armorFormat", str1, str2);
                     }
 
-                    tooltip.add(i18n.translate("stat", "displayFormat", nameStr, statStr));
+                    tooltip.add(SilentGear.i18n.translate("stat", "displayFormat", nameStr, statStr));
                 }
             } else if (flag.showStats) {
-                strStats += " " + TextFormatting.GRAY + i18n.translate("misc", "tooltip.stats.key");
+                strStats += " " + TextFormatting.GRAY + SilentGear.i18n.translate("misc", "tooltip.stats.key");
                 tooltip.add(strStats);
             }
 
             // Tool construction
-            String strConstruction = TextFormatting.GOLD + i18n.translate("misc", "tooltip.construction.name");
+            String strConstruction = TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.construction.name");
             if (altDown && flag.showConstruction) {
                 tooltip.add(strConstruction);
                 Collections.reverse(constructionParts);
                 tooltipListParts(stack, tooltip, constructionParts);
             } else if (flag.showConstruction) {
-                strConstruction += " " + TextFormatting.GRAY + i18n.translate("misc", "tooltip.construction.key");
+                strConstruction += " " + TextFormatting.GRAY + SilentGear.i18n.translate("misc", "tooltip.construction.key");
                 tooltip.add(strConstruction);
             }
         }
