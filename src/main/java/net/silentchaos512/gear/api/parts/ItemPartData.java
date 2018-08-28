@@ -150,4 +150,12 @@ public class ItemPartData {
     public boolean isTip() {
         return this.part instanceof PartTip;
     }
+
+    public boolean isGrip() {
+        return this.part instanceof PartGrip;
+    }
+
+    public boolean isBowstring() {
+        return this.part instanceof PartBowstring;
+    }
 }

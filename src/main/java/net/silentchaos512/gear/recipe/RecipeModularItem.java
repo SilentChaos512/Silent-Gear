@@ -31,24 +31,24 @@ public class RecipeModularItem extends RecipeBaseSL {
         boolean foundBowstring = false;
         boolean foundTip = false;
         for (ItemStack stack : parts) {
-            ItemPart part = PartRegistry.get(stack);
+            ItemPartData part = ItemPartData.fromStack(stack);
             if (stack.getItem() instanceof ToolHead) {
                 ToolHead itemToolHead = (ToolHead) stack.getItem();
                 if (!itemToolHead.getToolClass(stack).equals(this.item.getGearClass()))
                     return ItemStack.EMPTY;
                 data.addAll(itemToolHead.getAllParts(stack));
-            } else if (part instanceof PartRod) {
-                if (!foundRod)
-                    data.add(ItemPartData.fromStack(stack));
-                foundRod = true;
-            } else if (part instanceof PartBowstring) {
-                if (!foundBowstring)
-                    data.add(ItemPartData.fromStack(stack));
-                foundBowstring = true;
-            } else if (part instanceof PartTip) {
-                if (!foundTip)
-                    data.add(ItemPartData.fromStack(stack));
-                foundTip = true;
+            }
+            else if (part != null) {
+                if (part.isRod()) {
+                    if (!foundRod) data.add(part);
+                    foundRod = true;
+                } else if (part.isBowstring()) {
+                    if (!foundBowstring) data.add(part);
+                    foundBowstring = true;
+                } else if (part.isTip()) {
+                    if (!foundTip) data.add(part);
+                    foundTip = true;
+                }
             }
         }
 
@@ -58,7 +58,7 @@ public class RecipeModularItem extends RecipeBaseSL {
     @Override
     public boolean matches(InventoryCrafting inv, World world) {
         Collection<ItemStack> parts = getComponents(inv);
-        return item.matchesRecipe(parts);
+        return item.matchesRecipe(parts) && parts.size() == getNonEmptyStacks(inv).size();
     }
 
     @Nonnull
