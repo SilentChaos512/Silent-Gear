@@ -137,6 +137,10 @@ repositories {
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
     }
+    maven {
+        name "Cyclops Repo"
+        url "https://oss.jfrog.org/artifactory/simple/libs-release/"
+    }
     repositories {
         maven { url 'https://maven.mcmoddev.com' }
     }
@@ -162,6 +166,10 @@ dependencies {
     if (project.hasProperty('sl_version')) {
         compileOnly "com.github.SilentChaos512:SilentLib:${project.sl_version}"
     }
+
+    // EvilCraft
+    compileOnly "org.cyclops.cyclopscore:CyclopsCore:${project.mc_version}-${project.cyclops_core_version}:deobf"
+    compileOnly "org.cyclops.evilcraft:EvilCraft:${project.mc_version}-${project.evilcraft_version}:deobf"
 }
 
 processResources {
