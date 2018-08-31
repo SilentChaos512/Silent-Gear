@@ -2,7 +2,9 @@ package net.silentchaos512.gear;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -20,6 +22,7 @@ import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.world.ModWorldGenerator;
+import net.silentchaos512.lib.event.InitialSpawnItems;
 import net.silentchaos512.lib.registry.SRegistry;
 
 public class CommonProxy {
@@ -62,6 +65,9 @@ public class CommonProxy {
 
     public void postInit(SRegistry registry, FMLPostInitializationEvent event) {
         registry.postInit(event);
+
+        InitialSpawnItems.add(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"),
+                () -> Config.spawnWithStarterBlueprints ? ModItems.blueprintPackage.getStack() : ItemStack.EMPTY);
 
         // Log issues with registered parts
         PartRegistry.getValues().forEach(ItemPart::postInitChecks);

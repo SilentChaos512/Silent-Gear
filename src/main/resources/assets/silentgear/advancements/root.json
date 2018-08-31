@@ -24,10 +24,5 @@
                 ]
             }
         }
-    },
-    "rewards": {
-        "loot": [
-            "silentgear:starter_blueprints"
-        ]
     }
 }

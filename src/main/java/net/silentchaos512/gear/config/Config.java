@@ -27,6 +27,9 @@ public class Config extends ConfigBase {
     /*
      * Items
      */
+    public static boolean spawnWithStarterBlueprints;
+    private static final String SPAWN_WITH_STARTER_BLUEPRINTS_COMMENT = "Spawn players with a blueprint package containing some starter blueprints (set false to disable). This uses the starter_blueprints loot table.";
+
     public static EntityMatchList sinewAnimals = new EntityMatchList(true, false,
             "minecraft:cow", "minecraft:sheep", "minecraft:pig");
     private static final String SINEW_ANIMALS_COMMENT = "These entities can drop sinew. It is not restricted to animals.";
@@ -104,6 +107,9 @@ public class Config extends ConfigBase {
             /*
              * Items
              */
+
+            // Starter blueprints
+            spawnWithStarterBlueprints = loadBoolean("Spawn With Starter Blueprints", CAT_ITEMS, true, SPAWN_WITH_STARTER_BLUEPRINTS_COMMENT);
 
             // Sinew
             String catSinew = CAT_ITEMS + SEP + "sinew";
