@@ -51,7 +51,7 @@ public class Config extends ConfigBase {
     private static final String NERFED_GEAR_COMMENT = "These items will have reduced durability to discourage use, but they can still be crafted and used as normal. Items from other mods can be added to the list, but I cannot guarantee their durability will actually change.";
 
     public static float nerfedGearMulti;
-    private static final float NERFED_GEAR_MULTI_DEFAULT = 0.25f;
+    private static final float NERFED_GEAR_MULTI_DEFAULT = 0.5f;
     private static final String NERFED_GEAR_MULTI_COMMENT = "The durability of items in the nerfed gear list will be multiplied by this value.";
 
     /*
@@ -131,12 +131,24 @@ public class Config extends ConfigBase {
 
             for (ConfigOptionEquipment option : equipmentConfigs)
                 option.loadValue(config);
-
             toolsBreakPermanently = loadBoolean("Equipment Breaks Permanently", CAT_ITEMS, TOOLS_BREAK_DEFAULT, TOOLS_BREAK_COMMENT);
+
+            // Grab last build number for potential changes?
+            int currentBuild = SilentGear.instance.getBuildNum();
+            int lastBuild = config.get("last_version", "last_build", currentBuild).getInt(currentBuild);
+            // TODO
         } catch (Exception ex) {
             SilentGear.log.fatal("Could not load configuration file! This could end badly...");
             SilentGear.log.catching(ex);
         }
+    }
+
+    @Override
+    public void save() {
+        super.save();
+
+        int buildNum = SilentGear.instance.getBuildNum();
+        config.get("last_version", "last_build", buildNum).setValue(buildNum);
     }
 
     private static ConfigOptionEquipment forEquipment(ICoreItem item) {
