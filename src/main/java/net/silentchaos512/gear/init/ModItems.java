@@ -2,6 +2,7 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.GuideBookToolMod;
@@ -28,6 +29,7 @@ public class ModItems {
     public static final List<Blueprint> blueprints = new ArrayList<>();
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
+    public static BlueprintPackage blueprintPackage = new BlueprintPackage(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"));
 
     public static Flaxseeds flaxseeds = new Flaxseeds();
 
@@ -79,6 +81,7 @@ public class ModItems {
         IEnumItems.RegistrationHelper enumItems = new IEnumItems.RegistrationHelper(reg);
 
         reg.registerItem(guideBook, "guide_book");
+        reg.registerItem(blueprintPackage, "blueprint_package");
 
         // Blueprints/templates
         registerBlueprints(reg, "blueprint", false);

@@ -1,3 +1,7 @@
+0.1.2
+Added: Configs to control vanilla gear nerfing (to disable, remove all items from the list)
+Added: Blueprint package, an item that gives blueprints when used (pulls from a loot table)
+
 0.1.1
 Added: Wool and leather grips (craft leather or a block of wool with an existing tool)
 Fixed: Quick repair recipe matching when it shouldn't, causing some recipes to stop working (#3)

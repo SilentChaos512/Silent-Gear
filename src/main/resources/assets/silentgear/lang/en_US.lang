@@ -84,7 +84,9 @@ item.silentgear.blueprint.sword.desc=The classic
 
 item.silentgear.template.name=Template
 
-item.silentgear.blueprint_book.name=Blueprint Book
+item.silentgear.blueprint_package.name=Blueprint Package
+item.silentgear.blueprint_package.desc1=Contains some blueprints for gear crafting
+item.silentgear.blueprint_package.desc2=Right-click to open
 
 item.silentgear.flaxseeds.name=Flaxseeds
 
