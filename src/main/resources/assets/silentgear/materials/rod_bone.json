@@ -14,7 +14,8 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:bone"
+            "item": "minecraft:bone",
+            "oredict": "bone"
         }
     },
     "display": {

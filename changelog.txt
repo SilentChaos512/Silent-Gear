@@ -5,6 +5,7 @@ Added: Loot table function 'silentgear:select_tier' which can be used to generat
 Changed: Anvil repairs improved (50% of material durability), quick repair reduced to 35% of material durability
 Changed: Upgrades can now be applied in an anvil
 Changed: Root advancement no longer gives blueprints, player spawns with a blueprint package instead (#7)
+Changed: Stone and iron rods now accept "rodStone" and "rodIron"
 
 0.1.1
 Added: Wool and leather grips (craft leather or a block of wool with an existing tool)

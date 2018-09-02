@@ -15,7 +15,7 @@
     "crafting_items": {
         "normal": {
             "item": "silentgear:stone_rod",
-            "oredict": "stickStone"
+            "oredict": "rodStone"
         }
     },
     "display": {
