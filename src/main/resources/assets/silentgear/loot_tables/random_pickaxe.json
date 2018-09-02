@@ -1,0 +1,46 @@
+{
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "silentgear:pickaxe",
+                    "entryName": "silentgear:pickaxe_tier1",
+                    "weight": 3,
+                    "functions": [
+                        {
+                            "function": "silentgear:select_tier",
+                            "tier": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "silentgear:pickaxe",
+                    "entryName": "silentgear:pickaxe_tier2",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "silentgear:select_tier",
+                            "tier": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "silentgear:pickaxe",
+                    "entryName": "silentgear:pickaxe_tier3",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "silentgear:select_tier",
+                            "tier": 3
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

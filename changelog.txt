@@ -1,6 +1,7 @@
 0.1.2
 Added: Configs to control vanilla gear nerfing (to disable, remove all items from the list)
 Added: Blueprint package, an item that gives blueprints when used (pulls from a loot table)
+Added: Loot table function 'silentgear:select_tier' which can be used to generate random gear
 Changed: Anvil repairs improved (50% of material durability), quick repair reduced to 35% of material durability
 Changed: Upgrades can now be applied in an anvil
 Changed: Root advancement no longer gives blueprints, player spawns with a blueprint package instead (#7)
