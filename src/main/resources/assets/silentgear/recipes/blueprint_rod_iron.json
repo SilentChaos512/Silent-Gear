@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "silentgear:iron_rod",
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "ore": "blueprintRod",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "ingotIron",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "ingotIron",
+      "type": "forge:ore_dict"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

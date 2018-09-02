@@ -2,6 +2,7 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -137,5 +138,13 @@ public class ModItems {
             blueprints.add(blueprint);
             reg.registerItem(blueprint, name + "_" + key);
         });
+
+        // Part blueprints (just rods right now, are any others needed?)
+        Item item = new Item();
+        if (!singleUse) {
+            item.setContainerItem(item);
+        }
+        reg.registerItem(item, name + "_rod");
+        OreDictionary.registerOre("blueprintRod", item);
     }
 }

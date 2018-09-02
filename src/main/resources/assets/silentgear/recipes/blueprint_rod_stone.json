@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "silentgear:stone_rod",
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "ore": "blueprintRod",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "cobblestone",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "cobblestone",
+      "type": "forge:ore_dict"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

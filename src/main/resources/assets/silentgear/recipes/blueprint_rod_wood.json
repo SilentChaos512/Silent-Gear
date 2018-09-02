@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "minecraft:stick",
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "ore": "blueprintRod",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "plankWood",
+      "type": "forge:ore_dict"
+    },
+    {
+      "ore": "plankWood",
+      "type": "forge:ore_dict"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

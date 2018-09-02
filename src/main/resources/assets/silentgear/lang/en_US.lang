@@ -82,6 +82,9 @@ item.silentgear.blueprint.shovel.desc=Small spoon
 item.silentgear.blueprint.sickle.desc=Mowing the lawn
 item.silentgear.blueprint.sword.desc=The classic
 
+item.silentgear.blueprint_rod.name=Blueprint (Rod)
+item.silentgear.template_rod.name=Template (Rod)
+
 item.silentgear.template.name=Template
 
 item.silentgear.blueprint_package.name=Blueprint Package
