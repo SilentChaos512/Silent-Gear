@@ -22,7 +22,8 @@
     "display": {
         "hidden": false,
         "texture_suffix": "wool",
-        "texture_color": "f9801d"
+        "texture_color": "f9801d",
+        "broken_color": "f9801d"
     },
     "availability": {
         "enabled": true,
