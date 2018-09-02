@@ -84,6 +84,7 @@ public enum MiscUpgrades implements IEnumItems<MiscUpgrades, MiscUpgrades.Item> 
     public String getName() {
         return getEnum().name().toLowerCase(Locale.ROOT) + "_upgrade";
     }
+
     public static class Item extends net.minecraft.item.Item {
         @Override
         public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

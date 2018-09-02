@@ -115,12 +115,26 @@ public abstract class ItemPart {
         return StatInstance.Operation.ADD;
     }
 
+    @Deprecated
     public int getRepairAmount(ItemStack gear, ItemPartData part) {
+        return (int) this.getRepairAmount(gear, part, RepairContext.QUICK);
+    }
+
+    public float getRepairAmount(ItemStack gear, ItemPartData part, RepairContext context) {
         // Base value on material durability
         ItemPartData gearPrimary = GearData.getPrimaryPart(gear);
         if (gearPrimary != null && part.part.tier < gearPrimary.part.tier) return 0;
         Collection<StatInstance> mods = getStatModifiers(CommonItemStats.DURABILITY, part);
-        return (int) (CommonItemStats.DURABILITY.compute(0f, mods) / 2);
+        float durability = CommonItemStats.DURABILITY.compute(0f, mods);
+
+        switch (context) {
+            case QUICK:
+                return 0.35f * durability;
+            case ANVIL:
+                return 0.5f * durability;
+            default:
+                throw new IllegalArgumentException("Unknown RepairContext: " + context);
+        }
     }
 
     // ============
@@ -413,5 +427,9 @@ public abstract class ItemPart {
         if (getCraftingStack().isEmpty())
             SilentGear.log.warn("Part \"{}\"{}has no crafting item.", this.registryName,
                     (this.userDefined ? " (user defined) " : " "));
+    }
+
+    public enum RepairContext {
+        QUICK, ANVIL
     }
 }

@@ -104,6 +104,10 @@ public class ItemPartData {
         return stat.compute(0, getStatModifiers(stat));
     }
 
+    public float getRepairAmount(ItemStack gear, ItemPart.RepairContext context) {
+        return this.part.getRepairAmount(gear, this, context);
+    }
+
     @Nullable
     public ResourceLocation getTexture(ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
         return part.getTexture(this, gear, gearClass, position, animationFrame);

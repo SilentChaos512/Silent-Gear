@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -42,12 +43,12 @@ public class RecipeQuickRepair extends RecipeBaseSL {
 
         if (gear.isEmpty() || parts.isEmpty()) return ItemStack.EMPTY;
 
-        int repairValue = 0;
+        float repairValue = 0f;
         int materialCount = 0;
         for (ItemStack stack : parts) {
             ItemPartData data = ItemPartData.fromStack(stack);
             if (data != null) {
-                repairValue += data.getPart().getRepairAmount(gear, data);
+                repairValue += data.getRepairAmount(gear, ItemPart.RepairContext.QUICK);
                 ++materialCount;
             }
         }
@@ -59,7 +60,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
         if (gear.getItem() instanceof ICoreItem)
             repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
 
-        gear.attemptDamageItem(-repairValue, SilentGear.random, null);
+        gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
 //        GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);
         GearData.incrementRepairCount(gear, materialCount);
         GearData.recalculateStats(gear);
@@ -88,7 +89,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
                 ++partsCount;
                 // It needs to be a part with repair value
                 ItemPartData data = ItemPartData.fromStack(stack);
-                if (data == null || data.getPart().getRepairAmount(gear, data) <= 0)
+                if (data == null || data.getRepairAmount(gear, ItemPart.RepairContext.QUICK) <= 0)
                     return false;
             }
             else {
