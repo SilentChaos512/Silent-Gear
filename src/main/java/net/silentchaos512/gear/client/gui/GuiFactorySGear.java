@@ -62,7 +62,7 @@ public class GuiFactorySGear implements IModGuiFactory {
             Set<String> categories = Config.INSTANCE.getConfiguration().getCategoryNames();
 
             for (String s : categories)
-                if (!s.contains("."))
+                if (!s.contains(".") && !s.contains("last_version"))
                     list.add(new DummyConfigElement.DummyCategoryElement(s, "config." + SilentGear.MOD_ID + "." + s,
                             new ConfigElement(Config.INSTANCE.getCategory(s)).getChildElements()));
 

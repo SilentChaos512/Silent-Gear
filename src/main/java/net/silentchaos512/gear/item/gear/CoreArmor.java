@@ -137,7 +137,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     @Override
     public void setDamage(ItemStack stack, int damage) {
         if (GearHelper.isUnbreakable(stack)) return;
-        if (!Config.toolsBreakPermanently)
+        if (!Config.gearBreaksPermanently)
             damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
         super.setDamage(stack, damage);
     }

@@ -129,9 +129,9 @@ public abstract class ItemPart {
 
         switch (context) {
             case QUICK:
-                return 0.35f * durability;
+                return Config.quickRepairFactor * durability;
             case ANVIL:
-                return 0.5f * durability;
+                return Config.anvilRepairFactor * durability;
             default:
                 throw new IllegalArgumentException("Unknown RepairContext: " + context);
         }

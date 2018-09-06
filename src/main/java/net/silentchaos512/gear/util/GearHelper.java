@@ -115,7 +115,7 @@ public class GearHelper {
     public static void attemptDamage(ItemStack stack, int amount, EntityLivingBase entityLiving) {
         if (isUnbreakable(stack) || (entityLiving instanceof EntityPlayer && ((EntityPlayer) entityLiving).capabilities.isCreativeMode))
             return;
-        final boolean canBreakPermanently = Config.toolsBreakPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
+        final boolean canBreakPermanently = Config.gearBreaksPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
 
         if (!canBreakPermanently)
             amount = Math.min(stack.getMaxDamage() - stack.getItemDamage(), amount);
@@ -137,7 +137,7 @@ public class GearHelper {
     // Used by setDamage in gear items to prevent other mods from breaking them
     public static int calcDamageClamped(ItemStack stack, int damage) {
         if (isUnbreakable(stack)) return 0;
-        final boolean canBreakPermanently = Config.toolsBreakPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
+        final boolean canBreakPermanently = Config.gearBreaksPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
 
         if (!canBreakPermanently) {
             if (damage > stack.getItemDamage()) damage = Math.min(stack.getMaxDamage(), damage);
@@ -152,7 +152,7 @@ public class GearHelper {
         // return true;
         // }
 
-        if (Config.toolsBreakPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart()))
+        if (Config.gearBreaksPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart()))
             return false;
 
         int maxDamage = stack.getMaxDamage();

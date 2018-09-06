@@ -8,7 +8,10 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.lib.collection.EntityMatchList;
 import net.silentchaos512.lib.collection.ItemMatchList;
-import net.silentchaos512.lib.config.ConfigBase;
+import net.silentchaos512.lib.config.ConfigBaseNew;
+import net.silentchaos512.lib.config.ConfigOption;
+import net.silentchaos512.lib.util.I18nHelper;
+import net.silentchaos512.lib.util.LogHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,19 +19,47 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Config extends ConfigBase {
-
+public class Config extends ConfigBaseNew {
     public static final Config INSTANCE = new Config();
 
-    private static final String CAT_ITEMS = "items";
-    private static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
-    static final String CAT_TOOLS = CAT_ITEMS + SEP + "tools";
+    public static final String CAT_ITEMS = "items";
+    public static final String CAT_GEAR = CAT_ITEMS + SEP + "gear";
+    public static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
+    public static final String CAT_SINEW = CAT_ITEMS + SEP + "sinew";
 
     /*
      * Items
      */
+
+    @ConfigOption(name = "Spawn With Starter Blueprints", category = CAT_ITEMS)
+    @ConfigOption.BooleanDefault(true)
+    @ConfigOption.Comment("Spawn players with a blueprint package containing some starter blueprints (set false to disable). This uses the starter_blueprints loot table.")
     public static boolean spawnWithStarterBlueprints;
-    private static final String SPAWN_WITH_STARTER_BLUEPRINTS_COMMENT = "Spawn players with a blueprint package containing some starter blueprints (set false to disable). This uses the starter_blueprints loot table.";
+
+    @ConfigOption(name = "Drop Rate", category = CAT_SINEW)
+    @ConfigOption.RangeFloat(value = 0.2f, min = 0f, max = 1f)
+    @ConfigOption.Comment("The probability an animal will drop sinew.")
+    public static float sinewDropRate;
+
+    @ConfigOption(name = "Upgrades Anvil Only", category = CAT_GEAR)
+    @ConfigOption.BooleanDefault(false)
+    @ConfigOption.Comment("If enabled, upgrades (like tip upgrades) can only be applied in anvils.")
+    public static boolean upgradesAnvilOnly;
+
+    @ConfigOption(name = "Repair Factor Anvil", category = CAT_GEAR)
+    @ConfigOption.RangeFloat(value = 0.5f, min = 0f, max = 1f)
+    @ConfigOption.Comment("The effectiveness of anvil repairs (based on material durability). Set to 0 to disable.")
+    public static float anvilRepairFactor;
+
+    @ConfigOption(name = "Repair Factor Quick", category = CAT_GEAR)
+    @ConfigOption.RangeFloat(value = 0.35f, min = 0f, max = 1f)
+    @ConfigOption.Comment("The effectiveness of quick repairs (based on material durability). Set to 0 to disable.")
+    public static float quickRepairFactor;
+
+    @ConfigOption(name = "Gear Breaks Permanently", category = CAT_GEAR)
+    @ConfigOption.BooleanDefault(false)
+    @ConfigOption.Comment("If enabled, tools/weapons/armor are destroyed when broken, just like vanilla.")
+    public static boolean gearBreaksPermanently;
 
     public static EntityMatchList sinewAnimals = new EntityMatchList(true, false,
             "minecraft:cow", "minecraft:sheep", "minecraft:pig");
@@ -42,10 +73,6 @@ public class Config extends ConfigBase {
             "danknull:dank_null", "xreliquary:sojourner_staff", "torchbandolier:torch_bandolier");
     private static final String ITEMS_THAT_TOOLS_CAN_USE_COMMENT = "Items that block-placing tools can \"use\" by simulating a right-click.";
 
-    public static float sinewDropRate;
-    private static final float SINEW_DROP_RATE_DEFAULT = 0.2f;
-    private static final String SINEW_DROP_RATE_COMMENT = "The probability an animal will drop sinew.";
-
     /*
      * Nerfed gear
      */
@@ -53,9 +80,10 @@ public class Config extends ConfigBase {
     public static Set<String> nerfedGear;
     private static final String NERFED_GEAR_COMMENT = "These items will have reduced durability to discourage use, but they can still be crafted and used as normal. Items from other mods can be added to the list, but I cannot guarantee their durability will actually change.";
 
+    @ConfigOption(name = "Durability Multiplier", category = CAT_NERFED_GEAR)
+    @ConfigOption.RangeFloat(value = 0.5f, min = 0f, max = 1f)
+    @ConfigOption.Comment("The durability of items in the nerfed gear list will be multiplied by this value.")
     public static float nerfedGearMulti;
-    private static final float NERFED_GEAR_MULTI_DEFAULT = 0.5f;
-    private static final String NERFED_GEAR_MULTI_COMMENT = "The durability of items in the nerfed gear list will be multiplied by this value.";
 
     /*
      * Tools
@@ -79,10 +107,6 @@ public class Config extends ConfigBase {
     public static ConfigOptionEquipment leggings = forEquipment(ModItems.leggings);
     public static ConfigOptionEquipment boots = forEquipment(ModItems.boots);
 
-    public static boolean toolsBreakPermanently;
-    private static final boolean TOOLS_BREAK_DEFAULT = false;
-    private static final String TOOLS_BREAK_COMMENT = "If enabled, tools/weapons/armor are destroyed when broken, just like vanilla.";
-
     File directory;
 
     public Config() {
@@ -102,20 +126,26 @@ public class Config extends ConfigBase {
     }
 
     @Override
+    public I18nHelper i18n() {
+        return SilentGear.i18n;
+    }
+
+    @Override
+    public LogHelper log() {
+        return SilentGear.log;
+    }
+
+    @Override
     public void load() {
         try {
+            super.load();
+
             /*
              * Items
              */
 
-            // Starter blueprints
-            spawnWithStarterBlueprints = loadBoolean("Spawn With Starter Blueprints", CAT_ITEMS, true, SPAWN_WITH_STARTER_BLUEPRINTS_COMMENT);
-
             // Sinew
-            String catSinew = CAT_ITEMS + SEP + "sinew";
-            sinewAnimals.loadConfig(config, "Animals That Drop Sinew", catSinew, SINEW_ANIMALS_COMMENT);
-            sinewDropRate = loadFloat("Drop Rate", catSinew, SINEW_DROP_RATE_DEFAULT, SINEW_DROP_RATE_COMMENT);
-
+            sinewAnimals.loadConfig(config, "Animals That Drop Sinew", CAT_SINEW, SINEW_ANIMALS_COMMENT);
             // Block placer tools
             blockPlacerTools.loadConfig(config, "Items That Place Blocks", CAT_ITEMS, BLOCK_PLACER_TOOLS_COMMENT);
             itemsThatToolsCanUse.loadConfig(config, "Items That Block Placer Tools Can Use", CAT_ITEMS, ITEMS_THAT_TOOLS_CAN_USE_COMMENT);
@@ -129,7 +159,6 @@ public class Config extends ConfigBase {
 
             String[] nerfedItems = config.getStringList("Nerfed Gear List", CAT_NERFED_GEAR, getDefaultNerfedGear(), NERFED_GEAR_COMMENT);
             nerfedGear = ImmutableSet.copyOf(nerfedItems);
-            nerfedGearMulti = loadFloat("Durability Multiplier", CAT_NERFED_GEAR, NERFED_GEAR_MULTI_DEFAULT, 0, 1, NERFED_GEAR_MULTI_COMMENT);
 
             /*
              * Tools
@@ -137,7 +166,6 @@ public class Config extends ConfigBase {
 
             for (ConfigOptionEquipment option : equipmentConfigs)
                 option.loadValue(config);
-            toolsBreakPermanently = loadBoolean("Equipment Breaks Permanently", CAT_ITEMS, TOOLS_BREAK_DEFAULT, TOOLS_BREAK_COMMENT);
 
             // Grab last build number for potential changes?
             int currentBuild = SilentGear.instance.getBuildNum();

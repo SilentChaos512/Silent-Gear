@@ -41,7 +41,7 @@ public class ConfigOptionEquipment {
     }
 
     public ConfigOptionEquipment loadValue(Configuration config) {
-        return loadValue(config, Config.CAT_TOOLS + Config.SEP + name);
+        return loadValue(config, Config.CAT_GEAR + Config.SEP + name);
     }
 
     public ConfigOptionEquipment loadValue(Configuration config, String category) {
