@@ -21,7 +21,7 @@ package net.silentchaos512.gear.item;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -32,7 +32,11 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.item.IColoredItem;
 
-public class TestItem extends Item implements IColoredItem {
+public class TestItem extends ItemPickaxe implements IColoredItem {
+    public TestItem() {
+        super(ToolMaterial.IRON);
+    }
+
     @Override
     public IItemColor getColorHandler() {
         return (stack, tintIndex) -> {

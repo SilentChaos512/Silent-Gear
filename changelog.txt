@@ -1,3 +1,7 @@
+0.1.3
+Added: Quark runes can now control the effect color of gear
+Changed: Default enchanted effect color to purple (vanilla)
+
 0.1.2
 Added: Configs to control vanilla gear nerfing (to disable, remove all items from the list)
 Added: Blueprint package, an item that gives blueprints when used (pulls from a loot table)

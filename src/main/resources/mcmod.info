@@ -2,7 +2,7 @@
 {
   "modid": "silentgear",
   "name": "Silent Gear",
-  "description": "Preview build",
+  "description": "Modular tools and armor",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "http://minecraft.curseforge.com/projects/silents-gear",

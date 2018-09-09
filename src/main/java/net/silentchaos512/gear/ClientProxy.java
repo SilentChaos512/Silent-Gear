@@ -18,10 +18,8 @@ import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolHeadModel;
 import net.silentchaos512.gear.client.models.ToolModel;
-import net.silentchaos512.gear.client.renderer.TEISREquipment;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.compat.jei.JeiPlugin;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.lib.client.gui.DebugRenderOverlay;
 import net.silentchaos512.lib.registry.SRegistry;
@@ -84,8 +82,6 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
 
         ColorHandlers.init();
-        ModItems.toolClasses.values().forEach(item -> item.getItem().setTileEntityItemStackRenderer(TEISREquipment.INSTANCE));
-        ModItems.armorClasses.values().forEach(item -> item.getItem().setTileEntityItemStackRenderer(TEISREquipment.INSTANCE));
     }
 
     @Override
