@@ -19,10 +19,10 @@
 package net.silentchaos512.gear.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockOre;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.EnumFacing;
@@ -33,10 +33,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public interface IAOETool {
     /**
@@ -48,10 +54,10 @@ public interface IAOETool {
     /**
      * Call the item's rayTrace method inside this.
      */
-    @Nonnull
+    @Nullable
     RayTraceResult rayTraceBlocks(World world, EntityPlayer player);
 
-    default List<BlockPos> getExtraBlocks(World world, RayTraceResult rt, EntityPlayer player, ItemStack stack) {
+    default List<BlockPos> getExtraBlocks(World world, @Nullable RayTraceResult rt, EntityPlayer player, ItemStack stack) {
         List<BlockPos> positions = new ArrayList<>();
 
         if (player.isSneaking() || rt == null || rt.getBlockPos() == null || rt.sideHit == null)
@@ -60,7 +66,8 @@ public interface IAOETool {
         BlockPos pos = rt.getBlockPos();
         IBlockState state = world.getBlockState(pos);
 
-        if (ForgeHooks.canToolHarvestBlock(world, pos, stack)) {
+        // The Forge.canToolHarvestBlock method seems to be very unreliable...
+        if (stack.getItem().canHarvestBlock(state, stack) || ForgeHooks.canToolHarvestBlock(world, pos, stack)) {
             switch (rt.sideHit.getAxis()) {
                 case Y:
                     attemptAddExtraBlock(world, state, pos.offset(EnumFacing.NORTH), stack, positions);
@@ -94,22 +101,17 @@ public interface IAOETool {
                     break;
             }
         }
+//        SilentGear.log.debug("{}", positions);
         return positions;
     }
 
     default void attemptAddExtraBlock(World world, IBlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
-        IBlockState state2 = world.getBlockState(pos2);
-
-        if (world.isAirBlock(pos2))
-            return;
-        Block block1 = state1.getBlock();
-        Block block2 = state2.getBlock();
-        if (!BreakHandler.areBlocksSimilar(block1, block2))
-            return;
-        if (!block2.isToolEffective(getAOEToolClass(), state2) && !stack.getItem().canHarvestBlock(state2, stack))
-            return;
-
-        list.add(pos2);
+        final IBlockState state2 = world.getBlockState(pos2);
+        if (!world.isAirBlock(pos2)
+                && BreakHandler.areBlocksSimilar(state1, state2)
+                && (state2.getBlock().isToolEffective(getAOEToolClass(), state2) || stack.getItem().canHarvestBlock(state2, stack))) {
+            list.add(pos2);
+        }
     }
 
     /**
@@ -156,21 +158,44 @@ public interface IAOETool {
             return false;
         }
 
+        private static final Set<Block> ORE_BLOCKS = new HashSet<>();
+
+        public static void buildOreBlocksSet() {
+            ORE_BLOCKS.clear();
+
+            for (Block block : ForgeRegistries.BLOCKS) {
+                if (block instanceof BlockOre) {
+                    ORE_BLOCKS.add(block);
+                } else {
+                    ItemStack blockStack = new ItemStack(block);
+                    for (String oreName : StackHelper.getOreNames(blockStack)) {
+                        if (oreName.startsWith("ore")) {
+                            ORE_BLOCKS.add(block);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            SilentGear.log.info("IAOETool: Rebuilt ore block set, contains {} items", ORE_BLOCKS.size());
+        }
+
         /**
          * Determine if the blocks are similar enough to be considered the same. For example, dirt
          * and grass, or redstone ore and lit redstone ore.
          *
          * @return True if the blocks are the same (equal) or similar, false otherwise
          */
-        static boolean areBlocksSimilar(Block block1, Block block2) {
-            if (block1 == block2) return true;
-            return compareBlocksSimilar(block1, block2, Blocks.REDSTONE_ORE, Blocks.LIT_REDSTONE_ORE)
-                    || compareBlocksSimilar(block1, block2, Blocks.DIRT, Blocks.GRASS);
-        }
-
-        // This just makes areBlocksSimilar easier to read
-        private static boolean compareBlocksSimilar(Block block1, Block block2, Block possible1, Block possible2) {
-            return (block1 == possible1 || block1 == possible2) && (block2 == possible1 || block2 == possible2);
+        static boolean areBlocksSimilar(IBlockState block1, IBlockState block2) {
+            if (block1.getBlock() == block2.getBlock()) return true;
+            // For ores, only mine the same type
+            if (ORE_BLOCKS.contains(block1.getBlock()) || ORE_BLOCKS.contains(block2.getBlock()))
+                return false;
+            // Otherwise, anything with the same harvest level should be okay
+            int level1 = block1.getBlock().getHarvestLevel(block1);
+            int level2 = block2.getBlock().getHarvestLevel(block2);
+            SilentGear.log.debug("areBlocksSimilar: {} and {}", level1, level2);
+            return level1 == level2 || level1 < 0 || level2 < 0;
         }
     }
 
@@ -189,7 +214,7 @@ public interface IAOETool {
                     List<BlockPos> positions = ((IAOETool) stack.getItem()).getExtraBlocks(world, event.getTarget(), player, stack);
 
                     for (BlockPos pos : positions)
-                        event.getContext().drawSelectionBox(player, new RayTraceResult(new Vec3d(0, 0, 0), null, pos), 0, event.getPartialTicks());
+                        event.getContext().drawSelectionBox(player, new RayTraceResult(new Vec3d(0, 0, 0), EnumFacing.UP, pos), 0, event.getPartialTicks());
                 }
             }
         }

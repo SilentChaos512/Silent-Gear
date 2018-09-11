@@ -28,6 +28,7 @@ import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.IAOETool;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CoreExcavator extends CoreShovel implements IAOETool {
     @Nonnull
@@ -47,7 +48,7 @@ public class CoreExcavator extends CoreShovel implements IAOETool {
         return "shovel";
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public RayTraceResult rayTraceBlocks(World world, EntityPlayer player) {
         return this.rayTrace(world, player, false);

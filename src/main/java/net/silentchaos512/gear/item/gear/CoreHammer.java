@@ -10,6 +10,7 @@ import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.IAOETool;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CoreHammer extends CorePickaxe implements IAOETool {
     @Nonnull
@@ -29,7 +30,7 @@ public class CoreHammer extends CorePickaxe implements IAOETool {
         return "pickaxe";
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public RayTraceResult rayTraceBlocks(World world, EntityPlayer player) {
         return this.rayTrace(world, player, false);

@@ -21,6 +21,7 @@ import net.silentchaos512.gear.event.*;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldGenerator;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 import net.silentchaos512.lib.registry.SRegistry;
@@ -65,6 +66,8 @@ public class CommonProxy {
 
     public void postInit(SRegistry registry, FMLPostInitializationEvent event) {
         registry.postInit(event);
+
+        IAOETool.BreakHandler.buildOreBlocksSet();
 
         InitialSpawnItems.add(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"),
                 () -> Config.spawnWithStarterBlueprints ? ModItems.blueprintPackage.getStack() : ItemStack.EMPTY);

@@ -86,10 +86,12 @@ public class WorldListener implements IWorldEventListener {
         if (heldItem.getItem() instanceof IAOETool) {
             IAOETool iaoeTool = (IAOETool) heldItem.getItem();
             RayTraceResult rt = iaoeTool.rayTraceBlocks(world, player);
-            List<BlockPos> positions = iaoeTool.getExtraBlocks(world, rt, player, heldItem);
-
-            SilentGear.network.wrapper.sendToAllAround(new MessageExtraBlockBreak(player.getEntityId(), progress - 1, positions.toArray(new BlockPos[0])),
-                    new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 32D));
+            if (rt != null) {
+                final List<BlockPos> positions = iaoeTool.getExtraBlocks(world, rt, player, heldItem);
+                final TargetPoint point = new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 32D);
+                SilentGear.network.wrapper.sendToAllAround(new MessageExtraBlockBreak(
+                        player.getEntityId(), progress - 1, positions.toArray(new BlockPos[0])), point);
+            }
         }
     }
 }
