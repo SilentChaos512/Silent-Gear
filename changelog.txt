@@ -1,6 +1,8 @@
 0.1.3
+Added: Configs to change repair multiplier for quick and anvil repairs
 Added: Quark runes can now control the effect color of gear
 Changed: Default enchanted effect color to purple (vanilla)
+Changed: Updated all tool textures with consistent shading (base mod only)
 
 0.1.2
 Added: Configs to control vanilla gear nerfing (to disable, remove all items from the list)
