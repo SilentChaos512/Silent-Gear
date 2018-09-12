@@ -25,8 +25,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class PartDataList implements List<ItemPartData> {
-    private List<ItemPartData> list = new ArrayList<>();
+public final class PartDataList implements List<ItemPartData> {
+    private final List<ItemPartData> list = new ArrayList<>();
 
     private PartDataList() {
     }

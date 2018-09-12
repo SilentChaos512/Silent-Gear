@@ -49,8 +49,10 @@ advancements.silentgear.upgrade_base.description=You might want to make a few...
 
 tile.silentgear.crafting_station.name=Crafting Station
 tile.silentgear.crafting_station.storage=Storage
+tile.silentgear.crafting_station.upgrades=Upgrades: %s
+tile.silentgear.crafting_station.upgrade_format=- %s
 tile.silentgear.flax_plant.name=Flax Plant
-tile.silentgear.flower.name=Ineedaname Flower
+tile.silentgear.flower.name=Blue Flower
 tile.silentgear.part_analyzer.name=Part Analyzer
 
 

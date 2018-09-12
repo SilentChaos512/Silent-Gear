@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
-import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.RepairContext;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.advancements.LibTriggers;
@@ -50,7 +50,7 @@ public class RepairHandler {
     private void handleGearRepair(AnvilUpdateEvent event, ItemPartData part) {
         ItemStack result = event.getLeft().copy();
         // TODO: Need to consider stack size!
-        float amount =  part.getRepairAmount(result, ItemPart.RepairContext.ANVIL);
+        float amount =  part.getRepairAmount(result, RepairContext.ANVIL);
         amount *= GearData.getStat(result, CommonItemStats.REPAIR_EFFICIENCY);
 
         // How many of materials to use?

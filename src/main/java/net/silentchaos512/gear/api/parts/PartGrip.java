@@ -2,8 +2,11 @@ package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
+
+import java.util.List;
 
 public final class PartGrip extends ItemPart implements IUpgradePart {
     public PartGrip(ResourceLocation name) {
@@ -22,6 +25,11 @@ public final class PartGrip extends ItemPart implements IUpgradePart {
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
         return getTexture(part, gear, gearClass, PartPositions.GRIP, animationFrame);
+    }
+
+    @Override
+    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+        // Nothing
     }
 
     @Override

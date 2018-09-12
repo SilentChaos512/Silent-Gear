@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter(value = AccessLevel.PUBLIC)
-public class ItemPartData {
+public final class ItemPartData {
     private static final Map<ResourceLocation, ItemPartData> CACHE_UNGRADED_PARTS = new HashMap<>();
 
     final ItemPart part;
@@ -104,7 +104,7 @@ public class ItemPartData {
         return stat.compute(0, getStatModifiers(stat));
     }
 
-    public float getRepairAmount(ItemStack gear, ItemPart.RepairContext context) {
+    public float getRepairAmount(ItemStack gear, RepairContext context) {
         return this.part.getRepairAmount(gear, this, context);
     }
 
@@ -161,5 +161,14 @@ public class ItemPartData {
 
     public boolean isBowstring() {
         return this.part instanceof PartBowstring;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemPartData{" +
+                "part=" + part +
+                ", grade=" + grade +
+                ", craftingItem=" + craftingItem +
+                "}";
     }
 }

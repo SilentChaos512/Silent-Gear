@@ -28,9 +28,9 @@ public class StatInstance {
 
     public static final StatInstance ZERO = new StatInstance("__zero__", 0f, StatInstance.Operation.ADD);
 
-    private String id;
-    private float value;
-    private StatInstance.Operation op;
+    private final String id;
+    private final float value;
+    private final StatInstance.Operation op;
 
     public StatInstance(String id, float value, StatInstance.Operation op) {
         this.id = id;

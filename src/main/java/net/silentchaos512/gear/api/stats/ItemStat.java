@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @ParametersAreNonnullByDefault
 public class ItemStat {
-    public static Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
+    public static final Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
 
     @Getter(value = AccessLevel.PUBLIC)
     protected final ResourceLocation name;
@@ -69,12 +69,6 @@ public class ItemStat {
     private static final float WEIGHT_DEVIATION_COEFF = 2f;
 
     public float compute(float baseValue, Collection<StatInstance> modifiers) {
-//    if (this == CommonItemStats.DURABILITY) {
-//      SilentGear.log.debug("Modifiers for " + this.unlocalizedName);
-//      for (StatInstance inst : modifiers)
-//        SilentGear.log.debug("    " + inst);
-//    }
-
         if (modifiers.isEmpty())
             return baseValue;
 
@@ -147,7 +141,7 @@ public class ItemStat {
         }
 
         float value = compute(baseValue + add, modifiers) - add;
-        if (isAffectedByGrades()) {
+        if (affectedByGrades) {
             // FIXME: This doesn't exactly match the calculations done in GearData
             float gradeBonus = 1f + grade.bonusPercent / 100f;
             value *= gradeBonus;

@@ -3,6 +3,9 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
 
 import java.util.List;
 
@@ -50,5 +53,10 @@ public final class PartTip extends ItemPart implements IUpgradePart {
     @Override
     public IPartPosition getPartPosition() {
         return PartPositions.TIP;
+    }
+
+    @Override
+    public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
+        return stat == CommonItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.ADD;
     }
 }

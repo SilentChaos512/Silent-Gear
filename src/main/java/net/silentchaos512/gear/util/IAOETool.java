@@ -194,7 +194,7 @@ public interface IAOETool {
             // Otherwise, anything with the same harvest level should be okay
             int level1 = block1.getBlock().getHarvestLevel(block1);
             int level2 = block2.getBlock().getHarvestLevel(block2);
-            SilentGear.log.debug("areBlocksSimilar: {} and {}", level1, level2);
+//            SilentGear.log.debug("areBlocksSimilar: {} and {}", level1, level2);
             return level1 == level2 || level1 < 0 || level2 < 0;
         }
     }

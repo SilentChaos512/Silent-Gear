@@ -2,6 +2,9 @@ package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import java.util.List;
 
 public final class PartBowstring extends ItemPart {
     public PartBowstring(ResourceLocation name) {
@@ -32,6 +35,11 @@ public final class PartBowstring extends ItemPart {
     @Override
     public String getModelIndex(ItemPartData part, int animationFrame) {
         return this.modelIndex + "_" + animationFrame;
+    }
+
+    @Override
+    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+        // Nothing
     }
 
     @Override

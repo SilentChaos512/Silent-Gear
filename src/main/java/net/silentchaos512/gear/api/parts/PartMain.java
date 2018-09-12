@@ -2,7 +2,13 @@ package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
+
+import java.util.List;
 
 public final class PartMain extends ItemPart {
     public PartMain(ResourceLocation name) {
@@ -38,7 +44,17 @@ public final class PartMain extends ItemPart {
     }
 
     @Override
+    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+        // Nothing
+    }
+
+    @Override
     public String getTypeName() {
         return "main";
+    }
+
+    @Override
+    public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
+        return stat == CommonItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.AVG;
     }
 }

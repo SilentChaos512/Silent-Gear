@@ -31,10 +31,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 // TODO: javadoc
 @Getter(value = AccessLevel.PUBLIC)
 public abstract class ItemPart {
+    private static final Pattern REGEX_TEXTURE_SUFFIX_REPLACE = Pattern.compile("[a-z]+_");
+
     protected ResourceLocation registryName;
 
     public static final String NBT_KEY = "Key";
@@ -71,7 +74,7 @@ public abstract class ItemPart {
 
     public ItemPart(ResourceLocation registryName, boolean userDefined) {
         this.registryName = registryName;
-        this.textureSuffix = registryName.getPath().replaceFirst("[a-z]+_", "");
+        this.textureSuffix = REGEX_TEXTURE_SUFFIX_REPLACE.matcher(registryName.getPath()).replaceFirst("");
         this.modelIndex = ++lastModelIndex;
         this.userDefined = userDefined;
         loadJsonResources();
@@ -100,19 +103,8 @@ public abstract class ItemPart {
      * Default operation to use if the resource file does not specify on operation for the given
      * stat
      */
-    public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
-        if (stat == CommonItemStats.HARVEST_LEVEL)
-            return StatInstance.Operation.MAX;
-        else if (this instanceof PartMain)
-            return StatInstance.Operation.AVG;
-        else if (stat == CommonItemStats.ATTACK_SPEED || stat == CommonItemStats.RARITY)
-            return StatInstance.Operation.ADD;
-        else if (this instanceof PartRod)
-            return StatInstance.Operation.MUL2;
-        else if (this instanceof PartTip)
-            return StatInstance.Operation.ADD;
-
-        return StatInstance.Operation.ADD;
+    public Operation getDefaultStatOperation(ItemStat stat) {
+        return stat == CommonItemStats.HARVEST_LEVEL ? Operation.MAX : Operation.ADD;
     }
 
     @Deprecated
@@ -222,14 +214,13 @@ public abstract class ItemPart {
      * @param gear    The equipment (tool/weapon/armor) stack
      * @param tooltip Current tooltip lines
      */
-    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
-    }
+    public abstract void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced);
 
     /**
      * Gets a translation key for the part
      */
     public String getTranslationKey(@Nullable ItemPartData part) {
-        return "material." + this.registryName.getNamespace() + "." + this.registryName.getPath() + ".name";
+        return String.format("material.%s.%s.name", this.registryName.getNamespace(), this.registryName.getPath());
     }
 
     /**
@@ -256,7 +247,7 @@ public abstract class ItemPart {
         str += "Key: " + this.registryName + ", ";
         str += "CraftingStack: " + this.craftingStack.get() + ", ";
         str += "CraftingOreDictName: '" + this.craftingOreDictName + "', ";
-        str += "Tier: " + getTier();
+        str += "Tier: " + this.tier;
         str += "}";
         return str;
     }
@@ -269,7 +260,7 @@ public abstract class ItemPart {
      * Get the location of the resource file that contains material information
      */
     private String getResourceFileLocation() {
-        return "assets/" + this.registryName.getNamespace() + "/materials/" + this.registryName.getPath() + ".json";
+        return String.format("assets/%s/materials/%s.json", this.registryName.getNamespace(), this.registryName.getPath());
     }
 
     private void loadJsonResources() {
@@ -279,23 +270,25 @@ public abstract class ItemPart {
         if (resourceAsStream != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream, "UTF-8"))) {
                 readResourceFile(reader);
-                SilentGear.log.info("Successfully read {}", path);
+                if (SilentGear.log.getLogger().isDebugEnabled())
+                    SilentGear.log.info("Successfully read {}", path);
             } catch (Exception e) {
-                e.printStackTrace();
+                SilentGear.log.catching(e);
             }
         } else {
-            SilentGear.log.error("ItemPart {} is missing its data file!", this.getRegistryName());
+            SilentGear.log.error("ItemPart {} is missing its data file!", this.registryName);
         }
 
         // Override in config folder
         File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.registryName.getPath() + ".json");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readResourceFile(reader);
-            SilentGear.log.info("Successfully read {}", file.getAbsolutePath());
+            if (SilentGear.log.getLogger().isDebugEnabled())
+                SilentGear.log.debug("Successfully read {}", file.getAbsolutePath());
         } catch (FileNotFoundException e) {
             // Ignore
         } catch (Exception e) {
-            e.printStackTrace();
+            SilentGear.log.catching(e);
         }
     }
 
@@ -305,112 +298,7 @@ public abstract class ItemPart {
     private void readResourceFile(BufferedReader reader) {
         JsonElement je = GSON.fromJson(reader, JsonElement.class);
         JsonObject json = je.getAsJsonObject();
-        processJson(json);
-    }
-
-    /**
-     * Process the JSON from a loaded resource file. Override if you need to load extra data.
-     *
-     * @param json The root JsonObject from the current file
-     */
-    protected void processJson(JsonObject json) {
-        // Read stats
-        JsonElement elementStats = json.get("stats");
-        if (elementStats.isJsonArray()) {
-            JsonArray array = elementStats.getAsJsonArray();
-            StatModifierMap statMap = new StatModifierMap();
-            for (JsonElement element : array) {
-                JsonObject obj = element.getAsJsonObject();
-                String name = obj.has("name") ? JsonUtils.getString(obj, "name") : "";
-                ItemStat stat = ItemStat.ALL_STATS.get(name);
-
-                if (stat != null) {
-                    float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
-                    Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : getDefaultStatOperation(stat);
-                    String id = "mat_" + this.getTranslationKey(null) + "_" + stat.getName() + (statMap.get(stat).size() + 1);
-                    statMap.put(stat, new StatInstance(id, value, op));
-                }
-            }
-
-            // Move the newly loaded modifiers into the stat map, replacing existing ones
-            statMap.forEach((stat, instance) -> {
-                this.stats.removeAll(stat);
-                this.stats.put(stat, instance);
-            });
-        }
-
-        // Read crafting item data
-        JsonElement elementCraftingItems = json.get("crafting_items");
-        if (elementCraftingItems.isJsonObject()) {
-            JsonObject objTop = elementCraftingItems.getAsJsonObject();
-            // Normal item (ingot, gem)
-            if (objTop.has("normal") && objTop.get("normal").isJsonObject()) {
-                JsonObject obj = objTop.get("normal").getAsJsonObject();
-                craftingStack = readItemData(obj);
-                if (obj.has("oredict"))
-                    craftingOreDictName = JsonUtils.getString(obj, "oredict");
-            }
-            // Small item (nugget, shard)
-            if (objTop.has("small") && objTop.get("small").isJsonObject()) {
-                JsonObject obj = objTop.get("small").getAsJsonObject();
-                craftingStackSmall = readItemData(obj);
-                if (obj.has("oredict"))
-                    craftingOreDictNameSmall = JsonUtils.getString(obj, "oredict");
-            }
-        }
-
-        // Display properties
-        JsonElement elementDisplay = json.get("display");
-        if (elementDisplay.isJsonObject()) {
-            JsonObject obj = elementDisplay.getAsJsonObject();
-            if (obj.has("hidden"))
-                this.hidden = JsonUtils.getBoolean(obj, "hidden");
-            if (obj.has("texture_suffix"))
-                this.textureSuffix = JsonUtils.getString(obj, "texture_suffix");
-            if (obj.has("texture_color"))
-                this.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
-            if (obj.has("broken_color"))
-                this.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
-            if (obj.has("name_color"))
-                this.nameColor = TextFormatting.getValueByName(obj.get("name_color").getAsString());
-            if (obj.has("override_localization"))
-                this.localizedNameOverride = JsonUtils.getString(obj, "override_localization");
-        }
-
-        // Availability (enabled, tier, blacklisting)
-        JsonElement elementAvailability = json.get("availability");
-        if (elementAvailability.isJsonObject()) {
-            JsonObject obj = elementAvailability.getAsJsonObject();
-            this.enabled = obj.has("enabled") ? JsonUtils.getBoolean(obj, "enabled") : this.enabled;
-            this.tier = obj.has("tier") ? JsonUtils.getInt(obj, "tier") : this.tier;
-            // TODO: blacklist
-        }
-    }
-
-    private int readColorCode(String str) {
-        try {
-            return UnsignedInts.parseUnsignedInt(str, 16);
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-            return 0xFFFFFF;
-        }
-    }
-
-    /**
-     * Parse ItemStack data from a JSON object
-     */
-    private Supplier<ItemStack> readItemData(JsonObject json) {
-        if (!json.has("item"))
-            return () -> ItemStack.EMPTY;
-
-        final String itemName = JsonUtils.getString(json, "item");
-        final int meta = json.has("data") ? JsonUtils.getInt(json, "data") : 0;
-        // Item likely does not exist when the ItemPart is constructed, so we need to get it lazily
-        return () -> {
-            Item item = Item.getByNameOrId(itemName);
-            if (item == null) return ItemStack.EMPTY;
-            return new ItemStack(item, 1, meta);
-        };
+        Loader.processJson(this, json);
     }
 
     public void writeToNBT(NBTTagCompound tags) {
@@ -429,7 +317,113 @@ public abstract class ItemPart {
                     (this.userDefined ? " (user defined) " : " "));
     }
 
-    public enum RepairContext {
-        QUICK, ANVIL
+    /**
+     * Handles most aspects of loading part properties from their JSON file
+     */
+    private static class Loader {
+        private static void processJson(ItemPart part, JsonObject json) {
+            readStats(part, json);
+            readCraftingItems(part, json);
+            readDisplayProperties(part, json);
+            readAvailability(part, json);
+        }
+
+        private static void readStats(ItemPart part, JsonObject json) {
+            JsonElement elementStats = json.get("stats");
+            if (elementStats.isJsonArray()) {
+                JsonArray array = elementStats.getAsJsonArray();
+                Multimap<ItemStat, StatInstance> statMap = new StatModifierMap();
+                for (JsonElement element : array) {
+                    JsonObject obj = element.getAsJsonObject();
+                    String name = JsonUtils.getString(obj, "name", "");
+                    ItemStat stat = ItemStat.ALL_STATS.get(name);
+
+                    if (stat != null) {
+                        float value = JsonUtils.getFloat(obj, "value", 0f);
+                        Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op"))
+                                : part.getDefaultStatOperation(stat);
+                        String id = String.format("mat_%s_%s%d", part.getTranslationKey(null), stat.getName(),
+                                statMap.get(stat).size() + 1);
+                        statMap.put(stat, new StatInstance(id, value, op));
+                    }
+                }
+
+                // Move the newly loaded modifiers into the stat map, replacing existing ones
+                statMap.forEach((stat, instance) -> {
+                    part.stats.removeAll(stat);
+                    part.stats.put(stat, instance);
+                });
+            }
+        }
+
+        private static void readCraftingItems(ItemPart part, JsonObject json) {
+            JsonElement elementCraftingItems = json.get("crafting_items");
+            if (elementCraftingItems.isJsonObject()) {
+                JsonObject objTop = elementCraftingItems.getAsJsonObject();
+                // Normal item (ingot, gem)
+                if (objTop.has("normal") && objTop.get("normal").isJsonObject()) {
+                    JsonObject obj = objTop.get("normal").getAsJsonObject();
+                    part.craftingStack = readItemData(obj);
+                    part.craftingOreDictName = JsonUtils.getString(obj, "oredict", part.craftingOreDictName);
+                }
+                // Small item (nugget, shard)
+                if (objTop.has("small") && objTop.get("small").isJsonObject()) {
+                    JsonObject obj = objTop.get("small").getAsJsonObject();
+                    part.craftingStackSmall = readItemData(obj);
+                    part.craftingOreDictNameSmall = JsonUtils.getString(obj, "oredict", part.craftingOreDictNameSmall);
+                }
+            }
+        }
+
+        private static void readDisplayProperties(ItemPart part, JsonObject json) {
+            JsonElement elementDisplay = json.get("display");
+            if (elementDisplay.isJsonObject()) {
+                JsonObject obj = elementDisplay.getAsJsonObject();
+                part.hidden = JsonUtils.getBoolean(obj, "hidden", part.hidden);
+                part.textureSuffix = JsonUtils.getString(obj, "texture_suffix", part.textureSuffix);
+                if (obj.has("texture_color"))
+                    part.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
+                if (obj.has("broken_color"))
+                    part.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
+                if (obj.has("name_color"))
+                    part.nameColor = TextFormatting.getValueByName(JsonUtils.getString(obj, "name_color"));
+                part.localizedNameOverride = JsonUtils.getString(obj, "override_localization", part.localizedNameOverride);
+            }
+        }
+
+        private static void readAvailability(ItemPart part, JsonObject json) {
+            JsonElement elementAvailability = json.get("availability");
+            if (elementAvailability.isJsonObject()) {
+                JsonObject obj = elementAvailability.getAsJsonObject();
+                part.enabled = JsonUtils.getBoolean(obj, "enabled", part.enabled);
+                part.tier = JsonUtils.getInt(obj, "tier", part.tier);
+                // TODO: blacklist
+            }
+        }
+
+        private static int readColorCode(String str) {
+            try {
+                return UnsignedInts.parseUnsignedInt(str, 16);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                return 0xFFFFFF;
+            }
+        }
+
+        /**
+         * Parse ItemStack data from a JSON object
+         */
+        private static Supplier<ItemStack> readItemData(JsonObject json) {
+            if (!json.has("item"))
+                return () -> ItemStack.EMPTY;
+
+            final String itemName = JsonUtils.getString(json, "item");
+            final int meta = JsonUtils.getInt(json, "data", 0);
+            // Item likely does not exist when the ItemPart is constructed, so we need to get it lazily
+            return () -> {
+                Item item = Item.getByNameOrId(itemName);
+                return item == null ? ItemStack.EMPTY : new ItemStack(item, 1, meta);
+            };
+        }
     }
 }

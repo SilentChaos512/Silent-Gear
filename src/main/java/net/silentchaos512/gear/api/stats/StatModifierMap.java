@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
-    private Multimap<ItemStat, StatInstance> map = ArrayListMultimap.create();
+    private final Multimap<ItemStat, StatInstance> map = ArrayListMultimap.create();
 
     @Override
     public int size() {

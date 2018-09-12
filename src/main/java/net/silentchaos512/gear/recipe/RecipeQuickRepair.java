@@ -23,9 +23,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.api.parts.RepairContext;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
@@ -48,7 +48,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
         for (ItemStack stack : parts) {
             ItemPartData data = ItemPartData.fromStack(stack);
             if (data != null) {
-                repairValue += data.getRepairAmount(gear, ItemPart.RepairContext.QUICK);
+                repairValue += data.getRepairAmount(gear, RepairContext.QUICK);
                 ++materialCount;
             }
         }
@@ -89,7 +89,7 @@ public class RecipeQuickRepair extends RecipeBaseSL {
                 ++partsCount;
                 // It needs to be a part with repair value
                 ItemPartData data = ItemPartData.fromStack(stack);
-                if (data == null || data.getRepairAmount(gear, ItemPart.RepairContext.QUICK) <= 0)
+                if (data == null || data.getRepairAmount(gear, RepairContext.QUICK) <= 0)
                     return false;
             }
             else {

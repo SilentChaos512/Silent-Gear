@@ -54,7 +54,7 @@ public class BlockCraftingStation extends BlockContainer implements ITileEntityB
         return !player.isSneaking() && (world.isRemote || this.openGui(player, world, pos));
     }
 
-    protected boolean openGui(EntityPlayer player, World world, BlockPos pos) {
+    private boolean openGui(EntityPlayer player, World world, BlockPos pos) {
         player.openGui(SilentGear.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }

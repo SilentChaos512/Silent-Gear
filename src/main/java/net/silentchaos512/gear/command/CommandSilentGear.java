@@ -35,7 +35,7 @@ public class CommandSilentGear extends CommandBase {
         static String[] getKeys() {
             String[] ret = new String[values().length];
             for (int i = 0; i < ret.length; ++i)
-                ret[i] = values()[i].name().toLowerCase();
+                ret[i] = values()[i].name().toLowerCase(Locale.ROOT);
             return ret;
         }
     }

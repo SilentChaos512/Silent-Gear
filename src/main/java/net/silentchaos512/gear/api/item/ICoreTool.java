@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -7,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -19,10 +19,13 @@ import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public interface ICoreTool extends ICoreItem {
-    Set<ItemStat> RELEVANT_STATS = new LinkedHashSet<>(Arrays.asList(
+    Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             CommonItemStats.HARVEST_LEVEL,
             CommonItemStats.HARVEST_SPEED,
             CommonItemStats.MELEE_DAMAGE,
@@ -30,7 +33,7 @@ public interface ICoreTool extends ICoreItem {
             CommonItemStats.DURABILITY,
             CommonItemStats.ENCHANTABILITY,
             CommonItemStats.RARITY
-    ));
+    );
 
     @Override
     default Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack) {
