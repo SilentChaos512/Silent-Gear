@@ -58,35 +58,36 @@ public class GuiCraftingStation extends GuiContainer {
         this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "storage"), -55, 19, 0x404040);
         this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 0x404040);
 
-        // Draw crafting result tooltip
         ItemStack craftResult = this.container.craftResult.getStackInSlot(0);
-        if (craftResult.isEmpty())
-            return;
+        drawSlimeFace(craftResult);
 
-        FontRenderer font = this.mc.fontRenderer;
-        List<String> tooltip = craftResult.getTooltip(this.mc.player, getTooltipFlag(craftResult));
+        if (!craftResult.isEmpty()) {
+            // Draw crafting result tooltip
+            FontRenderer font = this.mc.fontRenderer;
+            List<String> tooltip = craftResult.getTooltip(this.mc.player, getTooltipFlag(craftResult));
 
-        int maxWidth = 0;
-        for (String line : tooltip) {
-            maxWidth = Math.max(maxWidth, font.getStringWidth(line));
+            int maxWidth = 0;
+            for (String line : tooltip) {
+                maxWidth = Math.max(maxWidth, font.getStringWidth(line));
+            }
+            // SilentGear.log.debug(maxWidth);
+
+            float scale = 75f / maxWidth;
+            int xPos = (int) ((this.xSize - 82) / scale);
+            int yPos = (int) ((this.ySize - 160) / scale);
+            // SilentGear.log.debug(xPos, yPos);
+
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(scale, scale, 1);
+
+            int step = (int) (scale * 10);
+            for (String line : tooltip) {
+                font.drawStringWithShadow(line, xPos, yPos, 0xFFFFFF);
+                yPos += Math.round(step / scale);
+            }
+
+            GlStateManager.popMatrix();
         }
-        // SilentGear.log.debug(maxWidth);
-
-        float scale = 75f / maxWidth;
-        int xPos = (int) ((this.xSize - 82) / scale);
-        int yPos = (int) ((this.ySize - 160) / scale);
-        // SilentGear.log.debug(xPos, yPos);
-
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, 1);
-
-        int step = (int) (scale * 10);
-        for (String line : tooltip) {
-            font.drawStringWithShadow(line, xPos, yPos, 0xFFFFFF);
-            yPos += Math.round(step / scale);
-        }
-
-        GlStateManager.popMatrix();
     }
 
     @Override
@@ -117,5 +118,23 @@ public class GuiCraftingStation extends GuiContainer {
         x = xPos + 171;
         y = yPos + 4;
         drawRect(x, y, x + 80, y + 158, 0xCF000000);
+    }
+
+    private void drawSlimeFace(ItemStack craftResult) {
+        mc.getTextureManager().bindTexture(TEXTURE);
+        GlStateManager.color(1, 1, 1, 1);
+        final int textureY = 245;
+        int textureX;
+        if (craftResult.isEmpty()) {
+            if (this.container.craftMatrix.isEmpty()) textureX = 223; // :|
+            else textureX = 234; // :\
+        } else {
+            ResourceLocation name = craftResult.getItem().getRegistryName();
+            if (name == null || "tconstruct".equals(name.getNamespace())) textureX = 245; // :(
+            else textureX = 212; // :)
+        }
+
+        drawTexturedModalRect(this.xSize - 18, this.ySize - 17, textureX, textureY, 11, 11);
+        mc.getTextureManager().bindTexture(ICONS);
     }
 }
