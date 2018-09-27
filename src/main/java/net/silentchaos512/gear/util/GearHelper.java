@@ -8,13 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -35,8 +33,12 @@ import net.silentchaos512.lib.registry.RecipeMaker;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class GearHelper {
+public final class GearHelper {
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
+    private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
+    private static final float BROKEN_DESTROY_SPEED = 0.25f;
+
+    private GearHelper() {}
 
     //region Attribute modifiers
 
@@ -62,13 +64,11 @@ public class GearHelper {
 
         float speed = GearData.getStat(stack, CommonItemStats.ATTACK_SPEED);
         if (isBroken(stack))
-            speed += 0.7f;
+            speed += BROKEN_ATTACK_SPEED_CHANGE;
         return speed;
     }
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        String name = stack.getItem() instanceof ItemTool ? "Tool modifier" : "Weapon modifier";
-
         @SuppressWarnings("deprecation")
         Multimap<String, AttributeModifier> map = stack.getItem().getItemAttributeModifiers(slot);
 
@@ -168,9 +168,31 @@ public class GearHelper {
 
     //endregion
 
+    public static int getHarvestLevel(ItemStack stack, String toolClass, @Nullable IBlockState state, @Nullable Set<Material> effectiveMaterials) {
+        if (isBroken(stack) || !stack.getItem().getToolClasses(stack).contains(toolClass))
+            return -1;
+
+        final int level = GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+        if (state == null) return level;
+
+        final boolean effectiveOnMaterial = effectiveMaterials == null || effectiveMaterials.contains(state.getMaterial());
+        if (effectiveOnMaterial && state.getBlock().getHarvestLevel(state) <= level)
+            return level;
+        else return -1;
+    }
+
+    public static void setHarvestLevel(ICoreItem item, String toolClass, int level, Set<String> mutableSet) {
+        // Add tool class to list if level is non-negative. Because this is on the item level, the
+        // actual number is meaningless. Harvest levels can be customized in the material JSONs.
+        final boolean add = level >= 0;
+        SilentGear.log.info("{}: {} tool class \"{}\"", item.getClass().getSimpleName(), (add ? "set" : "remove"), toolClass);
+        if (add) mutableSet.add(toolClass);
+        else mutableSet.remove(toolClass);
+    }
+
     public static float getDestroySpeed(ItemStack stack, IBlockState state, @Nullable Set<Material> extraMaterials) {
         if (isBroken(stack))
-            return 0.25f;
+            return BROKEN_DESTROY_SPEED;
 
         float speed = GearData.getStat(stack, CommonItemStats.HARVEST_SPEED);
 
@@ -235,11 +257,6 @@ public class GearHelper {
         }
     }
 
-    public static boolean onEntityItemUpdate(EntityItem entityItem) {
-        // TODO
-        return false;
-    }
-
     public static EnumRarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
         if (stack.isItemEnchanted())
@@ -256,7 +273,7 @@ public class GearHelper {
         return SilentGear.RARITY_LEGENDARY;
     }
 
-    private static Map<String, List<ItemStack>> subItemCache = new HashMap<>();
+    private static final Map<String, List<ItemStack>> subItemCache = new HashMap<>();
 
     public static void getSubItems(ICoreItem item, CreativeTabs tab, NonNullList<ItemStack> subitems) {
         boolean inTab = false;
@@ -324,15 +341,5 @@ public class GearHelper {
         }
 
         return list;
-    }
-
-    public static class EventHandler {
-
-        public static final EventHandler INSTANCE = new EventHandler();
-
-        private EventHandler() {
-        }
-
-        // TODO
     }
 }

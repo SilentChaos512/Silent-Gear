@@ -40,10 +40,13 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class CoreSickle extends ItemTool implements ICoreTool {
+    private final Set<String> toolClasses = new HashSet<>();
 
     // TODO: Durability use config
     private static final int DURABILITY_USAGE = 2;
@@ -52,7 +55,7 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.CACTUS, Material.LEAVES, Material.PLANTS, Material.VINE, Material.WEB);
 
     public CoreSickle() {
-        super(GearData.FAKE_MATERIAL, ImmutableSet.of());
+        super(Objects.requireNonNull(GearData.FAKE_MATERIAL), ImmutableSet.of());
         setNoRepair();
     }
 
@@ -83,14 +86,12 @@ public class CoreSickle extends ItemTool implements ICoreTool {
         boolean flag = false;
         final int radius = HARVEST_RANGE;
         int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, sickle);
-        BlockPos target;
-        Block block;
 
         for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; ++z) {
             for (int x = pos.getX() - radius; x <= pos.getX() + radius; ++x) {
-                target = new BlockPos(x, pos.getY(), z);
+                BlockPos target = new BlockPos(x, pos.getY(), z);
                 state = worldIn.getBlockState(target);
-                block = state.getBlock();
+                Block block = state.getBlock();
 
                 if (block instanceof IGrowable && !(block instanceof BlockDoublePlant)) {
                     IGrowable crop = (IGrowable) block;
@@ -124,7 +125,7 @@ public class CoreSickle extends ItemTool implements ICoreTool {
 
         if (flag) {
             GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player);
-            player.addExhaustion(0.02f);
+            player.addExhaustion(0.02f); // TODO: Config?
         }
         return flag ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
     }
@@ -139,7 +140,6 @@ public class CoreSickle extends ItemTool implements ICoreTool {
 
         World world = player.world;
         IBlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
 
         if (!EFFECTIVE_MATERIALS.contains(state.getMaterial())) return false;
 
@@ -242,7 +242,13 @@ public class CoreSickle extends ItemTool implements ICoreTool {
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
-        return super.getHarvestLevel(stack, toolClass, player, state) < 0 ? 0 : GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+        return GearHelper.getHarvestLevel(stack, toolClass, state, EFFECTIVE_MATERIALS);
+    }
+
+    @Override
+    public void setHarvestLevel(String toolClass, int level) {
+        super.setHarvestLevel(toolClass, level);
+        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
     }
 
     @Override

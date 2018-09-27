@@ -30,10 +30,18 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Set;
 
 public class CoreMachete extends CoreSword {
-    private static final int BREAK_RANGE = 2;
+    private static final int BREAK_RANGE = 2; // TODO: Config?
+
+    private final Set<String> toolClasses = new HashSet<>();
+
+    public CoreMachete() {
+        setHarvestLevel("axe", 0);
+    }
 
     @Nonnull
     @Override
@@ -55,8 +63,19 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
+    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
+        return GearHelper.getHarvestLevel(stack, toolClass, state, null);
+    }
+
+    @Override
+    public void setHarvestLevel(String toolClass, int level) {
+        super.setHarvestLevel(toolClass, level);
+        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
+    }
+
+    @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.of("axe");
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.copyOf(toolClasses);
     }
 
     @Override
@@ -64,7 +83,7 @@ public class CoreMachete extends CoreSword {
         float speed = GearHelper.getDestroySpeed(stack, state, CoreAxe.EXTRA_EFFECTIVE_MATERIALS);
         // Slower on materials normally harvested with axes
         if (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.GOURD || state.getMaterial() == Material.CIRCUITS)
-            return speed * 0.4f;
+            return speed * 0.4f; // TODO: Add config!
         return speed;
     }
 }

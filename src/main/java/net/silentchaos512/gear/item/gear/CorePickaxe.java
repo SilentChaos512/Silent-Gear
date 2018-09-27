@@ -30,17 +30,22 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class CorePickaxe extends ItemPickaxe implements ICoreTool {
-
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.ANVIL, Material.ICE, Material.IRON, Material.PACKED_ICE, Material.ROCK);
     private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.ROCK, Material.CIRCUITS, Material.GLASS, Material.PISTON, Material.REDSTONE_LIGHT);
 
+    private final Set<String> toolClasses = new HashSet<>();
+
     public CorePickaxe() {
-        super(GearData.FAKE_MATERIAL);
+        super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
         setNoRepair();
+        setHarvestLevel("pickaxe", 0);
     }
 
     @Nonnull
@@ -105,10 +110,14 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
-        if (super.getHarvestLevel(stack, toolClass, player, state) < 0 || GearHelper.isBroken(stack))
-            return -1;
-        return GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
+        return GearHelper.getHarvestLevel(stack, toolClass, state, EXTRA_EFFECTIVE_MATERIALS);
+    }
+
+    @Override
+    public void setHarvestLevel(String toolClass, int level) {
+        super.setHarvestLevel(toolClass, level);
+        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
     }
 
     @Override
@@ -146,11 +155,15 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        if (GearHelper.isBroken(stack))
+        if (!GearHelper.isBroken(stack)) {
+            ImmutableSet.Builder<String> builder = ImmutableSet.builder();
+            builder.addAll(this.toolClasses);
+            if (GearData.hasPart(stack, MiscUpgrades.SPOON.getPart()))
+                builder.add("shovel");
+            return builder.build();
+        } else {
             return ImmutableSet.of();
-        else if (GearData.hasPart(stack, MiscUpgrades.SPOON.getPart()))
-            return ImmutableSet.of("pickaxe", "shovel");
-        return super.getToolClasses(stack);
+        }
     }
 
     @Override

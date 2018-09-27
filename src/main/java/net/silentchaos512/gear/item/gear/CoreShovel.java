@@ -29,15 +29,20 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class CoreShovel extends ItemSpade implements ICoreTool {
-
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.CLAY, Material.CRAFTED_SNOW, Material.GRASS, Material.GROUND, Material.SAND, Material.SNOW);
 
+    private final Set<String> toolClasses = new HashSet<>();
+
     public CoreShovel() {
-        super(GearData.FAKE_MATERIAL);
+        super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
+        setHarvestLevel("shovel", 0);
     }
 
     @Nonnull
@@ -102,10 +107,14 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
-        if (super.getHarvestLevel(stack, toolClass, player, state) < 0 || GearHelper.isBroken(stack))
-            return -1;
-        return GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
+        return GearHelper.getHarvestLevel(stack, toolClass, state, BASE_EFFECTIVE_MATERIALS);
+    }
+
+    @Override
+    public void setHarvestLevel(String toolClass, int level) {
+        super.setHarvestLevel(toolClass, level);
+        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
     }
 
     @Override
@@ -143,7 +152,7 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : super.getToolClasses(stack);
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.copyOf(this.toolClasses);
     }
 
     @Override

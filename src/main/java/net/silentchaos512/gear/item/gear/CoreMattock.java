@@ -27,7 +27,10 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class CoreMattock extends ItemHoe implements ICoreTool {
@@ -35,9 +38,13 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
             Material.PLANTS, Material.VINE, Material.GRASS, Material.GROUND, Material.CLAY,
             Material.SAND, Material.SNOW, Material.GOURD, Material.WOOD);
 
+    private final Set<String> toolClasses = new HashSet<>();
+
     public CoreMattock() {
-        super(GearData.FAKE_MATERIAL);
+        super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
         setNoRepair();
+        setHarvestLevel("shovel", 0);
+        setHarvestLevel("axe", 0);
     }
 
     @Nonnull
@@ -114,12 +121,14 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, EntityPlayer player, IBlockState state) {
-        if (GearHelper.isBroken(stack)) return -1;
-        int harvestLevel = GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
-        return !EFFECTIVE_MATERIALS.contains(state.getMaterial())
-                || state.getBlock().getHarvestLevel(state) > harvestLevel
-                ? -1 : harvestLevel; // ?
+    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
+        return GearHelper.getHarvestLevel(stack, toolClass, state, EFFECTIVE_MATERIALS);
+    }
+
+    @Override
+    public void setHarvestLevel(String toolClass, int level) {
+        super.setHarvestLevel(toolClass, level);
+        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
     }
 
     @Override
@@ -149,7 +158,7 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.of("shovel", "axe");
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.copyOf(this.toolClasses);
     }
 
     @Override
