@@ -72,7 +72,7 @@ public class GearData {
 
         // Get parts the item was made with
         PartDataList parts = getConstructionParts(stack);
-        if (parts.size() == 0)
+        if (parts.isEmpty() || parts.getMains().isEmpty()) // TODO: How to check invalid parts?
             return;
         // Build unique parts set
         PartDataList uniqueParts = parts.getUniqueParts(true);

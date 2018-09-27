@@ -25,6 +25,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.item.TipUpgrades;
+import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.gear.item.ToolRods;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
@@ -46,7 +47,7 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
         initFailed = true;
-        subtypeRegistry.registerSubtypeInterpreter(ModItems.toolHead, s -> ModItems.toolHead.getSubtypeKey(s));
+        subtypeRegistry.registerSubtypeInterpreter(ModItems.toolHead, s -> ToolHead.getSubtypeKey(s));
 
 //        ModItems.gearClasses.forEach(
 //                (key, item) -> subtypeRegistry.registerSubtypeInterpreter(item.getItem(),

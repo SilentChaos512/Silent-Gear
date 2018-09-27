@@ -26,6 +26,7 @@ import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.ToolHead;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -180,7 +181,7 @@ public class ToolHeadModel implements IModel {
             ItemPartData primaryPart = ModItems.toolHead.getPrimaryPart(stack);
             ItemPartData secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
 
-            String key = ModItems.toolHead.getModelKey(toolClass, primaryPart, secondaryPart);
+            String key = ToolHead.getModelKey(toolClass, primaryPart, secondaryPart);
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
