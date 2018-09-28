@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.*;
@@ -13,15 +14,15 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
-import net.silentchaos512.lib.util.I18nHelper;
 
 import java.util.Collection;
 
-public class TooltipHandler {
-    public static TooltipHandler INSTANCE = new TooltipHandler();
+@Mod.EventBusSubscriber
+public final class TooltipHandler {
+    private TooltipHandler() {}
 
     @SubscribeEvent
-    public void onTooltip(ItemTooltipEvent event) {
+    public static void onTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         ItemPart part = !stack.isEmpty() ? PartRegistry.get(stack) : null;
 
@@ -37,29 +38,30 @@ public class TooltipHandler {
         }
     }
 
-    private void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
-        event.getToolTip().add(TextFormatting.GREEN + SilentGear.i18n.translate("part", "type." + part.getTypeName(), part.getTier()));
+    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
+        event.getToolTip().add(TextFormatting.GREEN + SilentGear.i18n.translate("part",
+                "type." + part.getType().getName(), part.getTier()));
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTrackerSL.isControlDown()) {
             if (part instanceof PartMain)
-                getGradeLine(event, grade, SilentGear.i18n);
+                getGradeLine(event, grade);
             event.getToolTip().add(TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.stats.name")
                     + TextFormatting.RESET + TextFormatting.ITALIC + " (Silent Gear)");
             getPartStatLines(event, stack, part);
         } else {
             if (grade != MaterialGrade.NONE && part instanceof PartMain)
-                getGradeLine(event, grade, SilentGear.i18n);
+                getGradeLine(event, grade);
             event.getToolTip().add(TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.ctrlForStats"));
         }
     }
 
-    private void getGradeLine(ItemTooltipEvent event, MaterialGrade grade, I18nHelper i18n) {
-        String line = i18n.translate("material", "gradeOnPart", grade.getTranslatedName());
+    private static void getGradeLine(ItemTooltipEvent event, MaterialGrade grade) {
+        String line = SilentGear.i18n.translate("material", "gradeOnPart", grade.getTranslatedName());
         event.getToolTip().add(TextFormatting.AQUA + line);
     }
 
-    private void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
+    private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
         ItemPartData partData = ItemPartData.instance(part, MaterialGrade.fromStack(stack), stack);
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);

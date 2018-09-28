@@ -4,15 +4,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartBowstring extends ItemPart {
+    @Deprecated
     public PartBowstring(ResourceLocation name) {
         super(name, false);
     }
 
+    @Deprecated
     public PartBowstring(ResourceLocation name, boolean userDefined) {
         super(name, userDefined);
+    }
+
+    public PartBowstring(ResourceLocation name, PartOrigins origin) {
+        super(name, origin);
+    }
+
+    @Override
+    public PartType getType() {
+        return PartType.BOWSTRING;
     }
 
     @Override
@@ -38,7 +50,7 @@ public final class PartBowstring extends ItemPart {
     }
 
     @Override
-    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemPartData part, ItemStack gear, World world, @Nonnull List<String> tooltip, boolean advanced) {
         // Nothing
     }
 

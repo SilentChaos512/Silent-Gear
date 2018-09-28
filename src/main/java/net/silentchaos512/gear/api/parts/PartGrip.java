@@ -6,15 +6,27 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartGrip extends ItemPart implements IUpgradePart {
+    @Deprecated
     public PartGrip(ResourceLocation name) {
         super(name, false);
     }
 
+    @Deprecated
     public PartGrip(ResourceLocation name, boolean userDefined) {
         super(name, userDefined);
+    }
+
+    public PartGrip(ResourceLocation name, PartOrigins origin) {
+        super(name, origin);
+    }
+
+    @Override
+    public PartType getType() {
+        return PartType.GRIP;
     }
 
     @Override
@@ -28,7 +40,7 @@ public final class PartGrip extends ItemPart implements IUpgradePart {
     }
 
     @Override
-    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemPartData part, ItemStack gear, World world, @Nonnull List<String> tooltip, boolean advanced) {
         // Nothing
     }
 

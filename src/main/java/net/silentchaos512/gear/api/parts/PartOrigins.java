@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- ToolRods
+ * Silent Gear -- PartOrigins
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -16,24 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.item;
+package net.silentchaos512.gear.api.parts;
 
-import lombok.Getter;
-import net.minecraft.util.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.PartOrigins;
-import net.silentchaos512.gear.api.parts.PartRod;
+public enum PartOrigins {
+    /**
+     * Built-in part of Silent Gear. Using this in an add-on mod will throw an exception.
+     */
+    BUILTIN_CORE,
+    /**
+     * Built-in part of another mod. This is the only valid origin for add-on mods.
+     */
+    BUILTIN_ADDON,
+    /**
+     * A part defined in the config folder (data packs in 1.13+, hopefully).
+     */
+    USER_DEFINED;
 
-import java.util.Locale;
+    public boolean isBuiltin() {
+        return this == BUILTIN_CORE || this == BUILTIN_ADDON;
+    }
 
-public enum ToolRods {
-    WOOD, BONE, STONE, IRON, BLAZE, END;
-
-    @Getter
-    private final PartRod part;
-
-    ToolRods() {
-        ResourceLocation name = new ResourceLocation(SilentGear.MOD_ID, "rod_" + name().toLowerCase(Locale.ROOT));
-        this.part = new PartRod(name, PartOrigins.BUILTIN_CORE);
+    public boolean isUserDefined() {
+        return this == USER_DEFINED;
     }
 }

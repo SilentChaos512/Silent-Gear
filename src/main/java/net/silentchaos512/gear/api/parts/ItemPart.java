@@ -23,6 +23,8 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.lib.util.GameUtil;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nullable;
@@ -34,7 +36,7 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 // TODO: javadoc
-@Getter(value = AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 public abstract class ItemPart {
     private static final Pattern REGEX_TEXTURE_SUFFIX_REPLACE = Pattern.compile("[a-z]+_");
 
@@ -44,45 +46,52 @@ public abstract class ItemPart {
     protected static final ResourceLocation BLANK_TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "items/blank");
     private static final Gson GSON = (new GsonBuilder()).create();
 
-    @Getter(value = AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     protected Supplier<ItemStack> craftingStack = () -> ItemStack.EMPTY;
     protected String craftingOreDictName = "";
-    @Getter(value = AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     protected Supplier<ItemStack> craftingStackSmall = () -> ItemStack.EMPTY;
     protected String craftingOreDictNameSmall = "";
     protected int tier = 0;
     protected boolean enabled = true;
     protected boolean hidden = false;
     protected String textureSuffix;
-    protected int textureColor = 0xFFFFFF;
-    protected int brokenColor = 0xFFFFFF;
+    protected int textureColor = Color.VALUE_WHITE;
+    protected int brokenColor = Color.VALUE_WHITE;
     protected TextFormatting nameColor = TextFormatting.GRAY;
     protected String localizedNameOverride = "";
-    private final boolean userDefined;
+    private final PartOrigins origin;
 
     /**
      * Numerical index for model caching. This value could change any time the mod updates or new
      * materials are added, so don't use it for persistent data! Also good for identifying subtypes
      * in JEI.
      */
-    @Getter(value = AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     protected int modelIndex;
     private static int lastModelIndex = -1;
 
-    @Getter(value = AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     protected Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
 
+    @Deprecated
     public ItemPart(ResourceLocation registryName, boolean userDefined) {
+        this(registryName, userDefined ? PartOrigins.USER_DEFINED : SilentGear.MOD_ID.equals(registryName.getNamespace()) ? PartOrigins.BUILTIN_CORE : PartOrigins.BUILTIN_ADDON);
+    }
+
+    public ItemPart(ResourceLocation registryName, PartOrigins origin) {
         this.registryName = registryName;
         this.textureSuffix = REGEX_TEXTURE_SUFFIX_REPLACE.matcher(registryName.getPath()).replaceFirst("");
         this.modelIndex = ++lastModelIndex;
-        this.userDefined = userDefined;
+        this.origin = origin;
         loadJsonResources();
     }
 
     // ===========================
     // = Stats and Miscellaneous =
     // ===========================
+
+    public abstract PartType getType();
 
     public ItemStack getCraftingStack() {
         return craftingStack.get();
@@ -238,12 +247,15 @@ public abstract class ItemPart {
     /**
      * Gets a string that represents the type of part (main, rod, tip, etc.) Used for localization
      * of part type/class, not the individual part.
+     * @deprecated Use {@link #getType()}, then {@link PartType#getName()}
      */
+    @Deprecated
     public abstract String getTypeName();
 
     @Override
     public String toString() {
-        String str = "ItemPart{";
+        String str = "ItemPart[" + this.getType().getDebugSymbol() + "]{";
+        str += "Origin: " + this.origin + ", ";
         str += "Key: " + this.registryName + ", ";
         str += "CraftingStack: " + this.craftingStack.get() + ", ";
         str += "CraftingOreDictName: '" + this.craftingOreDictName + "', ";
@@ -312,9 +324,15 @@ public abstract class ItemPart {
     }
 
     public void postInitChecks() {
+        if (GameUtil.isDeobfuscated())
+            SilentGear.log.debug("Post-init checks for {}", this);
+
         if (getCraftingStack().isEmpty())
-            SilentGear.log.warn("Part \"{}\"{}has no crafting item.", this.registryName,
-                    (this.userDefined ? " (user defined) " : " "));
+            SilentGear.log.warn("Part \"{}\" ({}) has no crafting item.", this.registryName, this.origin);
+
+        if (this.origin == PartOrigins.BUILTIN_CORE && !SilentGear.MOD_ID.equals(this.registryName.getNamespace()))
+            throw new IllegalArgumentException(String.format("Part \"%s\" has origin %s, but should be %s",
+                    this.registryName, PartOrigins.BUILTIN_CORE, PartOrigins.BUILTIN_ADDON));
     }
 
     /**
@@ -406,7 +424,7 @@ public abstract class ItemPart {
                 return UnsignedInts.parseUnsignedInt(str, 16);
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
-                return 0xFFFFFF;
+                return Color.VALUE_WHITE;
             }
         }
 

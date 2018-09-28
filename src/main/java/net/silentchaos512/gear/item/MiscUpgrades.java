@@ -25,6 +25,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.PartOrigins;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.parts.PartUpgrade;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.lib.item.IEnumItems;
@@ -46,7 +48,12 @@ public enum MiscUpgrades implements IEnumItems<MiscUpgrades, MiscUpgrades.Item> 
         this.item = new MiscUpgrades.Item();
         ResourceLocation partName = new ResourceLocation(SilentGear.MOD_ID, "misc_" + name().toLowerCase(Locale.ROOT));
 
-        this.part = new PartUpgrade(partName) {
+        this.part = new PartUpgrade(partName, PartOrigins.BUILTIN_CORE) {
+            @Override
+            public PartType getType() {
+                return PartType.MISC_UPGRADE;
+            }
+
             @Override
             public boolean isValidFor(@Nonnull ICoreItem gearItem) {
                 return canApplyTo.test(gearItem);

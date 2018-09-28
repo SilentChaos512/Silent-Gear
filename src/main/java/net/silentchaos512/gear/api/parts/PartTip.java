@@ -7,16 +7,27 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartTip extends ItemPart implements IUpgradePart {
-
+    @Deprecated
     public PartTip(ResourceLocation name) {
         super(name, false);
     }
 
+    @Deprecated
     public PartTip(ResourceLocation name, boolean userDefined) {
         super(name, userDefined);
+    }
+
+    public PartTip(ResourceLocation name, PartOrigins origin) {
+        super(name, origin);
+    }
+
+    @Override
+    public PartType getType() {
+        return PartType.TIP;
     }
 
     @Override
@@ -36,7 +47,7 @@ public final class PartTip extends ItemPart implements IUpgradePart {
     }
 
     @Override
-    public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemPartData data, ItemStack gear, World world, @Nonnull List<String> tooltip, boolean advanced) {
         tooltip.add(1, getNameColor() + getTranslatedName(data, gear));
     }
 

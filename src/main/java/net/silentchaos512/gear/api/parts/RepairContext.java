@@ -18,6 +18,16 @@
 
 package net.silentchaos512.gear.api.parts;
 
+/**
+ * Indicates how a gear item is being repaired.
+ */
 public enum RepairContext {
-    QUICK, ANVIL
+    /**
+     * Quick repair (crafting grid)
+     */
+    QUICK,
+    /**
+     * Standard anvil repair
+     */
+    ANVIL
 }

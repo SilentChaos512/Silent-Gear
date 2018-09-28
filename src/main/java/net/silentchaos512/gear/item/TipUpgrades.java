@@ -6,10 +6,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartOrigins;
 import net.silentchaos512.gear.api.parts.PartTip;
 import net.silentchaos512.lib.item.IEnumItems;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,7 +30,8 @@ public enum TipUpgrades implements IEnumItems<TipUpgrades, TipUpgrades.Item> {
 
     TipUpgrades() {
         this.item = new TipUpgrades.Item();
-        this.part = new PartTip(new ResourceLocation(SilentGear.MOD_ID, "tip_" + name().toLowerCase(Locale.ROOT)));
+        ResourceLocation name = new ResourceLocation(SilentGear.MOD_ID, "tip_" + name().toLowerCase(Locale.ROOT));
+        this.part = new PartTip(name, PartOrigins.BUILTIN_CORE);
     }
 
     @Nonnull
@@ -56,7 +59,7 @@ public enum TipUpgrades implements IEnumItems<TipUpgrades, TipUpgrades.Item> {
 
     public class Item extends net.minecraft.item.Item {
         @Override
-        public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
+        public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
             ItemPartData data = ItemPartData.instance(getPart());
             list.add(getPart().getNameColor() + data.getTranslatedName(ItemStack.EMPTY));
         }

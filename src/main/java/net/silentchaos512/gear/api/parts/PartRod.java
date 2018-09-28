@@ -7,15 +7,27 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartRod extends ItemPart {
+    @Deprecated
     public PartRod(ResourceLocation name) {
         super(name, false);
     }
 
+    @Deprecated
     public PartRod(ResourceLocation name, boolean userDefined) {
         super(name, userDefined);
+    }
+
+    public PartRod(ResourceLocation name, PartOrigins origin) {
+        super(name, origin);
+    }
+
+    @Override
+    public PartType getType() {
+        return PartType.ROD;
     }
 
     @Override
@@ -34,7 +46,7 @@ public final class PartRod extends ItemPart {
     }
 
     @Override
-    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemPartData part, ItemStack gear, World world, @Nonnull List<String> tooltip, boolean advanced) {
         // Nothing
     }
 

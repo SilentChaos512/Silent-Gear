@@ -22,16 +22,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class PartUpgrade extends ItemPart implements IUpgradePart {
+    @Deprecated
     public PartUpgrade(ResourceLocation registryName) {
         this(registryName, false);
     }
 
+    @Deprecated
     public PartUpgrade(ResourceLocation registryName, boolean userDefined) {
         super(registryName, userDefined);
+    }
+
+    public PartUpgrade(ResourceLocation registryName, PartOrigins origin) {
+        super(registryName, origin);
+    }
+
+    @Override
+    public PartType getType() {
+        return PartType.MISC_UPGRADE;
     }
 
     @Override
@@ -52,7 +64,7 @@ public class PartUpgrade extends ItemPart implements IUpgradePart {
     }
 
     @Override
-    public void addInformation(ItemPartData data, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemPartData data, ItemStack gear, World world, @Nonnull List<String> tooltip, boolean advanced) {
         tooltip.add(1, this.getNameColor() + this.getTranslatedName(data, gear));
     }
 
