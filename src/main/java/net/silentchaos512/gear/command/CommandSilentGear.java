@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.command;
 
 import com.google.common.collect.ImmutableList;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,13 +17,16 @@ import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Locale;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CommandSilentGear extends CommandBase {
 
     enum SubCommand {
-        RESET_MODEL_CACHES, REGISTRY_ANALYZE, BREAK_ITEM_IN_HAND, REPAIR_ITEM_IN_HAND;
+        RESET_MODEL_CACHES, REGISTRY_ANALYZE, BREAK_ITEM_IN_HAND, REPAIR_ITEM_IN_HAND, LOCK_STATS;
 
         @Nullable
         static SubCommand fromArgs(String arg) {
@@ -61,7 +65,6 @@ public class CommandSilentGear extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-
         if (args.length < 1) {
             tell(sender, getUsage(sender), false);
             return;
@@ -94,6 +97,18 @@ public class CommandSilentGear extends CommandBase {
                 GearData.recalculateStats(stack);
                 tell(sender, "┬─┬ノ( º _ ºノ)", false);
             }
+        } else if (subCommand == SubCommand.LOCK_STATS && sender instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) sender;
+            ItemStack stack = player.getHeldItemMainhand();
+            if (stack.getItem() instanceof ICoreItem) {
+                final boolean locked = !GearData.hasLockedStats(stack);
+                GearData.setLockedStats(stack, locked);
+
+                String lockStr = locked
+                        ? TextFormatting.RED + SilentGear.i18n.translate("command", "lockStats.locked")
+                        : TextFormatting.GREEN + SilentGear.i18n.translate("command", "lockStats.unlocked");
+                tell(sender, "lockStats.success", true, stack.getDisplayName(), lockStr);
+            }
         }
     }
 
@@ -105,19 +120,11 @@ public class CommandSilentGear extends CommandBase {
             return ImmutableList.of();
     }
 
-    @Override
-    public boolean isUsernameIndex(String[] args, int index) {
-
-        return args.length > 2 && args[1].equals("get") ? index == 3 : index == 4;
-    }
-
     private void tell(ICommandSender sender, String key, boolean fromLocalizationFile, Object... args) {
-
         tell(sender, TextFormatting.RESET, key, fromLocalizationFile, args);
     }
 
     private void tell(ICommandSender sender, TextFormatting format, String key, boolean fromLocalizationFile, Object... args) {
-
         String value = fromLocalizationFile
                 ? SilentGear.i18n.translate("command." + key, args)
                 : key;

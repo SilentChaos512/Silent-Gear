@@ -21,7 +21,6 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.lib.util.PlayerHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.UUID;
@@ -175,14 +174,22 @@ public class GearData {
         return synergy;
     }
 
-    public static float getStat(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
+    public static float getStat(ItemStack stack, ItemStat stat) {
         NBTTagCompound tags = getData(stack, NBT_ROOT_PROPERTIES);
         String key = stat.getName().getPath();
         return tags.hasKey(key) ? tags.getFloat(key) : stat.getDefaultValue();
     }
 
-    public static int getStatInt(@Nonnull ItemStack stack, @Nonnull ItemStat stat) {
+    public static int getStatInt(ItemStack stack, ItemStat stat) {
         return Math.round(getStat(stack, stat));
+    }
+
+    public static boolean hasLockedStats(ItemStack stack) {
+        return getData(stack, NBT_ROOT_PROPERTIES).getBoolean(NBT_LOCK_STATS);
+    }
+
+    public static void setLockedStats(ItemStack stack, boolean lock) {
+        getData(stack, NBT_ROOT_PROPERTIES).setBoolean(NBT_LOCK_STATS, lock);
     }
 
     public static PartDataList getConstructionParts(ItemStack stack) {

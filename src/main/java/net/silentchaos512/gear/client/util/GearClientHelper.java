@@ -50,8 +50,16 @@ public class GearClientHelper {
                 tooltip.add(2, TextFormatting.YELLOW + SilentGear.i18n.translate("misc", "exampleOutput2"));
             }
 
-            // Let parts add information if they need to
             PartDataList constructionParts = GearData.getConstructionParts(stack);
+
+            if (constructionParts.getMains().isEmpty()) {
+                tooltip.add(TextFormatting.RED + SilentGear.i18n.translate("misc", "invalidParts"));
+                tooltip.add(TextFormatting.RED + SilentGear.i18n.translate("misc", "lockedStats"));
+            } else if (GearData.hasLockedStats(stack)) {
+                tooltip.add(TextFormatting.YELLOW + SilentGear.i18n.translate("misc", "lockedStats"));
+            }
+
+            // Let parts add information if they need to
             Collections.reverse(constructionParts);
             for (ItemPartData data : constructionParts) {
                 data.getPart().addInformation(data, stack, world, tooltip, flag.isAdvanced());
