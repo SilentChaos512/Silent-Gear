@@ -1,4 +1,5 @@
 0.1.4
+Added: Lock stats subcommand (freezes an item's stats, mainly for pack/map makers) (/sgear)
 Added: Tool classes can be controlled with Tool Progression to some extent. Harvest levels cannot be set there, you would still need to use Gear's material JSONs. (#11)
 Fixed: Crash with Tool Progression mod (#11)
 

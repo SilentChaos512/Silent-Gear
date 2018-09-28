@@ -88,7 +88,7 @@ public class CommandSilentGear extends CommandBase {
                 stack.setItemDamage(stack.getMaxDamage());
                 GearData.recalculateStats(stack);
                 tell(sender, "(╯°□°）╯︵ ┻━┻", false);
-            }
+            } else tell(sender, "invalidItemType", true, stack.getDisplayName());
         } else if (subCommand == SubCommand.REPAIR_ITEM_IN_HAND && sender instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) sender;
             ItemStack stack = player.getHeldItemMainhand();
@@ -96,7 +96,7 @@ public class CommandSilentGear extends CommandBase {
                 stack.setItemDamage(0);
                 GearData.recalculateStats(stack);
                 tell(sender, "┬─┬ノ( º _ ºノ)", false);
-            }
+            } else tell(sender, "invalidItemType", true, stack.getDisplayName());
         } else if (subCommand == SubCommand.LOCK_STATS && sender instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) sender;
             ItemStack stack = player.getHeldItemMainhand();
@@ -108,7 +108,7 @@ public class CommandSilentGear extends CommandBase {
                         ? TextFormatting.RED + SilentGear.i18n.translate("command", "lockStats.locked")
                         : TextFormatting.GREEN + SilentGear.i18n.translate("command", "lockStats.unlocked");
                 tell(sender, "lockStats.success", true, stack.getDisplayName(), lockStr);
-            }
+            } else tell(sender, "invalidItemType", true, stack.getDisplayName());
         }
     }
 
@@ -126,7 +126,7 @@ public class CommandSilentGear extends CommandBase {
 
     private void tell(ICommandSender sender, TextFormatting format, String key, boolean fromLocalizationFile, Object... args) {
         String value = fromLocalizationFile
-                ? SilentGear.i18n.translate("command." + key, args)
+                ? SilentGear.i18n.translate("command", key, args)
                 : key;
         sender.sendMessage(new TextComponentString(format + value));
     }
