@@ -109,6 +109,8 @@ public class CommandSilentGear extends CommandBase {
                         : TextFormatting.GREEN + SilentGear.i18n.translate("command", "lockStats.unlocked");
                 tell(sender, "lockStats.success", true, stack.getDisplayName(), lockStr);
             } else tell(sender, "invalidItemType", true, stack.getDisplayName());
+        } else {
+            tell(sender, getUsage(sender), false);
         }
     }
 

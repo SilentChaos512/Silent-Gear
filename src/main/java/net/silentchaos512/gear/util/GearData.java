@@ -54,47 +54,47 @@ public class GearData {
 
     /**
      * Recalculate gear stats and setup NBT. This should be call ANY TIME an item is modified!
-     *
-     * @param stack
      */
     public static void recalculateStats(ItemStack stack) {
         getUUID(stack);
+        ICoreItem item = (ICoreItem) stack.getItem();
+        PartDataList parts = getConstructionParts(stack);
 
-        // Has locked stats tag?
         NBTTagCompound propertiesCompound = getData(stack, NBT_ROOT_PROPERTIES);
         if (!propertiesCompound.hasKey(NBT_LOCK_STATS))
             propertiesCompound.setBoolean(NBT_LOCK_STATS, false);
-        else if (propertiesCompound.getBoolean(NBT_LOCK_STATS))
-            return;
 
-        ICoreItem item = (ICoreItem) stack.getItem();
+        final boolean statsUnlocked = !propertiesCompound.getBoolean(NBT_LOCK_STATS);
+        final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
+        if (statsUnlocked && partsListValid) {
+            // We should recalculate the item's stats!
+            PartDataList uniqueParts = parts.getUniqueParts(true);
 
-        // Get parts the item was made with
-        PartDataList parts = getConstructionParts(stack);
-        if (parts.isEmpty() || parts.getMains().isEmpty()) // TODO: How to check invalid parts?
-            return;
-        // Build unique parts set
-        PartDataList uniqueParts = parts.getUniqueParts(true);
+            double synergy = calculateSynergyValue(parts, uniqueParts);
 
-        // Calculate synergy value
-        double synergy = calculateSynergyValue(parts, uniqueParts);
+            // Only consider stats relevant to the item
+            // Collection<ItemStat> relevantStats = stack.getItem() instanceof ICoreItem
+            // ? item.getRelevantStats(stack)
+            // : ItemStat.ALL_STATS.values();
 
-        // Only consider stats relevant to the item
-        // Collection<ItemStat> relevantStats = stack.getItem() instanceof ICoreItem
-        // ? item.getRelevantStats(stack)
-        // : ItemStat.ALL_STATS.values();
+            // Get all stat modifiers from all parts and item class modifiers
+            Multimap<ItemStat, StatInstance> stats = getStatModifiers(item, parts, synergy);
 
-        // Get all stat modifiers from all parts and item class modifiers
-        Multimap<ItemStat, StatInstance> stats = getStatModifiers(item, parts, synergy);
+            // Calculate and write stats
+            for (ItemStat stat : stats.keySet()) {
+                float value = stat.compute(0f, stats.get(stat));
+                // SilentGear.log.debug(stat, value);
+                propertiesCompound.setFloat(stat.getName().getPath(), value);
+            }
 
-        // Calculate and write stats
-        for (ItemStat stat : stats.keySet()) {
-            float value = stat.compute(0f, stats.get(stat));
-            // SilentGear.log.debug(stat, value);
-            propertiesCompound.setFloat(stat.getName().getPath(), value);
+            propertiesCompound.setFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
         }
-        propertiesCompound.setFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
 
+        // Update model keys even if we didn't update stats
+        createAndSaveModelKeys(stack, item, parts);
+    }
+
+    private static void createAndSaveModelKeys(ItemStack stack, ICoreItem item, PartDataList parts) {
         // Save model keys for performance
         // Remove the old keys first, then get new ones from ICoreItem
         stack.getOrCreateSubCompound(NBT_ROOT).removeTag(NBT_ROOT_MODEL_KEYS);
@@ -111,7 +111,7 @@ public class GearData {
         NBTTagCompound tags = getData(stack, NBT_ROOT_MODEL_KEYS);
         String key = Integer.toString(animationFrame);
         if (!tags.hasKey(key))
-            tags.setString(key,  ((ICoreItem) stack.getItem()).getModelKey(stack, animationFrame));
+            tags.setString(key, ((ICoreItem) stack.getItem()).getModelKey(stack, animationFrame));
         return tags.getString(Integer.toString(animationFrame));
     }
 
