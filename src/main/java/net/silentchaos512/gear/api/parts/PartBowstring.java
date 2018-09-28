@@ -5,6 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public final class PartBowstring extends ItemPart {
@@ -42,6 +43,12 @@ public final class PartBowstring extends ItemPart {
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
         return getTexture(part, gear, gearClass, PartPositions.BOWSTRING, animationFrame);
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getBrokenTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position) {
+        return null;
     }
 
     @Override
