@@ -19,21 +19,24 @@
 package net.silentchaos512.gear.api.parts;
 
 public enum PartPositions implements IPartPosition {
-    ANY("head", "any"),
-    HEAD("head", "head"),
-    GUARD("guard", "guard"),
-    ROD("rod", "rod"),
-    TIP("tip", "tip"),
-    GRIP("grip", "grip"),
-    BOWSTRING("bowstring", "bowstring"),
-    ARMOR("main", "main");
+    ANY("head", "any", false),
+    ARMOR("main", "main", false),
+    ROD("rod", "rod", true),
+    GRIP("grip", "grip", true),
+    HEAD("head", "head", true),
+    GUARD("guard", "guard", true),
+    TIP("tip", "tip", true),
+    BOWSTRING("bowstring", "bowstring", true),
+    BINDING("binding", "binding", true);
 
     private final String texturePrefix;
     private final String modelKey;
 
-    PartPositions(String texture, String model) {
+    PartPositions(String texture, String model, boolean isRenderLayer) {
         this.texturePrefix = texture;
         this.modelKey = model;
+
+        if (isRenderLayer) RENDER_LAYERS.add(this);
     }
 
     @Override

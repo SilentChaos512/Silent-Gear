@@ -9,6 +9,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.config.Configuration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
@@ -19,21 +20,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigOptionEquipment {
-    private static final String[] RECIPE_INGREDIENTS = {"head_count", "rod_count", "bowstring_count"};
-
     public final ICoreItem item;
     public final String name;
 
     private boolean canCraft = true;
     private boolean isVisible = true;
 
-    private Map<ItemStat, StatInstance> modifiers = new THashMap<>();
-    private Map<ItemStat, Float> baseModifiers = new THashMap<>();
-    private Map<String, Integer> recipe = new HashMap<>();
-    // TODO: Configurable harvest speeds by class? Or block material?
-//    private float efficiencyAsPickaxe = 0f;
-//    private float efficiencyAsShovel = 0f;
-//    private float efficiencyAsAxe = 0f;
+    private final Map<ItemStat, StatInstance> modifiers = new THashMap<>();
+    private final Map<ItemStat, Float> baseModifiers = new THashMap<>();
+    private final Map<String, Integer> recipe = new HashMap<>();
 
     public <T extends ICoreItem> ConfigOptionEquipment(T item) {
         this.item = item;
@@ -62,34 +57,24 @@ public class ConfigOptionEquipment {
         return StatInstance.ZERO;
     }
 
+    public int getCraftingPartCount(PartType type) {
+        return this.recipe.getOrDefault(type.getName(), 0);
+    }
+
+    @Deprecated
     public int getHeadCount() {
-        return this.recipe.getOrDefault("head_count", 0);
+        return this.recipe.getOrDefault("main", 0);
     }
 
+    @Deprecated
     public int getRodCount() {
-        return this.recipe.getOrDefault("rod_count", 0);
+        return this.recipe.getOrDefault("rod", 0);
     }
 
+    @Deprecated
     public int getBowstringCount() {
-        return this.recipe.getOrDefault("bowstring_count", 0);
+        return this.recipe.getOrDefault("bowstring", 0);
     }
-
-//    public Set<String> getToolClasses(ItemStack stack) {
-//        if (GearHelper.isBroken(stack)) return ImmutableSet.of();
-//
-//        ImmutableSet.Builder<String> builder = new ImmutableSet.Builder<>();
-//        if (efficiencyAsPickaxe > 0f) builder.add(ToolClass.PICKAXE.getName());
-//        if (efficiencyAsShovel > 0f) builder.add(ToolClass.SHOVEL.getName());
-//        if (efficiencyAsAxe > 0f) builder.add(ToolClass.AXE.getName());
-//        return builder.build();
-//    }
-
-//    public float getEfficiencyAsTool(ToolClass toolClass) {
-//        if (toolClass == ToolClass.PICKAXE) return efficiencyAsPickaxe;
-//        else if (toolClass == ToolClass.SHOVEL) return efficiencyAsShovel;
-//        else if (toolClass == ToolClass.AXE) return efficiencyAsAxe;
-//        else return 0f;
-//    }
 
     public boolean canCraft() {
         return this.canCraft;
@@ -155,18 +140,23 @@ public class ConfigOptionEquipment {
 
         if (JsonUtils.hasField(json, "crafting")) {
             JsonObject obj = JsonUtils.getJsonObject(json, "crafting");
-            for (String type : RECIPE_INGREDIENTS)
-                if (obj.has(type))
-                    this.recipe.put(type, obj.get(type).getAsInt());
+            for (PartType type : PartType.getValues()) {
+                final int amount = getPartCountFromJson(obj, type);
+                if (amount > 0)
+                    this.recipe.put(type.getName(), amount);
+            }
             this.canCraft = JsonUtils.getBoolean(obj, "can_craft", this.canCraft);
             this.isVisible = JsonUtils.getBoolean(obj, "visible", this.isVisible);
         }
+    }
 
-//        if (JsonUtils.hasField(json, "tool_classes")) {
-//            JsonObject obj = JsonUtils.getJsonObject(json, "tool_classes");
-//            this.efficiencyAsPickaxe = JsonUtils.getFloat(obj, "pickaxe", this.efficiencyAsPickaxe);
-//            this.efficiencyAsShovel = JsonUtils.getFloat(obj, "shovel", this.efficiencyAsShovel);
-//            this.efficiencyAsAxe = JsonUtils.getFloat(obj, "axe", this.efficiencyAsAxe);
-//        }
+    private static int getPartCountFromJson(JsonObject json, PartType type) {
+        String[] possibleNames = type == PartType.MAIN
+                ? new String[] {type.getName(), type.getName() + "_count", "head_count"}
+                : new String[] {type.getName(), type.getName() + "_count"};
+        for (String name : possibleNames)
+            if (json.has(name))
+                return json.get(name).getAsInt();
+        return 0;
     }
 }

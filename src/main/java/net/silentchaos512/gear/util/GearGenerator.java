@@ -32,7 +32,10 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class GearGenerator {
+// FIXME: modify to use PartType?
+public final class GearGenerator {
+    private GearGenerator() {}
+
     public static List<? extends ItemPart> getPartsOfType(Class<? extends ItemPart> partClass) {
         return getPartsOfType(partClass::isInstance);
     }

@@ -22,6 +22,7 @@ import lombok.Getter;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -29,6 +30,7 @@ import java.util.function.BiFunction;
 public final class PartType {
     private static final Map<String, PartType> VALUES = new HashMap<>();
 
+    public static final PartType BINDING = create("binding", "b", PartBinding::new);
     public static final PartType BOWSTRING = create("bowstring", "B", PartBowstring::new);
     public static final PartType GRIP = create("grip", "G", PartGrip::new);
     public static final PartType MAIN = create("main", "M", PartMain::new);
@@ -50,6 +52,10 @@ public final class PartType {
         return VALUES.get(name);
     }
 
+    public static Collection<PartType> getValues() {
+        return VALUES.values();
+    }
+
     @Getter private final String name;
     @Getter private final String debugSymbol;
     private final BiFunction<ResourceLocation, PartOrigins, ItemPart> partConstructor;
@@ -62,5 +68,11 @@ public final class PartType {
 
     public ItemPart construct(ResourceLocation registryName, PartOrigins origin) {
         return this.partConstructor.apply(registryName, origin);
+    }
+
+    @Override
+    public String toString() {
+        return "PartType[" + debugSymbol + "]{" +
+                "name='" + name + "'}";
     }
 }

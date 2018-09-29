@@ -17,8 +17,7 @@
         "repair_efficiency": 0.75
     },
     "crafting": {
-        "head_count": 4,
-        "rod_count": 2,
-        "bowstring_count": 0
+        "main": 4,
+        "rod": 2
     }
 }

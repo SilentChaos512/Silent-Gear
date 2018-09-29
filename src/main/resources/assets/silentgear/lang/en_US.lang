@@ -277,6 +277,7 @@ material.silentgear.tip_lapis.name=Lapis-Coated
 material.silentgear.tip_quartz.name=Quartz-Tipped
 material.silentgear.tip_redstone.name=Redstone-Coated
 
+part.silentgear.type.binding=Binding
 part.silentgear.type.bowstring=Bowstring
 part.silentgear.type.grip=Grip
 part.silentgear.type.main=Main Part (Tier %d)

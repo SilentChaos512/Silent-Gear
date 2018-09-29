@@ -12,9 +12,11 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.item.IColoredItem;
+import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.I18nHelper;
 
 import javax.annotation.Nonnull;
@@ -24,8 +26,10 @@ import java.util.function.Function;
 
 public class Blueprint extends Item implements IBlueprint, IColoredItem {
     private static final String NAME = "blueprint";
-    private static Map<String, Blueprint> ITEMS_BLUEPRINT = new HashMap<>();
-    private static Map<String, Blueprint> ITEMS_TEMPLATE = new HashMap<>();
+    private static final Map<String, Blueprint> ITEMS_BLUEPRINT = new HashMap<>();
+    private static final Map<String, Blueprint> ITEMS_TEMPLATE = new HashMap<>();
+    private static final int COLOR_OUTLINE_BLUEPRINT = 0xF1F1B9;
+    private static final int COLOR_OUTLINE_TEMPLATE = 0xBAF2E2;
 
     private final boolean singleUse;
     @Nonnull
@@ -77,7 +81,7 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
         I18nHelper i18n = SilentGear.i18n;
         String itemClass = this.gearItem.getGearClass();
 
@@ -115,15 +119,14 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
                 String toolHeadName = i18n.itemSubText("tool_head", itemClass);
                 list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", 1, toolHeadName));
 
-                int rodCount = this.gearItem.getConfig().getRodCount();
-                if (rodCount > 0) {
-                    String partName = i18n.translate("part", "type.rod");
-                    list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", rodCount, partName));
-                }
-                int bowstringCount = this.gearItem.getConfig().getBowstringCount();
-                if (bowstringCount > 0) {
-                    String partName = i18n.translate("part", "type.bowstring");
-                    list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", bowstringCount, partName));
+                for (PartType type : PartType.getValues()) {
+                    if (type != PartType.MAIN) {
+                        final int required = this.gearItem.getConfig().getCraftingPartCount(type);
+                        if (required > 0) {
+                            String partName = i18n.translate("part", "type." + type.getName());
+                            list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", required, partName));
+                        }
+                    }
                 }
             } else {
                 list.add(TextFormatting.YELLOW + i18n.itemSubText(NAME, "altForRecipe"));
@@ -139,8 +142,8 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
     @Override
     public IItemColor getColorHandler() {
         return (stack, tintIndex) -> {
-            if (tintIndex == 0) return 0xFFFFFF;
-            else return this.singleUse ? 0xBAF2E2 : 0xF1F1B9;
+            if (tintIndex == 0) return Color.VALUE_WHITE;
+            else return this.singleUse ? COLOR_OUTLINE_TEMPLATE : COLOR_OUTLINE_BLUEPRINT;
         };
     }
 }

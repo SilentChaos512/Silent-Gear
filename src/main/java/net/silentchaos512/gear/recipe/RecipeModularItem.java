@@ -5,14 +5,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.recipe.RecipeBaseSL;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class RecipeModularItem extends RecipeBaseSL {
@@ -26,32 +26,24 @@ public class RecipeModularItem extends RecipeBaseSL {
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         Collection<ItemStack> parts = getComponents(inv);
         List<ItemPartData> data = new ArrayList<>();
+        Map<PartType, ItemPartData> partsByType = new HashMap<>();
 
-        boolean foundRod = false;
-        boolean foundBowstring = false;
-        boolean foundTip = false;
         for (ItemStack stack : parts) {
             ItemPartData part = ItemPartData.fromStack(stack);
             if (stack.getItem() instanceof ToolHead) {
-                ToolHead itemToolHead = (ToolHead) stack.getItem();
-                if (!itemToolHead.getToolClass(stack).equals(this.item.getGearClass()))
+                if (!ToolHead.getToolClass(stack).equals(this.item.getGearClass()))
                     return ItemStack.EMPTY;
-                data.addAll(itemToolHead.getAllParts(stack));
+                data.addAll(ToolHead.getAllParts(stack));
             }
             else if (part != null) {
-                if (part.isRod()) {
-                    if (!foundRod) data.add(part);
-                    foundRod = true;
-                } else if (part.isBowstring()) {
-                    if (!foundBowstring) data.add(part);
-                    foundBowstring = true;
-                } else if (part.isTip()) {
-                    if (!foundTip) data.add(part);
-                    foundTip = true;
-                }
+                PartType type = part.getPart().getType();
+                if (partsByType.containsKey(type) && partsByType.get(type).getPart() != part.getPart())
+                    return ItemStack.EMPTY;
+                partsByType.put(part.getPart().getType(), part);
             }
         }
 
+        data.addAll(partsByType.values());
         return this.item.construct((Item) this.item, data);
     }
 
@@ -70,9 +62,7 @@ public class RecipeModularItem extends RecipeBaseSL {
     private Collection<ItemStack> getComponents(InventoryCrafting inv) {
         List<ItemStack> parts = new ArrayList<>();
         parts.addAll(getComponents(inv, s -> s.getItem() instanceof ToolHead));
-        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof PartRod));
-        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof PartBowstring));
-        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) instanceof PartTip));
+        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) != null));
         return parts;
     }
 

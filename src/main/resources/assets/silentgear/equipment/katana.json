@@ -18,8 +18,7 @@
         "reach_distance": 0.5
     },
     "crafting": {
-        "head_count": 3,
-        "rod_count": 1,
-        "bowstring_count": 0
+        "main": 3,
+        "rod": 1
     }
 }

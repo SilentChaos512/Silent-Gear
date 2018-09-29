@@ -12,6 +12,6 @@
         "repair_efficiency": 1.0
     },
     "crafting": {
-        "head_count": 4
+        "main": 4
     }
 }

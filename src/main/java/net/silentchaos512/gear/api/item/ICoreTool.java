@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,10 +18,7 @@ import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public interface ICoreTool extends ICoreItem {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
@@ -89,65 +85,68 @@ public interface ICoreTool extends ICoreItem {
 
     @Override
     default boolean matchesRecipe(Collection<ItemStack> parts) {
+        ConfigOptionEquipment config = getConfig();
         ItemStack head = ItemStack.EMPTY;
-        ItemStack rod = ItemStack.EMPTY;
-        ItemStack bowstring = ItemStack.EMPTY;
-        int rodCount = 0;
-        int bowstringCount = 0;
-        int tipCount = 0;
-        int otherCount = 0;
+        Map<PartType, Integer> partCounts = new HashMap<>();
+        Map<PartType, ItemPart> partsFound = new HashMap<>();
 
         for (ItemStack stack : parts) {
             ItemPart part = PartRegistry.get(stack);
-            //SilentGear.log.debug(stack, part);
             if (stack.getItem() instanceof ToolHead) {
                 // Head
                 if (!head.isEmpty())
                     return false;
-                String headClass = ((ToolHead) stack.getItem()).getToolClass(stack);
+                String headClass = ToolHead.getToolClass(stack);
                 if (!headClass.equals(this.getGearClass()))
                     return false;
                 head = stack;
-            } else if (part instanceof PartRod) {
-                // Rod
-                if (!rod.isEmpty() && part != PartRegistry.get(rod))
-                    return false;
-                ++rodCount;
-                rod = stack;
-            } else if (part instanceof PartBowstring) {
-                // Bowstring
-                if (!bowstring.isEmpty() && part != PartRegistry.get(bowstring))
-                    return false;
-                ++bowstringCount;
-                bowstring = stack;
-            } else if (part instanceof PartTip) {
-                // Tipped upgrade
-                ++tipCount;
+                partCounts.put(PartType.MAIN, config.getHeadCount());
             } else if (part != null) {
-                // Some other part type
-                ++otherCount;
+                // Count parts
+                final PartType type = part.getType();
+                if (partsFound.containsKey(type) && partsFound.get(type) != part)
+                    return false;
+                int current = partCounts.getOrDefault(type, 0);
+                partCounts.put(type, current + 1);
+                partsFound.putIfAbsent(type, part);
             } else {
                 // Other non-part item
                 return false;
             }
         }
 
-        ConfigOptionEquipment config = getConfig();
-
-        boolean headCheck = !head.isEmpty();
-        boolean rodCheck = config.getRodCount() == 0 || (!rod.isEmpty() && config.getRodCount() == rodCount);
-        boolean bowstringCheck = config.getBowstringCount() == 0 || (!bowstring.isEmpty() && config.getBowstringCount() == bowstringCount);
-        return headCheck && rodCheck && bowstringCheck && tipCount <= 1 && otherCount <= 1;
+        for (PartType type : PartType.getValues()) {
+            final int required = config.getCraftingPartCount(type);
+            final int found = partCounts.getOrDefault(type, 0);
+            if (required == 0 && partsFound.get(type) instanceof IUpgradePart) {
+                // Allow a single upgrade of this type
+                if (found > 1) return false;
+            } else if (required != found) {
+                // Wrong number of parts
+                return false;
+            }
+        }
+        return !head.isEmpty();
     }
 
     @Override
     default ItemPartData[] getRenderParts(ItemStack stack) {
-        ItemPartData partHead = getPrimaryPart(stack);
-        ItemPartData partGuard = hasSwordGuard() ? getSecondaryPart(stack) : null;
-        ItemPartData partRod = getRodPart(stack);
-        ItemPartData partTip = getTipPart(stack);
-        ItemPartData partBowstring = getBowstringPart(stack);
-        List<ItemPartData> list = Lists.newArrayList(partHead, partGuard, partRod, partTip, partBowstring);
+        PartDataList parts = GearData.getConstructionParts(stack);
+        List<ItemPartData> list = new ArrayList<>();
+
+        for (IPartPosition position : IPartPosition.RENDER_LAYERS) {
+            if (position == PartPositions.HEAD) {
+                list.add(getPrimaryPart(stack));
+            } else if (position == PartPositions.GUARD && hasSwordGuard()) {
+                list.add(getSecondaryPart(stack));
+            } else if (position == PartPositions.ROD) {
+                list.add(getRodPart(stack));
+            } else {
+                final ItemPartData part = parts.firstInPosition(position);
+                if (part != null) list.add(part);
+            }
+        }
+
         return list.stream().filter(Objects::nonNull).toArray(ItemPartData[]::new);
     }
 

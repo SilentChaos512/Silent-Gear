@@ -35,18 +35,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-public class ToolModel implements IModel {
+public final class ToolModel implements IModel {
     private static final IModel MODEL = new ToolModel();
-    private static final Set<IPartPosition> RENDER_ORDER = ImmutableSet.of(
-            PartPositions.ROD,
-            PartPositions.GRIP,
-            PartPositions.HEAD,
-            PartPositions.GUARD,
-            PartPositions.TIP,
-            PartPositions.BOWSTRING
-    );
 
     public static final Map<UUID, Float> bowPull = new HashMap<>();
 
@@ -121,7 +112,7 @@ public class ToolModel implements IModel {
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
         // Get textures in proper render order
-        ImmutableList<ResourceLocation> textures = RENDER_ORDER.stream()
+        ImmutableList<ResourceLocation> textures = IPartPosition.RENDER_LAYERS.stream()
                 .map(IPartPosition::getModelIndex)
                 .map(this.textures::get)
                 .filter(Objects::nonNull)
@@ -135,7 +126,7 @@ public class ToolModel implements IModel {
         return new ToolModel.Baked(this, createQuadsMap(model, layerCount), format, Maps.immutableEnumMap(transformMap), new HashMap<>());
     }
 
-    private ImmutableList<ImmutableList<BakedQuad>> createQuadsMap(IBakedModel model, int layerCount) {
+    private static ImmutableList<ImmutableList<BakedQuad>> createQuadsMap(IBakedModel model, int layerCount) {
         List<ImmutableList.Builder<BakedQuad>> list = new ArrayList<>();
         for (int i = 0; i < layerCount; ++i)
             list.add(ImmutableList.builder());
@@ -200,38 +191,42 @@ public class ToolModel implements IModel {
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ICoreTool itemTool = (ICoreTool) stack.getItem();
                 String toolClass = itemTool.getGearClass();
-                boolean hasGuard = "sword".equals(toolClass);
                 boolean isBroken = GearHelper.isBroken(stack);
 
-                ItemPartData partHead = itemTool.getPrimaryPart(stack);
-                ItemPartData partGuard = hasGuard ? itemTool.getSecondaryPart(stack) : null;
-                ItemPartData partRod = itemTool.getRodPart(stack);
-                ItemPartData partGrip = itemTool.getGripPart(stack);
-                ItemPartData partTip = itemTool.getTipPart(stack);
-                ItemPartData partBowstring = itemTool.getBowstringPart(stack);
+                PartDataList parts = GearData.getConstructionParts(stack);
+                Map<IPartPosition, ItemPartData> renderLayers = new LinkedHashMap<>();
+                for (IPartPosition position : IPartPosition.RENDER_LAYERS) {
+                    // We have a few special cases. These return a default part for rendering if the
+                    // part is missing or invalid.
+                    if (position == PartPositions.HEAD) {
+                        renderLayers.put(PartPositions.HEAD, itemTool.getPrimaryPart(stack));
+                    } else if (position == PartPositions.GUARD && itemTool.hasSwordGuard()) {
+                        renderLayers.put(PartPositions.GUARD, itemTool.getSecondaryPart(stack));
+                    } else if (position == PartPositions.ROD) {
+                        renderLayers.put(PartPositions.ROD, itemTool.getRodPart(stack));
+                    } else {
+                        // For most cases just get the first (usually only) matching part in the list
+                        final ItemPartData part = parts.firstInPosition(position);
+                        if (part != null) renderLayers.put(position, part);
+                    }
+                }
 
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 // Populate the map builder with textures, function handles null checks
-                processTexture(stack, toolClass, PartPositions.HEAD, partHead, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, PartPositions.GUARD, partGuard, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, PartPositions.ROD, partRod, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, PartPositions.GRIP, partGrip, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, PartPositions.TIP, partTip, animationFrame, isBroken, builder);
-                processTexture(stack, toolClass, PartPositions.BOWSTRING, partBowstring, animationFrame, isBroken, builder);
+                renderLayers.forEach((pos, part) ->
+                        processTexture(stack, toolClass, pos, part, animationFrame, isBroken, builder));
 
                 ToolModel.Baked model = (ToolModel.Baked) originalModel;
                 IModel parent = model.getParent().retexture(builder.build());
-                Function<ResourceLocation, TextureAtlasSprite> textureGetter;
-                textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+                Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
+                        Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
                 GearClientHelper.modelCache.put(key, bakedModel);
 
                 // Color cache
-                ColorHandlers.gearColorCache.put(key,
-                        Stream.of(partRod, partGrip, partHead, partGuard, partTip, partBowstring)
-                                .filter(Objects::nonNull)
-                                .map(part -> part.getColor(stack, animationFrame))
-                                .toArray(Integer[]::new));
+                ColorHandlers.gearColorCache.put(key, renderLayers.values().stream()
+                        .map(part -> part.getColor(stack, animationFrame))
+                        .toArray(Integer[]::new));
 
                 return bakedModel;
             }
@@ -239,16 +234,15 @@ public class ToolModel implements IModel {
             return GearClientHelper.modelCache.get(key);
         }
 
-        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, @Nullable ItemPartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private static void processTexture(ItemStack stack, String toolClass, IPartPosition position, @Nullable ItemPartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
-                ResourceLocation texture;
-                if (isBroken)
-                    texture = part.getBrokenTexture(stack, toolClass, position);
-                else
-                    texture = part.getTexture(stack, toolClass, position, animationFrame);
-
-                if (texture != null)
+                ResourceLocation texture = isBroken
+                        ? part.getBrokenTexture(stack, toolClass, position)
+                        : part.getTexture(stack, toolClass, position, animationFrame);
+                if (texture != null) {
+//                    SilentGear.log.debug("{}: {}", texture, part);
                     builder.put(position.getModelIndex(), texture.toString());
+                }
             }
         }
 
@@ -271,7 +265,6 @@ public class ToolModel implements IModel {
     }
 
     public static final class Baked extends AbstractToolModel {
-
         public static Baked instance;
 
         Baked(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format, ImmutableMap<TransformType, TRSRTransformation> transforms, Map<String, IBakedModel> cache) {
