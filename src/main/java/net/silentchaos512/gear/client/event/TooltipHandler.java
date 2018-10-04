@@ -7,6 +7,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -17,7 +18,7 @@ import net.silentchaos512.lib.client.key.KeyTrackerSL;
 
 import java.util.Collection;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Side.CLIENT)
 public final class TooltipHandler {
     private TooltipHandler() {}
 

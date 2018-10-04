@@ -1,7 +1,10 @@
+0.2.1
+Fixed: Server crash (#12)
+
 0.2.0
 Multiple internal changes, watch out for bugs!
-Added: Bindings. There are none defined by default, but can be created with JSON files like all other part types. Use texture suffix "generic". Most tool classes do not have a binding texture (layer will be blank).
-Added: Lock stats subcommand (freezes an item's stats, mainly for pack/map makers) (/sgear)
+Added: Bindings. There are none defined by default, but can be created with JSON files like all other part types. Use texture suffix "generic", type "binding". Most tool classes do not have a binding texture (layer will be blank).
+Added: Lock stats subcommand (freezes an item's stats, mainly for pack/map makers) (/sgear lock_stats)
 Added: Tool classes can be controlled with Tool Progression to some extent. Harvest levels cannot be set there, you would still need to use Gear's material JSONs. (#11)
 Changed: Equipment JSONs can now specify any part type as a required ingredient (instead of just mains, rods, and bowstrings)
 Fixed: Crash with Tool Progression mod (#11)
