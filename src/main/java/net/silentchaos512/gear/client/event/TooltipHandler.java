@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,6 +26,13 @@ public final class TooltipHandler {
 
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
+        LoaderState state = Loader.instance().getLoaderState();
+        if (state == LoaderState.INITIALIZATION || state == LoaderState.SERVER_ABOUT_TO_START || state == LoaderState.SERVER_STOPPING) {
+            // Skip tooltips during block/item remapping
+            // JEI tooltip caches are done in AVAILABLE, in-game is SERVER_STARTED
+            return;
+        }
+
         ItemStack stack = event.getItemStack();
         ItemPart part = !stack.isEmpty() ? PartRegistry.get(stack) : null;
 

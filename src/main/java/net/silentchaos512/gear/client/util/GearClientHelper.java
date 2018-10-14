@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.silentchaos512.gear.SilentGear;
@@ -35,6 +37,13 @@ public class GearClientHelper {
     }
 
     public static void addInformation(ItemStack stack, World world, List<String> tooltip, TooltipFlagTC flag) {
+        LoaderState state = Loader.instance().getLoaderState();
+        if (state == LoaderState.INITIALIZATION || state == LoaderState.SERVER_ABOUT_TO_START || state == LoaderState.SERVER_STOPPING) {
+            // Skip tooltips during block/item remapping
+            // JEI tooltip caches are done in AVAILABLE, in-game is SERVER_STARTED
+            return;
+        }
+
         if (stack.getItem() instanceof ICoreItem) {
             boolean ctrlDown = flag.ctrlDown;
             boolean altDown = flag.altDown;
