@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.lib.collection.EntityMatchList;
 import net.silentchaos512.lib.collection.ItemMatchList;
 import net.silentchaos512.lib.config.ConfigBaseNew;
@@ -60,6 +61,9 @@ public class Config extends ConfigBaseNew {
     @ConfigOption.BooleanDefault(false)
     @ConfigOption.Comment("If enabled, tools/weapons/armor are destroyed when broken, just like vanilla.")
     public static boolean gearBreaksPermanently;
+
+    public static IAOETool.MatchMode aoeToolMatchMode = IAOETool.MatchMode.MODERATE;
+    public static IAOETool.MatchMode aoeToolOreMode = IAOETool.MatchMode.STRICT;
 
     public static EntityMatchList sinewAnimals = new EntityMatchList(true, false,
             "minecraft:cow", "minecraft:sheep", "minecraft:pig");
@@ -149,6 +153,15 @@ public class Config extends ConfigBaseNew {
             // Block placer tools
             blockPlacerTools.loadConfig(config, "Items That Place Blocks", CAT_ITEMS, BLOCK_PLACER_TOOLS_COMMENT);
             itemsThatToolsCanUse.loadConfig(config, "Items That Block Placer Tools Can Use", CAT_ITEMS, ITEMS_THAT_TOOLS_CAN_USE_COMMENT);
+
+            aoeToolMatchMode = loadEnum("AOE Tool Match Mode", CAT_GEAR, IAOETool.MatchMode.class, IAOETool.MatchMode.MODERATE,
+                    "Block matching mode for hammers and excavators. LOOSE will break any blocks the tool can harvest" +
+                            " together (bit OP with blocks like obsidian), MODERATE will break blocks of similar" +
+                            " harvest levels, and STRICT will only mine one block type.");
+            aoeToolOreMode = loadEnum("AOE Tool Ore Match Mode", CAT_GEAR, IAOETool.MatchMode.class, IAOETool.MatchMode.STRICT,
+                    "Ore matching mode for hammers and excavators, overrides standard match mode if both blocks are" +
+                            " ores. LOOSE will break anything, MODERATE will break the same harvest level or lower," +
+                            " STRICT will break only the same block type.");
 
             /*
              * Nerfed gear

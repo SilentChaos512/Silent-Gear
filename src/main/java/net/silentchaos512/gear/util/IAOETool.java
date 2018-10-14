@@ -32,9 +32,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
@@ -66,8 +69,7 @@ public interface IAOETool {
         BlockPos pos = rt.getBlockPos();
         IBlockState state = world.getBlockState(pos);
 
-        // The Forge.canToolHarvestBlock method seems to be very unreliable...
-        if (stack.getItem().canHarvestBlock(state, stack) || ForgeHooks.canToolHarvestBlock(world, pos, stack)) {
+        if (isEffectiveOnBlock(stack, world, pos, state)) {
             switch (rt.sideHit.getAxis()) {
                 case Y:
                     attemptAddExtraBlock(world, state, pos.offset(EnumFacing.NORTH), stack, positions);
@@ -105,6 +107,11 @@ public interface IAOETool {
         return positions;
     }
 
+    default boolean isEffectiveOnBlock(ItemStack stack, World world, BlockPos pos, IBlockState state) {
+        // The Forge.canToolHarvestBlock method seems to be very unreliable...
+        return stack.getItem().canHarvestBlock(state, stack) || ForgeHooks.canToolHarvestBlock(world, pos, stack);
+    }
+
     default void attemptAddExtraBlock(World world, IBlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
         final IBlockState state2 = world.getBlockState(pos2);
         if (!world.isAirBlock(pos2)
@@ -114,11 +121,17 @@ public interface IAOETool {
         }
     }
 
+    enum MatchMode {
+        LOOSE, MODERATE, STRICT
+    }
+
     /**
      * Handles actual AOE block breaking. Call {@link #onBlockStartBreak(ItemStack, BlockPos,
      * EntityPlayer)} inside the {@code onBlockStartBreak} method of the tool's item.
      */
-    class BreakHandler {
+    final class BreakHandler {
+        private BreakHandler() {}
+
         public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, EntityPlayer player) {
             World world = player.getEntityWorld();
             if (world.isRemote || !(player instanceof EntityPlayerMP) || !(tool.getItem() instanceof IAOETool))
@@ -126,8 +139,9 @@ public interface IAOETool {
 
             IAOETool item = (IAOETool) tool.getItem();
             RayTraceResult rt = item.rayTraceBlocks(world, player);
+            IBlockState stateOriginal = world.getBlockState(pos);
 
-            if (rt != null && rt.typeOfHit == RayTraceResult.Type.BLOCK) {
+            if (rt != null && rt.typeOfHit == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal)) {
                 EnumFacing side = rt.sideHit;
                 List<BlockPos> extraBlocks = item.getExtraBlocks(world, rt, player, tool);
 
@@ -181,40 +195,52 @@ public interface IAOETool {
         }
 
         /**
-         * Determine if the blocks are similar enough to be considered the same. For example, dirt
-         * and grass, or redstone ore and lit redstone ore.
+         * Determine if the blocks are similar enough to be considered the same. This depends on the
+         * match mode configs. STRICT will only match the same block (ignoring exact state),
+         * MODERATE will break anything with the same or lower harvest level (except level -1 and 0
+         * blocks will still break together regardless of which is targeted), and LOOSE will match
+         * anything.
          *
          * @return True if the blocks are the same (equal) or similar, false otherwise
          */
-        static boolean areBlocksSimilar(IBlockState block1, IBlockState block2) {
-            if (block1.getBlock() == block2.getBlock()) return true;
-            // For ores, only mine the same type
-            if (ORE_BLOCKS.contains(block1.getBlock()) || ORE_BLOCKS.contains(block2.getBlock()))
+        static boolean areBlocksSimilar(IBlockState state1, IBlockState state2) {
+            Block block1 = state1.getBlock();
+            Block block2 = state2.getBlock();
+            boolean isOre1 = ORE_BLOCKS.contains(block1);
+            boolean isOre2 = ORE_BLOCKS.contains(block2);
+            MatchMode mode = isOre1 && isOre2 ? Config.aoeToolOreMode : Config.aoeToolMatchMode;
+
+            if (mode == MatchMode.LOOSE || block1 == block2)
+                return true;
+
+            if (mode == MatchMode.STRICT || (!isOre1 && isOre2))
                 return false;
-            // Otherwise, anything with the same harvest level should be okay
-            int level1 = block1.getBlock().getHarvestLevel(block1);
-            int level2 = block2.getBlock().getHarvestLevel(block2);
-//            SilentGear.log.debug("areBlocksSimilar: {} and {}", level1, level2);
-            return level1 == level2 || level1 < 0 || level2 < 0;
+
+            // Otherwise, anything with same or lower harvest level should be okay
+            int level1 = block1.getHarvestLevel(state1);
+            int level2 = block2.getHarvestLevel(state2);
+            return level1 >= level2 || level2 == 0;
         }
     }
 
-    class HighlightHandler {
-        @SubscribeEvent
-        public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
-            EntityPlayer player = event.getPlayer();
-            if (player == null)
-                return;
+    @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Side.CLIENT)
+    final class HighlightHandler {
+        private HighlightHandler() {}
 
-            if (event.getSubID() == 0 && event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK) {
+        @SubscribeEvent
+        public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+            EntityPlayer player = event.getPlayer();
+
+            if (player != null && event.getSubID() == 0 && event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK) {
                 ItemStack stack = player.getHeldItemMainhand();
 
                 if (stack.getItem() instanceof IAOETool) {
                     World world = player.getEntityWorld();
-                    List<BlockPos> positions = ((IAOETool) stack.getItem()).getExtraBlocks(world, event.getTarget(), player, stack);
+                    IAOETool item = (IAOETool) stack.getItem();
 
-                    for (BlockPos pos : positions)
-                        event.getContext().drawSelectionBox(player, new RayTraceResult(new Vec3d(0, 0, 0), EnumFacing.UP, pos), 0, event.getPartialTicks());
+                    for (BlockPos pos : item.getExtraBlocks(world, event.getTarget(), player, stack)) {
+                        event.getContext().drawSelectionBox(player, new RayTraceResult(Vec3d.ZERO, EnumFacing.UP, pos), 0, event.getPartialTicks());
+                    }
                 }
             }
         }
