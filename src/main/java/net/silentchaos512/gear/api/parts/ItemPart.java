@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -25,7 +26,6 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.GameUtil;
-import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -147,8 +147,13 @@ public abstract class ItemPart {
             return false;
         if (partRep.isItemEqual(this.craftingStack.get()))
             return true;
-        if (matchOreDict)
-            return StackHelper.matchesOreDict(partRep, this.craftingOreDictName);
+        if (matchOreDict && !this.craftingOreDictName.isEmpty()) {
+            for (int id : OreDictionary.getOreIDs(partRep)) {
+                if (this.craftingOreDictName.equals(OreDictionary.getOreName(id))) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
