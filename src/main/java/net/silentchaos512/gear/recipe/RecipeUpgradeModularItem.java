@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.recipe.RecipeBaseSL;
 
@@ -42,6 +43,8 @@ public class RecipeUpgradeModularItem extends RecipeBaseSL {
 
     @Override
     public boolean matches(InventoryCrafting inv, World world) {
+        if (Config.upgradesAnvilOnly) return false;
+
         boolean foundTool = false;
         boolean foundUpgrade = false;
 

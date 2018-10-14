@@ -6,6 +6,8 @@
 ### Changed
 - Optimize ore dictionary lookup for materials and tooltip creation (should improve load times slightly, related to [Silent's Gems #341](https://github.com/SilentChaos512/SilentGems/issues/341))
 - AOE tools will now break blocks of lower or equal harvest levels, instead of just equal (except in STRICT mode). Non-ores can be broken when targeting ores.
+### Fixed
+- The "anvil only" config for upgrades actually works now
 
 ## [0.2.1]
 ### Fixed
