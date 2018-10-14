@@ -1,0 +1,12 @@
+{
+  "ingredients": [
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "silentgear:leather_scrap",
+    "count": 9
+  }
+}

@@ -31,6 +31,7 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     IRON_ROD,
     DIAMOND_SHARD,
     EMERALD_SHARD,
+    LEATHER_SCRAP,
     SINEW,
     DRIED_SINEW,
     SINEW_FIBER,
@@ -39,7 +40,11 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     BLACK_DYE,
     BLUE_DYE;
 
-    private Item item;
+    private final Item item;
+
+    CraftingItems() {
+        this.item = new Item();
+    }
 
     @Nonnull
     @Override
@@ -50,7 +55,6 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     @Nonnull
     @Override
     public Item getItem() {
-        if (item == null) item = new Item();
-        return item;
+        return this.item;
     }
 }
