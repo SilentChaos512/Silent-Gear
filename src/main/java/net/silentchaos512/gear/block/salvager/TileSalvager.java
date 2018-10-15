@@ -19,7 +19,9 @@
 package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.silentchaos512.gear.SilentGear;
@@ -53,10 +55,13 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     public void update() {
         if (world.isRemote) return;
 
+        boolean requiresClientSync = false;
+
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
             if (progress < BASE_WORK_TIME) {
                 ++progress;
+                requiresClientSync = true;
             }
 
             if (progress >= BASE_WORK_TIME && areAllOutputSlotsFree()) {
@@ -71,7 +76,13 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
 
                 progress = 0;
                 input.shrink(1);
+                requiresClientSync = true;
             }
+        }
+
+        if (requiresClientSync) {
+            IBlockState state = world.getBlockState(pos);
+            world.notifyBlockUpdate(pos, state, state, 3);
         }
     }
 
@@ -101,15 +112,15 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
 
         for (ItemPartData part : GearData.getConstructionParts(stack)) {
             if (part.isRod()) {
-                for (int i = 0; i < Math.min(1, config.getRodCount()); ++i) {
-                    builder.add(part.getCraftingItem());
+                for (int i = 0; i < Math.max(1, config.getRodCount()); ++i) {
+                    builder.add(part.getCraftingItem().copy());
                 }
             } else if (part.isMain()) {
-                ItemStack craftingItem = part.getCraftingItem();
+                ItemStack craftingItem = part.getCraftingItem().copy();
                 part.getGrade().setGradeOnStack(craftingItem);
                 builder.add(craftingItem);
             } else {
-                builder.add(part.getCraftingItem());
+                builder.add(part.getCraftingItem().copy());
             }
         }
 
@@ -166,6 +177,13 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     @Override
     public int getFieldCount() {
         return 1;
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound tags = super.getUpdateTag();
+        writeSyncVars(tags, SyncVariable.Type.PACKET);
+        return tags;
     }
 
     @Override

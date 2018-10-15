@@ -54,6 +54,8 @@ tile.silentgear.crafting_station.upgrade_format=- %s
 tile.silentgear.flax_plant.name=Flax Plant
 tile.silentgear.flower.name=Blue Flower
 tile.silentgear.part_analyzer.name=Part Analyzer
+tile.silentgear.salvager.name=Salvager
+tile.silentgear.salvager.desc=Can break down some items into their components
 
 
 
