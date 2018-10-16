@@ -195,9 +195,9 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     public int[] getSlotsForFace(EnumFacing side) {
         switch (side) {
             case DOWN:
-                return SLOTS_OUTPUT;
+                return SLOTS_OUTPUT.clone();
             default:
-                return SLOTS_INPUT;
+                return SLOTS_INPUT.clone();
         }
     }
 
