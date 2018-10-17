@@ -20,6 +20,8 @@ package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -87,8 +89,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     }
 
     private boolean canSalvage(ItemStack stack) {
-        // TODO
-        return stack.getItem() instanceof ICoreItem;
+        return stack.getItem() instanceof ICoreItem || VanillaGearSalvage.isVanillaGear(stack);
     }
 
     private Collection<ItemStack> getSalvagedPartsWithChance(ItemStack stack) {
@@ -99,8 +100,10 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     private Collection<ItemStack> getSalvageableParts(ItemStack stack) {
         if (stack.getItem() instanceof ICoreItem) {
             return getSalvageFromGearItem(stack);
+        } else if (VanillaGearSalvage.isVanillaGear(stack)) {
+            return getSalvageFromVanillaItem(stack);
         } else {
-            // TODO: Other item types?
+            // TODO: Other item types? Custom handlers?
             return ImmutableList.of();
         }
     }
@@ -122,6 +125,24 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
             } else {
                 builder.add(part.getCraftingItem().copy());
             }
+        }
+
+        return builder.build();
+    }
+
+    private static Collection<ItemStack> getSalvageFromVanillaItem(ItemStack stack) {
+        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
+
+        Item headItem = VanillaGearSalvage.getHeadItem(stack);
+        int headCount = VanillaGearSalvage.getHeadCount(stack);
+        if (headItem != null && headCount > 0) {
+            builder.add(new ItemStack(headItem, headCount));
+        }
+
+        Item rodItem = Items.STICK;
+        int rodCount = VanillaGearSalvage.getRodCount(stack);
+        if (rodCount > 0) {
+            builder.add(new ItemStack(rodItem, rodCount));
         }
 
         return builder.build();
