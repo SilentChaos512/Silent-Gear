@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 
-public final class VanillaGearSalvage {
+final class VanillaGearSalvage {
     private static final Collection<Item> items = ImmutableList.of(
             Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD,
             Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE,
@@ -45,7 +45,7 @@ public final class VanillaGearSalvage {
 
     private VanillaGearSalvage() {}
 
-    public static boolean isVanillaGear(ItemStack stack) {
+    static boolean isVanillaGear(ItemStack stack) {
         return items.contains(stack.getItem());
     }
 

@@ -111,6 +111,18 @@ public class Config extends ConfigBaseNew {
     public static ConfigOptionEquipment leggings = forEquipment(ModItems.leggings);
     public static ConfigOptionEquipment boots = forEquipment(ModItems.boots);
 
+    /*
+     * Salvager
+     */
+    @ConfigOption(name = "Min Loss Rate", category = "salvager")
+    @ConfigOption.RangeDouble(value = 0, min = 0, max = 1)
+    @ConfigOption.Comment("The minimum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss. Rate depends on remaining durability.")
+    public static double salvagerMinLossRate;
+    @ConfigOption(name = "Max Loss Rate", category = "salvager")
+    @ConfigOption.RangeDouble(value = 0.35, min = 0, max = 1)
+    @ConfigOption.Comment("The maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss. Rate depends on remaining durability.")
+    public static double salvagerMaxLossRate;
+
     File directory;
 
     public Config() {

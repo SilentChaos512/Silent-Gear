@@ -29,17 +29,20 @@ import net.minecraft.util.ITickable;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.tile.TileSidedInventorySL;
+import net.silentchaos512.lib.util.GameUtil;
+import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.TimeHelper;
 
 import java.util.Collection;
 import java.util.stream.IntStream;
 
 public class TileSalvager extends TileSidedInventorySL implements ITickable {
-    static final int BASE_WORK_TIME = TimeHelper.ticksFromSeconds(10);
+    static final int BASE_WORK_TIME = TimeHelper.ticksFromSeconds(GameUtil.isDeobfuscated() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
     private static final int[] SLOTS_OUTPUT = IntStream.rangeClosed(1, 18).toArray();
@@ -93,8 +96,33 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     }
 
     private Collection<ItemStack> getSalvagedPartsWithChance(ItemStack stack) {
-        // TODO: Loss chance?
-        return getSalvageableParts(stack);
+        double lossRate = getLossRate(stack);
+        SilentGear.log.debug("Loss rate for '{}': {}", stack, lossRate);
+        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
+
+        for (ItemStack part : getSalvageableParts(stack)) {
+            ItemStack copy = part.copy();
+            int count = copy.getCount();
+            for (int i = 0; i < count; ++i) {
+                if (MathUtils.tryPercentage(SilentGear.random, lossRate)) {
+                    copy.shrink(1);
+                }
+            }
+
+            if (!copy.isEmpty()) {
+                builder.add(copy);
+            }
+        }
+        return builder.build();
+    }
+
+    private double getLossRate(ItemStack stack) {
+        int maxDamage = stack.getMaxDamage();
+        if (maxDamage == 0) {
+            return Config.salvagerMinLossRate;
+        }
+        double ratio = (double) stack.getItemDamage() / maxDamage;
+        return Config.salvagerMinLossRate + ratio * (Config.salvagerMaxLossRate - Config.salvagerMinLossRate);
     }
 
     private Collection<ItemStack> getSalvageableParts(ItemStack stack) {
@@ -115,11 +143,12 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
 
         for (ItemPartData part : GearData.getConstructionParts(stack)) {
             if (part.isRod()) {
-                for (int i = 0; i < Math.max(1, config.getRodCount()); ++i) {
-                    builder.add(part.getCraftingItem().copy());
-                }
+                ItemStack rod = part.getCraftingItem().copy();
+                rod.setCount(Math.max(1, config.getRodCount()));
+                builder.add(rod);
             } else if (part.isMain()) {
                 ItemStack craftingItem = part.getCraftingItem().copy();
+                // TODO: Add a chance of grade loss?
                 part.getGrade().setGradeOnStack(craftingItem);
                 builder.add(craftingItem);
             } else {
