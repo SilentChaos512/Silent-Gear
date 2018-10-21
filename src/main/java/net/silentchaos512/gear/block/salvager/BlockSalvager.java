@@ -21,7 +21,9 @@ package net.silentchaos512.gear.block.salvager;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -32,6 +34,7 @@ import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
 import net.silentchaos512.lib.block.ITileEntityBlock;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockSalvager extends BlockContainer implements ITileEntityBlock {
     public BlockSalvager() {
@@ -61,5 +64,11 @@ public class BlockSalvager extends BlockContainer implements ITileEntityBlock {
             }
         }
         return true;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(SilentGear.i18n.subText(this, "desc"));
     }
 }
