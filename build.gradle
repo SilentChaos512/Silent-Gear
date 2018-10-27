@@ -164,7 +164,12 @@ dependencies {
 
     // Silent Lib
     if (project.hasProperty('sl_version')) {
-        compileOnly "com.github.SilentChaos512:SilentLib:${project.sl_version}"
+        def projectSilentLib = findProject(":SilentLib")
+        print "Local Silent Lib: ${projectSilentLib} (${projectSilentLib != null ? "found" : "not found"})"
+        if (projectSilentLib != null)
+            compileOnly project(":SilentLib")
+        else
+            provided "com.github.SilentChaos512:SilentLib:${project.sl_version}"
     }
 
     // EvilCraft

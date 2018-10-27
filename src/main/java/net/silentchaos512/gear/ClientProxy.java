@@ -134,7 +134,7 @@ public class ClientProxy extends CommonProxy {
 
         @Override
         public boolean isHidden() {
-            return false;
+            return true;
         }
     }
 }
