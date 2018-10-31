@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.parts;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.common.primitives.UnsignedInts;
 import com.google.gson.*;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +23,8 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.api.traits.TraitRegistry;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -29,9 +33,7 @@ import net.silentchaos512.lib.util.GameUtil;
 
 import javax.annotation.Nullable;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -46,11 +48,9 @@ public abstract class ItemPart {
     protected static final ResourceLocation BLANK_TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "items/blank");
     private static final Gson GSON = (new GsonBuilder()).create();
 
-    @Getter(AccessLevel.NONE)
-    protected Supplier<ItemStack> craftingStack = () -> ItemStack.EMPTY;
+    @Getter(AccessLevel.NONE) protected Supplier<ItemStack> craftingStack = () -> ItemStack.EMPTY;
     protected String craftingOreDictName = "";
-    @Getter(AccessLevel.NONE)
-    protected Supplier<ItemStack> craftingStackSmall = () -> ItemStack.EMPTY;
+    @Getter(AccessLevel.NONE) protected Supplier<ItemStack> craftingStackSmall = () -> ItemStack.EMPTY;
     protected String craftingOreDictNameSmall = "";
     protected int tier = 0;
     protected boolean enabled = true;
@@ -67,12 +67,11 @@ public abstract class ItemPart {
      * materials are added, so don't use it for persistent data! Also good for identifying subtypes
      * in JEI.
      */
-    @Getter(AccessLevel.NONE)
-    protected int modelIndex;
+    @Getter(AccessLevel.NONE) protected int modelIndex;
     private static int lastModelIndex = -1;
 
-    @Getter(AccessLevel.NONE)
-    protected Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
+    @Getter(AccessLevel.NONE) protected Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
+    @Getter(AccessLevel.NONE) protected Map<Trait, Integer> traits = new LinkedHashMap<>();
 
     @Deprecated
     public ItemPart(ResourceLocation registryName, boolean userDefined) {
@@ -108,6 +107,10 @@ public abstract class ItemPart {
         return event.getModifiers();
     }
 
+    public Map<Trait, Integer> getTraits(ItemPartData part) {
+        return ImmutableMap.copyOf(traits);
+    }
+
     /**
      * Default operation to use if the resource file does not specify on operation for the given
      * stat
@@ -136,6 +139,14 @@ public abstract class ItemPart {
             default:
                 throw new IllegalArgumentException("Unknown RepairContext: " + context);
         }
+    }
+
+    public float computeStatValue(ItemStat stat) {
+        return computeStatValue(stat, ItemPartData.instance(this));
+    }
+
+    public float computeStatValue(ItemStat stat, ItemPartData part) {
+        return stat.compute(0, getStatModifiers(stat, part));
     }
 
     // ============
@@ -243,7 +254,7 @@ public abstract class ItemPart {
      * @param part The part
      * @param gear The equipment (tool/weapon/armor) stack
      */
-    public String getTranslatedName(ItemPartData part, ItemStack gear) {
+    public String getTranslatedName(@Nullable ItemPartData part, ItemStack gear) {
         if (!localizedNameOverride.isEmpty())
             return localizedNameOverride;
         return /* nameColor + */ SilentGear.i18n.translate(this.getTranslationKey(part));
@@ -252,6 +263,7 @@ public abstract class ItemPart {
     /**
      * Gets a string that represents the type of part (main, rod, tip, etc.) Used for localization
      * of part type/class, not the individual part.
+     *
      * @deprecated Use {@link #getType()}, then {@link PartType#getName()}
      */
     @Deprecated
@@ -292,7 +304,7 @@ public abstract class ItemPart {
             } catch (Exception e) {
                 SilentGear.log.catching(e);
             }
-        } else {
+        } else if (origin.isBuiltin()) {
             SilentGear.log.error("ItemPart {} is missing its data file!", this.registryName);
         }
 
@@ -346,6 +358,7 @@ public abstract class ItemPart {
     private static class Loader {
         private static void processJson(ItemPart part, JsonObject json) {
             readStats(part, json);
+            readTraits(part, json);
             readCraftingItems(part, json);
             readDisplayProperties(part, json);
             readAvailability(part, json);
@@ -376,6 +389,32 @@ public abstract class ItemPart {
                     part.stats.removeAll(stat);
                     part.stats.put(stat, instance);
                 });
+            }
+        }
+
+        private static void readTraits(ItemPart part, JsonObject json) {
+            JsonElement elementTraits = json.get("traits");
+            if (elementTraits != null && elementTraits.isJsonArray()) {
+                JsonArray array = elementTraits.getAsJsonArray();
+                Map<Trait, Integer> traitsMap = new HashMap<>();
+                for (JsonElement element : array) {
+                    JsonObject obj = element.getAsJsonObject();
+                    String name = JsonUtils.getString(obj, "name", "");
+                    Trait trait = TraitRegistry.get(name);
+
+                    if (trait != null) {
+                        int level = MathHelper.clamp(JsonUtils.getInt(obj, "level", 1), 1, trait.getMaxLevel());
+                        if (level > 0) {
+                            SilentGear.log.debug("Part '{}': put trait '{}' level {}", part.getRegistryName(), trait.getName(), level);
+                            traitsMap.put(trait, level);
+                        }
+                    }
+                }
+
+                if (!traitsMap.isEmpty()) {
+                    part.traits.clear();
+                    part.traits.putAll(traitsMap);
+                }
             }
         }
 
@@ -410,7 +449,11 @@ public abstract class ItemPart {
                     part.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
                 if (obj.has("name_color"))
                     part.nameColor = TextFormatting.getValueByName(JsonUtils.getString(obj, "name_color"));
-                part.localizedNameOverride = JsonUtils.getString(obj, "override_localization", part.localizedNameOverride);
+
+                if (obj.has("override_localization"))
+                    part.localizedNameOverride = JsonUtils.getString(obj, "override_localization");
+                else if (obj.has("override_translation"))
+                    part.localizedNameOverride = JsonUtils.getString(obj, "override_translation");
             }
         }
 

@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.block.craftingstation;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -8,11 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.client.gui.GuiItemParts;
 import net.silentchaos512.gear.client.util.TooltipFlagTC;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 
+import java.io.IOException;
 import java.util.List;
 
 public class GuiCraftingStation extends GuiContainer {
@@ -21,6 +24,8 @@ public class GuiCraftingStation extends GuiContainer {
     private final TileCraftingStation tile;
     private final ContainerCraftingStation container;
 
+    private GuiButton buttonShowAllParts;
+
     public GuiCraftingStation(TileCraftingStation tile, ContainerCraftingStation inventorySlotsIn) {
         super(inventorySlotsIn);
         this.tile = tile;
@@ -28,6 +33,23 @@ public class GuiCraftingStation extends GuiContainer {
 
         this.xSize = 256;
         // this.ySize = 256;
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+
+        buttonShowAllParts = new GuiButton(100, 0, 0, "Show Parts GUI (WIP)");
+        buttonList.add(buttonShowAllParts);
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        super.actionPerformed(button);
+
+        if (button == buttonShowAllParts) {
+            mc.displayGuiScreen(new GuiItemParts());
+        }
     }
 
     @Override

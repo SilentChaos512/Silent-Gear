@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.client.event;
 
-import net.minecraft.client.util.ITooltipFlag.TooltipFlags;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -78,14 +77,11 @@ public final class TooltipHandler {
 
             if (!modifiers.isEmpty()) {
                 StatInstance inst = stat.computeForDisplay(0, partData.getGrade(), modifiers);
-                boolean isZero = inst.getValue() == 0;
-                if (part instanceof PartMain && stat == CommonItemStats.HARVEST_LEVEL)
-                    isZero = false;
-
-                if (!isZero || event.getFlags() == TooltipFlags.ADVANCED) {
+                if (inst.shouldList(part, stat, event.getFlags().isAdvanced())) {
+                    boolean isZero = inst.getValue() == 0;
                     TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                    String nameStr = nameColor + SilentGear.i18n.translate("stat." + stat.getName());
+                    String nameStr = nameColor + stat.translatedName();
                     int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
                     String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");

@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
@@ -23,13 +24,13 @@ import java.util.Map;
 public class ItemStat {
     public static final Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
 
-    @Getter(value = AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     protected final ResourceLocation name;
-    @Getter(value = AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     protected final float defaultValue;
-    @Getter(value = AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     protected final float minimumValue;
-    @Getter(value = AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     protected final float maximumValue;
     // TODO: Hide hidden stats!
     private boolean isHidden = false;
@@ -179,5 +180,9 @@ public class ItemStat {
 
     public String toString() {
         return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", name, defaultValue, minimumValue, maximumValue);
+    }
+
+    public String translatedName() {
+        return SilentGear.i18n.translate("stat." + this.name);
     }
 }

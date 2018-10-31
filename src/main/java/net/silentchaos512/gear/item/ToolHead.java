@@ -26,12 +26,14 @@ import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.client.util.TooltipFlagTC;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.I18nHelper;
 
 import javax.annotation.Nonnull;
@@ -39,6 +41,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class ToolHead extends Item implements IStatItem {
     private static final String NBT_ROOT = "ToolHeadData";
@@ -91,7 +94,8 @@ public class ToolHead extends Item implements IStatItem {
 
     private static void writeStatCache(ItemStack stack, PartDataList parts) {
         ICoreItem item = ModItems.toolClasses.get(getToolClass(stack));
-        double synergy = GearData.calculateSynergyValue(parts, parts.getUniqueParts(true));
+        Map<Trait, Integer> traits = TraitHelper.getTraits(parts);
+        double synergy = GearData.calculateSynergyValue(parts, parts.getUniqueParts(true), traits);
         Multimap<ItemStat, StatInstance> stats = GearData.getStatModifiers(item, parts, synergy);
 
         NBTTagCompound tags = new NBTTagCompound();

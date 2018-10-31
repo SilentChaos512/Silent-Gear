@@ -246,6 +246,24 @@ material.silentgear.bowstring_flax.name=Flax Bowstring
 material.silentgear.bowstring_sinew.name=Sinew Bowstring
 material.silentgear.bowstring_string.name=Plain Bowstring
 
+material.silentgear.grip_leather.name=Leather Grip
+material.silentgear.grip_wool_white.name=Wool Grip
+material.silentgear.grip_wool_orange.name=Wool Grip
+material.silentgear.grip_wool_magenta.name=Wool Grip
+material.silentgear.grip_wool_light_blue.name=Wool Grip
+material.silentgear.grip_wool_yellow.name=Wool Grip
+material.silentgear.grip_wool_lime.name=Wool Grip
+material.silentgear.grip_wool_pink.name=Wool Grip
+material.silentgear.grip_wool_gray.name=Wool Grip
+material.silentgear.grip_wool_silver.name=Wool Grip
+material.silentgear.grip_wool_cyan.name=Wool Grip
+material.silentgear.grip_wool_purple.name=Wool Grip
+material.silentgear.grip_wool_blue.name=Wool Grip
+material.silentgear.grip_wool_brown.name=Wool Grip
+material.silentgear.grip_wool_green.name=Wool Grip
+material.silentgear.grip_wool_red.name=Wool Grip
+material.silentgear.grip_wool_black.name=Wool Grip
+
 material.silentgear.mainWithGrade=%1$s (%2$s)
 material.silentgear.main_diamond.name=Diamond
 material.silentgear.main_emerald.name=Emerald

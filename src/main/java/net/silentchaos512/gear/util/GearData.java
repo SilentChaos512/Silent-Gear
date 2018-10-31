@@ -18,14 +18,14 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.lib.util.PlayerHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 
-public class GearData {
+public final class GearData {
     /**
      * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately,
      * some mods still reference the gear material instead of calling the appropriate methods.
@@ -52,8 +52,10 @@ public class GearData {
     private static final int MAX_ROD_PARTS = 1;
     private static final int MAX_TIP_PARTS = 1;
 
+    private GearData() {throw new IllegalAccessError("Utility class");}
+
     /**
-     * Recalculate gear stats and setup NBT. This should be call ANY TIME an item is modified!
+     * Recalculate gear stats and setup NBT. This should be called ANY TIME an item is modified!
      */
     public static void recalculateStats(ItemStack stack) {
         getUUID(stack);
@@ -69,8 +71,9 @@ public class GearData {
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
             PartDataList uniqueParts = parts.getUniqueParts(true);
+            Map<Trait, Integer> traits = TraitHelper.getTraits(parts);
 
-            double synergy = calculateSynergyValue(parts, uniqueParts);
+            double synergy = calculateSynergyValue(parts, uniqueParts, traits);
 
             // Only consider stats relevant to the item
             // Collection<ItemStat> relevantStats = stack.getItem() instanceof ICoreItem
@@ -86,6 +89,14 @@ public class GearData {
                 // SilentGear.log.debug(stat, value);
                 propertiesCompound.setFloat(stat.getName().getPath(), value);
             }
+
+            // Cache traits in properties compound as well
+            NBTTagList traitList = new NBTTagList();
+            for (Trait trait : traits.keySet()) {
+                int level = traits.get(trait);
+                traitList.appendTag(trait.writeToNBT(level));
+            }
+            propertiesCompound.setTag("Traits", traitList);
 
             propertiesCompound.setFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
         }
@@ -145,7 +156,9 @@ public class GearData {
         return stats;
     }
 
-    public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts) {
+    public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<Trait, Integer> traits) {
+        // TODO: Synergy boosting traits?
+
         // First, we add a bonus for the number of unique main parts
         double synergy = 1.0 + 0.16 * Math.log(5 * uniqueParts.getMains().size() - 4);
         // Second, reduce synergy for difference in rarity and tier
@@ -361,6 +374,10 @@ public class GearData {
         if (!rootTag.hasKey(compoundKey))
             rootTag.setTag(compoundKey, new NBTTagCompound());
         return rootTag.getCompoundTag(compoundKey);
+    }
+
+    static NBTTagCompound getPropertiesData(ItemStack stack) {
+        return getData(stack, NBT_ROOT_PROPERTIES);
     }
 
     static NBTTagCompound getStatisticsCompound(ItemStack stack) {

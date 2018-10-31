@@ -119,7 +119,11 @@ public final class GearHelper {
 
         if (!canBreakPermanently)
             amount = Math.min(stack.getMaxDamage() - stack.getItemDamage(), amount);
+
         EntityPlayerMP player = entityLiving instanceof EntityPlayerMP ? (EntityPlayerMP) entityLiving : null;
+        final int preTraitAmount = amount;
+        amount = (int) TraitHelper.activateTraits(stack, preTraitAmount,
+                (trait, level) -> trait.onDurabilityDamage(player, level, stack, preTraitAmount));
         boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.random, player);
 
         if (isBroken(stack)) {

@@ -1,9 +1,12 @@
 # Changelog
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## [Unreleased]
 ### Added
 - Two configs to control how strict AOE tools are when matching blocks.
-- Leather scrap item
+- Leather scrap item, no particular use right now
 ### Changed
 - Optimize ore dictionary lookup for materials and tooltip creation (should improve load times slightly, related to [Silent's Gems #341](https://github.com/SilentChaos512/SilentGems/issues/341))
 - AOE tools will now break blocks of lower or equal harvest levels, instead of just equal (except in STRICT mode). Non-ores can be broken when targeting ores.
@@ -167,8 +170,3 @@ Numerous other tweaks and minor fixes
 
 ## [0.0.1] (preview 1, 1.12.2)
 - Initial preview build
-
-# Note
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

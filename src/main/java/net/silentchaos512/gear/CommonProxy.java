@@ -35,6 +35,7 @@ public class CommonProxy {
 
         // Phased Initializers
         registry.addPhasedInitializer(Config.INSTANCE);
+        registry.addPhasedInitializer(ModTraits.INSTANCE);
         registry.addPhasedInitializer(ModMaterials.INSTANCE);
         registry.addPhasedInitializer(VanillaGearHandler.INSTANCE);
 

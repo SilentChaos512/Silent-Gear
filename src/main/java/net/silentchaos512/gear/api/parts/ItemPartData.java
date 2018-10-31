@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.Trait;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -128,6 +129,10 @@ public final class ItemPartData {
 
     public String getModelIndex(int animationFrame) {
         return part.getModelIndex(this, animationFrame);
+    }
+
+    public Map<Trait, Integer> getTraits() {
+        return part.getTraits(this);
     }
 
     public String getTranslatedName(ItemStack gear) {
