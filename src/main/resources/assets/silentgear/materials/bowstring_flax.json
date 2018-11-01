@@ -1,0 +1,25 @@
+{
+    "type": "bowstring",
+    "stats": [
+        {"name": "durability",      "value":  0.05, "op": "MUL1"},
+        {"name": "enchantability",  "value":  0.00, "op": "MUL1"},
+        {"name": "ranged_damage",   "value": -0.10, "op": "MUL1"},
+        {"name": "ranged_speed",    "value":  0.20, "op": "MUL1"},
+        {"name": "rarity",          "value":  6}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "silentgear:flax_string"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "flax",
+        "texture_color": "ffffff"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 1,
+        "tool_blacklist": []
+    }
+}

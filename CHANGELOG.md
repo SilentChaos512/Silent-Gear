@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Two configs to control how strict AOE tools are when matching blocks.
+- Traits for gear materials (WIP). Traits are added through material JSONs. Currently I recommend limiting traits to main parts because the math is a little wonky (still working out some formulas). But any part type should accept traits.
+- Salvager, breaks down gear (vanilla and SGear) into their components. The more damaged the item, the greater the chance of losing parts (configurable, default 0% - 50%). Set min and max rates to 0 to disable part loss.
+- GUI that lists all available parts and can sort them (by name, type, and all stats). Incomplete, but usable. Currently accessed through the crafting station (may change).
 - Leather scrap item, no particular use right now
 ### Changed
 - Optimize ore dictionary lookup for materials and tooltip creation (should improve load times slightly, related to [Silent's Gems #341](https://github.com/SilentChaos512/SilentGems/issues/341))

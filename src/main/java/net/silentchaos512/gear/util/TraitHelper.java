@@ -85,6 +85,7 @@ public final class TraitHelper {
         Trait[] keys = result.keySet().toArray(new Trait[0]);
 
         for (Trait trait : keys) {
+            // FIXME: Just counting mains right now, other parts throw the math off
             final int totalParts = parts.getMains().size();
             final int partsWithTrait = countPartsWithTrait.get(trait);
             final float divisor = Math.max(1, (totalParts + partsWithTrait) / 2f); // TODO: Probably needs work...

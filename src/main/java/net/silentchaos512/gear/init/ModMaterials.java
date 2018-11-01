@@ -51,7 +51,7 @@ public class ModMaterials implements IPhasedInitializer {
 
         bowstringString = PartRegistry.putPart(new PartBowstring(getPath("bowstring_string"), PartOrigins.BUILTIN_CORE));
         bowstringSinew = PartRegistry.putPart(new PartBowstring(getPath("bowstring_sinew"), PartOrigins.BUILTIN_CORE));
-        // TODO: What happened to flax bowstring? I thought I added that???
+        PartRegistry.putPart(new PartBowstring(getPath("bowstring_flax"), PartOrigins.BUILTIN_CORE));
 
         for (MiscUpgrades upgrade : MiscUpgrades.values())
             PartRegistry.putPart(upgrade.getPart());
