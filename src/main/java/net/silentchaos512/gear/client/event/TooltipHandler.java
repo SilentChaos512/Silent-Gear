@@ -14,10 +14,12 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Side.CLIENT)
 public final class TooltipHandler {
@@ -36,7 +38,7 @@ public final class TooltipHandler {
         ItemPart part = !stack.isEmpty() ? PartRegistry.get(stack) : null;
 
         if (part != null && !part.isBlacklisted(stack)) {
-            onPartTooltip(event, stack, part);
+            onPartTooltip(event, stack, ItemPartData.instance(part));
             return;
         }
 
@@ -47,9 +49,18 @@ public final class TooltipHandler {
         }
     }
 
-    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
+    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPartData partData) {
+        ItemPart part = partData.getPart();
         event.getToolTip().add(TextFormatting.GREEN + SilentGear.i18n.translate("part",
                 "type." + part.getType().getName(), part.getTier()));
+
+        // Traits
+        Map<Trait, Integer> traits = partData.getTraits();
+        for (Trait trait : traits.keySet()) {
+            final int level = traits.get(trait);
+            final TextFormatting nameColor = trait.getNameColor();
+            event.getToolTip().add(nameColor + trait.getTranslatedName(level));
+        }
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTrackerSL.isControlDown()) {

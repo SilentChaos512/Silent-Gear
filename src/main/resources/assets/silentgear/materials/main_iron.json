@@ -17,6 +17,9 @@
         {"name": "rarity",          "value":   20},
         {"name": "chargeability",   "value":  0.7}
     ],
+    "traits": [
+        {"name": "silentgear:malleable", "level": 3}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:iron_ingot",

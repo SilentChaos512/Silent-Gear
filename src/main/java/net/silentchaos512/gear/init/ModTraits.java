@@ -31,7 +31,7 @@ import net.silentchaos512.lib.registry.SRegistry;
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
 
-    private static final float DURABILITY_EFFECT_CHANCE = 0.5f; // 0.1
+    private static final float DURABILITY_EFFECT_CHANCE = 0.1f;
 
     private ModTraits() {}
 
@@ -39,7 +39,7 @@ public final class ModTraits implements IPhasedInitializer {
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
         Trait malleable = TraitRegistry.register(new DurabilityTrait(path("malleable"), 3, TextFormatting.WHITE,
                 DURABILITY_EFFECT_CHANCE, -1));
-        Trait brittle = TraitRegistry.register(new DurabilityTrait(path("brittle"), 3, TextFormatting.DARK_GRAY,
+        Trait brittle = TraitRegistry.register(new DurabilityTrait(path("brittle"), 3, TextFormatting.GRAY,
                 DURABILITY_EFFECT_CHANCE, 1));
 
         Trait.setCancelsWith(malleable, brittle);

@@ -57,7 +57,7 @@ public class Trait {
             final int diff = level - otherLevel;
 
             int newLevel;
-            if (level < 0)
+            if (diff < 0)
                 newLevel = MathHelper.clamp(diff, -other.maxLevel, 0);
             else
                 newLevel = MathHelper.clamp(diff, 0, this.maxLevel);
@@ -71,18 +71,18 @@ public class Trait {
         return cancelsWith.contains(other);
     }
 
-    public String getTranslatedName(TraitInstance instance) {
-        String level = SilentGear.i18n.translate("enchantment.level." + instance.level);
-        return SilentGear.i18n.translate("trait", name.toString(), level);
+    public String getTranslatedName(int level) {
+        String translatedName = SilentGear.i18n.translate("trait." + name);
+        String levelString = SilentGear.i18n.translate("enchantment.level." + level);
+        return SilentGear.i18n.translate("trait", "displayFormat", translatedName, levelString);
     }
 
     @Override
     public String toString() {
         return "Trait{" +
-                "maxLevel=" + maxLevel +
-                ", name=" + name +
+                "name=" + name +
+                ", maxLevel=" + maxLevel +
                 ", nameColor=" + nameColor +
-                ", cancelsWith=" + cancelsWith +
                 '}';
     }
 
@@ -96,8 +96,9 @@ public class Trait {
     //region Handlers
 
     protected boolean shouldActivate(int level, ItemStack gear) {
-        SilentGear.log.debug("shouldActivate '{}': {}", name, activationChance);
-        return MathUtils.tryPercentage(activationChance);
+        final float chance = activationChance * level;
+        SilentGear.log.debug("shouldActivate '{}': {}", name, chance);
+        return MathUtils.tryPercentage(chance);
     }
 
     public float onDurabilityDamage(@Nullable EntityPlayer player, int level, ItemStack gear, int damageTaken) {

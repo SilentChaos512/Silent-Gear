@@ -22,6 +22,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
 import java.util.*;
@@ -73,6 +74,9 @@ public class GearClientHelper {
             for (ItemPartData data : constructionParts) {
                 data.getPart().addInformation(data, stack, world, tooltip, flag.isAdvanced());
             }
+
+            TraitHelper.getTraits(constructionParts).forEach((trait, level) ->
+                    tooltip.add(trait.getNameColor() + trait.getTranslatedName(level)));
 
             float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
             TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;

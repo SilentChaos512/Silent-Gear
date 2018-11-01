@@ -23,12 +23,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.MathHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -57,20 +59,18 @@ public final class TraitHelper {
         return value;
     }
 
-    public static Map<Trait, Integer> getTraits(Collection<ItemPartData> parts) {
+    public static Map<Trait, Integer> getTraits(PartDataList parts) {
         if (parts.isEmpty())
             return ImmutableMap.of();
 
         Map<Trait, Integer> result = new LinkedHashMap<>();
+        Map<Trait, Integer> countPartsWithTrait = new HashMap<>();
 //        Map<ItemPart, Integer> uniquePartCounts = new HashMap<>();
 
         for (ItemPartData part : parts) {
             part.getTraits().forEach(((trait, level) -> {
-                if (result.containsKey(trait)) {
-                    result.put(trait, result.get(trait) + level);
-                } else {
-                    result.put(trait, level);
-                }
+                result.merge(trait, level, (i1, i2) -> i1 + i2);
+                countPartsWithTrait.merge(trait, 1, (i1, i2) -> i1 + i2);
             }));
 
 //            final ItemPart p = part.getPart();
@@ -85,8 +85,11 @@ public final class TraitHelper {
         Trait[] keys = result.keySet().toArray(new Trait[0]);
 
         for (Trait trait : keys) {
-            int avg = Math.round((float) result.get(trait) / parts.size());
-            result.put(trait, avg);
+            final int totalParts = parts.getMains().size();
+            final int partsWithTrait = countPartsWithTrait.get(trait);
+            final float divisor = Math.max(1, (totalParts + partsWithTrait) / 2f); // TODO: Probably needs work...
+            final int value = Math.round(result.get(trait) / divisor);
+            result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
         }
 
         cancelTraits(result, keys);
