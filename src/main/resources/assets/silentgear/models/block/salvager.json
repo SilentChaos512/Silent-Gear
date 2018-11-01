@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "silentgear:blocks/todo",
+        "down": "silentgear:blocks/todo",
+        "up": "silentgear:blocks/todo",
+        "north": "silentgear:blocks/todo",
+        "east": "silentgear:blocks/todo",
+        "south": "silentgear:blocks/todo",
+        "west": "silentgear:blocks/todo"
+    }
+}
