@@ -30,13 +30,16 @@ import net.silentchaos512.gear.block.analyzer.TilePartAnalyzer;
 import net.silentchaos512.gear.block.craftingstation.ContainerCraftingStation;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
+import net.silentchaos512.gear.block.salvager.ContainerSalvager;
+import net.silentchaos512.gear.block.salvager.GuiSalvager;
+import net.silentchaos512.gear.block.salvager.TileSalvager;
 
 public class GuiHandlerSilentGear implements IGuiHandler {
-
     public enum GuiType {
         INVALID,
         CRAFTING_STATION,
-        PART_ANALYZER;
+        PART_ANALYZER,
+        SALVAGER;
 
         public final int id = ordinal() - 1;
 
@@ -69,6 +72,13 @@ public class GuiHandlerSilentGear implements IGuiHandler {
                     TilePartAnalyzer tileAnalyzer = (TilePartAnalyzer) tile;
                     return new ContainerPartAnalyzer(player.inventory, tileAnalyzer);
                 }
+                return null;
+            case SALVAGER:
+                if (tile instanceof TileSalvager) {
+                    TileSalvager tileSalvager = (TileSalvager) tile;
+                    return new ContainerSalvager(player.inventory, tileSalvager);
+                }
+                return null;
             default:
                 SilentGear.log.warn("No GUI with ID {}!", ID);
                 return null;
@@ -96,6 +106,12 @@ public class GuiHandlerSilentGear implements IGuiHandler {
                 if (tile instanceof TilePartAnalyzer) {
                     TilePartAnalyzer tileAnalyzer = (TilePartAnalyzer) tile;
                     return new GuiPartAnalyzer(player.inventory, tileAnalyzer);
+                }
+                return null;
+            case SALVAGER:
+                if (tile instanceof TileSalvager) {
+                    TileSalvager tileSalvager = (TileSalvager) tile;
+                    return new GuiSalvager(player.inventory, tileSalvager);
                 }
             default:
                 SilentGear.log.warn("No GUI with ID {}!", ID);
