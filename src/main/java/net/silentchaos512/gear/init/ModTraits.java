@@ -18,20 +18,28 @@
 
 package net.silentchaos512.gear.init;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 import net.silentchaos512.gear.trait.DurabilityTrait;
+import net.silentchaos512.gear.trait.StatModifierTrait;
 import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
+
+import javax.annotation.Nullable;
 
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
 
     private static final float DURABILITY_EFFECT_CHANCE = 0.1f;
+    private static final float SOFT_MULTI = 0.2f;
 
     private ModTraits() {}
 
@@ -41,8 +49,18 @@ public final class ModTraits implements IPhasedInitializer {
                 DURABILITY_EFFECT_CHANCE, -1));
         Trait brittle = TraitRegistry.register(new DurabilityTrait(path("brittle"), 3, TextFormatting.GRAY,
                 DURABILITY_EFFECT_CHANCE, 1));
-
         Trait.setCancelsWith(malleable, brittle);
+
+        TraitRegistry.register(new StatModifierTrait(path("soft"), 3, TextFormatting.YELLOW) {
+            @Override
+            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value) {
+                if (stat == CommonItemStats.HARVEST_SPEED) {
+                    float damageRatio = (float) gear.getItemDamage() / (float) gear.getMaxDamage();
+                    return value - SOFT_MULTI * level * value * damageRatio;
+                }
+                return value;
+            }
+        });
     }
 
     private static ResourceLocation path(String name) {

@@ -86,7 +86,7 @@ public class CommandSilentGear extends CommandBase {
             ItemStack stack = player.getHeldItemMainhand();
             if (stack.getItem() instanceof ICoreItem) {
                 stack.setItemDamage(stack.getMaxDamage());
-                GearData.recalculateStats(stack);
+                GearData.recalculateStats(player, stack);
                 tell(sender, "(╯°□°）╯︵ ┻━┻", false);
             } else tell(sender, "invalidItemType", true, stack.getDisplayName());
         } else if (subCommand == SubCommand.REPAIR_ITEM_IN_HAND && sender instanceof EntityPlayer) {
@@ -94,7 +94,7 @@ public class CommandSilentGear extends CommandBase {
             ItemStack stack = player.getHeldItemMainhand();
             if (stack.getItem() instanceof ICoreItem) {
                 stack.setItemDamage(0);
-                GearData.recalculateStats(stack);
+                GearData.recalculateStats(player, stack);
                 tell(sender, "┬─┬ノ( º _ ºノ)", false);
             } else tell(sender, "invalidItemType", true, stack.getDisplayName());
         } else if (subCommand == SubCommand.LOCK_STATS && sender instanceof EntityPlayer) {

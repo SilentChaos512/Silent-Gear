@@ -22,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.Trait;
 
 import javax.annotation.Nullable;
@@ -54,10 +53,10 @@ public class DurabilityTrait extends Trait {
     public float onDurabilityDamage(@Nullable EntityPlayer player, int level, ItemStack gear, int damageTaken) {
         if (shouldActivate(level, gear)) {
             int ret = Math.round(damageTaken + effectScale);
-            SilentGear.log.debug("DurabilityTrait '{}': {} -> {}", getName(), damageTaken, ret);
+//            SilentGear.log.debug("DurabilityTrait '{}': {} -> {}", getName(), damageTaken, ret);
             return ret;
         }
-        SilentGear.log.debug("DurabilityTrait '{}': no proc", getName());
+//        SilentGear.log.debug("DurabilityTrait '{}': no proc", getName());
         return super.onDurabilityDamage(player, level, gear, damageTaken);
     }
 }

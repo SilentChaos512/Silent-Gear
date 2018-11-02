@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.Multimap;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -57,7 +58,7 @@ public final class GearData {
     /**
      * Recalculate gear stats and setup NBT. This should be called ANY TIME an item is modified!
      */
-    public static void recalculateStats(ItemStack stack) {
+    public static void recalculateStats(EntityPlayer player, ItemStack stack) {
         getUUID(stack);
         ICoreItem item = (ICoreItem) stack.getItem();
         PartDataList parts = getConstructionParts(stack);
@@ -85,7 +86,9 @@ public final class GearData {
 
             // Calculate and write stats
             for (ItemStat stat : stats.keySet()) {
-                float value = stat.compute(0f, stats.get(stat));
+                final float initialValue = stat.compute(0f, stats.get(stat));
+                final float value = TraitHelper.activateTraits(stack, initialValue, (trait, level, val) ->
+                        trait.onGetStat(null, stat, level, stack, val));
                 // SilentGear.log.debug(stat, value);
                 propertiesCompound.setFloat(stat.getName().getPath(), value);
             }
@@ -104,6 +107,9 @@ public final class GearData {
         // Update model keys even if we didn't update stats
         createAndSaveModelKeys(stack, item, parts);
     }
+
+    @Deprecated
+    public static void recalculateStats(ItemStack stack) {recalculateStats(null, stack);}
 
     private static void createAndSaveModelKeys(ItemStack stack, ICoreItem item, PartDataList parts) {
         // Save model keys for performance
@@ -190,7 +196,15 @@ public final class GearData {
     public static float getStat(ItemStack stack, ItemStat stat) {
         NBTTagCompound tags = getData(stack, NBT_ROOT_PROPERTIES);
         String key = stat.getName().getPath();
-        return tags.hasKey(key) ? tags.getFloat(key) : stat.getDefaultValue();
+
+        if (tags.hasKey(key)) {
+            final float value = tags.getFloat(key);
+            return value;
+//            return TraitHelper.activateTraits(stack, value, (trait, level) ->
+//                    trait.onGetStat(null, stat, level, stack, value));
+        } else {
+            return stat.getDefaultValue();
+        }
     }
 
     public static int getStatInt(ItemStack stack, ItemStat stat) {

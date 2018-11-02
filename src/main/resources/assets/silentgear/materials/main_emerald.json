@@ -17,6 +17,9 @@
         {"name": "rarity",          "value":   35},
         {"name": "chargeability",   "value":  0.9}
     ],
+    "traits": [
+        {"name": "silentgear:brittle", "level": 1}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:emerald",

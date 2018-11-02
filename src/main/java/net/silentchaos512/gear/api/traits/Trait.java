@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
@@ -97,12 +98,15 @@ public class Trait {
 
     protected boolean shouldActivate(int level, ItemStack gear) {
         final float chance = activationChance * level;
-        SilentGear.log.debug("shouldActivate '{}': {}", name, chance);
         return MathUtils.tryPercentage(chance);
     }
 
     public float onDurabilityDamage(@Nullable EntityPlayer player, int level, ItemStack gear, int damageTaken) {
         return damageTaken;
+    }
+
+    public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value) {
+        return value;
     }
 
     //endregion

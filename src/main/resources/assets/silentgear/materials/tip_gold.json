@@ -12,6 +12,10 @@
         {"name": "ranged_speed",    "value": 0.2, "op": "ADD"},
         {"name": "rarity",          "value":  12}
     ],
+    "traits": [
+        {"name": "silentgear:malleable", "level": 1},
+        {"name": "silentgear:soft", "level": 2}
+    ],
     "crafting_items": {
         "normal": {
             "item": "silentgear:tip_upgrade_gold"

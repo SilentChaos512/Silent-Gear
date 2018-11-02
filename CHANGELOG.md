@@ -6,13 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Two configs to control how strict AOE tools are when matching blocks.
-- Traits for gear materials (WIP). Traits are added through material JSONs. Currently I recommend limiting traits to main parts because the math is a little wonky (still working out some formulas). But any part type should accept traits.
+- Traits for gear materials (WIP). Traits are added in the material JSONs. Some traits will be opposites and will cancel out the other, so material mixing can be used to your advantage. This feature needs a lot of work, expect anything to change.
+    - Brittle - Gear will sometimes lose an _extra_ point of durability, chance increases with level. Cancels with Malleable.
+    - Malleable - Gear will sometimes lose one _less_ point of durability, chance increases with level. Cancels with Brittle.
+    - Soft - Tools will lose some harvest speed as they are damaged. Repairing will restore lost speed.
 - Salvager, breaks down gear (vanilla and SGear) into their components. The more damaged the item, the greater the chance of losing parts (configurable, default 0% - 50%). Set min and max rates to 0 to disable part loss.
 - GUI that lists all available parts and can sort them (by name, type, and all stats). Incomplete, but usable. Currently accessed through the crafting station (may change).
+- Flax bowstring
 - Leather scrap item, no particular use right now
 ### Changed
 - Optimize ore dictionary lookup for materials and tooltip creation (should improve load times slightly, related to [Silent's Gems #341](https://github.com/SilentChaos512/SilentGems/issues/341))
 - AOE tools will now break blocks of lower or equal harvest levels, instead of just equal (except in STRICT mode). Non-ores can be broken when targeting ores.
+- Part analyzer operates significantly faster now.
 ### Fixed
 - The "anvil only" config for upgrades actually works now
 

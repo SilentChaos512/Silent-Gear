@@ -24,10 +24,10 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.MathHelper;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 
 import java.util.HashMap;
@@ -38,7 +38,21 @@ import java.util.function.BiFunction;
 public final class TraitHelper {
     private TraitHelper() {throw new IllegalAccessError("Utility class");}
 
-    public static float activateTraits(ItemStack gear, final int inputValue, BiFunction<Trait, Integer, Float> action) {
+    /**
+     * An easy way to activate an item's traits from anywhere. <strong>Use with care!</strong>
+     * Calling this frequently (like every render tick) causes FPS to tank.
+     * <p>
+     * This implementation pulls the item's traits straight from NBT to minimize object creation.
+     * The {@link BiFunction} is applied to every trait.
+     *
+     * @param gear       The {@link net.silentchaos512.gear.api.item.ICoreItem} affected
+     * @param inputValue The base value to have the traits act on.
+     * @param action     The specific action to apply to each trait. This is {@code (trait, level,
+     *                   value) -> modifiedInputValue}, where 'value' is the currently calculated
+     *                   result.
+     * @return The {@code inputValue} modified by traits.
+     */
+    public static float activateTraits(ItemStack gear, final float inputValue, TraitFunction action) {
         NBTTagList tagList = GearData.getPropertiesData(gear).getTagList("Traits", 10);
         float value = inputValue;
 
@@ -50,12 +64,11 @@ public final class TraitHelper {
 
                 if (trait != null) {
                     int level = tagCompound.getByte("Level");
-                    value = action.apply(trait, level);
+                    value = action.apply(trait, level, value);
                 }
             }
         }
 
-        SilentGear.log.debug("activateTraits: {} -> {}", inputValue, value);
         return value;
     }
 

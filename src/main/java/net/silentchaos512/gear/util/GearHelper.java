@@ -37,6 +37,7 @@ public final class GearHelper {
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
+    private static final int DAMAGE_FACTOR_LEVELS = 10;
 
     private GearHelper() {}
 
@@ -117,14 +118,21 @@ public final class GearHelper {
             return;
         final boolean canBreakPermanently = Config.gearBreaksPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
 
-        if (!canBreakPermanently)
-            amount = Math.min(stack.getMaxDamage() - stack.getItemDamage(), amount);
-
         EntityPlayerMP player = entityLiving instanceof EntityPlayerMP ? (EntityPlayerMP) entityLiving : null;
         final int preTraitAmount = amount;
         amount = (int) TraitHelper.activateTraits(stack, preTraitAmount,
-                (trait, level) -> trait.onDurabilityDamage(player, level, stack, preTraitAmount));
+                (trait, level, val) -> trait.onDurabilityDamage(player, level, stack, (int) val));
+
+        final int maxDamage = stack.getMaxDamage();
+        int preDamageFactor = getDamageFactor(stack, maxDamage);
+        if (!canBreakPermanently)
+            amount = Math.min(maxDamage - stack.getItemDamage(), amount);
         boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.random, player);
+
+        // Recalculate stats occasionally
+        if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
+            GearData.recalculateStats(stack);
+        }
 
         if (isBroken(stack)) {
             // The item "broke" (can still be repaired)
@@ -136,6 +144,11 @@ public final class GearHelper {
             entityLiving.renderBrokenItemStack(stack);
             stack.shrink(1);
         }
+    }
+
+    private static int getDamageFactor(ItemStack stack, int maxDamage) {
+        if (maxDamage == 0) return 1;
+        return stack.getItemDamage() / (maxDamage / DAMAGE_FACTOR_LEVELS);
     }
 
     // Used by setDamage in gear items to prevent other mods from breaking them
