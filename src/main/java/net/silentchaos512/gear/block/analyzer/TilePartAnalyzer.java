@@ -38,7 +38,7 @@ import net.silentchaos512.lib.util.TimeHelper;
 import java.util.stream.IntStream;
 
 public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable {
-    static final int BASE_ANALYZE_TIME = TimeHelper.ticksFromSeconds(30);
+    static final int BASE_ANALYZE_TIME = TimeHelper.ticksFromSeconds(5);
 
     static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
