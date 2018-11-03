@@ -38,6 +38,9 @@ import javax.annotation.Nullable;
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
 
+    public static Trait synergyBoost;
+    public static final float SYNERGY_BOOST_MULTI = 0.1f;
+
     private static final float DURABILITY_EFFECT_CHANCE = 0.1f;
     private static final float SOFT_MULTI = 0.2f;
 
@@ -50,6 +53,8 @@ public final class ModTraits implements IPhasedInitializer {
         Trait brittle = TraitRegistry.register(new DurabilityTrait(path("brittle"), 3, TextFormatting.GRAY,
                 DURABILITY_EFFECT_CHANCE, 1));
         Trait.setCancelsWith(malleable, brittle);
+
+        synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"), 3, TextFormatting.DARK_GREEN, 0));
 
         TraitRegistry.register(new StatModifierTrait(path("soft"), 3, TextFormatting.YELLOW) {
             @Override

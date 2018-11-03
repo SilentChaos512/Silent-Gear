@@ -72,6 +72,33 @@ public final class TraitHelper {
         return value;
     }
 
+    /**
+     * Gets the level of the trait on the gear, or zero if it does not have the trait. Similar to
+     * {@link #activateTraits(ItemStack, float, TraitFunction)}, this pulls the traits straight from
+     * NBT to minimize object creation.
+     *
+     * @param gear  The {@link net.silentchaos512.gear.api.item.ICoreItem}
+     * @param trait The trait to look for
+     * @return The level of the trait on the gear, or zero if it does not have the trait
+     */
+    public static int getTraitLevel(ItemStack gear, Trait trait) {
+        NBTTagList tagList = GearData.getPropertiesData(gear).getTagList("Traits", 10);
+
+        for (NBTBase nbt : tagList) {
+            if (nbt instanceof NBTTagCompound) {
+                NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+                String regName = tagCompound.getString("Name");
+                Trait traitOnGear = TraitRegistry.get(regName);
+
+                if (traitOnGear == trait) {
+                    return tagCompound.getByte("Level");
+                }
+            }
+        }
+
+        return 0;
+    }
+
     public static Map<Trait, Integer> getTraits(PartDataList parts) {
         if (parts.isEmpty())
             return ImmutableMap.of();

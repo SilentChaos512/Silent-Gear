@@ -97,8 +97,8 @@ public class Trait {
     //region Handlers
 
     protected boolean shouldActivate(int level, ItemStack gear) {
-        final float chance = activationChance * level;
-        return MathUtils.tryPercentage(chance);
+        if (activationChance == 0) return false;
+        return MathUtils.tryPercentage(activationChance * level);
     }
 
     public float onDurabilityDamage(@Nullable EntityPlayer player, int level, ItemStack gear, int damageTaken) {

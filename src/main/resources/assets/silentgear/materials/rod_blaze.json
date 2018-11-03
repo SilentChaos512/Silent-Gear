@@ -12,6 +12,9 @@
         {"name": "ranged_speed",    "value": -0.1, "op": "MUL2"},
         {"name": "rarity",          "value":   30}
     ],
+    "traits": [
+        {"name": "silentgear:synergy_boost", "level": 2}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:blaze_rod"

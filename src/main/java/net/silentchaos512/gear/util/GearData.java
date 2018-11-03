@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.init.ModTraits;
 import net.silentchaos512.lib.util.PlayerHelper;
 import net.silentchaos512.lib.util.StackHelper;
 
@@ -163,8 +164,6 @@ public final class GearData {
     }
 
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<Trait, Integer> traits) {
-        // TODO: Synergy boosting traits?
-
         // First, we add a bonus for the number of unique main parts
         double synergy = 1.0 + 0.16 * Math.log(5 * uniqueParts.getMains().size() - 4);
         // Second, reduce synergy for difference in rarity and tier
@@ -186,10 +185,18 @@ public final class GearData {
                 synergy -= 0.16f * Math.abs(maxTier - tier);
             }
         }
-        if (synergy > 1)
+        if (synergy > 1) {
             synergy = Math.sqrt(synergy);
-        // if (synergy != 1)
-        // SilentGear.log.debug(uniqueParts.size(), synergy);
+
+            if (traits.containsKey(ModTraits.synergyBoost)) {
+                final double oldVal = synergy;
+                int level = traits.get(ModTraits.synergyBoost);
+                synergy += synergy * level * ModTraits.SYNERGY_BOOST_MULTI;
+                SilentGear.log.debug("synergy: {} -> {}", oldVal, synergy);
+            }
+        }
+
+
         return synergy;
     }
 
@@ -198,10 +205,7 @@ public final class GearData {
         String key = stat.getName().getPath();
 
         if (tags.hasKey(key)) {
-            final float value = tags.getFloat(key);
-            return value;
-//            return TraitHelper.activateTraits(stack, value, (trait, level) ->
-//                    trait.onGetStat(null, stat, level, stack, value));
+            return tags.getFloat(key);
         } else {
             return stat.getDefaultValue();
         }
