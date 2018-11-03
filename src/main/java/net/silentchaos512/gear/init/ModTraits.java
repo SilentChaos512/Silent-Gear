@@ -38,6 +38,7 @@ import javax.annotation.Nullable;
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
 
+    public static Trait speedBoostLight;
     public static Trait synergyBoost;
     public static final float SYNERGY_BOOST_MULTI = 0.1f;
 
@@ -54,6 +55,7 @@ public final class ModTraits implements IPhasedInitializer {
                 DURABILITY_EFFECT_CHANCE, 1));
         Trait.setCancelsWith(malleable, brittle);
 
+        speedBoostLight = TraitRegistry.register(new Trait(path("speed_boost_light"), 3, TextFormatting.GOLD, 0));
         synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"), 3, TextFormatting.DARK_GREEN, 0));
 
         TraitRegistry.register(new StatModifierTrait(path("soft"), 3, TextFormatting.YELLOW) {

@@ -18,7 +18,8 @@
         {"name": "chargeability",   "value":  0.8}
     ],
     "traits": [
-        {"name": "silentgear:brittle", "level": 2}
+        {"name": "silentgear:brittle", "level": 2},
+        {"name": "silentgear:speed_boost_light", "level": 3}
     ],
     "crafting_items": {
         "normal": {

@@ -19,15 +19,16 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolHeadModel;
 import net.silentchaos512.gear.client.models.ToolModel;
-import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.compat.jei.JeiPlugin;
+import net.silentchaos512.gear.event.GearEvents;
+import net.silentchaos512.gear.init.ModTraits;
+import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.client.gui.DebugRenderOverlay;
 import net.silentchaos512.lib.registry.SRegistry;
 
@@ -92,9 +93,9 @@ public class ClientProxy extends CommonProxy {
         @Override
         public List<String> getDebugText() {
             List<String> list = new ArrayList<>();
-            PartRegistry.getDebugLines(list);
-            list.add("GearClientHelper.modelCache=" + GearClientHelper.modelCache.size());
-            list.add("ColorHandlers.gearColorCache=" + ColorHandlers.gearColorCache.size());
+//            PartRegistry.getDebugLines(list);
+//            list.add("GearClientHelper.modelCache=" + GearClientHelper.modelCache.size());
+//            list.add("ColorHandlers.gearColorCache=" + ColorHandlers.gearColorCache.size());
 
             // Harvest level checks
             RayTraceResult rt = Minecraft.getMinecraft().objectMouseOver;
@@ -115,6 +116,16 @@ public class ClientProxy extends CommonProxy {
                         final boolean canHarvest = toolLevel >= blockLevel;
                         TextFormatting format = canHarvest ? TextFormatting.GREEN : TextFormatting.RED;
                         list.add(format + String.format("%s=%d (%d)", toolClass, blockLevel, toolLevel));
+
+                        final float destroySpeed = heldItem.getDestroySpeed(state);
+                        if (canHarvest) {
+                            int level = TraitHelper.getTraitLevel(heldItem, ModTraits.speedBoostLight);
+                            float light = GearEvents.getAreaLightBrightness(player.world, player.getPosition());
+                            final float newSpeed = destroySpeed + 3 * level * light;
+                            list.add(String.format("speed = %.1f", newSpeed));
+                        } else {
+                            list.add(String.format("speed = %.1f", destroySpeed));
+                        }
                     }
                 }
             }
@@ -134,7 +145,7 @@ public class ClientProxy extends CommonProxy {
 
         @Override
         public boolean isHidden() {
-            return true;
+            return !SilentGear.instance.isDevBuild();
         }
     }
 }

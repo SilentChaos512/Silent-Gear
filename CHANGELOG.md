@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Brittle - Gear will sometimes lose an _extra_ point of durability, chance increases with level. Cancels with Malleable.
     - Malleable - Gear will sometimes lose one _less_ point of durability, chance increases with level. Cancels with Brittle.
     - Soft - Tools will lose some harvest speed as they are damaged. Repairing will restore lost speed.
-    - Synergistic - Adds a bonus multiplier on synergy, if it is greater than 100% (mix those materials!)
+    - speed_boost_light (name TBD) - Tools gain a harvest speed bonus when in light. The brighter the light, the bigger the bonus.
+    - Synergistic (synergy_boost) - Adds a bonus multiplier on synergy, if it is greater than 100% (mix those materials!)
 - Salvager, breaks down gear (vanilla and SGear) into their components. The more damaged the item, the greater the chance of losing parts (configurable, default 0% - 50%). Set min and max rates to 0 to disable part loss.
 - GUI that lists all available parts and can sort them (by name, type, and all stats). Incomplete, but usable. Currently accessed through the crafting station (may change).
 - Flax bowstring
