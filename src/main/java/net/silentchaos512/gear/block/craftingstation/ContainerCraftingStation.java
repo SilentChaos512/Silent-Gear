@@ -128,6 +128,7 @@ public class ContainerCraftingStation extends Container {
                 tile.setInventorySlotContents(i + TileCraftingStation.CRAFTING_GRID_START, stack);
             }
         }
+        tile.markDirty();
     }
 
     @Override
@@ -149,7 +150,7 @@ public class ContainerCraftingStation extends Container {
             final int playerStart = tile.getSizeInventory();
             final int hotbarStart = playerStart + 27;
 
-            if (index == outputSlot.getSlotIndex()) { // Output slot
+            if (slot == outputSlot) { // Output slot
                 itemstack1.getItem().onCreated(itemstack1, this.world, playerIn);
 
                 if (!this.mergeItemStack(itemstack1, playerStart, playerStart + 36, true)) { // To player and hotbar
@@ -158,11 +159,17 @@ public class ContainerCraftingStation extends Container {
 
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index >= playerStart && index < hotbarStart) { // Player
-                if (!this.mergeItemStack(itemstack1, hotbarStart, hotbarStart + 9, false)) { // To hotbar
+                // To parts grid, side inventory, or hotbar?
+                if (!this.mergeItemStack(itemstack1, TileCraftingStation.GEAR_PARTS_START, TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE, false)
+                        && !this.mergeItemStack(itemstack1, TileCraftingStation.SIDE_INVENTORY_START, TileCraftingStation.SIDE_INVENTORY_START + TileCraftingStation.SIDE_INVENTORY_SIZE, false)
+                        && !this.mergeItemStack(itemstack1, hotbarStart, hotbarStart + 9, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= hotbarStart && index < hotbarStart + 9) { // Hotbar
-                if (!this.mergeItemStack(itemstack1, playerStart, playerStart + 27, false)) { // To player
+                // To parts grid, side inventory, or player?
+                if (!this.mergeItemStack(itemstack1, TileCraftingStation.GEAR_PARTS_START, TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE, false)
+                        && !this.mergeItemStack(itemstack1, TileCraftingStation.SIDE_INVENTORY_START, TileCraftingStation.SIDE_INVENTORY_START + TileCraftingStation.SIDE_INVENTORY_SIZE, false)
+                        && !this.mergeItemStack(itemstack1, playerStart, playerStart + 27, false)) { // To player
                     return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, playerStart, playerStart + 36, false)) { // To player and hotbar

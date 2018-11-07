@@ -129,7 +129,6 @@ public class GuiItemParts extends GuiScreen {
             PartButton partButton = (PartButton) button;
             selectedPart = partButton.part;
             selectedPartInfo = getPartInfo(selectedPart);
-            SilentGear.log.debug("Select part: {}", partButton.part);
         } else if (button instanceof GuiDropDownElement) {
             selectedPart = null;
             if (selectedPartInfo != null) selectedPartInfo.clear();

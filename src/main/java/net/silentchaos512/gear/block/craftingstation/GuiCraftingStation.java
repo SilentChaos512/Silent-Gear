@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.craftingstation;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -8,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.client.gui.GuiItemParts;
@@ -15,6 +17,7 @@ import net.silentchaos512.gear.client.util.TooltipFlagTC;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
+import net.silentchaos512.lib.gui.TexturedButton;
 import net.silentchaos512.lib.util.Color;
 
 import java.io.IOException;
@@ -26,7 +29,7 @@ public class GuiCraftingStation extends GuiContainer {
     private final TileCraftingStation tile;
     private final ContainerCraftingStation container;
 
-    private GuiButton buttonShowAllParts;
+    private TexturedButton buttonShowAllParts;
 
     public GuiCraftingStation(TileCraftingStation tile, ContainerCraftingStation inventorySlotsIn) {
         super(inventorySlotsIn);
@@ -41,7 +44,8 @@ public class GuiCraftingStation extends GuiContainer {
     public void initGui() {
         super.initGui();
 
-        buttonShowAllParts = new GuiButton(100, 0, 0, "Show Parts GUI (WIP)");
+        buttonShowAllParts = new TexturedButton(TEXTURE, 100, guiLeft + 149, guiTop + 62, 236, 166, 20, 18,
+                ImmutableList.of("Show Available Parts", TextFormatting.GRAY + "List can be sorted by stats"));
         buttonList.add(buttonShowAllParts);
     }
 
@@ -59,6 +63,10 @@ public class GuiCraftingStation extends GuiContainer {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
+
+        if (buttonShowAllParts.isMouseOver()) {
+            buttonShowAllParts.drawHover(mouseX, mouseY);
+        }
     }
 
     private TooltipFlagTC getTooltipFlag(ItemStack stack) {
@@ -78,9 +86,14 @@ public class GuiCraftingStation extends GuiContainer {
 //            itemX += 20;
 //        }
 
-        this.fontRenderer.drawString(SilentGear.i18n.translatedName(ModBlocks.craftingStation), 6, 6, 0x404040);
-        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "storage"), -55, 19, 0x404040);
-        this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 0x404040);
+        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "crafting"),
+                8, 6, 0x404040);
+        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "parts"),
+                80, 6, 0x404040); // TODO: Change text color when able to use?
+        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "storage"),
+                -55, 19, 0x404040);
+        this.fontRenderer.drawString(I18n.format("container.inventory"),
+                8, this.ySize - 96 + 2, 0x404040);
 
         ItemStack craftResult = this.container.craftResult.getStackInSlot(0);
         drawSlimeFace(craftResult);

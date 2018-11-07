@@ -71,6 +71,12 @@ public class TileCraftingStation extends TileInventorySL {
         handleVersionUpdates((int) tags.getByte(NBT_VERSION));
     }
 
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tags) {
+        tags.setByte(NBT_VERSION, (byte) CURRENT_VERSION);
+        return super.writeToNBT(tags);
+    }
+
     private void handleVersionUpdates(int previousVersion) {
         if (previousVersion != CURRENT_VERSION) {
             SilentGear.log.info("Crafting Station at {} is updating from version '{}' to '{}'. This should not result in item loss.",
@@ -88,11 +94,5 @@ public class TileCraftingStation extends TileInventorySL {
                 }
             }
         }
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tags) {
-        tags.setByte(NBT_VERSION, (byte) CURRENT_VERSION);
-        return super.writeToNBT(tags);
     }
 }
