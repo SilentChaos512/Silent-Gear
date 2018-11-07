@@ -76,7 +76,7 @@ public class GuiCraftingStation extends GuiContainer {
 //            itemX += 20;
 //        }
 
-        this.fontRenderer.drawString(SilentGear.i18n.translatedName(ModBlocks.craftingStation), 28, 6, 0x404040);
+        this.fontRenderer.drawString(SilentGear.i18n.translatedName(ModBlocks.craftingStation), 6, 6, 0x404040);
         this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "storage"), -55, 19, 0x404040);
         this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 0x404040);
 
@@ -122,7 +122,7 @@ public class GuiCraftingStation extends GuiContainer {
         this.drawTexturedModalRect(xPos, yPos, 0, 0, this.xSize, this.ySize);
 
         // Internal/external inventory slots
-        final int rowCount = this.tile.getSizeInventory() / 3;
+        final int rowCount = TileCraftingStation.SIDE_INVENTORY_SIZE / 3;
         final int rowWidth = 62;
         final int totalHeight = 44 + 18 * (rowCount - 2);
         int x = xPos - 61;
