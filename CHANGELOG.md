@@ -4,6 +4,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+Please remember the traits system is still WIP. Anything is subject to change or balancing.
+### Added
+- More traits!
+    - Bulky - Item loses attack speed. This is intended for a new upgrade part I have planned, using on main parts is not recommended (just change the stats).
+    - Jagged - Item gains attack (melee) damage as the item loses durability.
+### Changed
+- Raised max level on most traits to four (some are five)
+- Other balancing/tweaking of traits
+
+## [0.3.0] - 2018-11-02
 ### Added
 - Two configs to control how strict AOE tools are when matching blocks.
 - Traits for gear materials (WIP). Traits are added in the material JSONs. Some traits will be opposites and will cancel out the other, so material mixing can be used to your advantage. The math for calculating levels is also a bit weird right now, but works well for main parts at least. This feature needs a lot of work, expect anything to change.

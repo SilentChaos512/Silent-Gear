@@ -86,10 +86,11 @@ public final class GearData {
             Multimap<ItemStat, StatInstance> stats = getStatModifiers(item, parts, synergy);
 
             // Calculate and write stats
+            final float damageRatio = (float) stack.getItemDamage() / (float) stack.getMaxDamage();
             for (ItemStat stat : stats.keySet()) {
                 final float initialValue = stat.compute(0f, stats.get(stat));
                 final float value = TraitHelper.activateTraits(stack, initialValue, (trait, level, val) ->
-                        trait.onGetStat(null, stat, level, stack, val));
+                        trait.onGetStat(null, stat, level, stack, val, damageRatio));
                 // SilentGear.log.debug(stat, value);
                 propertiesCompound.setFloat(stat.getName().getPath(), value);
             }
@@ -192,7 +193,7 @@ public final class GearData {
                 final double oldVal = synergy;
                 int level = traits.get(ModTraits.synergyBoost);
                 synergy += synergy * level * ModTraits.SYNERGY_BOOST_MULTI;
-                SilentGear.log.debug("synergy: {} -> {}", oldVal, synergy);
+//                SilentGear.log.debug("synergy: {} -> {}", oldVal, synergy);
             }
         }
 

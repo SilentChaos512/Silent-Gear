@@ -42,29 +42,53 @@ public final class ModTraits implements IPhasedInitializer {
     public static Trait synergyBoost;
     public static final float SYNERGY_BOOST_MULTI = 0.1f;
 
+    private static final int COMMON_MAX_LEVEL = 4;
     private static final float DURABILITY_EFFECT_CHANCE = 0.1f;
-    private static final float SOFT_MULTI = 0.2f;
+    private static final float JAGGED_MULTI = (float) 1 / 6;
+    private static final float SOFT_MULTI = 0.15f;
 
     private ModTraits() {}
 
     @Override
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
-        Trait malleable = TraitRegistry.register(new DurabilityTrait(path("malleable"), 3, TextFormatting.WHITE,
+        Trait malleable = TraitRegistry.register(new DurabilityTrait(path("malleable"),
+                COMMON_MAX_LEVEL + 1, TextFormatting.WHITE,
                 DURABILITY_EFFECT_CHANCE, -1));
-        Trait brittle = TraitRegistry.register(new DurabilityTrait(path("brittle"), 3, TextFormatting.GRAY,
+        Trait brittle = TraitRegistry.register(new DurabilityTrait(path("brittle"),
+                COMMON_MAX_LEVEL + 1, TextFormatting.GRAY,
                 DURABILITY_EFFECT_CHANCE, 1));
         Trait.setCancelsWith(malleable, brittle);
 
-        speedBoostLight = TraitRegistry.register(new Trait(path("speed_boost_light"), 3, TextFormatting.GOLD, 0));
-        synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"), 3, TextFormatting.DARK_GREEN, 0));
+        speedBoostLight = TraitRegistry.register(new Trait(path("speed_boost_light"),
+                COMMON_MAX_LEVEL, TextFormatting.GOLD, 0));
+        synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"),
+                COMMON_MAX_LEVEL, TextFormatting.DARK_GREEN, 0));
 
-        TraitRegistry.register(new StatModifierTrait(path("soft"), 3, TextFormatting.YELLOW) {
+        TraitRegistry.register(new StatModifierTrait(path("bulky"), COMMON_MAX_LEVEL, TextFormatting.BOLD) {
             @Override
-            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value) {
-                if (stat == CommonItemStats.HARVEST_SPEED) {
-                    float damageRatio = (float) gear.getItemDamage() / (float) gear.getMaxDamage();
-                    return value - SOFT_MULTI * level * value * damageRatio;
+            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
+                if (stat == CommonItemStats.ATTACK_SPEED) {
+                    // TODO: If part durability ever gets implemented, reduce speed lost as part is damaged.
+                    // This trait will be used with a future upgrade item.
+                    float result = value - 0.075f * level;
+                    return result > -3.95f ? result : -3.9f;
                 }
+                return value;
+            }
+        });
+        TraitRegistry.register(new StatModifierTrait(path("jagged"), COMMON_MAX_LEVEL, TextFormatting.DARK_RED) {
+            @Override
+            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
+                if (stat == CommonItemStats.MELEE_DAMAGE)
+                    return value + JAGGED_MULTI * level * value * damageRatio;
+                return value;
+            }
+        });
+        TraitRegistry.register(new StatModifierTrait(path("soft"), COMMON_MAX_LEVEL, TextFormatting.YELLOW) {
+            @Override
+            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
+                if (stat == CommonItemStats.HARVEST_SPEED)
+                    return value - SOFT_MULTI * level * value * damageRatio;
                 return value;
             }
         });

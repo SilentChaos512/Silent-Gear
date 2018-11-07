@@ -105,7 +105,7 @@ public class Trait {
         return damageTaken;
     }
 
-    public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value) {
+    public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
         return value;
     }
 

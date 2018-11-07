@@ -33,5 +33,5 @@ public abstract class StatModifierTrait extends Trait {
     }
 
     @Override
-    public abstract float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value);
+    public abstract float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio);
 }

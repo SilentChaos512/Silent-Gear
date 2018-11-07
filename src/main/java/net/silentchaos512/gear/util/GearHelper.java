@@ -10,11 +10,13 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -132,6 +134,10 @@ public final class GearHelper {
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
             GearData.recalculateStats(stack);
+            if (player != null) {
+                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK,
+                        SoundCategory.PLAYERS, 0.5f, 2.0f);
+            }
         }
 
         if (isBroken(stack)) {
