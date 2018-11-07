@@ -22,6 +22,7 @@ public class TileCraftingStation extends TileInventorySL {
     public static final int GEAR_PARTS_SIZE = 3 * 2;
     public static final int SIDE_INVENTORY_SIZE = 3 * 6;
 
+    // Slot order by index = craft grid, parts grid, side inventory, player + hotbar, output slot
     public static final int CRAFTING_GRID_START = 0;
     public static final int GEAR_PARTS_START = CRAFTING_GRID_START + CRAFTING_GRID_SIZE;
     public static final int SIDE_INVENTORY_START = GEAR_PARTS_START + GEAR_PARTS_SIZE;
@@ -79,7 +80,7 @@ public class TileCraftingStation extends TileInventorySL {
         if (previousVersion == 0) {
             // Original without crafting grid retention or part slots
             // Move side inventory to correct location to prevent item loss
-            for (int i = 0; i < 18; ++i) { // Original side inventory size is 18 (3x6)
+            for (int i = 18; i >= 0; --i) { // Original side inventory size is 18 (3x6)
                 final ItemStack stack = getStackInSlot(i);
                 if (!stack.isEmpty()) {
                     setInventorySlotContents(i + SIDE_INVENTORY_START, stack);

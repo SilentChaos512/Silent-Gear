@@ -18,18 +18,18 @@
 
 package net.silentchaos512.gear.inventory;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 import net.silentchaos512.gear.api.parts.ItemPart;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 
 import javax.annotation.Nonnull;
 
-public class SlotItemPart extends SlotItemHandler {
-    public SlotItemPart(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-        super(itemHandler, index, xPosition, yPosition);
+public class SlotItemPart extends Slot {
+    public SlotItemPart(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+        super(inventoryIn, index, xPosition, yPosition);
     }
 
     @Override

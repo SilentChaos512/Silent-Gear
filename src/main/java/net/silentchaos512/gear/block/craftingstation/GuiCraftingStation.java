@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -14,6 +15,7 @@ import net.silentchaos512.gear.client.util.TooltipFlagTC;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
+import net.silentchaos512.lib.util.Color;
 
 import java.io.IOException;
 import java.util.List;
@@ -82,6 +84,14 @@ public class GuiCraftingStation extends GuiContainer {
 
         ItemStack craftResult = this.container.craftResult.getStackInSlot(0);
         drawSlimeFace(craftResult);
+
+        // Debug
+        if (SilentGear.instance.isDevBuild()) {
+            Slot slot = getSlotUnderMouse();
+            if (slot != null) {
+                fontRenderer.drawString("slot=" + slot.getSlotIndex(), 130, 6, Color.VALUE_WHITE);
+            }
+        }
 
         if (!craftResult.isEmpty()) {
             // Draw crafting result tooltip

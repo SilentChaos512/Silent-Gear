@@ -1,21 +1,27 @@
 package net.silentchaos512.gear.block.craftingstation;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
+import net.silentchaos512.gear.inventory.SlotItemPart;
 
 public class ContainerCraftingStation extends Container {
     InventoryCrafting craftMatrix;
-
     InventoryCraftResult craftResult;
-    private final EntityPlayer player;
 
+    private Slot outputSlot;
+    private final EntityPlayer player;
     private final TileCraftingStation tile;
     private final World world;
+
     public ContainerCraftingStation(InventoryPlayer playerInventory, World worldIn, BlockPos posIn, TileCraftingStation tile) {
         this.player = playerInventory.player;
         this.tile = tile;
@@ -34,39 +40,59 @@ public class ContainerCraftingStation extends Container {
 //        setupInventorySlots(this.playerInventory, inventory);
 //    }
 
+    //region Slots
+
     private void setupInventorySlots(InventoryPlayer playerInv, IInventory extendedInv) {
         inventorySlots.clear();
         inventoryItemStacks.clear();
-        setupBasicSlots(playerInv);
-        setupExtendedSlots(extendedInv);
+
+        setupCraftingGrid();
+        setupPartSlots();
+        setupSideInventory();
+        setupPlayerSlots(playerInv);
+
+        // Output
+        outputSlot = this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix,
+                this.craftResult, tile.getSizeInventory(), 146, 35));
+
+        onCraftMatrixChanged(this.tile);
     }
 
-    private void setupBasicSlots(InventoryPlayer playerInventory) {
-        int slotIndex = 0;
-        this.addSlotToContainer(new SlotCrafting(playerInventory.player, this.craftMatrix, this.craftResult, slotIndex++, 146, 35));
-
-        // Crafting grid
+    private void setupCraftingGrid() {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
-                addSlotToContainer(new Slot(this.craftMatrix, slotIndex++, 8 + x * 18, 17 + y * 18));
+                final int index = x + y * 3;
+                addSlotToContainer(new Slot(this.craftMatrix, index, 8 + x * 18, 17 + y * 18));
             }
         }
+    }
 
+    private void setupPartSlots() {
+        for (int y = 0; y < 3; ++y) {
+            for (int x = 0; x < 2; ++x) {
+                // TODO: Need custom slot type?
+                final int index = TileCraftingStation.GEAR_PARTS_START + x + y * 2;
+                addSlotToContainer(new SlotItemPart(tile, index, 79 + x * 18, 17 + y * 18));
+            }
+        }
+    }
+
+    private void setupPlayerSlots(InventoryPlayer playerInventory) {
         // Player backpack
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 9; ++x) {
-                addSlotToContainer(new Slot(playerInventory, slotIndex++, 8 + x * 18, 84 + y * 18));
+                final int index = x + (y + 1) * 9;
+                addSlotToContainer(new Slot(playerInventory, index, 8 + x * 18, 84 + y * 18));
             }
         }
 
         // Player hotbar
         for (int x = 0; x < 9; ++x) {
-            addSlotToContainer(new Slot(playerInventory, slotIndex++, 8 + x * 18, 142));
+            addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, 142));
         }
     }
 
-    private void setupExtendedSlots(IInventory inventory) {
-        // Side inventory
+    private void setupSideInventory() {
         final int rowCount = (int) Math.ceil(TileCraftingStation.SIDE_INVENTORY_SIZE / 3.0);
         final int totalHeight = 44 + 18 * (rowCount - 2);
 
@@ -78,20 +104,18 @@ public class ContainerCraftingStation extends Container {
                 addSlotToContainer(new Slot(tile, index, xPos, yPos));
             }
         }
-
-        // Part slots
-        for (int y = 0; y < 3; ++y) {
-            for (int x = 0; x < 2; ++x) {
-                // TODO: Need custom slot type?
-                final int index = TileCraftingStation.GEAR_PARTS_START + x + y * 3;
-                addSlotToContainer(new Slot(tile, index, 79 + x * 18, 17 + y * 18));
-            }
-        }
     }
+
+    //endregion
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return tile.isUsableByPlayer(playerIn);
+    }
+
+    @Override
+    public Slot getSlot(int slotId) {
+        return slotId == outputSlot.getSlotIndex() ? outputSlot : super.getSlot(slotId);
     }
 
     @Override
@@ -125,7 +149,7 @@ public class ContainerCraftingStation extends Container {
             final int playerStart = tile.getSizeInventory();
             final int hotbarStart = playerStart + 27;
 
-            if (index == 0) { // Output slot
+            if (index == outputSlot.getSlotIndex()) { // Output slot
                 itemstack1.getItem().onCreated(itemstack1, this.world, playerIn);
 
                 if (!this.mergeItemStack(itemstack1, playerStart, playerStart + 36, true)) { // To player and hotbar
@@ -168,5 +192,23 @@ public class ContainerCraftingStation extends Container {
     @Override
     public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
         return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
+    }
+
+    @Override
+    protected void slotChangedCraftingGrid(World world, EntityPlayer player, InventoryCrafting craftMatrix, InventoryCraftResult craftResult) {
+        if (!world.isRemote) {
+            EntityPlayerMP entityplayermp = (EntityPlayerMP) player;
+            ItemStack itemstack = ItemStack.EMPTY;
+            IRecipe irecipe = CraftingManager.findMatchingRecipe(craftMatrix, world);
+
+            if (irecipe != null && (irecipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayermp.getRecipeBook().isUnlocked(irecipe))) {
+                craftResult.setRecipeUsed(irecipe);
+                itemstack = irecipe.getCraftingResult(craftMatrix);
+            }
+
+            final int index = outputSlot.getSlotIndex();
+            craftResult.setInventorySlotContents(index, itemstack);
+            entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, index, itemstack));
+        }
     }
 }
