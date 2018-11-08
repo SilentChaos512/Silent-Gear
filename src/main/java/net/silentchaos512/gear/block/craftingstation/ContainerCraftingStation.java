@@ -223,6 +223,7 @@ public class ContainerCraftingStation extends Container {
                 craftResult.setRecipeUsed(irecipe);
                 itemstack = irecipe.getCraftingResult(craftMatrix);
 
+                // TODO: That nesting...
                 // If output is a tool head, try using available parts to craft a complete tool
                 if (itemstack.getItem() instanceof ToolHead) {
                     String toolClass = ToolHead.getToolClass(itemstack);
@@ -233,6 +234,7 @@ public class ContainerCraftingStation extends Container {
                         NonNullList<ItemStack> partStackList = NonNullList.create();
                         partStackList.add(itemstack.copy());
                         Set<PartType> partTypesFound = new HashSet<>();
+                        partTypesFound.add(PartType.MAIN);
 
                         // Search for parts to apply
                         for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
@@ -259,7 +261,16 @@ public class ContainerCraftingStation extends Container {
                             }
                         }
 
-                        if (!partTypesFound.isEmpty()) {
+                        // Make sure all required parts are present
+                        boolean allRequiredPartsFound = !partTypesFound.isEmpty();
+                        for (PartType type : item.getConfig().getRequiredPartTypes()) {
+                            if (!partTypesFound.contains(type)) {
+                                allRequiredPartsFound = false;
+                                break;
+                            }
+                        }
+
+                        if (allRequiredPartsFound) {
                             // Make the tool with extra parts
                             ItemStack result = recipe.getCraftingResult(partStackList);
                             if (!result.isEmpty()) {
