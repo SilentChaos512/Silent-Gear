@@ -8,10 +8,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.play.server.SPacketSetSlot;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
 import net.silentchaos512.gear.inventory.SlotItemPart;
+import net.silentchaos512.gear.item.ToolHead;
+import net.silentchaos512.gear.recipe.RecipeModularItem;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ContainerCraftingStation extends Container {
     InventoryCrafting craftMatrix;
@@ -52,6 +63,7 @@ public class ContainerCraftingStation extends Container {
         setupPlayerSlots(playerInv);
 
         // Output
+        // TODO: Need to extend SlotCrafting to remove proper ingredients?
         outputSlot = this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix,
                 this.craftResult, tile.getSizeInventory(), 146, 35));
 
@@ -70,9 +82,8 @@ public class ContainerCraftingStation extends Container {
     private void setupPartSlots() {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 2; ++x) {
-                // TODO: Need custom slot type?
                 final int index = TileCraftingStation.GEAR_PARTS_START + x + y * 2;
-                addSlotToContainer(new SlotItemPart(tile, index, 79 + x * 18, 17 + y * 18));
+                addSlotToContainer(new SlotItemPart(this, tile, index, 79 + x * 18, 17 + y * 18));
             }
         }
     }
@@ -135,7 +146,7 @@ public class ContainerCraftingStation extends Container {
     public void onCraftMatrixChanged(IInventory inventoryIn) {
         if (craftMatrix != null && craftResult != null) {
             slotChangedCraftingGrid(world, player, craftMatrix, craftResult);
-            // TODO: Apply parts to tool heads for fast tool crafting
+            super.onCraftMatrixChanged(inventoryIn);
         }
     }
 
@@ -211,6 +222,52 @@ public class ContainerCraftingStation extends Container {
             if (irecipe != null && (irecipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayermp.getRecipeBook().isUnlocked(irecipe))) {
                 craftResult.setRecipeUsed(irecipe);
                 itemstack = irecipe.getCraftingResult(craftMatrix);
+
+                // If output is a tool head, try using available parts to craft a complete tool
+                if (itemstack.getItem() instanceof ToolHead) {
+                    String toolClass = ToolHead.getToolClass(itemstack);
+                    RecipeModularItem recipe = ModRecipes.gearCrafting.get(toolClass);
+                    ICoreItem item = ModItems.gearClasses.get(toolClass);
+
+                    if (recipe != null && item != null) {
+                        NonNullList<ItemStack> partStackList = NonNullList.create();
+                        partStackList.add(itemstack.copy());
+                        Set<PartType> partTypesFound = new HashSet<>();
+
+                        // Search for parts to apply
+                        for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
+                            final ItemStack partStack = getSlot(i).getStack();
+                            final ItemPartData part = ItemPartData.fromStack(partStack);
+
+                            if (part != null) {
+                                final PartType type = part.getPart().getType();
+                                final int requiredCount = item.getConfig().getCraftingPartCount(type);
+
+                                // If required, must meet that number. Only one of each type, except misc upgrades.
+                                final boolean isMiscUpgrade = type == PartType.MISC_UPGRADE;
+                                if (requiredCount <= partStack.getCount() && (!partTypesFound.contains(type) || isMiscUpgrade)) {
+                                    for (int j = 0; j < Math.max(requiredCount, 1); ++j) {
+                                        ItemStack copy = partStack.copy();
+                                        copy.setCount(1);
+                                        partStackList.add(copy);
+                                    }
+
+                                    if (!isMiscUpgrade) {
+                                        partTypesFound.add(type);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!partTypesFound.isEmpty()) {
+                            // Make the tool with extra parts
+                            ItemStack result = recipe.getCraftingResult(partStackList);
+                            if (!result.isEmpty()) {
+                                itemstack = result;
+                            }
+                        }
+                    }
+                }
             }
 
             final int index = outputSlot.getSlotIndex();

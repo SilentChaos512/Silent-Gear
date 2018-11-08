@@ -18,6 +18,7 @@
 
 package net.silentchaos512.gear.inventory;
 
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -28,8 +29,11 @@ import net.silentchaos512.gear.api.parts.PartRegistry;
 import javax.annotation.Nonnull;
 
 public class SlotItemPart extends Slot {
-    public SlotItemPart(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+    private final Container container;
+
+    public SlotItemPart(Container container, IInventory inventoryIn, int index, int xPosition, int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
+        this.container = container;
     }
 
     @Override
@@ -37,5 +41,11 @@ public class SlotItemPart extends Slot {
         if (!super.isItemValid(stack)) return false;
         final ItemPart part = PartRegistry.get(stack);
         return part != null && !(part instanceof PartMain);
+    }
+
+    @Override
+    public void onSlotChanged() {
+        super.onSlotChanged();
+        container.onCraftMatrixChanged(inventory);
     }
 }

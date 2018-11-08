@@ -22,7 +22,6 @@ public class TileCraftingStation extends TileInventorySL {
     public static final int GEAR_PARTS_SIZE = 3 * 2;
     public static final int SIDE_INVENTORY_SIZE = 3 * 6;
 
-    // Slot order by index = craft grid, parts grid, side inventory, player + hotbar, output slot
     public static final int CRAFTING_GRID_START = 0;
     public static final int GEAR_PARTS_START = CRAFTING_GRID_START + CRAFTING_GRID_SIZE;
     public static final int SIDE_INVENTORY_START = GEAR_PARTS_START + GEAR_PARTS_SIZE;
