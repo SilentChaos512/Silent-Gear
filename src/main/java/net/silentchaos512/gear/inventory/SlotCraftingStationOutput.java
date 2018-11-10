@@ -23,26 +23,25 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.PartRegistry;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.block.craftingstation.ContainerCraftingStation;
 import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * For Crafting Station output slot. Allows consumed gear parts to be removed.
  */
 public class SlotCraftingStationOutput extends SlotCrafting {
     private final IInventory station;
+    private final ContainerCraftingStation container;
     private int amountCrafted = 0; // TODO: Find some way to update this.
 
-    public SlotCraftingStationOutput(EntityPlayer player, InventoryCrafting craftingInventory, IInventory inventoryIn, IInventory station, int slotIndex, int xPosition, int yPosition) {
+    public SlotCraftingStationOutput(ContainerCraftingStation container, EntityPlayer player, InventoryCrafting craftingInventory, IInventory inventoryIn, IInventory station, int slotIndex, int xPosition, int yPosition) {
         super(player, craftingInventory, inventoryIn, slotIndex, xPosition, yPosition);
         this.station = station;
+        this.container = container;
     }
 
     // Called on shift-click? Param amount seems to always be 2
@@ -70,26 +69,38 @@ public class SlotCraftingStationOutput extends SlotCrafting {
 
     private void consumeParts(ItemStack stack) {
         if (stack.getItem() instanceof ICoreItem) {
-            // Amount craft is always 1 or 2? And 2 is always wrong...?
-//            if (amountCrafted > 1)
-//                amountCrafted /= 2;
-
-//            SilentGear.log.debug("Removing parts for {} items crafted...", amountCrafted);
             ICoreItem item = (ICoreItem) stack.getItem();
-            Set<PartType> partTypesFound = new HashSet<>();
+//            Set<PartType> partTypesFound = new HashSet<>();
 
-            for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
-                ItemStack stackInSlot = station.getStackInSlot(i);
-                ItemPart part = PartRegistry.get(stackInSlot);
+//            for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
+//                ItemStack stackInSlot = station.getStackInSlot(i);
+//                ItemPart part = PartRegistry.get(stackInSlot);
+//
+//                if (!stackInSlot.isEmpty() && part != null && (!partTypesFound.contains(part.getType()) || part.getType() == PartType.MISC_UPGRADE)) {
+//                    int count = Math.max(item.getConfig().getCraftingPartCount(part.getType()), 1);
+//                    station.decrStackSize(i, count); // was 'count * amountCrafted'
+//                    SilentGear.log.debug("Remove {} from {}", count, stackInSlot);
+//
+//                    if (part.getType() != PartType.MISC_UPGRADE) {
+//                        partTypesFound.add(part.getType());
+//                    }
+//                }
+//            }
 
-                if (!stackInSlot.isEmpty() && part != null && (!partTypesFound.contains(part.getType()) || part.getType() == PartType.MISC_UPGRADE)) {
-                    int count = Math.max(item.getConfig().getCraftingPartCount(part.getType()), 1);
-                    station.decrStackSize(i, count); // was 'count * amountCrafted'
-                    SilentGear.log.debug("Remove {} from {}", count, stackInSlot);
-
-                    if (part.getType() != PartType.MISC_UPGRADE) {
-                        partTypesFound.add(part.getType());
+            Map<ItemPartData, Integer> partList = container.getCompatibleParts(item);
+            for (Map.Entry<ItemPartData, Integer> entry : partList.entrySet()) {
+                ItemPartData part = entry.getKey();
+                int amount = entry.getValue();
+                int slot = -1;
+                for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
+                    if (station.getStackInSlot(i).isItemEqual(part.getCraftingItem())) {
+                        slot = i;
+                        break;
                     }
+                }
+
+                if (slot >= 0) {
+                    station.decrStackSize(slot, amount);
                 }
             }
         }
