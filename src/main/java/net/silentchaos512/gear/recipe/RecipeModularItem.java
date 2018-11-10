@@ -25,6 +25,10 @@ public class RecipeModularItem extends RecipeBaseSL {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         Collection<ItemStack> parts = getComponents(inv);
+        return getCraftingResult(parts);
+    }
+
+    public ItemStack getCraftingResult(Collection<ItemStack> parts) {
         List<ItemPartData> data = new ArrayList<>();
         Map<PartType, ItemPartData> partsByType = new HashMap<>();
 

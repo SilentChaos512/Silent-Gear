@@ -16,8 +16,8 @@ import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
 import javax.annotation.Nonnull;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ConfigOptionEquipment {
     public final ICoreItem item;
@@ -55,6 +55,10 @@ public class ConfigOptionEquipment {
         if (this.modifiers.containsKey(stat))
             return this.modifiers.get(stat);
         return StatInstance.ZERO;
+    }
+
+    public Set<PartType> getRequiredPartTypes() {
+        return recipe.keySet().stream().map(PartType::get).collect(Collectors.toSet());
     }
 
     public int getCraftingPartCount(PartType type) {
