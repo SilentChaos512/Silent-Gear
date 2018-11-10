@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -18,7 +17,6 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.gui.TexturedButton;
-import net.silentchaos512.lib.util.Color;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +42,7 @@ public class GuiCraftingStation extends GuiContainer {
     public void initGui() {
         super.initGui();
 
-        buttonShowAllParts = new TexturedButton(TEXTURE, 100, guiLeft + 149, guiTop + 62, 236, 166, 20, 18,
+        buttonShowAllParts = new TexturedButton(TEXTURE, 100, guiLeft + 149, guiTop + 5, 236, 166, 20, 18,
                 ImmutableList.of("Show Available Parts", TextFormatting.GRAY + "List can be sorted by stats"));
         buttonList.add(buttonShowAllParts);
     }
@@ -99,12 +97,12 @@ public class GuiCraftingStation extends GuiContainer {
         drawSlimeFace(craftResult);
 
         // Debug
-        if (SilentGear.instance.isDevBuild()) {
-            Slot slot = getSlotUnderMouse();
-            if (slot != null) {
-                fontRenderer.drawString("slot=" + slot.getSlotIndex(), 130, 6, Color.VALUE_WHITE);
-            }
-        }
+//        if (SilentGear.instance.isDevBuild()) {
+//            Slot slot = getSlotUnderMouse();
+//            if (slot != null) {
+//                fontRenderer.drawString("slot=" + slot.getSlotIndex(), 130, 6, Color.VALUE_WHITE);
+//            }
+//        }
 
         if (!craftResult.isEmpty()) {
             // Draw crafting result tooltip
