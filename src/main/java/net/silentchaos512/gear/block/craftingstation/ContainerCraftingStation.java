@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
+import net.silentchaos512.gear.inventory.SlotCraftingStationOutput;
 import net.silentchaos512.gear.inventory.SlotItemPart;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.gear.recipe.RecipeModularItem;
@@ -63,9 +64,8 @@ public class ContainerCraftingStation extends Container {
         setupPlayerSlots(playerInv);
 
         // Output
-        // TODO: Need to extend SlotCrafting to remove proper ingredients?
-        outputSlot = this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix,
-                this.craftResult, tile.getSizeInventory(), 146, 35));
+        outputSlot = this.addSlotToContainer(new SlotCraftingStationOutput(playerInv.player, this.craftMatrix,
+                this.craftResult, tile, tile.getSizeInventory(), 146, 35));
 
         onCraftMatrixChanged(this.tile);
     }
@@ -262,7 +262,7 @@ public class ContainerCraftingStation extends Container {
                         }
 
                         // Make sure all required parts are present
-                        boolean allRequiredPartsFound = !partTypesFound.isEmpty();
+                        boolean allRequiredPartsFound = true;
                         for (PartType type : item.getConfig().getRequiredPartTypes()) {
                             if (!partTypesFound.contains(type)) {
                                 allRequiredPartsFound = false;
