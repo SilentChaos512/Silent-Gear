@@ -51,12 +51,9 @@ public class DurabilityTrait extends Trait {
 
     @Override
     public float onDurabilityDamage(@Nullable EntityPlayer player, int level, ItemStack gear, int damageTaken) {
-        if (shouldActivate(level, gear)) {
-            int ret = Math.round(damageTaken + effectScale);
-//            SilentGear.log.debug("DurabilityTrait '{}': {} -> {}", getName(), damageTaken, ret);
-            return ret;
+        if (damageTaken != 0 && shouldActivate(level, gear)) {
+            return Math.round(damageTaken + effectScale);
         }
-//        SilentGear.log.debug("DurabilityTrait '{}': no proc", getName());
         return super.onDurabilityDamage(player, level, gear, damageTaken);
     }
 }
