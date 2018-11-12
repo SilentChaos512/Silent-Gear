@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
@@ -52,6 +53,7 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
     /**
      * Gets the blueprint item (not template) associated with the gear item.
+     *
      * @return The Blueprint item, or null if it does not exist
      */
     @Nullable
@@ -72,7 +74,17 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
     @Override
     public ItemStack getCraftingResult(ItemStack blueprint, Collection<ItemStack> parts) {
-        return craftingHandler.apply(PartDataList.from(parts));
+        // TODO: Config to ban blueprints or templates?
+
+        final PartDataList partList = PartDataList.from(parts);
+        for (ItemPartData part : partList) {
+            // Block blacklisted parts
+            if (part.getPart().isBlacklisted()) {
+                return ItemStack.EMPTY;
+            }
+        }
+
+        return craftingHandler.apply(partList);
     }
 
     @Override

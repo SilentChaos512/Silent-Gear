@@ -3,15 +3,25 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.1] - 2018-11-12
+Major crafting station overhaul! I haven't found any item loss/duplication, but keep an eye out.
+
 Please remember the traits system is still WIP. Anything is subject to change or balancing.
 ### Added
+- Crafting station keeps items in the crafting grid when closed
+- Crafting station has a proper button for the parts GUI now
+- Crafting station has a 'parts grid' next to the crafting grid. This allows tools to be crafted in a single step! Place the tool head recipe in the crafting grid, then fill the parts grid with any required parts or upgrades.
 - More traits!
     - Bulky - Item loses attack speed. This is intended for a new upgrade part I have planned, using on main parts is not recommended (just change the stats).
     - Jagged - Item gains attack (melee) damage as the item loses durability.
 ### Changed
-- Raised max level on most traits to four (some are five)
+- Crafting station has even better shift-click support now
+- Raised max level on most traits to four (some are five now)
 - Other balancing/tweaking of traits
+### Fixed
+- Crafting station losing items when RealBench is installed [#4]
+- Disabled parts working in gear crafting
+- Malleable and Brittle activating when no durability is lost
 
 ## [0.3.0] - 2018-11-02
 ### Added

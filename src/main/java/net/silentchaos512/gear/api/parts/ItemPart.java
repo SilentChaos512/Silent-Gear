@@ -299,24 +299,24 @@ public abstract class ItemPart {
         if (resourceAsStream != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream, "UTF-8"))) {
                 readResourceFile(reader);
-                if (SilentGear.log.getLogger().isDebugEnabled())
-                    SilentGear.log.info("Successfully read {}", path);
+                SilentGear.log.debug("Successfully read '{}'", path);
             } catch (Exception e) {
+                SilentGear.log.warn("Error reading file '{}'", path);
                 SilentGear.log.catching(e);
             }
         } else if (origin.isBuiltin()) {
-            SilentGear.log.error("ItemPart {} is missing its data file!", this.registryName);
+            SilentGear.log.error("ItemPart '{}' is missing its data file!", this.registryName);
         }
 
         // Override in config folder
         File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.registryName.getPath() + ".json");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readResourceFile(reader);
-            if (SilentGear.log.getLogger().isDebugEnabled())
-                SilentGear.log.debug("Successfully read {}", file.getAbsolutePath());
+            SilentGear.log.debug("Successfully read override '{}'", file.getAbsolutePath());
         } catch (FileNotFoundException e) {
             // Ignore
         } catch (Exception e) {
+            SilentGear.log.warn("Error reading override '{}'", file.getAbsolutePath());
             SilentGear.log.catching(e);
         }
     }

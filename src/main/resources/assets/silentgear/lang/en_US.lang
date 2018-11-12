@@ -312,6 +312,7 @@ trait.silentgear.displayFormat=%1$s %2$s
 trait.silentgear.brittle=Brittle
 trait.silentgear.malleable=Malleable
 trait.silentgear.soft=Soft
+trait.silentgear.speed_boost_light=Lustrous
 trait.silentgear.synergy_boost=Synergistic
 
 
