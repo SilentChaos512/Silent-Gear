@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.lib.collection.EntityMatchList;
 import net.silentchaos512.lib.collection.ItemMatchList;
@@ -36,6 +37,8 @@ public class Config extends ConfigBaseNew {
     @ConfigOption.BooleanDefault(true)
     @ConfigOption.Comment("Spawn players with a blueprint package containing some starter blueprints (set false to disable). This uses the starter_blueprints loot table.")
     public static boolean spawnWithStarterBlueprints;
+
+    public static BlueprintType blueprintTypes = BlueprintType.BOTH;
 
     @ConfigOption(name = "Drop Rate", category = CAT_SINEW)
     @ConfigOption.RangeFloat(value = 0.2f, min = 0f, max = 1f)
@@ -159,6 +162,9 @@ public class Config extends ConfigBaseNew {
             /*
              * Items
              */
+
+            blueprintTypes = loadEnum("Blueprint Types Allowed", CAT_ITEMS, BlueprintType.class, BlueprintType.BOTH,
+                    "Allow players to use blueprints, templates, or both?");
 
             // Sinew
             sinewAnimals.loadConfig(config, "Animals That Drop Sinew", CAT_SINEW, SINEW_ANIMALS_COMMENT);

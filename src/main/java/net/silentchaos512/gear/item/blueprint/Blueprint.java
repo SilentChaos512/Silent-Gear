@@ -3,9 +3,11 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -15,6 +17,7 @@ import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.item.IColoredItem;
 import net.silentchaos512.lib.util.Color;
@@ -74,14 +77,15 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
     @Override
     public ItemStack getCraftingResult(ItemStack blueprint, Collection<ItemStack> parts) {
-        // TODO: Config to ban blueprints or templates?
+        // Blueprints/templates disabled?
+        if (isDisabled())
+            return ItemStack.EMPTY;
 
         final PartDataList partList = PartDataList.from(parts);
         for (ItemPartData part : partList) {
             // Block blacklisted parts
-            if (part.getPart().isBlacklisted()) {
+            if (part.getPart().isBlacklisted())
                 return ItemStack.EMPTY;
-            }
         }
 
         return craftingHandler.apply(partList);
@@ -90,6 +94,10 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
     @Override
     public int getMaterialCost(ItemStack blueprint) {
         return this.gearItem.getConfig().getHeadCount();
+    }
+
+    public boolean isDisabled() {
+        return singleUse && !Config.blueprintTypes.allowTemplate() || !singleUse && !Config.blueprintTypes.allowBlueprint();
     }
 
     @Override
@@ -108,8 +116,10 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
         int amount = this.gearItem.getConfig().getHeadCount();
         list.add(i18n.itemSubText(NAME, "materialAmount", amount));
 
-        // Single use or multiple uses?
-        if (this.singleUse) {
+        // Single use or multiple uses? Or disabled?
+        if (isDisabled()) {
+            list.add(TextFormatting.DARK_RED + i18n.itemSubText(NAME, "disabled"));
+        } else if (this.singleUse) {
             list.add(TextFormatting.RED + i18n.itemSubText(NAME, "singleUse"));
         } else {
             list.add(TextFormatting.GREEN + i18n.itemSubText(NAME, "multiUse"));
@@ -144,6 +154,12 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
                 list.add(TextFormatting.YELLOW + i18n.itemSubText(NAME, "altForRecipe"));
             }
         }
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (!isDisabled())
+            super.getSubItems(tab, items);
     }
 
     @Override

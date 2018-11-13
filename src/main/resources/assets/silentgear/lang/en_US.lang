@@ -67,6 +67,7 @@ tile.silentgear.salvager.desc=Can break down some items into their components
 
 item.silentgear.blueprint.name=Blueprint
 item.silentgear.blueprint.materialAmount=Material Required: %d
+item.silentgear.blueprint.disabled=Disabled in config!
 item.silentgear.blueprint.singleUse=Can be used only once
 item.silentgear.blueprint.multiUse=Can be used many times
 item.silentgear.blueprint.altForRecipe=<Hold Alt for tool recipe>
