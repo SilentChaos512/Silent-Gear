@@ -24,10 +24,11 @@ import java.util.stream.Collectors;
 public class Config extends ConfigBaseNew {
     public static final Config INSTANCE = new Config();
 
-    public static final String CAT_ITEMS = "items";
-    public static final String CAT_GEAR = CAT_ITEMS + SEP + "gear";
-    public static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
-    public static final String CAT_SINEW = CAT_ITEMS + SEP + "sinew";
+    private static final String CAT_DEBUG = "debug";
+    private static final String CAT_ITEMS = "items";
+    static final String CAT_GEAR = CAT_ITEMS + SEP + "gear";
+    private static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
+    private static final String CAT_SINEW = CAT_ITEMS + SEP + "sinew";
 
     /*
      * Items
@@ -125,6 +126,14 @@ public class Config extends ConfigBaseNew {
     @ConfigOption.RangeDouble(value = 0.35, min = 0, max = 1)
     @ConfigOption.Comment("The maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss. Rate depends on remaining durability.")
     public static double salvagerMaxLossRate;
+
+    /*
+     * Debug
+     */
+//    @ConfigOption(name = "Model Test", category = CAT_DEBUG)
+//    @ConfigOption.BooleanDefault(false)
+//    @ConfigOption.Comment("Modifies model render code for testing purposes. This will likely decrease FPS.")
+//    public static boolean modelDebug;
 
     File directory;
 

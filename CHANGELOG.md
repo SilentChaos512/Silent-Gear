@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- New traits
+    - Chipping - As the item is damaged, armor loses a little protection, tools gain harvest speed (repairing the item will reverse the effect, of course).
+### Changed
+- Item part GUI no longer pauses the game
+- Traits are now displayed a little differently on parts, hold control to see the full list at once
+
 ## [0.3.1] - 2018-11-12
 Major crafting station overhaul! I haven't found any item loss/duplication, but keep an eye out.
 

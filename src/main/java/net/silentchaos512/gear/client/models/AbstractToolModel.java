@@ -35,10 +35,12 @@ public abstract class AbstractToolModel extends LayeredBakedModel {
     @Nonnull
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(@Nonnull TransformType cameraTransformType) {
-        return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType);
+        final boolean debug = false;
+        return PerspectiveMapWrapper.handlePerspective(this, debug ? itemTransforms() : this.transforms, cameraTransformType);
     }
 
     protected ImmutableMap<TransformType, TRSRTransformation> itemTransforms() {
+        // TODO: Crossbow angles: -90, 0, 45 (at least for first-person right hand)
         ImmutableMap.Builder<TransformType, TRSRTransformation> builder = ImmutableMap.builder();
         builder.put(TransformType.GROUND, get(0, 2, 0, 0, 0, 0, 0.5f));
         builder.put(TransformType.HEAD, get(0, 13, 7, 0, 180, 0, 1));

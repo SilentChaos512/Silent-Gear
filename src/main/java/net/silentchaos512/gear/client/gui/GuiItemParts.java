@@ -24,6 +24,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.silentchaos512.gear.SilentGear;
@@ -51,6 +52,7 @@ public class GuiItemParts extends GuiScreen {
     private static final int BUTTON_SPACING = PartButton.SIZE + 4;
     private static final int BUTTON_ROW_LENGTH = 12;
     private static final int BUTTON_INITIAL_OFFSET = 5;
+    private static final ResourceLocation TEX_WHITE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/white.png");
 
     private int lastButtonId = 6900;
     private List<ItemPart> partList = new ArrayList<>();
@@ -89,6 +91,11 @@ public class GuiItemParts extends GuiScreen {
                 ++i;
             }
         }
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 
     private void layoutPartButtons() {
@@ -152,13 +159,19 @@ public class GuiItemParts extends GuiScreen {
 
     private void drawSelectedPartInfo() {
         if (selectedPart != null && !selectedPartInfo.isEmpty()) {
+            ScaledResolution res = new ScaledResolution(mc);
+
+            ItemStack stack = selectedPart.getCraftingStack();
+            AssetUtil.renderStackToGui(stack, res.getScaledWidth() - 194, 30, 2.5f);
+
             final int maxWidth = 140;
-            final int x = new ScaledResolution(mc).getScaledWidth() - (maxWidth + 10);
+            final int x = res.getScaledWidth() - (maxWidth + 10);
             int y = 35;
 
             String translatedName = selectedPart.getTranslatedName(ItemPartData.instance(selectedPart), ItemStack.EMPTY);
             StringUtil.renderScaledAsciiString(mc.fontRenderer, translatedName, x, y, Color.VALUE_WHITE, false, 1);
-            String regName = TextFormatting.GRAY + "(" + selectedPart.getRegistryName() + ")";
+            String originType = selectedPart.getOrigin().isUserDefined() ? " (user defined)" : " (built-in)";
+            String regName = TextFormatting.GRAY + selectedPart.getRegistryName().toString() + originType;
             StringUtil.renderScaledAsciiString(mc.fontRenderer, regName, x, y + 10, Color.VALUE_WHITE, false, 0.5f);
             String typeName = SilentGear.i18n.translate("part", "type." + selectedPart.getType().getName(), selectedPart.getTier());
             StringUtil.renderScaledAsciiString(mc.fontRenderer, TextFormatting.GREEN + typeName, x, y + 16, Color.VALUE_WHITE, false, 0.8f);
@@ -169,6 +182,7 @@ public class GuiItemParts extends GuiScreen {
                 int width2 = fontRenderer.getStringWidth(pair.second);
                 fontRenderer.drawString(pair.second, x + maxWidth - width2, y, Color.VALUE_WHITE);
                 y += 10;
+                // TODO: We need actual stat bars or something. Need to save actual stats, record max value somewhere.
             }
         }
     }

@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
+import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
 import java.util.Map;
@@ -56,10 +57,16 @@ public final class TooltipHandler {
 
         // Traits
         Map<Trait, Integer> traits = partData.getTraits();
+        int numTraits = traits.size();
+        int traitIndex = KeyTrackerSL.isControlDown() || numTraits == 0 ? -1 : ClientTicks.ticksInGame / 20 % numTraits;
+        int i = 0;
         for (Trait trait : traits.keySet()) {
-            final int level = traits.get(trait);
-            final TextFormatting nameColor = trait.getNameColor();
-            event.getToolTip().add(nameColor + trait.getTranslatedName(level));
+            if (traitIndex < 0 || traitIndex == i) {
+                final int level = traits.get(trait);
+                final TextFormatting nameColor = trait.getNameColor();
+                event.getToolTip().add(nameColor + trait.getTranslatedName(level));
+            }
+            ++i;
         }
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
