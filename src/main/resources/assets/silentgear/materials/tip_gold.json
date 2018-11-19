@@ -4,7 +4,7 @@
         {"name": "durability",      "value":  16, "op": "ADD"},
         {"name": "enchantability",  "value":   6, "op": "ADD"},
         {"name": "harvest_level",   "value":   0, "op": "MAX"},
-        {"name": "harvest_speed",   "value": 3.0, "op": "ADD"},
+        {"name": "harvest_speed",   "value": 6.0, "op": "ADD"},
         {"name": "melee_damage",    "value": 0.0, "op": "ADD"},
         {"name": "magic_damage",    "value": 2.0, "op": "ADD"},
         {"name": "attack_speed",    "value": 0.0, "op": "ADD"},
@@ -13,7 +13,7 @@
         {"name": "rarity",          "value":  12}
     ],
     "traits": [
-        {"name": "silentgear:malleable", "level": 1},
+        {"name": "silentgear:malleable", "level": 2},
         {"name": "silentgear:soft", "level": 2}
     ],
     "crafting_items": {

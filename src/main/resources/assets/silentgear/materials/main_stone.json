@@ -17,6 +17,9 @@
         {"name": "rarity",          "value":    5},
         {"name": "chargeability",   "value":  0.5}
     ],
+    "traits": [
+        {"name": "silentgear:brittle", "level": 1}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:cobblestone",

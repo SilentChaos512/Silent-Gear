@@ -311,10 +311,23 @@ part.silentgear.type.tip=Tip Upgrade
 
 trait.silentgear.displayFormat=%1$s %2$s
 trait.silentgear.brittle=Brittle
+trait.silentgear.brittle.desc=Gear sometimes takes extra damage (cancels with Malleable)
+trait.silentgear.bulky=Bulky
+trait.silentgear.bulky.desc=TODO, not tested
+trait.silentgear.chipping=Chipping
+trait.silentgear.chipping.desc=Reduces armor protection or increases harvest speed as gear is damaged
+trait.silentgear.jagged=Jagged
+trait.silentgear.jagged.desc=Increases attack damage as tool is damaged
 trait.silentgear.malleable=Malleable
+trait.silentgear.malleable.desc=Gear sometimes takes less damage (cancels with Brittle)
+trait.silentgear.multi_break=Multi-break
+trait.silentgear.multi_break.desc=TODO, not coded
 trait.silentgear.soft=Soft
+trait.silentgear.soft.desc=Reduces harvest speed as tool is damaged
 trait.silentgear.speed_boost_light=Lustrous
+trait.silentgear.speed_boost_light.desc=Tools gain a large harvest speed boost when in light
 trait.silentgear.synergy_boost=Synergistic
+trait.silentgear.synergy_boost.desc=Gear gets a synergy bonus (if base value is more than 100%)
 
 
 

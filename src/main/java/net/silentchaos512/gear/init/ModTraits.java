@@ -38,6 +38,7 @@ import javax.annotation.Nullable;
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
 
+    public static Trait multiBreak;
     public static Trait speedBoostLight;
     public static Trait synergyBoost;
     public static final float SYNERGY_BOOST_MULTI = 0.1f;
@@ -59,6 +60,8 @@ public final class ModTraits implements IPhasedInitializer {
                 DURABILITY_EFFECT_CHANCE, 1));
         Trait.setCancelsWith(malleable, brittle);
 
+        multiBreak = TraitRegistry.register(new Trait(path("multi_break"),
+                COMMON_MAX_LEVEL, TextFormatting.DARK_GREEN, 0));
         speedBoostLight = TraitRegistry.register(new Trait(path("speed_boost_light"),
                 COMMON_MAX_LEVEL, TextFormatting.GOLD, 0));
         synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"),
@@ -73,6 +76,16 @@ public final class ModTraits implements IPhasedInitializer {
                     float result = value - 0.075f * level;
                     return result > -3.95f ? result : -3.9f;
                 }
+                return value;
+            }
+        });
+        TraitRegistry.register(new StatModifierTrait(path("chipping"), COMMON_MAX_LEVEL, TextFormatting.DARK_BLUE) {
+            @Override
+            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
+                if (stat == CommonItemStats.ARMOR)
+                    return value - 0.075f * level * value * damageRatio;
+                if (stat == CommonItemStats.HARVEST_SPEED)
+                    return value + 0.25f * level * value * damageRatio;
                 return value;
             }
         });

@@ -17,6 +17,9 @@
         {"name": "rarity",          "value":   0},
         {"name": "chargeability",   "value": 0.6}
     ],
+    "traits": [
+        {"name": "silentgear:jagged", "level": 1}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:planks",

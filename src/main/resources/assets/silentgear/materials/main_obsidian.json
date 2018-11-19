@@ -6,7 +6,7 @@
         {"name": "enchantability",  "value":    7},
         {"name": "harvest_level",   "value":    3},
         {"name": "harvest_speed",   "value":    5},
-        {"name": "melee_damage",    "value":    2},
+        {"name": "melee_damage",    "value":    3},
         {"name": "magic_damage",    "value":    2},
         {"name": "attack_speed",    "value": -0.4},
         {"name": "armor",           "value":   20},
@@ -16,6 +16,10 @@
         {"name": "ranged_speed",    "value": -0.4},
         {"name": "rarity",          "value":   30},
         {"name": "chargeability",   "value":  0.8}
+    ],
+    "traits": [
+        {"name": "silentgear:jagged", "level": 4},
+        {"name": "silentgear:chipping", "level": 2}
     ],
     "crafting_items": {
         "normal": {

@@ -13,7 +13,7 @@
         {"name": "rarity",          "value":  10}
     ],
     "traits": [
-        {"name": "silentgear:malleable", "level": 3}
+        {"name": "silentgear:malleable", "level": 4}
     ],
     "crafting_items": {
         "normal": {

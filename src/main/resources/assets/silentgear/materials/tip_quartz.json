@@ -12,6 +12,10 @@
         {"name": "ranged_speed",    "value": 0.0, "op": "ADD"},
         {"name": "rarity",          "value":  15}
     ],
+    "traits": [
+        {"name": "silentgear:chipping", "level": 1},
+        {"name": "silentgear:jagged", "level": 3}
+    ],
     "crafting_items": {
         "normal": {
             "item": "silentgear:tip_upgrade_quartz"

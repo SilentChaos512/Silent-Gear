@@ -13,7 +13,8 @@
         {"name": "rarity",          "value":  17}
     ],
     "traits": [
-        {"name": "silentgear:brittle", "level": 1}
+        {"name": "silentgear:brittle", "level": 1},
+        {"name": "silentgear:synergy_boost", "level": 2}
     ],
     "crafting_items": {
         "normal": {
