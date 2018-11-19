@@ -43,7 +43,6 @@ public class CoreAxe extends ItemAxe implements ICoreTool {
 
     public CoreAxe() {
         super(Objects.requireNonNull(GearData.FAKE_MATERIAL), 0f, 0f);
-        setNoRepair();
         setHarvestLevel("axe", 0);
     }
 

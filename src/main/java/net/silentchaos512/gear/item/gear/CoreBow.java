@@ -38,9 +38,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     public static final int MIN_DRAW_DELAY = 10;
     public static final int MAX_DRAW_DELAY = 100;
 
-    public CoreBow() {
-        setNoRepair();
-    }
+    public CoreBow() {}
 
     @Nonnull
     @Override

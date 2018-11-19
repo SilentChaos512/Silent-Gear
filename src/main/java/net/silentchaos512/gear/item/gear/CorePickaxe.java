@@ -44,7 +44,6 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
 
     public CorePickaxe() {
         super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
-        setNoRepair();
         setHarvestLevel("pickaxe", 0);
     }
 

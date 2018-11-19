@@ -56,7 +56,6 @@ public class CoreSickle extends ItemTool implements ICoreTool {
 
     public CoreSickle() {
         super(Objects.requireNonNull(GearData.FAKE_MATERIAL), ImmutableSet.of());
-        setNoRepair();
     }
 
     @Nonnull

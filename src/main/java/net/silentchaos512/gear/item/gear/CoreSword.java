@@ -29,7 +29,6 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
 
     public CoreSword() {
         super(GearData.FAKE_MATERIAL);
-        setNoRepair();
     }
 
     @Nonnull

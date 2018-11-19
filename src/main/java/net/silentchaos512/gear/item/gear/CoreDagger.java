@@ -8,7 +8,6 @@ import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import javax.annotation.Nonnull;
 
 public class CoreDagger extends CoreSword {
-
     @Nonnull
     @Override
     public ConfigOptionEquipment getConfig() {

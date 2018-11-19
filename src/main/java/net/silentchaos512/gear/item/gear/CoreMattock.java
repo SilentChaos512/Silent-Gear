@@ -42,7 +42,6 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
 
     public CoreMattock() {
         super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
-        setNoRepair();
         setHarvestLevel("shovel", 0);
         setHarvestLevel("axe", 0);
     }

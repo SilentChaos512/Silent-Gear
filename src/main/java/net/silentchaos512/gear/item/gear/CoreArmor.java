@@ -49,7 +49,6 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     public CoreArmor(EntityEquipmentSlot slot, String name) {
         super(ArmorMaterial.DIAMOND, 0, slot);
-        setNoRepair();
         this.itemName = name;
     }
 

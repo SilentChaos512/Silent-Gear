@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New traits
     - Chipping - As the item is damaged, armor loses a little protection, tools gain harvest speed (repairing the item will reverse the effect, of course).
 ### Changed
-- Item part GUI no longer pauses the game
+- Vanilla's repair recipe (which destroys NBT) is now replaced. Will ignore any gear items and behave as normal otherwise.
+- Gear items are now considered "repairable" thanks to the previous item, which should greatly improve mod compatibility
 - Traits are now displayed a little differently on parts, hold control to see the full list at once
+- Item part GUI no longer pauses the game
 
 ## [0.3.1] - 2018-11-12
 Major crafting station overhaul! I haven't found any item loss/duplication, but keep an eye out.
