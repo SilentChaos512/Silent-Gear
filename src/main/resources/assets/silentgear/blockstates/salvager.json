@@ -4,6 +4,9 @@
       "_comment": "Remove if finished model requires rotation",
       "model": "silentgear:salvager"
     },
+    "inventory": {
+      "model": "silentgear:salvager"
+    },
     "facing=north": {
       "model": "silentgear:salvager",
       "y": 180
