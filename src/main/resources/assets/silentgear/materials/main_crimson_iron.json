@@ -1,0 +1,42 @@
+{
+    "type": "main",
+    "stats": [
+        {"name": "durability",      "value":  420},
+        {"name": "armor_durability","value":   27},
+        {"name": "enchantability",  "value":   14},
+        {"name": "harvest_level",   "value":    3},
+        {"name": "harvest_speed",   "value":   10},
+        {"name": "melee_damage",    "value":    3},
+        {"name": "magic_damage",    "value":    3},
+        {"name": "attack_speed",    "value": -0.1},
+        {"name": "armor",           "value":   18},
+        {"name": "armor_toughness", "value":    2},
+        {"name": "magic_armor",     "value":    6},
+        {"name": "ranged_damage",   "value":    2},
+        {"name": "ranged_speed",    "value": -0.1},
+        {"name": "rarity",          "value":   35},
+        {"name": "chargeability",   "value":  0.7}
+    ],
+    "traits": [
+        {"name": "silentgear:malleable", "level": 3}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "silentgear:crimson_iron_ingot",
+            "data": 0,
+            "oredict": "ingotCrimsonIron"
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "crimson_iron",
+        "texture_color": "FFFFFF",
+        "broken_color": "FFFFFF",
+        "name_color": "red"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 2,
+        "tool_blacklist": []
+    }
+}

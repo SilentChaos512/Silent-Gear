@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "inventory": { "model": "silentgear:crimson_iron_ore" },
+        "normal": { "model": "silentgear:crimson_iron_ore" }
+    }
+}
