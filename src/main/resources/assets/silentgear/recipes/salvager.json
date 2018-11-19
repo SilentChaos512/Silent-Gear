@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " p ",
+    "cic",
+    "coc"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCrimsonIron"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "blockIron"
+    },
+    "o": {
+      "type": "forge:ore_dict",
+      "ore": "obsidian"
+    }
+  },
+  "result": {
+    "item": "silentgear:salvager"
+  }
+}

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.BlockOre;
 import net.minecraft.block.material.Material;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.block.Flower;
@@ -17,8 +18,10 @@ public class ModBlocks {
     public static BlockSalvager salvager = new BlockSalvager();
     public static Flower flower = new Flower();
     public static FlaxPlant flaxPlant = new FlaxPlant();
+    public static Block crimsonIronOre = new BlockOre().setHardness(4).setResistance(10);
 
     public static void registerAll(SRegistry reg) {
+        reg.registerBlock(crimsonIronOre, "crimson_iron_ore");
         reg.registerBlock(craftingStation, "crafting_station");
         reg.registerBlock(partAnalyzer, "part_analyzer");
         reg.registerBlock(salvager, "salvager");

@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "b b",
+    "cmc",
+    "c c"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:blaze_rod"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCrimsonIron"
+    },
+    "m": {
+      "item": "minecraft:magma_cream"
+    }
+  },
+  "result": {
+    "item": "silentgear:crimson_steel_ingot"
+  }
+}

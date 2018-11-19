@@ -110,15 +110,7 @@ public class ModItems {
 
     private static void registerOreDictEntries() {
         OreDictionary.registerOre("flint", Items.FLINT);
-        OreDictionary.registerOre("dyeBlack", CraftingItems.BLACK_DYE.getItem());
-        OreDictionary.registerOre("dyeBlue", CraftingItems.BLUE_DYE.getItem());
-        OreDictionary.registerOre("nuggetDiamond", CraftingItems.DIAMOND_SHARD.getItem());
-        OreDictionary.registerOre("nuggetEmerald", CraftingItems.EMERALD_SHARD.getItem());
-        OreDictionary.registerOre("rodIron", CraftingItems.IRON_ROD.getItem());
-        OreDictionary.registerOre("rodStone", CraftingItems.STONE_ROD.getItem());
-        OreDictionary.registerOre("stickIron", CraftingItems.IRON_ROD.getItem());
-        OreDictionary.registerOre("stickStone", CraftingItems.STONE_ROD.getItem());
-        OreDictionary.registerOre("string", CraftingItems.FLAX_STRING.getItem());
+        CraftingItems.registerOreDict();
     }
 
     private static void addSmeltingRecipes() {

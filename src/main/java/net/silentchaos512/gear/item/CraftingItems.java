@@ -19,6 +19,7 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.item.Item;
+import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.lib.item.IEnumItems;
 
 import javax.annotation.Nonnull;
@@ -59,5 +60,19 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     @Override
     public Item getItem() {
         return this.item;
+    }
+
+    public static void registerOreDict() {
+        OreDictionary.registerOre("dyeBlack", BLACK_DYE.item);
+        OreDictionary.registerOre("dyeBlue", BLUE_DYE.item);
+        OreDictionary.registerOre("ingotCrimsonIron", CRIMSON_IRON_INGOT.item);
+        OreDictionary.registerOre("ingotCrimsonSteel", CRIMSON_STEEL_INGOT.item);
+        OreDictionary.registerOre("nuggetDiamond", DIAMOND_SHARD.item);
+        OreDictionary.registerOre("nuggetEmerald", EMERALD_SHARD.item);
+        OreDictionary.registerOre("rodIron", IRON_ROD.item);
+        OreDictionary.registerOre("rodStone", STONE_ROD.item);
+        OreDictionary.registerOre("stickIron", IRON_ROD.item);
+        OreDictionary.registerOre("stickStone", STONE_ROD.item);
+        OreDictionary.registerOre("string", FLAX_STRING.item);
     }
 }

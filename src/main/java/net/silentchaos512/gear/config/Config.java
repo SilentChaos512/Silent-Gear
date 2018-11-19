@@ -12,6 +12,7 @@ import net.silentchaos512.lib.collection.EntityMatchList;
 import net.silentchaos512.lib.collection.ItemMatchList;
 import net.silentchaos512.lib.config.ConfigBaseNew;
 import net.silentchaos512.lib.config.ConfigOption;
+import net.silentchaos512.lib.config.ConfigOptionOreGen;
 import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.LogHelper;
 
@@ -29,6 +30,7 @@ public class Config extends ConfigBaseNew {
     static final String CAT_GEAR = CAT_ITEMS + SEP + "gear";
     private static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
     private static final String CAT_SINEW = CAT_ITEMS + SEP + "sinew";
+    private static final String CAT_WORLD = "world";
 
     /*
      * Items
@@ -118,6 +120,7 @@ public class Config extends ConfigBaseNew {
     /*
      * Salvager
      */
+
     @ConfigOption(name = "Min Loss Rate", category = "salvager")
     @ConfigOption.RangeDouble(value = 0, min = 0, max = 1)
     @ConfigOption.Comment("The minimum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss. Rate depends on remaining durability.")
@@ -126,6 +129,12 @@ public class Config extends ConfigBaseNew {
     @ConfigOption.RangeDouble(value = 0.35, min = 0, max = 1)
     @ConfigOption.Comment("The maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss. Rate depends on remaining durability.")
     public static double salvagerMaxLossRate;
+
+    /*
+     * World Generation
+     */
+
+    public static ConfigOptionOreGen crimsonIronOreGen;
 
     /*
      * Debug
@@ -206,6 +215,12 @@ public class Config extends ConfigBaseNew {
 
             for (ConfigOptionEquipment option : equipmentConfigs)
                 option.loadValue(config);
+
+            /*
+             * World Generation
+             */
+            crimsonIronOreGen = new ConfigOptionOreGen("Crimson Iron Ore", -1, 24, 6, 24, 120);
+            crimsonIronOreGen.loadValue(config, CAT_WORLD);
 
             // Grab last build number for potential changes?
             int currentBuild = SilentGear.instance.getBuildNum();
