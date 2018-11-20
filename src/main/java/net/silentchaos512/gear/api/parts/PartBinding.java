@@ -45,7 +45,7 @@ public class PartBinding extends ItemPart implements IUpgradePart {
     @Nullable
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
-        return new ResourceLocation(this.registryName.getNamespace(), "items/" + gearClass + "/binding_" + this.textureSuffix);
+        return new ResourceLocation(this.textureDomain, "items/" + gearClass + "/binding_" + this.textureSuffix);
     }
 
     @Nullable

@@ -444,6 +444,7 @@ public abstract class ItemPart {
             if (elementDisplay != null && elementDisplay.isJsonObject()) {
                 JsonObject obj = elementDisplay.getAsJsonObject();
                 part.hidden = JsonUtils.getBoolean(obj, "hidden", part.hidden);
+                part.textureDomain = JsonUtils.getString(obj, "texture_domain", part.textureDomain);
                 part.textureSuffix = JsonUtils.getString(obj, "texture_suffix", part.textureSuffix);
                 if (obj.has("texture_color"))
                     part.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));

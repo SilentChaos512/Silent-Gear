@@ -3,16 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.2] - 2018-11-20
 ### Added
 - Crimson iron - Harvest level 2. Ore can be found in the Nether.
 - Crimson steel - Harvest level 4. Crafted from crimson iron.
 - Salvager has a recipe... finally
+- texture_domain option in material JSONs, allows textures from other mods to be used (fixes a texture issue in Silent's Gems)
 - Chipping trait - As the item is damaged, armor loses a little protection, tools gain harvest speed (repairing the item will reverse the effect, of course).
 ### Changed
 - Vanilla's repair recipe (which destroys NBT) is now replaced. Will ignore any gear items and behave as normal otherwise.
 - Gear items are now considered "repairable" thanks to the previous item, which should greatly improve mod compatibility
 - Gold tool heads and tips have new, shinier textures
+- Hammers had a slight design change (a little bulkier). Silent's Gems textures _not updated yet_ (that will be fun...)
 - Traits are now displayed a little differently on parts, hold control to see the full list at once
 - Item part GUI no longer pauses the game
 ### Fixed

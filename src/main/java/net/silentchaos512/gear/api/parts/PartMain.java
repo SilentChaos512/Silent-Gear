@@ -42,7 +42,7 @@ public final class PartMain extends ItemPart {
         String partPosition = position.getTexturePrefix();
         String subtypePrefix = partPosition + (partPosition.isEmpty() ? "" : "_");
         String path = "items/" + toolClass + "/" + subtypePrefix + this.textureSuffix + frameStr;
-        return new ResourceLocation(this.registryName.getNamespace(), path);
+        return new ResourceLocation(this.textureDomain, path);
     }
 
     @Override

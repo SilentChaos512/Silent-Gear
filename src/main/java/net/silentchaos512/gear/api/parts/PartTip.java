@@ -33,7 +33,7 @@ public final class PartTip extends ItemPart implements IUpgradePart {
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
         String frameStr = "bow".equals(gearClass) && animationFrame == 3 ? "_3" : "";
-        return new ResourceLocation(this.registryName.getNamespace(), "items/" + gearClass + "/tip_" + this.textureSuffix + frameStr);
+        return new ResourceLocation(this.textureDomain, "items/" + gearClass + "/tip_" + this.textureSuffix + frameStr);
     }
 
     @Override
