@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gold tool heads and tips have new, shinier textures
 - Traits are now displayed a little differently on parts, hold control to see the full list at once
 - Item part GUI no longer pauses the game
+### Fixed
+- JSON overrides crashing the game if sections are omitted [#13]
 
 ## [0.3.1] - 2018-11-12
 Major crafting station overhaul! I haven't found any item loss/duplication, but keep an eye out.

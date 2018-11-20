@@ -16,13 +16,12 @@ import java.util.*;
  */
 public final class PartRegistry {
     private static Map<String, ItemPart> map = new LinkedHashMap<>();
-    private static List<PartMain> mains = null;
-    private static List<PartRod> rods = null;
-    private static List<PartMain> visibleMains = null;
-    private static List<PartRod> visibleRods = null;
+    private static ImmutableList<PartMain> mains = null;
+    private static ImmutableList<PartRod> rods = null;
+    private static ImmutableList<PartMain> visibleMains = null;
+    private static ImmutableList<PartRod> visibleRods = null;
     private static Map<String, ItemPart> STACK_TO_PART = new HashMap<>();
-    @Getter
-    private static int highestMainPartTier = 0;
+    @Getter private static int highestMainPartTier = 0;
 
     private PartRegistry() {
         throw new IllegalAccessError("Utility class");
@@ -30,6 +29,7 @@ public final class PartRegistry {
 
     /**
      * Gets the part with the given key, if it exists.
+     *
      * @param key The part name/key
      * @return The {@link ItemPart} with the given key, or null if there is no match
      */
@@ -40,6 +40,7 @@ public final class PartRegistry {
 
     /**
      * Gets the part with the given key, if it exists.
+     *
      * @param key The part name/key
      * @return The {@link ItemPart} with the given key, or null if there is no match
      */
@@ -98,8 +99,8 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list of registered ToolPartMains in the order they are registered (used for sub-item
-     * display).
+     * Gets a list of registered mains in the order they are registered (used for sub-item display,
+     * among other things). List is immutable and cached.
      */
     public static List<PartMain> getMains() {
         if (mains == null) {
@@ -111,7 +112,8 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list of registered ToolPartRods in the order they are registered.
+     * Gets a list of registered rods in the order they are registered. List is immutable and
+     * cached.
      */
     public static List<PartRod> getRods() {
         if (rods == null) {
@@ -123,7 +125,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list of all mains that are not blacklisted or hidden
+     * Gets a list of all mains that are not blacklisted or hidden. List is immutable and cached.
      */
     public static List<PartMain> getVisibleMains() {
         if (visibleMains == null) {
@@ -135,7 +137,7 @@ public final class PartRegistry {
     }
 
     /**
-     * Gets a list of all rods that are not blacklisted or hidden
+     * Gets a list of all rods that are not blacklisted or hidden. List is immutable and cached.
      */
     public static List<PartRod> getVisibleRods() {
         if (visibleRods == null) {

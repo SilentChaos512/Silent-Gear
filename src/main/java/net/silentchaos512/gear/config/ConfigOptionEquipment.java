@@ -116,7 +116,7 @@ public class ConfigOptionEquipment {
         JsonObject json = je.getAsJsonObject();
 
         JsonElement elementMods = json.get("modifiers");
-        if (elementMods.isJsonArray()) {
+        if (elementMods != null && elementMods.isJsonArray()) {
             JsonArray array = elementMods.getAsJsonArray();
             for (JsonElement element : array) {
                 JsonObject obj = element.getAsJsonObject();
@@ -132,7 +132,7 @@ public class ConfigOptionEquipment {
         }
 
         JsonElement elementBaseMods = json.get("base_modifiers");
-        if (elementBaseMods.isJsonObject()) {
+        if (elementBaseMods != null && elementBaseMods.isJsonObject()) {
             JsonObject obj = elementBaseMods.getAsJsonObject();
             for (ItemStat stat : ItemStat.ALL_STATS.values()) {
                 if (obj.has(stat.getName().getPath())) {
@@ -156,8 +156,8 @@ public class ConfigOptionEquipment {
 
     private static int getPartCountFromJson(JsonObject json, PartType type) {
         String[] possibleNames = type == PartType.MAIN
-                ? new String[] {type.getName(), type.getName() + "_count", "head_count"}
-                : new String[] {type.getName(), type.getName() + "_count"};
+                ? new String[]{type.getName(), type.getName() + "_count", "head_count"}
+                : new String[]{type.getName(), type.getName() + "_count"};
         for (String name : possibleNames)
             if (json.has(name))
                 return json.get(name).getAsInt();

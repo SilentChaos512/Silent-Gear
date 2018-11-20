@@ -55,6 +55,7 @@ public abstract class ItemPart {
     protected int tier = 0;
     protected boolean enabled = true;
     protected boolean hidden = false;
+    protected String textureDomain;
     protected String textureSuffix;
     protected int textureColor = Color.VALUE_WHITE;
     protected int brokenColor = Color.VALUE_WHITE;
@@ -80,6 +81,7 @@ public abstract class ItemPart {
 
     public ItemPart(ResourceLocation registryName, PartOrigins origin) {
         this.registryName = registryName;
+        textureDomain = registryName.getNamespace();
         this.textureSuffix = REGEX_TEXTURE_SUFFIX_REPLACE.matcher(registryName.getPath()).replaceFirst("");
         this.modelIndex = ++lastModelIndex;
         this.origin = origin;
@@ -366,7 +368,7 @@ public abstract class ItemPart {
 
         private static void readStats(ItemPart part, JsonObject json) {
             JsonElement elementStats = json.get("stats");
-            if (elementStats.isJsonArray()) {
+            if (elementStats != null && elementStats.isJsonArray()) {
                 JsonArray array = elementStats.getAsJsonArray();
                 Multimap<ItemStat, StatInstance> statMap = new StatModifierMap();
                 for (JsonElement element : array) {
@@ -420,7 +422,7 @@ public abstract class ItemPart {
 
         private static void readCraftingItems(ItemPart part, JsonObject json) {
             JsonElement elementCraftingItems = json.get("crafting_items");
-            if (elementCraftingItems.isJsonObject()) {
+            if (elementCraftingItems != null && elementCraftingItems.isJsonObject()) {
                 JsonObject objTop = elementCraftingItems.getAsJsonObject();
                 // Normal item (ingot, gem)
                 if (objTop.has("normal") && objTop.get("normal").isJsonObject()) {
@@ -439,7 +441,7 @@ public abstract class ItemPart {
 
         private static void readDisplayProperties(ItemPart part, JsonObject json) {
             JsonElement elementDisplay = json.get("display");
-            if (elementDisplay.isJsonObject()) {
+            if (elementDisplay != null && elementDisplay.isJsonObject()) {
                 JsonObject obj = elementDisplay.getAsJsonObject();
                 part.hidden = JsonUtils.getBoolean(obj, "hidden", part.hidden);
                 part.textureSuffix = JsonUtils.getString(obj, "texture_suffix", part.textureSuffix);
@@ -459,7 +461,7 @@ public abstract class ItemPart {
 
         private static void readAvailability(ItemPart part, JsonObject json) {
             JsonElement elementAvailability = json.get("availability");
-            if (elementAvailability.isJsonObject()) {
+            if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
                 part.enabled = JsonUtils.getBoolean(obj, "enabled", part.enabled);
                 part.tier = JsonUtils.getInt(obj, "tier", part.tier);
