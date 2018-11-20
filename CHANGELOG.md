@@ -8,8 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crimson iron - Harvest level 2. Ore can be found in the Nether.
 - Crimson steel - Harvest level 4. Crafted from crimson iron.
 - Salvager has a recipe... finally
-- New traits
-    - Chipping - As the item is damaged, armor loses a little protection, tools gain harvest speed (repairing the item will reverse the effect, of course).
+- Chipping trait - As the item is damaged, armor loses a little protection, tools gain harvest speed (repairing the item will reverse the effect, of course).
 ### Changed
 - Vanilla's repair recipe (which destroys NBT) is now replaced. Will ignore any gear items and behave as normal otherwise.
 - Gear items are now considered "repairable" thanks to the previous item, which should greatly improve mod compatibility

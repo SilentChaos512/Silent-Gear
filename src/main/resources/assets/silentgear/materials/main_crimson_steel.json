@@ -14,7 +14,7 @@
         {"name": "magic_armor",     "value":    8},
         {"name": "ranged_damage",   "value":    3},
         {"name": "ranged_speed",    "value": -0.1},
-        {"name": "rarity",          "value":   45},
+        {"name": "rarity",          "value":   42},
         {"name": "chargeability",   "value":  0.9}
     ],
     "traits": [

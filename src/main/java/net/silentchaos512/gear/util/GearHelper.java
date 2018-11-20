@@ -246,6 +246,9 @@ public final class GearHelper {
             attemptDamage(stack, damage, entityLiving);
         }
 //        GearStatistics.incrementStat(stack, GearStatistics.BLOCKS_MINED);
+
+        // TODO: Implement multi-break skill
+
         return true;
     }
 
