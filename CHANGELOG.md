@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Vanilla's repair recipe (which destroys NBT) is now replaced. Will ignore any gear items and behave as normal otherwise.
 - Gear items are now considered "repairable" thanks to the previous item, which should greatly improve mod compatibility
+- Gold tool heads and tips have new, shinier textures
 - Traits are now displayed a little differently on parts, hold control to see the full list at once
 - Item part GUI no longer pauses the game
 
