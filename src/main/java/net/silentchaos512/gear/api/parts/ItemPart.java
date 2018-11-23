@@ -450,8 +450,10 @@ public abstract class ItemPart {
                     part.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
                 if (obj.has("broken_color"))
                     part.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
-                if (obj.has("name_color"))
-                    part.nameColor = TextFormatting.getValueByName(JsonUtils.getString(obj, "name_color"));
+                if (obj.has("name_color")) {
+                    TextFormatting format = TextFormatting.getValueByName(JsonUtils.getString(obj, "name_color"));
+                    part.nameColor = format != null ? format : part.nameColor;
+                }
 
                 if (obj.has("override_localization"))
                     part.localizedNameOverride = JsonUtils.getString(obj, "override_localization");
