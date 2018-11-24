@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "inventory": {"model": "silentgear:netherwood_leaves"},
+        "check_decay=false,decayable=false": {"model": "silentgear:netherwood_leaves"},
+        "check_decay=false,decayable=true": {"model": "silentgear:netherwood_leaves"},
+        "check_decay=true,decayable=false": {"model": "silentgear:netherwood_leaves"},
+        "check_decay=true,decayable=true": {"model": "silentgear:netherwood_leaves"}
+    }
+}

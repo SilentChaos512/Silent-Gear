@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "normal": {"model": "silentgear:netherwood_planks"},
+        "inventory": {"model": "silentgear:netherwood_planks"}
+    }
+}

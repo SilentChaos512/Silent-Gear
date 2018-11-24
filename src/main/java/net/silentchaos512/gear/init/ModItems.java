@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ModItems {
+public final class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
@@ -33,6 +33,7 @@ public class ModItems {
     public static BlueprintPackage blueprintPackage = new BlueprintPackage(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"));
 
     public static Flaxseeds flaxseeds = new Flaxseeds();
+    public static NetherBanana netherBanana = new NetherBanana();
 
     public static ToolHead toolHead = new ToolHead();
 
@@ -53,6 +54,8 @@ public class ModItems {
     public static CoreArmor chestplate = new CoreArmor(EntityEquipmentSlot.CHEST, "chestplate");
     public static CoreArmor leggings = new CoreArmor(EntityEquipmentSlot.LEGS, "leggings");
     public static CoreArmor boots = new CoreArmor(EntityEquipmentSlot.FEET, "boots");
+
+    private ModItems() {}
 
     public static void registerAll(SRegistry reg) {
         guideBook.giveBookOnFirstLogin = false;
@@ -93,6 +96,7 @@ public class ModItems {
         enumItems.registerItems(MiscUpgrades.values());
         enumItems.registerItems(CraftingItems.values());
         reg.registerItem(flaxseeds, "flaxseeds");
+        reg.registerItem(netherBanana, "nether_banana");
 
         reg.registerItem(toolHead, "tool_head");
 

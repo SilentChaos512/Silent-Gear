@@ -1,5 +1,6 @@
 package net.silentchaos512.gear;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -18,6 +19,7 @@ import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolHeadModel;
 import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.compat.jei.JeiPlugin;
+import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.lib.registry.SRegistry;
 
 public class ClientProxy extends CommonProxy {
@@ -46,6 +48,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
 
         ColorHandlers.init();
+
+        ModBlocks.netherwoodLeaves.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
     }
 
     @Override
