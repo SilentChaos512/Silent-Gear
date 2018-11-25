@@ -158,7 +158,7 @@ public abstract class ItemPart {
     public boolean matchesForCrafting(ItemStack partRep, boolean matchOreDict) {
         if (partRep.isEmpty())
             return false;
-        if (partRep.isItemEqual(this.craftingStack.get()))
+        if (!matchOreDict && partRep.isItemEqual(this.craftingStack.get()))
             return true;
         if (matchOreDict && !this.craftingOreDictName.isEmpty()) {
             for (int id : OreDictionary.getOreIDs(partRep)) {

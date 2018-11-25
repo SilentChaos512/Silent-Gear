@@ -70,6 +70,10 @@ public class ItemStat {
     private static final float WEIGHT_DEVIATION_COEFF = 2f;
 
     public float compute(float baseValue, Collection<StatInstance> modifiers) {
+        return compute(baseValue, true, modifiers);
+    }
+
+    public float compute(float baseValue, boolean clampValue, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
             return baseValue;
 
@@ -125,7 +129,7 @@ public class ItemStat {
             if (mod.getOp() == StatInstance.Operation.MAX)
                 f1 = Math.max(f1, mod.getValue());
 
-        return clampValue(f1);
+        return clampValue ? clampValue(f1) : f1;
     }
 
     public StatInstance computeForDisplay(float baseValue, MaterialGrade grade, Collection<StatInstance> modifiers) {
@@ -141,7 +145,7 @@ public class ItemStat {
             }
         }
 
-        float value = compute(baseValue + add, modifiers) - add;
+        float value = compute(baseValue + add, false, modifiers) - add;
         if (affectedByGrades) {
             // FIXME: This doesn't exactly match the calculations done in GearData
             float gradeBonus = 1f + grade.bonusPercent / 100f;

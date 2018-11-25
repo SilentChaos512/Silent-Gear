@@ -64,8 +64,15 @@ public final class PartRegistry {
         if (STACK_TO_PART.containsKey(key))
             return STACK_TO_PART.get(key);
 
+        // Match exact item first, then ore dictionary
+        ItemPart part = getPart(key, stack, false);
+        return part != null ? part : getPart(key, stack, true);
+    }
+
+    @Nullable
+    private static ItemPart getPart(String key, ItemStack stack, boolean matchOreDict) {
         for (ItemPart part : map.values()) {
-            if (part.matchesForCrafting(stack, true)) {
+            if (part.matchesForCrafting(stack, matchOreDict)) {
                 STACK_TO_PART.put(key, part);
                 return part;
             }

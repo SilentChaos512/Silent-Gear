@@ -21,6 +21,7 @@ import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Side.CLIENT)
 public final class TooltipHandler {
@@ -88,6 +89,9 @@ public final class TooltipHandler {
         event.getToolTip().add(TextFormatting.AQUA + line);
     }
 
+    private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
+    private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
+
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
         ItemPartData partData = ItemPartData.instance(part, MaterialGrade.fromStack(stack), stack);
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
@@ -102,9 +106,9 @@ public final class TooltipHandler {
                     String nameStr = nameColor + stat.translatedName();
                     int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
-                    String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");
+                    String statStr = statColor + REGEX_TRIM_TO_INT.matcher(inst.formattedString(decimalPlaces, false)).replaceFirst("");
                     if (statStr.contains("."))
-                        statStr = statStr.replaceFirst("0+$", "");
+                        statStr = REGEX_REMOVE_TRAILING_ZEROS.matcher(statStr).replaceFirst("");
                     if (modifiers.size() > 1)
                         statStr += "*";
                     if (stat == CommonItemStats.ARMOR_DURABILITY)

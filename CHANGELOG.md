@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Netherwood trees, which can be found in the Nether (adds logs, planks, leaves, and saplings, no stairs or slabs yet)
 - A new type of fruit
+### Fixed
+- Part detection will favor specific items more consistently
+- Part tooltips should display all modifiers correctly now (such as negative values in some cases)
 
 ## [0.3.2] - 2018-11-20
 ### Added
