@@ -1,26 +1,6 @@
 {
   "variants": {
-    "normal": {
-      "_comment": "Remove if finished model requires rotation",
-      "model": "silentgear:salvager"
-    },
-    "inventory": {
-      "model": "silentgear:salvager"
-    },
-    "facing=north": {
-      "model": "silentgear:salvager",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "silentgear:salvager"
-    },
-    "facing=east": {
-      "model": "silentgear:salvager",
-      "y": 270
-    },
-    "facing=west": {
-      "model": "silentgear:salvager",
-      "y": 90
-    }
+    "normal": {"model": "silentgear:salvager"},
+    "inventory": {"model": "silentgear:salvager"}
   }
 }

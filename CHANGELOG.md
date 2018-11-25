@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Netherwood trees, which can be found in the Nether (adds logs, planks, leaves, and saplings, no stairs or slabs yet)
 - A new type of fruit
 - Trait: Crude - Reduces synergy bonuses, cancels with Synergy Boost (found on rough rod)
+- Textures for the salvager (KelleyEngineering)
 ### Changed
 - Synergy calculations tweaked (higher max value, lower drop off)
 ### Fixed
