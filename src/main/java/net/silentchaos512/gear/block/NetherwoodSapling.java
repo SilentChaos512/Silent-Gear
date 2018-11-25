@@ -55,8 +55,8 @@ public class NetherwoodSapling extends BlockBush implements IGrowable {
 
     @Override
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
-        return state.getBlock() == this && worldIn.getBlockState(pos.down()).getBlock() == Blocks.NETHERRACK
-                || super.canBlockStay(worldIn, pos, state);
+        Block blockBelow = worldIn.getBlockState(pos.down()).getBlock();
+        return state.getBlock() == this && blockBelow == Blocks.NETHERRACK || super.canBlockStay(worldIn, pos, state);
     }
 
     @Override

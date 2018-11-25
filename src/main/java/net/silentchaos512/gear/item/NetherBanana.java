@@ -22,6 +22,6 @@ import net.minecraft.item.ItemFood;
 
 public class NetherBanana extends ItemFood {
     public NetherBanana() {
-        super(5, 0.5f, false);
+        super(5, 0.4f, false);
     }
 }

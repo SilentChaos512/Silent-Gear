@@ -48,7 +48,7 @@ public class NetherwoodTree extends WorldGenShrub {
 
         IBlockState state = worldIn.getBlockState(position);
 
-        if (state.getBlock() == ModBlocks.netherwoodSapling || state.getBlock().canSustainPlant(state, worldIn, position, net.minecraft.util.EnumFacing.UP, ModBlocks.netherwoodSapling)) {
+        if (ModBlocks.netherwoodSapling.canBlockStay(worldIn, position, state)) {
             setBlockAndNotifyAdequately(worldIn, position, wood);
 
             final int height = MathUtils.nextIntInclusive(3, 5);
