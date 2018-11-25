@@ -32,6 +32,17 @@
                     "weight": 1
                 }
             ]
+        },
+        {
+            "name": "sword",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "silentgear:blueprint_sword",
+                    "weight": 1
+                }
+            ]
         }
     ]
 }

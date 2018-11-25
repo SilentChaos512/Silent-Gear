@@ -25,6 +25,13 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.lib.collection.StackList;
 
+/**
+ * This replaces vanilla's item repair recipe. That recipe deletes all NBT, so the results would be
+ * disastrous on SGear items. This blocks {@link ICoreItem} from matching. For all others, this is
+ * passed back to the vanilla version.
+ *
+ * @since 0.3.2
+ */
 public class RecipeRepairItemFix extends RecipeRepairItem {
     @Override
     public boolean matches(InventoryCrafting inv, World worldIn) {
