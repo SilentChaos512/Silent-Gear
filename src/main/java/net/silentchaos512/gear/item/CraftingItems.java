@@ -31,6 +31,7 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     ROUGH_ROD,
     STONE_ROD,
     IRON_ROD,
+    NETHERWOOD_STICK,
     CRIMSON_IRON_INGOT,
     CRIMSON_STEEL_INGOT,
     DIAMOND_SHARD,
@@ -73,6 +74,7 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
         OreDictionary.registerOre("rodStone", STONE_ROD.item);
         OreDictionary.registerOre("stickIron", IRON_ROD.item);
         OreDictionary.registerOre("stickStone", STONE_ROD.item);
+        OreDictionary.registerOre("stickWood", NETHERWOOD_STICK.item);
         OreDictionary.registerOre("string", FLAX_STRING.item);
     }
 }

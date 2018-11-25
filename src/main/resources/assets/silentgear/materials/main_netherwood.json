@@ -1,0 +1,41 @@
+{
+    "type": "main",
+    "stats": [
+        {"name": "durability",      "value":  72},
+        {"name": "armor_durability","value":  12},
+        {"name": "enchantability",  "value":  13},
+        {"name": "harvest_level",   "value":   0},
+        {"name": "harvest_speed",   "value":   2},
+        {"name": "melee_damage",    "value":   0},
+        {"name": "magic_damage",    "value":   0},
+        {"name": "attack_speed",    "value": 0.2},
+        {"name": "armor",           "value":   8},
+        {"name": "armor_toughness", "value":   0},
+        {"name": "magic_armor",     "value":   0},
+        {"name": "ranged_damage",   "value":   0},
+        {"name": "ranged_speed",    "value": 0.0},
+        {"name": "rarity",          "value":   2},
+        {"name": "chargeability",   "value": 0.6}
+    ],
+    "traits": [
+        {"name": "silentgear:jagged", "level": 1}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "silentgear:netherwood_planks",
+            "data": 0
+        }
+    },
+    "display": {
+        "hidden": false,
+        "texture_suffix": "iron",
+        "texture_color": "D83200",
+        "broken_color": "D83200",
+        "name_color": "red"
+    },
+    "availability": {
+        "enabled": true,
+        "tier": 0,
+        "tool_blacklist": []
+    }
+}

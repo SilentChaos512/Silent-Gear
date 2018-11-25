@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p",
+    "p"
+  ],
+  "key": {
+    "p": {
+      "item": "silentgear:netherwood_planks"
+    }
+  },
+  "result": {
+    "item": "silentgear:netherwood_stick",
+    "count": 4
+  }
+}

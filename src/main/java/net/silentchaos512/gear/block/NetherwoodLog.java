@@ -25,8 +25,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.oredict.OreDictionary;
+import net.silentchaos512.lib.registry.IAddRecipes;
 
-public class NetherwoodLog extends BlockLog {
+public class NetherwoodLog extends BlockLog implements IAddRecipes {
     public NetherwoodLog() {
         setDefaultState(blockState.getBaseState().withProperty(LOG_AXIS, EnumAxis.Y));
     }
@@ -83,5 +85,10 @@ public class NetherwoodLog extends BlockLog {
     @Override
     public int damageDropped(IBlockState state) {
         return 0;
+    }
+
+    @Override
+    public void addOreDict() {
+        OreDictionary.registerOre("logWood", this);
     }
 }
