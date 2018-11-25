@@ -25,6 +25,10 @@ import java.util.regex.Pattern;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Side.CLIENT)
 public final class TooltipHandler {
+    // Display a single trait and cycling through the list. Main problem with this is it affects
+    // JEI's tooltip cache. When disabled, you can search for parts with certain traits.
+    private static final boolean TRAIT_DISPLAY_CYCLE = false;
+
     private TooltipHandler() {}
 
     @SubscribeEvent
@@ -59,7 +63,7 @@ public final class TooltipHandler {
         // Traits
         Map<Trait, Integer> traits = partData.getTraits();
         int numTraits = traits.size();
-        int traitIndex = KeyTrackerSL.isControlDown() || numTraits == 0 ? -1 : ClientTicks.ticksInGame / 20 % numTraits;
+        int traitIndex = getTraitDisplayIndex(numTraits);
         int i = 0;
         for (Trait trait : traits.keySet()) {
             if (traitIndex < 0 || traitIndex == i) {
@@ -82,6 +86,12 @@ public final class TooltipHandler {
                 getGradeLine(event, grade);
             event.getToolTip().add(TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.ctrlForStats"));
         }
+    }
+
+    private static int getTraitDisplayIndex(int numTraits) {
+        if (!TRAIT_DISPLAY_CYCLE || KeyTrackerSL.isControlDown() || numTraits == 0)
+            return -1;
+        else return ClientTicks.ticksInGame / 20 % numTraits;
     }
 
     private static void getGradeLine(ItemTooltipEvent event, MaterialGrade grade) {

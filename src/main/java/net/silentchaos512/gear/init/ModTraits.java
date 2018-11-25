@@ -41,7 +41,8 @@ public final class ModTraits implements IPhasedInitializer {
     public static Trait multiBreak;
     public static Trait speedBoostLight;
     public static Trait synergyBoost;
-    public static final float SYNERGY_BOOST_MULTI = 0.1f;
+    public static Trait crude;
+    public static final float SYNERGY_BOOST_MULTI = 0.04f;
 
     private static final int COMMON_MAX_LEVEL = 4;
     private static final float DURABILITY_EFFECT_CHANCE = 0.1f;
@@ -65,7 +66,10 @@ public final class ModTraits implements IPhasedInitializer {
         speedBoostLight = TraitRegistry.register(new Trait(path("speed_boost_light"),
                 COMMON_MAX_LEVEL, TextFormatting.GOLD, 0));
         synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"),
-                COMMON_MAX_LEVEL, TextFormatting.DARK_GREEN, 0));
+                COMMON_MAX_LEVEL + 1, TextFormatting.DARK_GREEN, 0));
+        crude = TraitRegistry.register(new Trait(path("crude"),
+                COMMON_MAX_LEVEL + 1, TextFormatting.BOLD, 0));
+        Trait.setCancelsWith(synergyBoost, crude);
 
         TraitRegistry.register(new StatModifierTrait(path("bulky"), COMMON_MAX_LEVEL, TextFormatting.BOLD) {
             @Override

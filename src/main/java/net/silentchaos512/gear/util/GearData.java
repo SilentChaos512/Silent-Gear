@@ -164,9 +164,19 @@ public final class GearData {
         return stats;
     }
 
+    private static final double SYNERGY_MULTI = 1.1;
+
+    private static double getBaseSynergy(PartDataList parts) {
+        final int x = parts.getMains().size();
+        final double a = SYNERGY_MULTI;
+        return a * (x / (x + a)) + (1 / (1 + a));
+    }
+
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<Trait, Integer> traits) {
         // First, we add a bonus for the number of unique main parts
-        double synergy = 1.0 + 0.2 * Math.log(5 * uniqueParts.getMains().size() - 4);
+//        double synergy = 1.0 + 0.2 * Math.log(5 * uniqueParts.getMains().size() - 4);
+        double synergy = getBaseSynergy(uniqueParts);
+
         // Second, reduce synergy for difference in rarity and tier
         ItemPartData primaryMain = parts.getPrimaryMain();
         float primaryRarity = primaryMain == null ? 0 : primaryMain.computeStat(CommonItemStats.RARITY);
@@ -186,15 +196,17 @@ public final class GearData {
                 synergy -= 0.16f * Math.abs(maxTier - tier);
             }
         }
-        if (synergy > 1) {
-            synergy = Math.sqrt(synergy);
 
+        if (synergy > 1) {
             if (traits.containsKey(ModTraits.synergyBoost)) {
                 int level = traits.get(ModTraits.synergyBoost);
-                synergy += synergy * level * ModTraits.SYNERGY_BOOST_MULTI;
+                synergy += level * ModTraits.SYNERGY_BOOST_MULTI;
+            }
+            if (traits.containsKey(ModTraits.crude)) {
+                int level = traits.get(ModTraits.crude);
+                synergy -= level * ModTraits.SYNERGY_BOOST_MULTI;
             }
         }
-
 
         return synergy;
     }
