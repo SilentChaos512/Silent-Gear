@@ -197,15 +197,14 @@ public final class GearData {
             }
         }
 
-        if (synergy > 1) {
-            if (traits.containsKey(ModTraits.synergyBoost)) {
-                int level = traits.get(ModTraits.synergyBoost);
-                synergy += level * ModTraits.SYNERGY_BOOST_MULTI;
-            }
-            if (traits.containsKey(ModTraits.crude)) {
-                int level = traits.get(ModTraits.crude);
-                synergy -= level * ModTraits.SYNERGY_BOOST_MULTI;
-            }
+        // Synergy Boost (only if higher than 100%)
+        if (synergy > 1 && traits.containsKey(ModTraits.synergyBoost)) {
+            int level = traits.get(ModTraits.synergyBoost);
+            synergy += level * ModTraits.SYNERGY_BOOST_MULTI;
+        }
+        if (traits.containsKey(ModTraits.crude)) {
+            int level = traits.get(ModTraits.crude);
+            synergy -= level * ModTraits.SYNERGY_BOOST_MULTI;
         }
 
         return synergy;

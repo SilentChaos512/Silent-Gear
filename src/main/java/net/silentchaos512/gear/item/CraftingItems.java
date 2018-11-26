@@ -18,11 +18,18 @@
 
 package net.silentchaos512.gear.item;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.item.IEnumItems;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Objects;
 
 public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     BLUEPRINT_PAPER,
@@ -48,7 +55,7 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     private final Item item;
 
     CraftingItems() {
-        this.item = new Item();
+        this.item = new ItemInternal();
     }
 
     @Nonnull
@@ -76,5 +83,15 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
         OreDictionary.registerOre("stickStone", STONE_ROD.item);
         OreDictionary.registerOre("stickWood", NETHERWOOD_STICK.item);
         OreDictionary.registerOre("string", FLAX_STRING.item);
+    }
+
+    private static final class ItemInternal extends Item {
+        @Override
+        public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+            String regName = Objects.requireNonNull(getRegistryName()).getPath();
+            String key = SilentGear.i18n.getKey("item", regName, "desc");
+            if (SilentGear.i18n.hasKey(key))
+                tooltip.add(SilentGear.i18n.translate(key));
+        }
     }
 }

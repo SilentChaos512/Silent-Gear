@@ -1,0 +1,8 @@
+{
+    "ingredients": {
+        "part": "net.silentchaos512.gear.recipe.gear.GearPartIngredientFactory"
+    },
+    "recipes": {
+        "rough_tool": "net.silentchaos512.gear.recipe.gear.RoughToolRecipeFactory"
+    }
+}

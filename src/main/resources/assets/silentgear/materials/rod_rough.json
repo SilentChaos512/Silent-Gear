@@ -23,9 +23,9 @@
     },
     "display": {
         "hidden": false,
-        "texture_suffix": "wood",
+        "texture_suffix": "rough",
         "texture_color": "ffffff",
-        "name_color": "gold"
+        "name_color": "red"
     },
     "availability": {
         "enabled": true,

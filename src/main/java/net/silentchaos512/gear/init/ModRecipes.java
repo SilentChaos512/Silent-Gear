@@ -14,20 +14,26 @@ import net.silentchaos512.lib.registry.SRegistry;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModRecipes {
+public final class ModRecipes {
     public static final Map<String, RecipeModularItem> gearCrafting = new HashMap<>();
 
+    private ModRecipes() {}
+
     public static void registerAll(SRegistry reg) {
+        // Gear recipes
         RecipeMaker recipes = reg.getRecipeMaker();
         for (ICoreItem item : ModItems.toolClasses.values()) {
             final RecipeModularItem recipe = new RecipeModularItem(item);
             gearCrafting.put(item.getGearClass(), recipe);
             recipes.addCustomRecipe("core_" + item.getGearClass(), recipe);
         }
+
+        // Gear crafting system recipes - TODO: move to JSON
         recipes.addCustomRecipe("head_blueprint", new RecipeBlueprintCrafting(ModItems.toolHead));
         recipes.addCustomRecipe("upgrade_core_item", new RecipeUpgradeModularItem());
         recipes.addCustomRecipe("quick_gear_repair", new RecipeQuickRepair());
 
+        // Smelting recipes
         recipes.addSmelting(ModBlocks.crimsonIronOre, new ItemStack(CraftingItems.CRIMSON_IRON_INGOT.getItem()), 0.6f);
 
         // Repair recipe "fix" - prevents gear items from being destroyed by vanilla
