@@ -109,5 +109,7 @@ public class Trait {
         return value;
     }
 
+    public void onUpdate(@Nullable EntityPlayer player, int level, ItemStack gear) {}
+
     //endregion
 }

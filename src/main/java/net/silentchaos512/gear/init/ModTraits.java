@@ -30,6 +30,7 @@ import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 import net.silentchaos512.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.trait.StatModifierTrait;
+import net.silentchaos512.gear.trait.TraitRefractive;
 import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
 
@@ -70,6 +71,8 @@ public final class ModTraits implements IPhasedInitializer {
         crude = TraitRegistry.register(new Trait(path("crude"),
                 COMMON_MAX_LEVEL + 1, TextFormatting.BOLD, 0));
         Trait.setCancelsWith(synergyBoost, crude);
+
+        TraitRegistry.register(new TraitRefractive(path("refractive"), 1, TextFormatting.GOLD, 0));
 
         TraitRegistry.register(new StatModifierTrait(path("bulky"), COMMON_MAX_LEVEL, TextFormatting.BOLD) {
             @Override

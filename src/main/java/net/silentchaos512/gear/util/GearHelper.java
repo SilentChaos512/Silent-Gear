@@ -281,6 +281,9 @@ public final class GearHelper {
                 GearData.recalculateStats(stack);
             }
         }
+
+        EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
+        TraitHelper.tickTraits(player, stack);
     }
 
     public static EnumRarity getRarity(ItemStack stack) {

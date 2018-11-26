@@ -13,6 +13,7 @@
         {"name": "rarity",          "value":   10}
     ],
     "traits": [
+        {"name": "silentgear:refractive", "level": 1},
         {"name": "silentgear:speed_boost_light", "level": 4}
     ],
     "crafting_items": {

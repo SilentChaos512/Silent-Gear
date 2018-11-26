@@ -19,6 +19,7 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +31,7 @@ import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -99,6 +101,14 @@ public final class TraitHelper {
         return 0;
     }
 
+    /**
+     * Gets a Map of Traits and levels from the parts, used to calculate trait levels and should not
+     * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, Trait)} when
+     * appropriate.
+     *
+     * @param parts The list of all parts used in constructing the gear.
+     * @return A Map of Traits to their levels
+     */
     public static Map<Trait, Integer> getTraits(PartDataList parts) {
         if (parts.isEmpty())
             return ImmutableMap.of();
@@ -164,6 +174,24 @@ public final class TraitHelper {
                             break;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    static void tickTraits(@Nullable EntityPlayer player, ItemStack gear) {
+        // Performance test on 2018-11-26 - roughly 5% FPS loss max (negligible), average ~420 FPS
+        NBTTagList tagList = GearData.getPropertiesData(gear).getTagList("Traits", 10);
+
+        for (NBTBase nbt : tagList) {
+            if (nbt instanceof NBTTagCompound) {
+                NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+                String regName = tagCompound.getString("Name");
+                Trait trait = TraitRegistry.get(regName);
+
+                if (trait != null) {
+                    int level = tagCompound.getByte("Level");
+                    trait.onUpdate(player, level, gear);
                 }
             }
         }
