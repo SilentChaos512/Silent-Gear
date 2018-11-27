@@ -404,4 +404,5 @@ misc.silentgear.exampleOutput1=Example output (modular recipe)
 misc.silentgear.exampleOutput2=If you crafted this, something went wrong!
 misc.silentgear.invalidParts=Seems to contain invalid parts
 misc.silentgear.lockedStats=Stats are locked
+misc.silentgear.notifyOnBreak=Your %s has broken. You should fix that.
 misc.silentgear.poorlyMade=This item is poorly made and will not last long

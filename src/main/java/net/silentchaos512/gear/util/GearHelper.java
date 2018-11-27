@@ -31,6 +31,7 @@ import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.item.ToolRods;
 import net.silentchaos512.lib.registry.RecipeMaker;
+import net.silentchaos512.lib.util.ChatHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -145,11 +146,21 @@ public final class GearHelper {
             entityLiving.renderBrokenItemStack(stack);
             GearData.incrementBrokenCount(stack);
             GearData.recalculateStats(stack);
+            if (player != null)
+                notifyPlayerOfBrokenGear(stack, player);
+
         } else if (canBreakPermanently && wouldBreak) {
             // Item is gone forever, rest in pieces
             entityLiving.renderBrokenItemStack(stack);
             stack.shrink(1);
         }
+    }
+
+    public static void notifyPlayerOfBrokenGear(ItemStack stack, EntityPlayerMP player) {
+        // Notify player. Mostly for armor, but might help new players as well.
+        // FIXME: Does not work with armor currently, need to find a way to get player
+        String key = SilentGear.i18n.getKey("misc", "notifyOnBreak");
+        ChatHelper.translateStatus(player, key, true, stack.getDisplayName());
     }
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
