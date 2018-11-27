@@ -154,7 +154,8 @@ public final class GearHelper {
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
         if (maxDamage == 0) return 1;
-        return stack.getItemDamage() / (maxDamage / DAMAGE_FACTOR_LEVELS);
+        int step = maxDamage / DAMAGE_FACTOR_LEVELS;
+        return stack.getItemDamage() / (step > 0 ? step : 1);
     }
 
     // Used by setDamage in gear items to prevent other mods from breaking them
