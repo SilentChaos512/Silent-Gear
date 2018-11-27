@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Netherwood trees, which can be found in the Nether (adds logs, planks, leaves, and saplings, no stairs or slabs yet)
 - A new type of fruit
 - Quick tool crafting. A few tools can now be crafted without blueprints, but only with rough rods (reduces durability and synergy). This is intended more as an emergency or early-game feature.
-- Trait: Crude - Reduces synergy bonuses, cancels with Synergy Boost (found on rough rod)
 - Textures for the salvager (KelleyEngineering)
+- Trait: Crude - Reduces synergy bonuses, cancels with Synergy Boost (found on rough rod)
 ### Changed
+- Parts with no crafting item will attempt to get one from the ore dictionary instead. The `item` field is now optional if you set `oredict`. If you care what item is displayed, you may still set both.
 - Synergy calculations tweaked (higher max value, lower drop off)
+- Synergy boost effect changed to _add_ 4% to synergy per level (instead of a multiplier)
 ### Fixed
 - Part detection will favor specific items more consistently
 - Part tooltips should display all modifiers correctly now (such as negative values in some cases)

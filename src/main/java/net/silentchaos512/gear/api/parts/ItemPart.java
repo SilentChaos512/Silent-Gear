@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -29,7 +30,6 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.Color;
-import net.silentchaos512.lib.util.GameUtil;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -274,10 +274,10 @@ public abstract class ItemPart {
     @Override
     public String toString() {
         String str = "ItemPart[" + this.getType().getDebugSymbol() + "]{";
-        str += "Origin: " + this.origin + ", ";
         str += "Key: " + this.registryName + ", ";
-        str += "CraftingStack: " + this.craftingStack.get() + ", ";
-        str += "CraftingOreDictName: '" + this.craftingOreDictName + "', ";
+        str += "Origin: " + this.origin + ", ";
+        str += "CraftingItem: " + this.craftingStack.get() + ", ";
+        str += "CraftingOreDict: '" + this.craftingOreDictName + "', ";
         str += "Tier: " + this.tier;
         str += "}";
         return str;
@@ -343,15 +343,39 @@ public abstract class ItemPart {
     }
 
     public void postInitChecks() {
-        if (GameUtil.isDeobfuscated())
-            SilentGear.log.debug("Post-init checks for {}", this);
+        // Crafting item missing? Try to acquire an item from the ore dictionary.
+        if (getCraftingStack().isEmpty()) {
+            ItemStack fromOredict = getCraftingItemFromOreDict();
+            if (!fromOredict.isEmpty())
+                craftingStack = () -> fromOredict;
+            else
+                SilentGear.log.error("Part \"{}\" ({}) has no crafting item.", this.registryName, this.origin);
+        }
 
-        if (getCraftingStack().isEmpty())
-            SilentGear.log.warn("Part \"{}\" ({}) has no crafting item.", this.registryName, this.origin);
-
+        // Confirm that add-ons are using correct origin (should be BUILTIN_ADDON, not BUILTIN_CORE)
         if (this.origin == PartOrigins.BUILTIN_CORE && !SilentGear.MOD_ID.equals(this.registryName.getNamespace()))
             throw new IllegalArgumentException(String.format("Part \"%s\" has origin %s, but should be %s",
                     this.registryName, PartOrigins.BUILTIN_CORE, PartOrigins.BUILTIN_ADDON));
+    }
+
+    @SuppressWarnings("MethodWithMultipleReturnPoints")
+    private ItemStack getCraftingItemFromOreDict() {
+        // Attempts to get a crafting item based on the part's oredict key.
+        if (craftingOreDictName.isEmpty()) {
+            SilentGear.log.error("No crafting item or ore dictionary key for part: {}", this);
+            return ItemStack.EMPTY;
+        }
+        if (!OreDictionary.doesOreNameExist(craftingOreDictName)) {
+            SilentGear.log.error("Ore dictionary key '{}' does not exist. Part: {}", craftingOreDictName, this);
+            return ItemStack.EMPTY;
+        }
+
+        NonNullList<ItemStack> stacks = OreDictionary.getOres(craftingOreDictName, false);
+        if (!stacks.isEmpty()) {
+            ItemStack itemStack = stacks.get(0);
+            SilentGear.log.debug("Acquire crafting item from oredict, item={}, part={}", itemStack, this);
+            return itemStack;
+        } else return ItemStack.EMPTY;
     }
 
     /**
