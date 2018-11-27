@@ -18,6 +18,7 @@
 
 package net.silentchaos512.gear.init;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -43,6 +44,7 @@ public final class ModTraits implements IPhasedInitializer {
     public static Trait speedBoostLight;
     public static Trait synergyBoost;
     public static Trait crude;
+    public static Trait holy;
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
 
     private static final int COMMON_MAX_LEVEL = 4;
@@ -73,6 +75,14 @@ public final class ModTraits implements IPhasedInitializer {
         Trait.setCancelsWith(synergyBoost, crude);
 
         TraitRegistry.register(new TraitRefractive(path("refractive"), 1, TextFormatting.GOLD, 0));
+
+        holy = TraitRegistry.register(new Trait(path("holy"), COMMON_MAX_LEVEL, TextFormatting.YELLOW, 0) {
+            @Override
+            public float onAttackEntity(@Nullable EntityPlayer player, EntityLivingBase target, int level, ItemStack gear, float baseValue) {
+                if (!target.isEntityUndead()) return baseValue;
+                return baseValue + 2 * level;
+            }
+        });
 
         TraitRegistry.register(new StatModifierTrait(path("bulky"), COMMON_MAX_LEVEL, TextFormatting.BOLD) {
             @Override

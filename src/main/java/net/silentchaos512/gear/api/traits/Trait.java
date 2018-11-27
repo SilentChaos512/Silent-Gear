@@ -19,6 +19,7 @@
 package net.silentchaos512.gear.api.traits;
 
 import lombok.Getter;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -99,6 +100,10 @@ public class Trait {
     protected boolean shouldActivate(int level, ItemStack gear) {
         if (activationChance == 0) return false;
         return MathUtils.tryPercentage(activationChance * level);
+    }
+
+    public float onAttackEntity(@Nullable EntityPlayer player, EntityLivingBase target, int level, ItemStack gear, float baseValue) {
+        return baseValue;
     }
 
     public float onDurabilityDamage(@Nullable EntityPlayer player, int level, ItemStack gear, int damageTaken) {

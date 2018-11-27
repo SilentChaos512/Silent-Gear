@@ -19,20 +19,70 @@
 package net.silentchaos512.gear.event;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.init.ModTraits;
 import net.silentchaos512.gear.util.TraitHelper;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public final class GearEvents {
     private GearEvents() {}
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent events) {
+        entityAttackedThisTick.clear();
+    }
+
+    //region Damaging traits
+
+    private static final Set<UUID> entityAttackedThisTick = new HashSet<>();
+
+    @SubscribeEvent
+    public static void onAttackEntity(LivingAttackEvent event) {
+        // Check if already handled
+        EntityLivingBase attacked = event.getEntityLiving();
+        if (attacked == null || entityAttackedThisTick.contains(attacked.getPersistentID())) return;
+
+        DamageSource source = event.getSource();
+        if (source == null) return;
+
+        Entity attacker = source.getTrueSource();
+        if (!(attacker instanceof EntityPlayer)) return;
+
+        EntityPlayer player = (EntityPlayer) attacker;
+        ItemStack weapon = player.getHeldItemMainhand();
+        if (!(weapon.getItem() instanceof ICoreTool)) return;
+
+        final float baseDamage = event.getAmount();
+        final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, level, value) ->
+                trait.onAttackEntity(player, attacked, level, weapon, baseDamage));
+
+        if (Math.abs(newDamage - baseDamage) > 0.0001f) {
+            event.setCanceled(true);
+            entityAttackedThisTick.add(attacked.getPersistentID());
+            attacked.attackEntityFrom(source, newDamage);
+        }
+    }
+
+    //endregion
+
+    //region Lustrous trait
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
@@ -49,6 +99,8 @@ public final class GearEvents {
 
             if (canHarvest) {
                 int level = TraitHelper.getTraitLevel(tool, ModTraits.speedBoostLight);
+                // FIXME: Seems to be very inconsistent. Need to check block/sky light separately?
+                // Like this: player.world.getLightFor(EnumSkyBlock.BLOCK, player.getPosition());
                 float light = getAreaLightBrightness(player.world, player.getPosition());
                 event.setNewSpeed(event.getOriginalSpeed() + 3 * level * light);
             }
@@ -70,4 +122,6 @@ public final class GearEvents {
         value = Math.max(value, world.getLightBrightness(pos.south().east()));
         return value;
     }
+
+    // endregion
 }

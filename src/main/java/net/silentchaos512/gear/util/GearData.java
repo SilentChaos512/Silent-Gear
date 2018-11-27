@@ -45,7 +45,7 @@ public final class GearData {
     private static final String NBT_IS_EXAMPLE = "IsExample";
     private static final String NBT_RANDOM_GRADING_DONE = "RandomGradingDone";
     private static final String NBT_SYNERGY_DISPLAY = "synergy";
-    private static final String NBT_UUID = "ToolCore_UUID";
+    private static final String NBT_UUID = "ToolCore_UUID";                 // TODO: Update this
 
     private static final String NBT_BROKEN_COUNT = "BrokenCount";
     private static final String NBT_REPAIR_COUNT = "RepairCount";
