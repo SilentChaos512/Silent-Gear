@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- New tool/armor textures made mainly for custom materials. These should replace the "iron" textures suffix when possible. There are two types, `generic_hc` and `generic_lc` (high contrast, low contrast). The "HC" has a very shiny appearance, and "LC" looks more dull.
 - Missing textures for crimson iron/steel armor
 ### Fixed
 - Worn armor is actually colored now (let me know if this doesn't work for you, I'm not sure how I even fixed this :/)
