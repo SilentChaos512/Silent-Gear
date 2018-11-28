@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Missing textures for crimson iron/steel armor
+### Fixed
+- Worn armor is actually colored now (let me know if this doesn't work for you, I'm not sure how I even fixed this :/)
+
 ## [0.4.0] - 2018-11-27
 ### Added
 - Netherwood trees, which can be found in the Nether (adds logs, planks, leaves, and saplings, no stairs or slabs yet)

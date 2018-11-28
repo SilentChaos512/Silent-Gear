@@ -16,7 +16,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -34,10 +33,12 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public class CoreArmor extends ItemArmor implements ICoreArmor {
-
     // Just using my own UUIDs, ItemArmor can keep being stingy.
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("cfea1f82-ab07-40ed-8384-045446707a98"), UUID.fromString("9f441293-6f6e-461f-a3e2-3cad0c06f3a5"), UUID.fromString("4c90545f-c314-4db4-8a60-dac8b3a132a2"), UUID.fromString("f96e4ac9-ab1d-423b-8392-d820d12fc454")};
     // sum = 1, starts with boots
@@ -121,7 +122,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Override
     public boolean matchesRecipe(@Nonnull Collection<ItemStack> parts) {
-        // TODO
+        // Armor comes straight from the blueprint, this is not needed
         return false;
     }
 
@@ -171,7 +172,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
                 list.add(new ShapelessRecipes(SilentGear.MOD_ID, result, ingredients));
             }
         } else {
-            SilentGear.log.warn("Trying to add {} example recipes, but could not find blueprint item!", getGearClass());
+            SilentGear.log.warn("Trying to add {} example recipes, but could not find blueprint item!", itemName);
         }
 
         return list;
@@ -185,22 +186,52 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     //endregion
 
-    //region Client-side methods
-
-    private Map<ResourceLocation, String> textureCache = new HashMap<>();
+    //region Client-side methods and rendering horrors
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+        // In order for colors to work, it seems the following must be true:
+        // 1. Armor texture must be named using the vanilla convention
+        // 2. Return value of this may NOT be cached... wat? Not a big deal I guess.
+        // 3. You got lucky. The tiniest change can break everything for no apparent reason.
+
+        int layer = slot == EntityEquipmentSlot.LEGS ? 2 : 1;
+        // Overlay - default to a blank texture
+        if ("overlay".equals(type))
+            return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
+
         ItemPartData part = GearData.getPrimaryRenderPartFast(stack);
-        if (part == null) part = ItemPartData.instance(ModMaterials.mainWood);
-        ResourceLocation key = part.getPart().getRegistryName();
-        if (!textureCache.containsKey(key)) {
-            String str = key.getNamespace() + ":textures/armor/" + key.getPath().replaceFirst("^main_", "")
-                    + (slot == EntityEquipmentSlot.LEGS ? "_2" : "_1") + ".png";
-            textureCache.put(key, str);
-        }
-        return textureCache.get(key);
+        if (part == null) part = ItemPartData.instance(ModMaterials.mainIron);
+
+        // Actual armor texture
+        return part.getPart().getTextureDomain() + ":textures/models/armor/"
+                + part.getPart().getTextureSuffix()
+                + "_layer_" + layer
+                + (type != null ? "_" + type : "")
+                + ".png";
     }
+
+    @Override
+    public boolean hasOverlay(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public boolean hasColor(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public int getColor(ItemStack stack) {
+        ItemPartData renderPart = GearData.getPrimaryRenderPartFast(stack);
+        return renderPart != null ? renderPart.getColor(stack, 0) : 0xFF00FF;
+    }
+
+    @Override
+    public void removeColor(ItemStack stack) {}
+
+    @Override
+    public void setColor(ItemStack stack, int color) {}
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
