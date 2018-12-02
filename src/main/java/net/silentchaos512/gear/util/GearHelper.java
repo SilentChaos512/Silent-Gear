@@ -324,9 +324,7 @@ public final class GearHelper {
                 break;
             }
         }
-        if (!inTab) {
-            return;
-        }
+        if (!inTab) return;
 
         if (!subItemCache.containsKey(item.getGearClass())) {
             List<ItemStack> list = new ArrayList<>();

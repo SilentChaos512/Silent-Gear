@@ -406,3 +406,4 @@ misc.silentgear.invalidParts=Seems to contain invalid parts
 misc.silentgear.lockedStats=Stats are locked
 misc.silentgear.notifyOnBreak=Your %s has broken. You should fix that.
 misc.silentgear.poorlyMade=This item is poorly made and will not last long
+misc.silentgear.ungradedParts=*Contains ungraded parts!

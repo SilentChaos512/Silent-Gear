@@ -20,10 +20,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.item.IStatItem;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.Trait;
@@ -73,6 +70,8 @@ public class ToolHead extends Item implements IStatItem {
      * Create a stack with a single part. Best for sub-items.
      */
     public ItemStack getStack(String toolClass, PartMain part, boolean isExample) {
+        // Assign a C grade to example outputs
+        ItemPartData partData = ItemPartData.instance(part, MaterialGrade.C);
         ItemStack result = new ItemStack(this);
         NBTTagCompound tags = getData(result);
         tags.setString(NBT_TOOL_CLASS, toolClass);
@@ -80,15 +79,14 @@ public class ToolHead extends Item implements IStatItem {
 
         NBTTagList tagList = new NBTTagList();
         NBTTagCompound partTags = new NBTTagCompound();
-        part.writeToNBT(partTags);
+        partData.writeToNBT(partTags);
 
         tagList.appendTag(partTags);
         final boolean hasGuard = "sword".equals(toolClass);
         if (hasGuard) tagList.appendTag(partTags);
         tags.setTag(NBT_MATERIALS, tagList);
 
-        ItemPartData data = ItemPartData.instance(part);
-        writeStatCache(result, PartDataList.of(data));
+        writeStatCache(result, PartDataList.of(partData));
         return result;
     }
 
@@ -194,22 +192,31 @@ public class ToolHead extends Item implements IStatItem {
     public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
         I18nHelper i18n = SilentGear.i18n;
         String toolClass = getToolClass(stack);
+        Collection<ItemPartData> parts = getAllParts(stack);
 
-        // Materials used in crafting
-        GearClientHelper.tooltipListParts(stack, list, getAllParts(stack));
+        // Ungraded parts warning
+        boolean hasUngradedParts = parts.stream().anyMatch(p -> p.getGrade() == MaterialGrade.NONE);
+        if (hasUngradedParts) {
+            list.add(TextFormatting.ITALIC + SilentGear.i18n.miscText("ungradedParts"));
+        }
 
+        // List materials
+        GearClientHelper.tooltipListParts(stack, list, parts);
+
+        // Example output warning
         if (getData(stack).getBoolean(NBT_IS_EXAMPLE)) {
             list.add(TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput1"));
             list.add(TextFormatting.YELLOW + i18n.translate("misc", "exampleOutput2"));
         }
 
+        // Tooltip from actual tool (minus rod and anything else)
         ICoreItem toolItem = ModItems.toolClasses.get(toolClass);
         if (toolItem != null) {
             // TODO: We're constructing a rod-less tool each time to get stats. Is that bad?
-            ItemStack constructed = toolItem.construct((Item) toolItem, getAllParts(stack));
+            ItemStack constructed = toolItem.construct((Item) toolItem, parts);
             GearData.recalculateStats(constructed);
-            GearClientHelper.addInformation(constructed, world, list,
-                    TooltipFlagTC.withModifierKeys(flag.isAdvanced(), true, false));
+            TooltipFlagTC tooltipFlag = TooltipFlagTC.withModifierKeys(flag.isAdvanced(), true, false);
+            GearClientHelper.addInformation(constructed, world, list, tooltipFlag);
         }
     }
 
@@ -221,10 +228,11 @@ public class ToolHead extends Item implements IStatItem {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        if (this.isInCreativeTab(tab))
-            for (String toolClass : ModItems.toolClasses.keySet())
-                for (PartMain part : PartRegistry.getVisibleMains())
-                    list.add(getStack(toolClass, part, true));
+        if (!this.isInCreativeTab(tab)) return;
+
+        for (String toolClass : ModItems.toolClasses.keySet())
+            for (PartMain part : PartRegistry.getVisibleMains())
+                list.add(getStack(toolClass, part, true));
     }
 
     public Collection<IRecipe> getExampleRecipes() {

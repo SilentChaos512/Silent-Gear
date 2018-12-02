@@ -45,7 +45,10 @@ public final class GearGenerator {
     }
 
     public static List<? extends ItemPart> getPartsOfType(Predicate<? super ItemPart> condition) {
-        return PartRegistry.getValues().stream().filter(condition).collect(Collectors.toList());
+        return PartRegistry.getValues().stream()
+                .filter(p -> !p.isBlacklisted())
+                .filter(condition)
+                .collect(Collectors.toList());
     }
 
     public static Optional<ItemPart> selectRandom(Class<? extends ItemPart> partClass) {
@@ -104,7 +107,7 @@ public final class GearGenerator {
         ItemStack result = item.construct(item.getItem(), parts);
 
         // Apply some random upgrades?
-        if (item instanceof ICoreTool && SilentGear.random.nextFloat() < 0.3f * tier + 0.1f) {
+        if (item instanceof ICoreTool && SilentGear.random.nextFloat() < 0.2f * tier + 0.1f) {
             Optional<ItemPart> tip = selectRandom(PartTip.class);
             tip.ifPresent(part -> GearData.addUpgradePart(result, ItemPartData.instance(part)));
         }

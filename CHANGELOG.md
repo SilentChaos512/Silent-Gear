@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New tool/armor textures made mainly for custom materials. These should replace the "iron" textures suffix when possible. There are two types, `generic_hc` and `generic_lc` (high contrast, low contrast). The "HC" has a very shiny appearance, and "LC" looks more dull.
 - Missing textures for crimson iron/steel armor
+- Tool heads warn about ungraded parts in the tooltip
+### Changed
+- Disabled parts should no longer appear in randomized gear
 ### Fixed
+- Worn armor from custom materials will now load the correct textures
 - Worn armor is actually colored now (let me know if this doesn't work for you, I'm not sure how I even fixed this :/)
 
 ## [0.4.0] - 2018-11-27
