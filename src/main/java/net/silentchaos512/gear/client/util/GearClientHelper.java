@@ -28,8 +28,10 @@ import net.silentchaos512.lib.util.StackHelper;
 import java.util.*;
 
 @SideOnly(Side.CLIENT)
-public class GearClientHelper {
+public final class GearClientHelper {
     public static Map<String, IBakedModel> modelCache = new HashMap<>();
+
+    private GearClientHelper() {}
 
     public static void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
         TooltipFlagTC flagTC = flag instanceof TooltipFlagTC ? (TooltipFlagTC) flag

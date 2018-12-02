@@ -301,9 +301,8 @@ public abstract class ItemPart {
         if (resourceAsStream != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream, "UTF-8"))) {
                 readResourceFile(reader);
-                SilentGear.log.debug("Successfully read '{}'", path);
             } catch (Exception e) {
-                SilentGear.log.warn("Error reading file '{}'", path);
+                SilentGear.log.warn("Error reading part file '{}'", path);
                 SilentGear.log.catching(e);
             }
         } else if (origin.isBuiltin()) {
@@ -314,11 +313,10 @@ public abstract class ItemPart {
         File file = new File(Config.INSTANCE.getDirectory().getPath(), "materials/" + this.registryName.getPath() + ".json");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readResourceFile(reader);
-            SilentGear.log.debug("Successfully read override '{}'", file.getAbsolutePath());
         } catch (FileNotFoundException e) {
-            // Ignore
+            // Ignore, overrides are not required
         } catch (Exception e) {
-            SilentGear.log.warn("Error reading override '{}'", file.getAbsolutePath());
+            SilentGear.log.warn("Error reading part override '{}'", file.getAbsolutePath());
             SilentGear.log.catching(e);
         }
     }
@@ -430,10 +428,8 @@ public abstract class ItemPart {
 
                     if (trait != null) {
                         int level = MathHelper.clamp(JsonUtils.getInt(obj, "level", 1), 1, trait.getMaxLevel());
-                        if (level > 0) {
-                            SilentGear.log.debug("Part '{}': put trait '{}' level {}", part.getRegistryName(), trait.getName(), level);
+                        if (level > 0)
                             traitsMap.put(trait, level);
-                        }
                     }
                 }
 

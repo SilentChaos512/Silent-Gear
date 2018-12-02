@@ -17,6 +17,7 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.lib.client.key.KeyTrackerSL;
 import net.silentchaos512.lib.gui.TexturedButton;
+import net.silentchaos512.lib.util.StringUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -92,6 +93,15 @@ public class GuiCraftingStation extends GuiContainer {
                 -55, 19, 0x404040);
         this.fontRenderer.drawString(I18n.format("container.inventory"),
                 8, this.ySize - 96 + 2, 0x404040);
+
+        // Version number (remove in full release)
+        String versionNumString = "Version: " + SilentGear.VERSION + "-" + SilentGear.BUILD_NUM + (SilentGear.instance.isDevBuild() ? " (dev)" : "");
+        int versionNumStringWidth = fontRenderer.getStringWidth(versionNumString);
+        float versionNumScale = 0.65f;
+        StringUtil.renderScaledAsciiString(fontRenderer, versionNumString,
+                (int) (xSize - versionNumStringWidth * versionNumScale) - 1,
+                ySize + 1,
+                0xCCCCCC, false, versionNumScale);
 
         ItemStack craftResult = this.container.craftResult.getStackInSlot(0);
         drawSlimeFace(craftResult);
