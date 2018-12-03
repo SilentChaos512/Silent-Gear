@@ -40,7 +40,17 @@
                 {
                     "type": "item",
                     "name": "silentgear:blueprint_sword",
-                    "weight": 1
+                    "weight": 11
+                },
+                {
+                    "type": "item",
+                    "name": "silentgear:blueprint_katana",
+                    "weight": 5
+                },
+                {
+                    "type": "item",
+                    "name": "silentgear:blueprint_machete",
+                    "weight": 7
                 }
             ]
         }

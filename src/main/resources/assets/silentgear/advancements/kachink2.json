@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:diamond_shard"
+        },
+        "title": {
+            "translate": "advancements.silentgear.kachink2.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.kachink2.description"
+        }
+    },
+    "parent": "silentgear:kachink1",
+    "criteria": {
+        "repair": {
+            "trigger": "silentlib:generic_int",
+            "conditions": {
+                "type": "silentgear:brittle_proc",
+                "value": 1
+            }
+        }
+    }
+}

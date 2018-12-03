@@ -19,10 +19,13 @@
 package net.silentchaos512.gear.trait;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.lib.advancements.LibTriggers;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +35,8 @@ import javax.annotation.Nullable;
  * not change with level. A negative scale reduces damage taken, positive increases it.
  */
 public class DurabilityTrait extends Trait {
+    private static final ResourceLocation TRIGGER_BRITTLE = new ResourceLocation(SilentGear.MOD_ID, "brittle_proc");
+
     private final float effectScale;
 
     /**
@@ -52,8 +57,11 @@ public class DurabilityTrait extends Trait {
     @Override
     public float onDurabilityDamage(@Nullable EntityPlayer player, int level, ItemStack gear, int damageTaken) {
         if (damageTaken != 0 && shouldActivate(level, gear)) {
+            if (effectScale > 0 && player instanceof EntityPlayerMP)
+                LibTriggers.GENERIC_INT.trigger((EntityPlayerMP) player, TRIGGER_BRITTLE, 1);
             return Math.round(damageTaken + effectScale);
         }
+
         return super.onDurabilityDamage(player, level, gear, damageTaken);
     }
 }

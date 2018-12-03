@@ -9,7 +9,8 @@
         "description": {
             "translate": "advancements.silentgear.blueprint_sword.description"
         },
-        "announce_to_chat": false
+        "announce_to_chat": false,
+        "show_toast": false
     },
     "parent": "silentgear:root",
     "criteria": {

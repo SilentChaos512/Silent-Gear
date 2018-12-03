@@ -16,6 +16,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,6 +31,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.item.ToolRods;
+import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.registry.RecipeMaker;
 import net.silentchaos512.lib.util.ChatHelper;
 
@@ -127,7 +129,7 @@ public final class GearHelper {
                 (trait, level, val) -> trait.onDurabilityDamage(player, level, stack, (int) val));
 
         final int maxDamage = stack.getMaxDamage();
-        int preDamageFactor = getDamageFactor(stack, maxDamage);
+        final int preDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently)
             amount = Math.min(maxDamage - stack.getItemDamage(), amount);
         boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.random, player);
@@ -135,10 +137,8 @@ public final class GearHelper {
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
             GearData.recalculateStats(stack);
-            if (player != null) {
-                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK,
-                        SoundCategory.PLAYERS, 0.5f, 2.0f);
-            }
+            if (player != null)
+                onDamageFactorChange(player, preDamageFactor, getDamageFactor(stack, maxDamage));
         }
 
         if (isBroken(stack)) {
@@ -148,7 +148,6 @@ public final class GearHelper {
             GearData.recalculateStats(stack);
             if (player != null)
                 notifyPlayerOfBrokenGear(stack, player);
-
         } else if (canBreakPermanently && wouldBreak) {
             // Item is gone forever, rest in pieces
             entityLiving.renderBrokenItemStack(stack);
@@ -156,7 +155,16 @@ public final class GearHelper {
         }
     }
 
-    public static void notifyPlayerOfBrokenGear(ItemStack stack, EntityPlayerMP player) {
+    private static void onDamageFactorChange(EntityPlayerMP player, int preDamageFactor, int newDamageFactor) {
+        if (newDamageFactor > preDamageFactor) {
+            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK,
+                    SoundCategory.PLAYERS, 0.5f, 2.0f);
+
+            LibTriggers.GENERIC_INT.trigger(player, new ResourceLocation(SilentGear.MOD_ID, "damage_factor_change"), 1);
+        }
+    }
+
+    private static void notifyPlayerOfBrokenGear(ItemStack stack, EntityPlayerMP player) {
         // Notify player. Mostly for armor, but might help new players as well.
         // FIXME: Does not work with armor currently, need to find a way to get player
         String key = SilentGear.i18n.getKey("misc", "notifyOnBreak");
@@ -165,8 +173,8 @@ public final class GearHelper {
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
         if (maxDamage == 0) return 1;
-        int step = maxDamage / DAMAGE_FACTOR_LEVELS;
-        return stack.getItemDamage() / (step > 0 ? step : 1);
+        int step = Math.max(1, maxDamage / DAMAGE_FACTOR_LEVELS);
+        return stack.getItemDamage() / step;
     }
 
     // Used by setDamage in gear items to prevent other mods from breaking them
