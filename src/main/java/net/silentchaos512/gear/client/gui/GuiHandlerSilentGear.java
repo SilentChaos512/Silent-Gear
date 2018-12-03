@@ -19,7 +19,9 @@
 package net.silentchaos512.gear.client.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -33,13 +35,16 @@ import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
 import net.silentchaos512.gear.block.salvager.ContainerSalvager;
 import net.silentchaos512.gear.block.salvager.GuiSalvager;
 import net.silentchaos512.gear.block.salvager.TileSalvager;
+import net.silentchaos512.gear.item.blueprint.book.ContainerBlueprintBook;
+import net.silentchaos512.gear.item.blueprint.book.GuiBlueprintBook;
 
 public class GuiHandlerSilentGear implements IGuiHandler {
     public enum GuiType {
         INVALID,
         CRAFTING_STATION,
         PART_ANALYZER,
-        SALVAGER;
+        SALVAGER,
+        BLUEPRINT_BOOK;
 
         public final int id = ordinal() - 1;
 
@@ -49,18 +54,28 @@ public class GuiHandlerSilentGear implements IGuiHandler {
                     return type;
             return INVALID;
         }
+
+        public void open(EntityPlayer player, World world, BlockPos pos) {
+            player.openGui(SilentGear.instance, this.id, world, pos.getX(), pos.getY(), pos.getZ());
+        }
+
+        public void open(EntityPlayer player, World world, int subtype) {
+            player.openGui(SilentGear.instance, this.id, world, subtype, 0, 0);
+        }
     }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         BlockPos pos = new BlockPos(x, y, z);
         TileEntity tile = world.getTileEntity(pos);
-        if (tile == null) {
+        GuiType guiType = GuiType.byId(ID);
+
+        if (tile == null && guiType != GuiType.BLUEPRINT_BOOK) {
             SilentGear.log.warn("Missing TileEntity at ({}, {}, {})!", x, y, z);
             return null;
         }
 
-        switch (GuiType.byId(ID)) {
+        switch (guiType) {
             case CRAFTING_STATION:
                 if (tile instanceof TileCraftingStation) {
                     TileCraftingStation tileCrafting = (TileCraftingStation) tile;
@@ -79,6 +94,10 @@ public class GuiHandlerSilentGear implements IGuiHandler {
                     return new ContainerSalvager(player.inventory, tileSalvager);
                 }
                 return null;
+            case BLUEPRINT_BOOK:
+                EnumHand hand = x == 1 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+                ItemStack stack = player.getHeldItem(hand);
+                return new ContainerBlueprintBook(stack, player.inventory, hand);
             default:
                 SilentGear.log.warn("No GUI with ID {}!", ID);
                 return null;
@@ -89,12 +108,14 @@ public class GuiHandlerSilentGear implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         BlockPos pos = new BlockPos(x, y, z);
         TileEntity tile = world.getTileEntity(pos);
-        if (tile == null) {
+        GuiType guiType = GuiType.byId(ID);
+
+        if (tile == null && guiType != GuiType.BLUEPRINT_BOOK) {
             SilentGear.log.warn("Missing TileEntity at ({}, {}, {})!", x, y, z);
             return null;
         }
 
-        switch (GuiType.byId(ID)) {
+        switch (guiType) {
             case CRAFTING_STATION:
                 if (tile instanceof TileCraftingStation) {
                     TileCraftingStation tileCrafting = (TileCraftingStation) tile;
@@ -113,6 +134,9 @@ public class GuiHandlerSilentGear implements IGuiHandler {
                     TileSalvager tileSalvager = (TileSalvager) tile;
                     return new GuiSalvager(player.inventory, tileSalvager);
                 }
+            case BLUEPRINT_BOOK:
+                ContainerBlueprintBook container = (ContainerBlueprintBook) getServerGuiElement(ID, player, world, x, y, z);
+                return container != null ? new GuiBlueprintBook(container) : null;
             default:
                 SilentGear.log.warn("No GUI with ID {}!", ID);
                 return null;

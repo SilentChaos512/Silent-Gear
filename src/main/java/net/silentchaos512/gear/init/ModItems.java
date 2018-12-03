@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
+import net.silentchaos512.gear.item.blueprint.book.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.item.IEnumItems;
 import net.silentchaos512.lib.item.ItemGuideBookSL;
@@ -31,6 +32,7 @@ public final class ModItems {
 
     public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
     public static BlueprintPackage blueprintPackage = new BlueprintPackage(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"));
+    public static BlueprintBook blueprintBook = new BlueprintBook();
 
     public static Flaxseeds flaxseeds = new Flaxseeds();
     public static NetherBanana netherBanana = new NetherBanana();
@@ -90,7 +92,7 @@ public final class ModItems {
         // Blueprints/templates
         registerBlueprints(reg, "blueprint", false);
         registerBlueprints(reg, "template", true);
-//        reg.registerItem(blueprintBook);
+        reg.registerItem(blueprintBook, "blueprint_book");
 
         enumItems.registerItems(TipUpgrades.values());
         enumItems.registerItems(MiscUpgrades.values());

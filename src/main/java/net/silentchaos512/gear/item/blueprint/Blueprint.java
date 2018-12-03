@@ -96,6 +96,11 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
         return this.gearItem.getConfig().getHeadCount();
     }
 
+    @Override
+    public boolean isSingleUse(ItemStack blueprint) {
+        return singleUse;
+    }
+
     public boolean isDisabled() {
         return singleUse && !Config.blueprintTypes.allowTemplate() || !singleUse && !Config.blueprintTypes.allowBlueprint();
     }

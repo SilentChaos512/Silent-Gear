@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
-import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.recipe.RecipeBaseSL;
@@ -33,7 +32,7 @@ public class RecipeBlueprintCrafting extends RecipeBaseSL {
     @Override
     public boolean matches(InventoryCrafting inv, World world) {
         StackList list = StackHelper.getNonEmptyStacks(inv);
-        ItemStack blueprint = list.uniqueOfType(Blueprint.class);
+        ItemStack blueprint = list.uniqueOfType(IBlueprint.class);
 
         // Only one blueprint
         if (blueprint.isEmpty()) {
@@ -44,7 +43,7 @@ public class RecipeBlueprintCrafting extends RecipeBaseSL {
         int materialCount = materials.size();
         IBlueprint blueprintItem = (IBlueprint) blueprint.getItem();
 
-        // Right number of materials and nothing else?
+        // Right number of materials and nothing else? FIXME: blueprint book support?
         if (materialCount + 1 != list.size() || materialCount != blueprintItem.getMaterialCost(blueprint)) {
             return false;
         }

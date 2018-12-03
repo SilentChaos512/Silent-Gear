@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- BlueprintBook
+ * Silent Gear -- SlotBlueprint
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -16,23 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.item.blueprint;
+package net.silentchaos512.gear.item.blueprint.book;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
+import net.silentchaos512.gear.item.blueprint.IBlueprint;
 
-import java.util.Collection;
+import javax.annotation.Nonnull;
 
-public class BlueprintBook extends Item implements IBlueprint {
-    // TODO: Store blueprints (container/GUI). Try to pick correct blueprint when crafting.
-
-    @Override
-    public ItemStack getCraftingResult(ItemStack blueprint, Collection<ItemStack> parts) {
-        return null;
+public class SlotBlueprint extends SlotItemHandler {
+    public SlotBlueprint(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+        super(itemHandler, index, xPosition, yPosition);
     }
 
     @Override
-    public int getMaterialCost(ItemStack blueprint) {
-        return 0;
+    public boolean isItemValid(@Nonnull ItemStack stack) {
+        Item item = stack.getItem();
+        return item instanceof IBlueprint
+                && !(item instanceof BlueprintBook)
+                && !((IBlueprint) item).isSingleUse(stack);
     }
 }
