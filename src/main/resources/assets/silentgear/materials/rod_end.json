@@ -13,7 +13,8 @@
         {"name": "rarity",          "value":   40}
     ],
     "traits": [
-        {"name": "silentgear:speed_boost_light", "level": 3}
+        {"name": "silentgear:speed_boost_light", "level": 3},
+        {"name": "silentgear:ancient", "level": 2}
     ],
     "crafting_items": {
         "normal": {

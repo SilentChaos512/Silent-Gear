@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Missing textures for crimson iron/steel armor
 - Tool heads warn about ungraded parts in the tooltip
 - New traits (suggested by KelleyEngineering)
+    - Ancient - Increased XP dropped from blocks and mobs
     - Eroded - Increase harvest speed and decrease attack damage as gear is damaged
     - Magmatic - Auto-smelting
 ### Changed

@@ -27,7 +27,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -145,5 +145,33 @@ public final class GearEvents {
                 event.getDrops().add(i, smelted);
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onXpDrop(LivingExperienceDropEvent event) {
+        if (event.getAttackingPlayer() == null) return;
+
+        ItemStack tool = event.getAttackingPlayer().getHeldItemMainhand();
+        if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
+
+        int ancientLevel = TraitHelper.getTraitLevel(tool, ModTraits.ancient);
+        if (ancientLevel == 0) return;
+
+        int bonusXp = (int) (event.getOriginalExperience() * ModTraits.ANCIENT_XP_BOOST * ancientLevel);
+        event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
+    }
+
+    @SubscribeEvent
+    public static void onBlockXpDrop(BlockEvent.BreakEvent event) {
+        if (event.getPlayer() == null) return;
+
+        ItemStack tool = event.getPlayer().getHeldItemMainhand();
+        if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
+
+        int ancientLevel = TraitHelper.getTraitLevel(tool, ModTraits.ancient);
+        if (ancientLevel == 0) return;
+
+        int bonusXp = (int) (event.getExpToDrop() * ModTraits.ANCIENT_XP_BOOST * ancientLevel);
+        event.setExpToDrop(event.getExpToDrop() + bonusXp);
     }
 }

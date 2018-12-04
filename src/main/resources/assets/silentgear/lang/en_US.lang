@@ -335,6 +335,8 @@ part.silentgear.type.rod=Tool Rod
 part.silentgear.type.tip=Tip Upgrade
 
 trait.silentgear.displayFormat=%1$s %2$s
+trait.silentgear.ancient=Ancient
+trait.silentgear.ancient.desc=Increases XP dropped by blocks and mobs
 trait.silentgear.brittle=Brittle
 trait.silentgear.brittle.desc=Gear sometimes takes extra damage (cancels with Malleable)
 trait.silentgear.bulky=Bulky

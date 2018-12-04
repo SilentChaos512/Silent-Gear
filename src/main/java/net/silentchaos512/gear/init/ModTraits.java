@@ -40,12 +40,14 @@ import javax.annotation.Nullable;
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
 
-    public static Trait multiBreak;
-    public static Trait speedBoostLight;
-    public static Trait synergyBoost;
+    public static Trait ancient;
     public static Trait crude;
     public static Trait holy;
     public static Trait magmatic;
+    public static Trait multiBreak;
+    public static Trait speedBoostLight;
+    public static Trait synergyBoost;
+    public static final float ANCIENT_XP_BOOST = 0.25f;
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
 
     private static final int COMMON_MAX_LEVEL = 4;
@@ -76,6 +78,7 @@ public final class ModTraits implements IPhasedInitializer {
         Trait.setCancelsWith(synergyBoost, crude);
 
         TraitRegistry.register(new TraitRefractive(path("refractive"), 1, TextFormatting.GOLD, 0));
+        ancient = TraitRegistry.register(new Trait(path("ancient"), COMMON_MAX_LEVEL, TextFormatting.GOLD, 0));
         magmatic = TraitRegistry.register(new Trait(path("magmatic"), 1, TextFormatting.RED, 0));
 
         holy = TraitRegistry.register(new Trait(path("holy"), COMMON_MAX_LEVEL, TextFormatting.YELLOW, 0) {
