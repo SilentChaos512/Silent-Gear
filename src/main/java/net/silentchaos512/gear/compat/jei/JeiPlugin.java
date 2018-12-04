@@ -113,12 +113,12 @@ public class JeiPlugin implements IModPlugin {
         registry.addIngredientInfo(Arrays.stream(TipUpgrades.values()).map(TipUpgrades::getStack).collect(Collectors.toList()),
                 ItemStack.class, getDescKey("tip_upgrade"));
         // Tool Heads
-        ModItems.toolClasses.forEach((toolClass, item) -> {
+        for (String toolClass : ModItems.toolClasses.keySet()) {
             List<ItemStack> list = new ArrayList<>();
             for (PartMain part : PartRegistry.getMains())
                 list.add(ModItems.toolHead.getStack(toolClass, part, true));
             registry.addIngredientInfo(list, ItemStack.class, getDescKey("tool_head"));
-        });
+        }
 
         initFailed = false;
     }

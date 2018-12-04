@@ -90,7 +90,7 @@ public class RepairHandler {
             LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, event.crafting.getMaxDamage());
 
             // Add tip upgrade
-            if (GearData.getConstructionParts(event.crafting).getTips().size() > 0)
+            if (!GearData.getConstructionParts(event.crafting).getTips().isEmpty())
                 LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
         }
     }

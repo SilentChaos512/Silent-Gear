@@ -81,7 +81,7 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(SilentGear.i18n.subText(this, "desc"));
-        tooltip.add(SilentGear.i18n.subText(this, "color", Integer.toHexString(getCoverColor(stack))));
+        tooltip.add(SilentGear.i18n.subText(this, "color", String.format("%06x", getCoverColor(stack))));
         tooltip.add(SilentGear.i18n.subText(this, "selected", "not implemented"));
     }
 
