@@ -115,33 +115,26 @@ public final class TraitHelper {
 
         Map<Trait, Integer> result = new LinkedHashMap<>();
         Map<Trait, Integer> countPartsWithTrait = new HashMap<>();
-//        Map<ItemPart, Integer> uniquePartCounts = new HashMap<>();
 
         for (ItemPartData part : parts) {
             part.getTraits().forEach(((trait, level) -> {
+                // Count total levels for each trait from all parts
                 result.merge(trait, level, (i1, i2) -> i1 + i2);
+                // Count number of parts with each trait
                 countPartsWithTrait.merge(trait, 1, (i1, i2) -> i1 + i2);
             }));
-
-//            final ItemPart p = part.getPart();
-//            SilentGear.log.debug("GearData#getTraits: {} level {}", p.getRegistryName(), uniquePartCounts.get(p));
-//            if (uniquePartCounts.containsKey(p)) {
-//                uniquePartCounts.put(p, uniquePartCounts.get(p) + 1);
-//            } else {
-//                uniquePartCounts.put(p, 1);
-//            }
         }
 
         Trait[] keys = result.keySet().toArray(new Trait[0]);
 
         for (Trait trait : keys) {
-            // FIXME: Just counting mains right now, other parts throw the math off
-            final int totalParts = parts.getMains().size();
             final int partsWithTrait = countPartsWithTrait.get(trait);
-            final float divisor = Math.max(1, (totalParts + partsWithTrait) / 2f); // TODO: Probably needs work...
+            final float divisor = Math.max(1, partsWithTrait);
             final int value = Math.round(result.get(trait) / divisor);
             result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
         }
+
+        // TODO: Consider non-mains
 
         cancelTraits(result, keys);
 

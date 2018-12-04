@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New tool/armor textures made mainly for custom materials. These should replace the "iron" textures suffix when possible. There are two types, `generic_hc` and `generic_lc` (high contrast, low contrast). The "HC" has a very shiny appearance, and "LC" looks more dull.
 - Missing textures for crimson iron/steel armor
 - Tool heads warn about ungraded parts in the tooltip
+- New traits (suggested by KelleyEngineering)
+    - Eroded - Increase harvest speed and decrease attack damage as gear is damaged
 ### Changed
 - Disabled parts should no longer appear in randomized gear
 ### Fixed

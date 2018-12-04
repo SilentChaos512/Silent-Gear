@@ -106,7 +106,17 @@ public final class ModTraits implements IPhasedInitializer {
                 return value;
             }
         });
-        TraitRegistry.register(new StatModifierTrait(path("jagged"), COMMON_MAX_LEVEL, TextFormatting.DARK_RED) {
+        Trait eroded = TraitRegistry.register(new StatModifierTrait(path("eroded"), COMMON_MAX_LEVEL, TextFormatting.GRAY) {
+            @Override
+            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
+                if (stat == CommonItemStats.MELEE_DAMAGE)
+                    return value - 0.15f * level * value * damageRatio;
+                if (stat == CommonItemStats.HARVEST_SPEED)
+                    return value + 0.15f * level * value * damageRatio;
+                return value;
+            }
+        });
+        Trait jagged = TraitRegistry.register(new StatModifierTrait(path("jagged"), COMMON_MAX_LEVEL, TextFormatting.DARK_RED) {
             @Override
             public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
                 if (stat == CommonItemStats.MELEE_DAMAGE)
@@ -122,6 +132,8 @@ public final class ModTraits implements IPhasedInitializer {
                 return value;
             }
         });
+
+        Trait.setCancelsWith(jagged, eroded);
     }
 
     private static ResourceLocation path(String name) {
