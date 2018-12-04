@@ -46,7 +46,7 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
 
     public static final int INVENTORY_SIZE = 27;
 
-    private static final int DEFAULT_COLOR = 0x007F7F;
+    private static final int DEFAULT_COLOR = Color.VALUE_WHITE;
 
     private static final String NBT_ROOT = "SGear_BlueprintBook";
     private static final String NBT_COLOR = "Color";
