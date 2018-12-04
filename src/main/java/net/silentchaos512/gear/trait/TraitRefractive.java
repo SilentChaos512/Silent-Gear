@@ -28,12 +28,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
 
 public class TraitRefractive extends Trait {
-    private static final int ACTIVATE_RATE = 80;
+    private static final int ACTIVATE_RATE = 20;
     private static final int CHECK_RANGE = 3;
     private static final int VERTICAL_RANGE = 5;
 
@@ -48,7 +49,7 @@ public class TraitRefractive extends Trait {
         if (player != null && player.ticksExisted % ACTIVATE_RATE == 0) {
             // TODO: Phantom lights, block config?
             // This fails with torches to some extent, they don't attach to walls
-//            placeLight(player.world, player, Blocks.TORCH.getDefaultState());
+            placeLight(player.world, player, ModBlocks.phantomLight.getDefaultState());
         }
     }
 

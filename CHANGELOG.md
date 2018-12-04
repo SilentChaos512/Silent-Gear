@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.4.1] - 2018-12-04
 ### Added
 - Blueprint book - This item stores blueprints. Several features are missing, but eventually you will be able to select a blueprint somehow (without removing it from the book) to use for crafting gear.
 - New tool/armor textures made mainly for custom materials. These should replace the "iron" textures suffix when possible. There are two types, `generic_hc` and `generic_lc` (high contrast, low contrast). The "HC" has a very shiny appearance, and "LC" looks more dull.
@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Ancient - Increased XP dropped from blocks and mobs
     - Eroded - Increase harvest speed and decrease attack damage as gear is damaged
     - Magmatic - Auto-smelting
+    - Refractive - Places lights in dark areas. Adds a new phantom light block.
 ### Changed
 - Disabled parts should no longer appear in randomized gear
 - Trait level calculations are a little different

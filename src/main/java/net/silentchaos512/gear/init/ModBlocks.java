@@ -19,6 +19,7 @@ public final class ModBlocks {
     public static NetherwoodLeaves netherwoodLeaves = new NetherwoodLeaves();
     public static NetherwoodPlanks netherwoodPlanks = new NetherwoodPlanks();
     public static Block crimsonIronOre = new BlockOre().setHardness(4).setResistance(10);
+    public static Block phantomLight = new PhantomLight();
 
     private ModBlocks() {}
 
@@ -33,6 +34,7 @@ public final class ModBlocks {
         reg.registerBlock(netherwoodPlanks, "netherwood_planks");
         reg.registerBlock(flower, "flower");
         reg.registerBlock(flaxPlant, "flax_plant");
+        reg.registerBlock(phantomLight, "phantom_light");
 
 //        if (GameUtil.isDeobfuscated()) {
 //            Block block = new BlockFalling(Material.SAND);
