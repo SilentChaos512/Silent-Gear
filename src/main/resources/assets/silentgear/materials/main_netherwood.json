@@ -28,7 +28,7 @@
     },
     "display": {
         "hidden": false,
-        "texture_suffix": "iron",
+        "texture_suffix": "generic_lc",
         "texture_color": "D83200",
         "broken_color": "D83200",
         "name_color": "red"

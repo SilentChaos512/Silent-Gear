@@ -23,11 +23,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -124,4 +126,24 @@ public final class GearEvents {
     }
 
     // endregion
+
+    @SubscribeEvent
+    public static void onBlockDrops(BlockEvent.HarvestDropsEvent event) {
+        if (event.isSilkTouching() || event.getHarvester() == null) return;
+
+        ItemStack tool = event.getHarvester().getHeldItemMainhand();
+        if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
+
+        int magmaticLevel = TraitHelper.getTraitLevel(tool, ModTraits.magmatic);
+        if (magmaticLevel == 0) return;
+
+        for (int i = 0; i < event.getDrops().size(); ++i) {
+            ItemStack stack = event.getDrops().get(i);
+            ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
+            if (!smelted.isEmpty()) {
+                event.getDrops().remove(i);
+                event.getDrops().add(i, smelted);
+            }
+        }
+    }
 }

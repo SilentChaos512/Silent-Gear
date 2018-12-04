@@ -17,6 +17,10 @@
         {"name": "rarity",          "value":   10},
         {"name": "chargeability",   "value":  0.8}
     ],
+    "traits": [
+        {"name": "silentgear:eroded", "level": 3},
+        {"name": "silentgear:magmatic", "level": 1}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:netherrack",
@@ -26,7 +30,7 @@
     },
     "display": {
         "hidden": false,
-        "texture_suffix": "iron",
+        "texture_suffix": "generic_lc",
         "texture_color": "854242",
         "broken_color": "854242",
         "name_color": "dark_red"

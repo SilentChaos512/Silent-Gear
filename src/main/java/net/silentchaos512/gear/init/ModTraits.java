@@ -45,6 +45,7 @@ public final class ModTraits implements IPhasedInitializer {
     public static Trait synergyBoost;
     public static Trait crude;
     public static Trait holy;
+    public static Trait magmatic;
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
 
     private static final int COMMON_MAX_LEVEL = 4;
@@ -75,6 +76,7 @@ public final class ModTraits implements IPhasedInitializer {
         Trait.setCancelsWith(synergyBoost, crude);
 
         TraitRegistry.register(new TraitRefractive(path("refractive"), 1, TextFormatting.GOLD, 0));
+        magmatic = TraitRegistry.register(new Trait(path("magmatic"), 1, TextFormatting.RED, 0));
 
         holy = TraitRegistry.register(new Trait(path("holy"), COMMON_MAX_LEVEL, TextFormatting.YELLOW, 0) {
             @Override

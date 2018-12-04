@@ -11,8 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tool heads warn about ungraded parts in the tooltip
 - New traits (suggested by KelleyEngineering)
     - Eroded - Increase harvest speed and decrease attack damage as gear is damaged
+    - Magmatic - Auto-smelting
 ### Changed
 - Disabled parts should no longer appear in randomized gear
+- Trait level calculations are a little different
 ### Fixed
 - Worn armor from custom materials will now load the correct textures
 - Worn armor is actually colored now (let me know if this doesn't work for you, I'm not sure how I even fixed this :/)
