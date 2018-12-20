@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.recipe.gear;
+package net.silentchaos512.gear.crafting.ingredient;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;

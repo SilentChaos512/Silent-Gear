@@ -6,8 +6,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.recipe.*;
 import net.silentchaos512.lib.registry.RecipeMaker;
 import net.silentchaos512.lib.registry.SRegistry;
 
@@ -20,7 +20,7 @@ public final class ModRecipes {
     private ModRecipes() {}
 
     public static void registerAll(SRegistry reg) {
-        // Gear recipes
+        // Gear recipes TODO: move to JSON
         RecipeMaker recipes = reg.getRecipeMaker();
         for (ICoreItem item : ModItems.toolClasses.values()) {
             final RecipeModularItem recipe = new RecipeModularItem(item);
@@ -28,17 +28,12 @@ public final class ModRecipes {
             recipes.addCustomRecipe("core_" + item.getGearClass(), recipe);
         }
 
-        // Gear crafting system recipes - TODO: move to JSON
-        recipes.addCustomRecipe("head_blueprint", new RecipeBlueprintCrafting(ModItems.toolHead));
-        recipes.addCustomRecipe("upgrade_core_item", new RecipeUpgradeModularItem());
-        recipes.addCustomRecipe("quick_gear_repair", new RecipeQuickRepair());
-
         // Smelting recipes
         recipes.addSmelting(ModBlocks.crimsonIronOre, new ItemStack(CraftingItems.CRIMSON_IRON_INGOT.getItem()), 0.6f);
 
         // Repair recipe "fix" - prevents gear items from being destroyed by vanilla
         SilentGear.log.info("Replacing vanilla repair recipe");
-        IRecipe rec = new RecipeRepairItemFix();
+        IRecipe rec = new RepairItemRecipeFix();
         rec.setRegistryName(new ResourceLocation("minecraft", "repairitem"));
         ForgeRegistries.RECIPES.register(rec);
     }

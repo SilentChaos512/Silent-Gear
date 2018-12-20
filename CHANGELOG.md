@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Convert most remaining recipe types to JSON. Should not have any effect, just 1.13 prep.
+
 ## [0.4.1] - 2018-12-04
 ### Added
 - Blueprint book - This item stores blueprints. Several features are missing, but eventually you will be able to select a blueprint somehow (without removing it from the book) to use for crafting gear.

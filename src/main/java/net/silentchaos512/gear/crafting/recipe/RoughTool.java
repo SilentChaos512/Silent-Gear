@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- RoughToolRecipeFactory
+ * Silent Gear -- RoughTool
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -16,23 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.recipe.gear;
+package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.lib.collection.StackList;
+import net.silentchaos512.lib.recipe.RecipeBaseSL;
 
-public class RoughToolRecipeFactory implements IRecipeFactory {
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+public class RoughTool implements IRecipeFactory {
     @Override
     public IRecipe parse(JsonContext context, JsonObject json) {
         ShapedOreRecipe recipe = ShapedOreRecipe.factory(context, json);
@@ -53,6 +62,36 @@ public class RoughToolRecipeFactory implements IRecipeFactory {
 
         ItemStack result = new ItemStack(item);
         ShapedOreRecipe baseRecipe = new ShapedOreRecipe(new ResourceLocation(SilentGear.MOD_ID, "rough_tools"), result, primer);
-        return new RoughToolRecipe(baseRecipe);
+        return new Recipe(baseRecipe);
+    }
+
+    private static class Recipe extends RecipeBaseSL {
+        private final ShapedOreRecipe baseRecipe;
+
+        Recipe(ShapedOreRecipe baseRecipe) {
+            this.baseRecipe = baseRecipe;
+        }
+
+        @Override
+        public boolean matches(InventoryCrafting inv, World worldIn) {
+            return baseRecipe.matches(inv, worldIn);
+        }
+
+        @Override
+        public ItemStack getCraftingResult(InventoryCrafting inv) {
+            StackList list = StackList.fromInventory(inv);
+            Collection<ItemPartData> parts = list.allMatches(s -> PartRegistry.get(s) != null)
+                    .stream()
+                    .map(ItemPartData::fromStack)
+                    .collect(Collectors.toList());
+
+            ICoreItem item = (ICoreItem) baseRecipe.getRecipeOutput().getItem();
+            return item.construct(item.getItem(), parts);
+        }
+
+        @Override
+        public ItemStack getRecipeOutput() {
+            return baseRecipe.getRecipeOutput();
+        }
     }
 }

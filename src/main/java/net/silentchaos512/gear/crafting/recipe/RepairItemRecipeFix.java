@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- RecipeRepairItemFix
+ * Silent Gear -- RepairItemRecipeFix
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.recipe;
+package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -32,7 +32,7 @@ import net.silentchaos512.lib.collection.StackList;
  *
  * @since 0.3.2
  */
-public class RecipeRepairItemFix extends RecipeRepairItem {
+public class RepairItemRecipeFix extends RecipeRepairItem {
     @Override
     public boolean matches(InventoryCrafting inv, World worldIn) {
         ItemStack gearStack = StackList.fromInventory(inv).firstMatch(s -> s.getItem() instanceof ICoreItem);

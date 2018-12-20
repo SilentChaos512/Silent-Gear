@@ -1,8 +1,12 @@
 {
     "ingredients": {
-        "part": "net.silentchaos512.gear.recipe.gear.GearPartIngredientFactory"
+        "part": "net.silentchaos512.gear.crafting.ingredient.GearPartIngredientFactory"
     },
     "recipes": {
-        "rough_tool": "net.silentchaos512.gear.recipe.gear.RoughToolRecipeFactory"
+        "blueprint_crafting": "net.silentchaos512.gear.crafting.recipe.BlueprintCrafting",
+        "modular_gear": "net.silentchaos512.gear.crafting.recipe.ModularGear",
+        "quick_repair": "net.silentchaos512.gear.crafting.recipe.QuickRepair",
+        "rough_tool": "net.silentchaos512.gear.crafting.recipe.RoughTool",
+        "upgrade_gear": "net.silentchaos512.gear.crafting.recipe.UpgradeGear"
     }
 }

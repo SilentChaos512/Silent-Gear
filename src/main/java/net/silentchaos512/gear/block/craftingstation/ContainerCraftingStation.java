@@ -21,7 +21,7 @@ import net.silentchaos512.gear.inventory.InventoryCraftingStation;
 import net.silentchaos512.gear.inventory.SlotCraftingStationOutput;
 import net.silentchaos512.gear.inventory.SlotItemPart;
 import net.silentchaos512.gear.item.ToolHead;
-import net.silentchaos512.gear.recipe.RecipeModularItem;
+import net.silentchaos512.gear.crafting.recipe.RecipeModularItem;
 
 import java.util.HashMap;
 import java.util.HashSet;

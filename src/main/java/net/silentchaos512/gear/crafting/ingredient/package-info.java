@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package net.silentchaos512.gear.recipe.gear;
+package net.silentchaos512.gear.crafting.ingredient;
 
 import mcp.MethodsReturnNonnullByDefault;
 
