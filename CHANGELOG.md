@@ -5,7 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Shovels no longer make paths while sneaking (more consistent block placing)
 - Convert most remaining recipe types to JSON. Should not have any effect, just 1.13 prep.
+### Fixed
+- Broken shovels no longer create path blocks [#15]
 
 ## [0.4.1] - 2018-12-04
 ### Added

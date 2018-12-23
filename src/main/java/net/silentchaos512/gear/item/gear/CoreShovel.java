@@ -83,7 +83,11 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // TODO
+        ItemStack stack = player.getHeldItem(hand);
+        if (GearHelper.isBroken(stack) || player.isSneaking())
+            return EnumActionResult.PASS;
+
+        // Make paths or whatever
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 
