@@ -71,8 +71,8 @@ public class ModWorldGenerator extends WorldGeneratorSL {
 
     private void generateNetherTrees(World world, Random random, int posX, int posZ) {
         // TODO: Configs for chance and min/max count?
-        if (MathUtils.tryPercentage(random, 0.15f)) {
-            final int count = MathUtils.nextIntInclusive(random, 2, 6);
+        if (MathUtils.tryPercentage(random, Config.netherwoodClusterChance)) {
+            final int count = MathUtils.nextIntInclusive(random, Config.netherwoodClusterMinSize, Config.netherwoodClusterMaxSize);
 
             int sx = posX + 8 + random.nextInt(16);
             int sz = posZ + 8 + random.nextInt(16);

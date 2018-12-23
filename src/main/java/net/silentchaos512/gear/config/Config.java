@@ -33,6 +33,7 @@ public class Config extends ConfigBaseNew {
     private static final String CAT_WORLD = "world";
     private static final String CAT_WORLD_FLAX = CAT_WORLD + SEP + "flax";
     private static final String CAT_WORLD_FLOWER = CAT_WORLD + SEP + "flowers";
+    private static final String CAT_WORLD_NETHERWOOD = CAT_WORLD + SEP + "netherwood";
 
     /*
      * Items
@@ -155,6 +156,21 @@ public class Config extends ConfigBaseNew {
 
     public static int[] flowerDimensionBlacklist = new int[0];
 
+    @ConfigOption(name = "Cluster Chance", category = CAT_WORLD_NETHERWOOD)
+    @ConfigOption.RangeFloat(value = 0.15f, min = 0, max = 1)
+    @ConfigOption.Comment("The chance of any given chunk having a cluster of netherwood trees.")
+    public static float netherwoodClusterChance;
+
+    @ConfigOption(name = "Cluster Min Size", category = CAT_WORLD_NETHERWOOD)
+    @ConfigOption.RangeInt(value = 2, min = 0, max = 50)
+    @ConfigOption.Comment("The minimum number of netherwood trees to TRY TO PLACE per cluster. Must be less than max size.")
+    public static int netherwoodClusterMinSize;
+
+    @ConfigOption(name = "Cluster Max Size", category = CAT_WORLD_NETHERWOOD)
+    @ConfigOption.RangeInt(value = 6, min = 0, max = 50)
+    @ConfigOption.Comment("The maximum number of netherwood trees per cluster. The actual number will vary, depending on the terrain and random chance.")
+    public static int netherwoodClusterMaxSize;
+
     /*
      * Debug
      */
@@ -247,6 +263,10 @@ public class Config extends ConfigBaseNew {
 
             // Flowers
             flowerDimensionBlacklist = config.get(CAT_WORLD_FLOWER, "Dimension Blacklist", new int[0]).getIntList();
+
+            // Netherwood
+            if (netherwoodClusterMaxSize < netherwoodClusterMinSize)
+                netherwoodClusterMaxSize = netherwoodClusterMinSize;
 
             // Grab last build number for potential changes?
             int currentBuild = SilentGear.instance.getBuildNum();
