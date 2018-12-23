@@ -31,6 +31,7 @@ public class Config extends ConfigBaseNew {
     private static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
     private static final String CAT_SINEW = CAT_ITEMS + SEP + "sinew";
     private static final String CAT_WORLD = "world";
+    private static final String CAT_WORLD_FLAX = CAT_WORLD + SEP + "flax";
 
     /*
      * Items
@@ -136,6 +137,11 @@ public class Config extends ConfigBaseNew {
 
     public static ConfigOptionOreGen crimsonIronOreGen;
 
+    @ConfigOption(name = "Flaxseed Drop Weight", category = CAT_WORLD_FLAX)
+    @ConfigOption.RangeInt(value = 5, min = 0)
+    @ConfigOption.Comment("The weight of flaxseed drops. Set 0 to disable, higher numbers mean more common. Vanilla wheat seeds are 10.")
+    public static int flaxseedDropWeight;
+
     /*
      * Debug
      */
@@ -221,6 +227,10 @@ public class Config extends ConfigBaseNew {
              */
             crimsonIronOreGen = new ConfigOptionOreGen("Crimson Iron Ore", -1, 24, 6, 24, 120);
             crimsonIronOreGen.loadValue(config, CAT_WORLD);
+
+            // Flax
+            config.setCategoryComment(CAT_WORLD_FLAX, "Settings for flax and flaxseed drops");
+            config.setCategoryRequiresMcRestart(CAT_WORLD_FLAX, true);
 
             // Grab last build number for potential changes?
             int currentBuild = SilentGear.instance.getBuildNum();

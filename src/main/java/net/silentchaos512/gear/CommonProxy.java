@@ -66,6 +66,10 @@ public class CommonProxy {
     public void postInit(SRegistry registry, FMLPostInitializationEvent event) {
         registry.postInit(event);
 
+        if (Config.flaxseedDropWeight > 0) {
+            MinecraftForge.addGrassSeed(new ItemStack(ModItems.flaxseeds), Config.flaxseedDropWeight);
+        }
+
         IAOETool.BreakHandler.buildOreBlocksSet();
 
         InitialSpawnItems.add(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"),
