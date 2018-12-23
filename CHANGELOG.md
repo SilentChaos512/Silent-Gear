@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Config to set flaxseed drop weight, set 0 to disable [#14]
+- Config settings for blue flowers (cluster chance/size and dimension blacklist), set chance or size to 0 to disable [#14]
 ### Changed
 - Shovels no longer make paths while sneaking (more consistent block placing)
 - Convert most remaining recipe types to JSON. Should not have any effect, just 1.13 prep.

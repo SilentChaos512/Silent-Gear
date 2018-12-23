@@ -32,6 +32,7 @@ public class Config extends ConfigBaseNew {
     private static final String CAT_SINEW = CAT_ITEMS + SEP + "sinew";
     private static final String CAT_WORLD = "world";
     private static final String CAT_WORLD_FLAX = CAT_WORLD + SEP + "flax";
+    private static final String CAT_WORLD_FLOWER = CAT_WORLD + SEP + "flowers";
 
     /*
      * Items
@@ -142,6 +143,18 @@ public class Config extends ConfigBaseNew {
     @ConfigOption.Comment("The weight of flaxseed drops. Set 0 to disable, higher numbers mean more common. Vanilla wheat seeds are 10.")
     public static int flaxseedDropWeight;
 
+    @ConfigOption(name = "Cluster Chance", category = CAT_WORLD_FLOWER)
+    @ConfigOption.RangeFloat(value = 0.025f, min = 0, max = 1)
+    @ConfigOption.Comment("The chance of any given chunk having a cluster of blue flowers.")
+    public static float flowerClusterChance;
+
+    @ConfigOption(name = "Cluster Size", category = CAT_WORLD_FLOWER)
+    @ConfigOption.RangeInt(value = 10, min = 0, max = 100)
+    @ConfigOption.Comment("The maximum number of blue flowers per cluster. The actual number will vary, depending on the terrain and random chance.")
+    public static int flowerClusterSize;
+
+    public static int[] flowerDimensionBlacklist = new int[0];
+
     /*
      * Debug
      */
@@ -231,6 +244,9 @@ public class Config extends ConfigBaseNew {
             // Flax
             config.setCategoryComment(CAT_WORLD_FLAX, "Settings for flax and flaxseed drops");
             config.setCategoryRequiresMcRestart(CAT_WORLD_FLAX, true);
+
+            // Flowers
+            flowerDimensionBlacklist = config.get(CAT_WORLD_FLOWER, "Dimension Blacklist", new int[0]).getIntList();
 
             // Grab last build number for potential changes?
             int currentBuild = SilentGear.instance.getBuildNum();

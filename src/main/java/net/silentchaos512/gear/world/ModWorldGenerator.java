@@ -13,6 +13,7 @@ import net.silentchaos512.gear.world.feature.NetherwoodTree;
 import net.silentchaos512.lib.config.ConfigOptionOreGen;
 import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.world.WorldGeneratorSL;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Random;
 
@@ -37,16 +38,18 @@ public class ModWorldGenerator extends WorldGeneratorSL {
     }
 
     private void generateFlowers(World world, Random random, int posX, int posZ) {
-        // TODO: Configs!
+        // Blacklisted from dimension?
+        if (world.provider != null && ArrayUtils.contains(Config.flowerDimensionBlacklist, world.provider.getDimension()))
+            return;
 
-        if (random.nextFloat() > 0.025f)
+        if (random.nextFloat() > Config.flowerClusterChance)
             return;
 
         int sx = posX + 8 + random.nextInt(16);
         int sy = -1;
         int sz = posZ + 8 + random.nextInt(16);
 
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < Config.flowerClusterSize; ++i) {
             int x = sx + random.nextInt(7) - 3;
             int y = sy < 0 ? random.nextInt(120) + 50 : sy;
             sy = y + 5;
