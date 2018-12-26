@@ -306,6 +306,11 @@ public final class GearHelper {
         TraitHelper.tickTraits(player, stack);
     }
 
+    public static boolean shouldUseFallbackColor(ItemStack stack, ItemPartData part) {
+        // TODO
+        return false;
+    }
+
     public static EnumRarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
         if (stack.isItemEnchanted())

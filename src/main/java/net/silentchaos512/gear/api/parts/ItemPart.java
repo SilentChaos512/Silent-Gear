@@ -59,6 +59,7 @@ public abstract class ItemPart {
     protected String textureSuffix;
     protected int textureColor = Color.VALUE_WHITE;
     protected int brokenColor = Color.VALUE_WHITE;
+    protected int fallbackColor = Color.VALUE_WHITE;
     protected TextFormatting nameColor = TextFormatting.GRAY;
     protected String localizedNameOverride = "";
     private final PartOrigins origin;
@@ -229,8 +230,12 @@ public abstract class ItemPart {
     }
 
     public int getColor(ItemPartData part, ItemStack gear, int animationFrame) {
-        if (!gear.isEmpty() && GearHelper.isBroken(gear))
-            return this.brokenColor;
+        if (!gear.isEmpty()) {
+            if (GearHelper.isBroken(gear))
+                return this.brokenColor;
+            if (GearHelper.shouldUseFallbackColor(gear, part))
+                return this.fallbackColor;
+        }
         return this.textureColor;
     }
 
@@ -464,12 +469,23 @@ public abstract class ItemPart {
             if (elementDisplay != null && elementDisplay.isJsonObject()) {
                 JsonObject obj = elementDisplay.getAsJsonObject();
                 part.hidden = JsonUtils.getBoolean(obj, "hidden", part.hidden);
+
                 part.textureDomain = JsonUtils.getString(obj, "texture_domain", part.textureDomain);
                 part.textureSuffix = JsonUtils.getString(obj, "texture_suffix", part.textureSuffix);
+
                 if (obj.has("texture_color"))
                     part.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
+
                 if (obj.has("broken_color"))
                     part.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
+
+                if (obj.has("fallback_color"))
+                    part.fallbackColor = readColorCode(JsonUtils.getString(obj, "fallback_color"));
+                else if (part.textureColor != Color.VALUE_WHITE)
+                    part.fallbackColor = part.textureColor;
+                else if (part.brokenColor != Color.VALUE_WHITE)
+                    part.fallbackColor = part.brokenColor;
+
                 if (obj.has("name_color")) {
                     TextFormatting format = TextFormatting.getValueByName(JsonUtils.getString(obj, "name_color"));
                     part.nameColor = format != null ? format : part.nameColor;
