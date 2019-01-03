@@ -11,16 +11,6 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartTip extends ItemPart implements IUpgradePart {
-    @Deprecated
-    public PartTip(ResourceLocation name) {
-        super(name, false);
-    }
-
-    @Deprecated
-    public PartTip(ResourceLocation name, boolean userDefined) {
-        super(name, userDefined);
-    }
-
     public PartTip(ResourceLocation name, PartOrigins origin) {
         super(name, origin);
     }
@@ -33,12 +23,9 @@ public final class PartTip extends ItemPart implements IUpgradePart {
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
         String frameStr = "bow".equals(gearClass) && animationFrame == 3 ? "_3" : "";
-        return new ResourceLocation(this.textureDomain, "items/" + gearClass + "/tip_" + this.textureSuffix + frameStr);
-    }
-
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
-        return getTexture(part, gear, gearClass, PartPositions.TIP, animationFrame);
+        PartDisplayProperties props = getDisplayProperties(part, gear, animationFrame);
+        String path = "items/" + gearClass + "/tip_" + props.textureSuffix + frameStr;
+        return new ResourceLocation(props.textureDomain, path);
     }
 
     @Override

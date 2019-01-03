@@ -38,6 +38,7 @@ public class ModMaterials implements IPhasedInitializer {
         mainDiamond = PartRegistry.putPart(new PartMain(getPath("main_diamond"), PartOrigins.BUILTIN_CORE));
         mainObsidian = PartRegistry.putPart(new PartMain(getPath("main_obsidian"), PartOrigins.BUILTIN_CORE));
 //        PartRegistry.putPart(new PartMain(getPath("main_test")));
+        PartRegistry.putPart(new PartMain(getPath("main_test2"), PartOrigins.BUILTIN_CORE));
         PartRegistry.putPart(new PartMain(getPath("main_netherwood"), PartOrigins.BUILTIN_CORE));
         PartRegistry.putPart(new PartMain(getPath("main_crimson_iron"), PartOrigins.BUILTIN_CORE));
         PartRegistry.putPart(new PartMain(getPath("main_crimson_steel"), PartOrigins.BUILTIN_CORE));

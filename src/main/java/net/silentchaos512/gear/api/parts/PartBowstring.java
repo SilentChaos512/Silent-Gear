@@ -9,16 +9,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public final class PartBowstring extends ItemPart {
-    @Deprecated
-    public PartBowstring(ResourceLocation name) {
-        super(name, false);
-    }
-
-    @Deprecated
-    public PartBowstring(ResourceLocation name, boolean userDefined) {
-        super(name, userDefined);
-    }
-
     public PartBowstring(ResourceLocation name, PartOrigins origin) {
         super(name, origin);
     }
@@ -34,15 +24,13 @@ public final class PartBowstring extends ItemPart {
     }
 
     @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack stack, String toolClass, IPartPosition position, int animationFrame) {
-        if (!"bow".equals(toolClass)) return BLANK_TEXTURE;
-        return new ResourceLocation(this.textureDomain, "items/" + toolClass + "/bowstring_"
-                + this.textureSuffix + "_" + animationFrame);
-    }
-
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
-        return getTexture(part, gear, gearClass, PartPositions.BOWSTRING, animationFrame);
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+        if (!"bow".equals(gearClass)) return BLANK_TEXTURE;
+        PartDisplayProperties props = getDisplayProperties(part, gear, animationFrame);
+        // items/bow/bowstring_material_frame.png
+        String path = String.format("items/%s/%s_%s_%d", gearClass, position.getTexturePrefix(),
+                props.textureSuffix, animationFrame);
+        return new ResourceLocation(props.textureDomain, path);
     }
 
     @Nullable

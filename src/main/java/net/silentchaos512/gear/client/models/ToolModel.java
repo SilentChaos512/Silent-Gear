@@ -82,13 +82,13 @@ public final class ToolModel implements IModel {
 
                     // Basic texture
                     // position could be HEAD, but I added ANY to make it clear this is not just mains.
-                    ResourceLocation texBasic = partData.getTexture(ItemStack.EMPTY, toolClass, PartPositions.ANY, frame);
+                    ResourceLocation texBasic = partData.getTexture(ItemStack.EMPTY, toolClass, part.getPartPosition(), frame);
 //                    SilentGear.log.info(String.format("    %s, frame=%d, part=%s, tex=%s", toolClass, frame, part.getKey().getResourcePath(), texBasic));
                     if (texBasic != null)
                         builder.add(texBasic);
 
                     // Broken texture
-                    ResourceLocation texBroken = partData.getBrokenTexture(ItemStack.EMPTY, toolClass, PartPositions.ANY);
+                    ResourceLocation texBroken = partData.getBrokenTexture(ItemStack.EMPTY, toolClass, part.getPartPosition());
 //                    SilentGear.log.info("      +broken: " + texBroken);
                     if (texBroken != null)
                         builder.add(texBroken);

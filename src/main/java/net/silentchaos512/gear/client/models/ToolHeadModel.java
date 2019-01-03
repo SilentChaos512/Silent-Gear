@@ -202,7 +202,7 @@ public class ToolHeadModel implements IModel {
                 // Color cache
                 ColorHandlers.gearColorCache.put(key, Stream.of(primaryPart, secondaryPart)
                         .filter(Objects::nonNull)
-                        .map(part -> part.getColor(ItemStack.EMPTY, 0)).toArray(Integer[]::new));
+                        .map(part -> part.getColor(stack, 0)).toArray(Integer[]::new));
 
                 return bakedModel;
             }

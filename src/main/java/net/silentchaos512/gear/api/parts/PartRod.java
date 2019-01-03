@@ -11,16 +11,6 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartRod extends ItemPart {
-    @Deprecated
-    public PartRod(ResourceLocation name) {
-        super(name, false);
-    }
-
-    @Deprecated
-    public PartRod(ResourceLocation name, boolean userDefined) {
-        super(name, userDefined);
-    }
-
     public PartRod(ResourceLocation name, PartOrigins origin) {
         super(name, origin);
     }
@@ -33,16 +23,6 @@ public final class PartRod extends ItemPart {
     @Override
     public IPartPosition getPartPosition() {
         return PartPositions.ROD;
-    }
-
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
-        return new ResourceLocation(this.textureDomain, "items/" + gearClass + "/rod_" + this.textureSuffix);
-    }
-
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
-        return getTexture(part, gear, gearClass, PartPositions.ROD, animationFrame);
     }
 
     @Override

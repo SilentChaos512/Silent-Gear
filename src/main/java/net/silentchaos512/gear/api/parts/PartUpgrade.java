@@ -27,16 +27,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class PartUpgrade extends ItemPart implements IUpgradePart {
-    @Deprecated
-    public PartUpgrade(ResourceLocation registryName) {
-        this(registryName, false);
-    }
-
-    @Deprecated
-    public PartUpgrade(ResourceLocation registryName, boolean userDefined) {
-        super(registryName, userDefined);
-    }
-
     public PartUpgrade(ResourceLocation registryName, PartOrigins origin) {
         super(registryName, origin);
     }
@@ -54,12 +44,6 @@ public class PartUpgrade extends ItemPart implements IUpgradePart {
     @Nullable
     @Override
     public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
         return null;
     }
 

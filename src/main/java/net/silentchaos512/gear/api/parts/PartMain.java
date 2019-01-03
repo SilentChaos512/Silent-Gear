@@ -12,16 +12,6 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartMain extends ItemPart {
-    @Deprecated
-    public PartMain(ResourceLocation name) {
-        super(name, false);
-    }
-
-    @Deprecated
-    public PartMain(ResourceLocation name, boolean userDefined) {
-        super(name, userDefined);
-    }
-
     public PartMain(ResourceLocation name, PartOrigins origin) {
         super(name, origin);
     }
@@ -41,13 +31,9 @@ public final class PartMain extends ItemPart {
         String frameStr = "bow".equals(toolClass) && animationFrame == 3 ? "_3" : "";
         String partPosition = position.getTexturePrefix();
         String subtypePrefix = partPosition + (partPosition.isEmpty() ? "" : "_");
-        String path = "items/" + toolClass + "/" + subtypePrefix + this.textureSuffix + frameStr;
-        return new ResourceLocation(this.textureDomain, path);
-    }
-
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack stack, String toolClass, int animationFrame) {
-        return getTexture(part, stack, toolClass, PartPositions.HEAD, animationFrame);
+        PartDisplayProperties props = getDisplayProperties(part, gear, animationFrame);
+        String path = "items/" + toolClass + "/" + subtypePrefix + props.textureSuffix + frameStr;
+        return new ResourceLocation(props.textureDomain, path);
     }
 
     @Override

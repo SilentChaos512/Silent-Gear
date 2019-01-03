@@ -19,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
+import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -27,6 +28,7 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.item.ToolHead;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.Color;
@@ -55,11 +57,12 @@ public abstract class ItemPart {
     protected int tier = 0;
     protected boolean enabled = true;
     protected boolean hidden = false;
-    protected String textureDomain;
-    protected String textureSuffix;
-    protected int textureColor = Color.VALUE_WHITE;
-    protected int brokenColor = Color.VALUE_WHITE;
-    protected int fallbackColor = Color.VALUE_WHITE;
+    //    protected String textureDomain;
+//    protected String textureSuffix;
+//    @Getter(AccessLevel.NONE) protected Map<String, Integer> textureColor = new HashMap<>();
+//    @Getter(AccessLevel.NONE) protected Map<String, Integer> brokenColor = new HashMap<>();
+//    @Getter(AccessLevel.NONE) protected Map<String, Integer> fallbackColor = new HashMap<>();
+    @Getter(AccessLevel.NONE) private Map<String, PartDisplayProperties> display = new HashMap<>();
     protected TextFormatting nameColor = TextFormatting.GRAY;
     protected String localizedNameOverride = "";
     private final PartOrigins origin;
@@ -75,15 +78,10 @@ public abstract class ItemPart {
     @Getter(AccessLevel.NONE) protected Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
     @Getter(AccessLevel.NONE) protected Map<Trait, Integer> traits = new LinkedHashMap<>();
 
-    @Deprecated
-    public ItemPart(ResourceLocation registryName, boolean userDefined) {
-        this(registryName, userDefined ? PartOrigins.USER_DEFINED : SilentGear.MOD_ID.equals(registryName.getNamespace()) ? PartOrigins.BUILTIN_CORE : PartOrigins.BUILTIN_ADDON);
-    }
-
     public ItemPart(ResourceLocation registryName, PartOrigins origin) {
         this.registryName = registryName;
-        textureDomain = registryName.getNamespace();
-        this.textureSuffix = REGEX_TEXTURE_SUFFIX_REPLACE.matcher(registryName.getPath()).replaceFirst("");
+        String suffix = REGEX_TEXTURE_SUFFIX_REPLACE.matcher(registryName.getPath()).replaceFirst("");
+        display.put("all", new PartDisplayProperties(registryName.getNamespace(), suffix));
         this.modelIndex = ++lastModelIndex;
         this.origin = origin;
         loadJsonResources();
@@ -200,14 +198,10 @@ public abstract class ItemPart {
      * @param animationFrame Animation frame, usually 0
      */
     @Nullable
-    public abstract ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame);
-
-    @Nullable
-    public abstract ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame);
-
-    @Nullable
-    public ResourceLocation getTexture(ItemPartData part, ItemStack equipment, String gearClass, IPartPosition position) {
-        return getTexture(part, equipment, gearClass, position, 0);
+    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+        PartDisplayProperties props = getDisplayProperties(part, gear, animationFrame);
+        String path = "items/" + gearClass + "/" + position.getTexturePrefix() + "_" + props.textureSuffix;
+        return new ResourceLocation(props.textureDomain, path);
     }
 
     /**
@@ -230,13 +224,33 @@ public abstract class ItemPart {
     }
 
     public int getColor(ItemPartData part, ItemStack gear, int animationFrame) {
+        PartDisplayProperties props = getDisplayProperties(part, gear, animationFrame);
+
         if (!gear.isEmpty()) {
             if (GearHelper.isBroken(gear))
-                return this.brokenColor;
+                return props.brokenColor;
             if (GearHelper.shouldUseFallbackColor(gear, part))
-                return this.fallbackColor;
+                return props.fallbackColor;
         }
-        return this.textureColor;
+
+        return props.textureColor;
+    }
+
+    public PartDisplayProperties getDisplayProperties(ItemPartData part, ItemStack gear, int animationFrame) {
+        if (!gear.isEmpty()) {
+            String gearType = gear.getItem() instanceof ToolHead
+                    ? ToolHead.getToolClass(gear)
+                    : Objects.requireNonNull(gear.getItem().getRegistryName()).getPath();
+
+            // Gear class-specific override
+            if (display.containsKey(gearType))
+                return display.get(gearType);
+            // Armor override
+            if (gear.getItem() instanceof ICoreArmor && display.containsKey("armor"))
+                return display.get("armor");
+        }
+        // Default
+        return display.get("all");
     }
 
     /**
@@ -468,23 +482,23 @@ public abstract class ItemPart {
             JsonElement elementDisplay = json.get("display");
             if (elementDisplay != null && elementDisplay.isJsonObject()) {
                 JsonObject obj = elementDisplay.getAsJsonObject();
+                PartDisplayProperties defaultProps = part.display.getOrDefault("all", PartDisplayProperties.DEFAULT);
+
+                if (!part.display.containsKey("all")) {
+                    part.display.put("all", defaultProps);
+                }
+
+                for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+                    String key = entry.getKey();
+                    JsonElement value = entry.getValue();
+
+                    if (value.isJsonObject()) {
+                        JsonObject jsonObject = value.getAsJsonObject();
+                        part.display.put(key, PartDisplayProperties.from(jsonObject, defaultProps));
+                    }
+                }
+
                 part.hidden = JsonUtils.getBoolean(obj, "hidden", part.hidden);
-
-                part.textureDomain = JsonUtils.getString(obj, "texture_domain", part.textureDomain);
-                part.textureSuffix = JsonUtils.getString(obj, "texture_suffix", part.textureSuffix);
-
-                if (obj.has("texture_color"))
-                    part.textureColor = readColorCode(JsonUtils.getString(obj, "texture_color"));
-
-                if (obj.has("broken_color"))
-                    part.brokenColor = readColorCode(JsonUtils.getString(obj, "broken_color"));
-
-                if (obj.has("fallback_color"))
-                    part.fallbackColor = readColorCode(JsonUtils.getString(obj, "fallback_color"));
-                else if (part.textureColor != Color.VALUE_WHITE)
-                    part.fallbackColor = part.textureColor;
-                else if (part.brokenColor != Color.VALUE_WHITE)
-                    part.fallbackColor = part.brokenColor;
 
                 if (obj.has("name_color")) {
                     TextFormatting format = TextFormatting.getValueByName(JsonUtils.getString(obj, "name_color"));
@@ -495,6 +509,28 @@ public abstract class ItemPart {
                     part.localizedNameOverride = JsonUtils.getString(obj, "override_localization");
                 else if (obj.has("override_translation"))
                     part.localizedNameOverride = JsonUtils.getString(obj, "override_translation");
+
+                // Old properties
+
+                if (obj.has("texture_color")) {
+                    String str = JsonUtils.getString(obj, "texture_color");
+                    defaultProps.textureColor = PartDisplayProperties.readColorCode(str);
+                }
+                if (obj.has("broken_color")) {
+                    String str = JsonUtils.getString(obj, "broken_color");
+                    defaultProps.brokenColor = PartDisplayProperties.readColorCode(str);
+                }
+                if (obj.has("fallback_color")) {
+                    String str = JsonUtils.getString(obj, "fallback_color");
+                    defaultProps.fallbackColor = PartDisplayProperties.readColorCode(str);
+                }
+
+                if (obj.has("texture_domain")) {
+                    defaultProps.textureDomain = JsonUtils.getString(obj, "texture_domain");
+                }
+                if (obj.has("texture_suffix")) {
+                    defaultProps.textureSuffix = JsonUtils.getString(obj, "texture_suffix");
+                }
             }
         }
 
@@ -508,6 +544,28 @@ public abstract class ItemPart {
             }
         }
 
+        @Deprecated
+        private static void readColorMap(Map<String, Integer> map, int fallback, JsonElement jsonElement) {
+            if (jsonElement.isJsonPrimitive()) {
+                int color = readColorCode(jsonElement.getAsString());
+                map.put("all", color);
+            } else if (jsonElement.isJsonObject()) {
+                JsonObject json = jsonElement.getAsJsonObject();
+
+                json.entrySet().forEach(entry -> {
+                    int color = readColorCode(entry.getValue().getAsString());
+                    map.put(entry.getKey(), color);
+                });
+            } else {
+                SilentGear.log.error("Could not read color map, unknown element type: " + jsonElement);
+            }
+
+            if (!map.containsKey("all")) {
+                map.put("all", fallback);
+            }
+        }
+
+        @Deprecated
         private static int readColorCode(String str) {
             try {
                 return UnsignedInts.parseUnsignedInt(str, 16);

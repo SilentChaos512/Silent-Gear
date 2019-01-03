@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class PartBinding extends ItemPart implements IUpgradePart {
@@ -42,21 +41,8 @@ public class PartBinding extends ItemPart implements IUpgradePart {
         return PartPositions.BINDING;
     }
 
-    @Nullable
     @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
-        return new ResourceLocation(this.textureDomain, "items/" + gearClass + "/binding_" + this.textureSuffix);
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
-        return getTexture(part, gear, gearClass, PartPositions.BINDING, animationFrame);
-    }
-
-    @Override
-    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) {
-    }
+    public void addInformation(ItemPartData part, ItemStack gear, World world, List<String> tooltip, boolean advanced) { }
 
     @Override
     public String getTypeName() {

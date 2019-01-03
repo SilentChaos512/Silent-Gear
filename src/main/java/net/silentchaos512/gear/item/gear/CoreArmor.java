@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.silentchaos512.gear.api.parts.PartDisplayProperties;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -204,8 +205,9 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
         if (part == null) part = ItemPartData.instance(ModMaterials.mainIron);
 
         // Actual armor texture
-        return part.getPart().getTextureDomain() + ":textures/models/armor/"
-                + part.getPart().getTextureSuffix()
+        PartDisplayProperties props = part.getPart().getDisplayProperties(part, stack, 0);
+        return props.getTextureDomain() + ":textures/models/armor/"
+                + props.getTextureSuffix()
                 + "_layer_" + layer
                 + (type != null ? "_" + type : "")
                 + ".png";

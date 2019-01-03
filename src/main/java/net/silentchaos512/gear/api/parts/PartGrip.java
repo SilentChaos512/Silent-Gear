@@ -10,16 +10,6 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class PartGrip extends ItemPart implements IUpgradePart {
-    @Deprecated
-    public PartGrip(ResourceLocation name) {
-        super(name, false);
-    }
-
-    @Deprecated
-    public PartGrip(ResourceLocation name, boolean userDefined) {
-        super(name, userDefined);
-    }
-
     public PartGrip(ResourceLocation name, PartOrigins origin) {
         super(name, origin);
     }
@@ -27,16 +17,6 @@ public final class PartGrip extends ItemPart implements IUpgradePart {
     @Override
     public PartType getType() {
         return PartType.GRIP;
-    }
-
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
-        return new ResourceLocation(this.textureDomain, "items/" + gearClass + "/grip_" + this.textureSuffix);
-    }
-
-    @Override
-    public ResourceLocation getTexture(ItemPartData part, ItemStack gear, String gearClass, int animationFrame) {
-        return getTexture(part, gear, gearClass, PartPositions.GRIP, animationFrame);
     }
 
     @Override
