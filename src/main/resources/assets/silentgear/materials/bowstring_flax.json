@@ -16,9 +16,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "flax",
-        "texture_color": "ffffff"
+        "all": {
+            "texture_suffix": "flax",
+            "texture_color": "ffffff"
+        }
     },
     "availability": {
         "enabled": true,

@@ -34,10 +34,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "gold",
-        "texture_color": "FFFFFF",
-        "broken_color": "EAEE57",
+        "all": {
+            "texture_suffix": "gold",
+            "texture_color": "FFFFFF",
+            "broken_color": "EAEE57"
+        },
         "name_color": "gold"
     },
     "availability": {

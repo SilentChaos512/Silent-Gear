@@ -19,9 +19,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "bone",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "bone",
+            "texture_color": "ffffff"
+        },
         "name_color": "white"
     },
     "availability": {

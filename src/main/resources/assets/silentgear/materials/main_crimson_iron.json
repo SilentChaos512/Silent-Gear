@@ -28,10 +28,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "crimson_iron",
-        "texture_color": "FFFFFF",
-        "broken_color": "FF6189",
+        "all": {
+            "texture_suffix": "crimson_iron",
+            "texture_color": "FFFFFF",
+            "broken_color": "FF6189"
+        },
         "name_color": "red"
     },
     "availability": {

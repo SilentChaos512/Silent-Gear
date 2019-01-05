@@ -22,9 +22,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "emerald",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "emerald",
+            "texture_color": "ffffff"
+        },
         "name_color": "dark_green"
     },
     "availability": {

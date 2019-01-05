@@ -19,9 +19,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "iron",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "iron",
+            "texture_color": "ffffff"
+        },
         "name_color": "gray"
     },
     "availability": {

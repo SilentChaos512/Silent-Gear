@@ -21,9 +21,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "blaze",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "blaze",
+            "texture_color": "ffffff"
+        },
         "name_color": "gold"
     },
     "availability": {

@@ -29,10 +29,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "generic_lc",
-        "texture_color": "854242",
-        "broken_color": "854242",
+        "all": {
+            "texture_suffix": "generic_lc",
+            "texture_color": "854242",
+            "broken_color": "854242"
+        },
         "name_color": "dark_red"
     },
     "availability": {

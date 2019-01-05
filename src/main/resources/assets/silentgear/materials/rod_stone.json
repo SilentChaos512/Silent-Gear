@@ -19,9 +19,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "stone",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "stone",
+            "texture_color": "ffffff"
+        },
         "name_color": "dark_gray"
     },
     "availability": {

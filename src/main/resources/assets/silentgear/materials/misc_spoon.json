@@ -10,9 +10,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "",
+            "texture_color": "ffffff"
+        },
         "name_color": "dark_aqua"
     },
     "availability": {

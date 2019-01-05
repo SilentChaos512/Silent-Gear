@@ -25,10 +25,11 @@
         "requires_smelting": true
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "generic_lc",
-        "texture_color": "C76245",
-        "broken_color": "C76245",
+        "all": {
+            "texture_suffix": "generic_lc",
+            "texture_color": "C76245",
+            "broken_color": "C76245"
+        },
         "name_color": "gold"
     },
     "availability": {

@@ -21,9 +21,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "lapis",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "lapis",
+            "texture_color": "ffffff"
+        },
         "name_color": "blue"
     },
     "availability": {

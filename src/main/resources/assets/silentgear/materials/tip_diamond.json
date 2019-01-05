@@ -22,9 +22,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "diamond",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "diamond",
+            "texture_color": "ffffff"
+        },
         "name_color": "aqua"
     },
     "availability": {

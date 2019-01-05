@@ -28,10 +28,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "crimson_steel",
-        "texture_color": "FFFFFF",
-        "broken_color": "DC143C",
+        "all": {
+            "texture_suffix": "crimson_steel",
+            "texture_color": "FFFFFF",
+            "broken_color": "DC143C"
+        },
         "name_color": "dark_red"
     },
     "availability": {

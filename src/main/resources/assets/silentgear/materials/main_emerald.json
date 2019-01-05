@@ -33,10 +33,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "emerald",
-        "texture_color": "FFFFFF",
-        "broken_color": "41F384",
+        "all": {
+            "texture_suffix": "emerald",
+            "texture_color": "FFFFFF",
+            "broken_color": "41F384"
+        },
         "name_color": "green"
     },
     "availability": {

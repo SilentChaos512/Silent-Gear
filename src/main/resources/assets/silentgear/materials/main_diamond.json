@@ -32,10 +32,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "diamond",
-        "texture_color": "FFFFFF",
-        "broken_color": "33EBCB",
+        "all": {
+            "texture_suffix": "diamond",
+            "texture_color": "FFFFFF",
+            "broken_color": "33EBCB"
+        },
         "name_color": "aqua"
     },
     "availability": {

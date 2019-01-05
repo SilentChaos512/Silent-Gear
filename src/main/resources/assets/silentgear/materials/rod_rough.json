@@ -22,9 +22,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "rough",
-        "texture_color": "ffffff",
+        "all": {
+            "texture_suffix": "rough",
+            "texture_color": "ffffff"
+        },
         "name_color": "red"
     },
     "availability": {

@@ -19,10 +19,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "iron",
-        "texture_color": "D83200",
-        "broken_color": "D83200",
+        "all": {
+            "texture_suffix": "iron",
+            "texture_color": "D83200",
+            "broken_color": "D83200"
+        },
         "name_color": "red"
     },
     "availability": {

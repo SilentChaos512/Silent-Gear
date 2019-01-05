@@ -20,9 +20,10 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "leather",
-        "texture_color": "ffffff"
+        "all": {
+            "texture_suffix": "leather",
+            "texture_color": "ffffff"
+        }
     },
     "availability": {
         "enabled": true,

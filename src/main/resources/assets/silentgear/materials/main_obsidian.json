@@ -29,10 +29,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "iron",
-        "texture_color": "443464",
-        "broken_color": "443464",
+        "all": {
+            "texture_suffix": "iron",
+            "texture_color": "443464",
+            "broken_color": "443464"
+        },
         "name_color": "dark_purple"
     },
     "availability": {

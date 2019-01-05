@@ -20,10 +20,11 @@
         }
     },
     "display": {
-        "hidden": false,
-        "texture_suffix": "wool",
-        "texture_color": "80c71f",
-        "broken_color": "80c71f"
+        "all": {
+            "texture_suffix": "wool",
+            "texture_color": "80c71f",
+            "broken_color": "80c71f"
+        }
     },
     "availability": {
         "enabled": true,
