@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Changed part display properties to allow textures and colors to be set for different gear types. Old files are still compatible. The `all` object is the default for everything. Use `armor` to override all armor types. Then use the item name (`sword`, `bow`, etc.) to override specific gear types. See `main_test2.json` for an example.
+
 ## [0.4.2] - 2018-12-23
 ### Added
 - Config to set flaxseed drop weight, set 0 to disable [#14]
