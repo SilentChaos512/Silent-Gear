@@ -1,0 +1,8 @@
+{
+    "type": "damage_type",
+    "max_level": 5,
+    "name_color": "yellow",
+    "cancels_with": [],
+    "damage_type": "holy",
+    "damage_bonus": 2
+}

@@ -38,6 +38,8 @@ public final class TraitRegistry {
             throw new IllegalArgumentException("Already have a trait with key " + key);
         MAP.put(key, trait);
 
+        trait.loadJsonResources();
+
         return trait;
     }
 }

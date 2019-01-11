@@ -1,0 +1,14 @@
+{
+    "type": "stat_modifier",
+    "max_level": 5,
+    "name_color": "dark_red",
+    "cancels_with": ["eroded"],
+    "stats": [
+        {
+            "name": "melee_damage",
+            "value": 0.1667,
+            "factor_damage": true,
+            "factor_value": true
+        }
+    ]
+}

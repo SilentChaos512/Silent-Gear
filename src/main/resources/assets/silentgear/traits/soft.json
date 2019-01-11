@@ -1,0 +1,14 @@
+{
+    "type": "stat_modifier",
+    "max_level": 5,
+    "name_color": "yellow",
+    "cancels_with": [],
+    "stats": [
+        {
+            "name": "harvest_speed",
+            "value": -0.15,
+            "factor_damage": true,
+            "factor_value": true
+        }
+    ]
+}

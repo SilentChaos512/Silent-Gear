@@ -1,0 +1,20 @@
+{
+    "type": "stat_modifier",
+    "max_level": 5,
+    "name_color": "dark_blue",
+    "cancels_with": [],
+    "stats": [
+        {
+            "name": "armor",
+            "value": -0.075,
+            "factor_damage": true,
+            "factor_value": true
+        },
+        {
+            "name": "harvest_speed",
+            "value": 0.25,
+            "factor_damage": true,
+            "factor_value": true
+        }
+    ]
+}

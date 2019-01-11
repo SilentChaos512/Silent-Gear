@@ -18,12 +18,14 @@
 
 package net.silentchaos512.gear.trait;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
@@ -37,21 +39,10 @@ import javax.annotation.Nullable;
 public class DurabilityTrait extends Trait {
     private static final ResourceLocation TRIGGER_BRITTLE = new ResourceLocation(SilentGear.MOD_ID, "brittle_proc");
 
-    private final float effectScale;
+    private float effectScale = 0;
 
-    /**
-     * Constructor
-     *
-     * @param name         Registry name
-     * @param maxLevel     Max level that can be obtained
-     * @param nameColor    Name color for tooltips
-     * @param effectChance Chance of taking extra/reduced durability damage (0.0-1.0)
-     * @param effectScale  Scale/direction of effect. Positive numbers increase damage, negative
-     *                     numbers decrease it. Chance will be multiplied by trait level.
-     */
-    public DurabilityTrait(ResourceLocation name, int maxLevel, TextFormatting nameColor, float effectChance, float effectScale) {
-        super(name, maxLevel, nameColor, effectChance);
-        this.effectScale = effectScale;
+    public DurabilityTrait(ResourceLocation name, ResourceOrigin origin) {
+        super(name, origin);
     }
 
     @Override
@@ -63,5 +54,10 @@ public class DurabilityTrait extends Trait {
         }
 
         return super.onDurabilityDamage(player, level, gear, damageTaken);
+    }
+
+    @Override
+    protected void processExtraJson(JsonObject json) {
+        this.effectScale = JsonUtils.getFloat(json, "effect_scale", this.effectScale);
     }
 }

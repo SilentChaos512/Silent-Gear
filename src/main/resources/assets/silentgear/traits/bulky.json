@@ -1,0 +1,14 @@
+{
+    "type": "stat_modifier",
+    "max_level": 5,
+    "name_color": "bold",
+    "cancels_with": [],
+    "stats": [
+        {
+            "name": "attack_speed",
+            "value": -0.075,
+            "factor_damage": true,
+            "factor_value": false
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+{
+    "type": "trait",
+    "max_level": 5,
+    "name_color": "bold",
+    "cancels_with": ["synergy_boost"]
+}

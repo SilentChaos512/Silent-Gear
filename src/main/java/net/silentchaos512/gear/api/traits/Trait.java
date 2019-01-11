@@ -18,28 +18,49 @@
 
 package net.silentchaos512.gear.api.traits;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Trait {
-    @Getter private final float activationChance;
-    @Getter private final int maxLevel;
-    @Getter private final ResourceLocation name;
-    @Getter private final TextFormatting nameColor;
-    private final Set<Trait> cancelsWith = new HashSet<>();
+    private static final Gson GSON = (new GsonBuilder()).create();
+
+    @Getter private float activationChance;
+    @Getter private int maxLevel;
+    @Getter private ResourceLocation name;
+    @Getter private TextFormatting nameColor = TextFormatting.GRAY;
+    @Getter private ResourceOrigin origin = ResourceOrigin.BUILTIN_CORE;
+    private final Set<String> cancelsWith = new HashSet<>();
+
+    public Trait(ResourceLocation name, ResourceOrigin origin) {
+        this.name = name;
+        this.origin = origin;
+
+        if (!this.origin.validate(this.name, SilentGear.MOD_ID)) {
+            throw new IllegalArgumentException(String.format("Trait '%s' has origin %s, but should be %s",
+                    this.name, this.origin, ResourceOrigin.BUILTIN_ADDON));
+        }
+    }
 
     public Trait(ResourceLocation name, int maxLevel, TextFormatting nameColor, float activationChance) {
         this.name = name;
@@ -50,12 +71,12 @@ public class Trait {
 
     public static void setCancelsWith(Trait t1, Trait t2) {
         SilentGear.log.debug("Set trait cancels with: '{}' and '{}'", t1.name, t2.name);
-        t1.cancelsWith.add(t2);
-        t2.cancelsWith.add(t1);
+        t1.cancelsWith.add(t2.name.toString());
+        t2.cancelsWith.add(t1.name.toString());
     }
 
     public final int getCanceledLevel(int level, Trait other, int otherLevel) {
-        if (cancelsWith.contains(other)) {
+        if (willCancelWith(other)) {
             final int diff = level - otherLevel;
 
             int newLevel;
@@ -70,7 +91,7 @@ public class Trait {
     }
 
     public final boolean willCancelWith(Trait other) {
-        return cancelsWith.contains(other);
+        return cancelsWith.contains(other.name.toString());
     }
 
     public String getTranslatedName(int level) {
@@ -83,8 +104,8 @@ public class Trait {
     public String toString() {
         return "Trait{" +
                 "name=" + name +
+                ", origin=" + origin +
                 ", maxLevel=" + maxLevel +
-                ", nameColor=" + nameColor +
                 '}';
     }
 
@@ -94,6 +115,53 @@ public class Trait {
         tagCompound.setByte("Level", (byte) level);
         return tagCompound;
     }
+
+    //region JSON handling
+
+    /**
+     * Get the location of the resource file that contains material information
+     */
+    private String getResourceFileLocation() {
+        return String.format("assets/%s/traits/%s.json", this.name.getNamespace(), this.name.getPath());
+    }
+
+    void loadJsonResources() {
+        // Main resource file in JAR
+        String path = getResourceFileLocation();
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(path);
+        if (resourceAsStream != null) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream, "UTF-8"))) {
+                readResourceFile(reader);
+            } catch (Exception e) {
+                SilentGear.log.warn("Error reading trait file '{}'", path);
+                SilentGear.log.catching(e);
+            }
+        } else if (origin.isBuiltin()) {
+            SilentGear.log.error("Trait '{}' is missing its data file!", this.name);
+        }
+
+        // Override in config folder
+        File file = new File(Config.INSTANCE.getDirectory().getPath(), "traits/" + this.name.getPath() + ".json");
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            readResourceFile(reader);
+        } catch (FileNotFoundException e) {
+            // Ignore, overrides are not required
+        } catch (Exception e) {
+            SilentGear.log.warn("Error reading trait override '{}'", file.getAbsolutePath());
+            SilentGear.log.catching(e);
+        }
+    }
+
+    private void readResourceFile(BufferedReader reader) {
+        JsonElement je = GSON.fromJson(reader, JsonElement.class);
+        JsonObject json = je.getAsJsonObject();
+        Loader.processJson(this, json);
+        processExtraJson(json);
+    }
+
+    protected void processExtraJson(JsonObject json) { }
+
+    //endregion
 
     //region Handlers
 
@@ -117,4 +185,38 @@ public class Trait {
     public void onUpdate(@Nullable EntityPlayer player, int level, ItemStack gear) {}
 
     //endregion
+
+    private static class Loader {
+        private static void processJson(Trait trait, JsonObject json) {
+            trait.activationChance = JsonUtils.getFloat(json, "activation_chance", trait.activationChance);
+            trait.maxLevel = JsonUtils.getInt(json, "max_level", trait.maxLevel);
+
+            if (json.has("name_color")) {
+                TextFormatting format = TextFormatting.getValueByName(JsonUtils.getString(json, "name_color"));
+                trait.nameColor = format != null ? format : trait.nameColor;
+            }
+
+            processCancelsWithArray(trait, json);
+        }
+
+        private static void processCancelsWithArray(Trait trait, JsonObject json) {
+            if (json.has("cancels_with")) {
+                JsonElement elemCancelsWith = json.get("cancels_with");
+
+                if (elemCancelsWith.isJsonArray()) {
+                    trait.cancelsWith.clear();
+
+                    for (JsonElement element : elemCancelsWith.getAsJsonArray()) {
+                        if (element.isJsonPrimitive()) {
+                            String str = element.getAsString();
+                            if (!str.contains(":")) {
+                                str = SilentGear.RESOURCE_PREFIX + str;
+                            }
+                            trait.cancelsWith.add(str);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

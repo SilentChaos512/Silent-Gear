@@ -1,0 +1,8 @@
+{
+    "type": "durability",
+    "max_level": 5,
+    "name_color": "gray",
+    "cancels_with": ["brittle"],
+    "effect_scale": -1,
+    "activation_chance": 0.1
+}

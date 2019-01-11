@@ -24,9 +24,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.lib.util.MathUtils;
@@ -38,8 +38,8 @@ public class TraitRefractive extends Trait {
     private static final int CHECK_RANGE = 3;
     private static final int VERTICAL_RANGE = 5;
 
-    public TraitRefractive(ResourceLocation name, int maxLevel, TextFormatting nameColor, float activationChance) {
-        super(name, maxLevel, nameColor, activationChance);
+    public TraitRefractive(ResourceLocation name, ResourceOrigin origin) {
+        super(name, origin);
     }
 
     @Override

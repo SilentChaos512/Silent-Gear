@@ -18,20 +18,86 @@
 
 package net.silentchaos512.gear.trait;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.Trait;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class StatModifierTrait extends Trait {
-    public StatModifierTrait(ResourceLocation name, int maxLevel, TextFormatting nameColor) {
-        super(name, maxLevel, nameColor, 1);
+public class StatModifierTrait extends Trait {
+    private final Map<ItemStat, StatMod> mods = new HashMap<>();
+
+    public StatModifierTrait(ResourceLocation name, ResourceOrigin origin) {
+        super(name, origin);
     }
 
     @Override
-    public abstract float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio);
+    protected void processExtraJson(JsonObject json) {
+        if (!json.has("stats")) {
+            SilentGear.log.error("JSON file for StatModifierTrait '{}' is missing the 'stats' array", this.getName());
+            return;
+        }
+
+        for (JsonElement element : json.get("stats").getAsJsonArray()) {
+            if (element.isJsonObject()) {
+                JsonObject obj = element.getAsJsonObject();
+
+                String statName = JsonUtils.getString(obj, "name", "");
+                ItemStat stat = ItemStat.ALL_STATS.get(statName);
+
+                if (stat != null) {
+                    mods.put(stat, StatMod.fromJson(obj));
+                }
+            }
+        }
+    }
+
+    @Override
+    public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
+        StatMod mod = this.mods.get(stat);
+
+        if (mod != null) {
+            float apply = mod.apply(level, value, damageRatio);
+            SilentGear.log.debug("{}: {} -> {}", this.getName(), value, apply);
+            return apply;
+        }
+
+        return value;
+    }
+
+    private static class StatMod {
+        private float multi;
+        private boolean factorDamage;
+        private boolean factorValue;
+
+        private float apply(int level, float value, float damageRatio) {
+            float f = multi * level;
+
+            if (factorDamage)
+                f *= damageRatio;
+            if (factorValue)
+                f *= value;
+
+            return value + f;
+        }
+
+        private static StatMod fromJson(JsonObject json) {
+            StatMod mod = new StatMod();
+
+            mod.multi = JsonUtils.getFloat(json, "value", 0);
+            mod.factorDamage = JsonUtils.getBoolean(json, "factor_damage", true);
+            mod.factorValue = JsonUtils.getBoolean(json, "factor_value", true);
+
+            return mod;
+        }
+    }
 }

@@ -25,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.Trait;
@@ -51,36 +52,24 @@ public final class ModTraits implements IPhasedInitializer {
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
 
     private static final int COMMON_MAX_LEVEL = 4;
-    private static final float DURABILITY_EFFECT_CHANCE = 0.1f;
-    private static final float JAGGED_MULTI = (float) 1 / 6;
-    private static final float SOFT_MULTI = 0.15f;
 
     private ModTraits() {}
 
     @Override
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
-        Trait malleable = TraitRegistry.register(new DurabilityTrait(path("malleable"),
-                COMMON_MAX_LEVEL + 1, TextFormatting.WHITE,
-                DURABILITY_EFFECT_CHANCE, -1));
-        Trait brittle = TraitRegistry.register(new DurabilityTrait(path("brittle"),
-                COMMON_MAX_LEVEL + 1, TextFormatting.GRAY,
-                DURABILITY_EFFECT_CHANCE, 1));
-        Trait.setCancelsWith(malleable, brittle);
+        TraitRegistry.register(new DurabilityTrait(path("malleable"), ResourceOrigin.BUILTIN_CORE));
+        TraitRegistry.register(new DurabilityTrait(path("brittle"), ResourceOrigin.BUILTIN_CORE));
 
-        multiBreak = TraitRegistry.register(new Trait(path("multi_break"),
-                COMMON_MAX_LEVEL, TextFormatting.DARK_GREEN, 0));
-        speedBoostLight = TraitRegistry.register(new Trait(path("speed_boost_light"),
-                COMMON_MAX_LEVEL, TextFormatting.GOLD, 0));
-        synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"),
-                COMMON_MAX_LEVEL + 1, TextFormatting.DARK_GREEN, 0));
-        crude = TraitRegistry.register(new Trait(path("crude"),
-                COMMON_MAX_LEVEL + 1, TextFormatting.BOLD, 0));
-        Trait.setCancelsWith(synergyBoost, crude);
+        multiBreak = TraitRegistry.register(new Trait(path("multi_break"), ResourceOrigin.BUILTIN_CORE));
+        speedBoostLight = TraitRegistry.register(new Trait(path("speed_boost_light"), ResourceOrigin.BUILTIN_CORE));
+        synergyBoost = TraitRegistry.register(new Trait(path("synergy_boost"), ResourceOrigin.BUILTIN_CORE));
+        crude = TraitRegistry.register(new Trait(path("crude"), ResourceOrigin.BUILTIN_CORE));
 
-        TraitRegistry.register(new TraitRefractive(path("refractive"), 1, TextFormatting.GOLD, 0));
-        ancient = TraitRegistry.register(new Trait(path("ancient"), COMMON_MAX_LEVEL, TextFormatting.GOLD, 0));
-        magmatic = TraitRegistry.register(new Trait(path("magmatic"), 1, TextFormatting.RED, 0));
+        TraitRegistry.register(new TraitRefractive(path("refractive"), ResourceOrigin.BUILTIN_CORE));
+        ancient = TraitRegistry.register(new Trait(path("ancient"), ResourceOrigin.BUILTIN_CORE));
+        magmatic = TraitRegistry.register(new Trait(path("magmatic"), ResourceOrigin.BUILTIN_CORE));
 
+        // TODO: JSON + add a DamageType trait that changes damage type?
         holy = TraitRegistry.register(new Trait(path("holy"), COMMON_MAX_LEVEL, TextFormatting.YELLOW, 0) {
             @Override
             public float onAttackEntity(@Nullable EntityPlayer player, EntityLivingBase target, int level, ItemStack gear, float baseValue) {
@@ -89,56 +78,22 @@ public final class ModTraits implements IPhasedInitializer {
             }
         });
 
-        TraitRegistry.register(new StatModifierTrait(path("bulky"), COMMON_MAX_LEVEL, TextFormatting.BOLD) {
+        TraitRegistry.register(new StatModifierTrait(path("bulky"), ResourceOrigin.BUILTIN_CORE) {
             @Override
             public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
+                float result = super.onGetStat(player, stat, level, gear, value, damageRatio);
                 if (stat == CommonItemStats.ATTACK_SPEED) {
                     // TODO: If part durability ever gets implemented, reduce speed lost as part is damaged.
                     // This trait will be used with a future upgrade item.
-                    float result = value - 0.075f * level;
                     return result > -3.95f ? result : -3.9f;
                 }
-                return value;
+                return result;
             }
         });
-        TraitRegistry.register(new StatModifierTrait(path("chipping"), COMMON_MAX_LEVEL, TextFormatting.DARK_BLUE) {
-            @Override
-            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
-                if (stat == CommonItemStats.ARMOR)
-                    return value - 0.075f * level * value * damageRatio;
-                if (stat == CommonItemStats.HARVEST_SPEED)
-                    return value + 0.25f * level * value * damageRatio;
-                return value;
-            }
-        });
-        Trait eroded = TraitRegistry.register(new StatModifierTrait(path("eroded"), COMMON_MAX_LEVEL, TextFormatting.GRAY) {
-            @Override
-            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
-                if (stat == CommonItemStats.MELEE_DAMAGE)
-                    return value - 0.15f * level * value * damageRatio;
-                if (stat == CommonItemStats.HARVEST_SPEED)
-                    return value + 0.15f * level * value * damageRatio;
-                return value;
-            }
-        });
-        Trait jagged = TraitRegistry.register(new StatModifierTrait(path("jagged"), COMMON_MAX_LEVEL, TextFormatting.DARK_RED) {
-            @Override
-            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
-                if (stat == CommonItemStats.MELEE_DAMAGE)
-                    return value + JAGGED_MULTI * level * value * damageRatio;
-                return value;
-            }
-        });
-        TraitRegistry.register(new StatModifierTrait(path("soft"), COMMON_MAX_LEVEL, TextFormatting.YELLOW) {
-            @Override
-            public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
-                if (stat == CommonItemStats.HARVEST_SPEED)
-                    return value - SOFT_MULTI * level * value * damageRatio;
-                return value;
-            }
-        });
-
-        Trait.setCancelsWith(jagged, eroded);
+        TraitRegistry.register(new StatModifierTrait(path("chipping"), ResourceOrigin.BUILTIN_CORE));
+        TraitRegistry.register(new StatModifierTrait(path("eroded"), ResourceOrigin.BUILTIN_CORE));
+        TraitRegistry.register(new StatModifierTrait(path("jagged"), ResourceOrigin.BUILTIN_CORE));
+        TraitRegistry.register(new StatModifierTrait(path("soft"), ResourceOrigin.BUILTIN_CORE));
     }
 
     private static ResourceLocation path(String name) {

@@ -1,0 +1,20 @@
+{
+    "type": "stat_modifier",
+    "max_level": 5,
+    "name_color": "gray",
+    "cancels_with": ["jagged"],
+    "stats": [
+        {
+            "name": "melee_damage",
+            "value": -0.15,
+            "factor_damage": true,
+            "factor_value": true
+        },
+        {
+            "name": "harvest_speed",
+            "value": 0.15,
+            "factor_damage": true,
+            "factor_value": true
+        }
+    ]
+}
