@@ -66,9 +66,7 @@ public class StatModifierTrait extends Trait {
         StatMod mod = this.mods.get(stat);
 
         if (mod != null) {
-            float apply = mod.apply(level, value, damageRatio);
-            SilentGear.log.debug("{}: {} -> {}", this.getName(), value, apply);
-            return apply;
+            return mod.apply(level, value, damageRatio);
         }
 
         return value;

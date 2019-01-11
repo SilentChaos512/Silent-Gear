@@ -190,6 +190,7 @@ public class Config extends ConfigBaseNew {
         config = new Configuration(new File(directory.getPath(), SilentGear.MOD_ID + ".cfg"));
         new File(directory.getPath(), "materials/").mkdirs();
         new File(directory.getPath(), "equipment/").mkdirs();
+        new File(directory.getPath(), "traits/").mkdirs();
     }
 
     @Override

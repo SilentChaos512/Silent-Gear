@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- User-defined traits. Currently this is limited to stat modifier traits only. Additional types may be available in the future.
 ### Changed
 - Changed part display properties to allow textures and colors to be set for different gear types. Old files are still compatible. The `all` object is the default for everything. Use `armor` to override all armor types. Then use the item name (`sword`, `bow`, etc.) to override specific gear types. See `main_test2.json` for an example.
 

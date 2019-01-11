@@ -30,6 +30,7 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.trait.StatModifierTrait;
 import net.silentchaos512.gear.trait.TraitRefractive;
@@ -37,6 +38,7 @@ import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
 
 import javax.annotation.Nullable;
+import java.io.File;
 
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
@@ -94,9 +96,35 @@ public final class ModTraits implements IPhasedInitializer {
         TraitRegistry.register(new StatModifierTrait(path("eroded"), ResourceOrigin.BUILTIN_CORE));
         TraitRegistry.register(new StatModifierTrait(path("jagged"), ResourceOrigin.BUILTIN_CORE));
         TraitRegistry.register(new StatModifierTrait(path("soft"), ResourceOrigin.BUILTIN_CORE));
+
+        UserDefined.loadUserTraits();
     }
 
     private static ResourceLocation path(String name) {
         return new ResourceLocation(SilentGear.MOD_ID, name);
+    }
+
+    private static final class UserDefined {
+        static void loadUserTraits() {
+            final File directory = new File(Config.INSTANCE.getDirectory(), "traits");
+            final File[] files = directory.listFiles();
+
+            if (!directory.isDirectory() || files == null) {
+                SilentGear.log.warn("File \"{}\" is not a directory?", directory);
+                return;
+            }
+
+            for (File file : files) {
+                SilentGear.log.info("Trait file found: {}", file);
+                String filename = file.getName().replace(".json", "");
+                ResourceLocation name = path(filename);
+
+                if (TraitRegistry.get(name.toString()) == null) {
+                    // FIXME: For now, we just have stat modifier traits.
+                    StatModifierTrait trait = new StatModifierTrait(name, ResourceOrigin.USER_DEFINED);
+                    TraitRegistry.register(trait);
+                }
+            }
+        }
     }
 }
