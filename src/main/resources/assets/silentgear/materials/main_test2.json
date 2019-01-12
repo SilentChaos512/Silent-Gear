@@ -23,7 +23,6 @@
         }
     },
     "display": {
-        "hidden": false,
         "all": {
             "texture_suffix": "test",
             "texture_color": "FFFFFF",
@@ -35,8 +34,10 @@
         },
         "bow": {
             "texture_suffix": "generic_lc",
-            "texture_color": "9900FF"
-        }
+            "texture_color": "8800FF",
+            "highlight": true
+        },
+        "name_color": "red"
     },
     "availability": {
         "enabled": true,

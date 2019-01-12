@@ -24,6 +24,7 @@ public class ModMaterials implements IPhasedInitializer {
 
     public static PartMain mainWood, mainStone, mainFlint, mainIron, mainGold, mainEmerald, mainDiamond, mainObsidian, mainNetherrack, mainTerracotta;
     public static PartBowstring bowstringString, bowstringSinew;
+    public static PartHighlight highlight;
 
     @Override
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
@@ -59,6 +60,8 @@ public class ModMaterials implements IPhasedInitializer {
 
         for (MiscUpgrades upgrade : MiscUpgrades.values())
             PartRegistry.putPart(upgrade.getPart());
+
+        highlight = PartRegistry.putPart(new PartHighlight(getPath("highlight"), PartOrigins.BUILTIN_CORE));
 
         UserDefined.loadUserParts();
     }

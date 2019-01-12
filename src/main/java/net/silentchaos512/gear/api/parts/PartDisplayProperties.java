@@ -20,6 +20,7 @@ package net.silentchaos512.gear.api.parts;
 
 import com.google.common.primitives.UnsignedInts;
 import com.google.gson.JsonObject;
+import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.util.JsonUtils;
 import net.silentchaos512.lib.util.Color;
@@ -42,6 +43,7 @@ public final class PartDisplayProperties {
     int textureColor;
     int brokenColor;
     int fallbackColor;
+    @Getter(AccessLevel.NONE) boolean highlight;
 
     private PartDisplayProperties() {
         textureDomain = textureSuffix = "";
@@ -76,7 +78,11 @@ public final class PartDisplayProperties {
             fallbackColor = readColorCode(JsonUtils.getString(json, "fallback_color", Integer.toHexString(defaultProps.fallbackColor)));
         }
 
-        return new PartDisplayProperties(textureDomain, textureSuffix, textureColor, brokenColor, fallbackColor);
+        PartDisplayProperties props = new PartDisplayProperties(textureDomain, textureSuffix, textureColor, brokenColor, fallbackColor);
+
+        props.highlight = JsonUtils.getBoolean(json, "highlight", props.highlight);
+
+        return props;
     }
 
     static int readColorCode(String str) {
@@ -88,6 +94,10 @@ public final class PartDisplayProperties {
         }
     }
 
+    public boolean hasHighlight() {
+        return this.highlight;
+    }
+
     @Override
     public String toString() {
         return "PartDisplayProperties{" +
@@ -96,6 +106,7 @@ public final class PartDisplayProperties {
                 ", textureColor=" + Integer.toHexString(textureColor) +
                 ", brokenColor=" + Integer.toHexString(brokenColor) +
                 ", fallbackColor=" + Integer.toHexString(fallbackColor) +
+                ", highlight=" + highlight +
                 '}';
     }
 }

@@ -33,6 +33,7 @@ public final class PartType {
     public static final PartType BINDING = create("binding", "b", PartBinding::new);
     public static final PartType BOWSTRING = create("bowstring", "B", PartBowstring::new);
     public static final PartType GRIP = create("grip", "G", PartGrip::new);
+    public static final PartType HIGHLIGHT = create("highlight", "h", PartHighlight::new);
     public static final PartType MAIN = create("main", "M", PartMain::new);
     public static final PartType MISC_UPGRADE = create("misc_upgrade", "U", PartUpgrade::new);
     public static final PartType ROD = create("rod", "R", PartRod::new);

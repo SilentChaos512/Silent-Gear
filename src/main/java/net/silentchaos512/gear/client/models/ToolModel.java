@@ -118,11 +118,11 @@ public final class ToolModel implements IModel {
                 .filter(Objects::nonNull)
                 .map(ResourceLocation::new)
                 .collect(ImmutableList.toImmutableList());
-        int layerCount = textures.size();
 
         IBakedModel model = (new ItemLayerModel(textures)).bake(state, format, bakedTextureGetter);
         builder.addAll(model.getQuads(null, null, 0));
 
+        int layerCount = textures.size();
         return new ToolModel.Baked(this, createQuadsMap(model, layerCount), format, Maps.immutableEnumMap(transformMap), new HashMap<>());
     }
 

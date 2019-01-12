@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.init.ModTraits;
 import net.silentchaos512.lib.util.PlayerHelper;
 import net.silentchaos512.lib.util.StackHelper;
@@ -72,6 +73,7 @@ public final class GearData {
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
+            addOrRemoveHighlightPart(stack, parts);
             PartDataList uniqueParts = parts.getUniqueParts(true);
             Map<Trait, Integer> traits = TraitHelper.getTraits(parts);
 
@@ -108,6 +110,28 @@ public final class GearData {
 
         // Update model keys even if we didn't update stats
         createAndSaveModelKeys(stack, item, parts);
+    }
+
+    private static void addOrRemoveHighlightPart(ItemStack stack, PartDataList parts) {
+        final ItemPartData primary = parts.getPrimaryMain();
+        if (primary == null) return;
+
+        boolean changed = false;
+
+        if (primary.getPart().getDisplayProperties(primary, stack, 0).hasHighlight()) {
+            // Add highlight part if missing
+            if (parts.getParts(p -> p.getPart() instanceof PartHighlight).isEmpty()) {
+                parts.add(ItemPartData.instance(ModMaterials.highlight));
+                changed = true;
+            }
+        } else {
+            // Remove unneeded highlight part if present
+            changed = parts.removeIf(p -> p.getPart() instanceof PartHighlight);
+        }
+
+        if (changed) {
+            writeConstructionParts(stack, parts);
+        }
     }
 
     @Deprecated

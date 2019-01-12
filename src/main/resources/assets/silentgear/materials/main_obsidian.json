@@ -30,7 +30,7 @@
     },
     "display": {
         "all": {
-            "texture_suffix": "iron",
+            "texture_suffix": "generic_hc",
             "texture_color": "443464",
             "broken_color": "443464"
         },

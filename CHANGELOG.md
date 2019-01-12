@@ -4,10 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+This version makes some changes to the `display` object of part JSON files. Old files should still work, but I recommend updating them. For an example, please see [this file](https://github.com/SilentChaos512/Silent-Gear/blob/1.12/src/main/resources/assets/silentgear/materials/main_test2.json).
 ### Added
 - User-defined traits. Currently this is limited to stat modifier traits only. Additional types may be available in the future.
+- New display property, `highlight`. Adds a few transparent white pixels on top of tool heads. Optional, disabled by default.
 ### Changed
-- Changed part display properties to allow textures and colors to be set for different gear types. Old files are still compatible. The `all` object is the default for everything. Use `armor` to override all armor types. Then use the item name (`sword`, `bow`, etc.) to override specific gear types. See `main_test2.json` for an example.
+- Changed part display properties to allow textures and colors to be set for different gear types. Old files are still compatible. The `all` object is the default for everything. Use `armor` to override all armor types. Then use the item name (`sword`, `bow`, etc.) to override specific gear types.
 
 ## [0.4.2] - 2018-12-23
 ### Added

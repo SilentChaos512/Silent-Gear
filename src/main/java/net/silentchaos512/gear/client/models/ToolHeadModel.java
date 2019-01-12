@@ -26,6 +26,7 @@ import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.ToolHead;
 
 import javax.annotation.Nonnull;
@@ -38,50 +39,58 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class ToolHeadModel implements IModel {
-
     public static final IModel MODEL = new ToolHeadModel();
 
-    @Nullable
-    private final ResourceLocation textureHead;
-    @Nullable
-    private final ResourceLocation textureGuard;
+    @Nullable private final ResourceLocation textureHead;
+    @Nullable private final ResourceLocation textureGuard;
+    @Nullable private final ResourceLocation textureHighlight;
 
     public ToolHeadModel() {
         this.textureHead = null;
         this.textureGuard = null;
+        this.textureHighlight = null;
     }
 
-    public ToolHeadModel(@Nullable ResourceLocation textureHead, @Nullable ResourceLocation textureGuard) {
+    public ToolHeadModel(@Nullable ResourceLocation textureHead, @Nullable ResourceLocation textureGuard, @Nullable ResourceLocation textureHighlight) {
         this.textureHead = textureHead;
         this.textureGuard = textureGuard;
+        this.textureHighlight = textureHighlight;
     }
 
     @Nonnull
     @Override
     public IModel retexture(ImmutableMap<String, String> textures) {
         ResourceLocation head = null;
-        ResourceLocation guard = null;
-
         if (textures.containsKey("head"))
             head = new ResourceLocation(textures.get("head"));
+
+        ResourceLocation guard = null;
         if (textures.containsKey("guard"))
             guard = new ResourceLocation(textures.get("guard"));
+        
+        ResourceLocation highlight = null;
+        if (textures.containsKey("highlight"))
+            highlight = new ResourceLocation(textures.get("highlight"));
 
-        return new ToolHeadModel(head, guard);
+        return new ToolHeadModel(head, guard, highlight);
     }
 
     @Nonnull
     @Override
     public IModel process(ImmutableMap<String, String> customData) {
         ResourceLocation head = null;
-        ResourceLocation guard = null;
-
         if (customData.containsKey("head"))
             head = new ResourceLocation(customData.get("head"));
+
+        ResourceLocation guard = null;
         if (customData.containsKey("guard"))
             guard = new ResourceLocation(customData.get("guard"));
 
-        return new ToolHeadModel(head, guard);
+        ResourceLocation highlight = null;
+        if (customData.containsKey("highlight"))
+            highlight = new ResourceLocation(customData.get("highlight"));
+
+        return new ToolHeadModel(head, guard, highlight);
     }
 
     @Nonnull
@@ -107,6 +116,11 @@ public class ToolHeadModel implements IModel {
                         builder.add(textureGuard);
                 }
             }
+
+            final ItemPartData highlight = ItemPartData.instance(ModMaterials.highlight);
+            final ResourceLocation highlightTexture = highlight.getTexture(ItemStack.EMPTY, toolClass, PartPositions.HIGHLIGHT, 0);
+            if (highlightTexture != null)
+                builder.add(highlightTexture);
         }
         return builder.build();
     }
@@ -116,8 +130,6 @@ public class ToolHeadModel implements IModel {
     public IBakedModel bake(@Nonnull IModelState state, @Nonnull VertexFormat format, @Nonnull Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         ImmutableMap<TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
 
-        TRSRTransformation transform = TRSRTransformation.identity();
-
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
         ImmutableList.Builder<ResourceLocation> texBuilder = ImmutableList.builder();
@@ -125,6 +137,8 @@ public class ToolHeadModel implements IModel {
             texBuilder.add(this.textureHead);
         if (this.textureGuard != null)
             texBuilder.add(this.textureGuard);
+        if (this.textureHighlight != null)
+            texBuilder.add(this.textureHighlight);
 
         ImmutableList<ResourceLocation> textures = texBuilder.build();
 
@@ -175,11 +189,12 @@ public class ToolHeadModel implements IModel {
 
             ToolHeadModel.Baked model = (ToolHeadModel.Baked) originalModel;
 
-            String toolClass = ModItems.toolHead.getToolClass(stack);
+            String toolClass = ToolHead.getToolClass(stack);
             boolean hasGuard = "sword".equals(toolClass);
 
-            ItemPartData primaryPart = ModItems.toolHead.getPrimaryPart(stack);
-            ItemPartData secondaryPart = hasGuard ? ModItems.toolHead.getSecondaryPart(stack) : null;
+            ItemPartData primaryPart = ToolHead.getPrimaryPart(stack);
+            ItemPartData secondaryPart = hasGuard ? ToolHead.getSecondaryPart(stack) : null;
+            ItemPartData highlightPart = getHighlightPart(primaryPart, stack);
 
             String key = ToolHead.getModelKey(toolClass, primaryPart, secondaryPart);
 
@@ -187,15 +202,18 @@ public class ToolHeadModel implements IModel {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
                 ResourceLocation textureHead = primaryPart == null ? null : primaryPart.getTexture(stack, toolClass, PartPositions.HEAD, 0);
                 ResourceLocation textureGuard = secondaryPart == null ? null : secondaryPart.getTexture(stack, toolClass, PartPositions.GUARD, 0);
+                ResourceLocation textureHighlight = highlightPart == null ? null : highlightPart.getTexture(stack, toolClass, PartPositions.HIGHLIGHT, 0);
 
                 if (textureHead != null)
                     builder.put("head", textureHead.toString());
                 if (textureGuard != null)
                     builder.put("guard", textureGuard.toString());
+                if (textureHighlight != null)
+                    builder.put("highlight", textureHighlight.toString());
 
                 IModel parent = model.getParent().retexture(builder.build());
-                Function<ResourceLocation, TextureAtlasSprite> textureGetter;
-                textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+                Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
+                        Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
                 IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
                 GearClientHelper.modelCache.put(key, bakedModel);
 
@@ -209,6 +227,14 @@ public class ToolHeadModel implements IModel {
 
             return GearClientHelper.modelCache.get(key);
         }
+    }
+
+    @Nullable
+    private static ItemPartData getHighlightPart(@Nullable ItemPartData primary, ItemStack stack) {
+        if (primary == null) return null;
+        if (primary.getPart().getDisplayProperties(primary, stack, 0).hasHighlight())
+            return ItemPartData.instance(ModMaterials.highlight);
+        return null;
     }
 
     public static final class Baked extends AbstractToolModel {
