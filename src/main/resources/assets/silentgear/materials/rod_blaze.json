@@ -23,7 +23,8 @@
     "display": {
         "all": {
             "texture_suffix": "blaze",
-            "texture_color": "ffffff"
+            "texture_color": "FFFFFF",
+            "fallback_color": "F28D21"
         },
         "name_color": "gold"
     },

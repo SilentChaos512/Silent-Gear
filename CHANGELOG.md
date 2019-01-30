@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.5.0] - 2019-01-14
 This version makes some changes to the `display` object of part JSON files. Old files should still work, but I recommend updating them. For an example, please see [this file](https://github.com/SilentChaos512/Silent-Gear/blob/1.12/src/main/resources/assets/silentgear/materials/main_test2.json).
 ### Added
 - User-defined traits. Currently this is limited to stat modifier traits only. Additional types may be available in the future.

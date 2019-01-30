@@ -21,7 +21,8 @@
     "display": {
         "all": {
             "texture_suffix": "bone",
-            "texture_color": "ffffff"
+            "texture_color": "FFFFFF",
+            "fallback_color": "EDEBCA"
         },
         "name_color": "white"
     },

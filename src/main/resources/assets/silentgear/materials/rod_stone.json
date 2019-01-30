@@ -21,7 +21,8 @@
     "display": {
         "all": {
             "texture_suffix": "stone",
-            "texture_color": "ffffff"
+            "texture_color": "FFFFFF",
+            "fallback_color": "9A9A9A"
         },
         "name_color": "dark_gray"
     },

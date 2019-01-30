@@ -21,7 +21,8 @@
     "display": {
         "all": {
             "texture_suffix": "iron",
-            "texture_color": "ffffff"
+            "texture_color": "FFFFFF",
+            "fallback_color": "D8D8D8"
         },
         "name_color": "gray"
     },

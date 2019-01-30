@@ -24,7 +24,8 @@
     "display": {
         "all": {
             "texture_suffix": "end",
-            "texture_color": "ffffff"
+            "texture_color": "FFFFFF",
+            "fallback_color": "F6EACD"
         },
         "name_color": "light_purple"
     },

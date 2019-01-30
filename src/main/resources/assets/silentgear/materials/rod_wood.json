@@ -22,7 +22,8 @@
     "display": {
         "all": {
             "texture_suffix": "wood",
-            "texture_color": "ffffff"
+            "texture_color": "FFFFFF",
+            "fallback_color": "896727"
         },
         "name_color": "gold"
     },
