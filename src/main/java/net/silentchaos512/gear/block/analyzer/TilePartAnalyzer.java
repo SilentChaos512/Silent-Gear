@@ -30,6 +30,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.parts.PartManager;
@@ -52,8 +53,8 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     int progress = 0;
     private boolean requireClientSync = false;
 
-    TilePartAnalyzer() {
-        super(null); // FIXME
+    public TilePartAnalyzer() {
+        super(ModTileEntities.PART_ANALYZER.type());
     }
 
     @Override

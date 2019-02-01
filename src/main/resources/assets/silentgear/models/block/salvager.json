@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "particle": "silentgear:blocks/salvager_side",
-        "down": "silentgear:blocks/salvager",
-        "up": "silentgear:blocks/salvager_top",
-        "north": "silentgear:blocks/salvager_side",
-        "east": "silentgear:blocks/salvager_side",
-        "south": "silentgear:blocks/salvager_side",
-        "west": "silentgear:blocks/salvager_side"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "silentgear:block/salvager_side",
+    "down": "silentgear:block/salvager",
+    "up": "silentgear:block/salvager_top",
+    "north": "silentgear:block/salvager_side",
+    "east": "silentgear:block/salvager_side",
+    "south": "silentgear:block/salvager_side",
+    "west": "silentgear:block/salvager_side"
+  }
 }

@@ -1,11 +1,10 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:items/pickaxe/rod_wood",
-    "layer1": "silentgear:items/pickaxe/grip_wool",
-    "layer2": "silentgear:items/pickaxe/head_diamond",
-    "layer3": "silentgear:items/pickaxe/binding_generic",
-    "layer4": "silentgear:items/pickaxe/tip_gold"
+    "layer0": "silentgear:item/pickaxe/rod_wood",
+    "layer1": "silentgear:item/pickaxe/grip_wool",
+    "layer2": "silentgear:item/pickaxe/head_diamond",
+    "layer3": "silentgear:item/pickaxe/binding_generic",
+    "layer4": "silentgear:item/pickaxe/tip_gold"
   }
 }
-

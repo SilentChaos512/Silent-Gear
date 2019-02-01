@@ -1,0 +1,7 @@
+{
+  "__comment__": "Placeholder gear model",
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "silentgear:item/blueprint_shovel"
+  }
+}

@@ -1,6 +1,6 @@
 {
-    "parent": "block/cross",
-    "textures": {
-        "cross": "silentgear:blocks/netherwood_sapling"
-    }
+  "parent": "block/cross",
+  "textures": {
+    "cross": "silentgear:block/netherwood_sapling"
+  }
 }

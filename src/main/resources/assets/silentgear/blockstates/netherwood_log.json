@@ -1,9 +1,7 @@
 {
-    "variants": {
-        "axis=y":  { "model": "silentgear:netherwood_log" },
-        "axis=z":   { "model": "silentgear:netherwood_log", "x": 90 },
-        "axis=x":   { "model": "silentgear:netherwood_log", "x": 90, "y": 90 },
-        "axis=none": { "model": "silentgear:netherwood_bark" },
-        "inventory": { "model": "silentgear:netherwood_log" }
-    }
+  "variants": {
+    "axis=y": { "model": "silentgear:block/netherwood_log" },
+    "axis=z": { "model": "silentgear:block/netherwood_log", "x": 90 },
+    "axis=x": { "model": "silentgear:block/netherwood_log", "x": 90, "y": 90 }
+  }
 }

@@ -1,8 +1,8 @@
 {
   "variants": {
-    "facing=north": { "model": "silentgear:part_analyzer", "y": 180 },
-    "facing=south": { "model": "silentgear:part_analyzer" },
-    "facing=east": { "model": "silentgear:part_analyzer", "y": 270 },
-    "facing=west": { "model": "silentgear:part_analyzer", "y": 90 }
+    "facing=north": { "model": "silentgear:block/part_analyzer", "y": 180 },
+    "facing=south": { "model": "silentgear:block/part_analyzer" },
+    "facing=east": { "model": "silentgear:block/part_analyzer", "y": 270 },
+    "facing=west": { "model": "silentgear:block/part_analyzer", "y": 90 }
   }
 }

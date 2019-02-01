@@ -17,9 +17,12 @@ import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModLootStuff;
+import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.util.GenModels;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.lib.event.InitialSpawnItems;
+import net.silentchaos512.lib.util.GameUtil;
 
 class SideProxy {
     SideProxy() {
@@ -29,6 +32,7 @@ class SideProxy {
 
         FMLModLoadingContext.get().getModEventBus().addListener(ModBlocks::registerAll);
         FMLModLoadingContext.get().getModEventBus().addListener(ModItems::registerAll);
+        FMLModLoadingContext.get().getModEventBus().addListener(ModTileEntities::registerAll);
 
         FMLModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.spec);
         FMLModLoadingContext.get().getModEventBus().register(Config.class);
@@ -47,6 +51,10 @@ class SideProxy {
                 return ModItems.blueprintPackage.getStack();
             else return ItemStack.EMPTY;
         });
+
+        if (GameUtil.isDeobfuscated()) {
+            GenModels.generateAll();
+        }
     }
 
     private void imcEnqueue(InterModEnqueueEvent event) { }

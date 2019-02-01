@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -47,6 +48,12 @@ public class BlockPartAnalyzer extends BlockContainer {
         super(Builder.create(Material.IRON)
                 .hardnessAndResistance(5, 30)
         );
+        this.setDefaultState(this.getDefaultState().with(FACING, EnumFacing.SOUTH));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+        builder.add(FACING);
     }
 
     @Nullable

@@ -1,7 +1,7 @@
 {
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "silentgear:blocks/netherwood_log_top",
-        "side": "silentgear:blocks/netherwood_log"
-    }
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "silentgear:block/netherwood_log_top",
+    "side": "silentgear:block/netherwood_log"
+  }
 }

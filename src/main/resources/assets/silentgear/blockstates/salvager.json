@@ -1,6 +1,5 @@
 {
   "variants": {
-    "normal": {"model": "silentgear:salvager"},
-    "inventory": {"model": "silentgear:salvager"}
+    "": { "model": "silentgear:block/salvager" }
   }
 }

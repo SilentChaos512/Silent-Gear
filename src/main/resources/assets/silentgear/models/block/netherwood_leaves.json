@@ -1,6 +1,6 @@
 {
-    "parent": "block/leaves",
-    "textures": {
-        "all": "silentgear:blocks/netherwood_leaves"
-    }
+  "parent": "block/leaves",
+  "textures": {
+    "all": "silentgear:block/netherwood_leaves"
+  }
 }

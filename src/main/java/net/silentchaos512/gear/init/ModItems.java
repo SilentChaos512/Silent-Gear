@@ -2,6 +2,7 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -24,6 +25,7 @@ public final class ModItems {
     public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
     public static final List<Blueprint> blueprints = new ArrayList<>();
+    static final Map<String, ItemBlock> blocksToRegister = new LinkedHashMap<>();
 
     public static BlueprintPackage blueprintPackage;
     public static BlueprintBook blueprintBook;
@@ -53,6 +55,8 @@ public final class ModItems {
 
     public static void registerAll(RegistryEvent.Register<Item> event) {
         if (!event.getName().equals(ForgeRegistries.ITEMS.getRegistryName())) return;
+
+        blocksToRegister.forEach(ModItems::register);
 
         // Initializes, but does not register gear classes, fills maps
         initializeGear();

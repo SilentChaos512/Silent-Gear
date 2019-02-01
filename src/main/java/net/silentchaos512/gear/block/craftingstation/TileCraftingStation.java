@@ -12,6 +12,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.lib.tile.TileInventorySL;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,8 +29,8 @@ public class TileCraftingStation extends TileInventorySL {
     public static final int GEAR_PARTS_START = CRAFTING_GRID_START + CRAFTING_GRID_SIZE;
     public static final int SIDE_INVENTORY_START = GEAR_PARTS_START + GEAR_PARTS_SIZE;
 
-    TileCraftingStation() {
-        super(null); // FIXME
+    public TileCraftingStation() {
+        super(ModTileEntities.CRAFTING_STATION.type());
     }
 
 //    private static final int CURRENT_VERSION = 1;

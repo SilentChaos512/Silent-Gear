@@ -2,6 +2,7 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.LazyLoadBase;
 import net.minecraft.util.ResourceLocation;
@@ -45,9 +46,14 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     }
 
     private static void register(String name, Block block) {
+        register(name, block, new ItemBlock(block, new Item.Builder().group(SilentGear.ITEM_GROUP)));
+    }
+
+    private static void register(String name, Block block, ItemBlock item) {
         ResourceLocation registryName = new ResourceLocation(SilentGear.MOD_ID, name);
         block.setRegistryName(registryName);
         ForgeRegistries.BLOCKS.register(block);
+        ModItems.blocksToRegister.put(name, item);
     }
 
     @Override

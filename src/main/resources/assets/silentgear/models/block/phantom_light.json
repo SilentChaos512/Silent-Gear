@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "silentgear:items/blank"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "silentgear:item/blank"
+  }
 }

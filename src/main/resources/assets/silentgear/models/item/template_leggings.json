@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:items/template",
-    "layer1": "silentgear:items/blueprint_leggings"
+    "layer0": "silentgear:item/template",
+    "layer1": "silentgear:item/blueprint_leggings"
   }
 }

@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube",
-    "textures": {
-        "particle": "silentgear:blocks/crafting_station_front",
-        "down": "blocks/planks_oak",
-        "up": "silentgear:blocks/crafting_station_top",
-        "north": "silentgear:blocks/crafting_station_front",
-        "east": "silentgear:blocks/crafting_station_side",
-        "south": "silentgear:blocks/crafting_station_side",
-        "west": "silentgear:blocks/crafting_station_front"
-    }
+  "parent": "block/cube",
+  "textures": {
+    "particle": "silentgear:block/crafting_station_front",
+    "down": "block/oak_planks",
+    "up": "silentgear:block/crafting_station_top",
+    "north": "silentgear:block/crafting_station_front",
+    "east": "silentgear:block/crafting_station_side",
+    "south": "silentgear:block/crafting_station_side",
+    "west": "silentgear:block/crafting_station_front"
+  }
 }

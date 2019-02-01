@@ -1,6 +1,6 @@
 {
   "parent": "block/crop",
   "textures": {
-    "crop": "silentgear:blocks/flax_plant2"
+    "crop": "silentgear:block/flax_plant2"
   }
 }

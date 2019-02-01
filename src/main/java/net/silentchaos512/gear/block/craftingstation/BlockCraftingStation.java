@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.craftingstation;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -10,6 +11,7 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -29,6 +31,12 @@ public class BlockCraftingStation extends BlockContainer {
                 .hardnessAndResistance(3, 10)
                 .sound(SoundType.WOOD)
         );
+        this.setDefaultState(this.getDefaultState().with(FACING, EnumFacing.SOUTH));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+        builder.add(FACING);
     }
 
     @Nullable

@@ -1,6 +1,5 @@
 {
-    "variants": {
-        "inventory": { "model": "silentgear:phantom_light" },
-        "normal": { "model": "silentgear:phantom_light" }
-    }
+  "variants": {
+    "": { "model": "silentgear:block/phantom_light" }
+  }
 }

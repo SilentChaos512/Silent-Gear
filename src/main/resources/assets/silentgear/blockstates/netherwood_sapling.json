@@ -1,7 +1,5 @@
 {
   "variants": {
-    "stage=0": { "model": "silentgear:netherwood_sapling" },
-    "stage=1": { "model": "silentgear:netherwood_sapling" },
-    "inventory": { "model": "silentgear:netherwood_sapling" }
+    "": { "model": "silentgear:block/netherwood_sapling" }
   }
 }

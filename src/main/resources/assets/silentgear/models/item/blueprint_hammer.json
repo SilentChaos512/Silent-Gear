@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:items/blueprint",
-    "layer1": "silentgear:items/blueprint_hammer"
+    "layer0": "silentgear:item/blueprint",
+    "layer1": "silentgear:item/blueprint_hammer"
   }
 }

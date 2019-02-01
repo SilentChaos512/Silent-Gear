@@ -34,6 +34,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -57,7 +58,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     int progress = 0;
 
     public TileSalvager() {
-        super(null); // FIXME
+        super(ModTileEntities.SALVAGER.type());
     }
 
     @Override
