@@ -22,6 +22,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 
@@ -36,15 +37,16 @@ public class GuiPartAnalyzer extends GuiContainer {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(SilentGear.i18n.translatedName(ModBlocks.partAnalyzer), 28, 6, 0x404040);
+        ITextComponent text = ModBlocks.PART_ANALYZER.asBlock().getNameTextComponent();
+        fontRenderer.drawString(text.getFormattedText(), 28, 6, 0x404040);
     }
 
     private int getAnalyzeProgress(int scale) {
@@ -55,7 +57,7 @@ public class GuiPartAnalyzer extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(TEXTURE);
 
         int posX = (this.width - this.xSize) / 2;

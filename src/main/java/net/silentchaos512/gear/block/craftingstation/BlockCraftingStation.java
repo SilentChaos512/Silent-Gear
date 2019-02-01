@@ -1,90 +1,74 @@
 package net.silentchaos512.gear.block.craftingstation;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.lib.block.ITileEntityBlock;
 
-public class BlockCraftingStation extends BlockContainer implements ITileEntityBlock {
-    private static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+import javax.annotation.Nullable;
+
+public class BlockCraftingStation extends BlockContainer {
+    private static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public BlockCraftingStation() {
-        super(Material.WOOD);
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        setHardness(3.0f);
-        setResistance(5.0f);
+        super(Builder.create(Material.WOOD)
+                .hardnessAndResistance(3, 10)
+                .sound(SoundType.WOOD)
+        );
     }
 
+    @Nullable
     @Override
-    public Class<? extends TileEntity> getTileEntityClass() {
-        return TileCraftingStation.class;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileCraftingStation();
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof TileCraftingStation) {
             TileCraftingStation tileCraftingStation = (TileCraftingStation) tileEntity;
             InventoryHelper.dropInventoryItems(worldIn, pos, tileCraftingStation.getInternalStorage());
         }
-        super.breakBlock(worldIn, pos, state);
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         return !player.isSneaking() && (world.isRemote || this.openGui(player, world, pos));
     }
 
     private boolean openGui(EntityPlayer player, World world, BlockPos pos) {
-        player.openGui(SilentGear.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+        // FIXME
+//        player.openGui(SilentGear.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
 
+    @Nullable
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-        IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer);
-        return state.withProperty(FACING, placer.getHorizontalFacing());
+    public IBlockState getStateForPlacement(BlockItemUseContext context) {
+        return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
         EnumFacing side = placer.getHorizontalFacing().getOpposite();
-        world.setBlockState(pos, state.withProperty(FACING, side), 2);
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getHorizontalIndex();
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+        world.setBlockState(pos, state.with(FACING, side), 2);
     }
 
     @Override
@@ -93,27 +77,12 @@ public class BlockCraftingStation extends BlockContainer implements ITileEntityB
     }
 
     @Override
-    public boolean isTranslucent(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isFullBlock(IBlockState state) {
-        return false;
-    }
-
-    @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
         return face == EnumFacing.DOWN || face == EnumFacing.UP;
     }
 }

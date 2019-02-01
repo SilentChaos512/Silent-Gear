@@ -7,13 +7,14 @@ import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.IUnbakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.*;
@@ -27,17 +28,21 @@ import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.gear.CoreBow;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartPositions;
+import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public final class ToolModel implements IModel {
-    private static final IModel MODEL = new ToolModel();
+public final class ToolModel implements IUnbakedModel {
+    private static final IUnbakedModel MODEL = new ToolModel();
 
     public static final Map<UUID, Float> bowPull = new HashMap<>();
 
@@ -52,22 +57,22 @@ public final class ToolModel implements IModel {
     }
 
     @Override
-    public IModel retexture(ImmutableMap<String, String> textures) {
+    public ToolModel retexture(ImmutableMap<String, String> textures) {
         return new ToolModel(textures);
     }
 
     @Override
-    public IModel process(ImmutableMap<String, String> customData) {
+    public ToolModel process(ImmutableMap<String, String> customData) {
         return new ToolModel(customData);
     }
 
     @Override
-    public Collection<ResourceLocation> getDependencies() {
+    public Collection<ResourceLocation> getOverrideLocations() {
         return ImmutableList.of();
     }
 
     @Override
-    public Collection<ResourceLocation> getTextures() {
+    public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
 
 //        SilentGear.log.info("Getting item part textures... what could go wrong?");
@@ -76,9 +81,9 @@ public final class ToolModel implements IModel {
             ICoreItem item = ModItems.toolClasses.get(toolClass);
 
             for (int frame = 0; frame < item.getAnimationFrames(); ++frame)
-                for (ItemPart part : PartRegistry.getValues()) {
-                    if (part.isBlacklisted()) continue;
-                    ItemPartData partData = ItemPartData.instance(part);
+                for (IGearPart part : PartManager.getValues()) {
+//                    if (part.isBlacklisted()) continue;
+                    PartData partData = PartData.of(part);
 
                     // Basic texture
                     // position could be HEAD, but I added ANY to make it clear this is not just mains.
@@ -106,8 +111,9 @@ public final class ToolModel implements IModel {
         return builder.build();
     }
 
+
     @Override
-    public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+    public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock, VertexFormat format) {
         ImmutableMap<TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
@@ -119,8 +125,8 @@ public final class ToolModel implements IModel {
                 .map(ResourceLocation::new)
                 .collect(ImmutableList.toImmutableList());
 
-        IBakedModel model = (new ItemLayerModel(textures)).bake(state, format, bakedTextureGetter);
-        builder.addAll(model.getQuads(null, null, 0));
+        IBakedModel model = (new ItemLayerModel(textures)).bake(modelGetter, spriteGetter, state, uvlock, format);
+        builder.addAll(model.getQuads(null, null, SilentGear.random));
 
         int layerCount = textures.size();
         return new ToolModel.Baked(this, createQuadsMap(model, layerCount), format, Maps.immutableEnumMap(transformMap), new HashMap<>());
@@ -128,15 +134,18 @@ public final class ToolModel implements IModel {
 
     private static ImmutableList<ImmutableList<BakedQuad>> createQuadsMap(IBakedModel model, int layerCount) {
         List<ImmutableList.Builder<BakedQuad>> list = new ArrayList<>();
-        for (int i = 0; i < layerCount; ++i)
+        for (int i = 0; i < layerCount; ++i) {
             list.add(ImmutableList.builder());
+        }
 
-        for (BakedQuad quad : model.getQuads(null, null, 0))
+        for (BakedQuad quad : model.getQuads(null, null, SilentGear.random)) {
             list.get(quad.getTintIndex()).add(quad);
+        }
 
         ImmutableList.Builder<ImmutableList<BakedQuad>> builder = ImmutableList.builder();
-        for (ImmutableList.Builder<BakedQuad> b : list)
+        for (ImmutableList.Builder<BakedQuad> b : list) {
             builder.add(b.build());
+        }
 
         return builder.build();
     }
@@ -151,8 +160,7 @@ public final class ToolModel implements IModel {
         public static Loader INSTANCE = new Loader();
 
         @Override
-        public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        }
+        public void onResourceManagerReload(IResourceManager resourceManager) { }
 
         @Override
         public boolean accepts(@Nonnull ResourceLocation modelLocation) {
@@ -162,28 +170,22 @@ public final class ToolModel implements IModel {
 
         @Nonnull
         @Override
-        public IModel loadModel(@Nonnull ResourceLocation modelLocation) {
+        public IUnbakedModel loadModel(@Nonnull ResourceLocation modelLocation) {
             return MODEL;
         }
     }
 
     private static final class OverrideHandler extends ItemOverrideList {
-
         public static final OverrideHandler INSTANCE = new OverrideHandler();
 
-        OverrideHandler() {
-            super(ImmutableList.of());
-        }
-
+        @Nullable
         @Override
-        @Nonnull
-        public IBakedModel handleItemState(@Nonnull IBakedModel originalModel, @Nonnull ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
-            if (!(stack.getItem() instanceof ICoreTool))
-                return originalModel;
+        public IBakedModel getModelWithOverrides(IBakedModel parentModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+            if (!(stack.getItem() instanceof ICoreTool)) return parentModel;
 
             int animationFrame = getAnimationFrame(stack, world, entity);
             String key = GearData.getCachedModelKey(stack, animationFrame);
-            StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
+            stack.getOrCreateTag().setString("debug_modelkey", key);
 
             // DEBUG:
             // model.cache.clear();
@@ -194,7 +196,7 @@ public final class ToolModel implements IModel {
                 boolean isBroken = GearHelper.isBroken(stack);
 
                 PartDataList parts = GearData.getConstructionParts(stack);
-                Map<IPartPosition, ItemPartData> renderLayers = new LinkedHashMap<>();
+                Map<IPartPosition, PartData> renderLayers = new LinkedHashMap<>();
                 for (IPartPosition position : IPartPosition.RENDER_LAYERS) {
                     // We have a few special cases. These return a default part for rendering if the
                     // part is missing or invalid.
@@ -206,7 +208,7 @@ public final class ToolModel implements IModel {
                         renderLayers.put(PartPositions.ROD, itemTool.getRodPart(stack));
                     } else {
                         // For most cases just get the first (usually only) matching part in the list
-                        final ItemPartData part = parts.firstInPosition(position);
+                        PartData part = parts.firstInPosition(position);
                         if (part != null) renderLayers.put(position, part);
                     }
                 }
@@ -216,11 +218,18 @@ public final class ToolModel implements IModel {
                 renderLayers.forEach((pos, part) ->
                         processTexture(stack, toolClass, pos, part, animationFrame, isBroken, builder));
 
-                ToolModel.Baked model = (ToolModel.Baked) originalModel;
+                ToolModel.Baked model = (ToolModel.Baked) parentModel;
                 IModel parent = model.getParent().retexture(builder.build());
-                Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
-                        Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-                IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
+                // TODO: What's this? Do we need to get a model and if so, how?
+                Function<ResourceLocation, IUnbakedModel> modelGetter = location -> null;
+                Function<ResourceLocation, TextureAtlasSprite> spriteGetter = location ->
+                        Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
+                IBakedModel bakedModel = parent.bake(
+                        modelGetter,
+                        spriteGetter,
+                        new SimpleModelState(ImmutableMap.of()),
+                        false,
+                        model.getVertexFormat());
                 GearClientHelper.modelCache.put(key, bakedModel);
 
                 // Color cache
@@ -234,7 +243,7 @@ public final class ToolModel implements IModel {
             return GearClientHelper.modelCache.get(key);
         }
 
-        private static void processTexture(ItemStack stack, String toolClass, IPartPosition position, @Nullable ItemPartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private static void processTexture(ItemStack stack, String toolClass, IPartPosition position, @Nullable PartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
                 ResourceLocation texture = isBroken
                         ? part.getBrokenTexture(stack, toolClass, position)

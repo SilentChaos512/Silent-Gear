@@ -34,11 +34,11 @@ public class ContainerSalvager extends ContainerSL {
 
     @Override
     protected void addTileInventorySlots(IInventory inv) {
-        addSlotToContainer(new Slot(tileInventory, 0, 9, 35));
+        addSlot(new Slot(tileInventory, 0, 9, 35));
         int index = 1;
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 6; ++x) {
-                addSlotToContainer(new SlotOutputOnly(tileInventory, index, 62 + 18 * x, 17 + 18 * y));
+                addSlot(new SlotOutputOnly(tileInventory, index, 62 + 18 * x, 17 + 18 * y));
                 ++index;
             }
         }

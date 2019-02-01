@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import java.util.Collection;
 
 public interface IBlueprint {
-
     ItemStack getCraftingResult(ItemStack blueprint, Collection<ItemStack> parts);
 
     int getMaterialCost(ItemStack blueprint);

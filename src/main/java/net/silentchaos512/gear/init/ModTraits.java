@@ -23,24 +23,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.trait.StatModifierTrait;
 import net.silentchaos512.gear.trait.TraitRefractive;
-import net.silentchaos512.lib.registry.IPhasedInitializer;
-import net.silentchaos512.lib.registry.SRegistry;
 
 import javax.annotation.Nullable;
-import java.io.File;
 
-public final class ModTraits implements IPhasedInitializer {
+@Deprecated
+public final class ModTraits /*implements IPhasedInitializer*/ {
     public static final ModTraits INSTANCE = new ModTraits();
 
     public static Trait ancient;
@@ -57,8 +53,7 @@ public final class ModTraits implements IPhasedInitializer {
 
     private ModTraits() {}
 
-    @Override
-    public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
+    public void preInit() {
         TraitRegistry.register(new DurabilityTrait(path("malleable"), ResourceOrigin.BUILTIN_CORE));
         TraitRegistry.register(new DurabilityTrait(path("brittle"), ResourceOrigin.BUILTIN_CORE));
 
@@ -106,16 +101,17 @@ public final class ModTraits implements IPhasedInitializer {
 
     private static final class UserDefined {
         static void loadUserTraits() {
+            /*
             final File directory = new File(Config.INSTANCE.getDirectory(), "traits");
             final File[] files = directory.listFiles();
 
             if (!directory.isDirectory() || files == null) {
-                SilentGear.log.warn("File \"{}\" is not a directory?", directory);
+                SilentGear.LOGGER.warn("File \"{}\" is not a directory?", directory);
                 return;
             }
 
             for (File file : files) {
-                SilentGear.log.info("Trait file found: {}", file);
+                SilentGear.LOGGER.info("Trait file found: {}", file);
                 String filename = file.getName().replace(".json", "");
                 ResourceLocation name = path(filename);
 
@@ -125,6 +121,7 @@ public final class ModTraits implements IPhasedInitializer {
                     TraitRegistry.register(trait);
                 }
             }
+            */
         }
     }
 }

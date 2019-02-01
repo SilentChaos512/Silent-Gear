@@ -19,76 +19,115 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.crafting.IRecipeFactory;
-import net.minecraftforge.common.crafting.JsonContext;
-import net.silentchaos512.gear.api.parts.PartRegistry;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.collection.StackList;
-import net.silentchaos512.lib.recipe.RecipeBaseSL;
-import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public class BlueprintCrafting implements IRecipeFactory {
-    @Override
-    public IRecipe parse(JsonContext context, JsonObject json) {
-        return new Recipe(ModItems.toolHead);
+public final class BlueprintCrafting implements IRecipe {
+    private final ResourceLocation recipeId;
+    private final IItemProvider outputType;
+
+    private BlueprintCrafting(ResourceLocation id, IItemProvider outputType) {
+        this.recipeId = id;
+        this.outputType = outputType;
     }
 
-    private static class Recipe extends RecipeBaseSL {
-        Item outputType;
+    @Override
+    public ItemStack getCraftingResult(IInventory inv) {
+        StackList list = StackList.from(inv);
+        ItemStack blueprint = list.firstOfType(IBlueprint.class);
+        list.remove(blueprint);
+        return ((IBlueprint) blueprint.getItem()).getCraftingResult(blueprint, list);
+    }
 
-        Recipe(Item outputType) {
-            this.outputType = outputType;
+    @Override
+    public boolean matches(IInventory inv, World world) {
+        StackList list = StackList.from(inv);
+        ItemStack blueprint = list.uniqueOfType(IBlueprint.class);
+
+        // Only one blueprint
+        if (blueprint.isEmpty()) {
+            return false;
+        }
+
+        Collection<ItemStack> materials = list.allMatches(s -> PartManager.from(s) != null);
+        int materialCount = materials.size();
+        IBlueprint blueprintItem = (IBlueprint) blueprint.getItem();
+
+        // Right number of materials and nothing else? FIXME: blueprint book support?
+        if (materialCount + 1 != list.size() || materialCount != blueprintItem.getMaterialCost(blueprint)) {
+            return false;
+        }
+
+        // Inventory allows mixing?
+        return inventoryAllowsMixedMaterial(inv) || materials.stream().map(PartManager::from).distinct().count() == 1;
+    }
+
+    private static boolean inventoryAllowsMixedMaterial(IInventory inv) {
+        return inv instanceof InventoryCraftingStation;
+    }
+
+    @Override
+    public boolean canFit(int width, int height) {
+        return true;
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getRecipeOutput() {
+        return new ItemStack(outputType);
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return recipeId;
+    }
+
+    @Override
+    public IRecipeSerializer<?> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
+    public static class Serializer implements IRecipeSerializer<BlueprintCrafting> {
+        public static final Serializer INSTANCE = new Serializer();
+
+        private Serializer() {}
+
+        @Override
+        public BlueprintCrafting read(ResourceLocation recipeId, JsonObject json) {
+            return new BlueprintCrafting(recipeId, Items.AIR); //FIXME
         }
 
         @Override
-        public ItemStack getCraftingResult(InventoryCrafting inv) {
-            StackList list = StackHelper.getNonEmptyStacks(inv);
-            ItemStack blueprint = list.firstOfType(IBlueprint.class);
-            list.remove(blueprint);
-            return ((IBlueprint) blueprint.getItem()).getCraftingResult(blueprint, list);
+        public BlueprintCrafting read(ResourceLocation recipeId, PacketBuffer buffer) {
+            return new BlueprintCrafting(recipeId, Items.AIR); // FIXME
         }
 
         @Override
-        public boolean matches(InventoryCrafting inv, World world) {
-            StackList list = StackHelper.getNonEmptyStacks(inv);
-            ItemStack blueprint = list.uniqueOfType(IBlueprint.class);
+        public void write(PacketBuffer buffer, BlueprintCrafting recipe) { }
 
-            // Only one blueprint
-            if (blueprint.isEmpty()) {
-                return false;
-            }
-
-            Collection<ItemStack> materials = list.allMatches(s -> PartRegistry.get(s) != null);
-            int materialCount = materials.size();
-            IBlueprint blueprintItem = (IBlueprint) blueprint.getItem();
-
-            // Right number of materials and nothing else? FIXME: blueprint book support?
-            if (materialCount + 1 != list.size() || materialCount != blueprintItem.getMaterialCost(blueprint)) {
-                return false;
-            }
-
-            // Inventory allows mixing?
-            return inventoryAllowsMixedMaterial(inv) || materials.stream().map(PartRegistry::get).distinct().count() == 1;
-        }
-
-        @Nonnull
         @Override
-        public ItemStack getRecipeOutput() {
-            return new ItemStack(outputType);
-        }
-
-        private static boolean inventoryAllowsMixedMaterial(InventoryCrafting inv) {
-            return inv instanceof InventoryCraftingStation;
+        public ResourceLocation getName() {
+            return new ResourceLocation(SilentGear.MOD_ID, "blueprint_crafting");
         }
     }
 }

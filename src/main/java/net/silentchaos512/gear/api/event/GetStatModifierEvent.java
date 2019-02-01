@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.api.event;
 
 import lombok.Getter;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.silentchaos512.gear.api.parts.ItemPartData;
+import net.minecraftforge.eventbus.api.Event;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.parts.PartData;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ import java.util.List;
 public class GetStatModifierEvent extends Event {
     private final ItemStat stat;
     private final List<StatInstance> modifiers;
-    private final ItemPartData part;
+    private final PartData part;
 
-    public GetStatModifierEvent(ItemPartData part, ItemStat stat, List<StatInstance> modifiers) {
+    public GetStatModifierEvent(PartData part, ItemStat stat, List<StatInstance> modifiers) {
         this.stat = stat;
         this.modifiers = modifiers;
         this.part = part;

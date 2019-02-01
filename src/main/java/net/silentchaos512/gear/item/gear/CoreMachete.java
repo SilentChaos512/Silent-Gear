@@ -18,29 +18,25 @@
 
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.silentchaos512.gear.config.Config;
+import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
 
 public class CoreMachete extends CoreSword {
     private static final int BREAK_RANGE = 2; // TODO: Config?
 
-    private final Set<String> toolClasses = new HashSet<>();
-
     public CoreMachete() {
-        setHarvestLevel("axe", 0);
+        super(ToolType.AXE);
     }
 
     @Nonnull
@@ -63,20 +59,15 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
-        return GearHelper.getHarvestLevel(stack, toolClass, state, null);
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+        return GearHelper.getHarvestLevel(stack, tool, blockState, null);
     }
 
-    @Override
-    public void setHarvestLevel(String toolClass, int level) {
-        super.setHarvestLevel(toolClass, level);
-        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-    }
-
-    @Override
-    public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.copyOf(toolClasses);
-    }
+//    @Override
+//    public void setHarvestLevel(String toolClass, int level) {
+//        super.setHarvestLevel(toolClass, level);
+//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
+//    }
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {

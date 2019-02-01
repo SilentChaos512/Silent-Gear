@@ -21,15 +21,15 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.MathHelper;
-import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
+import net.silentchaos512.gear.parts.PartData;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -55,10 +55,10 @@ public final class TraitHelper {
      * @return The {@code inputValue} modified by traits.
      */
     public static float activateTraits(ItemStack gear, final float inputValue, TraitFunction action) {
-        NBTTagList tagList = GearData.getPropertiesData(gear).getTagList("Traits", 10);
+        NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
         float value = inputValue;
 
-        for (NBTBase nbt : tagList) {
+        for (INBTBase nbt : tagList) {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound tagCompound = (NBTTagCompound) nbt;
                 String regName = tagCompound.getString("Name");
@@ -84,9 +84,9 @@ public final class TraitHelper {
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */
     public static int getTraitLevel(ItemStack gear, Trait trait) {
-        NBTTagList tagList = GearData.getPropertiesData(gear).getTagList("Traits", 10);
+        NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
 
-        for (NBTBase nbt : tagList) {
+        for (INBTBase nbt : tagList) {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound tagCompound = (NBTTagCompound) nbt;
                 String regName = tagCompound.getString("Name");
@@ -116,7 +116,7 @@ public final class TraitHelper {
         Map<Trait, Integer> result = new LinkedHashMap<>();
         Map<Trait, Integer> countPartsWithTrait = new HashMap<>();
 
-        for (ItemPartData part : parts) {
+        for (PartData part : parts) {
             part.getTraits().forEach(((trait, level) -> {
                 // Count total levels for each trait from all parts
                 result.merge(trait, level, (i1, i2) -> i1 + i2);
@@ -174,9 +174,9 @@ public final class TraitHelper {
 
     static void tickTraits(@Nullable EntityPlayer player, ItemStack gear) {
         // Performance test on 2018-11-26 - roughly 5% FPS loss max (negligible), average ~420 FPS
-        NBTTagList tagList = GearData.getPropertiesData(gear).getTagList("Traits", 10);
+        NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
 
-        for (NBTBase nbt : tagList) {
+        for (INBTBase nbt : tagList) {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound tagCompound = (NBTTagCompound) nbt;
                 String regName = tagCompound.getString("Name");

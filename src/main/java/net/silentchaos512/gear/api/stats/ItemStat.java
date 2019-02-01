@@ -2,10 +2,12 @@ package net.silentchaos512.gear.api.stats;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
@@ -186,7 +188,12 @@ public class ItemStat {
         return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", name, defaultValue, minimumValue, maximumValue);
     }
 
+    @Deprecated
     public String translatedName() {
-        return SilentGear.i18n.translate("stat." + this.name);
+        return I18n.format("stat." + name.getNamespace() + "." + name.getPath());
+    }
+
+    public ITextComponent getDisplayName() {
+        return new TextComponentTranslation("stat." + name.getNamespace() + "." + name.getPath());
     }
 }

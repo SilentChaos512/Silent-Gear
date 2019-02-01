@@ -12,25 +12,26 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
-public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
+public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadListener {
+    public static final ExtraBlockBreakHandler INSTANCE = new ExtraBlockBreakHandler(Minecraft.getInstance());
 
-    public static final ExtraBlockBreakHandler INSTANCE = new ExtraBlockBreakHandler(Minecraft.getMinecraft());
-
-    private final Map<Integer, DestroyExtraBlocksProgress> extraDamagedBlocks = new HashMap<Integer, DestroyExtraBlocksProgress>();
+    private final Map<Integer, DestroyExtraBlocksProgress> extraDamagedBlocks = new HashMap<>();
     private Minecraft mc;
     private final TextureManager renderEngine;
     private final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
@@ -38,17 +39,17 @@ public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
     private ExtraBlockBreakHandler(Minecraft mcIn) {
         this.mc = mcIn;
         this.renderEngine = mcIn.getTextureManager();
-        ((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(this);
+        ((IReloadableResourceManager) mc.getResourceManager()).addReloadListener(this);
     }
 
     @SubscribeEvent
     public void renderBlockBreakAnim(RenderWorldLastEvent event) {
         GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         this.mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
         this.drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), this.mc.getRenderViewEntity(), event.getPartialTicks());
         this.mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.disableBlend();
     }
 
@@ -62,22 +63,22 @@ public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
         this.extraDamagedBlocks.clear();
     }
 
-    private void preRenderDamagedBlocks() {
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+    private static void preRenderDamagedBlocks() {
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.enableBlend();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
-        GlStateManager.doPolygonOffset(-3.0F, -3.0F);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
+        GlStateManager.polygonOffset(-3.0F, -3.0F);
         GlStateManager.enablePolygonOffset();
         GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.pushMatrix();
     }
 
-    private void postRenderDamagedBlocks() {
-        GlStateManager.disableAlpha();
-        GlStateManager.doPolygonOffset(0.0F, 0.0F);
+    private static void postRenderDamagedBlocks() {
+        GlStateManager.disableAlphaTest();
+        GlStateManager.polygonOffset(0.0F, 0.0F);
         GlStateManager.disablePolygonOffset();
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.depthMask(true);
         GlStateManager.popMatrix();
     }
@@ -87,13 +88,13 @@ public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
         double d4 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
         double d5 = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double) partialTicks;
 
-        if (this.mc.world.getWorldTime() % 20 == 0) {
+        if (this.mc.world.getGameTime() % 20 == 0) {
             this.cleanupExtraDamagedBlocks();
         }
 
         if (!this.extraDamagedBlocks.isEmpty()) {
             this.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            this.preRenderDamagedBlocks();
+            ExtraBlockBreakHandler.preRenderDamagedBlocks();
             bufferBuilderIn.begin(7, DefaultVertexFormats.BLOCK);
             bufferBuilderIn.setTranslation(-d3, -d4, -d5);
             bufferBuilderIn.noColor();
@@ -131,7 +132,7 @@ public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
 
             tessellatorIn.draw();
             bufferBuilderIn.setTranslation(0.0D, 0.0D, 0.0D);
-            this.postRenderDamagedBlocks();
+            ExtraBlockBreakHandler.postRenderDamagedBlocks();
         }
     }
 
@@ -140,15 +141,16 @@ public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
             DestroyExtraBlocksProgress destroyblockprogress = entry.getValue();
             int k1 = destroyblockprogress.getCreationWorldTick();
 
-            if (this.mc.world.getWorldTime() - k1 > 400) {
+            if (this.mc.world.getGameTime() - k1 > 400) {
                 this.extraDamagedBlocks.remove(entry.getKey());
             }
         }
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
-        TextureMap texturemap = this.mc.getTextureMapBlocks();
+    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+        TextureMap texturemap = this.mc.getTextureMap();
+        if (texturemap == null) return;
 
         for (int i = 0; i < this.destroyBlockIcons.length; ++i) {
             this.destroyBlockIcons[i] = texturemap.getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
@@ -161,7 +163,7 @@ public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
             this.extraDamagedBlocks.put(Integer.valueOf(breakerId), destroyextrablocksprogress);
 
             destroyextrablocksprogress.setPartialBlockDamage(progress);
-            destroyextrablocksprogress.setWorldTick((int) this.mc.world.getWorldTime());
+            destroyextrablocksprogress.setWorldTick((int) this.mc.world.getGameTime());
         } else {
             this.extraDamagedBlocks.remove(breakerId);
         }

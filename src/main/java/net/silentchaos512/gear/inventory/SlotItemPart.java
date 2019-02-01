@@ -22,9 +22,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.PartManager;
 
 import javax.annotation.Nonnull;
 
@@ -39,7 +39,7 @@ public class SlotItemPart extends Slot {
     @Override
     public boolean isItemValid(@Nonnull ItemStack stack) {
         if (!super.isItemValid(stack)) return false;
-        final ItemPart part = PartRegistry.get(stack);
+        IGearPart part = PartManager.from(stack);
         return part != null && !(part instanceof PartMain);
     }
 

@@ -30,15 +30,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,7 +73,7 @@ public class Trait {
     }
 
     public static void setCancelsWith(Trait t1, Trait t2) {
-        SilentGear.log.debug("Set trait cancels with: '{}' and '{}'", t1.name, t2.name);
+        SilentGear.LOGGER.debug("Set trait cancels with: '{}' and '{}'", t1.name, t2.name);
         t1.cancelsWith.add(t2.name.toString());
         t2.cancelsWith.add(t1.name.toString());
     }
@@ -94,10 +97,15 @@ public class Trait {
         return cancelsWith.contains(other.name.toString());
     }
 
+    @Deprecated
     public String getTranslatedName(int level) {
-        String translatedName = SilentGear.i18n.translate("trait." + name);
-        String levelString = SilentGear.i18n.translate("enchantment.level." + level);
-        return SilentGear.i18n.translate("trait", "displayFormat", translatedName, levelString);
+        return "wrong method!";
+    }
+
+    public ITextComponent getDisplayName(int level) {
+        ITextComponent textName = new TextComponentTranslation("trait." + name.getNamespace() + "." + name.getPath());
+        ITextComponent textLevel = new TextComponentTranslation("enchantment.level." + level);
+        return new TextComponentTranslation("trait.silentgear.displayFormat", textName, textLevel);
     }
 
     @Override
@@ -133,23 +141,25 @@ public class Trait {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream, "UTF-8"))) {
                 readResourceFile(reader);
             } catch (Exception e) {
-                SilentGear.log.warn("Error reading trait file '{}'", path);
-                SilentGear.log.catching(e);
+                SilentGear.LOGGER.warn("Error reading trait file '{}'", path);
+                SilentGear.LOGGER.catching(e);
             }
         } else if (origin.isBuiltin()) {
-            SilentGear.log.error("Trait '{}' is missing its data file!", this.name);
+            SilentGear.LOGGER.error("Trait '{}' is missing its data file!", this.name);
         }
 
         // Override in config folder
+        /*
         File file = new File(Config.INSTANCE.getDirectory().getPath(), "traits/" + this.name.getPath() + ".json");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             readResourceFile(reader);
         } catch (FileNotFoundException e) {
             // Ignore, overrides are not required
         } catch (Exception e) {
-            SilentGear.log.warn("Error reading trait override '{}'", file.getAbsolutePath());
-            SilentGear.log.catching(e);
+            SilentGear.LOGGER.warn("Error reading trait override '{}'", file.getAbsolutePath());
+            SilentGear.LOGGER.catching(e);
         }
+        */
     }
 
     private void readResourceFile(BufferedReader reader) {

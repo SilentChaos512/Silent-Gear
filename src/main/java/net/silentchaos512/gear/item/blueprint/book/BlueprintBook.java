@@ -28,6 +28,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -54,7 +56,12 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
     private static final String NBT_SELECTED = "Selected";
 
     public BlueprintBook() {
-        setContainerItem(this);
+        super(new Builder()
+                .maxStackSize(1)
+                .group(SilentGear.ITEM_GROUP)
+        );
+        // FIXME
+//        setContainerItem(this);
     }
 
     @Override
@@ -79,10 +86,10 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(SilentGear.i18n.subText(this, "desc"));
-        tooltip.add(SilentGear.i18n.subText(this, "color", String.format("%06x", getCoverColor(stack))));
-        tooltip.add(SilentGear.i18n.subText(this, "selected", "not implemented"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TextComponentTranslation("item.silentgear.blueprint_book.desc"));
+        tooltip.add(new TextComponentTranslation("item.silentgear.blueprint_book.color", Color.format(getCoverColor(stack))));
+        tooltip.add(new TextComponentTranslation("item.silentgear.blueprint_book.selected", "not implemented"));
     }
 
     @Nullable
@@ -94,9 +101,9 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
             tags.setTag(NBT_INVENTORY, new NBTTagList());
 
         ItemStackHandler stackHandler = new ItemStackHandler(INVENTORY_SIZE);
-        NBTTagList tagList = tags.getTagList(NBT_INVENTORY, 10);
-        for (int i = 0; i < tagList.tagCount(); ++i)
-            stackHandler.setStackInSlot(i, new ItemStack(tagList.getCompoundTagAt(i)));
+        NBTTagList tagList = tags.getList(NBT_INVENTORY, 10);
+        for (int i = 0; i < tagList.size(); ++i)
+            stackHandler.setStackInSlot(i, ItemStack.read(tagList.getCompound(i)));
 
         return stackHandler;
     }
@@ -109,14 +116,14 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
         NBTTagList tagList = new NBTTagList();
         for (int i = 0; i < itemHandler.getSlots(); ++i) {
             ItemStack itemStack = itemHandler.getStackInSlot(i);
-            tagList.appendTag(itemStack.serializeNBT());
+            tagList.add(itemStack.serializeNBT());
         }
 
         tags.setTag(NBT_INVENTORY, tagList);
     }
 
     private static NBTTagCompound getTags(ItemStack stack) {
-        return stack.getOrCreateSubCompound(NBT_ROOT);
+        return stack.getOrCreateChildTag(NBT_ROOT);
     }
 
     @Override
@@ -126,6 +133,6 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
 
     private static int getCoverColor(ItemStack stack) {
         NBTTagCompound tags = getTags(stack);
-        return tags.hasKey(NBT_COLOR) ? tags.getInteger(NBT_COLOR) : DEFAULT_COLOR;
+        return tags.hasKey(NBT_COLOR) ? tags.getInt(NBT_COLOR) : DEFAULT_COLOR;
     }
 }

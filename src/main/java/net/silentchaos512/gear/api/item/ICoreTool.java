@@ -11,9 +11,12 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.init.ModMaterials;
-import net.silentchaos512.gear.item.ToolHead;
-import net.silentchaos512.gear.item.ToolRods;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.parts.type.PartBowstring;
+import net.silentchaos512.gear.parts.type.PartGrip;
+import net.silentchaos512.gear.parts.type.PartRod;
+import net.silentchaos512.gear.parts.type.PartTip;
 import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
@@ -50,49 +53,51 @@ public interface ICoreTool extends ICoreItem {
         return 2;
     }
 
-    default ItemPartData getSecondaryPart(ItemStack stack) {
-        ItemPartData data = GearData.getSecondaryPart(stack);
+    default PartData getSecondaryPart(ItemStack stack) {
+        PartData data = GearData.getSecondaryPart(stack);
         if (data != null) return data;
-        return ItemPartData.instance(ModMaterials.mainWood);
-    }
-
-    default ItemPartData getRodPart(ItemStack stack) {
-        for (ItemPartData data : GearData.getConstructionParts(stack))
-            if (data.getPart() instanceof PartRod) return data;
-        return ItemPartData.instance(ToolRods.WOOD.getPart());
+        return PartData.of(PartManager.tryGetFallback(PartType.MAIN));
     }
 
     @Nullable
-    default ItemPartData getGripPart(ItemStack stack) {
-        for (ItemPartData part : GearData.getConstructionParts(stack))
+    default PartData getRodPart(ItemStack stack) {
+        for (PartData data : GearData.getConstructionParts(stack))
+            if (data.getPart() instanceof PartRod) return data;
+        return null;
+    }
+
+    @Nullable
+    default PartData getGripPart(ItemStack stack) {
+        for (PartData part : GearData.getConstructionParts(stack))
             if (part.getPart() instanceof PartGrip) return part;
         return null;
     }
 
     @Nullable
-    default ItemPartData getTipPart(ItemStack stack) {
-        for (ItemPartData data : GearData.getConstructionParts(stack))
+    default PartData getTipPart(ItemStack stack) {
+        for (PartData data : GearData.getConstructionParts(stack))
             if (data.getPart() instanceof PartTip) return data;
         return null;
     }
 
     @Nullable
-    default ItemPartData getBowstringPart(ItemStack stack) {
-        for (ItemPartData data : GearData.getConstructionParts(stack))
+    default PartData getBowstringPart(ItemStack stack) {
+        for (PartData data : GearData.getConstructionParts(stack))
             if (data.getPart() instanceof PartBowstring) return data;
         return null;
     }
 
+    @Deprecated
     @Override
     default boolean matchesRecipe(Collection<ItemStack> parts) {
         ConfigOptionEquipment config = getConfig();
         ItemStack head = ItemStack.EMPTY;
         Map<PartType, Integer> partCounts = new HashMap<>();
-        Map<PartType, ItemPart> partsFound = new HashMap<>();
+        Map<PartType, IGearPart> partsFound = new HashMap<>();
 
         for (ItemStack stack : parts) {
-            ItemPart part = PartRegistry.get(stack);
-            if (stack.getItem() instanceof ToolHead) {
+            IGearPart part = PartManager.from(stack);
+            /*if (stack.getItem() instanceof ToolHead) {
                 // Head
                 if (!head.isEmpty())
                     return false;
@@ -101,7 +106,7 @@ public interface ICoreTool extends ICoreItem {
                     return false;
                 head = stack;
                 partCounts.put(PartType.MAIN, config.getHeadCount());
-            } else if (part != null) {
+            } else*/ if (part != null) {
                 // Count parts
                 final PartType type = part.getType();
                 if (partsFound.containsKey(type) && partsFound.get(type) != part)
@@ -130,9 +135,9 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Override
-    default ItemPartData[] getRenderParts(ItemStack stack) {
+    default PartData[] getRenderParts(ItemStack stack) {
         PartDataList parts = GearData.getConstructionParts(stack);
-        List<ItemPartData> list = new ArrayList<>();
+        Collection<PartData> list = new ArrayList<>();
 
         for (IPartPosition position : IPartPosition.RENDER_LAYERS) {
             if (position == PartPositions.HEAD) {
@@ -142,12 +147,12 @@ public interface ICoreTool extends ICoreItem {
             } else if (position == PartPositions.ROD) {
                 list.add(getRodPart(stack));
             } else {
-                final ItemPartData part = parts.firstInPosition(position);
+                PartData part = parts.firstInPosition(position);
                 if (part != null) list.add(part);
             }
         }
 
-        return list.stream().filter(Objects::nonNull).toArray(ItemPartData[]::new);
+        return list.stream().filter(Objects::nonNull).toArray(PartData[]::new);
     }
 
     default boolean hasSwordGuard() {

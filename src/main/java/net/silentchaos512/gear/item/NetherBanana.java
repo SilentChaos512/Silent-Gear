@@ -19,9 +19,10 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.item.ItemFood;
+import net.silentchaos512.gear.SilentGear;
 
 public class NetherBanana extends ItemFood {
     public NetherBanana() {
-        super(5, 0.4f, false);
+        super(5, 0.4f, false, new Builder().group(SilentGear.ITEM_GROUP));
     }
 }

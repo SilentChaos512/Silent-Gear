@@ -35,20 +35,20 @@ public class GuiSalvager extends GuiContainer {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(SilentGear.i18n.translatedName(ModBlocks.salvager), 28, 6, 0x404040);
+        this.fontRenderer.drawString(ModBlocks.SALVAGER.asBlock().getNameTextComponent().getFormattedText(), 28, 6, 0x404040);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(TEXTURE);
 
         int posX = (this.width - this.xSize) / 2;

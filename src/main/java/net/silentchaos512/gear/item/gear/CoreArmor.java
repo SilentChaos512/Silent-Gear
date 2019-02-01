@@ -3,45 +3,40 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.api.parts.PartDisplayProperties;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.init.ModMaterials;
-import net.silentchaos512.gear.item.blueprint.Blueprint;
+import net.silentchaos512.gear.api.parts.IPartDisplay;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 public class CoreArmor extends ItemArmor implements ICoreArmor {
-    // Just using my own UUIDs, ItemArmor can keep being stingy.
-    private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("cfea1f82-ab07-40ed-8384-045446707a98"), UUID.fromString("9f441293-6f6e-461f-a3e2-3cad0c06f3a5"), UUID.fromString("4c90545f-c314-4db4-8a60-dac8b3a132a2"), UUID.fromString("f96e4ac9-ab1d-423b-8392-d820d12fc454")};
+    // Just copied from ItemArmor, access transformers are too flaky
+    private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     // sum = 1, starts with boots
     private static final float[] ABSORPTION_RATIO_BY_SLOT = {0.175f, 0.3f, 0.4f, 0.125f};
     // Same values as in ItemArmor.
@@ -50,7 +45,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     private final String itemName;
 
     public CoreArmor(EntityEquipmentSlot slot, String name) {
-        super(ArmorMaterial.DIAMOND, 0, slot);
+        super(ArmorMaterial.DIAMOND, slot, GearHelper.getBuilder(null));
         this.itemName = name;
     }
 
@@ -76,7 +71,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
         if (item instanceof CoreArmor)
             return ((CoreArmor) item).getArmorProtection(stack);
         else if (item instanceof ItemArmor)
-            return ((ItemArmor) item).damageReduceAmount;
+            return ((ItemArmor) item).getDamageReduceAmount();
         return 0;
     }
 
@@ -138,7 +133,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     @Override
     public void setDamage(ItemStack stack, int damage) {
         if (GearHelper.isUnbreakable(stack)) return;
-        if (!Config.gearBreaksPermanently)
+        if (!Config.GENERAL.gearBreaksPermanently.get())
             damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
         super.setDamage(stack, damage);
     }
@@ -154,13 +149,14 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     public Collection<IRecipe> getExampleRecipes() {
         Collection<IRecipe> list = new ArrayList<>();
 
+        /*
         Ingredient blueprint = Blueprint.getBlueprintIngredientForGear(this);
         if (blueprint != null) {
             for (PartMain part : PartRegistry.getVisibleMains()) {
@@ -175,14 +171,14 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
         } else {
             SilentGear.log.warn("Trying to add {} example recipes, but could not find blueprint item!", itemName);
         }
+        */
 
         return list;
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (this.isInCreativeTab(tab))
-            GearHelper.getSubItems(this, tab, subItems);
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        GearHelper.fillItemGroup(this, group, items);
     }
 
     //endregion
@@ -201,11 +197,11 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
         if ("overlay".equals(type))
             return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
 
-        ItemPartData part = GearData.getPrimaryRenderPartFast(stack);
-        if (part == null) part = ItemPartData.instance(ModMaterials.mainIron);
+        PartData part = GearData.getPrimaryRenderPartFast(stack);
+        if (part == null) part = PartData.ofNullable(PartManager.tryGetFallback(PartType.MAIN));
 
         // Actual armor texture
-        PartDisplayProperties props = part.getPart().getDisplayProperties(part, stack, 0);
+        IPartDisplay props = part.getPart().getDisplayProperties(part, stack, 0);
         return props.getTextureDomain() + ":textures/models/armor/"
                 + props.getTextureSuffix()
                 + "_layer_" + layer
@@ -213,6 +209,8 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
                 + ".png";
     }
 
+    // FIXME
+    /*
     @Override
     public boolean hasOverlay(ItemStack stack) {
         return true;
@@ -225,7 +223,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Override
     public int getColor(ItemStack stack) {
-        ItemPartData renderPart = GearData.getPrimaryRenderPartFast(stack);
+        PartData renderPart = GearData.getPrimaryRenderPartFast(stack);
         return renderPart != null ? renderPart.getColor(stack, 0) : 0xFF00FF;
     }
 
@@ -234,15 +232,16 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Override
     public void setColor(ItemStack stack, int color) {}
+    */
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return GearHelper.getDisplayName(stack);
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
-        GearClientHelper.addInformation(stack, world, list, flag);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     //endregion

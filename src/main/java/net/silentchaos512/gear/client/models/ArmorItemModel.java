@@ -5,15 +5,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.*;
@@ -21,21 +18,24 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.IPartPosition;
+import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.StackHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public class ArmorItemModel implements IModel {
-
-    public static final IModel MODEL = new ArmorItemModel();
+public class ArmorItemModel implements IUnbakedModel {
+    private static final IUnbakedModel MODEL = new ArmorItemModel();
 
     @Nullable
     private final ResourceLocation textureMain;
@@ -49,7 +49,7 @@ public class ArmorItemModel implements IModel {
     }
 
     @Override
-    public IModel retexture(ImmutableMap<String, String> textures) {
+    public ArmorItemModel retexture(ImmutableMap<String, String> textures) {
         ResourceLocation main = null;
 
         if (textures.containsKey("main"))
@@ -59,7 +59,7 @@ public class ArmorItemModel implements IModel {
     }
 
     @Override
-    public IModel process(ImmutableMap<String, String> customData) {
+    public ArmorItemModel process(ImmutableMap<String, String> customData) {
         ResourceLocation main = null;
 
         if (customData.containsKey("main"))
@@ -69,16 +69,16 @@ public class ArmorItemModel implements IModel {
     }
 
     @Override
-    public Collection<ResourceLocation> getDependencies() {
+    public Collection<ResourceLocation> getOverrideLocations() {
         return ImmutableList.of();
     }
 
     @Override
-    public Collection<ResourceLocation> getTextures() {
+    public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
         for (String armorClass : ModItems.armorClasses.keySet()) {
-            for (PartMain part : PartRegistry.getMains()) {
-                ItemPartData partData = ItemPartData.instance(part);
+            for (IGearPart part : PartManager.getMains()) {
+                PartData partData = PartData.of(part);
                 // Basic texture
                 ResourceLocation textureMain = partData.getTexture(ItemStack.EMPTY, armorClass, PartPositions.ARMOR, 0);
                 if (textureMain != null)
@@ -93,8 +93,9 @@ public class ArmorItemModel implements IModel {
         return builder.build();
     }
 
+    @Nullable
     @Override
-    public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+    public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock, VertexFormat format) {
         ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
 
         TRSRTransformation transform = TRSRTransformation.identity();
@@ -106,8 +107,8 @@ public class ArmorItemModel implements IModel {
 
         ImmutableList<ResourceLocation> textures = texBuilder.build();
         int layerCount = textures.size();
-        IBakedModel model = (new ItemLayerModel(textures)).bake(state, format, bakedTextureGetter);
-        builder.addAll(model.getQuads(null, null, 0));
+        IBakedModel model = (new ItemLayerModel(textures)).bake(modelGetter, spriteGetter, state, uvlock, format);
+        builder.addAll(model.getQuads(null, null, SilentGear.random));
 
         return new ArmorItemModel.Baked(this, createQuadsMap(model, layerCount), format, Maps.immutableEnumMap(transformMap), new HashMap<>());
     }
@@ -117,7 +118,7 @@ public class ArmorItemModel implements IModel {
         for (int i = 0; i < layerCount; ++i)
             list.add(ImmutableList.builder());
 
-        for (BakedQuad quad : model.getQuads(null, null, 0))
+        for (BakedQuad quad : model.getQuads(null, null, SilentGear.random))
             list.get(quad.getTintIndex()).add(quad);
 
         ImmutableList.Builder<ImmutableList<BakedQuad>> builder = ImmutableList.builder();
@@ -133,12 +134,10 @@ public class ArmorItemModel implements IModel {
     }
 
     public static final class Loader implements ICustomModelLoader {
-
         public static Loader INSTANCE = new Loader();
 
         @Override
-        public void onResourceManagerReload(IResourceManager resourceManager) {
-        }
+        public void onResourceManagerReload(IResourceManager resourceManager) { }
 
         @Override
         public boolean accepts(ResourceLocation modelLocation) {
@@ -147,30 +146,25 @@ public class ArmorItemModel implements IModel {
         }
 
         @Override
-        public IModel loadModel(ResourceLocation modelLocation) {
+        public IUnbakedModel loadModel(ResourceLocation modelLocation) {
             return MODEL;
         }
     }
 
     private static final class OverrideHandler extends ItemOverrideList {
-
         static final OverrideHandler INSTANCE = new OverrideHandler();
 
-        OverrideHandler() {
-            super(ImmutableList.of());
-        }
-
+        @Nullable
         @Override
-        public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
-            if (!(stack.getItem() instanceof ICoreArmor))
-                return originalModel;
+        public IBakedModel getModelWithOverrides(IBakedModel parentModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+            if (!(stack.getItem() instanceof ICoreArmor)) return parentModel;
 
-            ArmorItemModel.Baked model = (ArmorItemModel.Baked) originalModel;
+            ArmorItemModel.Baked model = (ArmorItemModel.Baked) parentModel;
 
-            ICoreArmor itemArmor = (ICoreArmor) stack.getItem();
+            ICoreItem itemArmor = (ICoreArmor) stack.getItem();
 
             String key = GearData.getCachedModelKey(stack, 0);
-            StackHelper.getTagCompound(stack, true).setString("debug_modelkey", key);
+            stack.getOrCreateTag().setString("debug_modelkey", key);
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
@@ -178,20 +172,27 @@ public class ArmorItemModel implements IModel {
                 processTexture(stack, itemArmor.getGearClass(), PartPositions.ARMOR, itemArmor.getPrimaryPart(stack), GearHelper.isBroken(stack), builder);
 
                 IModel parent = model.getParent().retexture(builder.build());
-                Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
-                        Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-                IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.getVertexFormat(), textureGetter);
+                // TODO: What's this? Do we need to get a model and if so, how?
+                Function<ResourceLocation, IUnbakedModel> modelGetter = location -> null;
+                Function<ResourceLocation, TextureAtlasSprite> spriteGetter = location ->
+                        Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
+                IBakedModel bakedModel = parent.bake(
+                        modelGetter,
+                        spriteGetter,
+                        new SimpleModelState(model.transforms),
+                        false,
+                        model.getVertexFormat());
                 GearClientHelper.modelCache.put(key, bakedModel);
                 return bakedModel;
             }
 
             // Color cache
-            ColorHandlers.gearColorCache.put(key, new Integer[] {itemArmor.getPrimaryPart(stack).getColor(stack, 0)});
+            ColorHandlers.gearColorCache.put(key, new Integer[]{itemArmor.getPrimaryPart(stack).getColor(stack, 0)});
 
             return GearClientHelper.modelCache.get(key);
         }
 
-        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, ItemPartData part, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, PartData part, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
                 ResourceLocation texture;
                 if (isBroken)

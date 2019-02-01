@@ -5,44 +5,43 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class CoreShovel extends ItemSpade implements ICoreTool {
-    private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.CLAY, Material.CRAFTED_SNOW, Material.GRASS, Material.GROUND, Material.SAND, Material.SNOW);
-
-    private final Set<String> toolClasses = new HashSet<>();
+    private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
+            Material.CLAY,
+            Material.CRAFTED_SNOW,
+            Material.GRASS,
+            Material.GROUND,
+            Material.SAND,
+            Material.SNOW
+    );
 
     public CoreShovel() {
-        super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
-        setHarvestLevel("shovel", 0);
+        super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.SHOVEL));
     }
 
     @Nonnull
@@ -59,9 +58,9 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     //region Harvest tool overrides
 
     @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack tool) {
+    public boolean canHarvestBlock(ItemStack stack, IBlockState state) {
         // Forge ItemStack-sensitive version
-        return canHarvestBlock(state, getStatInt(tool, CommonItemStats.HARVEST_LEVEL));
+        return canHarvestBlock(state, getStatInt(stack, CommonItemStats.HARVEST_LEVEL));
     }
 
     @Override
@@ -82,13 +81,15 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (GearHelper.isBroken(stack) || player.isSneaking())
+    public EnumActionResult onItemUse(ItemUseContext context) {
+        // No action if broken or player is sneaking
+        if (GearHelper.isBroken(context.getItem())
+                || context.getPlayer() != null && context.getPlayer().isSneaking()) {
             return EnumActionResult.PASS;
+        }
 
         // Make paths or whatever
-        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+        return super.onItemUse(context);
     }
 
     //endregion
@@ -96,7 +97,7 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -111,15 +112,15 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
-        return GearHelper.getHarvestLevel(stack, toolClass, state, BASE_EFFECTIVE_MATERIALS);
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+        return GearHelper.getHarvestLevel(stack, tool, blockState, BASE_EFFECTIVE_MATERIALS);
     }
 
-    @Override
-    public void setHarvestLevel(String toolClass, int level) {
-        super.setHarvestLevel(toolClass, level);
-        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-    }
+//    @Override
+//    public void setHarvestLevel(String toolClass, int level) {
+//        super.setHarvestLevel(toolClass, level);
+//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
+//    }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
@@ -132,15 +133,15 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return GearHelper.getDisplayName(stack);
     }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
         super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
         if (GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(stack);
+            GearData.recalculateStats(null, stack);
         }
     }
 
@@ -155,11 +156,6 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.copyOf(this.toolClasses);
-    }
-
-    @Override
     public boolean hasEffect(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
@@ -170,8 +166,8 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        GearHelper.getSubItems(this, tab, items);
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
@@ -180,8 +176,8 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override

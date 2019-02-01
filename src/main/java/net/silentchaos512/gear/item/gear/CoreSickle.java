@@ -8,7 +8,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,45 +16,47 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.*;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class CoreSickle extends ItemTool implements ICoreTool {
-    private final Set<String> toolClasses = new HashSet<>();
+    public static final ToolType TOOL_TYPE = ToolType.get("sickle");
 
     // TODO: Durability use config
     private static final int DURABILITY_USAGE = 2;
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
-    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.CACTUS, Material.LEAVES, Material.PLANTS, Material.VINE, Material.WEB);
+    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
+            Material.CACTUS,
+            Material.LEAVES,
+            Material.PLANTS,
+            Material.VINE,
+            Material.WEB
+    );
 
     public CoreSickle() {
-        super(Objects.requireNonNull(GearData.FAKE_MATERIAL), ImmutableSet.of());
+        super(0, 0, ItemTier.DIAMOND, ImmutableSet.of(), GearHelper.getBuilder(TOOL_TYPE));
     }
 
     @Nonnull
@@ -72,61 +73,67 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     //region Sickle harvesting
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack sickle = player.getHeldItem(hand);
+    public EnumActionResult onItemUse(ItemUseContext context) {
+        // Sickles can right-click to harvest an area of plants
+        // TODO: I seem to recall this not working on servers. Maybe should be implemented like hammers?
 
-        if (GearHelper.isBroken(sickle))
-            return EnumActionResult.PASS;
+        ItemStack sickle = context.getItem();
+        if (GearHelper.isBroken(sickle)) return EnumActionResult.PASS;
 
-        IBlockState state = worldIn.getBlockState(pos);
-        if (!(state.getBlock() instanceof IGrowable))
-            return EnumActionResult.PASS;
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
 
-        boolean flag = false;
+        IBlockState state = world.getBlockState(pos);
+        if (!(state.getBlock() instanceof IGrowable)) return EnumActionResult.PASS;
+
+        boolean somethingHarvested = false;
         final int radius = HARVEST_RANGE;
+        @Nullable EntityPlayer player = context.getPlayer();
         int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, sickle);
 
         for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; ++z) {
             for (int x = pos.getX() - radius; x <= pos.getX() + radius; ++x) {
                 BlockPos target = new BlockPos(x, pos.getY(), z);
-                state = worldIn.getBlockState(target);
+                state = world.getBlockState(target);
                 Block block = state.getBlock();
 
                 if (block instanceof IGrowable && !(block instanceof BlockDoublePlant)) {
                     IGrowable crop = (IGrowable) block;
-                    if (!crop.canGrow(worldIn, target, state, worldIn.isRemote)) {
+                    if (!crop.canGrow(world, target, state, world.isRemote)) {
                         // Fully grown crop, get the drops
                         NonNullList<ItemStack> drops = NonNullList.create();
-                        block.getDrops(drops, worldIn, target, state, fortune);
+                        block.getDrops(state, drops, world, target, fortune);
 
-                        ForgeEventFactory.fireBlockHarvesting(drops, worldIn, target, state, fortune, 1, false, player);
+                        ForgeEventFactory.fireBlockHarvesting(drops, world, target, state, fortune, 1, false, player);
 
                         // Spawn drops in world, remove first seed
                         boolean foundSeed = false;
                         for (ItemStack drop : drops) {
                             if (!foundSeed && drop.getItem() instanceof IPlantable) {
                                 IPlantable seed = (IPlantable) drop.getItem();
-                                if (seed.getPlant(worldIn, target) == block.getDefaultState()) {
+                                if (seed.getPlant(world, target) == block.getDefaultState()) {
                                     foundSeed = true;
                                 }
                             } else {
-                                Block.spawnAsEntity(worldIn, target, drop);
+                                Block.spawnAsEntity(world, target, drop);
                             }
                         }
 
                         // Reset to default state
-                        worldIn.setBlockState(target, block.getDefaultState(), 2);
-                        flag = true;
+                        world.setBlockState(target, block.getDefaultState(), 2);
+                        somethingHarvested = true;
                     }
                 }
             }
         }
 
-        if (flag) {
+        if (somethingHarvested) {
             GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player);
-            player.addExhaustion(0.02f); // TODO: Config?
+            if (player != null) {
+                player.addExhaustion(0.02f); // TODO: Config?
+            }
         }
-        return flag ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
+        return somethingHarvested ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
     }
 
     @Override
@@ -176,9 +183,9 @@ public class CoreSickle extends ItemTool implements ICoreTool {
         if (canceled)
             return false;
 
-        if (playerMP.capabilities.isCreativeMode) {
+        if (playerMP.abilities.isCreativeMode) {
             block.onBlockHarvested(world, pos, state, player);
-            if (block.removedByPlayer(state, world, pos, playerMP, false)) {
+            if (block.removedByPlayer(state, world, pos, playerMP, false, state.getFluidState())) {
                 block.onPlayerDestroy(world, pos, state);
             }
             if (!world.isRemote) {
@@ -190,7 +197,7 @@ public class CoreSickle extends ItemTool implements ICoreTool {
         if (!world.isRemote) {
             block.onBlockHarvested(world, pos, state, playerMP);
 
-            if (block.removedByPlayer(state, world, pos, playerMP, true)) {
+            if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
                 block.onPlayerDestroy(world, pos, state);
                 block.harvestBlock(world, player, pos, state, null, sickle);
                 block.dropXpOnBlockBreak(world, pos, xpDropped);
@@ -198,9 +205,8 @@ public class CoreSickle extends ItemTool implements ICoreTool {
 
             playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
         } else {
-            int meta = block.getMetaFromState(state);
-            world.playEvent(2001, pos, Block.getIdFromBlock(block) + (meta << 12));
-            if (block.removedByPlayer(state, world, pos, playerMP, true)) {
+            world.playEvent(2001, pos, Block.getStateId(state));
+            if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
                 block.onPlayerDestroy(world, pos, state);
             }
 
@@ -220,7 +226,7 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -240,15 +246,15 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
-        return GearHelper.getHarvestLevel(stack, toolClass, state, EFFECTIVE_MATERIALS);
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+        return GearHelper.getHarvestLevel(stack, tool, blockState, EFFECTIVE_MATERIALS);
     }
 
-    @Override
-    public void setHarvestLevel(String toolClass, int level) {
-        super.setHarvestLevel(toolClass, level);
-        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-    }
+//    @Override
+//    public void setHarvestLevel(String toolClass, int level) {
+//        super.setHarvestLevel(toolClass, level);
+//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
+//    }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
@@ -261,15 +267,15 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return GearHelper.getDisplayName(stack);
     }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
         super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
         if (GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(stack);
+            GearData.recalculateStats(null, stack);
         }
     }
 
@@ -284,14 +290,8 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (isInCreativeTab(tab))
-            GearHelper.getSubItems(this, tab, subItems);
-    }
-
-    @Override
-    public Set<String> getToolClasses(ItemStack stack) {
-        return ImmutableSet.of();
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
@@ -310,8 +310,8 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override

@@ -27,6 +27,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.event.GearEvents;
@@ -51,18 +52,18 @@ public class DebugOverlay extends DebugRenderOverlay {
 //            list.add("ColorHandlers.gearColorCache=" + ColorHandlers.gearColorCache.size());
 
         // Harvest level checks
-        RayTraceResult rt = Minecraft.getMinecraft().objectMouseOver;
-        if (rt != null && rt.typeOfHit == RayTraceResult.Type.BLOCK) {
-            Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+        Minecraft mc = Minecraft.getInstance();
+        RayTraceResult rt = mc.objectMouseOver;
+        if (rt != null && rt.type == RayTraceResult.Type.BLOCK) {
+            Entity renderViewEntity = mc.getRenderViewEntity();
             if (renderViewEntity != null) {
                 BlockPos pos = rt.getBlockPos();
                 IBlockState state = renderViewEntity.world.getBlockState(pos);
 
-                EntityPlayerSP player = Minecraft.getMinecraft().player;
+                EntityPlayerSP player = mc.player;
                 ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
                 if (heldItem.getItem() instanceof ICoreTool) {
-                    String toolClass = state.getBlock().getHarvestTool(state);
-                    if (toolClass == null) toolClass = "";
+                    ToolType toolClass = state.getBlock().getHarvestTool(state);
                     final int blockLevel = state.getBlock().getHarvestLevel(state);
                     final int toolLevel = heldItem.getItem().getHarvestLevel(heldItem, toolClass, player, state);
 
@@ -98,6 +99,6 @@ public class DebugOverlay extends DebugRenderOverlay {
 
     @Override
     public boolean isHidden() {
-        return !SilentGear.instance.isDevBuild();
+        return !SilentGear.isDevBuild();
     }
 }

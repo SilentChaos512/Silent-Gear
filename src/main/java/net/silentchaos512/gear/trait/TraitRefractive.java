@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.EnumLightType;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.traits.Trait;
@@ -49,7 +49,7 @@ public class TraitRefractive extends Trait {
         if (player != null && player.ticksExisted % ACTIVATE_RATE == 0) {
             // TODO: Phantom lights, block config?
             // This fails with torches to some extent, they don't attach to walls
-            placeLight(player.world, player, ModBlocks.phantomLight.getDefaultState());
+            placeLight(player.world, player, ModBlocks.PHANTOM_LIGHT.asBlockState());
         }
     }
 
@@ -58,14 +58,17 @@ public class TraitRefractive extends Trait {
         BlockPos bottomPos = player.getPosition()
                 .offset(EnumFacing.NORTH, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE))
                 .offset(EnumFacing.WEST, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE));
-        if (world.getLightFor(EnumSkyBlock.BLOCK, bottomPos) > 7)
+        if (world.getLightFor(EnumLightType.BLOCK, bottomPos) > 7)
             return;
 
         for (BlockPos pos = bottomPos.up(VERTICAL_RANGE); pos.getY() >= bottomPos.getY(); pos = pos.down()) {
+            // FIXME
+            /*
             if (world.isAirBlock(pos) && state.getBlock().canPlaceBlockAt(world, pos)) {
                 world.setBlockState(pos, state, 3);
                 break;
             }
+            */
         }
     }
 }

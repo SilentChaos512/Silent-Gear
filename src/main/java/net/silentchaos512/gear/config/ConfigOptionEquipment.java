@@ -4,9 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import gnu.trove.map.hash.THashMap;
 import net.minecraft.util.JsonUtils;
-import net.minecraftforge.common.config.Configuration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -15,26 +13,32 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
 import javax.annotation.Nonnull;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class ConfigOptionEquipment {
-    public final ICoreItem item;
+    public final Supplier<? extends ICoreItem> item;
     public final String name;
 
     private boolean canCraft = true;
     private boolean isVisible = true;
 
-    private final Map<ItemStat, StatInstance> modifiers = new THashMap<>();
-    private final Map<ItemStat, Float> baseModifiers = new THashMap<>();
+    private final Map<ItemStat, StatInstance> modifiers = new HashMap<>();
+    private final Map<ItemStat, Float> baseModifiers = new HashMap<>();
     private final Map<String, Integer> recipe = new HashMap<>();
 
-    public <T extends ICoreItem> ConfigOptionEquipment(T item) {
+    public <T extends ICoreItem> ConfigOptionEquipment(String name, Supplier<T> item) {
         this.item = item;
-        this.name = item.getGearClass();
+        this.name = name;
     }
 
+    /*
     public ConfigOptionEquipment loadValue(Configuration config) {
         return loadValue(config, Config.CAT_GEAR + Config.SEP + name);
     }
@@ -43,11 +47,12 @@ public class ConfigOptionEquipment {
         loadJsonResources();
         return this;
     }
+    */
 
     @Nonnull
     public StatInstance getBaseModifier(ItemStat stat) {
         float value = this.baseModifiers.containsKey(stat) ? this.baseModifiers.get(stat) : 0;
-        return new StatInstance(this.item.getGearClass() + "_basemod", value, Operation.ADD);
+        return new StatInstance(this.name + "_basemod", value, Operation.ADD);
     }
 
     @Nonnull
@@ -90,18 +95,19 @@ public class ConfigOptionEquipment {
 
     private void loadJsonResources() {
         // Main resource file in JAR
-        String path = "assets/" + SilentGear.MOD_ID + "/equipment/" + item.getGearClass() + ".json";
-        SilentGear.log.info("Loading equipment asset file: " + path);
+        String path = "assets/" + SilentGear.MOD_ID + "/equipment/" + this.name + ".json";
+        SilentGear.LOGGER.info("Loading equipment asset file: {}", path);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path), "UTF-8"))) {
             readResourceFile(reader);
         } catch (Exception e) {
-            SilentGear.log.fatal("Error loading resource file! Either Silent screwed up or the JAR has been modified.");
-            SilentGear.log.fatal("    item: " + item);
-            SilentGear.log.fatal("    item type: " + item.getGearClass());
+            SilentGear.LOGGER.fatal("Error loading resource file! Either Silent screwed up or the JAR has been modified.");
+            SilentGear.LOGGER.fatal("    item: {}", item.get());
+            SilentGear.LOGGER.fatal("    item type: {}", this.name);
             e.printStackTrace();
         }
 
         // Override in config folder
+        /*
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(Config.INSTANCE.directory.getPath(), "equipment/" + item.getGearClass() + ".json")))) {
             readResourceFile(reader);
         } catch (FileNotFoundException ex) {
@@ -109,6 +115,7 @@ public class ConfigOptionEquipment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 
     private void readResourceFile(BufferedReader reader) {
@@ -125,7 +132,7 @@ public class ConfigOptionEquipment {
                 if (stat != null) {
                     float value = obj.has("value") ? JsonUtils.getFloat(obj, "value") : 0f;
                     Operation op = obj.has("op") ? Operation.byName(JsonUtils.getString(obj, "op")) : Operation.MUL1;
-                    String id = this.item.getGearClass() + "_mod_" + stat.getName();
+                    String id = this.name + "_mod_" + stat.getName();
                     this.modifiers.put(stat, new StatInstance(id, value, op));
                 }
             }

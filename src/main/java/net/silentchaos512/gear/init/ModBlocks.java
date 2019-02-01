@@ -1,46 +1,67 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockOre;
+import net.minecraft.item.Item;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.analyzer.BlockPartAnalyzer;
 import net.silentchaos512.gear.block.craftingstation.BlockCraftingStation;
 import net.silentchaos512.gear.block.salvager.BlockSalvager;
-import net.silentchaos512.lib.registry.SRegistry;
+import net.silentchaos512.lib.block.IBlockProvider;
 
-public final class ModBlocks {
-    public static BlockCraftingStation craftingStation = new BlockCraftingStation();
-    public static BlockPartAnalyzer partAnalyzer = new BlockPartAnalyzer();
-    public static BlockSalvager salvager = new BlockSalvager();
-    public static Flower flower = new Flower();
-    public static FlaxPlant flaxPlant = new FlaxPlant();
-    public static NetherwoodSapling netherwoodSapling = new NetherwoodSapling();
-    public static NetherwoodLog netherwoodLog = new NetherwoodLog();
-    public static NetherwoodLeaves netherwoodLeaves = new NetherwoodLeaves();
-    public static NetherwoodPlanks netherwoodPlanks = new NetherwoodPlanks();
-    public static Block crimsonIronOre = new BlockOre().setHardness(4).setResistance(10);
-    public static Block phantomLight = new PhantomLight();
+import java.util.Locale;
+import java.util.function.Supplier;
 
-    private ModBlocks() {}
+public enum ModBlocks implements IBlockProvider, IStringSerializable {
+    CRAFTING_STATION(BlockCraftingStation::new),
+    PART_ANALYZER(BlockPartAnalyzer::new),
+    SALVAGER(BlockSalvager::new),
+    FLOWER(Flower::new),
+    FLAX_PLANT(FlaxPlant::new),
+    NETHERWOOD_LOG(NetherwoodLog::new),
+    NETHERWOOD_PLANKS(NetherwoodPlanks::new),
+    NETHERWOOD_LEAVES(NetherwoodLeaves::new),
+    NETHERWOOD_SAPLING(NetherwoodSapling::new),
+    CRIMSON_IRON_ORE(CrimsonIronOre::new),
+    PHANTOM_LIGHT(PhantomLight::new);
 
-    public static void registerAll(SRegistry reg) {
-        reg.registerBlock(crimsonIronOre, "crimson_iron_ore");
-        reg.registerBlock(craftingStation, "crafting_station");
-        reg.registerBlock(partAnalyzer, "part_analyzer");
-        reg.registerBlock(salvager, "salvager");
-        reg.registerBlock(netherwoodSapling, "netherwood_sapling");
-        reg.registerBlock(netherwoodLog, "netherwood_log");
-        reg.registerBlock(netherwoodLeaves, "netherwood_leaves");
-        reg.registerBlock(netherwoodPlanks, "netherwood_planks");
-        reg.registerBlock(flower, "flower");
-        reg.registerBlock(flaxPlant, "flax_plant");
-        reg.registerBlock(phantomLight, "phantom_light");
+    private final LazyLoadBase<Block> block;
 
-//        if (GameUtil.isDeobfuscated()) {
-//            Block block = new BlockFalling(Material.SAND);
-//            block.setHardness(3);
-//            block.setHarvestLevel("shovel", 1);
-//            reg.registerBlock(block, "test_block");
-//        }
+    ModBlocks(Supplier<Block> blockSupplier) {
+        this.block = new LazyLoadBase<>(blockSupplier);
+    }
+
+    public static void registerAll(RegistryEvent.Register<Block> event) {
+        if (!event.getName().equals(ForgeRegistries.BLOCKS.getRegistryName())) return;
+
+        for (ModBlocks block : values()) {
+            register(block.getName(), block.asBlock());
+        }
+    }
+
+    private static void register(String name, Block block) {
+        ResourceLocation registryName = new ResourceLocation(SilentGear.MOD_ID, name);
+        block.setRegistryName(registryName);
+        ForgeRegistries.BLOCKS.register(block);
+    }
+
+    @Override
+    public String getName() {
+        return name().toLowerCase(Locale.ROOT);
+    }
+
+    @Override
+    public Block asBlock() {
+        return block.getValue();
+    }
+
+    @Override
+    public Item asItem() {
+        return asBlock().asItem();
     }
 }

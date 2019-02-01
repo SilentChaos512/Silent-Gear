@@ -19,9 +19,9 @@
 package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
-import net.silentchaos512.gear.SilentGear;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -29,7 +29,7 @@ import java.util.Random;
 public enum MaterialGrade {
     NONE(0), E(-8), D(-4), C(0), B(5), A(10), S(20), SS(30), SSS(40);
 
-    private static final String NBT_KEY = SilentGear.MOD_ID + "_grade";
+    private static final String NBT_KEY = "SGear_Grade";
 
     public final int bonusPercent;
 
@@ -38,8 +38,8 @@ public enum MaterialGrade {
     }
 
     public static MaterialGrade fromStack(ItemStack stack) {
-        if (!stack.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT_KEY)) {
-            String str = stack.getTagCompound().getString(NBT_KEY);
+        if (!stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().hasKey(NBT_KEY)) {
+            String str = stack.getOrCreateTag().getString(NBT_KEY);
             return fromString(str);
         }
         return MaterialGrade.NONE;
@@ -91,14 +91,16 @@ public enum MaterialGrade {
 
     public void setGradeOnStack(@Nonnull ItemStack stack) {
         if (!stack.isEmpty()) {
-            if (!stack.hasTagCompound()) {
-                stack.setTagCompound(new NBTTagCompound());
-            }
-            stack.getTagCompound().setString(NBT_KEY, name());
+            stack.getOrCreateTag().setString(NBT_KEY, name());
         }
     }
 
+    @Deprecated
     public String getTranslatedName() {
-        return SilentGear.i18n.translate("stat", "grade." + name());
+        return "wrong method!";
+    }
+
+    public ITextComponent getDisplayName() {
+        return new TextComponentTranslation("stat.silentgear.gradle." + name());
     }
 }

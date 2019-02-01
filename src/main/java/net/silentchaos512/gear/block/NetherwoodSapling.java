@@ -18,119 +18,34 @@
 
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.BlockSapling;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.world.feature.NetherwoodTree;
-import net.silentchaos512.lib.util.MathUtils;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.silentchaos512.gear.block.trees.NetherwoodTree;
 
-import java.util.Random;
-
-import static net.minecraft.block.BlockSapling.STAGE;
-
-public class NetherwoodSapling extends BlockBush implements IGrowable {
-    private static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.1, 0, 0.1, 0.9, 0.8, 0.9);
-
+public class NetherwoodSapling extends BlockSapling {
     public NetherwoodSapling() {
-        setDefaultState(blockState.getBaseState().withProperty(STAGE, 0));
+        super(new NetherwoodTree(), Builder.create(Material.PLANTS)
+                .doesNotBlockMovement()
+                .needsRandomTick()
+                .hardnessAndResistance(0)
+                .sound(SoundType.PLANT)
+        );
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return SAPLING_AABB;
-    }
-
-    @Override
-    public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
-        Block blockBelow = worldIn.getBlockState(pos.down()).getBlock();
-        return state.getBlock() == this && blockBelow == Blocks.NETHERRACK || super.canBlockStay(worldIn, pos, state);
-    }
-
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    //    @Override
+    public boolean canBlockStay(IWorld worldIn, BlockPos pos, IBlockState state) {
         IBlockState soil = worldIn.getBlockState(pos.down());
-        Block target = worldIn.getBlockState(pos).getBlock();
-        return target.isReplaceable(worldIn, pos)
-                && (soil.getBlock() == Blocks.NETHERRACK || soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), EnumFacing.UP, this))
-                || super.canPlaceBlockAt(worldIn, pos);
-    }
-
-    private static void generateTree(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        new NetherwoodTree(ModBlocks.netherwoodLog.getDefaultState(), ModBlocks.netherwoodLeaves.getDefaultState())
-                .generate(worldIn, rand, pos);
+        return isValidGround(soil, worldIn, pos);
     }
 
     @Override
-    public int damageDropped(IBlockState state) {
-        return 0;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(STAGE, meta);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(STAGE);
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, STAGE);
-    }
-
-    @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        items.add(new ItemStack(this));
-    }
-
-    @Override
-    public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
-        return true;
-    }
-
-    @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-        return MathUtils.tryPercentage(0.45);
-    }
-
-    @Override
-    public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-        grow(worldIn, pos, state, rand);
-    }
-
-    private static void grow(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        if (state.getValue(STAGE) == 0)
-            worldIn.setBlockState(pos, state.cycleProperty(STAGE), 4);
-        else
-            generateTree(worldIn, pos, state, rand);
-    }
-
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        if (!worldIn.isRemote) {
-            super.updateTick(worldIn, pos, state, rand);
-
-            int darkness = 15 - worldIn.getLightFromNeighbors(pos.up());
-            // Can grow at any light level, but more light improves chances
-            if (worldIn.isAreaLoaded(pos, 1) && rand.nextInt(5 + darkness / 2) == 0) {
-                grow(worldIn, pos, state, rand);
-            }
-        }
+    protected boolean isValidGround(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+        return state.getBlock() == Blocks.NETHERRACK || super.isValidGround(state, worldIn, pos);
     }
 }

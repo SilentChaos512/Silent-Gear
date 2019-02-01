@@ -18,13 +18,16 @@
 
 package net.silentchaos512.gear.init;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.LootFunctionSelectGearTier;
-import net.silentchaos512.lib.registry.SRegistry;
 
 public class ModLootStuff {
-    public static void registerAll(SRegistry registry) {
-        registry.registerLootFunction(new LootFunctionSelectGearTier.Serializer());
-        registry.registerLootTable("starter_blueprints");
-        registry.registerLootTable("random_pickaxe");
+    public static void init() {
+        LootFunctionManager.registerFunction(new LootFunctionSelectGearTier.Serializer());
+        LootTableList.register(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"));
+        LootTableList.register(new ResourceLocation(SilentGear.MOD_ID, "random_pickaxe"));
     }
 }

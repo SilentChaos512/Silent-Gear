@@ -2,7 +2,6 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,32 +12,31 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemArrow;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
+import net.minecraft.item.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class CoreBow extends ItemBow implements ICoreRangedWeapon {
+    private static final int MIN_DRAW_DELAY = 10;
+    private static final int MAX_DRAW_DELAY = 100;
 
-    public static final int MIN_DRAW_DELAY = 10;
-    public static final int MAX_DRAW_DELAY = 100;
-
-    public CoreBow() {}
+    public CoreBow() {
+        super(GearHelper.getBuilder(null));
+    }
 
     @Nonnull
     @Override
@@ -71,7 +69,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
         if (player.world.isRemote) {
-            float pull = (stack.getMaxItemUseDuration() - player.getItemInUseCount()) / getDrawDelay(stack);
+            float pull = (stack.getUseDuration() - player.getItemInUseCount()) / getDrawDelay(stack);
             ToolModel.bowPull.put(GearData.getUUID(stack), pull);
         }
         super.onUsingTick(stack, player, count);
@@ -112,7 +110,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
         if (ret != null && ret.getType() == EnumActionResult.FAIL)
             return ret;
 
-        if (!player.capabilities.isCreativeMode && !hasAmmo) {
+        if (!player.abilities.isCreativeMode && !hasAmmo) {
             return new ActionResult<>(EnumActionResult.FAIL, stack);
         } else {
             player.setActiveHand(hand);
@@ -128,10 +126,10 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
 
         if (entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityLiving;
-            boolean infiniteAmmo = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
+            boolean infiniteAmmo = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
             ItemStack ammo = this.findAmmo(player);
 
-            int i = this.getMaxItemUseDuration(stack) - timeLeft;
+            int i = this.getUseDuration(stack) - timeLeft;
             // i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn,
             // (EntityPlayer) entityLiving, i, StackHelper.isValid(ammo) || infiniteAmmo);
             if (i < 0)
@@ -144,7 +142,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
                 float velocity = getArrowVelocity(stack, i);
 
                 if ((double) velocity >= 0.1D) {
-                    boolean flag1 = player.capabilities.isCreativeMode || (ammo.getItem() instanceof ItemArrow && ((ItemArrow) ammo.getItem()).isInfinite(ammo, stack, player));
+                    boolean flag1 = player.abilities.isCreativeMode || (ammo.getItem() instanceof ItemArrow && ((ItemArrow) ammo.getItem()).isInfinite(ammo, stack, player));
 
                     if (!worldIn.isRemote) {
                         ItemArrow itemarrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
@@ -177,7 +175,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
 
                     worldIn.playSound(null, player.posX, player.posY, player.posZ,
                             SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F,
-                            1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + velocity * 0.5F);
+                            1.0F / (random.nextFloat() * 0.4F + 1.2F) + velocity * 0.5F);
 
                     if (!flag1) {
                         ammo.shrink(1);
@@ -186,7 +184,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
                             player.inventory.deleteStack(ammo);
                     }
 
-                    player.addStat(StatList.getObjectUseStats(this));
+//                    player.addStat(StatList.getObjectUseStats(this));
                     // Shots fired statistic
                     // ToolHelper.incrementStatShotsFired(stack, 1);
                 }
@@ -199,7 +197,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -219,8 +217,8 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return GearHelper.getDisplayName(stack);
     }
 
     @Override
@@ -239,13 +237,13 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        GearHelper.getSubItems(this, tab, items);
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override

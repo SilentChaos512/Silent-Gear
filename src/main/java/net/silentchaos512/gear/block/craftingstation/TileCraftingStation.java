@@ -10,11 +10,13 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.silentchaos512.gear.SilentGear;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.silentchaos512.lib.tile.TileInventorySL;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 public class TileCraftingStation extends TileInventorySL {
@@ -26,8 +28,12 @@ public class TileCraftingStation extends TileInventorySL {
     public static final int GEAR_PARTS_START = CRAFTING_GRID_START + CRAFTING_GRID_SIZE;
     public static final int SIDE_INVENTORY_START = GEAR_PARTS_START + GEAR_PARTS_SIZE;
 
-    private static final int CURRENT_VERSION = 1;
-    private static final String NBT_VERSION = "SGCS_Version";
+    TileCraftingStation() {
+        super(null); // FIXME
+    }
+
+//    private static final int CURRENT_VERSION = 1;
+//    private static final String NBT_VERSION = "SGCS_Version";
 
     public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {
         NonNullList<Pair<ItemStack, IInventory>> list = NonNullList.create();
@@ -53,8 +59,14 @@ public class TileCraftingStation extends TileInventorySL {
     }
 
     @Override
-    public String getName() {
-        return "crafting_station";
+    public ITextComponent getName() {
+        return new TextComponentTranslation("block.silengear.crafting_station");
+    }
+
+    @Nullable
+    @Override
+    public ITextComponent getCustomName() {
+        return null;
     }
 
     @Override
@@ -63,35 +75,21 @@ public class TileCraftingStation extends TileInventorySL {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tags) {
-        super.readFromNBT(tags);
-        // "Version updates" will adjust inventory slots if they need to change, but this has to be
-        // coded for each version of the tile entity.
-        handleVersionUpdates((int) tags.getByte(NBT_VERSION));
+    public boolean isEmpty() {
+        return false;
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tags) {
-        tags.setByte(NBT_VERSION, (byte) CURRENT_VERSION);
-        return super.writeToNBT(tags);
+    public void read(NBTTagCompound tags) {
+        super.read(tags);
+        // "Version updates" will adjust inventory slots if they need to change, but this has to be
+        // coded for each version of the tile entity.
+//        handleVersionUpdates((int) tags.getByte(NBT_VERSION));
     }
 
-    private void handleVersionUpdates(int previousVersion) {
-        if (previousVersion != CURRENT_VERSION) {
-            SilentGear.log.info("Crafting Station at {} is updating from version '{}' to '{}'. This should not result in item loss.",
-                    pos, previousVersion, CURRENT_VERSION);
-        }
-
-        if (previousVersion == 0) {
-            // Original without crafting grid retention or part slots
-            // Move side inventory to correct location to prevent item loss
-            for (int i = 18; i >= 0; --i) { // Original side inventory size is 18 (3x6)
-                final ItemStack stack = getStackInSlot(i);
-                if (!stack.isEmpty()) {
-                    setInventorySlotContents(i + SIDE_INVENTORY_START, stack);
-                    setInventorySlotContents(i, ItemStack.EMPTY);
-                }
-            }
-        }
+    @Override
+    public NBTTagCompound write(NBTTagCompound tags) {
+//        tags.setByte(NBT_VERSION, (byte) CURRENT_VERSION);
+        return super.write(tags);
     }
 }

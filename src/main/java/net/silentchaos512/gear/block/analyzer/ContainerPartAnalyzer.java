@@ -35,11 +35,11 @@ public class ContainerPartAnalyzer extends ContainerSL {
 
     @Override
     protected void addTileInventorySlots(IInventory inv) {
-        addSlotToContainer(new Slot(tileInventory, 0, 26, 35));
-        addSlotToContainer(new SlotOutputOnly(tileInventory, 1, 80, 35));
-        addSlotToContainer(new SlotOutputOnly(tileInventory, 2, 98, 35));
-        addSlotToContainer(new SlotOutputOnly(tileInventory, 3, 116, 35));
-        addSlotToContainer(new SlotOutputOnly(tileInventory, 4, 134, 35));
+        addSlot(new Slot(tileInventory, 0, 26, 35));
+        addSlot(new SlotOutputOnly(tileInventory, 1, 80, 35));
+        addSlot(new SlotOutputOnly(tileInventory, 2, 98, 35));
+        addSlot(new SlotOutputOnly(tileInventory, 3, 116, 35));
+        addSlot(new SlotOutputOnly(tileInventory, 4, 134, 35));
     }
 
     @Override

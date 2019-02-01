@@ -21,7 +21,6 @@ package net.silentchaos512.gear.item.blueprint.book;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModItems;
 
 public class GuiBlueprintBook extends GuiContainer {
@@ -36,20 +35,20 @@ public class GuiBlueprintBook extends GuiContainer {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(SilentGear.i18n.translatedName(ModItems.blueprintBook), 35, 6, 0x404040);
+        fontRenderer.drawString(ModItems.blueprintBook.getName().getFormattedText(), 35, 6, 0x404040);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         this.mc.getTextureManager().bindTexture(TEXTURE);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;

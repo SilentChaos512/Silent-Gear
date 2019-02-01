@@ -5,45 +5,51 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.item.*;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class CoreMattock extends ItemHoe implements ICoreTool {
-    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES,
-            Material.PLANTS, Material.VINE, Material.GRASS, Material.GROUND, Material.CLAY,
-            Material.SAND, Material.SNOW, Material.GOURD, Material.WOOD);
-
-    private final Set<String> toolClasses = new HashSet<>();
+    private static Set<ToolType> TOOL_CLASSES = ImmutableSet.of(ToolType.AXE, ToolType.SHOVEL);
+    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
+            Material.LEAVES,
+            Material.PLANTS,
+            Material.VINE,
+            Material.GRASS,
+            Material.GROUND,
+            Material.CLAY,
+            Material.SAND,
+            Material.SNOW,
+            Material.GOURD,
+            Material.WOOD
+    );
 
     public CoreMattock() {
-        super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
-        setHarvestLevel("shovel", 0);
-        setHarvestLevel("axe", 0);
+        super(ItemTier.DIAMOND, 0, GearHelper.getBuilder(null)
+                .addToolType(ToolType.AXE, 3)
+                .addToolType(ToolType.SHOVEL, 3)
+        );
     }
 
     @Nonnull
@@ -58,31 +64,29 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
-
-        if (GearHelper.isBroken(stack))
-            return EnumActionResult.PASS;
-
-        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+    public EnumActionResult onItemUse(ItemUseContext context) {
+        ItemStack stack = context.getItem();
+        if (GearHelper.isBroken(stack)) return EnumActionResult.PASS;
+        return super.onItemUse(context);
     }
 
-    @Override
-    protected void setBlock(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state) {
-        worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-        if (!worldIn.isRemote) {
-            worldIn.setBlockState(pos, state, 11);
-            GearHelper.attemptDamage(stack, 1, player);
-        }
-    }
+//    @Override
+//    protected void setBlock(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state) {
+//        worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+//
+//        if (!worldIn.isRemote) {
+//            worldIn.setBlockState(pos, state, 11);
+//            GearHelper.attemptDamage(stack, 1, player);
+//        }
+//    }
 
     //region Harvest tool overrides
 
+
     @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack tool) {
+    public boolean canHarvestBlock(ItemStack stack, IBlockState state) {
         // Forge ItemStack-sensitive version
-        return canHarvestBlock(state, getStatInt(tool, CommonItemStats.HARVEST_LEVEL));
+        return canHarvestBlock(state, getStatInt(stack, CommonItemStats.HARVEST_LEVEL));
     }
 
     @Override
@@ -105,7 +109,7 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -120,15 +124,15 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
-        return GearHelper.getHarvestLevel(stack, toolClass, state, EFFECTIVE_MATERIALS);
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+        return GearHelper.getHarvestLevel(stack, tool, blockState, EFFECTIVE_MATERIALS);
     }
 
-    @Override
-    public void setHarvestLevel(String toolClass, int level) {
-        super.setHarvestLevel(toolClass, level);
-        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-    }
+//    @Override
+//    public void setHarvestLevel(String toolClass, int level) {
+//        super.setHarvestLevel(toolClass, level);
+//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
+//    }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
@@ -141,8 +145,8 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return GearHelper.getDisplayName(stack);
     }
 
     @Override
@@ -156,8 +160,8 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
-    public Set<String> getToolClasses(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? ImmutableSet.of() : ImmutableSet.copyOf(this.toolClasses);
+    public Set<ToolType> getToolTypes(ItemStack stack) {
+        return GearHelper.isBroken(stack) ? ImmutableSet.of() : TOOL_CLASSES;
     }
 
     @Override
@@ -171,8 +175,8 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        GearHelper.getSubItems(this, tab, items);
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
@@ -181,8 +185,8 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override

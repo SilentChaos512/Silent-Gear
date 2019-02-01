@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.util;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -13,27 +13,27 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.MiscUpgrades;
-import net.silentchaos512.gear.item.ToolRods;
+import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.lib.advancements.LibTriggers;
-import net.silentchaos512.lib.registry.RecipeMaker;
-import net.silentchaos512.lib.util.ChatHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -75,8 +75,8 @@ public final class GearHelper {
     }
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        @SuppressWarnings("deprecation")
-        Multimap<String, AttributeModifier> map = stack.getItem().getItemAttributeModifiers(slot);
+        @SuppressWarnings("deprecation") // Need to use this version to prevent stack overflow
+        Multimap<String, AttributeModifier> map = stack.getItem().getAttributeModifiers(slot);
 
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Melee Damage
@@ -113,15 +113,15 @@ public final class GearHelper {
     //region Damage and repair
 
     public static boolean getIsRepairable(ItemStack stack, ItemStack material) {
-        ItemPartData data = GearData.getPrimaryPart(stack);
-        ItemPartData dataMaterial = ItemPartData.fromStack(material);
-        return data != null && dataMaterial != null && data.getPart().getTier() <= dataMaterial.getPart().getTier();
+        PartData data = GearData.getPrimaryPart(stack);
+        PartData dataMaterial = PartData.from(material);
+        return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
     }
 
     public static void attemptDamage(ItemStack stack, int amount, EntityLivingBase entityLiving) {
-        if (isUnbreakable(stack) || (entityLiving instanceof EntityPlayer && ((EntityPlayer) entityLiving).capabilities.isCreativeMode))
+        if (isUnbreakable(stack) || (entityLiving instanceof EntityPlayer && ((EntityPlayer) entityLiving).abilities.isCreativeMode))
             return;
-        final boolean canBreakPermanently = Config.gearBreaksPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
+        final boolean canBreakPermanently = canBreakPermanently(stack);
 
         EntityPlayerMP player = entityLiving instanceof EntityPlayerMP ? (EntityPlayerMP) entityLiving : null;
         final int preTraitAmount = amount;
@@ -131,12 +131,12 @@ public final class GearHelper {
         final int maxDamage = stack.getMaxDamage();
         final int preDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently)
-            amount = Math.min(maxDamage - stack.getItemDamage(), amount);
+            amount = Math.min(maxDamage - stack.getDamage(), amount);
         boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.random, player);
 
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
-            GearData.recalculateStats(stack);
+            GearData.recalculateStats(player, stack);
             if (player != null)
                 onDamageFactorChange(player, preDamageFactor, getDamageFactor(stack, maxDamage));
         }
@@ -145,7 +145,7 @@ public final class GearHelper {
             // The item "broke" (can still be repaired)
             entityLiving.renderBrokenItemStack(stack);
             GearData.incrementBrokenCount(stack);
-            GearData.recalculateStats(stack);
+            GearData.recalculateStats(player, stack);
             if (player != null)
                 notifyPlayerOfBrokenGear(stack, player);
         } else if (canBreakPermanently && wouldBreak) {
@@ -167,26 +167,29 @@ public final class GearHelper {
     private static void notifyPlayerOfBrokenGear(ItemStack stack, EntityPlayerMP player) {
         // Notify player. Mostly for armor, but might help new players as well.
         // FIXME: Does not work with armor currently, need to find a way to get player
-        String key = SilentGear.i18n.getKey("misc", "notifyOnBreak");
-        ChatHelper.translateStatus(player, key, true, stack.getDisplayName());
+        player.sendMessage(new TextComponentTranslation("misc.silentgear.notifyOnBreak", stack.getDisplayName()));
     }
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
         if (maxDamage == 0) return 1;
         int step = Math.max(1, maxDamage / DAMAGE_FACTOR_LEVELS);
-        return stack.getItemDamage() / step;
+        return stack.getDamage() / step;
     }
 
     // Used by setDamage in gear items to prevent other mods from breaking them
     public static int calcDamageClamped(ItemStack stack, int damage) {
         if (isUnbreakable(stack)) return 0;
-        final boolean canBreakPermanently = Config.gearBreaksPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
 
-        if (!canBreakPermanently) {
-            if (damage > stack.getItemDamage()) damage = Math.min(stack.getMaxDamage(), damage);
+        if (!canBreakPermanently(stack)) {
+            if (damage > stack.getDamage()) damage = Math.min(stack.getMaxDamage(), damage);
             else damage = Math.max(0, damage);
         }
         return damage;
+    }
+
+    private static boolean canBreakPermanently(ItemStack stack) {
+        return Config.GENERAL.gearBreaksPermanently.get()
+                || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
     }
 
     public static boolean isBroken(ItemStack stack) {
@@ -195,13 +198,13 @@ public final class GearHelper {
         // return true;
         // }
 
-        if (Config.gearBreaksPermanently || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart()))
+        if (canBreakPermanently(stack))
             return false;
 
         int maxDamage = stack.getMaxDamage();
         if (stack.isEmpty() || maxDamage <= 0)
             return false;
-        return stack.getItemDamage() >= maxDamage;
+        return stack.getDamage() >= maxDamage;
     }
 
     public static boolean isUnbreakable(ItemStack stack) {
@@ -211,8 +214,18 @@ public final class GearHelper {
 
     //endregion
 
-    public static int getHarvestLevel(ItemStack stack, String toolClass, @Nullable IBlockState state, @Nullable Set<Material> effectiveMaterials) {
-        if (isBroken(stack) || !stack.getItem().getToolClasses(stack).contains(toolClass))
+    public static Item.Builder getBuilder(@Nullable ToolType toolType) {
+        Item.Builder b = new Item.Builder()
+                .maxStackSize(1)
+                .group(SilentGear.ITEM_GROUP);
+        if (toolType != null) {
+            b.addToolType(toolType, 3);
+        }
+        return b;
+    }
+
+    public static int getHarvestLevel(ItemStack stack, ToolType toolClass, @Nullable IBlockState state, @Nullable Set<Material> effectiveMaterials) {
+        if (isBroken(stack) || !stack.getItem().getToolTypes(stack).contains(toolClass))
             return -1;
 
         final int level = GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
@@ -228,7 +241,7 @@ public final class GearHelper {
         // Add tool class to list if level is non-negative. Because this is on the item level, the
         // actual number is meaningless. Harvest levels can be customized in the material JSONs.
         final boolean add = level >= 0;
-        SilentGear.log.info("{}: {} tool class \"{}\"", item.getClass().getSimpleName(), (add ? "set" : "remove"), toolClass);
+        SilentGear.LOGGER.info("{}: {} tool class \"{}\"", item.getClass().getSimpleName(), (add ? "set" : "remove"), toolClass);
         if (add) mutableSet.add(toolClass);
         else mutableSet.remove(toolClass);
     }
@@ -240,13 +253,13 @@ public final class GearHelper {
         float speed = GearData.getStat(stack, CommonItemStats.HARVEST_SPEED);
 
         // Tool effective on block?
-        if (stack.getItem().canHarvestBlock(state, stack)) {
+        if (stack.getItem().canHarvestBlock(stack, state)) {
             return speed;
         }
 
         // Check tool classes
-        for (String type : stack.getItem().getToolClasses(stack)) {
-            if (state.getBlock().isToolEffective(type, state)) {
+        for (ToolType type : stack.getItem().getToolTypes(stack)) {
+            if (state.getBlock().isToolEffective(state, type)) {
                 return speed;
             }
         }
@@ -281,17 +294,18 @@ public final class GearHelper {
         return !isBroken;
     }
 
-    public static void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        if (world.getTotalWorldTime() % 20 == 0) {
+    // Formerly onUpdate
+    public static void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        if (world.getGameTime() % 20 == 0) {
             // Any ungraded parts get a random grade
             if (!GearData.isRandomGradingDone(stack)) {
                 // Select D, C, or B as median
                 MaterialGrade median = SilentGear.random.nextInt(100) < 20 ? MaterialGrade.D : SilentGear.random.nextInt(100) < 40 ? MaterialGrade.B : MaterialGrade.C;
                 PartDataList parts = PartDataList.of();
-                for (ItemPartData data : GearData.getConstructionParts(stack)) {
+                for (PartData data : GearData.getConstructionParts(stack)) {
                     if (data.getGrade() == MaterialGrade.NONE) {
                         MaterialGrade grade = MaterialGrade.selectRandom(SilentGear.random, median, 1.5, MaterialGrade.S);
-                        parts.add(ItemPartData.instance(data.getPart(), grade, data.getCraftingItem()));
+                        parts.add(PartData.of(data.getPart(), grade, data.getCraftingItem()));
                     } else {
                         parts.add(data);
                     }
@@ -306,14 +320,14 @@ public final class GearHelper {
         TraitHelper.tickTraits(player, stack);
     }
 
-    public static boolean shouldUseFallbackColor(ItemStack stack, ItemPartData part) {
+    public static boolean shouldUseFallbackColor(ItemStack stack, PartData part) {
         // TODO
         return false;
     }
 
     public static EnumRarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
-        if (stack.isItemEnchanted())
+        if (stack.isEnchanted())
             rarity += 20;
 
         if (rarity < 20)
@@ -324,15 +338,17 @@ public final class GearHelper {
             return EnumRarity.RARE;
         if (rarity < 110)
             return EnumRarity.EPIC;
-        return SilentGear.RARITY_LEGENDARY;
+//        return SilentGear.RARITY_LEGENDARY;
+        return EnumRarity.EPIC;
     }
 
     private static final Map<String, List<ItemStack>> subItemCache = new HashMap<>();
 
-    public static void getSubItems(ICoreItem item, CreativeTabs tab, NonNullList<ItemStack> subitems) {
+    // Formerly getSubItems
+    public static void fillItemGroup(ICoreItem item, ItemGroup group, Collection<ItemStack> items) {
         boolean inTab = false;
-        for (CreativeTabs tabInList : item.getItem().getCreativeTabs()) {
-            if (tabInList == tab) {
+        for (ItemGroup tabInList : item.asItem().getCreativeTabs()) {
+            if (tabInList == group) {
                 inTab = true;
                 break;
             }
@@ -342,14 +358,14 @@ public final class GearHelper {
         if (!subItemCache.containsKey(item.getGearClass())) {
             List<ItemStack> list = new ArrayList<>();
             // Create a few samples of each tool type, because rendering performance is a problem on many machines.
-            for (int i = 1; i <= PartRegistry.getHighestMainPartTier(); ++i) {
+            for (int i = 1; i <= 3 /*PartRegistry.getHighestMainPartTier()*/; ++i) {
                 ItemStack stack = createSampleItem(item, i);
                 if (!stack.isEmpty())
                     list.add(stack);
             }
             subItemCache.put(item.getGearClass(), list);
         }
-        subitems.addAll(subItemCache.get(item.getGearClass()));
+        items.addAll(subItemCache.get(item.getGearClass()));
     }
 
     private static ItemStack createSampleItem(ICoreItem item, int tier) {
@@ -362,16 +378,26 @@ public final class GearHelper {
         subItemCache.clear();
     }
 
-    public static String getItemStackDisplayName(ItemStack stack) {
-        ICoreItem item = (ICoreItem) stack.getItem();
-        ItemPartData data = GearData.getPrimaryPart(stack);
-        if (data == null)
-            return SilentGear.i18n.translate(stack.getTranslationKey() + ".name");
-        String partName = data.getTranslatedName(ItemStack.EMPTY);
-        return SilentGear.i18n.subText(item.getItem(), "nameProper", partName);
+    public static ITextComponent getDisplayName(ItemStack gear) {
+        ICoreItem item = (ICoreItem) gear.getItem();
+        PartData part = GearData.getPrimaryPart(gear);
+        if (part == null) return new TextComponentTranslation(gear.getTranslationKey());
+
+        ITextComponent partName = part.getDisplayName(gear);
+        ITextComponent gearName = new TextComponentTranslation(gear.getTranslationKey() + ".nameProper", partName);
+
+        if (gear.getItem() instanceof ICoreTool) {
+            boolean hasRod = true; // FIXME
+            if (!hasRod) {
+                return new TextComponentTranslation(gear.getTranslationKey() + ".noRod", gearName);
+            }
+        }
+
+        return gearName;
     }
 
     public static Collection<IRecipe> getExampleRecipes(ICoreItem item) {
+        /*
         RecipeMaker recipes = SilentGear.registry.getRecipeMaker();
         Collection<IRecipe> list = new ArrayList<>();
 
@@ -393,5 +419,8 @@ public final class GearHelper {
         }
 
         return list;
+        */
+        SilentGear.LOGGER.warn("GearHelper#getExampleRecipes: not implemented");
+        return ImmutableList.of();
     }
 }

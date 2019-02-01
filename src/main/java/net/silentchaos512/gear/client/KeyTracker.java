@@ -1,27 +1,35 @@
 package net.silentchaos512.gear.client;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.client.settings.KeyModifier;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.lib.client.key.KeyTrackerSL;
+import net.minecraft.client.util.InputMappings;
+import org.lwjgl.glfw.GLFW;
 
-public class KeyTracker extends KeyTrackerSL {
-
+public class KeyTracker {
     public static KeyTracker INSTANCE = new KeyTracker();
 
     private KeyBinding keyTest;
 
     public KeyTracker() {
-        super(SilentGear.MOD_NAME);
-        keyTest = createBinding("Test", KeyConflictContext.IN_GAME, KeyModifier.NONE, Keyboard.KEY_BACKSLASH);
+//        keyTest = createBinding("Test", KeyConflictContext.IN_GAME, KeyModifier.NONE, Keyboard.KEY_BACKSLASH);
     }
 
-    @Override
-    public void onKeyInput(KeyInputEvent event) {
-        // TODO
+//    @Override
+//    public void onKeyInput(KeyInputEvent event) {
+//        // TODO
+//    }
+
+    public static boolean isShiftDown() {
+        return InputMappings.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)
+                || InputMappings.isKeyDown(GLFW.GLFW_KEY_RIGHT_SHIFT);
+    }
+
+    public static boolean isControlDown() {
+        return InputMappings.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)
+                || InputMappings.isKeyDown(GLFW.GLFW_KEY_RIGHT_CONTROL);
+    }
+
+    public static boolean isAltDown() {
+        return InputMappings.isKeyDown(GLFW.GLFW_KEY_LEFT_ALT)
+                || InputMappings.isKeyDown(GLFW.GLFW_KEY_RIGHT_ALT);
     }
 }

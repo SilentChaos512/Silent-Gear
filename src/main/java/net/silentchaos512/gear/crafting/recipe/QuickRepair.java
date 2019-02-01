@@ -19,96 +19,123 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.crafting.IRecipeFactory;
-import net.minecraftforge.common.crafting.JsonContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.api.parts.PartRegistry;
-import net.silentchaos512.gear.api.parts.RepairContext;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
-import net.silentchaos512.lib.recipe.RecipeBaseSL;
-import net.silentchaos512.lib.util.StackHelper;
 
 import java.util.Collection;
 
 @SuppressWarnings("unused")
-public class QuickRepair implements IRecipeFactory {
+public class QuickRepair implements IRecipe {
     @Override
-    public IRecipe parse(JsonContext context, JsonObject json) {
-        return new Recipe();
+    public boolean matches(IInventory inv, World worldIn) {
+        ItemStack gear = ItemStack.EMPTY;
+        int partsCount = 0;
+
+        // Need 1 gear and 1+ parts
+        for (ItemStack stack : StackList.from(inv)) {
+            if (stack.getItem() instanceof ICoreItem) {
+                if (gear.isEmpty())
+                    gear = stack;
+                else
+                    return false;
+            } else if (PartManager.from(stack) != null) {
+                ++partsCount;
+                // It needs to be a part with repair value
+                PartData data = PartData.from(stack);
+                if (data == null || data.getRepairAmount(gear, RepairContext.Type.QUICK) <= 0)
+                    return false;
+            } else {
+                return false;
+            }
+        }
+
+        return !gear.isEmpty() && partsCount > 0;
     }
 
-    private static class Recipe extends RecipeBaseSL {
-        @Override
-        public boolean matches(InventoryCrafting inv, World worldIn) {
-            ItemStack gear = ItemStack.EMPTY;
-            int partsCount = 0;
+    @Override
+    public ItemStack getCraftingResult(IInventory inv) {
+        StackList list = StackList.from(inv);
+        ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
+        Collection<ItemStack> parts = list.allMatches(s -> PartManager.from(s) != null);
 
-            // Need 1 gear and 1+ parts
-            for (ItemStack stack : StackList.fromInventory(inv)) {
-                if (stack.getItem() instanceof ICoreItem) {
-                    if (gear.isEmpty())
-                        gear = stack;
-                    else
-                        return false;
-                }
-                else if (PartRegistry.get(stack) != null) {
-                    ++partsCount;
-                    // It needs to be a part with repair value
-                    ItemPartData data = ItemPartData.fromStack(stack);
-                    if (data == null || data.getRepairAmount(gear, RepairContext.QUICK) <= 0)
-                        return false;
-                }
-                else {
-                    return false;
-                }
+        if (gear.isEmpty() || parts.isEmpty()) return ItemStack.EMPTY;
+
+        float repairValue = 0f;
+        int materialCount = 0;
+        for (ItemStack stack : parts) {
+            PartData data = PartData.from(stack);
+            if (data != null) {
+                repairValue += data.getRepairAmount(gear, RepairContext.Type.QUICK);
+                ++materialCount;
             }
-
-            return !gear.isEmpty() && partsCount > 0;
         }
 
-        @Override
-        public ItemStack getCraftingResult(InventoryCrafting inv) {
-            StackList list = StackHelper.getNonEmptyStacks(inv);
-            ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
-            Collection<ItemStack> parts = list.allMatches(s -> PartRegistry.get(s) != null);
+        // Makes odd repair values line up better
+        repairValue += 1;
 
-            if (gear.isEmpty() || parts.isEmpty()) return ItemStack.EMPTY;
+        // Repair efficiency instance tool class
+        if (gear.getItem() instanceof ICoreItem)
+            repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
 
-            float repairValue = 0f;
-            int materialCount = 0;
-            for (ItemStack stack : parts) {
-                ItemPartData data = ItemPartData.fromStack(stack);
-                if (data != null) {
-                    repairValue += data.getRepairAmount(gear, RepairContext.QUICK);
-                    ++materialCount;
-                }
-            }
-
-            // Makes odd repair values line up better
-            repairValue += 1;
-
-            // Repair efficiency instance tool class
-            if (gear.getItem() instanceof ICoreItem)
-                repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
-
-            gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
+        gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
 //            GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);
-            GearData.incrementRepairCount(gear, materialCount);
-            GearData.recalculateStats(gear);
-            return gear;
+        GearData.incrementRepairCount(gear, materialCount);
+        GearData.recalculateStats(null, gear);
+        return gear;
+    }
+
+    @Override
+    public boolean canFit(int width, int height) {
+        return false;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return Serializer.INSTANCE.getName();
+    }
+
+    @Override
+    public IRecipeSerializer<?> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
+    public static final class Serializer implements IRecipeSerializer<QuickRepair> {
+        public static final Serializer INSTANCE = new Serializer();
+
+        @Override
+        public QuickRepair read(ResourceLocation recipeId, JsonObject json) {
+            return new QuickRepair();
         }
 
         @Override
-        public ItemStack getRecipeOutput() {
-            return ItemStack.EMPTY;
+        public QuickRepair read(ResourceLocation recipeId, PacketBuffer buffer) {
+            return new QuickRepair();
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, QuickRepair recipe) { }
+
+        @Override
+        public ResourceLocation getName() {
+            return new ResourceLocation(SilentGear.MOD_ID, "quick_repair");
         }
     }
 }

@@ -3,8 +3,8 @@ package net.silentchaos512.gear.api.stats;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.util.text.TextFormatting;
-import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.PartMain;
+import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.api.parts.IGearPart;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;
@@ -75,7 +75,7 @@ public class StatInstance {
         return val < whiteVal ? TextFormatting.RED : val == whiteVal ? TextFormatting.WHITE : TextFormatting.GREEN;
     }
 
-    public boolean shouldList(ItemPart part, ItemStat stat, boolean advanced) {
+    public boolean shouldList(IGearPart part, ItemStat stat, boolean advanced) {
         return advanced || value != 0 || (part instanceof PartMain && stat == CommonItemStats.HARVEST_LEVEL);
     }
 

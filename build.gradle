@@ -1,112 +1,180 @@
-// Based on jriwanek's Forge Modding Skeleton (https://github.com/jriwanek/ForgeModdingSkeleton)
-
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = 'forge'
-            url = 'http://files.minecraftforge.net/maven'
-        }
-        maven {
-            name = 'gradle'
-            url 'https://plugins.gradle.org/m2/'
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:${project.fg_version}"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
 
 plugins {
+    id 'io.franzbecker.gradle-lombok' version '2.0'
+    id 'maven'
+    id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.4"
     id "com.matthewprenger.cursegradle" version "1.1.0"
-    id 'net.ltgt.apt' version '0.10' // for lombok
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'net.minecraftforge.gradle'
+// apply plugin: 'eclipse'
 
 repositories {
+    flatDir {
+        name "fileRepo"
+        dirs "repo"
+    }
     mavenLocal()
-    mavenCentral()
+    jcenter()
+}
+
+lombok {
+    version = '1.18.4'
+    sha256 = ""
+}
+
+def versionInfo = getGitVersion()
+version = "${versionInfo['version']}"
+group = 'net.silentchaos512.gear' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'silent-gear'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+minecraft {
+    mappings channel: 'snapshot', version: '20180921-1.13'
+
+    runs {
+        client = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+        server = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+    }
 }
 
 dependencies {
+    minecraft 'net.minecraftforge.test:forge:1.13-24.0.145-1.13-pre'
+
+    compile "net.silentchaos512:silent-lib:3.1+"
+    compile "net.silentchaos512:wit:1.1.+"
+
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.compilerArgs = [
-            '-Xlint:deprecation', // deprecation, rawtypes, cast, unchecked, all
-//  '-Xdiags:verbose',
-//  '-Werror'
-    ]
-}
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    appendix = "${project.mc_version}"
 
-javadoc {
-    failOnError = false
-}
-
-def mod_file = getModFile()
-def short_version = getVersion('VERSION', mod_file)
-version = mc_version + '-' + short_version
-def display_version = short_version
-def build_num = getBuildNumber()
-
-//if (System.getenv().BUILD_NUMBER) {
-//  version += '.' + System.getenv().BUILD_NUMBER
-//  display_version += '.' + System.getenv().BUILD_NUMBER
-//}
-
-sourceCompatibility = targetCompatibility = '1.8'
-
-eclipse.project {
-    buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
-    natures 'org.eclipse.buildship.core.gradleprojectnature'
-}
-
-minecraft {
-    version = project.forge_mc_version + '-' + project.forge_version
-    runDir = 'run'
-    mappings = project.mcp_mappings
-
-    replace "BUILD_NUM = 0", "BUILD_NUM = " + build_num
-    replaceIn "${project.archivesBaseName}.java"
-
-    if (project.hasProperty('coreplugin')) {
-        clientJvmArgs += '-Dfml.coreMods.load=' + project.coreplugin
-        serverJvmArgs += '-Dfml.coreMods.load=' + project.coreplugin
+    manifest {
+        attributes(["Specification-Title": "silent-gear",
+                    "Specification-Vendor": "silentchaos512",
+                    "Specification-Version": "24.0", // We are version 1 of the modlauncher specification
+                    "Implementation-Title": project.name,
+                    "Implementation-Version": "${version}",
+                    "Implementation-Vendor" :"silentchaos512",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
+}
 
-    if (project.hasProperty('mc_username')) {
-        clientRunArgs += ['--username', project.mc_username]
-        if (project.hasProperty('mc_password')) {
-            clientRunArgs += ['--password', project.mc_password]
+task sourcesJar(type: Jar) {
+    appendix = "${project.mc_version}"
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar) {
+    appendix = "${project.mc_version}"
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        SilentGear(MavenPublication) {
+            groupId 'net.silentchaos512'
+            artifactId 'silent-gear'
+            version "${versionInfo['version_short']}".toString()
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
-    if (project.hasProperty('mc_uuid')) {
-        clientRunArgs += ['--uuid', project.mc_uuid]
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['SilentGear']
+
+    pkg {
+        repo = 'silent-gear'
+        name = 'silent-gear'
+        licenses = ["LGPL-3.0"]
+        vcsUrl = 'https://github.com/SilentChaos512/Silent-Gear.git'
+
+        version {
+            name = "${versionInfo['version_short']}".toString()
+            desc = "Silent Gear (1.13) ${versionInfo['version_short']}".toString()
+            released = new Date()
+            vcsTag = "v${versionInfo['version_short']}".toString()
+        }
+    }
+}
+
+// Version stuff
+
+def getGitVersion() {
+    def out = [:]
+
+    // Call git command
+    def outStream = new ByteArrayOutputStream()
+    def result = exec {
+        executable = 'git'
+        args = [ 'describe', '--long' ]
+        standardOutput = outStream
     }
 
-    // disable server gui
-    serverRunArgs += 'nogui'
+    def fullVersion = outStream.toString().trim()
+    def matcher = fullVersion =~ /(\d+).(\d+).(\d+)-(.*)/
 
-    // skip the screen to confirm that you want to load a world with missing registry entries
-    serverJvmArgs += '-Dfml.doNotBackup=true'
-    clientJvmArgs += '-Dfml.doNotBackup=true'
+    def maj = matcher[0][1]
+    def min = matcher[0][2]
+    def rev = matcher[0][3]
+    def bn = getBuildNumber()
 
-    // skip having to confirm on server
-    serverJvmArgs += '-Dfml.queryResult=confirm'
+    out['build.major.number'] = maj.toString()
+    out['build.minor.number'] = min.toString()
+    out['build.revision.number'] = rev.toString()
+    out['build.githash'] = matcher[0][4].toString()
+    out['build.number'] = bn.toString()
+    out['version'] = "${maj}.${min}.${rev}+${bn}".toString()
 
-    //skip jansi warnings in the log
-    serverJvmArgs += '-Dlog4j.skipJansi=true'
-    clientJvmArgs += '-Dlog4j.skipJansi=true'
+    return out;
+}
 
-    if (project.hasProperty('client_args')) {
-        clientJvmArgs += project.client_args
+// Build number tracking
+
+String getBuildNumber() {
+    def versionFile = file('version.properties')
+    if (versionFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionFile))
+        return versionProps['build_num'].toString()
     }
-    if (project.hasProperty('server_args')) {
-        serverJvmArgs += project.server_args
-    }
+    return "1"
 }
 
 task incrementBuild {
@@ -115,241 +183,15 @@ task incrementBuild {
         if (versionFile.canRead()) {
             Properties versionProps = new Properties()
             versionProps.load(new FileInputStream(versionFile))
-            build_num = versionProps['build_num'].toInteger() + 1
-            println("incrementing BuildNumber to: " + build_num)
-            versionProps['build_num'] = build_num.toString()
+            def num = versionProps['build_num'].toInteger() + 1
+            println("incrementing BuildNumber to: " + num)
+            versionProps['build_num'] = num.toString()
             versionProps.store(versionFile.newWriter(), null)
         } else {
             println("version.properties file not found! Ignoring.")
         }
     }
 }
-build.dependsOn incrementBuild
+build.finalizedBy incrementBuild
 
-repositories {
-    jcenter()
-    mavenCentral()
-    maven { // JEI
-        name = "Progwml6 maven"
-        url = "http://dvs1.progwml6.com/files/maven"
-    }
-    maven { // JEI mirror
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
-    }
-    maven {
-        name "Cyclops Repo"
-        url "https://oss.jfrog.org/artifactory/simple/libs-release/"
-    }
-    repositories {
-        maven { url 'https://maven.mcmoddev.com' }
-    }
-    maven { // Jitpack
-        url 'https://jitpack.io'
-    }
-}
 
-dependencies {
-    // lombok
-    if (project.hasProperty('lombok_version')) {
-        compile "org.projectlombok:lombok:${project.lombok_version}"
-        apt "org.projectlombok:lombok:${project.lombok_version}"
-    }
-
-    // JEI
-    if (project.hasProperty('jei_version')) {
-        deobfProvided "mezz.jei:jei_${project.mc_version}:${project.jei_version}:api"
-        //runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
-    }
-
-    // Silent Lib
-    if (project.hasProperty('sl_version')) {
-        def projectSilentLib = findProject(":SilentLib")
-        print "Local Silent Lib: ${projectSilentLib} (${projectSilentLib != null ? "found" : "not found"})"
-        if (projectSilentLib != null)
-            compileOnly project(":SilentLib")
-        else
-            provided "com.github.SilentChaos512:SilentLib:${project.sl_version}"
-    }
-
-    // EvilCraft
-    compileOnly "org.cyclops.cyclopscore:CyclopsCore:${project.mc_version}-${project.cyclops_core_version}:deobf"
-    compileOnly "org.cyclops.evilcraft:EvilCraft:${project.mc_version}-${project.evilcraft_version}:deobf"
-}
-
-processResources {
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version': short_version, 'mcversion': project.minecraft.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-
-    rename '(.+_at.cfg)', 'META-INF/$1'
-}
-
-jar {
-    mustRunAfter incrementBuild
-    doFirst {
-        build_num = getBuildNumber()
-        if (build_num > 0) {
-            classifier = build_num
-        }
-    }
-    manifest {
-        if (project.hasProperty('coreplugin')) {
-            attributes 'FMLCorePluginContainsFMLMod': 'true'
-            attributes 'FMLCorePlugin': project.coreplugin
-        }
-//  attributes 'FMLAT' : ''
-    }
-}
-
-task apiJar(type: Jar) {
-    classifier = 'apiClasses'
-    from apiClasses
-}
-
-task deobfJar(type: Jar) {
-    classifier = 'deobf'
-    from sourceSets.main.output
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.getDestinationDir()
-}
-
-artifacts {
-    if (project.hasProperty('doAPIJar')) {
-        archives apiJar
-    }
-    if (project.hasProperty('doDeobfJar')) {
-        archives deobfJar
-    }
-    if (project.hasProperty('doSourceJar')) {
-        archives sourceJar
-    }
-    if (project.hasProperty('doJavadocJar')) {
-        archives javadocJar
-    }
-}
-
-class Secrets {
-    def data = null
-
-    def getProperty(String key) {
-        return data ? data[key] : ''
-    }
-}
-
-import groovy.json.JsonSlurper
-
-def secretFile
-if (System.getenv().SECRET_FILE) {
-    secretFile = file System.getenv().SECRET_FILE
-} else {
-    secretFile = file 'secret.json'
-}
-
-project.ext.secret = new Secrets()
-if (secretFile.exists()) {
-    secretFile.withReader {
-        project.ext.secret.data = new JsonSlurper().parse it
-    }
-}
-
-curseforge {
-    if (project.hasProperty('cf_project_id') && project.hasProperty('cf_release_type') && project.hasProperty('cf_changelog_filename') &&
-            ((project.cf_release_type == 'alpha') || (project.cf_release_type == 'beta') || (project.cf_release_type == 'release'))) {
-        apiKey = secret.curseforgeAPIKey
-        project {
-            id = project.cf_project_id
-            changelog = file(project.cf_changelog_filename)
-            releaseType = project.cf_release_type
-            addGameVersion(project.mc_version)
-            mainArtifact(jar) {
-//                displayName = "$project.description $display_version"
-                relations {
-                    requiredLibrary 'silent-lib'
-                }
-            }
-//            if (project.hasProperty('doAPIJar')) {
-//                addArtifact(apiJar) {
-//                    displayName = "$project.description $display_version API"
-//                }
-//            }
-//            if (project.hasProperty('doSourceJar')) {
-//                addArtifact(sourceJar) {
-//                    displayName = "$project.description $display_version Sources"
-//                }
-//            }
-//            if (project.hasProperty('doDeobfJar')) {
-//                addArtifact(deobfJar) {
-//                    displayName = "$project.description $display_version Development"
-//                }
-//            }
-//            if (project.hasProperty('doJavadocJar')) {
-//                addArtifact(javadocJar) {
-//                    displayName = "$project.description $display_version Javadoc"
-//                }
-//            }
-        }
-    }
-}
-
-String getModFile() {
-    String path = ''
-    FileTree tree = fileTree(dir: 'src/main/java')
-    tree.include '**/*.java'
-    tree.visit { element ->
-        if (element.file.isFile()) {
-            element.file.eachLine { String s ->
-                s = s.trim()
-                if (s.startsWith('@Mod(')) {
-                    path = "src/main/java/$element.relativePath"
-                }
-            }
-        }
-    }
-    return path
-}
-
-String getVersion(String type, String mod_file) {
-    String major = '0'
-    String revision = '0'
-    String patch = '0'
-    File file = file(mod_file)
-    def prefix = ~/^(?:public|protected|private) static final String $type = ".*$/
-    file.eachLine { String s ->
-        s = s.trim()
-        if (s ==~ prefix || prefix.matcher(s).matches()) {
-            String[] bits = s.split("=")
-            String interesting = bits[1].trim()
-            interesting = interesting.substring(1, interesting.length() - 2)
-            String[] pts = interesting.trim().split("\\.")
-
-            major = pts[0] ?: '0'
-            revision = pts[1] ?: '0'
-            patch = pts[2] ?: '0'
-        }
-    }
-    return "$major.$revision.$patch"
-}
-
-int getBuildNumber() {
-    def versionFile = file('version.properties')
-    if (versionFile.canRead()) {
-        Properties versionProps = new Properties()
-        versionProps.load(new FileInputStream(versionFile))
-        return versionProps['build_num'].toInteger()
-    } else {
-        println('version.properties file not found! Build number will be 0')
-        return 0
-    }
-}

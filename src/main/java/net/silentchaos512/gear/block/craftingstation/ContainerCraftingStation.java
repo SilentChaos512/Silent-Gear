@@ -5,29 +5,22 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.play.server.SPacketSetSlot;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
-import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
 import net.silentchaos512.gear.inventory.SlotCraftingStationOutput;
 import net.silentchaos512.gear.inventory.SlotItemPart;
-import net.silentchaos512.gear.item.ToolHead;
-import net.silentchaos512.gear.crafting.recipe.RecipeModularItem;
+import net.silentchaos512.gear.parts.PartData;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ContainerCraftingStation extends Container {
     InventoryCrafting craftMatrix;
@@ -68,7 +61,7 @@ public class ContainerCraftingStation extends Container {
         setupPlayerSlots(playerInv);
 
         // Output
-        outputSlot = this.addSlotToContainer(new SlotCraftingStationOutput(this, playerInv.player,
+        outputSlot = this.addSlot(new SlotCraftingStationOutput(this, playerInv.player,
                 this.craftMatrix, this.craftResult, tile, tile.getSizeInventory(), 146, 35));
 
         onCraftMatrixChanged(this.tile);
@@ -78,7 +71,7 @@ public class ContainerCraftingStation extends Container {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 final int index = x + y * 3;
-                addSlotToContainer(new Slot(this.craftMatrix, index, 8 + x * 18, 17 + y * 18));
+                addSlot(new Slot(this.craftMatrix, index, 8 + x * 18, 17 + y * 18));
             }
         }
     }
@@ -87,7 +80,7 @@ public class ContainerCraftingStation extends Container {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 2; ++x) {
                 final int index = TileCraftingStation.GEAR_PARTS_START + x + y * 2;
-                addSlotToContainer(new SlotItemPart(this, tile, index, 79 + x * 18, 17 + y * 18));
+                addSlot(new SlotItemPart(this, tile, index, 79 + x * 18, 17 + y * 18));
             }
         }
     }
@@ -97,13 +90,13 @@ public class ContainerCraftingStation extends Container {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 9; ++x) {
                 final int index = x + (y + 1) * 9;
-                addSlotToContainer(new Slot(playerInventory, index, 8 + x * 18, 84 + y * 18));
+                addSlot(new Slot(playerInventory, index, 8 + x * 18, 84 + y * 18));
             }
         }
 
         // Player hotbar
         for (int x = 0; x < 9; ++x) {
-            addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, 142));
+            addSlot(new Slot(playerInventory, x, 8 + x * 18, 142));
         }
     }
 
@@ -116,7 +109,7 @@ public class ContainerCraftingStation extends Container {
                 int index = TileCraftingStation.SIDE_INVENTORY_START + x + y * 3;
                 int xPos = x * 18 - 56;
                 int yPos = y * 18 + 5 + (166 - totalHeight) / 2;
-                addSlotToContainer(new Slot(tile, index, xPos, yPos));
+                addSlot(new Slot(tile, index, xPos, yPos));
             }
         }
     }
@@ -217,18 +210,19 @@ public class ContainerCraftingStation extends Container {
     }
 
     @Override
-    protected void slotChangedCraftingGrid(World world, EntityPlayer player, InventoryCrafting craftMatrix, InventoryCraftResult craftResult) {
+    protected void slotChangedCraftingGrid(World worldIn, EntityPlayer playerIn, IInventory craftMatrixIn, InventoryCraftResult craftResultIn) {
         if (world.isRemote) return;
 
         EntityPlayerMP entityplayermp = (EntityPlayerMP) player;
         ItemStack itemstack = ItemStack.EMPTY;
-        IRecipe irecipe = CraftingManager.findMatchingRecipe(craftMatrix, world);
+        IRecipe irecipe = worldIn.getServer().getRecipeManager().getRecipe(craftMatrixIn, worldIn, net.minecraftforge.common.crafting.VanillaRecipeTypes.CRAFTING);
 
         if (irecipe != null && (irecipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayermp.getRecipeBook().isUnlocked(irecipe))) {
             craftResult.setRecipeUsed(irecipe);
             itemstack = irecipe.getCraftingResult(craftMatrix);
 
             // If output is a tool head, try using available parts to craft a complete tool
+            /*
             if (itemstack.getItem() instanceof ToolHead) {
                 String toolClass = ToolHead.getToolClass(itemstack);
                 RecipeModularItem recipe = ModRecipes.gearCrafting.get(toolClass);
@@ -261,6 +255,7 @@ public class ContainerCraftingStation extends Container {
                     }
                 }
             }
+            */
         }
 
         final int index = outputSlot.getSlotIndex();
@@ -268,13 +263,13 @@ public class ContainerCraftingStation extends Container {
         entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, index, itemstack));
     }
 
-    public Map<ItemPartData, Integer> getCompatibleParts(ICoreItem item) {
-        Map<ItemPartData, Integer> result = new HashMap<>();
+    public Map<PartData, Integer> getCompatibleParts(ICoreItem item) {
+        Map<PartData, Integer> result = new HashMap<>();
         Set<PartType> typesFound = new HashSet<>();
 
         for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
             ItemStack partStack = getSlot(i).getStack();
-            ItemPartData part = ItemPartData.fromStack(partStack);
+            PartData part = PartData.from(partStack);
 
             if (part != null) {
                 PartType type = part.getPart().getType();

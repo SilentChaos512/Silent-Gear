@@ -1,12 +1,10 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.silentchaos512.gear.GuideBookToolMod;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -15,9 +13,6 @@ import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
-import net.silentchaos512.lib.item.IEnumItems;
-import net.silentchaos512.lib.item.ItemGuideBookSL;
-import net.silentchaos512.lib.registry.SRegistry;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -30,39 +25,85 @@ public final class ModItems {
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
     public static final List<Blueprint> blueprints = new ArrayList<>();
 
-    public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
-    public static BlueprintPackage blueprintPackage = new BlueprintPackage(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"));
-    public static BlueprintBook blueprintBook = new BlueprintBook();
+    public static BlueprintPackage blueprintPackage;
+    public static BlueprintBook blueprintBook;
 
-    public static Flaxseeds flaxseeds = new Flaxseeds();
-    public static NetherBanana netherBanana = new NetherBanana();
+    public static Flaxseeds flaxseeds;
+    public static NetherBanana netherBanana;
 
-    public static ToolHead toolHead = new ToolHead();
+    public static CoreSword sword;
+    public static CoreDagger dagger;
+    public static CoreKatana katana;
+    public static CoreMachete machete;
+    public static CorePickaxe pickaxe;
+    public static CoreShovel shovel;
+    public static CoreAxe axe;
+    public static CoreHammer hammer;
+    public static CoreExcavator excavator;
+    public static CoreMattock mattock;
+    public static CoreSickle sickle;
+    public static CoreBow bow;
 
-    public static CoreSword sword = new CoreSword();
-    public static CoreDagger dagger = new CoreDagger();
-    public static CoreKatana katana = new CoreKatana();
-    public static CoreMachete machete = new CoreMachete();
-    public static CorePickaxe pickaxe = new CorePickaxe();
-    public static CoreShovel shovel = new CoreShovel();
-    public static CoreAxe axe = new CoreAxe();
-    public static CoreHammer hammer = new CoreHammer();
-    public static CoreExcavator excavator = new CoreExcavator();
-    public static CoreMattock mattock = new CoreMattock();
-    public static CoreSickle sickle = new CoreSickle();
-    public static CoreBow bow = new CoreBow();
-
-    public static CoreArmor helmet = new CoreArmor(EntityEquipmentSlot.HEAD, "helmet");
-    public static CoreArmor chestplate = new CoreArmor(EntityEquipmentSlot.CHEST, "chestplate");
-    public static CoreArmor leggings = new CoreArmor(EntityEquipmentSlot.LEGS, "leggings");
-    public static CoreArmor boots = new CoreArmor(EntityEquipmentSlot.FEET, "boots");
+    public static CoreArmor helmet;
+    public static CoreArmor chestplate;
+    public static CoreArmor leggings;
+    public static CoreArmor boots;
 
     private ModItems() {}
 
-    public static void registerAll(SRegistry reg) {
-        guideBook.giveBookOnFirstLogin = false;
+    public static void registerAll(RegistryEvent.Register<Item> event) {
+        if (!event.getName().equals(ForgeRegistries.ITEMS.getRegistryName())) return;
 
+        // Initializes, but does not register gear classes, fills maps
+        initializeGear();
+
+        blueprintPackage = register("blueprint_package", new BlueprintPackage(
+                new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints")));
+
+        // Blueprints/templates
+        registerBlueprints("blueprint", false);
+        registerBlueprints("template", true);
+        blueprintBook = register("blueprint_book", new BlueprintBook());
+
+        for (CraftingItems item : CraftingItems.values()) {
+            register(item.getName(), item.asItem());
+        }
+
+        flaxseeds = register("flaxseeds", new Flaxseeds());
+        netherBanana = register("nether_banana", new NetherBanana());
+
+        // Register gear classes
+        toolClasses.forEach((key, item) -> register(key, item.asItem()));
+        armorClasses.forEach((key, item) -> register(key, item.asItem()));
+
+        if (SilentGear.isDevBuild()) {
+            register("test_item", new TestItem());
+        }
+
+        registerOreDictEntries();
+        addSmeltingRecipes();
+    }
+
+    private static void initializeGear() {
         // Build gear maps now because blueprints need them
+        sword = new CoreSword();
+        dagger = new CoreDagger();
+        katana = new CoreKatana();
+        machete = new CoreMachete();
+        pickaxe = new CorePickaxe();
+        shovel = new CoreShovel();
+        axe = new CoreAxe();
+        hammer = new CoreHammer();
+        excavator = new CoreExcavator();
+        mattock = new CoreMattock();
+        sickle = new CoreSickle();
+        bow = new CoreBow();
+
+        helmet = new CoreArmor(EntityEquipmentSlot.HEAD, "helmet");
+        chestplate = new CoreArmor(EntityEquipmentSlot.CHEST, "chestplate");
+        leggings = new CoreArmor(EntityEquipmentSlot.LEGS, "leggings");
+        boots = new CoreArmor(EntityEquipmentSlot.FEET, "boots");
+
         toolClasses.put("sword", sword);
         toolClasses.put("dagger", dagger);
         toolClasses.put("katana", katana);
@@ -83,66 +124,37 @@ public final class ModItems {
 
         gearClasses.putAll(toolClasses);
         gearClasses.putAll(armorClasses);
-
-        IEnumItems.RegistrationHelper enumItems = new IEnumItems.RegistrationHelper(reg);
-
-        reg.registerItem(guideBook, "guide_book");
-        reg.registerItem(blueprintPackage, "blueprint_package");
-
-        // Blueprints/templates
-        registerBlueprints(reg, "blueprint", false);
-        registerBlueprints(reg, "template", true);
-        reg.registerItem(blueprintBook, "blueprint_book");
-
-        enumItems.registerItems(TipUpgrades.values());
-        enumItems.registerItems(MiscUpgrades.values());
-        enumItems.registerItems(CraftingItems.values());
-        reg.registerItem(flaxseeds, "flaxseeds");
-        reg.registerItem(netherBanana, "nether_banana");
-
-        reg.registerItem(toolHead, "tool_head");
-
-        // Tools/armor
-        toolClasses.forEach((key, item) -> reg.registerItem(item.getItem(), key));
-        armorClasses.forEach((key, item) -> reg.registerItem(item.getItem(), key));
-
-        if (SilentGear.instance.getBuildNum() == 0) {
-            reg.registerItem(new TestItem(), "test_item");
-        }
-
-        registerOreDictEntries();
-        addSmeltingRecipes();
     }
 
     private static void registerOreDictEntries() {
-        OreDictionary.registerOre("flint", Items.FLINT);
-        CraftingItems.registerOreDict();
+//        OreDictionary.registerOre("flint", Items.FLINT);
+//        CraftingItems.registerOreDict();
     }
 
     private static void addSmeltingRecipes() {
-        GameRegistry.addSmelting(CraftingItems.SINEW.getStack(), CraftingItems.DRIED_SINEW.getStack(), 0.1f);
+//        GameRegistry.addSmelting(CraftingItems.SINEW.getStack(), CraftingItems.DRIED_SINEW.getStack(), 0.1f);
     }
 
-    private static void registerBlueprints(SRegistry reg, String name, boolean singleUse) {
-        toolClasses.forEach((key, item) -> {
-            Blueprint blueprint = new Blueprint(singleUse, item,
-                    partList -> toolHead.getStack(key, partList));
+    private static <T extends Item> T register(String name, T item) {
+        ResourceLocation id = new ResourceLocation(SilentGear.MOD_ID, name);
+        item.setRegistryName(name);
+        ForgeRegistries.ITEMS.register(item);
+        return item;
+    }
+
+    private static void registerBlueprints(String name, boolean singleUse) {
+        gearClasses.forEach((key, item) -> {
+            Blueprint blueprint = new Blueprint(singleUse, item, item::construct);
             blueprints.add(blueprint);
-            reg.registerItem(blueprint, name + "_" + key);
-        });
-        armorClasses.forEach((key, item) -> {
-            Blueprint blueprint = new Blueprint(singleUse, item,
-                    partList -> item.construct(item.getItem(), partList));
-            blueprints.add(blueprint);
-            reg.registerItem(blueprint, name + "_" + key);
+            register(name + "_" + key, blueprint);
         });
 
         // Part blueprints (just rods right now, are any others needed?)
-        Item item = new Item();
-        if (!singleUse) {
-            item.setContainerItem(item);
-        }
-        reg.registerItem(item, name + "_rod");
-        OreDictionary.registerOre("blueprintRod", item);
+        Item item = new Item(new Item.Builder()/*.containerItem(singleUse ? null : item)*/);
+//        if (!singleUse) {
+//            item.setContainerItem(item);
+//        }
+        register(name + "_rod", item);
+//        OreDictionary.registerOre("blueprintRod", item);
     }
 }

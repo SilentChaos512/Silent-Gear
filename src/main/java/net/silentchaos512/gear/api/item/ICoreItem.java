@@ -2,12 +2,14 @@ package net.silentchaos512.gear.api.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.api.parts.PartMain;
+import net.minecraft.util.IItemProvider;
+import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.init.ModMaterials;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.item.ICustomEnchantColor;
@@ -19,35 +21,38 @@ import java.util.Set;
 /**
  * Interface for all equipment items, including tools and armor.
  */
-public interface ICoreItem extends IStatItem, ICustomEnchantColor {
+public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor {
     //region Item properties and construction
 
     default ItemStack construct(Item item, ItemStack... materials) {
-        List<ItemPartData> parts = NonNullList.create();
+        List<PartData> parts = PartDataList.of();
         for (ItemStack mat : materials) {
-            ItemPartData data = ItemPartData.fromStack(mat);
+            PartData data = PartData.from(mat);
             if (data != null)
                 parts.add(data);
         }
-        return construct(item, parts);
+        return construct(parts);
     }
 
-    default ItemStack construct(Item item, Collection<ItemPartData> parts) {
-        ItemStack result = new ItemStack(item);
+    default ItemStack construct(Collection<PartData> parts) {
+        ItemStack result = new ItemStack(this);
         GearData.writeConstructionParts(result, parts);
         GearData.recalculateStats(result);
         return result;
     }
 
-    default Item getItem() {
+    @Override
+    default Item asItem() {
         return (Item) this;
     }
 
     String getGearClass();
 
-    default ItemPartData getPrimaryPart(ItemStack stack) {
-        ItemPartData data = GearData.getPrimaryPart(stack);
-        return data != null ? data : ItemPartData.instance(ModMaterials.mainWood);
+    default PartData getPrimaryPart(ItemStack stack) {
+        PartData data = GearData.getPrimaryPart(stack);
+        if (data != null) return data;
+
+        return PartData.of(PartManager.tryGetFallback(PartType.MAIN));
     }
 
     //endregion
@@ -66,6 +71,7 @@ public interface ICoreItem extends IStatItem, ICustomEnchantColor {
 
     Set<ItemStat> getRelevantStats(ItemStack stack);
 
+    @Deprecated
     ConfigOptionEquipment getConfig();
 
     boolean matchesRecipe(Collection<ItemStack> parts);
@@ -78,14 +84,13 @@ public interface ICoreItem extends IStatItem, ICustomEnchantColor {
         return 1;
     }
 
-    default String getModelKey(ItemStack stack, int animationFrame, ItemPartData... parts) {
+    default String getModelKey(ItemStack stack, int animationFrame, PartData... parts) {
         StringBuilder builder = new StringBuilder(getGearClass());
         if (GearHelper.isBroken(stack))
             builder.append("_b");
 
         boolean foundMain = false;
-        for (ItemPartData part : parts) {
-            assert part.getPart() != null;
+        for (PartData part : parts) {
             if (part.getPart() instanceof PartMain) {
                 // Only first main matters
                 if (!foundMain) {
@@ -104,7 +109,7 @@ public interface ICoreItem extends IStatItem, ICustomEnchantColor {
         return getModelKey(stack, animationFrame, getRenderParts(stack));
     }
 
-    ItemPartData[] getRenderParts(ItemStack stack);
+    PartData[] getRenderParts(ItemStack stack);
 
     //endregion
 }

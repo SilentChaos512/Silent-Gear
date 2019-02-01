@@ -29,48 +29,42 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
-import net.silentchaos512.lib.block.ITileEntityBlock;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockSalvager extends BlockContainer implements ITileEntityBlock {
+public class BlockSalvager extends BlockContainer {
     public BlockSalvager() {
-        super(Material.IRON);
-        setHardness(4);
-        setResistance(20);
+        super(Builder.create(Material.IRON)
+                .hardnessAndResistance(4, 20)
+        );
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileSalvager();
     }
 
     @Override
-    public Class<? extends TileEntity> getTileEntityClass() {
-        return TileSalvager.class;
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileSalvager) {
-                playerIn.openGui(SilentGear.instance, GuiHandlerSilentGear.GuiType.SALVAGER.id,
-                        worldIn, pos.getX(), pos.getY(), pos.getZ());
+//                playerIn.openGui(SilentGear.instance, GuiHandlerSilentGear.GuiType.SALVAGER.id,
+//                        worldIn, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(SilentGear.i18n.subText(this, "desc"));
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TextComponentTranslation("block.silentgear.salvager.desc"));
     }
 
     @Override

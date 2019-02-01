@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
+import net.minecraft.util.IItemProvider;
 import net.silentchaos512.gear.SilentGear;
 
 import javax.annotation.Nullable;
@@ -30,7 +31,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 final class VanillaGearSalvage {
-    private static final Collection<Item> items = ImmutableList.of(
+    private static final Collection<Item> ITEMS = ImmutableList.of(
             Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD,
             Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE,
             Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL,
@@ -46,7 +47,7 @@ final class VanillaGearSalvage {
     private VanillaGearSalvage() {}
 
     static boolean isVanillaGear(ItemStack stack) {
-        return items.contains(stack.getItem());
+        return ITEMS.contains(stack.getItem());
     }
 
     static int getHeadCount(ItemStack stack) {
@@ -57,14 +58,14 @@ final class VanillaGearSalvage {
         if (item instanceof ItemPickaxe || item instanceof ItemAxe) return 3;
         if (item instanceof ItemArmor) {
             int multi = Objects.requireNonNull(item.getRegistryName()).getPath().startsWith("chainmail") ? 4 : 1;
-            EntityEquipmentSlot type = ((ItemArmor) item).armorType;
+            EntityEquipmentSlot type = item.getEquipmentSlot(stack);
             if (type == EntityEquipmentSlot.CHEST) return 8 * multi;
             if (type == EntityEquipmentSlot.FEET) return 4 * multi;
             if (type == EntityEquipmentSlot.HEAD) return 5 * multi;
             if (type == EntityEquipmentSlot.LEGS) return 7 * multi;
         }
 
-        SilentGear.log.warn("Tried to salvage '{}' as vanilla gear, but could not identify item type", stack);
+        SilentGear.LOGGER.warn("Tried to salvage '{}' as vanilla gear, but could not identify item type", stack);
         return 0;
     }
 
@@ -76,17 +77,17 @@ final class VanillaGearSalvage {
     }
 
     @Nullable
-    static Item getHeadItem(ItemStack stack) {
+    static IItemProvider getHeadItem(ItemStack stack) {
         String name = Objects.requireNonNull(stack.getItem().getRegistryName()).getPath();
         if (name.startsWith("diamond")) return Items.DIAMOND;
         if (name.startsWith("golden")) return Items.GOLD_INGOT;
         if (name.startsWith("iron")) return Items.IRON_INGOT;
-        if (name.startsWith("stone")) return Item.getItemFromBlock(Blocks.COBBLESTONE);
-        if (name.startsWith("wooden")) return Item.getItemFromBlock(Blocks.PLANKS);
+        if (name.startsWith("stone")) return Blocks.COBBLESTONE;
+        if (name.startsWith("wooden")) return Blocks.OAK_PLANKS;
         if (name.startsWith("leather")) return Items.LEATHER;
         if (name.startsWith("chainmail")) return Items.IRON_NUGGET;
 
-        SilentGear.log.warn("Don't know salvage head part for vanilla gear '{}'", stack);
+        SilentGear.LOGGER.warn("Don't know salvage head part for vanilla gear '{}'", stack);
         return null;
     }
 }

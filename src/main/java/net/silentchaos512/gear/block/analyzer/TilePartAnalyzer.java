@@ -26,19 +26,22 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.PartMain;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.tile.TileSidedInventorySL;
-import net.silentchaos512.lib.util.TimeHelper;
+import net.silentchaos512.lib.util.TimeUtils;
 
+import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
 public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable {
-    static final int BASE_ANALYZE_TIME = TimeHelper.ticksFromSeconds(5);
+    static final int BASE_ANALYZE_TIME = TimeUtils.ticksFromSeconds(5);
 
     static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
@@ -49,12 +52,16 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     int progress = 0;
     private boolean requireClientSync = false;
 
+    TilePartAnalyzer() {
+        super(null); // FIXME
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (world.isRemote) return;
 
         ItemStack input = getInputStack();
-        ItemPart part = PartRegistry.get(input);
+        IGearPart part = PartManager.from(input);
 
         if (part != null) {
             // Analyzing
@@ -104,10 +111,15 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
         return INVENTORY_SIZE;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return getInputStack().isEmpty();
+    }
+
     private ItemStack getInputStack() {
         for (int slot : SLOTS_INPUT) {
             ItemStack stack = getStackInSlot(slot);
-            if (PartRegistry.get(stack) instanceof PartMain && MaterialGrade.fromStack(stack) == MaterialGrade.NONE) {
+            if (PartManager.from(stack) instanceof PartMain && MaterialGrade.fromStack(stack) == MaterialGrade.NONE) {
                 return stack;
             }
         }
@@ -150,29 +162,28 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound tags = new NBTTagCompound();
-        writeSyncVars(tags, SyncVariable.Type.PACKET);
+        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
 
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
-            NBTTagCompound itemTags = input.writeToNBT(new NBTTagCompound());
+            NBTTagCompound itemTags = input.serializeNBT();
             tags.setTag("input_item", itemTags);
         }
 
-        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tags);
+        return new SPacketUpdateTileEntity(pos, 0, tags);
     }
 
     @Override
     public NBTTagCompound getUpdateTag() {
         NBTTagCompound tags = super.getUpdateTag();
-        writeSyncVars(tags, SyncVariable.Type.PACKET);
+        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
 
         NBTTagList tagList = new NBTTagList();
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
-            NBTTagCompound itemTags = new NBTTagCompound();
+            NBTTagCompound itemTags = input.serializeNBT();
             itemTags.setByte("Slot", (byte) INPUT_SLOT);
-            input.writeToNBT(itemTags);
-            tagList.appendTag(itemTags);
+            tagList.add(itemTags);
         }
         tags.setTag("Items", tagList);
         return tags;
@@ -182,10 +193,10 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         super.onDataPacket(net, packet);
         NBTTagCompound tags = packet.getNbtCompound();
-        readSyncVars(tags);
+        SyncVariable.Helper.readSyncVars(this, tags);
 
         if (tags.hasKey("input_item")) {
-            setInventorySlotContents(INPUT_SLOT, new ItemStack(tags.getCompoundTag("input_item")));
+            setInventorySlotContents(INPUT_SLOT, ItemStack.read(tags.getCompound("input_item")));
         } else {
             setInventorySlotContents(INPUT_SLOT, ItemStack.EMPTY);
         }
@@ -208,16 +219,27 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (grade != MaterialGrade.NONE) return false;
-        return PartRegistry.get(stack) instanceof PartMain;
+        return PartManager.from(stack) instanceof PartMain;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index != INPUT_SLOT;
+    }
+
+    @Override
+    public ITextComponent getName() {
+        return new TextComponentTranslation("block.silentgear.part_analyzer");
+    }
+
+    @Nullable
+    @Override
+    public ITextComponent getCustomName() {
+        return null;
     }
 }

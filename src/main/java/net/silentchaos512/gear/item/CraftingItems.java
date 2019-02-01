@@ -21,24 +21,21 @@ package net.silentchaos512.gear.item;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.lib.item.IEnumItems;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 
-public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
+public enum CraftingItems implements IItemProvider, IStringSerializable {
     BLUEPRINT_PAPER,
     UPGRADE_BASE,
     ADVANCED_UPGRADE_BASE,
-    ROUGH_ROD,
-    STONE_ROD,
-    IRON_ROD,
-    NETHERWOOD_STICK,
     CRIMSON_IRON_INGOT,
     CRIMSON_STEEL_INGOT,
     DIAMOND_SHARD,
@@ -50,7 +47,25 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
     FLAX_FIBER,
     FLAX_STRING,
     BLACK_DYE,
-    BLUE_DYE;
+    BLUE_DYE,
+    // Rods
+    ROUGH_ROD,
+    STONE_ROD,
+    IRON_ROD,
+    NETHERWOOD_STICK,
+    // Tip Upgrades
+    IRON_TIPPED_UPGRADE,
+    GOLD_TIPPED_UPGRADE,
+    DIAMOND_TIPPED_UPGRADE,
+    EMERALD_TIPPED_UPGRADE,
+    REDSTONE_COATED_UPGRADE,
+    GLOWSTONE_COATED_UPGRADE,
+    LAPIS_COATED_UPGRADE,
+    QUARTZ_TIPPED_UPGRADE,
+    // Misc Upgrades
+    SPOON_UPGRADE,
+    RED_CARD_UPGRADE
+    ;
 
     private final Item item;
 
@@ -58,18 +73,17 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
         this.item = new ItemInternal();
     }
 
-    @Nonnull
     @Override
-    public CraftingItems getEnum() {
-        return this;
-    }
-
-    @Nonnull
-    @Override
-    public Item getItem() {
+    public Item asItem() {
         return this.item;
     }
 
+    @Override
+    public String getName() {
+        return name().toLowerCase(Locale.ROOT);
+    }
+
+    /*
     public static void registerOreDict() {
         OreDictionary.registerOre("dyeBlack", BLACK_DYE.item);
         OreDictionary.registerOre("dyeBlue", BLUE_DYE.item);
@@ -84,14 +98,16 @@ public enum CraftingItems implements IEnumItems<CraftingItems, Item> {
         OreDictionary.registerOre("stickWood", NETHERWOOD_STICK.item);
         OreDictionary.registerOre("string", FLAX_STRING.item);
     }
+    */
 
     private static final class ItemInternal extends Item {
+        ItemInternal() {
+            super(new Builder().group(SilentGear.ITEM_GROUP));
+        }
+
         @Override
-        public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-            String regName = Objects.requireNonNull(getRegistryName()).getPath();
-            String key = SilentGear.i18n.getKey("item", regName, "desc");
-            if (SilentGear.i18n.hasKey(key))
-                tooltip.add(SilentGear.i18n.translate(key));
+        public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+            tooltip.add(new TextComponentTranslation(getTranslationKey()+ ".desc"));
         }
     }
 }

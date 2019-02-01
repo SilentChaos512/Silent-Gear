@@ -18,24 +18,8 @@
 
 package net.silentchaos512.gear.crafting.recipe;
 
-import com.google.gson.JsonObject;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.World;
-import net.minecraftforge.common.crafting.IRecipeFactory;
-import net.minecraftforge.common.crafting.JsonContext;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.IUpgradePart;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.recipe.RecipeBaseSL;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class UpgradeGear implements IRecipeFactory {
+public class UpgradeGear /*implements IRecipeFactory*/ {
+    /*
     @Override
     public IRecipe parse(JsonContext context, JsonObject json) {
         return new Recipe();
@@ -92,4 +76,5 @@ public class UpgradeGear implements IRecipeFactory {
             return foundTool && foundUpgrade;
         }
     }
+    */
 }

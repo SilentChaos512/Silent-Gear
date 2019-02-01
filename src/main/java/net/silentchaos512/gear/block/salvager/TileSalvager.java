@@ -25,24 +25,29 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.tile.TileSidedInventorySL;
 import net.silentchaos512.lib.util.GameUtil;
 import net.silentchaos512.lib.util.MathUtils;
-import net.silentchaos512.lib.util.TimeHelper;
+import net.silentchaos512.lib.util.TimeUtils;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
 public class TileSalvager extends TileSidedInventorySL implements ITickable {
-    static final int BASE_WORK_TIME = TimeHelper.ticksFromSeconds(GameUtil.isDeobfuscated() ? 2 : 10);
+    static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(GameUtil.isDeobfuscated() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
     private static final int[] SLOTS_OUTPUT = IntStream.rangeClosed(1, 18).toArray();
@@ -51,13 +56,17 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     @SyncVariable(name = "progress")
     int progress = 0;
 
+    public TileSalvager() {
+        super(null); // FIXME
+    }
+
     @Override
     public int getSizeInventory() {
         return INVENTORY_SIZE;
     }
 
     @Override
-    public void update() {
+    public void tick() {
         if (world.isRemote) return;
 
         boolean requiresClientSync = false;
@@ -75,7 +84,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
                     if (slot > 0) {
                         setInventorySlotContents(slot, stack);
                     } else {
-                        SilentGear.log.warn("Item lost in salvager: " + stack);
+                        SilentGear.LOGGER.warn("Item lost in salvager: {}", stack);
                     }
                 }
 
@@ -97,7 +106,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
 
     private Collection<ItemStack> getSalvagedPartsWithChance(ItemStack stack) {
         double lossRate = getLossRate(stack);
-        SilentGear.log.debug("Loss rate for '{}': {}", stack, lossRate);
+        SilentGear.LOGGER.debug("Loss rate for '{}': {}", stack, lossRate);
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
 
         for (ItemStack part : getSalvageableParts(stack)) {
@@ -118,11 +127,12 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
 
     private double getLossRate(ItemStack stack) {
         int maxDamage = stack.getMaxDamage();
+        Double min = Config.GENERAL.salvagerMinLossRate.get();
         if (maxDamage == 0) {
-            return Config.salvagerMinLossRate;
+            return min;
         }
-        double ratio = (double) stack.getItemDamage() / maxDamage;
-        return Config.salvagerMinLossRate + ratio * (Config.salvagerMaxLossRate - Config.salvagerMinLossRate);
+        double ratio = (double) stack.getDamage() / maxDamage;
+        return min + ratio * (Config.GENERAL.salvagerMaxLossRate.get() - min);
     }
 
     private Collection<ItemStack> getSalvageableParts(ItemStack stack) {
@@ -141,12 +151,12 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
         ConfigOptionEquipment config = item.getConfig();
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
 
-        for (ItemPartData part : GearData.getConstructionParts(stack)) {
-            if (part.isRod()) {
+        for (PartData part : GearData.getConstructionParts(stack)) {
+            if (part.getType() == PartType.ROD) {
                 ItemStack rod = part.getCraftingItem().copy();
                 rod.setCount(Math.max(1, config.getRodCount()));
                 builder.add(rod);
-            } else if (part.isMain()) {
+            } else if (part.getType() == PartType.MAIN) {
                 ItemStack craftingItem = part.getCraftingItem().copy();
                 // TODO: Add a chance of grade loss?
                 part.getGrade().setGradeOnStack(craftingItem);
@@ -162,7 +172,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     private static Collection<ItemStack> getSalvageFromVanillaItem(ItemStack stack) {
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
 
-        Item headItem = VanillaGearSalvage.getHeadItem(stack);
+        IItemProvider headItem = VanillaGearSalvage.getHeadItem(stack);
         int headCount = VanillaGearSalvage.getHeadCount(stack);
         if (headItem != null && headCount > 0) {
             builder.add(new ItemStack(headItem, headCount));
@@ -206,6 +216,11 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     }
 
     @Override
+    public boolean isEmpty() {
+        return getInputStack().isEmpty();
+    }
+
+    @Override
     public int getField(int id) {
         switch (id) {
             case 0:
@@ -232,7 +247,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     @Override
     public NBTTagCompound getUpdateTag() {
         NBTTagCompound tags = super.getUpdateTag();
-        writeSyncVars(tags, SyncVariable.Type.PACKET);
+        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
         return tags;
     }
 
@@ -261,7 +276,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
@@ -282,5 +297,16 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
             if (index == k)
                 return true;
         return false;
+    }
+
+    @Override
+    public ITextComponent getName() {
+        return new TextComponentTranslation("block.silentgear.salvager");
+    }
+
+    @Nullable
+    @Override
+    public ITextComponent getCustomName() {
+        return null;
     }
 }

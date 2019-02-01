@@ -20,30 +20,35 @@ package net.silentchaos512.gear.api.parts;
 
 import lombok.Getter;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.parts.type.*;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public final class PartType {
     private static final Map<String, PartType> VALUES = new HashMap<>();
 
-    public static final PartType BINDING = create("binding", "b", PartBinding::new);
-    public static final PartType BOWSTRING = create("bowstring", "B", PartBowstring::new);
-    public static final PartType GRIP = create("grip", "G", PartGrip::new);
-    public static final PartType HIGHLIGHT = create("highlight", "h", PartHighlight::new);
-    public static final PartType MAIN = create("main", "M", PartMain::new);
-    public static final PartType MISC_UPGRADE = create("misc_upgrade", "U", PartUpgrade::new);
-    public static final PartType ROD = create("rod", "R", PartRod::new);
-    public static final PartType TIP = create("tip", "T", PartTip::new);
+    public static final PartType BINDING = create("binding", "b", createSerializer("binding", PartBinding::new));
+    public static final PartType BOWSTRING = create("bowstring", "B", createSerializer("bowstring", PartBowstring::new));
+    public static final PartType GRIP = create("grip", "G", createSerializer("grip", PartGrip::new));
+    public static final PartType HIGHLIGHT = create("highlight", "h", createSerializer("highlight", PartHighlight::new));
+    public static final PartType MAIN = create("main", "M", createSerializer("main", PartMain::new));
+    public static final PartType MISC_UPGRADE = create("misc_upgrade", "U", createSerializer("misc_upgrade", PartUpgrade::new));
+    public static final PartType ROD = create("rod", "R", createSerializer("rod", PartRod::new));
+    public static final PartType TIP = create("tip", "T", createSerializer("tip", PartTip::new));
 
-    public static PartType create(String name, String debugSymbol, BiFunction<ResourceLocation, PartOrigins, ItemPart> partConstructor) {
+    public static PartType create(String name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
         if (VALUES.containsKey(name))
             throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", name));
 
-        PartType type = new PartType(name, debugSymbol, partConstructor);
+        PartType type = new PartType(name, debugSymbol, serializer);
         VALUES.put(name, type);
         return type;
     }
@@ -59,21 +64,29 @@ public final class PartType {
 
     @Getter private final String name;
     @Getter private final String debugSymbol;
-    private final BiFunction<ResourceLocation, PartOrigins, ItemPart> partConstructor;
+    private final IPartSerializer<? extends IGearPart> serializer;
 
-    private PartType(String name, String debugSymbol, BiFunction<ResourceLocation, PartOrigins, ItemPart> partConstructor) {
+    private PartType(String name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
         this.name = name;
         this.debugSymbol = debugSymbol;
-        this.partConstructor = partConstructor;
+        this.serializer = serializer;
     }
 
-    public ItemPart construct(ResourceLocation registryName, PartOrigins origin) {
-        return this.partConstructor.apply(registryName, origin);
+    public ITextComponent getDisplayName(int tier) {
+        return new TextComponentTranslation("part.silentgear.type." + name, tier);
+    }
+
+    public IPartSerializer<? extends IGearPart> getSerializer() {
+        return serializer;
     }
 
     @Override
     public String toString() {
         return "PartType[" + debugSymbol + "]{" +
                 "name='" + name + "'}";
+    }
+
+    private static <T extends AbstractGearPart> IPartSerializer<T> createSerializer(String id, Function<ResourceLocation, T> function) {
+        return new AbstractGearPart.Serializer<>(new ResourceLocation(SilentGear.MOD_ID, id), function);
     }
 }

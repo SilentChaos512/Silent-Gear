@@ -3,25 +3,26 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.lib.client.key.KeyTrackerSL;
+import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.lib.item.IColoredItem;
 import net.silentchaos512.lib.util.Color;
-import net.silentchaos512.lib.util.I18nHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,9 +43,11 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
     private final Function<PartDataList, ItemStack> craftingHandler;
 
     public Blueprint(boolean singleUse, @Nonnull ICoreItem gearItem, @Nonnull Function<PartDataList, ItemStack> craftingHandler) {
+        super(new Builder().group(SilentGear.ITEM_GROUP));
         this.singleUse = singleUse;
         if (!singleUse) {
-            setContainerItem(this);
+            // FIXME
+//            setContainerItem(this);
             ITEMS_BLUEPRINT.put(gearItem.getGearClass(), this);
         } else {
             ITEMS_TEMPLATE.put(gearItem.getGearClass(), this);
@@ -82,10 +85,10 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
             return ItemStack.EMPTY;
 
         final PartDataList partList = PartDataList.from(parts);
-        for (ItemPartData part : partList) {
+        for (PartData part : partList) {
             // Block blacklisted parts
-            if (part.getPart().isBlacklisted())
-                return ItemStack.EMPTY;
+//            if (part.getPart().isBlacklisted())
+//                return ItemStack.EMPTY;
         }
 
         return craftingHandler.apply(partList);
@@ -102,69 +105,83 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
     }
 
     public boolean isDisabled() {
-        return singleUse && !Config.blueprintTypes.allowTemplate() || !singleUse && !Config.blueprintTypes.allowBlueprint();
+        return false; // FIXME
+        /*
+        BlueprintType config = Config.GENERAL.blueprintTypes.get();
+        return singleUse && !config.allowTemplate()
+                || !singleUse && !config.allowBlueprint();
+        */
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
-        I18nHelper i18n = SilentGear.i18n;
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
         String itemClass = this.gearItem.getGearClass();
 
         // Output item class
-        String key = this.gearItem.getItem().getTranslationKey() + ".name";
-        list.add(TextFormatting.AQUA + i18n.translate(key));
+        list.add(gearItem.asItem().getName().applyTextStyle(TextFormatting.AQUA));
         // Flavor text
-        if (this.gearItem instanceof ICoreTool)
-            list.add(TextFormatting.ITALIC + i18n.itemSubText(NAME, this.gearItem.getGearClass() + ".desc"));
+        if (this.gearItem instanceof ICoreTool) {
+            list.add(new TextComponentTranslation("item.silentgear.blueprint." + gearItem.getGearClass() + ".desc")
+                    .applyTextStyle(TextFormatting.ITALIC));
+        }
 
         // Material required for crafting
-        int amount = this.gearItem.getConfig().getHeadCount();
-        list.add(i18n.itemSubText(NAME, "materialAmount", amount));
+        list.add(new TextComponentTranslation("item.silentgear.blueprint.materialAmount",
+                this.gearItem.getConfig().getHeadCount()));
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            list.add(TextFormatting.DARK_RED + i18n.itemSubText(NAME, "disabled"));
+            list.add(new TextComponentTranslation("item.silentgear.blueprint.disabled")
+                    .applyTextStyle(TextFormatting.DARK_RED));
         } else if (this.singleUse) {
-            list.add(TextFormatting.RED + i18n.itemSubText(NAME, "singleUse"));
+            list.add(new TextComponentTranslation("item.silentgear.blueprint.singleUse")
+                    .applyTextStyle(TextFormatting.RED));
         } else {
-            list.add(TextFormatting.GREEN + i18n.itemSubText(NAME, "multiUse"));
+            list.add(new TextComponentTranslation("item.silentgear.blueprint.multiUse")
+                    .applyTextStyle(TextFormatting.GREEN));
         }
 
         // Is mixed material allowed in this GUI?
-        if (Minecraft.getMinecraft().currentScreen instanceof GuiCraftingStation) {
-            list.add(TextFormatting.GREEN + i18n.itemSubText(NAME, "canMix"));
+        if (Minecraft.getInstance().currentScreen instanceof GuiCraftingStation) {
+            list.add(new TextComponentTranslation("item.silentgear.blueprint.canMix")
+                    .applyTextStyle(TextFormatting.GREEN));
         } else {
-            list.add(TextFormatting.RED + i18n.itemSubText(NAME, "noMixing"));
+            list.add(new TextComponentTranslation("item.silentgear.blueprint.noMixing")
+                    .applyTextStyle(TextFormatting.RED));
         }
 
         // Item recipe
         if (this.gearItem instanceof ICoreTool) {
-            list.add("");
-            if (KeyTrackerSL.isAltDown()) {
-                String locToolName = i18n.itemSubText(itemClass, "name");
-                list.add(TextFormatting.YELLOW + i18n.itemSubText(NAME, "itemRecipe1", locToolName));
-                String toolHeadName = i18n.itemSubText("tool_head", itemClass);
-                list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", 1, toolHeadName));
+            list.add(new TextComponentString(""));
+            if (KeyTracker.isAltDown()) {
+                ITextComponent textItemClass = new TextComponentTranslation("item.silentgear.blueprint." + itemClass);
+                ITextComponent textLine1 = new TextComponentTranslation("item.silentgear.blueprint.blueprint.itemRecipe1", textItemClass);
+                list.add(textLine1.applyTextStyle(TextFormatting.YELLOW));
+
+                ITextComponent textToolHead = new TextComponentTranslation("item.silentgear.blueprint.tool_head." + itemClass);
+                ITextComponent textLine2 = new TextComponentTranslation("item.silentgear.blueprint.blueprint.itemRecipe2", 1, textToolHead);
+                list.add(new TextComponentString("  ").appendSibling(textLine2.applyTextStyle(TextFormatting.YELLOW)));
 
                 for (PartType type : PartType.getValues()) {
                     if (type != PartType.MAIN) {
                         final int required = this.gearItem.getConfig().getCraftingPartCount(type);
                         if (required > 0) {
-                            String partName = i18n.translate("part", "type." + type.getName());
-                            list.add("  " + i18n.itemSubText(NAME, "itemRecipe2", required, partName));
+                            ITextComponent textName = type.getDisplayName(0);
+                            ITextComponent text = new TextComponentTranslation("item.silentgear.blueprint.itemRecipe2", required, textName);
+                            list.add(new TextComponentString("  ").appendSibling(text));
                         }
                     }
                 }
             } else {
-                list.add(TextFormatting.YELLOW + i18n.itemSubText(NAME, "altForRecipe"));
+                list.add(new TextComponentTranslation("item.silentgear.blueprint.altForRecipe")
+                        .applyTextStyle(TextFormatting.YELLOW));
             }
         }
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (!isDisabled())
-            super.getSubItems(tab, items);
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (!isDisabled()) super.fillItemGroup(group, items);
     }
 
     @Override

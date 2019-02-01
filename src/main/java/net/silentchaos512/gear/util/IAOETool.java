@@ -30,15 +30,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.lib.util.StackHelper;
+import net.silentchaos512.gear.Config;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,7 +53,7 @@ public interface IAOETool {
      * The tool class of the item (pickaxe, shovel, axe)
      */
     @Nonnull
-    String getAOEToolClass();
+    ToolType getAOEToolClass();
 
     /**
      * Call the item's rayTrace method inside this.
@@ -109,14 +110,14 @@ public interface IAOETool {
 
     default boolean isEffectiveOnBlock(ItemStack stack, World world, BlockPos pos, IBlockState state) {
         // The Forge.canToolHarvestBlock method seems to be very unreliable...
-        return stack.getItem().canHarvestBlock(state, stack) || ForgeHooks.canToolHarvestBlock(world, pos, stack);
+        return stack.getItem().canHarvestBlock(stack, state) || ForgeHooks.canToolHarvestBlock(world, pos, stack);
     }
 
     default void attemptAddExtraBlock(World world, IBlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
         final IBlockState state2 = world.getBlockState(pos2);
         if (!world.isAirBlock(pos2)
                 && BreakHandler.areBlocksSimilar(state1, state2)
-                && (state2.getBlock().isToolEffective(getAOEToolClass(), state2) || stack.getItem().canHarvestBlock(state2, stack))) {
+                && (state2.getBlock().isToolEffective(state2, getAOEToolClass()) || stack.getItem().canHarvestBlock(stack, state2))) {
             list.add(pos2);
         }
     }
@@ -141,24 +142,24 @@ public interface IAOETool {
             RayTraceResult rt = item.rayTraceBlocks(world, player);
             IBlockState stateOriginal = world.getBlockState(pos);
 
-            if (rt != null && rt.typeOfHit == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal)) {
+            if (rt != null && rt.type == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal)) {
                 EnumFacing side = rt.sideHit;
                 List<BlockPos> extraBlocks = item.getExtraBlocks(world, rt, player, tool);
 
                 for (BlockPos pos2 : extraBlocks) {
                     IBlockState state = world.getBlockState(pos2);
-                    if (!world.isBlockLoaded(pos2) || !player.canPlayerEdit(pos2, side, tool) || !(state.getBlock().canHarvestBlock(world, pos2, player)))
+                    if (!world.isBlockLoaded(pos2) || !player.canPlayerEdit(pos2, side, tool) || !(state.canHarvestBlock(world, pos2, player)))
                         continue;
 
-                    if (player.capabilities.isCreativeMode) {
+                    if (player.abilities.isCreativeMode) {
                         state.getBlock().onBlockHarvested(world, pos2, state, player);
-                        if (state.getBlock().removedByPlayer(state, world, pos2, player, false))
+                        if (state.getBlock().removedByPlayer(state, world, pos2, player, false, state.getFluidState()))
                             state.getBlock().onPlayerDestroy(world, pos2, state);
                     } else {
                         int xp = ForgeHooks.onBlockBreakEvent(world, ((EntityPlayerMP) player).interactionManager.getGameType(), (EntityPlayerMP) player, pos2);
                         state.getBlock().onBlockHarvested(world, pos2, state, player);
                         tool.getItem().onBlockDestroyed(tool, world, state, pos2, player);
-                        if (state.getBlock().removedByPlayer(state, world, pos2, player, true)) {
+                        if (state.getBlock().removedByPlayer(state, world, pos2, player, true, state.getFluidState())) {
                             state.getBlock().onPlayerDestroy(world, pos2, state);
                             state.getBlock().harvestBlock(world, player, pos2, state, world.getTileEntity(pos2), tool);
                             state.getBlock().dropXpOnBlockBreak(world, pos2, xp);
@@ -178,20 +179,12 @@ public interface IAOETool {
             ORE_BLOCKS.clear();
 
             for (Block block : ForgeRegistries.BLOCKS) {
-                if (block instanceof BlockOre) {
+                if (block instanceof BlockOre || Tags.Blocks.ORES.contains(block)) {
                     ORE_BLOCKS.add(block);
-                } else {
-                    ItemStack blockStack = new ItemStack(block);
-                    for (String oreName : StackHelper.getOreNames(blockStack)) {
-                        if (oreName.startsWith("ore")) {
-                            ORE_BLOCKS.add(block);
-                            break;
-                        }
-                    }
                 }
             }
 
-            SilentGear.log.info("IAOETool: Rebuilt ore block set, contains {} items", ORE_BLOCKS.size());
+            SilentGear.LOGGER.info("IAOETool: Rebuilt ore block set, contains {} items", ORE_BLOCKS.size());
         }
 
         /**
@@ -208,7 +201,9 @@ public interface IAOETool {
             Block block2 = state2.getBlock();
             boolean isOre1 = ORE_BLOCKS.contains(block1);
             boolean isOre2 = ORE_BLOCKS.contains(block2);
-            MatchMode mode = isOre1 && isOre2 ? Config.aoeToolOreMode : Config.aoeToolMatchMode;
+            MatchMode mode = isOre1 && isOre2
+                    ? Config.GENERAL.matchModeOres.get()
+                    : Config.GENERAL.matchModeStandard.get();
 
             if (mode == MatchMode.LOOSE || block1 == block2)
                 return true;
@@ -223,7 +218,7 @@ public interface IAOETool {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Side.CLIENT)
+    @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
     final class HighlightHandler {
         private HighlightHandler() {}
 
@@ -231,7 +226,7 @@ public interface IAOETool {
         public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
             EntityPlayer player = event.getPlayer();
 
-            if (player != null && event.getSubID() == 0 && event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK) {
+            if (player != null && event.getSubID() == 0 && event.getTarget().type == RayTraceResult.Type.BLOCK) {
                 ItemStack stack = player.getHeldItemMainhand();
 
                 if (stack.getItem() instanceof IAOETool) {

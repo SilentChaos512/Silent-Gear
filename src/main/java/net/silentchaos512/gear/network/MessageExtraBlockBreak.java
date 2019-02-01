@@ -1,10 +1,6 @@
 package net.silentchaos512.gear.network;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.lib.network.MessageSL;
 
 public class MessageExtraBlockBreak extends MessageSL {
@@ -31,6 +27,7 @@ public class MessageExtraBlockBreak extends MessageSL {
         }
     }
 
+    /*
     @Override
     public void fromBytes(ByteBuf buf) {
         super.fromBytes(buf);
@@ -63,4 +60,5 @@ public class MessageExtraBlockBreak extends MessageSL {
 
         return null;
     }
+    */
 }

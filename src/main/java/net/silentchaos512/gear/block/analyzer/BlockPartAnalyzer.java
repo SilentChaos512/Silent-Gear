@@ -18,52 +18,41 @@
 
 package net.silentchaos512.gear.block.analyzer;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
-import net.silentchaos512.lib.block.ITileEntityBlock;
-import net.silentchaos512.lib.registry.ICustomModel;
 
 import javax.annotation.Nullable;
 
-public class BlockPartAnalyzer extends BlockContainer implements ITileEntityBlock, ICustomModel {
-
-    private static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.4, 1);
+public class BlockPartAnalyzer extends BlockContainer {
+    private static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
+    private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 7, 16);
 
     public BlockPartAnalyzer() {
-        super(Material.IRON);
-        setHardness(4f);
-        setResistance(20f);
+        super(Builder.create(Material.IRON)
+                .hardnessAndResistance(5, 30)
+        );
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TilePartAnalyzer();
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileEntityClass() {
-        return TilePartAnalyzer.class;
     }
 
     @Override
@@ -72,64 +61,33 @@ public class BlockPartAnalyzer extends BlockContainer implements ITileEntityBloc
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TilePartAnalyzer) {
-                playerIn.openGui(SilentGear.instance, GuiHandlerSilentGear.GuiType.PART_ANALYZER.id,
-                        worldIn, pos.getX(), pos.getY(), pos.getZ());
+//                player.openGui(SilentGear.instance, GuiHandlerSilentGear.GuiType.PART_ANALYZER.id,
+//                        worldIn, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;
     }
 
+    @Nullable
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-        IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer);
-        return state.withProperty(FACING, placer.getHorizontalFacing());
+    public IBlockState getStateForPlacement(BlockItemUseContext context) {
+        return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
     }
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         EnumFacing side = placer.getHorizontalFacing().getOpposite();
-        worldIn.setBlockState(pos, state.withProperty(FACING, side), 2);
+        worldIn.setBlockState(pos, state.with(FACING, side), 2);
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getHorizontalIndex();
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
-    }
-
-    @Nullable
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return BOUNDING_BOX;
-    }
-
-    @Override
-    public boolean isTranslucent(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isFullBlock(IBlockState state) {
-        return false;
+    public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+        return VOXEL_SHAPE;
     }
 
     @Override
@@ -138,16 +96,7 @@ public class BlockPartAnalyzer extends BlockContainer implements ITileEntityBloc
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
         return face == EnumFacing.DOWN;
-    }
-
-    @Override
-    public void registerModels() {
-        Item item = Item.getItemFromBlock(this);
-        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-            ModelResourceLocation model = new ModelResourceLocation(SilentGear.RESOURCE_PREFIX + "part_analyzer", "facing=" + facing.getName());
-            ModelLoader.setCustomModelResourceLocation(item, facing.getHorizontalIndex(), model);
-        }
     }
 }

@@ -1,44 +1,46 @@
 package net.silentchaos512.gear.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.lib.util.Color;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class ColorHandlers {
-
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+public final class ColorHandlers {
     public static Map<String, Integer[]> gearColorCache = new HashMap<>();
 
-    public static void init() {
-        ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
+    private ColorHandlers() {}
 
-        List<Item> gearItems = new ArrayList<>();
-        gearItems.addAll(ModItems.toolClasses.values().stream().map(ICoreItem::getItem).collect(Collectors.toList()));
-        gearItems.addAll(ModItems.armorClasses.values().stream().map(ICoreItem::getItem).collect(Collectors.toList()));
+    @SubscribeEvent
+    public static void onItemColors(ColorHandlerEvent.Item event) {
+        ItemColors itemColors = event.getItemColors();
+        if (itemColors == null) {
+            SilentGear.LOGGER.error("ItemColors is null?", new IllegalStateException("wat?"));
+            return;
+        }
 
         // Tools/Armor - mostly used for broken color, but colors could be changed at any time
-        itemColors.registerItemColorHandler((stack, tintIndex) -> {
-            if (!(stack.getItem() instanceof ICoreItem) || tintIndex < 0)
-                return 0xFFFFFF;
+        itemColors.register(ColorHandlers::getGearLayerColor, ModItems.gearClasses.values()
+                .stream()
+                .map(ICoreItem::asItem).toArray(Item[]::new)
+        );
+    }
 
-            String modelKey = GearData.getCachedModelKey(stack, 0);
-            Integer[] colors = gearColorCache.get(modelKey);
-            return colors != null && tintIndex < colors.length ? colors[tintIndex] : 0xFFFFFF;
-        }, gearItems.toArray(new Item[0]));
+    private static int getGearLayerColor(ItemStack stack, int tintIndex) {
+        if (!(stack.getItem() instanceof ICoreItem) || tintIndex < 0) return Color.VALUE_WHITE;
 
-        // Tool Heads
-        itemColors.registerItemColorHandler((stack, tintIndex) -> {
-            String modelKey = ModItems.toolHead.getModelKey(stack);
-            Integer[] colors = gearColorCache.get(modelKey);
-            return colors != null && tintIndex < colors.length ? colors[tintIndex] : 0xFFFFFF;
-        }, ModItems.toolHead);
+        String modelKey = GearData.getCachedModelKey(stack, 0);
+        Integer[] colors = gearColorCache.get(modelKey);
+        return colors != null && tintIndex < colors.length ? colors[tintIndex] : Color.VALUE_WHITE;
     }
 }

@@ -5,22 +5,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.network.MessageExtraBlockBreak;
 import net.silentchaos512.gear.util.IAOETool;
 
-import java.util.List;
-
 public class WorldListener implements IWorldEventListener {
-
     private final MinecraftServer server;
     private World world;
 
@@ -30,7 +26,7 @@ public class WorldListener implements IWorldEventListener {
     }
 
     @Override
-    public void notifyBlockUpdate(World worldIn, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
+    public void notifyBlockUpdate(IBlockReader worldIn, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
     }
 
     @Override
@@ -50,11 +46,11 @@ public class WorldListener implements IWorldEventListener {
     }
 
     @Override
-    public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+    public void addParticle(IParticleData particleData, boolean alwaysRender, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
     }
 
     @Override
-    public void spawnParticle(int id, boolean ignoreRange, boolean p_190570_3_, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+    public void addParticle(IParticleData particleData, boolean ignoreRange, boolean minimizeLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
     }
 
     @Override
@@ -87,10 +83,12 @@ public class WorldListener implements IWorldEventListener {
             IAOETool iaoeTool = (IAOETool) heldItem.getItem();
             RayTraceResult rt = iaoeTool.rayTraceBlocks(world, player);
             if (rt != null) {
+                /* FIXME
                 final List<BlockPos> positions = iaoeTool.getExtraBlocks(world, rt, player, heldItem);
                 final TargetPoint point = new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 32D);
                 SilentGear.network.wrapper.sendToAllAround(new MessageExtraBlockBreak(
                         player.getEntityId(), progress - 1, positions.toArray(new BlockPos[0])), point);
+                */
             }
         }
     }

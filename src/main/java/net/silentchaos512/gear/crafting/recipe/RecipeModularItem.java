@@ -18,22 +18,23 @@
 
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.ItemPartData;
-import net.silentchaos512.gear.api.parts.PartRegistry;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.item.ToolHead;
-import net.silentchaos512.lib.recipe.RecipeBaseSL;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.lib.collection.StackList;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class RecipeModularItem extends RecipeBaseSL {
+public class RecipeModularItem implements IRecipe {
     private final ICoreItem item;
 
     public RecipeModularItem(ICoreItem item) {
@@ -41,17 +42,23 @@ public class RecipeModularItem extends RecipeBaseSL {
     }
 
     @Override
-    public ItemStack getCraftingResult(InventoryCrafting inv) {
+    public ItemStack getCraftingResult(IInventory inv) {
         Collection<ItemStack> parts = getComponents(inv);
         return getCraftingResult(parts);
     }
 
-    public ItemStack getCraftingResult(Collection<ItemStack> parts) {
-        List<ItemPartData> data = new ArrayList<>();
-        Map<PartType, ItemPartData> partsByType = new HashMap<>();
+    @Override
+    public boolean canFit(int width, int height) {
+        return true;
+    }
 
+    public ItemStack getCraftingResult(Collection<ItemStack> parts) {
+        List<PartData> data = new ArrayList<>();
+        Map<PartType, PartData> partsByType = new HashMap<>();
+
+        /*
         for (ItemStack stack : parts) {
-            ItemPartData part = ItemPartData.fromStack(stack);
+            PartData part = PartData.from(stack);
             if (stack.getItem() instanceof ToolHead) {
                 if (!ToolHead.getToolClass(stack).equals(this.item.getGearClass()))
                     return ItemStack.EMPTY;
@@ -64,31 +71,42 @@ public class RecipeModularItem extends RecipeBaseSL {
                 partsByType.put(part.getPart().getType(), part);
             }
         }
+        */
 
         data.addAll(partsByType.values());
-        return this.item.construct((Item) this.item, data);
+        return this.item.construct(data);
     }
 
     @Override
-    public boolean matches(InventoryCrafting inv, World world) {
+    public boolean matches(IInventory inv, World world) {
         Collection<ItemStack> parts = getComponents(inv);
-        return item.matchesRecipe(parts) && parts.size() == getNonEmptyStacks(inv).size();
+        return item.matchesRecipe(parts) && parts.size() == StackList.from(inv).size();
     }
 
     @Nonnull
     @Override
     public ItemStack getRecipeOutput() {
-        return new ItemStack((Item) this.item);
+        return new ItemStack(this.item);
     }
 
-    private Collection<ItemStack> getComponents(InventoryCrafting inv) {
+    @Override
+    public ResourceLocation getId() {
+        return null;
+    }
+
+    @Override
+    public IRecipeSerializer<?> getSerializer() {
+        return null;
+    }
+
+    private Collection<ItemStack> getComponents(IInventory inv) {
         List<ItemStack> parts = new ArrayList<>();
-        parts.addAll(getComponents(inv, s -> s.getItem() instanceof ToolHead));
-        parts.addAll(getComponents(inv, s -> PartRegistry.get(s) != null));
+//        parts.addAll(getComponents(inv, s -> s.getItem() instanceof ToolHead));
+        parts.addAll(getComponents(inv, s -> PartManager.from(s) != null));
         return parts;
     }
 
-    private Collection<ItemStack> getComponents(InventoryCrafting inv, Predicate<ItemStack> predicate) {
+    private Collection<ItemStack> getComponents(IInventory inv, Predicate<ItemStack> predicate) {
         List<ItemStack> parts = new ArrayList<>();
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);

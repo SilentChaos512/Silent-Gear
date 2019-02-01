@@ -43,7 +43,7 @@ public class StatModifierTrait extends Trait {
     @Override
     protected void processExtraJson(JsonObject json) {
         if (!json.has("stats")) {
-            SilentGear.log.error("JSON file for StatModifierTrait '{}' is missing the 'stats' array", this.getName());
+            SilentGear.LOGGER.error("JSON file for StatModifierTrait '{}' is missing the 'stats' array", this.getName());
             return;
         }
 

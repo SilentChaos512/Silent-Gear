@@ -21,13 +21,14 @@ package net.silentchaos512.gear.item;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.PartOrigins;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.parts.PartUpgrade;
+import net.silentchaos512.gear.parts.type.PartUpgrade;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.lib.item.IEnumItems;
 
@@ -48,7 +49,7 @@ public enum MiscUpgrades implements IEnumItems<MiscUpgrades, MiscUpgrades.Item> 
         this.item = new MiscUpgrades.Item();
         ResourceLocation partName = new ResourceLocation(SilentGear.MOD_ID, "misc_" + name().toLowerCase(Locale.ROOT));
 
-        this.part = new PartUpgrade(partName, PartOrigins.BUILTIN_CORE) {
+        this.part = new PartUpgrade(partName) {
             @Override
             public PartType getType() {
                 return PartType.MISC_UPGRADE;
@@ -93,9 +94,14 @@ public enum MiscUpgrades implements IEnumItems<MiscUpgrades, MiscUpgrades.Item> 
     }
 
     public static class Item extends net.minecraft.item.Item {
+        Item() {
+            super(new Builder().group(SilentGear.ITEM_GROUP));
+        }
+
         @Override
-        public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-            tooltip.add(TextFormatting.ITALIC + SilentGear.i18n.subText(this, "desc"));
+        public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+            tooltip.add(new TextComponentTranslation(getTranslationKey() + ".desc")
+                    .applyTextStyle(TextFormatting.ITALIC));
         }
 
     }

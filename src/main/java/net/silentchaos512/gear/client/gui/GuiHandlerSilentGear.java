@@ -56,11 +56,13 @@ public class GuiHandlerSilentGear implements IGuiHandler {
         }
 
         public void open(EntityPlayer player, World world, BlockPos pos) {
-            player.openGui(SilentGear.instance, this.id, world, pos.getX(), pos.getY(), pos.getZ());
+            // FIXME
+//            player.openGui(SilentGear.instance, this.id, world, pos.getX(), pos.getY(), pos.getZ());
         }
 
         public void open(EntityPlayer player, World world, int subtype) {
-            player.openGui(SilentGear.instance, this.id, world, subtype, 0, 0);
+            // FIXME
+//            player.openGui(SilentGear.instance, this.id, world, subtype, 0, 0);
         }
     }
 
@@ -71,7 +73,7 @@ public class GuiHandlerSilentGear implements IGuiHandler {
         GuiType guiType = GuiType.byId(ID);
 
         if (tile == null && guiType != GuiType.BLUEPRINT_BOOK) {
-            SilentGear.log.warn("Missing TileEntity at ({}, {}, {})!", x, y, z);
+            SilentGear.LOGGER.warn("Missing TileEntity at ({}, {}, {})!", x, y, z);
             return null;
         }
 
@@ -99,7 +101,7 @@ public class GuiHandlerSilentGear implements IGuiHandler {
                 ItemStack stack = player.getHeldItem(hand);
                 return new ContainerBlueprintBook(stack, player.inventory, hand);
             default:
-                SilentGear.log.warn("No GUI with ID {}!", ID);
+                SilentGear.LOGGER.warn("No GUI with ID {}!", ID);
                 return null;
         }
     }
@@ -111,7 +113,7 @@ public class GuiHandlerSilentGear implements IGuiHandler {
         GuiType guiType = GuiType.byId(ID);
 
         if (tile == null && guiType != GuiType.BLUEPRINT_BOOK) {
-            SilentGear.log.warn("Missing TileEntity at ({}, {}, {})!", x, y, z);
+            SilentGear.LOGGER.warn("Missing TileEntity at ({}, {}, {})!", x, y, z);
             return null;
         }
 
@@ -138,7 +140,7 @@ public class GuiHandlerSilentGear implements IGuiHandler {
                 ContainerBlueprintBook container = (ContainerBlueprintBook) getServerGuiElement(ID, player, world, x, y, z);
                 return container != null ? new GuiBlueprintBook(container) : null;
             default:
-                SilentGear.log.warn("No GUI with ID {}!", ID);
+                SilentGear.LOGGER.warn("No GUI with ID {}!", ID);
                 return null;
         }
     }

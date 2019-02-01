@@ -23,8 +23,12 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.*;
-import net.silentchaos512.gear.init.ModMaterials;
-import net.silentchaos512.gear.item.ToolRods;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.parts.type.PartBowstring;
+import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.parts.type.PartRod;
+import net.silentchaos512.gear.parts.type.PartTip;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -36,43 +40,43 @@ import java.util.stream.Collectors;
 public final class GearGenerator {
     private GearGenerator() {}
 
-    public static List<? extends ItemPart> getPartsOfType(Class<? extends ItemPart> partClass) {
+    public static List<? extends IGearPart> getPartsOfType(Class<? extends IGearPart> partClass) {
         return getPartsOfType(partClass::isInstance);
     }
 
-    public static List<? extends ItemPart> getPartsOfType(Class<? extends ItemPart> partClass, int partTier) {
+    public static List<? extends IGearPart> getPartsOfType(Class<? extends IGearPart> partClass, int partTier) {
         return getPartsOfType(part -> partClass.isInstance(part) && (partTier < 0 || part.getTier() == partTier));
     }
 
-    public static List<? extends ItemPart> getPartsOfType(Predicate<? super ItemPart> condition) {
-        return PartRegistry.getValues().stream()
-                .filter(p -> !p.isBlacklisted())
+    public static List<? extends IGearPart> getPartsOfType(Predicate<? super IGearPart> condition) {
+        return PartManager.getValues().stream()
+//                .filter(p -> !p.isBlacklisted())
                 .filter(condition)
                 .collect(Collectors.toList());
     }
 
-    public static Optional<ItemPart> selectRandom(Class<? extends ItemPart> partClass) {
+    public static Optional<IGearPart> selectRandom(Class<? extends IGearPart> partClass) {
         return selectRandom(partClass, -1);
     }
 
-    public static Optional<ItemPart> selectRandom(Class<? extends ItemPart> partClass, int partTier) {
-        List<? extends ItemPart> list = getPartsOfType(partClass, partTier);
+    public static Optional<IGearPart> selectRandom(Class<? extends IGearPart> partClass, int partTier) {
+        List<? extends IGearPart> list = getPartsOfType(partClass, partTier);
         if (!list.isEmpty())
             return Optional.of(list.get(SilentGear.random.nextInt(list.size())));
-        ItemPart fallback = getFallback(partClass);
+        IGearPart fallback = getFallback(partClass);
         return fallback == null ? Optional.empty() : Optional.of(fallback);
     }
 
     @Nullable
-    private static ItemPart getFallback(Class<? extends ItemPart> partClass) {
-        SilentGear.log.debug("GearGenerator::getFallback: class {}", partClass);
+    private static IGearPart getFallback(Class<? extends IGearPart> partClass) {
+        SilentGear.LOGGER.debug("GearGenerator::getFallback: class {}", partClass);
 
         if (partClass == PartRod.class)
-            return ToolRods.WOOD.getPart();
+            return PartManager.get(PartConst.FALLBACK_ROD);
         else if (partClass == PartBowstring.class)
-            return selectRandom(partClass, -1).orElse(ModMaterials.bowstringString);
+            return selectRandom(partClass, -1).orElse(PartManager.get(PartConst.FALLBACK_BOWSTRING));
 
-        SilentGear.log.debug("    no fallback part available");
+        SilentGear.LOGGER.debug("    no fallback part available");
         return null;
     }
 
@@ -84,10 +88,10 @@ public final class GearGenerator {
 
     public static ItemStack create(ICoreItem item, int tier) {
         // Select main and rod
-        Optional<ItemPart> main = selectRandom(PartMain.class, tier);
-        Optional<ItemPart> rod = selectRandom(PartRod.class, tier);
+        Optional<IGearPart> main = selectRandom(PartMain.class, tier);
+        Optional<IGearPart> rod = selectRandom(PartRod.class, tier);
         if (!main.isPresent() || !rod.isPresent()) {
-            SilentGear.log.warn("Could not create {} of tier {}", item.getGearClass(), tier);
+            SilentGear.LOGGER.warn("Could not create {} of tier {}", item.getGearClass(), tier);
             return ItemStack.EMPTY;
         }
 
@@ -101,15 +105,15 @@ public final class GearGenerator {
             parts.addPart(rod.get());
         // Requires bowstring?
         if (item.getConfig().getBowstringCount() > 0) {
-            Optional<ItemPart> bowstring = selectRandom(PartBowstring.class, tier);
+            Optional<IGearPart> bowstring = selectRandom(PartBowstring.class, tier);
             bowstring.ifPresent(parts::addPart);
         }
-        ItemStack result = item.construct(item.getItem(), parts);
+        ItemStack result = item.construct(parts);
 
         // Apply some random upgrades?
         if (item instanceof ICoreTool && SilentGear.random.nextFloat() < 0.2f * tier + 0.1f) {
-            Optional<ItemPart> tip = selectRandom(PartTip.class);
-            tip.ifPresent(part -> GearData.addUpgradePart(result, ItemPartData.instance(part)));
+            Optional<IGearPart> tip = selectRandom(PartTip.class);
+            tip.ifPresent(part -> GearData.addUpgradePart(result, PartData.of(part)));
         }
 
         GearData.recalculateStats(result);

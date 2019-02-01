@@ -1,19 +1,20 @@
 package net.silentchaos512.gear.event;
 
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.silentchaos512.gear.SilentGear;
 
-public class WorldHandler {
-
-    public static final WorldHandler INSTANCE = new WorldHandler();
-
-    private WorldHandler() {
-    }
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+public final class WorldHandler {
+    private WorldHandler() { }
 
     @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load event) {
+    public static void onWorldLoad(WorldEvent.Load event) {
+        /* FIXME
         if (event.getWorld().getMinecraftServer() != null) {
             event.getWorld().addEventListener(new WorldListener(event.getWorld(), event.getWorld().getMinecraftServer()));
         }
+        */
     }
 }

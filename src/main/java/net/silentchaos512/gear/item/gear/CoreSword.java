@@ -3,32 +3,35 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.ICoreWeapon;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class CoreSword extends ItemSword implements ICoreWeapon {
-
     public CoreSword() {
-        super(GearData.FAKE_MATERIAL);
+        this(null);
+    }
+
+    CoreSword(@Nullable ToolType type) {
+        super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(type));
     }
 
     @Nonnull
@@ -45,7 +48,7 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -65,15 +68,15 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return GearHelper.getDisplayName(stack);
     }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
         super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
         if (GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(stack);
+            GearData.recalculateStats(null, stack);
         }
     }
 
@@ -98,8 +101,8 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        GearHelper.getSubItems(this, tab, items);
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
@@ -108,8 +111,8 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override

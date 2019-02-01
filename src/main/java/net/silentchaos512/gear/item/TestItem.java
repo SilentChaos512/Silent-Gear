@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -34,7 +35,7 @@ import net.silentchaos512.lib.item.IColoredItem;
 
 public class TestItem extends ItemPickaxe implements IColoredItem {
     public TestItem() {
-        super(ToolMaterial.IRON);
+        super(ItemTier.IRON, 0, 0, new Builder().group(SilentGear.ITEM_GROUP));
     }
 
     @Override

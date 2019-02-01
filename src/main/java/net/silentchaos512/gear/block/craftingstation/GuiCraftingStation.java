@@ -2,25 +2,24 @@ package net.silentchaos512.gear.block.craftingstation;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.client.gui.GuiItemParts;
+import net.silentchaos512.gear.client.gui.TexturedButton;
 import net.silentchaos512.gear.client.util.TooltipFlagTC;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.item.ToolHead;
-import net.silentchaos512.lib.client.key.KeyTrackerSL;
-import net.silentchaos512.lib.gui.TexturedButton;
-import net.silentchaos512.lib.util.StringUtil;
+import net.silentchaos512.lib.util.TextRenderUtils;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GuiCraftingStation extends GuiContainer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/crafting_station.png");
@@ -43,24 +42,27 @@ public class GuiCraftingStation extends GuiContainer {
     public void initGui() {
         super.initGui();
 
+        // Parts GUI button
         buttonShowAllParts = new TexturedButton(TEXTURE, 100, guiLeft + 149, guiTop + 5, 236, 166, 20, 18,
-                ImmutableList.of("Show Available Parts", TextFormatting.GRAY + "List can be sorted by stats"));
-        buttonList.add(buttonShowAllParts);
+                ImmutableList.of(
+                        new TextComponentTranslation("gui.silentgear.crafting_station.parts_button.hover1")
+                                .getFormattedText(),
+                        new TextComponentTranslation("gui.silentgear.crafting_station.parts_button.hover2")
+                                .applyTextStyle(TextFormatting.GRAY)
+                                .getFormattedText()
+                )) {
+            @Override
+            public void onClick(double mouseX, double mouseY) {
+                mc.displayGuiScreen(new GuiItemParts());
+            }
+        };
+        buttons.add(buttonShowAllParts);
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        super.actionPerformed(button);
-
-        if (button == buttonShowAllParts) {
-            mc.displayGuiScreen(new GuiItemParts());
-        }
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
 
         if (buttonShowAllParts.isMouseOver()) {
@@ -68,10 +70,10 @@ public class GuiCraftingStation extends GuiContainer {
         }
     }
 
-    private TooltipFlagTC getTooltipFlag(ItemStack stack) {
-        boolean ctrl = stack.getItem() instanceof ICoreItem || stack.getItem() instanceof ToolHead;
-        boolean alt = KeyTrackerSL.isAltDown();
-        boolean shift = KeyTrackerSL.isShiftDown();
+    private ITooltipFlag getTooltipFlag(ItemStack stack) {
+        boolean ctrl = stack.getItem() instanceof ICoreItem/* || stack.getItem() instanceof ToolHead*/;
+        boolean alt = false; //KeyTrackerSL.isAltDown();
+        boolean shift = false; //KeyTrackerSL.isShiftDown();
         return new TooltipFlagTC(ctrl, alt, shift, false);
     }
 
@@ -85,23 +87,21 @@ public class GuiCraftingStation extends GuiContainer {
 //            itemX += 20;
 //        }
 
-        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "crafting"),
+        this.fontRenderer.drawString(
+                I18n.format("gui.silentgear.crafting_station.crafting"),
                 8, 6, 0x404040);
-        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "parts"),
+        this.fontRenderer.drawString(
+                I18n.format("gui.silentgear.crafting_station.parts"),
                 80, 6, 0x404040); // TODO: Change text color when able to use?
-        this.fontRenderer.drawString(SilentGear.i18n.subText(ModBlocks.craftingStation, "storage"),
+        this.fontRenderer.drawString(
+                I18n.format("gui.silentgear.crafting_station.storage"),
                 -55, 19, 0x404040);
-        this.fontRenderer.drawString(I18n.format("container.inventory"),
+        this.fontRenderer.drawString(
+                I18n.format("container.inventory"),
                 8, this.ySize - 96 + 2, 0x404040);
 
-        // Version number (remove in full release)
-        String versionNumString = "Version: " + SilentGear.VERSION + "-" + SilentGear.BUILD_NUM + (SilentGear.instance.isDevBuild() ? " (dev)" : "");
-        int versionNumStringWidth = fontRenderer.getStringWidth(versionNumString);
-        float versionNumScale = 0.65f;
-        StringUtil.renderScaledAsciiString(fontRenderer, versionNumString,
-                (int) (xSize - versionNumStringWidth * versionNumScale) - 1,
-                ySize + 1,
-                0xCCCCCC, false, versionNumScale);
+        // Version number (remove in full release?)
+        renderVersionString();
 
         ItemStack craftResult = this.container.craftResult.getStackInSlot(0);
         drawSlimeFace(craftResult);
@@ -117,7 +117,10 @@ public class GuiCraftingStation extends GuiContainer {
         if (!craftResult.isEmpty()) {
             // Draw crafting result tooltip
             FontRenderer font = this.mc.fontRenderer;
-            List<String> tooltip = craftResult.getTooltip(this.mc.player, getTooltipFlag(craftResult));
+            List<String> tooltip = craftResult.getTooltip(this.mc.player, getTooltipFlag(craftResult))
+                    .stream()
+                    .map(ITextComponent::getFormattedText)
+                    .collect(Collectors.toList());
 
             int maxWidth = 0;
             for (String line : tooltip) {
@@ -131,7 +134,7 @@ public class GuiCraftingStation extends GuiContainer {
             // SilentGear.log.debug(xPos, yPos);
 
             GlStateManager.pushMatrix();
-            GlStateManager.scale(scale, scale, 1);
+            GlStateManager.scalef(scale, scale, 1);
 
             int step = (int) (scale * 10);
             for (String line : tooltip) {
@@ -146,7 +149,7 @@ public class GuiCraftingStation extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         // Main window
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         this.mc.getTextureManager().bindTexture(TEXTURE);
         int xPos = (this.width - this.xSize) / 2;
         int yPos = (this.height - this.ySize) / 2;
@@ -173,9 +176,21 @@ public class GuiCraftingStation extends GuiContainer {
         drawRect(x, y, x + 80, y + 158, 0xCF000000);
     }
 
+    private void renderVersionString() {
+        String versionNumString = "Version: " + SilentGear.getVersion() + (SilentGear.isDevBuild() ? " (dev)" : "");
+        int versionNumStringWidth = fontRenderer.getStringWidth(versionNumString);
+        float versionNumScale = 0.65f;
+        TextRenderUtils.renderScaled(fontRenderer, versionNumString,
+                (int) (xSize - versionNumStringWidth * versionNumScale) - 1,
+                ySize + 1,
+                versionNumScale,
+                0xCCCCCC,
+                false);
+    }
+
     private void drawSlimeFace(ItemStack craftResult) {
         mc.getTextureManager().bindTexture(TEXTURE);
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         final int textureY = 245;
         int textureX;
         if (craftResult.isEmpty()) {

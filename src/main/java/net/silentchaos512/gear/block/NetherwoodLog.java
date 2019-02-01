@@ -19,76 +19,35 @@
 package net.silentchaos512.gear.block;
 
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.oredict.OreDictionary;
-import net.silentchaos512.lib.registry.IAddRecipes;
+import net.minecraft.world.IBlockReader;
 
-public class NetherwoodLog extends BlockLog implements IAddRecipes {
+public class NetherwoodLog extends BlockLog {
     public NetherwoodLog() {
-        setDefaultState(blockState.getBaseState().withProperty(LOG_AXIS, EnumAxis.Y));
+        super(MapColor.ADOBE, Builder.create(Material.WOOD)
+                .hardnessAndResistance(2)
+                .sound(SoundType.WOOD)
+        );
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public int getFlammability(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face) {
         return 0;
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean isFlammable(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face) {
         return false;
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        switch (meta) {
-            case 0:
-                return getDefaultState().withProperty(LOG_AXIS, EnumAxis.Y);
-            case 1:
-                return getDefaultState().withProperty(LOG_AXIS, EnumAxis.X);
-            case 2:
-                return getDefaultState().withProperty(LOG_AXIS, EnumAxis.Z);
-            case 3:
-                return getDefaultState().withProperty(LOG_AXIS, EnumAxis.NONE);
-        }
-        return getDefaultState();
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        switch (state.getValue(LOG_AXIS)) {
-            case X:
-                return 1;
-            case Z:
-                return 2;
-            case NONE:
-                return 3;
-            default:
-                return 0;
-        }
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, LOG_AXIS);
     }
 
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this);
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return 0;
-    }
-
-    @Override
-    public void addOreDict() {
-        OreDictionary.registerOre("logWood", this);
     }
 }

@@ -56,13 +56,13 @@ public class ContainerBlueprintBook extends Container {
 
     private void setupBookSlots() {
         if (itemHandler == null) {
-            SilentGear.log.error("Blueprint book has no inventory? ItemStack: {}", book);
+            SilentGear.LOGGER.error("Blueprint book has no inventory? ItemStack: {}", book);
             return;
         }
 
         for (int row = 0; row < BlueprintBook.INVENTORY_SIZE / 9; ++row)
             for (int col = 0; col < 9; ++col)
-                this.addSlotToContainer(new SlotBlueprint(itemHandler, col + row * 9, 8 + col * 18, 18 + row * 18));
+                this.addSlot(new SlotBlueprint(itemHandler, col + row * 9, 8 + col * 18, 18 + row * 18));
     }
 
     private void setupPlayerSlots(InventoryPlayer inventoryPlayer) {
@@ -71,10 +71,10 @@ public class ContainerBlueprintBook extends Container {
 
         for (int y = 0; y < numRows; ++y)
             for (int x = 0; x < 9; ++x)
-                this.addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 103 + y * 18 + hotbarYOffset));
+                this.addSlot(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 103 + y * 18 + hotbarYOffset));
 
         for (int x = 0; x < 9; ++x)
-            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 161 + hotbarYOffset));
+            this.addSlot(new Slot(inventoryPlayer, x, 8 + x * 18, 161 + hotbarYOffset));
     }
 
     @Override
@@ -94,8 +94,8 @@ public class ContainerBlueprintBook extends Container {
         super.onContainerClosed(playerIn);
 
         if (!(book.getItem() instanceof BlueprintBook)) {
-            SilentGear.log.error("Item is not a blueprint book? ItemStack: {}", book);
-            SilentGear.log.catching(new IllegalStateException("ContainerBlueprintBook not constructed with BlueprintBook"));
+            SilentGear.LOGGER.error("Item is not a blueprint book? ItemStack: {}", book,
+                    new IllegalStateException("ContainerBlueprintBook not constructed with BlueprintBook"));
             return;
         }
 

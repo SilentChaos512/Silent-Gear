@@ -23,15 +23,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -59,7 +60,7 @@ public final class GearEvents {
     public static void onAttackEntity(LivingAttackEvent event) {
         // Check if already handled
         EntityLivingBase attacked = event.getEntityLiving();
-        if (attacked == null || entityAttackedThisTick.contains(attacked.getPersistentID())) return;
+        if (attacked == null || entityAttackedThisTick.contains(attacked.getUniqueID())) return;
 
         DamageSource source = event.getSource();
         if (source == null) return;
@@ -77,7 +78,7 @@ public final class GearEvents {
 
         if (Math.abs(newDamage - baseDamage) > 0.0001f) {
             event.setCanceled(true);
-            entityAttackedThisTick.add(attacked.getPersistentID());
+            entityAttackedThisTick.add(attacked.getUniqueID());
             attacked.attackEntityFrom(source, newDamage);
         }
     }
@@ -93,8 +94,8 @@ public final class GearEvents {
 
         if (tool.getItem() instanceof ICoreItem) {
             final IBlockState state = event.getState();
-            String toolClass = state.getBlock().getHarvestTool(state);
-            if (toolClass == null) toolClass = "";
+            ToolType toolClass = state.getBlock().getHarvestTool(state);
+//            if (toolClass == null) toolClass = "";
             final int blockLevel = state.getBlock().getHarvestLevel(state);
             final int toolLevel = tool.getItem().getHarvestLevel(tool, toolClass, player, state);
             final boolean canHarvest = toolLevel >= blockLevel;
@@ -110,18 +111,18 @@ public final class GearEvents {
     }
 
     public static float getAreaLightBrightness(World world, BlockPos pos) {
-        float value = world.getLightBrightness(pos);
+        float value = world.getLight(pos);
         // Checking this many positions IS necessary. If player is near a wall, it would
         // only check inside blocks otherwise.
-        value = Math.max(value, world.getLightBrightness(pos.north()));
-        value = Math.max(value, world.getLightBrightness(pos.south()));
-        value = Math.max(value, world.getLightBrightness(pos.east()));
-        value = Math.max(value, world.getLightBrightness(pos.west()));
+        value = Math.max(value, world.getLight(pos.north()));
+        value = Math.max(value, world.getLight(pos.south()));
+        value = Math.max(value, world.getLight(pos.east()));
+        value = Math.max(value, world.getLight(pos.west()));
         // Fix corners too... This can exploited in some rare cases, but should be fine.
-        value = Math.max(value, world.getLightBrightness(pos.north().west()));
-        value = Math.max(value, world.getLightBrightness(pos.north().east()));
-        value = Math.max(value, world.getLightBrightness(pos.south().west()));
-        value = Math.max(value, world.getLightBrightness(pos.south().east()));
+        value = Math.max(value, world.getLight(pos.north().west()));
+        value = Math.max(value, world.getLight(pos.north().east()));
+        value = Math.max(value, world.getLight(pos.south().west()));
+        value = Math.max(value, world.getLight(pos.south().east()));
         return value;
     }
 
@@ -139,11 +140,14 @@ public final class GearEvents {
 
         for (int i = 0; i < event.getDrops().size(); ++i) {
             ItemStack stack = event.getDrops().get(i);
+            // FIXME
+            /*
             ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
             if (!smelted.isEmpty()) {
                 event.getDrops().remove(i);
                 event.getDrops().add(i, smelted);
             }
+            */
         }
     }
 

@@ -1,23 +1,7 @@
 package net.silentchaos512.gear.world;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.world.feature.NetherwoodTree;
-import net.silentchaos512.lib.config.ConfigOptionOreGen;
-import net.silentchaos512.lib.util.MathUtils;
-import net.silentchaos512.lib.world.WorldGeneratorSL;
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.Random;
-
-public class ModWorldGenerator extends WorldGeneratorSL {
+public class ModWorldGenerator /*extends WorldGeneratorSL*/ {
+    /*
     private static final int NETHER_TREE_SPREAD = 6;
     public static final int NETHER_TREE_MIN_Y = 32;
     public static final int NETHER_TREE_MAX_Y = 96;
@@ -111,4 +95,5 @@ public class ModWorldGenerator extends WorldGeneratorSL {
             }
         }
     }
+    */
 }

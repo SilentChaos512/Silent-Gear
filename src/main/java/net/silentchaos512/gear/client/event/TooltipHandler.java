@@ -1,29 +1,32 @@
 package net.silentchaos512.gear.client.event;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.LoaderState;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.Trait;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.lib.client.key.KeyTrackerSL;
+import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Side.CLIENT)
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public final class TooltipHandler {
     // Display a single trait and cycling through the list. Main problem with this is it affects
     // JEI's tooltip cache. When disabled, you can search for parts with certain traits.
@@ -33,32 +36,45 @@ public final class TooltipHandler {
 
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
+        /*
         LoaderState state = Loader.instance().getLoaderState();
         if (state == LoaderState.INITIALIZATION || state == LoaderState.SERVER_ABOUT_TO_START || state == LoaderState.SERVER_STOPPING) {
             // Skip tooltips during block/item remapping
             // JEI tooltip caches are done in AVAILABLE, in-game is SERVER_STARTED
             return;
         }
+        */
 
         ItemStack stack = event.getItemStack();
-        ItemPart part = !stack.isEmpty() ? PartRegistry.get(stack) : null;
+        IGearPart part = !stack.isEmpty() ? PartManager.from(stack) : null;
 
-        if (part != null && !part.isBlacklisted(stack)) {
-            onPartTooltip(event, stack, ItemPartData.instance(part));
+        if (part != null /*&& !part.isBlacklisted(stack)*/) {
+            onPartTooltip(event, stack, PartData.of(part));
             return;
         }
 
         // Nerfed gear?
+        /* FIXME
         ResourceLocation name = stack.getItem().getRegistryName();
         if (name != null && Config.nerfedGear.contains(name.toString())) {
-            event.getToolTip().add(1, TextFormatting.RED + SilentGear.i18n.translate("misc", "poorlyMade"));
+            event.getToolTip().add(1, new TextComponentTranslation("misc.silentgear.poorlyMade")
+                    .applyTextStyle(TextFormatting.RED));
         }
+        */
     }
 
-    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, ItemPartData partData) {
-        ItemPart part = partData.getPart();
-        event.getToolTip().add(TextFormatting.GREEN + SilentGear.i18n.translate("part",
-                "type." + part.getType().getName(), part.getTier()));
+    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData partData) {
+        IGearPart part = partData.getPart();
+        // Type, tier
+        event.getToolTip().add(part.getType().getDisplayName(part.getTier())
+                .applyTextStyle(TextFormatting.GREEN));
+
+        if (event.getFlags().isAdvanced()) {
+            event.getToolTip().add(new TextComponentString("item: " + part.getMaterials().getItem()));
+            event.getToolTip().add(new TextComponentString("tag: " + part.getMaterials().getTag()));
+            event.getToolTip().add(new TextComponentString("itemSmall: " + part.getMaterials().getSmallItem()));
+            event.getToolTip().add(new TextComponentString("tagSmall: " + part.getMaterials().getSmallTag()));
+        }
 
         // Traits
         Map<Trait, Integer> traits = partData.getTraits();
@@ -69,41 +85,42 @@ public final class TooltipHandler {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
                 final TextFormatting nameColor = trait.getNameColor();
-                event.getToolTip().add(nameColor + trait.getTranslatedName(level));
+                event.getToolTip().add(trait.getDisplayName(level).applyTextStyle(nameColor));
             }
             ++i;
         }
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
-        if (KeyTrackerSL.isControlDown()) {
-            if (part instanceof PartMain)
-                getGradeLine(event, grade);
-            event.getToolTip().add(TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.stats.name")
-                    + TextFormatting.RESET + TextFormatting.ITALIC + " (Silent Gear)");
+        if (KeyTracker.isControlDown()) {
+            if (part instanceof PartMain) getGradeLine(event, grade);
+            event.getToolTip().add(new TextComponentTranslation("misc.silentgear.tooltip.stats.name")
+                    .applyTextStyle(TextFormatting.GOLD)
+                    .appendSibling(new TextComponentString(" (Silent Gear)")
+                            .applyTextStyle(TextFormatting.RESET)
+                            .applyTextStyle(TextFormatting.ITALIC)));
             getPartStatLines(event, stack, part);
         } else {
-            if (grade != MaterialGrade.NONE && part instanceof PartMain)
-                getGradeLine(event, grade);
-            event.getToolTip().add(TextFormatting.GOLD + SilentGear.i18n.translate("misc", "tooltip.ctrlForStats"));
+            if (grade != MaterialGrade.NONE && part instanceof PartMain) getGradeLine(event, grade);
+            event.getToolTip().add(new TextComponentTranslation("misc.silentgear.tooltip.ctrlForStats")
+                    .applyTextStyle(TextFormatting.GOLD));
         }
     }
 
     private static int getTraitDisplayIndex(int numTraits) {
-        if (!TRAIT_DISPLAY_CYCLE || KeyTrackerSL.isControlDown() || numTraits == 0)
+        if (!TRAIT_DISPLAY_CYCLE || KeyTracker.isControlDown() || numTraits == 0)
             return -1;
-        else return ClientTicks.ticksInGame / 20 % numTraits;
+        else return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 
     private static void getGradeLine(ItemTooltipEvent event, MaterialGrade grade) {
-        String line = SilentGear.i18n.translate("material", "gradeOnPart", grade.getTranslatedName());
-        event.getToolTip().add(TextFormatting.AQUA + line);
+        event.getToolTip().add(grade.getDisplayName().applyTextStyle(TextFormatting.AQUA));
     }
 
     private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
     private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
 
-    private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, ItemPart part) {
-        ItemPartData partData = ItemPartData.instance(part, MaterialGrade.fromStack(stack), stack);
+    private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, IGearPart part) {
+        PartData partData = PartData.of(part, MaterialGrade.fromStack(stack), stack);
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
@@ -113,7 +130,7 @@ public final class TooltipHandler {
                     boolean isZero = inst.getValue() == 0;
                     TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                    String nameStr = nameColor + stat.translatedName();
+                    ITextComponent nameStr = stat.getDisplayName().applyTextStyle(nameColor);
                     int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
                     String statStr = statColor + REGEX_TRIM_TO_INT.matcher(inst.formattedString(decimalPlaces, false)).replaceFirst("");
@@ -124,7 +141,8 @@ public final class TooltipHandler {
                     if (stat == CommonItemStats.ARMOR_DURABILITY)
                         statStr += "x";
 
-                    event.getToolTip().add("- " + SilentGear.i18n.translate("stat", "displayFormat", nameStr, statStr));
+                    event.getToolTip().add(new TextComponentString("- ").appendSibling(
+                            new TextComponentTranslation("stat.silentgear.displayFormat", nameStr, statStr)));
                 }
             }
         }

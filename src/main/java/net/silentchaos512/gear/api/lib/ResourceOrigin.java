@@ -20,7 +20,7 @@ package net.silentchaos512.gear.api.lib;
 
 import net.minecraft.util.ResourceLocation;
 
-// TODO: Move to Silent Lib?
+@Deprecated
 public enum ResourceOrigin {
     BUILTIN_CORE,
     BUILTIN_ADDON,

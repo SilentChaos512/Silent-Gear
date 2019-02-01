@@ -5,46 +5,54 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.item.MiscUpgrades;
+import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class CorePickaxe extends ItemPickaxe implements ICoreTool {
-    private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.ANVIL, Material.ICE, Material.IRON, Material.PACKED_ICE, Material.ROCK);
-    private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(Material.ROCK, Material.CIRCUITS, Material.GLASS, Material.PISTON, Material.REDSTONE_LIGHT);
+    private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
+            Material.ANVIL,
+            Material.ICE,
+            Material.IRON,
+            Material.PACKED_ICE,
+            Material.ROCK
+    );
+    private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(
+            Material.ROCK,
+            Material.CIRCUITS,
+            Material.GLASS,
+            Material.PISTON,
+            Material.REDSTONE_LIGHT
+    );
 
-    private final Set<String> toolClasses = new HashSet<>();
+    private static final ImmutableSet<ToolType> TOOL_CLASSES_BASE =
+            ImmutableSet.of(ToolType.PICKAXE);
+    private static final ImmutableSet<ToolType> TOOL_CLASSES_WITH_SPOON =
+            ImmutableSet.of(ToolType.PICKAXE, ToolType.SHOVEL);
 
     public CorePickaxe() {
-        super(Objects.requireNonNull(GearData.FAKE_MATERIAL));
-        setHarvestLevel("pickaxe", 0);
+        super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.PICKAXE));
     }
 
     @Nonnull
@@ -57,13 +65,13 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     public String getGearClass() {
         return "pickaxe";
     }
-
     //region Harvest tool overrides
 
+
     @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack tool) {
+    public boolean canHarvestBlock(ItemStack stack, IBlockState state) {
         // Forge ItemStack-sensitive version
-        return canHarvestBlock(state, getStatInt(tool, CommonItemStats.HARVEST_LEVEL));
+        return canHarvestBlock(state, getStatInt(stack, CommonItemStats.HARVEST_LEVEL));
     }
 
     @Override
@@ -82,19 +90,13 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
             return true;
         return super.canHarvestBlock(state);
     }
-
-    @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // TODO
-        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
-    }
-
     //endregion
 
     //region Standard tool overrides
 
+
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -109,15 +111,15 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState state) {
-        return GearHelper.getHarvestLevel(stack, toolClass, state, EXTRA_EFFECTIVE_MATERIALS);
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+        return GearHelper.getHarvestLevel(stack, tool, blockState, EXTRA_EFFECTIVE_MATERIALS);
     }
+//    @Override
+//    public void setHarvestLevel(String toolClass, int level) {
+//        super.setHarvestLevel(toolClass, level);
+//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
+//    }
 
-    @Override
-    public void setHarvestLevel(String toolClass, int level) {
-        super.setHarvestLevel(toolClass, level);
-        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-    }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
@@ -130,15 +132,15 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return GearHelper.getItemStackDisplayName(stack);
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return GearHelper.getDisplayName(stack);
     }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
         super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
         if (GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(stack);
+            GearData.recalculateStats(null, stack);
         }
     }
 
@@ -153,16 +155,18 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     }
 
     @Override
-    public Set<String> getToolClasses(ItemStack stack) {
+    public Set<ToolType> getToolTypes(ItemStack stack) {
         if (!GearHelper.isBroken(stack)) {
-            ImmutableSet.Builder<String> builder = ImmutableSet.builder();
-            builder.addAll(this.toolClasses);
-            if (GearData.hasPart(stack, MiscUpgrades.SPOON.getPart()))
-                builder.add("shovel");
-            return builder.build();
-        } else {
-            return ImmutableSet.of();
+            if (GearData.hasPart(stack, PartConst.MISC_SPOON)) {
+                // Pickaxe with spoon
+                return TOOL_CLASSES_WITH_SPOON;
+            } else {
+                // Normal pickaxe
+                return TOOL_CLASSES_BASE;
+            }
         }
+        // Broken
+        return ImmutableSet.of();
     }
 
     @Override
@@ -176,8 +180,8 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        GearHelper.getSubItems(this, tab, items);
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
@@ -186,8 +190,8 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, world, entity, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override

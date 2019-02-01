@@ -18,30 +18,64 @@
 
 package net.silentchaos512.gear.crafting.ingredient;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.silentchaos512.gear.api.parts.ItemPart;
-import net.silentchaos512.gear.api.parts.PartRegistry;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JsonUtils;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.PartManager;
 
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 public class GearPartIngredient extends Ingredient {
     private final PartType type;
 
     public GearPartIngredient(PartType type) {
+        super(Stream.of());
         this.type = type;
     }
 
     @Override
-    public boolean apply(@Nullable ItemStack stack) {
+    public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        ItemPart part = PartRegistry.get(stack);
+        IGearPart part = PartManager.from(stack);
         return part != null && part.getType().equals(type);
     }
 
     @Override
     public ItemStack[] getMatchingStacks() {
         return super.getMatchingStacks();
+    }
+
+    public static class Serializer implements IIngredientSerializer<GearPartIngredient> {
+        @Override
+        public GearPartIngredient parse(PacketBuffer buffer) {
+            String str = buffer.readString(255);
+            PartType type = PartType.get(str);
+            return new GearPartIngredient(type);
+        }
+
+        @Override
+        public GearPartIngredient parse(JsonObject json) {
+            String typeName = JsonUtils.getString(json, "part_type", "");
+            if (typeName.isEmpty())
+                throw new JsonSyntaxException("'part_type' is missing");
+
+            PartType type = PartType.get(typeName);
+            if (type == null)
+                throw new JsonSyntaxException("part_type " + typeName + " does not exist");
+
+            return new GearPartIngredient(type);
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, GearPartIngredient ingredient) {
+            buffer.writeString(ingredient.type.getName());
+        }
     }
 }

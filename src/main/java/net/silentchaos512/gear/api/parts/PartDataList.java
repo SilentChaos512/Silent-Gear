@@ -20,24 +20,28 @@ package net.silentchaos512.gear.api.parts;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.parts.type.PartRod;
+import net.silentchaos512.gear.parts.type.PartTip;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public final class PartDataList implements List<ItemPartData> {
-    private final List<ItemPartData> list = new ArrayList<>();
+public final class PartDataList implements List<PartData> {
+    private final List<PartData> list = new ArrayList<>();
 
     private PartDataList() {
     }
 
-    public static PartDataList of(Collection<ItemPartData> c) {
+    public static PartDataList of(Collection<PartData> c) {
         PartDataList ret = new PartDataList();
         ret.list.addAll(c);
         return ret;
     }
 
-    public static PartDataList of(ItemPartData... parts) {
+    public static PartDataList of(PartData... parts) {
         PartDataList ret = new PartDataList();
         Collections.addAll(ret.list, parts);
         return ret;
@@ -46,14 +50,14 @@ public final class PartDataList implements List<ItemPartData> {
     public static PartDataList from(Collection<ItemStack> stacks) {
         PartDataList ret = new PartDataList();
         // Get part data for each stack, if it is a part. Silently ignore non-parts.
-        stacks.stream().map(ItemPartData::fromStack).filter(Objects::nonNull).forEach(data -> ret.list.add(data));
+        stacks.stream().map(PartData::from).filter(Objects::nonNull).forEach(ret.list::add);
         return ret;
     }
 
     public PartDataList getUniqueParts(boolean mainsOnly) {
         PartDataList result = PartDataList.of();
-        for (ItemPartData data : (mainsOnly ? getMains() : this.list)) {
-            if (result.stream().map(ItemPartData::getPart).noneMatch(part -> part == data.part)) {
+        for (PartData data : (mainsOnly ? getMains() : this.list)) {
+            if (result.stream().map(PartData::getPart).noneMatch(part -> part == data.getPart())) {
                 result.add(data);
             }
         }
@@ -61,64 +65,64 @@ public final class PartDataList implements List<ItemPartData> {
     }
 
     @Nullable
-    public ItemPartData firstInPosition(IPartPosition position) {
-        for (ItemPartData part : this.list)
-            if (part.part.getPartPosition() == position)
+    public PartData firstInPosition(IPartPosition position) {
+        for (PartData part : this.list)
+            if (part.getPart().getPartPosition() == position)
                 return part;
         return null;
     }
 
     @Nullable
-    public ItemPartData getPrimaryMain() {
-        for (ItemPartData data : this.list)
-            if (data.part instanceof PartMain)
+    public PartData getPrimaryMain() {
+        for (PartData data : this.list)
+            if (data.getPart() instanceof PartMain)
                 return data;
         return null;
     }
 
-    public List<ItemPartData> getMains() {
-        return getParts(ItemPartData::isMain);
+    public List<PartData> getMains() {
+        return getParts(part -> part.getPart() instanceof PartMain);
     }
 
-    public List<ItemPartData> getRods() {
-        return getParts(ItemPartData::isRod);
+    public List<PartData> getRods() {
+        return getParts(part -> part.getPart() instanceof PartRod);
     }
 
-    public List<ItemPartData> getTips() {
-        return getParts(ItemPartData::isTip);
+    public List<PartData> getTips() {
+        return getParts(part -> part.getPart() instanceof PartTip);
     }
 
-    public List<ItemPartData> getParts(Predicate<ItemPartData> predicate) {
-        ImmutableList.Builder<ItemPartData> builder = ImmutableList.builder();
+    public List<PartData> getParts(Predicate<PartData> predicate) {
+        ImmutableList.Builder<PartData> builder = ImmutableList.builder();
         this.list.stream().filter(predicate).forEach(builder::add);
         return builder.build();
     }
 
     /**
-     * Convenience method which wraps the part in {@link ItemPartData} for you. Useful for ungraded
+     * Convenience method which wraps the part in {@link PartData} for you. Useful for ungraded
      * parts and parts without a unique crafting stack.
      */
-    public boolean addPart(ItemPart part) {
-        return this.list.add(ItemPartData.instance(part));
+    public boolean addPart(IGearPart part) {
+        return this.list.add(PartData.of(part));
     }
 
     @Override
-    public boolean add(ItemPartData arg0) {
+    public boolean add(PartData arg0) {
         return this.list.add(arg0);
     }
 
     @Override
-    public void add(int arg0, ItemPartData arg1) {
+    public void add(int arg0, PartData arg1) {
         this.list.add(arg0, arg1);
     }
 
     @Override
-    public boolean addAll(Collection<? extends ItemPartData> arg0) {
+    public boolean addAll(Collection<? extends PartData> arg0) {
         return this.list.addAll(arg0);
     }
 
     @Override
-    public boolean addAll(int arg0, Collection<? extends ItemPartData> arg1) {
+    public boolean addAll(int arg0, Collection<? extends PartData> arg1) {
         return this.list.addAll(arg0, arg1);
     }
 
@@ -138,7 +142,7 @@ public final class PartDataList implements List<ItemPartData> {
     }
 
     @Override
-    public ItemPartData get(int arg0) {
+    public PartData get(int arg0) {
         return this.list.get(arg0);
     }
 
@@ -153,7 +157,7 @@ public final class PartDataList implements List<ItemPartData> {
     }
 
     @Override
-    public Iterator<ItemPartData> iterator() {
+    public Iterator<PartData> iterator() {
         return this.list.iterator();
     }
 
@@ -163,12 +167,12 @@ public final class PartDataList implements List<ItemPartData> {
     }
 
     @Override
-    public ListIterator<ItemPartData> listIterator() {
+    public ListIterator<PartData> listIterator() {
         return this.list.listIterator();
     }
 
     @Override
-    public ListIterator<ItemPartData> listIterator(int arg0) {
+    public ListIterator<PartData> listIterator(int arg0) {
         return this.list.listIterator(arg0);
     }
 
@@ -178,7 +182,7 @@ public final class PartDataList implements List<ItemPartData> {
     }
 
     @Override
-    public ItemPartData remove(int arg0) {
+    public PartData remove(int arg0) {
         return this.list.remove(arg0);
     }
 
@@ -193,7 +197,7 @@ public final class PartDataList implements List<ItemPartData> {
     }
 
     @Override
-    public ItemPartData set(int arg0, ItemPartData arg1) {
+    public PartData set(int arg0, PartData arg1) {
         return this.list.set(arg0, arg1);
     }
 
@@ -203,7 +207,7 @@ public final class PartDataList implements List<ItemPartData> {
     }
 
     @Override
-    public List<ItemPartData> subList(int arg0, int arg1) {
+    public List<PartData> subList(int arg0, int arg1) {
         return this.list.subList(arg0, arg1);
     }
 

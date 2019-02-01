@@ -24,9 +24,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.block.craftingstation.ContainerCraftingStation;
 import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
+import net.silentchaos512.gear.parts.PartData;
 
 import java.util.Map;
 
@@ -87,9 +87,9 @@ public class SlotCraftingStationOutput extends SlotCrafting {
 //                }
 //            }
 
-            Map<ItemPartData, Integer> partList = container.getCompatibleParts(item);
-            for (Map.Entry<ItemPartData, Integer> entry : partList.entrySet()) {
-                ItemPartData part = entry.getKey();
+            Map<PartData, Integer> partList = container.getCompatibleParts(item);
+            for (Map.Entry<PartData, Integer> entry : partList.entrySet()) {
+                PartData part = entry.getKey();
                 int amount = entry.getValue();
                 int slot = -1;
                 for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
