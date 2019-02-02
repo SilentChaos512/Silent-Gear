@@ -1,5 +1,5 @@
 {
-    "type": "bowstring",
+    "type": "silentgear:bowstring",
     "stats": [
         {"name": "durability",      "value":  0.0, "op": "MUL1"},
         {"name": "enchantability",  "value":  0.0, "op": "MUL1"},
@@ -9,17 +9,27 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:string"
+            "item": "silentgear:plain_bowstring",
+            "tag": "silentgear:bowstrings/plain"
+        },
+        "small": {
+            "item": "minecraft:string",
+            "tag": "forge:string/string",
+            "size": 3
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.bowstring.plain"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "string",
-            "texture_color": "ffffff"
+            "normal_color": "white"
         }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

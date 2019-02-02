@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value": 256, "op": "ADD"},
         {"name": "enchantability",  "value":  -2, "op": "ADD"},
@@ -18,18 +18,20 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_diamond"
+            "item": "silentgear:diamond_tipped_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.diamond"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "diamond",
-            "texture_color": "ffffff"
-        },
-        "name_color": "aqua"
+            "normal_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

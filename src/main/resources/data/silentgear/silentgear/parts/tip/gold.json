@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value":  16, "op": "ADD"},
         {"name": "enchantability",  "value":   6, "op": "ADD"},
@@ -18,18 +18,20 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_gold"
+            "item": "silentgear:gold_tipped_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.gold"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "gold",
-            "texture_color": "ffffff"
-        },
-        "name_color": "gold"
+            "normal_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

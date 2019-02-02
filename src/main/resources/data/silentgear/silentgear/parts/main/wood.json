@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  59},
         {"name": "armor_durability","value":   9},
@@ -22,21 +22,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:planks",
-            "data": 0,
-            "oredict": "plankWood"
+            "item": "minecraft:oak_planks",
+            "tag": "minecraft:planks"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.wood"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "wood",
             "texture_color": "FFFFFF",
             "broken_color": "866526"
-        },
-        "name_color": "gold"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 0,
         "tool_blacklist": []
     }

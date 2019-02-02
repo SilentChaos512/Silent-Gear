@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  32},
         {"name": "armor_durability","value":   7},
@@ -24,25 +24,27 @@
     "crafting_items": {
         "normal": {
             "item": "minecraft:gold_ingot",
-            "data": 0,
-            "oredict": "ingotGold"
+            "tag": "forge:ingots/gold"
         },
         "small": {
             "item": "minecraft:gold_nugget",
-            "data": 0,
-            "oredict": "nuggetGold"
+            "tag": "forge:nuggets/gold",
+            "size": 9
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.gold"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "gold",
-            "texture_color": "FFFFFF",
-            "broken_color": "EAEE57"
-        },
-        "name_color": "gold"
+            "normal_color": "#FFFFFF",
+            "broken_color": "#EAEE57"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 2,
         "tool_blacklist": []
     }

@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value": 1561},
         {"name": "armor_durability","value":   33},
@@ -24,23 +24,27 @@
     "crafting_items": {
         "normal": {
             "item": "minecraft:diamond",
-            "oredict": "gemDiamond"
+            "tag": "forge:gems/diamond"
         },
         "small": {
             "item": "silentgear:diamond_shard",
-            "oredict": "nuggetDiamond"
+            "tag": "forge:nuggets/diamond",
+            "size": 9
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.diamond"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "diamond",
-            "texture_color": "FFFFFF",
-            "broken_color": "33EBCB"
-        },
-        "name_color": "aqua"
+            "normal_color": "#FFFFFF",
+            "broken_color": "#33EBCB"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 3,
         "tool_blacklist": []
     }

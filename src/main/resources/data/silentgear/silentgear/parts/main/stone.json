@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  131},
         {"name": "armor_durability","value":    5},
@@ -22,21 +22,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:cobblestone",
-            "data": 0,
-            "oredict": "cobblestone"
+            "item": "minecraft:cobblestone"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.stone"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "stone",
-            "texture_color": "FFFFFF",
-            "broken_color": "9A9A9A"
-        },
-        "name_color": "dark_gray"
+            "normal_color": "#FFFFFF",
+            "broken_color": "#9A9A9A"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

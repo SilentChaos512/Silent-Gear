@@ -1,14 +1,14 @@
 {
     "type": "trait",
     "max_level": 5,
-    "name_color": "dark_green",
+    "name_color": "gold",
     "cancels_with": [],
     "name": {
         "translate": true,
-        "name": "trait.silentgear.multi_break"
+        "name": "trait.silentgear.lustrous"
     },
     "description": {
         "translate": true,
-        "name": "trait.silentgear.multi_break.desc"
+        "name": "trait.silentgear.lustrous.desc"
     }
 }

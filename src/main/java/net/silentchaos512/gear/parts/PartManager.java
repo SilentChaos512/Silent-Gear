@@ -7,11 +7,11 @@ import com.google.gson.JsonParseException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class PartManager implements ISelectiveResourceReloadListener {
+public final class PartManager implements IResourceManagerReloadListener /*ISelectiveResourceReloadListener*/ {
     public static final PartManager INSTANCE = new PartManager();
 
     private static final Pattern PATTERN_NAME_FROM_PATH = Pattern.compile(
@@ -45,6 +45,11 @@ public final class PartManager implements ISelectiveResourceReloadListener {
     private PartManager() {}
 
     @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        onResourceManagerReload(resourceManager, iResourceType -> true);
+    }
+
+//    @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(

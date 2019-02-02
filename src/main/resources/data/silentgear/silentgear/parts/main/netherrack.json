@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  198},
         {"name": "armor_durability","value":    6},
@@ -23,21 +23,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:netherrack",
-            "data": 0,
-            "oredict": "netherrack"
+            "item": "minecraft:netherrack"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.netherrack"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "generic_lc",
-            "texture_color": "854242",
-            "broken_color": "854242"
-        },
-        "name_color": "dark_red"
+            "normal_color": "#854242",
+            "broken_color": "#854242"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

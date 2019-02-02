@@ -1,5 +1,5 @@
 {
-    "type": "grip",
+    "type": "silentgear:grip",
     "stats": [
         {"name": "durability",        "value": 0.05, "op": "MUL1"},
         {"name": "repair_efficiency", "value": 0.1,  "op": "MUL1"},
@@ -15,18 +15,21 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:leather",
-            "data": 0
+            "item": "silentgear:leather_wrappings"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.grip.leather"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "leather",
-            "texture_color": "ffffff"
+            "normal_color": "white"
         }
     },
     "availability": {
-        "enabled": true,
         "tier": 0,
         "tool_blacklist": []
     }

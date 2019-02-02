@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  175},
         {"name": "armor_durability","value":   11},
@@ -19,21 +19,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:brick",
-            "data": 0
-        },
-        "requires_smelting": true
+            "item": "minecraft:brick"
+        }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.terracotta"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "generic_lc",
-            "texture_color": "C76245",
+            "normal_color": "C76245",
             "broken_color": "C76245"
-        },
-        "name_color": "gold"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

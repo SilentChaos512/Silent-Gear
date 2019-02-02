@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  72},
         {"name": "armor_durability","value":  12},
@@ -22,20 +22,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:netherwood_planks",
-            "data": 0
+            "item": "silentgear:netherwood_planks"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.netherwood"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "generic_lc",
-            "texture_color": "D83200",
-            "broken_color": "D83200"
-        },
-        "name_color": "red"
+            "normal_color": "#D83200",
+            "broken_color": "#D83200"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 0,
         "tool_blacklist": []
     }

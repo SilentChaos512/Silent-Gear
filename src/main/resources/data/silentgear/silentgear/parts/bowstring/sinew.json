@@ -1,5 +1,5 @@
 {
-    "type": "bowstring",
+    "type": "silentgear:bowstring",
     "stats": [
         {"name": "durability",      "value":  0.25, "op": "MUL1"},
         {"name": "enchantability",  "value": -0.1,  "op": "MUL1"},
@@ -9,17 +9,27 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:sinew_fiber"
+            "item": "silentgear:sinew_bowstring",
+            "tag": "silentgear:bowstrings/sinew"
+        },
+        "small": {
+            "item": "silentgear:sinew_fiber",
+            "tag": "forge:string/sinew",
+            "size": 3
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.bowstring.sinew"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "sinew",
-            "texture_color": "ffffff"
+            "normal_color": "white"
         }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

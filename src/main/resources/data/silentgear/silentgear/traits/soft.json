@@ -10,5 +10,13 @@
             "factor_damage": true,
             "factor_value": true
         }
-    ]
+    ],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.soft"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.soft.desc"
+    }
 }

@@ -1,5 +1,5 @@
 {
-    "type": "rod",
+    "type": "silentgear:rod",
     "stats": [
         {"name": "durability",      "value":  0.0, "op": "MUL2"},
         {"name": "enchantability",  "value":  0.1, "op": "MUL2"},
@@ -15,19 +15,22 @@
     "crafting_items": {
         "normal": {
             "item": "minecraft:stick",
-            "data": 0,
-            "oredict": "stickWood"
+            "tag": "forge:rods/wooden"
         }
+    },
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.rod.wood"
     },
     "display": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "wood",
-            "texture_color": "ffffff"
-        },
-        "name_color": "gold"
+            "normal_color": "white",
+            "fallback_color": "#896727"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 0,
         "tool_blacklist": []
     }

@@ -3,6 +3,7 @@ package net.silentchaos512.gear.client;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -15,7 +16,7 @@ import net.silentchaos512.lib.util.Color;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public final class ColorHandlers {
     public static Map<String, Integer[]> gearColorCache = new HashMap<>();
 

@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value":    0, "op": "ADD"},
         {"name": "enchantability",  "value":  0.1, "op": "MUL2"},
@@ -18,18 +18,20 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_glowstone"
+            "item": "silentgear:glowstone_coated_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.glowstone"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "glowstone",
-            "texture_color": "ffffff"
-        },
-        "name_color": "yellow"
+            "normal_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

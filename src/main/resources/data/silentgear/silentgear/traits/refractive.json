@@ -2,5 +2,13 @@
     "type": "trait",
     "max_level": 5,
     "name_color": "gold",
-    "cancels_with": []
+    "cancels_with": [],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.refractive"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.refractive.desc"
+    }
 }

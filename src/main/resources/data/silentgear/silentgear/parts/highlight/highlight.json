@@ -1,10 +1,19 @@
 {
-    "type": "highlight",
+    "type": "silentgear:highlight",
     "stats": [],
     "traits": [],
-    "crafting_items": {},
-    "display": {
+    "crafting_items": {
+        "normal": {
+            "tag": "none:invalid"
+        }
+    },
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.highlight"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "highlight"
         }
     },

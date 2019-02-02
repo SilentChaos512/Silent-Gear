@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  124},
         {"name": "armor_durability","value":    4},
@@ -22,21 +22,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:flint",
-            "data": 0,
-            "oredict": "flint"
+            "item": "minecraft:flint"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.flint"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "flint",
-            "texture_color": "FFFFFF",
-            "broken_color": "969696"
-        },
-        "name_color": "dark_gray"
+            "normal_color": "#FFFFFF",
+            "broken_color": "#969696"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

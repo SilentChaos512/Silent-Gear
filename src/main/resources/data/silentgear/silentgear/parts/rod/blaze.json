@@ -1,5 +1,5 @@
 {
-    "type": "rod",
+    "type": "silentgear:rod",
     "stats": [
         {"name": "durability",      "value":  0.4, "op": "MUL2"},
         {"name": "enchantability",  "value":  0.6, "op": "MUL2"},
@@ -17,18 +17,23 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:blaze_rod"
+            "item": "minecraft:blaze_rod",
+            "tag": "forge:rods/blaze"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.rod.blaze"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "blaze",
-            "texture_color": "ffffff"
-        },
-        "name_color": "gold"
+            "normal_color": "white",
+            "fallback_color": "#F28D21"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 3,
         "tool_blacklist": []
     }

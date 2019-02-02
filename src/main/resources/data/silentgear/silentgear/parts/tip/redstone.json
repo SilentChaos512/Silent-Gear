@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value":    0, "op": "ADD"},
         {"name": "enchantability",  "value":    0, "op": "ADD"},
@@ -17,18 +17,20 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_redstone"
+            "item": "silentgear:redstone_coated_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.redstone"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "redstone",
-            "texture_color": "ffffff"
-        },
-        "name_color": "red"
+            "normal_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

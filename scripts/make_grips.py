@@ -1,4 +1,32 @@
+import io
 
+
+def color_str(color: int):
+    return '#' + hex(color)[2:].upper()
+
+
+colors = {
+    "white": 16383998,
+    "orange": 16351261,
+    "magenta": 13061821,
+    "light_blue": 3847130,
+    "yellow": 16701501,
+    "lime": 8439583,
+    "pink": 15961002,
+    "gray": 4673362,
+    "light_gray": 10329495,
+    "cyan": 1481884,
+    "purple": 8991416,
+    "blue": 3949738,
+    "brown": 8606770,
+    "green": 6192150,
+    "red": 11546150,
+    "black": 1908001
+}
+
+# Unfortunately, we have to do this because of formatting.
+# So no json module...
+data = """
 {
     "type": "silentgear:grip",
     "stats": [
@@ -16,18 +44,18 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:yellow_wool"
+            "item": "minecraft:%s_wool"
         }
     },
     "name": {
         "translate": true,
-        "name": "part.silentgear.grip.yellow_wool"
+        "name": "part.silentgear.grip.%s_wool"
     },
     "textures": {
         "all": {
             "texture_domain": "silentgear",
             "texture_suffix": "wool",
-            "normal_color": "#FED83D"
+            "normal_color": "%s"
         }
     },
     "availability": {
@@ -35,3 +63,11 @@
         "tool_blacklist": []
     }
 }
+"""
+
+
+if __name__ == '__main__':
+    for name, color in colors.items():
+        content = data % (name, name, color_str(color))
+        with open('output/wool_' + name + '.json', 'w') as f:
+            f.write(content)

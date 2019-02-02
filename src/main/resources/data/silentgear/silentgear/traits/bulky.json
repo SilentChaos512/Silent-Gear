@@ -10,5 +10,13 @@
             "factor_damage": true,
             "factor_value": false
         }
-    ]
+    ],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.bulky"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.bulky.desc"
+    }
 }

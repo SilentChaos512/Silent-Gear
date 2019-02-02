@@ -20,30 +20,8 @@ public final class ModTags {
     }
 
     public static final class Items {
-        public static final Tag<Item> INGOTS_CRIMSON_IRON = TagGenerator.item(
-                nameForge("ingots/crimson_iron"), CraftingItems.CRIMSON_IRON_INGOT);
-        public static final Tag<Item> INGOTS_CRIMSON_STEEL = TagGenerator.item(
-                nameForge("ingots/crimson_steel"), CraftingItems.CRIMSON_STEEL_INGOT);
-        public static final Tag<Item> NUGGETS_DIAMOND = TagGenerator.item(
-                nameForge("nuggets/diamond"), CraftingItems.DIAMOND_SHARD);
-        public static final Tag<Item> NUGGETS_EMERALD = TagGenerator.item(
-                nameForge("nuggets/emerald"), CraftingItems.EMERALD_SHARD);
         public static final Tag<Item> ORES_CRIMSON_IRON = TagGenerator.item(
                 nameForge("ores/crimson_iron"), ModBlocks.CRIMSON_IRON_ORE);
-        public static final Tag<Item> PAPER_BLUEPRINT = TagGenerator.item(
-                nameForge("paper/blueprint"), CraftingItems.BLUEPRINT_PAPER);
-        public static final Tag<Item> RODS_IRON = TagGenerator.item(
-                nameForge("rods/iron"), CraftingItems.IRON_ROD);
-        public static final Tag<Item> RODS_NETHERWOOD = TagGenerator.item(
-                nameMod("rods/netherwood"), CraftingItems.NETHERWOOD_STICK);
-        public static final Tag<Item> RODS_ROUGH = TagGenerator.item(
-                nameMod("rods/rough"), CraftingItems.ROUGH_ROD);
-        public static final Tag<Item> RODS_STONE = TagGenerator.item(
-                nameForge("rods/stone"), CraftingItems.STONE_ROD);
-        public static final Tag<Item> UPGRADE_BASES_BASIC = TagGenerator.item(
-                nameMod("upgrade_bases/basic"), CraftingItems.UPGRADE_BASE);
-        public static final Tag<Item> UPGRADE_BASES_ADVANCED = TagGenerator.item(
-                nameMod("upgrade_bases/advanced"), CraftingItems.ADVANCED_UPGRADE_BASE);
 
         private Items() {}
     }
@@ -67,17 +45,28 @@ public final class ModTags {
         TagGenerator.block(nameForge("ores"), Blocks.ORES_CRIMSON_IRON);
         TagGenerator.item(nameForge("ores"), Items.ORES_CRIMSON_IRON);
 
-        TagGenerator.item(nameForge("ingots"), Items.INGOTS_CRIMSON_IRON);
-        TagGenerator.item(nameForge("ingots"), Items.INGOTS_CRIMSON_STEEL);
-        TagGenerator.item(nameForge("nuggets"), Items.NUGGETS_DIAMOND);
-        TagGenerator.item(nameForge("nuggets"), Items.NUGGETS_EMERALD);
+        assert CraftingItems.CRIMSON_IRON_INGOT.getTag() != null;
+        TagGenerator.item(nameForge("ingots"), CraftingItems.CRIMSON_IRON_INGOT.getTag());
+        assert CraftingItems.CRIMSON_STEEL_INGOT.getTag() != null;
+        TagGenerator.item(nameForge("ingots"), CraftingItems.CRIMSON_STEEL_INGOT.getTag());
+        assert CraftingItems.DIAMOND_SHARD.getTag() != null;
+        TagGenerator.item(nameForge("nuggets"), CraftingItems.DIAMOND_SHARD.getTag());
+        assert CraftingItems.EMERALD_SHARD.getTag() != null;
+        TagGenerator.item(nameForge("nuggets"), CraftingItems.EMERALD_SHARD.getTag());
         // TODO: Will there be a standard paper tag?
         TagGenerator.item(nameForge("paper"), net.minecraft.init.Items.PAPER);
-        TagGenerator.item(nameForge("paper"), Items.PAPER_BLUEPRINT);
-        TagGenerator.item(nameForge("rods"), Items.RODS_IRON);
-        TagGenerator.item(nameForge("rods"), Items.RODS_NETHERWOOD);
-        TagGenerator.item(nameForge("rods"), Items.RODS_ROUGH);
-        TagGenerator.item(nameForge("rods"), Items.RODS_STONE);
+        assert CraftingItems.BLUEPRINT_PAPER.getTag() != null;
+        TagGenerator.item(nameForge("paper"), CraftingItems.BLUEPRINT_PAPER.getTag());
+        assert CraftingItems.IRON_ROD.getTag() != null;
+        TagGenerator.item(nameForge("rods"), CraftingItems.IRON_ROD.getTag());
+        assert CraftingItems.NETHERWOOD_STICK.getTag() != null;
+        TagGenerator.item(nameForge("rods"), CraftingItems.NETHERWOOD_STICK.getTag());
+        assert CraftingItems.ROUGH_ROD.getTag() != null;
+        TagGenerator.item(nameForge("rods"), CraftingItems.ROUGH_ROD.getTag());
+        assert CraftingItems.STONE_ROD.getTag() != null;
+        TagGenerator.item(nameForge("rods"), CraftingItems.STONE_ROD.getTag());
+        // TODO: String tag?
+        TagGenerator.item(nameForge("string"), "forge:string/string", "forge:string/sinew", "forge:string/flax");
 
         for (ICoreItem item : ModItems.gearClasses.values()) {
             String type = item.getGearClass();

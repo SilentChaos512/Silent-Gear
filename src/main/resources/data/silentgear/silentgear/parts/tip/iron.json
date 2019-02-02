@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value": 128, "op": "ADD"},
         {"name": "enchantability",  "value":   2, "op": "ADD"},
@@ -17,18 +17,20 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_iron"
+            "item": "silentgear:iron_tipped_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.iron"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "iron",
-            "texture_color": "ffffff"
-        },
-        "name_color": "white"
+            "normal_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

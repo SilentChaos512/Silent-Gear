@@ -1,5 +1,5 @@
 {
-    "type": "misc_upgrade",
+    "type": "silentgear:misc_upgrade",
     "stats": [
         {"name": "durability",      "value": 0.2, "op": "MUL1"},
         {"name": "rarity",          "value":  10}
@@ -9,15 +9,18 @@
             "item": "silentgear:spoon_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.misc.spoon"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "",
-            "texture_color": "ffffff"
+            "texture_color": "white"
         },
         "name_color": "dark_aqua"
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  250},
         {"name": "armor_durability","value":   15},
@@ -23,25 +23,27 @@
     "crafting_items": {
         "normal": {
             "item": "minecraft:iron_ingot",
-            "data": 0,
-            "oredict": "ingotIron"
+            "tag": "forge:ingots/iron"
         },
         "small": {
             "item": "minecraft:iron_nugget",
-            "data": 0,
-            "oredict": "nuggetIron"
+            "tag": "forge:nuggets/iron",
+            "size": 9
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.iron"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "iron",
-            "texture_color": "FFFFFF",
-            "broken_color": "FFFFFF"
-        },
-        "name_color": "gray"
+            "normal_color": "#FFFFFF",
+            "broken_color": "#FFFFFF"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 2,
         "tool_blacklist": []
     }

@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value":  420},
         {"name": "armor_durability","value":   27},
@@ -23,20 +23,26 @@
     "crafting_items": {
         "normal": {
             "item": "silentgear:crimson_iron_ingot",
-            "data": 0,
-            "oredict": "ingotCrimsonIron"
+            "tag": "forge:ingots/crimson_iron"
+        },
+        "small": {
+            "tag": "forge:nuggets/crimson_iron",
+            "size": 9
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.crimson_iron"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "crimson_iron",
-            "texture_color": "FFFFFF",
-            "broken_color": "FF6189"
-        },
-        "name_color": "red"
+            "normal_color": "#FFFFFF",
+            "broken_color": "#FF6189"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 2,
         "tool_blacklist": []
     }

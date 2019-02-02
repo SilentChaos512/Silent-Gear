@@ -1,5 +1,5 @@
 {
-    "type": "main",
+    "type": "silentgear:main",
     "stats": [
         {"name": "durability",      "value": 4096},
         {"name": "armor_durability","value":   42},
@@ -23,21 +23,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:obsidian",
-            "data": 0,
-            "oredict": "obsidian"
+            "item": "minecraft:obsidian"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.obsidian"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "generic_hc",
-            "texture_color": "443464",
-            "broken_color": "443464"
-        },
-        "name_color": "dark_purple"
+            "texture_color": "#443464",
+            "broken_color": "#443464"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 3,
         "tool_blacklist": []
     }

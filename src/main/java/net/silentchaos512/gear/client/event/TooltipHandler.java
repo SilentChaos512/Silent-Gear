@@ -10,16 +10,17 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.IPartMaterial;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
@@ -70,10 +71,15 @@ public final class TooltipHandler {
                 .applyTextStyle(TextFormatting.GREEN));
 
         if (event.getFlags().isAdvanced()) {
-            event.getToolTip().add(new TextComponentString("item: " + part.getMaterials().getItem()));
-            event.getToolTip().add(new TextComponentString("tag: " + part.getMaterials().getTag()));
-            event.getToolTip().add(new TextComponentString("itemSmall: " + part.getMaterials().getSmallItem()));
-            event.getToolTip().add(new TextComponentString("tagSmall: " + part.getMaterials().getSmallTag()));
+            IPartMaterial mat = part.getMaterials();
+            if (mat.getItem() != null)
+                event.getToolTip().add(new TextComponentString("item: " + mat.getItem().asItem().getRegistryName()));
+            if (mat.getTag() != null)
+                event.getToolTip().add(new TextComponentString("tag: " + mat.getTag().getId()));
+            if (mat.getSmallItem() != null)
+                event.getToolTip().add(new TextComponentString("itemSmall: " + mat.getSmallItem().asItem().getRegistryName()));
+            if (mat.getSmallTag() != null)
+                event.getToolTip().add(new TextComponentString("tagSmall: " + mat.getSmallTag().getId()));
         }
 
         // Traits

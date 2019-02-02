@@ -1,5 +1,5 @@
 {
-    "type": "rod",
+    "type": "silentgear:rod",
     "stats": [
         {"name": "durability",      "value": -0.1, "op": "MUL2"},
         {"name": "enchantability",  "value": -0.3, "op": "MUL2"},
@@ -15,18 +15,22 @@
     "crafting_items": {
         "normal": {
             "item": "silentgear:stone_rod",
-            "oredict": "rodStone"
+            "tag": "forge:rods/stone"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.rod.stone"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "stone",
-            "texture_color": "ffffff"
-        },
-        "name_color": "dark_gray"
+            "normal_color": "white",
+            "fallback_color": "#9A9A9A"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

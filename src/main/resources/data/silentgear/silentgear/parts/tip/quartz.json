@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value":  64, "op": "ADD"},
         {"name": "enchantability",  "value":   4, "op": "ADD"},
@@ -18,15 +18,18 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_quartz"
+            "item": "silentgear:quartz_tipped_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.quartz"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "quartz",
-            "texture_color": "ffffff"
-        },
-        "name_color": "white"
+            "normal_color": "white"
+        }
     },
     "availability": {
         "enabled": true,

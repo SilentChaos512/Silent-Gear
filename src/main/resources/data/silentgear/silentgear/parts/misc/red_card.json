@@ -1,5 +1,5 @@
 {
-    "type": "misc_upgrade",
+    "type": "silentgear:misc_upgrade",
     "stats": [
         {"name": "durability",      "value": 0.0, "op": "MUL1"},
         {"name": "rarity",          "value": -5}
@@ -9,15 +9,17 @@
             "item": "silentgear:red_card_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.misc.red_card"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "",
-            "texture_color": "ffffff"
-        },
-        "name_color": "red"
+            "texture_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

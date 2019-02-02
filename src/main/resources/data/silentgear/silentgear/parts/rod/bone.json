@@ -1,5 +1,5 @@
 {
-    "type": "rod",
+    "type": "silentgear:rod",
     "stats": [
         {"name": "durability",      "value":  0.1, "op": "MUL2"},
         {"name": "enchantability",  "value":  0.1, "op": "MUL2"},
@@ -14,19 +14,22 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:bone",
-            "oredict": "bone"
+            "item": "minecraft:bone"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.rod.bone"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "bone",
-            "texture_color": "ffffff"
-        },
-        "name_color": "white"
+            "normal_color": "white",
+            "fallback_color": "#EDEBCA"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

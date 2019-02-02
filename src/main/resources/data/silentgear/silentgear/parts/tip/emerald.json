@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value": 512, "op": "ADD"},
         {"name": "enchantability",  "value":   2, "op": "ADD"},
@@ -18,18 +18,20 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_emerald"
+            "item": "silentgear:emerald_tipped_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.emerald"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "emerald",
-            "texture_color": "ffffff"
-        },
-        "name_color": "dark_green"
+            "normal_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

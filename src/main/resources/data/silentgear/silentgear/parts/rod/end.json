@@ -1,5 +1,5 @@
 {
-    "type": "rod",
+    "type": "silentgear:rod",
     "stats": [
         {"name": "durability",      "value":  0.5, "op": "MUL2"},
         {"name": "enchantability",  "value":  0.2, "op": "MUL2"},
@@ -21,15 +21,19 @@
             "item": "minecraft:end_rod"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.rod.end"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "end",
-            "texture_color": "ffffff"
-        },
-        "name_color": "light_purple"
+            "normal_color": "white",
+            "fallback_color": "#F6EACD"
+        }
     },
     "availability": {
-        "enabled": true,
         "tier": 3,
         "tool_blacklist": []
     }

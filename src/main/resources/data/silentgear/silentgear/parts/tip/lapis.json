@@ -1,5 +1,5 @@
 {
-    "type": "tip",
+    "type": "silentgear:tip",
     "stats": [
         {"name": "durability",      "value":    0, "op": "ADD"},
         {"name": "enchantability",  "value":  0.6, "op": "MUL2"},
@@ -17,18 +17,20 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:tip_upgrade_lapis"
+            "item": "silentgear:lapis_coated_upgrade"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.tip.lapis"
+    },
+    "textures": {
         "all": {
             "texture_suffix": "lapis",
-            "texture_color": "ffffff"
-        },
-        "name_color": "blue"
+            "normal_color": "white"
+        }
     },
     "availability": {
-        "enabled": true,
         "tool_blacklist": []
     }
 }

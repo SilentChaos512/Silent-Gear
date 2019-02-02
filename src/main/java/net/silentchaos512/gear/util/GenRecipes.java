@@ -13,7 +13,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.util.generator.RecipeGenerator;
 
@@ -27,27 +26,30 @@ public class GenRecipes {
                 .ingredient(ModBlocks.CRIMSON_IRON_ORE)
                 .experience(1.0f)
         );
+        assert CraftingItems.UPGRADE_BASE.getTag() != null;
         RecipeGenerator.create(name("crafting_station"), RecipeGenerator.ShapedBuilder
                 .create(ModBlocks.CRAFTING_STATION)
                 .layout("#T#", "#U#", "#C#")
                 .key('#', ItemTags.PLANKS)
                 .key('T', Blocks.CRAFTING_TABLE)
-                .key('U', ModTags.Items.UPGRADE_BASES_BASIC)
+                .key('U', CraftingItems.UPGRADE_BASE.getTag())
                 .key('C', Tags.Items.CHESTS_WOODEN)
         );
+        assert CraftingItems.ADVANCED_UPGRADE_BASE.getTag() != null;
         RecipeGenerator.create(name("part_analyzer"), RecipeGenerator.ShapedBuilder
                 .create(ModBlocks.PART_ANALYZER)
                 .layout("QIQ", "I#I", "GGG")
                 .key('Q', Tags.Items.GEMS_QUARRTZ)
                 .key('I', Tags.Items.INGOTS_IRON)
-                .key('#', ModTags.Items.UPGRADE_BASES_ADVANCED)
+                .key('#', CraftingItems.ADVANCED_UPGRADE_BASE.getTag())
                 .key('G', Tags.Items.INGOTS_GOLD)
         );
+        assert CraftingItems.CRIMSON_IRON_INGOT.getTag() != null;
         RecipeGenerator.create(name("salvager"), RecipeGenerator.ShapedBuilder
                 .create(ModBlocks.SALVAGER)
                 .layout(" P ", "/I/", "/#/")
                 .key('P', Blocks.PISTON)
-                .key('/', ModTags.Items.INGOTS_CRIMSON_IRON)
+                .key('/', CraftingItems.CRIMSON_IRON_INGOT.getTag())
                 .key('I', Tags.Blocks.STORAGE_BLOCKS_IRON)
                 .key('#', Blocks.OBSIDIAN)
         );
@@ -79,10 +81,11 @@ public class GenRecipes {
         blueprints(ModItems.boots, b -> b.layout("#/#", "# #"));
         blueprints("rod", b -> b.layout("#/", "#/"));
 
+        assert CraftingItems.BLUEPRINT_PAPER.getTag() != null;
         RecipeGenerator.create(name("blueprint_book"), RecipeGenerator.ShapelessBuilder
                 .create(ModItems.blueprintBook)
                 .ingredient(Items.BOOK)
-                .ingredient(ModTags.Items.PAPER_BLUEPRINT, 3)
+                .ingredient(CraftingItems.BLUEPRINT_PAPER.getTag(), 3)
         );
 
         RecipeGenerator.create(name("blueprint_paper"), RecipeGenerator.ShapelessBuilder
@@ -96,12 +99,13 @@ public class GenRecipes {
                 .ingredient(ItemTags.PLANKS)
                 .ingredient(Tags.Items.STONE)
         );
+        assert CraftingItems.DIAMOND_SHARD.getTag() != null;
         RecipeGenerator.create(name("upgrade_base_advanced"), RecipeGenerator.ShapedBuilder
                 .create(CraftingItems.ADVANCED_UPGRADE_BASE)
                 .layout("///", "DUD", "GGG")
-                .key('/', ModTags.Items.NUGGETS_DIAMOND)
+                .key('/', CraftingItems.DIAMOND_SHARD.getTag())
                 .key('D', Tags.Items.DYES_BLUE)
-                .key('U', ModTags.Items.UPGRADE_BASES_BASIC)
+                .key('U', CraftingItems.UPGRADE_BASE.getTag())
                 .key('G', Tags.Items.NUGGETS_GOLD)
         );
         RecipeGenerator.create(name("rough_rods"), RecipeGenerator.ShapedBuilder
@@ -143,7 +147,7 @@ public class GenRecipes {
                 .create(CraftingItems.CRIMSON_STEEL_INGOT)
                 .layout("/ /", "#C#", "# #")
                 .key('/', Tags.Items.RODS_BLAZE)
-                .key('#', ModTags.Items.INGOTS_CRIMSON_IRON)
+                .key('#', CraftingItems.CRIMSON_IRON_INGOT.getTag())
                 .key('C', Items.MAGMA_CREAM)
         );
         RecipeGenerator.compress9(name("diamond_shards"), Items.DIAMOND, CraftingItems.DIAMOND_SHARD);
@@ -174,14 +178,18 @@ public class GenRecipes {
 
         RecipeGenerator.create(name("spoon_upgrade"), RecipeGenerator.ShapelessBuilder
                 .create(CraftingItems.SPOON_UPGRADE)
-                .ingredient(ModTags.Items.UPGRADE_BASES_ADVANCED)
+                .ingredient(CraftingItems.ADVANCED_UPGRADE_BASE.getTag())
                 .ingredient(Items.DIAMOND_SHOVEL)
         );
         RecipeGenerator.create(name("red_card_upgrade"), RecipeGenerator.ShapelessBuilder
                 .create(CraftingItems.RED_CARD_UPGRADE, 4)
-                .ingredient(ModTags.Items.UPGRADE_BASES_BASIC)
+                .ingredient(CraftingItems.UPGRADE_BASE.getTag())
                 .ingredient(Tags.Items.DYES_RED)
         );
+
+        // TODO: Bowstring (3 string)
+
+        // TODO: Grips (2 material + 1 #forge:string)
     }
 
     private static void blueprints(ICoreItem item, Consumer<RecipeGenerator.ShapedBuilder> layout) {
@@ -197,9 +205,10 @@ public class GenRecipes {
         if (blueprint != null) {
             RecipeGenerator.ShapedBuilder builder = RecipeGenerator.ShapedBuilder.create(blueprint);
             layout.accept(builder);
+            assert CraftingItems.BLUEPRINT_PAPER.getTag() != null;
             RecipeGenerator.create(nameBlueprint, builder
                     .group("silentgear:blueprints_" + type)
-                    .key('#', ModTags.Items.PAPER_BLUEPRINT)
+                    .key('#', CraftingItems.BLUEPRINT_PAPER.getTag())
                     .key('/', Tags.Items.RODS_WOODEN)
             );
         }
@@ -216,10 +225,11 @@ public class GenRecipes {
 
     private static void tipUpgrade(IItemProvider output, Tag<Item> material) {
         ResourceLocation name = Objects.requireNonNull(output.asItem().getRegistryName());
+        assert CraftingItems.UPGRADE_BASE.getTag() != null;
         RecipeGenerator.create(name, RecipeGenerator.ShapelessBuilder
                 .create(output)
                 .group("silentgear:tip_upgrades")
-                .ingredient(ModTags.Items.UPGRADE_BASES_BASIC)
+                .ingredient(CraftingItems.UPGRADE_BASE.getTag())
                 .ingredient(material)
         );
     }

@@ -2,13 +2,13 @@
     "type": "trait",
     "max_level": 5,
     "name_color": "dark_green",
-    "cancels_with": [],
+    "cancels_with": ["crude"],
     "name": {
         "translate": true,
-        "name": "trait.silentgear.multi_break"
+        "name": "trait.silentgear.synergistic"
     },
     "description": {
         "translate": true,
-        "name": "trait.silentgear.multi_break.desc"
+        "name": "trait.silentgear.synergistic.desc"
     }
 }

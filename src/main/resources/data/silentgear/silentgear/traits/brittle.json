@@ -4,5 +4,13 @@
     "name_color": "white",
     "cancels_with": ["malleable"],
     "effect_scale": 1,
-    "activation_chance": 0.1
+    "activation_chance": 0.1,
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.brittle"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.brittle.desc"
+    }
 }

@@ -1,5 +1,5 @@
 {
-    "type": "bowstring",
+    "type": "silentgear:bowstring",
     "stats": [
         {"name": "durability",      "value":  0.05, "op": "MUL1"},
         {"name": "enchantability",  "value":  0.00, "op": "MUL1"},
@@ -12,17 +12,27 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:flax_string"
+            "item": "silentgear:flax_bowstring",
+            "tag": "silentgear:bowstrings/flax"
+        },
+        "small": {
+            "item": "silentgear:flax_string",
+            "tag": "forge:string/flax",
+            "size": 3
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.bowstring.flax"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "flax",
-            "texture_color": "ffffff"
+            "normal_color": "white"
         }
     },
     "availability": {
-        "enabled": true,
         "tier": 1,
         "tool_blacklist": []
     }

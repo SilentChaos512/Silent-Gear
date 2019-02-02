@@ -1,5 +1,6 @@
+
 {
-    "type": "grip",
+    "type": "silentgear:grip",
     "stats": [
         {"name": "durability",        "value":  0.0, "op": "MUL1"},
         {"name": "repair_efficiency", "value":  0.2, "op": "MUL1"},
@@ -15,19 +16,21 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:wool",
-            "data": 9
+            "item": "minecraft:cyan_wool"
         }
     },
-    "display": {
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.grip.cyan_wool"
+    },
+    "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "wool",
-            "texture_color": "169c9c",
-            "broken_color": "169c9c"
+            "normal_color": "#169C9C"
         }
     },
     "availability": {
-        "enabled": true,
         "tier": 0,
         "tool_blacklist": []
     }

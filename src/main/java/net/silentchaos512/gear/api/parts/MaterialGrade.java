@@ -101,6 +101,6 @@ public enum MaterialGrade {
     }
 
     public ITextComponent getDisplayName() {
-        return new TextComponentTranslation("stat.silentgear.gradle." + name());
+        return new TextComponentTranslation("stat.silentgear.grade." + name());
     }
 }
