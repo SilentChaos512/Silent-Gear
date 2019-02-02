@@ -9,7 +9,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
-import net.silentchaos512.lib.util.model.ModelGenerator;
+import net.silentchaos512.lib.util.generator.ModelGenerator;
 
 public class GenModels {
     public static void generateAll() {

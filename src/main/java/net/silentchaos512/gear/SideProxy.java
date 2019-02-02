@@ -14,15 +14,12 @@ import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolModel;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModLootStuff;
-import net.silentchaos512.gear.init.ModTileEntities;
+import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GenModels;
+import net.silentchaos512.gear.util.GenRecipes;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.lib.event.InitialSpawnItems;
-import net.silentchaos512.lib.util.GameUtil;
 
 class SideProxy {
     SideProxy() {
@@ -41,6 +38,7 @@ class SideProxy {
         MinecraftForge.EVENT_BUS.addListener(this::serverStarted);
 
         ModLootStuff.init();
+        ModRecipes.init();
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -52,8 +50,10 @@ class SideProxy {
             else return ItemStack.EMPTY;
         });
 
-        if (GameUtil.isDeobfuscated()) {
+        if (SilentGear.isDevBuild()) {
+            ModTags.init();
             GenModels.generateAll();
+            GenRecipes.generateAll();
         }
     }
 

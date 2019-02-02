@@ -1,0 +1,15 @@
+{
+  "type": "crafting_shapeless",
+  "group": "silentgear:tip_upgrades",
+  "ingredients": [
+    {
+      "tag": "silentgear:upgrade_bases/basic"
+    },
+    {
+      "tag": "forge:ingots/gold"
+    }
+  ],
+  "result": {
+    "item": "silentgear:gold_tipped_upgrade"
+  }
+}

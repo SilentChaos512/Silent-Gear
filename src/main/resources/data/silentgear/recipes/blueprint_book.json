@@ -1,0 +1,20 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "tag": "forge:paper/blueprint"
+    },
+    {
+      "tag": "forge:paper/blueprint"
+    },
+    {
+      "tag": "forge:paper/blueprint"
+    }
+  ],
+  "result": {
+    "item": "silentgear:blueprint_book"
+  }
+}

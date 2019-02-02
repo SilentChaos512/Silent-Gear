@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "silentgear:leather_scrap"
+    }
+  },
+  "result": {
+    "item": "minecraft:leather"
+  }
+}

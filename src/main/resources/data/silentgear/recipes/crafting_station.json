@@ -1,0 +1,25 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "#T#",
+    "#U#",
+    "#C#"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "C": {
+      "tag": "forge:chests/wooden"
+    },
+    "T": {
+      "item": "minecraft:crafting_table"
+    },
+    "U": {
+      "tag": "silentgear:upgrade_bases/basic"
+    }
+  },
+  "result": {
+    "item": "silentgear:crafting_station"
+  }
+}

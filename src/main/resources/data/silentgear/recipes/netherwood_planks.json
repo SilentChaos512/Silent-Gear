@@ -1,0 +1,12 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:netherwood_log"
+    }
+  ],
+  "result": {
+    "item": "silentgear:netherwood_planks",
+    "count": 4
+  }
+}

@@ -160,7 +160,9 @@ public final class ToolModel implements IUnbakedModel {
         public static Loader INSTANCE = new Loader();
 
         @Override
-        public void onResourceManagerReload(IResourceManager resourceManager) { }
+        public void onResourceManagerReload(IResourceManager resourceManager) {
+            SilentGear.LOGGER.debug("ToolModel.Loader#onResourceManagerReload");
+        }
 
         @Override
         public boolean accepts(@Nonnull ResourceLocation modelLocation) {

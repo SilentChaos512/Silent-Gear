@@ -1,0 +1,20 @@
+{
+  "type": "crafting_shaped",
+  "group": "silentgear:blueprints_excavator",
+  "pattern": [
+    "# #",
+    "###",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "silentgear:template_excavator"
+  }
+}
