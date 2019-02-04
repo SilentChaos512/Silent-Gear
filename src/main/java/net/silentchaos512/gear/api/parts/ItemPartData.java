@@ -23,6 +23,7 @@ import lombok.Getter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -135,8 +136,20 @@ public final class ItemPartData {
         return part.getTraits(this);
     }
 
+    /**
+     * Gets a translated name for the part.
+     * @deprecated Use {@link #getDisplayName(ItemStack)} instead
+     */
+    @Deprecated
     public String getTranslatedName(ItemStack gear) {
         return part.getTranslatedName(this, gear);
+    }
+
+    /**
+     * Gets a user-friendly name for use in tooltips.
+     */
+    public ITextComponent getDisplayName(ItemStack gear) {
+        return part.getDisplayName(this, gear);
     }
 
     @Override

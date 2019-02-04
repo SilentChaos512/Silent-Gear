@@ -26,6 +26,7 @@ public class Config extends ConfigBaseNew {
     public static final Config INSTANCE = new Config();
 
     private static final String CAT_DEBUG = "debug";
+    private static final String CAT_CLIENT = "client";
     private static final String CAT_ITEMS = "items";
     static final String CAT_GEAR = CAT_ITEMS + SEP + "gear";
     private static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
@@ -34,6 +35,15 @@ public class Config extends ConfigBaseNew {
     private static final String CAT_WORLD_FLAX = CAT_WORLD + SEP + "flax";
     private static final String CAT_WORLD_FLOWER = CAT_WORLD + SEP + "flowers";
     private static final String CAT_WORLD_NETHERWOOD = CAT_WORLD + SEP + "netherwood";
+
+    /*
+     * Client
+     */
+
+    @ConfigOption(name = "Show Example Tool Heads Only", category = CAT_CLIENT)
+    @ConfigOption.BooleanDefault(false)
+    @ConfigOption.Comment("Show only a few example tool heads instead of all possibilities.")
+    public static boolean toolHeadShowExamplesOnly;
 
     /*
      * Items

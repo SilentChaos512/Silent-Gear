@@ -13,6 +13,9 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -274,11 +277,26 @@ public abstract class ItemPart {
      *
      * @param part The part
      * @param gear The equipment (tool/weapon/armor) stack
+     * @deprecated Use {@link #getDisplayName(ItemPartData, ItemStack)} instead
      */
+    @Deprecated
     public String getTranslatedName(@Nullable ItemPartData part, ItemStack gear) {
         if (!localizedNameOverride.isEmpty())
             return localizedNameOverride;
         return /* nameColor + */ SilentGear.i18n.translate(this.getTranslationKey(part));
+    }
+
+    /**
+     * Gets a user-friendly name for use in tooltips.
+     *
+     * @param part The part data (or null if not available)
+     * @param gear The gear item
+     * @return A text component
+     */
+    public ITextComponent getDisplayName(@Nullable ItemPartData part, ItemStack gear) {
+        if (!localizedNameOverride.isEmpty())
+            return new TextComponentString(localizedNameOverride);
+        return new TextComponentTranslation(getTranslationKey(part));
     }
 
     /**
