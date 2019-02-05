@@ -2,5 +2,13 @@
     "type": "trait",
     "max_level": 1,
     "name_color": "red",
-    "cancels_with": []
+    "cancels_with": [],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.magmatic"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.magmatic.desc"
+    }
 }

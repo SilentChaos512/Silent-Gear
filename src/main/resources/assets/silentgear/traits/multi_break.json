@@ -2,5 +2,13 @@
     "type": "trait",
     "max_level": 5,
     "name_color": "dark_green",
-    "cancels_with": []
+    "cancels_with": [],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.multi_break"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.multi_break.desc"
+    }
 }

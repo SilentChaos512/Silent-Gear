@@ -16,5 +16,13 @@
             "factor_damage": true,
             "factor_value": true
         }
-    ]
+    ],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.eroded"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.eroded.desc"
+    }
 }
