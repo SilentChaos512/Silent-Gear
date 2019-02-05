@@ -1,0 +1,14 @@
+{
+    "type": "trait",
+    "max_level": 5,
+    "name_color": "blue",
+    "cancels_with": [],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.chilled"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.chilled.desc"
+    }
+}

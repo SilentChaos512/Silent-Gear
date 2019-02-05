@@ -43,8 +43,8 @@ public class TraitRefractive extends Trait {
     }
 
     @Override
-    public void onUpdate(@Nullable EntityPlayer player, int level, ItemStack gear) {
-        super.onUpdate(player, level, gear);
+    public void tick(World world, @Nullable EntityPlayer player, int level, ItemStack gear, boolean isEquipped) {
+        super.tick(world, player, level, gear, isEquipped);
 
         if (player != null && player.ticksExisted % ACTIVATE_RATE == 0) {
             // TODO: Phantom lights, block config?

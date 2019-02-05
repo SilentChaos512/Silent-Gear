@@ -1,0 +1,23 @@
+{
+    "type": "potion_trait",
+    "max_level": 5,
+    "name_color": "aqua",
+    "cancels_with": [],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.aquatic"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.aquatic.desc"
+    },
+    "potion_effects": {
+        "armor": [
+            {
+                "full_set": true,
+                "effect": "minecraft:water_breathing",
+                "level": 1
+            }
+        ]
+    }
+}

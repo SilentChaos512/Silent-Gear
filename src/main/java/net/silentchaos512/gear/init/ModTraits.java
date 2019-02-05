@@ -19,10 +19,12 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.lib.ResourceOrigin;
@@ -32,8 +34,10 @@ import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.trait.DurabilityTrait;
+import net.silentchaos512.gear.trait.PotionEffectTrait;
 import net.silentchaos512.gear.trait.StatModifierTrait;
 import net.silentchaos512.gear.trait.TraitRefractive;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
 
@@ -43,13 +47,18 @@ import java.io.File;
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
 
+    public static Trait adamant;
     public static Trait ancient;
+    public static Trait aquatic;
+    public static Trait chilled;
     public static Trait crude;
     public static Trait holy;
     public static Trait magmatic;
     public static Trait multiBreak;
     public static Trait speedBoostLight;
+    public static Trait stellar;
     public static Trait synergyBoost;
+
     public static final float ANCIENT_XP_BOOST = 0.25f;
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
 
@@ -96,6 +105,38 @@ public final class ModTraits implements IPhasedInitializer {
         TraitRegistry.register(new StatModifierTrait(path("eroded"), ResourceOrigin.BUILTIN_CORE));
         TraitRegistry.register(new StatModifierTrait(path("jagged"), ResourceOrigin.BUILTIN_CORE));
         TraitRegistry.register(new StatModifierTrait(path("soft"), ResourceOrigin.BUILTIN_CORE));
+
+        adamant = TraitRegistry.register(new PotionEffectTrait(path("adamant"), ResourceOrigin.BUILTIN_CORE) {
+            @Override
+            public float onAttackEntity(@Nullable EntityPlayer player, EntityLivingBase target, int level, ItemStack gear, float baseValue) {
+                // Use base max health for Scaling Health compatibility
+                double baseMaxHealth = target.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
+                return baseMaxHealth > 20 ? baseValue + 2 * level : baseValue;
+            }
+        });
+        aquatic = TraitRegistry.register(new PotionEffectTrait(path("aquatic"), ResourceOrigin.BUILTIN_CORE) {
+            @Override
+            public float onAttackEntity(@Nullable EntityPlayer player, EntityLivingBase target, int level, ItemStack gear, float baseValue) {
+                if (!target.canBreatheUnderwater()) return baseValue;
+                return baseValue + 2 * level;
+            }
+        });
+        chilled = TraitRegistry.register(new Trait(path("chilled"), ResourceOrigin.BUILTIN_CORE) {
+            @Override
+            public float onAttackEntity(@Nullable EntityPlayer player, EntityLivingBase target, int level, ItemStack gear, float baseValue) {
+                if (!target.isImmuneToFire()) return baseValue;
+                return baseValue + 2 * level;
+            }
+        });
+        stellar = TraitRegistry.register(new PotionEffectTrait(path("stellar"), ResourceOrigin.BUILTIN_CORE) {
+            @Override
+            public void tick(World world, @Nullable EntityPlayer player, int level, ItemStack gear, boolean isEquipped) {
+                super.tick(world, player, level, gear, isEquipped);
+                if (world.getTotalWorldTime() % (400 - 40 * level) == 0 && gear.getItemDamage() > 0) {
+                    GearHelper.attemptDamage(gear, -1, player);
+                }
+            }
+        });
 
         UserDefined.loadUserTraits();
     }

@@ -1,0 +1,28 @@
+{
+    "type": "potion_trait",
+    "max_level": 5,
+    "name_color": "dark_red",
+    "cancels_with": [],
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.adamant"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.adamant.desc"
+    },
+    "potion_effects": {
+        "armor": [
+            {
+                "full_set": false,
+                "effect": "minecraft:resistance",
+                "level": [
+                    1,
+                    1,
+                    2,
+                    2
+                ]
+            }
+        ]
+    }
+}

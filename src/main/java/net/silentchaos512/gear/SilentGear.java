@@ -24,6 +24,8 @@ import net.silentchaos512.lib.network.NetworkHandlerSL;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.LogHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -50,7 +52,9 @@ public class SilentGear implements IModBase {
     }
 
     public static final Random random = new Random();
+    @Deprecated
     public static final LogHelper log = new LogHelper(MOD_NAME, BUILD_NUM);
+    public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final I18nHelper i18n = new I18nHelper(MOD_ID, log, true);
 
     public static final SRegistry registry = new SRegistry();

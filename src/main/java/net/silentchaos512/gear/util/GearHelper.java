@@ -302,8 +302,10 @@ public final class GearHelper {
             }
         }
 
-        EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
-        TraitHelper.tickTraits(player, stack);
+        if (!world.isRemote) {
+            EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
+            TraitHelper.tickTraits(world, player, stack, isSelected);
+        }
     }
 
     public static boolean shouldUseFallbackColor(ItemStack stack, ItemPartData part) {

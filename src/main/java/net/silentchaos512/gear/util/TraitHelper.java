@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.traits.Trait;
@@ -172,7 +173,7 @@ public final class TraitHelper {
         }
     }
 
-    static void tickTraits(@Nullable EntityPlayer player, ItemStack gear) {
+    static void tickTraits(World world, @Nullable EntityPlayer player, ItemStack gear, boolean isEquipped) {
         // Performance test on 2018-11-26 - roughly 5% FPS loss max (negligible), average ~420 FPS
         NBTTagList tagList = GearData.getPropertiesData(gear).getTagList("Traits", 10);
 
@@ -184,7 +185,7 @@ public final class TraitHelper {
 
                 if (trait != null) {
                     int level = tagCompound.getByte("Level");
-                    trait.onUpdate(player, level, gear);
+                    trait.tick(world, player, level, gear, isEquipped);
                 }
             }
         }

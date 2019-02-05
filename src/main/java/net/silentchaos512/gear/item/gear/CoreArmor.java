@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -171,8 +172,8 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        GearHelper.onUpdate(itemStack, world, player, 0, true);
     }
 
     public Collection<IRecipe> getExampleRecipes() {

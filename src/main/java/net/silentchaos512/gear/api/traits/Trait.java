@@ -31,6 +31,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -182,7 +183,8 @@ public class Trait {
         return value;
     }
 
-    public void onUpdate(@Nullable EntityPlayer player, int level, ItemStack gear) {}
+    // Was onUpdate
+    public void tick(World world, @Nullable EntityPlayer player, int level, ItemStack gear, boolean isEquipped) {}
 
     //endregion
 
