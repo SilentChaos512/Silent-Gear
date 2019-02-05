@@ -1,5 +1,3 @@
-// Based on jriwanek's Forge Modding Skeleton (https://github.com/jriwanek/ForgeModdingSkeleton)
-
 buildscript {
     repositories {
         jcenter()
@@ -18,6 +16,9 @@ buildscript {
 }
 
 plugins {
+    id 'maven'
+    id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.1"
     id "com.matthewprenger.cursegradle" version "1.1.0"
     id 'net.ltgt.apt' version '0.10' // for lombok
 }
@@ -26,11 +27,12 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
 
 repositories {
+    flatDir {
+        name "fileRepo"
+        dirs "repo"
+    }
     mavenLocal()
     mavenCentral()
-}
-
-dependencies {
 }
 
 tasks.withType(JavaCompile) {
@@ -46,16 +48,10 @@ javadoc {
     failOnError = false
 }
 
-def mod_file = getModFile()
-def short_version = getVersion('VERSION', mod_file)
-version = mc_version + '-' + short_version
-def display_version = short_version
+def versionInfo = getModVersion()
+System.out.println(versionInfo)
+version = "${versionInfo['version']}"
 def build_num = getBuildNumber()
-
-//if (System.getenv().BUILD_NUMBER) {
-//  version += '.' + System.getenv().BUILD_NUMBER
-//  display_version += '.' + System.getenv().BUILD_NUMBER
-//}
 
 sourceCompatibility = targetCompatibility = '1.8'
 
@@ -109,23 +105,6 @@ minecraft {
     }
 }
 
-task incrementBuild {
-    doFirst {
-        def versionFile = file('version.properties')
-        if (versionFile.canRead()) {
-            Properties versionProps = new Properties()
-            versionProps.load(new FileInputStream(versionFile))
-            build_num = versionProps['build_num'].toInteger() + 1
-            println("incrementing BuildNumber to: " + build_num)
-            versionProps['build_num'] = build_num.toString()
-            versionProps.store(versionFile.newWriter(), null)
-        } else {
-            println("version.properties file not found! Ignoring.")
-        }
-    }
-}
-build.dependsOn incrementBuild
-
 repositories {
     jcenter()
     mavenCentral()
@@ -144,33 +123,19 @@ repositories {
     repositories {
         maven { url 'https://maven.mcmoddev.com' }
     }
-    maven { // Jitpack
-        url 'https://jitpack.io'
-    }
 }
 
 dependencies {
     // lombok
-    if (project.hasProperty('lombok_version')) {
-        compile "org.projectlombok:lombok:${project.lombok_version}"
-        apt "org.projectlombok:lombok:${project.lombok_version}"
-    }
+    compile "org.projectlombok:lombok:${project.lombok_version}"
+    apt "org.projectlombok:lombok:${project.lombok_version}"
 
     // JEI
-    if (project.hasProperty('jei_version')) {
-        deobfProvided "mezz.jei:jei_${project.mc_version}:${project.jei_version}:api"
-        //runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
-    }
+    deobfProvided "mezz.jei:jei_${project.mc_version}:${project.jei_version}:api"
+    runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
 
     // Silent Lib
-    if (project.hasProperty('sl_version')) {
-        def projectSilentLib = findProject(":SilentLib")
-        print "Local Silent Lib: ${projectSilentLib} (${projectSilentLib != null ? "found" : "not found"})"
-        if (projectSilentLib != null)
-            compileOnly project(":SilentLib")
-        else
-            provided "com.github.SilentChaos512:SilentLib:${project.sl_version}"
-    }
+    compile "net.silentchaos512:silent-lib:3.0+"
 
     // EvilCraft
     compileOnly "org.cyclops.cyclopscore:CyclopsCore:${project.mc_version}-${project.cyclops_core_version}:deobf"
@@ -183,7 +148,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-        expand 'version': short_version, 'mcversion': project.minecraft.version
+        expand 'version': "${versionInfo['version_short']}", 'mcversion': project.minecraft.version
     }
 
     from(sourceSets.main.resources.srcDirs) {
@@ -194,33 +159,29 @@ processResources {
 }
 
 jar {
-    mustRunAfter incrementBuild
-    doFirst {
-        build_num = getBuildNumber()
-        if (build_num > 0) {
-            classifier = build_num
-        }
-    }
-    manifest {
-        if (project.hasProperty('coreplugin')) {
-            attributes 'FMLCorePluginContainsFMLMod': 'true'
-            attributes 'FMLCorePlugin': project.coreplugin
-        }
-//  attributes 'FMLAT' : ''
-    }
+    appendix = "${project.mc_version}"
 }
 
 task apiJar(type: Jar) {
+    appendix = "${project.mc_version}"
     classifier = 'apiClasses'
     from apiClasses
 }
 
 task deobfJar(type: Jar) {
+    appendix = "${project.mc_version}"
     classifier = 'deobf'
     from sourceSets.main.output
 }
 
+task sourcesJar(type: Jar) {
+    appendix = "${project.mc_version}"
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
+    appendix = "${project.mc_version}"
     classifier = 'javadoc'
     from javadoc.getDestinationDir()
 }
@@ -303,6 +264,114 @@ curseforge {
     }
 }
 
+// Bintray/Maven publishing
+
+publishing {
+    publications {
+        silentgear(MavenPublication) {
+            groupId 'net.silentchaos512'
+            artifactId 'silent-gear'
+            version "${versionInfo['version_short']}".toString()
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+bintray {
+    // Not sure if this syntax works, need to test
+    user = secret.BINTRAY_USER ?: System.getenv('BINTRAY_USER')
+    key = secret.BINTRAY_KEY ?: System.getenv('BINTRAY_KEY')
+    publications = ['silentgear']
+
+    pkg {
+        repo = 'silent-gear'
+        name = 'silent-gear'
+        licenses = ["LGPL-3.0"]
+        vcsUrl = 'https://github.com/SilentChaos512/Silent-Gear.git'
+
+        version {
+            name = "${versionInfo['version_short']}".toString()
+            desc = "Silent Gear (1.12.2) ${versionInfo['version_short']}".toString()
+            released = new Date()
+            vcsTag = "v${versionInfo['version_short']}".toString()
+        }
+    }
+}
+
+// Version stuff
+
+def getModVersion() {
+    try {
+        return getGitVersion()
+    } catch (Exception ex) {
+        System.out.println("Git version failed, falling back to old method")
+        return getVersion('VERSION', getModFile())
+    }
+}
+
+def getGitVersion() {
+    // Call git command
+    def outStream = new ByteArrayOutputStream()
+    def result = exec {
+        executable = 'git'
+        args = [ 'describe', '--long' ]
+        standardOutput = outStream
+    }
+
+    def fullVersion = outStream.toString().trim()
+    def matcher = fullVersion =~ /(\d+).(\d+).(\d+)-(.*)/
+
+    def maj = matcher[0][1]
+    def min = matcher[0][2]
+    def rev = matcher[0][3]
+    def bn = getBuildNumber()
+
+    return makeVersionMap(maj, min, rev, bn, matcher[0][4])
+}
+
+static def makeVersionMap(maj, min, rev, bn, githash) {
+    def out = [:]
+    out['build.major.number'] = maj.toString()
+    out['build.minor.number'] = min.toString()
+    out['build.revision.number'] = rev.toString()
+    out['build.githash'] = githash
+    out['build.number'] = bn.toString()
+    out['version_short'] = "${maj}.${min}.${rev}".toString()
+    out['version'] = "${maj}.${min}.${rev}+${bn}".toString()
+    return out
+}
+
+// Modified old version getter
+def getVersion(String type, String mod_file) {
+    String maj = '0'
+    String min = '0'
+    String rev = '0'
+    String bn = getBuildNumber()
+
+    File file = file(mod_file)
+    def prefix = ~/^(?:public|protected|private) static final String $type = ".*$/
+    file.eachLine { String s ->
+        s = s.trim()
+        if (s ==~ prefix || prefix.matcher(s).matches()) {
+            String[] bits = s.split("=")
+            String interesting = bits[1].trim()
+            interesting = interesting.substring(1, interesting.length() - 2)
+            String[] pts = interesting.trim().split("\\.")
+
+            maj = pts[0] ?: '0'
+            min = pts[1] ?: '0'
+            rev = pts[2] ?: '0'
+        }
+    }
+
+    return makeVersionMap(maj, min, rev, bn, 'unknown')
+}
+
+// Used by old getVersion
 String getModFile() {
     String path = ''
     FileTree tree = fileTree(dir: 'src/main/java')
@@ -320,36 +389,31 @@ String getModFile() {
     return path
 }
 
-String getVersion(String type, String mod_file) {
-    String major = '0'
-    String revision = '0'
-    String patch = '0'
-    File file = file(mod_file)
-    def prefix = ~/^(?:public|protected|private) static final String $type = ".*$/
-    file.eachLine { String s ->
-        s = s.trim()
-        if (s ==~ prefix || prefix.matcher(s).matches()) {
-            String[] bits = s.split("=")
-            String interesting = bits[1].trim()
-            interesting = interesting.substring(1, interesting.length() - 2)
-            String[] pts = interesting.trim().split("\\.")
+// Build number tracking
 
-            major = pts[0] ?: '0'
-            revision = pts[1] ?: '0'
-            patch = pts[2] ?: '0'
-        }
-    }
-    return "$major.$revision.$patch"
-}
-
-int getBuildNumber() {
+String getBuildNumber() {
     def versionFile = file('version.properties')
     if (versionFile.canRead()) {
         Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(versionFile))
-        return versionProps['build_num'].toInteger()
-    } else {
-        println('version.properties file not found! Build number will be 0')
-        return 0
+        return versionProps['build_num'].toString()
+    }
+    return "1"
+}
+
+task incrementBuild {
+    doFirst {
+        def versionFile = file('version.properties')
+        if (versionFile.canRead()) {
+            Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionFile))
+            def num = versionProps['build_num'].toInteger() + 1
+            println("incrementing BuildNumber to: " + num)
+            versionProps['build_num'] = num.toString()
+            versionProps.store(versionFile.newWriter(), null)
+        } else {
+            println("version.properties file not found! Ignoring.")
+        }
     }
 }
+build.finalizedBy incrementBuild // only increment on successful builds

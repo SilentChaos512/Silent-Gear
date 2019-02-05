@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2019-02-05
+### Added
+- New traits: adamant, aquatic, chilled, and stellar [#18]
+- Potion effect traits. These allow tools and armor to give potion effects when equipped. Armor can require a full set, or give different levels of an effect based on the number of pieces. These traits have their own JSON format, see the new traits for examples.
+### Fixed
+- Hammers breaking unbreaking blocks [#20]
+
 ## [0.5.0] - 2019-01-14
 This version makes some changes to the `display` object of part JSON files. Old files should still work, but I recommend updating them. For an example, please see [this file](https://github.com/SilentChaos512/Silent-Gear/blob/1.12/src/main/resources/assets/silentgear/materials/main_test2.json).
 ### Added
