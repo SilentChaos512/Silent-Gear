@@ -22,7 +22,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
-import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -241,16 +242,21 @@ public abstract class ItemPart {
 
     public PartDisplayProperties getDisplayProperties(ItemPartData part, ItemStack gear, int animationFrame) {
         if (!gear.isEmpty()) {
-            String gearType = gear.getItem() instanceof ToolHead
-                    ? ToolHead.getToolClass(gear)
-                    : Objects.requireNonNull(gear.getItem().getRegistryName()).getPath();
+            GearType gearType = gear.getItem() instanceof ToolHead
+                    ? GearType.get(ToolHead.getToolClass(gear))
+                    : ((ICoreItem) gear.getItem()).getGearType();
+            if (gearType == null) return display.get("all"); // TODO: Remove this line when tool heads are gone
 
             // Gear class-specific override
-            if (display.containsKey(gearType))
-                return display.get(gearType);
-            // Armor override
-            if (gear.getItem() instanceof ICoreArmor && display.containsKey("armor"))
-                return display.get("armor");
+            if (display.containsKey(gearType.getName())) {
+                return display.get(gearType.getName());
+            }
+            // Parent type overrides, like "armor"
+            for (String key : display.keySet()) {
+                if (gearType.matches(key)) {
+                    return display.get(key);
+                }
+            }
         }
         // Default
         return display.get("all");

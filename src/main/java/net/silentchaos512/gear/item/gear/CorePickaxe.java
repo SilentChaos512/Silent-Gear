@@ -20,6 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -56,6 +57,11 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     @Override
     public String getGearClass() {
         return "pickaxe";
+    }
+
+    @Override
+    public GearType getGearType() {
+        return GearType.PICKAXE;
     }
 
     //region Harvest tool overrides

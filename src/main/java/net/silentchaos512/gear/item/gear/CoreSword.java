@@ -14,6 +14,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreWeapon;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -40,6 +41,11 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     @Override
     public String getGearClass() {
         return "sword";
+    }
+
+    @Override
+    public GearType getGearType() {
+        return GearType.SWORD;
     }
 
     //region Standard tool overrides

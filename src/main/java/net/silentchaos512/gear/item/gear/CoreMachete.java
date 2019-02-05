@@ -24,6 +24,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModItems;
@@ -52,6 +53,11 @@ public class CoreMachete extends CoreSword {
     @Override
     public String getGearClass() {
         return "machete";
+    }
+
+    @Override
+    public GearType getGearType() {
+        return GearType.MACHETE;
     }
 
     @Override

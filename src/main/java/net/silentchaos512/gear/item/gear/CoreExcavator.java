@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.IAOETool;
@@ -40,6 +41,11 @@ public class CoreExcavator extends CoreShovel implements IAOETool {
     @Override
     public String getGearClass() {
         return "excavator";
+    }
+
+    @Override
+    public GearType getGearType() {
+        return GearType.EXCAVATOR;
     }
 
     @Nonnull

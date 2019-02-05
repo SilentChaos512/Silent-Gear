@@ -21,6 +21,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.models.ToolModel;
@@ -49,6 +50,11 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     @Override
     public String getGearClass() {
         return "bow";
+    }
+
+    @Override
+    public GearType getGearType() {
+        return GearType.BOW;
     }
 
     //region Bow stuff

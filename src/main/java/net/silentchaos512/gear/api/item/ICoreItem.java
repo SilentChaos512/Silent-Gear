@@ -43,7 +43,10 @@ public interface ICoreItem extends IStatItem, ICustomEnchantColor {
         return (Item) this;
     }
 
+    @Deprecated
     String getGearClass();
+
+    GearType getGearType();
 
     default ItemPartData getPrimaryPart(ItemStack stack) {
         ItemPartData data = GearData.getPrimaryPart(stack);

@@ -18,6 +18,7 @@
 
 package net.silentchaos512.gear.item.gear;
 
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 
@@ -33,5 +34,10 @@ public class CoreKatana extends CoreSword {
     @Override
     public String getGearClass() {
         return "katana";
+    }
+
+    @Override
+    public GearType getGearType() {
+        return GearType.KATANA;
     }
 }
