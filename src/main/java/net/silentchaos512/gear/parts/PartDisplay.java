@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JsonUtils;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
-import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.utils.Color;
 
 public final class PartDisplay implements IPartDisplay {
     public static final PartDisplay DEFAULT = new PartDisplay();

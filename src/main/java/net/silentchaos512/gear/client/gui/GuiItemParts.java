@@ -38,7 +38,7 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.client.gui.button.GuiDropDownElement;
 import net.silentchaos512.lib.client.gui.button.GuiDropDownList;
-import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.utils.Color;
 import net.silentchaos512.lib.util.TextRenderUtils;
 
 import java.util.ArrayList;

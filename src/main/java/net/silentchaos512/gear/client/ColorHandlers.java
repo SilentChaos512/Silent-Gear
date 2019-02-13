@@ -11,7 +11,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.utils.Color;
 
 import java.util.HashMap;
 import java.util.Map;

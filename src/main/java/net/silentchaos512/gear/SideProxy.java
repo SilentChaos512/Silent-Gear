@@ -14,6 +14,7 @@ import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolModel;
+import net.silentchaos512.gear.command.SGearPartsCommand;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GenModels;
@@ -63,6 +64,7 @@ class SideProxy {
 
     private void serverAboutToStart(FMLServerAboutToStartEvent event) {
         event.getServer().getResourceManager().addReloadListener(PartManager.INSTANCE);
+        SGearPartsCommand.register(event.getServer().getCommandManager().getDispatcher());
     }
 
     private void serverStarted(FMLServerStartedEvent event) {

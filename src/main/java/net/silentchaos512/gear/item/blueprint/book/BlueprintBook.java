@@ -37,7 +37,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.lib.item.IColoredItem;
-import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

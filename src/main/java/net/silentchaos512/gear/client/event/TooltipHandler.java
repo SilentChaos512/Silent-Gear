@@ -99,7 +99,7 @@ public final class TooltipHandler {
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTracker.isControlDown()) {
             if (part instanceof PartMain) getGradeLine(event, grade);
-            event.getToolTip().add(new TextComponentTranslation("misc.silentgear.tooltip.stats.name")
+            event.getToolTip().add(new TextComponentTranslation("misc.silentgear.tooltip.stats")
                     .applyTextStyle(TextFormatting.GOLD)
                     .appendSibling(new TextComponentString(" (Silent Gear)")
                             .applyTextStyle(TextFormatting.RESET)

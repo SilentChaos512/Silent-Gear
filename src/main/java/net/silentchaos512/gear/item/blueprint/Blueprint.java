@@ -22,7 +22,7 @@ import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.lib.item.IColoredItem;
-import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

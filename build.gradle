@@ -20,6 +20,10 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 // apply plugin: 'eclipse'
 
+javadoc {
+    failOnError = false
+}
+
 repositories {
     flatDir {
         name "fileRepo"
@@ -65,9 +69,15 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge.test:forge:1.13-24.0.150-1.13-pre'
+    minecraft 'net.minecraftforge.test:forge:1.13-24.0.184-1.13-pre'
 
     compile "net.silentchaos512:silent-lib:3.1+"
+    compile ("net.silentchaos512:silent-utils:1.+") {
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'log4j-core'
+        exclude module: 'log4j-api'
+    }
     compile "net.silentchaos512:wit:1.1.+"
 
 }
