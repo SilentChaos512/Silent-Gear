@@ -2,7 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.config.ConfigOptionEquipment;
 
 import javax.annotation.Nonnull;

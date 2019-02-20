@@ -95,7 +95,7 @@ public enum MiscUpgrades implements IEnumItems<MiscUpgrades, MiscUpgrades.Item> 
 
     public static class Item extends net.minecraft.item.Item {
         Item() {
-            super(new Builder().group(SilentGear.ITEM_GROUP));
+            super(new Properties().group(SilentGear.ITEM_GROUP));
         }
 
         @Override

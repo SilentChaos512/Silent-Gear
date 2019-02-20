@@ -141,7 +141,7 @@ public final class ModItems {
 
     private static <T extends Item> T register(String name, T item) {
         ResourceLocation id = new ResourceLocation(SilentGear.MOD_ID, name);
-        item.setRegistryName(name);
+        item.setRegistryName(id);
         ForgeRegistries.ITEMS.register(item);
         return item;
     }
@@ -154,7 +154,7 @@ public final class ModItems {
         });
 
         // Part blueprints (just rods right now, are any others needed?)
-        Item item = new Item(new Item.Builder()/*.containerItem(singleUse ? null : item)*/);
+        Item item = new Item(new Item.Properties());
 //        if (!singleUse) {
 //            item.setContainerItem(item);
 //        }

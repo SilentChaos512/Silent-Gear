@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.client.util;
 
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,10 +51,6 @@ public final class GearClientHelper {
 
         if (!(stack.getItem() instanceof ICoreItem)) return;
 
-        // This will help track down NPEs...
-//        NonNullList<ITextComponent> list = NonNullList.create();
-        List<ITextComponent> list = tooltip;
-
         boolean ctrlDown = flag.ctrlDown;
         boolean altDown = flag.altDown;
 
@@ -72,38 +68,40 @@ public final class GearClientHelper {
         PartDataList constructionParts = GearData.getConstructionParts(stack);
 
         if (constructionParts.getMains().isEmpty()) {
-            list.add(misc("invalidParts").applyTextStyle(TextFormatting.RED));
-            list.add(misc("lockedStats").applyTextStyle(TextFormatting.RED));
+            tooltip.add(misc("invalidParts").applyTextStyle(TextFormatting.RED));
+            tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.RED));
         } else if (GearData.hasLockedStats(stack)) {
-            list.add(misc("lockedStats").applyTextStyle(TextFormatting.YELLOW));
+            tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.YELLOW));
+        } else if (constructionParts.getRods().isEmpty()) {
+            tooltip.add(misc("missingRod").applyTextStyle(TextFormatting.RED));
         }
 
         // Let parts add information if they need to
         Collections.reverse(constructionParts);
         for (PartData data : constructionParts) {
-            data.getPart().addInformation(data, stack, list, flag);
+            data.getPart().addInformation(data, stack, tooltip, flag);
         }
 
         TraitHelper.getTraits(constructionParts).forEach((trait, level) ->
-                list.add(trait.getDisplayName(level)));
+                tooltip.add(trait.getDisplayName(level)));
 
         float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
         TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
-        list.add(new TextComponentString("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue))));
+        tooltip.add(new TextComponentString("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue))));
 
         if (flag.isAdvanced()) {
             // ICoreTool itemTool = (ICoreTool) item;
             // tooltip.add(itemTool.getGearClass());
             NBTTagCompound tagCompound = stack.getOrCreateTag();
             if (tagCompound.hasKey("debug_modelkey")) {
-                list.add(new TextComponentString(tagCompound.getString("debug_modelkey")).applyTextStyle(TextFormatting.DARK_GRAY));
+                tooltip.add(new TextComponentString(tagCompound.getString("debug_modelkey")).applyTextStyle(TextFormatting.DARK_GRAY));
             }
         }
 
         // Stats!
         ITextComponent textStats = misc("tooltip.stats.name").applyTextStyle(TextFormatting.GOLD);
         if (ctrlDown && flag.showStats) {
-            list.add(textStats);
+            tooltip.add(textStats);
             // Display only stats relevant to the item class
             for (ItemStat stat : item.getRelevantStats(stack)) {
                 float statValue = GearData.getStat(stack, stat);
@@ -137,27 +135,25 @@ public final class GearClientHelper {
                     textStat = statText("armorFormat", str1, str2);
                 }
 
-                list.add(statText("displayFormat", textName, textStat));
+                tooltip.add(statText("displayFormat", textName, textStat));
             }
         } else if (flag.showStats) {
             textStats.appendText(" ").appendSibling(misc("tooltip.stats.key").applyTextStyle(TextFormatting.GRAY));
-            list.add(textStats);
+            tooltip.add(textStats);
         }
 
         // Tool construction
         ITextComponent textConstruction = misc("tooltip.construction.name").applyTextStyle(TextFormatting.GOLD);
         if (altDown && flag.showConstruction) {
-            list.add(textConstruction);
+            tooltip.add(textConstruction);
             Collections.reverse(constructionParts);
-            tooltipListParts(stack, list, constructionParts);
+            tooltipListParts(stack, tooltip, constructionParts);
         } else if (flag.showConstruction) {
             textConstruction.appendSibling(new TextComponentString(" ")
                     .applyTextStyle(TextFormatting.GRAY)
                     .appendSibling(misc("tooltip.construction.key")));
-            list.add(textConstruction);
+            tooltip.add(textConstruction);
         }
-
-        tooltip.addAll(list);
     }
 
     private static ITextComponent misc(String key, Object... formatArgs) {

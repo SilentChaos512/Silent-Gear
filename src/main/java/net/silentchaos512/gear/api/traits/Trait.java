@@ -72,12 +72,6 @@ public class Trait {
         this.activationChance = activationChance;
     }
 
-    public static void setCancelsWith(Trait t1, Trait t2) {
-        SilentGear.LOGGER.debug("Set trait cancels with: '{}' and '{}'", t1.name, t2.name);
-        t1.cancelsWith.add(t2.name.toString());
-        t2.cancelsWith.add(t1.name.toString());
-    }
-
     public final int getCanceledLevel(int level, Trait other, int otherLevel) {
         if (willCancelWith(other)) {
             final int diff = level - otherLevel;

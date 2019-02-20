@@ -29,7 +29,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;

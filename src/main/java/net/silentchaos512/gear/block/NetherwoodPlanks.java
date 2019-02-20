@@ -28,7 +28,7 @@ import net.minecraft.world.IBlockReader;
 
 public class NetherwoodPlanks extends Block {
     public NetherwoodPlanks() {
-        super(Builder.create(Material.WOOD)
+        super(Properties.create(Material.WOOD)
                 .hardnessAndResistance(2, 3)
                 .sound(SoundType.WOOD)
         );

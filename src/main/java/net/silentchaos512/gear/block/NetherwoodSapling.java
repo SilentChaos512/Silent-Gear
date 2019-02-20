@@ -30,7 +30,7 @@ import net.silentchaos512.gear.block.trees.NetherwoodTree;
 
 public class NetherwoodSapling extends BlockSapling {
     public NetherwoodSapling() {
-        super(new NetherwoodTree(), Builder.create(Material.PLANTS)
+        super(new NetherwoodTree(), Properties.create(Material.PLANTS)
                 .doesNotBlockMovement()
                 .needsRandomTick()
                 .hardnessAndResistance(0)

@@ -5,16 +5,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.javafmlmod.FMLModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.command.SGearPartsCommand;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GenModels;
@@ -24,19 +24,18 @@ import net.silentchaos512.lib.event.InitialSpawnItems;
 
 class SideProxy {
     SideProxy() {
-        FMLModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLModLoadingContext.get().getModEventBus().addListener(this::imcEnqueue);
-        FMLModLoadingContext.get().getModEventBus().addListener(this::imcProcess);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::imcEnqueue);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::imcProcess);
 
-        FMLModLoadingContext.get().getModEventBus().addListener(ModBlocks::registerAll);
-        FMLModLoadingContext.get().getModEventBus().addListener(ModItems::registerAll);
-        FMLModLoadingContext.get().getModEventBus().addListener(ModTileEntities::registerAll);
-
-        FMLModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.spec);
-        FMLModLoadingContext.get().getModEventBus().register(Config.class);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModBlocks::registerAll);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModItems::registerAll);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModTileEntities::registerAll);
 
         MinecraftForge.EVENT_BUS.addListener(this::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(this::serverStarted);
+
+        Config.init();
 
         ModLootStuff.init();
         ModRecipes.init();
@@ -73,7 +72,7 @@ class SideProxy {
 
     static class Client extends SideProxy {
         Client() {
-            FMLModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
             MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
 
@@ -83,6 +82,7 @@ class SideProxy {
                 MinecraftForge.EVENT_BUS.register(new DebugOverlay());
             }
 
+            // FIXME: These do not work!
             ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
             ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
         }
@@ -108,7 +108,7 @@ class SideProxy {
 
     static class Server extends SideProxy {
         Server() {
-            FMLModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
         }
 
         private void serverSetup(FMLDedicatedServerSetupEvent event) { }

@@ -43,16 +43,19 @@ public class CommonItemStats {
     public static final ItemStat HARVEST_SPEED = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "harvest_speed"),
             1f, 0f, 10000f, false, TextFormatting.YELLOW)
             .setAffectedByGrades(true)
-            .setSynergyApplies(true);
+            .setSynergyApplies(true)
+            .setMissingRodEffect(f -> Math.max(2, f / 8));
     public static final ItemStat REACH_DISTANCE = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "reach_distance"),
             0f, -100f, 100f, false, TextFormatting.YELLOW)
             .setAffectedByGrades(false)
-            .setSynergyApplies(false);
+            .setSynergyApplies(false)
+            .setMissingRodEffect(f -> f - 1.5f);
     // Melee Weapons
     public static final ItemStat MELEE_DAMAGE = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "melee_damage"),
             0f, 0f, 10000f, false, TextFormatting.GREEN)
             .setAffectedByGrades(true)
-            .setSynergyApplies(true);
+            .setSynergyApplies(true)
+            .setMissingRodEffect(f -> f / 2);
     public static final ItemStat MAGIC_DAMAGE = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "magic_damage"),
             0f, 0f, 10000f, false, TextFormatting.GREEN)
             .setAffectedByGrades(true)

@@ -39,7 +39,7 @@ import java.util.List;
 
 public class BlockSalvager extends BlockContainer {
     public BlockSalvager() {
-        super(Builder.create(Material.IRON)
+        super(Properties.create(Material.IRON)
                 .hardnessAndResistance(4, 20)
         );
     }

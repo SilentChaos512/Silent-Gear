@@ -45,7 +45,7 @@ public class BlockPartAnalyzer extends BlockContainer {
     private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 7, 16);
 
     public BlockPartAnalyzer() {
-        super(Builder.create(Material.IRON)
+        super(Properties.create(Material.IRON)
                 .hardnessAndResistance(5, 30)
         );
         this.setDefaultState(this.getDefaultState().with(FACING, EnumFacing.SOUTH));

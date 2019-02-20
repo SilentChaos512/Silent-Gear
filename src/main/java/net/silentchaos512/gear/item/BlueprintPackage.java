@@ -33,7 +33,7 @@ import java.util.List;
 
 public class BlueprintPackage extends ItemLootContainer {
     public BlueprintPackage(ResourceLocation defaultLootTable) {
-        super(defaultLootTable, new Builder().group(SilentGear.ITEM_GROUP));
+        super(defaultLootTable, new Properties().group(SilentGear.ITEM_GROUP));
     }
 
     @Override

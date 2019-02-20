@@ -56,12 +56,15 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
     private static final String NBT_SELECTED = "Selected";
 
     public BlueprintBook() {
-        super(new Builder()
+        super(new Properties()
                 .maxStackSize(1)
                 .group(SilentGear.ITEM_GROUP)
         );
-        // FIXME
-//        setContainerItem(this);
+    }
+
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack) {
+        return itemStack;
     }
 
     @Override

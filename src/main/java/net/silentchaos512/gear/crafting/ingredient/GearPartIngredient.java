@@ -19,14 +19,17 @@
 package net.silentchaos512.gear.crafting.ingredient;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.PartManager;
 
 import javax.annotation.Nullable;
@@ -48,15 +51,31 @@ public class GearPartIngredient extends Ingredient {
     }
 
     @Override
-    public ItemStack[] getMatchingStacks() {
-        return super.getMatchingStacks();
+    public boolean isSimple() {
+        return false;
     }
 
-    public static class Serializer implements IIngredientSerializer<GearPartIngredient> {
+    @Override
+    public boolean hasNoMatchingItems() {
+        return false;
+    }
+
+    @Override
+    public IIngredientSerializer<? extends Ingredient> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
+    public static final class Serializer implements IIngredientSerializer<GearPartIngredient> {
+        public static final Serializer INSTANCE = new Serializer();
+        public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "part_type");
+
+        private Serializer() {}
+
         @Override
         public GearPartIngredient parse(PacketBuffer buffer) {
             String str = buffer.readString(255);
             PartType type = PartType.get(str);
+            if (type == null) throw new JsonParseException("Unknown part type: " + str);
             return new GearPartIngredient(type);
         }
 

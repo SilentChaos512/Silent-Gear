@@ -34,7 +34,7 @@ public class PhantomLight extends Block {
     private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.3, 0.3, 0.3, 0.7, 0.7, 0.7);
 
     public PhantomLight() {
-        super(Builder.create(Material.CIRCUITS)
+        super(Properties.create(Material.CIRCUITS)
                 .doesNotBlockMovement()
                 .hardnessAndResistance(0.5f, 6000000.0f)
                 .lightValue(15)

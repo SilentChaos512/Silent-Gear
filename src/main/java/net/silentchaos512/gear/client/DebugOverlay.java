@@ -69,7 +69,8 @@ public class DebugOverlay extends DebugRenderOverlay {
 
                     final boolean canHarvest = toolLevel >= blockLevel;
                     TextFormatting format = canHarvest ? TextFormatting.GREEN : TextFormatting.RED;
-                    list.add(format + String.format("%s=%d (%d)", toolClass, blockLevel, toolLevel));
+                    String name = toolClass == null ? "null" : toolClass.getName();
+                    list.add(format + String.format("%s=%d (%d)", name, blockLevel, toolLevel));
 
                     final float destroySpeed = heldItem.getDestroySpeed(state);
                     if (canHarvest) {

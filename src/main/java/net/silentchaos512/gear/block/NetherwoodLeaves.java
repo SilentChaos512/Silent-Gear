@@ -31,7 +31,7 @@ import net.silentchaos512.gear.init.ModItems;
 
 public class NetherwoodLeaves extends BlockLeaves {
     public NetherwoodLeaves() {
-        super(Builder.create(Material.PLANTS)
+        super(Properties.create(Material.PLANTS)
                 .sound(SoundType.PLANT)
         );
     }

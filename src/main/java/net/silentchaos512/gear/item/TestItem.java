@@ -35,7 +35,7 @@ import net.silentchaos512.lib.item.IColoredItem;
 
 public class TestItem extends ItemPickaxe implements IColoredItem {
     public TestItem() {
-        super(ItemTier.IRON, 0, 0, new Builder().group(SilentGear.ITEM_GROUP));
+        super(ItemTier.IRON, 0, 0, new Properties().group(SilentGear.ITEM_GROUP));
     }
 
     @Override

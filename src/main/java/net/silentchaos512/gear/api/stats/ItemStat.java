@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.stats;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * A stat that any ICoreItem can use. See {@link CommonItemStats} for stats that can be used.
@@ -26,14 +26,11 @@ import java.util.Map;
 public class ItemStat {
     public static final Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
 
-    @Getter(AccessLevel.PUBLIC)
-    protected final ResourceLocation name;
-    @Getter(AccessLevel.PUBLIC)
-    protected final float defaultValue;
-    @Getter(AccessLevel.PUBLIC)
-    protected final float minimumValue;
-    @Getter(AccessLevel.PUBLIC)
-    protected final float maximumValue;
+    @Getter protected final ResourceLocation name;
+    @Getter protected final float defaultValue;
+    @Getter protected final float minimumValue;
+    @Getter protected final float maximumValue;
+    Function<Float, Float> missingRodFunction;
     // TODO: Hide hidden stats!
     private boolean isHidden = false;
     private boolean synergyApplies = false;
@@ -181,6 +178,16 @@ public class ItemStat {
 
     public ItemStat setAffectedByGrades(boolean value) {
         this.affectedByGrades = value;
+        return this;
+    }
+
+    public float withMissingRodEffect(float statValue) {
+        if (missingRodFunction == null) return statValue;
+        return missingRodFunction.apply(statValue);
+    }
+
+    public ItemStat setMissingRodEffect(Function<Float, Float> function) {
+        this.missingRodFunction = function;
         return this;
     }
 

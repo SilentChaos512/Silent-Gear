@@ -2,10 +2,10 @@ package net.silentchaos512.gear.client.models;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraftforge.client.model.IModel;
@@ -24,7 +24,7 @@ public abstract class AbstractToolModel extends LayeredBakedModel {
     protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 
     public AbstractToolModel(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format,
-                             ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms,
+                             ImmutableMap<TransformType, TRSRTransformation> transforms,
                              Map<String, IBakedModel> cache) {
 
         super(parent, immutableList, format);
@@ -58,10 +58,12 @@ public abstract class AbstractToolModel extends LayeredBakedModel {
                 TRSRTransformation.quatFromXYZDegrees(new Vector3f(ax, ay, az)), new Vector3f(s, s, s), null));
     }
 
+    @Override
     public boolean isAmbientOcclusion() {
         return true;
     }
 
+    @Override
     public boolean isGui3d() {
         return false;
     }

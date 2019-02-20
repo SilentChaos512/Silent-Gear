@@ -10,7 +10,7 @@ import net.silentchaos512.gear.init.ModBlocks;
 
 public class Flaxseeds extends ItemSeeds {
     public Flaxseeds() {
-        super(ModBlocks.FLAX_PLANT.asBlock(), new Builder().group(SilentGear.ITEM_GROUP));
+        super(ModBlocks.FLAX_PLANT.asBlock(), new Properties().group(SilentGear.ITEM_GROUP));
     }
 
     @Override

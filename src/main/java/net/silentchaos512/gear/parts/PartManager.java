@@ -91,20 +91,21 @@ public final class PartManager implements ISelectiveResourceReloadListener {
         return MAP.values();
     }
 
+    public static Collection<IGearPart> getPartsOfType(PartType type) {
+        // TODO: cache this?
+        return getValues().stream()
+                .filter(part -> part.getType() == type)
+                .collect(Collectors.toList());
+    }
+
     public static Collection<IGearPart> getMains() {
         // TODO: cache this?
-        return getValues()
-                .stream()
-                .filter(part -> part.getType() == PartType.MAIN)
-                .collect(Collectors.toList());
+        return getPartsOfType(PartType.MAIN);
     }
 
     public static Collection<IGearPart> getRods() {
         // TODO: cache this?
-        return getValues()
-                .stream()
-                .filter(part -> part.getType() == PartType.ROD)
-                .collect(Collectors.toList());
+        return getPartsOfType(PartType.ROD);
     }
 
     @Nullable

@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.lib.item.IColoredItem;
 import net.silentchaos512.utils.Color;
@@ -43,11 +44,9 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
     private final Function<PartDataList, ItemStack> craftingHandler;
 
     public Blueprint(boolean singleUse, @Nonnull ICoreItem gearItem, @Nonnull Function<PartDataList, ItemStack> craftingHandler) {
-        super(new Builder().group(SilentGear.ITEM_GROUP));
+        super(new Properties().group(SilentGear.ITEM_GROUP));
         this.singleUse = singleUse;
         if (!singleUse) {
-            // FIXME
-//            setContainerItem(this);
             ITEMS_BLUEPRINT.put(gearItem.getGearClass(), this);
         } else {
             ITEMS_TEMPLATE.put(gearItem.getGearClass(), this);
@@ -55,6 +54,11 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
         this.gearItem = gearItem;
         this.craftingHandler = craftingHandler;
+    }
+
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack) {
+        return isSingleUse(itemStack) ? ItemStack.EMPTY : itemStack;
     }
 
     /**
@@ -105,12 +109,9 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
     }
 
     public boolean isDisabled() {
-        return false; // FIXME
-        /*
         BlueprintType config = Config.GENERAL.blueprintTypes.get();
         return singleUse && !config.allowTemplate()
                 || !singleUse && !config.allowBlueprint();
-        */
     }
 
     @Override

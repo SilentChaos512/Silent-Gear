@@ -27,7 +27,7 @@ public class BlockCraftingStation extends BlockContainer {
     private static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public BlockCraftingStation() {
-        super(Builder.create(Material.WOOD)
+        super(Properties.create(Material.WOOD)
                 .hardnessAndResistance(3, 10)
                 .sound(SoundType.WOOD)
         );

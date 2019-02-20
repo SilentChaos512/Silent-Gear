@@ -20,8 +20,8 @@ package net.silentchaos512.gear.block;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -30,7 +30,7 @@ import net.minecraft.world.IBlockReader;
 
 public class NetherwoodLog extends BlockLog {
     public NetherwoodLog() {
-        super(MapColor.ADOBE, Builder.create(Material.WOOD)
+        super(MaterialColor.ADOBE, Properties.create(Material.WOOD)
                 .hardnessAndResistance(2)
                 .sound(SoundType.WOOD)
         );

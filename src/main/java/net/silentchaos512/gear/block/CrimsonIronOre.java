@@ -6,7 +6,7 @@ import net.minecraft.block.state.IBlockState;
 
 public class CrimsonIronOre extends BlockOre {
     public CrimsonIronOre() {
-        super(Builder.create(Material.ROCK)
+        super(Properties.create(Material.ROCK)
                 .hardnessAndResistance(4, 10)
         );
     }

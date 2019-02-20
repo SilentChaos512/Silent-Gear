@@ -1,0 +1,39 @@
+{
+    "type": "silentgear:gear_crafting",
+    "ingredients": [
+        {
+            "tag": "silentgear:blueprints/hammer"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "rod"
+        }
+    ],
+    "result": {
+        "item": "silentgear:hammer"
+    }
+}

@@ -46,7 +46,7 @@ archivesBaseName = 'silent-gear'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20180921-1.13'
+    mappings channel: "${project.mcp_channel}".toString(), version: "${project.mcp_mappings}".toString()
 
     runs {
         client = {
@@ -69,17 +69,9 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge.test:forge:1.13-24.0.184-1.13-pre'
+    minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    compile "net.silentchaos512:silent-lib:3.1+"
-    compile ("net.silentchaos512:silent-utils:1.+") {
-        exclude module: 'guava'
-        exclude module: 'gson'
-        exclude module: 'log4j-core'
-        exclude module: 'log4j-api'
-    }
-    compile "net.silentchaos512:wit:1.1.+"
-
+    compile "net.silentchaos512:silent-lib:4.+"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -89,7 +81,7 @@ jar {
     manifest {
         attributes(["Specification-Title": "silent-gear",
                     "Specification-Vendor": "silentchaos512",
-                    "Specification-Version": "24.0", // We are version 1 of the modlauncher specification
+                    "Specification-Version": "25.0", // We are version 1 of the modlauncher specification
                     "Implementation-Title": project.name,
                     "Implementation-Version": "${version}",
                     "Implementation-Vendor" :"silentchaos512",
@@ -137,7 +129,7 @@ bintray {
 
         version {
             name = "${versionInfo['version_short']}".toString()
-            desc = "Silent Gear (1.13) ${versionInfo['version_short']}".toString()
+            desc = "Silent Gear (${project.mc_version}) ${versionInfo['version_short']}".toString()
             released = new Date()
             vcsTag = "v${versionInfo['version_short']}".toString()
         }

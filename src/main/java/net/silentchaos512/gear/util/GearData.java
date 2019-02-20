@@ -13,7 +13,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.IUpgradePart;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -21,8 +24,8 @@ import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.init.ModTraits;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.PartHighlight;
 import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.parts.type.PartRod;
@@ -84,6 +87,7 @@ public final class GearData {
             Map<Trait, Integer> traits = TraitHelper.getTraits(parts);
 
             double synergy = calculateSynergyValue(parts, uniqueParts, traits);
+            boolean hasMissingRod = item instanceof ICoreTool && parts.getRods().isEmpty();
 
             // Only consider stats relevant to the item
             // Collection<ItemStat> relevantStats = stack.getItem() instanceof ICoreItem
@@ -97,7 +101,11 @@ public final class GearData {
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
             for (ItemStat stat : stats.keySet()) {
                 final float initialValue = stat.compute(0f, stats.get(stat));
-                final float value = TraitHelper.activateTraits(stack, initialValue, (trait, level, val) ->
+                // Some stats will be reduced if tool rod is missing (and required)
+                final float withMissingParts = hasMissingRod
+                        ? stat.withMissingRodEffect(initialValue)
+                        : initialValue;
+                final float value = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) ->
                         trait.onGetStat(null, stat, level, stack, val, damageRatio));
                 // SilentGear.log.debug(stat, value);
                 propertiesCompound.setFloat(stat.getName().getPath(), value);
@@ -499,10 +507,11 @@ public final class GearData {
 
         @SubscribeEvent
         public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
-            StackList.from(event.player.inventory)
+            EntityPlayer player = event.getPlayer();
+            StackList.from(player.inventory)
                     .stream()
                     .filter(s -> s.getItem() instanceof ICoreItem)
-                    .forEach(s -> recalculateStats(event.player, s));
+                    .forEach(s -> recalculateStats(player, s));
         }
     }
 }

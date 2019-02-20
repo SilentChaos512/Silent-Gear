@@ -10,12 +10,11 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
+import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.advancements.LibTriggers;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class RepairHandler {
@@ -76,25 +75,27 @@ public final class RepairHandler {
 
     @SubscribeEvent
     public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-        if (!(event.crafting.getItem() instanceof ICoreItem)) return;
+        ItemStack result = event.getCrafting();
+        if (!(result.getItem() instanceof ICoreItem)) return;
 
-        if (event.player instanceof EntityPlayerMP) {
+        if (event.getPlayer() instanceof EntityPlayerMP) {
             // Try to trigger some advancments
-            EntityPlayerMP player = (EntityPlayerMP) event.player;
+            EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
 
             // Repair from broken
-            int brokenCount = GearData.getBrokenCount(event.crafting);
-            int repairCount = GearData.getRepairCount(event.crafting);
+            int brokenCount = GearData.getBrokenCount(result);
+            int repairCount = GearData.getRepairCount(result);
             if (brokenCount > 0 && repairCount > 0) {
-                LibTriggers.GENERIC_INT.trigger(player, REPAIR_FROM_BROKEN, brokenCount);
+//                LibTriggers.GENERIC_INT.trigger(player, REPAIR_FROM_BROKEN, brokenCount);
             }
 
             // High durability
-            LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, event.crafting.getMaxDamage());
+//            LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, result.getMaxDamage());
 
             // Add tip upgrade
-            if (!GearData.getConstructionParts(event.crafting).getTips().isEmpty())
-                LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
+            if (!GearData.getConstructionParts(result).getTips().isEmpty()) {
+//                LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
+            }
         }
     }
 }

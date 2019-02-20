@@ -1,0 +1,23 @@
+{
+    "type": "silentgear:gear_crafting",
+    "ingredients": [
+        {
+            "tag": "silentgear:blueprints/axe"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        }
+    ],
+    "result": {
+        "item": "silentgear:axe"
+    }
+}

@@ -39,7 +39,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.config.Config;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

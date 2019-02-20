@@ -1,10 +1,15 @@
 package net.silentchaos512.gear.init;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.RecipeSerializers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
+import net.silentchaos512.gear.crafting.recipe.GearCrafting;
 import net.silentchaos512.gear.crafting.recipe.RecipeModularItem;
 
 import java.util.HashMap;
@@ -37,9 +42,11 @@ public class ModRecipes {
     }
 
     public static void init() {
-//        RecipeSerializers.register(ApplyEnchantmentTokenRecipe.Serializer.INSTANCE);
-//        RecipeSerializers.register(ModifySoulUrnRecipe.Serializer.INSTANCE);
-//        RecipeSerializers.register(SoulUrnRecipe.Serializer.INSTANCE);
+        // Recipe serializers
+        RecipeSerializers.register(GearCrafting.Serializer.INSTANCE);
+
+        // Ingredient serializers
+        CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
 
         if (SilentGear.isDevBuild()) {
             MinecraftForge.EVENT_BUS.addListener(ModRecipes::onPlayerJoinServer);
@@ -47,15 +54,16 @@ public class ModRecipes {
     }
 
     private static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.player.world.isRemote || event.player.world.getServer() == null) return;
+        EntityPlayer player = event.getPlayer();
+        if (player.world.isRemote || player.world.getServer() == null) return;
 
-        ResourceLocation[] recipes =event.player.world.getServer().getRecipeManager().getRecipes()
+        ResourceLocation[] recipes = player.world.getServer().getRecipeManager().getRecipes()
                 .stream()
                 .map(IRecipe::getId)
                 .filter(name -> name.getNamespace().equals(SilentGear.MOD_ID))
                 .toArray(ResourceLocation[]::new);
 
         SilentGear.LOGGER.info("DEV: Unlocking {} recipes in recipe book", recipes.length);
-        event.player.unlockRecipes(recipes);
+        player.unlockRecipes(recipes);
     }
 }

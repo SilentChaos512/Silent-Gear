@@ -46,7 +46,7 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     }
 
     private static void register(String name, Block block) {
-        register(name, block, new ItemBlock(block, new Item.Builder().group(SilentGear.ITEM_GROUP)));
+        register(name, block, new ItemBlock(block, new Item.Properties().group(SilentGear.ITEM_GROUP)));
     }
 
     private static void register(String name, Block block, ItemBlock item) {

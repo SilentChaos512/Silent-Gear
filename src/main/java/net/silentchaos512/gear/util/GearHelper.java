@@ -24,7 +24,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
-import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -214,8 +214,8 @@ public final class GearHelper {
 
     //endregion
 
-    public static Item.Builder getBuilder(@Nullable ToolType toolType) {
-        Item.Builder b = new Item.Builder()
+    public static Item.Properties getBuilder(@Nullable ToolType toolType) {
+        Item.Properties b = new Item.Properties()
                 .maxStackSize(1)
                 .group(SilentGear.ITEM_GROUP);
         if (toolType != null) {

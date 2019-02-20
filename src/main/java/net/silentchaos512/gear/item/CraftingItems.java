@@ -117,7 +117,7 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
 
     private static final class ItemInternal extends Item {
         ItemInternal() {
-            super(new Builder().group(SilentGear.ITEM_GROUP));
+            super(new Properties().group(SilentGear.ITEM_GROUP));
         }
 
         @Override

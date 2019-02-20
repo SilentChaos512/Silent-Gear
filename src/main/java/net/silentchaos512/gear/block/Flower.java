@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 
 public class Flower extends BlockBush {
     public Flower() {
-        super(Builder.create(Material.PLANTS)
+        super(Properties.create(Material.PLANTS)
                 .sound(SoundType.PLANT)
         );
     }
