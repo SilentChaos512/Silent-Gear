@@ -39,6 +39,11 @@ public interface ICoreTool extends ICoreItem {
         return RELEVANT_STATS;
     }
 
+    @Override
+    default boolean requiresPartOfType(PartType type) {
+        return type == PartType.MAIN || type == PartType.ROD;
+    }
+
     /**
      * The base damage done to the item when breaking a block, not considering enchantments
      */

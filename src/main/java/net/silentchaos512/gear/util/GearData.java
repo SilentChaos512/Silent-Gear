@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -350,9 +351,24 @@ public final class GearData {
         INBTBase nbt = tagList.get(index);
         if (nbt instanceof NBTTagEnd) return null;
 
-        PartData data = PartData.read((NBTTagCompound) nbt);
-        return data != null && data.getPart() instanceof PartMain ? data : null;
+        PartData data = PartData.readFast((NBTTagCompound) nbt);
+        return data != null && data.getType() == PartType.MAIN ? data : null;
     }
+
+    @Nullable
+    public static PartData getPartOfType(ItemStack stack, PartType type) {
+        NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
+        NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
+
+        for (INBTBase nbt : tagList) {
+            if (nbt instanceof NBTTagCompound) {
+                PartData part = PartData.readFast((NBTTagCompound) nbt);
+                if (part != null && part.getType() == type) return part;
+            }
+        }
+        return null;
+    }
+
 
     public static void addUpgradePart(ItemStack gear, ItemStack partStack) {
         PartData part = PartData.from(partStack);

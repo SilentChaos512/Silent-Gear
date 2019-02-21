@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 
@@ -19,6 +20,11 @@ public interface ICoreRangedWeapon extends ICoreTool {
     @Override
     default Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
+    }
+
+    @Override
+    default boolean requiresPartOfType(PartType type) {
+        return type == PartType.MAIN || type == PartType.ROD || type == PartType.BOWSTRING;
     }
 
     @Override

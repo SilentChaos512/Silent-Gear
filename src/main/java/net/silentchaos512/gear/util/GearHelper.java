@@ -24,6 +24,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -379,7 +380,6 @@ public final class GearHelper {
     }
 
     public static ITextComponent getDisplayName(ItemStack gear) {
-        ICoreItem item = (ICoreItem) gear.getItem();
         PartData part = GearData.getPrimaryPart(gear);
         if (part == null) return new TextComponentTranslation(gear.getTranslationKey());
 
@@ -387,9 +387,12 @@ public final class GearHelper {
         ITextComponent gearName = new TextComponentTranslation(gear.getTranslationKey() + ".nameProper", partName);
 
         if (gear.getItem() instanceof ICoreTool) {
-            boolean hasRod = true; // FIXME
-            if (!hasRod) {
+            ICoreItem item = (ICoreItem) gear.getItem();
+            if (item.requiresPartOfType(PartType.ROD) && GearData.getPartOfType(gear, PartType.ROD) == null) {
                 return new TextComponentTranslation(gear.getTranslationKey() + ".noRod", gearName);
+            }
+            if (item.requiresPartOfType(PartType.BOWSTRING) && GearData.getPartOfType(gear, PartType.BOWSTRING) == null) {
+                return new TextComponentTranslation(gear.getTranslationKey() + ".unstrung", gearName);
             }
         }
 
