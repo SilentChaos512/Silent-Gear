@@ -5,10 +5,7 @@ import com.google.gson.JsonParseException;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeSerializers;
-import net.minecraft.item.crafting.ShapelessRecipe;
+import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -22,10 +19,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class GearCrafting implements IRecipe {
-    private final ShapelessRecipe recipe;
+    private final IRecipe recipe;
     private final ICoreItem item;
 
-    private GearCrafting(ShapelessRecipe recipeTemplate, ICoreItem item) {
+    private GearCrafting(IRecipe recipeTemplate, ICoreItem item) {
         this.recipe = recipeTemplate;
         this.item = item;
     }
@@ -94,7 +91,44 @@ public final class GearCrafting implements IRecipe {
         }
 
         @Override
-        public void write(PacketBuffer buffer, GearCrafting recipe) {}
+        public void write(PacketBuffer buffer, GearCrafting recipe) {
+            RecipeSerializers.CRAFTING_SHAPELESS.write(buffer, (ShapelessRecipe) recipe.recipe);
+        }
+
+        @Override
+        public ResourceLocation getName() {
+            return NAME;
+        }
+    }
+
+    public static final class ShapedSerializer implements IRecipeSerializer<GearCrafting> {
+        public static final ShapedSerializer INSTANCE = new ShapedSerializer();
+        static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "shaped_gear_crafting");
+
+        ShapedSerializer() {}
+
+        @Override
+        public GearCrafting read(ResourceLocation recipeId, JsonObject json) {
+            ShapedRecipe recipe = RecipeSerializers.CRAFTING_SHAPED.read(recipeId, json);
+            Item item = recipe.getRecipeOutput().getItem();
+            if (!(item instanceof ICoreItem))
+                throw new JsonParseException("result must a gear item");
+            return new GearCrafting(recipe, (ICoreItem) item);
+        }
+
+        @Override
+        public GearCrafting read(ResourceLocation recipeId, PacketBuffer buffer) {
+            ShapedRecipe recipe = RecipeSerializers.CRAFTING_SHAPED.read(recipeId, buffer);
+            Item item = recipe.getRecipeOutput().getItem();
+            if (!(item instanceof ICoreItem))
+                throw new IllegalStateException("result must a gear item");
+            return new GearCrafting(recipe, (ICoreItem) item);
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, GearCrafting recipe) {
+            RecipeSerializers.CRAFTING_SHAPED.write(buffer, (ShapedRecipe) recipe.recipe);
+        }
 
         @Override
         public ResourceLocation getName() {

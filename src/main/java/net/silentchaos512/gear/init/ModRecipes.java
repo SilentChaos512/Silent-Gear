@@ -10,29 +10,13 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.recipe.GearCrafting;
-import net.silentchaos512.gear.crafting.recipe.RecipeModularItem;
+import net.silentchaos512.gear.crafting.recipe.QuickRepair;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class ModRecipes {
-    public static final Map<String, RecipeModularItem> gearCrafting = new HashMap<>();
-
+public final class ModRecipes {
     private ModRecipes() {}
 
     public static void registerAll() {
-        // Gear recipes TODO: move to JSON
         /*
-        RecipeMaker recipes = reg.getRecipeMaker();
-        for (ICoreItem item : ModItems.toolClasses.values()) {
-            final RecipeModularItem recipe = new RecipeModularItem(item);
-            gearCrafting.put(item.getGearClass(), recipe);
-            recipes.addCustomRecipe("core_" + item.getGearClass(), recipe);
-        }
-
-        // Smelting recipes
-        recipes.addSmelting(ModBlocks.crimsonIronOre, new ItemStack(CraftingItems.CRIMSON_IRON_INGOT.getItem()), 0.6f);
-
         // Repair recipe "fix" - prevents gear items from being destroyed by vanilla
         SilentGear.LOGGER.info("Replacing vanilla repair recipe");
         IRecipe rec = new RepairItemRecipeFix();
@@ -44,6 +28,8 @@ public class ModRecipes {
     public static void init() {
         // Recipe serializers
         RecipeSerializers.register(GearCrafting.Serializer.INSTANCE);
+        RecipeSerializers.register(GearCrafting.ShapedSerializer.INSTANCE);
+        RecipeSerializers.register(QuickRepair.Serializer.INSTANCE);
 
         // Ingredient serializers
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);

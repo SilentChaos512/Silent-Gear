@@ -37,7 +37,6 @@ import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
 
-@SuppressWarnings("unused")
 public class QuickRepair implements IRecipe {
     @Override
     public boolean matches(IInventory inv, World worldIn) {
@@ -87,8 +86,13 @@ public class QuickRepair implements IRecipe {
         repairValue += 1;
 
         // Repair efficiency instance tool class
-        if (gear.getItem() instanceof ICoreItem)
-            repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
+        if (gear.getItem() instanceof ICoreItem) {
+            float repairEfficiency = GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
+            // FIXME: temp fix for missing equipment modifiers
+            if (repairEfficiency > 0) {
+                repairValue *= repairEfficiency;
+            }
+        }
 
         gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
 //            GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);

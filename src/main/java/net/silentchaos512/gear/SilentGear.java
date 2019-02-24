@@ -44,7 +44,7 @@ public class SilentGear {
 
     public static boolean isDevBuild() {
         // TODO
-        return true;
+        return false;
     }
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {
