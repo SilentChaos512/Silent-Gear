@@ -50,7 +50,7 @@ class SideProxy {
             else return ItemStack.EMPTY;
         });
 
-        if (SilentGear.isDevBuild()) {
+        if (SilentGear.isDevBuild() && SilentGear.RUN_GENERATORS) {
             ModTags.init();
             GenModels.generateAll();
             GenRecipes.generateAll();
