@@ -58,7 +58,12 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-        return isSingleUse(itemStack) ? ItemStack.EMPTY : itemStack;
+        return isSingleUse(itemStack) ? ItemStack.EMPTY : new ItemStack(this);
+    }
+
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+        return !isSingleUse(stack);
     }
 
     /**

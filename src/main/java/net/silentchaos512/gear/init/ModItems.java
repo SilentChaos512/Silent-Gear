@@ -155,10 +155,6 @@ public final class ModItems {
 
         // Part blueprints (just rods right now, are any others needed?)
         Item item = new Item(new Item.Properties());
-//        if (!singleUse) {
-//            item.setContainerItem(item);
-//        }
         register(name + "_rod", item);
-//        OreDictionary.registerOre("blueprintRod", item);
     }
 }
