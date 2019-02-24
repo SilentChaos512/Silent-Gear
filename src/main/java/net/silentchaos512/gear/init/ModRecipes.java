@@ -9,28 +9,16 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
-import net.silentchaos512.gear.crafting.recipe.GearCrafting;
-import net.silentchaos512.gear.crafting.recipe.QuickRepair;
-import net.silentchaos512.gear.crafting.recipe.RepairItemRecipeFix;
-import net.silentchaos512.gear.crafting.recipe.UpgradeGear;
+import net.silentchaos512.gear.crafting.recipe.*;
 
 public final class ModRecipes {
     private ModRecipes() {}
-
-    public static void registerAll() {
-        /*
-        // Repair recipe "fix" - prevents gear items from being destroyed by vanilla
-        SilentGear.LOGGER.info("Replacing vanilla repair recipe");
-        IRecipe rec = new RepairItemRecipeFix();
-        rec.setRegistryName(new ResourceLocation("minecraft", "repairitem"));
-        ForgeRegistries.RECIPES.register(rec);
-        */
-    }
 
     public static void init() {
         // Recipe serializers
         RecipeSerializers.register(GearCrafting.Serializer.INSTANCE);
         RecipeSerializers.register(GearCrafting.ShapedSerializer.INSTANCE);
+        RecipeSerializers.register(GearPartSwap.Serializer.INSTANCE);
         RecipeSerializers.register(QuickRepair.Serializer.INSTANCE);
         RecipeSerializers.register(RepairItemRecipeFix.Serializer.INSTANCE);
         RecipeSerializers.register(UpgradeGear.Serializer.INSTANCE);

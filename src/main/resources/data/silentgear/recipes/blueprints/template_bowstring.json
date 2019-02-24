@@ -11,7 +11,7 @@
       "tag": "minecraft:wooden_slabs"
     },
     "/": {
-      "tag": "forge:string/plain"
+      "tag": "forge:string/string"
     }
   },
   "result": {

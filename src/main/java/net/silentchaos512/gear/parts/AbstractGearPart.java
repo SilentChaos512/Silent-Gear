@@ -93,6 +93,8 @@ public abstract class AbstractGearPart implements IGearPart {
     public float getRepairAmount(RepairContext context) {
         // Base value on material durability
         PartData material = context.getMaterial();
+        if (material.getType() != PartType.MAIN) return 0;
+
         PartData gearPrimary = GearData.getPrimaryPart(context.getGear());
         // Material tier must be equal to or higher than gear's primary
         if (gearPrimary != null && material.getTier() < gearPrimary.getTier()) return 0;
