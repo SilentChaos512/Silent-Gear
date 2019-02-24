@@ -153,8 +153,9 @@ public final class ModItems {
             register(name + "_" + key, blueprint);
         });
 
-        // Part blueprints (just rods right now, are any others needed?)
-        Item item = new Item(new Item.Properties());
-        register(name + "_rod", item);
+        // Part blueprints
+        Item.Properties properties = new Item.Properties().group(SilentGear.ITEM_GROUP);
+        register(name + "_rod", new Item(properties));
+        register(name + "_bowstring", new Item(properties));
     }
 }

@@ -15,7 +15,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:leather_wrappings"
+            "item": "minecraft:leather"
         }
     },
     "name": {

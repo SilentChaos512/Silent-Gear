@@ -68,7 +68,7 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     LAPIS_COATED_UPGRADE,
     QUARTZ_TIPPED_UPGRADE,
     // Grips
-    LEATHER_WRAPPINGS,
+//    LEATHER_WRAPPINGS,
     // Bowstrings
     PLAIN_BOWSTRING("silentgear:bowstrings/plain", "silentgear:bowstrings"),
     FLAX_BOWSTRING("silentgear:bowstrings/flax", "silentgear:bowstrings"),
