@@ -80,12 +80,9 @@ public final class ModItems {
         toolClasses.forEach((key, item) -> register(key, item.asItem()));
         armorClasses.forEach((key, item) -> register(key, item.asItem()));
 
-        if (SilentGear.isDevBuild()) {
-            register("test_item", new TestItem());
-        }
-
-        registerOreDictEntries();
-        addSmeltingRecipes();
+//        if (SilentGear.isDevBuild()) {
+//            register("test_item", new TestItem());
+//        }
     }
 
     private static void initializeGear() {
@@ -128,15 +125,6 @@ public final class ModItems {
 
         gearClasses.putAll(toolClasses);
         gearClasses.putAll(armorClasses);
-    }
-
-    private static void registerOreDictEntries() {
-//        OreDictionary.registerOre("flint", Items.FLINT);
-//        CraftingItems.registerOreDict();
-    }
-
-    private static void addSmeltingRecipes() {
-//        GameRegistry.addSmelting(CraftingItems.SINEW.getStack(), CraftingItems.DRIED_SINEW.getStack(), 0.1f);
     }
 
     private static <T extends Item> T register(String name, T item) {

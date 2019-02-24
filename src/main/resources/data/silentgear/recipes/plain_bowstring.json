@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "group": "silentgear:bowstrings",
+  "pattern": [
+    "/",
+    "/",
+    "/"
+  ],
+  "key": {
+    "/": {
+      "tag": "forge:string/string"
+    }
+  },
+  "result": {
+    "item": "silentgear:plain_bowstring"
+  }
+}

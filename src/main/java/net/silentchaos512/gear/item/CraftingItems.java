@@ -115,6 +115,11 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
         return tag;
     }
 
+    @Nullable
+    public Tag<Item> getGroupTag() {
+        return groupTag;
+    }
+
     private static final class ItemInternal extends Item {
         ItemInternal() {
             super(new Properties().group(SilentGear.ITEM_GROUP));

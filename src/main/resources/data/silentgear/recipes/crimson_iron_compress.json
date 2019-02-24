@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "silentgear:crimson_iron_nugget"
+    }
+  },
+  "result": {
+    "item": "silentgear:crimson_iron_ingot"
+  }
+}

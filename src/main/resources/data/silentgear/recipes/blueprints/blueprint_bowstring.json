@@ -1,0 +1,20 @@
+{
+  "type": "crafting_shaped",
+  "group": "silentgear:blueprints_bowstring",
+  "pattern": [
+    "#/",
+    "#/",
+    "#/"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:paper/blueprint"
+    },
+    "/": {
+      "tag": "forge:string/plain"
+    }
+  },
+  "result": {
+    "item": "silentgear:blueprint_bowstring"
+  }
+}

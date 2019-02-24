@@ -15,7 +15,9 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.util.generator.RecipeGenerator;
-import net.silentchaos512.lib.util.generator.RecipeGenerator.*;
+import net.silentchaos512.lib.util.generator.RecipeGenerator.ShapedBuilder;
+import net.silentchaos512.lib.util.generator.RecipeGenerator.ShapelessBuilder;
+import net.silentchaos512.lib.util.generator.RecipeGenerator.SmeltingBuilder;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -109,41 +111,6 @@ public class GenRecipes {
                 .key('U', CraftingItems.UPGRADE_BASE.getTag())
                 .key('G', Tags.Items.NUGGETS_GOLD)
         );
-        RecipeGenerator.create(name("rough_rods"), ShapedBuilder
-                .create(CraftingItems.ROUGH_ROD, 2)
-                .layout(" /", "/ ")
-                .key('/', Tags.Items.RODS_WOODEN)
-        );
-        RecipeGenerator.create(name("stone_rods"), ShapedBuilder
-                .create(CraftingItems.STONE_ROD, 4)
-                .layout("#", "#")
-                .key('#', Blocks.COBBLESTONE)
-        );
-//        RecipeGenerator.create(name("stone_rods_from_blueprint"), ShapelessBuilder
-//                .create(CraftingItems.STONE_ROD, 4)
-//                .ingredient("silentgear:blueprint_rod")
-//                .ingredient(Blocks.COBBLESTONE, 2)
-//        );
-        RecipeGenerator.create(name("iron_rods"), ShapedBuilder
-                .create(CraftingItems.IRON_ROD, 4)
-                .layout("#", "#")
-                .key('#', Tags.Items.INGOTS_IRON)
-        );
-//        RecipeGenerator.create(name("iron_rods_from_blueprint"), ShapelessBuilder
-//                .create(CraftingItems.IRON_ROD, 4)
-//                .ingredient("silentgear:blueprint_rod")
-//                .ingredient(Tags.Items.INGOTS_IRON, 2)
-//        );
-        RecipeGenerator.create(name("netherwood_sticks"), ShapedBuilder
-                .create(CraftingItems.NETHERWOOD_STICK, 4)
-                .layout(" #", "# ")
-                .key('#', ModBlocks.NETHERWOOD_PLANKS)
-        );
-//        RecipeGenerator.create(name("netherwood_sticks_from_blueprint"), ShapelessBuilder
-//                .create(CraftingItems.NETHERWOOD_STICK, 4)
-//                .ingredient("silentgear:blueprint_rod")
-//                .ingredient(ModBlocks.NETHERWOOD_PLANKS, 2)
-//        );
         RecipeGenerator.create(name("crimson_steel_ingot"), ShapedBuilder
                 .create(CraftingItems.CRIMSON_STEEL_INGOT)
                 .layout("/ /", "#C#", "# #")
@@ -153,7 +120,13 @@ public class GenRecipes {
         );
         RecipeGenerator.compress9(name("diamond_shards"), Items.DIAMOND, CraftingItems.DIAMOND_SHARD);
         RecipeGenerator.compress9(name("emerald_shards"), Items.EMERALD, CraftingItems.EMERALD_SHARD);
-        RecipeGenerator.compress9(name("leather_scraps"), Items.LEATHER, CraftingItems.LEATHER_SCRAP);
+//        RecipeGenerator.compress9(name("leather_scraps"), Items.LEATHER, CraftingItems.LEATHER_SCRAP);
+        RecipeGenerator.compress9(name("crimson_iron"),
+                CraftingItems.CRIMSON_IRON_INGOT,
+                CraftingItems.CRIMSON_IRON_NUGGET);
+        RecipeGenerator.compress9(name("crimson_steel"),
+                CraftingItems.CRIMSON_STEEL_INGOT,
+                CraftingItems.CRIMSON_STEEL_NUGGET);
         RecipeGenerator.create(name("sinew_smelting"), SmeltingBuilder
                 .create(CraftingItems.DRIED_SINEW)
                 .ingredient(CraftingItems.SINEW)
@@ -168,14 +141,14 @@ public class GenRecipes {
                 .ingredient(CraftingItems.FLAX_FIBER, 2)
         );
 
-        tipUpgrade(CraftingItems.IRON_TIPPED_UPGRADE, Tags.Items.INGOTS_IRON);
-        tipUpgrade(CraftingItems.GOLD_TIPPED_UPGRADE, Tags.Items.INGOTS_GOLD);
-        tipUpgrade(CraftingItems.DIAMOND_TIPPED_UPGRADE, Tags.Items.GEMS_DIAMOND);
-        tipUpgrade(CraftingItems.EMERALD_TIPPED_UPGRADE, Tags.Items.GEMS_EMERALD);
-        tipUpgrade(CraftingItems.REDSTONE_COATED_UPGRADE, Tags.Items.DUSTS_REDSTONE);
-        tipUpgrade(CraftingItems.GLOWSTONE_COATED_UPGRADE, Tags.Items.DUSTS_GLOWSTONE);
-        tipUpgrade(CraftingItems.LAPIS_COATED_UPGRADE, Tags.Items.GEMS_LAPIS);
-        tipUpgrade(CraftingItems.QUARTZ_TIPPED_UPGRADE, Tags.Items.GEMS_QUARRTZ);
+        tipUpgrade(CraftingItems.IRON_TIPPED_UPGRADE, Tags.Items.INGOTS_IRON, 1);
+        tipUpgrade(CraftingItems.GOLD_TIPPED_UPGRADE, Tags.Items.INGOTS_GOLD, 1);
+        tipUpgrade(CraftingItems.DIAMOND_TIPPED_UPGRADE, Tags.Items.GEMS_DIAMOND, 1);
+        tipUpgrade(CraftingItems.EMERALD_TIPPED_UPGRADE, Tags.Items.GEMS_EMERALD, 1);
+        tipUpgrade(CraftingItems.REDSTONE_COATED_UPGRADE, Tags.Items.DUSTS_REDSTONE, 4);
+        tipUpgrade(CraftingItems.GLOWSTONE_COATED_UPGRADE, Tags.Items.DUSTS_GLOWSTONE, 4);
+        tipUpgrade(CraftingItems.LAPIS_COATED_UPGRADE, Tags.Items.GEMS_LAPIS, 4);
+        tipUpgrade(CraftingItems.QUARTZ_TIPPED_UPGRADE, Tags.Items.GEMS_QUARRTZ, 4);
 
         RecipeGenerator.create(name("spoon_upgrade"), ShapelessBuilder
                 .create(CraftingItems.SPOON_UPGRADE)
@@ -188,9 +161,16 @@ public class GenRecipes {
                 .ingredient(Tags.Items.DYES_RED)
         );
 
-        // TODO: Bowstring (3 string)
+        // Bowstring (3 string)
+        bowstrings(CraftingItems.FLAX_BOWSTRING, CraftingItems.FLAX_STRING.getTag());
+        bowstrings(CraftingItems.PLAIN_BOWSTRING, "forge:string/string");
+        bowstrings(CraftingItems.SINEW_BOWSTRING, CraftingItems.SINEW_FIBER.getTag());
 
-        // TODO: Grips (2 material + 1 #forge:string)
+        // Rods
+        rods(CraftingItems.ROUGH_ROD, Tags.Items.RODS_WOODEN, 2, true);
+        rods(CraftingItems.STONE_ROD, Tags.Blocks.COBBLESTONE, 4, false);
+        rods(CraftingItems.IRON_ROD, Tags.Items.INGOTS_IRON, 4, false);
+        rods(CraftingItems.NETHERWOOD_STICK, ModBlocks.NETHERWOOD_PLANKS, 4, true);
     }
 
     private static void blueprints(ICoreItem item, Consumer<ShapedBuilder> layout) {
@@ -198,8 +178,8 @@ public class GenRecipes {
     }
 
     private static void blueprints(String type, Consumer<ShapedBuilder> layout) {
-        ResourceLocation nameBlueprint = name("blueprint_" + type);
-        ResourceLocation nameTemplate = name("template_" + type);
+        ResourceLocation nameBlueprint = name("blueprints/blueprint_" + type);
+        ResourceLocation nameTemplate = name("blueprints/template_" + type);
         Item blueprint = ForgeRegistries.ITEMS.getValue(nameBlueprint);
         Item template = ForgeRegistries.ITEMS.getValue(nameTemplate);
 
@@ -224,14 +204,52 @@ public class GenRecipes {
         }
     }
 
-    private static void tipUpgrade(IItemProvider output, Tag<Item> material) {
+    private static void bowstrings(IItemProvider output, Object material) {
+        ResourceLocation name = Objects.requireNonNull(output.asItem().getRegistryName());
+        // Normal
+        RecipeGenerator.create(name, ShapedBuilder
+                .create(output)
+                .group("silentgear:bowstrings")
+                .layout("/", "/", "/")
+                .key('/', material)
+        );
+        // Blueprint fallback
+        ResourceLocation name2 = new ResourceLocation(SilentGear.MOD_ID, name.getPath() + "2");
+        RecipeGenerator.create(name2, ShapelessBuilder
+                .create(output)
+                .group("silentgear:bowstrings")
+                .ingredient("silentgear:blueprints/bowstring")
+                .ingredient(material, 3)
+        );
+    }
+
+    private static void rods(IItemProvider output, Object material, int count, boolean tilted) {
+        ResourceLocation name = Objects.requireNonNull(output.asItem().getRegistryName());
+
+        // Normal
+        RecipeGenerator.create(name, ShapedBuilder
+                .create(output, count)
+                .layout(tilted ? " /" : "/",
+                        tilted ? "/ " : "/")
+                .key('/', material)
+        );
+        // Blueprint fallback
+        ResourceLocation name2 = new ResourceLocation(SilentGear.MOD_ID, name.getPath() + "2");
+        RecipeGenerator.create(name2, ShapelessBuilder
+                .create(output, count)
+                .ingredient("silentgear:blueprints/rod")
+                .ingredient(material, 2)
+        );
+    }
+
+    private static void tipUpgrade(IItemProvider output, Tag<Item> material, int materialCount) {
         ResourceLocation name = Objects.requireNonNull(output.asItem().getRegistryName());
         assert CraftingItems.UPGRADE_BASE.getTag() != null;
         RecipeGenerator.create(name, ShapelessBuilder
                 .create(output)
                 .group("silentgear:tip_upgrades")
                 .ingredient(CraftingItems.UPGRADE_BASE.getTag())
-                .ingredient(material)
+                .ingredient(material, materialCount)
         );
     }
 
