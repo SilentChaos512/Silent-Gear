@@ -22,8 +22,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.type.PartMain;
-import net.silentchaos512.gear.parts.type.PartRod;
-import net.silentchaos512.gear.parts.type.PartTip;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -81,15 +79,19 @@ public final class PartDataList implements List<PartData> {
     }
 
     public List<PartData> getMains() {
-        return getParts(part -> part.getPart() instanceof PartMain);
+        return getPartsOfType(PartType.MAIN);
     }
 
     public List<PartData> getRods() {
-        return getParts(part -> part.getPart() instanceof PartRod);
+        return getPartsOfType(PartType.ROD);
     }
 
     public List<PartData> getTips() {
-        return getParts(part -> part.getPart() instanceof PartTip);
+        return getPartsOfType(PartType.TIP);
+    }
+
+    public List<PartData> getPartsOfType(PartType type) {
+        return getParts(part -> part.getType() == type);
     }
 
     public List<PartData> getParts(Predicate<PartData> predicate) {

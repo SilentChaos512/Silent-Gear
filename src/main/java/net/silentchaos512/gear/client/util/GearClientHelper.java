@@ -72,8 +72,13 @@ public final class GearClientHelper {
             tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.RED));
         } else if (GearData.hasLockedStats(stack)) {
             tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.YELLOW));
-        } else if (constructionParts.getRods().isEmpty()) {
-            tooltip.add(misc("missingRod").applyTextStyle(TextFormatting.RED));
+        } else {
+            if (constructionParts.getRods().isEmpty()) {
+                tooltip.add(misc("missingRod").applyTextStyle(TextFormatting.RED));
+            }
+            if (item.requiresPartOfType(PartType.BOWSTRING) && constructionParts.getPartsOfType(PartType.BOWSTRING).isEmpty()) {
+                tooltip.add(misc("missingBowstring").applyTextStyle(TextFormatting.RED));
+            }
         }
 
         // Let parts add information if they need to
