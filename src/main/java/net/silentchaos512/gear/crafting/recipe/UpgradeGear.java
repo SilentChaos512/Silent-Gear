@@ -18,63 +18,106 @@
 
 package net.silentchaos512.gear.crafting.recipe;
 
-public class UpgradeGear /*implements IRecipeFactory*/ {
-    /*
+import com.google.gson.JsonObject;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.IUpgradePart;
+import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.lib.collection.StackList;
+
+import java.util.Collection;
+
+public class UpgradeGear implements IRecipe {
     @Override
-    public IRecipe parse(JsonContext context, JsonObject json) {
-        return new Recipe();
+    public boolean matches(IInventory inv, World worldIn) {
+        if (Config.GENERAL.upgradesInAnvilOnly.get()) return false;
+
+        StackList list = StackList.from(inv);
+        // Require 1 and only 1 gear item
+        ItemStack gear = list.uniqueOfType(ICoreItem.class);
+        // Require at least 1 upgrade part
+        ItemStack upgrade = list.firstMatch(stack -> {
+            PartData part = PartData.fromStackFast(stack);
+            return part != null && part.getPart() instanceof IUpgradePart;
+        });
+        return !gear.isEmpty() && !upgrade.isEmpty();
     }
 
-    private static class Recipe extends RecipeBaseSL {
+    @Override
+    public ItemStack getCraftingResult(IInventory inv) {
+        StackList list = StackList.from(inv);
+        ItemStack gear = list.uniqueOfType(ICoreItem.class);
+        if (gear.isEmpty()) return ItemStack.EMPTY;
+
+        Collection<ItemStack> upgrades = list.allMatches(stack -> {
+            PartData part = PartData.fromStackFast(stack);
+            return part != null && part.getPart() instanceof IUpgradePart;
+        });
+
+        ItemStack result = gear.copy();
+
+        for (ItemStack upgrade : upgrades) {
+            GearData.addUpgradePart(result, upgrade);
+        }
+        GearData.recalculateStats(null, result);
+        return result;
+    }
+
+    @Override
+    public boolean canFit(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        // Cannot determine
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return Serializer.NAME;
+    }
+
+    @Override
+    public IRecipeSerializer<?> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
+    public static final class Serializer implements IRecipeSerializer<UpgradeGear> {
+        public static final Serializer INSTANCE = new Serializer();
+        private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "upgrade_gear");
+
         @Override
-        public ItemStack getCraftingResult(InventoryCrafting inv) {
-            ItemStack tool = ItemStack.EMPTY;
-            List<ItemStack> upgrades = new ArrayList<>();
-
-            for (ItemStack stack : getNonEmptyStacks(inv)) {
-                ItemPartData partData = ItemPartData.fromStack(stack);
-                if (stack.getItem() instanceof ICoreItem)
-                    tool = stack.copy();
-                else if (partData != null && partData.getPart() instanceof IUpgradePart)
-                    upgrades.add(stack);
-            }
-
-            if (tool.isEmpty())
-                return ItemStack.EMPTY;
-
-            for (ItemStack upgrade : upgrades)
-                GearData.addUpgradePart(tool, upgrade);
-            GearData.recalculateStats(tool);
-            return tool;
+        public UpgradeGear read(ResourceLocation recipeId, JsonObject json) {
+            return new UpgradeGear();
         }
 
         @Override
-        public ItemStack getRecipeOutput() {
-            return ItemStack.EMPTY;
+        public UpgradeGear read(ResourceLocation recipeId, PacketBuffer buffer) {
+            return new UpgradeGear();
         }
 
         @Override
-        public boolean matches(InventoryCrafting inv, World world) {
-            if (Config.upgradesAnvilOnly) return false;
+        public void write(PacketBuffer buffer, UpgradeGear recipe) {}
 
-            boolean foundTool = false;
-            boolean foundUpgrade = false;
-
-            for (ItemStack stack : getNonEmptyStacks(inv)) {
-                ItemPartData partData = ItemPartData.fromStack(stack);
-                if (stack.getItem() instanceof ICoreItem) {
-                    if (foundTool)
-                        return false;
-                    foundTool = true;
-                } else if (partData != null && partData.getPart() instanceof IUpgradePart) {
-                    foundUpgrade = true;
-                } else {
-                    return false;
-                }
-            }
-
-            return foundTool && foundUpgrade;
+        @Override
+        public ResourceLocation getName() {
+            return NAME;
         }
     }
-    */
 }

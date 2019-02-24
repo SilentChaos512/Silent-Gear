@@ -72,6 +72,11 @@ public final class PartData {
     }
 
     @Nullable
+    public static PartData fromStackFast(ItemStack craftingItem) {
+        return ofNullable(PartManager.from(craftingItem));
+    }
+
+    @Nullable
     public static PartData read(NBTTagCompound tags) {
         String key = tags.getString(NBT_ID);
         IGearPart part = PartManager.get(new ResourceLocation(key));
