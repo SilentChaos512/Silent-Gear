@@ -18,11 +18,15 @@
 
 package net.silentchaos512.gear.crafting.recipe;
 
+import com.google.gson.JsonObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.RecipeRepairItem;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.lib.collection.StackList;
 
@@ -33,14 +37,45 @@ import net.silentchaos512.lib.collection.StackList;
  *
  * @since 0.3.2
  */
-public class RepairItemRecipeFix extends RecipeRepairItem {
-    public RepairItemRecipeFix(ResourceLocation p_i48163_1_) {
+public final class RepairItemRecipeFix extends RecipeRepairItem {
+    private RepairItemRecipeFix(ResourceLocation p_i48163_1_) {
         super(p_i48163_1_);
+        SilentGear.LOGGER.debug("RepairItemRecipeFix init");
+    }
+
+    @Override
+    public IRecipeSerializer<?> getSerializer() {
+        return Serializer.INSTANCE;
     }
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
         ItemStack gearStack = StackList.from(inv).firstMatch(s -> s.getItem() instanceof ICoreItem);
         return gearStack.isEmpty() && super.matches(inv, worldIn);
+    }
+
+    public static final class Serializer implements IRecipeSerializer<RepairItemRecipeFix> {
+        public static final Serializer INSTANCE = new Serializer();
+        private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "repair_item_fix");
+
+        @Override
+        public RepairItemRecipeFix read(ResourceLocation recipeId, JsonObject json) {
+            SilentGear.LOGGER.debug("RepairItemRecipeFix read json");
+            return new RepairItemRecipeFix(recipeId);
+        }
+
+        @Override
+        public RepairItemRecipeFix read(ResourceLocation recipeId, PacketBuffer buffer) {
+            SilentGear.LOGGER.debug("RepairItemRecipeFix read packet");
+            return new RepairItemRecipeFix(recipeId);
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, RepairItemRecipeFix recipe) {}
+
+        @Override
+        public ResourceLocation getName() {
+            return NAME;
+        }
     }
 }
