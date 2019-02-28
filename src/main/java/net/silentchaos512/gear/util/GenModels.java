@@ -6,6 +6,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
@@ -13,10 +14,24 @@ import net.silentchaos512.lib.util.generator.ModelGenerator;
 
 public class GenModels {
     public static void generateAll() {
-//        for (IBlockProvider block : ModBlocks.values()) {
-//            // Many of these won't be correct, just need the items anyway
-//            ModelGenerator.create(block.asBlock());
-//        }
+        ModelGenerator.create(ModelGenerator.BlockBuilder
+                .create(ModBlocks.FLOWER.asBlock())
+                .parent("block/cross")
+                .texture("cross", "flower")
+                .item(ModelGenerator.ItemBuilder
+                        .create(ModBlocks.FLOWER.asItem())
+                        .texture(id("block/flower"))
+                )
+        );
+        ModelGenerator.create(ModelGenerator.BlockBuilder
+                .create(ModBlocks.NETHERWOOD_SAPLING.asBlock())
+                .parent("block/cross")
+                .texture("cross", "netherwood_sapling")
+                .item(ModelGenerator.ItemBuilder
+                        .create(ModBlocks.NETHERWOOD_SAPLING.asItem())
+                        .texture(id("block/netherwood_sapling"))
+                )
+        );
 
         for (CraftingItems item : CraftingItems.values()) {
             ModelGenerator.create(item.asItem());
@@ -57,7 +72,7 @@ public class GenModels {
                 .texture("upgrade_" + name));
     }
 
-    private static ResourceLocation name(String name) {
+    private static ResourceLocation id(String name) {
         return new ResourceLocation(SilentGear.MOD_ID, name);
     }
 }

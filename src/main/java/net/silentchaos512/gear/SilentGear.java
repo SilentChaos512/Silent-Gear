@@ -18,7 +18,7 @@ import java.util.Random;
 public class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.1";
     public static final boolean RUN_GENERATORS = false;
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
@@ -45,8 +45,8 @@ public class SilentGear {
     }
 
     public static boolean isDevBuild() {
-        // TODO
-        return false;
+        // TODO: How to check for deobfuscated environment?
+        return RUN_GENERATORS;
     }
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {

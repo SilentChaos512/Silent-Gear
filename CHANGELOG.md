@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- World generation (flowers, netherwood, and crimson iron)
+### Fixed
+- Flower and netherwood sapling models corrected
+
 ## [1.0.0] - 2019-02-24
 Port to 1.13.2. Bumped version to 1.0.0 because of major changes, but this is still an alpha of course.
 - Old part files are not compatible and must be updated.

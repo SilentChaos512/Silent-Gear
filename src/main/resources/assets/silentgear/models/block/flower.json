@@ -1,6 +1,6 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cross",
   "textures": {
-    "all": "silentgear:block/flower"
+    "cross": "silentgear:block/flower"
   }
 }
