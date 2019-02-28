@@ -16,6 +16,8 @@ import net.silentchaos512.gear.item.CraftingItems;
 public class FlaxPlant extends BlockCrops {
     public FlaxPlant() {
         super(Properties.create(Material.PLANTS)
+                .hardnessAndResistance(0)
+                .doesNotBlockMovement()
                 .sound(SoundType.PLANT)
         );
     }

@@ -25,13 +25,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 
 public class PhantomLight extends Block {
-    private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.3, 0.3, 0.3, 0.7, 0.7, 0.7);
+    private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(5, 5, 5, 11, 11, 11);
 
     public PhantomLight() {
         super(Properties.create(Material.CIRCUITS)
@@ -39,6 +40,11 @@ public class PhantomLight extends Block {
                 .hardnessAndResistance(0.5f, 6000000.0f)
                 .lightValue(15)
         );
+    }
+
+    @Override
+    public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+        return VOXEL_SHAPE;
     }
 
     @Override
