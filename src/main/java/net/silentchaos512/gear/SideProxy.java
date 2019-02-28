@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
@@ -20,6 +21,7 @@ import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GenModels;
 import net.silentchaos512.gear.util.GenRecipes;
 import net.silentchaos512.gear.util.IAOETool;
+import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 
 class SideProxy {
@@ -42,6 +44,8 @@ class SideProxy {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        DeferredWorkQueue.runLater(ModWorldFeatures::addFeaturesToBiomes);
+
         IAOETool.BreakHandler.buildOreBlocksSet();
 
         InitialSpawnItems.add(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"), () -> {

@@ -24,12 +24,11 @@ public class NetherwoodTreeFeature extends AbstractTreeFeature<NoFeatureConfig> 
 
     @Override
     protected boolean place(Set<BlockPos> changedBlocks, IWorld worldIn, Random rand, BlockPos position) {
-        final int startY = position.getY();
-        for (IBlockState iblockstate = worldIn.getBlockState(position);
-             (iblockstate.getBlock().isAir(iblockstate, worldIn, position)
-                     || iblockstate.getBlock().canBeReplacedByLeaves(iblockstate, worldIn, position))
-                     && startY > 0;
-             iblockstate = worldIn.getBlockState(position)) {
+        final int startY = Math.min(position.getY(), 96);
+        position = new BlockPos(position.getX(), startY, position.getZ());
+        for (IBlockState state = worldIn.getBlockState(position);
+             state.getBlock().canBeReplacedByLeaves(state, worldIn, position) && startY > 0;
+             state = worldIn.getBlockState(position)) {
             position = position.down();
         }
 
