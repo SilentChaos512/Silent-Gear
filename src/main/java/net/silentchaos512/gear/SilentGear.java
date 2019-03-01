@@ -40,7 +40,10 @@ public class SilentGear {
 
     public static String getVersion() {
         Optional<? extends ModContainer> o = ModList.get().getModContainerById(SilentGear.MOD_ID);
-        if (o.isPresent()) return o.get().getModInfo().getVersion().toString();
+        if (o.isPresent()) {
+            String str = o.get().getModInfo().getVersion().toString();
+            return "NONE".equals(str) ? VERSION : str;
+        }
         return "0.0.0";
     }
 

@@ -37,6 +37,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 
@@ -70,11 +71,7 @@ public class BlockPartAnalyzer extends BlockContainer {
     @Override
     public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TilePartAnalyzer) {
-//                player.openGui(SilentGear.instance, GuiHandlerSilentGear.GuiType.PART_ANALYZER.id,
-//                        worldIn, pos.getX(), pos.getY(), pos.getZ());
-            }
+                GuiTypes.PART_ANALYZER.display(player, pos);
         }
         return true;
     }
@@ -93,7 +90,7 @@ public class BlockPartAnalyzer extends BlockContainer {
     }
 
     @Override
-    public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
         return VOXEL_SHAPE;
     }
 

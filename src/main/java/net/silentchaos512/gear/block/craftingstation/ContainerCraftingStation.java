@@ -7,7 +7,6 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.play.server.SPacketSetSlot;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
@@ -31,7 +30,11 @@ public class ContainerCraftingStation extends Container {
     private final TileCraftingStation tile;
     private final World world;
 
-    public ContainerCraftingStation(InventoryPlayer playerInventory, World worldIn, BlockPos posIn, TileCraftingStation tile) {
+    public ContainerCraftingStation(EntityPlayer player, TileCraftingStation tile) {
+        this(player.inventory, player.world, tile);
+    }
+
+    public ContainerCraftingStation(InventoryPlayer playerInventory, World worldIn, TileCraftingStation tile) {
         this.player = playerInventory.player;
         this.tile = tile;
         this.world = this.tile.getWorld();

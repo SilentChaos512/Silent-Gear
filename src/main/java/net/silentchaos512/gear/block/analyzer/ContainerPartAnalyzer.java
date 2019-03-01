@@ -28,7 +28,6 @@ import net.silentchaos512.lib.inventory.ContainerSL;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 
 public class ContainerPartAnalyzer extends ContainerSL {
-
     public ContainerPartAnalyzer(InventoryPlayer playerInventory, IInventory tileInventory) {
         super(playerInventory, tileInventory);
     }

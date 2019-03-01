@@ -33,6 +33,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -53,11 +54,7 @@ public class BlockSalvager extends BlockContainer {
     @Override
     public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileSalvager) {
-//                playerIn.openGui(SilentGear.instance, GuiHandlerSilentGear.GuiType.SALVAGER.id,
-//                        worldIn, pos.getX(), pos.getY(), pos.getZ());
-            }
+            GuiTypes.SALVAGER.display(player, pos);
         }
         return true;
     }

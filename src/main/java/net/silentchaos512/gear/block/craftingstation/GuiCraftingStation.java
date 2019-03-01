@@ -24,14 +24,12 @@ import java.util.stream.Collectors;
 public class GuiCraftingStation extends GuiContainer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/crafting_station.png");
 
-    private final TileCraftingStation tile;
     private final ContainerCraftingStation container;
 
     private TexturedButton buttonShowAllParts;
 
-    public GuiCraftingStation(TileCraftingStation tile, ContainerCraftingStation inventorySlotsIn) {
+    public GuiCraftingStation(ContainerCraftingStation inventorySlotsIn) {
         super(inventorySlotsIn);
-        this.tile = tile;
         this.container = inventorySlotsIn;
 
         this.xSize = 256;

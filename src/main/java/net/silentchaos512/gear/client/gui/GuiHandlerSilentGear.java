@@ -81,7 +81,7 @@ public class GuiHandlerSilentGear implements IGuiHandler {
             case CRAFTING_STATION:
                 if (tile instanceof TileCraftingStation) {
                     TileCraftingStation tileCrafting = (TileCraftingStation) tile;
-                    return new ContainerCraftingStation(player.inventory, world, pos, tileCrafting);
+                    return new ContainerCraftingStation(player.inventory, world, tileCrafting);
                 }
                 return null;
             case PART_ANALYZER:
@@ -121,8 +121,8 @@ public class GuiHandlerSilentGear implements IGuiHandler {
             case CRAFTING_STATION:
                 if (tile instanceof TileCraftingStation) {
                     TileCraftingStation tileCrafting = (TileCraftingStation) tile;
-                    ContainerCraftingStation container = new ContainerCraftingStation(player.inventory, world, pos, tileCrafting);
-                    return new GuiCraftingStation(tileCrafting, container);
+                    ContainerCraftingStation container = new ContainerCraftingStation(player.inventory, world, tileCrafting);
+                    return new GuiCraftingStation(container);
                 }
                 return null;
             case PART_ANALYZER:

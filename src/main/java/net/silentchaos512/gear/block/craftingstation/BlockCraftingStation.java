@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 
@@ -57,12 +58,11 @@ public class BlockCraftingStation extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return !player.isSneaking() && (world.isRemote || this.openGui(player, world, pos));
+        return !player.isSneaking() && (world.isRemote || BlockCraftingStation.openGui(player, world, pos));
     }
 
-    private boolean openGui(EntityPlayer player, World world, BlockPos pos) {
-        // FIXME
-//        player.openGui(SilentGear.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+    private static boolean openGui(EntityPlayer player, World world, BlockPos pos) {
+        GuiTypes.CRAFTING_STATION.display(player, pos);
         return true;
     }
 

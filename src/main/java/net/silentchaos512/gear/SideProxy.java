@@ -1,10 +1,15 @@
 package net.silentchaos512.gear;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
@@ -12,6 +17,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
+import net.silentchaos512.gear.client.gui.GuiTypes;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.command.SGearPartsCommand;
@@ -23,6 +29,9 @@ import net.silentchaos512.gear.util.GenRecipes;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.InitialSpawnItems;
+import net.silentchaos512.lib.inventory.ContainerType;
+
+import java.util.function.BiFunction;
 
 class SideProxy {
     SideProxy() {
@@ -36,6 +45,8 @@ class SideProxy {
 
         MinecraftForge.EVENT_BUS.addListener(this::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(this::serverStarted);
+
+        registerContainersCommon();
 
         Config.init();
 
@@ -74,17 +85,26 @@ class SideProxy {
         SilentGear.LOGGER.info(PartManager.MARKER, "Total gear parts loaded: {}", PartManager.getValues().size());
     }
 
+    private static void registerContainersCommon() {
+        for (GuiTypes type : GuiTypes.values()) {
+            //noinspection Convert2MethodRef -- compiler error
+            ContainerType.register(type::getContainerType, (tileType, player) ->
+                    type.getContainer(tileType, player));
+        }
+    }
+
     static class Client extends SideProxy {
         Client() {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
             MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
-
             MinecraftForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
 
             if (SilentGear.isDevBuild()) {
                 MinecraftForge.EVENT_BUS.register(new DebugOverlay());
             }
+
+            registerContainers();
 
             // FIXME: These do not work!
             ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
@@ -92,6 +112,22 @@ class SideProxy {
         }
 
         private void clientSetup(FMLClientSetupEvent event) { }
+
+        private static void registerContainers() {
+            for (GuiTypes type : GuiTypes.values()) {
+                //noinspection Convert2MethodRef -- compiler error
+                ContainerType.registerGui(type::getContainerType, (tileType, player) ->
+                        type.getGui(tileType, player));
+            }
+
+            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> packet -> {
+                ContainerType<?> type = ContainerType.factories.get(packet.getId()).get();
+                if (packet.getAdditionalData() != null) type.fromBytes(packet.getAdditionalData());
+                //noinspection unchecked
+                return ((BiFunction<ContainerType<?>, EntityPlayer, GuiContainer>) ContainerType.guiFactories.get(packet.getId()))
+                        .apply(type, Minecraft.getInstance().player);
+            });
+        }
 
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
             /*
