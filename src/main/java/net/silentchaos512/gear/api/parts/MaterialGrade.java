@@ -18,13 +18,22 @@
 
 package net.silentchaos512.gear.api.parts;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public enum MaterialGrade {
     NONE(0), E(-8), D(-4), C(0), B(5), A(10), S(20), SS(30), SSS(40);
@@ -102,5 +111,21 @@ public enum MaterialGrade {
 
     public ITextComponent getDisplayName() {
         return new TextComponentTranslation("stat.silentgear.grade." + name());
+    }
+
+    public static class Argument implements ArgumentType<MaterialGrade> {
+        @Override
+        public MaterialGrade parse(StringReader reader) {
+            return MaterialGrade.fromString(reader.readUnquotedString());
+        }
+
+        @Override
+        public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+            return ISuggestionProvider.suggest(Arrays.stream(values()).map(MaterialGrade::name), builder);
+        }
+
+        public static MaterialGrade getGrade(CommandContext<CommandSource> context, String name) {
+            return context.getArgument(name, MaterialGrade.class);
+        }
     }
 }

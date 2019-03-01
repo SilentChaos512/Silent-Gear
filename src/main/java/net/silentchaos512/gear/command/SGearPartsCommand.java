@@ -17,6 +17,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
@@ -28,7 +29,7 @@ import java.util.Collection;
 public final class SGearPartsCommand {
     private static final SuggestionProvider<CommandSource> partIdSuggestions = (ctx, builder) ->
             ISuggestionProvider.func_212476_a(PartManager.getValues().stream().map(IGearPart::getName), builder);
-    private static final SuggestionProvider<CommandSource>  partInGearSuggestions = (ctx, builder) -> {
+    private static final SuggestionProvider<CommandSource> partInGearSuggestions = (ctx, builder) -> {
         PartDataList parts = GearData.getConstructionParts(getGear(ctx));
         return ISuggestionProvider.func_212476_a(parts.getUniqueParts(false).stream().map(part ->
                 part.getPart().getName()), builder);
@@ -43,8 +44,12 @@ public final class SGearPartsCommand {
         // Add
         builder.then(
                 Commands.literal("add").then(
-                        Commands.argument("partID", ResourceLocationArgument.resourceLocation()).executes(
-                                SGearPartsCommand::runAdd
+                        Commands.argument("partID", ResourceLocationArgument.resourceLocation()).then(
+                                Commands.argument("grade", new MaterialGrade.Argument()).executes(ctx ->
+                                        runAdd(ctx, getPartGrade(ctx))
+                                )
+                        ).executes(ctx ->
+                                runAdd(ctx, MaterialGrade.NONE)
                         ).suggests(partIdSuggestions)
                 )
         );
@@ -64,14 +69,14 @@ public final class SGearPartsCommand {
         dispatcher.register(builder);
     }
 
-    private static int runAdd(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+    private static int runAdd(CommandContext<CommandSource> ctx, MaterialGrade grade) throws CommandSyntaxException {
         IGearPart part = getPart(ctx);
         if (part == null) return 0;
         ItemStack gear = getGear(ctx);
         if (gear.isEmpty()) return 0;
 
         Collection<PartData> partList = GearData.getConstructionParts(gear);
-        partList.add(PartData.of(part));
+        partList.add(PartData.of(part, grade));
         GearData.writeConstructionParts(gear, partList);
         GearData.recalculateStats(ctx.getSource().asPlayer(), gear);
         return 1;
@@ -128,6 +133,11 @@ public final class SGearPartsCommand {
             ctx.getSource().sendErrorMessage(text("partNotFound", id));
         }
         return part;
+    }
+
+    private static MaterialGrade getPartGrade(CommandContext<CommandSource> ctx) {
+        MaterialGrade grade = MaterialGrade.Argument.getGrade(ctx, "grade");
+        return grade;
     }
 
     private static ItemStack getGear(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
