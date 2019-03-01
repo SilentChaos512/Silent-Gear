@@ -8,18 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.IUpgradePart;
-import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
-import net.silentchaos512.gear.inventory.SlotCraftingStationOutput;
-import net.silentchaos512.gear.inventory.SlotItemPart;
-import net.silentchaos512.gear.parts.PartData;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class ContainerCraftingStation extends Container {
     InventoryCrafting craftMatrix;
@@ -59,13 +48,12 @@ public class ContainerCraftingStation extends Container {
         inventoryItemStacks.clear();
 
         setupCraftingGrid();
-        setupPartSlots();
         setupSideInventory();
         setupPlayerSlots(playerInv);
 
         // Output
-        outputSlot = this.addSlot(new SlotCraftingStationOutput(this, playerInv.player,
-                this.craftMatrix, this.craftResult, tile, tile.getSizeInventory(), 146, 35));
+        outputSlot = this.addSlot(new SlotCrafting(playerInv.player, this.craftMatrix,
+                this.craftResult, tile.getSizeInventory(), 124, 35));
 
         onCraftMatrixChanged(this.tile);
     }
@@ -74,16 +62,7 @@ public class ContainerCraftingStation extends Container {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 final int index = x + y * 3;
-                addSlot(new Slot(this.craftMatrix, index, 8 + x * 18, 17 + y * 18));
-            }
-        }
-    }
-
-    private void setupPartSlots() {
-        for (int y = 0; y < 3; ++y) {
-            for (int x = 0; x < 2; ++x) {
-                final int index = TileCraftingStation.GEAR_PARTS_START + x + y * 2;
-                addSlot(new SlotItemPart(this, tile, index, 79 + x * 18, 17 + y * 18));
+                addSlot(new Slot(this.craftMatrix, index, 30 + x * 18, 17 + y * 18));
             }
         }
     }
@@ -170,16 +149,14 @@ public class ContainerCraftingStation extends Container {
 
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index >= playerStart && index < hotbarStart) { // Player
-                // To parts grid, side inventory, or hotbar?
-                if (!this.mergeItemStack(itemstack1, TileCraftingStation.GEAR_PARTS_START, TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE, false)
-                        && !this.mergeItemStack(itemstack1, TileCraftingStation.SIDE_INVENTORY_START, TileCraftingStation.SIDE_INVENTORY_START + TileCraftingStation.SIDE_INVENTORY_SIZE, false)
+                // To side inventory or hotbar?
+                if (!this.mergeItemStack(itemstack1, TileCraftingStation.SIDE_INVENTORY_START, TileCraftingStation.SIDE_INVENTORY_START + TileCraftingStation.SIDE_INVENTORY_SIZE, false)
                         && !this.mergeItemStack(itemstack1, hotbarStart, hotbarStart + 9, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= hotbarStart && index < hotbarStart + 9) { // Hotbar
-                // To parts grid, side inventory, or player?
-                if (!this.mergeItemStack(itemstack1, TileCraftingStation.GEAR_PARTS_START, TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE, false)
-                        && !this.mergeItemStack(itemstack1, TileCraftingStation.SIDE_INVENTORY_START, TileCraftingStation.SIDE_INVENTORY_START + TileCraftingStation.SIDE_INVENTORY_SIZE, false)
+                // To side inventory or player?
+                if (!this.mergeItemStack(itemstack1, TileCraftingStation.SIDE_INVENTORY_START, TileCraftingStation.SIDE_INVENTORY_START + TileCraftingStation.SIDE_INVENTORY_SIZE, false)
                         && !this.mergeItemStack(itemstack1, playerStart, playerStart + 27, false)) { // To player
                     return ItemStack.EMPTY;
                 }
@@ -223,75 +200,10 @@ public class ContainerCraftingStation extends Container {
         if (irecipe != null && (irecipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayermp.getRecipeBook().isUnlocked(irecipe))) {
             craftResult.setRecipeUsed(irecipe);
             itemstack = irecipe.getCraftingResult(craftMatrix);
-
-            // If output is a tool head, try using available parts to craft a complete tool
-            /*
-            if (itemstack.getItem() instanceof ToolHead) {
-                String toolClass = ToolHead.getToolClass(itemstack);
-                RecipeModularItem recipe = ModRecipes.gearCrafting.get(toolClass);
-                ICoreItem item = ModItems.gearClasses.get(toolClass);
-
-                if (recipe != null && item != null) {
-                    NonNullList<ItemStack> partStackList = NonNullList.create();
-                    partStackList.add(itemstack.copy());
-
-                    Map<ItemPartData, Integer> partList = getCompatibleParts(item);
-                    Set<PartType> partTypesFound = partList.keySet().stream().map(p -> p.getPart().getType()).collect(Collectors.toSet());
-                    partTypesFound.add(PartType.MAIN);
-
-                    // Make sure all required parts are present
-                    boolean allRequiredPartsFound = true;
-                    for (PartType type : item.getConfig().getRequiredPartTypes()) {
-                        if (!partTypesFound.contains(type)) {
-                            allRequiredPartsFound = false;
-                            break;
-                        }
-                    }
-
-                    if (allRequiredPartsFound) {
-                        // Make the tool with extra parts
-                        partStackList.addAll(partList.keySet().stream().map(ItemPartData::getCraftingItem).collect(Collectors.toList()));
-                        ItemStack result = recipe.getCraftingResult(partStackList);
-                        if (!result.isEmpty()) {
-                            itemstack = result;
-                        }
-                    }
-                }
-            }
-            */
         }
 
         final int index = outputSlot.getSlotIndex();
         craftResult.setInventorySlotContents(index, itemstack);
         entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, index, itemstack));
-    }
-
-    public Map<PartData, Integer> getCompatibleParts(ICoreItem item) {
-        Map<PartData, Integer> result = new HashMap<>();
-        Set<PartType> typesFound = new HashSet<>();
-
-        for (int i = TileCraftingStation.GEAR_PARTS_START; i < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE; ++i) {
-            ItemStack partStack = getSlot(i).getStack();
-            PartData part = PartData.from(partStack);
-
-            if (part != null) {
-                PartType type = part.getPart().getType();
-                int requiredCount = item.getConfig().getCraftingPartCount(type);
-
-                boolean isMiscUpgrade = type == PartType.MISC_UPGRADE;
-                boolean enoughInStack = requiredCount <= partStack.getCount();
-                boolean roomForPart = !typesFound.contains(type) || isMiscUpgrade;
-                boolean incompatible = requiredCount == 0 && !(part.getPart() instanceof IUpgradePart);
-
-                if (enoughInStack && roomForPart && !incompatible) {
-                    result.put(part, Math.max(1, requiredCount));
-                    if (!isMiscUpgrade) {
-                        typesFound.add(type);
-                    }
-                }
-            }
-        }
-
-        return result;
     }
 }

@@ -40,10 +40,7 @@ public final class InventoryCraftingStation extends InventoryCrafting {
 
         ItemStack stack = ItemStackHelper.getAndSplit(stacks, index - TileCraftingStation.CRAFTING_GRID_SIZE, count);
         if (!stack.isEmpty()) {
-            if (index < TileCraftingStation.GEAR_PARTS_START + TileCraftingStation.GEAR_PARTS_SIZE)
-                container.onCraftMatrixChanged(this);
-            else
-                markDirty();
+            markDirty();
         }
         return stack;
     }

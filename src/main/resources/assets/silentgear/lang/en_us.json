@@ -188,7 +188,6 @@
   "item.silentgear.boots": "Boots",
   "item.silentgear.boots.nameProper": "%s Boots",
   "gui.silentgear.crafting_station.crafting": "Crafting",
-  "gui.silentgear.crafting_station.parts": "Parts",
   "gui.silentgear.crafting_station.storage": "Storage",
   "gui.silentgear.crafting_station.parts_button.hover1": "Show Available Parts",
   "gui.silentgear.crafting_station.parts_button.hover2": "List can be sorted by stats",

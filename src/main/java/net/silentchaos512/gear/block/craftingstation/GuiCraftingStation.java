@@ -89,9 +89,6 @@ public class GuiCraftingStation extends GuiContainer {
                 I18n.format("gui.silentgear.crafting_station.crafting"),
                 8, 6, 0x404040);
         this.fontRenderer.drawString(
-                I18n.format("gui.silentgear.crafting_station.parts"),
-                80, 6, 0x404040); // TODO: Change text color when able to use?
-        this.fontRenderer.drawString(
                 I18n.format("gui.silentgear.crafting_station.storage"),
                 -55, 19, 0x404040);
         this.fontRenderer.drawString(

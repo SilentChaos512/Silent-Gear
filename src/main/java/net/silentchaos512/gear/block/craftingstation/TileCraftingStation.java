@@ -3,7 +3,6 @@ package net.silentchaos512.gear.block.craftingstation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -22,19 +21,14 @@ import java.util.Arrays;
 
 public class TileCraftingStation extends TileInventorySL {
     public static final int CRAFTING_GRID_SIZE = 3 * 3;
-    public static final int GEAR_PARTS_SIZE = 3 * 2;
     public static final int SIDE_INVENTORY_SIZE = 3 * 6;
 
     public static final int CRAFTING_GRID_START = 0;
-    public static final int GEAR_PARTS_START = CRAFTING_GRID_START + CRAFTING_GRID_SIZE;
-    public static final int SIDE_INVENTORY_START = GEAR_PARTS_START + GEAR_PARTS_SIZE;
+    public static final int SIDE_INVENTORY_START = CRAFTING_GRID_SIZE;
 
     public TileCraftingStation() {
         super(ModTileEntities.CRAFTING_STATION.type());
     }
-
-//    private static final int CURRENT_VERSION = 1;
-//    private static final String NBT_VERSION = "SGCS_Version";
 
     public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {
         NonNullList<Pair<ItemStack, IInventory>> list = NonNullList.create();
@@ -72,25 +66,11 @@ public class TileCraftingStation extends TileInventorySL {
 
     @Override
     public int getSizeInventory() {
-        return CRAFTING_GRID_SIZE + GEAR_PARTS_SIZE + SIDE_INVENTORY_SIZE;
+        return CRAFTING_GRID_SIZE + SIDE_INVENTORY_SIZE;
     }
 
     @Override
     public boolean isEmpty() {
         return false;
-    }
-
-    @Override
-    public void read(NBTTagCompound tags) {
-        super.read(tags);
-        // "Version updates" will adjust inventory slots if they need to change, but this has to be
-        // coded for each version of the tile entity.
-//        handleVersionUpdates((int) tags.getByte(NBT_VERSION));
-    }
-
-    @Override
-    public NBTTagCompound write(NBTTagCompound tags) {
-//        tags.setByte(NBT_VERSION, (byte) CURRENT_VERSION);
-        return super.write(tags);
     }
 }
