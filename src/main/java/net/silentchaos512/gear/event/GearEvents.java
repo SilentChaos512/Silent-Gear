@@ -142,7 +142,7 @@ public final class GearEvents {
             ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
             if (!smelted.isEmpty()) {
                 event.getDrops().remove(i);
-                event.getDrops().add(i, smelted);
+                event.getDrops().add(i, smelted.copy());
             }
         }
     }
