@@ -1,7 +1,9 @@
 {
   "__comment__": "Placeholder gear model",
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
-    "layer0": "silentgear:item/blueprint_excavator"
+    "layer0": "silentgear:item/excavator/rod_generic_lc",
+    "layer1": "silentgear:item/excavator/head_generic_hc",
+    "layer2": "silentgear:item/excavator/_highlight"
   }
 }

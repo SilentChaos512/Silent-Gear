@@ -1,7 +1,9 @@
 {
   "__comment__": "Placeholder gear model",
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
-    "layer0": "silentgear:item/blueprint_mattock"
+    "layer0": "silentgear:item/mattock/rod_generic_lc",
+    "layer1": "silentgear:item/mattock/head_generic_hc",
+    "layer2": "silentgear:item/mattock/_highlight"
   }
 }

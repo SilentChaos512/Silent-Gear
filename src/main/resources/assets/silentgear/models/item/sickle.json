@@ -1,7 +1,9 @@
 {
   "__comment__": "Placeholder gear model",
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
-    "layer0": "silentgear:item/blueprint_sickle"
+    "layer0": "silentgear:item/sickle/rod_generic_lc",
+    "layer1": "silentgear:item/sickle/head_generic_hc",
+    "layer2": "silentgear:item/sickle/_highlight"
   }
 }

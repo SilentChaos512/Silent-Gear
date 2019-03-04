@@ -2,6 +2,6 @@
   "__comment__": "Placeholder gear model",
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:item/blueprint_helmet"
+    "layer0": "silentgear:item/helmet/main_generic_hc"
   }
 }

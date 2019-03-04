@@ -332,9 +332,10 @@ public final class GearData {
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
 
         INBTBase nbt = tagList.get(0);
-        if (nbt instanceof NBTTagEnd) return null;
-
-        return PartData.readFast(tags);
+        if (nbt instanceof NBTTagCompound) {
+            return PartData.readFast((NBTTagCompound) nbt);
+        }
+        return null;
     }
 
     /**

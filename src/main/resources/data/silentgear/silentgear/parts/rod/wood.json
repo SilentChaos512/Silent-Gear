@@ -22,7 +22,7 @@
         "translate": true,
         "name": "part.silentgear.rod.wood"
     },
-    "display": {
+    "textures": {
         "all": {
             "texture_domain": "silentgear",
             "texture_suffix": "wood",

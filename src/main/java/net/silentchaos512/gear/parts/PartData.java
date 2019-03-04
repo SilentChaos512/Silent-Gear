@@ -4,10 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartPosition;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.Trait;
@@ -165,5 +162,9 @@ public final class PartData {
 
     public int getColor(ItemStack gear, int animationFrame) {
         return part.getColor(this, gear, animationFrame);
+    }
+
+    public int getFallbackColor(ItemStack gear, int animationFrame) {
+        return part.getDisplayProperties(this, gear, animationFrame).getFallbackColor();
     }
 }

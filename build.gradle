@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.105', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
 
@@ -14,15 +14,11 @@ plugins {
     id 'maven'
     id 'maven-publish'
     id "com.jfrog.bintray" version "1.8.4"
-    id "com.matthewprenger.cursegradle" version "1.1.0"
+    id "com.matthewprenger.cursegradle" version "1.1.2"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-// apply plugin: 'eclipse'
-
-javadoc {
-    failOnError = false
-}
+apply plugin: 'eclipse'
 
 repositories {
     flatDir {
@@ -38,10 +34,20 @@ lombok {
     sha256 = ""
 }
 
-def versionInfo = getGitVersion()
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs = ['-Xlint:deprecation']
+}
+
+javadoc {
+    failOnError = false
+}
+
+archivesBaseName = project.archivesBaseName
+def versionInfo = getModVersion()
+System.out.println(versionInfo)
 version = "${versionInfo['version']}"
-group = 'net.silentchaos512.gear' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'silent-gear'
+def build_num = getBuildNumber()
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -49,59 +55,54 @@ minecraft {
     mappings channel: "${project.mcp_channel}".toString(), version: "${project.mcp_mappings}".toString()
 
     runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                silentgear {
-                    source sourceSets.main
-                }
-            }
+        client = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
         }
-
-        server {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                silentgear {
-                    source sourceSets.main
-                }
-            }
+        server = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
         }
     }
+}
+
+repositories {
+    jcenter()
+    mavenLocal()
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    compile "net.silentchaos512:silent-lib:4.+"
+    compile "com.udojava:EvalEx:2.1"
+    compile "net.silentchaos512:silent-lib:${project.sl_version}"
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
 jar {
     appendix = "${project.mc_version}"
-
     manifest {
-        attributes(["Specification-Title": "silent-gear",
-                    "Specification-Vendor": "silentchaos512",
+        attributes(["Specification-Title": project.mod_id,
+                    "Specification-Vendor": "SilentChaos512",
                     "Specification-Version": "25.0", // We are version 1 of the modlauncher specification
                     "Implementation-Title": project.name,
                     "Implementation-Version": "${version}",
-                    "Implementation-Vendor" :"silentchaos512",
+                    "Implementation-Vendor" :"SilentChaos512",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
+}
+
+task deobfJar(type: Jar) {
+    appendix = "${project.mc_version}"
+    classifier = 'deobf'
+    from sourceSets.main.output
 }
 
 task sourcesJar(type: Jar) {
@@ -110,15 +111,92 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
 }
 
-task javadocJar(type: Jar) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
     appendix = "${project.mc_version}"
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from javadoc.getDestinationDir()
 }
+
+artifacts {
+    if (project.hasProperty('doDeobfJar')) {
+        archives deobfJar
+    }
+    if (project.hasProperty('doSourceJar')) {
+        archives sourcesJar
+    }
+    if (project.hasProperty('doJavadocJar')) {
+        archives javadocJar
+    }
+}
+
+class Secrets {
+    def data = null
+
+    def getProperty(String key) {
+        return data ? data[key] : ''
+    }
+}
+
+import groovy.json.JsonSlurper
+
+def secretFile
+if (System.getenv().SECRET_FILE) {
+    secretFile = file System.getenv().SECRET_FILE
+} else {
+    secretFile = file 'secret.json'
+}
+
+project.ext.secret = new Secrets()
+if (secretFile.exists()) {
+    secretFile.withReader {
+        project.ext.secret.data = new JsonSlurper().parse it
+    }
+}
+
+curseforge {
+    if (project.hasProperty('cf_project_id') && project.hasProperty('cf_release_type') && project.hasProperty('cf_changelog_filename') &&
+            ((project.cf_release_type == 'alpha') || (project.cf_release_type == 'beta') || (project.cf_release_type == 'release'))) {
+        apiKey = secret.curseforgeAPIKey
+        project {
+            id = project.cf_project_id
+            changelog = file(project.cf_changelog_filename)
+            releaseType = project.cf_release_type
+            addGameVersion(project.mc_version)
+            mainArtifact(jar) {
+//                displayName = "$project.description $display_version"
+                relations {
+                    requiredLibrary 'silent-lib'
+                }
+            }
+//            if (project.hasProperty('doAPIJar')) {
+//                addArtifact(apiJar) {
+//                    displayName = "$project.description $display_version API"
+//                }
+//            }
+//            if (project.hasProperty('doSourceJar')) {
+//                addArtifact(sourceJar) {
+//                    displayName = "$project.description $display_version Sources"
+//                }
+//            }
+//            if (project.hasProperty('doDeobfJar')) {
+//                addArtifact(deobfJar) {
+//                    displayName = "$project.description $display_version Development"
+//                }
+//            }
+//            if (project.hasProperty('doJavadocJar')) {
+//                addArtifact(javadocJar) {
+//                    displayName = "$project.description $display_version Javadoc"
+//                }
+//            }
+        }
+    }
+}
+
+// Bintray/Maven publishing
 
 publishing {
     publications {
-        SilentGear(MavenPublication) {
+        silentGear(MavenPublication) {
             groupId 'net.silentchaos512'
             artifactId 'silent-gear'
             version "${versionInfo['version_short']}".toString()
@@ -132,19 +210,19 @@ publishing {
 }
 
 bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['SilentGear']
+    user = secret.BINTRAY_USER ?: System.getenv('BINTRAY_USER')
+    key = secret.BINTRAY_KEY ?: System.getenv('BINTRAY_KEY')
+    publications = ['silentGear']
 
     pkg {
         repo = 'silent-gear'
-        name = 'silent-gear'
+        name = "silent-gear-${project.mc_version}"
         licenses = ["LGPL-3.0"]
         vcsUrl = 'https://github.com/SilentChaos512/Silent-Gear.git'
 
         version {
             name = "${versionInfo['version_short']}".toString()
-            desc = "Silent Gear (${project.mc_version}) ${versionInfo['version_short']}".toString()
+            desc = "Silent's Gear (${project.mc_version}) ${versionInfo['version_short']}".toString()
             released = new Date()
             vcsTag = "v${versionInfo['version_short']}".toString()
         }
@@ -153,9 +231,16 @@ bintray {
 
 // Version stuff
 
-def getGitVersion() {
-    def out = [:]
+def getModVersion() {
+    try {
+        return getGitVersion()
+    } catch (Exception ex) {
+        System.out.println("Git version failed, falling back to old method")
+        return getVersion('VERSION', getModFile())
+    }
+}
 
+def getGitVersion() {
     // Call git command
     def outStream = new ByteArrayOutputStream()
     def result = exec {
@@ -172,14 +257,63 @@ def getGitVersion() {
     def rev = matcher[0][3]
     def bn = getBuildNumber()
 
+    return makeVersionMap(maj, min, rev, bn, matcher[0][4])
+}
+
+static def makeVersionMap(maj, min, rev, bn, githash) {
+    def out = [:]
     out['build.major.number'] = maj.toString()
     out['build.minor.number'] = min.toString()
     out['build.revision.number'] = rev.toString()
-    out['build.githash'] = matcher[0][4].toString()
+    out['build.githash'] = githash
     out['build.number'] = bn.toString()
+    out['version_short'] = "${maj}.${min}.${rev}".toString()
     out['version'] = "${maj}.${min}.${rev}+${bn}".toString()
+    return out
+}
 
-    return out;
+// Modified old version getter
+def getVersion(String type, String mod_file) {
+    String maj = '0'
+    String min = '0'
+    String rev = '0'
+    String bn = getBuildNumber()
+
+    File file = file(mod_file)
+    def prefix = ~/^(?:public|protected|private) static final String $type = ".*$/
+    file.eachLine { String s ->
+        s = s.trim()
+        if (s ==~ prefix || prefix.matcher(s).matches()) {
+            String[] bits = s.split("=")
+            String interesting = bits[1].trim()
+            interesting = interesting.substring(1, interesting.length() - 2)
+            String[] pts = interesting.trim().split("\\.")
+
+            maj = pts[0] ?: '0'
+            min = pts[1] ?: '0'
+            rev = pts[2] ?: '0'
+        }
+    }
+
+    return makeVersionMap(maj, min, rev, bn, 'unknown')
+}
+
+// Used by old getVersion
+String getModFile() {
+    String path = ''
+    FileTree tree = fileTree(dir: 'src/main/java')
+    tree.include '**/*.java'
+    tree.visit { element ->
+        if (element.file.isFile()) {
+            element.file.eachLine { String s ->
+                s = s.trim()
+                if (s.startsWith('@Mod(')) {
+                    path = "src/main/java/$element.relativePath"
+                }
+            }
+        }
+    }
+    return path
 }
 
 // Build number tracking
@@ -209,6 +343,4 @@ task incrementBuild {
         }
     }
 }
-build.finalizedBy incrementBuild
-
-
+build.finalizedBy incrementBuild // only increment on successful builds

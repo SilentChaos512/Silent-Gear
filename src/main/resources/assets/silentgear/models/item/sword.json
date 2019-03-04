@@ -1,7 +1,10 @@
 {
   "__comment__": "Placeholder gear model",
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
-    "layer0": "silentgear:item/blueprint_sword"
+    "layer0": "silentgear:item/sword/rod_generic_lc",
+    "layer1": "silentgear:item/sword/head_generic_hc",
+    "layer2": "silentgear:item/sword/guard_generic_hc",
+    "layer3": "silentgear:item/sword/_highlight"
   }
 }
