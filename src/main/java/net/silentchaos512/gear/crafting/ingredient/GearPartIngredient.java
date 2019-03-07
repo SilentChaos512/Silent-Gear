@@ -94,7 +94,8 @@ public class GearPartIngredient extends Ingredient {
 
         @Override
         public void write(PacketBuffer buffer, GearPartIngredient ingredient) {
-            buffer.writeString(ingredient.type.getName());
+            buffer.writeResourceLocation(NAME);
+            buffer.writeString(ingredient.type.getName(), 255);
         }
     }
 }
