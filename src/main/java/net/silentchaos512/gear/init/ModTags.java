@@ -83,8 +83,5 @@ public final class ModTags {
         TagGenerator.item(nameForge("dyes/blue"), CraftingItems.BLUE_DYE);
         TagGenerator.item(nameForge("dyes/black"), CraftingItems.BLACK_DYE);
         TagGenerator.item(nameForge("rods/wooden"), CraftingItems.NETHERWOOD_STICK);
-
-        // Calling because Silent Lib is not receiving events?
-        TagGenerator.generateFiles();
     }
 }

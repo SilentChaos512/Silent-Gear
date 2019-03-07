@@ -18,7 +18,7 @@ import java.util.Random;
 public class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "1.0.2";
+    public static final String VERSION = "1.0.3";
     public static final boolean RUN_GENERATORS = false;
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
@@ -39,17 +39,24 @@ public class SilentGear {
     }
 
     public static String getVersion() {
-        Optional<? extends ModContainer> o = ModList.get().getModContainerById(SilentGear.MOD_ID);
+        return getVersion(false);
+    }
+
+    public static String getVersion(boolean correctInDev) {
+        Optional<? extends ModContainer> o = ModList.get().getModContainerById(MOD_ID);
         if (o.isPresent()) {
             String str = o.get().getModInfo().getVersion().toString();
-            return "NONE".equals(str) ? VERSION : str;
+            if (correctInDev && "NONE".equals(str))
+                return VERSION;
+            return str;
         }
         return "0.0.0";
     }
 
     public static boolean isDevBuild() {
-        // TODO: How to check for deobfuscated environment?
-        return RUN_GENERATORS;
+        // TODO: Is there a better way? Guess it works though...
+        String version = getVersion(false);
+        return "NONE".equals(version);
     }
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {
