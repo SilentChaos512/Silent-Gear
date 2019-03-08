@@ -112,6 +112,6 @@ public interface ICoreTool extends ICoreItem {
     }
 
     default boolean hasSwordGuard() {
-        return "sword".equals(getGearClass());
+        return getGearType() == GearType.SWORD;
     }
 }

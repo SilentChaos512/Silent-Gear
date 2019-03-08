@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -18,8 +19,8 @@ import java.util.Optional;
 public class CoreHammer extends CorePickaxe implements IAOETool {
 
     @Override
-    public String getGearClass() {
-        return "hammer";
+    public GearType getGearType() {
+        return GearType.HAMMER;
     }
 
     @Nonnull

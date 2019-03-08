@@ -174,7 +174,7 @@ public class GenRecipes {
     }
 
     private static void blueprints(ICoreItem item, Consumer<ShapedBuilder> layout) {
-        blueprints(item.getGearClass(), layout);
+        blueprints(item.getGearType().getName(), layout);
     }
 
     private static void blueprints(String type, Consumer<ShapedBuilder> layout) {

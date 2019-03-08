@@ -35,5 +35,5 @@ public interface ITrait {
 
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
-    void onUpdate(TraitActionContext context);
+    void onUpdate(TraitActionContext context, boolean isEquipped);
 }

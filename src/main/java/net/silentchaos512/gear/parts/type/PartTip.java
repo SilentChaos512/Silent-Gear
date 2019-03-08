@@ -4,6 +4,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -26,7 +27,7 @@ public final class PartTip extends AbstractGearPart implements IUpgradePart {
     }
 
     @Override
-    public ResourceLocation getTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+    public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
         String frameStr = "bow".equals(gearClass) && animationFrame == 3 ? "_3" : "";
         IPartDisplay props = getDisplayProperties(part, gear, animationFrame);
         String path = "items/" + gearClass + "/tip_" + props.getTextureSuffix() + frameStr;
@@ -34,7 +35,7 @@ public final class PartTip extends AbstractGearPart implements IUpgradePart {
     }
 
     @Override
-    public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position) {
+    public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position) {
         return null;
     }
 

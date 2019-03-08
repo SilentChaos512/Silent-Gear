@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -41,8 +42,8 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
-    public String getGearClass() {
-        return "machete";
+    public GearType getGearType() {
+        return GearType.MACHETE;
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -49,10 +50,10 @@ public interface IGearPart {
     IPartDisplay getDisplayProperties(PartData part, ItemStack gear, int animationFrame);
 
     @Nullable
-    ResourceLocation getTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame);
+    ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame);
 
     @Nullable
-    ResourceLocation getBrokenTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position);
+    ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position);
 
     int getColor(PartData part, ItemStack gear, int animationFrame);
 

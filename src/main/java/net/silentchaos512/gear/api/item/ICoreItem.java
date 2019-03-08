@@ -47,7 +47,7 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
         return (Item) this;
     }
 
-    String getGearClass();
+    GearType getGearType();
 
     default PartData getPrimaryPart(ItemStack stack) {
         PartData data = GearData.getPrimaryPart(stack);
@@ -93,7 +93,7 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
     }
 
     default String getModelKey(ItemStack stack, int animationFrame, PartData... parts) {
-        StringBuilder builder = new StringBuilder(getGearClass());
+        StringBuilder builder = new StringBuilder(getGearType().getName());
         if (GearHelper.isBroken(stack))
             builder.append("_b");
 

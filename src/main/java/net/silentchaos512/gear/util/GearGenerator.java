@@ -91,7 +91,7 @@ public final class GearGenerator {
         Optional<IGearPart> main = selectRandom(PartMain.class, tier);
         Optional<IGearPart> rod = selectRandom(PartRod.class, tier);
         if (!main.isPresent() || !rod.isPresent()) {
-            SilentGear.LOGGER.warn("Could not create {} of tier {}", item.getGearClass(), tier);
+            SilentGear.LOGGER.warn("Could not create {} of tier {}", item.getGearType().getName(), tier);
             return ItemStack.EMPTY;
         }
 

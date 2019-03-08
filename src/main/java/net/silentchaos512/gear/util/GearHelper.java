@@ -24,6 +24,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
@@ -344,7 +345,7 @@ public final class GearHelper {
         return EnumRarity.EPIC;
     }
 
-    private static final Map<String, List<ItemStack>> subItemCache = new HashMap<>();
+    private static final Map<GearType, List<ItemStack>> subItemCache = new HashMap<>();
 
     // Formerly getSubItems
     public static void fillItemGroup(ICoreItem item, ItemGroup group, Collection<ItemStack> items) {
@@ -357,7 +358,7 @@ public final class GearHelper {
         }
         if (!inTab) return;
 
-        if (!subItemCache.containsKey(item.getGearClass())) {
+        if (!subItemCache.containsKey(item.getGearType())) {
             List<ItemStack> list = new ArrayList<>();
             // Create a few samples of each tool type, because rendering performance is a problem on many machines.
             for (int i = 1; i <= 3 /*PartRegistry.getHighestMainPartTier()*/; ++i) {
@@ -365,9 +366,9 @@ public final class GearHelper {
                 if (!stack.isEmpty())
                     list.add(stack);
             }
-            subItemCache.put(item.getGearClass(), list);
+            subItemCache.put(item.getGearType(), list);
         }
-        items.addAll(subItemCache.get(item.getGearClass()));
+        items.addAll(subItemCache.get(item.getGearType()));
     }
 
     private static ItemStack createSampleItem(ICoreItem item, int tier) {

@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
@@ -199,8 +200,8 @@ public final class GearClientHelper {
         Map<String, PartData> map = new LinkedHashMap<>();
 
         ICoreTool item = (ICoreTool) stack.getItem();
-        String itemClass = item.getGearClass();
-        boolean hasGuard = "sword".equals(itemClass);
+        GearType itemClass = item.getGearType();
+        boolean hasGuard = item.hasSwordGuard();
 
         PartData partHead = item.getPrimaryPart(stack);
         PartData partGuard = hasGuard ? item.getSecondaryPart(stack) : null;

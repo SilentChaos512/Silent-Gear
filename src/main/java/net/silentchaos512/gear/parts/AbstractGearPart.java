@@ -20,7 +20,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
-import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -115,14 +116,19 @@ public abstract class AbstractGearPart implements IGearPart {
     @Override
     public IPartDisplay getDisplayProperties(PartData part, ItemStack gear, int animationFrame) {
         if (!gear.isEmpty()) {
-            String gearType = Objects.requireNonNull(gear.getItem().getRegistryName()).getPath();
+            GearType gearType = ((ICoreItem) gear.getItem()).getGearType();
 
             // Gear class-specific override
-            if (display.containsKey(gearType))
-                return display.get(gearType);
-            // Armor override
-            if (gear.getItem() instanceof ICoreArmor && display.containsKey("armor"))
-                return display.get("armor");
+            String typeName = gearType.getName();
+            if (display.containsKey(typeName)) {
+                return display.get(typeName);
+            }
+            // Parent type overrides, like "armor"
+            for (String key : display.keySet()) {
+                if (gearType.matches(key)) {
+                    return display.get(key);
+                }
+            }
         }
         // Default
         return display.get("all");
@@ -130,7 +136,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     @Nullable
     @Override
-    public ResourceLocation getTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+    public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
         IPartDisplay props = getDisplayProperties(part, gear, animationFrame);
         String path = "item/" + gearClass + "/" + position.getTexturePrefix() + "_" + props.getTextureSuffix();
         return new ResourceLocation(props.getTextureDomain(), path);
@@ -138,7 +144,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     @Nullable
     @Override
-    public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position) {
+    public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position) {
         return getTexture(part, gear, gearClass, position, 0);
     }
 

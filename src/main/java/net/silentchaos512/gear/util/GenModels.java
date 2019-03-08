@@ -62,7 +62,7 @@ public class GenModels {
         for (ICoreItem item : ModItems.gearClasses.values()) {
             ModelGenerator.create(ModelGenerator.ItemBuilder.create(item.asItem())
                     .comment("Placeholder gear model")
-                    .texture("blueprint_" + item.getGearClass()));
+                    .texture("blueprint_" + item.getGearType().getName()));
         }
     }
 

@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -56,8 +57,8 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     }
 
     @Override
-    public String getGearClass() {
-        return "pickaxe";
+    public GearType getGearType() {
+        return GearType.PICKAXE;
     }
 
     @Override

@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -149,12 +150,12 @@ public final class PartData {
     }
 
     @Nullable
-    public ResourceLocation getTexture(ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+    public ResourceLocation getTexture(ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
         return part.getTexture(this, gear, gearClass, position, animationFrame);
     }
 
     @Nullable
-    public ResourceLocation getBrokenTexture(ItemStack gear, String gearClass, IPartPosition position) {
+    public ResourceLocation getBrokenTexture(ItemStack gear, GearType gearClass, IPartPosition position) {
         return part.getBrokenTexture(this, gear, gearClass, position);
     }
 

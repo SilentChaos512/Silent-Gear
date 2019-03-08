@@ -27,6 +27,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -60,8 +61,8 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     }
 
     @Override
-    public String getGearClass() {
-        return "sickle";
+    public GearType getGearType() {
+        return GearType.SICKLE;
     }
 
     @Override

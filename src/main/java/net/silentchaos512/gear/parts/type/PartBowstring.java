@@ -2,6 +2,7 @@ package net.silentchaos512.gear.parts.type;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
 import net.silentchaos512.gear.parts.PartPositions;
@@ -34,7 +35,7 @@ public final class PartBowstring extends AbstractGearPart {
 
     @Nullable
     @Override
-    public ResourceLocation getTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+    public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
         if (!"bow".equals(gearClass)) return null;
         IPartDisplay props = getDisplayProperties(part, gear, animationFrame);
         // items/bow/bowstring_material_frame.png
@@ -45,7 +46,7 @@ public final class PartBowstring extends AbstractGearPart {
 
     @Nullable
     @Override
-    public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position) {
+    public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position) {
         return null;
     }
 

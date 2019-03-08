@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -11,8 +12,8 @@ import java.util.Optional;
 public class CoreDagger extends CoreSword {
 
     @Override
-    public String getGearClass() {
-        return "dagger";
+    public GearType getGearType() {
+        return GearType.DAGGER;
     }
 
     @Override

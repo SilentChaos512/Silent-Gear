@@ -15,6 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -49,8 +50,19 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     }
 
     @Override
-    public String getGearClass() {
-        return itemName;
+    public GearType getGearType() {
+        switch (this.getEquipmentSlot()) {
+            case HEAD:
+                return GearType.HELMET;
+            case CHEST:
+                return GearType.CHESTPLATE;
+            case LEGS:
+                return GearType.LEGGINGS;
+            case FEET:
+                return GearType.BOOTS;
+            default:
+                return GearType.ARMOR;
+        }
     }
 
     //region Stats and attributes

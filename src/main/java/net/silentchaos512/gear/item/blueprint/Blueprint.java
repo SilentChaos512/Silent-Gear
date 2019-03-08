@@ -47,9 +47,9 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
         super(new Properties().group(SilentGear.ITEM_GROUP));
         this.singleUse = singleUse;
         if (!singleUse) {
-            ITEMS_BLUEPRINT.put(gearItem.getGearClass(), this);
+            ITEMS_BLUEPRINT.put(gearItem.getGearType().getName(), this);
         } else {
-            ITEMS_TEMPLATE.put(gearItem.getGearClass(), this);
+            ITEMS_TEMPLATE.put(gearItem.getGearType().getName(), this);
         }
 
         this.gearItem = gearItem;
@@ -73,7 +73,8 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
      */
     @Nullable
     public static Blueprint getBlueprintForGear(ICoreItem item, boolean singleUse) {
-        return singleUse ? ITEMS_TEMPLATE.get(item.getGearClass()) : ITEMS_BLUEPRINT.get(item.getGearClass());
+        String gearClass = item.getGearType().getName();
+        return singleUse ? ITEMS_TEMPLATE.get(gearClass) : ITEMS_BLUEPRINT.get(gearClass);
     }
 
     @Nullable
@@ -122,13 +123,13 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-        String itemClass = this.gearItem.getGearClass();
+        String itemClass = this.gearItem.getGearType().getName();
 
         // Output item class
         list.add(gearItem.asItem().getName().applyTextStyle(TextFormatting.AQUA));
         // Flavor text
         if (this.gearItem instanceof ICoreTool) {
-            list.add(new TextComponentTranslation("item.silentgear.blueprint." + gearItem.getGearClass() + ".desc")
+            list.add(new TextComponentTranslation("item.silentgear.blueprint." + itemClass + ".desc")
                     .applyTextStyle(TextFormatting.ITALIC));
         }
 

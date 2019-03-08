@@ -69,7 +69,7 @@ public final class ModTags {
         TagGenerator.item(nameForge("string"), "forge:string/string", "forge:string/sinew", "forge:string/flax");
 
         for (ICoreItem item : ModItems.gearClasses.values()) {
-            String type = item.getGearClass();
+            String type = item.getGearType().getName();
             Tag<Item> tag = TagGenerator.item(
                     nameMod("blueprints/" + type),
                     nameMod("blueprint_" + type).toString(),

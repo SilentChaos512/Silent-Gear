@@ -18,6 +18,7 @@ import net.minecraftforge.client.model.*;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -77,16 +78,17 @@ public class ArmorItemModel implements IUnbakedModel {
     @Override
     public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
-        for (String armorClass : ModItems.armorClasses.keySet()) {
+        for (ICoreArmor item : ModItems.armorClasses.values()) {
+            GearType type = item.getGearType();
             for (IGearPart part : PartManager.getMains()) {
                 PartData partData = PartData.of(part);
                 // Basic texture
-                ResourceLocation textureMain = partData.getTexture(ItemStack.EMPTY, armorClass, PartPositions.ARMOR, 0);
+                ResourceLocation textureMain = partData.getTexture(ItemStack.EMPTY, type, PartPositions.ARMOR, 0);
                 if (textureMain != null)
                     builder.add(textureMain);
 
                 // Broken texture
-                ResourceLocation textureBroken = partData.getBrokenTexture(ItemStack.EMPTY, armorClass, PartPositions.ARMOR);
+                ResourceLocation textureBroken = partData.getBrokenTexture(ItemStack.EMPTY, type, PartPositions.ARMOR);
                 if (textureBroken != null)
                     builder.add(textureBroken);
             }
@@ -170,7 +172,7 @@ public class ArmorItemModel implements IUnbakedModel {
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
 
-                processTexture(stack, itemArmor.getGearClass(), PartPositions.ARMOR, itemArmor.getPrimaryPart(stack), GearHelper.isBroken(stack), builder);
+                processTexture(stack, itemArmor.getGearType(), PartPositions.ARMOR, itemArmor.getPrimaryPart(stack), GearHelper.isBroken(stack), builder);
 
                 IModel parent = model.getParent().retexture(builder.build());
                 // TODO: What's this? Do we need to get a model and if so, how?
@@ -193,7 +195,7 @@ public class ArmorItemModel implements IUnbakedModel {
             return GearClientHelper.modelCache.get(key);
         }
 
-        private void processTexture(ItemStack stack, String toolClass, IPartPosition position, PartData part, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private void processTexture(ItemStack stack, GearType toolClass, IPartPosition position, PartData part, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
                 ResourceLocation texture;
                 if (isBroken)

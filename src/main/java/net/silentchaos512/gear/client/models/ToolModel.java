@@ -17,7 +17,7 @@ import net.minecraftforge.client.model.*;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartPosition;
@@ -73,9 +73,9 @@ public final class ToolModel implements IUnbakedModel {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
 
 //        SilentGear.log.info("Getting item part textures... what could go wrong?");
-        for (String toolClass : ModItems.toolClasses.keySet()) {
-            boolean hasGuard = "sword".equals(toolClass);
-            ICoreItem item = ModItems.toolClasses.get(toolClass);
+        for (ICoreTool item : ModItems.toolClasses.values()) {
+            GearType toolClass = item.getGearType();
+            boolean hasGuard = item.hasSwordGuard();
 
             for (int frame = 0; frame < item.getAnimationFrames(); ++frame)
                 for (IGearPart part : PartManager.getValues()) {
@@ -191,7 +191,7 @@ public final class ToolModel implements IUnbakedModel {
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ICoreTool itemTool = (ICoreTool) stack.getItem();
-                String toolClass = itemTool.getGearClass();
+                GearType toolClass = itemTool.getGearType();
                 boolean isBroken = GearHelper.isBroken(stack);
 
                 PartDataList parts = GearData.getConstructionParts(stack);
@@ -242,7 +242,7 @@ public final class ToolModel implements IUnbakedModel {
             return GearClientHelper.modelCache.get(key);
         }
 
-        private static void processTexture(ItemStack stack, String toolClass, IPartPosition position, @Nullable PartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
+        private static void processTexture(ItemStack stack, GearType toolClass, IPartPosition position, @Nullable PartData part, int animationFrame, boolean isBroken, ImmutableMap.Builder<String, String> builder) {
             if (part != null) {
                 ResourceLocation texture = isBroken
                         ? part.getBrokenTexture(stack, toolClass, position)

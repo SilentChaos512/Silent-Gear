@@ -20,13 +20,14 @@ package net.silentchaos512.gear.parts.type;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
-import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.AbstractGearPart;
-import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartPositions;
 
 import javax.annotation.Nullable;
 
@@ -52,8 +53,8 @@ public class PartHighlight extends AbstractGearPart {
 
     @Nullable
     @Override
-    public ResourceLocation getTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
-        String frameStr = "bow".equals(gearClass) && animationFrame == 3 ? "_3" : "";
+    public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
+        String frameStr = gearClass == GearType.BOW && animationFrame == 3 ? "_3" : "";
         IPartDisplay props = getDisplayProperties(part, gear, animationFrame);
         String path = "items/" + gearClass + "/_" + props.getTextureSuffix() + frameStr;
         return new ResourceLocation(props.getTextureDomain(), path);

@@ -22,6 +22,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
@@ -52,7 +53,7 @@ public class PartUpgrade extends AbstractGearPart implements IUpgradePart {
 
     @Nullable
     @Override
-    public ResourceLocation getTexture(PartData part, ItemStack gear, String gearClass, IPartPosition position, int animationFrame) {
+    public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
         return null;
     }
 
