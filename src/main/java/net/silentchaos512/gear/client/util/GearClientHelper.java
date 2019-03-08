@@ -104,7 +104,7 @@ public final class GearClientHelper {
         }
 
         // Stats!
-        ITextComponent textStats = misc("tooltip.stats.name").applyTextStyle(TextFormatting.GOLD);
+        ITextComponent textStats = misc("tooltip.stats").applyTextStyle(TextFormatting.GOLD);
         if (ctrlDown && flag.showStats) {
             tooltip.add(textStats);
             // Display only stats relevant to the item class
@@ -148,7 +148,7 @@ public final class GearClientHelper {
         }
 
         // Tool construction
-        ITextComponent textConstruction = misc("tooltip.construction.name").applyTextStyle(TextFormatting.GOLD);
+        ITextComponent textConstruction = misc("tooltip.construction").applyTextStyle(TextFormatting.GOLD);
         if (altDown && flag.showConstruction) {
             tooltip.add(textConstruction);
             Collections.reverse(constructionParts);

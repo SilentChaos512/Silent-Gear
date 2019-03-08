@@ -7,6 +7,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartMaterial;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -30,6 +31,7 @@ public final class TooltipHandler {
     // Display a single trait and cycling through the list. Main problem with this is it affects
     // JEI's tooltip cache. When disabled, you can search for parts with certain traits.
     private static final boolean TRAIT_DISPLAY_CYCLE = false;
+    private static final boolean DETAILED_MATERIAL_INFO = false;
 
     private TooltipHandler() {}
 
@@ -68,16 +70,8 @@ public final class TooltipHandler {
         event.getToolTip().add(part.getType().getDisplayName(part.getTier())
                 .applyTextStyle(TextFormatting.GREEN));
 
-        if (event.getFlags().isAdvanced()) {
-            IPartMaterial mat = part.getMaterials();
-            if (mat.getItem() != null)
-                event.getToolTip().add(new TextComponentString("item: " + mat.getItem().asItem().getRegistryName()));
-            if (mat.getTag() != null)
-                event.getToolTip().add(new TextComponentString("tag: " + mat.getTag().getId()));
-            if (mat.getSmallItem() != null)
-                event.getToolTip().add(new TextComponentString("itemSmall: " + mat.getSmallItem().asItem().getRegistryName()));
-            if (mat.getSmallTag() != null)
-                event.getToolTip().add(new TextComponentString("tagSmall: " + mat.getSmallTag().getId()));
+        if (event.getFlags().isAdvanced() && DETAILED_MATERIAL_INFO && SilentGear.isDevBuild()) {
+            addDetailedMaterialInfo(event, part);
         }
 
         // Traits
@@ -107,6 +101,18 @@ public final class TooltipHandler {
             event.getToolTip().add(new TextComponentTranslation("misc.silentgear.tooltip.ctrlForStats")
                     .applyTextStyle(TextFormatting.GOLD));
         }
+    }
+
+    private static void addDetailedMaterialInfo(ItemTooltipEvent event, IGearPart part) {
+        IPartMaterial mat = part.getMaterials();
+        if (mat.getItem() != null)
+            event.getToolTip().add(new TextComponentString("item: " + mat.getItem().asItem().getRegistryName()));
+        if (mat.getTag() != null)
+            event.getToolTip().add(new TextComponentString("tag: " + mat.getTag().getId()));
+        if (mat.getSmallItem() != null)
+            event.getToolTip().add(new TextComponentString("itemSmall: " + mat.getSmallItem().asItem().getRegistryName()));
+        if (mat.getSmallTag() != null)
+            event.getToolTip().add(new TextComponentString("tagSmall: " + mat.getSmallTag().getId()));
     }
 
     private static int getTraitDisplayIndex(int numTraits) {
