@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
+import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.gui.GuiTypes;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolModel;
@@ -24,6 +26,7 @@ import net.silentchaos512.gear.command.SGearPartsCommand;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.GenModels;
 import net.silentchaos512.gear.util.GenRecipes;
 import net.silentchaos512.gear.util.IAOETool;
@@ -77,7 +80,9 @@ class SideProxy {
     private void imcProcess(InterModProcessEvent event) { }
 
     private void serverAboutToStart(FMLServerAboutToStartEvent event) {
-        event.getServer().getResourceManager().addReloadListener(PartManager.INSTANCE);
+        IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
+        resourceManager.addReloadListener(TraitManager.INSTANCE);
+        resourceManager.addReloadListener(PartManager.INSTANCE);
         SGearPartsCommand.register(event.getServer().getCommandManager().getDispatcher());
     }
 
@@ -98,6 +103,7 @@ class SideProxy {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
             MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
+            MinecraftForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
             MinecraftForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
 
             if (SilentGear.isDevBuild()) {

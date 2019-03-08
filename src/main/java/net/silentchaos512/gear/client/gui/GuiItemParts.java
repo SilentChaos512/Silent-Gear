@@ -172,7 +172,7 @@ public class GuiItemParts extends GuiScreen {
 
             String translatedName = selectedPart.getDisplayName(PartData.of(selectedPart), ItemStack.EMPTY).getFormattedText();
             TextRenderUtils.renderScaled(mc.fontRenderer, translatedName, x, y, 1, Color.VALUE_WHITE, false);
-            String regName = TextFormatting.GRAY + selectedPart.getName().toString();
+            String regName = TextFormatting.GRAY + selectedPart.getId().toString();
             TextRenderUtils.renderScaled(mc.fontRenderer, regName, x, y + 10, 0.5f, Color.VALUE_WHITE, false);
             String typeName = I18n.format("part.silentgear.type." + selectedPart.getType().getName(), selectedPart.getTier());
             TextRenderUtils.renderScaled(mc.fontRenderer, TextFormatting.GREEN + typeName, x, y + 16, 0.8f, Color.VALUE_WHITE, false);
@@ -231,7 +231,7 @@ public class GuiItemParts extends GuiScreen {
         }
 
         PartButton(IGearPart part, int buttonId, int x, int y, int widthIn, int heightIn) {
-            super(buttonId, x, y, widthIn, heightIn, part.getName().toString());
+            super(buttonId, x, y, widthIn, heightIn, part.getId().toString());
             this.part = part;
         }
 

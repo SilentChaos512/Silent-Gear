@@ -1,8 +1,7 @@
 {
-    "type": "stat_modifier",
+    "type": "silentgear:stat_modifier_trait",
     "max_level": 5,
-    "name_color": "gray",
-    "cancels_with": ["jagged"],
+    "cancels_with": ["silentgear:jagged"],
     "stats": [
         {
             "name": "melee_damage",

@@ -25,6 +25,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -126,8 +127,8 @@ public final class GearHelper {
 
         EntityPlayerMP player = entityLiving instanceof EntityPlayerMP ? (EntityPlayerMP) entityLiving : null;
         final int preTraitAmount = amount;
-        amount = (int) TraitHelper.activateTraits(stack, preTraitAmount,
-                (trait, level, val) -> trait.onDurabilityDamage(player, level, stack, (int) val));
+        amount = (int) TraitHelper.activateTraits(stack, preTraitAmount, (trait, level, val) ->
+                trait.onDurabilityDamage(new TraitActionContext(player, level, stack), (int) val));
 
         final int maxDamage = stack.getMaxDamage();
         final int preDamageFactor = getDamageFactor(stack, maxDamage);

@@ -23,14 +23,16 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.api.traits.Trait;
-import net.silentchaos512.gear.init.ModTraits;
+import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.PartHighlight;
 import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.parts.type.PartRod;
 import net.silentchaos512.gear.parts.type.PartTip;
+import net.silentchaos512.gear.traits.TraitConst;
+import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.lib.collection.StackList;
 
 import javax.annotation.Nullable;
@@ -85,7 +87,7 @@ public final class GearData {
             // We should recalculate the item's stats!
             addOrRemoveHighlightPart(stack, parts);
             PartDataList uniqueParts = parts.getUniqueParts(true);
-            Map<Trait, Integer> traits = TraitHelper.getTraits(parts);
+            Map<ITrait, Integer> traits = TraitHelper.getTraits(parts);
 
             double synergy = calculateSynergyValue(parts, uniqueParts, traits);
             boolean hasMissingRod = item instanceof ICoreTool && parts.getRods().isEmpty();
@@ -107,16 +109,19 @@ public final class GearData {
                         ? stat.withMissingRodEffect(initialValue)
                         : initialValue;
                 final float value = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) ->
-                        trait.onGetStat(null, stat, level, stack, val, damageRatio));
+                        trait.onGetStat(new TraitActionContext(player, level, stack), stat, val, damageRatio));
                 // SilentGear.log.debug(stat, value);
                 propertiesCompound.setFloat(stat.getName().getPath(), value);
             }
 
             // Cache traits in properties compound as well
             NBTTagList traitList = new NBTTagList();
-            for (Trait trait : traits.keySet()) {
+            for (ITrait trait : traits.keySet()) {
                 int level = traits.get(trait);
-                traitList.add(trait.writeToNBT(level));
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setString("Name", trait.getId().toString());
+                tag.setByte("Level", (byte) level);
+                traitList.add(tag);
             }
             propertiesCompound.setTag("Traits", traitList);
 
@@ -216,7 +221,7 @@ public final class GearData {
         return a * (x / (x + a)) + (1 / (1 + a));
     }
 
-    public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<Trait, Integer> traits) {
+    public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<ITrait, Integer> traits) {
         // First, we add a bonus for the number of unique main parts
 //        double synergy = 1.0 + 0.2 * Math.log(5 * uniqueParts.getMains().size() - 4);
         double synergy = getBaseSynergy(uniqueParts);
@@ -242,13 +247,15 @@ public final class GearData {
         }
 
         // Synergy Boost (only if higher than 100%)
-        if (synergy > 1 && traits.containsKey(ModTraits.synergyBoost)) {
-            int level = traits.get(ModTraits.synergyBoost);
-            synergy += level * ModTraits.SYNERGY_BOOST_MULTI;
+        ITrait synergistic = TraitManager.get(TraitConst.SYNERGISTIC);
+        if (synergy > 1 && traits.containsKey(synergistic)) {
+            int level = traits.get(synergistic);
+            synergy += level * TraitConst.SYNERGY_BOOST_MULTI;
         }
-        if (traits.containsKey(ModTraits.crude)) {
-            int level = traits.get(ModTraits.crude);
-            synergy -= level * ModTraits.SYNERGY_BOOST_MULTI;
+        ITrait crude = TraitManager.get(TraitConst.CRUDE);
+        if (traits.containsKey(crude)) {
+            int level = traits.get(crude);
+            synergy -= level * TraitConst.SYNERGY_BOOST_MULTI;
         }
 
         return synergy;
@@ -429,7 +436,7 @@ public final class GearData {
     public static boolean hasPart(ItemStack gear, IGearPart upgrade) {
         NBTTagCompound tags = getData(gear, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
-        String upgradeName = upgrade.getName().toString();
+        String upgradeName = upgrade.getId().toString();
 
         for (INBTBase nbt : tagList) {
             if (nbt instanceof NBTTagCompound) {

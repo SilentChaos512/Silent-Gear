@@ -16,36 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.trait;
+package net.silentchaos512.gear.traits;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumLightType;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.lib.ResourceOrigin;
-import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.lib.util.MathUtils;
 
-import javax.annotation.Nullable;
-
-public class TraitRefractive extends Trait {
+public class TraitRefractive extends SimpleTrait {
+    // TODO: Serializer needed to load trait correctly
     private static final int ACTIVATE_RATE = 20;
     private static final int CHECK_RANGE = 3;
     private static final int VERTICAL_RANGE = 5;
 
-    public TraitRefractive(ResourceLocation name, ResourceOrigin origin) {
-        super(name, origin);
+    public TraitRefractive(ResourceLocation name) {
+        super(name);
     }
 
     @Override
-    public void onUpdate(@Nullable EntityPlayer player, int level, ItemStack gear) {
-        super.onUpdate(player, level, gear);
+    public void onUpdate(TraitActionContext context) {
+        super.onUpdate(context);
 
+        EntityPlayer player = context.getPlayer();
         if (player != null && player.ticksExisted % ACTIVATE_RATE == 0) {
             // TODO: Phantom lights, block config?
             // This fails with torches to some extent, they don't attach to walls

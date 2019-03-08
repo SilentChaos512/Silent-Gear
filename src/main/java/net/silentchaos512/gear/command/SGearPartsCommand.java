@@ -28,11 +28,11 @@ import java.util.Collection;
 
 public final class SGearPartsCommand {
     private static final SuggestionProvider<CommandSource> partIdSuggestions = (ctx, builder) ->
-            ISuggestionProvider.func_212476_a(PartManager.getValues().stream().map(IGearPart::getName), builder);
+            ISuggestionProvider.func_212476_a(PartManager.getValues().stream().map(IGearPart::getId), builder);
     private static final SuggestionProvider<CommandSource> partInGearSuggestions = (ctx, builder) -> {
         PartDataList parts = GearData.getConstructionParts(getGear(ctx));
         return ISuggestionProvider.func_212476_a(parts.getUniqueParts(false).stream().map(part ->
-                part.getPart().getName()), builder);
+                part.getPart().getId()), builder);
     };
 
     private SGearPartsCommand() {}

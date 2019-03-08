@@ -27,10 +27,9 @@ public final class PartSerializers {
     public static <S extends IPartSerializer<T>, T extends IGearPart> S register(S serializer) {
         if (REGISTRY.containsKey(serializer.getName())) {
             throw new IllegalArgumentException("Duplicate gear part serializer " + serializer.getName());
-        } else {
-            REGISTRY.put(serializer.getName(), serializer);
-            return serializer;
         }
+        REGISTRY.put(serializer.getName(), serializer);
+        return serializer;
     }
 
     public static IGearPart deserialize(ResourceLocation id, JsonObject json) {
@@ -41,9 +40,8 @@ public final class PartSerializers {
         IPartSerializer<?> serializer = REGISTRY.get(type);
         if (serializer == null) {
             throw new JsonSyntaxException("Invalid or unsupported gear part type " + type);
-        } else {
-            return serializer.read(id, json);
         }
+        return serializer.read(id, json);
     }
 
     public static IGearPart read(PacketBuffer buffer) {
@@ -52,13 +50,12 @@ public final class PartSerializers {
         IPartSerializer<?> serializer = REGISTRY.get(type);
         if (serializer == null) {
             throw new IllegalArgumentException("Unknown gear part serializer " + type);
-        } else {
-            return serializer.read(id, buffer);
         }
+        return serializer.read(id, buffer);
     }
 
     public static <T extends IGearPart> void write(T part, PacketBuffer buffer) {
-        buffer.writeResourceLocation(part.getName());
+        buffer.writeResourceLocation(part.getId());
         buffer.writeResourceLocation(part.getSerializer().getName());
         IPartSerializer<T> serializer = (IPartSerializer<T>) part.getSerializer();
         serializer.write(buffer, part);

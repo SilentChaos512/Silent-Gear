@@ -8,8 +8,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.Trait;
-import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.RepairContext;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IGearPart {
-    ResourceLocation getName();
+    ResourceLocation getId();
 
     int getTier();
 
@@ -31,7 +32,7 @@ public interface IGearPart {
 
     Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part);
 
-    Map<Trait, Integer> getTraits(PartData part);
+    Map<ITrait, Integer> getTraits(PartData part);
 
     StatInstance.Operation getDefaultStatOperation(ItemStat stat);
 

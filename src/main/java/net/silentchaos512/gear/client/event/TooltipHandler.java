@@ -5,18 +5,15 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartMaterial;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
@@ -27,8 +24,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public final class TooltipHandler {
+    public static final TooltipHandler INSTANCE = new TooltipHandler();
+
     // Display a single trait and cycling through the list. Main problem with this is it affects
     // JEI's tooltip cache. When disabled, you can search for parts with certain traits.
     private static final boolean TRAIT_DISPLAY_CYCLE = false;
@@ -36,7 +34,7 @@ public final class TooltipHandler {
     private TooltipHandler() {}
 
     @SubscribeEvent
-    public static void onTooltip(ItemTooltipEvent event) {
+    public void onTooltip(ItemTooltipEvent event) {
         /*
         LoaderState state = Loader.instance().getLoaderState();
         if (state == LoaderState.INITIALIZATION || state == LoaderState.SERVER_ABOUT_TO_START || state == LoaderState.SERVER_STOPPING) {
@@ -83,15 +81,14 @@ public final class TooltipHandler {
         }
 
         // Traits
-        Map<Trait, Integer> traits = partData.getTraits();
+        Map<ITrait, Integer> traits = partData.getTraits();
         int numTraits = traits.size();
         int traitIndex = getTraitDisplayIndex(numTraits);
         int i = 0;
-        for (Trait trait : traits.keySet()) {
+        for (ITrait trait : traits.keySet()) {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
-                final TextFormatting nameColor = trait.getNameColor();
-                event.getToolTip().add(trait.getDisplayName(level).applyTextStyle(nameColor));
+                event.getToolTip().add(trait.getDisplayName(level));
             }
             ++i;
         }

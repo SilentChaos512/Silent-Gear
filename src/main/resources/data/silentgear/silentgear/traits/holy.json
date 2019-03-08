@@ -1,7 +1,6 @@
 {
-    "type": "damage_type",
+    "type": "silentgear:damage_type_trait",
     "max_level": 5,
-    "name_color": "yellow",
     "cancels_with": [],
     "damage_type": "holy",
     "damage_bonus": 2,

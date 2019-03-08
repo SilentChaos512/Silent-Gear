@@ -2,6 +2,7 @@ package net.silentchaos512.gear;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -57,6 +58,10 @@ public class SilentGear {
         // TODO: Is there a better way? Guess it works though...
         String version = getVersion(false);
         return "NONE".equals(version);
+    }
+
+    public static ResourceLocation getId(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {

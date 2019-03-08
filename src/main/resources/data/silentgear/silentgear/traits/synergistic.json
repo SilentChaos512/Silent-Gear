@@ -1,8 +1,7 @@
 {
-    "type": "trait",
+    "type": "silentgear:simple_trait",
     "max_level": 5,
-    "name_color": "dark_green",
-    "cancels_with": ["crude"],
+    "cancels_with": ["silentgear:crude"],
     "name": {
         "translate": true,
         "name": "trait.silentgear.synergistic"

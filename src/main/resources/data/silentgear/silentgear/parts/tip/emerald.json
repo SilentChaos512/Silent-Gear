@@ -14,7 +14,7 @@
     ],
     "traits": [
         {"name": "silentgear:brittle", "level": 1},
-        {"name": "silentgear:synergy_boost", "level": 2}
+        {"name": "silentgear:synergistic", "level": 2}
     ],
     "crafting_items": {
         "normal": {

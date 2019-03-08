@@ -24,17 +24,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
-import net.silentchaos512.gear.api.traits.TraitRegistry;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.traits.TraitManager;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public final class TraitHelper {
@@ -62,7 +61,7 @@ public final class TraitHelper {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound tagCompound = (NBTTagCompound) nbt;
                 String regName = tagCompound.getString("Name");
-                Trait trait = TraitRegistry.get(regName);
+                ITrait trait = TraitManager.get(regName);
 
                 if (trait != null) {
                     int level = tagCompound.getByte("Level");
@@ -83,14 +82,14 @@ public final class TraitHelper {
      * @param trait The trait to look for
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */
-    public static int getTraitLevel(ItemStack gear, Trait trait) {
+    public static int getTraitLevel(ItemStack gear, ITrait trait) {
         NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
 
         for (INBTBase nbt : tagList) {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound tagCompound = (NBTTagCompound) nbt;
                 String regName = tagCompound.getString("Name");
-                Trait traitOnGear = TraitRegistry.get(regName);
+                ITrait traitOnGear = TraitManager.get(regName);
 
                 if (traitOnGear == trait) {
                     return tagCompound.getByte("Level");
@@ -102,19 +101,33 @@ public final class TraitHelper {
     }
 
     /**
+     * Shortcut for {@link #getTraitLevel(ItemStack, ITrait)}, which acquires the trait from the
+     * TraitManager for you.
+     *
+     * @param gear    The gear item
+     * @param traitId The trait's ID
+     * @return The level of the trait on the gear, or zero if the item does not have the trait or
+     * the trait does not exist.
+     */
+    public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
+        ITrait trait = TraitManager.get(traitId);
+        return trait != null ? getTraitLevel(gear, trait) : 0;
+    }
+
+    /**
      * Gets a Map of Traits and levels from the parts, used to calculate trait levels and should not
-     * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, Trait)} when
+     * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ITrait)} when
      * appropriate.
      *
      * @param parts The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
-    public static Map<Trait, Integer> getTraits(PartDataList parts) {
+    public static Map<ITrait, Integer> getTraits(Collection<PartData> parts) {
         if (parts.isEmpty())
             return ImmutableMap.of();
 
-        Map<Trait, Integer> result = new LinkedHashMap<>();
-        Map<Trait, Integer> countPartsWithTrait = new HashMap<>();
+        Map<ITrait, Integer> result = new LinkedHashMap<>();
+        Map<ITrait, Integer> countPartsWithTrait = new HashMap<>();
 
         for (PartData part : parts) {
             part.getTraits().forEach(((trait, level) -> {
@@ -125,9 +138,9 @@ public final class TraitHelper {
             }));
         }
 
-        Trait[] keys = result.keySet().toArray(new Trait[0]);
+        ITrait[] keys = result.keySet().toArray(new ITrait[0]);
 
-        for (Trait trait : keys) {
+        for (ITrait trait : keys) {
             final int partsWithTrait = countPartsWithTrait.get(trait);
             final float divisor = Math.max(1, partsWithTrait);
             final int value = Math.round(result.get(trait) / divisor);
@@ -141,13 +154,13 @@ public final class TraitHelper {
         return result;
     }
 
-    private static void cancelTraits(Map<Trait, Integer> mapToModify, Trait[] keys) {
+    private static void cancelTraits(Map<ITrait, Integer> mapToModify, ITrait[] keys) {
         for (int i = 0; i < keys.length; ++i) {
-            Trait t1 = keys[i];
+            ITrait t1 = keys[i];
 
             if (mapToModify.containsKey(t1)) {
                 for (int j = i + 1; j < keys.length; ++j) {
-                    Trait t2 = keys[j];
+                    ITrait t2 = keys[j];
 
                     if (mapToModify.containsKey(t2) && t1.willCancelWith(t2)) {
                         final int level = mapToModify.get(t1);
@@ -180,11 +193,11 @@ public final class TraitHelper {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound tagCompound = (NBTTagCompound) nbt;
                 String regName = tagCompound.getString("Name");
-                Trait trait = TraitRegistry.get(regName);
+                ITrait trait = TraitManager.get(regName);
 
                 if (trait != null) {
                     int level = tagCompound.getByte("Level");
-                    trait.onUpdate(player, level, gear);
+                    trait.onUpdate(new TraitActionContext(player, level, gear));
                 }
             }
         }

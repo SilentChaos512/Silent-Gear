@@ -13,7 +13,7 @@
         {"name": "rarity",          "value":   30}
     ],
     "traits": [
-        {"name": "silentgear:synergy_boost", "level": 3}
+        {"name": "silentgear:synergistic", "level": 3}
     ],
     "crafting_items": {
         "normal": {

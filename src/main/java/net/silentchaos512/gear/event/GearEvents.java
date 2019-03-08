@@ -36,7 +36,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.init.ModTraits;
+import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.traits.TraitConst;
+import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.TraitHelper;
 
 import java.util.HashSet;
@@ -74,7 +77,7 @@ public final class GearEvents {
 
         final float baseDamage = event.getAmount();
         final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, level, value) ->
-                trait.onAttackEntity(player, attacked, level, weapon, baseDamage));
+                trait.onAttackEntity(new TraitActionContext(player, level, weapon), attacked, baseDamage));
 
         if (Math.abs(newDamage - baseDamage) > 0.0001f) {
             event.setCanceled(true);
@@ -101,7 +104,8 @@ public final class GearEvents {
             final boolean canHarvest = toolLevel >= blockLevel;
 
             if (canHarvest) {
-                int level = TraitHelper.getTraitLevel(tool, ModTraits.speedBoostLight);
+                ITrait lustrous = TraitManager.get(TraitConst.LUSTROUS);
+                int level = TraitHelper.getTraitLevel(tool, lustrous);
                 // FIXME: Seems to be very inconsistent. Need to check block/sky light separately?
                 // Like this: player.world.getLightFor(EnumSkyBlock.BLOCK, player.getPosition());
                 float light = getAreaLightBrightness(player.world, player.getPosition());
@@ -135,7 +139,7 @@ public final class GearEvents {
         ItemStack tool = event.getHarvester().getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
-        int magmaticLevel = TraitHelper.getTraitLevel(tool, ModTraits.magmatic);
+        int magmaticLevel = TraitHelper.getTraitLevel(tool, TraitConst.MAGMATIC);
         if (magmaticLevel == 0) return;
 
         for (int i = 0; i < event.getDrops().size(); ++i) {
@@ -158,10 +162,10 @@ public final class GearEvents {
         ItemStack tool = event.getAttackingPlayer().getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
-        int ancientLevel = TraitHelper.getTraitLevel(tool, ModTraits.ancient);
+        int ancientLevel = TraitHelper.getTraitLevel(tool, TraitConst.ANCIENT);
         if (ancientLevel == 0) return;
 
-        int bonusXp = (int) (event.getOriginalExperience() * ModTraits.ANCIENT_XP_BOOST * ancientLevel);
+        int bonusXp = (int) (event.getOriginalExperience() * TraitConst.ANCIENT_XP_BOOST * ancientLevel);
         event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
     }
 
@@ -172,10 +176,10 @@ public final class GearEvents {
         ItemStack tool = event.getPlayer().getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
-        int ancientLevel = TraitHelper.getTraitLevel(tool, ModTraits.ancient);
+        int ancientLevel = TraitHelper.getTraitLevel(tool, TraitConst.ANCIENT);
         if (ancientLevel == 0) return;
 
-        int bonusXp = (int) (event.getExpToDrop() * ModTraits.ANCIENT_XP_BOOST * ancientLevel);
+        int bonusXp = (int) (event.getExpToDrop() * TraitConst.ANCIENT_XP_BOOST * ancientLevel);
         event.setExpToDrop(event.getExpToDrop() + bonusXp);
     }
 }

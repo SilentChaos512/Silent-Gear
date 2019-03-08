@@ -51,6 +51,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
         MAP.clear();
         ITEM_TO_PART.clear();
+        SilentGear.LOGGER.info(MARKER, "Reloading part files");
 
         for (ResourceLocation id : resources) {
             try (IResource iresource = resourceManager.getResource(id)) {
@@ -70,13 +71,15 @@ public final class PartManager implements IResourceManagerReloadListener {
                 SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", id, ex);
             }
         }
+
+        SilentGear.LOGGER.info(MARKER, "Finished! Registered {} parts", MAP.size());
     }
 
     private static void addPart(IGearPart part) {
-        if (MAP.containsKey(part.getName())) {
-            throw new IllegalStateException("Duplicate gear part " + part.getName());
+        if (MAP.containsKey(part.getId())) {
+            throw new IllegalStateException("Duplicate gear part " + part.getId());
         } else {
-            MAP.put(part.getName(), part);
+            MAP.put(part.getId(), part);
         }
     }
 

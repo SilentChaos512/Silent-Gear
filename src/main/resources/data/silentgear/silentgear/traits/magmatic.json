@@ -1,7 +1,6 @@
 {
-    "type": "trait",
+    "type": "silentgear:simple_trait",
     "max_level": 1,
-    "name_color": "red",
     "cancels_with": [],
     "name": {
         "translate": true,

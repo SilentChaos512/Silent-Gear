@@ -1,8 +1,7 @@
 {
-    "type": "durability",
+    "type": "silentgear:durability_trait",
     "max_level": 5,
-    "name_color": "gray",
-    "cancels_with": ["brittle"],
+    "cancels_with": ["silentgear:brittle"],
     "effect_scale": -1,
     "activation_chance": 0.1,
     "name": {

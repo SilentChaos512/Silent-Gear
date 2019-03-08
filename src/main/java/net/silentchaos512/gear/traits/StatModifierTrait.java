@@ -16,60 +16,60 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.trait;
+package net.silentchaos512.gear.traits;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.lib.ResourceOrigin;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.api.traits.ITraitSerializer;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StatModifierTrait extends Trait {
+public final class StatModifierTrait extends SimpleTrait {
+    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("stat_modifier_trait");
+    static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
+            SERIALIZER_ID,
+            StatModifierTrait::new,
+            StatModifierTrait::readJson
+    );
+
     private final Map<ItemStat, StatMod> mods = new HashMap<>();
 
-    public StatModifierTrait(ResourceLocation name, ResourceOrigin origin) {
-        super(name, origin);
+    private StatModifierTrait(ResourceLocation name) {
+        super(name);
     }
 
     @Override
-    protected void processExtraJson(JsonObject json) {
+    public float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio) {
+        StatMod mod = this.mods.get(stat);
+        if (mod != null) {
+            return mod.apply(context.getTraitLevel(), value, damageRatio);
+        }
+        return value;
+    }
+
+    private static void readJson(StatModifierTrait trait, JsonObject json) {
         if (!json.has("stats")) {
-            SilentGear.LOGGER.error("JSON file for StatModifierTrait '{}' is missing the 'stats' array", this.getName());
+            SilentGear.LOGGER.error("JSON file for StatModifierTrait '{}' is missing the 'stats' array", trait.getId());
             return;
         }
 
         for (JsonElement element : json.get("stats").getAsJsonArray()) {
             if (element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
-
                 String statName = JsonUtils.getString(obj, "name", "");
                 ItemStat stat = ItemStat.ALL_STATS.get(statName);
 
                 if (stat != null) {
-                    mods.put(stat, StatMod.fromJson(obj));
+                    trait.mods.put(stat, StatMod.fromJson(obj));
                 }
             }
         }
-    }
-
-    @Override
-    public float onGetStat(@Nullable EntityPlayer player, ItemStat stat, int level, ItemStack gear, float value, float damageRatio) {
-        StatMod mod = this.mods.get(stat);
-
-        if (mod != null) {
-            return mod.apply(level, value, damageRatio);
-        }
-
-        return value;
     }
 
     private static class StatMod {

@@ -4,10 +4,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.IPartPosition;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.Trait;
+import net.silentchaos512.gear.api.traits.ITrait;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +38,7 @@ public final class PartData {
     }
 
     public static PartData of(IGearPart part) {
-        ResourceLocation name = part.getName();
+        ResourceLocation name = part.getId();
         if (CACHE_UNGRADED_PARTS.containsKey(name)) {
             return CACHE_UNGRADED_PARTS.get(name);
         }
@@ -94,7 +97,7 @@ public final class PartData {
     }
 
     public NBTTagCompound write(@Nonnull NBTTagCompound tags) {
-        tags.setString("ID", part.getName().toString());
+        tags.setString("ID", part.getId().toString());
         if (this.grade != MaterialGrade.NONE) {
             tags.setString("Grade", this.grade.name());
         }
@@ -133,7 +136,7 @@ public final class PartData {
         return part.getStatModifiers(stat, this);
     }
 
-    public Map<Trait, Integer> getTraits() {
+    public Map<ITrait, Integer> getTraits() {
         return part.getTraits(this);
     }
 

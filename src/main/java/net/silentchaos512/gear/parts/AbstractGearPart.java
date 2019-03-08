@@ -18,6 +18,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.*;
@@ -25,9 +26,9 @@ import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.api.traits.Trait;
-import net.silentchaos512.gear.api.traits.TraitRegistry;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -43,7 +44,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     // Stats and Traits
     Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
-    Map<Trait, Integer> traits = new LinkedHashMap<>();
+    Map<ITrait, Integer> traits = new LinkedHashMap<>();
 
     // Display
     ITextComponent displayName;
@@ -57,7 +58,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public ResourceLocation getName() {
+    public ResourceLocation getId() {
         return name;
     }
 
@@ -80,7 +81,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Map<Trait, Integer> getTraits(PartData part) {
+    public Map<ITrait, Integer> getTraits(PartData part) {
         return ImmutableMap.copyOf(traits);
     }
 
@@ -199,7 +200,7 @@ public abstract class AbstractGearPart implements IGearPart {
                         StatInstance.Operation op = obj.has("op")
                                 ? StatInstance.Operation.byName(JsonUtils.getString(obj, "op"))
                                 : part.getDefaultStatOperation(stat);
-                        String statId = String.format("mat_%s_%s%d", part.getName(), stat.getName(),
+                        String statId = String.format("mat_%s_%s%d", part.getId(), stat.getName(),
                                 statMap.get(stat).size() + 1);
                         statMap.put(stat, new StatInstance(statId, value, op));
                     }
@@ -216,16 +217,19 @@ public abstract class AbstractGearPart implements IGearPart {
             JsonElement elementTraits = json.get("traits");
             if (elementTraits != null && elementTraits.isJsonArray()) {
                 JsonArray array = elementTraits.getAsJsonArray();
-                Map<Trait, Integer> traitsMap = new HashMap<>();
+                Map<ITrait, Integer> traitsMap = new HashMap<>();
                 for (JsonElement element : array) {
                     JsonObject obj = element.getAsJsonObject();
                     String name = JsonUtils.getString(obj, "name", "");
-                    Trait trait = TraitRegistry.get(name);
+                    ITrait trait = TraitManager.get(name);
 
                     if (trait != null) {
                         int level = MathHelper.clamp(JsonUtils.getInt(obj, "level", 1), 1, trait.getMaxLevel());
-                        if (level > 0)
+                        if (level > 0) {
                             traitsMap.put(trait, level);
+                            SilentGear.LOGGER.debug("Add trait {} level {} to part {}",
+                                    trait.getId(), level, part.getId());
+                        }
                     }
                 }
 
