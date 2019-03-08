@@ -10,8 +10,6 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.parts.*;
 import net.silentchaos512.gear.parts.type.PartBowstring;
 import net.silentchaos512.gear.parts.type.PartGrip;
@@ -90,53 +88,6 @@ public interface ICoreTool extends ICoreItem {
         for (PartData data : GearData.getConstructionParts(stack))
             if (data.getPart() instanceof PartBowstring) return data;
         return null;
-    }
-
-    @Deprecated
-    @Override
-    default boolean matchesRecipe(Collection<ItemStack> parts) {
-        ConfigOptionEquipment config = getConfig();
-        ItemStack head = ItemStack.EMPTY;
-        Map<PartType, Integer> partCounts = new HashMap<>();
-        Map<PartType, IGearPart> partsFound = new HashMap<>();
-
-        for (ItemStack stack : parts) {
-            IGearPart part = PartManager.from(stack);
-            /*if (stack.getItem() instanceof ToolHead) {
-                // Head
-                if (!head.isEmpty())
-                    return false;
-                String headClass = ToolHead.getToolClass(stack);
-                if (!headClass.equals(this.getGearClass()))
-                    return false;
-                head = stack;
-                partCounts.put(PartType.MAIN, config.getHeadCount());
-            } else*/ if (part != null) {
-                // Count parts
-                final PartType type = part.getType();
-                if (partsFound.containsKey(type) && partsFound.get(type) != part)
-                    return false;
-                int current = partCounts.getOrDefault(type, 0);
-                partCounts.put(type, current + 1);
-                partsFound.putIfAbsent(type, part);
-            } else {
-                // Other non-part item
-                return false;
-            }
-        }
-
-        for (PartType type : PartType.getValues()) {
-            final int required = config.getCraftingPartCount(type);
-            final int found = partCounts.getOrDefault(type, 0);
-            if (required == 0 && partsFound.get(type) instanceof IUpgradePart) {
-                // Allow a single upgrade of this type
-                if (found > 1) return false;
-            } else if (required != found) {
-                // Wrong number of parts
-                return false;
-            }
-        }
-        return !head.isEmpty();
     }
 
     @Override

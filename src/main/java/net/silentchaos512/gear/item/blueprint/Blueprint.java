@@ -105,7 +105,8 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
     @Override
     public int getMaterialCost(ItemStack blueprint) {
-        return this.gearItem.getConfig().getHeadCount();
+        // FIXME
+        return 0;
     }
 
     @Override
@@ -133,7 +134,7 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
         // Material required for crafting
         list.add(new TextComponentTranslation("item.silentgear.blueprint.materialAmount",
-                this.gearItem.getConfig().getHeadCount()));
+                this.getMaterialCost(stack)));
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
@@ -170,7 +171,8 @@ public class Blueprint extends Item implements IBlueprint, IColoredItem {
 
                 for (PartType type : PartType.getValues()) {
                     if (type != PartType.MAIN) {
-                        final int required = this.gearItem.getConfig().getCraftingPartCount(type);
+                        // FIXME
+                        final int required = 0; //this.gearItem.getConfig().getCraftingPartCount(type);
                         if (required > 0) {
                             ITextComponent textName = type.getDisplayName(0);
                             ITextComponent text = new TextComponentTranslation("item.silentgear.blueprint.itemRecipe2", required, textName);

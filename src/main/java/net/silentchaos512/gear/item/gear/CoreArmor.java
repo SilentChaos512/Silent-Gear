@@ -16,12 +16,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
-import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
@@ -98,29 +97,6 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     }
 
     //endregion
-
-    @Nonnull
-    @Override
-    public ConfigOptionEquipment getConfig() {
-        switch (this.armorType) {
-            case FEET:
-                return Config.boots;
-            case LEGS:
-                return Config.leggings;
-            case CHEST:
-                return Config.chestplate;
-            case HEAD:
-                return Config.helmet;
-            default:
-                throw new IllegalArgumentException("Armor type is set to " + this.armorType);
-        }
-    }
-
-    @Override
-    public boolean matchesRecipe(@Nonnull Collection<ItemStack> parts) {
-        // Armor comes straight from the blueprint, this is not needed
-        return false;
-    }
 
     //region Item overrides
 

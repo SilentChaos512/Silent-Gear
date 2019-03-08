@@ -4,18 +4,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.item.ICustomEnchantColor;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -75,10 +76,13 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
 
     Set<ItemStat> getRelevantStats(ItemStack stack);
 
-    @Deprecated
-    ConfigOptionEquipment getConfig();
+    default Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
+        return Optional.empty();
+    }
 
-    boolean matchesRecipe(Collection<ItemStack> parts);
+    default Optional<StatInstance> getStatModifier(ItemStat stat) {
+        return Optional.empty();
+    }
 
     //endregion
 

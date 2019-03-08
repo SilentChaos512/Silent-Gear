@@ -29,11 +29,10 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
@@ -149,13 +148,12 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
 
     private static Collection<ItemStack> getSalvageFromGearItem(ItemStack stack) {
         ICoreItem item = (ICoreItem) stack.getItem();
-        ConfigOptionEquipment config = item.getConfig();
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
 
         for (PartData part : GearData.getConstructionParts(stack)) {
             if (part.getType() == PartType.ROD) {
                 ItemStack rod = part.getCraftingItem().copy();
-                rod.setCount(Math.max(1, config.getRodCount()));
+                rod.setCount(1);
                 builder.add(rod);
             } else if (part.getType() == PartType.MAIN) {
                 ItemStack craftingItem = part.getCraftingItem().copy();

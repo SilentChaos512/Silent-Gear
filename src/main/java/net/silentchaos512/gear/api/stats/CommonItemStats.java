@@ -10,7 +10,7 @@ import net.silentchaos512.gear.SilentGear;
  * @author SilentChaos512
  * @since Experimental
  */
-public class CommonItemStats {
+public final class CommonItemStats {
     // Generic
     public static final ItemStat DURABILITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "durability"),
             1f, 1f, 32767f, true, TextFormatting.BLUE)
@@ -22,7 +22,7 @@ public class CommonItemStats {
             .setSynergyApplies(true);
     public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "repair_efficiency"),
             1f, 0f, 1000f, false, TextFormatting.BLUE)
-            .setHidden(true)
+//            .setHidden(true)
             .setAffectedByGrades(false)
             .setSynergyApplies(false);
     public static final ItemStat ENCHANTABILITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "enchantability"),
@@ -87,6 +87,8 @@ public class CommonItemStats {
             0f, 0f, 40f, false, TextFormatting.LIGHT_PURPLE)
             .setAffectedByGrades(true)
             .setSynergyApplies(true);
+
+    private CommonItemStats() {}
 
     public static void init() {
         // NO-OP

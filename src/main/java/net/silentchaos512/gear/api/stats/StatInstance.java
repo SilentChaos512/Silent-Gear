@@ -1,10 +1,9 @@
 package net.silentchaos512.gear.api.stats;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.util.text.TextFormatting;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.type.PartMain;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;
@@ -15,7 +14,7 @@ import javax.annotation.Nonnegative;
  * @author SilentChaos512
  * @since Experimental
  */
-@Getter(value = AccessLevel.PUBLIC)
+@Getter
 public class StatInstance {
     public enum Operation {
         AVG, ADD, MUL1, MUL2, MAX;
@@ -38,6 +37,14 @@ public class StatInstance {
         this.id = id;
         this.value = value;
         this.op = op;
+    }
+
+    public static StatInstance makeBaseMod(float value) {
+        return new StatInstance("_base_mod", value, Operation.ADD);
+    }
+
+    public static StatInstance makeGearMod(float multi) {
+        return new StatInstance("_gear_mod", multi, Operation.MUL1);
     }
 
     public StatInstance copyWithNewId(String newId) {

@@ -24,13 +24,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ToolType;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class CoreMachete extends CoreSword {
     private static final int BREAK_RANGE = 2; // TODO: Config?
@@ -39,15 +40,29 @@ public class CoreMachete extends CoreSword {
         super(ToolType.AXE);
     }
 
-    @Nonnull
-    @Override
-    public ConfigOptionEquipment getConfig() {
-        return Config.machete;
-    }
-
     @Override
     public String getGearClass() {
         return "machete";
+    }
+
+    @Override
+    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.MELEE_DAMAGE)
+            return Optional.of(StatInstance.makeBaseMod(4));
+        if (stat == CommonItemStats.ATTACK_SPEED)
+            return Optional.of(StatInstance.makeBaseMod(-2.6f));
+        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+            return Optional.of(StatInstance.makeBaseMod(1));
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<StatInstance> getStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.DURABILITY)
+            return Optional.of(StatInstance.makeGearMod(0.2f));
+        if (stat == CommonItemStats.ENCHANTABILITY)
+            return Optional.of(StatInstance.makeGearMod(-0.1f));
+        return Optional.empty();
     }
 
     @Override

@@ -18,16 +18,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class CorePickaxe extends ItemPickaxe implements ICoreTool {
@@ -55,18 +55,23 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.PICKAXE));
     }
 
-    @Nonnull
-    @Override
-    public ConfigOptionEquipment getConfig() {
-        return Config.pickaxe;
-    }
-
     @Override
     public String getGearClass() {
         return "pickaxe";
     }
-    //region Harvest tool overrides
 
+    @Override
+    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.MELEE_DAMAGE)
+            return Optional.of(StatInstance.makeBaseMod(1));
+        if (stat == CommonItemStats.ATTACK_SPEED)
+            return Optional.of(StatInstance.makeBaseMod(-2.8f));
+        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+            return Optional.of(StatInstance.makeBaseMod(1));
+        return Optional.empty();
+    }
+
+    //region Harvest tool overrides
 
     @Override
     public boolean canHarvestBlock(ItemStack stack, IBlockState state) {

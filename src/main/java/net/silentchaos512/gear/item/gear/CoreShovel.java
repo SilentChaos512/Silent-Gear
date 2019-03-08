@@ -19,15 +19,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class CoreShovel extends ItemSpade implements ICoreTool {
@@ -44,15 +44,20 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.SHOVEL));
     }
 
-    @Nonnull
-    @Override
-    public ConfigOptionEquipment getConfig() {
-        return Config.shovel;
-    }
-
     @Override
     public String getGearClass() {
         return "shovel";
+    }
+
+    @Override
+    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.MELEE_DAMAGE)
+            return Optional.of(StatInstance.makeBaseMod(1.5f));
+        if (stat == CommonItemStats.ATTACK_SPEED)
+            return Optional.of(StatInstance.makeBaseMod(-3.0f));
+        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+            return Optional.of(StatInstance.makeBaseMod(2));
+        return Optional.empty();
     }
 
     //region Harvest tool overrides

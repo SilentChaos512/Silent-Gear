@@ -188,8 +188,8 @@ public final class GearData {
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             // Item class modifiers
             if (item != null) {
-                stats.put(stat, item.getConfig().getBaseModifier(stat));
-                stats.put(stat, item.getConfig().getStatModifier(stat));
+                item.getBaseStatModifier(stat).ifPresent(mod -> stats.put(stat, mod));
+                item.getStatModifier(stat).ifPresent(mod -> stats.put(stat, mod));
             }
             // Part modifiers
             int partCount = 0;

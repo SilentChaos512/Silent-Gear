@@ -11,6 +11,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
@@ -108,7 +109,10 @@ public final class GearClientHelper {
         if (ctrlDown && flag.showStats) {
             tooltip.add(textStats);
             // Display only stats relevant to the item class
-            for (ItemStat stat : item.getRelevantStats(stack)) {
+            Collection<ItemStat> relevantStats = flag.isAdvanced() && SilentGear.isDevBuild()
+                    ? ItemStat.ALL_STATS.values()
+                    : item.getRelevantStats(stack);
+            for (ItemStat stat : relevantStats) {
                 float statValue = GearData.getStat(stack, stat);
 
                 // Used for the total armor/toughness a full suit of armor would provide

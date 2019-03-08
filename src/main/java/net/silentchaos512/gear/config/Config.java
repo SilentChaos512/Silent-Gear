@@ -7,16 +7,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.utils.config.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Config {
@@ -187,31 +183,6 @@ public class Config {
     }
 
     // TODO: Old stuff below, needs to be fixed
-
-    private static List<ConfigOptionEquipment> equipmentConfigs = new ArrayList<>();
-    public static ConfigOptionEquipment sword = forEquipment("sword", () -> ModItems.sword);
-    public static ConfigOptionEquipment dagger = forEquipment("dagger", () -> ModItems.dagger);
-    public static ConfigOptionEquipment katana = forEquipment("katana", () -> ModItems.katana);
-    public static ConfigOptionEquipment machete = forEquipment("machete", () -> ModItems.machete);
-    public static ConfigOptionEquipment pickaxe = forEquipment("pickaxe", () -> ModItems.pickaxe);
-    public static ConfigOptionEquipment shovel = forEquipment("shovel", () -> ModItems.shovel);
-    public static ConfigOptionEquipment axe = forEquipment("axe", () -> ModItems.axe);
-    public static ConfigOptionEquipment hammer = forEquipment("hammer", () -> ModItems.hammer);
-    public static ConfigOptionEquipment excavator = forEquipment("excavator", () -> ModItems.excavator);
-    public static ConfigOptionEquipment mattock = forEquipment("mattock", () -> ModItems.mattock);
-    public static ConfigOptionEquipment sickle = forEquipment("sickle", () -> ModItems.sickle);
-    public static ConfigOptionEquipment bow = forEquipment("bow", () -> ModItems.bow);
-    public static ConfigOptionEquipment helmet = forEquipment("helmet", () -> ModItems.helmet);
-    public static ConfigOptionEquipment chestplate = forEquipment("chestplate", () -> ModItems.chestplate);
-    public static ConfigOptionEquipment leggings = forEquipment("leggings", () -> ModItems.leggings);
-    public static ConfigOptionEquipment boots = forEquipment("boots", () -> ModItems.boots);
-
-    @Deprecated
-    private static ConfigOptionEquipment forEquipment(String name, Supplier<? extends ICoreItem> item) {
-        ConfigOptionEquipment option = new ConfigOptionEquipment(name, item);
-        equipmentConfigs.add(option);
-        return option;
-    }
 
     private static String[] getDefaultNerfedGear() {
         Set<String> toolTypes = ImmutableSet.of("pickaxe", "shovel", "axe", "sword");

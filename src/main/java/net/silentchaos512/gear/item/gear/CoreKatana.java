@@ -18,20 +18,33 @@
 
 package net.silentchaos512.gear.item.gear;
 
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
+import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
 
-import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class CoreKatana extends CoreSword {
-    @Nonnull
-    @Override
-    public ConfigOptionEquipment getConfig() {
-        return Config.katana;
-    }
-
     @Override
     public String getGearClass() {
         return "katana";
+    }
+
+    @Override
+    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.MELEE_DAMAGE)
+            return Optional.of(StatInstance.makeBaseMod(2));
+        if (stat == CommonItemStats.ATTACK_SPEED)
+            return Optional.of(StatInstance.makeBaseMod(-2.2f));
+        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+            return Optional.of(StatInstance.makeBaseMod(0.5f));
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<StatInstance> getStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.DURABILITY)
+            return Optional.of(StatInstance.makeGearMod(-0.2f));
+        return Optional.empty();
     }
 }

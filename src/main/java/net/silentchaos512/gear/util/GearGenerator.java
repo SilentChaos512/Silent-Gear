@@ -97,14 +97,16 @@ public final class GearGenerator {
 
         // Make the base item
         PartDataList parts = PartDataList.of();
-        // Proper number of mains for head
-        for (int i = 0; i < item.getConfig().getHeadCount(); ++i)
+        // Proper number of mains for head -- FIXME
+        for (int i = 0; i < 1; ++i) {
             parts.addPart(main.get());
+        }
         // Requires a rod?
-        if (item.getConfig().getRodCount() > 0)
+        if (item.requiresPartOfType(PartType.ROD)) {
             parts.addPart(rod.get());
+        }
         // Requires bowstring?
-        if (item.getConfig().getBowstringCount() > 0) {
+        if (item.requiresPartOfType(PartType.BOWSTRING)) {
             Optional<IGearPart> bowstring = selectRandom(PartBowstring.class, tier);
             bowstring.ifPresent(parts::addPart);
         }

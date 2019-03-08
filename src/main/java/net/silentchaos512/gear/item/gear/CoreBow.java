@@ -17,18 +17,19 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     private static final int MIN_DRAW_DELAY = 10;
@@ -38,15 +39,27 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
         super(GearHelper.getBuilder(null));
     }
 
-    @Nonnull
-    @Override
-    public ConfigOptionEquipment getConfig() {
-        return Config.bow;
-    }
-
     @Override
     public String getGearClass() {
         return "bow";
+    }
+
+    @Override
+    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.RANGED_DAMAGE)
+            return Optional.of(StatInstance.makeBaseMod(2));
+        if (stat == CommonItemStats.RANGED_SPEED)
+            return Optional.of(StatInstance.makeBaseMod(1));
+        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+            return Optional.of(StatInstance.makeBaseMod(1));
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<StatInstance> getStatModifier(ItemStat stat) {
+        if (stat == CommonItemStats.ENCHANTABILITY)
+            return Optional.of(StatInstance.makeGearMod(-0.45f));
+        return Optional.empty();
     }
 
     //region Bow stuff
