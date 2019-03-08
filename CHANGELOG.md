@@ -8,7 +8,9 @@ Traits are mostly implemented. There are a few that do not function yet, but it 
 ### Fixed
 - Tools having wrong attack damage and speed modifiers (removed equipment JSON files entirely) [#24]
 - Example gear generates correctly
-- A few tooltip-related issues
+- Armor no longer says it's missing a rod
+- Fix armor item color (custom worn armor is still colorless)
+- A few misc tooltip-related issues
 
 ## [1.0.3] - 2019-03-07
 Temporary workaround for Forge issue #5577, Silent Gear [issue #25](https://github.com/SilentChaos512/Silent-Gear/issues/25). This allows players to connect to servers and LAN games. I have noticed their are issues with gear parts not syncing to the client, which I am pretty sure is unrelated. Gear items can still be crafted and used normally as far as I know, they just look wrong.

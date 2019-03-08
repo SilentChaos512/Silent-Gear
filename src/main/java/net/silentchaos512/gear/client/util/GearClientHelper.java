@@ -75,7 +75,7 @@ public final class GearClientHelper {
         } else if (GearData.hasLockedStats(stack)) {
             tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.YELLOW));
         } else {
-            if (constructionParts.getRods().isEmpty()) {
+            if (item.requiresPartOfType(PartType.ROD) && constructionParts.getRods().isEmpty()) {
                 tooltip.add(misc("missingRod").applyTextStyle(TextFormatting.RED));
             }
             if (item.requiresPartOfType(PartType.BOWSTRING) && constructionParts.getPartsOfType(PartType.BOWSTRING).isEmpty()) {

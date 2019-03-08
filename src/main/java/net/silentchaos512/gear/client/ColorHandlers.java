@@ -33,9 +33,17 @@ public final class ColorHandlers {
         }
 
         // Tools/Armor - mostly used for broken color, but colors could be changed at any time
-        itemColors.register(ColorHandlers::getColorTemp, ModItems.gearClasses.values()
-                .stream()
-                .map(ICoreItem::asItem).toArray(Item[]::new)
+        itemColors.register(ColorHandlers::getColorTemp,
+                ModItems.toolClasses.values()
+                        .stream()
+                        .map(ICoreItem::asItem)
+                        .toArray(Item[]::new)
+        );
+        itemColors.register(ColorHandlers::getArmorColorTemp,
+                ModItems.armorClasses.values()
+                        .stream()
+                        .map(ICoreItem::asItem)
+                        .toArray(Item[]::new)
         );
     }
 
@@ -65,6 +73,16 @@ public final class ColorHandlers {
         }
         if (tintIndex == 2 && stack.getItem() == ModItems.sword) {
             // Guard (just use primary for now)
+            PartData part = GearData.getPrimaryRenderPartFast(stack);
+            if (part == null) return Color.VALUE_WHITE;
+            return part.getFallbackColor(stack, 0);
+        }
+        return Color.VALUE_WHITE;
+    }
+
+    private static int getArmorColorTemp(ItemStack stack, int tintIndex) {
+        if (tintIndex == 0) {
+            // Main
             PartData part = GearData.getPrimaryRenderPartFast(stack);
             if (part == null) return Color.VALUE_WHITE;
             return part.getFallbackColor(stack, 0);
