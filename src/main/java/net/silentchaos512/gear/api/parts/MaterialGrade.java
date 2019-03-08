@@ -104,13 +104,9 @@ public enum MaterialGrade {
         }
     }
 
-    @Deprecated
-    public String getTranslatedName() {
-        return "wrong method!";
-    }
-
     public ITextComponent getDisplayName() {
-        return new TextComponentTranslation("stat.silentgear.grade." + name());
+        TextComponentTranslation text = new TextComponentTranslation("stat.silentgear.grade." + name());
+        return new TextComponentTranslation("part.silentgear.gradeOnPart", text);
     }
 
     public static class Argument implements ArgumentType<MaterialGrade> {
