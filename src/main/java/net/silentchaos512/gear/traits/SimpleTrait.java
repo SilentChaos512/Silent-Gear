@@ -85,7 +85,7 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public void onUpdate(TraitActionContext context) {
+    public void onUpdate(TraitActionContext context, boolean isEquipped) {
     }
 
     public static final class Serializer<T extends SimpleTrait> implements ITraitSerializer<T> {

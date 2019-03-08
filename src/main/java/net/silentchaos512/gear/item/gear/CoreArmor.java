@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
@@ -137,8 +138,8 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void onArmorTick(ItemStack stack, World world, EntityPlayer player) {
+        GearHelper.inventoryTick(stack, world, player, 0, true);
     }
 
     public Collection<IRecipe> getExampleRecipes() {

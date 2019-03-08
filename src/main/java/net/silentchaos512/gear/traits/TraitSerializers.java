@@ -19,6 +19,7 @@ public final class TraitSerializers {
         register(SimpleTrait.SERIALIZER);
         register(DamageTypeTrait.SERIALIZER);
         register(DurabilityTrait.SERIALIZER);
+        register(PotionEffectTrait.SERIALIZER);
         register(StatModifierTrait.SERIALIZER);
     }
 

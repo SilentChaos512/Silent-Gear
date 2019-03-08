@@ -40,8 +40,8 @@ public class TraitRefractive extends SimpleTrait {
     }
 
     @Override
-    public void onUpdate(TraitActionContext context) {
-        super.onUpdate(context);
+    public void onUpdate(TraitActionContext context, boolean isEquipped) {
+        super.onUpdate(context, isEquipped);
 
         EntityPlayer player = context.getPlayer();
         if (player != null && player.ticksExisted % ACTIVATE_RATE == 0) {
