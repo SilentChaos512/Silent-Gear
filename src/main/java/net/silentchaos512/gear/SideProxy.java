@@ -25,6 +25,7 @@ import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.command.SGearPartsCommand;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
+import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.GenModels;
@@ -52,6 +53,7 @@ class SideProxy {
         registerContainersCommon();
 
         Config.init();
+        Network.init();
 
         ModLootStuff.init();
         ModRecipes.init();

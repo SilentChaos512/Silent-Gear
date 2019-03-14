@@ -344,8 +344,8 @@ public abstract class AbstractGearPart implements IGearPart {
         public T read(ResourceLocation id, PacketBuffer buffer) {
             T part = function.apply(id);
 
-            // Name
             part.displayName = buffer.readTextComponent();
+            part.materials = PartMaterial.read(buffer);
 
             // Textures
             int displayCount = buffer.readVarInt();
@@ -360,8 +360,8 @@ public abstract class AbstractGearPart implements IGearPart {
 
         @Override
         public void write(PacketBuffer buffer, T part) {
-            // Name
             buffer.writeTextComponent(part.getDisplayName(null, ItemStack.EMPTY));
+            part.materials.write(buffer);
 
             // Textures
             buffer.writeVarInt(part.display.size());

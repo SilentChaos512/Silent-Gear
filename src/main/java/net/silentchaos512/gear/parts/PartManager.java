@@ -11,9 +11,11 @@ import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.network.SyncGearPartsPacket;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -25,14 +27,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("deprecation")
 public final class PartManager implements IResourceManagerReloadListener {
     public static final PartManager INSTANCE = new PartManager();
-
-    private static final Pattern PATTERN_NAME_FROM_PATH = Pattern.compile(
-            "(?<=silentgear/parts/)[^.]+(?=\\.json$)");
 
     public static final Marker MARKER = MarkerManager.getMarker("PartManager");
 
@@ -152,5 +152,14 @@ public final class PartManager implements IResourceManagerReloadListener {
         if (part == null)
             throw new NullPointerException("Fallback part '" + name + "' was not found");
         return part;
+    }
+
+    public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {
+        context.get().enqueueWork(() -> {
+            MAP.clear();
+            packet.getParts().forEach(part -> MAP.put(part.getId(), part));
+            SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
+        });
+        context.get().setPacketHandled(true);
     }
 }

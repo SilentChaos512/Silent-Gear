@@ -9,8 +9,10 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.network.SyncTraitsPacket;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -21,8 +23,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
-public class TraitManager implements IResourceManagerReloadListener {
+@SuppressWarnings("deprecation")
+public final class TraitManager implements IResourceManagerReloadListener {
     public static final TraitManager INSTANCE = new TraitManager();
 
     public static final Marker MARKER = MarkerManager.getMarker("TraitManager");
@@ -84,5 +88,14 @@ public class TraitManager implements IResourceManagerReloadListener {
     @Nullable
     public static ITrait get(String strId) {
         return get(new ResourceLocation(strId));
+    }
+
+    public static void handleTraitSyncPacket(SyncTraitsPacket packet, Supplier<NetworkEvent.Context> context) {
+        context.get().enqueueWork(() -> {
+            MAP.clear();
+            packet.getTraits().forEach(trait -> MAP.put(trait.getId(), trait));
+            SilentGear.LOGGER.info("Read {} traits from server", MAP.size());
+        });
+        context.get().setPacketHandled(true);
     }
 }
