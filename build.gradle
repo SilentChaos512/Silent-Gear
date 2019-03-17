@@ -77,6 +77,7 @@ minecraft {
 repositories {
     jcenter()
     mavenLocal()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -86,6 +87,8 @@ dependencies {
     compile("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
+
+    implementation 'com.github.shedaniel:RoughlyEnoughItems:1.13.2-forge-SNAPSHOT'
 }
 
 jar {

@@ -2,7 +2,7 @@
     "type": "silentgear:gear_crafting",
     "ingredients": [
         {
-            "tag": "silentgear:blueprints/boots"
+            "tag": "silentgear:blueprints/leggings"
         },
         {
             "type": "silentgear:part_type",

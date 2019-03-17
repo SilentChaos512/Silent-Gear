@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:tip_upgrade_emerald"
+            "item": "silentgear:emerald_tipped_upgrade"
         },
         "title": {
             "translate": "advancements.silentgear.high_durability.title"

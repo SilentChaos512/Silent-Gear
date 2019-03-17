@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Armor recipes now reference the correct blueprints
+- (Partially) When connecting to a dedicated server, information about traits and gear parts is synced to the client. Unfortunately, this happens too late and tooltips usually do not update.
+
+## [1.0.4] - 2019-03-08
 Traits are mostly implemented. There are a few that do not function yet, but it should be possible to create custom traits again.
 ### Fixed
 - Tools having wrong attack damage and speed modifiers (removed equipment JSON files entirely) [#24]
