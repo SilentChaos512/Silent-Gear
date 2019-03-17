@@ -155,11 +155,9 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> {
-            MAP.clear();
-            packet.getParts().forEach(part -> MAP.put(part.getId(), part));
-            SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
-        });
+        MAP.clear();
+        packet.getParts().forEach(part -> MAP.put(part.getId(), part));
+        SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
         context.get().setPacketHandled(true);
     }
 }

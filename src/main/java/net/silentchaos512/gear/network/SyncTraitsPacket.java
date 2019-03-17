@@ -2,6 +2,7 @@ package net.silentchaos512.gear.network;
 
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.traits.TraitSerializers;
 
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ import java.util.List;
 public class SyncTraitsPacket {
     private List<ITrait> traits;
 
-    public SyncTraitsPacket() { }
+    public SyncTraitsPacket() {
+        this(TraitManager.getValues());
+    }
 
     public SyncTraitsPacket(Collection<ITrait> traits) {
         this.traits = new ArrayList<>(traits);

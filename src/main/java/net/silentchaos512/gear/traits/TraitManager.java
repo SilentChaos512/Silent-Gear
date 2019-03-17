@@ -91,11 +91,9 @@ public final class TraitManager implements IResourceManagerReloadListener {
     }
 
     public static void handleTraitSyncPacket(SyncTraitsPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> {
-            MAP.clear();
-            packet.getTraits().forEach(trait -> MAP.put(trait.getId(), trait));
-            SilentGear.LOGGER.info("Read {} traits from server", MAP.size());
-        });
+        MAP.clear();
+        packet.getTraits().forEach(trait -> MAP.put(trait.getId(), trait));
+        SilentGear.LOGGER.info("Read {} traits from server", MAP.size());
         context.get().setPacketHandled(true);
     }
 }

@@ -20,6 +20,10 @@ public class Network {
                 .networkProtocolVersion(() -> "1")
                 .simpleChannel();
 
+        // TODO: Using "markAsLoginPacket" seems like the correct solution, but there is no way to
+        //  reply to message, thus the client is unable to login.
+        //  Seems like calling FMLHandshakeHandler.handleIndexedMessage would fix this, but it is
+        //  package-private.
         channel.messageBuilder(SyncTraitsPacket.class, 1)
                 .decoder(SyncTraitsPacket::fromBytes)
                 .encoder(SyncTraitsPacket::toBytes)

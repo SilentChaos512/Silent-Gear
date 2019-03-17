@@ -30,6 +30,7 @@ public final class DedicatedServerEvents {
 
         EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
+        // FIXME: These are sent too late!
         sendTraitsToClient(playerMP);
         sendPartsToClient(playerMP);
     }

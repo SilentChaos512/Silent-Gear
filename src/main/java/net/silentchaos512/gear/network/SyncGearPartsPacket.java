@@ -2,6 +2,7 @@ package net.silentchaos512.gear.network;
 
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.PartSerializers;
 
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ import java.util.List;
 public class SyncGearPartsPacket {
     private List<IGearPart> parts;
 
-    public SyncGearPartsPacket() { }
+    public SyncGearPartsPacket() {
+        this(PartManager.getValues());
+    }
 
     public SyncGearPartsPacket(Collection<IGearPart> parts) {
         this.parts = new ArrayList<>(parts);
