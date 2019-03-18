@@ -49,6 +49,10 @@ public final class GearHelper {
 
     private GearHelper() {}
 
+    public static boolean isGear(ItemStack stack) {
+        return stack.getItem() instanceof ICoreItem;
+    }
+
     //region Attribute modifiers
 
     public static float getMeleeDamageModifier(ItemStack stack) {

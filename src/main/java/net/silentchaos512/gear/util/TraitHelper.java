@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
@@ -58,6 +59,12 @@ public final class TraitHelper {
      * @return The {@code inputValue} modified by traits.
      */
     public static float activateTraits(ItemStack gear, final float inputValue, TraitFunction action) {
+        if (!GearHelper.isGear(gear)) {
+            SilentGear.LOGGER.error("Called activateTraits on non-gear item, {}", gear);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return inputValue;
+        }
+
         NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
         float value = inputValue;
 
@@ -87,6 +94,12 @@ public final class TraitHelper {
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */
     public static int getTraitLevel(ItemStack gear, ITrait trait) {
+        if (!GearHelper.isGear(gear)) {
+            SilentGear.LOGGER.error("Called getTraitLevel on non-gear item, {}", gear);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return 0;
+        }
+
         NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
 
         for (INBTBase nbt : tagList) {

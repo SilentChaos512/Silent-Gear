@@ -73,6 +73,12 @@ public final class GearData {
      * Recalculate gear stats and setup NBT. This should be called ANY TIME an item is modified!
      */
     public static void recalculateStats(EntityPlayer player, ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called recalculateStats on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return;
+        }
+
         getUUID(stack);
         ICoreItem item = (ICoreItem) stack.getItem();
         PartDataList parts = getConstructionParts(stack);
@@ -262,6 +268,12 @@ public final class GearData {
     }
 
     public static float getStat(ItemStack stack, ItemStat stat) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called getStat on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return stat.getDefaultValue();
+        }
+
         NBTTagCompound tags = getData(stack, NBT_ROOT_PROPERTIES);
         String key = stat.getName().getPath();
 
@@ -277,14 +289,30 @@ public final class GearData {
     }
 
     public static boolean hasLockedStats(ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called hasLockedStats on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return false;
+        }
         return getData(stack, NBT_ROOT_PROPERTIES).getBoolean(NBT_LOCK_STATS);
     }
 
     public static void setLockedStats(ItemStack stack, boolean lock) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called setLockedStats on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return;
+        }
         getData(stack, NBT_ROOT_PROPERTIES).setBoolean(NBT_LOCK_STATS, lock);
     }
 
     public static PartDataList getConstructionParts(ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called getConstructionParts on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return PartDataList.of();
+        }
+
         NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
         PartDataList list = PartDataList.of();
@@ -312,8 +340,13 @@ public final class GearData {
         return list;
     }
 
-    public static float getSynergyDisplayValue(ItemStack equipment) {
-        return getData(equipment, NBT_ROOT_PROPERTIES).getFloat(NBT_SYNERGY_DISPLAY);
+    public static float getSynergyDisplayValue(ItemStack gear) {
+        if (!GearHelper.isGear(gear)) {
+            SilentGear.LOGGER.error("Called recalculateStats on non-gear item, {}", gear);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return 1;
+        }
+        return getData(gear, NBT_ROOT_PROPERTIES).getFloat(NBT_SYNERGY_DISPLAY);
     }
 
     @Nullable
@@ -335,6 +368,12 @@ public final class GearData {
      */
     @Nullable
     public static PartData getPrimaryRenderPartFast(ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called getPrimaryRenderPartFast on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return null;
+        }
+
         NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
 
@@ -352,7 +391,7 @@ public final class GearData {
      * invalid, or the part is not a main part.
      */
     @Nullable
-    public static PartData getPartByIndex(ItemStack stack, int index) {
+    private static PartData getPartByIndex(ItemStack stack, int index) {
         NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
 
@@ -365,6 +404,12 @@ public final class GearData {
 
     @Nullable
     public static PartData getPartOfType(ItemStack stack, PartType type) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called getPartOfType on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return null;
+        }
+
         NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
 
@@ -434,6 +479,12 @@ public final class GearData {
      * @return True if the item has the part in its construction, false otherwise
      */
     public static boolean hasPart(ItemStack gear, IGearPart upgrade) {
+        if (!GearHelper.isGear(gear)) {
+            SilentGear.LOGGER.error("Called hasPart on non-gear item, {}", gear);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return false;
+        }
+
         NBTTagCompound tags = getData(gear, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
         String upgradeName = upgrade.getId().toString();
@@ -451,6 +502,12 @@ public final class GearData {
     }
 
     public static void writeConstructionParts(ItemStack stack, Collection<PartData> parts) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called writeConstructionParts on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return;
+        }
+
         NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = new NBTTagList();
 
@@ -473,8 +530,11 @@ public final class GearData {
      * @return The UUID, or null if gear's item is not an ICoreItem
      */
     public static UUID getUUID(ItemStack gear) {
-        if (!(gear.getItem() instanceof ICoreItem))
+        if (!GearHelper.isGear(gear)) {
+            SilentGear.LOGGER.error("Called getUUID on non-gear item, {}", gear);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
             return null;
+        }
 
         NBTTagCompound tags = gear.getOrCreateTag();
         if (!tags.hasUniqueId(NBT_UUID)) {
@@ -486,6 +546,11 @@ public final class GearData {
     }
 
     private static NBTTagCompound getData(ItemStack stack, String compoundKey) {
+        if (SilentGear.isDevBuild() && !GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called getData on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+        }
+
         NBTTagCompound rootTag = stack.getOrCreateChildTag(NBT_ROOT);
         if (!rootTag.hasKey(compoundKey))
             rootTag.setTag(compoundKey, new NBTTagCompound());
@@ -501,34 +566,64 @@ public final class GearData {
     }
 
     static void setExampleTag(ItemStack stack, boolean value) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called setExampleTag on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return;
+        }
         getData(stack, NBT_ROOT_CONSTRUCTION).setBoolean(NBT_IS_EXAMPLE, value);
     }
 
     public static boolean isExampleGear(ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called isExampleGear on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return false;
+        }
         return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_IS_EXAMPLE);
     }
 
     public static boolean isRandomGradingDone(ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called isRandomGradingDone on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return true;
+        }
         return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_RANDOM_GRADING_DONE);
     }
 
-    public static void setRandomGradingDone(ItemStack stack, boolean value) {
+    static void setRandomGradingDone(ItemStack stack, boolean value) {
         getData(stack, NBT_ROOT_CONSTRUCTION).setBoolean(NBT_RANDOM_GRADING_DONE, value);
     }
 
     public static int getBrokenCount(ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called getBrokenCount on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return 0;
+        }
         return getData(stack, NBT_ROOT_CONSTRUCTION).getInt(NBT_BROKEN_COUNT);
     }
 
-    public static void incrementBrokenCount(ItemStack stack) {
+    static void incrementBrokenCount(ItemStack stack) {
         getData(stack, NBT_ROOT_CONSTRUCTION).setInt(NBT_BROKEN_COUNT, getBrokenCount(stack) + 1);
     }
 
     public static int getRepairCount(ItemStack stack) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called getRepairCount on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return 0;
+        }
         return getData(stack, NBT_ROOT_CONSTRUCTION).getInt(NBT_REPAIR_COUNT);
     }
 
     public static void incrementRepairCount(ItemStack stack, int amount) {
+        if (!GearHelper.isGear(stack)) {
+            SilentGear.LOGGER.error("Called incrementRepairCount on non-gear item, {}", stack);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return;
+        }
         getData(stack, NBT_ROOT_CONSTRUCTION).setInt(NBT_REPAIR_COUNT, getRepairCount(stack) + amount);
     }
 
