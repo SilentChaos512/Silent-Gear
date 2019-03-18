@@ -1,7 +1,9 @@
 package net.silentchaos512.gear;
 
+import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -22,6 +24,7 @@ import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.gui.GuiTypes;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolModel;
+import net.silentchaos512.gear.command.LockStatsCommand;
 import net.silentchaos512.gear.command.SGearPartsCommand;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
@@ -85,7 +88,10 @@ class SideProxy {
         IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
         resourceManager.addReloadListener(TraitManager.INSTANCE);
         resourceManager.addReloadListener(PartManager.INSTANCE);
-        SGearPartsCommand.register(event.getServer().getCommandManager().getDispatcher());
+
+        CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommandManager().getDispatcher();
+        LockStatsCommand.register(dispatcher);
+        SGearPartsCommand.register(dispatcher);
     }
 
     private void serverStarted(FMLServerStartedEvent event) {
