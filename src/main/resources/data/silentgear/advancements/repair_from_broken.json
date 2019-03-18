@@ -10,7 +10,7 @@
             "translate": "advancements.silentgear.repair_from_broken.description"
         }
     },
-    "parent": "silentgear:pickaxe",
+    "parent": "silentgear:kachink1",
     "criteria": {
         "repair": {
             "trigger": "silentlib:generic_int",

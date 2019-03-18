@@ -1,0 +1,36 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:crimson_iron_ingot"
+        },
+        "title": {
+            "translate": "advancements.silentgear.crimson_iron.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.crimson_iron.description"
+        }
+    },
+    "parent": "silentgear:pickaxe",
+    "criteria": {
+        "get_ore": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:crimson_iron_ore"
+                    }
+                ]
+            }
+        },
+        "get_ingot": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:crimson_iron_ingot"
+                    }
+                ]
+            }
+        }
+    }
+}

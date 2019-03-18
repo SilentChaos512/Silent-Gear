@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:redstone_tipped_upgrade"
+            "item": "silentgear:redstone_coated_upgrade"
         },
         "title": {
             "translate": "advancements.silentgear.tip_upgrade.title"

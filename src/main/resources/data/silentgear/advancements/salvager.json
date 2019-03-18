@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:salvager"
+        },
+        "title": {
+            "translate": "advancements.silentgear.salvager.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.salvager.description"
+        }
+    },
+    "parent": "silentgear:crimson_iron",
+    "criteria": {
+        "get_ingot": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:salvager"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -15,12 +15,13 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.lib.advancements.LibTriggers;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class RepairHandler {
-    private static final ResourceLocation APPLY_TIP_UPGRADE = new ResourceLocation(SilentGear.MOD_ID, "apply_tip_upgrade");
-    private static final ResourceLocation MAX_DURABILITY = new ResourceLocation(SilentGear.MOD_ID, "max_durability");
-    private static final ResourceLocation REPAIR_FROM_BROKEN = new ResourceLocation(SilentGear.MOD_ID, "repair_from_broken");
+    private static final ResourceLocation APPLY_TIP_UPGRADE = SilentGear.getId("apply_tip_upgrade");
+    private static final ResourceLocation MAX_DURABILITY = SilentGear.getId("max_durability");
+    private static final ResourceLocation REPAIR_FROM_BROKEN = SilentGear.getId("repair_from_broken");
 
     private RepairHandler() {}
 
@@ -51,8 +52,7 @@ public final class RepairHandler {
 
     private static void handleGearRepair(AnvilUpdateEvent event, PartData part) {
         ItemStack result = event.getLeft().copy();
-        // TODO: Need to consider stack size!
-        float amount =  part.getRepairAmount(result, RepairContext.Type.ANVIL);
+        float amount = part.getRepairAmount(result, RepairContext.Type.ANVIL);
         amount *= GearData.getStat(result, CommonItemStats.REPAIR_EFFICIENCY);
 
         // How many of materials to use?
@@ -67,7 +67,6 @@ public final class RepairHandler {
             result.attemptDamageItem(-Math.round(amount * materialCount), SilentGear.random, null);
             GearData.recalculateStats(result);
             event.setOutput(result);
-            // TODO: Repair cost?
             event.setCost(materialCount);
             event.setMaterialCost(materialCount);
         }
@@ -86,15 +85,15 @@ public final class RepairHandler {
             int brokenCount = GearData.getBrokenCount(result);
             int repairCount = GearData.getRepairCount(result);
             if (brokenCount > 0 && repairCount > 0) {
-//                LibTriggers.GENERIC_INT.trigger(player, REPAIR_FROM_BROKEN, brokenCount);
+                LibTriggers.GENERIC_INT.trigger(player, REPAIR_FROM_BROKEN, brokenCount);
             }
 
             // High durability
-//            LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, result.getMaxDamage());
+            LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, result.getMaxDamage());
 
             // Add tip upgrade
             if (!GearData.getConstructionParts(result).getTips().isEmpty()) {
-//                LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
+                LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
             }
         }
     }
