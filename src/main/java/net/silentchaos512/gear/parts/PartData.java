@@ -133,12 +133,16 @@ public final class PartData {
         return part.computeStatValue(stat, this);
     }
 
-    public Collection<StatInstance> getStatModifiers(ItemStat stat) {
-        return part.getStatModifiers(stat, this);
+    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat) {
+        return part.getStatModifiers(gear, stat, this);
     }
 
     public Map<ITrait, Integer> getTraits() {
-        return part.getTraits(this);
+        return getTraits(ItemStack.EMPTY);
+    }
+
+    public Map<ITrait, Integer> getTraits(ItemStack gear) {
+        return part.getTraits(gear, this);
     }
 
     public ITextComponent getDisplayName(ItemStack gear) {

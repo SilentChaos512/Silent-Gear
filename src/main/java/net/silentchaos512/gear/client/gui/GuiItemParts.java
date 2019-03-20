@@ -174,7 +174,7 @@ public class GuiItemParts extends GuiScreen {
             TextRenderUtils.renderScaled(mc.fontRenderer, translatedName, x, y, 1, Color.VALUE_WHITE, false);
             String regName = TextFormatting.GRAY + selectedPart.getId().toString();
             TextRenderUtils.renderScaled(mc.fontRenderer, regName, x, y + 10, 0.5f, Color.VALUE_WHITE, false);
-            String typeName = I18n.format("part.silentgear.type." + selectedPart.getType().getName(), selectedPart.getTier());
+            String typeName = selectedPart.getType().getDisplayName(selectedPart.getTier()).getFormattedText();
             TextRenderUtils.renderScaled(mc.fontRenderer, TextFormatting.GREEN + typeName, x, y + 16, 0.8f, Color.VALUE_WHITE, false);
             y += 30;
 

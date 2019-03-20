@@ -31,9 +31,17 @@ public interface IGearPart {
 
     IPartSerializer<?> getSerializer();
 
-    Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part);
+    default Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part) {
+        return getStatModifiers(ItemStack.EMPTY, stat, part);
+    }
 
-    Map<ITrait, Integer> getTraits(PartData part);
+    Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part);
+
+    default Map<ITrait, Integer> getTraits(PartData part) {
+        return getTraits(ItemStack.EMPTY, part);
+    }
+
+    Map<ITrait, Integer> getTraits(ItemStack gear, PartData part);
 
     StatInstance.Operation getDefaultStatOperation(ItemStat stat);
 

@@ -93,7 +93,7 @@ public final class GearData {
             // We should recalculate the item's stats!
             addOrRemoveHighlightPart(stack, parts);
             PartDataList uniqueParts = parts.getUniqueParts(true);
-            Map<ITrait, Integer> traits = TraitHelper.getTraits(parts);
+            Map<ITrait, Integer> traits = TraitHelper.getTraits(stack, parts);
 
             double synergy = calculateSynergyValue(parts, uniqueParts, traits);
             boolean hasMissingRod = item instanceof ICoreTool && parts.getRods().isEmpty();
@@ -104,7 +104,7 @@ public final class GearData {
             // : ItemStat.ALL_STATS.values();
 
             // Get all stat modifiers from all parts and item class modifiers
-            Multimap<ItemStat, StatInstance> stats = getStatModifiers(item, parts, synergy);
+            Multimap<ItemStat, StatInstance> stats = getStatModifiers(stack, item, parts, synergy);
 
             // Calculate and write stats
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
@@ -189,7 +189,7 @@ public final class GearData {
         return tags.getString(Integer.toString(animationFrame));
     }
 
-    public static Multimap<ItemStat, StatInstance> getStatModifiers(@Nullable ICoreItem item, PartDataList parts, double synergy) {
+    public static Multimap<ItemStat, StatInstance> getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
         Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             // Item class modifiers
@@ -202,7 +202,7 @@ public final class GearData {
             for (PartData partData : parts) {
                 String idSuffix = "_" + (++partCount);
                 // Allow "duplicate" AVG modifiers
-                for (StatInstance inst : partData.getStatModifiers(stat)) {
+                for (StatInstance inst : partData.getStatModifiers(stack, stat)) {
                     if (inst.getOp() == Operation.AVG && stat.isAffectedByGrades()) {
                         float gradeBonus = 1f + partData.getGrade().bonusPercent / 100f;
                         float statValue = inst.getValue() * gradeBonus;

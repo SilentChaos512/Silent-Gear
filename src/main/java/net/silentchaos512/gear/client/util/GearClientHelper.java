@@ -89,7 +89,7 @@ public final class GearClientHelper {
             data.getPart().addInformation(data, stack, tooltip, flag);
         }
 
-        TraitHelper.getTraits(constructionParts).forEach((trait, level) ->
+        TraitHelper.getTraits(stack, constructionParts).forEach((trait, level) ->
                 tooltip.add(trait.getDisplayName(level)));
 
         float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);

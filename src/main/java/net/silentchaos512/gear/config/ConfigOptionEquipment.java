@@ -67,7 +67,7 @@ public class ConfigOptionEquipment {
     }
 
     public int getCraftingPartCount(PartType type) {
-        return this.recipe.getOrDefault(type.getName(), 0);
+        return this.recipe.getOrDefault(type.getName().toString(), 0);
     }
 
     @Deprecated
@@ -154,7 +154,7 @@ public class ConfigOptionEquipment {
             for (PartType type : PartType.getValues()) {
                 final int amount = getPartCountFromJson(obj, type);
                 if (amount > 0)
-                    this.recipe.put(type.getName(), amount);
+                    this.recipe.put(type.getName().toString(), amount);
             }
             this.canCraft = JsonUtils.getBoolean(obj, "can_craft", this.canCraft);
             this.isVisible = JsonUtils.getBoolean(obj, "visible", this.isVisible);
@@ -163,8 +163,8 @@ public class ConfigOptionEquipment {
 
     private static int getPartCountFromJson(JsonObject json, PartType type) {
         String[] possibleNames = type == PartType.MAIN
-                ? new String[]{type.getName(), type.getName() + "_count", "head_count"}
-                : new String[]{type.getName(), type.getName() + "_count"};
+                ? new String[]{type.getName().toString(), type.getName() + "_count", "head_count"}
+                : new String[]{type.getName().toString(), type.getName() + "_count"};
         for (String name : possibleNames)
             if (json.has(name))
                 return json.get(name).getAsInt();

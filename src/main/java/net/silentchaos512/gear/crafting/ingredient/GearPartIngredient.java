@@ -73,9 +73,9 @@ public class GearPartIngredient extends Ingredient {
 
         @Override
         public GearPartIngredient parse(PacketBuffer buffer) {
-            String str = buffer.readString(255);
-            PartType type = PartType.get(str);
-            if (type == null) throw new JsonParseException("Unknown part type: " + str);
+            ResourceLocation typeName = buffer.readResourceLocation();
+            PartType type = PartType.get(typeName);
+            if (type == null) throw new JsonParseException("Unknown part type: " + typeName);
             return new GearPartIngredient(type);
         }
 
@@ -85,7 +85,10 @@ public class GearPartIngredient extends Ingredient {
             if (typeName.isEmpty())
                 throw new JsonSyntaxException("'part_type' is missing");
 
-            PartType type = PartType.get(typeName);
+            ResourceLocation id = typeName.contains(":")
+                    ? new ResourceLocation(typeName)
+                    : SilentGear.getId(typeName);
+            PartType type = PartType.get(id);
             if (type == null)
                 throw new JsonSyntaxException("part_type " + typeName + " does not exist");
 
@@ -95,7 +98,7 @@ public class GearPartIngredient extends Ingredient {
         @Override
         public void write(PacketBuffer buffer, GearPartIngredient ingredient) {
             buffer.writeResourceLocation(NAME);
-            buffer.writeString(ingredient.type.getName(), 255);
+            buffer.writeResourceLocation(ingredient.type.getName());
         }
     }
 }

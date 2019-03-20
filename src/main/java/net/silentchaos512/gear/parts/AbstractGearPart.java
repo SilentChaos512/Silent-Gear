@@ -74,7 +74,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part) {
+    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
         GetStatModifierEvent event = new GetStatModifierEvent(part, stat, mods);
         MinecraftForge.EVENT_BUS.post(event);
@@ -82,7 +82,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Map<ITrait, Integer> getTraits(PartData part) {
+    public Map<ITrait, Integer> getTraits(ItemStack gear, PartData part) {
         return ImmutableMap.copyOf(traits);
     }
 
@@ -100,7 +100,7 @@ public abstract class AbstractGearPart implements IGearPart {
         PartData gearPrimary = GearData.getPrimaryPart(context.getGear());
         // Material tier must be equal to or higher than gear's primary
         if (gearPrimary != null && material.getTier() < gearPrimary.getTier()) return 0;
-        Collection<StatInstance> mods = getStatModifiers(CommonItemStats.DURABILITY, material);
+        Collection<StatInstance> mods = getStatModifiers(context.getGear(), CommonItemStats.DURABILITY, material);
         float durability = CommonItemStats.DURABILITY.compute(0f, mods);
 
         switch (context.getRepairType()) {

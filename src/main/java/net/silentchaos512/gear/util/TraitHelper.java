@@ -139,7 +139,7 @@ public final class TraitHelper {
      * @param parts The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
-    public static Map<ITrait, Integer> getTraits(Collection<PartData> parts) {
+    public static Map<ITrait, Integer> getTraits(ItemStack gear, Collection<PartData> parts) {
         if (parts.isEmpty())
             return ImmutableMap.of();
 
@@ -147,7 +147,7 @@ public final class TraitHelper {
         Map<ITrait, Integer> countPartsWithTrait = new HashMap<>();
 
         for (PartData part : parts) {
-            part.getTraits().forEach(((trait, level) -> {
+            part.getTraits(gear).forEach(((trait, level) -> {
                 // Count total levels for each trait from all parts
                 result.merge(trait, level, (i1, i2) -> i1 + i2);
                 // Count number of parts with each trait

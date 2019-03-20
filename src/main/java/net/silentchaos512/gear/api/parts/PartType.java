@@ -33,18 +33,23 @@ import java.util.Map;
 import java.util.function.Function;
 
 public final class PartType {
-    private static final Map<String, PartType> VALUES = new HashMap<>();
+    private static final Map<ResourceLocation, PartType> VALUES = new HashMap<>();
 
-    public static final PartType BINDING = create("binding", "b", createSerializer("binding", PartBinding::new));
-    public static final PartType BOWSTRING = create("bowstring", "B", createSerializer("bowstring", PartBowstring::new));
-    public static final PartType GRIP = create("grip", "G", createSerializer("grip", PartGrip::new));
-    public static final PartType HIGHLIGHT = create("highlight", "h", createSerializer("highlight", PartHighlight::new));
-    public static final PartType MAIN = create("main", "M", createSerializer("main", PartMain::new));
-    public static final PartType MISC_UPGRADE = create("misc_upgrade", "U", createSerializer("misc_upgrade", PartUpgrade::new));
-    public static final PartType ROD = create("rod", "R", createSerializer("rod", PartRod::new));
-    public static final PartType TIP = create("tip", "T", createSerializer("tip", PartTip::new));
+    public static final PartType BINDING = create(SilentGear.getId("binding"), "b", createSerializer("binding", PartBinding::new));
+    public static final PartType BOWSTRING = create(SilentGear.getId("bowstring"), "B", createSerializer("bowstring", PartBowstring::new));
+    public static final PartType GRIP = create(SilentGear.getId("grip"), "G", createSerializer("grip", PartGrip::new));
+    public static final PartType HIGHLIGHT = create(SilentGear.getId("highlight"), "h", createSerializer("highlight", PartHighlight::new));
+    public static final PartType MAIN = create(SilentGear.getId("main"), "M", createSerializer("main", PartMain::new));
+    public static final PartType MISC_UPGRADE = create(SilentGear.getId("misc_upgrade"), "U", createSerializer("misc_upgrade", PartUpgrade::new));
+    public static final PartType ROD = create(SilentGear.getId("rod"), "R", createSerializer("rod", PartRod::new));
+    public static final PartType TIP = create(SilentGear.getId("tip"), "T", createSerializer("tip", PartTip::new));
 
+    @Deprecated
     public static PartType create(String name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
+        return create(new ResourceLocation(name), debugSymbol, serializer);
+    }
+
+    public static PartType create(ResourceLocation name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
         if (VALUES.containsKey(name))
             throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", name));
 
@@ -53,8 +58,14 @@ public final class PartType {
         return type;
     }
 
+    @Deprecated
     @Nullable
     public static PartType get(String name) {
+        return get(new ResourceLocation(name));
+    }
+
+    @Nullable
+    public static PartType get(ResourceLocation name) {
         return VALUES.get(name);
     }
 
@@ -62,18 +73,18 @@ public final class PartType {
         return VALUES.values();
     }
 
-    @Getter private final String name;
+    @Getter private final ResourceLocation name;
     @Getter private final String debugSymbol;
     private final IPartSerializer<? extends IGearPart> serializer;
 
-    private PartType(String name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
+    private PartType(ResourceLocation name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
         this.name = name;
         this.debugSymbol = debugSymbol;
         this.serializer = serializer;
     }
 
     public ITextComponent getDisplayName(int tier) {
-        return new TextComponentTranslation("part.silentgear.type." + name, tier);
+        return new TextComponentTranslation("part." + name.getNamespace() + ".type." + name.getPath(), tier);
     }
 
     public IPartSerializer<? extends IGearPart> getSerializer() {
