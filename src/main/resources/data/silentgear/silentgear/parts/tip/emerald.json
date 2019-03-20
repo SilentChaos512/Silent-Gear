@@ -28,7 +28,8 @@
     "textures": {
         "all": {
             "texture_suffix": "emerald",
-            "normal_color": "white"
+            "normal_color": "white",
+            "fallback_color": "#00B038"
         }
     },
     "availability": {

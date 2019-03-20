@@ -12,10 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -83,7 +80,7 @@ public final class GearHelper {
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         @SuppressWarnings("deprecation") // Need to use this version to prevent stack overflow
-        Multimap<String, AttributeModifier> map = stack.getItem().getAttributeModifiers(slot);
+                Multimap<String, AttributeModifier> map = stack.getItem().getAttributeModifiers(slot);
 
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Melee Damage
@@ -229,6 +226,13 @@ public final class GearHelper {
             b.addToolType(toolType, 3);
         }
         return b;
+    }
+
+    public static void addModelTypeProperty(ICoreItem item) {
+        item.asItem().addPropertyOverride(SilentGear.getId("model_type"), (stack, world, entity) ->
+                (GearData.hasPartOftype(stack, PartType.ROD) ? 1 : 0)
+                        + (GearData.hasPartOftype(stack, PartType.MAIN) ? 2 : 0)
+                        + (GearData.hasPartOftype(stack, PartType.TIP) ? 4 : 0));
     }
 
     public static int getHarvestLevel(ItemStack stack, ToolType toolClass, @Nullable IBlockState state, @Nullable Set<Material> effectiveMaterials) {

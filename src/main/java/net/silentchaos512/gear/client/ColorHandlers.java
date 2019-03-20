@@ -71,7 +71,13 @@ public final class ColorHandlers {
             if (part == null) return Color.VALUE_WHITE;
             return part.getFallbackColor(stack, 0);
         }
-        if (tintIndex == 2 && stack.getItem() == ModItems.sword) {
+        if (tintIndex == 2) {
+            // Tip
+            PartData part = GearData.getPartOfType(stack, PartType.TIP);
+            if (part == null) return Color.VALUE_WHITE;
+            return part.getFallbackColor(stack, 0);
+        }
+        if (tintIndex == 3 && stack.getItem() == ModItems.sword) {
             // Guard (just use primary for now)
             PartData part = GearData.getPrimaryRenderPartFast(stack);
             if (part == null) return Color.VALUE_WHITE;

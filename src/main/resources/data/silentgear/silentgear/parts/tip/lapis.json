@@ -27,7 +27,8 @@
     "textures": {
         "all": {
             "texture_suffix": "lapis",
-            "normal_color": "white"
+            "normal_color": "white",
+            "fallback_color": "#224BAF"
         }
     },
     "availability": {

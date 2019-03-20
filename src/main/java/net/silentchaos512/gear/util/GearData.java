@@ -422,6 +422,22 @@ public final class GearData {
         return null;
     }
 
+    public static boolean hasPartOftype(ItemStack stack, PartType type) {
+        if (!GearHelper.isGear(stack)) return false;
+
+        NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
+        NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
+
+        for (INBTBase nbt : tagList) {
+            if (nbt instanceof NBTTagCompound) {
+                PartData part = PartData.readFast((NBTTagCompound) nbt);
+                if (part != null && part.getType() == type) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public static void addUpgradePart(ItemStack gear, ItemStack partStack) {
         PartData part = PartData.from(partStack);

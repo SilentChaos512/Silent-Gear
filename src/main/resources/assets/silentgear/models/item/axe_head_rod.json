@@ -1,0 +1,9 @@
+{
+  "__comment__": "Placeholder gear model",
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/axe/rod_generic_lc",
+    "layer1": "silentgear:item/axe/head_generic_hc",
+    "layer2": "silentgear:item/axe/_highlight"
+  }
+}

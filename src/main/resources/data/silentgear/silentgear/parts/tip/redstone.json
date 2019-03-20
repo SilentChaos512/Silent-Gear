@@ -27,7 +27,8 @@
     "textures": {
         "all": {
             "texture_suffix": "redstone",
-            "normal_color": "white"
+            "normal_color": "white",
+            "fallback_color": "#BB0000"
         }
     },
     "availability": {
