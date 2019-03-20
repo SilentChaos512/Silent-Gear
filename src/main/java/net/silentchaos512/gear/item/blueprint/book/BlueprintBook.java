@@ -18,7 +18,6 @@
 
 package net.silentchaos512.gear.item.blueprint.book;
 
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -36,14 +35,12 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.gui.GuiHandlerSilentGear;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
-import net.silentchaos512.lib.item.IColoredItem;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.List;
 
-public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
+public class BlueprintBook extends Item implements IBlueprint {
     // TODO: Store blueprints (container/GUI). Try to pick correct blueprint when crafting.
 
     public static final int INVENTORY_SIZE = 27;
@@ -65,18 +62,6 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         return itemStack;
-    }
-
-    @Override
-    public ItemStack getCraftingResult(ItemStack blueprint, Collection<ItemStack> parts) {
-        // TODO
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public int getMaterialCost(ItemStack blueprint) {
-        // TODO
-        return 0;
     }
 
     @Override
@@ -130,9 +115,8 @@ public class BlueprintBook extends Item implements IBlueprint, IColoredItem {
         return stack.getOrCreateChildTag(NBT_ROOT);
     }
 
-    @Override
-    public IItemColor getColorHandler() {
-        return (stack, tintIndex) -> tintIndex == 0 ? getCoverColor(stack) : Color.VALUE_WHITE;
+    public int getColor(ItemStack stack, int tintIndex) {
+        return tintIndex == 0 ? getCoverColor(stack) : Color.VALUE_WHITE;
     }
 
     private static int getCoverColor(ItemStack stack) {

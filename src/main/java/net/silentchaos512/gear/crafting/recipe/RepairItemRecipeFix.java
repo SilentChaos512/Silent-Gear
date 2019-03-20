@@ -40,7 +40,6 @@ import net.silentchaos512.lib.collection.StackList;
 public final class RepairItemRecipeFix extends RecipeRepairItem {
     private RepairItemRecipeFix(ResourceLocation p_i48163_1_) {
         super(p_i48163_1_);
-        SilentGear.LOGGER.debug("RepairItemRecipeFix init");
     }
 
     @Override
@@ -60,13 +59,11 @@ public final class RepairItemRecipeFix extends RecipeRepairItem {
 
         @Override
         public RepairItemRecipeFix read(ResourceLocation recipeId, JsonObject json) {
-            SilentGear.LOGGER.debug("RepairItemRecipeFix read json");
             return new RepairItemRecipeFix(recipeId);
         }
 
         @Override
         public RepairItemRecipeFix read(ResourceLocation recipeId, PacketBuffer buffer) {
-            SilentGear.LOGGER.debug("RepairItemRecipeFix read packet");
             return new RepairItemRecipeFix(recipeId);
         }
 
