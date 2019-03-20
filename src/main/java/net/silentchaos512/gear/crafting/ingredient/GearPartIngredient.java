@@ -33,14 +33,23 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.PartManager;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.stream.Stream;
 
-public class GearPartIngredient extends Ingredient {
+public final class GearPartIngredient extends Ingredient {
     private final PartType type;
 
-    public GearPartIngredient(PartType type) {
-        super(Stream.of());
+    private GearPartIngredient(PartType type) {
+        // Note: gear parts are NOT loaded at this time!
+        super(getStream(type));
         this.type = type;
+    }
+
+    private static Stream<IItemList> getStream(PartType type) {
+//        PartIcons icon = PartIcons.getIconForType(type);
+//        if (icon == null) return Stream.of();
+//        return Stream.of(new SingleItemList(new ItemStack(icon.asItem())));
+        return Stream.of();
     }
 
     @Override
@@ -48,6 +57,25 @@ public class GearPartIngredient extends Ingredient {
         if (stack == null || stack.isEmpty()) return false;
         IGearPart part = PartManager.from(stack);
         return part != null && part.getType().equals(type);
+    }
+
+    @Override
+    public ItemStack[] getMatchingStacks() {
+        // Although gear parts are not available when the ingredient is constructed,
+        // they are available later on
+        Collection<IGearPart> parts = PartManager.getPartsOfType(this.type);
+        if (!parts.isEmpty()) {
+            return parts.stream()
+                    .flatMap(part -> {
+                        if (part.getMaterials().getTag() != null)
+                            part.getMaterials().getTag().getAllElements();
+                        return Stream.of(part.getMaterials().getItem());
+                    })
+                    .map(ItemStack::new)
+                    .filter(stack -> !stack.isEmpty())
+                    .toArray(ItemStack[]::new);
+        }
+        return super.getMatchingStacks();
     }
 
     @Override

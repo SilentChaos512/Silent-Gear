@@ -16,8 +16,8 @@ public final class ModRecipes {
 
     public static void init() {
         // Recipe serializers
-        RecipeSerializers.register(GearCrafting.Serializer.INSTANCE);
-        RecipeSerializers.register(GearCrafting.ShapedSerializer.INSTANCE);
+        RecipeSerializers.register(ShapedGearCrafting.SERIALIZER);
+        RecipeSerializers.register(ShapelessGearCrafting.SERIALIZER);
         RecipeSerializers.register(GearPartSwap.Serializer.INSTANCE);
         RecipeSerializers.register(QuickRepair.Serializer.INSTANCE);
         RecipeSerializers.register(RepairItemRecipeFix.Serializer.INSTANCE);

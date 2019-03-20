@@ -15,10 +15,7 @@ import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
@@ -79,6 +76,10 @@ public final class ModItems {
         // Register gear classes
         toolClasses.forEach((key, item) -> register(key, item.asItem()));
         armorClasses.forEach((key, item) -> register(key, item.asItem()));
+
+//        for (PartIcons icon : PartIcons.values()) {
+//            register("dummy_icon_" + icon.name().toLowerCase(Locale.ROOT), icon.asItem());
+//        }
 
 //        if (SilentGear.isDevBuild()) {
 //            register("test_item", new TestItem());
