@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemWallOrFloor;
@@ -33,11 +35,13 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     NETHERWOOD_LEAVES(NetherwoodLeaves::new),
     NETHERWOOD_SAPLING(NetherwoodSapling::new),
     CRIMSON_IRON_ORE(CrimsonIronOre::new),
+    POTTED_FLOWER(() -> makePottedPlant(FLOWER), () -> null),
+    POTTED_NETHERWOOD_SAPLING(() -> makePottedPlant(NETHERWOOD_SAPLING), () -> null),
     PHANTOM_LIGHT(PhantomLight::new);
 
     private final Lazy<Block> block;
-    private final Lazy<ItemBlock> item;
 
+    private final Lazy<ItemBlock> item;
     ModBlocks(Supplier<Block> blockSupplier) {
         this.block = Lazy.of(blockSupplier);
         this.item = Lazy.of(() -> new ItemBlock(this.asBlock(), new Item.Properties().group(SilentGear.ITEM_GROUP)));
@@ -67,6 +71,10 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
 
     private static ItemBlock getStoneTorchItem() {
         return new ItemWallOrFloor(STONE_TORCH.asBlock(), WALL_STONE_TORCH.asBlock(), new Item.Properties());
+    }
+
+    private static BlockFlowerPot makePottedPlant(IBlockProvider flower) {
+        return new BlockFlowerPot(flower.asBlock(), Block.Properties.create(Material.CIRCUITS).hardnessAndResistance(0));
     }
 
     @Override
