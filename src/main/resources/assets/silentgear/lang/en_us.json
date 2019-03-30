@@ -71,6 +71,7 @@
   "block.silentgear.part_analyzer": "Part Analyzer",
   "block.silentgear.salvager": "Salvager",
   "block.silentgear.salvager.desc": "Can break down some items into their components",
+  "block.silentgear.stone_torch": "Stone Torch",
   "command.silentgear.lock_stats.invalid": "Not holding a valid gear item",
   "command.silentgear.lock_stats.locked": "Stats of %s are now locked",
   "command.silentgear.lock_stats.unlocked": "Stats of %s are now unlocked",

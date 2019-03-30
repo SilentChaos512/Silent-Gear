@@ -1,0 +1,24 @@
+{
+    "type": "crafting_shaped",
+    "pattern": [
+        "#",
+        "/"
+    ],
+    "key": {
+        "#": [
+            {
+                "item": "minecraft:coal"
+            },
+            {
+                "item": "minecraft:charcoal"
+            }
+        ],
+        "/": {
+            "tag": "forge:rods/stone"
+        }
+    },
+    "result": {
+        "item": "silentgear:stone_torch",
+        "count": 4
+    }
+}
