@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Stone torches (craft with coal/charcoal and stone rods)
 - Potted blue flower and netherwood saplings (just use the block on a flower pot)
+- Flax is obtainable, look for wild flax plants in plains or mountain biomes.
 - Sinew is now obtainable
+### Removed
+- Item of flax plant (block still exists, but you will get a warning on world load)
 ### Changed
 - Rewrote gear crafting recipe code to allow recipes to show up in the recipe book and REI (probably JEI as well, have not tested). The recipe JSON files are still the same. If you didn't know, you can completely replace these recipes with data packs!
 - Better temporary models for everything but bows. Still waiting on Forge for the proper model system to come back. These new models will likely become a config option, as they are probably much easier on less powerful hardware.

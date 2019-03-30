@@ -13,6 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.world.feature.BlueFlowerFeature;
 import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
+import net.silentchaos512.gear.world.feature.WildFlaxFeature;
 import net.silentchaos512.utils.MathUtils;
 
 public final class ModWorldFeatures {
@@ -22,6 +23,10 @@ public final class ModWorldFeatures {
         for (Biome biome : ForgeRegistries.BIOMES) {
             if (MathUtils.inRangeInclusive(biome.getDefaultTemperature(), 0.5f, 1.5f)) {
                 addFlowers(biome);
+            }
+
+            if (biome.getCategory() == Biome.Category.EXTREME_HILLS || biome.getCategory() == Biome.Category.PLAINS) {
+                addWildFlax(biome);
             }
 
             if (biome.getCategory() == Biome.Category.NETHER) {
@@ -34,6 +39,14 @@ public final class ModWorldFeatures {
     private static void addFlowers(Biome biome) {
         biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createCompositeFlowerFeature(
                 new BlueFlowerFeature(),
+                Biome.SURFACE_PLUS_32,
+                new FrequencyConfig(1)
+        ));
+    }
+
+    private static void addWildFlax(Biome biome) {
+        biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createCompositeFlowerFeature(
+                new WildFlaxFeature(32, 4),
                 Biome.SURFACE_PLUS_32,
                 new FrequencyConfig(1)
         ));
