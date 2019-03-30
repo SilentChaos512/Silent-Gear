@@ -1,10 +1,13 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.utils.MathUtils;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class DropsHandler {
@@ -12,20 +15,15 @@ public final class DropsHandler {
 
     @SubscribeEvent
     public static void onEntityDrops(LivingDropsEvent event) {
-        Entity entity = event.getEntity();
-        if (entity == null)
-            return;
+        EntityLivingBase entity = event.getEntityLiving();
+        if (entity == null) return;
 
         // Sinew drops
-        /*
-        if (Config.sinewAnimals.matches(entity)) {
-            float chance = Config.sinewDropRate * (1 + 0.3f * event.getLootingLevel());
-            if (SilentGear.random.nextFloat() < chance) {
-                ItemStack stack = new ItemStack(CraftingItems.SINEW);
-                EntityItem e = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack);
-                event.getDrops().add(e);
+        if (Config.GENERAL.isSinewAnimal(entity)) {
+            double chance = Config.GENERAL.sinewDropRate.get() * (1 + 0.2 * event.getLootingLevel());
+            if (MathUtils.tryPercentage(SilentGear.random, chance)) {
+                event.getDrops().add(entity.entityDropItem(CraftingItems.SINEW));
             }
         }
-        */
     }
 }
