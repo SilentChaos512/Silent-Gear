@@ -1,9 +1,41 @@
 {
-  "__comment__": "Placeholder gear model",
+  "__comment__": "Lite gear model",
   "parent": "item/handheld",
   "textures": {
     "layer0": "silentgear:item/hammer/rod_generic_lc",
     "layer1": "silentgear:item/hammer/head_generic_hc",
     "layer2": "silentgear:item/hammer/_highlight"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "silentgear:model_type": 1
+      },
+      "model": "silentgear:item/hammer_rod"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 2
+      },
+      "model": "silentgear:item/hammer_head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 3
+      },
+      "model": "silentgear:item/hammer_head_rod"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 6
+      },
+      "model": "silentgear:item/hammer_tip_head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 7
+      },
+      "model": "silentgear:item/hammer_tip_head_rod"
+    }
+  ]
 }

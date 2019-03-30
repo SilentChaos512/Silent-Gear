@@ -1,0 +1,11 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/blank",
+    "layer1": "silentgear:item/sword/head_generic_hc",
+    "layer2": "silentgear:item/blank",
+    "layer3": "silentgear:item/sword/guard_generic_hc",
+    "layer4": "silentgear:item/sword/_highlight"
+  }
+}

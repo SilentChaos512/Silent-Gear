@@ -1,9 +1,41 @@
 {
-  "__comment__": "Placeholder gear model",
+  "__comment__": "Lite gear model",
   "parent": "item/handheld",
   "textures": {
     "layer0": "silentgear:item/sickle/rod_generic_lc",
     "layer1": "silentgear:item/sickle/head_generic_hc",
     "layer2": "silentgear:item/sickle/_highlight"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "silentgear:model_type": 1
+      },
+      "model": "silentgear:item/sickle_rod"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 2
+      },
+      "model": "silentgear:item/sickle_head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 3
+      },
+      "model": "silentgear:item/sickle_head_rod"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 6
+      },
+      "model": "silentgear:item/sickle_tip_head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 7
+      },
+      "model": "silentgear:item/sickle_tip_head_rod"
+    }
+  ]
 }

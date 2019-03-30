@@ -1,9 +1,41 @@
 {
-  "__comment__": "Placeholder gear model",
+  "__comment__": "Lite gear model",
   "parent": "item/handheld",
   "textures": {
     "layer0": "silentgear:item/dagger/rod_generic_lc",
     "layer1": "silentgear:item/dagger/head_generic_hc",
     "layer2": "silentgear:item/dagger/_highlight"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "silentgear:model_type": 1
+      },
+      "model": "silentgear:item/dagger_rod"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 2
+      },
+      "model": "silentgear:item/dagger_head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 3
+      },
+      "model": "silentgear:item/dagger_head_rod"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 6
+      },
+      "model": "silentgear:item/dagger_tip_head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 7
+      },
+      "model": "silentgear:item/dagger_tip_head_rod"
+    }
+  ]
 }

@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ExtensionPoint;
@@ -22,8 +21,6 @@ import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.gui.GuiTypes;
-import net.silentchaos512.gear.client.models.ArmorItemModel;
-import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.command.LockStatsCommand;
 import net.silentchaos512.gear.command.SGearPartsCommand;
 import net.silentchaos512.gear.config.Config;
@@ -121,8 +118,8 @@ class SideProxy {
             registerContainers();
 
             // FIXME: These do not work!
-            ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
-            ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
+//            ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
+//            ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
         }
 
         private void clientSetup(FMLClientSetupEvent event) { }

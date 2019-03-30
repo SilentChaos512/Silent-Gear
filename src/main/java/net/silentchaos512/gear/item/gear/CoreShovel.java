@@ -43,6 +43,7 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
 
     public CoreShovel() {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.SHOVEL));
+        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

@@ -51,6 +51,7 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
                 .addToolType(ToolType.AXE, 3)
                 .addToolType(ToolType.SHOVEL, 3)
         );
+        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

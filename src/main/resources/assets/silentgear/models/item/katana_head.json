@@ -1,0 +1,9 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/blank",
+    "layer1": "silentgear:item/katana/head_generic_hc",
+    "layer2": "silentgear:item/katana/_highlight"
+  }
+}
