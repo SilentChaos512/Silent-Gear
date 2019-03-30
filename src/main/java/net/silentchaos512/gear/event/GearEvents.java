@@ -25,7 +25,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumLightType;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
@@ -106,28 +108,23 @@ public final class GearEvents {
             if (canHarvest) {
                 ITrait lustrous = TraitManager.get(TraitConst.LUSTROUS);
                 int level = TraitHelper.getTraitLevel(tool, lustrous);
-                // FIXME: Seems to be very inconsistent. Need to check block/sky light separately?
-                // Like this: player.world.getLightFor(EnumSkyBlock.BLOCK, player.getPosition());
-                float light = getAreaLightBrightness(player.world, player.getPosition());
-                event.setNewSpeed(event.getOriginalSpeed() + 3 * level * light);
+                int light = getLightForLustrousTrait(player.world, player.getPosition());
+                event.setNewSpeed(event.getOriginalSpeed() + getLustrousSpeedBonus(level, light));
             }
         }
     }
 
-    public static float getAreaLightBrightness(World world, BlockPos pos) {
-        float value = world.getLight(pos);
-        // Checking this many positions IS necessary. If player is near a wall, it would
-        // only check inside blocks otherwise.
-        value = Math.max(value, world.getLight(pos.north()));
-        value = Math.max(value, world.getLight(pos.south()));
-        value = Math.max(value, world.getLight(pos.east()));
-        value = Math.max(value, world.getLight(pos.west()));
-        // Fix corners too... This can exploited in some rare cases, but should be fine.
-        value = Math.max(value, world.getLight(pos.north().west()));
-        value = Math.max(value, world.getLight(pos.north().east()));
-        value = Math.max(value, world.getLight(pos.south().west()));
-        value = Math.max(value, world.getLight(pos.south().east()));
-        return value;
+    public static int getLightForLustrousTrait(World world, BlockPos pos) {
+        Chunk chunk = world.getChunk(pos);
+        boolean hasSkylight = world.dimension.hasSkyLight();
+        int blockLight = chunk.getLight(EnumLightType.BLOCK, pos, hasSkylight);
+        int skyLight = chunk.getLight(EnumLightType.SKY, pos, hasSkylight);
+        // Block light is less effective
+        return Math.max(skyLight, blockLight * 3 / 4);
+    }
+
+    public static int getLustrousSpeedBonus(int level, int light) {
+        return 4 * level * light / 15;
     }
 
     // endregion

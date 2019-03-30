@@ -78,8 +78,8 @@ public class DebugOverlay extends DebugRenderOverlay {
                     if (canHarvest) {
                         ITrait lustrous = TraitManager.get(TraitConst.LUSTROUS);
                         int level = TraitHelper.getTraitLevel(heldItem, lustrous);
-                        float light = GearEvents.getAreaLightBrightness(player.world, player.getPosition());
-                        final float newSpeed = destroySpeed + 3 * level * light;
+                        int light = GearEvents.getLightForLustrousTrait(player.world, player.getPosition());
+                        final float newSpeed = destroySpeed + GearEvents.getLustrousSpeedBonus(level, light);
                         list.add(String.format("speed = %.1f", newSpeed));
                     } else {
                         list.add(String.format("speed = %.1f", destroySpeed));
