@@ -112,8 +112,13 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
         for (ItemStack part : getSalvageableParts(stack)) {
             ItemStack copy = part.copy();
             int count = copy.getCount();
+            PartData partData = PartData.from(part);
+            double partLossRate = partData != null
+                    ? partData.getPart().getSalvageLossRate(stack, partData, lossRate)
+                    : lossRate;
+
             for (int i = 0; i < count; ++i) {
-                if (MathUtils.tryPercentage(SilentGear.random, lossRate)) {
+                if (MathUtils.tryPercentage(SilentGear.random, partLossRate)) {
                     copy.shrink(1);
                 }
             }
@@ -125,7 +130,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
         return builder.build();
     }
 
-    private double getLossRate(ItemStack stack) {
+    private static double getLossRate(ItemStack stack) {
         int maxDamage = stack.getMaxDamage();
         Double min = Config.GENERAL.salvagerMinLossRate.get();
         if (maxDamage == 0) {

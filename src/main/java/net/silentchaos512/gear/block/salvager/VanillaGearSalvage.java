@@ -58,7 +58,7 @@ final class VanillaGearSalvage {
         if (item instanceof ItemPickaxe || item instanceof ItemAxe) return 3;
         if (item instanceof ItemArmor) {
             int multi = Objects.requireNonNull(item.getRegistryName()).getPath().startsWith("chainmail") ? 4 : 1;
-            EntityEquipmentSlot type = item.getEquipmentSlot(stack);
+            EntityEquipmentSlot type = ((ItemArmor) item).getEquipmentSlot();
             if (type == EntityEquipmentSlot.CHEST) return 8 * multi;
             if (type == EntityEquipmentSlot.FEET) return 4 * multi;
             if (type == EntityEquipmentSlot.HEAD) return 5 * multi;
