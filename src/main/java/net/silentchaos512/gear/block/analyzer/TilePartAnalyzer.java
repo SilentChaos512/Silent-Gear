@@ -168,7 +168,7 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
             NBTTagCompound itemTags = input.serializeNBT();
-            tags.setTag("input_item", itemTags);
+            tags.put("input_item", itemTags);
         }
 
         return new SPacketUpdateTileEntity(pos, 0, tags);
@@ -183,10 +183,10 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
             NBTTagCompound itemTags = input.serializeNBT();
-            itemTags.setByte("Slot", (byte) INPUT_SLOT);
+            itemTags.putByte("Slot", (byte) INPUT_SLOT);
             tagList.add(itemTags);
         }
-        tags.setTag("Items", tagList);
+        tags.put("Items", tagList);
         return tags;
     }
 
@@ -196,7 +196,7 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
         NBTTagCompound tags = packet.getNbtCompound();
         SyncVariable.Helper.readSyncVars(this, tags);
 
-        if (tags.hasKey("input_item")) {
+        if (tags.contains("input_item")) {
             setInventorySlotContents(INPUT_SLOT, ItemStack.read(tags.getCompound("input_item")));
         } else {
             setInventorySlotContents(INPUT_SLOT, ItemStack.EMPTY);

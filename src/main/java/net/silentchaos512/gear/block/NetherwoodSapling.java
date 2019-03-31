@@ -32,7 +32,7 @@ public class NetherwoodSapling extends BlockSapling {
     public NetherwoodSapling() {
         super(new NetherwoodTree(), Properties.create(Material.PLANTS)
                 .doesNotBlockMovement()
-                .needsRandomTick()
+                .tickRandomly()
                 .hardnessAndResistance(0)
                 .sound(SoundType.PLANT)
         );

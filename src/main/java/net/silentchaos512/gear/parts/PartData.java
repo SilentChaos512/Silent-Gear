@@ -98,14 +98,14 @@ public final class PartData {
     }
 
     public NBTTagCompound write(@Nonnull NBTTagCompound tags) {
-        tags.setString("ID", part.getId().toString());
+        tags.putString("ID", part.getId().toString());
         if (this.grade != MaterialGrade.NONE) {
-            tags.setString("Grade", this.grade.name());
+            tags.putString("Grade", this.grade.name());
         }
 
         NBTTagCompound itemTag = new NBTTagCompound();
         this.craftingItem.write(itemTag);
-        tags.setTag("Item", itemTag);
+        tags.put("Item", itemTag);
         return tags;
     }
 

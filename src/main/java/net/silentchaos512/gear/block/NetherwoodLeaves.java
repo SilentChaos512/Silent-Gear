@@ -33,7 +33,7 @@ public class NetherwoodLeaves extends BlockLeaves {
     public NetherwoodLeaves() {
         super(Properties.create(Material.PLANTS)
                 .hardnessAndResistance(0.2f)
-                .needsRandomTick()
+                .tickRandomly()
                 .sound(SoundType.PLANT)
         );
     }

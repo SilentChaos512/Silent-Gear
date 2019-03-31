@@ -92,7 +92,7 @@ public class PartMaterial implements IPartMaterial {
             return null;
         }
 
-        ResourceLocation id = ResourceLocation.makeResourceLocation(str);
+        ResourceLocation id = ResourceLocation.tryCreate(str);
         if (id == null) {
             // Strange value
             SilentGear.LOGGER.warn("Received weird part material item string '{}' from server", str);
@@ -110,7 +110,7 @@ public class PartMaterial implements IPartMaterial {
             return null;
         }
 
-        ResourceLocation id = ResourceLocation.makeResourceLocation(str);
+        ResourceLocation id = ResourceLocation.tryCreate(str);
         if (id == null) {
             // Strange value
             SilentGear.LOGGER.warn("Received weird part material tag string '{}' from server", str);

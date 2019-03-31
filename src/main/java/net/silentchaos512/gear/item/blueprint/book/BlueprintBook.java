@@ -86,8 +86,8 @@ public class BlueprintBook extends Item implements IBlueprint {
         if (stack.isEmpty()) return null;
 
         NBTTagCompound tags = getTags(stack);
-        if (!tags.hasKey(NBT_INVENTORY))
-            tags.setTag(NBT_INVENTORY, new NBTTagList());
+        if (!tags.contains(NBT_INVENTORY))
+            tags.put(NBT_INVENTORY, new NBTTagList());
 
         ItemStackHandler stackHandler = new ItemStackHandler(INVENTORY_SIZE);
         NBTTagList tagList = tags.getList(NBT_INVENTORY, 10);
@@ -108,7 +108,7 @@ public class BlueprintBook extends Item implements IBlueprint {
             tagList.add(itemStack.serializeNBT());
         }
 
-        tags.setTag(NBT_INVENTORY, tagList);
+        tags.put(NBT_INVENTORY, tagList);
     }
 
     private static NBTTagCompound getTags(ItemStack stack) {
@@ -121,6 +121,6 @@ public class BlueprintBook extends Item implements IBlueprint {
 
     private static int getCoverColor(ItemStack stack) {
         NBTTagCompound tags = getTags(stack);
-        return tags.hasKey(NBT_COLOR) ? tags.getInt(NBT_COLOR) : DEFAULT_COLOR;
+        return tags.contains(NBT_COLOR) ? tags.getInt(NBT_COLOR) : DEFAULT_COLOR;
     }
 }

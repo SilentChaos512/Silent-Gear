@@ -133,7 +133,7 @@ public final class ToolBlockPlaceHandler {
 
     private static boolean itemNotPlaceable(ItemStack stack) {
         return stack.isEmpty()
-                || (stack.hasTag() && stack.getOrCreateTag().hasKey("NoPlacing"))
+                || (stack.hasTag() && stack.getOrCreateTag().contains("NoPlacing"))
                 || (!(stack.getItem() instanceof ItemBlock) && !Config.GENERAL.isPlaceableItem(stack));
     }
 }

@@ -83,12 +83,13 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    compile "com.udojava:EvalEx:2.1"
+//    compile "com.udojava:EvalEx:2.1"
     compile("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
 
-    implementation 'com.github.shedaniel:RoughlyEnoughItems:1.13.2-forge-SNAPSHOT'
+    compile 'com.github.shedaniel:RoughlyEnoughItems:1.13.2-forge-SNAPSHOT'
+//    implementation 'com.github.mezz:JustEnoughItems:v5.0.0'
 }
 
 jar {

@@ -100,7 +100,7 @@ public final class GearClientHelper {
             // ICoreTool itemTool = (ICoreTool) item;
             // tooltip.add(itemTool.getGearClass());
             NBTTagCompound tagCompound = stack.getOrCreateTag();
-            if (tagCompound.hasKey("debug_modelkey")) {
+            if (tagCompound.contains("debug_modelkey")) {
                 tooltip.add(new TextComponentString(tagCompound.getString("debug_modelkey")).applyTextStyle(TextFormatting.DARK_GRAY));
             }
         }

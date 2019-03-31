@@ -84,8 +84,8 @@ public final class GearData {
         PartDataList parts = getConstructionParts(stack);
 
         NBTTagCompound propertiesCompound = getData(stack, NBT_ROOT_PROPERTIES);
-        if (!propertiesCompound.hasKey(NBT_LOCK_STATS))
-            propertiesCompound.setBoolean(NBT_LOCK_STATS, false);
+        if (!propertiesCompound.contains(NBT_LOCK_STATS))
+            propertiesCompound.putBoolean(NBT_LOCK_STATS, false);
 
         final boolean statsUnlocked = !propertiesCompound.getBoolean(NBT_LOCK_STATS);
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
@@ -117,7 +117,7 @@ public final class GearData {
                 final float value = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) ->
                         trait.onGetStat(new TraitActionContext(player, level, stack), stat, val, damageRatio));
                 // SilentGear.log.debug(stat, value);
-                propertiesCompound.setFloat(stat.getName().getPath(), value);
+                propertiesCompound.putFloat(stat.getName().getPath(), value);
             }
 
             // Cache traits in properties compound as well
@@ -125,13 +125,13 @@ public final class GearData {
             for (ITrait trait : traits.keySet()) {
                 int level = traits.get(trait);
                 NBTTagCompound tag = new NBTTagCompound();
-                tag.setString("Name", trait.getId().toString());
-                tag.setByte("Level", (byte) level);
+                tag.putString("Name", trait.getId().toString());
+                tag.putByte("Level", (byte) level);
                 traitList.add(tag);
             }
-            propertiesCompound.setTag("Traits", traitList);
+            propertiesCompound.put("Traits", traitList);
 
-            propertiesCompound.setFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
+            propertiesCompound.putFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
         }
 
         // Update model keys even if we didn't update stats
@@ -171,10 +171,10 @@ public final class GearData {
     private static void createAndSaveModelKeys(ItemStack stack, ICoreItem item, PartDataList parts) {
         // Save model keys for performance
         // Remove the old keys first, then get new ones from ICoreItem
-        stack.getOrCreateChildTag(NBT_ROOT).removeTag(NBT_ROOT_MODEL_KEYS);
+        stack.getOrCreateChildTag(NBT_ROOT).remove(NBT_ROOT_MODEL_KEYS);
         NBTTagCompound modelKeys = getData(stack, NBT_ROOT_MODEL_KEYS);
         for (int i = 0; i < item.getAnimationFrames(); ++i) {
-            modelKeys.setString(Integer.toString(i), item.getModelKey(stack, i, parts.toArray(new PartData[0])));
+            modelKeys.putString(Integer.toString(i), item.getModelKey(stack, i, parts.toArray(new PartData[0])));
         }
     }
 
@@ -184,8 +184,8 @@ public final class GearData {
 
         NBTTagCompound tags = getData(stack, NBT_ROOT_MODEL_KEYS);
         String key = Integer.toString(animationFrame);
-        if (!tags.hasKey(key))
-            tags.setString(key, ((ICoreItem) stack.getItem()).getModelKey(stack, animationFrame));
+        if (!tags.contains(key))
+            tags.putString(key, ((ICoreItem) stack.getItem()).getModelKey(stack, animationFrame));
         return tags.getString(Integer.toString(animationFrame));
     }
 
@@ -277,7 +277,7 @@ public final class GearData {
         NBTTagCompound tags = getData(stack, NBT_ROOT_PROPERTIES);
         String key = stat.getName().getPath();
 
-        if (tags.hasKey(key)) {
+        if (tags.contains(key)) {
             return tags.getFloat(key);
         } else {
             return stat.getDefaultValue();
@@ -303,7 +303,7 @@ public final class GearData {
             SilentGear.LOGGER.catching(new IllegalArgumentException());
             return;
         }
-        getData(stack, NBT_ROOT_PROPERTIES).setBoolean(NBT_LOCK_STATS, lock);
+        getData(stack, NBT_ROOT_PROPERTIES).putBoolean(NBT_LOCK_STATS, lock);
     }
 
     public static PartDataList getConstructionParts(ItemStack stack) {
@@ -536,7 +536,7 @@ public final class GearData {
                 .map(p -> p.write(new NBTTagCompound()))
                 .forEach(tagList::add);
 
-        tags.setTag(NBT_CONSTRUCTION_PARTS, tagList);
+        tags.put(NBT_CONSTRUCTION_PARTS, tagList);
     }
 
     /**
@@ -555,7 +555,7 @@ public final class GearData {
         NBTTagCompound tags = gear.getOrCreateTag();
         if (!tags.hasUniqueId(NBT_UUID)) {
             UUID uuid = UUID.randomUUID();
-            tags.setUniqueId(NBT_UUID, uuid);
+            tags.putUniqueId(NBT_UUID, uuid);
             return uuid;
         }
         return tags.getUniqueId(NBT_UUID);
@@ -568,8 +568,8 @@ public final class GearData {
         }
 
         NBTTagCompound rootTag = stack.getOrCreateChildTag(NBT_ROOT);
-        if (!rootTag.hasKey(compoundKey))
-            rootTag.setTag(compoundKey, new NBTTagCompound());
+        if (!rootTag.contains(compoundKey))
+            rootTag.put(compoundKey, new NBTTagCompound());
         return rootTag.getCompound(compoundKey);
     }
 
@@ -587,7 +587,7 @@ public final class GearData {
             SilentGear.LOGGER.catching(new IllegalArgumentException());
             return;
         }
-        getData(stack, NBT_ROOT_CONSTRUCTION).setBoolean(NBT_IS_EXAMPLE, value);
+        getData(stack, NBT_ROOT_CONSTRUCTION).putBoolean(NBT_IS_EXAMPLE, value);
     }
 
     public static boolean isExampleGear(ItemStack stack) {
@@ -609,7 +609,7 @@ public final class GearData {
     }
 
     static void setRandomGradingDone(ItemStack stack, boolean value) {
-        getData(stack, NBT_ROOT_CONSTRUCTION).setBoolean(NBT_RANDOM_GRADING_DONE, value);
+        getData(stack, NBT_ROOT_CONSTRUCTION).putBoolean(NBT_RANDOM_GRADING_DONE, value);
     }
 
     public static int getBrokenCount(ItemStack stack) {
@@ -622,7 +622,7 @@ public final class GearData {
     }
 
     static void incrementBrokenCount(ItemStack stack) {
-        getData(stack, NBT_ROOT_CONSTRUCTION).setInt(NBT_BROKEN_COUNT, getBrokenCount(stack) + 1);
+        getData(stack, NBT_ROOT_CONSTRUCTION).putInt(NBT_BROKEN_COUNT, getBrokenCount(stack) + 1);
     }
 
     public static int getRepairCount(ItemStack stack) {
@@ -640,7 +640,7 @@ public final class GearData {
             SilentGear.LOGGER.catching(new IllegalArgumentException());
             return;
         }
-        getData(stack, NBT_ROOT_CONSTRUCTION).setInt(NBT_REPAIR_COUNT, getRepairCount(stack) + amount);
+        getData(stack, NBT_ROOT_CONSTRUCTION).putInt(NBT_REPAIR_COUNT, getRepairCount(stack) + amount);
     }
 
     @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)

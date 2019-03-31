@@ -70,7 +70,7 @@ public class Config {
                                     "silentgear:pickaxe",
                                     "silentgear:shovel"
                             ),
-                            o -> o instanceof String && ResourceLocation.makeResourceLocation((String) o) != null);
+                            o -> o instanceof String && ResourceLocation.tryCreate((String) o) != null);
             placeableItems = wrapper
                     .builder("item.blockPlacers.placeableItems")
                     .comment("These items can be used by placer tools. The player must be sneaking.",
@@ -81,7 +81,7 @@ public class Config {
                                     "torchbandolier:torch_bandolier",
                                     "xreliquary:sojourner_staff"
                             ),
-                            o -> o instanceof String && ResourceLocation.makeResourceLocation((String) o) != null);
+                            o -> o instanceof String && ResourceLocation.tryCreate((String) o) != null);
 
             wrapper.comment("item.sinew", "Settings for sinew drops");
 
@@ -98,7 +98,7 @@ public class Config {
                                     "minecraft:pig",
                                     "minecraft:sheep"
                             ),
-                            o -> o instanceof String && ResourceLocation.makeResourceLocation((String) o) != null);
+                            o -> o instanceof String && ResourceLocation.tryCreate((String) o) != null);
 
             wrapper.comment("item.gear", "Settings for gear (tools, weapons, and armor)");
 
@@ -166,7 +166,7 @@ public class Config {
         private static boolean isThingInList(IForgeRegistryEntry<?> thing, ConfigValue<List<? extends String>> list) {
             ResourceLocation name = thing.getRegistryName();
             for (String str : list.get()) {
-                ResourceLocation fromList = ResourceLocation.makeResourceLocation(str);
+                ResourceLocation fromList = ResourceLocation.tryCreate(str);
                 if (fromList != null && fromList.equals(name)) {
                     return true;
                 }

@@ -10,10 +10,10 @@ import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.world.feature.BlueFlowerFeature;
 import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
-import net.silentchaos512.gear.world.feature.WildFlaxFeature;
+import net.silentchaos512.lib.world.feature.PlantFeature;
 import net.silentchaos512.utils.MathUtils;
 
 public final class ModWorldFeatures {
@@ -38,7 +38,7 @@ public final class ModWorldFeatures {
 
     private static void addFlowers(Biome biome) {
         biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createCompositeFlowerFeature(
-                new BlueFlowerFeature(),
+                new PlantFeature(ModBlocks.FLOWER.asBlockState(), 32, 10),
                 Biome.SURFACE_PLUS_32,
                 new FrequencyConfig(1)
         ));
@@ -46,7 +46,7 @@ public final class ModWorldFeatures {
 
     private static void addWildFlax(Biome biome) {
         biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createCompositeFlowerFeature(
-                new WildFlaxFeature(32, 4),
+                new PlantFeature(((FlaxPlant) ModBlocks.FLAX_PLANT.asBlock()).getMaturePlant(), 32, 4),
                 Biome.SURFACE_PLUS_32,
                 new FrequencyConfig(1)
         ));

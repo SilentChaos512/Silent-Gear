@@ -71,7 +71,7 @@ public class ArmorItemModel implements IUnbakedModel {
     }
 
     @Override
-    public Collection<ResourceLocation> getOverrideLocations() {
+    public Collection<ResourceLocation> getDependencies() {
         return ImmutableList.of();
     }
 
@@ -167,7 +167,7 @@ public class ArmorItemModel implements IUnbakedModel {
             ICoreItem itemArmor = (ICoreArmor) stack.getItem();
 
             String key = GearData.getCachedModelKey(stack, 0);
-            stack.getOrCreateTag().setString("debug_modelkey", key);
+            stack.getOrCreateTag().putString("debug_modelkey", key);
 
             if (!GearClientHelper.modelCache.containsKey(key)) {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();

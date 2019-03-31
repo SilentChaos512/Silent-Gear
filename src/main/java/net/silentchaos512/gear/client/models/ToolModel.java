@@ -64,7 +64,7 @@ public final class ToolModel implements IUnbakedModel {
     }
 
     @Override
-    public Collection<ResourceLocation> getOverrideLocations() {
+    public Collection<ResourceLocation> getDependencies() {
         return ImmutableList.of();
     }
 
@@ -184,7 +184,7 @@ public final class ToolModel implements IUnbakedModel {
 
             int animationFrame = getAnimationFrame(stack, world, entity);
             String key = GearData.getCachedModelKey(stack, animationFrame);
-            stack.getOrCreateTag().setString("debug_modelkey", key);
+            stack.getOrCreateTag().putString("debug_modelkey", key);
 
             // DEBUG:
             // model.cache.clear();
