@@ -115,6 +115,9 @@ public interface IAOETool {
 
     default void attemptAddExtraBlock(World world, IBlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
         final IBlockState state2 = world.getBlockState(pos2);
+        // Prevent breaking of unbreakable blocks, like bedrock
+        if (state2.getBlockHardness(world, pos2) < 0) return;
+
         if (!world.isAirBlock(pos2)
                 && BreakHandler.areBlocksSimilar(state1, state2)
                 && (state2.getBlock().isToolEffective(state2, getAOEToolClass()) || stack.getItem().canHarvestBlock(stack, state2))) {
