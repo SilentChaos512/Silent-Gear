@@ -18,6 +18,7 @@
         {"name": "chargeability",   "value":  0.7}
     ],
     "traits": [
+        {"name": "silentgear:fiery", "level": 2},
         {"name": "silentgear:malleable", "level": 3}
     ],
     "crafting_items": {

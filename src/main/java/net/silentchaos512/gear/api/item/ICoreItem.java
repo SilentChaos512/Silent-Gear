@@ -3,19 +3,19 @@ package net.silentchaos512.gear.api.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
-import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.item.ICustomEnchantColor;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,20 +25,15 @@ import java.util.Set;
 public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor {
     //region Item properties and construction
 
-    default ItemStack construct(Item item, ItemStack... materials) {
-        List<PartData> parts = PartDataList.of();
-        for (ItemStack mat : materials) {
-            PartData data = PartData.from(mat);
-            if (data != null)
-                parts.add(data);
-        }
-        return construct(parts);
-    }
-
     default ItemStack construct(Collection<PartData> parts) {
         ItemStack result = new ItemStack(this);
         GearData.writeConstructionParts(result, parts);
-        GearData.recalculateStats(result);
+        GearData.recalculateStats(null, result);
+        // Allow traits to make any needed changes (must be done after a recalculate)
+        TraitHelper.activateTraits(result, 0, (trait, level, nothing) -> {
+            trait.onGearCrafted(new TraitActionContext(null, level, result));
+            return 0;
+        });
         return result;
     }
 

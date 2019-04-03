@@ -235,6 +235,14 @@ public final class GearHelper {
                         + (GearData.hasPartOftype(stack, PartType.TIP) ? 4 : 0));
     }
 
+    @Nullable
+    public static GearType getType(ItemStack gear) {
+        if (!(gear.getItem() instanceof ICoreItem)) {
+            return null;
+        }
+        return ((ICoreItem) gear.getItem()).getGearType();
+    }
+
     public static int getHarvestLevel(ItemStack stack, ToolType toolClass, @Nullable IBlockState state, @Nullable Set<Material> effectiveMaterials) {
         if (isBroken(stack) || !stack.getItem().getToolTypes(stack).contains(toolClass))
             return -1;

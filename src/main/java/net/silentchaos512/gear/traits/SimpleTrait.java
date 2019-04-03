@@ -80,6 +80,10 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
+    public void onGearCrafted(TraitActionContext context) {
+    }
+
+    @Override
     public float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio) {
         return value;
     }

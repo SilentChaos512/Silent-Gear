@@ -39,7 +39,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 public final class TraitHelper {
     private TraitHelper() {throw new IllegalAccessError("Utility class");}
@@ -49,7 +48,7 @@ public final class TraitHelper {
      * Calling this frequently (like every render tick) causes FPS to tank.
      * <p>
      * This implementation pulls the item's traits straight from NBT to minimize object creation.
-     * The {@link BiFunction} is applied to every trait.
+     * The {@link TraitFunction} is applied to every trait.
      *
      * @param gear       The {@link net.silentchaos512.gear.api.item.ICoreItem} affected
      * @param inputValue The base value to have the traits act on.

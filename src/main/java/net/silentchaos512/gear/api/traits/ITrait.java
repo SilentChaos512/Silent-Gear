@@ -33,6 +33,8 @@ public interface ITrait {
 
     float onDurabilityDamage(TraitActionContext context, int damageTaken);
 
+    void onGearCrafted(TraitActionContext context);
+
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
     void onUpdate(TraitActionContext context, boolean isEquipped);

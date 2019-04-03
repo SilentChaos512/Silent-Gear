@@ -115,7 +115,7 @@ public final class PotionEffectTrait extends SimpleTrait {
             // Level int or array
             JsonElement elementLevel = json.get("level");
             if (elementLevel == null) {
-                throw new JsonParseException("level element not found, should be either int or object");
+                throw new JsonParseException("level element not found, should be either int or array");
             }
             if (elementLevel.isJsonPrimitive()) {
                 // Single level
