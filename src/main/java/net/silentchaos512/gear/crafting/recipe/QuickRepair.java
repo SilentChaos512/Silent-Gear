@@ -40,28 +40,23 @@ import java.util.Collection;
 public class QuickRepair implements IRecipe {
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        ItemStack gear = ItemStack.EMPTY;
-        int partsCount = 0;
-
         // Need 1 gear and 1+ parts
-        for (ItemStack stack : StackList.from(inv)) {
-            if (stack.getItem() instanceof ICoreItem) {
-                if (gear.isEmpty())
-                    gear = stack;
-                else
+        StackList list = StackList.from(inv);
+
+        final ItemStack gear = list.uniqueOfType(ICoreItem.class);
+        if (gear.isEmpty()) return false;
+
+        int partsCount = 0;
+        for (ItemStack stack : list) {
+            if (!(stack.getItem() instanceof ICoreItem)) {
+                PartData part = PartData.from(stack);
+                if (part == null || part.getRepairAmount(gear, RepairContext.Type.QUICK) <= 0) {
                     return false;
-            } else if (PartManager.from(stack) != null) {
+                }
                 ++partsCount;
-                // It needs to be a part with repair value
-                PartData data = PartData.from(stack);
-                if (data == null || data.getRepairAmount(gear, RepairContext.Type.QUICK) <= 0)
-                    return false;
-            } else {
-                return false;
             }
         }
-
-        return !gear.isEmpty() && partsCount > 0;
+        return partsCount > 0;
     }
 
     @Override
