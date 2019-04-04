@@ -14,6 +14,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -35,6 +36,7 @@ import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -301,6 +303,8 @@ public final class GearHelper {
 
         // TODO: Implement multi-break skill
 
+        selfHarmWithToolHead(stack, entityLiving);
+
         return true;
     }
 
@@ -310,7 +314,36 @@ public final class GearHelper {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
             attemptDamage(stack, damage, attacker);
         }
+
+        selfHarmWithToolHead(stack, attacker);
+
         return !isBroken;
+    }
+
+    private static void selfHarmWithToolHead(ItemStack stack, EntityLivingBase user) {
+        // If missing rod, hurt the user
+        if (stack.getItem() instanceof ICoreItem) {
+            ICoreItem item = (ICoreItem) stack.getItem();
+            if (item.requiresPartOfType(PartType.ROD) && !GearData.hasPartOftype(stack, PartType.ROD)) {
+                float damageAmount = item.getStat(stack, CommonItemStats.MELEE_DAMAGE) / 2;
+                DamageSource source = new DamageSource("silentgear.broken_tool") {
+                    @Nonnull
+                    @Override
+                    public ITextComponent getDeathMessage(EntityLivingBase entity) {
+                        return new TextComponentTranslation("death.silentgear.broken_tool",
+                                entity.getDisplayName(),
+                                stack.getDisplayName());
+                    }
+                }.setDamageBypassesArmor();
+
+                user.attackEntityFrom(source, damageAmount);
+
+                if (user instanceof EntityPlayer) {
+                    EntityPlayer player = (EntityPlayer) user;
+                    player.sendStatusMessage(new TextComponentTranslation("misc.silentgear.missingRod.attack"), true);
+                }
+            }
+        }
     }
 
     // Formerly onUpdate
