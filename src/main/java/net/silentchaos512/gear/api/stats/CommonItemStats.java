@@ -13,11 +13,11 @@ import net.silentchaos512.gear.SilentGear;
 public final class CommonItemStats {
     // Generic
     public static final ItemStat DURABILITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "durability"),
-            1f, 1f, 32767f, true, TextFormatting.BLUE)
+            1f, 1f, Integer.MAX_VALUE, true, TextFormatting.BLUE)
             .setAffectedByGrades(true)
             .setSynergyApplies(true);
     public static final ItemStat ARMOR_DURABILITY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "armor_durability"),
-            0f, 0f, 2047f, true, TextFormatting.BLUE)
+            1f, 1f, Integer.MAX_VALUE / 16, true, TextFormatting.BLUE)
             .setAffectedByGrades(true)
             .setSynergyApplies(true);
     public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(new ResourceLocation(SilentGear.MOD_ID, "repair_efficiency"),
