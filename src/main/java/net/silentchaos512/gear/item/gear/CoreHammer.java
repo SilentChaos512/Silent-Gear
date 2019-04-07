@@ -18,6 +18,10 @@ import java.util.Optional;
 
 public class CoreHammer extends CorePickaxe implements IAOETool {
 
+    public CoreHammer() {
+        super(false);
+    }
+
     @Override
     public GearType getGearType() {
         return GearType.HAMMER;

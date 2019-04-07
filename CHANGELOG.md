@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Analyzer catalyst, which will increase the median grade when grading parts. These are set by item tags and there are two tiers (`silentgear:analyzer_catalyst/tier1` and `silentgear:analyzer_catalyst/tier2`). By default, tier 1 is glowstone dust, and tier 2 is glittery dust, a new item.
 ### Changed
 - Rod-less tools (heads) will now hurt you when used. Ouch!
+- Hammers are no longer effective on "extra materials" like circuits (redstone, ladders) and glass
 - Durability max is now Integer.MAX_VALUE (2^32-1) and Armor Durability max is 1/16th of that (134,217,727)
 ### Fixed
 - Hammers breaking unbreakable blocks

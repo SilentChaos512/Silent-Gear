@@ -33,14 +33,14 @@ import java.util.Set;
 
 public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
+            Material.ROCK,
             Material.ANVIL,
             Material.ICE,
             Material.IRON,
             Material.PACKED_ICE,
             Material.ROCK
-    );
+            );
     private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.ROCK,
             Material.CIRCUITS,
             Material.GLASS,
             Material.PISTON,
@@ -52,8 +52,17 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
     private static final ImmutableSet<ToolType> TOOL_CLASSES_WITH_SPOON =
             ImmutableSet.of(ToolType.PICKAXE, ToolType.SHOVEL);
 
+    private final Set<Material> extraMaterials;
+
     public CorePickaxe() {
+        this(true);
+    }
+
+    public CorePickaxe(boolean effectiveOnExtraMaterials) {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.PICKAXE));
+        this.extraMaterials = effectiveOnExtraMaterials
+                ? EXTRA_EFFECTIVE_MATERIALS
+                : ImmutableSet.of();
         GearHelper.addModelTypeProperty(this);
     }
 
@@ -93,7 +102,8 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
         if (state.getBlock().getHarvestLevel(state) > toolLevel)
             return false;
         // Included in base or extra materials?
-        if (BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()) || EXTRA_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
+        Material material = state.getMaterial();
+        if (BASE_EFFECTIVE_MATERIALS.contains(material) || this.extraMaterials.contains(material))
             return true;
         return super.canHarvestBlock(state);
     }
@@ -114,12 +124,12 @@ public class CorePickaxe extends ItemPickaxe implements ICoreTool {
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, EXTRA_EFFECTIVE_MATERIALS);
+        return GearHelper.getDestroySpeed(stack, state, this.extraMaterials);
     }
 
     @Override
     public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
-        return GearHelper.getHarvestLevel(stack, tool, blockState, EXTRA_EFFECTIVE_MATERIALS);
+        return GearHelper.getHarvestLevel(stack, tool, blockState, this.extraMaterials);
     }
 //    @Override
 //    public void setHarvestLevel(String toolClass, int level) {
