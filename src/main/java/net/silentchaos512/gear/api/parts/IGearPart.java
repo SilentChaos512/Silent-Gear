@@ -67,6 +67,10 @@ public interface IGearPart {
         return normalLossRate;
     }
 
+    default boolean isCraftingAllowed(@Nullable GearType gearType) {
+        return true;
+    }
+
     IPartDisplay getDisplayProperties(PartData part, ItemStack gear, int animationFrame);
 
     @Nullable

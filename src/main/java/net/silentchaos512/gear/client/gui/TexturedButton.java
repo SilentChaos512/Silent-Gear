@@ -36,20 +36,21 @@ public class TexturedButton extends GuiButton {
             Minecraft mc = Minecraft.getInstance();
             mc.getTextureManager().bindTexture(this.resLoc);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width
-                    && mouseY < this.y + this.height;
+            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int k = this.getHoverState(this.hovered);
             if (k == 0) {
                 k = 1;
             }
 
-            GlStateManager.enableBlend();
-            GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-            GlStateManager.blendFunc(770, 771);
-            this.drawTexturedModalRect(this.x, this.y, this.texturePosX,
-                    this.texturePosY - this.height + k * this.height, this.width, this.height);
-            // FIXME: What is this?
-//            this.mouseDragged(minecraft, mouseX, mouseY);
+            GlStateManager.disableDepthTest();
+            this.drawTexturedModalRect(
+                    this.x,
+                    this.y,
+                    this.texturePosX,
+                    this.texturePosY - this.height + k * this.height,
+                    this.width,
+                    this.height);
+            GlStateManager.enableDepthTest();
         }
     }
 

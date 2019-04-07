@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Durability max is now Integer.MAX_VALUE (2^32-1) and Armor Durability max is 1/16th of that (134,217,727)
 ### Fixed
 - Hammers breaking unbreakable blocks
+- Parts GUI is working again (access in the crafting station GUI)
 
 ## [1.0.6] - 2019-03-30
 ### Added

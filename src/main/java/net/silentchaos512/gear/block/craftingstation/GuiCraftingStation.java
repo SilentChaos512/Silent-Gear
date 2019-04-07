@@ -54,7 +54,7 @@ public class GuiCraftingStation extends GuiContainer {
                 mc.displayGuiScreen(new GuiItemParts());
             }
         };
-        buttons.add(buttonShowAllParts);
+        this.addButton(buttonShowAllParts);
     }
 
     @Override

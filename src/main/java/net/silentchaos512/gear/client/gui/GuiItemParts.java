@@ -22,24 +22,28 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.client.gui.button.GuiDropDownElement;
 import net.silentchaos512.lib.client.gui.button.GuiDropDownList;
-import net.silentchaos512.utils.Color;
 import net.silentchaos512.lib.util.TextRenderUtils;
+import net.silentchaos512.utils.Color;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,7 +63,7 @@ public class GuiItemParts extends GuiScreen {
     private List<IGearPart> partList = new ArrayList<>();
     private List<PartButton> partButtons = new ArrayList<>();
     private IGearPart selectedPart = null;
-    private List<StringPair> selectedPartInfo = null;
+    private List<Tuple<String, String>> selectedPartInfo = null;
 
     @Override
     public void initGui() {
@@ -91,7 +95,7 @@ public class GuiItemParts extends GuiScreen {
         // Build part button list
         int i = 0;
         for (IGearPart part : PartManager.getValues()) {
-            if (true /*!part.isBlacklisted()*/) {
+            if (part.isCraftingAllowed(null)) {
                 partList.add(part);
                 final int x = i % BUTTON_ROW_LENGTH;
                 final int y = i / BUTTON_ROW_LENGTH;
@@ -103,7 +107,7 @@ public class GuiItemParts extends GuiScreen {
                     }
                 };
                 partButtons.add(button);
-                buttons.add(button);
+                this.addButton(button);
                 ++i;
             }
         }
@@ -164,10 +168,10 @@ public class GuiItemParts extends GuiScreen {
         if (selectedPart != null && !selectedPartInfo.isEmpty()) {
             ItemStack stack = new ItemStack(selectedPart.getMaterials().getItem());
 //            AssetUtil.renderStackToGui(stack, res.getScaledWidth() - 194, 30, 2.5f);
-            mc.getItemRenderer().renderItemIntoGUI(stack, mc.mainWindow.getWidth() - 194, 30);
+            mc.getItemRenderer().renderItemIntoGUI(stack, mc.mainWindow.getScaledWidth() - 194, 30);
 
             final int maxWidth = 140;
-            final int x = mc.mainWindow.getWidth() - (maxWidth + 10);
+            final int x = mc.mainWindow.getScaledWidth() - (maxWidth + 10);
             int y = 35;
 
             String translatedName = selectedPart.getDisplayName(PartData.of(selectedPart), ItemStack.EMPTY).getFormattedText();
@@ -178,18 +182,18 @@ public class GuiItemParts extends GuiScreen {
             TextRenderUtils.renderScaled(mc.fontRenderer, TextFormatting.GREEN + typeName, x, y + 16, 0.8f, Color.VALUE_WHITE, false);
             y += 30;
 
-            for (StringPair pair : selectedPartInfo) {
-                fontRenderer.drawString(pair.first, x, y, Color.VALUE_WHITE);
-                int width2 = fontRenderer.getStringWidth(pair.second);
-                fontRenderer.drawString(pair.second, x + maxWidth - width2, y, Color.VALUE_WHITE);
+            for (Tuple<String, String> pair : selectedPartInfo) {
+                fontRenderer.drawString(pair.getA(), x, y, Color.VALUE_WHITE);
+                int width2 = fontRenderer.getStringWidth(pair.getB());
+                fontRenderer.drawString(pair.getB(), x + maxWidth - width2, y, Color.VALUE_WHITE);
                 y += 10;
                 // TODO: We need actual stat bars or something. Need to save actual stats, record max value somewhere.
             }
         }
     }
 
-    private List<StringPair> getPartInfo(IGearPart part) {
-        List<StringPair> list = new ArrayList<>();
+    private static List<Tuple<String, String>> getPartInfo(IGearPart part) {
+        List<Tuple<String, String>> list = new ArrayList<>();
 
         PartData partData = PartData.of(part);
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
@@ -213,7 +217,7 @@ public class GuiItemParts extends GuiScreen {
                     if (stat == CommonItemStats.ARMOR_DURABILITY)
                         statStr += "x";
 
-                    list.add(StringPair.of(nameStr, statStr));
+                    list.add(new Tuple<>(nameStr, statStr));
                 }
             }
         }
@@ -242,7 +246,14 @@ public class GuiItemParts extends GuiScreen {
 
                 // Render item TODO: would it be possible to get all tagged items?
                 ItemStack stack = new ItemStack(part.getMaterials().getItem());
+                if (stack.isEmpty()) {
+                    stack = new ItemStack(Blocks.BARRIER);
+                }
+                GlStateManager.enableRescaleNormal();
+                RenderHelper.enableGUIStandardItemLighting();
                 Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(stack, this.x, this.y);
+                RenderHelper.disableStandardItemLighting();
+                GlStateManager.disableRescaleNormal();
             }
         }
 
@@ -254,31 +265,10 @@ public class GuiItemParts extends GuiScreen {
                         .map(ITextComponent::getFormattedText)
                         .collect(Collectors.toList());
                 GuiUtils.preItemToolTip(craftingStack);
+                tooltip.add(0, part.getDisplayName(null, ItemStack.EMPTY).applyTextStyle(TextFormatting.UNDERLINE).getFormattedText());
                 GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, mc.mainWindow.getWidth(), mc.mainWindow.getHeight(), -1, mc.fontRenderer);
                 GuiUtils.postItemToolTip();
             }
-        }
-    }
-
-    private static final class StringPair {
-        private final String first;
-        private final String second;
-
-        private StringPair(String first, String second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        private static StringPair of() {
-            return of("", "");
-        }
-
-        private static StringPair of(String first) {
-            return of(first, "");
-        }
-
-        private static StringPair of(String first, String second) {
-            return new StringPair(first, second);
         }
     }
 }
