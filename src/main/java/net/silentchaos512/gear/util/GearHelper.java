@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.util;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,8 +11,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -22,16 +23,16 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
-import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.lib.advancements.LibTriggers;
@@ -450,33 +451,5 @@ public final class GearHelper {
         }
 
         return gearName;
-    }
-
-    public static Collection<IRecipe> getExampleRecipes(ICoreItem item) {
-        /*
-        RecipeMaker recipes = SilentGear.registry.getRecipeMaker();
-        Collection<IRecipe> list = new ArrayList<>();
-
-        for (PartMain part : PartRegistry.getVisibleMains()) {
-            ItemStack result = "sword".equals(item.getGearClass())
-                    ? item.construct(item.getItem(), part.getCraftingStack(), part.getCraftingStack())
-                    : item.construct(item.getItem(), part.getCraftingStack());
-            GearData.setExampleTag(result, true);
-
-            ConfigOptionEquipment config = item.getConfig();
-            List<Object> inputs = new ArrayList<>();
-            inputs.add(ModItems.toolHead.getStack(item.getGearClass(), part, false));
-            for (int i = 0; i < config.getRodCount(); ++i)
-                inputs.add(ToolRods.WOOD.getPart().getCraftingStack());
-            for (int i = 0; i < config.getBowstringCount(); ++i)
-                inputs.add(ModMaterials.bowstringString.getCraftingStack());
-
-            list.add(recipes.makeShapeless(result, inputs.toArray()));
-        }
-
-        return list;
-        */
-        SilentGear.LOGGER.warn("GearHelper#getExampleRecipes: not implemented");
-        return ImmutableList.of();
     }
 }
