@@ -21,6 +21,7 @@ import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.gui.GuiTypes;
+import net.silentchaos512.gear.command.GradeTestCommand;
 import net.silentchaos512.gear.command.LockStatsCommand;
 import net.silentchaos512.gear.command.SGearPartsCommand;
 import net.silentchaos512.gear.config.Config;
@@ -89,6 +90,9 @@ class SideProxy {
         CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommandManager().getDispatcher();
         LockStatsCommand.register(dispatcher);
         SGearPartsCommand.register(dispatcher);
+        if (SilentGear.isDevBuild()) {
+            GradeTestCommand.register(dispatcher);
+        }
     }
 
     private void serverStarted(FMLServerStartedEvent event) {

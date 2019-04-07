@@ -34,11 +34,22 @@ public class ContainerPartAnalyzer extends ContainerSL {
 
     @Override
     protected void addTileInventorySlots(IInventory inv) {
-        addSlot(new Slot(tileInventory, 0, 26, 35));
-        addSlot(new SlotOutputOnly(tileInventory, 1, 80, 35));
-        addSlot(new SlotOutputOnly(tileInventory, 2, 98, 35));
-        addSlot(new SlotOutputOnly(tileInventory, 3, 116, 35));
-        addSlot(new SlotOutputOnly(tileInventory, 4, 134, 35));
+        addSlot(new Slot(tileInventory, 0, 26, 35) {
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return TilePartAnalyzer.isUngradedMainPart(stack);
+            }
+        });
+        addSlot(new Slot(tileInventory, 1, 26, 55) {
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return TilePartAnalyzer.getCatalystTier(stack) > 0;
+            }
+        });
+        addSlot(new SlotOutputOnly(tileInventory, 2, 80, 35));
+        addSlot(new SlotOutputOnly(tileInventory, 3, 98, 35));
+        addSlot(new SlotOutputOnly(tileInventory, 4, 116, 35));
+        addSlot(new SlotOutputOnly(tileInventory, 5, 134, 35));
     }
 
     @Override
@@ -61,7 +72,7 @@ public class ContainerPartAnalyzer extends ContainerSL {
             final int startHotbar = size + 27;
             final int endHotbar = size + 36;
 
-            if (index >= 1 && index < TilePartAnalyzer.INVENTORY_SIZE) {
+            if (index >= 2 && index < TilePartAnalyzer.INVENTORY_SIZE) {
                 // Remove from output slot?
                 if (!this.mergeItemStack(stack1, startPlayer, endHotbar, true)) {
                     return ItemStack.EMPTY;
@@ -69,6 +80,11 @@ public class ContainerPartAnalyzer extends ContainerSL {
             } else if (index >= size && tileInventory.isItemValidForSlot(TilePartAnalyzer.INPUT_SLOT, stack1)) {
                 // Move from player to input slot?
                 if (!mergeItemStack(stack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (index >= size && tileInventory.isItemValidForSlot(TilePartAnalyzer.CATALYST_SLOT, stack1)) {
+                // Move from player to catalyst slot?
+                if (!mergeItemStack(stack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= startPlayer && index < endPlayer) {

@@ -29,7 +29,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.silentchaos512.utils.EnumUtils;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Random;
@@ -39,6 +41,7 @@ public enum MaterialGrade {
     NONE(0), E(-8), D(-4), C(0), B(5), A(10), S(20), SS(30), SSS(40);
 
     private static final String NBT_KEY = "SGear_Grade";
+    private static final double GRADE_STD_DEV = 1.5;
 
     public final int bonusPercent;
 
@@ -51,7 +54,7 @@ public enum MaterialGrade {
             String str = stack.getOrCreateTag().getString(NBT_KEY);
             return fromString(str);
         }
-        return MaterialGrade.NONE;
+        return NONE;
     }
 
     public static MaterialGrade fromString(String str) {
@@ -62,11 +65,25 @@ public enum MaterialGrade {
                 }
             }
         }
-        return MaterialGrade.NONE;
+        return NONE;
     }
 
     public static MaterialGrade selectRandom(Random random) {
-        return selectRandom(random, MaterialGrade.SSS);
+        return selectRandom(random, SSS);
+    }
+
+    /**
+     * Select a random grade, with median based on the catalyst tier. Standard median is B, each
+     * catalyst tier adds one to the median.
+     *
+     * @param random       A random object to use
+     * @param catalystTier The catalyst tier (or zero if there is no catalyst
+     * @return A MaterialGrade that is not NONE
+     */
+    public static MaterialGrade selectWithCatalyst(Random random, @Nonnegative int catalystTier) {
+        int ordinal = MaterialGrade.B.ordinal() + catalystTier;
+        MaterialGrade median = EnumUtils.byOrdinal(ordinal, SSS);
+        return selectRandom(random, median, GRADE_STD_DEV, SSS);
     }
 
     /**
@@ -79,7 +96,7 @@ public enum MaterialGrade {
     public static MaterialGrade selectRandom(Random random, MaterialGrade maxGrade) {
         // If I understand the math here, 95% of the time, we should get grades between E and SS,
         // inclusive. SSS should be about 2.5% chance, I think. E picks up the 2.5% on the low end.
-        return selectRandom(random, MaterialGrade.B, 1.5, maxGrade);
+        return selectRandom(random, B, GRADE_STD_DEV, maxGrade);
     }
 
     /**
@@ -93,7 +110,7 @@ public enum MaterialGrade {
      * @return A MaterialGrade that is not NONE
      */
     public static MaterialGrade selectRandom(Random random, MaterialGrade median, double stdDev, MaterialGrade maxGrade) {
-        int val = (int) (stdDev * random.nextGaussian() + median.ordinal());
+        int val = (int) Math.round(stdDev * random.nextGaussian() + median.ordinal());
         val = MathHelper.clamp(val, 1, maxGrade.ordinal());
         return values()[val];
     }

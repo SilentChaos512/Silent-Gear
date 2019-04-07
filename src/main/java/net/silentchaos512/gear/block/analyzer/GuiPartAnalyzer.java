@@ -20,11 +20,15 @@ package net.silentchaos512.gear.block.analyzer;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
+
+import java.util.List;
 
 public class GuiPartAnalyzer extends GuiContainer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/analyzer.png");
@@ -41,6 +45,16 @@ public class GuiPartAnalyzer extends GuiContainer {
         this.drawDefaultBackground();
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    @Override
+    public List<String> getItemToolTip(ItemStack stack) {
+        List<String> list = super.getItemToolTip(stack);
+        int catalystTier = TilePartAnalyzer.getCatalystTier(stack);
+        if (catalystTier > 0) {
+            list.add(I18n.format("gui.silentgear.part_analyzer.catalystTier", String.valueOf(catalystTier)));
+        }
+        return list;
     }
 
     @Override
