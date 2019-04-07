@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Hammers breaking unbreakable blocks
 - Parts GUI is working again (access in the crafting station GUI)
+- Some broken/missing translations
 
 ## [1.0.6] - 2019-03-30
 ### Added

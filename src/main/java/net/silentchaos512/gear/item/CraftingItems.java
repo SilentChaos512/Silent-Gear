@@ -18,6 +18,7 @@
 
 package net.silentchaos512.gear.item;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -127,7 +128,10 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
 
         @Override
         public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-            tooltip.add(new TextComponentTranslation(getTranslationKey()+ ".desc"));
+            String descKey = this.getTranslationKey() + ".desc";
+            if (I18n.hasKey(descKey)) {
+                tooltip.add(new TextComponentTranslation(descKey));
+            }
         }
     }
 }
