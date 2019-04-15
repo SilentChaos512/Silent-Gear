@@ -45,6 +45,10 @@ public final class GearPartIngredient extends Ingredient {
         this.type = type;
     }
 
+    public static GearPartIngredient of(PartType type) {
+        return new GearPartIngredient(type);
+    }
+
     private static Stream<IItemList> getStream(PartType type) {
 //        PartIcons icon = PartIcons.getIconForType(type);
 //        if (icon == null) return Stream.of();
