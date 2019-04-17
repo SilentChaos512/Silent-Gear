@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - "Unknown part type" error when connecting to servers
+- Blocks connecting to analyzers improperly
 
 ## [1.0.8] - 2019-04-15
 Small tweak needed by Silent's Gems 3.0.11.

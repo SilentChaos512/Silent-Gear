@@ -21,6 +21,7 @@ package net.silentchaos512.gear.block.analyzer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,11 +64,13 @@ public class BlockPartAnalyzer extends BlockContainer {
         return new TilePartAnalyzer();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
@@ -89,11 +92,19 @@ public class BlockPartAnalyzer extends BlockContainer {
         worldIn.setBlockState(pos, state.with(FACING, side), 2);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
         return VOXEL_SHAPE;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+    }
+
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
