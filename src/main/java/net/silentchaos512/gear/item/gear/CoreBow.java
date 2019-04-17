@@ -37,7 +37,8 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     private static final int MAX_DRAW_DELAY = 100;
 
     public CoreBow() {
-        super(GearHelper.getBuilder(null));
+        // Max damage doesn't matter, just needs to be greater than zero
+        super(GearHelper.getBuilder(null).defaultMaxDamage(100));
     }
 
     @Override
