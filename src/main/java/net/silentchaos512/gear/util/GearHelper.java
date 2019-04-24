@@ -385,15 +385,12 @@ public final class GearHelper {
         if (stack.isEnchanted())
             rarity += 20;
 
-        if (rarity < 20)
-            return EnumRarity.COMMON;
         if (rarity < 40)
+            return EnumRarity.COMMON;
+        if (rarity < 80)
             return EnumRarity.UNCOMMON;
-        if (rarity < 70)
+        if (rarity < 120)
             return EnumRarity.RARE;
-        if (rarity < 110)
-            return EnumRarity.EPIC;
-//        return SilentGear.RARITY_LEGENDARY;
         return EnumRarity.EPIC;
     }
 
