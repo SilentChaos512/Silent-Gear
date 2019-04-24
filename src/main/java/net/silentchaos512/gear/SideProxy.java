@@ -147,7 +147,7 @@ class SideProxy {
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
             /*
             if (Loader.isModLoaded("jei")) {
-                if (JeiPlugin.hasInitFailed()) {
+                if (SGearJeiPlugin.hasInitFailed()) {
                     String msg = "The JEI plugin seems to have failed. Some recipes may not be visible. Please report with a copy of your log file.";
                     SilentGear.log.error(msg);
                     event.player.sendMessage(new TextComponentString(TextFormatting.RED + "[Silent Gear] " + msg));

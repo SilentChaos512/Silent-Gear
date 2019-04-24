@@ -68,6 +68,21 @@ public enum MaterialGrade {
         return NONE;
     }
 
+    /**
+     * Gets a copy of the item with this grade applied. Does not modify the original item stack.
+     *
+     * @param original The original item stack
+     * @return A graded copy of original
+     */
+    public ItemStack applyTo(ItemStack original) {
+        ItemStack result = original.copy();
+        if (this == NONE) {
+            return result;
+        }
+        setGradeOnStack(result);
+        return result;
+    }
+
     public static MaterialGrade selectRandom(Random random) {
         return selectRandom(random, SSS);
     }

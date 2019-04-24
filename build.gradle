@@ -57,7 +57,7 @@ minecraft {
     runs {
         client = {
             // recommended logging data for a userdev environment
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+//            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
             properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run').canonicalPath
@@ -65,7 +65,7 @@ minecraft {
         }
         server = {
             // recommended logging data for a userdev environment
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+//            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
             properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run').canonicalPath
@@ -77,19 +77,31 @@ minecraft {
 repositories {
     jcenter()
     mavenLocal()
-    maven { url 'https://jitpack.io' }
+    maven { // JEI
+        name = "Progwml6 maven"
+        url = "http://dvs1.progwml6.com/files/maven/"
+    }
+    maven { // JEI mirror
+        name = "ModMaven"
+        url = "modmaven.k-4u.nl"
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-//    compile "com.udojava:EvalEx:2.1"
     compile("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
 
-    compile 'com.github.shedaniel:RoughlyEnoughItems:1.13.2-forge-SNAPSHOT'
-//    implementation 'com.github.mezz:JustEnoughItems:v5.0.0'
+    compileOnly 'com.github.shedaniel:RoughlyEnoughItems:1.13.2-forge-SNAPSHOT'
+
+//    deobf "mezz.jei:jei-${project.mc_version}:${project.jei_version}"
+//    compile 'com.github.mezz:JustEnoughItems:v5.0.0'
+    compile 'com.github.mezz:JustEnoughItems:1.13-SNAPSHOT'
 }
 
 jar {
@@ -171,7 +183,7 @@ curseforge {
             mainArtifact(jar) {
 //                displayName = "$project.description $display_version"
                 relations {
-                    requiredLibrary 'silent-lib'
+                    requiredDependency 'silent-lib'
                 }
             }
 //            if (project.hasProperty('doAPIJar')) {
