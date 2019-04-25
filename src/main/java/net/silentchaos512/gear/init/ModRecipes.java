@@ -22,7 +22,7 @@ public final class ModRecipes {
     public static void registerAll(SRegistry reg) {
         // Gear recipes TODO: move to JSON
         RecipeMaker recipes = reg.getRecipeMaker();
-        for (ICoreItem item : ModItems.toolClasses.values()) {
+        for (ICoreItem item : ModItems.gearClasses.values()) {
             final RecipeModularItem recipe = new RecipeModularItem(item);
             gearCrafting.put(item.getGearClass(), recipe);
             recipes.addCustomRecipe("core_" + item.getGearClass(), recipe);

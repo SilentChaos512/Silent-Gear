@@ -63,7 +63,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Override
     public GearType getGearType() {
-        switch (this.getEquipmentSlot()) {
+        switch (this.armorType) {
             case HEAD:
                 return GearType.HELMET;
             case CHEST:
