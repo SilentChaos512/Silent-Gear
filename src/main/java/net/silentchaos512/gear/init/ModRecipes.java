@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.registry.RecipeMaker;
@@ -20,11 +21,15 @@ public final class ModRecipes {
     private ModRecipes() {}
 
     public static void registerAll(SRegistry reg) {
-        // Gear recipes TODO: move to JSON
+        // Gear recipes
         RecipeMaker recipes = reg.getRecipeMaker();
         for (ICoreItem item : ModItems.gearClasses.values()) {
-            final RecipeModularItem recipe = new RecipeModularItem(item);
-            gearCrafting.put(item.getGearClass(), recipe);
+            final IRecipe recipe = Config.blueprintlessGearRecipes
+                    ? new ShapedGearCrafting(item, item.getAlternativeRecipe())
+                    : new RecipeModularItem(item);
+            if (recipe instanceof RecipeModularItem) {
+                gearCrafting.put(item.getGearClass(), (RecipeModularItem) recipe);
+            }
             recipes.addCustomRecipe("core_" + item.getGearClass(), recipe);
         }
 

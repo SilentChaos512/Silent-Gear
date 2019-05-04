@@ -48,6 +48,11 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{"/#~", "# ~", "/#~"};
+    }
+
+    @Override
     public String getGearClass() {
         return "bow";
     }

@@ -53,6 +53,11 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{"#", "/", "/"};
+    }
+
+    @Override
     public String getGearClass() {
         return "shovel";
     }

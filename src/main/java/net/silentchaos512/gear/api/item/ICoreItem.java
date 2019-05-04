@@ -73,6 +73,8 @@ public interface ICoreItem extends IStatItem, ICustomEnchantColor {
 
     boolean matchesRecipe(Collection<ItemStack> parts);
 
+    String[] getAlternativeRecipe();
+
     //endregion
 
     //region Client-side stuff

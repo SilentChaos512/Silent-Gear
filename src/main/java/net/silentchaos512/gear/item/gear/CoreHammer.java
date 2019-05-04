@@ -21,6 +21,11 @@ public class CoreHammer extends CorePickaxe implements IAOETool {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{"###", "###", " / "};
+    }
+
+    @Override
     public String getGearClass() {
         return "hammer";
     }

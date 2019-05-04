@@ -39,6 +39,11 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{"#", "#", "/"};
+    }
+
+    @Override
     public String getGearClass() {
         return "sword";
     }

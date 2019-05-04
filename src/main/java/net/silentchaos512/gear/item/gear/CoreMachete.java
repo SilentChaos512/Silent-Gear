@@ -51,6 +51,11 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{" ##", " # ", "/  "};
+    }
+
+    @Override
     public String getGearClass() {
         return "machete";
     }

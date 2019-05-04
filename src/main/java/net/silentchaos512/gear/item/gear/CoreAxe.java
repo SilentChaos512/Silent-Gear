@@ -54,6 +54,11 @@ public class CoreAxe extends ItemAxe implements ICoreTool {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{"##", "#/", " /"};
+    }
+
+    @Override
     public String getGearClass() {
         return "axe";
     }

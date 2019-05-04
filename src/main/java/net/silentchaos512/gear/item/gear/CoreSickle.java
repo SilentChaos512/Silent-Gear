@@ -66,6 +66,11 @@ public class CoreSickle extends ItemTool implements ICoreTool {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{" #", "##", "/ "};
+    }
+
+    @Override
     public String getGearClass() {
         return "sickle";
     }

@@ -145,6 +145,22 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
         return false;
     }
 
+    @Override
+    public String[] getAlternativeRecipe() {
+        switch (this.armorType) {
+            case HEAD:
+                return new String[]{"###", "# #"};
+            case CHEST:
+                return new String[]{"# #", "###", "###"};
+            case LEGS:
+                return new String[]{"###", "# #", "# #"};
+            case FEET:
+                return new String[]{"# #", "# #"};
+            default:
+                return new String[0];
+        }
+    }
+
     //region Item overrides
 
     @Override

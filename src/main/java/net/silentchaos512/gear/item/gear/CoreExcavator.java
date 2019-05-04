@@ -39,6 +39,11 @@ public class CoreExcavator extends CoreShovel implements IAOETool {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{"# #", "###", " / "};
+    }
+
+    @Override
     public String getGearClass() {
         return "excavator";
     }

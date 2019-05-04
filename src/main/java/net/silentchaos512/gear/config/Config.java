@@ -29,6 +29,7 @@ public class Config extends ConfigBaseNew {
     private static final String CAT_CLIENT = "client";
     private static final String CAT_ITEMS = "items";
     static final String CAT_GEAR = CAT_ITEMS + SEP + "gear";
+    private static final String CAT_GEAR_RECIPE = CAT_GEAR + SEP + "recipes";
     private static final String CAT_NERFED_GEAR = CAT_ITEMS + SEP + "nerfed_gear";
     private static final String CAT_SINEW = CAT_ITEMS + SEP + "sinew";
     private static final String CAT_WORLD = "world";
@@ -80,6 +81,12 @@ public class Config extends ConfigBaseNew {
     @ConfigOption.BooleanDefault(false)
     @ConfigOption.Comment("If enabled, tools/weapons/armor are destroyed when broken, just like vanilla.")
     public static boolean gearBreaksPermanently;
+
+    @ConfigOption(name = "Blueprint-less Gear Recipes", category = CAT_GEAR_RECIPE)
+    @ConfigOption.BooleanDefault(false)
+    @ConfigOption.Comment("If enabled, gear items can be crafted without blueprints, similar to vanilla items or Silent's Gems."
+            + " The downside of this is it does not prevent recipe conflicts, and the recipes are shaped.")
+    public static boolean blueprintlessGearRecipes;
 
     public static IAOETool.MatchMode aoeToolMatchMode = IAOETool.MatchMode.MODERATE;
     public static IAOETool.MatchMode aoeToolOreMode = IAOETool.MatchMode.STRICT;
@@ -244,6 +251,8 @@ public class Config extends ConfigBaseNew {
                     "Ore matching mode for hammers and excavators, overrides standard match mode if both blocks are" +
                             " ores. LOOSE will break anything, MODERATE will break the same harvest level or lower," +
                             " STRICT will break only the same block type.");
+
+            config.setCategoryRequiresMcRestart(CAT_GEAR_RECIPE, true);
 
             /*
              * Nerfed gear

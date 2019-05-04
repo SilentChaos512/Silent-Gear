@@ -54,6 +54,11 @@ public class CoreMattock extends ItemHoe implements ICoreTool {
     }
 
     @Override
+    public String[] getAlternativeRecipe() {
+        return new String[]{"## ", "#/#", " / "};
+    }
+
+    @Override
     public String getGearClass() {
         return "mattock";
     }

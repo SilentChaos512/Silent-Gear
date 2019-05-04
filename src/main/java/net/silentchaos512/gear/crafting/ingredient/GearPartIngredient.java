@@ -30,6 +30,11 @@ public class GearPartIngredient extends Ingredient {
     private final PartType type;
 
     public GearPartIngredient(PartType type) {
+        super(PartRegistry.getValues().stream()
+                .filter(part -> part.getType() == type)
+                .map(ItemPart::getCraftingStack)
+                .toArray(ItemStack[]::new)
+        );
         this.type = type;
     }
 
@@ -38,10 +43,5 @@ public class GearPartIngredient extends Ingredient {
         if (stack == null || stack.isEmpty()) return false;
         ItemPart part = PartRegistry.get(stack);
         return part != null && part.getType().equals(type);
-    }
-
-    @Override
-    public ItemStack[] getMatchingStacks() {
-        return super.getMatchingStacks();
     }
 }
