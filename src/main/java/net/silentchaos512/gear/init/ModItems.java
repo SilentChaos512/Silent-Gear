@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.silentchaos512.gear.GuideBookToolMod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -16,7 +15,6 @@ import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.item.IEnumItems;
-import net.silentchaos512.lib.item.ItemGuideBookSL;
 import net.silentchaos512.lib.registry.SRegistry;
 
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ public final class ModItems {
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
     public static final List<Blueprint> blueprints = new ArrayList<>();
 
-    public static ItemGuideBookSL guideBook = new ItemGuideBookSL(new GuideBookToolMod());
     public static BlueprintPackage blueprintPackage = new BlueprintPackage(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"));
     public static BlueprintBook blueprintBook = new BlueprintBook();
 
@@ -60,8 +57,6 @@ public final class ModItems {
     private ModItems() {}
 
     public static void registerAll(SRegistry reg) {
-        guideBook.giveBookOnFirstLogin = false;
-
         // Build gear maps now because blueprints need them
         toolClasses.put("sword", sword);
         toolClasses.put("dagger", dagger);
@@ -86,7 +81,6 @@ public final class ModItems {
 
         IEnumItems.RegistrationHelper enumItems = new IEnumItems.RegistrationHelper(reg);
 
-        reg.registerItem(guideBook, "guide_book");
         reg.registerItem(blueprintPackage, "blueprint_package");
 
         // Blueprints/templates
@@ -106,7 +100,7 @@ public final class ModItems {
         toolClasses.forEach((key, item) -> reg.registerItem(item.getItem(), key));
         armorClasses.forEach((key, item) -> reg.registerItem(item.getItem(), key));
 
-        if (SilentGear.instance.getBuildNum() == 0) {
+        if (SilentGear.isDevBuild()) {
             reg.registerItem(new TestItem(), "test_item");
         }
 

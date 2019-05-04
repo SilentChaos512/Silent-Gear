@@ -345,11 +345,11 @@ public abstract class ItemPart {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream, "UTF-8"))) {
                 readResourceFile(reader);
             } catch (Exception e) {
-                SilentGear.log.warn("Error reading part file '{}'", path);
-                SilentGear.log.catching(e);
+                SilentGear.LOGGER.warn("Error reading part file '{}'", path);
+                SilentGear.LOGGER.catching(e);
             }
         } else if (origin.isBuiltin()) {
-            SilentGear.log.error("ItemPart '{}' is missing its data file!", this.registryName);
+            SilentGear.LOGGER.error("ItemPart '{}' is missing its data file!", this.registryName);
         }
 
         // Override in config folder
@@ -359,8 +359,8 @@ public abstract class ItemPart {
         } catch (FileNotFoundException e) {
             // Ignore, overrides are not required
         } catch (Exception e) {
-            SilentGear.log.warn("Error reading part override '{}'", file.getAbsolutePath());
-            SilentGear.log.catching(e);
+            SilentGear.LOGGER.warn("Error reading part override '{}'", file.getAbsolutePath());
+            SilentGear.LOGGER.catching(e);
         }
     }
 
@@ -390,7 +390,7 @@ public abstract class ItemPart {
             if (!fromOredict.isEmpty())
                 craftingStack = () -> fromOredict;
             else
-                SilentGear.log.error("Part \"{}\" ({}) has no crafting item.", this.registryName, this.origin);
+                SilentGear.LOGGER.error("Part \"{}\" ({}) has no crafting item.", this.registryName, this.origin);
         }
 
         // Confirm that add-ons are using correct origin (should be BUILTIN_ADDON, not BUILTIN_CORE)
@@ -403,18 +403,18 @@ public abstract class ItemPart {
     private ItemStack getCraftingItemFromOreDict() {
         // Attempts to get a crafting item based on the part's oredict key.
         if (craftingOreDictName.isEmpty()) {
-            SilentGear.log.error("No crafting item or ore dictionary key for part: {}", this);
+            SilentGear.LOGGER.error("No crafting item or ore dictionary key for part: {}", this);
             return ItemStack.EMPTY;
         }
         if (!OreDictionary.doesOreNameExist(craftingOreDictName)) {
-            SilentGear.log.error("Ore dictionary key '{}' does not exist. Part: {}", craftingOreDictName, this);
+            SilentGear.LOGGER.error("Ore dictionary key '{}' does not exist. Part: {}", craftingOreDictName, this);
             return ItemStack.EMPTY;
         }
 
         NonNullList<ItemStack> stacks = OreDictionary.getOres(craftingOreDictName, false);
         if (!stacks.isEmpty()) {
             ItemStack itemStack = stacks.get(0);
-            SilentGear.log.debug("Acquire crafting item from oredict, item={}, part={}", itemStack, this);
+            SilentGear.LOGGER.debug("Acquire crafting item from oredict, item={}, part={}", itemStack, this);
             return itemStack;
         } else return ItemStack.EMPTY;
     }
@@ -581,7 +581,7 @@ public abstract class ItemPart {
                     map.put(entry.getKey(), color);
                 });
             } else {
-                SilentGear.log.error("Could not read color map, unknown element type: " + jsonElement);
+                SilentGear.LOGGER.error("Could not read color map, unknown element type: {}", jsonElement);
             }
 
             if (!map.containsKey("all")) {

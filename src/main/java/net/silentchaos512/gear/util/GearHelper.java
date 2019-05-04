@@ -19,6 +19,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -33,7 +34,6 @@ import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.item.ToolRods;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.registry.RecipeMaker;
-import net.silentchaos512.lib.util.ChatHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -132,7 +132,7 @@ public final class GearHelper {
         final int preDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently)
             amount = Math.min(maxDamage - stack.getItemDamage(), amount);
-        boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.random, player);
+        boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.RANDOM, player);
 
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
@@ -167,8 +167,7 @@ public final class GearHelper {
     private static void notifyPlayerOfBrokenGear(ItemStack stack, EntityPlayerMP player) {
         // Notify player. Mostly for armor, but might help new players as well.
         // FIXME: Does not work with armor currently, need to find a way to get player
-        String key = SilentGear.i18n.getKey("misc", "notifyOnBreak");
-        ChatHelper.translateStatus(player, key, true, stack.getDisplayName());
+        player.sendMessage(new TextComponentTranslation("misc.silentgear.notifyOnBreak", stack.getDisplayName()));
     }
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
@@ -228,7 +227,7 @@ public final class GearHelper {
         // Add tool class to list if level is non-negative. Because this is on the item level, the
         // actual number is meaningless. Harvest levels can be customized in the material JSONs.
         final boolean add = level >= 0;
-        SilentGear.log.info("{}: {} tool class \"{}\"", item.getClass().getSimpleName(), (add ? "set" : "remove"), toolClass);
+        SilentGear.LOGGER.info("{}: {} tool class \"{}\"", item.getClass().getSimpleName(), (add ? "set" : "remove"), toolClass);
         if (add) mutableSet.add(toolClass);
         else mutableSet.remove(toolClass);
     }
@@ -286,11 +285,11 @@ public final class GearHelper {
             // Any ungraded parts get a random grade
             if (!GearData.isRandomGradingDone(stack)) {
                 // Select D, C, or B as median
-                MaterialGrade median = SilentGear.random.nextInt(100) < 20 ? MaterialGrade.D : SilentGear.random.nextInt(100) < 40 ? MaterialGrade.B : MaterialGrade.C;
+                MaterialGrade median = SilentGear.RANDOM.nextInt(100) < 20 ? MaterialGrade.D : SilentGear.RANDOM.nextInt(100) < 40 ? MaterialGrade.B : MaterialGrade.C;
                 PartDataList parts = PartDataList.of();
                 for (ItemPartData data : GearData.getConstructionParts(stack)) {
                     if (data.getGrade() == MaterialGrade.NONE) {
-                        MaterialGrade grade = MaterialGrade.selectRandom(SilentGear.random, median, 1.5, MaterialGrade.S);
+                        MaterialGrade grade = MaterialGrade.selectRandom(SilentGear.RANDOM, median, 1.5, MaterialGrade.S);
                         parts.add(ItemPartData.instance(data.getPart(), grade, data.getCraftingItem()));
                     } else {
                         parts.add(data);

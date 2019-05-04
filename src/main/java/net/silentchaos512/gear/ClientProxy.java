@@ -35,7 +35,7 @@ public class ClientProxy extends CommonProxy {
         ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
         ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
 
-        if (SilentGear.instance.isDevBuild()) {
+        if (SilentGear.isDevBuild()) {
             MinecraftForge.EVENT_BUS.register(new DebugOverlay());
         }
     }
@@ -63,13 +63,13 @@ public class ClientProxy extends CommonProxy {
         if (Loader.isModLoaded("jei")) {
             if (JeiPlugin.hasInitFailed()) {
                 String msg = "The JEI plugin seems to have failed. Some recipes may not be visible. Please report with a copy of your log file.";
-                SilentGear.log.error(msg);
+                SilentGear.LOGGER.error(msg);
                 event.player.sendMessage(new TextComponentString(TextFormatting.RED + "[Silent Gear] " + msg));
             } else {
-                SilentGear.log.info("JEI plugin seems to have loaded correctly.");
+                SilentGear.LOGGER.info("JEI plugin seems to have loaded correctly.");
             }
         } else {
-            SilentGear.log.info("JEI is not installed?");
+            SilentGear.LOGGER.info("JEI is not installed?");
         }
     }
 }

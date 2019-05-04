@@ -77,7 +77,9 @@ public class GearStatistics {
         data.stats.forEach(tags::setInteger);
 
         // debug
-        data.stats.forEach((stat, value) -> SilentGear.log.debug("    {} = {}", stat, value));
+        if (SilentGear.LOGGER.isDebugEnabled()) {
+            data.stats.forEach((stat, value) -> SilentGear.LOGGER.debug("    {} = {}", stat, value));
+        }
     }
 
     private static void onCacheRemoval(RemovalNotification<UUIDStack, Data> notification) {
@@ -121,7 +123,9 @@ public class GearStatistics {
 
         private void set(String stat, int value) {
             stats.put(stat, value);
-            SilentGear.log.debug("Data.set: {} {}", stat, value);
+            if (SilentGear.LOGGER.isDebugEnabled()) {
+                SilentGear.LOGGER.debug("Data.set: {} {}", stat, value);
+            }
         }
 
         private void increment(String stat, int amount) {

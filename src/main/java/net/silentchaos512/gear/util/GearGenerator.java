@@ -58,7 +58,7 @@ public final class GearGenerator {
     public static Optional<ItemPart> selectRandom(Class<? extends ItemPart> partClass, int partTier) {
         List<? extends ItemPart> list = getPartsOfType(partClass, partTier);
         if (!list.isEmpty())
-            return Optional.of(list.get(SilentGear.random.nextInt(list.size())));
+            return Optional.of(list.get(SilentGear.RANDOM.nextInt(list.size())));
         ItemPart fallback = getFallback(partClass);
         return fallback == null ? Optional.empty() : Optional.of(fallback);
     }
@@ -79,7 +79,7 @@ public final class GearGenerator {
     public static ItemStack create(ICoreItem item, int minTier, int maxTier) {
         if (minTier >= maxTier)
             return create(item, maxTier);
-        return create(item, minTier + SilentGear.random.nextInt(maxTier - minTier));
+        return create(item, minTier + SilentGear.RANDOM.nextInt(maxTier - minTier));
     }
 
     public static ItemStack create(ICoreItem item, int tier) {
@@ -107,7 +107,7 @@ public final class GearGenerator {
         ItemStack result = item.construct(item.getItem(), parts);
 
         // Apply some random upgrades?
-        if (item instanceof ICoreTool && SilentGear.random.nextFloat() < 0.2f * tier + 0.1f) {
+        if (item instanceof ICoreTool && SilentGear.RANDOM.nextFloat() < 0.2f * tier + 0.1f) {
             Optional<ItemPart> tip = selectRandom(PartTip.class);
             tip.ifPresent(part -> GearData.addUpgradePart(result, ItemPartData.instance(part)));
         }

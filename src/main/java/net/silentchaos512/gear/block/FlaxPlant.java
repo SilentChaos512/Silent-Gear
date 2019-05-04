@@ -40,10 +40,10 @@ public class FlaxPlant extends BlockCrops implements ICustomModel {
         if (age >= 7) {
             // Seeds
             for (int i = 0; i < 1 + fortune; ++i)
-                if (SilentGear.random.nextInt(15) <= age)
+                if (SilentGear.RANDOM.nextInt(15) <= age)
                     drops.add(new ItemStack(getSeed()));
             // Fibers
-            int fiberCount = 2 + fortune + SilentGear.random.nextInt(3);
+            int fiberCount = 2 + fortune + SilentGear.RANDOM.nextInt(3);
             for (int i = 0; i < fiberCount; ++i)
                 drops.add(new ItemStack(getCrop()));
         }

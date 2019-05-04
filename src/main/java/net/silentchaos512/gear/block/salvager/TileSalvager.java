@@ -104,7 +104,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
             ItemStack copy = part.copy();
             int count = copy.getCount();
             for (int i = 0; i < count; ++i) {
-                if (MathUtils.tryPercentage(SilentGear.random, lossRate)) {
+                if (MathUtils.tryPercentage(SilentGear.RANDOM, lossRate)) {
                     copy.shrink(1);
                 }
             }

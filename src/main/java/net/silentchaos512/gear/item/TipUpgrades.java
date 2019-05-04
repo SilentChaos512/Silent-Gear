@@ -61,7 +61,7 @@ public enum TipUpgrades implements IEnumItems<TipUpgrades, TipUpgrades.Item> {
         @Override
         public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
             ItemPartData data = ItemPartData.instance(getPart());
-            list.add(getPart().getNameColor() + data.getTranslatedName(ItemStack.EMPTY));
+            list.add(getPart().getNameColor() + data.getDisplayName(ItemStack.EMPTY).getFormattedText());
         }
     }
 }

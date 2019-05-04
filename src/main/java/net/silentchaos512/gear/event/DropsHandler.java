@@ -6,7 +6,6 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 
 public class DropsHandler {
@@ -22,7 +21,7 @@ public class DropsHandler {
         // Sinew drops
         if (Config.sinewAnimals.matches(entity)) {
             float chance = Config.sinewDropRate * (1 + 0.3f * event.getLootingLevel());
-            if (SilentGear.random.nextFloat() < chance) {
+            if (SilentGear.RANDOM.nextFloat() < chance) {
                 EntityItem e = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, CraftingItems.SINEW.getStack());
                 event.getDrops().add(e);
             }

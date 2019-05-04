@@ -75,7 +75,7 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
                     input.shrink(1);
 
                     // Assign grade, move to output slot
-                    MaterialGrade.selectRandom(SilentGear.random).setGradeOnStack(stack);
+                    MaterialGrade.selectRandom(SilentGear.RANDOM).setGradeOnStack(stack);
                     setInventorySlotContents(outputSlot, stack);
                     if (input.getCount() <= 0) {
                         for (int slot : SLOTS_INPUT) {

@@ -62,7 +62,7 @@ public class RepairHandler {
         }
 
         if (amount > 0) {
-            result.attemptDamageItem(-Math.round(amount * materialCount), SilentGear.random, null);
+            result.attemptDamageItem(-Math.round(amount * materialCount), SilentGear.RANDOM, null);
             GearData.recalculateStats(result);
             event.setOutput(result);
             // TODO: Repair cost?

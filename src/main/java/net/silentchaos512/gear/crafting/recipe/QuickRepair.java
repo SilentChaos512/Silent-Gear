@@ -99,7 +99,7 @@ public class QuickRepair implements IRecipeFactory {
             if (gear.getItem() instanceof ICoreItem)
                 repairValue *= GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
 
-            gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
+            gear.attemptDamageItem(-Math.round(repairValue), SilentGear.RANDOM, null);
 //            GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);
             GearData.incrementRepairCount(gear, materialCount);
             GearData.recalculateStats(gear);
