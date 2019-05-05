@@ -20,11 +20,13 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.utils.config.BooleanValue;
 
 import java.util.*;
 
@@ -189,7 +191,12 @@ public final class GearClientHelper {
     }
 
     public static boolean hasEffect(ItemStack stack) {
-        return stack.isEnchanted();
+        BooleanValue allowEnchantedEffect = Config.CLIENT.allowEnchantedEffect;
+        if (allowEnchantedEffect == null) {
+            SilentGear.LOGGER.debug("null!");
+            return false;
+        }
+        return allowEnchantedEffect.get() && stack.isEnchanted();
     }
 
     public static boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {

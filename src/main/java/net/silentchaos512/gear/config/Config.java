@@ -16,9 +16,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Config {
+    private static final ConfigSpecWrapper WRAPPER_CLIENT = ConfigSpecWrapper.create(
+            FMLPaths.CONFIGDIR.get().resolve("silentgear-client.toml"));
     private static final ConfigSpecWrapper WRAPPER = ConfigSpecWrapper.create(
             FMLPaths.CONFIGDIR.get().resolve("silentgear-common.toml"));
 
+    public static final Client CLIENT = new Client(WRAPPER_CLIENT);
     public static final General GENERAL = new General(WRAPPER);
 
     public static class General {
@@ -175,9 +178,23 @@ public class Config {
         }
     }
 
+    public static class Client {
+        public final BooleanValue allowEnchantedEffect;
+
+        Client(ConfigSpecWrapper wrapper) {
+            allowEnchantedEffect = wrapper
+                    .builder("gear.allowEnchantedEffect")
+                    .comment("Allow gear items to have the 'enchanted glow' effect. Set to 'false' to disable the effect.",
+                            "The way vanilla handles the effect is bugged, and it is recommended to disable this until custom models are possible again.")
+                    .define(false);
+        }
+    }
+
     private Config() {}
 
     public static void init() {
+        WRAPPER_CLIENT.validate();
+        WRAPPER_CLIENT.validate();
         WRAPPER.validate();
         WRAPPER.validate();
     }

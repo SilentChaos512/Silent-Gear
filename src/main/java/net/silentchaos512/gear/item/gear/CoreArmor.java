@@ -10,7 +10,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -30,8 +29,6 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -142,29 +139,6 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
         GearHelper.inventoryTick(stack, world, player, 0, true);
     }
 
-    public Collection<IRecipe> getExampleRecipes() {
-        Collection<IRecipe> list = new ArrayList<>();
-
-        /*
-        Ingredient blueprint = Blueprint.getBlueprintIngredientForGear(this);
-        if (blueprint != null) {
-            for (PartMain part : PartRegistry.getVisibleMains()) {
-                ItemStack result = construct(this, part.getCraftingStack());
-                NonNullList<Ingredient> ingredients = NonNullList.create();
-                ingredients.add(blueprint);
-                for (int i = 0; i < getConfig().getHeadCount(); ++i) {
-                    ingredients.add(Ingredient.fromStacks(part.getCraftingStack()));
-                }
-                list.add(new ShapelessRecipes(SilentGear.MOD_ID, result, ingredients));
-            }
-        } else {
-            SilentGear.log.warn("Trying to add {} example recipes, but could not find blueprint item!", itemName);
-        }
-        */
-
-        return list;
-    }
-
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
@@ -222,6 +196,11 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     @Override
     public void setColor(ItemStack stack, int color) {}
     */
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return GearClientHelper.hasEffect(stack);
+    }
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
