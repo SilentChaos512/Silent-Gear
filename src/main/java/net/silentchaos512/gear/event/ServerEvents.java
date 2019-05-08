@@ -2,7 +2,6 @@ package net.silentchaos512.gear.event;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,9 +18,17 @@ import net.silentchaos512.gear.traits.TraitManager;
 
 import java.util.Collection;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.DEDICATED_SERVER)
-public final class DedicatedServerEvents {
-    private DedicatedServerEvents() {}
+/**
+ * Events for the server, such as sending data to clients. These events will also fire on single
+ * player (even though that is not necessary), as restricting them to dedicated server side only
+ * would prevent this from working on LAN games.
+ * <p>
+ * This was called DedicatedServerEvents in version 1.0.9, and was only registered on dedicated
+ * servers, as the name implied.
+ */
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+public final class ServerEvents {
+    private ServerEvents() {}
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Config to disable enchanted effect on gear items (this adds a new client config file). Since the effect is broken on vanilla models, this is disabled by default.
+### Fixed
+- Should fix gear parts and traits not syncing to clients on LAN games
 
 ## [1.0.9] - 2019-04-24
 ### Added
