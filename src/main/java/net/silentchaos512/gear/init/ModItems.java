@@ -34,6 +34,7 @@ public final class ModItems {
     public static CoreDagger dagger;
     public static CoreKatana katana;
     public static CoreMachete machete;
+    public static CoreSpear spear;
     public static CorePickaxe pickaxe;
     public static CoreShovel shovel;
     public static CoreAxe axe;
@@ -92,6 +93,7 @@ public final class ModItems {
         dagger = new CoreDagger();
         katana = new CoreKatana();
         machete = new CoreMachete();
+        spear = new CoreSpear();
         pickaxe = new CorePickaxe();
         shovel = new CoreShovel();
         axe = new CoreAxe();
@@ -110,6 +112,7 @@ public final class ModItems {
         toolClasses.put("dagger", dagger);
         toolClasses.put("katana", katana);
         toolClasses.put("machete", machete);
+        toolClasses.put("spear", spear);
         toolClasses.put("pickaxe", pickaxe);
         toolClasses.put("shovel", shovel);
         toolClasses.put("axe", axe);

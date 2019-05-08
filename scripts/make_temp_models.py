@@ -13,6 +13,7 @@ tools = [
     'pickaxe',
     'shovel',
     'sickle',
+    'spear',
     'sword',
 ]
 

@@ -1,22 +1,24 @@
 {
   "replace": false,
   "values": [
-    "#silentgear:blueprints/machete",
+    "#silentgear:blueprints/axe",
+    "#silentgear:blueprints/boots",
     "#silentgear:blueprints/bow",
-    "#silentgear:blueprints/shovel",
+    "#silentgear:blueprints/bowstring",
+    "#silentgear:blueprints/chestplate",
+    "#silentgear:blueprints/dagger",
     "#silentgear:blueprints/excavator",
     "#silentgear:blueprints/hammer",
-    "#silentgear:blueprints/sickle",
-    "#silentgear:blueprints/leggings",
     "#silentgear:blueprints/helmet",
-    "#silentgear:blueprints/sword",
-    "#silentgear:blueprints/dagger",
-    "#silentgear:blueprints/pickaxe",
-    "#silentgear:blueprints/boots",
-    "#silentgear:blueprints/axe",
-    "#silentgear:blueprints/mattock",
-    "#silentgear:blueprints/chestplate",
     "#silentgear:blueprints/katana",
-    "#silentgear:blueprints/rod"
+    "#silentgear:blueprints/leggings",
+    "#silentgear:blueprints/machete",
+    "#silentgear:blueprints/mattock",
+    "#silentgear:blueprints/pickaxe",
+    "#silentgear:blueprints/rod",
+    "#silentgear:blueprints/shovel",
+    "#silentgear:blueprints/sickle",
+    "#silentgear:blueprints/spear",
+    "#silentgear:blueprints/sword"
   ]
 }
