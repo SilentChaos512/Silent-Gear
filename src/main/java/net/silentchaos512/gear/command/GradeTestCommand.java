@@ -12,13 +12,14 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
-public class GradeTestCommand {
+public final class GradeTestCommand {
+    private GradeTestCommand() {}
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(Commands.literal("sgear_grade_test")
                 .requires(source -> source.hasPermissionLevel(2))
-                .then(
-                        Commands.argument("median", new MaterialGrade.Argument()).executes(
+                .then(Commands.argument("median", new MaterialGrade.Argument())
+                        .executes(
                                 GradeTestCommand::run
                         )
                 )

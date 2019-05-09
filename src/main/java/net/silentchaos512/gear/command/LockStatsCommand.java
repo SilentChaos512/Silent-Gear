@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
@@ -16,10 +15,12 @@ public final class LockStatsCommand {
     private LockStatsCommand() {}
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sgear_lock_stats")
-                .requires(source -> source.hasPermissionLevel(2));
-        builder.executes(LockStatsCommand::run);
-        dispatcher.register(builder);
+        dispatcher.register(Commands.literal("sgear_lock_stats")
+                .requires(source -> source.hasPermissionLevel(2))
+                .executes(
+                        LockStatsCommand::run
+                )
+        );
     }
 
     private static int run(CommandContext<CommandSource> context) throws CommandSyntaxException {

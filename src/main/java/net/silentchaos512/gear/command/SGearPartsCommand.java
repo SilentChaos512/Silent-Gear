@@ -45,32 +45,37 @@ public final class SGearPartsCommand {
                 .requires(source -> source.hasPermissionLevel(2));
 
         // Add
-        builder.then(
-                Commands.literal("add").then(
-                        Commands.argument("partID", ResourceLocationArgument.resourceLocation()).then(
-                                Commands.argument("grade", new MaterialGrade.Argument()).executes(ctx ->
+        builder.then(Commands.literal("add")
+                .then(Commands.argument("partID", ResourceLocationArgument.resourceLocation())
+                        .suggests(partIdSuggestions)
+                        .then(Commands.argument("grade", new MaterialGrade.Argument())
+                                .executes(ctx ->
                                         runAdd(ctx, getPartGrade(ctx))
                                 )
                         ).executes(ctx ->
                                 runAdd(ctx, MaterialGrade.NONE)
-                        ).suggests(partIdSuggestions)
+                        )
                 )
         );
         // Remove
-        builder.then(
-                Commands.literal("remove").then(
-                        Commands.argument("partID", ResourceLocationArgument.resourceLocation()).executes(
+        builder.then(Commands.literal("remove")
+                .then(Commands.argument("partID", ResourceLocationArgument.resourceLocation())
+                        .suggests(partInGearSuggestions)
+                        .executes(
                                 SGearPartsCommand::runRemoveById
-                        ).suggests(partInGearSuggestions)
-                ).then(
-                        Commands.argument("partIndex", IntegerArgumentType.integer()).executes(
+                        )
+                )
+                .then(Commands.argument("partIndex", IntegerArgumentType.integer())
+                        .executes(
                                 SGearPartsCommand::runRemoveByIndex
                         )
                 )
         );
         // List
         builder.then(Commands.literal("list")
-                .executes(SGearPartsCommand::runList)
+                .executes(
+                        SGearPartsCommand::runList
+                )
         );
 
         dispatcher.register(builder);
