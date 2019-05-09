@@ -10,14 +10,15 @@ import net.silentchaos512.gear.traits.TraitManager;
 import java.util.Objects;
 
 public class Network {
-    public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
+    private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
+    private static final int VERSION = 2;
 
     public static SimpleChannel channel;
     static {
         channel = NetworkRegistry.ChannelBuilder.named(NAME)
-                .clientAcceptedVersions(s -> Objects.equals(s, "1"))
-                .serverAcceptedVersions(s -> Objects.equals(s, "1"))
-                .networkProtocolVersion(() -> "1")
+                .clientAcceptedVersions(s -> Objects.equals(s, String.valueOf(VERSION)))
+                .serverAcceptedVersions(s -> Objects.equals(s, String.valueOf(VERSION)))
+                .networkProtocolVersion(() -> String.valueOf(VERSION))
                 .simpleChannel();
 
         // TODO: Using "markAsLoginPacket" seems like the correct solution, but there is no way to

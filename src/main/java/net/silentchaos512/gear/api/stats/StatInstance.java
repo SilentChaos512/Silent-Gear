@@ -1,9 +1,11 @@
 package net.silentchaos512.gear.api.stats;
 
 import lombok.Getter;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.utils.EnumUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;
@@ -89,5 +91,16 @@ public class StatInstance {
     @Override
     public String toString() {
         return String.format("{id=%s, value=%f, op=%s}", this.id, this.value, this.op);
+    }
+
+    public static StatInstance read(String id, PacketBuffer buffer) {
+        float value = buffer.readFloat();
+        Operation op = EnumUtils.byOrdinal(buffer.readByte(), Operation.AVG);
+        return new StatInstance(id, value, op);
+    }
+
+    public void write(PacketBuffer buffer) {
+        buffer.writeFloat(this.value);
+        buffer.writeByte(this.op.ordinal());
     }
 }

@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
+import net.minecraft.network.PacketBuffer;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -105,5 +106,26 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
     @Override
     public Map<ItemStat, Collection<StatInstance>> asMap() {
         return this.map.asMap();
+    }
+
+    public static StatModifierMap read(PacketBuffer buffer) {
+        StatModifierMap map = new StatModifierMap();
+
+        int count = buffer.readVarInt();
+        for (int i = 0; i < count; ++i) {
+            ItemStat stat = ItemStat.ALL_STATS.get(buffer.readString(255));
+            StatInstance instance = StatInstance.read("p" + i, buffer);
+            map.put(stat, instance);
+        }
+
+        return map;
+    }
+
+    public void write(PacketBuffer buffer) {
+        buffer.writeVarInt(this.size());
+        this.forEach((stat, instance) -> {
+            buffer.writeString(stat.name.getPath());
+            instance.write(buffer);
+        });
     }
 }

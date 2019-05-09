@@ -44,7 +44,7 @@ public abstract class AbstractGearPart implements IGearPart {
     int tier;
 
     // Stats and Traits
-    Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
+    StatModifierMap stats = new StatModifierMap();
     Map<ITrait, Integer> traits = new LinkedHashMap<>();
 
     // Display
@@ -355,6 +355,10 @@ public abstract class AbstractGearPart implements IGearPart {
                 part.display.put(key, display);
             }
 
+            // Stats and traits
+            part.stats = StatModifierMap.read(buffer);
+            readTraits(buffer, part);
+
             return part;
         }
 
@@ -368,6 +372,33 @@ public abstract class AbstractGearPart implements IGearPart {
             part.display.forEach((s, partDisplay) -> {
                 buffer.writeString(s);
                 PartDisplay.write(buffer, partDisplay);
+            });
+
+            // Stats and traits
+            part.stats.write(buffer);
+            writeTraits(buffer, part);
+        }
+
+        private void readTraits(PacketBuffer buffer, T part) {
+            part.traits.clear();
+            int traitCount = buffer.readVarInt();
+            for (int i = 0; i < traitCount; ++i) {
+                ResourceLocation traitId = buffer.readResourceLocation();
+                ITrait trait = TraitManager.get(traitId);
+                int level = buffer.readByte();
+                if (trait != null) {
+                    part.traits.put(trait, level);
+                } else {
+                    SilentGear.LOGGER.warn("Read unknown trait from server: {}", traitId);
+                }
+            }
+        }
+
+        private void writeTraits(PacketBuffer buffer, T part) {
+            buffer.writeVarInt(part.traits.size());
+            part.traits.forEach((trait, level) -> {
+                buffer.writeResourceLocation(trait.getId());
+                buffer.writeByte(level);
             });
         }
 

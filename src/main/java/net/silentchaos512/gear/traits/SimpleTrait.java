@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class SimpleTrait implements ITrait {
     public static final Serializer<SimpleTrait> SERIALIZER = new Serializer<>(Serializer.NAME, SimpleTrait::new);
@@ -30,8 +29,8 @@ public class SimpleTrait implements ITrait {
     private final ResourceLocation objId;
     int maxLevel;
     Set<String> cancelsWith = new HashSet<>();
-    Supplier<ITextComponent> displayName;
-    Supplier<ITextComponent> description;
+    ITextComponent displayName;
+    ITextComponent description;
 
     public SimpleTrait(ResourceLocation id) {
         this.objId = id;
@@ -54,14 +53,15 @@ public class SimpleTrait implements ITrait {
 
     @Override
     public ITextComponent getDisplayName(int level) {
-        return displayName.get()
+        return displayName
+                .deepCopy()
                 .appendText(" ")
                 .appendSibling(new TextComponentTranslation("enchantment.level." + level));
     }
 
     @Override
     public ITextComponent getDescription(int level) {
-        return description.get();
+        return description.deepCopy();
     }
 
     @Override
@@ -135,13 +135,25 @@ public class SimpleTrait implements ITrait {
         @Override
         public T read(ResourceLocation id, PacketBuffer buffer) {
             T trait = factory.apply(id);
-            // TODO
+            trait.maxLevel = buffer.readByte();
+            trait.displayName = buffer.readTextComponent();
+            trait.description = buffer.readTextComponent();
+            int cancelsCount = buffer.readVarInt();
+            for (int i = 0; i < cancelsCount; ++i) {
+                trait.cancelsWith.add(buffer.readString(255));
+            }
             return trait;
         }
 
         @Override
         public void write(PacketBuffer buffer, T trait) {
-            // TODO
+            buffer.writeByte(trait.maxLevel);
+            buffer.writeTextComponent(trait.displayName);
+            buffer.writeTextComponent(trait.description);
+            buffer.writeVarInt(trait.cancelsWith.size());
+            for (String str : trait.cancelsWith) {
+                buffer.writeString(str);
+            }
         }
 
         @Override
@@ -149,15 +161,15 @@ public class SimpleTrait implements ITrait {
             return serializerId;
         }
 
-        private static Supplier<ITextComponent> readTextComponent(JsonObject json, String name) {
+        private static ITextComponent readTextComponent(JsonObject json, String name) {
             JsonElement element = json.get(name);
             if (element != null && element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
                 final boolean translate = JsonUtils.getBoolean(obj, "translate", false);
                 final String value = JsonUtils.getString(obj, "name");
                 return translate
-                        ? () -> new TextComponentTranslation(value)
-                        : () -> new TextComponentString(value);
+                        ? new TextComponentTranslation(value)
+                        : new TextComponentString(value);
             } else if (element != null) {
                 throw new JsonParseException("Expected '" + name + "' to be an object");
             } else {
