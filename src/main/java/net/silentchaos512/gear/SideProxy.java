@@ -23,6 +23,7 @@ import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.gui.GuiTypes;
 import net.silentchaos512.gear.command.GradeTestCommand;
 import net.silentchaos512.gear.command.LockStatsCommand;
+import net.silentchaos512.gear.command.RecalculateStatsCommand;
 import net.silentchaos512.gear.command.SGearPartsCommand;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
@@ -89,6 +90,7 @@ class SideProxy {
 
         CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommandManager().getDispatcher();
         LockStatsCommand.register(dispatcher);
+        RecalculateStatsCommand.register(dispatcher);
         SGearPartsCommand.register(dispatcher);
         if (SilentGear.isDevBuild()) {
             GradeTestCommand.register(dispatcher);

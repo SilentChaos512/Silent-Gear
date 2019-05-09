@@ -14,17 +14,20 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public final class SGearPartsCommand {
     private static final SuggestionProvider<CommandSource> partIdSuggestions = (ctx, builder) ->
@@ -64,6 +67,10 @@ public final class SGearPartsCommand {
                                 SGearPartsCommand::runRemoveByIndex
                         )
                 )
+        );
+        // List
+        builder.then(Commands.literal("list")
+                .executes(SGearPartsCommand::runList)
         );
 
         dispatcher.register(builder);
@@ -122,6 +129,21 @@ public final class SGearPartsCommand {
         partList.remove(index);
         GearData.writeConstructionParts(gear, partList);
         ctx.getSource().sendFeedback(text("remove.success"), true);
+        return 1;
+    }
+
+    private static int runList(CommandContext<CommandSource> context) {
+        String listStr = PartManager.getValues().stream()
+                .map(part -> part.getId().toString())
+                .collect(Collectors.joining(", "));
+        context.getSource().sendFeedback(new TextComponentString(listStr), true);
+
+        for (PartType type : PartType.getValues()) {
+            int count = PartManager.getPartsOfType(type).size();
+            String str = String.format("%s: %d", type.getName(), count);
+            context.getSource().sendFeedback(new TextComponentString(str), true);
+        }
+
         return 1;
     }
 

@@ -83,6 +83,7 @@
   "command.silentgear.parts.partNotFound": "Part does not exist",
   "command.silentgear.parts.remove.success": "Successfully removed part",
   "command.silentgear.parts.sourceMustBePlayer": "Command source must be a player",
+  "command.silentgear.recalculate": "Recalculated stats for player %s",
   "death.silentgear.broken_tool": "%1$s killed themselves with %2$s",
   "item.silentgear.blueprint": "Blueprint",
   "item.silentgear.blueprint.materialAmount": "Material Required: %d",
