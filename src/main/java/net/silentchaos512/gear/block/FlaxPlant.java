@@ -24,6 +24,7 @@ public class FlaxPlant extends BlockCrops {
         super(Properties.create(Material.PLANTS)
                 .hardnessAndResistance(0)
                 .doesNotBlockMovement()
+                .tickRandomly()
                 .sound(SoundType.PLANT)
         );
         this.wild = wild;
