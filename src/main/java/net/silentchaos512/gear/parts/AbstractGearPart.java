@@ -178,6 +178,13 @@ public abstract class AbstractGearPart implements IGearPart {
     @Override
     public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) { }
 
+    @Override
+    public String toString() {
+        return "AbstractGearPart{" +
+                this.name +
+                "}";
+    }
+
     public static class Serializer<T extends AbstractGearPart> implements IPartSerializer<T> {
         private final ResourceLocation serializerId;
         private final Function<ResourceLocation, T> function;

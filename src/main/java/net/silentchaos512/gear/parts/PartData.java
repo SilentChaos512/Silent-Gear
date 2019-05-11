@@ -175,4 +175,12 @@ public final class PartData {
     public int getFallbackColor(ItemStack gear, int animationFrame) {
         return part.getDisplayProperties(this, gear, animationFrame).getFallbackColor();
     }
+
+    @Override
+    public String toString() {
+        return "PartData{" +
+                this.part +
+                ", Grade: " + this.grade +
+                "}";
+    }
 }

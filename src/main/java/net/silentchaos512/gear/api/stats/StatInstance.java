@@ -94,7 +94,7 @@ public class StatInstance {
 
     @Override
     public String toString() {
-        return String.format("{id=%s, value=%f, op=%s}", this.id, this.value, this.op);
+        return String.format("StatInstance{%s, value=%f, op=%s}", this.id, this.value, this.op);
     }
 
     public static StatInstance read(String id, PacketBuffer buffer) {
