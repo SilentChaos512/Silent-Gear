@@ -5,6 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Stats not calculating correctly in some cases (e.g. tip upgrades) [#27]
+
+## [1.0.11] - 2019-05-08
+### Added
+- Command to recalculate stats on all of a player's gear (can target multiple players)
+- Command to list all registered parts. Also shows how many of each type there are.
+### Fixed
+- Parts and traits should now sync all needed data with clients
+- Fix gear losing their stats during recalculations (e.g. ka-chink)
 - Flax plants not growing
 
 ## [1.0.10] - 2019-05-08

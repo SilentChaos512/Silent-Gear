@@ -49,6 +49,10 @@ public class StatInstance {
         return new StatInstance("_gear_mod", multi, Operation.MUL1);
     }
 
+    public StatInstance copyAppendId(String append) {
+        return copyWithNewId(this.id + append);
+    }
+
     public StatInstance copyWithNewId(String newId) {
         return new StatInstance(newId, this.value, this.op);
     }

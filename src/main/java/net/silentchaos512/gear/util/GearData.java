@@ -208,7 +208,7 @@ public final class GearData {
                         float statValue = inst.getValue() * gradeBonus;
                         stats.put(stat, new StatInstance(inst.getId() + idSuffix, statValue, Operation.AVG));
                     } else {
-                        stats.put(stat, inst);
+                        stats.put(stat, inst.copyAppendId(idSuffix));
                     }
                 }
             }
