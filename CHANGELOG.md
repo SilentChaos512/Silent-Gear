@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blueprints and templates now have the output item in their name, instead of the tooltip
 ### Fixed
 - Stats not calculating correctly in some cases (e.g. tip upgrades) [#27]
+- Bow "lite" models are animated now
 - Rod and bowstring blueprints/templates being consumed during crafting
 
 ## [1.0.11] - 2019-05-08

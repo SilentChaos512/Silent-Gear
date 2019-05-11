@@ -11,31 +11,31 @@
       "predicate": {
         "silentgear:model_type": 1
       },
-      "model": "silentgear:item/sword_rod"
+      "model": "silentgear:item/sword/rod"
     },
     {
       "predicate": {
         "silentgear:model_type": 2
       },
-      "model": "silentgear:item/sword_head"
+      "model": "silentgear:item/sword/head"
     },
     {
       "predicate": {
         "silentgear:model_type": 3
       },
-      "model": "silentgear:item/sword_head_rod"
+      "model": "silentgear:item/sword/rod_head"
     },
     {
       "predicate": {
         "silentgear:model_type": 6
       },
-      "model": "silentgear:item/sword_tip_head"
+      "model": "silentgear:item/sword/head_tip"
     },
     {
       "predicate": {
         "silentgear:model_type": 7
       },
-      "model": "silentgear:item/sword_tip_head_rod"
+      "model": "silentgear:item/sword/rod_head_tip"
     }
   ]
 }

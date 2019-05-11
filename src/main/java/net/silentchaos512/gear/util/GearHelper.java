@@ -235,7 +235,9 @@ public final class GearHelper {
         item.asItem().addPropertyOverride(SilentGear.getId("model_type"), (stack, world, entity) ->
                 (GearData.hasPartOftype(stack, PartType.ROD) ? 1 : 0)
                         + (GearData.hasPartOftype(stack, PartType.MAIN) ? 2 : 0)
-                        + (GearData.hasPartOftype(stack, PartType.TIP) ? 4 : 0));
+                        + (GearData.hasPartOftype(stack, PartType.TIP) ? 4 : 0)
+                        + (item.requiresPartOfType(PartType.BOWSTRING) && GearData.hasPartOftype(stack, PartType.BOWSTRING) ? 8 : 0)
+        );
     }
 
     @Nullable

@@ -11,31 +11,31 @@
       "predicate": {
         "silentgear:model_type": 1
       },
-      "model": "silentgear:item/machete_rod"
+      "model": "silentgear:item/machete/rod"
     },
     {
       "predicate": {
         "silentgear:model_type": 2
       },
-      "model": "silentgear:item/machete_head"
+      "model": "silentgear:item/machete/head"
     },
     {
       "predicate": {
         "silentgear:model_type": 3
       },
-      "model": "silentgear:item/machete_head_rod"
+      "model": "silentgear:item/machete/rod_head"
     },
     {
       "predicate": {
         "silentgear:model_type": 6
       },
-      "model": "silentgear:item/machete_tip_head"
+      "model": "silentgear:item/machete/head_tip"
     },
     {
       "predicate": {
         "silentgear:model_type": 7
       },
-      "model": "silentgear:item/machete_tip_head_rod"
+      "model": "silentgear:item/machete/rod_head_tip"
     }
   ]
 }

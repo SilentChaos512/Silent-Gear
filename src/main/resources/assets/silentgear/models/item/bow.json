@@ -1,10 +1,106 @@
 {
-  "__comment__": "Placeholder gear model",
+  "__comment__": "Lite gear model",
   "parent": "item/bow",
   "textures": {
     "layer0": "silentgear:item/bow/rod_generic_lc",
     "layer1": "silentgear:item/bow/head_generic_hc",
     "layer2": "silentgear:item/bow/_highlight",
     "layer3": "silentgear:item/bow/bowstring_string_0"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "silentgear:model_type": 1
+      },
+      "model": "silentgear:item/bow/rod"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 2
+      },
+      "model": "silentgear:item/bow/head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 3
+      },
+      "model": "silentgear:item/bow/rod_head"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 6
+      },
+      "model": "silentgear:item/bow/head_tip"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 7
+      },
+      "model": "silentgear:item/bow/rod_head_tip"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 11
+      },
+      "model": "silentgear:item/bow/rod_head_bowstring"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 11,
+        "pulling": 1
+      },
+      "model": "silentgear:item/bow/rod_head_bowstring_1"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 11,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/bow/rod_head_bowstring_2"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 11,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/bow/rod_head_bowstring_3"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 14
+      },
+      "model": "silentgear:item/bow/head_tip_bowstring"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 15
+      },
+      "model": "silentgear:item/bow/rod_head_tip_bowstring"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 15,
+        "pulling": 1
+      },
+      "model": "silentgear:item/bow/rod_head_tip_bowstring_1"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 15,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/bow/rod_head_tip_bowstring_2"
+    },
+    {
+      "predicate": {
+        "silentgear:model_type": 15,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/bow/rod_head_tip_bowstring_3"
+    }
+  ]
 }

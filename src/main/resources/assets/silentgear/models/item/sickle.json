@@ -11,31 +11,31 @@
       "predicate": {
         "silentgear:model_type": 1
       },
-      "model": "silentgear:item/sickle_rod"
+      "model": "silentgear:item/sickle/rod"
     },
     {
       "predicate": {
         "silentgear:model_type": 2
       },
-      "model": "silentgear:item/sickle_head"
+      "model": "silentgear:item/sickle/head"
     },
     {
       "predicate": {
         "silentgear:model_type": 3
       },
-      "model": "silentgear:item/sickle_head_rod"
+      "model": "silentgear:item/sickle/rod_head"
     },
     {
       "predicate": {
         "silentgear:model_type": 6
       },
-      "model": "silentgear:item/sickle_tip_head"
+      "model": "silentgear:item/sickle/head_tip"
     },
     {
       "predicate": {
         "silentgear:model_type": 7
       },
-      "model": "silentgear:item/sickle_tip_head_rod"
+      "model": "silentgear:item/sickle/rod_head_tip"
     }
   ]
 }

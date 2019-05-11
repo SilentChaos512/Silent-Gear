@@ -39,6 +39,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     public CoreBow() {
         // Max damage doesn't matter, just needs to be greater than zero
         super(GearHelper.getBuilder(null).defaultMaxDamage(100));
+        GearHelper.addModelTypeProperty(this);
     }
 
     @Override
@@ -90,6 +91,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
         super.onUsingTick(stack, player, count);
     }
 
+    @Override
     protected ItemStack findAmmo(EntityPlayer player) {
         if (this.isArrow(player.getHeldItem(EnumHand.OFF_HAND))) {
             return player.getHeldItem(EnumHand.OFF_HAND);

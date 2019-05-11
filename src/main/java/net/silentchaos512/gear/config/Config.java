@@ -180,12 +180,18 @@ public class Config {
 
     public static class Client {
         public final BooleanValue allowEnchantedEffect;
+        public final BooleanValue useLiteModels;
 
         Client(ConfigSpecWrapper wrapper) {
             allowEnchantedEffect = wrapper
                     .builder("gear.allowEnchantedEffect")
                     .comment("Allow gear items to have the 'enchanted glow' effect. Set to 'false' to disable the effect.",
                             "The way vanilla handles the effect is bugged, and it is recommended to disable this until custom models are possible again.")
+                    .define(false);
+            useLiteModels = wrapper
+                    .builder("gear.useLiteModels")
+                    .comment("Use 'lite' gear models. These should be easier on some systems, but do not allow unique textures for different materials.",
+                            "Currently, this option has no effect, as the normal model system is not working yet (lite models are used)")
                     .define(false);
         }
     }

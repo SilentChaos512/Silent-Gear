@@ -11,31 +11,31 @@
       "predicate": {
         "silentgear:model_type": 1
       },
-      "model": "silentgear:item/mattock_rod"
+      "model": "silentgear:item/mattock/rod"
     },
     {
       "predicate": {
         "silentgear:model_type": 2
       },
-      "model": "silentgear:item/mattock_head"
+      "model": "silentgear:item/mattock/head"
     },
     {
       "predicate": {
         "silentgear:model_type": 3
       },
-      "model": "silentgear:item/mattock_head_rod"
+      "model": "silentgear:item/mattock/rod_head"
     },
     {
       "predicate": {
         "silentgear:model_type": 6
       },
-      "model": "silentgear:item/mattock_tip_head"
+      "model": "silentgear:item/mattock/head_tip"
     },
     {
       "predicate": {
         "silentgear:model_type": 7
       },
-      "model": "silentgear:item/mattock_tip_head_rod"
+      "model": "silentgear:item/mattock/rod_head_tip"
     }
   ]
 }
