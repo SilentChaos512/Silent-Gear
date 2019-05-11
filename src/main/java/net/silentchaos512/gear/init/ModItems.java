@@ -10,8 +10,10 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.item.*;
-import net.silentchaos512.gear.item.blueprint.Blueprint;
+import net.silentchaos512.gear.item.blueprint.GearBlueprint;
+import net.silentchaos512.gear.item.blueprint.PartBlueprint;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
 
@@ -21,7 +23,7 @@ public final class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
-    public static final List<Blueprint> blueprints = new ArrayList<>();
+    public static final List<GearBlueprint> blueprints = new ArrayList<>();
     static final Map<String, ItemBlock> blocksToRegister = new LinkedHashMap<>();
 
     public static BlueprintPackage blueprintPackage;
@@ -140,14 +142,13 @@ public final class ModItems {
 
     private static void registerBlueprints(String name, boolean singleUse) {
         gearClasses.forEach((key, item) -> {
-            Blueprint blueprint = new Blueprint(singleUse, item);
+            GearBlueprint blueprint = new GearBlueprint(singleUse, item);
             blueprints.add(blueprint);
             register(name + "_" + key, blueprint);
         });
 
         // Part blueprints
-        Item.Properties properties = new Item.Properties().group(SilentGear.ITEM_GROUP);
-        register(name + "_rod", new Item(properties));
-        register(name + "_bowstring", new Item(properties));
+        register(name + "_rod", new PartBlueprint(singleUse, PartType.ROD));
+        register(name + "_bowstring", new PartBlueprint(singleUse, PartType.BOWSTRING));
     }
 }
