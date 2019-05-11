@@ -42,11 +42,13 @@ public class PhantomLight extends Block {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
         return VOXEL_SHAPE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isReplaceable(IBlockState state, BlockItemUseContext useContext) {
         return true;
@@ -57,6 +59,7 @@ public class PhantomLight extends Block {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void dropBlockAsItemWithChance(IBlockState state, World worldIn, BlockPos pos, float chancePerItem, int fortune) {
         // No drop
@@ -67,11 +70,13 @@ public class PhantomLight extends Block {
         return Items.AIR;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;

@@ -51,6 +51,7 @@ public class BlockSalvager extends BlockContainer {
         return new TileSalvager();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
@@ -64,6 +65,7 @@ public class BlockSalvager extends BlockContainer {
         tooltip.add(new TextComponentTranslation("block.silentgear.salvager.desc"));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;

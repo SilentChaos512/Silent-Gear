@@ -71,7 +71,7 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     private boolean requireClientSync = false;
 
     public TilePartAnalyzer() {
-        super(ModTileEntities.PART_ANALYZER.type());
+        super(ModTileEntities.PART_ANALYZER.type(), INVENTORY_SIZE);
     }
 
     @Override

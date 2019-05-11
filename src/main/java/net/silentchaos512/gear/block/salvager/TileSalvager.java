@@ -57,7 +57,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     int progress = 0;
 
     public TileSalvager() {
-        super(ModTileEntities.SALVAGER.type());
+        super(ModTileEntities.SALVAGER.type(), INVENTORY_SIZE);
     }
 
     @Override

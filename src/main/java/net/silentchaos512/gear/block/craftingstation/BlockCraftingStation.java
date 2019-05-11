@@ -56,6 +56,7 @@ public class BlockCraftingStation extends BlockContainer {
         super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         return !player.isSneaking() && (world.isRemote || BlockCraftingStation.openGui(player, world, pos));
@@ -79,11 +80,13 @@ public class BlockCraftingStation extends BlockContainer {
         world.setBlockState(pos, state.with(FACING, side), 2);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;

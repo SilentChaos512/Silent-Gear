@@ -349,6 +349,8 @@ public final class GearHelper {
 
     // Formerly onUpdate
     public static void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        @Nullable EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
+
         if (world.getGameTime() % 20 == 0) {
             // Any ungraded parts get a random grade
             if (!GearData.isRandomGradingDone(stack)) {
@@ -365,12 +367,11 @@ public final class GearHelper {
                 }
                 GearData.writeConstructionParts(stack, parts);
                 GearData.setRandomGradingDone(stack, true);
-                GearData.recalculateStats(stack);
+                GearData.recalculateStats(player, stack);
             }
         }
 
         if (!world.isRemote) {
-            EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
             TraitHelper.tickTraits(world, player, stack, isSelected);
         }
     }

@@ -27,7 +27,7 @@ public class TileCraftingStation extends TileInventorySL {
     public static final int SIDE_INVENTORY_START = CRAFTING_GRID_SIZE;
 
     public TileCraftingStation() {
-        super(ModTileEntities.CRAFTING_STATION.type());
+        super(ModTileEntities.CRAFTING_STATION.type(), CRAFTING_GRID_SIZE + SIDE_INVENTORY_SIZE);
     }
 
     public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {

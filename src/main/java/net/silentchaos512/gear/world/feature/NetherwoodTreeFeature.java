@@ -37,7 +37,7 @@ public class NetherwoodTreeFeature extends AbstractTreeFeature<NoFeatureConfig> 
         if (((NetherwoodSapling) ModBlocks.NETHERWOOD_SAPLING.asBlock()).canBlockStay(worldIn, position, state)) {
             setBlockState(worldIn, position, TRUNK);
 
-            final int height = MathUtils.nextIntInclusive(3, 5);
+            final int height = MathUtils.nextIntInclusive(4, 7);
             final int endY = startY + height;
 
             // Generate logs and leaves
