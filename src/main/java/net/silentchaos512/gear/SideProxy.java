@@ -48,6 +48,7 @@ class SideProxy {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModBlocks::registerAll);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModItems::registerAll);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModTileEntities::registerAll);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModEntities::registerAll);
 
         MinecraftForge.EVENT_BUS.addListener(this::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(this::serverStarted);
@@ -128,7 +129,9 @@ class SideProxy {
 //            ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
         }
 
-        private void clientSetup(FMLClientSetupEvent event) { }
+        private void clientSetup(FMLClientSetupEvent event) {
+            ModEntities.registerRenderers(event);
+        }
 
         private static void registerContainers() {
             for (GuiTypes type : GuiTypes.values()) {

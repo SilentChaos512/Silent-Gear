@@ -45,6 +45,7 @@ public final class ModItems {
     public static CoreMattock mattock;
     public static CoreSickle sickle;
     public static CoreBow bow;
+    public static CoreSlingshot slingshot;
 
     public static CoreArmor helmet;
     public static CoreArmor chestplate;
@@ -76,6 +77,8 @@ public final class ModItems {
         flaxseeds = register("flaxseeds", new Flaxseeds());
         netherBanana = register("nether_banana", new NetherBanana());
 
+        register("pebble", new SlingshotAmmo());
+
         // Register gear classes
         toolClasses.forEach((key, item) -> register(key, item.asItem()));
         armorClasses.forEach((key, item) -> register(key, item.asItem()));
@@ -104,6 +107,7 @@ public final class ModItems {
         mattock = new CoreMattock();
         sickle = new CoreSickle();
         bow = new CoreBow();
+        slingshot = new CoreSlingshot();
 
         helmet = new CoreArmor(EntityEquipmentSlot.HEAD, "helmet");
         chestplate = new CoreArmor(EntityEquipmentSlot.CHEST, "chestplate");
@@ -123,6 +127,7 @@ public final class ModItems {
         toolClasses.put("mattock", mattock);
         toolClasses.put("sickle", sickle);
         toolClasses.put("bow", bow);
+        toolClasses.put("slingshot", slingshot);
 
         armorClasses.put("helmet", helmet);
         armorClasses.put("chestplate", chestplate);

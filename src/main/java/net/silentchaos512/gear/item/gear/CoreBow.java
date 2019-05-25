@@ -13,6 +13,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -26,6 +27,7 @@ import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -135,6 +137,40 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
         }
     }
 
+    protected boolean isInfiniteAmmo(ItemStack bow, ItemStack ammo, EntityPlayer player) {
+        return ammo.getItem() instanceof ItemArrow && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player);
+    }
+
+    protected void fireProjectile(ItemStack stack, World worldIn, EntityPlayer player, ItemStack ammo, float velocity, boolean hasInfiniteAmmo) {
+        ItemArrow itemarrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
+        EntityArrow entityarrow = itemarrow.createArrow(worldIn, ammo, player);
+        entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity * 3.0F, 1.0F);
+
+        if (MathUtils.doublesEqual(velocity, 1.0F)) {
+            entityarrow.setIsCritical(true);
+        }
+
+        int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+        float powerBoost = power > 0 ? power * 0.5f + 0.5f : 0.0f;
+        float damageBoost = getArrowDamage(stack);
+        entityarrow.setDamage(damageBoost + powerBoost);
+
+        int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+        if (punchLevel > 0) {
+            entityarrow.setKnockbackStrength(punchLevel);
+        }
+
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
+            entityarrow.setFire(100);
+
+        stack.damageItem(1, player);
+
+        if (hasInfiniteAmmo)
+            entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+
+        worldIn.spawnEntity(entityarrow);
+    }
+
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
         if (worldIn.isRemote) {
@@ -146,64 +182,36 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
             boolean infiniteAmmo = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
             ItemStack ammo = this.findAmmo(player);
 
-            int i = this.getUseDuration(stack) - timeLeft;
-            // i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn,
-            // (EntityPlayer) entityLiving, i, StackHelper.isValid(ammo) || infiniteAmmo);
-            if (i < 0)
-                return;
+            int useTime = this.getUseDuration(stack) - timeLeft;
+            // useTime = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn,
+            // (EntityPlayer) entityLiving, useTime, StackHelper.isValid(ammo) || infiniteAmmo);
+            if (useTime < 0) return;
 
             if (!ammo.isEmpty() || infiniteAmmo) {
                 if (ammo.isEmpty())
                     ammo = new ItemStack(Items.ARROW);
 
-                float velocity = getArrowVelocity(stack, i);
+                float velocity = getArrowVelocity(stack, useTime);
 
                 if ((double) velocity >= 0.1D) {
-                    boolean flag1 = player.abilities.isCreativeMode || (ammo.getItem() instanceof ItemArrow && ((ItemArrow) ammo.getItem()).isInfinite(ammo, stack, player));
+                    boolean hasInfiniteAmmo = player.abilities.isCreativeMode || isInfiniteAmmo(stack, ammo, player);
 
                     if (!worldIn.isRemote) {
-                        ItemArrow itemarrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
-                        EntityArrow entityarrow = itemarrow.createArrow(worldIn, ammo, player);
-                        entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity * 3.0F, 1.0F);
-
-                        if (velocity == 1.0F)
-                            entityarrow.setIsCritical(true);
-
-                        int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-                        float powerBoost = power > 0 ? power * 0.5f + 0.5f : 0.0f;
-                        float damageBoost = getArrowDamage(stack);
-                        entityarrow.setDamage(damageBoost + powerBoost);
-
-                        int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-
-                        if (k > 0)
-                            entityarrow.setKnockbackStrength(k);
-
-                        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
-                            entityarrow.setFire(100);
-
-                        stack.damageItem(1, player);
-
-                        if (flag1)
-                            entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-
-                        worldIn.spawnEntity(entityarrow);
+                        fireProjectile(stack, worldIn, player, ammo, velocity, hasInfiniteAmmo);
                     }
 
                     worldIn.playSound(null, player.posX, player.posY, player.posZ,
                             SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F,
                             1.0F / (random.nextFloat() * 0.4F + 1.2F) + velocity * 0.5F);
 
-                    if (!flag1) {
+                    if (!hasInfiniteAmmo) {
                         ammo.shrink(1);
-
-                        if (ammo.getCount() == 0)
+                        if (ammo.getCount() == 0) {
                             player.inventory.deleteStack(ammo);
+                        }
                     }
 
-//                    player.addStat(StatList.getObjectUseStats(this));
-                    // Shots fired statistic
-                    // ToolHelper.incrementStatShotsFired(stack, 1);
+                    player.addStat(StatList.ITEM_USED.get(this));
                 }
             }
         }
