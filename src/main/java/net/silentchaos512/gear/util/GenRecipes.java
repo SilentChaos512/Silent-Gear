@@ -42,7 +42,7 @@ public class GenRecipes {
         RecipeGenerator.create(name("part_analyzer"), ShapedBuilder
                 .create(ModBlocks.PART_ANALYZER)
                 .layout("QIQ", "I#I", "GGG")
-                .key('Q', Tags.Items.GEMS_QUARRTZ)
+                .key('Q', Tags.Items.GEMS_QUARTZ)
                 .key('I', Tags.Items.INGOTS_IRON)
                 .key('#', CraftingItems.ADVANCED_UPGRADE_BASE.getTag())
                 .key('G', Tags.Items.INGOTS_GOLD)
@@ -148,7 +148,7 @@ public class GenRecipes {
         tipUpgrade(CraftingItems.REDSTONE_COATED_UPGRADE, Tags.Items.DUSTS_REDSTONE, 4);
         tipUpgrade(CraftingItems.GLOWSTONE_COATED_UPGRADE, Tags.Items.DUSTS_GLOWSTONE, 4);
         tipUpgrade(CraftingItems.LAPIS_COATED_UPGRADE, Tags.Items.GEMS_LAPIS, 4);
-        tipUpgrade(CraftingItems.QUARTZ_TIPPED_UPGRADE, Tags.Items.GEMS_QUARRTZ, 4);
+        tipUpgrade(CraftingItems.QUARTZ_TIPPED_UPGRADE, Tags.Items.GEMS_QUARTZ, 4);
 
         RecipeGenerator.create(name("spoon_upgrade"), ShapelessBuilder
                 .create(CraftingItems.SPOON_UPGRADE)

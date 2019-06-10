@@ -102,6 +102,8 @@ dependencies {
 //    deobf "mezz.jei:jei-${project.mc_version}:${project.jei_version}"
 //    compile 'com.github.mezz:JustEnoughItems:v5.0.0'
     compileOnly 'com.github.mezz:JustEnoughItems:1.13-SNAPSHOT'
+    
+    runtimeOnly 'net.silentchaos512:wit:1.+'
 }
 
 jar {
