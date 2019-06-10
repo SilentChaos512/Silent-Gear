@@ -27,26 +27,17 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.PartHighlight;
-import net.silentchaos512.gear.parts.type.PartMain;
-import net.silentchaos512.gear.parts.type.PartRod;
-import net.silentchaos512.gear.parts.type.PartTip;
 import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.lib.collection.StackList;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public final class GearData {
-    /**
-     * A fake material for tools. Tools need a gear material, even if it's not used. Unfortunately,
-     * some mods still reference the gear material instead of calling the appropriate methods.
-     */
-//    public static final ToolMaterial FAKE_MATERIAL = EnumHelper.addToolMaterial("silentgems:fake_material", 1, 512, 5.12f, 5.12f, 32);
-
     private static final String NBT_ROOT = "SGear_Data";
     private static final String NBT_ROOT_CONSTRUCTION = "Construction";
     private static final String NBT_ROOT_PROPERTIES = "Properties";
@@ -62,10 +53,6 @@ public final class GearData {
 
     private static final String NBT_BROKEN_COUNT = "BrokenCount";
     private static final String NBT_REPAIR_COUNT = "RepairCount";
-
-    private static final int MAX_MAIN_PARTS = 9;
-    private static final int MAX_ROD_PARTS = 1;
-    private static final int MAX_TIP_PARTS = 1;
 
     private GearData() {throw new IllegalAccessError("Utility class");}
 
@@ -146,7 +133,7 @@ public final class GearData {
 
         if (primary.getPart().getDisplayProperties(primary, stack, 0).hasHighlight()) {
             // Add highlight part if missing
-            if (parts.getParts(p -> p.getPart() instanceof PartHighlight).isEmpty()) {
+            if (parts.getParts(p -> p.getType() == PartType.HIGHLIGHT).isEmpty()) {
                 IGearPart highlight = PartManager.get(new ResourceLocation(SilentGear.MOD_ID, "highlight"));
                 if (highlight != null) {
                     parts.add(PartData.of(highlight));
@@ -157,7 +144,7 @@ public final class GearData {
             }
         } else {
             // Remove unneeded highlight part if present
-            changed = parts.removeIf(p -> p.getPart() instanceof PartHighlight);
+            changed = parts.removeIf(p -> p.getType() == PartType.HIGHLIGHT);
         }
 
         if (changed) {
@@ -316,24 +303,22 @@ public final class GearData {
         NBTTagCompound tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         NBTTagList tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
         PartDataList list = PartDataList.of();
-        int mainsFound = 0;
-        int rodsFound = 0;
-        int tipsFound = 0;
+        Map<PartType, Integer> partCounts = new HashMap<>();
 
         for (INBTBase nbt : tagList) {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound partCompound = (NBTTagCompound) nbt;
-                PartData data = PartData.read(partCompound);
-                if (data != null) {
-                    // FIXME chain of instanceof
-                    if (data.getPart() instanceof PartMain && ++mainsFound <= MAX_MAIN_PARTS)
-                        list.add(data);
-                    else if (data.getPart() instanceof PartRod && ++rodsFound <= MAX_ROD_PARTS)
-                        list.add(data);
-                    else if (data.getPart() instanceof PartTip && ++tipsFound <= MAX_TIP_PARTS)
-                        list.add(data);
-                    else
-                        list.add(data);
+                PartData part = PartData.read(partCompound);
+
+                if (part != null) {
+                    // Add to list if max per item of type is not exceeded
+                    // Max is 9 for mains, and typically 1 for others
+                    PartType type = part.getType();
+                    int count = partCounts.getOrDefault(type, 0);
+                    if (count < type.getMaxPerItem()) {
+                        list.add(part);
+                        partCounts.put(type, count + 1);
+                    }
                 }
             }
         }
@@ -361,7 +346,7 @@ public final class GearData {
 
     /**
      * Gets the primary part, but only the part itself. Grade and crafting stack are omitted so that
-     * the cached ItemPartData can be retrieved instead of constructing a new one.
+     * the cached PartData can be retrieved instead of constructing a new one.
      *
      * @param stack The gear item
      * @return Cached part data excluding grade and crafting item, or null if it does not exist.
@@ -441,7 +426,9 @@ public final class GearData {
 
     public static void addUpgradePart(ItemStack gear, ItemStack partStack) {
         PartData part = PartData.from(partStack);
-        if (part != null) addUpgradePart(gear, part);
+        if (part != null) {
+            addUpgradePart(gear, part);
+        }
     }
 
     public static void addUpgradePart(ItemStack gear, PartData part) {
@@ -463,9 +450,11 @@ public final class GearData {
         }
 
         // Other upgrades allow no exact duplicates, but any number of total upgrades
-        for (PartData partInList : parts)
-            if (partInList.getPart() == part.getPart())
+        for (PartData partInList : parts) {
+            if (partInList.getPart() == part.getPart()) {
                 return;
+            }
+        }
 
         parts.add(part);
         writeConstructionParts(gear, parts);
@@ -509,8 +498,9 @@ public final class GearData {
             if (nbt instanceof NBTTagCompound) {
                 NBTTagCompound partCompound = (NBTTagCompound) nbt;
                 String partKey = partCompound.getString(PartData.NBT_ID);
-                if (partKey.equals(upgradeName))
+                if (partKey.equals(upgradeName)) {
                     return true;
+                }
             }
         }
 

@@ -12,20 +12,20 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 
 public class BlockCraftingStation extends BlockContainer {
-    private static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
+    private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockCraftingStation() {
         super(Properties.create(Material.WOOD)
@@ -33,6 +33,10 @@ public class BlockCraftingStation extends BlockContainer {
                 .sound(SoundType.WOOD)
         );
         this.setDefaultState(this.getDefaultState().with(FACING, EnumFacing.SOUTH));
+    }
+
+    public static EnumFacing getFacing(IBlockState state) {
+        return state.has(FACING) ? state.get(FACING) : EnumFacing.SOUTH;
     }
 
     @Override
@@ -84,16 +88,5 @@ public class BlockCraftingStation extends BlockContainer {
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
-        return face == EnumFacing.DOWN || face == EnumFacing.UP;
     }
 }

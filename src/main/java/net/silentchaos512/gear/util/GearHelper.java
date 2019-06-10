@@ -82,8 +82,8 @@ public final class GearHelper {
     }
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        @SuppressWarnings("deprecation") // Need to use this version to prevent stack overflow
-                Multimap<String, AttributeModifier> map = stack.getItem().getAttributeModifiers(slot);
+        // Need to use this version to prevent stack overflow
+        @SuppressWarnings("deprecation") Multimap<String, AttributeModifier> map = stack.getItem().getAttributeModifiers(slot);
 
         if (slot == EntityEquipmentSlot.MAINHAND) {
             // Melee Damage
@@ -97,8 +97,9 @@ public final class GearHelper {
             replaceAttributeModifierInMap(map, key, value);
 
             // Reach distance
-            map.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach",
-                    GearData.getStat(stack, CommonItemStats.REACH_DISTANCE), 0));
+            float reachStat = GearData.getStat(stack, CommonItemStats.REACH_DISTANCE);
+            AttributeModifier reachModifier = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, 0);
+            map.put(EntityPlayer.REACH_DISTANCE.getName(), reachModifier);
         }
 
         return map;
@@ -164,9 +165,7 @@ public final class GearHelper {
 
     private static void onDamageFactorChange(EntityPlayerMP player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
-            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK,
-                    SoundCategory.PLAYERS, 0.5f, 2.0f);
-
+            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
             LibTriggers.GENERIC_INT.trigger(player, new ResourceLocation(SilentGear.MOD_ID, "damage_factor_change"), 1);
         }
     }
@@ -195,8 +194,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.GENERAL.gearBreaksPermanently.get()
-                || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
+        return Config.GENERAL.gearBreaksPermanently.get() || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
     }
 
     public static boolean isBroken(ItemStack stack) {
@@ -222,9 +220,7 @@ public final class GearHelper {
     //endregion
 
     public static Item.Properties getBuilder(@Nullable ToolType toolType) {
-        Item.Properties b = new Item.Properties()
-                .maxStackSize(1)
-                .group(SilentGear.ITEM_GROUP);
+        Item.Properties b = new Item.Properties().maxStackSize(1).group(SilentGear.ITEM_GROUP);
         if (toolType != null) {
             b.addToolType(toolType, 3);
         }

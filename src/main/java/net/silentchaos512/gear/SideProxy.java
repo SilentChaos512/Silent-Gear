@@ -131,6 +131,7 @@ class SideProxy {
 
         private void clientSetup(FMLClientSetupEvent event) {
             ModEntities.registerRenderers(event);
+            ModTileEntities.registerRenderers(event);
         }
 
         private static void registerContainers() {

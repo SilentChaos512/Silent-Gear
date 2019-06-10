@@ -53,7 +53,8 @@ public final class PartType {
         if (VALUES.containsKey(name))
             throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", name));
 
-        PartType type = new PartType(name, debugSymbol, serializer);
+        int maxPerItem = name.equals(SilentGear.getId("main")) ? 9 : 1;
+        PartType type = new PartType(name, debugSymbol, maxPerItem, serializer);
         VALUES.put(name, type);
         return type;
     }
@@ -75,11 +76,13 @@ public final class PartType {
 
     @Getter private final ResourceLocation name;
     @Getter private final String debugSymbol;
+    @Getter private final int maxPerItem;
     private final IPartSerializer<? extends IGearPart> serializer;
 
-    private PartType(ResourceLocation name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
+    private PartType(ResourceLocation name, String debugSymbol, int maxPerItem, IPartSerializer<? extends IGearPart> serializer) {
         this.name = name;
         this.debugSymbol = debugSymbol;
+        this.maxPerItem = maxPerItem;
         this.serializer = serializer;
     }
 

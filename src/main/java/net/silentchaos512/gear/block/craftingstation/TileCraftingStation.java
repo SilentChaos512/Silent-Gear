@@ -73,4 +73,10 @@ public class TileCraftingStation extends TileInventorySL {
     public boolean isEmpty() {
         return false;
     }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        super.setInventorySlotContents(index, stack);
+        sendUpdate();
+    }
 }
