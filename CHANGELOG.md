@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Configs for random grading. You can adjust the mean, standard deviation, and max grade.
 - Slingshots, a new ranged weapon. Currently unfinished, but usable. The projectiles are invisible for some reason.
 
 ## [1.0.12] - 2019-05-11

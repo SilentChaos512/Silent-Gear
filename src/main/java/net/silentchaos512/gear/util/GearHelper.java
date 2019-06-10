@@ -356,12 +356,14 @@ public final class GearHelper {
         if (world.getGameTime() % 20 == 0) {
             // Any ungraded parts get a random grade
             if (!GearData.isRandomGradingDone(stack)) {
-                // Select D, C, or B as median
-                MaterialGrade median = SilentGear.random.nextInt(100) < 20 ? MaterialGrade.D : SilentGear.random.nextInt(100) < 40 ? MaterialGrade.B : MaterialGrade.C;
+                MaterialGrade median = Config.GENERAL.randomGradeMean.get();
+                MaterialGrade maxGrade = Config.GENERAL.randomGradeMax.get();
+                double stdDev = Config.GENERAL.randomGradeStd.get();
+
                 PartDataList parts = PartDataList.of();
                 for (PartData data : GearData.getConstructionParts(stack)) {
                     if (data.getGrade() == MaterialGrade.NONE) {
-                        MaterialGrade grade = MaterialGrade.selectRandom(SilentGear.random, median, 1.5, MaterialGrade.S);
+                        MaterialGrade grade = MaterialGrade.selectRandom(SilentGear.random, median, stdDev, maxGrade);
                         parts.add(PartData.of(data.getPart(), grade, data.getCraftingItem()));
                     } else {
                         parts.add(data);

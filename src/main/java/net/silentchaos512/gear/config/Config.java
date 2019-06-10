@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.utils.config.*;
@@ -41,6 +42,10 @@ public class Config {
         public final DoubleValue repairFactorAnvil;
         public final DoubleValue repairFactorQuick;
         public final BooleanValue upgradesInAnvilOnly;
+        // Grading
+        public final EnumValue<MaterialGrade> randomGradeMean;
+        public final EnumValue<MaterialGrade> randomGradeMax;
+        public final DoubleValue randomGradeStd;
         // Salvager
         public final DoubleValue salvagerMinLossRate;
         public final DoubleValue salvagerMaxLossRate;
@@ -139,6 +144,24 @@ public class Config {
                     .builder("item.gear.upgrades.applyInAnvilOnly")
                     .comment("If true, upgrade parts may only be applied in an anvil.")
                     .define(false);
+
+            // Grading
+            wrapper.comment("item.grading.random",
+                    "Settings for random grading of ungraded materials. This affects gear items crafted with ungraded parts, not parts graded in the part analyzer.",
+                    "Grading follows a normal distribution, which means that values closer to the mean (average) are more common.");
+            randomGradeMean = wrapper
+                    .builder("item.grading.random.mean")
+                    .comment("The mean (average) grade assigned to ungraded parts.")
+                    .defineEnum(MaterialGrade.C);
+            randomGradeMax = wrapper
+                    .builder("item.grading.random.max")
+                    .comment("The maximum grade that ungraded parts can receive.")
+                    .defineEnum(MaterialGrade.S);
+            randomGradeStd = wrapper
+                    .builder("item.grading.random.standardDeviation")
+                    .comment("The standard deviation (how 'spread out' the curve is) for random grading. Must be non-negative.",
+                            "Setting to zero would disable all randomness and grade all parts at the mean.")
+                    .defineInRange(1.5, 0, 10);
 
             wrapper.comment("salvager", "Settings for the salvager");
 
