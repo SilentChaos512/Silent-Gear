@@ -63,6 +63,17 @@ public class PartAnalyzerContainer extends Container {
         addSlot(new SlotOutputOnly(inventory, 3, 98, 35));
         addSlot(new SlotOutputOnly(inventory, 4, 116, 35));
         addSlot(new SlotOutputOnly(inventory, 5, 134, 35));
+
+        int i;
+        for (i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+            }
+        }
+
+        for (i = 0; i < 9; ++i) {
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+        }
     }
 
     public int getProgressArrowScale() {

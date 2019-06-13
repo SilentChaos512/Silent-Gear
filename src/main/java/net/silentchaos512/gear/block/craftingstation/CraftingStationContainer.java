@@ -24,14 +24,26 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
     private final IInventory inventory;
 
     public CraftingStationContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new Inventory(9));
+        this(id, playerInventory, new Inventory(CraftingStationTileEntity.CRAFTING_GRID_SIZE + CraftingStationTileEntity.SIDE_INVENTORY_SIZE));
     }
 
+    @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public CraftingStationContainer(int id, PlayerInventory playerInventory, IInventory inventory) {
         super(ModContainers.CRAFTING_STATION.type(), id);
         this.player = playerInventory.player;
         this.inventory = inventory;
         setupInventorySlots(playerInventory, inventory);
+
+        int i;
+        for (i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+            }
+        }
+
+        for (i = 0; i < 9; ++i) {
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+        }
     }
 
 //    void setExtendedInventory(IInventory inventory) {
