@@ -43,7 +43,7 @@ public final class RepairHandler {
     private static void handleUpgradeApplication(AnvilUpdateEvent event, PartData part) {
         ItemStack result = event.getLeft().copy();
         GearData.addUpgradePart(result, part);
-        GearData.recalculateStats(null, result);
+        GearData.recalculateStats(result, null);
 
         event.setOutput(result);
         // TODO: Upgrade cost?
@@ -65,7 +65,7 @@ public final class RepairHandler {
 
         if (amount > 0) {
             result.attemptDamageItem(-Math.round(amount * materialCount), SilentGear.random, null);
-            GearData.recalculateStats(null, result);
+            GearData.recalculateStats(result, null);
             event.setOutput(result);
             event.setCost(materialCount);
             event.setMaterialCost(materialCount);

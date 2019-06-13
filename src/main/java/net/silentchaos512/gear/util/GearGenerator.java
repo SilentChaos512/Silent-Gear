@@ -118,7 +118,7 @@ public final class GearGenerator {
             tip.ifPresent(part -> GearData.addUpgradePart(result, PartData.of(part)));
         }
 
-        GearData.recalculateStats(null, result);
+        GearData.recalculateStats(result, null);
         return result;
     }
 }

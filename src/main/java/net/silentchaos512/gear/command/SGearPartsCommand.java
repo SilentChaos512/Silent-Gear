@@ -90,7 +90,7 @@ public final class SGearPartsCommand {
         Collection<PartData> partList = GearData.getConstructionParts(gear);
         partList.add(PartData.of(part, grade));
         GearData.writeConstructionParts(gear, partList);
-        GearData.recalculateStats(ctx.getSource().asPlayer(), gear);
+        GearData.recalculateStats(gear, ctx.getSource().asPlayer());
         return 1;
     }
 

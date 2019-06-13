@@ -32,7 +32,7 @@ public final class RecalculateStatsCommand {
         for (ServerPlayerEntity player : players) {
             for (ItemStack stack : PlayerUtils.getNonEmptyStacks(player)) {
                 if (GearHelper.isGear(stack)) {
-                    GearData.recalculateStats(player, stack);
+                    GearData.recalculateStats(stack, player);
                 }
             }
             context.getSource().sendFeedback(new TranslationTextComponent("command.silentgear.recalculate", player.getScoreboardName()), true);

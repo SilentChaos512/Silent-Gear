@@ -59,7 +59,7 @@ public final class GearData {
     /**
      * Recalculate gear stats and setup NBT. This should be called ANY TIME an item is modified!
      */
-    public static void recalculateStats(PlayerEntity player, ItemStack stack) {
+    public static void recalculateStats(ItemStack stack, @Nullable PlayerEntity player) {
         if (!GearHelper.isGear(stack)) {
             SilentGear.LOGGER.error("Called recalculateStats on non-gear item, {}", stack);
             SilentGear.LOGGER.catching(new IllegalArgumentException());
@@ -153,7 +153,9 @@ public final class GearData {
     }
 
     @Deprecated
-    public static void recalculateStats(ItemStack stack) {recalculateStats(null, stack);}
+    public static void recalculateStats(ItemStack stack) {
+        recalculateStats(stack, null);
+    }
 
     private static void createAndSaveModelKeys(ItemStack stack, ICoreItem item, PartDataList parts) {
         // Save model keys for performance
@@ -362,6 +364,8 @@ public final class GearData {
         CompoundNBT tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
 
+        if (tagList.isEmpty()) return null;
+
         INBT nbt = tagList.get(0);
         if (nbt instanceof CompoundNBT) {
             return PartData.readFast((CompoundNBT) nbt);
@@ -379,6 +383,8 @@ public final class GearData {
     private static PartData getPartByIndex(ItemStack stack, int index) {
         CompoundNBT tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
+
+        if (index >= tagList.size()) return null;
 
         INBT nbt = tagList.get(index);
         if (nbt instanceof EndNBT) return null;
@@ -643,7 +649,7 @@ public final class GearData {
             StackList.from(player.inventory)
                     .stream()
                     .filter(s -> s.getItem() instanceof ICoreItem)
-                    .forEach(s -> recalculateStats(player, s));
+                    .forEach(s -> recalculateStats(s, player));
         }
     }
 }

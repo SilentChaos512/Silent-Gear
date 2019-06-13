@@ -72,7 +72,7 @@ public class UpgradeGear implements ICraftingRecipe {
         for (ItemStack upgrade : upgrades) {
             GearData.addUpgradePart(result, upgrade);
         }
-        GearData.recalculateStats(null, result);
+        GearData.recalculateStats(result, null);
         return result;
     }
 

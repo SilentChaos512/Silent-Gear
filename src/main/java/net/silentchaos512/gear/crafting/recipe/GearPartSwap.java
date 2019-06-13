@@ -74,7 +74,7 @@ public class GearPartSwap implements ICraftingRecipe {
         }
 
         GearData.writeConstructionParts(result, parts);
-        GearData.recalculateStats(null, result);
+        GearData.recalculateStats(result, null);
         return result;
     }
 

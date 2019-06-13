@@ -28,7 +28,7 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
     default ItemStack construct(Collection<PartData> parts) {
         ItemStack result = new ItemStack(this);
         GearData.writeConstructionParts(result, parts);
-        GearData.recalculateStats(null, result);
+        GearData.recalculateStats(result, null);
         // Allow traits to make any needed changes (must be done after a recalculate)
         TraitHelper.activateTraits(result, 0, (trait, level, nothing) -> {
             trait.onGearCrafted(new TraitActionContext(null, level, result));

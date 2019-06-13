@@ -53,8 +53,6 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     SINEW_FIBER("forge:string/sinew", "forge:string"),
     FLAX_FIBER,
     FLAX_STRING("forge:string/flax", "forge:string"),
-    BLACK_DYE("forge:dyes/black", "forge:dyes"),
-    BLUE_DYE("forge:dyes/blue", "forge:dyes"),
     // Rods
     ROUGH_ROD("silentgear:rods/rough", "forge:rods"),
     STONE_ROD("forge:rods/stone", "forge:rods"),

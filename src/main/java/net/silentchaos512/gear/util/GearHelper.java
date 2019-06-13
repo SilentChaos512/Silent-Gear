@@ -144,7 +144,7 @@ public final class GearHelper {
 
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
-            GearData.recalculateStats(player, stack);
+            GearData.recalculateStats(stack, player);
             if (player != null)
                 onDamageFactorChange(player, preDamageFactor, getDamageFactor(stack, maxDamage));
         }
@@ -153,7 +153,7 @@ public final class GearHelper {
             // The item "broke" (can still be repaired)
             entityLiving.handleStatusUpdate((byte) 47); // entityLiving.renderBrokenItemStack(stack);
             GearData.incrementBrokenCount(stack);
-            GearData.recalculateStats(player, stack);
+            GearData.recalculateStats(stack, player);
             if (player != null)
                 notifyPlayerOfBrokenGear(stack, player);
         } else if (canBreakPermanently && wouldBreak) {
@@ -367,7 +367,7 @@ public final class GearHelper {
                 }
                 GearData.writeConstructionParts(stack, parts);
                 GearData.setRandomGradingDone(stack, true);
-                GearData.recalculateStats(player, stack);
+                GearData.recalculateStats(stack, player);
             }
         }
 

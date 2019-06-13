@@ -96,7 +96,7 @@ public class QuickRepair implements ICraftingRecipe {
         gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
 //            GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);
         GearData.incrementRepairCount(gear, materialCount);
-        GearData.recalculateStats(null, gear);
+        GearData.recalculateStats(gear, null);
         return gear;
     }
 

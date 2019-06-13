@@ -83,7 +83,7 @@ public class CoreSword extends SwordItem implements ICoreWeapon {
     public void setDamage(ItemStack stack, int damage) {
         super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
         if (GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(null, stack);
+            GearData.recalculateStats(stack, null);
         }
     }
 
