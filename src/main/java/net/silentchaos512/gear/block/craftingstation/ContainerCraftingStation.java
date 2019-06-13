@@ -1,9 +1,14 @@
 package net.silentchaos512.gear.block.craftingstation;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftResultInventory;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.CraftingResultSlot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.play.server.SPacketSetSlot;
@@ -11,24 +16,24 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.inventory.InventoryCraftingStation;
 
 public class ContainerCraftingStation extends Container {
-    InventoryCrafting craftMatrix;
-    InventoryCraftResult craftResult;
+    CraftingInventory craftMatrix;
+    CraftResultInventory craftResult;
 
     private Slot outputSlot;
-    private final EntityPlayer player;
+    private final PlayerEntity player;
     private final TileCraftingStation tile;
     private final World world;
 
-    public ContainerCraftingStation(EntityPlayer player, TileCraftingStation tile) {
+    public ContainerCraftingStation(PlayerEntity player, TileCraftingStation tile) {
         this(player.inventory, player.world, tile);
     }
 
-    public ContainerCraftingStation(InventoryPlayer playerInventory, World worldIn, TileCraftingStation tile) {
+    public ContainerCraftingStation(PlayerInventory playerInventory, World worldIn, TileCraftingStation tile) {
         this.player = playerInventory.player;
         this.tile = tile;
         this.world = this.tile.getWorld();
         this.craftMatrix = new InventoryCraftingStation(this, tile, 3, 3);
-        this.craftResult = new InventoryCraftResult();
+        this.craftResult = new CraftResultInventory();
 
         setupInventorySlots(playerInventory, this.tile);
     }
@@ -43,17 +48,16 @@ public class ContainerCraftingStation extends Container {
 
     //region Slots
 
-    private void setupInventorySlots(InventoryPlayer playerInv, IInventory extendedInv) {
+    private void setupInventorySlots(PlayerInventory playerInv, IInventory extendedInv) {
         inventorySlots.clear();
-        inventoryItemStacks.clear();
+        //inventoryItemStacks.clear();
 
         setupCraftingGrid();
         setupSideInventory();
         setupPlayerSlots(playerInv);
 
         // Output
-        outputSlot = this.addSlot(new SlotCrafting(playerInv.player, this.craftMatrix,
-                this.craftResult, tile.getSizeInventory(), 124, 35));
+        outputSlot = this.addSlot(new CraftingResultSlot(playerInv.player, this.craftMatrix, this.craftResult, tile.getSizeInventory(), 124, 35));
 
         onCraftMatrixChanged(this.tile);
     }
@@ -67,7 +71,7 @@ public class ContainerCraftingStation extends Container {
         }
     }
 
-    private void setupPlayerSlots(InventoryPlayer playerInventory) {
+    private void setupPlayerSlots(PlayerInventory playerInventory) {
         // Player backpack
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 9; ++x) {
@@ -99,7 +103,7 @@ public class ContainerCraftingStation extends Container {
     //endregion
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return tile.isUsableByPlayer(playerIn);
     }
 
@@ -109,7 +113,7 @@ public class ContainerCraftingStation extends Container {
     }
 
     @Override
-    public void onContainerClosed(EntityPlayer playerIn) {
+    public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
 
         for (int i = 0; i < TileCraftingStation.CRAFTING_GRID_SIZE; ++i) {
@@ -130,7 +134,7 @@ public class ContainerCraftingStation extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
@@ -190,20 +194,20 @@ public class ContainerCraftingStation extends Container {
     }
 
     @Override
-    protected void slotChangedCraftingGrid(World worldIn, EntityPlayer playerIn, IInventory craftMatrixIn, InventoryCraftResult craftResultIn) {
+    protected void slotChangedCraftingGrid(World worldIn, PlayerEntity playerIn, IInventory craftMatrixIn, CraftResultInventory craftResultIn) {
         if (world.isRemote) return;
 
-        EntityPlayerMP entityplayermp = (EntityPlayerMP) player;
+        ServerPlayerEntity player = (ServerPlayerEntity) this.player;
         ItemStack itemstack = ItemStack.EMPTY;
         IRecipe irecipe = worldIn.getServer().getRecipeManager().getRecipe(craftMatrixIn, worldIn, net.minecraftforge.common.crafting.VanillaRecipeTypes.CRAFTING);
 
-        if (irecipe != null && (irecipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayermp.getRecipeBook().isUnlocked(irecipe))) {
+        if (irecipe != null && (irecipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || player.getRecipeBook().isUnlocked(irecipe))) {
             craftResult.setRecipeUsed(irecipe);
             itemstack = irecipe.getCraftingResult(craftMatrix);
         }
 
         final int index = outputSlot.getSlotIndex();
         craftResult.setInventorySlotContents(index, itemstack);
-        entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, index, itemstack));
+        player.connection.sendPacket(new SPacketSetSlot(this.windowId, index, itemstack));
     }
 }

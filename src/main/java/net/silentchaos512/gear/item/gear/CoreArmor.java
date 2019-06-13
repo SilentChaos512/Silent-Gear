@@ -4,11 +4,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
@@ -32,17 +32,17 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class CoreArmor extends ItemArmor implements ICoreArmor {
-    // Just copied from ItemArmor, access transformers are too flaky
+public class CoreArmor extends ArmorItem implements ICoreArmor {
+    // Just copied from ArmorItem, access transformers are too flaky
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     // sum = 1, starts with boots
     private static final float[] ABSORPTION_RATIO_BY_SLOT = {0.175f, 0.3f, 0.4f, 0.125f};
-    // Same values as in ItemArmor.
+    // Same values as in ArmorItem.
     private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
 
     private final String itemName;
 
-    public CoreArmor(EntityEquipmentSlot slot, String name) {
+    public CoreArmor(EquipmentSlotType slot, String name) {
         super(ArmorMaterial.DIAMOND, slot, GearHelper.getBuilder(null));
         this.itemName = name;
     }
@@ -67,7 +67,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     public double getArmorProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return ABSORPTION_RATIO_BY_SLOT[armorType.getIndex()] * GearData.getStat(stack, CommonItemStats.ARMOR);
+        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, CommonItemStats.ARMOR);
     }
 
     public double getArmorToughness(ItemStack stack) {
@@ -79,12 +79,12 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
         Item item = stack.getItem();
         if (item instanceof CoreArmor)
             return ((CoreArmor) item).getArmorProtection(stack);
-        else if (item instanceof ItemArmor)
-            return ((ItemArmor) item).getDamageReduceAmount();
+        else if (item instanceof ArmorItem)
+            return ((ArmorItem) item).getDamageReduceAmount();
         return 0;
     }
 
-    private static int getPlayerTotalArmorValue(EntityLivingBase player) {
+    private static int getPlayerTotalArmorValue(LivingEntity player) {
         float total = 0;
         for (ItemStack armor : player.getArmorInventoryList()) {
             total += getGenericArmorProtection(armor);
@@ -94,14 +94,12 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
 
     @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-        if (slot == this.armorType) {
+        if (slot == this.getEquipmentSlot()) {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
-            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(
-                    uuid, "Armor modifier", getArmorProtection(stack), 0));
-            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(
-                    uuid, "Armor toughness", getArmorToughness(stack), 0));
+            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
+            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
         }
         return multimap;
     }
@@ -113,7 +111,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     @Override
     public int getMaxDamage(ItemStack stack) {
         int maxDamageFactor = GearData.getStatInt(stack, CommonItemStats.ARMOR_DURABILITY);
-        return MAX_DAMAGE_ARRAY[armorType.getIndex()] * maxDamageFactor;
+        return MAX_DAMAGE_ARRAY[this.getEquipmentSlot().getIndex()] * maxDamageFactor;
     }
 
     @Override
@@ -135,7 +133,7 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, World world, EntityPlayer player) {
+    public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         GearHelper.inventoryTick(stack, world, player, 0, true);
     }
 
@@ -149,13 +147,13 @@ public class CoreArmor extends ItemArmor implements ICoreArmor {
     //region Client-side methods and rendering horrors
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         // In order for colors to work, it seems the following must be true:
         // 1. Armor texture must be named using the vanilla convention
         // 2. Return value of this may NOT be cached... wat? Not a big deal I guess.
         // 3. You got lucky. The tiniest change can break everything for no apparent reason.
 
-        int layer = slot == EntityEquipmentSlot.LEGS ? 2 : 1;
+        int layer = slot == EquipmentSlotType.LEGS ? 2 : 1;
         // Overlay - default to a blank texture
         if ("overlay".equals(type))
             return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";

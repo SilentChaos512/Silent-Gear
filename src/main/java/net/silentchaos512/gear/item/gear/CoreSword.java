@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class CoreSword extends ItemSword implements ICoreWeapon {
+public class CoreSword extends SwordItem implements ICoreWeapon {
     public CoreSword() {
         this(null);
     }
@@ -60,7 +60,7 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 
@@ -93,7 +93,7 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack stack) {
+    public Rarity getRarity(ItemStack stack) {
         return GearHelper.getRarity(stack);
     }
 
@@ -103,7 +103,7 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return GearHelper.hitEntity(stack, target, attacker);
     }
 
@@ -113,7 +113,7 @@ public class CoreSword extends ItemSword implements ICoreWeapon {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 

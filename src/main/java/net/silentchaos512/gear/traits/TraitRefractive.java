@@ -18,16 +18,16 @@
 
 package net.silentchaos512.gear.traits;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumLightType;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.lib.util.MathUtils;
+import net.silentchaos512.utils.MathUtils;
 
 public class TraitRefractive extends SimpleTrait {
     // TODO: Serializer needed to load trait correctly
@@ -43,7 +43,7 @@ public class TraitRefractive extends SimpleTrait {
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         super.onUpdate(context, isEquipped);
 
-        EntityPlayer player = context.getPlayer();
+        PlayerEntity player = context.getPlayer();
         if (player != null && player.ticksExisted % ACTIVATE_RATE == 0) {
             // TODO: Phantom lights, block config?
             // This fails with torches to some extent, they don't attach to walls
@@ -52,11 +52,11 @@ public class TraitRefractive extends SimpleTrait {
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
-    private static void placeLight(World world, EntityPlayer player, IBlockState state) {
+    private static void placeLight(World world, PlayerEntity player, BlockState state) {
         BlockPos bottomPos = player.getPosition()
-                .offset(EnumFacing.NORTH, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE))
-                .offset(EnumFacing.WEST, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE));
-        if (world.getLightFor(EnumLightType.BLOCK, bottomPos) > 7)
+                .offset(Direction.NORTH, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE))
+                .offset(Direction.WEST, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE));
+        if (world.getLightFor(LightType.BLOCK, bottomPos) > 7)
             return;
 
         for (BlockPos pos = bottomPos.up(VERTICAL_RANGE); pos.getY() >= bottomPos.getY(); pos = pos.down()) {

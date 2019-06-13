@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -25,7 +25,7 @@ public class GearBlueprint extends AbstractBlueprint {
 
     @Override
     protected ITextComponent getCraftedName(ItemStack stack) {
-        return new TextComponentTranslation(this.gearItem.asItem().getTranslationKey());
+        return new TranslationTextComponent(this.gearItem.asItem().getTranslationKey());
     }
 
     @Override
@@ -34,28 +34,24 @@ public class GearBlueprint extends AbstractBlueprint {
 
         // Flavor text
         if (this.gearItem instanceof ICoreTool) {
-            list.add(new TextComponentTranslation("item.silentgear.blueprint." + itemClass + ".desc")
-                    .applyTextStyle(TextFormatting.ITALIC));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint." + itemClass + ".desc").applyTextStyle(TextFormatting.ITALIC));
         }
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            list.add(new TextComponentTranslation("item.silentgear.blueprint.disabled")
-                    .applyTextStyle(TextFormatting.DARK_RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").applyTextStyle(TextFormatting.DARK_RED));
         } else if (this.singleUse) {
-            list.add(new TextComponentTranslation("item.silentgear.blueprint.singleUse")
-                    .applyTextStyle(TextFormatting.RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").applyTextStyle(TextFormatting.RED));
         } else {
-            list.add(new TextComponentTranslation("item.silentgear.blueprint.multiUse")
-                    .applyTextStyle(TextFormatting.GREEN));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").applyTextStyle(TextFormatting.GREEN));
         }
 
         // Is mixed material allowed in this GUI?
         if (Minecraft.getInstance().currentScreen instanceof GuiCraftingStation) {
-            list.add(new TextComponentTranslation("item.silentgear.blueprint.canMix")
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.canMix")
                     .applyTextStyle(TextFormatting.GREEN));
         } else {
-            list.add(new TextComponentTranslation("item.silentgear.blueprint.noMixing")
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.noMixing")
                     .applyTextStyle(TextFormatting.RED));
         }
     }

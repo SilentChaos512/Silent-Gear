@@ -3,8 +3,8 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -27,7 +27,7 @@ public class PartBlueprint extends AbstractBlueprint {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TextComponentTranslation("item.silentgear.blueprint.partTypeWarning1").applyTextStyle(TextFormatting.ITALIC));
-        tooltip.add(new TextComponentTranslation("item.silentgear.blueprint.partTypeWarning2").applyTextStyle(TextFormatting.ITALIC));
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint.partTypeWarning1").applyTextStyle(TextFormatting.ITALIC));
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint.partTypeWarning2").applyTextStyle(TextFormatting.ITALIC));
     }
 }

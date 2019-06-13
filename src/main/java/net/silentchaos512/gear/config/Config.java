@@ -2,7 +2,7 @@ package net.silentchaos512.gear.config;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -185,7 +185,7 @@ public class Config {
             return isThingInList(stack.getItem(), placeableItems);
         }
 
-        public boolean isSinewAnimal(EntityLivingBase entity) {
+        public boolean isSinewAnimal(LivingEntity entity) {
             return isThingInList(entity.getType(), sinewAnimals);
         }
 

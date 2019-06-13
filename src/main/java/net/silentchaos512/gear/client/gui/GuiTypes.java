@@ -1,15 +1,18 @@
 package net.silentchaos512.gear.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IInteractionObject;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,54 +38,54 @@ import java.util.Optional;
 public enum GuiTypes {
     CRAFTING_STATION {
         @Override
-        public Container getContainer(TileEntityContainerType<?> tileType, EntityPlayer player) {
+        public Container getContainer(TileEntityContainerType<?> tileType, PlayerEntity player) {
             TileCraftingStation tileEntity = (TileCraftingStation) tileType.getTileEntity(player);
             return new ContainerCraftingStation(player, Objects.requireNonNull(tileEntity));
         }
 
         @OnlyIn(Dist.CLIENT)
         @Override
-        public GuiContainer getGui(TileEntityContainerType<?> tileType, EntityPlayer player) {
+        public ContainerScreen getGui(TileEntityContainerType<?> tileType, PlayerEntity player) {
             return new GuiCraftingStation((ContainerCraftingStation) tileType.createContainer(player.inventory, player));
         }
     },
     PART_ANALYZER {
         @Override
-        public Container getContainer(TileEntityContainerType<?> tileType, EntityPlayer player) {
+        public Container getContainer(TileEntityContainerType<?> tileType, PlayerEntity player) {
             IInventory tileEntity = (IInventory) tileType.getTileEntity(player);
             return new ContainerPartAnalyzer(player.inventory, Objects.requireNonNull(tileEntity));
         }
 
         @OnlyIn(Dist.CLIENT)
         @Override
-        public GuiContainer getGui(TileEntityContainerType<?> tileType, EntityPlayer player) {
+        public ContainerScreen getGui(TileEntityContainerType<?> tileType, PlayerEntity player) {
             TilePartAnalyzer tileEntity = (TilePartAnalyzer) tileType.getTileEntity(player);
             return new GuiPartAnalyzer(player.inventory, Objects.requireNonNull(tileEntity));
         }
     },
     SALVAGER {
         @Override
-        public Container getContainer(TileEntityContainerType<?> tileType, EntityPlayer player) {
+        public Container getContainer(TileEntityContainerType<?> tileType, PlayerEntity player) {
             IInventory tileEntity = (IInventory) tileType.getTileEntity(player);
             return new ContainerSalvager(player.inventory, Objects.requireNonNull(tileEntity));
         }
 
         @OnlyIn(Dist.CLIENT)
         @Override
-        public GuiContainer getGui(TileEntityContainerType<?> tileType, EntityPlayer player) {
+        public ContainerScreen getGui(TileEntityContainerType<?> tileType, PlayerEntity player) {
             TileSalvager tileEntity = (TileSalvager) tileType.getTileEntity(player);
             return new GuiSalvager(player.inventory, Objects.requireNonNull(tileEntity));
         }
     };
 
-    public void display(EntityPlayer player, BlockPos pos) {
-        if (!(player instanceof EntityPlayerMP)) {
+    public void display(PlayerEntity player, BlockPos pos) {
+        if (!(player instanceof ServerPlayerEntity)) {
             SilentGear.LOGGER.error("Tried to send GUI packet from client?");
             return;
         }
         TileEntityContainerType<?> tileType = getContainerType(pos);
         IInteractionObject containerSupplier = new Interactable(this, pos);
-        NetworkHooks.openGui((EntityPlayerMP) player, containerSupplier, tileType::toBytes);
+        NetworkHooks.openGui((ServerPlayerEntity) player, containerSupplier, tileType::toBytes);
     }
 
     public ResourceLocation getId() {
@@ -97,10 +100,10 @@ public enum GuiTypes {
         return new TileEntityContainerType<>(getId(), pos);
     }
 
-    public abstract Container getContainer(TileEntityContainerType<?> tileType, EntityPlayer player);
+    public abstract Container getContainer(TileEntityContainerType<?> tileType, PlayerEntity player);
 
     @OnlyIn(Dist.CLIENT)
-    public abstract GuiContainer getGui(TileEntityContainerType<?> tileType, EntityPlayer player);
+    public abstract ContainerScreen getGui(TileEntityContainerType<?> tileType, PlayerEntity player);
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<GuiTypes> from(FMLPlayMessages.OpenContainer msg) {
@@ -122,7 +125,7 @@ public enum GuiTypes {
         }
 
         @Override
-        public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+        public Container createContainer(PlayerInventory playerInventory, PlayerEntity playerIn) {
             return type.getContainer(type.getContainerType(pos), playerIn);
         }
 
@@ -134,7 +137,7 @@ public enum GuiTypes {
         @Override
         public ITextComponent getName() {
             ResourceLocation id = type.getId();
-            return new TextComponentTranslation("container." + id.getNamespace() + "." + id.getPath());
+            return new TranslationTextComponent("container." + id.getNamespace() + "." + id.getPath());
         }
 
         @Override

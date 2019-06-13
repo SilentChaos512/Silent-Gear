@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemWallOrFloor;
+import net.minecraft.item.WallOrFloorItem;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
@@ -26,7 +26,6 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     CRAFTING_STATION(BlockCraftingStation::new),
     PART_ANALYZER(BlockPartAnalyzer::new),
     SALVAGER(BlockSalvager::new),
-    FLOWER(Flower::new),
     FLAX_PLANT(() -> new FlaxPlant(false), () -> null),
     WILD_FLAX_PLANT(() -> new FlaxPlant(true), () -> null),
     STONE_TORCH(StoneTorch::new, ModBlocks::getStoneTorchItem),
@@ -36,19 +35,18 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     NETHERWOOD_LEAVES(NetherwoodLeaves::new),
     NETHERWOOD_SAPLING(NetherwoodSapling::new),
     CRIMSON_IRON_ORE(CrimsonIronOre::new),
-    POTTED_FLOWER(() -> makePottedPlant(FLOWER), () -> null),
     POTTED_NETHERWOOD_SAPLING(() -> makePottedPlant(NETHERWOOD_SAPLING), () -> null),
     PHANTOM_LIGHT(PhantomLight::new);
 
     private final Lazy<Block> block;
+    private final Lazy<BlockItem> item;
 
-    private final Lazy<ItemBlock> item;
     ModBlocks(Supplier<Block> blockSupplier) {
         this.block = Lazy.of(blockSupplier);
-        this.item = Lazy.of(() -> new ItemBlock(this.asBlock(), new Item.Properties().group(SilentGear.ITEM_GROUP)));
+        this.item = Lazy.of(() -> new BlockItem(this.asBlock(), new Item.Properties().group(SilentGear.ITEM_GROUP)));
     }
 
-    ModBlocks(Supplier<Block> blockSupplier, Supplier<ItemBlock> itemBlockSupplier) {
+    ModBlocks(Supplier<Block> blockSupplier, Supplier<BlockItem> itemBlockSupplier) {
         this.block = Lazy.of(blockSupplier);
         this.item = Lazy.of(itemBlockSupplier);
     }
@@ -61,7 +59,7 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
         }
     }
 
-    private static void register(String name, Block block, @Nullable ItemBlock item) {
+    private static void register(String name, Block block, @Nullable BlockItem item) {
         ResourceLocation registryName = new ResourceLocation(SilentGear.MOD_ID, name);
         block.setRegistryName(registryName);
         ForgeRegistries.BLOCKS.register(block);
@@ -70,12 +68,12 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
         }
     }
 
-    private static ItemBlock getStoneTorchItem() {
-        return new ItemWallOrFloor(STONE_TORCH.asBlock(), WALL_STONE_TORCH.asBlock(), new Item.Properties());
+    private static BlockItem getStoneTorchItem() {
+        return new WallOrFloorItem(STONE_TORCH.asBlock(), WALL_STONE_TORCH.asBlock(), new Item.Properties());
     }
 
-    private static BlockFlowerPot makePottedPlant(IBlockProvider flower) {
-        return new BlockFlowerPot(flower.asBlock(), Block.Properties.create(Material.CIRCUITS).hardnessAndResistance(0));
+    private static FlowerPotBlock makePottedPlant(IBlockProvider flower) {
+        return new FlowerPotBlock(flower.asBlock(), Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0));
     }
 
     @Override

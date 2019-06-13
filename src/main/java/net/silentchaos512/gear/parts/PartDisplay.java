@@ -2,7 +2,7 @@ package net.silentchaos512.gear.parts;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.utils.Color;
 
@@ -64,8 +64,8 @@ public final class PartDisplay implements IPartDisplay {
     }
 
     public static PartDisplay from(JsonObject json, IPartDisplay defaultProps) {
-        String textureDomain = JsonUtils.getString(json, "texture_domain", defaultProps.getTextureDomain());
-        String textureSuffix = JsonUtils.getString(json, "texture_suffix", defaultProps.getTextureSuffix());
+        String textureDomain = JSONUtils.getString(json, "texture_domain", defaultProps.getTextureDomain());
+        String textureSuffix = JSONUtils.getString(json, "texture_suffix", defaultProps.getTextureSuffix());
 
         int normalColor = loadColor(json, defaultProps.getNormalColor(), defaultProps.getNormalColor(), "normal_color", "texture_color");
         int brokenColor = loadColor(json, defaultProps.getBrokenColor(), normalColor, "broken_color");
@@ -73,7 +73,7 @@ public final class PartDisplay implements IPartDisplay {
 
         PartDisplay props = new PartDisplay(textureDomain, textureSuffix, normalColor, brokenColor, fallbackColor);
 
-        props.highlight = JsonUtils.getBoolean(json, "highlight", props.highlight);
+        props.highlight = JSONUtils.getBoolean(json, "highlight", props.highlight);
 
         return props;
     }

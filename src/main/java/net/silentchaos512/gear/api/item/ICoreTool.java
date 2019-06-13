@@ -1,16 +1,20 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.IPartPosition;
+import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.type.PartBowstring;
 import net.silentchaos512.gear.parts.type.PartGrip;
 import net.silentchaos512.gear.parts.type.PartRod;
@@ -19,7 +23,10 @@ import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 
 public interface ICoreTool extends ICoreItem {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
@@ -45,14 +52,14 @@ public interface ICoreTool extends ICoreItem {
     /**
      * The base damage done to the item when breaking a block, not considering enchantments
      */
-    default int getDamageOnBlockBreak(ItemStack gear, World world, IBlockState state, BlockPos pos) {
+    default int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
         return state.getMaterial() != Material.LEAVES && state.getBlockHardness(world, pos) > 0 ? 1 : 0;
     }
 
     /**
      * The base damage done to the item when attacking an entity
      */
-    default int getDamageOnHitEntity(ItemStack gear, EntityLivingBase target, EntityLivingBase attacker) {
+    default int getDamageOnHitEntity(ItemStack gear, LivingEntity target, LivingEntity attacker) {
         return 2;
     }
 

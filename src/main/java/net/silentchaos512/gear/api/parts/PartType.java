@@ -21,9 +21,9 @@ package net.silentchaos512.gear.api.parts;
 import lombok.Getter;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.type.*;
 
 import javax.annotation.Nullable;
@@ -87,7 +87,7 @@ public final class PartType {
     }
 
     public ITextComponent getDisplayName(int tier) {
-        return new TextComponentTranslation("part." + name.getNamespace() + ".type." + name.getPath(), tier);
+        return new TranslationTextComponent("part." + name.getNamespace() + ".type." + name.getPath(), tier);
     }
 
     public IPartSerializer<? extends IGearPart> getSerializer() {

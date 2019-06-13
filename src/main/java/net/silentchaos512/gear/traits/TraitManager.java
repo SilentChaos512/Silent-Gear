@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
@@ -52,7 +52,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
                 SilentGear.LOGGER.debug(MARKER, "Found likely trait file: {}, trying to read as trait {}", id, name);
 
-                JsonObject json = JsonUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                 if (json == null) {
                     SilentGear.LOGGER.error(MARKER, "could not load trait {} as it's null or empty", name);
                 } else {

@@ -18,9 +18,8 @@
 
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ToolType;
@@ -67,7 +66,7 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
         // Allow clearing vegetation, just like sickles but with a smaller range
         if (!player.isSneaking())
             return ModItems.sickle.onSickleStartBreak(itemstack, pos, player, BREAK_RANGE);
@@ -75,7 +74,7 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
         return GearHelper.getHarvestLevel(stack, tool, blockState, null);
     }
 
@@ -86,10 +85,10 @@ public class CoreMachete extends CoreSword {
 //    }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
         float speed = GearHelper.getDestroySpeed(stack, state, CoreAxe.EXTRA_EFFECTIVE_MATERIALS);
         // Slower on materials normally harvested with axes
-        if (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.GOURD || state.getMaterial() == Material.CIRCUITS)
+        if (CoreAxe.BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
             return speed * 0.4f; // TODO: Add config!
         return speed;
     }

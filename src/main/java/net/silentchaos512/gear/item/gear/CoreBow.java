@@ -3,18 +3,19 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.stats.StatList;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -34,7 +35,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class CoreBow extends ItemBow implements ICoreRangedWeapon {
+public class CoreBow extends BowItem implements ICoreRangedWeapon {
     private static final int MIN_DRAW_DELAY = 10;
     private static final int MAX_DRAW_DELAY = 100;
 
@@ -85,7 +86,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         if (player.world.isRemote) {
             float pull = (stack.getUseDuration() - player.getItemInUseCount()) / getDrawDelay(stack);
             ToolModel.bowPull.put(GearData.getUUID(stack), pull);
@@ -93,57 +94,27 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
         super.onUsingTick(stack, player, count);
     }
 
-    @Override
-    protected ItemStack findAmmo(EntityPlayer player) {
-        if (this.isArrow(player.getHeldItem(EnumHand.OFF_HAND))) {
-            return player.getHeldItem(EnumHand.OFF_HAND);
-        } else if (this.isArrow(player.getHeldItem(EnumHand.MAIN_HAND))) {
-            return player.getHeldItem(EnumHand.MAIN_HAND);
-        } else {
-            for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = player.inventory.getStackInSlot(i);
-
-                if (this.isArrow(itemstack)) {
-                    return itemstack;
-                }
-            }
-
-            return ItemStack.EMPTY;
-        }
-    }
-    // Same as vanilla bow, except it can be fired without arrows with infinity.
-
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer player, @Nonnull EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
+        // Same as vanilla bow, except it can be fired without arrows with infinity.
+        ItemStack itemstack = player.getHeldItem(hand);
+        boolean flag = !player.func_213356_f(itemstack).isEmpty() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0;
 
-        boolean hasAmmo = !findAmmo(player).isEmpty() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-        boolean isBroken = GearHelper.isBroken(stack);
+        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, world, player, hand, flag);
+        if (ret != null) return ret;
 
-        if (isBroken)
-            return new ActionResult<>(EnumActionResult.PASS, stack);
-
-        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(stack,
-                world, player, hand, hasAmmo);
-        if (ret != null && ret.getType() == EnumActionResult.FAIL)
-            return ret;
-
-        if (!player.abilities.isCreativeMode && !hasAmmo) {
-            return new ActionResult<>(EnumActionResult.FAIL, stack);
+        if (!player.abilities.isCreativeMode && !flag) {
+            return new ActionResult<>(ActionResultType.FAIL, itemstack);
         } else {
             player.setActiveHand(hand);
-            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+            return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
         }
     }
 
-    protected boolean isInfiniteAmmo(ItemStack bow, ItemStack ammo, EntityPlayer player) {
-        return ammo.getItem() instanceof ItemArrow && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player);
-    }
-
-    protected void fireProjectile(ItemStack stack, World worldIn, EntityPlayer player, ItemStack ammo, float velocity, boolean hasInfiniteAmmo) {
-        ItemArrow itemarrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
-        EntityArrow entityarrow = itemarrow.createArrow(worldIn, ammo, player);
+    protected void fireProjectile(ItemStack stack, World worldIn, PlayerEntity player, ItemStack ammo, float velocity, boolean hasInfiniteAmmo) {
+        ArrowItem itemarrow = (ArrowItem) (ammo.getItem() instanceof ArrowItem ? ammo.getItem() : Items.ARROW);
+        AbstractArrowEntity entityarrow = itemarrow.createArrow(worldIn, ammo, player);
         entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity * 3.0F, 1.0F);
 
         if (MathUtils.doublesEqual(velocity, 1.0F)) {
@@ -163,58 +134,20 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
         if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
             entityarrow.setFire(100);
 
-        stack.damageItem(1, player);
+        stack.damageItem(1, player, p -> p.sendBreakAnimation(p.getActiveHand()));
 
         if (hasInfiniteAmmo)
-            entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+            entityarrow.pickupStatus = ArrowEntity.PickupStatus.CREATIVE_ONLY;
 
-        worldIn.spawnEntity(entityarrow);
+        worldIn.addEntity(entityarrow);
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         if (worldIn.isRemote) {
             ToolModel.bowPull.remove(GearData.getUUID(stack));
         }
-
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityLiving;
-            boolean infiniteAmmo = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-            ItemStack ammo = this.findAmmo(player);
-
-            int useTime = this.getUseDuration(stack) - timeLeft;
-            // useTime = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn,
-            // (EntityPlayer) entityLiving, useTime, StackHelper.isValid(ammo) || infiniteAmmo);
-            if (useTime < 0) return;
-
-            if (!ammo.isEmpty() || infiniteAmmo) {
-                if (ammo.isEmpty())
-                    ammo = new ItemStack(Items.ARROW);
-
-                float velocity = getArrowVelocity(stack, useTime);
-
-                if ((double) velocity >= 0.1D) {
-                    boolean hasInfiniteAmmo = player.abilities.isCreativeMode || isInfiniteAmmo(stack, ammo, player);
-
-                    if (!worldIn.isRemote) {
-                        fireProjectile(stack, worldIn, player, ammo, velocity, hasInfiniteAmmo);
-                    }
-
-                    worldIn.playSound(null, player.posX, player.posY, player.posZ,
-                            SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F,
-                            1.0F / (random.nextFloat() * 0.4F + 1.2F) + velocity * 0.5F);
-
-                    if (!hasInfiniteAmmo) {
-                        ammo.shrink(1);
-                        if (ammo.getCount() == 0) {
-                            player.inventory.deleteStack(ammo);
-                        }
-                    }
-
-                    player.addStat(StatList.ITEM_USED.get(this));
-                }
-            }
-        }
+        super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
     }
 
     //endregion
@@ -227,7 +160,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 
@@ -252,7 +185,7 @@ public class CoreBow extends ItemBow implements ICoreRangedWeapon {
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack stack) {
+    public Rarity getRarity(ItemStack stack) {
         return GearHelper.getRarity(stack);
     }
 

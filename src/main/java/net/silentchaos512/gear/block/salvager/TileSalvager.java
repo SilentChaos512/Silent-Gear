@@ -19,16 +19,14 @@
 package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -39,14 +37,14 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.tile.TileSidedInventorySL;
 import net.silentchaos512.lib.util.GameUtil;
-import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.TimeUtils;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-public class TileSalvager extends TileSidedInventorySL implements ITickable {
+public class TileSalvager extends TileSidedInventorySL implements ITickableTileEntity {
     static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(GameUtil.isDeobfuscated() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
@@ -67,7 +65,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
 
     @Override
     public void tick() {
-        if (world.isRemote) return;
+        if (world == null || world.isRemote) return;
 
         boolean requiresClientSync = false;
 
@@ -95,7 +93,7 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
         }
 
         if (requiresClientSync) {
-            IBlockState state = world.getBlockState(pos);
+            BlockState state = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, state, state, 3);
         }
     }
@@ -225,38 +223,14 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     }
 
     @Override
-    public int getField(int id) {
-        switch (id) {
-            case 0:
-                return progress;
-            default:
-                return 0;
-        }
-    }
-
-    @Override
-    public void setField(int id, int value) {
-        switch (id) {
-            case 0:
-                this.progress = value;
-                break;
-        }
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 1;
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        NBTTagCompound tags = super.getUpdateTag();
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tags = super.getUpdateTag();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
         return tags;
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         switch (side) {
             case DOWN:
                 return SLOTS_OUTPUT.clone();
@@ -280,12 +254,12 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return isOutputSlot(index);
     }
 
@@ -301,16 +275,5 @@ public class TileSalvager extends TileSidedInventorySL implements ITickable {
             if (index == k)
                 return true;
         return false;
-    }
-
-    @Override
-    public ITextComponent getName() {
-        return new TextComponentTranslation("block.silentgear.salvager");
-    }
-
-    @Nullable
-    @Override
-    public ITextComponent getCustomName() {
-        return null;
     }
 }

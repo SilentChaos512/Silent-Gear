@@ -4,11 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -39,13 +39,13 @@ public final class PotionEffectTrait extends SimpleTrait {
 
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
-        EntityPlayer player = context.getPlayer();
+        PlayerEntity player = context.getPlayer();
         if (player == null || !isEquipped) return;
         GearType gearType = ((ICoreItem) context.getGear().getItem()).getGearType();
         potions.forEach((type, list) -> applyEffects(player, gearType, type, list));
     }
 
-    private void applyEffects(EntityPlayer player, GearType gearType, String type, Iterable<PotionData> effects) {
+    private void applyEffects(PlayerEntity player, GearType gearType, String type, Iterable<PotionData> effects) {
         if (gearType.matches(type) || "all".equals(type)) {
             int setPieceCount = getSetPieceCount(type, player);
             boolean hasFullSet = !"armor".equals(type) || setPieceCount >= 4;
@@ -53,7 +53,7 @@ public final class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    private int getSetPieceCount(String type, EntityPlayer player) {
+    private int getSetPieceCount(String type, PlayerEntity player) {
         if (!"armor".equals(type)) return 1;
 
         int count = 0;
@@ -105,11 +105,11 @@ public final class PotionEffectTrait extends SimpleTrait {
 
         static PotionData from(JsonObject json) {
             PotionData ret = new PotionData();
-            ret.requiresFullSet = JsonUtils.getBoolean(json, "full_set", false);
+            ret.requiresFullSet = JSONUtils.getBoolean(json, "full_set", false);
             // Effect ID, get actual potion only when needed
-            ret.effectId = new ResourceLocation(JsonUtils.getString(json, "effect", "unknown"));
+            ret.effectId = new ResourceLocation(JSONUtils.getString(json, "effect", "unknown"));
             // Effects duration in seconds.
-            float durationInSeconds = JsonUtils.getFloat(json, "duration", getDefaultDuration(ret));
+            float durationInSeconds = JSONUtils.getFloat(json, "duration", getDefaultDuration(ret));
             ret.duration = TimeUtils.ticksFromSeconds(durationInSeconds);
 
             // Level int or array
@@ -119,7 +119,7 @@ public final class PotionEffectTrait extends SimpleTrait {
             }
             if (elementLevel.isJsonPrimitive()) {
                 // Single level
-                ret.levels = new int[]{JsonUtils.getInt(json, "level", 1)};
+                ret.levels = new int[]{JSONUtils.getInt(json, "level", 1)};
             } else if (elementLevel.isJsonArray()) {
                 // Levels by piece count
                 JsonArray array = elementLevel.getAsJsonArray();
@@ -139,16 +139,16 @@ public final class PotionEffectTrait extends SimpleTrait {
             return "night_vision".equals(ret.effectId.getPath()) ? 15.5f : 1.5f;
         }
 
-        Optional<PotionEffect> getEffect(int pieceCount, boolean hasFullSet) {
+        Optional<EffectInstance> getEffect(int pieceCount, boolean hasFullSet) {
             if (this.requiresFullSet && !hasFullSet) return Optional.empty();
 
-            Potion potion = ForgeRegistries.POTIONS.getValue(effectId);
+            Effect potion = ForgeRegistries.POTIONS.getValue(effectId);
             if (potion == null) return Optional.empty();
 
             int effectLevel = levels[MathHelper.clamp(pieceCount - 1, 0, levels.length - 1)];
             if (effectLevel < 1) return Optional.empty();
 
-            return Optional.of(new PotionEffect(potion, duration, effectLevel - 1, true, false));
+            return Optional.of(new EffectInstance(potion, duration, effectLevel - 1, true, false));
         }
     }
 }

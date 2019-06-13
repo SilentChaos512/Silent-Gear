@@ -22,24 +22,24 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.lib.item.ItemLootContainer;
+import net.silentchaos512.lib.item.LootContainerItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlueprintPackage extends ItemLootContainer {
+public class BlueprintPackage extends LootContainerItem {
     public BlueprintPackage(ResourceLocation defaultLootTable) {
         super(defaultLootTable, new Properties().group(SilentGear.ITEM_GROUP));
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TextComponentTranslation("item.silentgear.blueprint_package.desc1").applyTextStyle(TextFormatting.ITALIC));
-        tooltip.add(new TextComponentTranslation("item.silentgear.blueprint_package.desc2").applyTextStyle(TextFormatting.ITALIC));
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc1").applyTextStyle(TextFormatting.ITALIC));
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc2").applyTextStyle(TextFormatting.ITALIC));
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 }

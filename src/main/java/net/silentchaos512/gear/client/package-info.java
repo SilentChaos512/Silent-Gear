@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package net.silentchaos512.gear.item.blueprint.book;
+package net.silentchaos512.gear.client;
 
 import mcp.MethodsReturnNonnullByDefault;
 

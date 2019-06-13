@@ -1,18 +1,20 @@
 package net.silentchaos512.gear.block.craftingstation;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.gui.GuiItemParts;
 import net.silentchaos512.gear.client.gui.TexturedButton;
 import net.silentchaos512.gear.client.util.TooltipFlagTC;
@@ -21,62 +23,64 @@ import net.silentchaos512.lib.util.TextRenderUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GuiCraftingStation extends GuiContainer {
+public class GuiCraftingStation extends ContainerScreen<ContainerCraftingStation> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/crafting_station.png");
 
     private final ContainerCraftingStation container;
 
     private TexturedButton buttonShowAllParts;
 
-    public GuiCraftingStation(ContainerCraftingStation inventorySlotsIn) {
-        super(inventorySlotsIn);
-        this.container = inventorySlotsIn;
+    public GuiCraftingStation(ContainerCraftingStation container, PlayerInventory playerInventory) {
+        super(container, playerInventory, new TranslationTextComponent("container.silentgear.crafting_station"));
+        this.container = container;
 
         this.xSize = 256;
         // this.ySize = 256;
     }
 
     @Override
-    public void initGui() {
-        super.initGui();
+    public void init() {
+        super.init();
 
         // Parts GUI button
-        buttonShowAllParts = new TexturedButton(TEXTURE, 100, guiLeft + 149, guiTop + 5, 236, 166, 20, 18,
+        buttonShowAllParts = new TexturedButton(TEXTURE, guiLeft + 149, guiTop + 5, 236, 166, 20, 18,
                 ImmutableList.of(
-                        new TextComponentTranslation("gui.silentgear.crafting_station.parts_button.hover1")
+                        new TranslationTextComponent("gui.silentgear.crafting_station.parts_button.hover1")
                                 .getFormattedText(),
-                        new TextComponentTranslation("gui.silentgear.crafting_station.parts_button.hover2")
+                        new TranslationTextComponent("gui.silentgear.crafting_station.parts_button.hover2")
                                 .applyTextStyle(TextFormatting.GRAY)
                                 .getFormattedText()
-                )) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                mc.displayGuiScreen(new GuiItemParts());
-            }
-        };
+                ),
+                b -> {
+                    if (minecraft != null) {
+                        minecraft.displayGuiScreen(new GuiItemParts());
+                    }
+                });
         this.addButton(buttonShowAllParts);
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
+        this.renderBackground();
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
 
-        if (buttonShowAllParts.isMouseOver()) {
+        if (buttonShowAllParts.isMouseOver(mouseX, mouseY)) { // TODO: right params?
             buttonShowAllParts.drawHover(mouseX, mouseY);
         }
     }
 
-    private ITooltipFlag getTooltipFlag(ItemStack stack) {
-        boolean ctrl = stack.getItem() instanceof ICoreItem/* || stack.getItem() instanceof ToolHead*/;
-        boolean alt = false; //KeyTrackerSL.isAltDown();
-        boolean shift = false; //KeyTrackerSL.isShiftDown();
+    private static ITooltipFlag getTooltipFlag(ItemStack stack) {
+        boolean ctrl = stack.getItem() instanceof ICoreItem || KeyTracker.isControlDown();
+        boolean alt = KeyTracker.isAltDown();
+        boolean shift = KeyTracker.isShiftDown();
         return new TooltipFlagTC(ctrl, alt, shift, false);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        if (minecraft == null) return;
+
         // Draw adjacent inventories
 //        NonNullList<Pair<ItemStack, IInventory>> list = this.tile.getAdjacentInventories();
 //        int itemX = 5;
@@ -85,15 +89,9 @@ public class GuiCraftingStation extends GuiContainer {
 //            itemX += 20;
 //        }
 
-        this.fontRenderer.drawString(
-                I18n.format("gui.silentgear.crafting_station.crafting"),
-                8, 6, 0x404040);
-        this.fontRenderer.drawString(
-                I18n.format("gui.silentgear.crafting_station.storage"),
-                -55, 19, 0x404040);
-        this.fontRenderer.drawString(
-                I18n.format("container.inventory"),
-                8, this.ySize - 96 + 2, 0x404040);
+        this.font.drawString(I18n.format("gui.silentgear.crafting_station.crafting"), 8, 6, 0x404040);
+        this.font.drawString(I18n.format("gui.silentgear.crafting_station.storage"), -55, 19, 0x404040);
+        this.font.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 0x404040);
 
         // Version number (remove in full release?)
         renderVersionString();
@@ -111,8 +109,7 @@ public class GuiCraftingStation extends GuiContainer {
 
         if (!craftResult.isEmpty()) {
             // Draw crafting result tooltip
-            FontRenderer font = this.mc.fontRenderer;
-            List<String> tooltip = craftResult.getTooltip(this.mc.player, getTooltipFlag(craftResult))
+            List<String> tooltip = craftResult.getTooltip(this.minecraft.player, getTooltipFlag(craftResult))
                     .stream()
                     .map(ITextComponent::getFormattedText)
                     .collect(Collectors.toList());
@@ -143,12 +140,14 @@ public class GuiCraftingStation extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        if (minecraft == null) return;
+
         // Main window
         GlStateManager.color4f(1, 1, 1, 1);
-        this.mc.getTextureManager().bindTexture(TEXTURE);
+        minecraft.getTextureManager().bindTexture(TEXTURE);
         int xPos = (this.width - this.xSize) / 2;
         int yPos = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(xPos, yPos, 0, 0, this.xSize, this.ySize);
+        this.blit(xPos, yPos, 0, 0, this.xSize, this.ySize);
 
         // Internal/external inventory slots
         final int rowCount = TileCraftingStation.SIDE_INVENTORY_SIZE / 3;
@@ -159,23 +158,23 @@ public class GuiCraftingStation extends GuiContainer {
         for (int i = 0; i < rowCount; ++i) {
             int height = i == 0 || i == rowCount - 1 ? 22 : 18;
             int ty = 194 + (i == 0 ? 0 : i == rowCount - 1 ? 40 : 22);
-            this.drawTexturedModalRect(x, y, 0, ty, rowWidth, height);
+            this.blit(x, y, 0, ty, rowWidth, height);
             y += height;
         }
 
-        this.drawTexturedModalRect(x, y - totalHeight - 12, 0, 177, rowWidth, 15);
+        this.blit(x, y - totalHeight - 12, 0, 177, rowWidth, 15);
 
         // Tooltip background
         x = xPos + 171;
         y = yPos + 4;
-        drawRect(x, y, x + 80, y + 158, 0xCF000000);
+        fill(x, y, x + 80, y + 158, 0xCF000000);
     }
 
     private void renderVersionString() {
         String versionNumString = "Version: " + SilentGear.getVersion() + (SilentGear.isDevBuild() ? " (dev)" : "");
-        int versionNumStringWidth = fontRenderer.getStringWidth(versionNumString);
+        int versionNumStringWidth = font.getStringWidth(versionNumString);
         float versionNumScale = 0.65f;
-        TextRenderUtils.renderScaled(fontRenderer, versionNumString,
+        TextRenderUtils.renderScaled(font, versionNumString,
                 (int) (xSize - versionNumStringWidth * versionNumScale) - 1,
                 ySize + 1,
                 versionNumScale,
@@ -184,20 +183,27 @@ public class GuiCraftingStation extends GuiContainer {
     }
 
     private void drawSlimeFace(ItemStack craftResult) {
-        mc.getTextureManager().bindTexture(TEXTURE);
+        if (minecraft == null) return;
+
+        TextureManager textureManager = minecraft.getTextureManager();
+        textureManager.bindTexture(TEXTURE);
         GlStateManager.color4f(1, 1, 1, 1);
         final int textureY = 245;
         int textureX;
         if (craftResult.isEmpty()) {
-            if (this.container.craftMatrix.isEmpty()) textureX = 223; // :|
-            else textureX = 234; // :\
+            if (this.container.craftMatrix.isEmpty())
+                textureX = 223; // :|
+            else
+                textureX = 234; // :\
         } else {
             ResourceLocation name = craftResult.getItem().getRegistryName();
-            if (name == null || "tconstruct".equals(name.getNamespace())) textureX = 245; // :(
-            else textureX = 212; // :)
+            if (name == null || "tconstruct".equals(name.getNamespace()))
+                textureX = 245; // :(
+            else
+                textureX = 212; // :)
         }
 
-        drawTexturedModalRect(this.xSize - 18, this.ySize - 17, textureX, textureY, 11, 11);
-        mc.getTextureManager().bindTexture(ICONS);
+        blit(this.xSize - 18, this.ySize - 17, textureX, textureY, 11, 11);
+        textureManager.bindTexture(GUI_ICONS_LOCATION);
     }
 }

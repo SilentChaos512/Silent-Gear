@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.init;
 
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,7 +18,7 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum ModEntities {
-    SLINGSHOT_PROJECTILE(() -> EntityType.Builder.create(SlingshotProjectile.class, SlingshotProjectile::new));
+    SLINGSHOT_PROJECTILE(() -> EntityType.Builder.<SlingshotProjectile>create(SlingshotProjectile::new, EntityClassification.MISC));
 
     private final Lazy<EntityType<?>> entityType;
 

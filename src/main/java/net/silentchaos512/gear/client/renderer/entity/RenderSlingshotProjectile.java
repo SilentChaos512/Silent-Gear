@@ -1,43 +1,43 @@
 package net.silentchaos512.gear.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 
 import javax.annotation.Nullable;
 
-public class RenderSlingshotProjectile extends Render<SlingshotProjectile> {
-    protected RenderSlingshotProjectile(RenderManager renderManager) {
+public class RenderSlingshotProjectile extends EntityRenderer<SlingshotProjectile> {
+    protected RenderSlingshotProjectile(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(SlingshotProjectile entity) {
-        return TextureMap.LOCATION_BLOCKS_TEXTURE;
+        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
     }
 
     @Override
     public void doRender(SlingshotProjectile entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        ItemStack stack = entity.getItem();
+        ItemStack stack = ItemStack.EMPTY; // entity.getItem(); FIXME
         if (stack.isEmpty()) return;
 
         GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
         GlStateManager.translatef((float)x, (float)y, (float)z);
         GlStateManager.enableRescaleNormal();
-//        GlStateManager.scalef(this.scale, this.scale, this.scale);
+        GlStateManager.scalef(1, 1, 1);
 //        TextureAtlasSprite textureatlassprite = Minecraft.getInstance().getItemRenderer().getItemModelMesher().getParticleIcon(stack.getItem());
         TextureAtlasSprite textureatlassprite = Minecraft.getInstance().getItemRenderer().getItemModelMesher().getParticleIcon(Items.FEATHER);
         Tessellator tessellator = Tessellator.getInstance();
@@ -49,11 +49,11 @@ public class RenderSlingshotProjectile extends Render<SlingshotProjectile> {
         float f4 = 1.0F;
         float f5 = 0.5F;
         float f6 = 0.25F;
-        GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotatef((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotatef(180.0F - this.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotatef((float)(this.getRenderManager().options.thirdPersonView == 2 ? -1 : 1) * -this.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
         if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entity));
+            GlStateManager.setupSolidRenderingTextureCombine(this.getTeamColor(entity));
         }
 
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
@@ -63,7 +63,7 @@ public class RenderSlingshotProjectile extends Render<SlingshotProjectile> {
         bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex((double)f, (double)f2).normal(0.0F, 1.0F, 0.0F).endVertex();
         tessellator.draw();
         if (this.renderOutlines) {
-            GlStateManager.disableOutlineMode();
+            GlStateManager.tearDownSolidRenderingTextureCombine();
             GlStateManager.disableColorMaterial();
         }
 
@@ -74,7 +74,7 @@ public class RenderSlingshotProjectile extends Render<SlingshotProjectile> {
 
     public static class Factory implements IRenderFactory<SlingshotProjectile> {
         @Override
-        public Render<? super SlingshotProjectile> createRenderFor(RenderManager manager) {
+        public EntityRenderer<? super SlingshotProjectile> createRenderFor(EntityRendererManager manager) {
             return new RenderSlingshotProjectile(manager);
         }
     }

@@ -18,19 +18,19 @@
 
 package net.silentchaos512.gear.block.salvager;
 
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.client.gui.GuiTypes;
@@ -38,7 +38,7 @@ import net.silentchaos512.gear.client.gui.GuiTypes;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockSalvager extends BlockContainer {
+public class BlockSalvager extends ContainerBlock {
     public BlockSalvager() {
         super(Properties.create(Material.IRON)
                 .hardnessAndResistance(4, 20)
@@ -53,7 +53,7 @@ public class BlockSalvager extends BlockContainer {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
             GuiTypes.SALVAGER.display(player, pos);
         }
@@ -62,12 +62,12 @@ public class BlockSalvager extends BlockContainer {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TextComponentTranslation("block.silentgear.salvager.desc"));
+        tooltip.add(new TranslationTextComponent("block.silentgear.salvager.desc"));
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }

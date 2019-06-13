@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.parts;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -78,7 +78,7 @@ public final class PartData {
     }
 
     @Nullable
-    public static PartData read(NBTTagCompound tags) {
+    public static PartData read(CompoundNBT tags) {
         String key = tags.getString(NBT_ID);
         IGearPart part = PartManager.get(new ResourceLocation(key));
         if (part == null) return null;
@@ -89,7 +89,7 @@ public final class PartData {
     }
 
     @Nullable
-    public static PartData readFast(NBTTagCompound tags) {
+    public static PartData readFast(CompoundNBT tags) {
         String key = tags.getString(NBT_ID);
         if (key.isEmpty()) return null;
         IGearPart part = PartManager.get(new ResourceLocation(key));
@@ -97,13 +97,13 @@ public final class PartData {
         return of(part);
     }
 
-    public NBTTagCompound write(@Nonnull NBTTagCompound tags) {
+    public CompoundNBT write(@Nonnull CompoundNBT tags) {
         tags.putString("ID", part.getId().toString());
         if (this.grade != MaterialGrade.NONE) {
             tags.putString("Grade", this.grade.name());
         }
 
-        NBTTagCompound itemTag = new NBTTagCompound();
+        CompoundNBT itemTag = new CompoundNBT();
         this.craftingItem.write(itemTag);
         tags.put("Item", itemTag);
         return tags;

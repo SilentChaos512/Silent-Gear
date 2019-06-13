@@ -2,16 +2,16 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class CoreShovel extends ItemSpade implements ICoreTool {
+public class CoreShovel extends ShovelItem implements ICoreTool {
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
             Material.CLAY,
-            Material.CRAFTED_SNOW,
-            Material.GRASS,
-            Material.GROUND,
+            Material.SNOW_BLOCK,
+            Material.ORGANIC,
+            Material.EARTH,
             Material.SAND,
             Material.SNOW
     );
@@ -65,19 +65,19 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     //region Harvest tool overrides
 
     @Override
-    public boolean canHarvestBlock(ItemStack stack, IBlockState state) {
+    public boolean canHarvestBlock(ItemStack stack, BlockState state) {
         // Forge ItemStack-sensitive version
         return canHarvestBlock(state, getStatInt(stack, CommonItemStats.HARVEST_LEVEL));
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState state) {
+    public boolean canHarvestBlock(BlockState state) {
         // Vanilla version... Not good because we can't get the actual harvest level.
         // Assume a very high level since we can't get the actual value.
         return canHarvestBlock(state, 10);
     }
 
-    private boolean canHarvestBlock(IBlockState state, int toolLevel) {
+    private boolean canHarvestBlock(BlockState state, int toolLevel) {
         // Wrong harvest level?
         if (state.getBlock().getHarvestLevel(state) > toolLevel)
             return false;
@@ -88,11 +88,11 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemUseContext context) {
+    public ActionResultType onItemUse(ItemUseContext context) {
         // No action if broken or player is sneaking
         if (GearHelper.isBroken(context.getItem())
                 || context.getPlayer() != null && context.getPlayer().isSneaking()) {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         }
 
         // Make paths or whatever
@@ -109,17 +109,17 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
         return GearHelper.getDestroySpeed(stack, state, null);
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
         return GearHelper.getHarvestLevel(stack, tool, blockState, BASE_EFFECTIVE_MATERIALS);
     }
 
@@ -158,7 +158,7 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack stack) {
+    public Rarity getRarity(ItemStack stack) {
         return GearHelper.getRarity(stack);
     }
 
@@ -168,7 +168,7 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return GearHelper.hitEntity(stack, target, attacker);
     }
 
@@ -178,7 +178,7 @@ public class CoreShovel extends ItemSpade implements ICoreTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 

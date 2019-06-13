@@ -1,10 +1,8 @@
 package net.silentchaos512.gear.network;
 
 import net.minecraft.util.math.BlockPos;
-import net.silentchaos512.lib.network.MessageSL;
 
-public class MessageExtraBlockBreak extends MessageSL {
-
+public class MessageExtraBlockBreak /*extends MessageSL*/ {
     public int entityID = 0;
     public int numBlocks = 0;
     public int progress = 0;

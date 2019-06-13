@@ -18,16 +18,16 @@
 
 package net.silentchaos512.gear.event;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumLightType;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.LightType;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
@@ -64,16 +64,16 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onAttackEntity(LivingAttackEvent event) {
         // Check if already handled
-        EntityLivingBase attacked = event.getEntityLiving();
+        LivingEntity attacked = event.getEntityLiving();
         if (attacked == null || entityAttackedThisTick.contains(attacked.getUniqueID())) return;
 
         DamageSource source = event.getSource();
         if (source == null) return;
 
         Entity attacker = source.getTrueSource();
-        if (!(attacker instanceof EntityPlayer)) return;
+        if (!(attacker instanceof PlayerEntity)) return;
 
-        EntityPlayer player = (EntityPlayer) attacker;
+        PlayerEntity player = (PlayerEntity) attacker;
         ItemStack weapon = player.getHeldItemMainhand();
         if (!(weapon.getItem() instanceof ICoreTool)) return;
 
@@ -94,11 +94,11 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        final EntityPlayer player = event.getEntityPlayer();
+        final PlayerEntity player = event.getEntityPlayer();
         ItemStack tool = player.getHeldItemMainhand();
 
         if (tool.getItem() instanceof ICoreItem) {
-            final IBlockState state = event.getState();
+            final BlockState state = event.getState();
             ToolType toolClass = state.getBlock().getHarvestTool(state);
 //            if (toolClass == null) toolClass = "";
             final int blockLevel = state.getBlock().getHarvestLevel(state);
@@ -114,11 +114,9 @@ public final class GearEvents {
         }
     }
 
-    public static int getLightForLustrousTrait(World world, BlockPos pos) {
-        Chunk chunk = world.getChunk(pos);
-        boolean hasSkylight = world.dimension.hasSkyLight();
-        int blockLight = chunk.getLight(EnumLightType.BLOCK, pos, hasSkylight);
-        int skyLight = chunk.getLight(EnumLightType.SKY, pos, hasSkylight);
+    public static int getLightForLustrousTrait(IEnviromentBlockReader world, BlockPos pos) {
+        int blockLight = world.getLightFor(LightType.BLOCK, pos);
+        int skyLight = world.getLightFor(LightType.SKY, pos);
         // Block light is less effective
         return Math.max(skyLight, blockLight * 3 / 4);
     }
@@ -131,9 +129,12 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onBlockDrops(BlockEvent.HarvestDropsEvent event) {
-        if (event.isSilkTouching() || event.getHarvester() == null) return;
+        PlayerEntity harvester = event.getHarvester();
+        if (harvester == null || event.isSilkTouching()) return;
 
-        ItemStack tool = event.getHarvester().getHeldItemMainhand();
+        if (!(harvester instanceof ServerPlayerEntity)) return;
+
+        ItemStack tool = harvester.getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
         int magmaticLevel = TraitHelper.getTraitLevel(tool, TraitConst.MAGMATIC);
@@ -142,6 +143,8 @@ public final class GearEvents {
         for (int i = 0; i < event.getDrops().size(); ++i) {
             ItemStack stack = event.getDrops().get(i);
             // FIXME
+//            ((ServerPlayerEntity) harvester).getServerWorld().getRecipeManager().getRecipe();
+
             /*
             ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
             if (!smelted.isEmpty()) {

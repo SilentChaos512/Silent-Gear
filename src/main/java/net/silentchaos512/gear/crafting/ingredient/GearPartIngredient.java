@@ -24,7 +24,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
@@ -113,7 +113,7 @@ public final class GearPartIngredient extends Ingredient {
 
         @Override
         public GearPartIngredient parse(JsonObject json) {
-            String typeName = JsonUtils.getString(json, "part_type", "");
+            String typeName = JSONUtils.getString(json, "part_type", "");
             if (typeName.isEmpty())
                 throw new JsonSyntaxException("'part_type' is missing");
 

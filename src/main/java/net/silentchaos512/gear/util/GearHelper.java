@@ -1,26 +1,26 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.Multimap;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.SilentGear;
@@ -81,11 +81,11 @@ public final class GearHelper {
         return speed;
     }
 
-    public static Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         // Need to use this version to prevent stack overflow
         @SuppressWarnings("deprecation") Multimap<String, AttributeModifier> map = stack.getItem().getAttributeModifiers(slot);
 
-        if (slot == EntityEquipmentSlot.MAINHAND) {
+        if (slot == EquipmentSlotType.MAINHAND) {
             // Melee Damage
             String key = SharedMonsterAttributes.ATTACK_DAMAGE.getName();
             float value = getMeleeDamageModifier(stack);
@@ -98,8 +98,8 @@ public final class GearHelper {
 
             // Reach distance
             float reachStat = GearData.getStat(stack, CommonItemStats.REACH_DISTANCE);
-            AttributeModifier reachModifier = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, 0);
-            map.put(EntityPlayer.REACH_DISTANCE.getName(), reachModifier);
+            AttributeModifier reachModifier = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
+            map.put(PlayerEntity.REACH_DISTANCE.getName(), reachModifier);
         }
 
         return map;
@@ -126,12 +126,12 @@ public final class GearHelper {
         return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, EntityLivingBase entityLiving) {
-        if (isUnbreakable(stack) || (entityLiving instanceof EntityPlayer && ((EntityPlayer) entityLiving).abilities.isCreativeMode))
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entityLiving) {
+        if (isUnbreakable(stack) || (entityLiving instanceof PlayerEntity && ((PlayerEntity) entityLiving).abilities.isCreativeMode))
             return;
         final boolean canBreakPermanently = canBreakPermanently(stack);
 
-        EntityPlayerMP player = entityLiving instanceof EntityPlayerMP ? (EntityPlayerMP) entityLiving : null;
+        ServerPlayerEntity player = entityLiving instanceof ServerPlayerEntity ? (ServerPlayerEntity) entityLiving : null;
         final int preTraitAmount = amount;
         amount = (int) TraitHelper.activateTraits(stack, preTraitAmount, (trait, level, val) ->
                 trait.onDurabilityDamage(new TraitActionContext(player, level, stack), (int) val));
@@ -151,29 +151,29 @@ public final class GearHelper {
 
         if (isBroken(stack)) {
             // The item "broke" (can still be repaired)
-            entityLiving.renderBrokenItemStack(stack);
+            entityLiving.handleStatusUpdate((byte) 47); // entityLiving.renderBrokenItemStack(stack);
             GearData.incrementBrokenCount(stack);
             GearData.recalculateStats(player, stack);
             if (player != null)
                 notifyPlayerOfBrokenGear(stack, player);
         } else if (canBreakPermanently && wouldBreak) {
             // Item is gone forever, rest in pieces
-            entityLiving.renderBrokenItemStack(stack);
+            entityLiving.handleStatusUpdate((byte) 47); // entityLiving.renderBrokenItemStack(stack);
             stack.shrink(1);
         }
     }
 
-    private static void onDamageFactorChange(EntityPlayerMP player, int preDamageFactor, int newDamageFactor) {
+    private static void onDamageFactorChange(ServerPlayerEntity player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
             player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
             LibTriggers.GENERIC_INT.trigger(player, new ResourceLocation(SilentGear.MOD_ID, "damage_factor_change"), 1);
         }
     }
 
-    private static void notifyPlayerOfBrokenGear(ItemStack stack, EntityPlayerMP player) {
+    private static void notifyPlayerOfBrokenGear(ItemStack stack, ServerPlayerEntity player) {
         // Notify player. Mostly for armor, but might help new players as well.
         // FIXME: Does not work with armor currently, need to find a way to get player
-        player.sendMessage(new TextComponentTranslation("misc.silentgear.notifyOnBreak", stack.getDisplayName()));
+        player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()));
     }
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
@@ -194,7 +194,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.GENERAL.gearBreaksPermanently.get() || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPart());
+        return Config.GENERAL.gearBreaksPermanently.get() || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPartId());
     }
 
     public static boolean isBroken(ItemStack stack) {
@@ -244,7 +244,7 @@ public final class GearHelper {
         return ((ICoreItem) gear.getItem()).getGearType();
     }
 
-    public static int getHarvestLevel(ItemStack stack, ToolType toolClass, @Nullable IBlockState state, @Nullable Set<Material> effectiveMaterials) {
+    public static int getHarvestLevel(ItemStack stack, ToolType toolClass, @Nullable BlockState state, @Nullable Set<Material> effectiveMaterials) {
         if (isBroken(stack) || !stack.getItem().getToolTypes(stack).contains(toolClass))
             return -1;
 
@@ -266,7 +266,7 @@ public final class GearHelper {
         else mutableSet.remove(toolClass);
     }
 
-    public static float getDestroySpeed(ItemStack stack, IBlockState state, @Nullable Set<Material> extraMaterials) {
+    public static float getDestroySpeed(ItemStack stack, BlockState state, @Nullable Set<Material> extraMaterials) {
         if (isBroken(stack))
             return BROKEN_DESTROY_SPEED;
 
@@ -293,7 +293,7 @@ public final class GearHelper {
         return 1f;
     }
 
-    public static boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+    public static boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (!isBroken(stack) && stack.getItem() instanceof ICoreTool) {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
             attemptDamage(stack, damage, entityLiving);
@@ -307,7 +307,7 @@ public final class GearHelper {
         return true;
     }
 
-    public static boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public static boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean isBroken = isBroken(stack);
         if (!isBroken && stack.getItem() instanceof ICoreTool) {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
@@ -319,7 +319,7 @@ public final class GearHelper {
         return !isBroken;
     }
 
-    private static void selfHarmWithToolHead(ItemStack stack, EntityLivingBase user) {
+    private static void selfHarmWithToolHead(ItemStack stack, LivingEntity user) {
         // If missing rod, hurt the user
         if (stack.getItem() instanceof ICoreItem) {
             ICoreItem item = (ICoreItem) stack.getItem();
@@ -328,8 +328,8 @@ public final class GearHelper {
                 DamageSource source = new DamageSource("silentgear.broken_tool") {
                     @Nonnull
                     @Override
-                    public ITextComponent getDeathMessage(EntityLivingBase entity) {
-                        return new TextComponentTranslation("death.silentgear.broken_tool",
+                    public ITextComponent getDeathMessage(LivingEntity entity) {
+                        return new TranslationTextComponent("death.silentgear.broken_tool",
                                 entity.getDisplayName(),
                                 stack.getDisplayName());
                     }
@@ -337,9 +337,9 @@ public final class GearHelper {
 
                 user.attackEntityFrom(source, damageAmount);
 
-                if (user instanceof EntityPlayer) {
-                    EntityPlayer player = (EntityPlayer) user;
-                    player.sendStatusMessage(new TextComponentTranslation("misc.silentgear.missingRod.attack"), true);
+                if (user instanceof PlayerEntity) {
+                    PlayerEntity player = (PlayerEntity) user;
+                    player.sendStatusMessage(new TranslationTextComponent("misc.silentgear.missingRod.attack"), true);
                 }
             }
         }
@@ -347,7 +347,7 @@ public final class GearHelper {
 
     // Formerly onUpdate
     public static void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        @Nullable EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
+        @Nullable PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity) entity : null;
 
         if (world.getGameTime() % 20 == 0) {
             // Any ungraded parts get a random grade
@@ -381,18 +381,18 @@ public final class GearHelper {
         return false;
     }
 
-    public static EnumRarity getRarity(ItemStack stack) {
+    public static Rarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
         if (stack.isEnchanted())
             rarity += 20;
 
         if (rarity < 40)
-            return EnumRarity.COMMON;
+            return Rarity.COMMON;
         if (rarity < 80)
-            return EnumRarity.UNCOMMON;
+            return Rarity.UNCOMMON;
         if (rarity < 120)
-            return EnumRarity.RARE;
-        return EnumRarity.EPIC;
+            return Rarity.RARE;
+        return Rarity.EPIC;
     }
 
     private static final Map<GearType, List<ItemStack>> subItemCache = new HashMap<>();
@@ -433,18 +433,18 @@ public final class GearHelper {
 
     public static ITextComponent getDisplayName(ItemStack gear) {
         PartData part = GearData.getPrimaryPart(gear);
-        if (part == null) return new TextComponentTranslation(gear.getTranslationKey());
+        if (part == null) return new TranslationTextComponent(gear.getTranslationKey());
 
         ITextComponent partName = part.getDisplayName(gear);
-        ITextComponent gearName = new TextComponentTranslation(gear.getTranslationKey() + ".nameProper", partName);
+        ITextComponent gearName = new TranslationTextComponent(gear.getTranslationKey() + ".nameProper", partName);
 
         if (gear.getItem() instanceof ICoreTool) {
             ICoreItem item = (ICoreItem) gear.getItem();
             if (item.requiresPartOfType(PartType.ROD) && GearData.getPartOfType(gear, PartType.ROD) == null) {
-                return new TextComponentTranslation(gear.getTranslationKey() + ".noRod", gearName);
+                return new TranslationTextComponent(gear.getTranslationKey() + ".noRod", gearName);
             }
             if (item.requiresPartOfType(PartType.BOWSTRING) && GearData.getPartOfType(gear, PartType.BOWSTRING) == null) {
-                return new TextComponentTranslation(gear.getTranslationKey() + ".unstrung", gearName);
+                return new TranslationTextComponent(gear.getTranslationKey() + ".unstrung", gearName);
             }
         }
 

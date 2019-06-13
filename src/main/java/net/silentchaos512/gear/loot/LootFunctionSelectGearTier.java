@@ -22,27 +22,25 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.LootFunction;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.util.GearGenerator;
 
-import java.util.Random;
-
-public class LootFunctionSelectGearTier extends LootFunction {
+public final class LootFunctionSelectGearTier extends LootFunction {
     private final int tier;
 
-    private LootFunctionSelectGearTier(LootCondition[] conditions, int tier) {
+    private LootFunctionSelectGearTier(ILootCondition[] conditions, int tier) {
         super(conditions);
         this.tier = tier;
     }
 
     @Override
-    public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
+    protected ItemStack doApply(ItemStack stack, LootContext context) {
         if (!(stack.getItem() instanceof ICoreItem)) return stack;
         return GearGenerator.create((ICoreItem) stack.getItem(), this.tier);
     }
@@ -58,8 +56,8 @@ public class LootFunctionSelectGearTier extends LootFunction {
         }
 
         @Override
-        public LootFunctionSelectGearTier deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootCondition[] conditionsIn) {
-            int tier = JsonUtils.getInt(object, "tier", 2);
+        public LootFunctionSelectGearTier deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+            int tier = JSONUtils.getInt(object, "tier", 2);
             return new LootFunctionSelectGearTier(conditionsIn, tier);
         }
     }

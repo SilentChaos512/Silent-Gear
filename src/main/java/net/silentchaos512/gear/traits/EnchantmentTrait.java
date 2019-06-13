@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -117,7 +117,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         static EnchantmentData from(JsonObject json) {
             EnchantmentData ret = new EnchantmentData();
             // Enchantment ID, get actual enchantment only when needed
-            ret.enchantmentId = new ResourceLocation(JsonUtils.getString(json, "enchantment", "unknown"));
+            ret.enchantmentId = new ResourceLocation(JSONUtils.getString(json, "enchantment", "unknown"));
 
             // Level int or array
             JsonElement elementLevel = json.get("level");
@@ -126,7 +126,7 @@ public final class EnchantmentTrait extends SimpleTrait {
             }
             if (elementLevel.isJsonPrimitive()) {
                 // Single level
-                ret.levels = new int[]{JsonUtils.getInt(json, "level", 1)};
+                ret.levels = new int[]{JSONUtils.getInt(json, "level", 1)};
             } else if (elementLevel.isJsonArray()) {
                 // Levels
                 JsonArray array = elementLevel.getAsJsonArray();

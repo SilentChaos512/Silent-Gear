@@ -18,13 +18,14 @@
 
 package net.silentchaos512.gear.client;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.ToolType;
@@ -56,14 +57,15 @@ public class DebugOverlay extends DebugRenderOverlay {
         // Harvest level checks
         Minecraft mc = Minecraft.getInstance();
         RayTraceResult rt = mc.objectMouseOver;
-        if (rt != null && rt.type == RayTraceResult.Type.BLOCK) {
+        if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK) {
+            BlockRayTraceResult brt = (BlockRayTraceResult) rt;
             Entity renderViewEntity = mc.getRenderViewEntity();
             if (renderViewEntity != null) {
-                BlockPos pos = rt.getBlockPos();
-                IBlockState state = renderViewEntity.world.getBlockState(pos);
+                BlockPos pos = brt.getPos();
+                BlockState state = renderViewEntity.world.getBlockState(pos);
 
-                EntityPlayerSP player = mc.player;
-                ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
+                ClientPlayerEntity player = mc.player;
+                ItemStack heldItem = player.getHeldItem(Hand.MAIN_HAND);
                 if (heldItem.getItem() instanceof ICoreTool) {
                     ToolType toolClass = state.getBlock().getHarvestTool(state);
                     final int blockLevel = state.getBlock().getHarvestLevel(state);

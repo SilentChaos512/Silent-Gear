@@ -4,16 +4,22 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.*;
+import net.minecraftforge.client.model.ICustomModelLoader;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ItemLayerModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
@@ -22,7 +28,6 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.gear.CoreBow;
@@ -109,9 +114,10 @@ public final class ToolModel implements IUnbakedModel {
     }
 
 
+    @Nullable
     @Override
-    public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock, VertexFormat format) {
-        ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
+    public IBakedModel bake(ModelBakery bakery, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, ISprite sprite, VertexFormat format) {
+        ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(ItemCameraTransforms.DEFAULT);
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
         // Get textures in proper render order
@@ -122,7 +128,7 @@ public final class ToolModel implements IUnbakedModel {
                 .map(ResourceLocation::new)
                 .collect(ImmutableList.toImmutableList());
 
-        IBakedModel model = (new ItemLayerModel(textures)).bake(modelGetter, spriteGetter, state, uvlock, format);
+        IBakedModel model = (new ItemLayerModel(textures)).bake(bakery, spriteGetter, sprite, format);
         builder.addAll(model.getQuads(null, null, SilentGear.random));
 
         int layerCount = textures.size();
@@ -179,7 +185,7 @@ public final class ToolModel implements IUnbakedModel {
 
         @Nullable
         @Override
-        public IBakedModel getModelWithOverrides(IBakedModel parentModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+        public IBakedModel getModelWithOverrides(IBakedModel parentModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
             if (!(stack.getItem() instanceof ICoreTool)) return parentModel;
 
             int animationFrame = getAnimationFrame(stack, world, entity);
@@ -223,7 +229,7 @@ public final class ToolModel implements IUnbakedModel {
                 Function<ResourceLocation, IUnbakedModel> modelGetter = location -> null;
                 Function<ResourceLocation, TextureAtlasSprite> spriteGetter = location ->
                         Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
-                IBakedModel bakedModel = parent.bake(
+/*                IBakedModel bakedModel = parent.bake(
                         modelGetter,
                         spriteGetter,
                         new SimpleModelState(ImmutableMap.of()),
@@ -236,7 +242,8 @@ public final class ToolModel implements IUnbakedModel {
                         .map(part -> part.getColor(stack, animationFrame))
                         .toArray(Integer[]::new));
 
-                return bakedModel;
+                return bakedModel;*/
+                return null;
             }
 
             return GearClientHelper.modelCache.get(key);
@@ -254,7 +261,7 @@ public final class ToolModel implements IUnbakedModel {
             }
         }
 
-        private int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+        private int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
             if (stack.getItem() instanceof CoreBow) {
                 UUID uuid = GearData.getUUID(stack);
                 if (bowPull.containsKey(uuid)) {
@@ -284,6 +291,11 @@ public final class ToolModel implements IUnbakedModel {
         @Override
         public ItemOverrideList getOverrides() {
             return OverrideHandler.INSTANCE;
+        }
+
+        @Override
+        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+            return null;
         }
 
         @Override

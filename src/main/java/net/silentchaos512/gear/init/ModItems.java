@@ -1,8 +1,9 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Food;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -11,26 +12,31 @@ import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.item.*;
+import net.silentchaos512.gear.item.BlueprintPackage;
+import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.Flaxseeds;
+import net.silentchaos512.gear.item.SlingshotAmmo;
 import net.silentchaos512.gear.item.blueprint.GearBlueprint;
 import net.silentchaos512.gear.item.blueprint.PartBlueprint;
-import net.silentchaos512.gear.item.blueprint.book.BlueprintBook;
 import net.silentchaos512.gear.item.gear.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
     public static final List<GearBlueprint> blueprints = new ArrayList<>();
-    static final Map<String, ItemBlock> blocksToRegister = new LinkedHashMap<>();
+    static final Map<String, BlockItem> blocksToRegister = new LinkedHashMap<>();
 
     public static BlueprintPackage blueprintPackage;
-    public static BlueprintBook blueprintBook;
 
     public static Flaxseeds flaxseeds;
-    public static NetherBanana netherBanana;
+    public static Item netherBanana;
+    public static Item pebble;
 
     public static CoreSword sword;
     public static CoreDagger dagger;
@@ -62,22 +68,23 @@ public final class ModItems {
         // Initializes, but does not register gear classes, fills maps
         initializeGear();
 
-        blueprintPackage = register("blueprint_package", new BlueprintPackage(
-                new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints")));
+        blueprintPackage = register("blueprint_package", new BlueprintPackage(SilentGear.getId("starter_blueprints")));
 
         // Blueprints/templates
         registerBlueprints("blueprint", false);
         registerBlueprints("template", true);
-        blueprintBook = register("blueprint_book", new BlueprintBook());
 
         for (CraftingItems item : CraftingItems.values()) {
             register(item.getName(), item.asItem());
         }
 
         flaxseeds = register("flaxseeds", new Flaxseeds());
-        netherBanana = register("nether_banana", new NetherBanana());
+        netherBanana = register("nether_banana", new Item(new Item.Properties()
+                .food(new Food.Builder().hunger(5).saturation(0.4f).build())
+                .group(SilentGear.ITEM_GROUP)
+        ));
 
-        register("pebble", new SlingshotAmmo());
+        pebble = register("pebble", new SlingshotAmmo());
 
         // Register gear classes
         toolClasses.forEach((key, item) -> register(key, item.asItem()));
@@ -109,10 +116,10 @@ public final class ModItems {
         bow = new CoreBow();
         slingshot = new CoreSlingshot();
 
-        helmet = new CoreArmor(EntityEquipmentSlot.HEAD, "helmet");
-        chestplate = new CoreArmor(EntityEquipmentSlot.CHEST, "chestplate");
-        leggings = new CoreArmor(EntityEquipmentSlot.LEGS, "leggings");
-        boots = new CoreArmor(EntityEquipmentSlot.FEET, "boots");
+        helmet = new CoreArmor(EquipmentSlotType.HEAD, "helmet");
+        chestplate = new CoreArmor(EquipmentSlotType.CHEST, "chestplate");
+        leggings = new CoreArmor(EquipmentSlotType.LEGS, "leggings");
+        boots = new CoreArmor(EquipmentSlotType.FEET, "boots");
 
         toolClasses.put("sword", sword);
         toolClasses.put("dagger", dagger);

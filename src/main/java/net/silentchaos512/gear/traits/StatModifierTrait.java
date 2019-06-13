@@ -20,7 +20,7 @@ package net.silentchaos512.gear.traits;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -62,7 +62,7 @@ public final class StatModifierTrait extends SimpleTrait {
         for (JsonElement element : json.get("stats").getAsJsonArray()) {
             if (element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
-                String statName = JsonUtils.getString(obj, "name", "");
+                String statName = JSONUtils.getString(obj, "name", "");
                 ItemStat stat = ItemStat.ALL_STATS.get(statName);
 
                 if (stat != null) {
@@ -91,9 +91,9 @@ public final class StatModifierTrait extends SimpleTrait {
         private static StatMod fromJson(JsonObject json) {
             StatMod mod = new StatMod();
 
-            mod.multi = JsonUtils.getFloat(json, "value", 0);
-            mod.factorDamage = JsonUtils.getBoolean(json, "factor_damage", true);
-            mod.factorValue = JsonUtils.getBoolean(json, "factor_value", true);
+            mod.multi = JSONUtils.getFloat(json, "value", 0);
+            mod.factorDamage = JSONUtils.getBoolean(json, "factor_damage", true);
+            mod.factorValue = JSONUtils.getBoolean(json, "factor_value", true);
 
             return mod;
         }

@@ -1,13 +1,14 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartDataList;
@@ -19,9 +20,12 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class GearPartSwap implements IRecipe {
+public class GearPartSwap implements ICraftingRecipe {
+    public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "swap_gear_part");
+    public static final Serializer SERIALIZER = new Serializer();
+
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(CraftingInventory inv, World worldIn) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return false;
@@ -47,7 +51,7 @@ public class GearPartSwap implements IRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getCraftingResult(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return ItemStack.EMPTY;
@@ -92,17 +96,15 @@ public class GearPartSwap implements IRecipe {
 
     @Override
     public ResourceLocation getId() {
-        return Serializer.NAME;
+        return NAME;
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
+        return SERIALIZER;
     }
 
-    public static final class Serializer implements IRecipeSerializer<GearPartSwap> {
-        public static final Serializer INSTANCE = new Serializer();
-        private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "swap_gear_part");
+    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GearPartSwap> {
 
         @Override
         public GearPartSwap read(ResourceLocation recipeId, JsonObject json) {
@@ -116,10 +118,5 @@ public class GearPartSwap implements IRecipe {
 
         @Override
         public void write(PacketBuffer buffer, GearPartSwap recipe) {}
-
-        @Override
-        public ResourceLocation getName() {
-            return NAME;
-        }
     }
 }

@@ -19,14 +19,17 @@
 package net.silentchaos512.gear.util;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockOre;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.OreBlock;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketBlockChange;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.network.play.server.SChangeBlockPacket;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -59,48 +62,48 @@ public interface IAOETool {
      * Call the item's rayTrace method inside this.
      */
     @Nullable
-    RayTraceResult rayTraceBlocks(World world, EntityPlayer player);
+    RayTraceResult rayTraceBlocks(World world, PlayerEntity player);
 
-    default List<BlockPos> getExtraBlocks(World world, @Nullable RayTraceResult rt, EntityPlayer player, ItemStack stack) {
+    default List<BlockPos> getExtraBlocks(World world, @Nullable BlockRayTraceResult rt, PlayerEntity player, ItemStack stack) {
         List<BlockPos> positions = new ArrayList<>();
 
-        if (player.isSneaking() || rt == null || rt.getBlockPos() == null || rt.sideHit == null)
+        if (player.isSneaking() || rt == null || rt.getPos() == null || rt.getFace() == null)
             return positions;
 
-        BlockPos pos = rt.getBlockPos();
-        IBlockState state = world.getBlockState(pos);
+        BlockPos pos = rt.getPos();
+        BlockState state = world.getBlockState(pos);
 
         if (isEffectiveOnBlock(stack, world, pos, state)) {
-            switch (rt.sideHit.getAxis()) {
+            switch (rt.getFace().getAxis()) {
                 case Y:
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.NORTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.NORTH).offset(EnumFacing.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.EAST).offset(EnumFacing.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.WEST).offset(EnumFacing.NORTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH).offset(Direction.EAST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST).offset(Direction.SOUTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH).offset(Direction.WEST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST).offset(Direction.NORTH), stack, positions);
                     break;
                 case X:
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.NORTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.DOWN), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.NORTH).offset(EnumFacing.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.UP).offset(EnumFacing.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.SOUTH).offset(EnumFacing.DOWN), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.DOWN).offset(EnumFacing.NORTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH).offset(Direction.UP), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP).offset(Direction.SOUTH), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH).offset(Direction.DOWN), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN).offset(Direction.NORTH), stack, positions);
                     break;
                 case Z:
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.DOWN), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.DOWN).offset(EnumFacing.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.EAST).offset(EnumFacing.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.UP).offset(EnumFacing.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(EnumFacing.WEST).offset(EnumFacing.DOWN), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN).offset(Direction.EAST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST).offset(Direction.UP), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP).offset(Direction.WEST), stack, positions);
+                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST).offset(Direction.DOWN), stack, positions);
                     break;
             }
         }
@@ -108,13 +111,13 @@ public interface IAOETool {
         return positions;
     }
 
-    default boolean isEffectiveOnBlock(ItemStack stack, World world, BlockPos pos, IBlockState state) {
+    default boolean isEffectiveOnBlock(ItemStack stack, World world, BlockPos pos, BlockState state) {
         // The Forge.canToolHarvestBlock method seems to be very unreliable...
         return stack.getItem().canHarvestBlock(stack, state) || ForgeHooks.canToolHarvestBlock(world, pos, stack);
     }
 
-    default void attemptAddExtraBlock(World world, IBlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
-        final IBlockState state2 = world.getBlockState(pos2);
+    default void attemptAddExtraBlock(World world, BlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
+        final BlockState state2 = world.getBlockState(pos2);
         // Prevent breaking of unbreakable blocks, like bedrock
         if (state2.getBlockHardness(world, pos2) < 0) return;
 
@@ -131,26 +134,27 @@ public interface IAOETool {
 
     /**
      * Handles actual AOE block breaking. Call {@link #onBlockStartBreak(ItemStack, BlockPos,
-     * EntityPlayer)} inside the {@code onBlockStartBreak} method of the tool's item.
+     * PlayerEntity)} inside the {@code onBlockStartBreak} method of the tool's item.
      */
     final class BreakHandler {
         private BreakHandler() {}
 
-        public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, EntityPlayer player) {
+        public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, PlayerEntity player) {
             World world = player.getEntityWorld();
-            if (world.isRemote || !(player instanceof EntityPlayerMP) || !(tool.getItem() instanceof IAOETool))
+            if (world.isRemote || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAOETool))
                 return false;
 
             IAOETool item = (IAOETool) tool.getItem();
             RayTraceResult rt = item.rayTraceBlocks(world, player);
-            IBlockState stateOriginal = world.getBlockState(pos);
+            BlockState stateOriginal = world.getBlockState(pos);
 
-            if (rt != null && rt.type == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal)) {
-                EnumFacing side = rt.sideHit;
-                List<BlockPos> extraBlocks = item.getExtraBlocks(world, rt, player, tool);
+            if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal)) {
+                BlockRayTraceResult brt = (BlockRayTraceResult) rt;
+                Direction side = brt.getFace();
+                List<BlockPos> extraBlocks = item.getExtraBlocks(world, brt, player, tool);
 
                 for (BlockPos pos2 : extraBlocks) {
-                    IBlockState state = world.getBlockState(pos2);
+                    BlockState state = world.getBlockState(pos2);
                     if (!world.isBlockLoaded(pos2) || !player.canPlayerEdit(pos2, side, tool) || !(state.canHarvestBlock(world, pos2, player)))
                         continue;
 
@@ -159,7 +163,7 @@ public interface IAOETool {
                         if (state.getBlock().removedByPlayer(state, world, pos2, player, false, state.getFluidState()))
                             state.getBlock().onPlayerDestroy(world, pos2, state);
                     } else {
-                        int xp = ForgeHooks.onBlockBreakEvent(world, ((EntityPlayerMP) player).interactionManager.getGameType(), (EntityPlayerMP) player, pos2);
+                        int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).interactionManager.getGameType(), (ServerPlayerEntity) player, pos2);
                         state.getBlock().onBlockHarvested(world, pos2, state, player);
                         tool.getItem().onBlockDestroyed(tool, world, state, pos2, player);
                         if (state.getBlock().removedByPlayer(state, world, pos2, player, true, state.getFluidState())) {
@@ -170,7 +174,7 @@ public interface IAOETool {
                     }
 
                     world.playEvent(2001, pos, Block.getStateId(state));
-                    ((EntityPlayerMP) player).connection.sendPacket(new SPacketBlockChange(world, pos));
+                    ((ServerPlayerEntity) player).connection.sendPacket(new SChangeBlockPacket(world, pos));
                 }
             }
             return false;
@@ -182,7 +186,7 @@ public interface IAOETool {
             ORE_BLOCKS.clear();
 
             for (Block block : ForgeRegistries.BLOCKS) {
-                if (block instanceof BlockOre || Tags.Blocks.ORES.contains(block)) {
+                if (block instanceof OreBlock || Tags.Blocks.ORES.contains(block)) {
                     ORE_BLOCKS.add(block);
                 }
             }
@@ -199,7 +203,7 @@ public interface IAOETool {
          *
          * @return True if the blocks are the same (equal) or similar, false otherwise
          */
-        static boolean areBlocksSimilar(IBlockState state1, IBlockState state2) {
+        static boolean areBlocksSimilar(BlockState state1, BlockState state2) {
             Block block1 = state1.getBlock();
             Block block2 = state2.getBlock();
             boolean isOre1 = ORE_BLOCKS.contains(block1);
@@ -227,17 +231,23 @@ public interface IAOETool {
 
         @SubscribeEvent
         public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
-            EntityPlayer player = event.getPlayer();
+            ActiveRenderInfo info = event.getInfo();
+            Entity entity = info.func_216773_g();
+            if (!(entity instanceof PlayerEntity)) return;
 
-            if (player != null && event.getSubID() == 0 && event.getTarget().type == RayTraceResult.Type.BLOCK) {
+            PlayerEntity player = (PlayerEntity) entity;
+
+            RayTraceResult rt = event.getTarget();
+
+            if (event.getSubID() == 0 && rt.getType() == RayTraceResult.Type.BLOCK) {
                 ItemStack stack = player.getHeldItemMainhand();
 
                 if (stack.getItem() instanceof IAOETool) {
                     World world = player.getEntityWorld();
                     IAOETool item = (IAOETool) stack.getItem();
 
-                    for (BlockPos pos : item.getExtraBlocks(world, event.getTarget(), player, stack)) {
-                        event.getContext().drawSelectionBox(player, new RayTraceResult(Vec3d.ZERO, EnumFacing.UP, pos), 0, event.getPartialTicks());
+                    for (BlockPos pos : item.getExtraBlocks(world, (BlockRayTraceResult) rt, player, stack)) {
+                        event.getContext().drawSelectionBox(info, new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos, false), 0);
                     }
                 }
             }

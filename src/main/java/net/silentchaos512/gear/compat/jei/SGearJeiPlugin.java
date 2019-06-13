@@ -1,32 +1,10 @@
 package net.silentchaos512.gear.compat.jei;
 
-import mezz.jei.api.IModPlugin;
-import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.registration.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.parts.PartManager;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-@JeiPlugin
-public class SGearJeiPlugin implements IModPlugin {
+//@JeiPlugin
+public class SGearJeiPlugin /*implements IModPlugin*/ {
     private static final ResourceLocation PLUGIN_UID = SilentGear.getId("plugin/main");
     static final ResourceLocation PART_ANALYZER = SilentGear.getId("category/part_analyzer");
     static final ResourceLocation GUI_TEXTURE = SilentGear.getId("textures/gui/recipe_display.png");
@@ -37,7 +15,7 @@ public class SGearJeiPlugin implements IModPlugin {
         return initFailed;
     }
 
-    @Override
+    /*@Override
     public ResourceLocation getPluginUid() {
         return PLUGIN_UID;
     }
@@ -129,5 +107,5 @@ public class SGearJeiPlugin implements IModPlugin {
 
     private static String getDescKey(ResourceLocation name) {
         return "jei." + name.getNamespace() + "." + name.getPath() + ".desc";
-    }
+    }*/
 }

@@ -16,11 +16,10 @@ import java.util.Optional;
 import java.util.Random;
 
 @Mod(SilentGear.MOD_ID)
-public class SilentGear {
+public final class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "1.0.7";
-    public static final boolean RUN_GENERATORS = false;
+    public static final String VERSION = "1.1.0";
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 
@@ -34,6 +33,7 @@ public class SilentGear {
     public static SilentGear INSTANCE;
     public static SideProxy PROXY;
 
+    @SuppressWarnings("Convert2MethodRef")
     public SilentGear() {
         INSTANCE = this;
         PROXY = DistExecutor.runForDist(() -> () -> new SideProxy.Client(), () -> () -> new SideProxy.Server());

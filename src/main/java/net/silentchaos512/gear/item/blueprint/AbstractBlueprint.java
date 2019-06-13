@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.item.blueprint;
 
-import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.config.Config;
 
-public abstract class AbstractBlueprint extends Item implements IBlueprint {
+public abstract class AbstractBlueprint extends Item {
     final boolean singleUse;
 
     AbstractBlueprint(Properties properties, boolean singleUse) {
@@ -26,15 +26,10 @@ public abstract class AbstractBlueprint extends Item implements IBlueprint {
 
     @Override
     public boolean hasContainerItem(ItemStack stack) {
-        return !isSingleUse(stack);
+        return !this.singleUse;
     }
 
-    @Override
-    public boolean isSingleUse(ItemStack blueprint) {
-        return this.singleUse;
-    }
-
-    protected boolean isDisabled() {
+    boolean isDisabled() {
         BlueprintType config = Config.GENERAL.blueprintTypes.get();
         return this.singleUse && !config.allowTemplate()
                 || !this.singleUse && !config.allowBlueprint();
@@ -50,11 +45,11 @@ public abstract class AbstractBlueprint extends Item implements IBlueprint {
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         String key = "item.silentgear." + (this.singleUse ? "template" : "blueprint");
-        return new TextComponentTranslation(key, this.getCraftedName(stack));
+        return new TranslationTextComponent(key, this.getCraftedName(stack));
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack stack) {
-        return this.isSingleUse(stack) ? EnumRarity.COMMON : EnumRarity.UNCOMMON;
+    public Rarity getRarity(ItemStack stack) {
+        return this.singleUse ? Rarity.COMMON : Rarity.UNCOMMON;
     }
 }

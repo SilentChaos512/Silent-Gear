@@ -1,17 +1,12 @@
 package net.silentchaos512.gear;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.ExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
@@ -30,14 +25,10 @@ import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitManager;
-import net.silentchaos512.gear.util.GenModels;
-import net.silentchaos512.gear.util.GenRecipes;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 import net.silentchaos512.lib.inventory.ContainerType;
-
-import java.util.function.BiFunction;
 
 class SideProxy {
     SideProxy() {
@@ -72,12 +63,6 @@ class SideProxy {
                 return ModItems.blueprintPackage.getStack();
             else return ItemStack.EMPTY;
         });
-
-        if (SilentGear.isDevBuild() && SilentGear.RUN_GENERATORS) {
-            ModTags.init();
-            GenModels.generateAll();
-            GenRecipes.generateAll();
-        }
     }
 
     private void imcEnqueue(InterModEnqueueEvent event) { }
@@ -141,13 +126,14 @@ class SideProxy {
                         type.getGui(tileType, player));
             }
 
-            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> packet -> {
+            // FIXME
+/*            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> packet -> {
                 ContainerType<?> type = ContainerType.factories.get(packet.getId()).get();
                 if (packet.getAdditionalData() != null) type.fromBytes(packet.getAdditionalData());
                 //noinspection unchecked
                 return ((BiFunction<ContainerType<?>, EntityPlayer, GuiContainer>) ContainerType.guiFactories.get(packet.getId()))
                         .apply(type, Minecraft.getInstance().player);
-            });
+            });*/
         }
 
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {

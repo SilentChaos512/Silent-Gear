@@ -1,10 +1,11 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.ShapelessRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -17,10 +18,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class ShapelessGearCrafting extends ExtendedShapelessRecipe {
-    public static final Serializer<ShapelessGearCrafting> SERIALIZER = Serializer.basic(
-            SilentGear.getId("gear_crafting"),
-            ShapelessGearCrafting::new
-    );
+    public static final ResourceLocation NAME = SilentGear.getId("gear_crafting");
+    public static final Serializer<ShapelessGearCrafting> SERIALIZER = Serializer.basic(ShapelessGearCrafting::new);
 
     private final ICoreItem item;
 
@@ -40,12 +39,12 @@ public final class ShapelessGearCrafting extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(CraftingInventory inv, World worldIn) {
         return this.getBaseRecipe().matches(inv, worldIn);
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getCraftingResult(CraftingInventory inv) {
         Collection<PartData> parts = StackList.from(inv).stream()
                 .map(PartData::from)
                 .filter(Objects::nonNull)

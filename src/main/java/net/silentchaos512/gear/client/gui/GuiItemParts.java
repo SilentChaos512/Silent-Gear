@@ -19,13 +19,14 @@
 package net.silentchaos512.gear.client.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -53,43 +54,31 @@ import java.util.stream.Collectors;
 
 // TODO: Display part name with item tooltip, or maybe replace item name?
 // TODO: Add some text explaining interface?
-public class GuiItemParts extends GuiScreen {
+public class GuiItemParts extends Screen {
     private static final int BUTTON_SPACING = PartButton.SIZE + 4;
     private static final int BUTTON_ROW_LENGTH = 12;
     private static final int BUTTON_INITIAL_OFFSET = 5;
     private static final ResourceLocation TEX_WHITE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/white.png");
 
-    private int lastButtonId = 6900;
     private List<IGearPart> partList = new ArrayList<>();
     private List<PartButton> partButtons = new ArrayList<>();
     private IGearPart selectedPart = null;
     private List<Tuple<String, String>> selectedPartInfo = null;
 
-    @Override
-    public void initGui() {
-        super.initGui();
+    protected GuiItemParts(ITextComponent p_i51108_1_) {
+        super(p_i51108_1_);
+    }
 
-        GuiDropDownList dropDownList = new GuiDropDownList(lastButtonId++, mc.mainWindow.getWidth() - 120, 5, "Sort Order", GuiDropDownList.ExpandDirection.DOWN);
-        dropDownList.addElement(new GuiDropDownElement(lastButtonId++, "Name",
-                b -> sortParts(false, Comparator.comparing(part -> part.getDisplayName(null, ItemStack.EMPTY).getFormattedText()))) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                selectedPart = null;
-                if (selectedPartInfo != null) selectedPartInfo.clear();
-            }
-        }, buttons);
-        dropDownList.addElement(new GuiDropDownElement(lastButtonId++, "Type",
-                b -> sortParts(false, Comparator.comparing(part -> part.getType().getName()))) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                selectedPart = null;
-                if (selectedPartInfo != null) selectedPartInfo.clear();
-            }
-        }, buttons);
+    @Override
+    public void init() {
+        if (minecraft == null) return;
+
+        GuiDropDownList dropDownList = new GuiDropDownList(minecraft.mainWindow.getWidth() - 120, 5, "Sort Order", GuiDropDownList.ExpandDirection.DOWN);
+        dropDownList.addElement(new GuiDropDownElement("Name", b -> sortParts(false, Comparator.comparing(part -> part.getDisplayName(null, ItemStack.EMPTY).getFormattedText()))), buttons);
+        dropDownList.addElement(new GuiDropDownElement("Type", b -> sortParts(false, Comparator.comparing(part -> part.getType().getName()))), buttons);
         ItemStat.ALL_STATS.values().stream()
                 .filter(stat -> !stat.isHidden())
-                .forEachOrdered(stat -> dropDownList.addElement(new GuiDropDownElement(lastButtonId++, stat.translatedName(),
-                        b -> sortParts(true, Comparator.comparingDouble(part -> part.computeStatValue(stat)))), buttons));
+                .forEachOrdered(stat -> dropDownList.addElement(new GuiDropDownElement(stat.translatedName(), b -> sortParts(true, Comparator.comparingDouble(part -> part.computeStatValue(stat)))), buttons));
         buttons.add(dropDownList);
 
         // Build part button list
@@ -99,13 +88,10 @@ public class GuiItemParts extends GuiScreen {
                 partList.add(part);
                 final int x = i % BUTTON_ROW_LENGTH;
                 final int y = i / BUTTON_ROW_LENGTH;
-                PartButton button = new PartButton(part, lastButtonId++, x * BUTTON_SPACING + BUTTON_INITIAL_OFFSET, y * BUTTON_SPACING + BUTTON_INITIAL_OFFSET) {
-                    @Override
-                    public void onClick(double mouseX, double mouseY) {
-                        selectedPart = this.part;
-                        selectedPartInfo = getPartInfo(selectedPart);
-                    }
-                };
+                PartButton button = new PartButton(part, x * BUTTON_SPACING + BUTTON_INITIAL_OFFSET, y * BUTTON_SPACING + BUTTON_INITIAL_OFFSET, b -> {
+                    selectedPart = part;
+                    selectedPartInfo = getPartInfo(selectedPart);
+                });
                 partButtons.add(button);
                 this.addButton(button);
                 ++i;
@@ -114,7 +100,7 @@ public class GuiItemParts extends GuiScreen {
     }
 
     @Override
-    public boolean doesGuiPauseGame() {
+    public boolean isPauseScreen() {
         return false;
     }
 
@@ -151,41 +137,43 @@ public class GuiItemParts extends GuiScreen {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
-
+        this.renderBackground();
         drawSelectedPartInfo();
-
         super.render(mouseX, mouseY, partialTicks);
 
-        for (GuiButton button : buttons) {
+        if (minecraft == null) return;
+
+        for (Widget button : buttons) {
             if (button instanceof PartButton) {
-                ((PartButton) button).drawHover(mc, mouseX, mouseY);
+                ((PartButton) button).drawHover(minecraft, mouseX, mouseY);
             }
         }
     }
 
     private void drawSelectedPartInfo() {
+        if (minecraft == null) return;
+
         if (selectedPart != null && !selectedPartInfo.isEmpty()) {
             ItemStack stack = new ItemStack(selectedPart.getMaterials().getItem());
 //            AssetUtil.renderStackToGui(stack, res.getScaledWidth() - 194, 30, 2.5f);
-            mc.getItemRenderer().renderItemIntoGUI(stack, mc.mainWindow.getScaledWidth() - 194, 30);
+            minecraft.getItemRenderer().renderItemIntoGUI(stack, minecraft.mainWindow.getScaledWidth() - 194, 30);
 
             final int maxWidth = 140;
-            final int x = mc.mainWindow.getScaledWidth() - (maxWidth + 10);
+            final int x = minecraft.mainWindow.getScaledWidth() - (maxWidth + 10);
             int y = 35;
 
             String translatedName = selectedPart.getDisplayName(PartData.of(selectedPart), ItemStack.EMPTY).getFormattedText();
-            TextRenderUtils.renderScaled(mc.fontRenderer, translatedName, x, y, 1, Color.VALUE_WHITE, false);
+            TextRenderUtils.renderScaled(minecraft.fontRenderer, translatedName, x, y, 1, Color.VALUE_WHITE, false);
             String regName = TextFormatting.GRAY + selectedPart.getId().toString();
-            TextRenderUtils.renderScaled(mc.fontRenderer, regName, x, y + 10, 0.5f, Color.VALUE_WHITE, false);
+            TextRenderUtils.renderScaled(minecraft.fontRenderer, regName, x, y + 10, 0.5f, Color.VALUE_WHITE, false);
             String typeName = selectedPart.getType().getDisplayName(selectedPart.getTier()).getFormattedText();
-            TextRenderUtils.renderScaled(mc.fontRenderer, TextFormatting.GREEN + typeName, x, y + 16, 0.8f, Color.VALUE_WHITE, false);
+            TextRenderUtils.renderScaled(minecraft.fontRenderer, TextFormatting.GREEN + typeName, x, y + 16, 0.8f, Color.VALUE_WHITE, false);
             y += 30;
 
             for (Tuple<String, String> pair : selectedPartInfo) {
-                fontRenderer.drawString(pair.getA(), x, y, Color.VALUE_WHITE);
-                int width2 = fontRenderer.getStringWidth(pair.getB());
-                fontRenderer.drawString(pair.getB(), x + maxWidth - width2, y, Color.VALUE_WHITE);
+                font.drawString(pair.getA(), x, y, Color.VALUE_WHITE);
+                int width2 = font.getStringWidth(pair.getB());
+                font.drawString(pair.getB(), x + maxWidth - width2, y, Color.VALUE_WHITE);
                 y += 10;
                 // TODO: We need actual stat bars or something. Need to save actual stats, record max value somewhere.
             }
@@ -225,24 +213,24 @@ public class GuiItemParts extends GuiScreen {
         return list;
     }
 
-    public static class PartButton extends GuiButton {
+    public static class PartButton extends Button {
         private static final int SIZE = 16;
 
         final IGearPart part;
 
-        PartButton(IGearPart part, int buttonId, int x, int y) {
-            this(part, buttonId, x, y, SIZE, SIZE);
+        PartButton(IGearPart part, int x, int y, IPressable action) {
+            this(part, x, y, SIZE, SIZE, action);
         }
 
-        PartButton(IGearPart part, int buttonId, int x, int y, int widthIn, int heightIn) {
-            super(buttonId, x, y, widthIn, heightIn, part.getId().toString());
+        PartButton(IGearPart part, int x, int y, int widthIn, int heightIn, IPressable action) {
+            super(x, y, widthIn, heightIn, part.getId().toString(), action);
             this.part = part;
         }
 
         @Override
         public void render(int mouseX, int mouseY, float partialTicks) {
             if (this.visible) {
-                this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+                this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
                 // Render item TODO: would it be possible to get all tagged items?
                 ItemStack stack = new ItemStack(part.getMaterials().getItem());
@@ -258,7 +246,7 @@ public class GuiItemParts extends GuiScreen {
         }
 
         void drawHover(Minecraft mc, int mouseX, int mouseY) {
-            if (this.isMouseOver()) {
+            if (this.isMouseOver(mouseX, mouseY)) {
                 ItemStack craftingStack = new ItemStack(part.getMaterials().getItem());
                 List<String> tooltip = craftingStack.getTooltip(mc.player, () -> false)
                         .stream()

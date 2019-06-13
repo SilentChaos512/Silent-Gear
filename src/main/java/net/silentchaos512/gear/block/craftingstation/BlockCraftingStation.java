@@ -1,12 +1,9 @@
 package net.silentchaos512.gear.block.craftingstation;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -14,17 +11,17 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 
-public class BlockCraftingStation extends BlockContainer {
+public class BlockCraftingStation extends ContainerBlock {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockCraftingStation() {
@@ -32,15 +29,15 @@ public class BlockCraftingStation extends BlockContainer {
                 .hardnessAndResistance(3, 10)
                 .sound(SoundType.WOOD)
         );
-        this.setDefaultState(this.getDefaultState().with(FACING, EnumFacing.SOUTH));
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.SOUTH));
     }
 
-    public static EnumFacing getFacing(IBlockState state) {
-        return state.has(FACING) ? state.get(FACING) : EnumFacing.SOUTH;
+    public static Direction getFacing(BlockState state) {
+        return state.has(FACING) ? state.get(FACING) : Direction.SOUTH;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
@@ -51,7 +48,7 @@ public class BlockCraftingStation extends BlockContainer {
     }
 
     @Override
-    public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof TileCraftingStation) {
             TileCraftingStation tileCraftingStation = (TileCraftingStation) tileEntity;
@@ -62,31 +59,31 @@ public class BlockCraftingStation extends BlockContainer {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return !player.isSneaking() && (world.isRemote || BlockCraftingStation.openGui(player, world, pos));
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        return !player.isSneaking() && (worldIn.isRemote || BlockCraftingStation.openGui(player, worldIn, pos));
     }
 
-    private static boolean openGui(EntityPlayer player, World world, BlockPos pos) {
+    private static boolean openGui(PlayerEntity player, World world, BlockPos pos) {
         GuiTypes.CRAFTING_STATION.display(player, pos);
         return true;
     }
 
     @Nullable
     @Override
-    public IBlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
         return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
-        EnumFacing side = placer.getHorizontalFacing().getOpposite();
+        Direction side = placer.getHorizontalFacing().getOpposite();
         world.setBlockState(pos, state.with(FACING, side), 2);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }

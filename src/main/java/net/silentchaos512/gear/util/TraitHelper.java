@@ -19,11 +19,11 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -64,12 +64,12 @@ public final class TraitHelper {
             return inputValue;
         }
 
-        NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
         float value = inputValue;
 
-        for (INBTBase nbt : tagList) {
-            if (nbt instanceof NBTTagCompound) {
-                NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+        for (INBT nbt : tagList) {
+            if (nbt instanceof CompoundNBT) {
+                CompoundNBT tagCompound = (CompoundNBT) nbt;
                 String regName = tagCompound.getString("Name");
                 ITrait trait = TraitManager.get(regName);
 
@@ -99,11 +99,11 @@ public final class TraitHelper {
             return 0;
         }
 
-        NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
 
-        for (INBTBase nbt : tagList) {
-            if (nbt instanceof NBTTagCompound) {
-                NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+        for (INBT nbt : tagList) {
+            if (nbt instanceof CompoundNBT) {
+                CompoundNBT tagCompound = (CompoundNBT) nbt;
                 String regName = tagCompound.getString("Name");
                 ITrait traitOnGear = TraitManager.get(regName);
 
@@ -201,13 +201,13 @@ public final class TraitHelper {
         }
     }
 
-    static void tickTraits(World world, @Nullable EntityPlayer player, ItemStack gear, boolean isEquipped) {
+    static void tickTraits(World world, @Nullable PlayerEntity player, ItemStack gear, boolean isEquipped) {
         // Performance test on 2018-11-26 - roughly 5% FPS loss max (negligible), average ~420 FPS
-        NBTTagList tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
 
-        for (INBTBase nbt : tagList) {
-            if (nbt instanceof NBTTagCompound) {
-                NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+        for (INBT nbt : tagList) {
+            if (nbt instanceof CompoundNBT) {
+                CompoundNBT tagCompound = (CompoundNBT) nbt;
                 String regName = tagCompound.getString("Name");
                 ITrait trait = TraitManager.get(regName);
 

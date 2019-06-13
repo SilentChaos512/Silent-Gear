@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.traits;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -24,7 +24,7 @@ public final class DamageTypeTrait extends SimpleTrait {
     }
 
     @Override
-    public float onAttackEntity(TraitActionContext context, EntityLivingBase target, float baseValue) {
+    public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
         if ("holy".equals(damageType) && target.isEntityUndead()) {
             // TODO: We need to actually cancel the event and attack with a new damage source
             return baseValue + damageBonus * context.getTraitLevel();
@@ -34,7 +34,7 @@ public final class DamageTypeTrait extends SimpleTrait {
     }
 
     private static void readJson(DamageTypeTrait trait, JsonObject json) {
-        trait.damageType = JsonUtils.getString(json, "damage_type", trait.getId().getPath());
-        trait.damageBonus = JsonUtils.getFloat(json, "damage_bonus", 0);
+        trait.damageType = JSONUtils.getString(json, "damage_type", trait.getId().getPath());
+        trait.damageBonus = JSONUtils.getFloat(json, "damage_bonus", 0);
     }
 }

@@ -3,11 +3,11 @@ package net.silentchaos512.gear.client.util;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -96,14 +96,14 @@ public final class GearClientHelper {
 
         float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
         TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
-        tooltip.add(new TextComponentString("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue))));
+        tooltip.add(new StringTextComponent("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue))));
 
         if (flag.isAdvanced()) {
             // ICoreTool itemTool = (ICoreTool) item;
             // tooltip.add(itemTool.getGearClass());
-            NBTTagCompound tagCompound = stack.getOrCreateTag();
+            CompoundNBT tagCompound = stack.getOrCreateTag();
             if (tagCompound.contains("debug_modelkey")) {
-                tooltip.add(new TextComponentString(tagCompound.getString("debug_modelkey")).applyTextStyle(TextFormatting.DARK_GRAY));
+                tooltip.add(new StringTextComponent(tagCompound.getString("debug_modelkey")).applyTextStyle(TextFormatting.DARK_GRAY));
             }
         }
 
@@ -133,8 +133,8 @@ public final class GearClientHelper {
                 }
 
                 StatInstance inst = new StatInstance("display_" + stat.getName(), statValue, StatInstance.Operation.AVG);
-                ITextComponent textName = new TextComponentString("- ").appendSibling(stat.getDisplayName());
-                ITextComponent textStat = new TextComponentString(inst.formattedString(stat.displayAsInt ? 0 : 1, false));
+                ITextComponent textName = new StringTextComponent("- ").appendSibling(stat.getDisplayName());
+                ITextComponent textStat = new StringTextComponent(inst.formattedString(stat.displayAsInt ? 0 : 1, false));
 
                 // Some stat-specific formatting...
                 if (stat == CommonItemStats.DURABILITY) {
@@ -161,7 +161,7 @@ public final class GearClientHelper {
             Collections.reverse(constructionParts);
             tooltipListParts(stack, tooltip, constructionParts);
         } else if (flag.showConstruction) {
-            textConstruction.appendSibling(new TextComponentString(" ")
+            textConstruction.appendSibling(new StringTextComponent(" ")
                     .applyTextStyle(TextFormatting.GRAY)
                     .appendSibling(misc("tooltip.construction.key")));
             tooltip.add(textConstruction);
@@ -169,18 +169,18 @@ public final class GearClientHelper {
     }
 
     private static ITextComponent misc(String key, Object... formatArgs) {
-        return new TextComponentTranslation("misc.silentgear." + key, formatArgs);
+        return new TranslationTextComponent("misc.silentgear." + key, formatArgs);
     }
 
     private static ITextComponent statText(String key, Object... formatArgs) {
-        return new TextComponentTranslation("stat.silentgear." + key, formatArgs);
+        return new TranslationTextComponent("stat.silentgear." + key, formatArgs);
     }
 
     public static void tooltipListParts(ItemStack gear, List<ITextComponent> tooltip, Collection<PartData> parts) {
         for (PartData part : parts) {
-            ITextComponent text = new TextComponentString("- ").appendSibling(part.getDisplayName(gear));
+            ITextComponent text = new StringTextComponent("- ").appendSibling(part.getDisplayName(gear));
             if (part.getPart().getType() == PartType.MAIN) {
-                ITextComponent gradeText = new TextComponentString(" (")
+                ITextComponent gradeText = new StringTextComponent(" (")
                         .applyTextStyle(TextFormatting.RESET)
                         .appendSibling(part.getGrade().getDisplayName())
                         .appendText(")");

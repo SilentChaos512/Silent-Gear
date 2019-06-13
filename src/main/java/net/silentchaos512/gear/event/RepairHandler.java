@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -77,9 +77,9 @@ public final class RepairHandler {
         ItemStack result = event.getCrafting();
         if (!(result.getItem() instanceof ICoreItem)) return;
 
-        if (event.getPlayer() instanceof EntityPlayerMP) {
+        if (event.getPlayer() instanceof ServerPlayerEntity) {
             // Try to trigger some advancments
-            EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
             // Repair from broken
             int brokenCount = GearData.getBrokenCount(result);

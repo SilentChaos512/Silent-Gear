@@ -1,17 +1,10 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
-import net.silentchaos512.utils.MathUtils;
 
 import java.util.Optional;
 
@@ -54,19 +47,7 @@ public class CoreSlingshot extends CoreBow {
         return super.getArrowDamage(stack);
     }
 
-    @Override
-    protected boolean isArrow(ItemStack stack) {
-        return stack.getItem() instanceof ISlingshotAmmo
-                && ((ISlingshotAmmo) stack.getItem()).isAmmo(stack);
-    }
-
-    @Override
-    protected boolean isInfiniteAmmo(ItemStack bow, ItemStack ammo, EntityPlayer player) {
-        // TODO
-        return super.isInfiniteAmmo(bow, ammo, player);
-    }
-
-    @Override
+/*    @Override
     protected void fireProjectile(ItemStack stack, World worldIn, EntityPlayer player, ItemStack ammo, float velocity, boolean hasInfiniteAmmo) {
         SlingshotProjectile entity = new SlingshotProjectile(player, worldIn, ammo);
         entity.shoot(player, player.rotationPitch, player.rotationYaw, velocity * 3.0F, 1.0F);
@@ -92,5 +73,5 @@ public class CoreSlingshot extends CoreBow {
         stack.damageItem(1, player);
 
         worldIn.spawnEntity(entity);
-    }
+    }*/
 }

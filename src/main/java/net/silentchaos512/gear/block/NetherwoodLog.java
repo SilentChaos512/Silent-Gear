@@ -18,17 +18,16 @@
 
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LogBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-public class NetherwoodLog extends BlockLog {
+public class NetherwoodLog extends LogBlock {
     public NetherwoodLog() {
         super(MaterialColor.ADOBE, Properties.create(Material.WOOD)
                 .hardnessAndResistance(2)
@@ -37,17 +36,12 @@ public class NetherwoodLog extends BlockLog {
     }
 
     @Override
-    public int getFlammability(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face) {
+    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
         return 0;
     }
 
     @Override
-    public boolean isFlammable(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing face) {
+    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
         return false;
-    }
-
-    @Override
-    protected ItemStack getSilkTouchDrop(IBlockState state) {
-        return new ItemStack(this);
     }
 }

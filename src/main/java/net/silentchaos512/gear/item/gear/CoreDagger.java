@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -37,7 +37,7 @@ public class CoreDagger extends CoreSword {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         target.hurtResistantTime *= 0.67f; // Make target vulnerable sooner
         return super.hitEntity(stack, target, attacker);
     }

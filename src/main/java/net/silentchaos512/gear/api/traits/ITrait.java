@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.api.traits;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -29,7 +29,7 @@ public interface ITrait {
 
     ITraitSerializer<?> getSerializer();
 
-    float onAttackEntity(TraitActionContext context, EntityLivingBase target, float baseValue);
+    float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue);
 
     float onDurabilityDamage(TraitActionContext context, int damageTaken);
 

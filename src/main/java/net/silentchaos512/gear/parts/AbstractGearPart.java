@@ -10,12 +10,12 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -162,7 +162,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     @Override
     public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
-        if (displayName == null) return new TextComponentString("<error: missing name>");
+        if (displayName == null) return new StringTextComponent("<error: missing name>");
         return displayName;
     }
 
@@ -205,13 +205,13 @@ public abstract class AbstractGearPart implements IGearPart {
                 Multimap<ItemStat, StatInstance> statMap = new StatModifierMap();
                 for (JsonElement element : array) {
                     JsonObject obj = element.getAsJsonObject();
-                    String name = JsonUtils.getString(obj, "name", "");
+                    String name = JSONUtils.getString(obj, "name", "");
                     ItemStat stat = ItemStat.ALL_STATS.get(name);
 
                     if (stat != null) {
-                        float value = JsonUtils.getFloat(obj, "value", 0f);
+                        float value = JSONUtils.getFloat(obj, "value", 0f);
                         StatInstance.Operation op = obj.has("op")
-                                ? StatInstance.Operation.byName(JsonUtils.getString(obj, "op"))
+                                ? StatInstance.Operation.byName(JSONUtils.getString(obj, "op"))
                                 : part.getDefaultStatOperation(stat);
                         String statId = String.format("mat_%s_%s%d", part.getId(), stat.getName(),
                                 statMap.get(stat).size() + 1);
@@ -233,11 +233,11 @@ public abstract class AbstractGearPart implements IGearPart {
                 Map<ITrait, Integer> traitsMap = new HashMap<>();
                 for (JsonElement element : array) {
                     JsonObject obj = element.getAsJsonObject();
-                    String name = JsonUtils.getString(obj, "name", "");
+                    String name = JSONUtils.getString(obj, "name", "");
                     ITrait trait = TraitManager.get(name);
 
                     if (trait != null) {
-                        int level = MathHelper.clamp(JsonUtils.getInt(obj, "level", 1), 1, trait.getMaxLevel());
+                        int level = MathHelper.clamp(JSONUtils.getInt(obj, "level", 1), 1, trait.getMaxLevel());
                         if (level > 0) {
                             traitsMap.put(trait, level);
                             SilentGear.LOGGER.debug("Add trait {} level {} to part {}",
@@ -260,11 +260,11 @@ public abstract class AbstractGearPart implements IGearPart {
                 throw new JsonParseException("crafting_items.normal must contain either 'item', 'tag', or both");
             }
             if (craftingNormal.has("item")) {
-                final ResourceLocation itemName = new ResourceLocation(JsonUtils.getString(craftingNormal, "item"));
+                final ResourceLocation itemName = new ResourceLocation(JSONUtils.getString(craftingNormal, "item"));
                 part.materials.item = ForgeRegistries.ITEMS.getValue(itemName);
             }
             if (craftingNormal.has("tag")) {
-                final ResourceLocation tagName = new ResourceLocation(JsonUtils.getString(craftingNormal, "tag"));
+                final ResourceLocation tagName = new ResourceLocation(JSONUtils.getString(craftingNormal, "tag"));
                 part.materials.tag = ItemTags.getCollection().getOrCreate(tagName);
             }
             // Small (optional)
@@ -274,11 +274,11 @@ public abstract class AbstractGearPart implements IGearPart {
                     throw new JsonParseException("crafting_items.small must contain either 'item', 'tag', or both");
                 }
                 if (craftingSmall.has("item")) {
-                    final ResourceLocation itemName = new ResourceLocation(JsonUtils.getString(craftingSmall, "item"));
+                    final ResourceLocation itemName = new ResourceLocation(JSONUtils.getString(craftingSmall, "item"));
                     part.materials.itemSmall = ForgeRegistries.ITEMS.getValue(itemName);
                 }
                 if (craftingSmall.has("tag")) {
-                    final ResourceLocation tagName = new ResourceLocation(JsonUtils.getString(craftingSmall, "tag"));
+                    final ResourceLocation tagName = new ResourceLocation(JSONUtils.getString(craftingSmall, "tag"));
                     part.materials.tagSmall = ItemTags.getCollection().getOrCreate(tagName);
                 }
             }
@@ -287,12 +287,12 @@ public abstract class AbstractGearPart implements IGearPart {
             JsonElement elementName = json.get("name");
             if (elementName != null && elementName.isJsonObject()) {
                 JsonObject obj = elementName.getAsJsonObject();
-                boolean translate = JsonUtils.getBoolean(obj, "translate", false);
-                String nameValue = JsonUtils.getString(obj, "name");
+                boolean translate = JSONUtils.getBoolean(obj, "translate", false);
+                String nameValue = JSONUtils.getString(obj, "name");
                 if (translate) {
-                    part.displayName = new TextComponentTranslation(nameValue);
+                    part.displayName = new TranslationTextComponent(nameValue);
                 } else {
-                    part.displayName = new TextComponentString(nameValue);
+                    part.displayName = new StringTextComponent(nameValue);
                 }
             } else if (elementName != null) {
                 throw new JsonParseException("Expected 'name' to be an object");
@@ -323,7 +323,7 @@ public abstract class AbstractGearPart implements IGearPart {
             JsonElement elementAvailability = json.get("availability");
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
-                part.tier = JsonUtils.getInt(obj, "tier", part.tier);
+                part.tier = JSONUtils.getInt(obj, "tier", part.tier);
             }
 
             return part;

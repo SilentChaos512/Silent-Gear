@@ -1,15 +1,14 @@
 package net.silentchaos512.gear.event;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.*;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,24 +24,24 @@ public final class ToolBlockPlaceHandler {
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        ItemStack stack = event.getItemStack();
+        // FIXME: How to get raytrace?
+/*        ItemStack stack = event.getItemStack();
         // Is the item allowed to place blocks?
         if (stack.isEmpty() || !canToolPlaceBlock(stack)) return;
 
-        EntityPlayer player = event.getEntityPlayer();
+        PlayerEntity player = event.getEntityPlayer();
         if (!player.isSneaking()) return;
 
         World world = event.getWorld();
         BlockPos pos = event.getPos();
-        EnumFacing side = event.getFace();
+        Direction side = event.getFace();
         if (side == null) return;
 
         ItemStack stackOffHand = player.getHeldItemOffhand();
-        Vec3d hit = event.getHitVec();
-        ItemUseContext context = new ItemUseContext(player, stackOffHand, pos, side, (float) hit.x, (float) hit.y, (float) hit.z);
+        ItemUseContext context = new ItemUseContext(player, Hand.OFF_HAND, new BlockRayTraceResult());
 
         // If block is in offhand, allow that to place instead.
-        if (!stackOffHand.isEmpty() && stackOffHand.getItem() instanceof ItemBlock && !canPlaceBlockAt(context)) {
+        if (!stackOffHand.isEmpty() && stackOffHand.getItem() instanceof BlockItem && !canPlaceBlockAt(context)) {
             return;
         }
 
@@ -69,24 +68,24 @@ public final class ToolBlockPlaceHandler {
         BlockPos targetPos = pos.offset(side);
 
         // Check for block overlap with player, if necessary
-        if (item instanceof ItemBlock) {
+        if (item instanceof BlockItem) {
             int px = targetPos.getX();
             int py = targetPos.getY();
             int pz = targetPos.getZ();
             AxisAlignedBB blockBounds = new AxisAlignedBB(px, py, pz, px + 1, py + 1, pz + 1);
             AxisAlignedBB playerBounds = player.getBoundingBox();
-            ItemBlock itemBlock = (ItemBlock) item;
-            Block block = itemBlock.getBlock();
-            IBlockState state = block.getDefaultState();
+            BlockItem blockItem = (BlockItem) item;
+            Block block = blockItem.getBlock();
+            BlockState state = block.getDefaultState();
             if (state.getMaterial().blocksMovement() && playerBounds.intersects(blockBounds))
                 return;
         }
 
         int prevSize = nextStack.getCount();
-        ItemUseContext context1 = new ItemUseContext(player, nextStack, pos, side, (float) hit.x, (float) hit.y, (float) hit.z);
-        EnumActionResult result = useItemAsPlayer(context1);
-        if (result == EnumActionResult.SUCCESS) {
-            player.swingArm(EnumHand.MAIN_HAND);
+        ItemUseContext context1 = new FakeItemUseContext(context, nextStack);
+        ActionResultType result = useItemAsPlayer(context1);
+        if (result == ActionResultType.SUCCESS) {
+            player.swingArm(Hand.MAIN_HAND);
         }
 
         // Don't consume blocks in creative mode
@@ -96,10 +95,10 @@ public final class ToolBlockPlaceHandler {
         // Remove empty stacks
         if (nextStack.isEmpty()) {
             player.inventory.setInventorySlotContents(itemSlot, ItemStack.EMPTY);
-        }
+        }*/
     }
 
-    private static EnumActionResult useItemAsPlayer(ItemUseContext context) {
+    private static ActionResultType useItemAsPlayer(ItemUseContext context) {
         return context.getItem().onItemUse(context);
     }
 
@@ -110,16 +109,16 @@ public final class ToolBlockPlaceHandler {
     }
 
     private static boolean canPlaceBlockAt(ItemUseContext context) {
-        EntityPlayer player = context.getPlayer();
+        PlayerEntity player = context.getPlayer();
         if (player == null) return false;
 
         World world = context.getWorld();
         BlockPos pos = context.getPos();
-        EnumFacing side = context.getFace();
+        Direction side = context.getFace();
         ItemStack usedStack = context.getItem();
 
-        if (usedStack.getItem() instanceof ItemBlock) {
-            Block block = ((ItemBlock) usedStack.getItem()).getBlock();
+        if (usedStack.getItem() instanceof BlockItem) {
+            Block block = ((BlockItem) usedStack.getItem()).getBlock();
 
             BlockItemUseContext blockContext = new BlockItemUseContext(context);
             if (block.getDefaultState().isReplaceable(blockContext)) {
@@ -134,6 +133,6 @@ public final class ToolBlockPlaceHandler {
     private static boolean itemNotPlaceable(ItemStack stack) {
         return stack.isEmpty()
                 || (stack.hasTag() && stack.getOrCreateTag().contains("NoPlacing"))
-                || (!(stack.getItem() instanceof ItemBlock) && !Config.GENERAL.isPlaceableItem(stack));
+                || (!(stack.getItem() instanceof BlockItem) && !Config.GENERAL.isPlaceableItem(stack));
     }
 }

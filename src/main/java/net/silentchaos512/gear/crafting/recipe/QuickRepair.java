@@ -19,13 +19,14 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
@@ -37,9 +38,12 @@ import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
 
-public class QuickRepair implements IRecipe {
+public class QuickRepair implements ICraftingRecipe {
+    public static final ResourceLocation NAME = SilentGear.getId("quick_repair");
+    public static final Serializer SERIALIZER = new Serializer();
+
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(CraftingInventory inv, World worldIn) {
         // Need 1 gear and 1+ parts
         StackList list = StackList.from(inv);
 
@@ -60,7 +64,7 @@ public class QuickRepair implements IRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getCraftingResult(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
         Collection<ItemStack> parts = list.allMatches(s -> PartManager.from(s) != null);
@@ -108,16 +112,15 @@ public class QuickRepair implements IRecipe {
 
     @Override
     public ResourceLocation getId() {
-        return Serializer.INSTANCE.getName();
+        return NAME;
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
+        return SERIALIZER;
     }
 
-    public static final class Serializer implements IRecipeSerializer<QuickRepair> {
-        public static final Serializer INSTANCE = new Serializer();
+    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<QuickRepair> {
 
         @Override
         public QuickRepair read(ResourceLocation recipeId, JsonObject json) {
@@ -130,11 +133,6 @@ public class QuickRepair implements IRecipe {
         }
 
         @Override
-        public void write(PacketBuffer buffer, QuickRepair recipe) { }
-
-        @Override
-        public ResourceLocation getName() {
-            return new ResourceLocation(SilentGear.MOD_ID, "quick_repair");
-        }
+        public void write(PacketBuffer buffer, QuickRepair recipe) {}
     }
 }

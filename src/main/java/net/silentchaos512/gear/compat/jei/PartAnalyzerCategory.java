@@ -1,33 +1,11 @@
 package net.silentchaos512.gear.compat.jei;
 
-import com.google.common.collect.ImmutableList;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.init.ModBlocks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class PartAnalyzerCategory implements IRecipeCategory<PartAnalyzerCategory.Recipe> {
+public class PartAnalyzerCategory /*implements IRecipeCategory<PartAnalyzerCategory.Recipe>*/ {
     private static final int GUI_START_X = 0;
     private static final int GUI_START_Y = 0;
     private static final int GUI_WIDTH = 72;
@@ -35,7 +13,7 @@ public class PartAnalyzerCategory implements IRecipeCategory<PartAnalyzerCategor
     private static final Tag<Item> CATALYSTS_TAG1 = new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier1"));
     private static final Tag<Item> CATALYSTS_TAG2 = new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier2"));
 
-    private final IDrawable background;
+    /*private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated arrow;
     private final String localizedName;
@@ -128,5 +106,5 @@ public class PartAnalyzerCategory implements IRecipeCategory<PartAnalyzerCategor
             list.addAll(CATALYSTS_TAG2.getAllElements().stream().map(ItemStack::new).collect(Collectors.toList()));
             return list;
         }
-    }
+    }*/
 }

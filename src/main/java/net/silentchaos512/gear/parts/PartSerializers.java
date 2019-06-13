@@ -3,7 +3,7 @@ package net.silentchaos512.gear.parts;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -33,7 +33,7 @@ public final class PartSerializers {
     }
 
     public static IGearPart deserialize(ResourceLocation id, JsonObject json) {
-        String typeStr = JsonUtils.getString(json, "type");
+        String typeStr = JSONUtils.getString(json, "type");
         if (!typeStr.contains(":")) typeStr = SilentGear.RESOURCE_PREFIX + typeStr;
         ResourceLocation type = new ResourceLocation(typeStr);
 

@@ -10,12 +10,12 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.ResourceLocationArgument;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -141,12 +141,12 @@ public final class SGearPartsCommand {
         String listStr = PartManager.getValues().stream()
                 .map(part -> part.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendFeedback(new TextComponentString(listStr), true);
+        context.getSource().sendFeedback(new StringTextComponent(listStr), true);
 
         for (PartType type : PartType.getValues()) {
             int count = PartManager.getPartsOfType(type).size();
             String str = String.format("%s: %d", type.getName(), count);
-            context.getSource().sendFeedback(new TextComponentString(str), true);
+            context.getSource().sendFeedback(new StringTextComponent(str), true);
         }
 
         return 1;
@@ -168,7 +168,7 @@ public final class SGearPartsCommand {
     }
 
     private static ItemStack getGear(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        if (ctx.getSource().getEntity() instanceof EntityPlayerMP) {
+        if (ctx.getSource().getEntity() instanceof ServerPlayerEntity) {
             ItemStack gear = ctx.getSource().asPlayer().getHeldItemMainhand();
             if (gear.getItem() instanceof ICoreItem) {
                 return gear;
@@ -180,6 +180,6 @@ public final class SGearPartsCommand {
     }
 
     private static ITextComponent text(String key, Object... args) {
-        return new TextComponentTranslation("command.silentgear.parts." + key, args);
+        return new TranslationTextComponent("command.silentgear.parts." + key, args);
     }
 }

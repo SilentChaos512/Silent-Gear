@@ -18,17 +18,16 @@
 
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.BlockSapling;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.silentchaos512.gear.block.trees.NetherwoodTree;
+import net.silentchaos512.gear.init.ModTags;
 
-public class NetherwoodSapling extends BlockSapling {
+public class NetherwoodSapling extends SaplingBlock {
     public NetherwoodSapling() {
         super(new NetherwoodTree(), Properties.create(Material.PLANTS)
                 .doesNotBlockMovement()
@@ -38,14 +37,8 @@ public class NetherwoodSapling extends BlockSapling {
         );
     }
 
-    //    @Override
-    public boolean canBlockStay(IWorld worldIn, BlockPos pos, IBlockState state) {
-        IBlockState soil = worldIn.getBlockState(pos.down());
-        return isValidGround(soil, worldIn, pos);
-    }
-
     @Override
-    protected boolean isValidGround(IBlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.getBlock() == Blocks.NETHERRACK || super.isValidGround(state, worldIn, pos);
+    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return state.isIn(ModTags.Blocks.NETHERWOOD_SOIL);
     }
 }

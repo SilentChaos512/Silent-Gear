@@ -19,9 +19,8 @@
 package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.block.Blocks;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.util.IItemProvider;
 import net.silentchaos512.gear.SilentGear;
@@ -53,16 +52,16 @@ final class VanillaGearSalvage {
     static int getHeadCount(ItemStack stack) {
         Item item = stack.getItem();
         //noinspection ChainOfInstanceofChecks
-        if (item instanceof ItemSpade) return 1;
-        if (item instanceof ItemSword || item instanceof ItemHoe) return 2;
-        if (item instanceof ItemPickaxe || item instanceof ItemAxe) return 3;
-        if (item instanceof ItemArmor) {
+        if (item instanceof ShovelItem) return 1;
+        if (item instanceof SwordItem || item instanceof HoeItem) return 2;
+        if (item instanceof PickaxeItem || item instanceof AxeItem) return 3;
+        if (item instanceof ArmorItem) {
             int multi = Objects.requireNonNull(item.getRegistryName()).getPath().startsWith("chainmail") ? 4 : 1;
-            EntityEquipmentSlot type = ((ItemArmor) item).getEquipmentSlot();
-            if (type == EntityEquipmentSlot.CHEST) return 8 * multi;
-            if (type == EntityEquipmentSlot.FEET) return 4 * multi;
-            if (type == EntityEquipmentSlot.HEAD) return 5 * multi;
-            if (type == EntityEquipmentSlot.LEGS) return 7 * multi;
+            EquipmentSlotType type = ((ArmorItem) item).getEquipmentSlot();
+            if (type == EquipmentSlotType.CHEST) return 8 * multi;
+            if (type == EquipmentSlotType.FEET) return 4 * multi;
+            if (type == EquipmentSlotType.HEAD) return 5 * multi;
+            if (type == EquipmentSlotType.LEGS) return 7 * multi;
         }
 
         SilentGear.LOGGER.warn("Tried to salvage '{}' as vanilla gear, but could not identify item type", stack);
@@ -71,8 +70,8 @@ final class VanillaGearSalvage {
 
     static int getRodCount(ItemStack stack) {
         //noinspection ChainOfInstanceofChecks
-        if (stack.getItem() instanceof ItemArmor) return 0;
-        if (stack.getItem() instanceof ItemSword) return 1;
+        if (stack.getItem() instanceof ArmorItem) return 0;
+        if (stack.getItem() instanceof ArmorItem) return 1;
         return 2;
     }
 

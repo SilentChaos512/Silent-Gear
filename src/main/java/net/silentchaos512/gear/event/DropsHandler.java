@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -15,7 +15,7 @@ public final class DropsHandler {
 
     @SubscribeEvent
     public static void onEntityDrops(LivingDropsEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntityLiving();
         if (entity == null) return;
 
         // Sinew drops

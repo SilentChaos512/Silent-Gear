@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,24 +32,24 @@ public final class ServerEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {
-        EntityPlayer player = event.getPlayer();
-        if (!(player instanceof EntityPlayerMP)) return;
+        PlayerEntity player = event.getPlayer();
+        if (!(player instanceof ServerPlayerEntity)) return;
 
-        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+        ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
 
         // FIXME: These are sent too late!
         sendTraitsToClient(playerMP);
         sendPartsToClient(playerMP);
     }
 
-    private static void sendTraitsToClient(EntityPlayerMP playerMP) {
+    private static void sendTraitsToClient(ServerPlayerEntity playerMP) {
         Collection<ITrait> traits = TraitManager.getValues();
         SilentGear.LOGGER.info("Sending {} traits to {}", traits.size(), playerMP.getScoreboardName());
         SyncTraitsPacket msg = new SyncTraitsPacket(traits);
         Network.channel.sendTo(msg, playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    private static void sendPartsToClient(EntityPlayerMP playerMP) {
+    private static void sendPartsToClient(ServerPlayerEntity playerMP) {
         Collection<IGearPart> parts = PartManager.getValues();
         SilentGear.LOGGER.info("Sending {} gear parts to {}", parts.size(), playerMP.getScoreboardName());
         SyncGearPartsPacket msg = new SyncGearPartsPacket(parts);

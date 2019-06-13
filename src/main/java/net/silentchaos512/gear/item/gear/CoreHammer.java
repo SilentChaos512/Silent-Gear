@@ -1,8 +1,9 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -17,7 +18,6 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class CoreHammer extends CorePickaxe implements IAOETool {
-
     public CoreHammer() {
         super(false);
     }
@@ -57,12 +57,12 @@ public class CoreHammer extends CorePickaxe implements IAOETool {
 
     @Nullable
     @Override
-    public RayTraceResult rayTraceBlocks(World world, EntityPlayer player) {
-        return this.rayTrace(world, player, false);
+    public RayTraceResult rayTraceBlocks(World world, PlayerEntity player) {
+        return rayTrace(world, player, RayTraceContext.FluidMode.NONE);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
         return IAOETool.BreakHandler.onBlockStartBreak(itemstack, pos, player);
     }
 }

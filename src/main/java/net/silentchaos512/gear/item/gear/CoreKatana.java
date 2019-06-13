@@ -26,7 +26,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import java.util.Optional;
 
 public class CoreKatana extends CoreSword {
-
     @Override
     public GearType getGearType() {
         return GearType.KATANA;

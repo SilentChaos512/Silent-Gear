@@ -1,16 +1,15 @@
 package net.silentchaos512.gear.client.event;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -46,9 +45,9 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
     public void renderBlockBreakAnim(RenderWorldLastEvent event) {
         GlStateManager.enableBlend();
         GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        this.mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+        this.mc.getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
         this.drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), this.mc.getRenderViewEntity(), event.getPartialTicks());
-        this.mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+        this.mc.getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
         GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.disableBlend();
     }
@@ -93,7 +92,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
         }
 
         if (!this.extraDamagedBlocks.isEmpty()) {
-            this.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            this.renderEngine.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
             ExtraBlockBreakHandler.preRenderDamagedBlocks();
             bufferBuilderIn.begin(7, DefaultVertexFormats.BLOCK);
             bufferBuilderIn.setTranslation(-d3, -d4, -d5);
@@ -109,7 +108,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
                     double d8 = (double) blockpos.getZ() - d5;
                     Block block = this.mc.world.getBlockState(blockpos).getBlock();
                     TileEntity te = this.mc.world.getTileEntity(blockpos);
-                    boolean hasBreak = block instanceof BlockChest || block instanceof BlockEnderChest || block instanceof BlockSign || block instanceof BlockSkull;
+                    boolean hasBreak = block instanceof ChestBlock || block instanceof EnderChestBlock || block instanceof AbstractSignBlock || block instanceof SkullBlock;
                     if (!hasBreak)
                         hasBreak = te != null && te.canRenderBreaking();
 
@@ -117,7 +116,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
                         if (d6 * d6 + d7 * d7 + d8 * d8 > 16384) {
                             this.extraDamagedBlocks.remove(entry.getKey());
                         } else {
-                            IBlockState iblockstate = mc.world.getBlockState(blockpos);
+                            BlockState iblockstate = mc.world.getBlockState(blockpos);
 
                             if (iblockstate.getMaterial() != Material.AIR) {
                                 int k1 = destroyblockprogress.getPartialBlockDamage();
@@ -149,7 +148,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-        TextureMap texturemap = this.mc.getTextureMap();
+        AtlasTexture texturemap = this.mc.getTextureMap();
         if (texturemap == null) return;
 
         for (int i = 0; i < this.destroyBlockIcons.length; ++i) {

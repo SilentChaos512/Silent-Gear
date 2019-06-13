@@ -18,45 +18,47 @@
 
 package net.silentchaos512.gear.block.salvager;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.InventoryPlayer;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 
-public class GuiSalvager extends GuiContainer {
+public class GuiSalvager extends ContainerScreen<ContainerSalvager> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/salvager.png");
     private final TileSalvager tileInventory;
 
-    public GuiSalvager(InventoryPlayer playerInventory, TileSalvager tileInventory) {
+    public GuiSalvager(PlayerInventory playerInventory, TileSalvager tileInventory) {
         super(new ContainerSalvager(playerInventory, tileInventory));
         this.tileInventory = tileInventory;
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
+        this.renderBackground();
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(ModBlocks.SALVAGER.asBlock().getNameTextComponent().getFormattedText(), 28, 6, 0x404040);
+        this.font.drawString(ModBlocks.SALVAGER.asBlock().getNameTextComponent().getFormattedText(), 28, 6, 0x404040);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        if (minecraft == null) return;
+
         GlStateManager.color4f(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(TEXTURE);
+        minecraft.getTextureManager().bindTexture(TEXTURE);
 
         int posX = (this.width - this.xSize) / 2;
         int posY = (this.height - this.ySize) / 2;
-        drawTexturedModalRect(posX, posY, 0, 0, this.xSize, this.ySize);
+        blit(posX, posY, 0, 0, this.xSize, this.ySize);
 
         // Progress arrow
-        drawTexturedModalRect(posX + 32, posY + 34, 176, 14, getProgressAmount(24) + 1, 16);
+        blit(posX + 32, posY + 34, 176, 14, getProgressAmount(24) + 1, 16);
     }
 
     private int getProgressAmount(int scale) {

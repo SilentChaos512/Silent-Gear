@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.inventory;
 
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
 
-public final class InventoryCraftingStation extends InventoryCrafting {
+public final class InventoryCraftingStation extends CraftingInventory {
     private final Container container;
     private final NonNullList<ItemStack> stacks;
 

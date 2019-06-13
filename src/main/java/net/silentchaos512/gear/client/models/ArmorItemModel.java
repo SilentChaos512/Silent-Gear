@@ -4,17 +4,22 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.*;
+import net.minecraftforge.client.model.ICustomModelLoader;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ItemLayerModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.silentchaos512.gear.SilentGear;
@@ -98,8 +103,8 @@ public class ArmorItemModel implements IUnbakedModel {
 
     @Nullable
     @Override
-    public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock, VertexFormat format) {
-        ImmutableMap<TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
+    public IBakedModel bake(ModelBakery bakery, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, ISprite sprite, VertexFormat format) {
+        ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(ItemCameraTransforms.DEFAULT);
 
         TRSRTransformation transform = TRSRTransformation.identity();
 
@@ -110,7 +115,7 @@ public class ArmorItemModel implements IUnbakedModel {
 
         ImmutableList<ResourceLocation> textures = texBuilder.build();
         int layerCount = textures.size();
-        IBakedModel model = (new ItemLayerModel(textures)).bake(modelGetter, spriteGetter, state, uvlock, format);
+        IBakedModel model = (new ItemLayerModel(textures)).bake(bakery, spriteGetter, sprite, format);
         builder.addAll(model.getQuads(null, null, SilentGear.random));
 
         return new ArmorItemModel.Baked(this, createQuadsMap(model, layerCount), format, Maps.immutableEnumMap(transformMap), new HashMap<>());
@@ -159,7 +164,7 @@ public class ArmorItemModel implements IUnbakedModel {
 
         @Nullable
         @Override
-        public IBakedModel getModelWithOverrides(IBakedModel parentModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+        public IBakedModel getModelWithOverrides(IBakedModel parentModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
             if (!(stack.getItem() instanceof ICoreArmor)) return parentModel;
 
             ArmorItemModel.Baked model = (ArmorItemModel.Baked) parentModel;
@@ -179,14 +184,15 @@ public class ArmorItemModel implements IUnbakedModel {
                 Function<ResourceLocation, IUnbakedModel> modelGetter = location -> null;
                 Function<ResourceLocation, TextureAtlasSprite> spriteGetter = location ->
                         Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
-                IBakedModel bakedModel = parent.bake(
+                /*IBakedModel bakedModel = parent.bake(
                         modelGetter,
                         spriteGetter,
                         new SimpleModelState(model.transforms),
                         false,
                         model.getVertexFormat());
                 GearClientHelper.modelCache.put(key, bakedModel);
-                return bakedModel;
+                return bakedModel;*/
+                return null;
             }
 
             // Color cache
@@ -220,6 +226,11 @@ public class ArmorItemModel implements IUnbakedModel {
         @Override
         public ItemOverrideList getOverrides() {
             return OverrideHandler.INSTANCE;
+        }
+
+        @Override
+        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+            return null;
         }
 
         @Override

@@ -36,7 +36,7 @@ public final class PartBowstring extends AbstractGearPart {
     @Nullable
     @Override
     public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
-        if (!"bow".equals(gearClass)) return null;
+        if (!GearType.BOW.equals(gearClass)) return null;
         IPartDisplay props = getDisplayProperties(part, gear, animationFrame);
         // items/bow/bowstring_material_frame.png
         String path = String.format("items/%s/%s_%s_%d", gearClass, position.getTexturePrefix(),

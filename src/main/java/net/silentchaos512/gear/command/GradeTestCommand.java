@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 
 import java.util.EnumMap;
@@ -38,7 +38,7 @@ public final class GradeTestCommand {
         for (MaterialGrade grade : MaterialGrade.values()) {
             if (grade != MaterialGrade.NONE) {
                 int amount = map.getOrDefault(grade, 0);
-                ITextComponent text = new TextComponentString(grade + ": " + amount);
+                ITextComponent text = new StringTextComponent(grade + ": " + amount);
                 context.getSource().sendFeedback(text, true);
             }
         }

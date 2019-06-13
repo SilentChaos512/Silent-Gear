@@ -27,7 +27,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.util.generator.TagGenerator;
@@ -131,7 +131,7 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
         public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
             String descKey = this.getTranslationKey() + ".desc";
             if (I18n.hasKey(descKey)) {
-                tooltip.add(new TextComponentTranslation(descKey));
+                tooltip.add(new TranslationTextComponent(descKey));
             }
         }
     }

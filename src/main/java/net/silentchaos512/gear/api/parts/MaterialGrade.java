@@ -28,7 +28,7 @@ import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nonnegative;
@@ -137,8 +137,8 @@ public enum MaterialGrade {
     }
 
     public ITextComponent getDisplayName() {
-        TextComponentTranslation text = new TextComponentTranslation("stat.silentgear.grade." + name());
-        return new TextComponentTranslation("part.silentgear.gradeOnPart", text);
+        ITextComponent text = new TranslationTextComponent("stat.silentgear.grade." + name());
+        return new TranslationTextComponent("part.silentgear.gradeOnPart", text);
     }
 
     public static class Argument implements ArgumentType<MaterialGrade> {

@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.RecipeSerializers;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -16,12 +16,11 @@ public final class ModRecipes {
 
     public static void init() {
         // Recipe serializers
-        RecipeSerializers.register(ShapedGearCrafting.SERIALIZER);
-        RecipeSerializers.register(ShapelessGearCrafting.SERIALIZER);
-        RecipeSerializers.register(GearPartSwap.Serializer.INSTANCE);
-        RecipeSerializers.register(QuickRepair.Serializer.INSTANCE);
-        RecipeSerializers.register(RepairItemRecipeFix.Serializer.INSTANCE);
-        RecipeSerializers.register(UpgradeGear.Serializer.INSTANCE);
+        register(ShapedGearCrafting.NAME, ShapedGearCrafting.SERIALIZER);
+        register(ShapelessGearCrafting.NAME, ShapelessGearCrafting.SERIALIZER);
+        register(GearPartSwap.NAME, GearPartSwap.SERIALIZER);
+        register(QuickRepair.NAME, QuickRepair.SERIALIZER);
+        register(UpgradeGear.NAME, UpgradeGear.SERIALIZER);
 
         // Ingredient serializers
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
@@ -31,8 +30,12 @@ public final class ModRecipes {
         }
     }
 
+    private static void register(ResourceLocation id, IRecipeSerializer<?> serializer) {
+        IRecipeSerializer.register(id.toString(), serializer);
+    }
+
     private static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {
-        EntityPlayer player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
         if (player.world.isRemote || player.world.getServer() == null) return;
 
         ResourceLocation[] recipes = player.world.getServer().getRecipeManager().getRecipes()

@@ -18,17 +18,17 @@
 
 package net.silentchaos512.gear.block.salvager;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.lib.inventory.ContainerSL;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 
 public class ContainerSalvager extends ContainerSL {
-    public ContainerSalvager(InventoryPlayer playerInventory, IInventory tileInventory) {
+    public ContainerSalvager(PlayerInventory playerInventory, IInventory tileInventory) {
         super(playerInventory, tileInventory);
     }
 
@@ -51,7 +51,7 @@ public class ContainerSalvager extends ContainerSL {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(index);
 

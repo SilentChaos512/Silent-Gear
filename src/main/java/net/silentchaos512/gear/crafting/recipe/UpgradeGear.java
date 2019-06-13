@@ -19,13 +19,14 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
@@ -36,9 +37,12 @@ import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
 
-public class UpgradeGear implements IRecipe {
+public class UpgradeGear implements ICraftingRecipe {
+    public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "upgrade_gear");
+    public static final Serializer SERIALIZER = new Serializer();
+
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(CraftingInventory inv, World worldIn) {
         if (Config.GENERAL.upgradesInAnvilOnly.get()) return false;
 
         StackList list = StackList.from(inv);
@@ -53,7 +57,7 @@ public class UpgradeGear implements IRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getCraftingResult(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return ItemStack.EMPTY;
@@ -90,17 +94,15 @@ public class UpgradeGear implements IRecipe {
 
     @Override
     public ResourceLocation getId() {
-        return Serializer.NAME;
+        return NAME;
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
+        return SERIALIZER;
     }
 
-    public static final class Serializer implements IRecipeSerializer<UpgradeGear> {
-        public static final Serializer INSTANCE = new Serializer();
-        private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "upgrade_gear");
+    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<UpgradeGear> {
 
         @Override
         public UpgradeGear read(ResourceLocation recipeId, JsonObject json) {
@@ -114,10 +116,5 @@ public class UpgradeGear implements IRecipe {
 
         @Override
         public void write(PacketBuffer buffer, UpgradeGear recipe) {}
-
-        @Override
-        public ResourceLocation getName() {
-            return NAME;
-        }
     }
 }

@@ -4,13 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -56,7 +56,7 @@ public class SimpleTrait implements ITrait {
         return displayName
                 .deepCopy()
                 .appendText(" ")
-                .appendSibling(new TextComponentTranslation("enchantment.level." + level));
+                .appendSibling(new TranslationTextComponent("enchantment.level." + level));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public float onAttackEntity(TraitActionContext context, EntityLivingBase target, float baseValue) {
+    public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
         return baseValue;
     }
 
@@ -114,7 +114,7 @@ public class SimpleTrait implements ITrait {
         @Override
         public T read(ResourceLocation id, JsonObject json) {
             T trait = factory.apply(id);
-            trait.maxLevel = JsonUtils.getInt(json, "max_level", 1);
+            trait.maxLevel = JSONUtils.getInt(json, "max_level", 1);
             trait.displayName = readTextComponent(json, "name");
             trait.description = readTextComponent(json, "description");
 
@@ -165,11 +165,11 @@ public class SimpleTrait implements ITrait {
             JsonElement element = json.get(name);
             if (element != null && element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
-                final boolean translate = JsonUtils.getBoolean(obj, "translate", false);
-                final String value = JsonUtils.getString(obj, "name");
+                final boolean translate = JSONUtils.getBoolean(obj, "translate", false);
+                final String value = JSONUtils.getString(obj, "name");
                 return translate
-                        ? new TextComponentTranslation(value)
-                        : new TextComponentString(value);
+                        ? new TranslationTextComponent(value)
+                        : new StringTextComponent(value);
             } else if (element != null) {
                 throw new JsonParseException("Expected '" + name + "' to be an object");
             } else {

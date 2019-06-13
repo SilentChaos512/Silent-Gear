@@ -1,22 +1,9 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.IParticleData;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.util.IAOETool;
 
-public class WorldListener implements IWorldEventListener {
+public class WorldListener /*implements IWorldEventListener*/ {
     private final MinecraftServer server;
     private World world;
 
@@ -25,7 +12,7 @@ public class WorldListener implements IWorldEventListener {
         this.world = world;
     }
 
-    @Override
+/*    @Override
     public void notifyBlockUpdate(IBlockReader worldIn, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
     }
 
@@ -83,13 +70,13 @@ public class WorldListener implements IWorldEventListener {
             IAOETool iaoeTool = (IAOETool) heldItem.getItem();
             RayTraceResult rt = iaoeTool.rayTraceBlocks(world, player);
             if (rt != null) {
-                /* FIXME
+                *//* FIXME
                 final List<BlockPos> positions = iaoeTool.getExtraBlocks(world, rt, player, heldItem);
                 final TargetPoint point = new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 32D);
                 SilentGear.network.wrapper.sendToAllAround(new MessageExtraBlockBreak(
                         player.getEntityId(), progress - 1, positions.toArray(new BlockPos[0])), point);
-                */
+                *//*
             }
         }
-    }
+    }*/
 }
