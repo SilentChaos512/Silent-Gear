@@ -65,7 +65,7 @@ public class GuiItemParts extends Screen {
     private IGearPart selectedPart = null;
     private List<Tuple<String, String>> selectedPartInfo = null;
 
-    protected GuiItemParts(ITextComponent p_i51108_1_) {
+    public GuiItemParts(ITextComponent p_i51108_1_) {
         super(p_i51108_1_);
     }
 

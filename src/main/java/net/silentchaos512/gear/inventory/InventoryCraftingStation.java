@@ -5,22 +5,22 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
 
 public final class InventoryCraftingStation extends CraftingInventory {
     private final Container container;
     private final NonNullList<ItemStack> stacks;
 
     @SuppressWarnings("TypeMayBeWeakened") // So no random types get thrown in by mistake
-    public InventoryCraftingStation(Container eventHandlerIn, TileCraftingStation tile, int width, int height) {
+    public InventoryCraftingStation(Container eventHandlerIn, CraftingStationTileEntity tile, int width, int height) {
         super(eventHandlerIn, width, height);
         this.container = eventHandlerIn;
         // This hold everything after the crafting grid, InventoryCrafting will only give 9 slots
-        this.stacks = NonNullList.withSize(tile.getSizeInventory() - TileCraftingStation.CRAFTING_GRID_SIZE, ItemStack.EMPTY);
+        this.stacks = NonNullList.withSize(tile.getSizeInventory() - CraftingStationTileEntity.CRAFTING_GRID_SIZE, ItemStack.EMPTY);
 
         // Fill crafting grid slots
-        for (int i = 0; i < TileCraftingStation.CRAFTING_GRID_SIZE; ++i) {
-            setInventorySlotContents(i, tile.getStackInSlot(i + TileCraftingStation.CRAFTING_GRID_START));
+        for (int i = 0; i < CraftingStationTileEntity.CRAFTING_GRID_SIZE; ++i) {
+            setInventorySlotContents(i, tile.getStackInSlot(i + CraftingStationTileEntity.CRAFTING_GRID_START));
         }
 
         this.container.onCraftMatrixChanged(this);
@@ -34,11 +34,11 @@ public final class InventoryCraftingStation extends CraftingInventory {
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (index < TileCraftingStation.CRAFTING_GRID_SIZE) {
+        if (index < CraftingStationTileEntity.CRAFTING_GRID_SIZE) {
             return super.decrStackSize(index, count);
         }
 
-        ItemStack stack = ItemStackHelper.getAndSplit(stacks, index - TileCraftingStation.CRAFTING_GRID_SIZE, count);
+        ItemStack stack = ItemStackHelper.getAndSplit(stacks, index - CraftingStationTileEntity.CRAFTING_GRID_SIZE, count);
         if (!stack.isEmpty()) {
             markDirty();
         }
@@ -52,10 +52,10 @@ public final class InventoryCraftingStation extends CraftingInventory {
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        if (index < TileCraftingStation.CRAFTING_GRID_SIZE) {
+        if (index < CraftingStationTileEntity.CRAFTING_GRID_SIZE) {
             return super.getStackInSlot(index);
         }
-        return index < getSizeInventory() ? stacks.get(index - TileCraftingStation.CRAFTING_GRID_SIZE) : ItemStack.EMPTY;
+        return index < getSizeInventory() ? stacks.get(index - CraftingStationTileEntity.CRAFTING_GRID_SIZE) : ItemStack.EMPTY;
     }
 
     @Override
@@ -70,18 +70,18 @@ public final class InventoryCraftingStation extends CraftingInventory {
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        if (index < TileCraftingStation.CRAFTING_GRID_SIZE) {
+        if (index < CraftingStationTileEntity.CRAFTING_GRID_SIZE) {
             return super.removeStackFromSlot(index);
         }
-        return ItemStackHelper.getAndRemove(stacks, index - TileCraftingStation.CRAFTING_GRID_SIZE);
+        return ItemStackHelper.getAndRemove(stacks, index - CraftingStationTileEntity.CRAFTING_GRID_SIZE);
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        if (index < TileCraftingStation.CRAFTING_GRID_SIZE) {
+        if (index < CraftingStationTileEntity.CRAFTING_GRID_SIZE) {
             super.setInventorySlotContents(index, stack);
         } else {
-            stacks.set(index - TileCraftingStation.CRAFTING_GRID_SIZE, stack);
+            stacks.set(index - CraftingStationTileEntity.CRAFTING_GRID_SIZE, stack);
         }
     }
 }

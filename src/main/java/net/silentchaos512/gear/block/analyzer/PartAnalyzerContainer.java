@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- ContainerSalvager
+ * Silent Gear -- PartAnalyzerContainer
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -16,38 +16,69 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.block.salvager;
+package net.silentchaos512.gear.block.analyzer;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.lib.inventory.ContainerSL;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
+import net.silentchaos512.gear.init.ModContainers;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 
-public class ContainerSalvager extends ContainerSL {
-    public ContainerSalvager(PlayerInventory playerInventory, IInventory tileInventory) {
-        super(playerInventory, tileInventory);
+public class PartAnalyzerContainer extends Container {
+    private final IInventory inventory;
+    private final IIntArray fields;
+
+    public PartAnalyzerContainer(int id, PlayerInventory playerInventory) {
+        this(id, playerInventory, new Inventory(PartAnalyzerTileEntity.INVENTORY_SIZE), new IntArray(1));
     }
 
-    @Override
-    protected void addTileInventorySlots(IInventory inv) {
-        addSlot(new Slot(tileInventory, 0, 9, 35));
-        int index = 1;
-        for (int y = 0; y < 3; ++y) {
-            for (int x = 0; x < 6; ++x) {
-                addSlot(new SlotOutputOnly(tileInventory, index, 62 + 18 * x, 17 + 18 * y));
-                ++index;
+    @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
+    public PartAnalyzerContainer(int id, PlayerInventory playerInventory, IInventory inventory, IIntArray fields) {
+        super(ModContainers.PART_ANALYZER.type(), id);
+        this.inventory = inventory;
+        this.fields = fields;
+
+        assertInventorySize(this.inventory, PartAnalyzerTileEntity.INVENTORY_SIZE);
+
+        addSlot(new Slot(inventory, 0, 26, 35) {
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return PartAnalyzerTileEntity.isUngradedMainPart(stack);
             }
-        }
+        });
+        addSlot(new Slot(inventory, 1, 26, 55) {
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return PartAnalyzerTileEntity.getCatalystTier(stack) > 0;
+            }
+        });
+        addSlot(new SlotOutputOnly(inventory, 2, 80, 35));
+        addSlot(new SlotOutputOnly(inventory, 3, 98, 35));
+        addSlot(new SlotOutputOnly(inventory, 4, 116, 35));
+        addSlot(new SlotOutputOnly(inventory, 5, 134, 35));
+    }
+
+    public int getProgressArrowScale() {
+        int progress = fields.get(0);
+        return progress != 0 ? progress * 24 / PartAnalyzerTileEntity.BASE_ANALYZE_TIME : 0;
     }
 
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
         listener.sendAllContents(this, getInventory());
+    }
+
+    @Override
+    public boolean canInteractWith(PlayerEntity playerIn) {
+        return inventory.isUsableByPlayer(playerIn);
     }
 
     @Override
@@ -58,20 +89,25 @@ public class ContainerSalvager extends ContainerSL {
         if (slot != null && slot.getHasStack()) {
             ItemStack stack1 = slot.getStack();
             stack = stack1.copy();
-            final int size = tileInventory.getSizeInventory();
+            final int size = inventory.getSizeInventory();
             final int startPlayer = size;
             final int endPlayer = size + 27;
             final int startHotbar = size + 27;
             final int endHotbar = size + 36;
 
-            if (index >= 1 && index < size) {
+            if (index >= 2 && index < PartAnalyzerTileEntity.INVENTORY_SIZE) {
                 // Remove from output slot?
                 if (!this.mergeItemStack(stack1, startPlayer, endHotbar, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= size && tileInventory.isItemValidForSlot(0, stack1)) {
+            } else if (index >= size && inventory.isItemValidForSlot(PartAnalyzerTileEntity.INPUT_SLOT, stack1)) {
                 // Move from player to input slot?
                 if (!mergeItemStack(stack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (index >= size && inventory.isItemValidForSlot(PartAnalyzerTileEntity.CATALYST_SLOT, stack1)) {
+                // Move from player to catalyst slot?
+                if (!mergeItemStack(stack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= startPlayer && index < endPlayer) {

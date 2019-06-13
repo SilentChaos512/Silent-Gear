@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- BlockPartAnalyzer
+ * Silent Gear -- PartAnalyzerBlock
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -25,10 +25,12 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -39,15 +41,14 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 
-public class BlockPartAnalyzer extends ContainerBlock {
-    private static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
+public class PartAnalyzerBlock extends ContainerBlock {
+    private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 7, 16);
 
-    public BlockPartAnalyzer() {
+    public PartAnalyzerBlock() {
         super(Properties.create(Material.IRON)
                 .hardnessAndResistance(5, 30)
         );
@@ -62,7 +63,7 @@ public class BlockPartAnalyzer extends ContainerBlock {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TilePartAnalyzer();
+        return new PartAnalyzerTileEntity();
     }
 
     @SuppressWarnings("deprecation")
@@ -74,8 +75,10 @@ public class BlockPartAnalyzer extends ContainerBlock {
     @SuppressWarnings("deprecation")
     @Override
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!worldIn.isRemote) {
-            GuiTypes.PART_ANALYZER.display(player, pos);
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof PartAnalyzerTileEntity) {
+            player.openContainer((INamedContainerProvider) tileEntity);
+            //player.addStat(...);
         }
         return true;
     }

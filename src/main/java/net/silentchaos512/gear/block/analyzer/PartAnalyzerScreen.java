@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- GuiPartAnalyzer
+ * Silent Gear -- PartAnalyzerScreen
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -18,10 +18,10 @@
 
 package net.silentchaos512.gear.block.analyzer;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -30,27 +30,25 @@ import net.silentchaos512.gear.init.ModBlocks;
 
 import java.util.List;
 
-public class GuiPartAnalyzer extends GuiContainer {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/analyzer.png");
+public class PartAnalyzerScreen extends ContainerScreen<PartAnalyzerContainer> {
+    private static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/analyzer.png");
 
-    private final TilePartAnalyzer tileInventory;
-
-    public GuiPartAnalyzer(InventoryPlayer playerInventory, TilePartAnalyzer tileInventory) {
-        super(new ContainerPartAnalyzer(playerInventory, tileInventory));
-        this.tileInventory = tileInventory;
+    public PartAnalyzerScreen(PartAnalyzerContainer container, PlayerInventory playerInventory, ITextComponent title) {
+        super(container, playerInventory, title);
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
+        this.renderBackground();
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
-    public List<String> getItemToolTip(ItemStack stack) {
-        List<String> list = super.getItemToolTip(stack);
-        int catalystTier = TilePartAnalyzer.getCatalystTier(stack);
+    public List<String> getTooltipFromItem(ItemStack stack) {
+        List<String> list = super.getTooltipFromItem(stack);
+        // Add catalyst tier to tooltip, only in part analyzer
+        int catalystTier = PartAnalyzerTileEntity.getCatalystTier(stack);
         if (catalystTier > 0) {
             list.add(I18n.format("gui.silentgear.part_analyzer.catalystTier", String.valueOf(catalystTier)));
         }
@@ -60,25 +58,21 @@ public class GuiPartAnalyzer extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         ITextComponent text = ModBlocks.PART_ANALYZER.asBlock().getNameTextComponent();
-        fontRenderer.drawString(text.getFormattedText(), 28, 6, 0x404040);
-    }
-
-    private int getAnalyzeProgress(int scale) {
-        int progress = tileInventory.progress;
-        int time = TilePartAnalyzer.BASE_ANALYZE_TIME;
-        return progress > 0 && progress < time ? progress * scale / time : 0;
+        font.drawString(text.getFormattedText(), 28, 6, 0x404040);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        if (minecraft == null) return;
+
         GlStateManager.color4f(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(TEXTURE);
+        minecraft.getTextureManager().bindTexture(TEXTURE);
 
         int posX = (this.width - this.xSize) / 2;
         int posY = (this.height - this.ySize) / 2;
-        drawTexturedModalRect(posX, posY, 0, 0, this.xSize, this.ySize);
+        blit(posX, posY, 0, 0, this.xSize, this.ySize);
 
         // Progress arrow
-        drawTexturedModalRect(posX + 49, posY + 34, 176, 14, getAnalyzeProgress(24) + 1, 16);
+        blit(posX + 49, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
     }
 }

@@ -23,16 +23,13 @@ import net.silentchaos512.lib.util.TextRenderUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GuiCraftingStation extends ContainerScreen<ContainerCraftingStation> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/crafting_station.png");
-
-    private final ContainerCraftingStation container;
+public class CraftingStationScreen extends ContainerScreen<CraftingStationContainer> {
+    private static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/crafting_station.png");
 
     private TexturedButton buttonShowAllParts;
 
-    public GuiCraftingStation(ContainerCraftingStation container, PlayerInventory playerInventory) {
-        super(container, playerInventory, new TranslationTextComponent("container.silentgear.crafting_station"));
-        this.container = container;
+    public CraftingStationScreen(CraftingStationContainer container, PlayerInventory playerInventory, ITextComponent title) {
+        super(container, playerInventory, title);
 
         this.xSize = 256;
         // this.ySize = 256;
@@ -53,7 +50,7 @@ public class GuiCraftingStation extends ContainerScreen<ContainerCraftingStation
                 ),
                 b -> {
                     if (minecraft != null) {
-                        minecraft.displayGuiScreen(new GuiItemParts());
+                        minecraft.displayGuiScreen(new GuiItemParts(new TranslationTextComponent("gui.silentgear.parts")));
                     }
                 });
         this.addButton(buttonShowAllParts);
@@ -150,7 +147,7 @@ public class GuiCraftingStation extends ContainerScreen<ContainerCraftingStation
         this.blit(xPos, yPos, 0, 0, this.xSize, this.ySize);
 
         // Internal/external inventory slots
-        final int rowCount = TileCraftingStation.SIDE_INVENTORY_SIZE / 3;
+        final int rowCount = CraftingStationTileEntity.SIDE_INVENTORY_SIZE / 3;
         final int rowWidth = 62;
         final int totalHeight = 44 + 18 * (rowCount - 2);
         int x = xPos - 61;

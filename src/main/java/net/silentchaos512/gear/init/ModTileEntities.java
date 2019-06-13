@@ -9,18 +9,18 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.block.analyzer.TilePartAnalyzer;
-import net.silentchaos512.gear.block.craftingstation.TileCraftingStation;
-import net.silentchaos512.gear.block.salvager.TileSalvager;
+import net.silentchaos512.gear.block.analyzer.PartAnalyzerTileEntity;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
+import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
 import net.silentchaos512.utils.Lazy;
 
 import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum ModTileEntities {
-    CRAFTING_STATION(TileCraftingStation::new),
-    PART_ANALYZER(TilePartAnalyzer::new),
-    SALVAGER(TileSalvager::new);
+    CRAFTING_STATION(CraftingStationTileEntity::new),
+    PART_ANALYZER(PartAnalyzerTileEntity::new),
+    SALVAGER(SalvagerTileEntity::new);
 
     private final Lazy<TileEntityType<?>> type;
 

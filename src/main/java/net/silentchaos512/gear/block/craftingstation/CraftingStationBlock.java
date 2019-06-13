@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
@@ -17,14 +18,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 
-public class BlockCraftingStation extends ContainerBlock {
+public class CraftingStationBlock extends ContainerBlock {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public BlockCraftingStation() {
+    public CraftingStationBlock() {
         super(Properties.create(Material.WOOD)
                 .hardnessAndResistance(3, 10)
                 .sound(SoundType.WOOD)
@@ -44,14 +44,14 @@ public class BlockCraftingStation extends ContainerBlock {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileCraftingStation();
+        return new CraftingStationTileEntity();
     }
 
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if (tileEntity instanceof TileCraftingStation) {
-            TileCraftingStation tileCraftingStation = (TileCraftingStation) tileEntity;
+        if (tileEntity instanceof CraftingStationTileEntity) {
+            CraftingStationTileEntity tileCraftingStation = (CraftingStationTileEntity) tileEntity;
             InventoryHelper.dropInventoryItems(worldIn, pos, tileCraftingStation.getInternalStorage());
         }
         super.onReplaced(state, worldIn, pos, newState, isMoving);
@@ -60,11 +60,15 @@ public class BlockCraftingStation extends ContainerBlock {
     @SuppressWarnings("deprecation")
     @Override
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        return !player.isSneaking() && (worldIn.isRemote || BlockCraftingStation.openGui(player, worldIn, pos));
+        return !player.isSneaking() && (worldIn.isRemote || openGui(player, worldIn, pos));
     }
 
-    private static boolean openGui(PlayerEntity player, World world, BlockPos pos) {
-        GuiTypes.CRAFTING_STATION.display(player, pos);
+    private static boolean openGui(PlayerEntity player, World worldIn, BlockPos pos) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof CraftingStationTileEntity) {
+            player.openContainer((INamedContainerProvider) tileEntity);
+            //player.addStat(...);
+        }
         return true;
     }
 

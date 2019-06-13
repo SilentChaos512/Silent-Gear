@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- TilePartAnalyzer
+ * Silent Gear -- PartAnalyzerTileEntity
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -19,40 +19,37 @@
 package net.silentchaos512.gear.block.analyzer;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
-import net.silentchaos512.lib.tile.TileSidedInventorySL;
 import net.silentchaos512.lib.util.TimeUtils;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable {
+public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
     static final int BASE_ANALYZE_TIME = TimeUtils.ticksFromSeconds(5);
     private static final List<Tag<Item>> CATALYST_TAGS = ImmutableList.of(
             new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier1")),
@@ -66,17 +63,33 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
     private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, INVENTORY_SIZE).toArray();
 
-    @SyncVariable(name = "progress")
-    int progress = 0;
+    @SyncVariable(name = "progress") private int progress = 0;
     private boolean requireClientSync = false;
 
-    public TilePartAnalyzer() {
+    private final IIntArray fields = new IIntArray() {
+        @Override
+        public int get(int index) {
+            return progress;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            progress = value;
+        }
+
+        @Override
+        public int size() {
+            return 1;
+        }
+    };
+
+    public PartAnalyzerTileEntity() {
         super(ModTileEntities.PART_ANALYZER.type(), INVENTORY_SIZE);
     }
 
     @Override
     public void tick() {
-        if (world.isRemote) return;
+        if (world == null || world.isRemote) return;
 
         ItemStack input = getInputStack();
         IGearPart part = PartManager.from(input);
@@ -125,15 +138,10 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
         }
 
         if (requireClientSync) {
-            IBlockState state = world.getBlockState(pos);
+            BlockState state = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, state, state, 3);
             requireClientSync = false;
         }
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return INVENTORY_SIZE;
     }
 
     @Override
@@ -179,28 +187,28 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tags = new NBTTagCompound();
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT tags = new CompoundNBT();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
 
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
-            NBTTagCompound itemTags = input.serializeNBT();
+            CompoundNBT itemTags = input.serializeNBT();
             tags.put("input_item", itemTags);
         }
 
-        return new SPacketUpdateTileEntity(pos, 0, tags);
+        return new SUpdateTileEntityPacket(pos, 0, tags);
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-        NBTTagCompound tags = super.getUpdateTag();
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tags = super.getUpdateTag();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
 
-        NBTTagList tagList = new NBTTagList();
+        ListNBT tagList = new ListNBT();
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
-            NBTTagCompound itemTags = input.serializeNBT();
+            CompoundNBT itemTags = input.serializeNBT();
             itemTags.putByte("Slot", (byte) INPUT_SLOT);
             tagList.add(itemTags);
         }
@@ -209,9 +217,9 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         super.onDataPacket(net, packet);
-        NBTTagCompound tags = packet.getNbtCompound();
+        CompoundNBT tags = packet.getNbtCompound();
         SyncVariable.Helper.readSyncVars(this, tags);
 
         if (tags.contains("input_item")) {
@@ -221,15 +229,16 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
         }
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         switch (side) {
             case UP:
-                return SLOTS_INPUT.clone();
+                return SLOTS_INPUT;
             case DOWN:
-                return SLOTS_OUTPUT.clone();
+                return SLOTS_OUTPUT;
             default:
-                return SLOTS_ALL.clone();
+                return SLOTS_ALL;
         }
     }
 
@@ -252,39 +261,22 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index != INPUT_SLOT;
-    }
-
-    private final LazyOptional<? extends IItemHandler>[] handlers =
-            SidedInvWrapper.create(this, EnumFacing.UP, EnumFacing.DOWN, EnumFacing.NORTH);
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing side) {
-        if (!this.removed && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (side == EnumFacing.UP)
-                return handlers[0].cast();
-            if (side == EnumFacing.DOWN)
-                return handlers[1].cast();
-            return handlers[2].cast();
-        }
-        return super.getCapability(cap, side);
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+        return index != INPUT_SLOT && index != CATALYST_SLOT;
     }
 
     @Override
-    public ITextComponent getName() {
-        return new TextComponentTranslation("block.silentgear.part_analyzer");
+    protected ITextComponent getDefaultName() {
+        return new TranslationTextComponent("container.silentgear.part_analyzer");
     }
 
-    @Nullable
     @Override
-    public ITextComponent getCustomName() {
-        return null;
+    protected Container createMenu(int id, PlayerInventory playerInventory) {
+        return new PartAnalyzerContainer(id, playerInventory, this, fields);
     }
 }

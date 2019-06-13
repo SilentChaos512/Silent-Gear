@@ -17,14 +17,14 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 
-public class TileCraftingStation extends TileInventorySL {
+public class CraftingStationTileEntity extends TileInventorySL {
     public static final int CRAFTING_GRID_SIZE = 3 * 3;
     public static final int SIDE_INVENTORY_SIZE = 3 * 6;
 
     public static final int CRAFTING_GRID_START = 0;
     public static final int SIDE_INVENTORY_START = CRAFTING_GRID_SIZE;
 
-    public TileCraftingStation() {
+    public CraftingStationTileEntity() {
         super(ModTileEntities.CRAFTING_STATION.type(), CRAFTING_GRID_SIZE + SIDE_INVENTORY_SIZE);
     }
 

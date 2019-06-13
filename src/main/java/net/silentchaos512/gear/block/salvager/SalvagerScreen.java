@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- GuiSalvager
+ * Silent Gear -- SalvagerScreen
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -22,16 +22,15 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 
-public class GuiSalvager extends ContainerScreen<ContainerSalvager> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/salvager.png");
-    private final TileSalvager tileInventory;
+public class SalvagerScreen extends ContainerScreen<SalvagerContainer> {
+    private static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/salvager.png");
 
-    public GuiSalvager(PlayerInventory playerInventory, TileSalvager tileInventory) {
-        super(new ContainerSalvager(playerInventory, tileInventory));
-        this.tileInventory = tileInventory;
+    public SalvagerScreen(SalvagerContainer container, PlayerInventory playerInventory, ITextComponent title) {
+        super(container, playerInventory, title);
     }
 
     @Override
@@ -58,12 +57,6 @@ public class GuiSalvager extends ContainerScreen<ContainerSalvager> {
         blit(posX, posY, 0, 0, this.xSize, this.ySize);
 
         // Progress arrow
-        blit(posX + 32, posY + 34, 176, 14, getProgressAmount(24) + 1, 16);
-    }
-
-    private int getProgressAmount(int scale) {
-        int progress = tileInventory.progress;
-        int time = TileSalvager.BASE_WORK_TIME;
-        return progress > 0 && progress < time ? progress * scale / time : 0;
+        blit(posX + 32, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
     }
 }

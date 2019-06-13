@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.block.craftingstation.GuiCraftingStation;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -47,7 +47,7 @@ public class GearBlueprint extends AbstractBlueprint {
         }
 
         // Is mixed material allowed in this GUI?
-        if (Minecraft.getInstance().currentScreen instanceof GuiCraftingStation) {
+        if (Minecraft.getInstance().currentScreen instanceof CraftingStationScreen) {
             list.add(new TranslationTextComponent("item.silentgear.blueprint.canMix")
                     .applyTextStyle(TextFormatting.GREEN));
         } else {

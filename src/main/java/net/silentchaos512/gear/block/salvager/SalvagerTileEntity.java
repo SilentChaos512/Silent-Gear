@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- TileSalvager
+ * Silent Gear -- SalvagerTileEntity
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -20,13 +20,18 @@ package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -34,9 +39,8 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
-import net.silentchaos512.lib.tile.TileSidedInventorySL;
-import net.silentchaos512.lib.util.GameUtil;
 import net.silentchaos512.lib.util.TimeUtils;
 import net.silentchaos512.utils.MathUtils;
 
@@ -44,17 +48,34 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-public class TileSalvager extends TileSidedInventorySL implements ITickableTileEntity {
-    static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(GameUtil.isDeobfuscated() ? 2 : 10);
+public class SalvagerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
+    static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
     private static final int[] SLOTS_OUTPUT = IntStream.rangeClosed(1, 18).toArray();
-    private static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
+    private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, 18).toArray();
+    static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
 
-    @SyncVariable(name = "progress")
-    int progress = 0;
+    @SyncVariable(name = "progress") int progress = 0;
 
-    public TileSalvager() {
+    private final IIntArray fields = new IIntArray() {
+        @Override
+        public int get(int index) {
+            return progress;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            progress = value;
+        }
+
+        @Override
+        public int size() {
+            return 1;
+        }
+    };
+
+    public SalvagerTileEntity() {
         super(ModTileEntities.SALVAGER.type(), INVENTORY_SIZE);
     }
 
@@ -229,13 +250,16 @@ public class TileSalvager extends TileSidedInventorySL implements ITickableTileE
         return tags;
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
     public int[] getSlotsForFace(Direction side) {
         switch (side) {
             case DOWN:
-                return SLOTS_OUTPUT.clone();
+                return SLOTS_OUTPUT;
+            case UP:
+                return SLOTS_INPUT;
             default:
-                return SLOTS_INPUT.clone();
+                return SLOTS_ALL;
         }
     }
 
@@ -264,16 +288,30 @@ public class TileSalvager extends TileSidedInventorySL implements ITickableTileE
     }
 
     private static boolean isInputSlot(int index) {
-        for (int k : SLOTS_INPUT)
-            if (index == k)
+        for (int k : SLOTS_INPUT) {
+            if (index == k) {
                 return true;
+            }
+        }
         return false;
     }
 
     private static boolean isOutputSlot(int index) {
-        for (int k : SLOTS_OUTPUT)
-            if (index == k)
+        for (int k : SLOTS_OUTPUT) {
+            if (index == k) {
                 return true;
+            }
+        }
         return false;
+    }
+
+    @Override
+    protected ITextComponent getDefaultName() {
+        return new TranslationTextComponent("container.silentgear.salvager");
+    }
+
+    @Override
+    protected Container createMenu(int id, PlayerInventory playerInventory) {
+        return new SalvagerContainer(id, playerInventory, this, fields);
     }
 }

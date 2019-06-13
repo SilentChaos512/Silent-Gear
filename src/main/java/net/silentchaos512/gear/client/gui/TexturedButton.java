@@ -37,7 +37,7 @@ public class TexturedButton extends Button {
             mc.getTextureManager().bindTexture(this.resLoc);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            int k = this.getHoverState(this.hovered);
+            int k = this.getYImage(this.isHovered());
             if (k == 0) {
                 k = 1;
             }
@@ -55,7 +55,7 @@ public class TexturedButton extends Button {
     }
 
     public void drawHover(int x, int y) {
-        if (this.isMouseOver()) {
+        if (this.isMouseOver(x, y)) {
             Minecraft mc = Minecraft.getInstance();
             GuiUtils.drawHoveringText(
                     this.textList,

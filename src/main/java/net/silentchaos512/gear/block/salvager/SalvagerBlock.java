@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- BlockSalvager
+ * Silent Gear -- SalvagerBlock
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -33,13 +34,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.client.gui.GuiTypes;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockSalvager extends ContainerBlock {
-    public BlockSalvager() {
+public class SalvagerBlock extends ContainerBlock {
+    public SalvagerBlock() {
         super(Properties.create(Material.IRON)
                 .hardnessAndResistance(4, 20)
         );
@@ -48,14 +48,16 @@ public class BlockSalvager extends ContainerBlock {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileSalvager();
+        return new SalvagerTileEntity();
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!worldIn.isRemote) {
-            GuiTypes.SALVAGER.display(player, pos);
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof SalvagerTileEntity) {
+            player.openContainer((INamedContainerProvider) tileEntity);
+            //player.addStat(...);
         }
         return true;
     }

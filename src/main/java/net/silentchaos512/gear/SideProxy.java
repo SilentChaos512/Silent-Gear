@@ -15,7 +15,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
-import net.silentchaos512.gear.client.gui.GuiTypes;
 import net.silentchaos512.gear.command.GradeTestCommand;
 import net.silentchaos512.gear.command.LockStatsCommand;
 import net.silentchaos512.gear.command.RecalculateStatsCommand;
@@ -28,23 +27,21 @@ import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.InitialSpawnItems;
-import net.silentchaos512.lib.inventory.ContainerType;
 
 class SideProxy {
     SideProxy() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::imcEnqueue);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::imcProcess);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(SideProxy::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(SideProxy::imcEnqueue);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(SideProxy::imcProcess);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModBlocks::registerAll);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModContainers::registerAll);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModEntities::registerAll);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModItems::registerAll);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModTileEntities::registerAll);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModEntities::registerAll);
 
-        MinecraftForge.EVENT_BUS.addListener(this::serverAboutToStart);
-        MinecraftForge.EVENT_BUS.addListener(this::serverStarted);
-
-        registerContainersCommon();
+        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverAboutToStart);
+        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
 
         Config.init();
         Network.init();
@@ -53,7 +50,7 @@ class SideProxy {
         ModRecipes.init();
     }
 
-    private void commonSetup(FMLCommonSetupEvent event) {
+    private static void commonSetup(FMLCommonSetupEvent event) {
         DeferredWorkQueue.runLater(ModWorldFeatures::addFeaturesToBiomes);
 
         IAOETool.BreakHandler.buildOreBlocksSet();
@@ -61,15 +58,15 @@ class SideProxy {
         InitialSpawnItems.add(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"), () -> {
             if (Config.GENERAL.spawnWithStarterBlueprints.get())
                 return ModItems.blueprintPackage.getStack();
-            else return ItemStack.EMPTY;
+            return ItemStack.EMPTY;
         });
     }
 
-    private void imcEnqueue(InterModEnqueueEvent event) { }
+    private static void imcEnqueue(InterModEnqueueEvent event) { }
 
-    private void imcProcess(InterModProcessEvent event) { }
+    private static void imcProcess(InterModProcessEvent event) { }
 
-    private void serverAboutToStart(FMLServerAboutToStartEvent event) {
+    private static void serverAboutToStart(FMLServerAboutToStartEvent event) {
         IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
         resourceManager.addReloadListener(TraitManager.INSTANCE);
         resourceManager.addReloadListener(PartManager.INSTANCE);
@@ -83,21 +80,13 @@ class SideProxy {
         }
     }
 
-    private void serverStarted(FMLServerStartedEvent event) {
+    private static void serverStarted(FMLServerStartedEvent event) {
         SilentGear.LOGGER.info(PartManager.MARKER, "Total gear parts loaded: {}", PartManager.getValues().size());
-    }
-
-    private static void registerContainersCommon() {
-        for (GuiTypes type : GuiTypes.values()) {
-            //noinspection Convert2MethodRef -- compiler error
-            ContainerType.register(type::getContainerType, (tileType, player) ->
-                    type.getContainer(tileType, player));
-        }
     }
 
     static class Client extends SideProxy {
         Client() {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::clientSetup);
 
             MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
             MinecraftForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
@@ -107,33 +96,15 @@ class SideProxy {
                 MinecraftForge.EVENT_BUS.register(new DebugOverlay());
             }
 
-            registerContainers();
-
             // FIXME: These do not work!
 //            ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
 //            ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
         }
 
-        private void clientSetup(FMLClientSetupEvent event) {
+        private static void clientSetup(FMLClientSetupEvent event) {
             ModEntities.registerRenderers(event);
             ModTileEntities.registerRenderers(event);
-        }
-
-        private static void registerContainers() {
-            for (GuiTypes type : GuiTypes.values()) {
-                //noinspection Convert2MethodRef -- compiler error
-                ContainerType.registerGui(type::getContainerType, (tileType, player) ->
-                        type.getGui(tileType, player));
-            }
-
-            // FIXME
-/*            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> packet -> {
-                ContainerType<?> type = ContainerType.factories.get(packet.getId()).get();
-                if (packet.getAdditionalData() != null) type.fromBytes(packet.getAdditionalData());
-                //noinspection unchecked
-                return ((BiFunction<ContainerType<?>, EntityPlayer, GuiContainer>) ContainerType.guiFactories.get(packet.getId()))
-                        .apply(type, Minecraft.getInstance().player);
-            });*/
+            ModContainers.registerScreens(event);
         }
 
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {

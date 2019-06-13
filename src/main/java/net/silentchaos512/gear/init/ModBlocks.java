@@ -12,9 +12,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
-import net.silentchaos512.gear.block.analyzer.BlockPartAnalyzer;
-import net.silentchaos512.gear.block.craftingstation.BlockCraftingStation;
-import net.silentchaos512.gear.block.salvager.BlockSalvager;
+import net.silentchaos512.gear.block.analyzer.PartAnalyzerBlock;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationBlock;
+import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.lib.block.IBlockProvider;
 import net.silentchaos512.utils.Lazy;
 
@@ -23,9 +23,9 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum ModBlocks implements IBlockProvider, IStringSerializable {
-    CRAFTING_STATION(BlockCraftingStation::new),
-    PART_ANALYZER(BlockPartAnalyzer::new),
-    SALVAGER(BlockSalvager::new),
+    CRAFTING_STATION(CraftingStationBlock::new),
+    PART_ANALYZER(PartAnalyzerBlock::new),
+    SALVAGER(SalvagerBlock::new),
     FLAX_PLANT(() -> new FlaxPlant(false), () -> null),
     WILD_FLAX_PLANT(() -> new FlaxPlant(true), () -> null),
     STONE_TORCH(StoneTorch::new, ModBlocks::getStoneTorchItem),

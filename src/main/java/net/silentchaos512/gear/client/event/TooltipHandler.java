@@ -2,8 +2,8 @@ package net.silentchaos512.gear.client.event;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -58,7 +58,7 @@ public final class TooltipHandler {
         /* FIXME
         ResourceLocation name = stack.getItem().getRegistryName();
         if (name != null && Config.nerfedGear.contains(name.toString())) {
-            event.getToolTip().add(1, new TextComponentTranslation("misc.silentgear.poorlyMade")
+            event.getToolTip().add(1, new TranslationTextComponent("misc.silentgear.poorlyMade")
                     .applyTextStyle(TextFormatting.RED));
         }
         */
@@ -66,9 +66,9 @@ public final class TooltipHandler {
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData partData) {
         IGearPart part = partData.getPart();
+
         // Type, tier
-        event.getToolTip().add(part.getType().getDisplayName(part.getTier())
-                .applyTextStyle(TextFormatting.GREEN));
+        event.getToolTip().add(part.getType().getDisplayName(part.getTier()).applyTextStyle(TextFormatting.GREEN));
 
         if (event.getFlags().isAdvanced() && DETAILED_MATERIAL_INFO && SilentGear.isDevBuild()) {
             addDetailedMaterialInfo(event, part);
@@ -89,36 +89,39 @@ public final class TooltipHandler {
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTracker.isControlDown()) {
-            if (part instanceof PartMain) getGradeLine(event, grade);
-            event.getToolTip().add(new TextComponentTranslation("misc.silentgear.tooltip.stats")
+            if (part instanceof PartMain) {
+                getGradeLine(event, grade);
+            }
+            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats")
                     .applyTextStyle(TextFormatting.GOLD)
-                    .appendSibling(new TextComponentString(" (Silent Gear)")
+                    .appendSibling(new StringTextComponent(" (Silent Gear)")
                             .applyTextStyle(TextFormatting.RESET)
                             .applyTextStyle(TextFormatting.ITALIC)));
             getPartStatLines(event, stack, part);
         } else {
-            if (grade != MaterialGrade.NONE && part instanceof PartMain) getGradeLine(event, grade);
-            event.getToolTip().add(new TextComponentTranslation("misc.silentgear.tooltip.ctrlForStats")
-                    .applyTextStyle(TextFormatting.GOLD));
+            if (grade != MaterialGrade.NONE && part instanceof PartMain) {
+                getGradeLine(event, grade);
+            }
+            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").applyTextStyle(TextFormatting.GOLD));
         }
     }
 
     private static void addDetailedMaterialInfo(ItemTooltipEvent event, IGearPart part) {
         IPartMaterial mat = part.getMaterials();
         if (mat.getItem() != null)
-            event.getToolTip().add(new TextComponentString("item: " + mat.getItem().asItem().getRegistryName()));
+            event.getToolTip().add(new StringTextComponent("item: " + mat.getItem().asItem().getRegistryName()));
         if (mat.getTag() != null)
-            event.getToolTip().add(new TextComponentString("tag: " + mat.getTag().getId()));
+            event.getToolTip().add(new StringTextComponent("tag: " + mat.getTag().getId()));
         if (mat.getSmallItem() != null)
-            event.getToolTip().add(new TextComponentString("itemSmall: " + mat.getSmallItem().asItem().getRegistryName()));
+            event.getToolTip().add(new StringTextComponent("itemSmall: " + mat.getSmallItem().asItem().getRegistryName()));
         if (mat.getSmallTag() != null)
-            event.getToolTip().add(new TextComponentString("tagSmall: " + mat.getSmallTag().getId()));
+            event.getToolTip().add(new StringTextComponent("tagSmall: " + mat.getSmallTag().getId()));
     }
 
     private static int getTraitDisplayIndex(int numTraits) {
         if (!TRAIT_DISPLAY_CYCLE || KeyTracker.isControlDown() || numTraits == 0)
             return -1;
-        else return ClientTicks.ticksInGame() / 20 % numTraits;
+        return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 
     private static void getGradeLine(ItemTooltipEvent event, MaterialGrade grade) {
@@ -150,8 +153,7 @@ public final class TooltipHandler {
                     if (stat == CommonItemStats.ARMOR_DURABILITY)
                         statStr += "x";
 
-                    event.getToolTip().add(new TextComponentString("- ").appendSibling(
-                            new TextComponentTranslation("stat.silentgear.displayFormat", nameStr, statStr)));
+                    event.getToolTip().add(new StringTextComponent("- ").appendSibling(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statStr)));
                 }
             }
         }
