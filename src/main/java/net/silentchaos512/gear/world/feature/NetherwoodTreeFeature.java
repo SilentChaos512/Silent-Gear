@@ -51,9 +51,11 @@ public class NetherwoodTreeFeature extends AbstractTreeFeature<NoFeatureConfig> 
                 }
             }
 
+//            SilentGear.LOGGER.debug("Netherwood Tree: pos={}, flag={}, isSoil={}", position, flag, isSoil(worldIn, position.down(), getSapling()));
+
             if (!flag) {
                 return false;
-            } else if ((isSoil(worldIn, position.down(), getSapling())) && position.getY() < worldIn.getMaxHeight() - height - 1) {
+            } else if (isSoil(worldIn, position.down(), getSapling()) && position.getY() < worldIn.getMaxHeight() - height - 1) {
                 this.setDirtAt(worldIn, position.down(), position);
 
                 // Leaves
