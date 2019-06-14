@@ -2,48 +2,53 @@ package net.silentchaos512.gear.block.craftingstation;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.RecipeBookContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.world.World;
+import net.minecraft.network.play.server.SSetSlotPacket;
+import net.minecraft.util.IWorldPosCallable;
 import net.silentchaos512.gear.init.ModContainers;
 
-public class CraftingStationContainer extends RecipeBookContainer<CraftingStationTileEntity> {
-    CraftingInventory craftMatrix;
+import java.util.Optional;
+
+public class CraftingStationContainer extends RecipeBookContainer<CraftingStationInventory> {
+    CraftingStationInventory craftMatrix;
     CraftResultInventory craftResult;
+    private final CraftingStationTileEntity tileEntity;
 
     private Slot outputSlot;
     private final PlayerEntity player;
-    private final IInventory inventory;
 
     public CraftingStationContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new Inventory(CraftingStationTileEntity.CRAFTING_GRID_SIZE + CraftingStationTileEntity.SIDE_INVENTORY_SIZE));
+        this(id, playerInventory, new CraftingStationTileEntity());
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
-    public CraftingStationContainer(int id, PlayerInventory playerInventory, IInventory inventory) {
+    public CraftingStationContainer(int id, PlayerInventory playerInventory, CraftingStationTileEntity tileEntityIn) {
         super(ModContainers.CRAFTING_STATION.type(), id);
         this.player = playerInventory.player;
-        this.inventory = inventory;
-        setupInventorySlots(playerInventory, inventory);
+        this.tileEntity = tileEntityIn;
 
-        int i;
-        for (i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+        this.craftResult = new CraftResultInventory() {
+            @Override
+            public void markDirty() {
+                CraftingStationContainer.this.tileEntity.markDirty();
             }
-        }
+        };
+        this.craftMatrix = new CraftingStationInventory(this, tileEntity);
+        this.craftMatrix.openInventory(this.player);
 
-        for (i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
-        }
+        setupInventorySlots(playerInventory, this.tileEntity);
+
+        onCraftMatrixChanged(craftMatrix);
     }
 
 //    void setExtendedInventory(IInventory inventory) {
@@ -65,9 +70,9 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
         setupPlayerSlots(playerInv);
 
         // Output
-        outputSlot = this.addSlot(new CraftingResultSlot(playerInv.player, this.craftMatrix, this.craftResult, inventory.getSizeInventory(), 124, 35));
+        outputSlot = this.addSlot(new CraftingResultSlot(playerInv.player, this.craftMatrix, this.craftResult, tileEntity.getSizeInventory(), 124, 35));
 
-        onCraftMatrixChanged(this.inventory);
+        onCraftMatrixChanged(tileEntity);
     }
 
     private void setupCraftingGrid() {
@@ -103,7 +108,7 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
                 int index = CraftingStationTileEntity.SIDE_INVENTORY_START + x + y * 3;
                 int xPos = x * 18 - 56;
                 int yPos = y * 18 + 5 + (166 - totalHeight) / 2;
-                addSlot(new Slot(inventory, index, xPos, yPos));
+                addSlot(new Slot(tileEntity, index, xPos, yPos));
             }
         }
     }
@@ -111,13 +116,40 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
     //endregion
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return inventory.isUsableByPlayer(playerIn);
+    public void onCraftMatrixChanged(IInventory inventoryIn) {
+        //noinspection OverlyLongLambda
+        IWorldPosCallable.of(player.world, player.getPosition()).consume((world, pos) -> {
+            if (!world.isRemote) {
+                ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
+                ItemStack stack = ItemStack.EMPTY;
+                Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftMatrix, world);
+                if (optional.isPresent()) {
+                    ICraftingRecipe recipe = optional.get();
+                    if (craftResult.canUseRecipe(world, playerMP, recipe)) {
+                        stack = recipe.getCraftingResult(craftMatrix);
+                    }
+                }
+
+                craftResult.setInventorySlotContents(outputSlot.slotNumber, stack);
+                playerMP.connection.sendPacket(new SSetSlotPacket(windowId, outputSlot.slotNumber, stack));
+            }
+        });
     }
 
     @Override
-    public Slot getSlot(int slotId) {
-        return slotId == outputSlot.getSlotIndex() ? outputSlot : super.getSlot(slotId);
+    public void func_201771_a(RecipeItemHelper p_201771_1_) {
+        craftMatrix.fillStackedContents(p_201771_1_);
+    }
+
+    @Override
+    public void clear() {
+        craftMatrix.clear();
+        craftResult.clear();
+    }
+
+    @Override
+    public boolean matches(IRecipe<? super CraftingStationInventory> recipe) {
+        return recipe.matches(craftMatrix, player.world);
     }
 
     @Override
@@ -127,18 +159,40 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
         for (int i = 0; i < CraftingStationTileEntity.CRAFTING_GRID_SIZE; ++i) {
             ItemStack stack = craftMatrix.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                inventory.setInventorySlotContents(i + CraftingStationTileEntity.CRAFTING_GRID_START, stack);
+                tileEntity.setInventorySlotContents(i + CraftingStationTileEntity.CRAFTING_GRID_START, stack);
             }
         }
-        inventory.markDirty();
+        tileEntity.markDirty();
     }
 
     @Override
-    public void onCraftMatrixChanged(IInventory inventoryIn) {
-        if (craftMatrix != null && craftResult != null) {
-            slotChangedCraftingGrid(player.world, player, craftMatrix, craftResult);
-            super.onCraftMatrixChanged(inventoryIn);
-        }
+    public int getOutputSlot() {
+        return outputSlot.slotNumber;
+    }
+
+    @Override
+    public int getWidth() {
+        return 3;
+    }
+
+    @Override
+    public int getHeight() {
+        return 3;
+    }
+
+    @Override
+    public int getSize() {
+        return tileEntity.getSizeInventory() + 1;
+    }
+
+    @Override
+    public boolean canInteractWith(PlayerEntity playerIn) {
+        return tileEntity.isUsableByPlayer(playerIn);
+    }
+
+    @Override
+    public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
+        return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
     }
 
     @Override
@@ -149,7 +203,7 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            final int playerStart = inventory.getSizeInventory();
+            final int playerStart = tileEntity.getSizeInventory();
             final int hotbarStart = playerStart + 27;
 
             if (slot == outputSlot) { // Output slot
@@ -194,63 +248,5 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
         }
 
         return itemstack;
-    }
-
-    @Override
-    public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
-        return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
-    }
-
-//    @Override
-    protected void slotChangedCraftingGrid(World worldIn, PlayerEntity playerIn, IInventory craftMatrixIn, CraftResultInventory craftResultIn) {
-/*        if (player.world.isRemote) return;
-
-        ServerPlayerEntity player = (ServerPlayerEntity) this.player;
-        ItemStack itemstack = ItemStack.EMPTY;
-        IRecipe irecipe = worldIn.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftMatrixIn, worldIn, net.minecraftforge.common.crafting.VanillaRecipeTypes.CRAFTING);
-
-        if (irecipe != null && (irecipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || player.getRecipeBook().isUnlocked(irecipe))) {
-            craftResult.setRecipeUsed(irecipe);
-            itemstack = irecipe.getCraftingResult(craftMatrix);
-        }
-
-        final int index = outputSlot.getSlotIndex();
-        craftResult.setInventorySlotContents(index, itemstack);
-        player.connection.sendPacket(new SPacketSetSlot(this.windowId, index, itemstack));*/
-    }
-
-    @Override
-    public void func_201771_a(RecipeItemHelper p_201771_1_) {
-
-    }
-
-    @Override
-    public void clear() {
-
-    }
-
-    @Override
-    public boolean matches(IRecipe<? super CraftingStationTileEntity> p_201769_1_) {
-        return false;
-    }
-
-    @Override
-    public int getOutputSlot() {
-        return 0;
-    }
-
-    @Override
-    public int getWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getHeight() {
-        return 0;
-    }
-
-    @Override
-    public int getSize() {
-        return 0;
     }
 }

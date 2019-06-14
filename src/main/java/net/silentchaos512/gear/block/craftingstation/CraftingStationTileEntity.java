@@ -70,14 +70,19 @@ public class CraftingStationTileEntity extends LockableSidedInventoryTileEntity 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
         super.setInventorySlotContents(index, stack);
+        markDirty();
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
         sendUpdate();
     }
 
     private void sendUpdate() {
-        if (world != null && !world.isRemote) {
+        if (world != null) {
             BlockState state = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, state, state, 3);
-            markDirty();
         }
     }
 

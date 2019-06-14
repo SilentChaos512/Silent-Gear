@@ -168,7 +168,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
     }
 
     private void renderVersionString() {
-        String versionNumString = "Version: " + SilentGear.getVersion() + (SilentGear.isDevBuild() ? " (dev)" : "");
+        String versionNumString = "Version: " + SilentGear.getLongVersion() + (SilentGear.isDevBuild() ? " (dev)" : "");
         int versionNumStringWidth = font.getStringWidth(versionNumString);
         float versionNumScale = 0.65f;
         TextRenderUtils.renderScaled(font, versionNumString,
