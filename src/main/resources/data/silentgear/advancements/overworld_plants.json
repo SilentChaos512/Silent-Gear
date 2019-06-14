@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "silentgear:flower"
+            "item": "silentgear:flax_fiber"
         },
         "title": {
             "translate": "advancements.silentgear.overworld_plants.title"
@@ -12,16 +12,6 @@
     },
     "parent": "silentgear:sickle",
     "criteria": {
-        "get_flower": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "silentgear:flower"
-                    }
-                ]
-            }
-        },
         "get_flaxseeds": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
