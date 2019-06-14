@@ -19,12 +19,12 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
-import net.silentchaos512.gear.loot.LootFunctionSelectGearTier;
+import net.silentchaos512.gear.loot.SelectGearTierLootFunction;
 
 public final class ModLootStuff {
     private ModLootStuff() {}
 
     public static void init() {
-        LootFunctionManager.registerFunction(new LootFunctionSelectGearTier.Serializer());
+        LootFunctionManager.registerFunction(new SelectGearTierLootFunction.Serializer());
     }
 }

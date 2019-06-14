@@ -16,11 +16,11 @@ public final class ModRecipes {
 
     public static void init() {
         // Recipe serializers
-        register(ShapedGearCrafting.NAME, ShapedGearCrafting.SERIALIZER);
-        register(ShapelessGearCrafting.NAME, ShapelessGearCrafting.SERIALIZER);
-        register(GearPartSwap.NAME, GearPartSwap.SERIALIZER);
-        register(QuickRepair.NAME, QuickRepair.SERIALIZER);
-        register(UpgradeGear.NAME, UpgradeGear.SERIALIZER);
+        register(ShapedGearRecipe.NAME, ShapedGearRecipe.SERIALIZER);
+        register(ShapelessGearRecipe.NAME, ShapelessGearRecipe.SERIALIZER);
+        register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
+        register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
+        register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
 
         // Ingredient serializers
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);

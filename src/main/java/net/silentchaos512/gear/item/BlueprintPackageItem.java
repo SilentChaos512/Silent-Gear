@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- BlueprintPackage
+ * Silent Gear -- BlueprintPackageItem
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -31,8 +31,8 @@ import net.silentchaos512.lib.item.LootContainerItem;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlueprintPackage extends LootContainerItem {
-    public BlueprintPackage(ResourceLocation defaultLootTable) {
+public class BlueprintPackageItem extends LootContainerItem {
+    public BlueprintPackageItem(ResourceLocation defaultLootTable) {
         super(defaultLootTable, new Properties().group(SilentGear.ITEM_GROUP));
     }
 

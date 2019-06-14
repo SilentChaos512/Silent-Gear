@@ -15,10 +15,10 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.PartPositions;
-import net.silentchaos512.gear.parts.type.PartBowstring;
-import net.silentchaos512.gear.parts.type.PartGrip;
-import net.silentchaos512.gear.parts.type.PartRod;
-import net.silentchaos512.gear.parts.type.PartTip;
+import net.silentchaos512.gear.parts.type.BowstringPart;
+import net.silentchaos512.gear.parts.type.GripPart;
+import net.silentchaos512.gear.parts.type.RodPart;
+import net.silentchaos512.gear.parts.type.TipPart;
 import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
@@ -72,28 +72,28 @@ public interface ICoreTool extends ICoreItem {
     @Nullable
     default PartData getRodPart(ItemStack stack) {
         for (PartData data : GearData.getConstructionParts(stack))
-            if (data.getPart() instanceof PartRod) return data;
+            if (data.getPart() instanceof RodPart) return data;
         return null;
     }
 
     @Nullable
     default PartData getGripPart(ItemStack stack) {
         for (PartData part : GearData.getConstructionParts(stack))
-            if (part.getPart() instanceof PartGrip) return part;
+            if (part.getPart() instanceof GripPart) return part;
         return null;
     }
 
     @Nullable
     default PartData getTipPart(ItemStack stack) {
         for (PartData data : GearData.getConstructionParts(stack))
-            if (data.getPart() instanceof PartTip) return data;
+            if (data.getPart() instanceof TipPart) return data;
         return null;
     }
 
     @Nullable
     default PartData getBowstringPart(ItemStack stack) {
         for (PartData data : GearData.getConstructionParts(stack))
-            if (data.getPart() instanceof PartBowstring) return data;
+            if (data.getPart() instanceof BowstringPart) return data;
         return null;
     }
 

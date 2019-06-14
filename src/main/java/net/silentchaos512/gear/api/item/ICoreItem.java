@@ -9,7 +9,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -94,7 +93,7 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
 
         boolean foundMain = false;
         for (PartData part : parts) {
-            if (part.getPart() instanceof PartMain) {
+            if (part.getType() == PartType.MAIN) {
                 // Only first main matters
                 if (!foundMain) {
                     foundMain = true;

@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.init;
 
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -18,15 +19,15 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum ModTileEntities {
-    CRAFTING_STATION(CraftingStationTileEntity::new),
-    PART_ANALYZER(PartAnalyzerTileEntity::new),
-    SALVAGER(SalvagerTileEntity::new);
+    CRAFTING_STATION(CraftingStationTileEntity::new, ModBlocks.CRAFTING_STATION::asBlock),
+    PART_ANALYZER(PartAnalyzerTileEntity::new, ModBlocks.PART_ANALYZER::asBlock),
+    SALVAGER(SalvagerTileEntity::new, ModBlocks.SALVAGER::asBlock);
 
     private final Lazy<TileEntityType<?>> type;
 
-    ModTileEntities(Supplier<TileEntity> tileEntitySupplier) {
+    ModTileEntities(Supplier<TileEntity> tileEntitySupplier, Supplier<Block> blockSupplier) {
         //noinspection ConstantConditions -- null in build
-        this.type = Lazy.of(() -> TileEntityType.Builder.create(tileEntitySupplier).build(null));
+        this.type = Lazy.of(() -> TileEntityType.Builder.create(tileEntitySupplier, blockSupplier.get()).build(null));
     }
 
     public TileEntityType<?> type() {

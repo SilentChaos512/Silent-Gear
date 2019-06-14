@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- PartUpgrade
+ * Silent Gear -- UpgradePart
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -31,8 +31,8 @@ import net.silentchaos512.gear.parts.PartPositions;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class PartUpgrade extends AbstractGearPart implements IUpgradePart {
-    public PartUpgrade(ResourceLocation registryName) {
+public class UpgradePart extends AbstractGearPart implements IUpgradePart {
+    public UpgradePart(ResourceLocation registryName) {
         super(registryName);
     }
 

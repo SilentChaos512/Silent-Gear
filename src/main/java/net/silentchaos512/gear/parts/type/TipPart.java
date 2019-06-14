@@ -16,8 +16,8 @@ import net.silentchaos512.gear.parts.PartPositions;
 
 import java.util.List;
 
-public final class PartTip extends AbstractGearPart implements IUpgradePart {
-    public PartTip(ResourceLocation name) {
+public final class TipPart extends AbstractGearPart implements IUpgradePart {
+    public TipPart(ResourceLocation name) {
         super(name);
     }
 

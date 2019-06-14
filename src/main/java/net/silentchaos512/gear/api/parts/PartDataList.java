@@ -21,7 +21,6 @@ package net.silentchaos512.gear.api.parts;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.type.PartMain;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -73,7 +72,7 @@ public final class PartDataList implements List<PartData> {
     @Nullable
     public PartData getPrimaryMain() {
         for (PartData data : this.list)
-            if (data.getPart() instanceof PartMain)
+            if (data.getType() == PartType.MAIN)
                 return data;
         return null;
     }

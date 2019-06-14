@@ -10,8 +10,8 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 
-public final class PartRod extends AbstractGearPart {
-    public PartRod(ResourceLocation name) {
+public final class RodPart extends AbstractGearPart {
+    public RodPart(ResourceLocation name) {
         super(name);
     }
 

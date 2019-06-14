@@ -151,7 +151,8 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
 
     private ItemStack getInputStack() {
         ItemStack stack = getStackInSlot(INPUT_SLOT);
-        if (PartManager.from(stack) instanceof PartMain && MaterialGrade.fromStack(stack) == MaterialGrade.NONE) {
+        IGearPart part = PartManager.from(stack);
+        if (part != null && part.getType() == PartType.MAIN && MaterialGrade.fromStack(stack) == MaterialGrade.NONE) {
             return stack;
         }
         return ItemStack.EMPTY;
@@ -173,7 +174,9 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
     static boolean isUngradedMainPart(ItemStack stack) {
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (grade != MaterialGrade.NONE) return false;
-        return PartManager.from(stack) instanceof PartMain;
+
+        IGearPart part = PartManager.from(stack);
+        return part != null && part.getType() == PartType.MAIN;
     }
 
     static int getCatalystTier(ItemStack stack) {

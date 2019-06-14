@@ -17,13 +17,13 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class ShapedGearCrafting extends ExtendedShapedRecipe {
+public final class ShapedGearRecipe extends ExtendedShapedRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("shaped_gear_crafting");
-    public static final ExtendedShapedRecipe.Serializer<ShapedGearCrafting> SERIALIZER = Serializer.basic(ShapedGearCrafting::new);
+    public static final ExtendedShapedRecipe.Serializer<ShapedGearRecipe> SERIALIZER = Serializer.basic(ShapedGearRecipe::new);
 
     private final ICoreItem item;
 
-    private ShapedGearCrafting(ShapedRecipe recipe) {
+    private ShapedGearRecipe(ShapedRecipe recipe) {
         super(recipe);
 
         ItemStack output = recipe.getRecipeOutput();

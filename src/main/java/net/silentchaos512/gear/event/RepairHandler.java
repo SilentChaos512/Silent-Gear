@@ -10,10 +10,10 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
@@ -33,7 +33,7 @@ public final class RepairHandler {
             if (part != null) {
                 if (part.getPart() instanceof IUpgradePart) {
                     handleUpgradeApplication(event, part);
-                } else if (part.getPart() instanceof PartMain) {
+                } else if (part.getType() == PartType.MAIN) {
                     handleGearRepair(event, part);
                 }
             }

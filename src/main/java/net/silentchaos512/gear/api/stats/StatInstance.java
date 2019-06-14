@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.parts.type.PartMain;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.utils.EnumUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -89,7 +89,7 @@ public class StatInstance {
     }
 
     public boolean shouldList(IGearPart part, ItemStat stat, boolean advanced) {
-        return advanced || value != 0 || (part instanceof PartMain && stat == CommonItemStats.HARVEST_LEVEL);
+        return advanced || value != 0 || (part.getType() == PartType.MAIN && stat == CommonItemStats.HARVEST_LEVEL);
     }
 
     @Override

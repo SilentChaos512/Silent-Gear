@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- UpgradeGear
+ * Silent Gear -- UpgradeGearRecipe
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
 
-public class UpgradeGear implements ICraftingRecipe {
+public class UpgradeGearRecipe implements ICraftingRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "upgrade_gear");
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -102,19 +102,19 @@ public class UpgradeGear implements ICraftingRecipe {
         return SERIALIZER;
     }
 
-    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<UpgradeGear> {
+    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<UpgradeGearRecipe> {
 
         @Override
-        public UpgradeGear read(ResourceLocation recipeId, JsonObject json) {
-            return new UpgradeGear();
+        public UpgradeGearRecipe read(ResourceLocation recipeId, JsonObject json) {
+            return new UpgradeGearRecipe();
         }
 
         @Override
-        public UpgradeGear read(ResourceLocation recipeId, PacketBuffer buffer) {
-            return new UpgradeGear();
+        public UpgradeGearRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+            return new UpgradeGearRecipe();
         }
 
         @Override
-        public void write(PacketBuffer buffer, UpgradeGear recipe) {}
+        public void write(PacketBuffer buffer, UpgradeGearRecipe recipe) {}
     }
 }

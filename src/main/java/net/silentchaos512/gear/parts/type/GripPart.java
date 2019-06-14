@@ -7,8 +7,8 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartPositions;
 
-public final class PartGrip extends AbstractGearPart implements IUpgradePart {
-    public PartGrip(ResourceLocation name) {
+public final class GripPart extends AbstractGearPart implements IUpgradePart {
+    public GripPart(ResourceLocation name) {
         super(name);
     }
 

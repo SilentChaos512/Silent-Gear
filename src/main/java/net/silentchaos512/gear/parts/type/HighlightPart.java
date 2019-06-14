@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- PartHighlight
+ * Silent Gear -- HighlightPart
  * Copyright (C) 2019 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -31,8 +31,8 @@ import net.silentchaos512.gear.parts.PartPositions;
 
 import javax.annotation.Nullable;
 
-public class PartHighlight extends AbstractGearPart {
-    public PartHighlight(ResourceLocation registryName) {
+public class HighlightPart extends AbstractGearPart {
+    public HighlightPart(ResourceLocation registryName) {
         super(registryName);
     }
 

@@ -15,10 +15,10 @@ import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class GearBlueprint extends AbstractBlueprint {
+public class GearBlueprintItem extends AbstractBlueprintItem {
     private final ICoreItem gearItem;
 
-    public GearBlueprint(boolean singleUse, ICoreItem gearItem) {
+    public GearBlueprintItem(boolean singleUse, ICoreItem gearItem) {
         super(new Properties().group(SilentGear.ITEM_GROUP), singleUse);
         this.gearItem = gearItem;
     }

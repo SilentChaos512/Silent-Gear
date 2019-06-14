@@ -20,7 +20,7 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class GearPartSwap implements ICraftingRecipe {
+public class GearPartSwapRecipe implements ICraftingRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "swap_gear_part");
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -104,19 +104,19 @@ public class GearPartSwap implements ICraftingRecipe {
         return SERIALIZER;
     }
 
-    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GearPartSwap> {
+    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GearPartSwapRecipe> {
 
         @Override
-        public GearPartSwap read(ResourceLocation recipeId, JsonObject json) {
-            return new GearPartSwap();
+        public GearPartSwapRecipe read(ResourceLocation recipeId, JsonObject json) {
+            return new GearPartSwapRecipe();
         }
 
         @Override
-        public GearPartSwap read(ResourceLocation recipeId, PacketBuffer buffer) {
-            return new GearPartSwap();
+        public GearPartSwapRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+            return new GearPartSwapRecipe();
         }
 
         @Override
-        public void write(PacketBuffer buffer, GearPartSwap recipe) {}
+        public void write(PacketBuffer buffer, GearPartSwapRecipe recipe) {}
     }
 }

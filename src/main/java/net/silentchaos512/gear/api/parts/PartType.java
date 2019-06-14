@@ -35,14 +35,14 @@ import java.util.function.Function;
 public final class PartType {
     private static final Map<ResourceLocation, PartType> VALUES = new HashMap<>();
 
-    public static final PartType BINDING = create(SilentGear.getId("binding"), "b", createSerializer("binding", PartBinding::new));
-    public static final PartType BOWSTRING = create(SilentGear.getId("bowstring"), "B", createSerializer("bowstring", PartBowstring::new));
-    public static final PartType GRIP = create(SilentGear.getId("grip"), "G", createSerializer("grip", PartGrip::new));
-    public static final PartType HIGHLIGHT = create(SilentGear.getId("highlight"), "h", createSerializer("highlight", PartHighlight::new));
-    public static final PartType MAIN = create(SilentGear.getId("main"), "M", createSerializer("main", PartMain::new));
-    public static final PartType MISC_UPGRADE = create(SilentGear.getId("misc_upgrade"), "U", createSerializer("misc_upgrade", PartUpgrade::new));
-    public static final PartType ROD = create(SilentGear.getId("rod"), "R", createSerializer("rod", PartRod::new));
-    public static final PartType TIP = create(SilentGear.getId("tip"), "T", createSerializer("tip", PartTip::new));
+    public static final PartType BINDING = create(SilentGear.getId("binding"), "b", createSerializer("binding", BindingPart::new));
+    public static final PartType BOWSTRING = create(SilentGear.getId("bowstring"), "B", createSerializer("bowstring", BowstringPart::new));
+    public static final PartType GRIP = create(SilentGear.getId("grip"), "G", createSerializer("grip", GripPart::new));
+    public static final PartType HIGHLIGHT = create(SilentGear.getId("highlight"), "h", createSerializer("highlight", HighlightPart::new));
+    public static final PartType MAIN = create(SilentGear.getId("main"), "M", createSerializer("main", MainPart::new));
+    public static final PartType MISC_UPGRADE = create(SilentGear.getId("misc_upgrade"), "U", createSerializer("misc_upgrade", UpgradePart::new));
+    public static final PartType ROD = create(SilentGear.getId("rod"), "R", createSerializer("rod", RodPart::new));
+    public static final PartType TIP = create(SilentGear.getId("tip"), "T", createSerializer("tip", TipPart::new));
 
     @Deprecated
     public static PartType create(String name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {

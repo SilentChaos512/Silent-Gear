@@ -28,13 +28,13 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.gear.CoreBow;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.PartPositions;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -101,7 +101,7 @@ public final class ToolModel implements IUnbakedModel {
                         builder.add(texBroken);
 
                     // Guard texture for swords
-                    if (hasGuard && part instanceof PartMain) {
+                    if (hasGuard && part.getType() == PartType.MAIN) {
                         ResourceLocation texGuard = partData.getTexture(ItemStack.EMPTY, toolClass, PartPositions.GUARD, frame);
 //                        SilentGear.log.info("      +guard: " + texGuard);
                         if (texGuard != null)

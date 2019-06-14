@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- LootFunctionSelectGearTier
+ * Silent Gear -- SelectGearTierLootFunction
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -31,10 +31,10 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.util.GearGenerator;
 
-public final class LootFunctionSelectGearTier extends LootFunction {
+public final class SelectGearTierLootFunction extends LootFunction {
     private final int tier;
 
-    private LootFunctionSelectGearTier(ILootCondition[] conditions, int tier) {
+    private SelectGearTierLootFunction(ILootCondition[] conditions, int tier) {
         super(conditions);
         this.tier = tier;
     }
@@ -45,20 +45,20 @@ public final class LootFunctionSelectGearTier extends LootFunction {
         return GearGenerator.create((ICoreItem) stack.getItem(), this.tier);
     }
 
-    public static class Serializer extends LootFunction.Serializer<LootFunctionSelectGearTier> {
+    public static class Serializer extends LootFunction.Serializer<SelectGearTierLootFunction> {
         public Serializer() {
-            super(new ResourceLocation(SilentGear.MOD_ID, "select_tier"), LootFunctionSelectGearTier.class);
+            super(new ResourceLocation(SilentGear.MOD_ID, "select_tier"), SelectGearTierLootFunction.class);
         }
 
         @Override
-        public void serialize(JsonObject object, LootFunctionSelectGearTier functionClazz, JsonSerializationContext serializationContext) {
+        public void serialize(JsonObject object, SelectGearTierLootFunction functionClazz, JsonSerializationContext serializationContext) {
             object.addProperty("tier", functionClazz.tier);
         }
 
         @Override
-        public LootFunctionSelectGearTier deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+        public SelectGearTierLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
             int tier = JSONUtils.getInt(object, "tier", 2);
-            return new LootFunctionSelectGearTier(conditionsIn, tier);
+            return new SelectGearTierLootFunction(conditionsIn, tier);
         }
     }
 }

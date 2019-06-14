@@ -12,10 +12,10 @@ import net.silentchaos512.gear.api.parts.PartType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class PartBlueprint extends AbstractBlueprint {
+public class PartBlueprintItem extends AbstractBlueprintItem {
     private final PartType partType;
 
-    public PartBlueprint(boolean singleUse, PartType partType) {
+    public PartBlueprintItem(boolean singleUse, PartType partType) {
         super(new Properties().group(SilentGear.ITEM_GROUP), singleUse);
         this.partType = partType;
     }

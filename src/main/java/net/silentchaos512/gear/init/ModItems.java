@@ -2,6 +2,7 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -12,12 +13,11 @@ import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.item.BlueprintPackage;
+import net.silentchaos512.gear.item.BlueprintPackageItem;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.Flaxseeds;
-import net.silentchaos512.gear.item.SlingshotAmmo;
-import net.silentchaos512.gear.item.blueprint.GearBlueprint;
-import net.silentchaos512.gear.item.blueprint.PartBlueprint;
+import net.silentchaos512.gear.item.SlingshotAmmoItem;
+import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
+import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.gear.*;
 
 import java.util.ArrayList;
@@ -29,12 +29,12 @@ public final class ModItems {
     public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
     public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
-    public static final List<GearBlueprint> blueprints = new ArrayList<>();
+    public static final List<GearBlueprintItem> blueprints = new ArrayList<>();
     static final Map<String, BlockItem> blocksToRegister = new LinkedHashMap<>();
 
-    public static BlueprintPackage blueprintPackage;
+    public static BlueprintPackageItem blueprintPackage;
 
-    public static Flaxseeds flaxseeds;
+    public static BlockNamedItem flaxseeds;
     public static Item netherBanana;
     public static Item pebble;
 
@@ -68,7 +68,7 @@ public final class ModItems {
         // Initializes, but does not register gear classes, fills maps
         initializeGear();
 
-        blueprintPackage = register("blueprint_package", new BlueprintPackage(SilentGear.getId("starter_blueprints")));
+        blueprintPackage = register("blueprint_package", new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
 
         // Blueprints/templates
         registerBlueprints("blueprint", false);
@@ -78,13 +78,11 @@ public final class ModItems {
             register(item.getName(), item.asItem());
         }
 
-        flaxseeds = register("flaxseeds", new Flaxseeds());
-        netherBanana = register("nether_banana", new Item(new Item.Properties()
-                .food(new Food.Builder().hunger(5).saturation(0.4f).build())
-                .group(SilentGear.ITEM_GROUP)
-        ));
+        flaxseeds = register("flaxseeds", new BlockNamedItem(ModBlocks.FLAX_PLANT.asBlock(), getBaseProperties()));
+        netherBanana = register("nether_banana", new Item(getBaseProperties()
+                .food(new Food.Builder().hunger(5).saturation(0.4f).build())));
 
-        pebble = register("pebble", new SlingshotAmmo());
+        pebble = register("pebble", new SlingshotAmmoItem());
 
         // Register gear classes
         toolClasses.forEach((key, item) -> register(key, item.asItem()));
@@ -97,6 +95,10 @@ public final class ModItems {
 //        if (SilentGear.isDevBuild()) {
 //            register("test_item", new TestItem());
 //        }
+    }
+
+    private static Item.Properties getBaseProperties() {
+        return new Item.Properties().group(SilentGear.ITEM_GROUP);
     }
 
     private static void initializeGear() {
@@ -154,13 +156,13 @@ public final class ModItems {
 
     private static void registerBlueprints(String name, boolean singleUse) {
         gearClasses.forEach((key, item) -> {
-            GearBlueprint blueprint = new GearBlueprint(singleUse, item);
+            GearBlueprintItem blueprint = new GearBlueprintItem(singleUse, item);
             blueprints.add(blueprint);
             register(name + "_" + key, blueprint);
         });
 
         // Part blueprints
-        register(name + "_rod", new PartBlueprint(singleUse, PartType.ROD));
-        register(name + "_bowstring", new PartBlueprint(singleUse, PartType.BOWSTRING));
+        register(name + "_rod", new PartBlueprintItem(singleUse, PartType.ROD));
+        register(name + "_bowstring", new PartBlueprintItem(singleUse, PartType.BOWSTRING));
     }
 }

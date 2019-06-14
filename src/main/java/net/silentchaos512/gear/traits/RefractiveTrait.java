@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- TraitRefractive
+ * Silent Gear -- RefractiveTrait
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -29,13 +29,13 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.utils.MathUtils;
 
-public class TraitRefractive extends SimpleTrait {
+public class RefractiveTrait extends SimpleTrait {
     // TODO: Serializer needed to load trait correctly
     private static final int ACTIVATE_RATE = 20;
     private static final int CHECK_RANGE = 3;
     private static final int VERTICAL_RANGE = 5;
 
-    public TraitRefractive(ResourceLocation name) {
+    public RefractiveTrait(ResourceLocation name) {
         super(name);
     }
 

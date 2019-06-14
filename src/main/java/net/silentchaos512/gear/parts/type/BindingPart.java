@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- PartBinding
+ * Silent Gear -- BindingPart
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartPositions;
 
-public class PartBinding extends AbstractGearPart implements IUpgradePart {
-    public PartBinding(ResourceLocation location) {
+public class BindingPart extends AbstractGearPart implements IUpgradePart {
+    public BindingPart(ResourceLocation location) {
         super(location);
     }
 

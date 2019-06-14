@@ -17,13 +17,13 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class ShapelessGearCrafting extends ExtendedShapelessRecipe {
+public final class ShapelessGearRecipe extends ExtendedShapelessRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("gear_crafting");
-    public static final Serializer<ShapelessGearCrafting> SERIALIZER = Serializer.basic(ShapelessGearCrafting::new);
+    public static final Serializer<ShapelessGearRecipe> SERIALIZER = Serializer.basic(ShapelessGearRecipe::new);
 
     private final ICoreItem item;
 
-    private ShapelessGearCrafting(ShapelessRecipe recipe) {
+    private ShapelessGearRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
         ItemStack output = recipe.getRecipeOutput();

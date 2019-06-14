@@ -3,14 +3,15 @@ package net.silentchaos512.gear.client.event;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartMaterial;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -18,7 +19,6 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
@@ -89,7 +89,7 @@ public final class TooltipHandler {
 
         MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTracker.isControlDown()) {
-            if (part instanceof PartMain) {
+            if (part.getType() == PartType.MAIN) {
                 getGradeLine(event, grade);
             }
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats")
@@ -99,7 +99,7 @@ public final class TooltipHandler {
                             .applyTextStyle(TextFormatting.ITALIC)));
             getPartStatLines(event, stack, part);
         } else {
-            if (grade != MaterialGrade.NONE && part instanceof PartMain) {
+            if (grade != MaterialGrade.NONE && part.getType() == PartType.MAIN) {
                 getGradeLine(event, grade);
             }
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").applyTextStyle(TextFormatting.GOLD));

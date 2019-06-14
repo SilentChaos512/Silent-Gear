@@ -1,5 +1,5 @@
 /*
- * Silent Gear -- QuickRepair
+ * Silent Gear -- QuickRepairRecipe
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
 
-public class QuickRepair implements ICraftingRecipe {
+public class QuickRepairRecipe implements ICraftingRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("quick_repair");
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -120,19 +120,19 @@ public class QuickRepair implements ICraftingRecipe {
         return SERIALIZER;
     }
 
-    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<QuickRepair> {
+    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<QuickRepairRecipe> {
 
         @Override
-        public QuickRepair read(ResourceLocation recipeId, JsonObject json) {
-            return new QuickRepair();
+        public QuickRepairRecipe read(ResourceLocation recipeId, JsonObject json) {
+            return new QuickRepairRecipe();
         }
 
         @Override
-        public QuickRepair read(ResourceLocation recipeId, PacketBuffer buffer) {
-            return new QuickRepair();
+        public QuickRepairRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+            return new QuickRepairRecipe();
         }
 
         @Override
-        public void write(PacketBuffer buffer, QuickRepair recipe) {}
+        public void write(PacketBuffer buffer, QuickRepairRecipe recipe) {}
     }
 }
