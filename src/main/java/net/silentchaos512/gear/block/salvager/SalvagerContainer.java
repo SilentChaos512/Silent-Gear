@@ -30,6 +30,7 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.silentchaos512.gear.init.ModContainers;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
+import net.silentchaos512.lib.util.InventoryUtils;
 
 public class SalvagerContainer extends Container {
     private final IInventory inventory;
@@ -54,16 +55,9 @@ public class SalvagerContainer extends Container {
             }
         }
 
-        int i;
-        for (i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-            }
-        }
+        InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
-        for (i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
-        }
+        func_216961_a(this.fields);
     }
 
     public int getProgressArrowScale() {

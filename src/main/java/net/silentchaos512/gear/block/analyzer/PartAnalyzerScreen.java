@@ -74,5 +74,9 @@ public class PartAnalyzerScreen extends ContainerScreen<PartAnalyzerContainer> {
 
         // Progress arrow
         blit(posX + 49, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
+
+        // Debug info
+        font.drawString("progress = " + container.fields.get(0), 5, 5, 0xFFFFFF);
+        font.drawString("arrow scale = " + container.getProgressArrowScale(), 5, 15, 0xFFFFFF);
     }
 }

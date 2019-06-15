@@ -30,10 +30,11 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.silentchaos512.gear.init.ModContainers;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
+import net.silentchaos512.lib.util.InventoryUtils;
 
 public class PartAnalyzerContainer extends Container {
     private final IInventory inventory;
-    private final IIntArray fields;
+    final IIntArray fields;
 
     public PartAnalyzerContainer(int id, PlayerInventory playerInventory) {
         this(id, playerInventory, new Inventory(PartAnalyzerTileEntity.INVENTORY_SIZE), new IntArray(1));
@@ -64,16 +65,9 @@ public class PartAnalyzerContainer extends Container {
         addSlot(new SlotOutputOnly(inventory, 4, 116, 35));
         addSlot(new SlotOutputOnly(inventory, 5, 134, 35));
 
-        int i;
-        for (i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-            }
-        }
+        InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
-        for (i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
-        }
+        func_216961_a(this.fields);
     }
 
     public int getProgressArrowScale() {

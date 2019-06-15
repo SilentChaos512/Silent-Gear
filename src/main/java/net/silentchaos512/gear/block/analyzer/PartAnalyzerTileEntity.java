@@ -38,9 +38,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.PartMain;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.TimeUtils;
@@ -69,12 +69,12 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
     private final IIntArray fields = new IIntArray() {
         @Override
         public int get(int index) {
-            return progress;
+            return PartAnalyzerTileEntity.this.progress;
         }
 
         @Override
         public void set(int index, int value) {
-            progress = value;
+            PartAnalyzerTileEntity.this.progress = value;
         }
 
         @Override
@@ -89,8 +89,7 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
 
     @Override
     public void tick() {
-        if (world == null || world.isRemote) return;
-
+        assert (world != null);
         ItemStack input = getInputStack();
         IGearPart part = PartManager.from(input);
 
@@ -102,7 +101,7 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
             }
 
             // Grade part if any output slot is free
-            if (progress >= BASE_ANALYZE_TIME) {
+            if (progress >= BASE_ANALYZE_TIME && !world.isRemote) {
                 int outputSlot = getFreeOutputSlot();
                 if (outputSlot > 0) {
                     progress = 0;
@@ -190,9 +189,21 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
     }
 
     @Override
+    public void read(CompoundNBT tags) {
+        super.read(tags);
+        SyncVariable.Helper.readSyncVars(this, tags);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tags) {
+        CompoundNBT compoundTag = super.write(tags);
+        SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
+        return compoundTag;
+    }
+
+    @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT tags = new CompoundNBT();
-        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
+        CompoundNBT tags = getUpdateTag();
 
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
@@ -207,6 +218,7 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
     public CompoundNBT getUpdateTag() {
         CompoundNBT tags = super.getUpdateTag();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
+//        tags.putInt("progress", this.progress);
 
         ListNBT tagList = new ListNBT();
         ItemStack input = getInputStack();
@@ -224,6 +236,7 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
         super.onDataPacket(net, packet);
         CompoundNBT tags = packet.getNbtCompound();
         SyncVariable.Helper.readSyncVars(this, tags);
+//        this.progress = tags.getInt("progress");
 
         if (tags.contains("input_item")) {
             setInventorySlotContents(INPUT_SLOT, ItemStack.read(tags.getCompound("input_item")));

@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 
 public class PartAnalyzerBlock extends ContainerBlock {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 7, 16);
+    private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 6, 16);
 
     public PartAnalyzerBlock() {
         super(Properties.create(Material.IRON)
@@ -90,9 +90,9 @@ public class PartAnalyzerBlock extends ContainerBlock {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        Direction side = placer.getHorizontalFacing().getOpposite();
+        Direction side =  placer != null ? placer.getHorizontalFacing().getOpposite() : Direction.SOUTH;
         worldIn.setBlockState(pos, state.with(FACING, side), 2);
     }
 

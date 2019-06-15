@@ -216,9 +216,9 @@ curseforge {
 
 publishing {
     publications {
-        silentGear(MavenPublication) {
-            groupId 'net.silentchaos512'
-            artifactId 'silent-gear'
+        publication(MavenPublication) {
+            groupId project.group
+            artifactId "${project.repoName}-${project.mc_version}"
             version "${versionInfo['version_short']}".toString()
 
             from components.java
@@ -232,17 +232,17 @@ publishing {
 bintray {
     user = secret.BINTRAY_USER ?: System.getenv('BINTRAY_USER')
     key = secret.BINTRAY_KEY ?: System.getenv('BINTRAY_KEY')
-    publications = ['silentGear']
+    publications = ['publication']
 
     pkg {
-        repo = 'silent-gear'
-        name = "silent-gear-${project.mc_version}"
+        repo = project.repoName
+        name = "${project.repoName}-${project.mc_version}"
         licenses = ["LGPL-3.0"]
-        vcsUrl = 'https://github.com/SilentChaos512/Silent-Gear.git'
+        vcsUrl = project.vcsUrl
 
         version {
             name = "${versionInfo['version_short']}".toString()
-            desc = "Silent's Gear (${project.mc_version}) ${versionInfo['version_short']}".toString()
+            desc = "${project.name} (${project.mc_version}) ${versionInfo['version_short']}".toString()
             released = new Date()
             vcsTag = "v${versionInfo['version_short']}".toString()
         }
