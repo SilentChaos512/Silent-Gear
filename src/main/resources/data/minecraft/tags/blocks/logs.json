@@ -1,4 +1,12 @@
 {
-  "replace": false,
-  "values": ["silentgear:netherwood_log"]
+    "replace": false,
+    "values": [
+        "#minecraft:oak_logs",
+        "#minecraft:birch_logs",
+        "#minecraft:spruce_logs",
+        "#minecraft:jungle_logs",
+        "#minecraft:acacia_logs",
+        "#minecraft:dark_oak_logs",
+        "silentgear:netherwood_log"
+    ]
 }
