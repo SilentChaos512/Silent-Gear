@@ -71,7 +71,7 @@ public class NetherwoodTreeFeature extends AbstractTreeFeature<NoFeatureConfig> 
                             if (Math.abs(dx) != leavesReach || Math.abs(k1) != leavesReach || rand.nextInt(2) != 0 && dy != 0) {
                                 BlockPos blockpos = new BlockPos(x, y, z);
                                 if (isAirOrLeaves(worldIn, blockpos)) {
-                                    this.func_208520_a(changedBlocks, worldIn, blockpos, LEAF, p_208519_5_);
+                                    this.setLogState(changedBlocks, worldIn, blockpos, LEAF, p_208519_5_);
                                 }
                             }
                         }
@@ -81,7 +81,7 @@ public class NetherwoodTreeFeature extends AbstractTreeFeature<NoFeatureConfig> 
                 // Trunk
                 for (int i2 = 0; i2 < height; ++i2) {
                     if (isAirOrLeaves(worldIn, position.up(i2))) {
-                        this.func_208520_a(changedBlocks, worldIn, position.up(i2), LOG, p_208519_5_);
+                        this.setLogState(changedBlocks, worldIn, position.up(i2), LOG, p_208519_5_);
                     }
                 }
 
