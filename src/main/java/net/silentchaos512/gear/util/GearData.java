@@ -30,20 +30,20 @@ import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.lib.collection.StackList;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public final class GearData {
     private static final String NBT_ROOT = "SGear_Data";
     private static final String NBT_ROOT_CONSTRUCTION = "Construction";
     private static final String NBT_ROOT_PROPERTIES = "Properties";
     private static final String NBT_ROOT_MODEL_KEYS = "ModelKeys";
+    private static final String NBT_ROOT_RENDERING = "Rendering";
     private static final String NBT_ROOT_STATISTICS = "Statistics";
 
+    private static final String NBT_BLENDED_HEAD_COLOR = "BlendedHeadColor";
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
@@ -55,6 +55,11 @@ public final class GearData {
     private static final String NBT_REPAIR_COUNT = "RepairCount";
 
     private GearData() {throw new IllegalAccessError("Utility class");}
+
+    @Deprecated
+    public static void recalculateStats(ItemStack stack) {
+        recalculateStats(stack, null);
+    }
 
     /**
      * Recalculate gear stats and setup NBT. This should be called ANY TIME an item is modified!
@@ -121,8 +126,8 @@ public final class GearData {
             propertiesCompound.putFloat(NBT_SYNERGY_DISPLAY, (float) synergy);
         }
 
-        // Update model keys even if we didn't update stats
-        createAndSaveModelKeys(stack, item, parts);
+        // Update rendering info even if we didn't update stats
+        updateRenderingInfo(stack, parts);
     }
 
     private static void addOrRemoveHighlightPart(ItemStack stack, PartDataList parts) {
@@ -152,9 +157,11 @@ public final class GearData {
         }
     }
 
-    @Deprecated
-    public static void recalculateStats(ItemStack stack) {
-        recalculateStats(stack, null);
+    private static void updateRenderingInfo(ItemStack stack, PartDataList parts) {
+        CompoundNBT nbt = getData(stack, NBT_ROOT_RENDERING);
+        nbt.putInt(NBT_BLENDED_HEAD_COLOR, calculateBlendedHeadColor(stack, parts));
+
+        createAndSaveModelKeys(stack, ((ICoreItem) stack.getItem()), parts);
     }
 
     private static void createAndSaveModelKeys(ItemStack stack, ICoreItem item, PartDataList parts) {
@@ -371,6 +378,55 @@ public final class GearData {
             return PartData.readFast((CompoundNBT) nbt);
         }
         return null;
+    }
+
+    public static int getHeadColor(ItemStack stack, boolean colorBlending) {
+        if (!colorBlending) {
+            PartData part = getPrimaryRenderPartFast(stack);
+            if (part == null) return Color.VALUE_WHITE;
+            return part.getFallbackColor(stack, 0);
+        }
+        return getData(stack, NBT_ROOT_RENDERING).getInt(NBT_BLENDED_HEAD_COLOR);
+    }
+
+    private static int calculateBlendedHeadColor(ItemStack gear, PartDataList parts) {
+        int[] componentSums = new int[3];
+        int maxColorSum = 0;
+        int colorCount = 0;
+
+        int partCount = parts.size();
+        for (int i = 0; i < partCount; ++i) {
+            PartData part = parts.get(i);
+            int color = part.getFallbackColor(gear, 0);
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = color & 0xFF;
+            // Add earlier colors multiple times, to give them greater weight
+            int colorWeight = (partCount - i) * (partCount - i);
+            for (int j = 0; j < colorWeight; ++j) {
+                maxColorSum += Math.max(r, Math.max(g, b));
+                componentSums[0] += r;
+                componentSums[1] += g;
+                componentSums[2] += b;
+                ++colorCount;
+            }
+        }
+
+        if (colorCount > 0) {
+            int r = componentSums[0] / colorCount;
+            int g = componentSums[1] / colorCount;
+            int b = componentSums[2] / colorCount;
+            float maxAverage = (float) maxColorSum / (float) colorCount;
+            float max = (float) Math.max(r, Math.max(g, b));
+            r = (int) ((float) r * maxAverage / max);
+            g = (int) ((float) g * maxAverage / max);
+            b = (int) ((float) b * maxAverage / max);
+            int finalColor = (r << 8) + g;
+            finalColor = (finalColor << 8) + b;
+            return finalColor;
+        }
+
+        return Color.VALUE_WHITE;
     }
 
     /**

@@ -67,9 +67,7 @@ public final class ColorHandlers {
         }
         if (tintIndex == 1) {
             // Main
-            PartData part = GearData.getPrimaryRenderPartFast(stack);
-            if (part == null) return Color.VALUE_WHITE;
-            return part.getFallbackColor(stack, 0);
+            return GearData.getHeadColor(stack, true);
         }
         if (tintIndex == 2) {
             // Tip
@@ -79,9 +77,7 @@ public final class ColorHandlers {
         }
         if (tintIndex == 3 && stack.getItem() == ModItems.sword) {
             // Guard (just use primary for now)
-            PartData part = GearData.getPrimaryRenderPartFast(stack);
-            if (part == null) return Color.VALUE_WHITE;
-            return part.getFallbackColor(stack, 0);
+            return GearData.getHeadColor(stack, true);
         }
         return Color.VALUE_WHITE;
     }
@@ -89,9 +85,7 @@ public final class ColorHandlers {
     private static int getArmorColorTemp(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
             // Main
-            PartData part = GearData.getPrimaryRenderPartFast(stack);
-            if (part == null) return Color.VALUE_WHITE;
-            return part.getFallbackColor(stack, 0);
+            return GearData.getHeadColor(stack, true);
         }
         return Color.VALUE_WHITE;
     }
