@@ -23,11 +23,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.LightType;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
@@ -45,6 +49,7 @@ import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.TraitHelper;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -142,16 +147,19 @@ public final class GearEvents {
 
         for (int i = 0; i < event.getDrops().size(); ++i) {
             ItemStack stack = event.getDrops().get(i);
-            // FIXME
-//            ((ServerPlayerEntity) harvester).getServerWorld().getRecipeManager().getRecipe();
+            ServerWorld world = ((ServerPlayerEntity) harvester).getServerWorld();
 
-            /*
-            ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
-            if (!smelted.isEmpty()) {
-                event.getDrops().remove(i);
-                event.getDrops().add(i, smelted);
+            // Magmatic smelting
+            Optional<FurnaceRecipe> recipe = world.getRecipeManager().getRecipe(IRecipeType.SMELTING, new Inventory(stack), world);
+            if (recipe.isPresent()) {
+                ItemStack smelted = recipe.get().getRecipeOutput();
+                if (!smelted.isEmpty()) {
+                    ItemStack copy = smelted.copy();
+                    copy.setCount(stack.getCount());
+                    event.getDrops().remove(i);
+                    event.getDrops().add(i, copy);
+                }
             }
-            */
         }
     }
 

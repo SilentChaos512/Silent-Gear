@@ -37,6 +37,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 // FIXME: modify to use PartType?
+// FIXME: Always fails to get fallback?
 public final class GearGenerator {
     private GearGenerator() {}
 

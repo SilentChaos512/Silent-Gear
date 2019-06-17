@@ -15,10 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
-import net.silentchaos512.gear.command.GradeTestCommand;
-import net.silentchaos512.gear.command.LockStatsCommand;
-import net.silentchaos512.gear.command.RecalculateStatsCommand;
-import net.silentchaos512.gear.command.SGearPartsCommand;
+import net.silentchaos512.gear.command.*;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.network.Network;
@@ -75,6 +72,7 @@ class SideProxy {
         LockStatsCommand.register(dispatcher);
         RecalculateStatsCommand.register(dispatcher);
         SGearPartsCommand.register(dispatcher);
+        RandomGearCommand.register(dispatcher);
         if (SilentGear.isDevBuild()) {
             GradeTestCommand.register(dispatcher);
         }
