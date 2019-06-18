@@ -15,7 +15,6 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.item.BlueprintPackageItem;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.SlingshotAmmoItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.gear.*;
@@ -82,7 +81,7 @@ public final class ModItems {
         netherBanana = register("nether_banana", new Item(getBaseProperties()
                 .food(new Food.Builder().hunger(5).saturation(0.4f).build())));
 
-        pebble = register("pebble", new SlingshotAmmoItem());
+//        pebble = register("pebble", new SlingshotAmmoItem());
 
         // Register gear classes
         toolClasses.forEach((key, item) -> register(key, item.asItem()));
@@ -136,7 +135,7 @@ public final class ModItems {
         toolClasses.put("mattock", mattock);
         toolClasses.put("sickle", sickle);
         toolClasses.put("bow", bow);
-        toolClasses.put("slingshot", slingshot);
+//        toolClasses.put("slingshot", slingshot);
 
         armorClasses.put("helmet", helmet);
         armorClasses.put("chestplate", chestplate);

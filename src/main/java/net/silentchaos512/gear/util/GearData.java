@@ -343,6 +343,24 @@ public final class GearData {
         return getData(gear, NBT_ROOT_PROPERTIES).getFloat(NBT_SYNERGY_DISPLAY);
     }
 
+    public static int getTier(ItemStack gear) {
+        if (!GearHelper.isGear(gear)) {
+            SilentGear.LOGGER.error("Called getTier on non-gear item, {}", gear);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return -1;
+        }
+
+        // TODO: Might want to store this value later, but it isn't used very often right now
+        PartDataList parts = getConstructionParts(gear);
+        int max = 0;
+        for (PartData part : parts) {
+            if (part.getTier() > max) {
+                max = part.getTier();
+            }
+        }
+        return max;
+    }
+
     @Nullable
     public static PartData getPrimaryPart(ItemStack stack) {
         return getPartByIndex(stack, 0);

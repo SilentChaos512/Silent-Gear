@@ -60,6 +60,21 @@
         }
       ],
       "name": "pool1"
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:flaxseeds"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "name": "pool2"
     }
   ],
   "functions": [

@@ -33,13 +33,13 @@ public final class ColorHandlers {
         }
 
         // Tools/Armor - mostly used for broken color, but colors could be changed at any time
-        itemColors.register(ColorHandlers::getColorTemp,
+        itemColors.register(ColorHandlers::getToolLiteColor,
                 ModItems.toolClasses.values()
                         .stream()
                         .map(ICoreItem::asItem)
                         .toArray(Item[]::new)
         );
-        itemColors.register(ColorHandlers::getArmorColorTemp,
+        itemColors.register(ColorHandlers::getArmorLiteColor,
                 ModItems.armorClasses.values()
                         .stream()
                         .map(ICoreItem::asItem)
@@ -58,7 +58,7 @@ public final class ColorHandlers {
     }
 
     // Temporary rendering solution until Forge fixes their stuff
-    private static int getColorTemp(ItemStack stack, int tintIndex) {
+    private static int getToolLiteColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
             // Rod
             PartData part = GearData.getPartOfType(stack, PartType.ROD);
@@ -82,7 +82,7 @@ public final class ColorHandlers {
         return Color.VALUE_WHITE;
     }
 
-    private static int getArmorColorTemp(ItemStack stack, int tintIndex) {
+    private static int getArmorLiteColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
             // Main
             return GearData.getHeadColor(stack, true);

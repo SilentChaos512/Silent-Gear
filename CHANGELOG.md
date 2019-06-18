@@ -3,10 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - 2019-06-17
 ### Added
 - Configs for random grading. You can adjust the mean, standard deviation, and max grade.
-- Slingshots, a new ranged weapon. Currently unfinished, but usable. The projectiles are invisible for some reason.
+- Gear with mixed main parts will blend the colors, but with much greater weight on earlier parts
+### Removed
+- Blue flower and black/blue dyes (use cornflowers and new vanilla dyes instead)
+### Changed
+- Netherwood tree generation (more leaves, subject to change)
 
 ## [1.0.12] - 2019-05-11
 ### Changed

@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "silentgear:axe"
+        },
+        "title": {
+            "translate": "advancements.silentgear.axe.title"
+        },
+        "description": {
+            "translate": "advancements.silentgear.axe.description"
+        }
+    },
+    "parent": "silentgear:blueprint_pickaxe",
+    "criteria": {
+        "get_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "silentgear:axe"
+                    }
+                ]
+            }
+        }
+    }
+}

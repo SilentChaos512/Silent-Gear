@@ -41,7 +41,7 @@ public abstract class AbstractGearPart implements IGearPart {
     // Identity
     private final ResourceLocation name;
     PartMaterial materials = new PartMaterial();
-    int tier;
+    int tier = -1;
 
     // Stats and Traits
     StatModifierMap stats = new StatModifierMap();
@@ -97,9 +97,8 @@ public abstract class AbstractGearPart implements IGearPart {
         PartData material = context.getMaterial();
         if (material.getType() != PartType.MAIN) return 0;
 
-        PartData gearPrimary = GearData.getPrimaryPart(context.getGear());
         // Material tier must be equal to or higher than gear's primary
-        if (gearPrimary != null && material.getTier() < gearPrimary.getTier()) return 0;
+        if (material.getTier() < GearData.getTier(context.getGear())) return 0;
         Collection<StatInstance> mods = getStatModifiers(context.getGear(), CommonItemStats.DURABILITY, material);
         float durability = CommonItemStats.DURABILITY.compute(0f, mods);
 
@@ -353,6 +352,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
             part.displayName = buffer.readTextComponent();
             part.materials = PartMaterial.read(buffer);
+            part.tier = buffer.readByte();
 
             // Textures
             int displayCount = buffer.readVarInt();
@@ -373,6 +373,7 @@ public abstract class AbstractGearPart implements IGearPart {
         public void write(PacketBuffer buffer, T part) {
             buffer.writeTextComponent(part.getDisplayName(null, ItemStack.EMPTY));
             part.materials.write(buffer);
+            buffer.writeByte(part.getTier());
 
             // Textures
             buffer.writeVarInt(part.display.size());
