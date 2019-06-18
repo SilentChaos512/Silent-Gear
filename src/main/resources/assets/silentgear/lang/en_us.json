@@ -375,5 +375,6 @@
   "misc.silentgear.missingBowstring": "Missing required bowstring, cannot be fired",
   "misc.silentgear.notifyOnBreak": "Your %s has broken. You should fix that.",
   "misc.silentgear.poorlyMade": "This item is poorly made and will not last long",
+  "misc.silentgear.tier": "Tier %d",
   "misc.silentgear.ungradedParts": "*Contains ungraded parts!"
 }

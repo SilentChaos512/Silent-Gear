@@ -111,6 +111,9 @@ public final class GearClientHelper {
         ITextComponent textStats = misc("tooltip.stats").applyTextStyle(TextFormatting.GOLD);
         if (ctrlDown && flag.showStats) {
             tooltip.add(textStats);
+
+            tooltip.add(misc("tier", GearData.getTier(stack)));
+
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = flag.isAdvanced() && SilentGear.isDevBuild()
                     ? ItemStat.ALL_STATS.values()

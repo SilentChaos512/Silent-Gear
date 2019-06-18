@@ -49,6 +49,7 @@ public final class GearData {
     private static final String NBT_IS_EXAMPLE = "IsExample";
     private static final String NBT_RANDOM_GRADING_DONE = "RandomGradingDone";
     private static final String NBT_SYNERGY_DISPLAY = "synergy";
+    private static final String NBT_TIER = "Tier";
     private static final String NBT_UUID = "SGear_UUID";
 
     private static final String NBT_BROKEN_COUNT = "BrokenCount";
@@ -83,6 +84,7 @@ public final class GearData {
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
+            clearCachedData(stack);
             addOrRemoveHighlightPart(stack, parts);
             PartDataList uniqueParts = parts.getUniqueParts(true);
             Map<ITrait, Integer> traits = TraitHelper.getTraits(stack, parts);
@@ -155,6 +157,16 @@ public final class GearData {
         if (changed) {
             writeConstructionParts(stack, parts);
         }
+    }
+
+    /**
+     * Clears NBT which is created on-demand.
+     */
+    private static void clearCachedData(ItemStack stack) {
+        if (!(stack.getItem() instanceof ICoreItem)) return;
+
+        CompoundNBT construction = getData(stack, NBT_ROOT_CONSTRUCTION);
+        construction.remove(NBT_TIER);
     }
 
     private static void updateRenderingInfo(ItemStack stack, PartDataList parts) {
@@ -350,15 +362,18 @@ public final class GearData {
             return -1;
         }
 
-        // TODO: Might want to store this value later, but it isn't used very often right now
-        PartDataList parts = getConstructionParts(gear);
-        int max = 0;
-        for (PartData part : parts) {
-            if (part.getTier() > max) {
-                max = part.getTier();
+        CompoundNBT data = getData(gear, NBT_ROOT_CONSTRUCTION);
+        if (!data.contains(NBT_TIER)) {
+            PartDataList parts = getConstructionParts(gear);
+            int max = 0;
+            for (PartData part : parts) {
+                if (part.getTier() > max) {
+                    max = part.getTier();
+                }
             }
+            data.putInt(NBT_TIER, max);
         }
-        return max;
+        return data.getInt(NBT_TIER);
     }
 
     @Nullable
