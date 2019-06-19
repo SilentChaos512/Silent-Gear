@@ -19,12 +19,23 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.loot.SelectGearTierLootFunction;
+import net.silentchaos512.gear.loot.SetPartsFunction;
 
 public final class ModLootStuff {
     private ModLootStuff() {}
 
     public static void init() {
-        LootFunctionManager.registerFunction(new SelectGearTierLootFunction.Serializer());
+        LootFunctionManager.registerFunction(SelectGearTierLootFunction.SERIALIZER);
+        LootFunctionManager.registerFunction(SetPartsFunction.SERIALIZER);
+
+        MinecraftForge.EVENT_BUS.addListener(ModLootStuff::onLootTableLoad);
+    }
+
+    @SubscribeEvent
+    public static void onLootTableLoad(LootTableLoadEvent event) {
     }
 }

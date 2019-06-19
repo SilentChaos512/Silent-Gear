@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Loot table function for setting specific parts on a gear item
+- Chinese translation (zh_cn, by XuyuEre)
+
 ## [1.1.0] - 2019-06-17
 ### Added
 - Configs for random grading. You can adjust the mean, standard deviation, and max grade.
