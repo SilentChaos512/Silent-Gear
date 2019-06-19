@@ -1,9 +1,12 @@
 package net.silentchaos512.gear;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DeferredWorkQueue;
@@ -11,6 +14,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
@@ -25,7 +30,11 @@ import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 
-class SideProxy {
+import javax.annotation.Nullable;
+
+class SideProxy implements IProxy {
+    @Nullable private static MinecraftServer server;
+
     SideProxy() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(SideProxy::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(SideProxy::imcEnqueue);
@@ -39,6 +48,8 @@ class SideProxy {
 
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
+        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarting);
+        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
 
         Config.init();
         Network.init();
@@ -59,15 +70,17 @@ class SideProxy {
         });
     }
 
-    private static void imcEnqueue(InterModEnqueueEvent event) { }
+    private static void imcEnqueue(InterModEnqueueEvent event) {}
 
-    private static void imcProcess(InterModProcessEvent event) { }
+    private static void imcProcess(InterModProcessEvent event) {}
 
     private static void serverAboutToStart(FMLServerAboutToStartEvent event) {
         IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
         resourceManager.addReloadListener(TraitManager.INSTANCE);
         resourceManager.addReloadListener(PartManager.INSTANCE);
+    }
 
+    private static void serverStarting(FMLServerStartingEvent event) {
         CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommandManager().getDispatcher();
         LockStatsCommand.register(dispatcher);
         RecalculateStatsCommand.register(dispatcher);
@@ -79,7 +92,25 @@ class SideProxy {
     }
 
     private static void serverStarted(FMLServerStartedEvent event) {
-        SilentGear.LOGGER.info(PartManager.MARKER, "Total gear parts loaded: {}", PartManager.getValues().size());
+        server = event.getServer();
+        SilentGear.LOGGER.info(TraitManager.MARKER, "Gear traits loaded: {}", TraitManager.getValues().size());
+        SilentGear.LOGGER.info(PartManager.MARKER, "Gear parts loaded: {}", PartManager.getValues().size());
+    }
+
+    private static void serverStopping(FMLServerStoppingEvent event) {
+        server = null;
+    }
+
+    @Nullable
+    @Override
+    public PlayerEntity getClientPlayer() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public MinecraftServer getServer() {
+        return server;
     }
 
     static class Client extends SideProxy {
@@ -120,6 +151,12 @@ class SideProxy {
             }
             */
         }
+
+        @Nullable
+        @Override
+        public PlayerEntity getClientPlayer() {
+            return Minecraft.getInstance().player;
+        }
     }
 
     static class Server extends SideProxy {
@@ -127,6 +164,6 @@ class SideProxy {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
         }
 
-        private void serverSetup(FMLDedicatedServerSetupEvent event) { }
+        private void serverSetup(FMLDedicatedServerSetupEvent event) {}
     }
 }

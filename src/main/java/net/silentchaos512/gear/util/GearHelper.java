@@ -14,10 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -126,10 +123,13 @@ public final class GearHelper {
         return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entityLiving) {
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entityLiving, Hand hand) {
+        attemptDamage(stack, amount, entityLiving, hand == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
+    }
+
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entityLiving, EquipmentSlotType slot) {
         if (isUnbreakable(stack) || (entityLiving instanceof PlayerEntity && ((PlayerEntity) entityLiving).abilities.isCreativeMode))
             return;
-        final boolean canBreakPermanently = canBreakPermanently(stack);
 
         ServerPlayerEntity player = entityLiving instanceof ServerPlayerEntity ? (ServerPlayerEntity) entityLiving : null;
         final int preTraitAmount = amount;
@@ -138,9 +138,9 @@ public final class GearHelper {
 
         final int maxDamage = stack.getMaxDamage();
         final int preDamageFactor = getDamageFactor(stack, maxDamage);
-        if (!canBreakPermanently)
+        if (!canBreakPermanently(stack))
             amount = Math.min(maxDamage - stack.getDamage(), amount);
-        boolean wouldBreak = stack.attemptDamageItem(amount, SilentGear.random, player);
+        stack.attemptDamageItem(amount, SilentGear.random, player);
 
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
@@ -149,16 +149,23 @@ public final class GearHelper {
                 onDamageFactorChange(player, preDamageFactor, getDamageFactor(stack, maxDamage));
         }
 
+        handleBrokenItem(stack, player, slot);
+    }
+
+    private static void handleBrokenItem(ItemStack stack, @Nullable ServerPlayerEntity player, EquipmentSlotType slot) {
         if (isBroken(stack)) {
             // The item "broke" (can still be repaired)
-            entityLiving.handleStatusUpdate((byte) 47); // entityLiving.renderBrokenItemStack(stack);
             GearData.incrementBrokenCount(stack);
             GearData.recalculateStats(stack, player);
-            if (player != null)
+            if (player != null) {
+                player.sendBreakAnimation(slot); // entity.renderBrokenItemStack(stack);
                 notifyPlayerOfBrokenGear(stack, player);
-        } else if (canBreakPermanently && wouldBreak) {
+            }
+        } else if (canBreakPermanently(stack) && stack.getDamage() > stack.getMaxDamage()) {
             // Item is gone forever, rest in pieces
-            entityLiving.handleStatusUpdate((byte) 47); // entityLiving.renderBrokenItemStack(stack);
+            if (player != null) {
+                player.sendBreakAnimation(slot); // entity.renderBrokenItemStack(stack);
+            }
             stack.shrink(1);
         }
     }
@@ -221,18 +228,17 @@ public final class GearHelper {
 
     public static Item.Properties getBuilder(@Nullable ToolType toolType) {
         Item.Properties b = new Item.Properties().maxStackSize(1).group(SilentGear.ITEM_GROUP);
-        if (toolType != null) {
-            b.addToolType(toolType, 3);
-        }
+        if (toolType != null) b.addToolType(toolType, 3);
         return b;
     }
 
     public static void addModelTypeProperty(ICoreItem item) {
+        // TODO: Add grips and bindings. Something to change head/rod textures and highlight?
         item.asItem().addPropertyOverride(SilentGear.getId("model_type"), (stack, world, entity) ->
-                (GearData.hasPartOftype(stack, PartType.ROD) ? 1 : 0)
-                        + (GearData.hasPartOftype(stack, PartType.MAIN) ? 2 : 0)
-                        + (GearData.hasPartOftype(stack, PartType.TIP) ? 4 : 0)
-                        + (item.requiresPartOfType(PartType.BOWSTRING) && GearData.hasPartOftype(stack, PartType.BOWSTRING) ? 8 : 0)
+                (GearData.hasPartOfType(stack, PartType.ROD) ? 1 : 0)
+                        + (GearData.hasPartOfType(stack, PartType.MAIN) ? 2 : 0)
+                        + (GearData.hasPartOfType(stack, PartType.TIP) ? 4 : 0)
+                        + (item.requiresPartOfType(PartType.BOWSTRING) && GearData.hasPartOfType(stack, PartType.BOWSTRING) ? 8 : 0)
         );
     }
 
@@ -296,7 +302,7 @@ public final class GearHelper {
     public static boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (!isBroken(stack) && stack.getItem() instanceof ICoreTool) {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
-            attemptDamage(stack, damage, entityLiving);
+            attemptDamage(stack, damage, entityLiving, EquipmentSlotType.MAINHAND);
         }
 //        GearStatistics.incrementStat(stack, GearStatistics.BLOCKS_MINED);
 
@@ -311,7 +317,7 @@ public final class GearHelper {
         boolean isBroken = isBroken(stack);
         if (!isBroken && stack.getItem() instanceof ICoreTool) {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
-            attemptDamage(stack, damage, attacker);
+            attemptDamage(stack, damage, attacker, EquipmentSlotType.MAINHAND);
         }
 
         selfHarmWithToolHead(stack, attacker);
@@ -323,7 +329,7 @@ public final class GearHelper {
         // If missing rod, hurt the user
         if (stack.getItem() instanceof ICoreItem) {
             ICoreItem item = (ICoreItem) stack.getItem();
-            if (item.requiresPartOfType(PartType.ROD) && !GearData.hasPartOftype(stack, PartType.ROD)) {
+            if (GearData.isMissingRequiredPart(stack, PartType.ROD)) {
                 float damageAmount = item.getStat(stack, CommonItemStats.MELEE_DAMAGE) / 2;
                 DamageSource source = new DamageSource("silentgear.broken_tool") {
                     @Nonnull

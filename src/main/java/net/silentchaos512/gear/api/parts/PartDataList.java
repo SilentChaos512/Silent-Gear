@@ -32,6 +32,10 @@ public final class PartDataList implements List<PartData> {
     private PartDataList() {
     }
 
+    public static PartDataList empty() {
+        return new PartDataList();
+    }
+
     public static PartDataList of(Collection<PartData> c) {
         PartDataList ret = new PartDataList();
         ret.list.addAll(c);

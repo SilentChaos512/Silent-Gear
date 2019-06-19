@@ -31,7 +31,7 @@ public final class SilentGear {
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static SilentGear INSTANCE;
-    public static SideProxy PROXY;
+    public static IProxy PROXY;
 
     @SuppressWarnings("Convert2MethodRef")
     public SilentGear() {

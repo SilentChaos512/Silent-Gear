@@ -23,10 +23,7 @@ import org.apache.logging.log4j.MarkerManager;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -87,7 +84,7 @@ public final class PartManager implements IResourceManagerReloadListener {
         return MAP.values();
     }
 
-    public static Collection<IGearPart> getPartsOfType(PartType type) {
+    public static List<IGearPart> getPartsOfType(PartType type) {
         // TODO: cache this?
         return getValues().stream()
                 .filter(part -> part.getType() == type)
@@ -133,10 +130,9 @@ public final class PartManager implements IResourceManagerReloadListener {
      *
      * @param type The part type
      * @return The fallback part if it exists
-     * @throws NullPointerException If the fallback is unknown or cannot be found
      */
+    @Nullable
     public static IGearPart tryGetFallback(PartType type) {
-        // TODO: Probably needs a lot of work...
         ResourceLocation name = null;
         if (type == PartType.MAIN)
             name = PartConst.FALLBACK_MAIN;
@@ -145,13 +141,8 @@ public final class PartManager implements IResourceManagerReloadListener {
         else if (type == PartType.BOWSTRING)
             name = PartConst.FALLBACK_BOWSTRING;
 
-        if (name == null)
-            throw new NullPointerException("Don't know fallback for part type '" + type + "'");
-
-        IGearPart part = get(name);
-        if (part == null)
-            throw new NullPointerException("Fallback part '" + name + "' was not found");
-        return part;
+        if (name == null) return null;
+        return get(name);
     }
 
     public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {

@@ -23,7 +23,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootFunction;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
@@ -32,6 +31,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.util.GearGenerator;
 
 public final class SelectGearTierLootFunction extends LootFunction {
+    public static final Serializer SERIALIZER = new Serializer();
     private final int tier;
 
     private SelectGearTierLootFunction(ILootCondition[] conditions, int tier) {
@@ -47,7 +47,7 @@ public final class SelectGearTierLootFunction extends LootFunction {
 
     public static class Serializer extends LootFunction.Serializer<SelectGearTierLootFunction> {
         public Serializer() {
-            super(new ResourceLocation(SilentGear.MOD_ID, "select_tier"), SelectGearTierLootFunction.class);
+            super(SilentGear.getId("select_tier"), SelectGearTierLootFunction.class);
         }
 
         @Override

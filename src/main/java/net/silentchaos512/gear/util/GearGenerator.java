@@ -31,54 +31,38 @@ import net.silentchaos512.gear.parts.type.RodPart;
 import net.silentchaos512.gear.parts.type.TipPart;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-// FIXME: modify to use PartType?
-// FIXME: Always fails to get fallback?
 public final class GearGenerator {
-    private GearGenerator() {}
-
-    public static List<? extends IGearPart> getPartsOfType(Class<? extends IGearPart> partClass) {
-        return getPartsOfType(partClass::isInstance);
+    private GearGenerator() {
+        throw new IllegalAccessError("Utility class");
     }
 
-    public static List<? extends IGearPart> getPartsOfType(Class<? extends IGearPart> partClass, int partTier) {
-        return getPartsOfType(part -> partClass.isInstance(part) && (partTier < 0 || part.getTier() == partTier));
+    public static Optional<IGearPart> selectRandom(PartType type) {
+        return selectRandom(type, -1);
     }
 
-    public static List<? extends IGearPart> getPartsOfType(Predicate<? super IGearPart> condition) {
-        return PartManager.getValues().stream()
-//                .filter(p -> !p.isBlacklisted())
-                .filter(condition)
+    public static Optional<IGearPart> selectRandom(PartType type, final int partTier) {
+        List<IGearPart> list = PartManager.getValues().stream()
+                .filter(p -> p.getType() == type)
+                .filter(p -> partTier == -1 || p.getTier() == partTier)
                 .collect(Collectors.toList());
-    }
-
-    public static Optional<IGearPart> selectRandom(Class<? extends IGearPart> partClass) {
-        return selectRandom(partClass, -1);
-    }
-
-    public static Optional<IGearPart> selectRandom(Class<? extends IGearPart> partClass, int partTier) {
-        List<? extends IGearPart> list = getPartsOfType(partClass, partTier);
         if (!list.isEmpty())
             return Optional.of(list.get(SilentGear.random.nextInt(list.size())));
-        IGearPart fallback = getFallback(partClass);
-        return fallback == null ? Optional.empty() : Optional.of(fallback);
+        return Optional.ofNullable(PartManager.tryGetFallback(type));
     }
 
-    @Nullable
-    private static IGearPart getFallback(Class<? extends IGearPart> partClass) {
-        SilentGear.LOGGER.debug("GearGenerator::getFallback: class {}", partClass);
-
-        if (partClass == RodPart.class)
-            return PartManager.get(PartConst.FALLBACK_ROD);
-        else if (partClass == BowstringPart.class)
-            return selectRandom(partClass, -1).orElse(PartManager.get(PartConst.FALLBACK_BOWSTRING));
-
-        SilentGear.LOGGER.debug("    no fallback part available");
-        return null;
+    public static Collection<IGearPart> selectRandomMains(int count, int partTier) {
+        Collection<IGearPart> list = new ArrayList<>();
+        for (int i = 0; i < count; ++i) {
+            selectRandom(PartType.MAIN, partTier).ifPresent(list::add);
+        }
+        return list;
     }
 
     public static ItemStack create(ICoreItem item, int minTier, int maxTier) {
@@ -89,37 +73,48 @@ public final class GearGenerator {
 
     public static ItemStack create(ICoreItem item, int tier) {
         // Select main and rod
-        Optional<IGearPart> main = selectRandom(MainPart.class, tier);
-        Optional<IGearPart> rod = selectRandom(RodPart.class, tier);
-        if (!main.isPresent() || !rod.isPresent()) {
-            SilentGear.LOGGER.warn("Could not create {} of tier {}", item.getGearType().getName(), tier);
+        Collection<IGearPart> mains = selectRandomMains(getMainPartCount(), tier);
+        Optional<IGearPart> rod = selectRandom(PartType.ROD);
+        if (mains.isEmpty() || !rod.isPresent()) {
+            SilentGear.LOGGER.error("Could not create {} of tier {}", item.getGearType().getName(), tier);
             return ItemStack.EMPTY;
         }
 
         // Make the base item
         PartDataList parts = PartDataList.of();
-        // Proper number of mains for head -- FIXME
-        for (int i = 0; i < 1; ++i) {
-            parts.addPart(main.get());
-        }
+        mains.forEach(p -> parts.add(PartData.of(p)));
         // Requires a rod?
         if (item.requiresPartOfType(PartType.ROD)) {
             parts.addPart(rod.get());
         }
         // Requires bowstring?
         if (item.requiresPartOfType(PartType.BOWSTRING)) {
-            Optional<IGearPart> bowstring = selectRandom(BowstringPart.class, tier);
+            Optional<IGearPart> bowstring = selectRandom(PartType.BOWSTRING, tier);
             bowstring.ifPresent(parts::addPart);
         }
         ItemStack result = item.construct(parts);
 
         // Apply some random upgrades?
         if (item instanceof ICoreTool && SilentGear.random.nextFloat() < 0.2f * tier + 0.1f) {
-            Optional<IGearPart> tip = selectRandom(TipPart.class);
+            Optional<IGearPart> tip = selectRandom(PartType.TIP);
             tip.ifPresent(part -> GearData.addUpgradePart(result, PartData.of(part)));
         }
 
         GearData.recalculateStats(result, null);
         return result;
+    }
+
+    public static int getMainPartCount() {
+        int randomMultiplier = 9 * (9 + 1) / 2;
+        int randomInt = SilentGear.random.nextInt(randomMultiplier);
+
+        int k = 0;
+        for (int i = 9; randomInt >= 0; i--) {
+            randomInt -= i;
+            k++;
+        }
+
+        int result = k / 3;
+        return result > 0 ? result : 1;
     }
 }

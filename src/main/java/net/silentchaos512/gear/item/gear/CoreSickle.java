@@ -139,7 +139,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
         }
 
         if (somethingHarvested) {
-            GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player);
+            GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player, context.getHand());
             player.addExhaustion(0.02f); // TODO: Config?
         }
         return somethingHarvested ? ActionResultType.SUCCESS : ActionResultType.PASS;
