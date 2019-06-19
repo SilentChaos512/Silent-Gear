@@ -210,13 +210,11 @@ public final class GearHelper {
         // return true;
         // }
 
-        if (canBreakPermanently(stack))
+        if (stack.isEmpty() || canBreakPermanently(stack))
             return false;
 
         int maxDamage = stack.getMaxDamage();
-        if (stack.isEmpty() || maxDamage <= 0)
-            return false;
-        return stack.getDamage() >= maxDamage;
+        return maxDamage > 0 && stack.getDamage() >= maxDamage - 1;
     }
 
     public static boolean isUnbreakable(ItemStack stack) {
