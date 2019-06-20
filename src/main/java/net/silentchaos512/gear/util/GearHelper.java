@@ -123,15 +123,21 @@ public final class GearHelper {
         return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entityLiving, Hand hand) {
-        attemptDamage(stack, amount, entityLiving, hand == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
+    @Deprecated
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity) {
+        // TODO: Remove this version when Gems updates
+        attemptDamage(stack, amount, entity);
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entityLiving, EquipmentSlotType slot) {
-        if (isUnbreakable(stack) || (entityLiving instanceof PlayerEntity && ((PlayerEntity) entityLiving).abilities.isCreativeMode))
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity, Hand hand) {
+        attemptDamage(stack, amount, entity, hand == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
+    }
+
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity, EquipmentSlotType slot) {
+        if (isUnbreakable(stack) || (entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.isCreativeMode))
             return;
 
-        ServerPlayerEntity player = entityLiving instanceof ServerPlayerEntity ? (ServerPlayerEntity) entityLiving : null;
+        ServerPlayerEntity player = entity instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity : null;
         final int preTraitAmount = amount;
         amount = (int) TraitHelper.activateTraits(stack, preTraitAmount, (trait, level, val) ->
                 trait.onDurabilityDamage(new TraitActionContext(player, level, stack), (int) val));
