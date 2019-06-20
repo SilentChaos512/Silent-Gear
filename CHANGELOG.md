@@ -3,11 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.1] - 2019-06-20
 ### Added
 - Netherwood slabs and stairs
+- Recipe advancements (most recipes will show in the recipe book when you get certain items)
+- New command, `sgear_random_gear` which will give randomized gear items
 - Loot table function for setting specific parts on a gear item
 - Chinese translation (zh_cn, by XuyuEre)
+### Fixed
+- Example gear items not appearing in the creative tab
 
 ## [1.1.0] - 2019-06-17
 ### Added

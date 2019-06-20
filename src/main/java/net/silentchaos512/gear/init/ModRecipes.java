@@ -4,7 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
@@ -26,7 +25,7 @@ public final class ModRecipes {
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
 
         if (SilentGear.isDevBuild()) {
-            MinecraftForge.EVENT_BUS.addListener(ModRecipes::onPlayerJoinServer);
+//            MinecraftForge.EVENT_BUS.addListener(ModRecipes::onPlayerJoinServer);
         }
     }
 

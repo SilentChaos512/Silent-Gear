@@ -1,0 +1,51 @@
+{
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "silentgear:hammer",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "silentgear:set_parts",
+                            "parts": [
+                                {
+                                    "part": "silentgear:main/diamond",
+                                    "grade": "S"
+                                },
+                                {
+                                    "part": "silentgear:main/diamond",
+                                    "grade": "S"
+                                },
+                                {
+                                    "part": "silentgear:main/emerald",
+                                    "grade": "S"
+                                },
+                                {
+                                    "part": "silentgear:rod/blaze"
+                                },
+                                {
+                                    "part": "silentgear:tip/redstone"
+                                }
+                            ]
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": "Loliberty Defense Force Mallet"
+                        },
+                        {
+                            "function": "minecraft:set_lore",
+                            "lore": [
+                                "Standard Issue",
+                                "Protectors of Free Speech"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
