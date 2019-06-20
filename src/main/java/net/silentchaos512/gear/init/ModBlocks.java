@@ -32,6 +32,8 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     WALL_STONE_TORCH(StoneTorchWall::new, () -> null),
     NETHERWOOD_LOG(NetherwoodLog::new),
     NETHERWOOD_PLANKS(NetherwoodPlanks::new),
+    NETHERWOOD_SLAB(NetherwoodSlab::new),
+    NETHERWOOD_STAIRS(NetherwoodStairs::new),
     NETHERWOOD_LEAVES(NetherwoodLeaves::new),
     NETHERWOOD_SAPLING(NetherwoodSapling::new),
     CRIMSON_IRON_ORE(CrimsonIronOre::new),

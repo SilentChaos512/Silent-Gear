@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Netherwood slabs and stairs
 - Loot table function for setting specific parts on a gear item
 - Chinese translation (zh_cn, by XuyuEre)
 
