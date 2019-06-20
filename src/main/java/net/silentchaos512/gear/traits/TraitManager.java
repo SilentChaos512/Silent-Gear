@@ -50,7 +50,9 @@ public final class TraitManager implements IResourceManagerReloadListener {
             try (IResource iresource = resourceManager.getResource(id)) {
                 String path = id.getPath().substring(DATA_PATH.length(), id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
-                SilentGear.LOGGER.debug(MARKER, "Found likely trait file: {}, trying to read as trait {}", id, name);
+                if (SilentGear.LOGGER.isTraceEnabled()) {
+                    SilentGear.LOGGER.trace(MARKER, "Found likely trait file: {}, trying to read as trait {}", id, name);
+                }
 
                 JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                 if (json == null) {
@@ -65,7 +67,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
             }
         }
 
-        SilentGear.LOGGER.info(MARKER, "Finished! Registered {} traits", MAP.size());
+        SilentGear.LOGGER.info(MARKER, "Registered {} traits", MAP.size());
     }
 
     private static void addTrait(ITrait trait) {

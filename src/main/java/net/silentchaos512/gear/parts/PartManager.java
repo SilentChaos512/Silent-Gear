@@ -54,7 +54,9 @@ public final class PartManager implements IResourceManagerReloadListener {
             try (IResource iresource = resourceManager.getResource(id)) {
                 String path = id.getPath().substring("silentgear/parts/".length(), id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
-                SilentGear.LOGGER.debug(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
+                if (SilentGear.LOGGER.isTraceEnabled()) {
+                    SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
+                }
 
                 JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                 if (json == null) {
@@ -69,7 +71,7 @@ public final class PartManager implements IResourceManagerReloadListener {
             }
         }
 
-        SilentGear.LOGGER.info(MARKER, "Finished! Registered {} parts", MAP.size());
+        SilentGear.LOGGER.info(MARKER, "Registered {} parts", MAP.size());
     }
 
     private static void addPart(IGearPart part) {

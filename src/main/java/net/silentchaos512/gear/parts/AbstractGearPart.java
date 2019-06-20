@@ -239,8 +239,9 @@ public abstract class AbstractGearPart implements IGearPart {
                         int level = MathHelper.clamp(JSONUtils.getInt(obj, "level", 1), 1, trait.getMaxLevel());
                         if (level > 0) {
                             traitsMap.put(trait, level);
-                            SilentGear.LOGGER.debug("Add trait {} level {} to part {}",
-                                    trait.getId(), level, part.getId());
+                            if (SilentGear.LOGGER.isTraceEnabled()) {
+                                SilentGear.LOGGER.trace("Add trait {} level {} to part {}", trait.getId(), level, part.getId());
+                            }
                         }
                     }
                 }
