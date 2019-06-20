@@ -14,10 +14,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IUpgradePart;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.CommonItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -588,18 +585,47 @@ public final class GearData {
     public static boolean hasPart(ItemStack gear, ResourceLocation partId) {
         IGearPart part = PartManager.get(partId);
         if (part == null) return false;
-        return hasPart(gear, part);
+        return hasPart(gear, part, MaterialGrade.Range.OPEN);
     }
 
     /**
      * Determine if the gear has the specified part. This scans the construction NBT directly for
      * speed, no part data list is created. Compares part registry names only.
      *
-     * @param gear    The gear item
-     * @param upgrade The part to check for
+     * @param gear       The gear item
+     * @param partId     The ID of the part
+     * @param gradeRange The grade of part to look for
+     * @return True if the item has the part in its construction, false if it does not or the part
+     * does not exist.
+     */
+    public static boolean hasPart(ItemStack gear, ResourceLocation partId, MaterialGrade.Range gradeRange) {
+        IGearPart part = PartManager.get(partId);
+        if (part == null) return false;
+        return hasPart(gear, part, gradeRange);
+    }
+
+    /**
+     * Determine if the gear has the specified part. This scans the construction NBT directly for
+     * speed, no part data list is created. Compares part registry names only.
+     *
+     * @param gear The gear item
+     * @param part The part to check for
      * @return True if the item has the part in its construction, false otherwise
      */
-    public static boolean hasPart(ItemStack gear, IGearPart upgrade) {
+    public static boolean hasPart(ItemStack gear, IGearPart part) {
+        return hasPart(gear, part, MaterialGrade.Range.OPEN);
+    }
+
+    /**
+     * Determine if the gear has the specified part. This scans the construction NBT directly for
+     * speed, no part data list is created. Compares part registry names and checks grades.
+     *
+     * @param gear       The gear item
+     * @param part       The part to check for
+     * @param gradeRange The grade of part to look for
+     * @return True if the item has the part in its construction, false otherwise
+     */
+    public static boolean hasPart(ItemStack gear, IGearPart part, MaterialGrade.Range gradeRange) {
         if (!GearHelper.isGear(gear)) {
             SilentGear.LOGGER.error("Called hasPart on non-gear item, {}", gear);
             SilentGear.LOGGER.catching(new IllegalArgumentException());
@@ -608,13 +634,14 @@ public final class GearData {
 
         CompoundNBT tags = getData(gear, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
-        String upgradeName = upgrade.getId().toString();
+        String upgradeName = part.getId().toString();
 
         for (INBT nbt : tagList) {
             if (nbt instanceof CompoundNBT) {
                 CompoundNBT partCompound = (CompoundNBT) nbt;
                 String partKey = partCompound.getString(PartData.NBT_ID);
-                if (partKey.equals(upgradeName)) {
+                MaterialGrade grade = MaterialGrade.fromString(partCompound.getString("Grade"));
+                if (partKey.equals(upgradeName) && gradeRange.test(grade)) {
                     return true;
                 }
             }

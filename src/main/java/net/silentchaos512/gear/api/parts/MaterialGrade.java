@@ -18,6 +18,8 @@
 
 package net.silentchaos512.gear.api.parts;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -26,6 +28,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -154,6 +157,38 @@ public enum MaterialGrade {
 
         public static MaterialGrade getGrade(CommandContext<CommandSource> context, String name) {
             return context.getArgument(name, MaterialGrade.class);
+        }
+    }
+
+    public static class Range {
+        public static final Range OPEN = new Range(MaterialGrade.NONE, MaterialGrade.SSS);
+
+        private final MaterialGrade min;
+        private final MaterialGrade max;
+
+        public Range(MaterialGrade min, MaterialGrade max) {
+            this.min = min;
+            this.max = max;
+
+            if (this.min.ordinal() > this.max.ordinal()) {
+                throw new IllegalArgumentException("min grade is greater than max grade");
+            }
+        }
+
+        public boolean test(MaterialGrade grade) {
+            int o = grade.ordinal();
+            return o >= min.ordinal() && o <= max.ordinal();
+        }
+
+        public static Range deserialize(JsonElement json) {
+            if (json.isJsonPrimitive()) {
+                MaterialGrade grade = MaterialGrade.fromString(json.getAsString());
+                return grade != NONE ? new Range(grade, grade) : OPEN;
+            }
+            JsonObject jsonObject = json.getAsJsonObject();
+            String min = JSONUtils.getString(jsonObject, "min", "NONE");
+            String max = JSONUtils.getString(jsonObject, "max", "SSS");
+            return new Range(MaterialGrade.fromString(min), MaterialGrade.fromString(max));
         }
     }
 }

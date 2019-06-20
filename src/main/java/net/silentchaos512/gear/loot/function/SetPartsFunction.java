@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.loot;
+package net.silentchaos512.gear.loot.function;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;

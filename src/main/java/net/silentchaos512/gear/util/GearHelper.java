@@ -38,6 +38,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+/**
+ * Contains various methods used by gear items. Many are delegates for item overrides, to cut down
+ * on code duplication. But there are some useful helper methods, like {@link #isGear}.
+ * <p>
+ * Also see {@link GearData}, which focuses on getting/updating item data and NBT.
+ */
 public final class GearHelper {
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
@@ -46,8 +52,25 @@ public final class GearHelper {
 
     private GearHelper() {}
 
+    /**
+     * Check if the item is a Silent Gear tool, weapon, or armor item.
+     *
+     * @param stack The item
+     * @return True if {@code stack} is a gear item
+     */
     public static boolean isGear(ItemStack stack) {
         return stack.getItem() instanceof ICoreItem;
+    }
+
+    /**
+     * Check if the item is a Silent Gear tool, weapon, or armor item. Also checks that the stack is
+     * not null and not empty.
+     *
+     * @param stack The item
+     * @return True if {@code stack} is a gear item, false if null, empty, or not a gear item
+     */
+    public static boolean isGearNullable(@Nullable ItemStack stack) {
+        return stack != null && !stack.isEmpty() && isGear(stack);
     }
 
     //region Attribute modifiers

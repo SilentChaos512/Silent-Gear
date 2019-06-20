@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Loot condition `silentgear:has_part`, which can check if a gear item has a particular part. Can also check the grade of the part.
+- Loot condition `silentgear:has_trait`, which can check if a gear item has a given trait
+
 ## [1.1.1] - 2019-06-20
 ### Added
 - Netherwood slabs and stairs
