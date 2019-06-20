@@ -20,6 +20,7 @@ package net.silentchaos512.gear.traits;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -31,17 +32,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class StatModifierTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("stat_modifier_trait");
     static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
-            SERIALIZER_ID,
+            SilentGear.getId("stat_modifier_trait"),
             StatModifierTrait::new,
-            StatModifierTrait::readJson
+            StatModifierTrait::readJson,
+            StatModifierTrait::readBuffer,
+            StatModifierTrait::writeBuffer
     );
 
     private final Map<ItemStat, StatMod> mods = new HashMap<>();
 
     private StatModifierTrait(ResourceLocation name) {
-        super(name);
+        super(name, SERIALIZER);
     }
 
     @Override
@@ -72,6 +74,23 @@ public final class StatModifierTrait extends SimpleTrait {
         }
     }
 
+    private static void readBuffer(StatModifierTrait trait, PacketBuffer buffer) {
+        trait.mods.clear();
+        int count = buffer.readByte();
+        for (int i = 0; i < count; ++i) {
+            ItemStat stat = ItemStat.ALL_STATS.get(buffer.readString());
+            trait.mods.put(stat, StatMod.read(buffer));
+        }
+    }
+
+    private static void writeBuffer(StatModifierTrait trait, PacketBuffer buffer) {
+        buffer.writeByte(trait.mods.size());
+        trait.mods.forEach((stat, mod) -> {
+            buffer.writeString(stat.getName().getPath());
+            mod.write(buffer);
+        });
+    }
+
     private static class StatMod {
         private float multi;
         private boolean factorDamage;
@@ -90,12 +109,24 @@ public final class StatModifierTrait extends SimpleTrait {
 
         private static StatMod fromJson(JsonObject json) {
             StatMod mod = new StatMod();
-
             mod.multi = JSONUtils.getFloat(json, "value", 0);
             mod.factorDamage = JSONUtils.getBoolean(json, "factor_damage", true);
             mod.factorValue = JSONUtils.getBoolean(json, "factor_value", true);
-
             return mod;
+        }
+
+        private static StatMod read(PacketBuffer buffer) {
+            StatMod mod = new StatMod();
+            mod.multi = buffer.readFloat();
+            mod.factorDamage = buffer.readBoolean();
+            mod.factorValue = buffer.readBoolean();
+            return mod;
+        }
+
+        private void write(PacketBuffer buffer) {
+            buffer.writeFloat(multi);
+            buffer.writeBoolean(factorDamage);
+            buffer.writeBoolean(factorValue);
         }
     }
 }

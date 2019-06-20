@@ -56,6 +56,7 @@ public final class TraitSerializers {
         return serializer.read(id, buffer);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends ITrait> void write(T trait, PacketBuffer buffer) {
         buffer.writeResourceLocation(trait.getId());
         buffer.writeResourceLocation(trait.getSerializer().getName());

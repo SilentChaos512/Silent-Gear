@@ -7,6 +7,7 @@ import com.google.gson.JsonParseException;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -28,13 +29,15 @@ public final class EnchantmentTrait extends SimpleTrait {
     static final ITraitSerializer<EnchantmentTrait> SERIALIZER = new Serializer<>(
             SERIALIZER_ID,
             EnchantmentTrait::new,
-            EnchantmentTrait::readJson
+            EnchantmentTrait::readJson,
+            EnchantmentTrait::readBuffer,
+            EnchantmentTrait::writeBuffer
     );
 
     private final Map<String, List<EnchantmentData>> enchantments = new HashMap<>();
 
     private EnchantmentTrait(ResourceLocation id) {
-        super(id);
+        super(id, SERIALIZER);
     }
 
     @Override
@@ -110,6 +113,35 @@ public final class EnchantmentTrait extends SimpleTrait {
         }
     }
 
+    private static void readBuffer(EnchantmentTrait trait, PacketBuffer buffer) {
+        trait.enchantments.clear();
+        int gearTypeCount = buffer.readByte();
+
+        for (int typeIndex = 0; typeIndex < gearTypeCount; ++typeIndex) {
+            List<EnchantmentData> list = new ArrayList<>();
+            String gearType = buffer.readString();
+            int dataCount = buffer.readByte();
+
+            for (int dataIndex = 0; dataIndex < dataCount; ++dataIndex) {
+                list.add(EnchantmentData.read(buffer));
+            }
+
+            trait.enchantments.put(gearType, list);
+        }
+    }
+
+    private static void writeBuffer(EnchantmentTrait trait, PacketBuffer buffer) {
+        buffer.writeByte(trait.enchantments.size());
+        for (Map.Entry<String, List<EnchantmentData>> entry : trait.enchantments.entrySet()) {
+            buffer.writeString(entry.getKey());
+            buffer.writeByte(entry.getValue().size());
+
+            for (EnchantmentData data : entry.getValue()) {
+                data.write(buffer);
+            }
+        }
+    }
+
     public static class EnchantmentData {
         private ResourceLocation enchantmentId;
         private int[] levels;
@@ -139,6 +171,18 @@ public final class EnchantmentTrait extends SimpleTrait {
             }
 
             return ret;
+        }
+
+        static EnchantmentData read(PacketBuffer buffer) {
+            EnchantmentData ret = new EnchantmentData();
+            ret.enchantmentId = buffer.readResourceLocation();
+            ret.levels = buffer.readVarIntArray();
+            return ret;
+        }
+
+        void write(PacketBuffer buffer) {
+            buffer.writeResourceLocation(enchantmentId);
+            buffer.writeVarIntArray(levels);
         }
 
         @Nullable

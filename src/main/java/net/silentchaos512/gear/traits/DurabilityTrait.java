@@ -18,7 +18,6 @@
 
 package net.silentchaos512.gear.traits;
 
-import com.google.gson.JsonObject;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.JSONUtils;
@@ -36,18 +35,29 @@ import net.silentchaos512.utils.MathUtils;
  */
 public final class DurabilityTrait extends SimpleTrait {
     private static final ResourceLocation TRIGGER_BRITTLE = SilentGear.getId("brittle_proc");
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("durability_trait");
+
     static final ITraitSerializer<DurabilityTrait> SERIALIZER = new Serializer<>(
-            SERIALIZER_ID,
+            SilentGear.getId("durability_trait"),
             DurabilityTrait::new,
-            DurabilityTrait::readJson
+            (trait, json) -> {
+                trait.activationChance = JSONUtils.getFloat(json, "activation_chance", 1);
+                trait.effectScale = JSONUtils.getInt(json, "effect_scale", 0);
+            },
+            (trait, buffer) -> {
+                trait.activationChance = buffer.readFloat();
+                trait.effectScale = buffer.readFloat();
+            },
+            (trait, buffer) -> {
+                buffer.writeFloat(trait.activationChance);
+                buffer.writeFloat(trait.effectScale);
+            }
     );
 
     private float activationChance;
     private float effectScale;
 
     private DurabilityTrait(ResourceLocation id) {
-        super(id);
+        super(id, SERIALIZER);
     }
 
     @Override
@@ -72,8 +82,4 @@ public final class DurabilityTrait extends SimpleTrait {
         return SERIALIZER;
     }
 
-    private static void readJson(DurabilityTrait trait, JsonObject json) {
-        trait.activationChance = JSONUtils.getFloat(json, "activation_chance", 1);
-        trait.effectScale = JSONUtils.getInt(json, "effect_scale", 0);
-    }
 }

@@ -27,13 +27,20 @@ public class SimpleTrait implements ITrait {
     public static final Serializer<SimpleTrait> SERIALIZER = new Serializer<>(Serializer.NAME, SimpleTrait::new);
 
     private final ResourceLocation objId;
+    private final ITraitSerializer<?> serializer;
     int maxLevel;
     Set<String> cancelsWith = new HashSet<>();
     ITextComponent displayName;
     ITextComponent description;
 
+    @Deprecated
     public SimpleTrait(ResourceLocation id) {
+        this(id, SERIALIZER);
+    }
+
+    public SimpleTrait(ResourceLocation id, ITraitSerializer<?> serializer) {
         this.objId = id;
+        this.serializer = serializer;
     }
 
     @Override
@@ -66,7 +73,7 @@ public class SimpleTrait implements ITrait {
 
     @Override
     public ITraitSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return serializer;
     }
 
     @Override
@@ -97,18 +104,24 @@ public class SimpleTrait implements ITrait {
 
         private final ResourceLocation serializerId;
         private final Function<ResourceLocation, T> factory;
-        private final BiConsumer<T, JsonObject> readJson;
+        @Nullable private final BiConsumer<T, JsonObject> readJson;
+        @Nullable private final BiConsumer<T, PacketBuffer> readBuffer;
+        @Nullable private final BiConsumer<T, PacketBuffer> writeBuffer;
 
         public Serializer(ResourceLocation serializerId, Function<ResourceLocation, T> factory) {
-            this(serializerId, factory, null);
+            this(serializerId, factory, null, null, null);
         }
 
         public Serializer(ResourceLocation serializerId,
                           Function<ResourceLocation, T> factory,
-                          @Nullable BiConsumer<T, JsonObject> readJson) {
+                          @Nullable BiConsumer<T, JsonObject> readJson,
+                          @Nullable BiConsumer<T, PacketBuffer> readBuffer,
+                          @Nullable BiConsumer<T, PacketBuffer> writeBuffer) {
             this.serializerId = serializerId;
             this.factory = factory;
             this.readJson = readJson;
+            this.readBuffer = readBuffer;
+            this.writeBuffer = writeBuffer;
         }
 
         @Override
@@ -142,6 +155,11 @@ public class SimpleTrait implements ITrait {
             for (int i = 0; i < cancelsCount; ++i) {
                 trait.cancelsWith.add(buffer.readString(255));
             }
+
+            if (readBuffer != null) {
+                readBuffer.accept(trait, buffer);
+            }
+
             return trait;
         }
 
@@ -153,6 +171,10 @@ public class SimpleTrait implements ITrait {
             buffer.writeVarInt(trait.cancelsWith.size());
             for (String str : trait.cancelsWith) {
                 buffer.writeString(str);
+            }
+
+            if (writeBuffer != null) {
+                writeBuffer.accept(trait, buffer);
             }
         }
 

@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.JSONUtils;
@@ -24,17 +25,18 @@ import net.silentchaos512.lib.util.TimeUtils;
 import java.util.*;
 
 public final class PotionEffectTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("potion_effect_trait");
     static final ITraitSerializer<PotionEffectTrait> SERIALIZER = new Serializer<>(
-            SERIALIZER_ID,
+            SilentGear.getId("potion_effect_trait"),
             PotionEffectTrait::new,
-            PotionEffectTrait::readJson
+            PotionEffectTrait::readJson,
+            PotionEffectTrait::readBuffer,
+            PotionEffectTrait::writeBuffer
     );
 
     private final Map<String, List<PotionData>> potions = new HashMap<>();
 
     private PotionEffectTrait(ResourceLocation id) {
-        super(id);
+        super(id, SERIALIZER);
     }
 
     @Override
@@ -97,6 +99,35 @@ public final class PotionEffectTrait extends SimpleTrait {
         }
     }
 
+    private static void readBuffer(PotionEffectTrait trait, PacketBuffer buffer) {
+        trait.potions.clear();
+        int gearTypeCount = buffer.readByte();
+
+        for (int typeIndex = 0; typeIndex < gearTypeCount; ++typeIndex) {
+            List<PotionData> list = new ArrayList<>();
+            String gearType = buffer.readString();
+            int potionDataCount = buffer.readByte();
+
+            for (int potionIndex = 0; potionIndex < potionDataCount; ++potionIndex) {
+                list.add(PotionData.read(buffer));
+            }
+
+            trait.potions.put(gearType, list);
+        }
+    }
+
+    private static void writeBuffer(PotionEffectTrait trait, PacketBuffer buffer) {
+        buffer.writeByte(trait.potions.size());
+        for (Map.Entry<String, List<PotionData>> entry : trait.potions.entrySet()) {
+            buffer.writeString(entry.getKey());
+            buffer.writeByte(entry.getValue().size());
+
+            for (PotionData potionData : entry.getValue()) {
+                potionData.write(buffer);
+            }
+        }
+    }
+
     public static class PotionData {
         private boolean requiresFullSet;
         private ResourceLocation effectId;
@@ -132,6 +163,22 @@ public final class PotionEffectTrait extends SimpleTrait {
             }
 
             return ret;
+        }
+
+        static PotionData read(PacketBuffer buffer) {
+            PotionData ret = new PotionData();
+            ret.requiresFullSet = buffer.readBoolean();
+            ret.effectId = buffer.readResourceLocation();
+            ret.duration = buffer.readVarInt();
+            ret.levels = buffer.readVarIntArray();
+            return ret;
+        }
+
+        void write(PacketBuffer buffer) {
+            buffer.writeBoolean(requiresFullSet);
+            buffer.writeResourceLocation(effectId);
+            buffer.writeVarInt(duration);
+            buffer.writeVarIntArray(levels);
         }
 
         private static float getDefaultDuration(PotionData ret) {
