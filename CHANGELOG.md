@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Loot condition `silentgear:has_part`, which can check if a gear item has a particular part. Can also check the grade of the part.
 - Loot condition `silentgear:has_trait`, which can check if a gear item has a given trait
+- Gear stat changes are now logged in the debug log. There will be a config for this later, but for right now it is forced on.
 ### Fixed
 - Issue where trait data was not being sent completely during client login
 

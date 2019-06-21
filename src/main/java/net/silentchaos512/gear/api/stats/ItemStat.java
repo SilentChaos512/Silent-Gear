@@ -78,16 +78,7 @@ public class ItemStat {
 
         // Used for weighted average. Percent difference in the value between each part and the primary part affects
         // weight. The bigger the difference, the less weight the part has.
-        float primaryMod = -1f;
-        for (StatInstance mod : modifiers) {
-            if (mod.getOp() == StatInstance.Operation.AVG) {
-                if (primaryMod < 0f) {
-                    primaryMod = mod.getValue();
-                }
-            }
-        }
-        if (primaryMod <= 0f)
-            primaryMod = 1f;
+        final float primaryMod = getPrimaryMod(modifiers);
 
         float f0 = baseValue;
 
@@ -97,9 +88,7 @@ public class ItemStat {
         for (StatInstance mod : modifiers) {
             if (mod.getOp() == StatInstance.Operation.AVG) {
                 ++count;
-                float weightBase = MathHelper.clamp(WEIGHT_BASE_MIN + WEIGHT_DEVIATION_COEFF
-                        * (mod.getValue() - primaryMod) / primaryMod, WEIGHT_BASE_MIN, WEIGHT_BASE_MAX);
-                float weight = (float) Math.pow(weightBase, -(count == 0 ? count : 0.5 + 0.5f * count));
+                float weight = getModifierWeight(mod, primaryMod, count);
                 totalWeight += weight;
                 f0 += mod.getValue() * weight;
             }
@@ -129,6 +118,24 @@ public class ItemStat {
                 f1 = Math.max(f1, mod.getValue());
 
         return clampValue ? clampValue(f1) : f1;
+    }
+
+    private static float getPrimaryMod(Iterable<StatInstance> modifiers) {
+        float primaryMod = -1f;
+        for (StatInstance mod : modifiers) {
+            if (mod.getOp() == StatInstance.Operation.AVG) {
+                if (primaryMod < 0f) {
+                    primaryMod = mod.getValue();
+                }
+            }
+        }
+        return primaryMod > 0 ? primaryMod : 1;
+    }
+
+    private static float getModifierWeight(StatInstance mod, float primaryMod, int count) {
+        float weightBase = WEIGHT_BASE_MIN + WEIGHT_DEVIATION_COEFF * (mod.getValue() - primaryMod) / primaryMod;
+        float weightBaseClamped = MathHelper.clamp(weightBase, WEIGHT_BASE_MIN, WEIGHT_BASE_MAX);
+        return (float) Math.pow(weightBaseClamped, -(count == 0 ? count : 0.5 + 0.5f * count));
     }
 
     public StatInstance computeForDisplay(float baseValue, MaterialGrade grade, Collection<StatInstance> modifiers) {

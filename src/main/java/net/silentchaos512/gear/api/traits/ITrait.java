@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.api.traits;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -38,4 +39,11 @@ public interface ITrait {
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
     void onUpdate(TraitActionContext context, boolean isEquipped);
+
+    default CompoundNBT write(int level) {
+        CompoundNBT tag = new CompoundNBT();
+        tag.putString("Name", this.getId().toString());
+        tag.putByte("Level", (byte) level);
+        return tag;
+    }
 }

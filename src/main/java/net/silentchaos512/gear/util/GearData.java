@@ -22,12 +22,14 @@ import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.utils.Color;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -115,29 +117,29 @@ public final class GearData {
             // Get all stat modifiers from all parts and item class modifiers
             Multimap<ItemStat, StatInstance> stats = getStatModifiers(stack, item, parts, synergy);
 
+            // For debugging
+            Map<ItemStat, Float> oldStatValues = getCurrentStatsForDebugging(stack);
+
             // Calculate and write stats
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
             for (ItemStat stat : stats.keySet()) {
                 final float initialValue = stat.compute(0f, stats.get(stat));
                 // Some stats will be reduced if tool rod is missing (and required)
-                final float withMissingParts = hasMissingRod
-                        ? stat.withMissingRodEffect(initialValue)
-                        : initialValue;
-                final float value = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) ->
-                        trait.onGetStat(new TraitActionContext(player, level, stack), stat, val, damageRatio));
+                final float withMissingParts = hasMissingRod ? stat.withMissingRodEffect(initialValue) : initialValue;
+                // Allow traits to modify stat
+                final float value = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) -> {
+                    TraitActionContext context = new TraitActionContext(player, level, stack);
+                    return trait.onGetStat(context, stat, val, damageRatio);
+                });
                 // SilentGear.log.debug(stat, value);
                 propertiesCompound.putFloat(stat.getName().getPath(), value);
             }
 
+            printStatsForDebugging(stack, oldStatValues);
+
             // Cache traits in properties compound as well
             ListNBT traitList = new ListNBT();
-            for (ITrait trait : traits.keySet()) {
-                int level = traits.get(trait);
-                CompoundNBT tag = new CompoundNBT();
-                tag.putString("Name", trait.getId().toString());
-                tag.putByte("Level", (byte) level);
-                traitList.add(tag);
-            }
+            traits.forEach((trait, level) -> traitList.add(trait.write(level)));
             propertiesCompound.put("Traits", traitList);
 
             propertiesCompound.putFloat(NBT_SYNERGY, (float) synergy);
@@ -145,6 +147,41 @@ public final class GearData {
 
         // Update rendering info even if we didn't update stats
         updateRenderingInfo(stack, parts);
+    }
+
+    private static final boolean STAT_DEBUGGING = true;
+
+    @Nullable
+    private static Map<ItemStat, Float> getCurrentStatsForDebugging(ItemStack stack) {
+        // Get current stats from the item, this is used for logging stat changes
+        if (STAT_DEBUGGING) { // TODO: Add config
+            Map<ItemStat, Float> map = new HashMap<>();
+            ItemStat.ALL_STATS.values().forEach(stat -> map.put(stat, getStat(stack, stat)));
+            return map;
+        }
+        return null;
+    }
+
+    private static void printStatsForDebugging(ItemStack stack, @Nullable Map<ItemStat, Float> oldStats) {
+        // Prints stats that have changed for debugging purposes
+        if (oldStats != null && SilentGear.LOGGER.isDebugEnabled()) {
+            SilentGear.LOGGER.debug("Stats change on {}", stack.getDisplayName().getFormattedText());
+            Map<ItemStat, Float> newStats = getCurrentStatsForDebugging(stack);
+            assert newStats != null;
+
+            int changeCount = 0;
+            for (ItemStat stat : ItemStat.ALL_STATS.values()) {
+                float oldValue = oldStats.get(stat);
+                float newValue = newStats.get(stat);
+                if (!MathUtils.doublesEqual(oldValue, newValue)) {
+                    SilentGear.LOGGER.debug(" - {}: {} -> {}", stat.getName().getPath(), oldValue, newValue);
+                    ++changeCount;
+                }
+            }
+
+            if (changeCount == 0)
+                SilentGear.LOGGER.debug(" - No changes");
+        }
     }
 
     private static void addOrRemoveHighlightPart(ItemStack stack, PartDataList parts) {
@@ -156,7 +193,7 @@ public final class GearData {
         if (primary.getPart().getDisplayProperties(primary, stack, 0).hasHighlight()) {
             // Add highlight part if missing
             if (parts.getParts(p -> p.getType() == PartType.HIGHLIGHT).isEmpty()) {
-                IGearPart highlight = PartManager.get(new ResourceLocation(SilentGear.MOD_ID, "highlight"));
+                IGearPart highlight = PartManager.get(PartConst.HIGHLIGHT);
                 if (highlight != null) {
                     parts.add(PartData.of(highlight));
                     changed = true;
@@ -169,9 +206,7 @@ public final class GearData {
             changed = parts.removeIf(p -> p.getType() == PartType.HIGHLIGHT);
         }
 
-        if (changed) {
-            writeConstructionParts(stack, parts);
-        }
+        if (changed) writeConstructionParts(stack, parts);
     }
 
     /**

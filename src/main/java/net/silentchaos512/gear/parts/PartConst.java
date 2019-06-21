@@ -8,6 +8,7 @@ public final class PartConst {
     public static final ResourceLocation FALLBACK_MAIN = SilentGear.getId("main/iron");
     public static final ResourceLocation FALLBACK_ROD = SilentGear.getId("rod/wood");
 
+    public static final ResourceLocation HIGHLIGHT = SilentGear.getId("highlight");
     public static final ResourceLocation MISC_SPOON = SilentGear.getId("misc/spoon");
 
     private PartConst() {
