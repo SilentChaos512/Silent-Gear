@@ -135,6 +135,7 @@ public final class TraitHelper {
      * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ITrait)} when
      * appropriate.
      *
+     * @param gear  The item
      * @param parts The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */

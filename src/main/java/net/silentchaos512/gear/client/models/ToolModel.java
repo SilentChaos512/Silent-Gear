@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+@SuppressWarnings("deprecation")
 public final class ToolModel implements IUnbakedModel {
     private static final IUnbakedModel MODEL = new ToolModel();
 

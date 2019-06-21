@@ -47,6 +47,7 @@ public class CraftingStationBlock extends ContainerBlock {
         return new CraftingStationTileEntity();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);

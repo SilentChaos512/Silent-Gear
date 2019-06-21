@@ -59,9 +59,11 @@ public interface IGearPart {
      * Get the chance the part will be lost when salvaging. Returning zero will ensure the part is
      * returned, regardless of how damaged the gear is.
      *
-     * @param gear The gear item
-     * @param part The part
-     * @return Chance of losing the part when salvaging
+     * @param gear           The gear item
+     * @param part           The part
+     * @param normalLossRate The default loss rate, which is based on config settings and how
+     *                       damaged the item is
+     * @return Chance of losing the part when salvaging (defaults to {@code normalLossRate})
      */
     default double getSalvageLossRate(ItemStack gear, PartData part, double normalLossRate) {
         return normalLossRate;
@@ -83,8 +85,8 @@ public interface IGearPart {
 
     ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
 
+    // May be removed or changed?
     @Deprecated
-        // May be removed or changed?
     String getModelIndex(PartData part, int animationFrame);
 
     @OnlyIn(Dist.CLIENT)

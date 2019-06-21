@@ -54,12 +54,18 @@ import java.util.Set;
 public interface IAOETool {
     /**
      * The tool class of the item (pickaxe, shovel, axe)
+     *
+     * @return The tool type
      */
     @Nonnull
     ToolType getAOEToolClass();
 
     /**
      * Call the item's rayTrace method inside this.
+     *
+     * @param world  The world
+     * @param player The player
+     * @return The ray trace result
      */
     @Nullable
     RayTraceResult rayTraceBlocks(World world, PlayerEntity player);

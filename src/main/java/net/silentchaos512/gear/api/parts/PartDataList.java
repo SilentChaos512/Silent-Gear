@@ -106,7 +106,11 @@ public final class PartDataList implements List<PartData> {
     /**
      * Convenience method which wraps the part in {@link PartData} for you. Useful for ungraded
      * parts and parts without a unique crafting stack.
+     *
+     * @param part The gear part
+     * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean addPart(IGearPart part) {
         return this.list.add(PartData.of(part));
     }

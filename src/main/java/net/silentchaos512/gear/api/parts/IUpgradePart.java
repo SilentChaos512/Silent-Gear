@@ -10,6 +10,7 @@ public interface IUpgradePart {
      * Check if the part can be applied to the gear type. This is <em>not</em> responsible for
      * checking for part conflicts, it only checks the item type.
      *
+     * @param gearItem The item
      * @return True if {@code gearItem} can accept the upgrade, false otherwise
      */
     default boolean isValidFor(ICoreItem gearItem) {

@@ -19,6 +19,7 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 public abstract class AbstractToolModel extends LayeredBakedModel {
 
     protected final ImmutableMap<TransformType, TRSRTransformation> transforms;

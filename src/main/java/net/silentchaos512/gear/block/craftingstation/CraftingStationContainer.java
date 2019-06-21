@@ -23,9 +23,8 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
     CraftingStationInventory craftMatrix;
     CraftResultInventory craftResult;
     private final CraftingStationTileEntity tileEntity;
-
-    private Slot outputSlot;
     private final PlayerEntity player;
+    private Slot outputSlot;
 
     public CraftingStationContainer(int id, PlayerInventory playerInventory) {
         this(id, playerInventory, new CraftingStationTileEntity());

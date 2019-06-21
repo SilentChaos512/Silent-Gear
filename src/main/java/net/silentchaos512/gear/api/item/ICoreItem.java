@@ -86,6 +86,7 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
         return 1;
     }
 
+    @SuppressWarnings("deprecation")
     default String getModelKey(ItemStack stack, int animationFrame, PartData... parts) {
         StringBuilder builder = new StringBuilder(getGearType().getName());
         if (GearHelper.isBroken(stack))

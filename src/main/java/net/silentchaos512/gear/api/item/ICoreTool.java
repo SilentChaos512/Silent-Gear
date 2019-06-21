@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.PartPositions;
@@ -51,6 +51,11 @@ public interface ICoreTool extends ICoreItem {
 
     /**
      * The base damage done to the item when breaking a block, not considering enchantments
+     * @param gear The item
+     * @param world The world
+     * @param state The block being broken
+     * @param pos The position of the block
+     * @return The amount of damage done (durability lost) to the item
      */
     default int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
         return state.getMaterial() != Material.LEAVES && state.getBlockHardness(world, pos) > 0 ? 1 : 0;
@@ -58,6 +63,11 @@ public interface ICoreTool extends ICoreItem {
 
     /**
      * The base damage done to the item when attacking an entity
+     *
+     * @param gear     The item
+     * @param target   The entity being attacked
+     * @param attacker The entity attacking the target
+     * @return The amount of damage done (durability lost) to the item
      */
     default int getDamageOnHitEntity(ItemStack gear, LivingEntity target, LivingEntity attacker) {
         return 2;

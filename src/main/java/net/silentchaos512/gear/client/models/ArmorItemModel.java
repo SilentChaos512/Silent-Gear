@@ -215,6 +215,7 @@ public class ArmorItemModel implements IUnbakedModel {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static final class Baked extends AbstractToolModel {
         public static Baked instance;
 

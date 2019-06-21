@@ -78,7 +78,12 @@ public class GuiItemParts extends Screen {
         dropDownList.addElement(new GuiDropDownElement("Type", b -> sortParts(false, Comparator.comparing(part -> part.getType().getName()))), buttons);
         ItemStat.ALL_STATS.values().stream()
                 .filter(stat -> !stat.isHidden())
-                .forEachOrdered(stat -> dropDownList.addElement(new GuiDropDownElement(stat.translatedName(), b -> sortParts(true, Comparator.comparingDouble(part -> part.computeStatValue(stat)))), buttons));
+                .forEachOrdered(stat -> {
+                    String statName = stat.getDisplayName().getFormattedText();
+                    dropDownList.addElement(new GuiDropDownElement(statName, b -> {
+                        sortParts(true, Comparator.comparingDouble(part -> part.computeStatValue(stat)));
+                    }), buttons);
+                });
         buttons.add(dropDownList);
 
         // Build part button list

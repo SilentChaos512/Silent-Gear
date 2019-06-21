@@ -40,6 +40,7 @@ public class PhantomLight extends Block {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return VOXEL_SHAPE;
