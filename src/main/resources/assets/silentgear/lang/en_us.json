@@ -86,6 +86,8 @@
   "command.silentgear.parts.remove.success": "Successfully removed part",
   "command.silentgear.parts.sourceMustBePlayer": "Command source must be a player",
   "command.silentgear.recalculate": "Recalculated stats for player %s",
+  "command.silentgear.traits.traitNotFound": "Trait does not exist",
+  "command.silentgear.traits.maxLevel": "Max Level: %d",
   "death.silentgear.broken_tool": "%1$s killed themselves with %2$s",
   "item.silentgear.blueprint": "%s Blueprint",
   "item.silentgear.blueprint.materialAmount": "Material Required: %d",
