@@ -595,6 +595,9 @@ public final class GearData {
             // Only one allowed in this position? Remove existing if needed.
             if (upgradePart.replacesExisting())
                 parts.removeIf(p -> p.getPart().getPartPosition() == part.getPart().getPartPosition());
+
+            // Allow the part to make additional changes if needed
+            upgradePart.onAddToGear(gear, part.getCraftingItem());
         }
 
         // Other upgrades allow no exact duplicates, but any number of total upgrades

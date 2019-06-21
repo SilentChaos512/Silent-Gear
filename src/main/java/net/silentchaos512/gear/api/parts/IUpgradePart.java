@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.parts;
 
+import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.item.ICoreItem;
 
 /**
@@ -19,5 +20,8 @@ public interface IUpgradePart {
 
     default boolean replacesExisting() {
         return false;
+    }
+
+    default void onAddToGear(ItemStack gear, ItemStack part) {
     }
 }
