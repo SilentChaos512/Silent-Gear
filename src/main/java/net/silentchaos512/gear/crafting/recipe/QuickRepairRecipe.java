@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.RepairContext;
@@ -86,7 +86,7 @@ public class QuickRepairRecipe implements ICraftingRecipe {
 
         // Repair efficiency instance tool class
         if (gear.getItem() instanceof ICoreItem) {
-            float repairEfficiency = GearData.getStat(gear, CommonItemStats.REPAIR_EFFICIENCY);
+            float repairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
             // FIXME: temp fix for missing equipment modifiers
             if (repairEfficiency > 0) {
                 repairValue *= repairEfficiency;

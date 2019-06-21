@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * A stat that any ICoreItem can use. See {@link CommonItemStats} for stats that can be used.
+ * A stat that any ICoreItem can use. See {@link ItemStats} for stats that can be used.
  *
  * @author SilentChaos512
  * @since Experimental

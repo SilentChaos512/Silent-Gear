@@ -26,7 +26,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.util.IAOETool;
@@ -55,22 +55,22 @@ public class CoreExcavator extends CoreShovel implements IAOETool {
 
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.MELEE_DAMAGE)
+        if (stat == ItemStats.MELEE_DAMAGE)
             return Optional.of(StatInstance.makeBaseMod(2));
-        if (stat == CommonItemStats.ATTACK_SPEED)
+        if (stat == ItemStats.ATTACK_SPEED)
             return Optional.of(StatInstance.makeBaseMod(-3));
-        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+        if (stat == ItemStats.REPAIR_EFFICIENCY)
             return Optional.of(StatInstance.makeBaseMod(1.5f));
         return Optional.empty();
     }
 
     @Override
     public Optional<StatInstance> getStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.DURABILITY)
+        if (stat == ItemStats.DURABILITY)
             return Optional.of(StatInstance.makeGearMod(1.0f));
-        if (stat == CommonItemStats.ENCHANTABILITY)
+        if (stat == ItemStats.ENCHANTABILITY)
             return Optional.of(StatInstance.makeGearMod(-0.5f));
-        if (stat == CommonItemStats.HARVEST_SPEED)
+        if (stat == ItemStats.HARVEST_SPEED)
             return Optional.of(StatInstance.makeGearMod(-0.5f));
         return Optional.empty();
     }

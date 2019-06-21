@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreWeapon;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -43,11 +43,11 @@ public class CoreSword extends SwordItem implements ICoreWeapon {
 
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.MELEE_DAMAGE)
+        if (stat == ItemStats.MELEE_DAMAGE)
             return Optional.of(StatInstance.makeBaseMod(3));
-        if (stat == CommonItemStats.ATTACK_SPEED)
+        if (stat == ItemStats.ATTACK_SPEED)
             return Optional.of(StatInstance.makeBaseMod(-2.4f));
-        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+        if (stat == ItemStats.REPAIR_EFFICIENCY)
             return Optional.of(StatInstance.makeBaseMod(1));
         return Optional.empty();
     }
@@ -71,7 +71,7 @@ public class CoreSword extends SwordItem implements ICoreWeapon {
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, ItemStats.ENCHANTABILITY);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CoreSword extends SwordItem implements ICoreWeapon {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
+        return GearData.getStatInt(stack, ItemStats.DURABILITY);
     }
 
     @Override

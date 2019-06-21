@@ -27,7 +27,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.MiscUpgrades;
@@ -79,7 +79,7 @@ public final class GearHelper {
         if (isBroken(stack))
             return 1f;
 
-        float val = GearData.getStat(stack, CommonItemStats.MELEE_DAMAGE);
+        float val = GearData.getStat(stack, ItemStats.MELEE_DAMAGE);
         return val < 0 ? 0 : val;
     }
 
@@ -87,7 +87,7 @@ public final class GearHelper {
         if (isBroken(stack))
             return 0f;
 
-        float val = GearData.getStat(stack, CommonItemStats.MAGIC_DAMAGE);
+        float val = GearData.getStat(stack, ItemStats.MAGIC_DAMAGE);
         return val < 0 ? 0 : val;
     }
 
@@ -95,7 +95,7 @@ public final class GearHelper {
         if (!(stack.getItem() instanceof ICoreTool))
             return 0.0f;
 
-        float speed = GearData.getStat(stack, CommonItemStats.ATTACK_SPEED);
+        float speed = GearData.getStat(stack, ItemStats.ATTACK_SPEED);
         if (isBroken(stack))
             speed += BROKEN_ATTACK_SPEED_CHANGE;
         return speed;
@@ -117,7 +117,7 @@ public final class GearHelper {
             replaceAttributeModifierInMap(map, key, value);
 
             // Reach distance
-            float reachStat = GearData.getStat(stack, CommonItemStats.REACH_DISTANCE);
+            float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE);
             AttributeModifier reachModifier = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
             map.put(PlayerEntity.REACH_DISTANCE.getName(), reachModifier);
         }
@@ -248,7 +248,7 @@ public final class GearHelper {
 
     public static boolean isUnbreakable(ItemStack stack) {
         // TODO: Is this the best solution?
-        return stack.getMaxDamage() >= CommonItemStats.DURABILITY.getMaximumValue();
+        return stack.getMaxDamage() >= ItemStats.DURABILITY.getMaximumValue();
     }
 
     //endregion
@@ -281,7 +281,7 @@ public final class GearHelper {
         if (isBroken(stack) || !stack.getItem().getToolTypes(stack).contains(toolClass))
             return -1;
 
-        final int level = GearData.getStatInt(stack, CommonItemStats.HARVEST_LEVEL);
+        final int level = GearData.getStatInt(stack, ItemStats.HARVEST_LEVEL);
         if (state == null) return level;
 
         final boolean effectiveOnMaterial = effectiveMaterials == null || effectiveMaterials.contains(state.getMaterial());
@@ -303,7 +303,7 @@ public final class GearHelper {
         if (isBroken(stack))
             return BROKEN_DESTROY_SPEED;
 
-        float speed = GearData.getStat(stack, CommonItemStats.HARVEST_SPEED);
+        float speed = GearData.getStat(stack, ItemStats.HARVEST_SPEED);
 
         // Tool effective on block?
         if (stack.getItem().canHarvestBlock(stack, state)) {
@@ -357,7 +357,7 @@ public final class GearHelper {
         if (stack.getItem() instanceof ICoreItem) {
             ICoreItem item = (ICoreItem) stack.getItem();
             if (GearData.isMissingRequiredPart(stack, PartType.ROD)) {
-                float damageAmount = item.getStat(stack, CommonItemStats.MELEE_DAMAGE) / 2;
+                float damageAmount = item.getStat(stack, ItemStats.MELEE_DAMAGE) / 2;
                 DamageSource source = new DamageSource("silentgear.broken_tool") {
                     @Nonnull
                     @Override
@@ -415,7 +415,7 @@ public final class GearHelper {
     }
 
     public static Rarity getRarity(ItemStack stack) {
-        int rarity = GearData.getStatInt(stack, CommonItemStats.RARITY);
+        int rarity = GearData.getStatInt(stack, ItemStats.RARITY);
         if (stack.isEnchanted())
             rarity += 20;
 

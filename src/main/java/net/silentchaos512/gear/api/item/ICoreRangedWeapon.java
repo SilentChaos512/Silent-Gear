@@ -3,18 +3,18 @@ package net.silentchaos512.gear.api.item;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 
 import java.util.Set;
 
 public interface ICoreRangedWeapon extends ICoreTool {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            CommonItemStats.RANGED_DAMAGE,
-            CommonItemStats.RANGED_SPEED,
-            CommonItemStats.DURABILITY,
-            CommonItemStats.ENCHANTABILITY,
-            CommonItemStats.RARITY
+            ItemStats.RANGED_DAMAGE,
+            ItemStats.RANGED_SPEED,
+            ItemStats.DURABILITY,
+            ItemStats.ENCHANTABILITY,
+            ItemStats.RARITY
     );
 
     @Override
@@ -37,7 +37,7 @@ public interface ICoreRangedWeapon extends ICoreTool {
     }
 
     default float getDrawDelay(ItemStack stack) {
-        float speed = getStat(stack, CommonItemStats.RANGED_SPEED);
+        float speed = getStat(stack, ItemStats.RANGED_SPEED);
         if (speed <= 0) speed = 1f;
         return getBaseDrawDelay(stack) / speed;
     }

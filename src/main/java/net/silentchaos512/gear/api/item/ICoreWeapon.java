@@ -3,19 +3,19 @@ package net.silentchaos512.gear.api.item;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 
 import java.util.Set;
 
 public interface ICoreWeapon extends ICoreTool {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            CommonItemStats.MELEE_DAMAGE,
-            CommonItemStats.MAGIC_DAMAGE,
-            CommonItemStats.ATTACK_SPEED,
-            CommonItemStats.DURABILITY,
-            CommonItemStats.ENCHANTABILITY,
-            CommonItemStats.RARITY
+            ItemStats.MELEE_DAMAGE,
+            ItemStats.MAGIC_DAMAGE,
+            ItemStats.ATTACK_SPEED,
+            ItemStats.DURABILITY,
+            ItemStats.ENCHANTABILITY,
+            ItemStats.RARITY
     );
 
     @Override

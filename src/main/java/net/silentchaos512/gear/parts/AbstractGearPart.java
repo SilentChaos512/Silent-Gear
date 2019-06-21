@@ -23,7 +23,7 @@ import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.*;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
@@ -88,7 +88,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     @Override
     public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
-        return stat == CommonItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.ADD;
+        return stat == ItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.ADD;
     }
 
     @Override
@@ -99,8 +99,8 @@ public abstract class AbstractGearPart implements IGearPart {
 
         // Material tier must be equal to or higher than gear's primary
         if (material.getTier() < GearData.getTier(context.getGear())) return 0;
-        Collection<StatInstance> mods = getStatModifiers(context.getGear(), CommonItemStats.DURABILITY, material);
-        float durability = CommonItemStats.DURABILITY.compute(0f, mods);
+        Collection<StatInstance> mods = getStatModifiers(context.getGear(), ItemStats.DURABILITY, material);
+        float durability = ItemStats.DURABILITY.compute(0f, mods);
 
         switch (context.getRepairType()) {
             case QUICK:

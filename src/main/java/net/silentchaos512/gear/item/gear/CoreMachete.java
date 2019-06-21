@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.init.ModItems;
@@ -47,20 +47,20 @@ public class CoreMachete extends CoreSword {
 
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.MELEE_DAMAGE)
+        if (stat == ItemStats.MELEE_DAMAGE)
             return Optional.of(StatInstance.makeBaseMod(4));
-        if (stat == CommonItemStats.ATTACK_SPEED)
+        if (stat == ItemStats.ATTACK_SPEED)
             return Optional.of(StatInstance.makeBaseMod(-2.6f));
-        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+        if (stat == ItemStats.REPAIR_EFFICIENCY)
             return Optional.of(StatInstance.makeBaseMod(1));
         return Optional.empty();
     }
 
     @Override
     public Optional<StatInstance> getStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.DURABILITY)
+        if (stat == ItemStats.DURABILITY)
             return Optional.of(StatInstance.makeGearMod(0.2f));
-        if (stat == CommonItemStats.ENCHANTABILITY)
+        if (stat == ItemStats.ENCHANTABILITY)
             return Optional.of(StatInstance.makeGearMod(-0.1f));
         return Optional.empty();
     }

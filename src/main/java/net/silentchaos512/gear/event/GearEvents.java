@@ -73,7 +73,7 @@ public final class GearEvents {
         if (attacked == null || entityAttackedThisTick.contains(attacked.getUniqueID())) return;
 
         DamageSource source = event.getSource();
-        if (source == null) return;
+        if (source == null || !"player".equals(source.damageType)) return;
 
         Entity attacker = source.getTrueSource();
         if (!(attacker instanceof PlayerEntity)) return;

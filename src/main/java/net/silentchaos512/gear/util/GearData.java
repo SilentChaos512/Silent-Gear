@@ -15,7 +15,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.*;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
@@ -254,16 +254,16 @@ public final class GearData {
 
         // Second, reduce synergy for difference in rarity and tier
         PartData primaryMain = parts.getPrimaryMain();
-        float primaryRarity = primaryMain == null ? 0 : primaryMain.computeStat(CommonItemStats.RARITY);
+        float primaryRarity = primaryMain == null ? 0 : primaryMain.computeStat(ItemStats.RARITY);
         float maxRarity = primaryRarity;
         int maxTier = 0;
         for (PartData data : uniqueParts) {
-            maxRarity = Math.max(maxRarity, data.computeStat(CommonItemStats.RARITY));
+            maxRarity = Math.max(maxRarity, data.computeStat(ItemStats.RARITY));
             maxTier = Math.max(maxTier, data.getPart().getTier());
         }
         for (PartData data : uniqueParts) {
             if (maxRarity > 0) {
-                float rarity = data.computeStat(CommonItemStats.RARITY);
+                float rarity = data.computeStat(ItemStats.RARITY);
                 synergy -= 0.005 * Math.abs(primaryRarity - rarity);
             }
             if (maxTier > 0) {

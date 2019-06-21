@@ -36,7 +36,7 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.parts.PartData;
@@ -202,7 +202,7 @@ public class GuiItemParts extends Screen {
                         statStr = statStr.replaceFirst("0+$", "");
                     if (modifiers.size() > 1)
                         statStr += "*";
-                    if (stat == CommonItemStats.ARMOR_DURABILITY)
+                    if (stat == ItemStats.ARMOR_DURABILITY)
                         statStr += "x";
 
                     list.add(new Tuple<>(nameStr, statStr));

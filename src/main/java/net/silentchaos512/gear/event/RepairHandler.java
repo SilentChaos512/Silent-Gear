@@ -15,7 +15,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
@@ -60,7 +60,7 @@ public final class RepairHandler {
     private static void handleGearRepair(AnvilUpdateEvent event, PartData part) {
         ItemStack result = event.getLeft().copy();
         float amount = part.getRepairAmount(result, RepairContext.Type.ANVIL);
-        amount *= GearData.getStat(result, CommonItemStats.REPAIR_EFFICIENCY);
+        amount *= GearData.getStat(result, ItemStats.REPAIR_EFFICIENCY);
 
         // How many of materials to use?
         int materialCount = 1;

@@ -89,7 +89,7 @@ public class StatInstance {
     }
 
     public boolean shouldList(IGearPart part, ItemStat stat, boolean advanced) {
-        return advanced || value != 0 || (part.getType() == PartType.MAIN && stat == CommonItemStats.HARVEST_LEVEL);
+        return advanced || value != 0 || (part.getType() == PartType.MAIN && stat == ItemStats.HARVEST_LEVEL);
     }
 
     @Override

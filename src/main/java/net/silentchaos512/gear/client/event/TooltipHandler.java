@@ -12,7 +12,7 @@ import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartMaterial;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -150,7 +150,7 @@ public final class TooltipHandler {
                         statStr = REGEX_REMOVE_TRAILING_ZEROS.matcher(statStr).replaceFirst("");
                     if (modifiers.size() > 1)
                         statStr += "*";
-                    if (stat == CommonItemStats.ARMOR_DURABILITY)
+                    if (stat == ItemStats.ARMOR_DURABILITY)
                         statStr += "x";
 
                     event.getToolTip().add(new StringTextComponent("- ").appendSibling(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statStr)));

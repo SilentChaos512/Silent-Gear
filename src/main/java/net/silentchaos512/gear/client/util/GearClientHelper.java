@@ -17,7 +17,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.config.Config;
@@ -124,11 +124,11 @@ public final class GearClientHelper {
                 // Used for the total armor/toughness a full suit of armor would provide
                 float totalArmor = -1;
                 if (item instanceof CoreArmor) {
-                    if (stat == CommonItemStats.ARMOR) {
+                    if (stat == ItemStats.ARMOR) {
                         // Armor value varies by type
                         totalArmor = statValue;
                         statValue = (float) ((CoreArmor) item).getArmorProtection(stack);
-                    } else if (stat == CommonItemStats.ARMOR_TOUGHNESS) {
+                    } else if (stat == ItemStats.ARMOR_TOUGHNESS) {
                         // Toughness split equally to each piece
                         totalArmor = statValue;
                         statValue /= 4;
@@ -140,11 +140,11 @@ public final class GearClientHelper {
                 ITextComponent textStat = new StringTextComponent(inst.formattedString(stat.displayAsInt ? 0 : 1, false));
 
                 // Some stat-specific formatting...
-                if (stat == CommonItemStats.DURABILITY) {
+                if (stat == ItemStats.DURABILITY) {
                     int durabilityLeft = stack.getMaxDamage() - stack.getDamage();
                     int durabilityMax = stack.getMaxDamage();
                     textStat = statText("durabilityFormat", durabilityLeft, durabilityMax);
-                } else if (stat == CommonItemStats.ARMOR || stat == CommonItemStats.ARMOR_TOUGHNESS) {
+                } else if (stat == ItemStats.ARMOR || stat == ItemStats.ARMOR_TOUGHNESS) {
                     String str1 = String.format("%.1f", statValue);
                     String str2 = String.format("%.1f", totalArmor);
                     textStat = statText("armorFormat", str1, str2);

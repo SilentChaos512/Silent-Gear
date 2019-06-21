@@ -19,7 +19,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartData;
@@ -67,12 +67,12 @@ public class CoreArmor extends ArmorItem implements ICoreArmor {
 
     public double getArmorProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, CommonItemStats.ARMOR);
+        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.ARMOR);
     }
 
     public double getArmorToughness(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return GearData.getStat(stack, CommonItemStats.ARMOR_TOUGHNESS) / 4;
+        return GearData.getStat(stack, ItemStats.ARMOR_TOUGHNESS) / 4;
     }
 
     private static double getGenericArmorProtection(ItemStack stack) {
@@ -110,7 +110,7 @@ public class CoreArmor extends ArmorItem implements ICoreArmor {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int maxDamageFactor = GearData.getStatInt(stack, CommonItemStats.ARMOR_DURABILITY);
+        int maxDamageFactor = GearData.getStatInt(stack, ItemStats.ARMOR_DURABILITY);
         return MAX_DAMAGE_ARRAY[this.getEquipmentSlot().getIndex()] * maxDamageFactor;
     }
 
@@ -129,7 +129,7 @@ public class CoreArmor extends ArmorItem implements ICoreArmor {
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, ItemStats.ENCHANTABILITY);
     }
 
     @Override

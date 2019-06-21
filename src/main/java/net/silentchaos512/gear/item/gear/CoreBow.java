@@ -21,7 +21,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.models.ToolModel;
@@ -52,18 +52,18 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.RANGED_DAMAGE)
+        if (stat == ItemStats.RANGED_DAMAGE)
             return Optional.of(StatInstance.makeBaseMod(2));
-        if (stat == CommonItemStats.RANGED_SPEED)
+        if (stat == ItemStats.RANGED_SPEED)
             return Optional.of(StatInstance.makeBaseMod(1));
-        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+        if (stat == ItemStats.REPAIR_EFFICIENCY)
             return Optional.of(StatInstance.makeBaseMod(1));
         return Optional.empty();
     }
 
     @Override
     public Optional<StatInstance> getStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.ENCHANTABILITY)
+        if (stat == ItemStats.ENCHANTABILITY)
             return Optional.of(StatInstance.makeGearMod(-0.45f));
         return Optional.empty();
     }
@@ -82,7 +82,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     }
 
     public float getArrowDamage(ItemStack stack) {
-        return GearData.getStat(stack, CommonItemStats.RANGED_DAMAGE);
+        return GearData.getStat(stack, ItemStats.RANGED_DAMAGE);
     }
 
     @Override
@@ -171,7 +171,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, ItemStats.ENCHANTABILITY);
     }
 
     @Override
@@ -181,7 +181,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
+        return GearData.getStatInt(stack, ItemStats.DURABILITY);
     }
 
     @Override

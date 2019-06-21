@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -73,11 +73,11 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
 
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == CommonItemStats.MELEE_DAMAGE)
+        if (stat == ItemStats.MELEE_DAMAGE)
             return Optional.of(StatInstance.makeBaseMod(1));
-        if (stat == CommonItemStats.ATTACK_SPEED)
+        if (stat == ItemStats.ATTACK_SPEED)
             return Optional.of(StatInstance.makeBaseMod(-2.8f));
-        if (stat == CommonItemStats.REPAIR_EFFICIENCY)
+        if (stat == ItemStats.REPAIR_EFFICIENCY)
             return Optional.of(StatInstance.makeBaseMod(1));
         return Optional.empty();
     }
@@ -87,7 +87,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     @Override
     public boolean canHarvestBlock(ItemStack stack, BlockState state) {
         // Forge ItemStack-sensitive version
-        return canHarvestBlock(state, getStatInt(stack, CommonItemStats.HARVEST_LEVEL));
+        return canHarvestBlock(state, getStatInt(stack, ItemStats.HARVEST_LEVEL));
     }
 
     @Override
@@ -145,7 +145,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.ENCHANTABILITY);
+        return GearData.getStatInt(stack, ItemStats.ENCHANTABILITY);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, CommonItemStats.DURABILITY);
+        return GearData.getStatInt(stack, ItemStats.DURABILITY);
     }
 
     @Override

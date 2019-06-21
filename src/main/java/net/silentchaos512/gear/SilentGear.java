@@ -7,7 +7,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.item.CraftingItems;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +24,7 @@ public final class SilentGear {
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 
     static {
-        CommonItemStats.init();
+        ItemStats.init();
     }
 
     public static final Random random = new Random();

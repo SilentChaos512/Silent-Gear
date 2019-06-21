@@ -8,7 +8,7 @@ import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.parts.AbstractGearPart;
@@ -52,6 +52,6 @@ public final class MainPart extends AbstractGearPart {
 
     @Override
     public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
-        return stat == CommonItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.AVG;
+        return stat == ItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.AVG;
     }
 }

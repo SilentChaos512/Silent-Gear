@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.CommonItemStats;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
@@ -30,13 +30,13 @@ import java.util.Set;
 
 public interface ICoreTool extends ICoreItem {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            CommonItemStats.HARVEST_LEVEL,
-            CommonItemStats.HARVEST_SPEED,
-            CommonItemStats.MELEE_DAMAGE,
-            CommonItemStats.ATTACK_SPEED,
-            CommonItemStats.DURABILITY,
-            CommonItemStats.ENCHANTABILITY,
-            CommonItemStats.RARITY
+            ItemStats.HARVEST_LEVEL,
+            ItemStats.HARVEST_SPEED,
+            ItemStats.MELEE_DAMAGE,
+            ItemStats.ATTACK_SPEED,
+            ItemStats.DURABILITY,
+            ItemStats.ENCHANTABILITY,
+            ItemStats.RARITY
     );
 
     @Override
