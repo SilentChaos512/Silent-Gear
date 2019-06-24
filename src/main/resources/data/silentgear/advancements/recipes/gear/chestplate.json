@@ -1,0 +1,25 @@
+{
+  "parent": "silentgear:recipes/root",
+  "rewards": {
+    "recipes": [
+      "silentgear:gear/chestplate"
+    ]
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "silentgear:blueprints/chestplate"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ]
+}

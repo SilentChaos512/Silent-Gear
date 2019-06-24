@@ -1,0 +1,27 @@
+{
+  "parent": "silentgear:recipes/root",
+  "rewards": {
+    "recipes": [
+      "silentgear:gear/bow",
+      "silentgear:gear/bow_limbs",
+      "silentgear:gear/bow_unstrung"
+    ]
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "silentgear:blueprints/bow"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ]
+}

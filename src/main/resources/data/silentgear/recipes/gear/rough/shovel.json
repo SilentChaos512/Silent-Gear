@@ -1,5 +1,6 @@
 {
     "type": "silentgear:shaped_gear_crafting",
+    "group": "silentgear:shovels",
     "pattern": [
         "#",
         "/",

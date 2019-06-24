@@ -1,5 +1,6 @@
 {
     "type": "silentgear:gear_crafting",
+    "group": "silentgear:pickaxes",
     "ingredients": [
         {
             "tag": "silentgear:blueprints/pickaxe"

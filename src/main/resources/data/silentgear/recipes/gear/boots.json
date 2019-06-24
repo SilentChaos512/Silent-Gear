@@ -1,5 +1,6 @@
 {
     "type": "silentgear:gear_crafting",
+    "group": "silentgear:armor_pieces",
     "ingredients": [
         {
             "tag": "silentgear:blueprints/boots"

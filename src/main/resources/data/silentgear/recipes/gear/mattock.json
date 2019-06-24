@@ -1,5 +1,6 @@
 {
     "type": "silentgear:gear_crafting",
+    "group": "silentgear:mattocks",
     "ingredients": [
         {
             "tag": "silentgear:blueprints/mattock"

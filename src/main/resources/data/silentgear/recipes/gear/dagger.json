@@ -1,5 +1,6 @@
 {
     "type": "silentgear:gear_crafting",
+    "group": "silentgear:daggers",
     "ingredients": [
         {
             "tag": "silentgear:blueprints/dagger"

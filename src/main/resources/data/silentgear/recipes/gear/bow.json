@@ -1,5 +1,6 @@
 {
     "type": "silentgear:gear_crafting",
+    "group": "silentgear:bows",
     "ingredients": [
         {
             "tag": "silentgear:blueprints/bow"

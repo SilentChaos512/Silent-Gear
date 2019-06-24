@@ -1,5 +1,6 @@
 {
     "type": "silentgear:gear_crafting",
+    "group": "silentgear:axes",
     "ingredients": [
         {
             "tag": "silentgear:blueprints/axe"

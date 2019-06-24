@@ -1,5 +1,6 @@
 {
     "type": "silentgear:gear_crafting",
+    "group": "silentgear:hammers",
     "ingredients": [
         {
             "tag": "silentgear:blueprints/hammer"
