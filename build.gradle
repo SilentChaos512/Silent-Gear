@@ -52,7 +52,7 @@ def build_num = getBuildNumber()
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: "${project.mcp_channel}".toString(), version: "${project.mcp_mappings}".toString()
+    mappings channel: project.mcp_channel, version: "${project.mcp_mappings}-${project.mc_version}"
 
     runs {
         client = {
@@ -77,13 +77,15 @@ minecraft {
 repositories {
     jcenter()
     mavenLocal()
-    maven { // JEI
+    maven {
+        // location of the maven that hosts JEI files
         name = "Progwml6 maven"
-        url = "http://dvs1.progwml6.com/files/maven/"
+        url = "https://dvs1.progwml6.com/files/maven/"
     }
-    maven { // JEI mirror
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
-        url = "modmaven.k-4u.nl"
+        url = "https://modmaven.k-4u.nl"
     }
     maven {
         url 'https://jitpack.io'
@@ -91,17 +93,18 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.forge_version}"
+    minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 
     compile("net.silentchaos512:silent-lib-${project.mc_version}:${project.sl_version}") {
         exclude module: "forge"
     }
 
-//    compileOnly 'com.github.shedaniel:RoughlyEnoughItems:1.13.2-forge-SNAPSHOT'
-
-//    deobf "mezz.jei:jei-${project.mc_version}:${project.jei_version}"
-//    compile 'com.github.mezz:JustEnoughItems:v5.0.0'
-//    compileOnly 'com.github.mezz:JustEnoughItems:1.13-SNAPSHOT'
+    // JEI
+//    compile 'com.github.mezz:JustEnoughItems:1.13-SNAPSHOT'
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}")
     
 //    runtimeOnly 'net.silentchaos512:wit:1.+'
 }
