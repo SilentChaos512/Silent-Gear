@@ -8,7 +8,7 @@
         {"name": "rarity",          "value":  6}
     ],
     "traits": [
-        {"name": "silentgear:synergistic", "level": 1}
+        {"name": "silentgear:synergistic", "level": 2}
     ],
     "crafting_items": {
         "normal": {

@@ -91,6 +91,7 @@ public final class GearClientHelper {
             data.getPart().addInformation(data, stack, tooltip, flag);
         }
 
+        // TODO: Used cached traits?
         TraitHelper.getTraits(stack, constructionParts).forEach((trait, level) ->
                 tooltip.add(trait.getDisplayName(level)));
 

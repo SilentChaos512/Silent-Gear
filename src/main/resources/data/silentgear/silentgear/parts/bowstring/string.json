@@ -7,6 +7,9 @@
         {"name": "ranged_speed",    "value":  0.1, "op": "MUL1"},
         {"name": "rarity",          "value":    5}
     ],
+    "traits": [
+        {"name": "silentgear:organic", "level": 2}
+    ],
     "crafting_items": {
         "normal": {
             "item": "silentgear:plain_bowstring",

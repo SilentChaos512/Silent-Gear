@@ -18,6 +18,7 @@
         {"name": "chargeability",   "value": 0.6}
     ],
     "traits": [
+        {"name": "silentgear:flexible", "level": 3},
         {"name": "silentgear:jagged", "level": 1}
     ],
     "crafting_items": {

@@ -7,6 +7,9 @@
         {"name": "ranged_speed",    "value":  0.0,  "op": "MUL1"},
         {"name": "rarity",          "value":    8}
     ],
+    "traits": [
+        {"name": "silentgear:flexible", "level": 3}
+    ],
     "crafting_items": {
         "normal": {
             "item": "silentgear:sinew_bowstring",

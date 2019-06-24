@@ -17,6 +17,10 @@
         {"name": "rarity",          "value":    7},
         {"name": "chargeability",   "value":  1.0}
     ],
+    "traits": [
+        {"name": "silentgear:brittle", "level": 1},
+        {"name": "silentgear:chipping", "level": 2}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:brick"

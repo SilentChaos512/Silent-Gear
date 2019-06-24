@@ -365,6 +365,7 @@ public final class GearData {
                 }
             }
         }
+
         return list;
     }
 

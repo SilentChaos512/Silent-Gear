@@ -18,7 +18,8 @@
         {"name": "chargeability",   "value":  0.5}
     ],
     "traits": [
-        {"name": "silentgear:brittle", "level": 1}
+        {"name": "silentgear:brittle", "level": 1},
+        {"name": "silentgear:ancient", "level": 1}
     ],
     "crafting_items": {
         "normal": {

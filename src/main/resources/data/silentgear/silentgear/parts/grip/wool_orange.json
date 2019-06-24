@@ -14,6 +14,9 @@
         {"name": "ranged_speed",      "value":  0.0, "op": "ADD"},
         {"name": "rarity",            "value":    4}
     ],
+    "traits": [
+        {"name": "silentgear:synergistic", "level": 1}
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:orange_wool"

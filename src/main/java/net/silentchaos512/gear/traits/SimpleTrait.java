@@ -60,10 +60,11 @@ public class SimpleTrait implements ITrait {
 
     @Override
     public ITextComponent getDisplayName(int level) {
-        return displayName
-                .deepCopy()
-                .appendText(" ")
-                .appendSibling(new TranslationTextComponent("enchantment.level." + level));
+        ITextComponent text = displayName.deepCopy();
+        if (level > 0) {
+            text.appendText(" ").appendSibling(new TranslationTextComponent("enchantment.level." + level));
+        }
+        return text;
     }
 
     @Override

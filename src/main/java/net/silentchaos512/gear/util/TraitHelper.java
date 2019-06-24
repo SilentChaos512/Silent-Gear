@@ -21,13 +21,14 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
@@ -35,7 +36,6 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.traits.TraitManager;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -139,19 +139,20 @@ public final class TraitHelper {
      * @param parts The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
-    public static Map<ITrait, Integer> getTraits(ItemStack gear, Collection<PartData> parts) {
+    public static Map<ITrait, Integer> getTraits(ItemStack gear, PartDataList parts) {
         if (parts.isEmpty())
             return ImmutableMap.of();
 
+        final int totalMains = parts.getMains().size();
         Map<ITrait, Integer> result = new LinkedHashMap<>();
         Map<ITrait, Integer> countPartsWithTrait = new HashMap<>();
 
         for (PartData part : parts) {
             part.getTraits(gear).forEach(((trait, level) -> {
                 // Count total levels for each trait from all parts
-                result.merge(trait, level, (i1, i2) -> i1 + i2);
+                result.merge(trait, level, Integer::sum);
                 // Count number of parts with each trait
-                countPartsWithTrait.merge(trait, 1, (i1, i2) -> i1 + i2);
+                countPartsWithTrait.merge(trait, 1, Integer::sum);
             }));
         }
 
@@ -159,15 +160,12 @@ public final class TraitHelper {
 
         for (ITrait trait : keys) {
             final int partsWithTrait = countPartsWithTrait.get(trait);
-            final float divisor = Math.max(1, partsWithTrait);
+            final float divisor = Math.max(totalMains / 2f, partsWithTrait);
             final int value = Math.round(result.get(trait) / divisor);
             result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
         }
 
-        // TODO: Consider non-mains
-
         cancelTraits(result, keys);
-
         return result;
     }
 

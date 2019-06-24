@@ -78,6 +78,10 @@ public final class TraitManager implements IResourceManagerReloadListener {
         }
     }
 
+    public static Collection<ResourceLocation> getKeys() {
+        return MAP.keySet();
+    }
+
     public static Collection<ITrait> getValues() {
         return MAP.values();
     }

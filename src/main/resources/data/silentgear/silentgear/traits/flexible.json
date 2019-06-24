@@ -1,0 +1,15 @@
+{
+    "type": "silentgear:durability_trait",
+    "max_level": 5,
+    "cancels_with": ["silentgear:brittle"],
+    "effect_scale": -1,
+    "activation_chance": 0.05,
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.flexible"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.flexible.desc"
+    }
+}
