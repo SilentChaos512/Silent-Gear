@@ -60,7 +60,7 @@ public final class PartRegistry {
         if (stack.isEmpty())
             return null;
 
-        String key = stack.getItem().getTranslationKey() + "@" + stack.getItemDamage();
+        String key = stack.getItem().getRegistryName() + "@" + stack.getItemDamage();
         if (STACK_TO_PART.containsKey(key))
             return STACK_TO_PART.get(key);
 

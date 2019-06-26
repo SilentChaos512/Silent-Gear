@@ -42,7 +42,7 @@ import java.util.Random;
 public class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "0.6.0";
+    public static final String VERSION = "0.6.1";
     public static final String SL_VERSION = "3.0.13";
     public static final int BUILD_NUM = 0;
     public static final String DEPENDENCIES = "required-after:silentlib@[" + SL_VERSION + ",)";

@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2019-06-26
+### Fixed
+- Items matching incorrect parts in cases where multiple items have the same translation key
+
 ## [0.6.0] - 2019-05-04
 ### Added
 - Config to use blueprint-less recipes (under items.gear.recipes). These recipes are shaped and cannot be changed, unlike the 1.13 versions. Note that this introduces the possibility of recipe conflicts, which is one of the reasons blueprints exist in the first place.
