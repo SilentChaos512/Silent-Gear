@@ -105,14 +105,24 @@ public abstract class ItemPart {
         return craftingStackSmall.get();
     }
 
+    @Deprecated
     public Collection<StatInstance> getStatModifiers(ItemStat stat, ItemPartData part) {
+        return getStatModifiers(ItemStack.EMPTY, stat, part);
+    }
+
+    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, ItemPartData part) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
         GetStatModifierEvent event = new GetStatModifierEvent(part, stat, mods);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
     }
 
+    @Deprecated
     public Map<Trait, Integer> getTraits(ItemPartData part) {
+        return getTraits(ItemStack.EMPTY, part);
+    }
+
+    public Map<Trait, Integer> getTraits(ItemStack gear, ItemPartData part) {
         return ImmutableMap.copyOf(traits);
     }
 
@@ -133,7 +143,7 @@ public abstract class ItemPart {
         // Base value on material durability
         ItemPartData gearPrimary = GearData.getPrimaryPart(gear);
         if (gearPrimary != null && part.part.tier < gearPrimary.part.tier) return 0;
-        Collection<StatInstance> mods = getStatModifiers(CommonItemStats.DURABILITY, part);
+        Collection<StatInstance> mods = getStatModifiers(gear, CommonItemStats.DURABILITY, part);
         float durability = CommonItemStats.DURABILITY.compute(0f, mods);
 
         switch (context) {

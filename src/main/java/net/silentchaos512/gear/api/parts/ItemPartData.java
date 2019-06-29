@@ -98,8 +98,13 @@ public final class ItemPartData {
         return tags;
     }
 
+    @Deprecated
     public Collection<StatInstance> getStatModifiers(ItemStat stat) {
         return part.getStatModifiers(stat, this);
+    }
+
+    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat) {
+        return part.getStatModifiers(gear, stat, this);
     }
 
     public float computeStat(ItemStat stat) {
@@ -132,8 +137,13 @@ public final class ItemPartData {
         return part.getModelIndex(this, animationFrame);
     }
 
+    @Deprecated
     public Map<Trait, Integer> getTraits() {
         return part.getTraits(this);
+    }
+
+    public Map<Trait, Integer> getTraits(ItemStack gear) {
+        return part.getTraits(gear, this);
     }
 
     /**

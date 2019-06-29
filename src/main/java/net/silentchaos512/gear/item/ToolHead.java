@@ -92,9 +92,9 @@ public class ToolHead extends Item implements IStatItem {
 
     private static void writeStatCache(ItemStack stack, PartDataList parts) {
         ICoreItem item = ModItems.toolClasses.get(getToolClass(stack));
-        Map<Trait, Integer> traits = TraitHelper.getTraits(parts);
+        Map<Trait, Integer> traits = TraitHelper.getTraits(stack, parts);
         double synergy = GearData.calculateSynergyValue(parts, parts.getUniqueParts(true), traits);
-        Multimap<ItemStat, StatInstance> stats = GearData.getStatModifiers(item, parts, synergy);
+        Multimap<ItemStat, StatInstance> stats = GearData.getStatModifiers(new ItemStack(item.getItem()), parts, synergy);
 
         NBTTagCompound tags = new NBTTagCompound();
         for (ItemStat stat : stats.keySet()) {

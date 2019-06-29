@@ -75,7 +75,7 @@ public final class GearData {
             // We should recalculate the item's stats!
             addOrRemoveHighlightPart(stack, parts);
             PartDataList uniqueParts = parts.getUniqueParts(true);
-            Map<Trait, Integer> traits = TraitHelper.getTraits(parts);
+            Map<Trait, Integer> traits = TraitHelper.getTraits(stack, parts);
 
             double synergy = calculateSynergyValue(parts, uniqueParts, traits);
 
@@ -85,7 +85,7 @@ public final class GearData {
             // : ItemStat.ALL_STATS.values();
 
             // Get all stat modifiers from all parts and item class modifiers
-            Multimap<ItemStat, StatInstance> stats = getStatModifiers(item, parts, synergy);
+            Multimap<ItemStat, StatInstance> stats = getStatModifiers(stack, parts, synergy);
 
             // Calculate and write stats
             final float damageRatio = (float) stack.getItemDamage() / (float) stack.getMaxDamage();
@@ -158,20 +158,19 @@ public final class GearData {
         return tags.getString(Integer.toString(animationFrame));
     }
 
-    public static Multimap<ItemStat, StatInstance> getStatModifiers(@Nullable ICoreItem item, PartDataList parts, double synergy) {
+    public static Multimap<ItemStat, StatInstance> getStatModifiers(ItemStack gear, PartDataList parts, double synergy) {
         Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
         for (ItemStat stat : ItemStat.ALL_STATS.values()) {
             // Item class modifiers
-            if (item != null) {
-                stats.put(stat, item.getConfig().getBaseModifier(stat));
-                stats.put(stat, item.getConfig().getStatModifier(stat));
-            }
+            ICoreItem item = (ICoreItem) gear.getItem();
+            stats.put(stat, item.getConfig().getBaseModifier(stat));
+            stats.put(stat, item.getConfig().getStatModifier(stat));
             // Part modifiers
             int partCount = 0;
             for (ItemPartData partData : parts) {
                 String idSuffix = "_" + (++partCount);
                 // Allow "duplicate" AVG modifiers
-                for (StatInstance inst : partData.getStatModifiers(stat)) {
+                for (StatInstance inst : partData.getStatModifiers(gear, stat)) {
                     if (inst.getOp() == Operation.AVG && stat.isAffectedByGrades()) {
                         float gradeBonus = 1f + partData.getGrade().bonusPercent / 100f;
                         float statValue = inst.getValue() * gradeBonus;

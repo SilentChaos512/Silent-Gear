@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2019-06-29
+### Changed
+- Some API tweaks to allow compatibility for Silent's Gems tool souls (not relevant to 1.14+, as this is already supported)
+
 ## [0.6.1] - 2019-06-26
 ### Fixed
 - Items matching incorrect parts in cases where multiple items have the same translation key
