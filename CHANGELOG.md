@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2019-07-01
+Updated for Minecraft 1.14.3
+
+## [1.1.3] - 2019-06-24
+JEI plugin is up to date. Recommended Forge is 26.0.51 or later.
+### Added
+- A few new traits, assigned to some existing parts
+### Changed
+- Small change to trait level calculations
+- Blueprint paper recipe now uses the vanilla blue dye item only, until Forge fixes the blue dye tag
+
 ## [1.1.2] - 2019-06-21
 ### Added
 - Loot condition `silentgear:has_part`, which can check if a gear item has a particular part. Can also check the grade of the part.

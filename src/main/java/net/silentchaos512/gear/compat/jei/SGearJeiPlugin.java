@@ -13,6 +13,9 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -91,7 +94,7 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration reg) {
-        // TODO
+        reg.addRecipeClickArea(CraftingStationScreen.class, 88, 32, 28, 23, VanillaRecipeCategoryUid.CRAFTING);
     }
 
     @Override
@@ -106,6 +109,12 @@ public class SGearJeiPlugin implements IModPlugin {
 //        );
 
         initFailed = false;
+    }
+
+    @Override
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration reg) {
+        reg.addRecipeTransferHandler(CraftingStationContainer.class, VanillaRecipeCategoryUid.CRAFTING,
+                0, 9, 9, 36 + CraftingStationTileEntity.SIDE_INVENTORY_SIZE);
     }
 
     private static void addInfoPage(IRecipeRegistration reg, IItemProvider item) {

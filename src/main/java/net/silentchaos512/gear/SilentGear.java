@@ -19,7 +19,7 @@ import java.util.Random;
 public final class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "1.1.0";
+    public static final String VERSION = "1.2.0";
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 

@@ -47,7 +47,7 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
         PartData data = GearData.getPrimaryPart(stack);
         if (data != null) return data;
 
-        return PartData.of(PartManager.tryGetFallback(PartType.MAIN));
+        return PartData.ofNullable(PartManager.tryGetFallback(PartType.MAIN));
     }
 
     default boolean requiresPartOfType(PartType type) {
@@ -61,11 +61,6 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
     @Override
     default float getStat(ItemStack stack, ItemStat stat) {
         return GearData.getStat(stack, stat);
-    }
-
-    @Override
-    default int getStatInt(ItemStack stack, ItemStat stat) {
-        return Math.round(GearData.getStat(stack, stat));
     }
 
     Set<ItemStat> getRelevantStats(ItemStack stack);

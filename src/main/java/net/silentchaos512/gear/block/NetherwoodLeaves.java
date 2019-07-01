@@ -28,7 +28,7 @@ import net.minecraft.world.IBlockReader;
 
 public class NetherwoodLeaves extends LeavesBlock {
     public NetherwoodLeaves() {
-        super(Properties.create(Material.PLANTS)
+        super(Properties.create(Material.LEAVES)
                 .hardnessAndResistance(0.2f)
                 .tickRandomly()
                 .sound(SoundType.PLANT)
