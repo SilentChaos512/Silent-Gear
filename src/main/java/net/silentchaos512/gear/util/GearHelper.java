@@ -428,8 +428,6 @@ public final class GearHelper {
         return Rarity.EPIC;
     }
 
-    private static final Map<GearType, List<ItemStack>> subItemCache = new HashMap<>();
-
     // Formerly getSubItems
     public static void fillItemGroup(ICoreItem item, ItemGroup group, Collection<ItemStack> items) {
         boolean inTab = false;
@@ -441,27 +439,21 @@ public final class GearHelper {
         }
         if (!inTab) return;
 
-        if (!subItemCache.containsKey(item.getGearType())) {
-            List<ItemStack> list = new ArrayList<>();
-            // Create a few samples of each tool type, because rendering performance is a problem on many machines.
-            for (int i = 1; i <= 3 /*PartRegistry.getHighestMainPartTier()*/; ++i) {
-                ItemStack stack = createSampleItem(item, i);
-                if (!stack.isEmpty())
-                    list.add(stack);
+        Collection<ItemStack> list = new ArrayList<>();
+        // Create a few samples of each tool type, because rendering performance is a problem on many machines.
+        for (int i = 1; i <= 3 /*PartRegistry.getHighestMainPartTier()*/; ++i) {
+            ItemStack stack = createSampleItem(item, i);
+            if (!stack.isEmpty()) {
+                list.add(stack);
             }
-            subItemCache.put(item.getGearType(), list);
         }
-        items.addAll(subItemCache.get(item.getGearType()));
+        items.addAll(list);
     }
 
     private static ItemStack createSampleItem(ICoreItem item, int tier) {
         ItemStack result = GearGenerator.create(item, tier);
         GearData.setExampleTag(result, true);
         return result;
-    }
-
-    public static void resetSubItemsCache() {
-        subItemCache.clear();
     }
 
     public static ITextComponent getDisplayName(ItemStack gear) {

@@ -135,7 +135,9 @@ public final class GearData {
                 propertiesCompound.putFloat(stat.getName().getPath(), value);
             }
 
-            printStatsForDebugging(stack, oldStatValues);
+            if (player != null) {
+                printStatsForDebugging(stack, oldStatValues);
+            }
 
             // Cache traits in properties compound as well
             ListNBT traitList = new ListNBT();

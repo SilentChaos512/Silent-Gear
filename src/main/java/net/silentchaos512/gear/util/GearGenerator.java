@@ -22,20 +22,16 @@ import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.parts.*;
-import net.silentchaos512.gear.parts.type.BowstringPart;
-import net.silentchaos512.gear.parts.type.MainPart;
-import net.silentchaos512.gear.parts.type.RodPart;
-import net.silentchaos512.gear.parts.type.TipPart;
+import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class GearGenerator {
@@ -76,7 +72,7 @@ public final class GearGenerator {
         Collection<IGearPart> mains = selectRandomMains(getMainPartCount(), tier);
         Optional<IGearPart> rod = selectRandom(PartType.ROD);
         if (mains.isEmpty() || !rod.isPresent()) {
-            SilentGear.LOGGER.error("Could not create {} of tier {}", item.getGearType().getName(), tier);
+            //SilentGear.LOGGER.error("Could not create {} of tier {}", item.getGearType().getName(), tier);
             return ItemStack.EMPTY;
         }
 

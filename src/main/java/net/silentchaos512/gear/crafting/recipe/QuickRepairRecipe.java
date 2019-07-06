@@ -30,6 +30,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.RepairContext;
@@ -107,7 +108,8 @@ public class QuickRepairRecipe implements ICraftingRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return ItemStack.EMPTY;
+        // Just so JEI won't complain
+        return new ItemStack(ModItems.pickaxe);
     }
 
     @Override

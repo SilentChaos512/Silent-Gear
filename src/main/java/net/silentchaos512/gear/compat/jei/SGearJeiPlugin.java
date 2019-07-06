@@ -7,12 +7,10 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
@@ -21,7 +19,6 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.parts.PartManager;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -69,14 +66,15 @@ public class SGearJeiPlugin implements IModPlugin {
         // Info pages
         addInfoPage(reg, ModBlocks.CRAFTING_STATION);
         addInfoPage(reg, ModBlocks.PART_ANALYZER);
-        addInfoPage(reg, "tip_upgrade", PartManager.getPartsOfType(PartType.TIP).stream()
+        // FIXME: Fails on servers
+/*        addInfoPage(reg, "tip_upgrade", PartManager.getPartsOfType(PartType.TIP).stream()
                 .flatMap(part -> {
                     Ingredient ingredient = part.getMaterials().getIngredient();
                     return ingredient != null ? Arrays.stream(ingredient.getMatchingStacks()) : Stream.of();
                 })
                 .map(ItemStack::getItem)
                 .collect(Collectors.toList())
-        );
+        );*/
         addInfoPage(reg, CraftingItems.RED_CARD_UPGRADE);
         addInfoPage(reg, CraftingItems.SPOON_UPGRADE);
         for (ICoreItem item : ModItems.gearClasses.values()) {
