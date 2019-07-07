@@ -46,6 +46,7 @@ public class Config {
         public final EnumValue<MaterialGrade> randomGradeMean;
         public final EnumValue<MaterialGrade> randomGradeMax;
         public final DoubleValue randomGradeStd;
+        public final BooleanValue randomGradeSameOnAllParts;
         // Salvager
         public final DoubleValue salvagerMinLossRate;
         public final DoubleValue salvagerMaxLossRate;
@@ -162,6 +163,10 @@ public class Config {
                     .comment("The standard deviation (how 'spread out' the curve is) for random grading. Must be non-negative.",
                             "Setting to zero would disable all randomness and grade all parts at the mean.")
                     .defineInRange(1.5, 0, 10);
+            randomGradeSameOnAllParts = wrapper
+                    .builder("item.grading.random.sameOnAllParts")
+                    .comment("Apply the same grade to all parts on the tool. This makes stats more random.")
+                    .define(true);
 
             wrapper.comment("salvager", "Settings for the salvager");
 
