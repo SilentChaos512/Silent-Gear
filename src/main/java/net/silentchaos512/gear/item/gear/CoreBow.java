@@ -99,7 +99,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
         // Same as vanilla bow, except it can be fired without arrows with infinity.
         ItemStack itemstack = player.getHeldItem(hand);
-        boolean flag = !player.func_213356_f(itemstack).isEmpty() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0;
+        boolean flag = !player.findAmmo(itemstack).isEmpty() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0;
 
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, world, player, hand, flag);
         if (ret != null) return ret;

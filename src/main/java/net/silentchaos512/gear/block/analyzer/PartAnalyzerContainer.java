@@ -67,7 +67,7 @@ public class PartAnalyzerContainer extends Container {
 
         InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
-        func_216961_a(this.fields);
+        trackIntArray(this.fields);
     }
 
     public int getProgressArrowScale() {
