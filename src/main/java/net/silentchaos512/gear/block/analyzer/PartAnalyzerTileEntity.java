@@ -97,7 +97,7 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
             // Analyzing
             if (progress < BASE_ANALYZE_TIME) {
                 ++progress;
-                requireClientSync = true;
+                //requireClientSync = true;
             }
 
             // Grade part if any output slot is free
