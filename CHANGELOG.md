@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Crossbows. These have some minor animation issues (because vanilla is dumb), but they function correctly.
 ### Changed
 - Random grading now assigns the same grade to all parts. Added a config which can revert to the old behavior.
 ### Fixed

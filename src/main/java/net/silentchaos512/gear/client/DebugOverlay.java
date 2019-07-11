@@ -22,8 +22,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,6 +35,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.event.GearEvents;
+import net.silentchaos512.gear.item.gear.CoreCrossbow;
 import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -50,12 +53,31 @@ public class DebugOverlay extends DebugRenderOverlay {
     @Override
     public List<String> getDebugText() {
         List<String> list = new ArrayList<>();
-//            PartRegistry.getDebugLines(list);
-//            list.add("GearClientHelper.modelCache=" + GearClientHelper.modelCache.size());
-//            list.add("ColorHandlers.gearColorCache=" + ColorHandlers.gearColorCache.size());
+
+        Minecraft mc = Minecraft.getInstance();
+        ClientPlayerEntity player = mc.player;
+        if (player == null) return list;
+
+        ItemStack heldItem = player.getHeldItem(Hand.MAIN_HAND);
+        if (heldItem.isEmpty()) return list;
+
+        Item item = heldItem.getItem();
+
+        // Crossbow debugging
+        if (item instanceof CoreCrossbow) {
+            float pull = item.getPropertyGetter(new ResourceLocation("pull")).call(heldItem, mc.world, player);
+            float pulling = item.getPropertyGetter(new ResourceLocation("pulling")).call(heldItem, mc.world, player);
+            float charged = item.getPropertyGetter(new ResourceLocation("charged")).call(heldItem, mc.world, player);
+            float firework = item.getPropertyGetter(new ResourceLocation("firework")).call(heldItem, mc.world, player);
+            list.add(String.format("pull=%.1f", pull));
+            list.add(String.format("pulling=%.1f", pulling));
+            list.add(String.format("charged=%.1f", charged));
+            list.add(String.format("firework=%.1f", firework));
+            list.add(String.format("chargeTime=%d", CoreCrossbow.getChargeTime(heldItem)));
+            return list;
+        }
 
         // Harvest level checks
-        Minecraft mc = Minecraft.getInstance();
         RayTraceResult rt = mc.objectMouseOver;
         if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK) {
             BlockRayTraceResult brt = (BlockRayTraceResult) rt;
@@ -64,12 +86,10 @@ public class DebugOverlay extends DebugRenderOverlay {
                 BlockPos pos = brt.getPos();
                 BlockState state = renderViewEntity.world.getBlockState(pos);
 
-                ClientPlayerEntity player = mc.player;
-                ItemStack heldItem = player.getHeldItem(Hand.MAIN_HAND);
-                if (heldItem.getItem() instanceof ICoreTool) {
+                if (item instanceof ICoreTool) {
                     ToolType toolClass = state.getBlock().getHarvestTool(state);
                     final int blockLevel = state.getBlock().getHarvestLevel(state);
-                    final int toolLevel = heldItem.getItem().getHarvestLevel(heldItem, toolClass, player, state);
+                    final int toolLevel = item.getHarvestLevel(heldItem, toolClass, player, state);
 
                     final boolean canHarvest = toolLevel >= blockLevel;
                     TextFormatting format = canHarvest ? TextFormatting.GREEN : TextFormatting.RED;

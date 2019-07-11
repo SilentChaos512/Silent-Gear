@@ -69,6 +69,7 @@ tools = [
 
 bows = [
     'bow',
+    'crossbow',
     'slingshot'
 ]
 

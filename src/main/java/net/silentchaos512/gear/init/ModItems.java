@@ -50,6 +50,7 @@ public final class ModItems {
     public static CoreMattock mattock;
     public static CoreSickle sickle;
     public static CoreBow bow;
+    public static CoreCrossbow crossbow;
     public static CoreSlingshot slingshot;
 
     public static CoreArmor helmet;
@@ -115,6 +116,7 @@ public final class ModItems {
         mattock = new CoreMattock();
         sickle = new CoreSickle();
         bow = new CoreBow();
+        crossbow = new CoreCrossbow();
         slingshot = new CoreSlingshot();
 
         helmet = new CoreArmor(EquipmentSlotType.HEAD, "helmet");
@@ -135,6 +137,7 @@ public final class ModItems {
         toolClasses.put("mattock", mattock);
         toolClasses.put("sickle", sickle);
         toolClasses.put("bow", bow);
+        toolClasses.put("crossbow", crossbow);
 //        toolClasses.put("slingshot", slingshot);
 
         armorClasses.put("helmet", helmet);

@@ -1,0 +1,20 @@
+{
+  "type": "crafting_shaped",
+  "group": "silentgear:blueprints_crossbow",
+  "pattern": [
+    "/#/",
+    "###",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:paper/blueprint"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "silentgear:blueprint_crossbow"
+  }
+}

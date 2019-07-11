@@ -1,0 +1,24 @@
+{
+    "type": "silentgear:gear_crafting",
+    "group": "silentgear:crossbows",
+    "ingredients": [
+        {
+            "tag": "silentgear:blueprints/crossbow"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        }
+    ],
+    "result": {
+        "item": "silentgear:crossbow"
+    }
+}

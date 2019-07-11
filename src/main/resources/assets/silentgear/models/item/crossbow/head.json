@@ -1,0 +1,9 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "silentgear:item/blank",
+    "layer1": "silentgear:item/crossbow/head_generic_hc",
+    "layer2": "silentgear:item/crossbow/_highlight"
+  }
+}
