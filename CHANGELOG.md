@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Random grading now assigns the same grade to all parts. Added a config which can revert to the old behavior.
 ### Fixed
 - Some issues with the JEI plugin on servers
+- Blended head colors including non-main parts
 
 ## [1.2.0] - 2019-07-01
 Updated for Minecraft 1.14.3

@@ -221,7 +221,7 @@ public final class GearData {
 
     private static void updateRenderingInfo(ItemStack stack, PartDataList parts) {
         CompoundNBT nbt = getData(stack, NBT_ROOT_RENDERING);
-        nbt.putInt(NBT_BLENDED_HEAD_COLOR, calculateBlendedHeadColor(stack, parts));
+        nbt.putInt(NBT_BLENDED_HEAD_COLOR, calculateBlendedHeadColor(stack, parts.getMains()));
 
         createAndSaveModelKeys(stack, ((ICoreItem) stack.getItem()), parts);
     }
@@ -408,7 +408,7 @@ public final class GearData {
     }
 
     @SuppressWarnings("OverlyLongMethod")
-    private static int calculateBlendedHeadColor(ItemStack gear, PartDataList parts) {
+    private static int calculateBlendedHeadColor(ItemStack gear, List<PartData> parts) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;
