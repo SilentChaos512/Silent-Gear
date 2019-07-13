@@ -1,0 +1,24 @@
+{
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "silents_mechanisms"
+        }
+    ],
+    "type": "silents_mechanisms:crushing",
+    "process_time": 400,
+    "ingredient": {
+        "tag": "forge:ores/crimson_iron"
+    },
+    "results": [
+        {
+            "item": "silentgear:crimson_iron_chunks",
+            "count": 2
+        },
+        {
+            "item": "minecraft:netherrack",
+            "count": 1,
+            "chance": 0.1
+        }
+    ]
+}

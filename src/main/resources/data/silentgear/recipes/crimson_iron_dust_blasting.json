@@ -1,7 +1,7 @@
 {
   "type": "minecraft:blasting",
   "ingredient": {
-    "item": "silentgear:crimson_iron_ore"
+    "tag": "forge:dusts/crimson_iron"
   },
   "result": "silentgear:crimson_iron_ingot",
   "experience": 1.0,

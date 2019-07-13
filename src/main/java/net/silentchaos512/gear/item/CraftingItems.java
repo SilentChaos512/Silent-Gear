@@ -44,6 +44,8 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     CRIMSON_STEEL_INGOT("forge:ingots/crimson_steel", "forge:ingots"),
     CRIMSON_IRON_NUGGET("forge:nuggets/crimson_iron", "forge:nuggets"),
     CRIMSON_STEEL_NUGGET("forge:nuggets/crimson_steel", "forge:nuggets"),
+    CRIMSON_IRON_CHUNKS,
+    CRIMSON_IRON_DUST,
     DIAMOND_SHARD("forge:nuggets/diamond", "forge:nuggets"),
     EMERALD_SHARD("forge:nuggets/emerald", "forge:nuggets"),
     GLITTERY_DUST,

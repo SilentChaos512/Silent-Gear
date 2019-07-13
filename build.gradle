@@ -105,7 +105,10 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}")
-    
+
+    runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
+        exclude module: "silent-gear-${project.mc_version}"
+    }
 //    runtimeOnly 'net.silentchaos512:wit:1.+'
 }
 
