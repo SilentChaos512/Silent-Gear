@@ -30,6 +30,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.item.blueprint.Blueprint;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearGenerator;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.I18nHelper;
 
@@ -230,9 +231,12 @@ public class ToolHead extends Item implements IStatItem {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         if (!this.isInCreativeTab(tab)) return;
 
-        for (String toolClass : ModItems.toolClasses.keySet())
-            for (PartMain part : PartRegistry.getVisibleMains())
-                list.add(getStack(toolClass, part, true));
+        for (String toolClass : ModItems.toolClasses.keySet()) {
+            for (int i = 1; i < 4; ++i) {
+                GearGenerator.selectRandom(PartMain.class, i).ifPresent(part ->
+                        list.add(getStack(toolClass, (PartMain) part, true)));
+            }
+        }
     }
 
     public Collection<IRecipe> getExampleRecipes() {

@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.3] - 2019-07-13
 ### Changed
 - Disabled refractive trait's effect (placing phantom lights)
+- Reduced number of tool heads shown in JEI in 3 examples per tool type [#19]
 
 ## [0.6.2] - 2019-06-29
 ### Changed
