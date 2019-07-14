@@ -5,8 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- New trait type, `silentgear:nbt_trait`. This will add arbitrary NBT to gear items when crafted.
 - Missing models for crossbow blueprints and templates
 - Crusher recipes (Silent's Mechanisms) for crimson iron ore
+### Changed
+- Trait lists in tooltips tweaked (hopefully they won't be confused for enchantments?)
 
 ## [1.2.1] - 2019-07-11
 ### Added

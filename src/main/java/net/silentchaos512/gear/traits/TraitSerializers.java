@@ -20,6 +20,7 @@ public final class TraitSerializers {
         register(DamageTypeTrait.SERIALIZER);
         register(DurabilityTrait.SERIALIZER);
         register(EnchantmentTrait.SERIALIZER);
+        register(NBTTrait.SERIALIZER);
         register(PotionEffectTrait.SERIALIZER);
         register(StatModifierTrait.SERIALIZER);
     }
