@@ -20,12 +20,15 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.config.BooleanValue;
 
 import java.util.*;
@@ -91,9 +94,18 @@ public final class GearClientHelper {
             data.getPart().addInformation(data, stack, tooltip, flag);
         }
 
-        // TODO: Used cached traits?
-        TraitHelper.getTraits(stack, constructionParts).forEach((trait, level) ->
-                tooltip.add(trait.getDisplayName(level)));
+        // Traits
+        Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
+        int numTraits = traits.size();
+        int traitIndex = getTraitDisplayIndex(numTraits);
+        int i = 0;
+        for (ITrait trait : traits.keySet()) {
+            if (traitIndex < 0 || traitIndex == i) {
+                final int level = traits.get(trait);
+                tooltip.add(trait.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC));
+            }
+            ++i;
+        }
 
         float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
         TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
@@ -170,6 +182,12 @@ public final class GearClientHelper {
                     .appendSibling(misc("tooltip.construction.key")));
             tooltip.add(textConstruction);
         }
+    }
+
+    private static int getTraitDisplayIndex(int numTraits) {
+        if (KeyTracker.isControlDown() || numTraits == 0)
+            return -1;
+        return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 
     private static ITextComponent misc(String key, Object... formatArgs) {

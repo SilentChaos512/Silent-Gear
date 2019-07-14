@@ -7,6 +7,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartMaterial;
@@ -82,7 +83,7 @@ public final class TooltipHandler {
         for (ITrait trait : traits.keySet()) {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
-                event.getToolTip().add(trait.getDisplayName(level));
+                event.getToolTip().add(trait.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC));
             }
             ++i;
         }

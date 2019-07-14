@@ -130,6 +130,25 @@ public final class TraitHelper {
         return trait != null ? getTraitLevel(gear, trait) : 0;
     }
 
+    public static Map<ITrait, Integer> getCachedTraits(ItemStack gear) {
+        if (!GearHelper.isGear(gear)) return ImmutableMap.of();
+
+        Map<ITrait, Integer> result = new LinkedHashMap<>();
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+
+        for (INBT nbt : tagList) {
+            if (nbt instanceof CompoundNBT) {
+                CompoundNBT tagCompound = (CompoundNBT) nbt;
+                String name = tagCompound.getString("Name");
+                ITrait trait = TraitManager.get(name);
+                int level = tagCompound.getByte("Level");
+                result.put(trait, level);
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Gets a Map of Traits and levels from the parts, used to calculate trait levels and should not
      * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ITrait)} when
