@@ -40,6 +40,9 @@ public final class ServerEvents {
         // FIXME: These are sent too late!
         sendTraitsToClient(playerMP);
         sendPartsToClient(playerMP);
+
+        PartManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
+        TraitManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
     }
 
     private static void sendTraitsToClient(ServerPlayerEntity playerMP) {

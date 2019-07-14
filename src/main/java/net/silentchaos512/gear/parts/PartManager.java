@@ -1,9 +1,11 @@
 package net.silentchaos512.gear.parts;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
@@ -11,6 +13,9 @@ import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -36,6 +41,7 @@ public final class PartManager implements IResourceManagerReloadListener {
     private static final Map<ResourceLocation, IGearPart> MAP = new LinkedHashMap<>();
     private static final Map<IItemProvider, IGearPart> ITEM_TO_PART = new HashMap<>();
     private static int highestMainPartTier = 0;
+    private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
     private PartManager() {}
 
@@ -48,6 +54,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
         MAP.clear();
         ITEM_TO_PART.clear();
+        ERROR_LIST.clear();
         SilentGear.LOGGER.info(MARKER, "Reloading part files");
 
         for (ResourceLocation id : resources) {
@@ -66,8 +73,10 @@ public final class PartManager implements IResourceManagerReloadListener {
                 }
             } catch (IllegalArgumentException | JsonParseException ex) {
                 SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", id, ex);
+                ERROR_LIST.add(id);
             } catch (IOException ex) {
                 SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", id, ex);
+                ERROR_LIST.add(id);
             }
         }
 
@@ -152,5 +161,17 @@ public final class PartManager implements IResourceManagerReloadListener {
         packet.getParts().forEach(part -> MAP.put(part.getId(), part));
         SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
         context.get().setPacketHandled(true);
+    }
+
+    public static Collection<ITextComponent> getErrorMessages(ServerPlayerEntity player) {
+        if (!ERROR_LIST.isEmpty()) {
+            String listStr = ERROR_LIST.stream().map(ResourceLocation::toString).collect(Collectors.joining(", "));
+            return ImmutableList.of(
+                    new StringTextComponent("[Silent Gear] The following gear parts failed to load, check your log file:")
+                            .applyTextStyle(TextFormatting.RED),
+                    new StringTextComponent(listStr)
+            );
+        }
+        return ImmutableList.of();
     }
 }

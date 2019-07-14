@@ -1,14 +1,19 @@
 package net.silentchaos512.gear.traits;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -20,10 +25,9 @@ import org.apache.logging.log4j.MarkerManager;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
 public final class TraitManager implements IResourceManagerReloadListener {
@@ -33,6 +37,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
 
     private static final String DATA_PATH = "silentgear/traits/";
     private static final Map<ResourceLocation, ITrait> MAP = new LinkedHashMap<>();
+    private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
     private TraitManager() {}
 
@@ -44,6 +49,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
         if (resources.isEmpty()) return;
 
         MAP.clear();
+        ERROR_LIST.clear();
         SilentGear.LOGGER.info(MARKER, "Reloading trait files");
 
         for (ResourceLocation id : resources) {
@@ -62,8 +68,10 @@ public final class TraitManager implements IResourceManagerReloadListener {
                 }
             } catch (IllegalArgumentException | JsonParseException ex) {
                 SilentGear.LOGGER.error(MARKER, "Parsing error loading trait {}", id, ex);
+                ERROR_LIST.add(id);
             } catch (IOException ex) {
                 SilentGear.LOGGER.error(MARKER, "Could not read trait {}", id, ex);
+                ERROR_LIST.add(id);
             }
         }
 
@@ -101,5 +109,17 @@ public final class TraitManager implements IResourceManagerReloadListener {
         packet.getTraits().forEach(trait -> MAP.put(trait.getId(), trait));
         SilentGear.LOGGER.info("Read {} traits from server", MAP.size());
         context.get().setPacketHandled(true);
+    }
+
+    public static Collection<ITextComponent> getErrorMessages(ServerPlayerEntity player) {
+        if (!ERROR_LIST.isEmpty()) {
+            String listStr = ERROR_LIST.stream().map(ResourceLocation::toString).collect(Collectors.joining(", "));
+            return ImmutableList.of(
+                    new StringTextComponent("[Silent Gear] The following traits failed to load, check your log file:")
+                            .applyTextStyle(TextFormatting.RED),
+                    new StringTextComponent(listStr)
+            );
+        }
+        return ImmutableList.of();
     }
 }

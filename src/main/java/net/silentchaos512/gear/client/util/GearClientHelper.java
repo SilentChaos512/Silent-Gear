@@ -17,11 +17,10 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.parts.PartData;
@@ -97,7 +96,7 @@ public final class GearClientHelper {
         // Traits
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
         int numTraits = traits.size();
-        int traitIndex = getTraitDisplayIndex(numTraits);
+        int traitIndex = getTraitDisplayIndex(numTraits, ctrlDown);
         int i = 0;
         for (ITrait trait : traits.keySet()) {
             if (traitIndex < 0 || traitIndex == i) {
@@ -184,8 +183,8 @@ public final class GearClientHelper {
         }
     }
 
-    private static int getTraitDisplayIndex(int numTraits) {
-        if (KeyTracker.isControlDown() || numTraits == 0)
+    private static int getTraitDisplayIndex(int numTraits, boolean ctrlDown) {
+        if (ctrlDown || numTraits == 0)
             return -1;
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }
