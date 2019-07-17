@@ -18,23 +18,31 @@
 
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.Set;
 
 public class CoreMachete extends CoreSword {
     private static final int BREAK_RANGE = 2; // TODO: Config?
+    private static final Set<Material> EFFECTIVE_MATERIALS = Sets.union(
+            CoreSickle.EFFECTIVE_MATERIALS,
+            ImmutableSet.of(Material.BAMBOO)
+    );
 
     public CoreMachete() {
         super(ToolType.AXE);
@@ -69,7 +77,7 @@ public class CoreMachete extends CoreSword {
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
         // Allow clearing vegetation, just like sickles but with a smaller range
         if (!player.isSneaking())
-            return ModItems.sickle.onSickleStartBreak(itemstack, pos, player, BREAK_RANGE);
+            return ModItems.sickle.onSickleStartBreak(itemstack, pos, player, BREAK_RANGE, EFFECTIVE_MATERIALS);
         return super.onBlockStartBreak(itemstack, pos, player);
     }
 

@@ -3,13 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.2] - 2019-07-17
 ### Added
 - New trait type, `silentgear:nbt_trait`. This will add arbitrary NBT to gear items when crafted.
 - Missing models for crossbow blueprints and templates
 - Crusher recipes (Silent's Mechanisms) for crimson iron ore
+- Notify players on login of part and trait files that failed to load
 ### Changed
 - Trait lists in tooltips tweaked (hopefully they won't be confused for enchantments?)
+- Sickles reset sweet berry bushes to age 1 (same as picking berries from them normally)
+- Machetes can now break multiple bamboo blocks at once
+### Fixed
+- Sickles duplicating dirt from grass blocks, possibly some other related issues
 
 ## [1.2.1] - 2019-07-11
 ### Added
