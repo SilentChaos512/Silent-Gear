@@ -21,45 +21,45 @@ package net.silentchaos512.gear.item;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.lib.util.generator.TagGenerator;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
 public enum CraftingItems implements IItemProvider, IStringSerializable {
-    BLUEPRINT_PAPER("forge:paper/blueprint", "forge:paper"),
-    UPGRADE_BASE("silentgear:upgrade_bases/basic"),
-    ADVANCED_UPGRADE_BASE("silentgear:upgrade_bases/advanced"),
-    CRIMSON_IRON_INGOT("forge:ingots/crimson_iron", "forge:ingots"),
-    CRIMSON_STEEL_INGOT("forge:ingots/crimson_steel", "forge:ingots"),
-    CRIMSON_IRON_NUGGET("forge:nuggets/crimson_iron", "forge:nuggets"),
-    CRIMSON_STEEL_NUGGET("forge:nuggets/crimson_steel", "forge:nuggets"),
-    CRIMSON_IRON_CHUNKS,
-    CRIMSON_IRON_DUST,
-    DIAMOND_SHARD("forge:nuggets/diamond", "forge:nuggets"),
-    EMERALD_SHARD("forge:nuggets/emerald", "forge:nuggets"),
+    BLUEPRINT_PAPER,
+    UPGRADE_BASE,
+    ADVANCED_UPGRADE_BASE,
+    CRIMSON_IRON_INGOT,
+    CRIMSON_STEEL_INGOT,
+    CRIMSON_IRON_NUGGET,
+    CRIMSON_STEEL_NUGGET,
+    CRIMSON_IRON_CHUNKS("silents-mechanisms"),
+    CRIMSON_IRON_DUST("silents-mechanisms"),
+    DIAMOND_SHARD,
+    EMERALD_SHARD,
     GLITTERY_DUST,
     LEATHER_SCRAP,
     SINEW,
     DRIED_SINEW,
-    SINEW_FIBER("forge:string/sinew", "forge:string"),
+    SINEW_FIBER,
     FLAX_FIBER,
-    FLAX_STRING("forge:string/flax", "forge:string"),
+    FLAX_STRING,
     // Rods
-    ROUGH_ROD("silentgear:rods/rough", "forge:rods"),
-    STONE_ROD("forge:rods/stone", "forge:rods"),
-    IRON_ROD("forge:rods/iron", "forge:rods"),
-    NETHERWOOD_STICK("silentgear:rods/netherwood", "forge:rods"),
+    ROUGH_ROD,
+    STONE_ROD,
+    IRON_ROD,
+    NETHERWOOD_STICK,
     // Tip Upgrades
     IRON_TIPPED_UPGRADE,
     GOLD_TIPPED_UPGRADE,
@@ -72,34 +72,24 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     // Grips
 //    LEATHER_WRAPPINGS,
     // Bowstrings
-    PLAIN_BOWSTRING("silentgear:bowstrings/plain", "silentgear:bowstrings"),
-    FLAX_BOWSTRING("silentgear:bowstrings/flax", "silentgear:bowstrings"),
-    SINEW_BOWSTRING("silentgear:bowstrings/sinew", "silentgear:bowstrings"),
+    PLAIN_BOWSTRING,
+    FLAX_BOWSTRING,
+    SINEW_BOWSTRING,
     // Misc Upgrades
     SPOON_UPGRADE,
     RED_CARD_UPGRADE
     ;
 
     private final Item item;
-    @Nullable private final Tag<Item> tag;
-    @Nullable private final Tag<Item> groupTag;
+    private final String requiredMod;
 
     CraftingItems() {
-        this(null, null);
+        this("");
     }
 
-    CraftingItems(@Nullable String itemTag) {
-        this(itemTag, null);
-    }
-
-    CraftingItems(@Nullable String itemTag, @Nullable String groupTag) {
+    CraftingItems(String requiredMod) {
         this.item = new ItemInternal();
-        this.tag = itemTag != null
-                ? TagGenerator.item(new ResourceLocation(itemTag), getName())
-                : null;
-        this.groupTag = groupTag != null && this.tag != null
-                ? TagGenerator.item(new ResourceLocation(groupTag), this.tag)
-                : null;
+        this.requiredMod = requiredMod;
     }
 
     @Override
@@ -112,17 +102,7 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
         return name().toLowerCase(Locale.ROOT);
     }
 
-    @Nullable
-    public Tag<Item> getTag() {
-        return tag;
-    }
-
-    @Nullable
-    public Tag<Item> getGroupTag() {
-        return groupTag;
-    }
-
-    private static final class ItemInternal extends Item {
+    private final class ItemInternal extends Item {
         ItemInternal() {
             super(new Properties().group(SilentGear.ITEM_GROUP));
         }
@@ -132,6 +112,13 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
             String descKey = this.getTranslationKey() + ".desc";
             if (I18n.hasKey(descKey)) {
                 tooltip.add(new TranslationTextComponent(descKey));
+            }
+        }
+
+        @Override
+        public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+            if (CraftingItems.this.requiredMod.isEmpty() || ModList.get().isLoaded(CraftingItems.this.requiredMod)) {
+                super.fillItemGroup(group, items);
             }
         }
     }
