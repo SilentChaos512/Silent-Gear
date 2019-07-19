@@ -1,0 +1,11 @@
+{
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/silent-gear",
+    "changelog": "https://github.com/SilentChaos512/Silent-Gear/blob/1.14/CHANGELOG.md",
+    "1.14.3": {
+        "1.2.2": "See changelog on GitHub"
+    },
+    "promos": {
+        "1.14.3-latest": "1.2.2",
+        "1.14.3-recommended": "1.2.2"
+    }
+}

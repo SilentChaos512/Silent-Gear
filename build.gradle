@@ -115,12 +115,12 @@ dependencies {
 jar {
     appendix = "${project.mc_version}"
     manifest {
-        attributes(["Specification-Title": project.mod_id,
-                    "Specification-Vendor": "SilentChaos512",
-                    "Specification-Version": "1.2",
-                    "Implementation-Title": project.name,
-                    "Implementation-Version": "${version}",
-                    "Implementation-Vendor" :"SilentChaos512",
+        attributes(["Specification-Title"     : project.mod_id,
+                    "Specification-Vendor"    : "SilentChaos512",
+                    "Specification-Version"   : "1.2",
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : "${version}",
+                    "Implementation-Vendor"   : "SilentChaos512",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }
@@ -162,6 +162,7 @@ class Secrets {
         return data ? data[key] : ''
     }
 }
+
 
 import groovy.json.JsonSlurper
 
@@ -271,7 +272,7 @@ def getGitVersion() {
     def outStream = new ByteArrayOutputStream()
     def result = exec {
         executable = 'git'
-        args = [ 'describe', '--long' ]
+        args = ['describe', '--long']
         standardOutput = outStream
     }
 
@@ -370,3 +371,35 @@ task incrementBuild {
     }
 }
 build.finalizedBy incrementBuild // only increment on successful builds
+
+// Update JSON management
+
+import groovy.json.JsonOutput
+
+def writeUpdateJson() {
+    def version = getModVersion()['version_short']
+    def slurper = new JsonSlurper()
+    def file = new File('update.json')
+    def json = slurper.parse(file)
+
+    if (!json.hasProperty(project.mc_version))
+        json[project.mc_version] = [:]
+    if (!json.hasProperty('promos'))
+        json['promos'] = [:]
+
+    // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
+    json[project.mc_version][version.toString()] = 'See changelog on GitHub'
+    json['promos']["${project.mc_version}-latest"] = version
+    json['promos']["${project.mc_version}-recommended"] = version
+
+    println(json)
+    file.write(JsonOutput.prettyPrint(JsonOutput.toJson(json)))
+}
+
+task createUpdateJson {
+    doLast {
+        println('Updating update.json...')
+        writeUpdateJson()
+    }
+}
+build.finalizedBy createUpdateJson
