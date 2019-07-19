@@ -35,7 +35,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
 
     public static final Marker MARKER = MarkerManager.getMarker("TraitManager");
 
-    private static final String DATA_PATH = "silentgear/traits/";
+    private static final String DATA_PATH = "silentgear/traits";
     private static final Map<ResourceLocation, ITrait> MAP = new LinkedHashMap<>();
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
 
         for (ResourceLocation id : resources) {
             try (IResource iresource = resourceManager.getResource(id)) {
-                String path = id.getPath().substring(DATA_PATH.length(), id.getPath().length() - ".json".length());
+                String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
                 if (SilentGear.LOGGER.isTraceEnabled()) {
                     SilentGear.LOGGER.trace(MARKER, "Found likely trait file: {}, trying to read as trait {}", id, name);

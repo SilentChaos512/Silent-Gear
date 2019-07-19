@@ -50,6 +50,8 @@ public class Config {
         // Salvager
         public final DoubleValue salvagerMinLossRate;
         public final DoubleValue salvagerMaxLossRate;
+        // Debug
+        public final BooleanValue extraPartAndTraitLogging;
 
         General(ConfigSpecWrapper wrapper) {
             wrapper.comment("item.blueprint", "Blueprint and template settings");
@@ -180,6 +182,12 @@ public class Config {
                     .comment("Maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
                             "Rate depends on remaining durability.")
                     .defineInRange(0.5, 0, 1);
+
+            extraPartAndTraitLogging = wrapper
+                    .builder("debug.logging.extraPartAndTraitInfo")
+                    .comment("Log additional information related to loading and synchronizing gear parts and traits.",
+                            "This might help track down more obscure issues.")
+                    .define(false);
         }
 
         public boolean isPlacerTool(ItemStack stack) {

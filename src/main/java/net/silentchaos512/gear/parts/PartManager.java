@@ -38,6 +38,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     public static final Marker MARKER = MarkerManager.getMarker("PartManager");
 
+    private static final String DATA_PATH = "silentgear/parts";
     private static final Map<ResourceLocation, IGearPart> MAP = new LinkedHashMap<>();
     private static final Map<IItemProvider, IGearPart> ITEM_TO_PART = new HashMap<>();
     private static int highestMainPartTier = 0;
@@ -49,7 +50,7 @@ public final class PartManager implements IResourceManagerReloadListener {
     public void onResourceManagerReload(IResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(
-                "silentgear/parts", s -> s.endsWith(".json"));
+                DATA_PATH, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
 
         MAP.clear();
@@ -59,7 +60,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
         for (ResourceLocation id : resources) {
             try (IResource iresource = resourceManager.getResource(id)) {
-                String path = id.getPath().substring("silentgear/parts/".length(), id.getPath().length() - ".json".length());
+                String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
                 if (SilentGear.LOGGER.isTraceEnabled()) {
                     SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);

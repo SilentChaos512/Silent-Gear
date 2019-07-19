@@ -8,9 +8,11 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
+import net.silentchaos512.gear.config.Config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public final class TraitSerializers {
     private static final Map<ResourceLocation, ITraitSerializer<?>> REGISTRY = new HashMap<>();
@@ -31,6 +33,7 @@ public final class TraitSerializers {
         if (REGISTRY.containsKey(serializer.getName())) {
             throw new IllegalArgumentException("Duplicate trait serializer " + serializer.getName());
         }
+        log(() -> "Registered serializer " + serializer.getName());
         REGISTRY.put(serializer.getName(), serializer);
         return serializer;
     }
@@ -39,6 +42,7 @@ public final class TraitSerializers {
         String typeStr = JSONUtils.getString(json, "type");
         if (!typeStr.contains(":")) typeStr = SilentGear.RESOURCE_PREFIX + typeStr;
         ResourceLocation type = new ResourceLocation(typeStr);
+        log(() -> "deserialize " + id + " (type " + type + ")");
 
         ITraitSerializer<?> serializer = REGISTRY.get(type);
         if (serializer == null) {
@@ -50,6 +54,7 @@ public final class TraitSerializers {
     public static ITrait read(PacketBuffer buffer) {
         ResourceLocation id = buffer.readResourceLocation();
         ResourceLocation type = buffer.readResourceLocation();
+        log(() -> "read " + id + " (type " + type + ")");
         ITraitSerializer<?> serializer = REGISTRY.get(type);
         if (serializer == null) {
             throw new IllegalArgumentException("Unknown trait serializer " + type);
@@ -59,9 +64,18 @@ public final class TraitSerializers {
 
     @SuppressWarnings("unchecked")
     public static <T extends ITrait> void write(T trait, PacketBuffer buffer) {
-        buffer.writeResourceLocation(trait.getId());
-        buffer.writeResourceLocation(trait.getSerializer().getName());
+        ResourceLocation id = trait.getId();
+        ResourceLocation type = trait.getSerializer().getName();
+        log(() -> "write " + id + " (type " + type + ")");
+        buffer.writeResourceLocation(id);
+        buffer.writeResourceLocation(type);
         ITraitSerializer<T> serializer = (ITraitSerializer<T>) trait.getSerializer();
         serializer.write(buffer, trait);
+    }
+
+    private static void log(Supplier<?> msg) {
+        if (Config.GENERAL.extraPartAndTraitLogging.get()) {
+            SilentGear.LOGGER.info(TraitManager.MARKER, msg);
+        }
     }
 }
