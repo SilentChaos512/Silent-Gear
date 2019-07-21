@@ -20,6 +20,7 @@ public final class ModRecipes {
         register(ShapelessGearRecipe.NAME, ShapelessGearRecipe.SERIALIZER);
         register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
         register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
+        register(ReplaceToolHeadRecipe.NAME, ReplaceToolHeadRecipe.SERIALIZER);
         register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
         register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
 
