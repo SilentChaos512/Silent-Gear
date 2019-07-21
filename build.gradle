@@ -382,11 +382,6 @@ def writeUpdateJson() {
     def file = new File('update.json')
     def json = slurper.parse(file)
 
-    if (!json.hasProperty(project.mc_version))
-        json[project.mc_version] = [:]
-    if (!json.hasProperty('promos'))
-        json['promos'] = [:]
-
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
     json[project.mc_version][version.toString()] = 'See changelog on GitHub'
     json['promos']["${project.mc_version}-latest"] = version
