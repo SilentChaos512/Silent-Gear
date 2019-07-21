@@ -51,9 +51,10 @@ import java.util.stream.IntStream;
 
 public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
     static final int BASE_ANALYZE_TIME = TimeUtils.ticksFromSeconds(5);
-    private static final List<Tag<Item>> CATALYST_TAGS = ImmutableList.of(
+    public static final List<Tag<Item>> CATALYST_TAGS = ImmutableList.of(
             new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier1")),
-            new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier2"))
+            new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier2")),
+            new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier3"))
     );
 
     static final int INPUT_SLOT = 0;

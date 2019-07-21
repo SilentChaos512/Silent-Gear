@@ -10,15 +10,12 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.block.analyzer.PartAnalyzerTileEntity;
 import net.silentchaos512.gear.init.ModBlocks;
 
 import java.util.ArrayList;
@@ -32,8 +29,6 @@ public class PartAnalyzerCategory implements IRecipeCategory<PartAnalyzerCategor
     private static final int GUI_START_Y = 0;
     private static final int GUI_WIDTH = 72;
     private static final int GUI_HEIGHT = 38;
-    private static final Tag<Item> CATALYSTS_TAG1 = new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier1"));
-    private static final Tag<Item> CATALYSTS_TAG2 = new ItemTags.Wrapper(SilentGear.getId("analyzer_catalyst/tier2"));
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -76,7 +71,7 @@ public class PartAnalyzerCategory implements IRecipeCategory<PartAnalyzerCategor
     @Override
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
         List<ItemStack> materials = recipe.getInputs();
-        List<ItemStack> catalysts = recipe.getCatalysts();
+        List<ItemStack> catalysts = Recipe.getCatalysts();
         ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(materials, catalysts));
 
         List<ItemStack> outputs = new ArrayList<>();
@@ -122,10 +117,10 @@ public class PartAnalyzerCategory implements IRecipeCategory<PartAnalyzerCategor
             return Arrays.stream(ingredient.getMatchingStacks()).collect(Collectors.toList());
         }
 
-        List<ItemStack> getCatalysts() {
+        static List<ItemStack> getCatalysts() {
             List<ItemStack> list = new ArrayList<>();
-            list.addAll(CATALYSTS_TAG1.getAllElements().stream().map(ItemStack::new).collect(Collectors.toList()));
-            list.addAll(CATALYSTS_TAG2.getAllElements().stream().map(ItemStack::new).collect(Collectors.toList()));
+            PartAnalyzerTileEntity.CATALYST_TAGS.forEach(tag ->
+                    list.addAll(tag.getAllElements().stream().map(ItemStack::new).collect(Collectors.toList())));
             return list;
         }
     }
