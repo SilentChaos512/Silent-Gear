@@ -34,6 +34,7 @@
     },
     "textures": {
         "all": {
+            "texture_domain": "silentgear",
             "texture_suffix": "wood",
             "texture_color": "FFFFFF",
             "broken_color": "866526"

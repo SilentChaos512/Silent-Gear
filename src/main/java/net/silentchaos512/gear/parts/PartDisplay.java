@@ -3,6 +3,7 @@ package net.silentchaos512.gear.parts;
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.utils.Color;
 
@@ -17,7 +18,8 @@ public final class PartDisplay implements IPartDisplay {
     boolean highlight;
 
     PartDisplay() {
-        textureDomain = textureSuffix = "";
+        textureDomain = SilentGear.MOD_ID;
+        textureSuffix = "";
         normalColor = brokenColor = fallbackColor = Color.VALUE_WHITE;
     }
 

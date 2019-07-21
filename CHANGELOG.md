@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Config to enable additional logging for loading and syncing parts and traits
 - Tier 3 analyzer catalyst tag (no items in it by default)
+- Recipe to replace the head of a tool. Craft a tool with a tool head (a tool with only main parts). The old head is retained.
 ### Changed
 - Trait descriptions are now shown in item tooltips when the Alt key is held down
 - Parts with zero armor durability are automatically blacklisted for armor crafting. Similarly, zero durability will blacklist all other gear types.
 ### Fixed
 - Traits not loading on OS X
 - Gear type blacklist for parts now actually works
+- Some armor textures being broken
 - Overrode vanilla's dumb repair recipe again... This disables crafting grid "repairs" of Silent Gear items, but the grindstone still works.
 
 ## [1.2.2] - 2019-07-17
