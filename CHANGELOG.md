@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Config to enable additional logging for loading and syncing parts and traits
 - Tier 3 analyzer catalyst tag (no items in it by default)
+### Changed
+- Trait descriptions are now shown in item tooltips when the Alt key is held down
 ### Fixed
 - Traits not loading on OS X
 - Overrode vanilla's dumb repair recipe again... This disables crafting grid "repairs" of Silent Gear items, but the grindstone still works.

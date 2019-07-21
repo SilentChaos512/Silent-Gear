@@ -101,7 +101,7 @@ public final class GearClientHelper {
         for (ITrait trait : traits.keySet()) {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
-                tooltip.add(trait.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC));
+                trait.addInformation(level, tooltip);
             }
             ++i;
         }

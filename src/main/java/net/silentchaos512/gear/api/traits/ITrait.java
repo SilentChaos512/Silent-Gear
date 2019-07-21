@@ -5,7 +5,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.client.KeyTracker;
+
+import java.util.List;
 
 public interface ITrait {
     ResourceLocation getId();
@@ -27,6 +32,14 @@ public interface ITrait {
     ITextComponent getDisplayName(int level);
 
     ITextComponent getDescription(int level);
+
+    default void addInformation(int level, List<ITextComponent> tooltip) {
+        tooltip.add(this.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC));
+        if (KeyTracker.isAltDown()) {
+            ITextComponent description = this.getDescription(level).applyTextStyle(TextFormatting.DARK_GRAY);
+            tooltip.add(new StringTextComponent("  ").appendSibling(description));
+        }
+    }
 
     ITraitSerializer<?> getSerializer();
 
