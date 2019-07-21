@@ -5,7 +5,7 @@
             "rolls": 1,
             "entries": [
                 {
-                    "type": "item",
+                    "type": "minecraft:item",
                     "name": "silentgear:blueprint_pickaxe",
                     "weight": 1
                 }
@@ -16,7 +16,7 @@
             "rolls": 1,
             "entries": [
                 {
-                    "type": "item",
+                    "type": "minecraft:item",
                     "name": "silentgear:blueprint_shovel",
                     "weight": 1
                 }
@@ -27,7 +27,7 @@
             "rolls": 1,
             "entries": [
                 {
-                    "type": "item",
+                    "type": "minecraft:item",
                     "name": "silentgear:blueprint_axe",
                     "weight": 1
                 }
@@ -38,19 +38,24 @@
             "rolls": 1,
             "entries": [
                 {
-                    "type": "item",
+                    "type": "minecraft:item",
                     "name": "silentgear:blueprint_sword",
                     "weight": 11
                 },
                 {
-                    "type": "item",
+                    "type": "minecraft:item",
                     "name": "silentgear:blueprint_katana",
                     "weight": 5
                 },
                 {
-                    "type": "item",
+                    "type": "minecraft:item",
                     "name": "silentgear:blueprint_machete",
                     "weight": 7
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "silentgear:blueprint_spear",
+                    "weight": 8
                 }
             ]
         }

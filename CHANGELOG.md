@@ -3,11 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.3] - 2019-07-21
 ### Added
 - Config to enable additional logging for loading and syncing parts and traits
 - Tier 3 analyzer catalyst tag (no items in it by default)
 - Recipe to replace the head of a tool. Craft a tool with a tool head (a tool with only main parts). The old head is retained.
+- Spear blueprints to the "swords" loot pool for the blueprint package
 ### Changed
 - Trait descriptions are now shown in item tooltips when the Alt key is held down
 - Parts with zero armor durability are automatically blacklisted for armor crafting. Similarly, zero durability will blacklist all other gear types.
