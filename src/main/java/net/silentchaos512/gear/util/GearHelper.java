@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.*;
@@ -394,5 +395,13 @@ public final class GearHelper {
         }
 
         return list;
+    }
+
+    @Nullable
+    public static GearType getType(ItemStack gear) {
+        if (gear.getItem() instanceof ICoreItem) {
+            return ((ICoreItem) gear.getItem()).getGearType();
+        }
+        return null;
     }
 }

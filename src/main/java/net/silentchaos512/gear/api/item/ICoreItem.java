@@ -1,8 +1,10 @@
 package net.silentchaos512.gear.api.item;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.ForgeHooks;
 import net.silentchaos512.gear.api.parts.ItemPartData;
 import net.silentchaos512.gear.api.parts.PartMain;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -10,6 +12,7 @@ import net.silentchaos512.gear.config.ConfigOptionEquipment;
 import net.silentchaos512.gear.init.ModMaterials;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.item.ICustomEnchantColor;
 
 import java.util.Collection;
@@ -35,7 +38,12 @@ public interface ICoreItem extends IStatItem, ICustomEnchantColor {
     default ItemStack construct(Item item, Collection<ItemPartData> parts) {
         ItemStack result = new ItemStack(item);
         GearData.writeConstructionParts(result, parts);
-        GearData.recalculateStats(result);
+        EntityPlayer player = ForgeHooks.getCraftingPlayer();
+        GearData.recalculateStats(player, result);
+        TraitHelper.activateTraits(result, 0, (trait, level, value) -> {
+            trait.onGearCrafted(player, level, result);
+            return 0;
+        });
         return result;
     }
 

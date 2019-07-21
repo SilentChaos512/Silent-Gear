@@ -52,10 +52,13 @@ public class Trait {
     @Getter private TextFormatting nameColor = TextFormatting.GRAY;
     @Getter private ResourceOrigin origin = ResourceOrigin.BUILTIN_CORE;
     private final Set<String> cancelsWith = new HashSet<>();
+    private String displayName;
+    private boolean translateName = true;
 
     public Trait(ResourceLocation name, ResourceOrigin origin) {
         this.name = name;
         this.origin = origin;
+        this.displayName = "trait." + this.name;
 
         if (!this.origin.validate(this.name, SilentGear.MOD_ID)) {
             throw new IllegalArgumentException(String.format("Trait '%s' has origin %s, but should be %s",
@@ -96,7 +99,7 @@ public class Trait {
     }
 
     public String getTranslatedName(int level) {
-        String translatedName = SilentGear.i18n.translate("trait." + name);
+        String translatedName = this.translateName ? SilentGear.i18n.translate(this.displayName) : this.displayName;
         String levelString = SilentGear.i18n.translate("enchantment.level." + level);
         return SilentGear.i18n.translate("trait", "displayFormat", translatedName, levelString);
     }
@@ -186,6 +189,8 @@ public class Trait {
     // Was onUpdate
     public void tick(World world, @Nullable EntityPlayer player, int level, ItemStack gear, boolean isEquipped) {}
 
+    public void onGearCrafted(@Nullable EntityPlayer player, int level, ItemStack gear) {}
+
     //endregion
 
     private static class Loader {
@@ -199,6 +204,12 @@ public class Trait {
             }
 
             processCancelsWithArray(trait, json);
+
+            if (json.has("name")) {
+                JsonObject nameJson = json.getAsJsonObject("name");
+                trait.displayName = JsonUtils.getString(nameJson, "name", trait.displayName);
+                trait.translateName = JsonUtils.getBoolean(nameJson, "translate", trait.translateName);
+            }
         }
 
         private static void processCancelsWithArray(Trait trait, JsonObject json) {

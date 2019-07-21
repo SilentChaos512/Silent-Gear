@@ -18,10 +18,15 @@
 
 package net.silentchaos512.gear.init;
 
+import com.google.common.io.Files;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -33,16 +38,15 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.Trait;
 import net.silentchaos512.gear.api.traits.TraitRegistry;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.trait.DurabilityTrait;
-import net.silentchaos512.gear.trait.PotionEffectTrait;
-import net.silentchaos512.gear.trait.StatModifierTrait;
-import net.silentchaos512.gear.trait.TraitRefractive;
+import net.silentchaos512.gear.trait.*;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.registry.IPhasedInitializer;
 import net.silentchaos512.lib.registry.SRegistry;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public final class ModTraits implements IPhasedInitializer {
     public static final ModTraits INSTANCE = new ModTraits();
@@ -63,6 +67,8 @@ public final class ModTraits implements IPhasedInitializer {
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
 
     private static final int COMMON_MAX_LEVEL = 4;
+
+    private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
     private ModTraits() {}
 
@@ -161,9 +167,25 @@ public final class ModTraits implements IPhasedInitializer {
                 ResourceLocation name = path(filename);
 
                 if (TraitRegistry.get(name.toString()) == null) {
-                    // FIXME: For now, we just have stat modifier traits.
-                    StatModifierTrait trait = new StatModifierTrait(name, ResourceOrigin.USER_DEFINED);
-                    TraitRegistry.register(trait);
+                    try {
+                        JsonObject json = JsonUtils.fromJson(GSON, Files.newReader(file, StandardCharsets.UTF_8), JsonObject.class);
+                        String type = JsonUtils.getString(json, "type", "stat_modifier");
+                        if (!type.contains(":")) type = "silentgear:" + type;
+
+                        // 1.14+ uses proper serializers, but I am NOT going to fix this here...
+                        Trait trait;
+                        if ("silentgear:nbt_trait".equals(type)) {
+                            trait = new NBTTrait(name, ResourceOrigin.USER_DEFINED);
+                        } else if ("silentgear:potion_trait".equals(type)) {
+                            trait = new PotionEffectTrait(name, ResourceOrigin.USER_DEFINED);
+                        } else {
+                            trait = new StatModifierTrait(name, ResourceOrigin.USER_DEFINED);
+                        }
+
+                        TraitRegistry.register(trait);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
