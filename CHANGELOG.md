@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tier 3 analyzer catalyst tag (no items in it by default)
 ### Fixed
 - Traits not loading on OS X
+- Overrode vanilla's dumb repair recipe again... This disables crafting grid "repairs" of Silent Gear items, but the grindstone still works.
 
 ## [1.2.2] - 2019-07-17
 ### Added

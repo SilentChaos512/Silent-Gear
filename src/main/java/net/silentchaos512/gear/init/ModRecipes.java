@@ -3,6 +3,7 @@ package net.silentchaos512.gear.init;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -20,6 +21,7 @@ public final class ModRecipes {
         register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
         register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
         register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
+        register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
 
         // Ingredient serializers
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
