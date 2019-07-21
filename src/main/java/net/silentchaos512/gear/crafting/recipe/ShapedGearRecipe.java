@@ -2,12 +2,14 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.lib.collection.StackList;
@@ -40,15 +42,21 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe {
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
-        return this.getBaseRecipe().matches(inv, worldIn);
+        if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
+
+        GearType gearType = item.getGearType();
+        return getParts(inv).stream().allMatch(part -> part.getPart().isCraftingAllowed(gearType));
     }
 
     @Override
     public ItemStack getCraftingResult(CraftingInventory inv) {
-        Collection<PartData> parts = StackList.from(inv).stream()
+        return item.construct(getParts(inv));
+    }
+
+    private static Collection<PartData> getParts(IInventory inv) {
+        return StackList.from(inv).stream()
                 .map(PartData::from)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        return item.construct(parts);
     }
 }

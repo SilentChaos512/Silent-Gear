@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tier 3 analyzer catalyst tag (no items in it by default)
 ### Changed
 - Trait descriptions are now shown in item tooltips when the Alt key is held down
+- Parts with zero armor durability are automatically blacklisted for armor crafting. Similarly, zero durability will blacklist all other gear types.
 ### Fixed
 - Traits not loading on OS X
+- Gear type blacklist for parts now actually works
 - Overrode vanilla's dumb repair recipe again... This disables crafting grid "repairs" of Silent Gear items, but the grindstone still works.
 
 ## [1.2.2] - 2019-07-17

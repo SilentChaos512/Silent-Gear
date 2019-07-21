@@ -42,6 +42,7 @@ public abstract class AbstractGearPart implements IGearPart {
     private final ResourceLocation name;
     PartMaterial materials = new PartMaterial();
     int tier = -1;
+    List<String> blacklistedGearTypes = new ArrayList<>();
 
     // Stats and Traits
     StatModifierMap stats = new StatModifierMap();
@@ -110,6 +111,12 @@ public abstract class AbstractGearPart implements IGearPart {
             default:
                 throw new IllegalArgumentException("Unknown RepairContext: " + context);
         }
+    }
+
+    @Override
+    public boolean isCraftingAllowed(@Nullable GearType gearType) {
+        if (gearType == null) return true;
+        return blacklistedGearTypes.stream().noneMatch(gearType::matches) && IGearPart.super.isCraftingAllowed(gearType);
     }
 
     @Override
@@ -324,9 +331,24 @@ public abstract class AbstractGearPart implements IGearPart {
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
                 part.tier = JSONUtils.getInt(obj, "tier", part.tier);
+
+                JsonArray blacklist = getGearBlacklist(obj);
+                if (blacklist != null) {
+                    part.blacklistedGearTypes.clear();
+                    blacklist.forEach(e -> part.blacklistedGearTypes.add(e.getAsString()));
+                }
             }
 
             return part;
+        }
+
+        @Nullable
+        private static JsonArray getGearBlacklist(JsonObject json) {
+            if (json.has("gear_blacklist"))
+                return JSONUtils.getJsonArray(json, "gear_blacklist");
+            else if (json.has("tool_blacklist"))
+                return JSONUtils.getJsonArray(json, "tool_blacklist");
+            return null;
         }
 
         private static JsonObject getRequiredObj(JsonObject json, String name) {
@@ -355,6 +377,12 @@ public abstract class AbstractGearPart implements IGearPart {
             part.materials = PartMaterial.read(buffer);
             part.tier = buffer.readByte();
 
+            part.blacklistedGearTypes.clear();
+            int blacklistSize = buffer.readByte();
+            for (int i = 0; i < blacklistSize; ++i) {
+                part.blacklistedGearTypes.add(buffer.readString());
+            }
+
             // Textures
             int displayCount = buffer.readVarInt();
             for (int i = 0; i < displayCount; ++i) {
@@ -375,6 +403,9 @@ public abstract class AbstractGearPart implements IGearPart {
             buffer.writeTextComponent(part.getDisplayName(null, ItemStack.EMPTY));
             part.materials.write(buffer);
             buffer.writeByte(part.getTier());
+
+            buffer.writeByte(part.blacklistedGearTypes.size());
+            part.blacklistedGearTypes.forEach(buffer::writeString);
 
             // Textures
             buffer.writeVarInt(part.display.size());

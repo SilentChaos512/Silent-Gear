@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.parts.PartData;
@@ -55,6 +56,10 @@ public interface IGearPart {
         return stat.compute(0, getStatModifiers(stat, part));
     }
 
+    default float computeUnclampedStatValue(ItemStat stat) {
+        return stat.compute(0, false, getStatModifiers(stat, PartData.of(this)));
+    }
+
     /**
      * Get the chance the part will be lost when salvaging. Returning zero will ensure the part is
      * returned, regardless of how damaged the gear is.
@@ -70,6 +75,12 @@ public interface IGearPart {
     }
 
     default boolean isCraftingAllowed(@Nullable GearType gearType) {
+        if (gearType != null) {
+            if (gearType.matches("armor"))
+                return computeUnclampedStatValue(ItemStats.ARMOR_DURABILITY) > 0;
+            else
+                return computeUnclampedStatValue(ItemStats.DURABILITY) > 0;
+        }
         return true;
     }
 

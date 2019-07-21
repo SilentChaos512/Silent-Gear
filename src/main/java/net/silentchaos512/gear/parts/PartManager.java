@@ -119,6 +119,12 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     @Nullable
+    public static IGearPart get(String id) {
+        ResourceLocation partId = ResourceLocation.tryCreate(id);
+        return partId != null ? get(partId) : null;
+    }
+
+    @Nullable
     public static IGearPart from(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
