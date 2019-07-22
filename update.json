@@ -3,10 +3,11 @@
     "changelog": "https://github.com/SilentChaos512/Silent-Gear/blob/1.14/CHANGELOG.md",
     "1.14.3": {
         "1.2.2": "See changelog on GitHub",
-        "1.2.3": "See changelog on GitHub"
+        "1.2.3": "See changelog on GitHub",
+        "1.2.4": "See changelog on GitHub"
     },
     "promos": {
-        "1.14.3-latest": "1.2.3",
-        "1.14.3-recommended": "1.2.3"
+        "1.14.3-latest": "1.2.4",
+        "1.14.3-recommended": "1.2.4"
     }
 }

@@ -33,7 +33,7 @@ public final class TraitSerializers {
         if (REGISTRY.containsKey(serializer.getName())) {
             throw new IllegalArgumentException("Duplicate trait serializer " + serializer.getName());
         }
-        log(() -> "Registered serializer " + serializer.getName());
+        SilentGear.LOGGER.info(TraitManager.MARKER, "Registered serializer '{}'", serializer.getName());
         REGISTRY.put(serializer.getName(), serializer);
         return serializer;
     }

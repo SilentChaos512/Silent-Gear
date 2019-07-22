@@ -30,7 +30,7 @@ public final class PartSerializers {
         if (REGISTRY.containsKey(serializer.getName())) {
             throw new IllegalArgumentException("Duplicate gear part serializer " + serializer.getName());
         }
-        log(() -> "Registered serializer " + serializer.getName());
+        SilentGear.LOGGER.info(PartManager.MARKER, "Registered serializer '{}'", serializer.getName());
         REGISTRY.put(serializer.getName(), serializer);
         return serializer;
     }
