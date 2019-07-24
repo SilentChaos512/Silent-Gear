@@ -2,10 +2,8 @@ package net.silentchaos512.gear;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -21,14 +19,17 @@ import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
+import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.InitialSpawnItems;
+import net.silentchaos512.lib.util.LibHooks;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 
 class SideProxy implements IProxy {
     @Nullable private static MinecraftServer server;
@@ -61,11 +62,14 @@ class SideProxy implements IProxy {
 
         IAOETool.BreakHandler.buildOreBlocksSet();
 
-        InitialSpawnItems.add(new ResourceLocation(SilentGear.MOD_ID, "starter_blueprints"), () -> {
+        InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.GENERAL.spawnWithStarterBlueprints.get())
-                return ModItems.blueprintPackage.getStack();
-            return ItemStack.EMPTY;
+                return Collections.singleton(ModItems.blueprintPackage.getStack());
+            return Collections.emptyList();
         });
+
+        LibHooks.registerCompostable(0.3f, ModItems.flaxseeds);
+        LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {}

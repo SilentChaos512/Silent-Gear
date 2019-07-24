@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[27,)"
+loaderVersion="[28,)"
 issueTrackerURL="https://github.com/SilentChaos512/Silent-Gear/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/silent-gear"
 logoFile="logo.png"
@@ -18,18 +18,18 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="forge"
     mandatory=true
-    versionRange="[27,)"
+    versionRange="[28,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.3]"
+    versionRange="[1.14.4]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]
     modId="silentlib"
     mandatory=true
-    versionRange="[4.2.1,)"
+    versionRange="[4.3,)"
     ordering="NONE"
     side="BOTH"
