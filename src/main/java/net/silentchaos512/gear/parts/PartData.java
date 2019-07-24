@@ -5,18 +5,15 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartPosition;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.ITrait;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class PartData {
@@ -137,11 +134,11 @@ public final class PartData {
         return part.getStatModifiers(gear, stat, this);
     }
 
-    public Map<ITrait, Integer> getTraits() {
+    public List<PartTraitInstance> getTraits() {
         return getTraits(ItemStack.EMPTY);
     }
 
-    public Map<ITrait, Integer> getTraits(ItemStack gear) {
+    public List<PartTraitInstance> getTraits(ItemStack gear) {
         return part.getTraits(gear, this);
     }
 

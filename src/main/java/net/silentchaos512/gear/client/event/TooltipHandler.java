@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.client.event;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -8,14 +9,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartMaterial;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
@@ -23,7 +20,6 @@ import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -72,22 +68,21 @@ public final class TooltipHandler {
         // Type, tier
         event.getToolTip().add(part.getType().getDisplayName(part.getTier()).applyTextStyle(TextFormatting.GREEN));
 
-        if (event.getFlags().isAdvanced() && DETAILED_MATERIAL_INFO && SilentGear.isDevBuild()) {
+        ITooltipFlag flags = event.getFlags();
+        if (flags.isAdvanced() && DETAILED_MATERIAL_INFO && SilentGear.isDevBuild()) {
             addDetailedMaterialInfo(event, part);
         }
 
         // Traits
-        Map<ITrait, Integer> traits = partData.getTraits();
-        List<ITrait> visibleTraits = traits.keySet().stream()
-                .filter(t -> t.showInTooltip(event.getFlags()))
+        List<PartTraitInstance> traits = partData.getTraits().stream()
+                .filter(inst -> inst.getTrait().showInTooltip(flags))
                 .collect(Collectors.toList());
-        int numTraits = visibleTraits.size();
+        int numTraits = traits.size();
         int traitIndex = getTraitDisplayIndex(numTraits);
         int i = 0;
-        for (ITrait trait : visibleTraits) {
+        for (PartTraitInstance inst : traits) {
             if (traitIndex < 0 || traitIndex == i) {
-                final int level = traits.get(trait);
-                trait.addInformation(level, event.getToolTip(), event.getFlags());
+                inst.getTrait().addInformation(inst.getLevel(), event.getToolTip(), flags);
             }
             ++i;
         }

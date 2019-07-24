@@ -20,6 +20,7 @@ package net.silentchaos512.gear.api.parts;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.parts.PartData;
 
 import javax.annotation.Nullable;
@@ -114,6 +115,14 @@ public final class PartDataList implements List<PartData> {
     public boolean addPart(IGearPart part) {
         return this.list.add(PartData.of(part));
     }
+
+    public int getPartsWithTrait(ITrait trait) {
+        return (int) this.stream()
+                .filter(part -> part.getTraits().stream().anyMatch(inst -> inst.getTrait() == trait))
+                .count();
+    }
+
+    //region List overrides
 
     @Override
     public boolean add(PartData arg0) {
@@ -229,4 +238,6 @@ public final class PartDataList implements List<PartData> {
     public <T> T[] toArray(T[] arg0) {
         return this.list.toArray(arg0);
     }
+
+    //endregion
 }

@@ -53,9 +53,10 @@ public final class TraitManager implements IResourceManagerReloadListener {
         SilentGear.LOGGER.info(MARKER, "Reloading trait files");
 
         for (ResourceLocation id : resources) {
+            String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
+            ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
+
             try (IResource iresource = resourceManager.getResource(id)) {
-                String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
-                ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
                 if (SilentGear.LOGGER.isTraceEnabled()) {
                     SilentGear.LOGGER.trace(MARKER, "Found likely trait file: {}, trying to read as trait {}", id, name);
                 }
@@ -67,11 +68,11 @@ public final class TraitManager implements IResourceManagerReloadListener {
                     addTrait(TraitSerializers.deserialize(name, json));
                 }
             } catch (IllegalArgumentException | JsonParseException ex) {
-                SilentGear.LOGGER.error(MARKER, "Parsing error loading trait {}", id, ex);
-                ERROR_LIST.add(id);
+                SilentGear.LOGGER.error(MARKER, "Parsing error loading trait {}", name, ex);
+                ERROR_LIST.add(name);
             } catch (IOException ex) {
-                SilentGear.LOGGER.error(MARKER, "Could not read trait {}", id, ex);
-                ERROR_LIST.add(id);
+                SilentGear.LOGGER.error(MARKER, "Could not read trait {}", name, ex);
+                ERROR_LIST.add(name);
             }
         }
 

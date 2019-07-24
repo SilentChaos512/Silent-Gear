@@ -14,7 +14,7 @@
     ],
     "traits": [
         {"name": "silentgear:brittle", "level": 2},
-        {"name": "silentgear:speed_boost_light", "level": 2}
+        {"name": "silentgear:lustrous", "level": 2}
     ],
     "crafting_items": {
         "normal": {

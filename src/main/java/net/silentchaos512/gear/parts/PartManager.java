@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.parts;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -59,9 +60,10 @@ public final class PartManager implements IResourceManagerReloadListener {
         SilentGear.LOGGER.info(MARKER, "Reloading part files");
 
         for (ResourceLocation id : resources) {
+            String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
+            ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
+
             try (IResource iresource = resourceManager.getResource(id)) {
-                String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
-                ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
                 if (SilentGear.LOGGER.isTraceEnabled()) {
                     SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
                 }
@@ -73,11 +75,11 @@ public final class PartManager implements IResourceManagerReloadListener {
                     addPart(PartSerializers.deserialize(name, json));
                 }
             } catch (IllegalArgumentException | JsonParseException ex) {
-                SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", id, ex);
-                ERROR_LIST.add(id);
+                SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", name, ex);
+                ERROR_LIST.add(name);
             } catch (IOException ex) {
-                SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", id, ex);
-                ERROR_LIST.add(id);
+                SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", name, ex);
+                ERROR_LIST.add(name);
             }
         }
 
@@ -164,8 +166,12 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {
+        Map<ResourceLocation, IGearPart> oldParts = ImmutableMap.copyOf(MAP);
         MAP.clear();
-        packet.getParts().forEach(part -> MAP.put(part.getId(), part));
+        packet.getParts().forEach(part -> {
+            part.retainData(oldParts.get(part.getId()));
+            MAP.put(part.getId(), part);
+        });
         SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
         context.get().setPacketHandled(true);
     }

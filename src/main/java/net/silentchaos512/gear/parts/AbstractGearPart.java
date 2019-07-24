@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.parts;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,24 +11,20 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.*;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -46,7 +41,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     // Stats and Traits
     StatModifierMap stats = new StatModifierMap();
-    Map<ITrait, Integer> traits = new LinkedHashMap<>();
+    List<PartTraitInstance> traits = new ArrayList<>();
 
     // Display
     ITextComponent displayName;
@@ -75,6 +70,15 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
+    public void retainData(@Nullable IGearPart oldPart) {
+        if (oldPart instanceof AbstractGearPart) {
+            // Copy trait instances, the client doesn't need to know conditions
+            this.traits.clear();
+            this.traits.addAll(((AbstractGearPart) oldPart).traits);
+        }
+    }
+
+    @Override
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
         GetStatModifierEvent event = new GetStatModifierEvent(part, stat, mods);
@@ -83,8 +87,8 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Map<ITrait, Integer> getTraits(ItemStack gear, PartData part) {
-        return ImmutableMap.copyOf(traits);
+    public List<PartTraitInstance> getTraits(ItemStack gear, PartData part) {
+        return Collections.unmodifiableList(traits);
     }
 
     @Override
@@ -236,26 +240,15 @@ public abstract class AbstractGearPart implements IGearPart {
             JsonElement elementTraits = json.get("traits");
             if (elementTraits != null && elementTraits.isJsonArray()) {
                 JsonArray array = elementTraits.getAsJsonArray();
-                Map<ITrait, Integer> traitsMap = new HashMap<>();
-                for (JsonElement element : array) {
-                    JsonObject obj = element.getAsJsonObject();
-                    String name = JSONUtils.getString(obj, "name", "");
-                    ITrait trait = TraitManager.get(name);
+                Collection<PartTraitInstance> traitsList = new ArrayList<>();
 
-                    if (trait != null) {
-                        int level = MathHelper.clamp(JSONUtils.getInt(obj, "level", 1), 1, trait.getMaxLevel());
-                        if (level > 0) {
-                            traitsMap.put(trait, level);
-                            if (SilentGear.LOGGER.isTraceEnabled()) {
-                                SilentGear.LOGGER.trace("Add trait {} level {} to part {}", trait.getId(), level, part.getId());
-                            }
-                        }
-                    }
+                for (JsonElement element : array) {
+                    traitsList.add(PartTraitInstance.deserialize(element.getAsJsonObject()));
                 }
 
-                if (!traitsMap.isEmpty()) {
+                if (!traitsList.isEmpty()) {
                     part.traits.clear();
-                    part.traits.putAll(traitsMap);
+                    part.traits.addAll(traitsList);
                 }
             }
 
@@ -423,23 +416,13 @@ public abstract class AbstractGearPart implements IGearPart {
             part.traits.clear();
             int traitCount = buffer.readVarInt();
             for (int i = 0; i < traitCount; ++i) {
-                ResourceLocation traitId = buffer.readResourceLocation();
-                ITrait trait = TraitManager.get(traitId);
-                int level = buffer.readByte();
-                if (trait != null) {
-                    part.traits.put(trait, level);
-                } else {
-                    SilentGear.LOGGER.warn("Read unknown trait from server: {}", traitId);
-                }
+                part.traits.add(PartTraitInstance.read(buffer));
             }
         }
 
         private void writeTraits(PacketBuffer buffer, T part) {
             buffer.writeVarInt(part.traits.size());
-            part.traits.forEach((trait, level) -> {
-                buffer.writeResourceLocation(trait.getId());
-                buffer.writeByte(level);
-            });
+            part.traits.forEach(inst -> inst.write(buffer));
         }
 
         @Override

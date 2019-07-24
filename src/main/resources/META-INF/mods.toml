@@ -24,7 +24,7 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.14.2,1.14.4]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]

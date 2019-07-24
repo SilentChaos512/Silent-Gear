@@ -24,7 +24,26 @@
         },
         {
             "name": "silentgear:flame_ward",
-            "level": 1
+            "level": 1,
+            "conditions": [
+                {
+                    "type": "silentgear:gear_type",
+                    "gear_type": "armor"
+                },
+                {
+                    "type": "silentgear:or",
+                    "values": [
+                        {
+                            "type": "silentgear:material_count",
+                            "count": 3
+                        },
+                        {
+                            "type": "silentgear:material_ratio",
+                            "ratio": 0.33
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "crafting_items": {

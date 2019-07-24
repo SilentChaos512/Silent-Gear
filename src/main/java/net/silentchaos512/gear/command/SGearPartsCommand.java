@@ -112,6 +112,7 @@ public final class SGearPartsCommand {
 
         if (removed) {
             GearData.writeConstructionParts(gear, partList);
+            GearData.recalculateStats(gear, ctx.getSource().asPlayer());
             ctx.getSource().sendFeedback(text("remove.success"), true);
             return 1;
         } else {
@@ -133,6 +134,7 @@ public final class SGearPartsCommand {
 
         partList.remove(index);
         GearData.writeConstructionParts(gear, partList);
+        GearData.recalculateStats(gear, ctx.getSource().asPlayer());
         ctx.getSource().sendFeedback(text("remove.success"), true);
         return 1;
     }
@@ -163,8 +165,7 @@ public final class SGearPartsCommand {
     }
 
     private static MaterialGrade getPartGrade(CommandContext<CommandSource> ctx) {
-        MaterialGrade grade = MaterialGrade.Argument.getGrade(ctx, "grade");
-        return grade;
+        return MaterialGrade.Argument.getGrade(ctx, "grade");
     }
 
     private static ItemStack getGear(CommandContext<CommandSource> ctx) throws CommandSyntaxException {

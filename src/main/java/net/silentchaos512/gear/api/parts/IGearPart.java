@@ -10,14 +10,12 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public interface IGearPart {
     ResourceLocation getId();
@@ -32,17 +30,25 @@ public interface IGearPart {
 
     IPartSerializer<?> getSerializer();
 
+    /**
+     * Used to copy data that is only needed on the server. This prevents certain things like trait
+     * conditions from being lost when synchronizing parts in singleplayer.
+     *
+     * @param oldPart The old part instance
+     */
+    void retainData(@Nullable IGearPart oldPart);
+
     default Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part) {
         return getStatModifiers(ItemStack.EMPTY, stat, part);
     }
 
     Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part);
 
-    default Map<ITrait, Integer> getTraits(PartData part) {
+    default List<PartTraitInstance> getTraits(PartData part) {
         return getTraits(ItemStack.EMPTY, part);
     }
 
-    Map<ITrait, Integer> getTraits(ItemStack gear, PartData part);
+    List<PartTraitInstance> getTraits(ItemStack gear, PartData part);
 
     StatInstance.Operation getDefaultStatOperation(ItemStat stat);
 

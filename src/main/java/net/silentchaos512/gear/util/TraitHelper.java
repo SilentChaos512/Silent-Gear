@@ -27,8 +27,11 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
@@ -167,12 +170,15 @@ public final class TraitHelper {
         Map<ITrait, Integer> countPartsWithTrait = new HashMap<>();
 
         for (PartData part : parts) {
-            part.getTraits(gear).forEach(((trait, level) -> {
-                // Count total levels for each trait from all parts
-                result.merge(trait, level, Integer::sum);
-                // Count number of parts with each trait
-                countPartsWithTrait.merge(trait, 1, Integer::sum);
-            }));
+            for (PartTraitInstance inst : part.getTraits(gear)) {
+                if (inst.conditionsMatch(gear, parts)) {
+                    ITrait trait = inst.getTrait();
+                    // Count total levels for each trait from all parts
+                    result.merge(trait, inst.getLevel(), Integer::sum);
+                    // Count number of parts with each trait
+                    countPartsWithTrait.merge(trait, 1, Integer::sum);
+                }
+            }
         }
 
         ITrait[] keys = result.keySet().toArray(new ITrait[0]);
@@ -185,6 +191,7 @@ public final class TraitHelper {
         }
 
         cancelTraits(result, keys);
+        MinecraftForge.EVENT_BUS.post(new GetTraitsEvent(gear, parts, result));
         return result;
     }
 
