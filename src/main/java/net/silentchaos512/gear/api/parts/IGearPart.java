@@ -80,6 +80,12 @@ public interface IGearPart {
         return normalLossRate;
     }
 
+    /**
+     * Determine if the part can be used to craft an item of the given type.
+     *
+     * @param gearType The gear type (or null if not available)
+     * @return True if crafting is allowed or {@code gearType} is {@code null}, false otherwise
+     */
     default boolean isCraftingAllowed(@Nullable GearType gearType) {
         if (gearType != null && this.getType() == PartType.MAIN) {
             if (gearType.matches("armor"))

@@ -10,7 +10,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
@@ -20,6 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * A trait, level, and optional conditions found on a gear part. Note that conditions are NOT sent
+ * to the client when syncing parts, so the conditions loaded from JSON must be retained.
+ */
 public class PartTraitInstance {
     private final ITrait trait;
     private final int level;
@@ -40,9 +43,6 @@ public class PartTraitInstance {
     }
 
     public boolean conditionsMatch(ItemStack gear, PartDataList parts) {
-        conditions.forEach(c -> {
-            SilentGear.LOGGER.debug("{}: {}", c, c.matches(gear, parts, this.trait));
-        });
         return conditions.stream().allMatch(c -> c.matches(gear, parts, this.trait));
     }
 
@@ -76,7 +76,6 @@ public class PartTraitInstance {
             throw new IllegalStateException("Unknown trait: " + traitId);
         }
         int level = buffer.readByte();
-        // TODO: conditions?
         return new PartTraitInstance(trait, level, ImmutableList.of());
     }
 
