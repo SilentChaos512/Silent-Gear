@@ -109,6 +109,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
             List<String> tooltip = craftResult.getTooltip(this.minecraft.player, getTooltipFlag(craftResult))
                     .stream()
                     .map(ITextComponent::getFormattedText)
+                    .map(s -> s.length() > 30 ? s.substring(0, 30) + "..." : s)
                     .collect(Collectors.toList());
 
             int maxWidth = 0;

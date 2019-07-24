@@ -55,7 +55,7 @@ public final class SilentGear {
     }
 
     public static String getLongVersion() {
-        return "1.14.3-" + getVersion();
+        return "1.14.4-" + getVersion();
     }
 
     public static boolean isDevBuild() {

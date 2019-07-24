@@ -81,7 +81,7 @@ public interface IGearPart {
     }
 
     default boolean isCraftingAllowed(@Nullable GearType gearType) {
-        if (gearType != null) {
+        if (gearType != null && this.getType() == PartType.MAIN) {
             if (gearType.matches("armor"))
                 return computeUnclampedStatValue(ItemStats.ARMOR_DURABILITY) > 0;
             else
