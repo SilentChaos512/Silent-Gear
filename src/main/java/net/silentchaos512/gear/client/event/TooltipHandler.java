@@ -22,8 +22,10 @@ import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class TooltipHandler {
     public static final TooltipHandler INSTANCE = new TooltipHandler();
@@ -76,13 +78,16 @@ public final class TooltipHandler {
 
         // Traits
         Map<ITrait, Integer> traits = partData.getTraits();
-        int numTraits = traits.size();
+        List<ITrait> visibleTraits = traits.keySet().stream()
+                .filter(t -> t.showInTooltip(event.getFlags()))
+                .collect(Collectors.toList());
+        int numTraits = visibleTraits.size();
         int traitIndex = getTraitDisplayIndex(numTraits);
         int i = 0;
-        for (ITrait trait : traits.keySet()) {
+        for (ITrait trait : visibleTraits) {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
-                trait.addInformation(level, event.getToolTip());
+                trait.addInformation(level, event.getToolTip(), event.getFlags());
             }
             ++i;
         }

@@ -32,6 +32,7 @@ public class SimpleTrait implements ITrait {
     Set<String> cancelsWith = new HashSet<>();
     ITextComponent displayName;
     ITextComponent description;
+    boolean hidden;
 
     @Deprecated
     public SimpleTrait(ResourceLocation id) {
@@ -73,6 +74,11 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    @Override
     public ITraitSerializer<?> getSerializer() {
         return serializer;
     }
@@ -101,7 +107,7 @@ public class SimpleTrait implements ITrait {
     }
 
     public static final class Serializer<T extends SimpleTrait> implements ITraitSerializer<T> {
-        private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "simple_trait");
+        private static final ResourceLocation NAME = SilentGear.getId("simple_trait");
 
         private final ResourceLocation serializerId;
         private final Function<ResourceLocation, T> factory;
@@ -131,6 +137,7 @@ public class SimpleTrait implements ITrait {
             trait.maxLevel = JSONUtils.getInt(json, "max_level", 1);
             trait.displayName = readTextComponent(json, "name");
             trait.description = readTextComponent(json, "description");
+            trait.hidden = JSONUtils.getBoolean(json, "hidden", false);
 
             if (json.has("cancels_with")) {
                 JsonArray array = json.getAsJsonArray("cancels_with");
@@ -152,6 +159,8 @@ public class SimpleTrait implements ITrait {
             trait.maxLevel = buffer.readByte();
             trait.displayName = buffer.readTextComponent();
             trait.description = buffer.readTextComponent();
+            trait.hidden = buffer.readBoolean();
+
             int cancelsCount = buffer.readVarInt();
             for (int i = 0; i < cancelsCount; ++i) {
                 trait.cancelsWith.add(buffer.readString(255));
@@ -169,6 +178,8 @@ public class SimpleTrait implements ITrait {
             buffer.writeByte(trait.maxLevel);
             buffer.writeTextComponent(trait.displayName);
             buffer.writeTextComponent(trait.description);
+            buffer.writeBoolean(trait.hidden);
+
             buffer.writeVarInt(trait.cancelsWith.size());
             for (String str : trait.cancelsWith) {
                 buffer.writeString(str);

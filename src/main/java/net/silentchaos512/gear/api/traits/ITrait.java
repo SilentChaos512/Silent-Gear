@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.traits;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -33,8 +34,38 @@ public interface ITrait {
 
     ITextComponent getDescription(int level);
 
+    default boolean isHidden() {
+        return false;
+    }
+
+    default boolean showInTooltip(ITooltipFlag flag) {
+        return !isHidden() || flag.isAdvanced();
+    }
+
+    @Deprecated
     default void addInformation(int level, List<ITextComponent> tooltip) {
-        tooltip.add(this.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC));
+        addInformation(level, tooltip, () -> false);
+    }
+
+    /**
+     * Add tooltip information for this trait. Normally, this consists of just the trait's
+     * translated name and level, but may include a description under certain conditions. If the
+     * trait is hidden ({@link #isHidden()}), nothing is shown unless advanced tooltips are
+     * enabled.
+     *
+     * @param level   The trait level
+     * @param tooltip The tooltip list
+     * @param flag    The tooltip flag
+     */
+    default void addInformation(int level, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        if (!showInTooltip(flag)) return;
+
+        // Display name
+        ITextComponent displayName = this.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC);
+        if (isHidden()) displayName.applyTextStyle(TextFormatting.DARK_GRAY);
+        tooltip.add(displayName);
+
+        // Description (usually not shown)
         if (KeyTracker.isAltDown()) {
             ITextComponent description = this.getDescription(level).applyTextStyle(TextFormatting.DARK_GRAY);
             tooltip.add(new StringTextComponent("  ").appendSibling(description));

@@ -31,6 +31,7 @@ import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.config.BooleanValue;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
 public final class GearClientHelper {
@@ -95,13 +96,16 @@ public final class GearClientHelper {
 
         // Traits
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
-        int numTraits = traits.size();
+        List<ITrait> visibleTraits = traits.keySet().stream()
+                .filter(t -> t.showInTooltip(flag))
+                .collect(Collectors.toList());
+        int numTraits = visibleTraits.size();
         int traitIndex = getTraitDisplayIndex(numTraits, ctrlDown);
         int i = 0;
-        for (ITrait trait : traits.keySet()) {
+        for (ITrait trait : visibleTraits) {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
-                trait.addInformation(level, tooltip);
+                trait.addInformation(level, tooltip, flag);
             }
             ++i;
         }
