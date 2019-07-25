@@ -3,11 +3,13 @@ package net.silentchaos512.gear.config;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.utils.config.*;
@@ -32,6 +34,10 @@ public class Config {
         // Block placers
         final ConfigValue<List<? extends String>> placerTools;
         final ConfigValue<List<? extends String>> placeableItems;
+        // Nerfed gear
+        public final BooleanValue nerfedItemsEnabled;
+        public final DoubleValue nerfedItemDurabilityMulti;
+        final ConfigValue<List<? extends String>> nerfedItems;
         // Sinew
         public final DoubleValue sinewDropRate;
         final ConfigValue<List<? extends String>> sinewAnimals;
@@ -81,7 +87,7 @@ public class Config {
                                     "silentgear:pickaxe",
                                     "silentgear:shovel"
                             ),
-                            o -> o instanceof String && ResourceLocation.tryCreate((String) o) != null);
+                            Config::isResourceLocation);
             placeableItems = wrapper
                     .builder("item.blockPlacers.placeableItems")
                     .comment("These items can be used by placer tools. The player must be sneaking.",
@@ -92,7 +98,25 @@ public class Config {
                                     "torchbandolier:torch_bandolier",
                                     "xreliquary:sojourner_staff"
                             ),
-                            o -> o instanceof String && ResourceLocation.tryCreate((String) o) != null);
+                            Config::isResourceLocation);
+
+            wrapper.comment("item.nerfedItems",
+                    "Settings for nerfed items.",
+                    "You can give items reduced durability to encourage use of Silent Gear tools.",
+                    "Changes require a restart!");
+
+            nerfedItemsEnabled = wrapper
+                    .builder("item.nerfedItems.enabled")
+                    .comment("Enable this feature. If false, the other settings in this category are ignored.")
+                    .define(false);
+            nerfedItemDurabilityMulti = wrapper
+                    .builder("item.nerfedItems.durabilityMultiplier")
+                    .comment("Multiplies max durability by this value. If the result would be zero, a value of 1 is assigned.")
+                    .defineInRange(0.05, 0, 1);
+            nerfedItems = wrapper
+                    .builder("item.nerfedItems.items")
+                    .comment("These items will have reduced durability")
+                    .defineList(NerfedGear.DEFAULT_ITEMS, Config::isResourceLocation);
 
             wrapper.comment("item.sinew", "Settings for sinew drops");
 
@@ -109,7 +133,7 @@ public class Config {
                                     "minecraft:pig",
                                     "minecraft:sheep"
                             ),
-                            o -> o instanceof String && ResourceLocation.tryCreate((String) o) != null);
+                            Config::isResourceLocation);
 
             wrapper.comment("item.gear", "Settings for gear (tools, weapons, and armor)");
 
@@ -190,6 +214,11 @@ public class Config {
                     .define(false);
         }
 
+        @SuppressWarnings("TypeMayBeWeakened")
+        public boolean isNerfedItem(Item item) {
+            return nerfedItemsEnabled.get() && isThingInList(item, nerfedItems);
+        }
+
         public boolean isPlacerTool(ItemStack stack) {
             return isThingInList(stack.getItem(), placerTools);
         }
@@ -212,6 +241,10 @@ public class Config {
             }
             return false;
         }
+    }
+
+    private static boolean isResourceLocation(Object o) {
+        return o instanceof String && ResourceLocation.tryCreate((String) o) != null;
     }
 
     public static class Client {

@@ -70,6 +70,8 @@ class SideProxy implements IProxy {
 
         LibHooks.registerCompostable(0.3f, ModItems.flaxseeds);
         LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
+
+        NerfedGear.init();
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {}

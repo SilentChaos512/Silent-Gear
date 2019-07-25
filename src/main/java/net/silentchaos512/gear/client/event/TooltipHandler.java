@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.event.ClientTicks;
@@ -53,13 +54,9 @@ public final class TooltipHandler {
         }
 
         // Nerfed gear?
-        /* FIXME
-        ResourceLocation name = stack.getItem().getRegistryName();
-        if (name != null && Config.nerfedGear.contains(name.toString())) {
-            event.getToolTip().add(1, new TranslationTextComponent("misc.silentgear.poorlyMade")
-                    .applyTextStyle(TextFormatting.RED));
+        if (Config.GENERAL.isNerfedItem(stack.getItem())) {
+            event.getToolTip().add(1, new TranslationTextComponent("misc.silentgear.poorlyMade").applyTextStyle(TextFormatting.RED));
         }
-        */
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData partData) {
