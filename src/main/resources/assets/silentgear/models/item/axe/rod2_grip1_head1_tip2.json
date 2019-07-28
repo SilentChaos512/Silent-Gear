@@ -1,0 +1,10 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/axe",
+  "textures": {
+    "layer0": "silentgear:item/axe/rod_generic_hc",
+    "layer1": "silentgear:item/axe/grip_wool",
+    "layer2": "silentgear:item/axe/head_generic_lc",
+    "layer3": "silentgear:item/axe/tip_iron"
+  }
+}

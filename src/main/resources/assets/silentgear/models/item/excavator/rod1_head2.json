@@ -1,0 +1,9 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/excavator",
+  "textures": {
+    "layer0": "silentgear:item/excavator/rod_generic_lc",
+    "layer1": "silentgear:item/blank",
+    "layer2": "silentgear:item/excavator/head_generic_hc"
+  }
+}

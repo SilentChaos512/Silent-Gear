@@ -1,0 +1,7 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/shovel",
+  "textures": {
+    "layer0": "silentgear:item/shovel/rod_generic_hc"
+  }
+}

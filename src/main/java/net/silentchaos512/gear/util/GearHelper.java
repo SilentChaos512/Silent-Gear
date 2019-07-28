@@ -24,14 +24,13 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
 import javax.annotation.Nonnull;
@@ -260,13 +259,17 @@ public final class GearHelper {
     }
 
     public static void addModelTypeProperty(ICoreItem item) {
-        // TODO: Add grips and bindings. Something to change head/rod textures and highlight?
-        item.asItem().addPropertyOverride(SilentGear.getId("model_type"), (stack, world, entity) ->
-                (GearData.hasPartOfType(stack, PartType.ROD) ? 1 : 0)
-                        + (GearData.hasPartOfType(stack, PartType.MAIN) ? 2 : 0)
-                        + (GearData.hasPartOfType(stack, PartType.TIP) ? 4 : 0)
-                        + (item.requiresPartOfType(PartType.BOWSTRING) && GearData.hasPartOfType(stack, PartType.BOWSTRING) ? 8 : 0)
-        );
+        //noinspection OverlyLongLambda
+        PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
+            if (item.supportsPartOfType(partType)) {
+                item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
+                    PartData part = GearData.getPartOfType(stack, partType);
+                    return part != null
+                            ? part.getPart().getDisplayProperties(part, ItemStack.EMPTY, 0).getLiteTexture().getIndex()
+                            : 0;
+                });
+            }
+        });
     }
 
     @Nullable

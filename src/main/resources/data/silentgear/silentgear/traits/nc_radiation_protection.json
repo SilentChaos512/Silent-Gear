@@ -1,0 +1,48 @@
+{
+    "type": "silentgear:nbt_trait",
+    "__comment__": "Not tested, just included as a reference for NBT traits for now",
+    "max_level": 5,
+    "cancels_with": [],
+    "nbt": {
+        "armor": [
+            {
+                "level": 1,
+                "data": {
+                    "ncRadiationResistance": 0.05
+                }
+            },
+            {
+                "level": 2,
+                "data": {
+                    "ncRadiationResistance": 0.1
+                }
+            },
+            {
+                "level": 3,
+                "data": {
+                    "ncRadiationResistance": 0.15
+                }
+            },
+            {
+                "level": 4,
+                "data": {
+                    "ncRadiationResistance": 0.2
+                }
+            },
+            {
+                "level": 5,
+                "data": {
+                    "ncRadiationResistance": 0.25
+                }
+            }
+        ]
+    },
+    "name": {
+        "translate": true,
+        "name": "trait.silentgear.nc_radiation_protection"
+    },
+    "description": {
+        "translate": true,
+        "name": "trait.silentgear.nc_radiation_protection.desc"
+    }
+}

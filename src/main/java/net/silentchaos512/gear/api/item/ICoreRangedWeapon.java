@@ -28,6 +28,11 @@ public interface ICoreRangedWeapon extends ICoreTool {
     }
 
     @Override
+    default boolean supportsPartOfType(PartType type) {
+        return true;
+    }
+
+    @Override
     default int getAnimationFrames() {
         return 4;
     }

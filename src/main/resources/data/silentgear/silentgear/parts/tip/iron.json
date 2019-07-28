@@ -26,6 +26,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "high_contrast",
             "texture_suffix": "iron",
             "normal_color": "white"
         }

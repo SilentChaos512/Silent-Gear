@@ -27,6 +27,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "high_contrast",
             "texture_suffix": "diamond",
             "normal_color": "white",
             "fallback_color": "#2BC7AC"

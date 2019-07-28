@@ -1,0 +1,7 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/machete",
+  "textures": {
+    "layer0": "silentgear:item/machete/rod_generic_hc"
+  }
+}

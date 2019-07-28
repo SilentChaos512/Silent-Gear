@@ -26,6 +26,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "low_contrast",
             "texture_domain": "silentgear",
             "texture_suffix": "blaze",
             "normal_color": "white",

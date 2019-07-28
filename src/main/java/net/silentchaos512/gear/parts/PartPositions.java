@@ -18,7 +18,11 @@
 
 package net.silentchaos512.gear.parts;
 
+import com.google.common.collect.ImmutableMap;
 import net.silentchaos512.gear.api.parts.IPartPosition;
+import net.silentchaos512.gear.api.parts.PartType;
+
+import java.util.Map;
 
 public enum PartPositions implements IPartPosition {
     ANY("head", "any", false),
@@ -31,6 +35,14 @@ public enum PartPositions implements IPartPosition {
     TIP("tip", "tip", true),
     BOWSTRING("bowstring", "bowstring", true),
     BINDING("binding", "binding", true);
+
+    public static final Map<PartPositions, PartType> LITE_MODEL_LAYERS = ImmutableMap.<PartPositions, PartType>builder()
+            .put(ROD, PartType.ROD)
+            .put(GRIP, PartType.GRIP)
+            .put(HEAD, PartType.MAIN)
+            .put(TIP, PartType.TIP)
+            .put(BOWSTRING, PartType.BOWSTRING)
+            .build();
 
     private final String texturePrefix;
     private final String modelKey;

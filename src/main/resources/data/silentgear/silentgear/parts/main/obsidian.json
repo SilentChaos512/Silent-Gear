@@ -32,6 +32,8 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "high_contrast",
+            "highlight": false,
             "texture_domain": "silentgear",
             "texture_suffix": "generic_hc",
             "texture_color": "#443464",

@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.api.parts;
 
+import net.silentchaos512.gear.parts.PartTextureType;
+
 public interface IPartDisplay {
     String getTextureDomain();
 
@@ -12,4 +14,6 @@ public interface IPartDisplay {
     int getFallbackColor();
 
     boolean hasHighlight();
+
+    PartTextureType getLiteTexture();
 }

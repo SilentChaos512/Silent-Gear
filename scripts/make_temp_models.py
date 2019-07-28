@@ -4,54 +4,6 @@ import json
 import os
 
 
-class PartType(Enum):
-    ROD = 1
-    HEAD = 2
-    TIP = 4
-    BOWSTRING = 8
-
-
-default_textures = {
-    PartType.ROD: 'rod_generic_lc',
-    PartType.HEAD: 'head_generic_hc',
-    PartType.TIP: 'tip_iron',
-    PartType.BOWSTRING: 'bowstring_string',
-}
-
-blank_texture = 'silentgear:item/blank'
-
-tool_models = [
-    [PartType.ROD],
-    [PartType.HEAD],
-    [PartType.ROD, PartType.HEAD],
-    [PartType.HEAD, PartType.TIP],
-    [PartType.ROD, PartType.HEAD, PartType.TIP],
-]
-
-bow_models = [
-    [PartType.ROD],
-    [PartType.HEAD],
-    [PartType.ROD, PartType.HEAD],
-    [PartType.HEAD, PartType.TIP],
-    [PartType.ROD, PartType.HEAD, PartType.TIP],
-    [PartType.ROD, PartType.HEAD, PartType.BOWSTRING],
-    [PartType.HEAD, PartType.TIP, PartType.BOWSTRING],
-    [PartType.ROD, PartType.HEAD, PartType.TIP, PartType.BOWSTRING],
-]
-
-tool_textures = [
-    'rod_generic_lc',
-    'head_generic_hc',
-    '_highlight'
-]
-
-bow_textures = [
-    'rod_generic_lc',
-    'head_generic_hc',
-    '_highlight',
-    'bowstring_string_0'
-]
-
 tools = [
     'axe',
     'dagger',
@@ -67,117 +19,198 @@ tools = [
     'sword',
 ]
 
-bows = [
-    'bow',
-    'crossbow',
-    'slingshot'
+bows = {
+    'bow': 'item/bow',
+    'crossbow': 'item/crossbow',
+    'slingshot': 'item/bow'
+}
+
+tool_models = [
+    # rod
+    {'rod': 1},
+    {'rod': 2},
+    # head
+    {'head': 1},
+    {'head': 2},
+    {'head': 3},
+    # rod, grip, head
+    {'rod': 1, 'grip': 1, 'head': 1},
+    {'rod': 2, 'grip': 1, 'head': 1},
+    {'rod': 1, 'grip': 1, 'head': 2},
+    {'rod': 2, 'grip': 1, 'head': 2},
+    {'rod': 1, 'grip': 1, 'head': 3},
+    {'rod': 2, 'grip': 1, 'head': 3},
+    # rod, head
+    {'rod': 1, 'head': 1},
+    {'rod': 2, 'head': 1},
+    {'rod': 1, 'head': 2},
+    {'rod': 2, 'head': 2},
+    {'rod': 1, 'head': 3},
+    {'rod': 2, 'head': 3},
+    # head, tip
+    {'head': 1, 'tip': 2},
+    {'head': 2, 'tip': 2},
+    {'head': 3, 'tip': 2},
+    # rod, head, tip
+    {'rod': 1, 'head': 1, 'tip': 2},
+    {'rod': 2, 'head': 1, 'tip': 2},
+    {'rod': 1, 'head': 2, 'tip': 2},
+    {'rod': 2, 'head': 2, 'tip': 2},
+    {'rod': 1, 'head': 3, 'tip': 2},
+    {'rod': 2, 'head': 3, 'tip': 2},
+    # rod, grip, head, tip
+    {'rod': 1, 'grip': 1, 'head': 1, 'tip': 2},
+    {'rod': 2, 'grip': 1, 'head': 1, 'tip': 2},
+    {'rod': 1, 'grip': 1, 'head': 2, 'tip': 2},
+    {'rod': 2, 'grip': 1, 'head': 2, 'tip': 2},
+    {'rod': 1, 'grip': 1, 'head': 3, 'tip': 2},
+    {'rod': 2, 'grip': 1, 'head': 3, 'tip': 2},
 ]
 
+bow_models = [
+    # rod
+    {'rod': 1},
+    {'rod': 2},
+    # head
+    {'head': 1},
+    {'head': 2},
+    {'head': 3},
+    # rod, head
+    {'rod': 1, 'head': 1},
+    {'rod': 2, 'head': 1},
+    {'rod': 1, 'head': 2},
+    {'rod': 2, 'head': 2},
+    {'rod': 1, 'head': 3},
+    {'rod': 2, 'head': 3},
+    # head, tip
+    {'head': 1, 'tip': 2},
+    {'head': 2, 'tip': 2},
+    {'head': 3, 'tip': 2},
+    # rod, head, tip
+    {'rod': 1, 'head': 1, 'tip': 2},
+    {'rod': 2, 'head': 1, 'tip': 2},
+    {'rod': 1, 'head': 2, 'tip': 2},
+    {'rod': 2, 'head': 2, 'tip': 2},
+    {'rod': 1, 'head': 3, 'tip': 2},
+    {'rod': 2, 'head': 3, 'tip': 2},
+    # rod, head, bowstring
+    {'rod': 1, 'head': 1, 'bowstring': 1},
+    {'rod': 2, 'head': 1, 'bowstring': 1},
+    {'rod': 1, 'head': 2, 'bowstring': 1},
+    {'rod': 2, 'head': 2, 'bowstring': 1},
+    {'rod': 1, 'head': 3, 'bowstring': 1},
+    {'rod': 2, 'head': 3, 'bowstring': 1},
+    # head, tip, bowstring
+    {'head': 1, 'tip': 2, 'bowstring': 1},
+    {'head': 1, 'tip': 2, 'bowstring': 1},
+    {'head': 2, 'tip': 2, 'bowstring': 1},
+    {'head': 2, 'tip': 2, 'bowstring': 1},
+    {'head': 3, 'tip': 2, 'bowstring': 1},
+    {'head': 3, 'tip': 2, 'bowstring': 1},
+    # rod, head, tip, bowstring
+    {'rod': 1, 'head': 1, 'tip': 2, 'bowstring': 1},
+    {'rod': 2, 'head': 1, 'tip': 2, 'bowstring': 1},
+    {'rod': 1, 'head': 2, 'tip': 2, 'bowstring': 1},
+    {'rod': 2, 'head': 2, 'tip': 2, 'bowstring': 1},
+    {'rod': 1, 'head': 3, 'tip': 2, 'bowstring': 1},
+    {'rod': 2, 'head': 3, 'tip': 2, 'bowstring': 1},
+]
 
-def model_id(part_types):
-    return sum((t.value for t in part_types))
+textures_map = {
+    'rod': [None, 'rod_generic_lc', 'rod_generic_hc', None],
+    'grip': [None, 'grip_wool', None, None],
+    'head': [None, 'head_generic_lc', 'head_generic_hc', 'head_generic_hc'],
+    'tip': [None, None, 'tip_iron', None],
+    'bowstring': [None, 'bowstring_string', None, None],
+}
+
+blank_texture = 'silentgear:item/blank'
 
 
-def model_name(tool: str, part_types):
-    return 'silentgear:item/' + tool + '/' + '_'.join((p.name.lower() for p in part_types))
+def make_root_model(gear_type: str, model_types: dict, parent='item/handheld') -> dict:
+    overrides = [make_override(gear_type, model) for model in model_types]
+
+    for model in model_types:
+        if is_valid_bow_configuration(model):
+            overrides.append(make_override(gear_type, model, frame=1, extra_predicates={'pulling': 1}))
+            overrides.append(make_override(gear_type, model, frame=2, extra_predicates={'pulling': 1, 'pull': 0.65}))
+            overrides.append(make_override(gear_type, model, frame=3, extra_predicates={'pulling': 1, 'pull': 0.9}))
+            if gear_type == 'crossbow':
+                overrides.append(make_override(gear_type, model, model_suffix='_arrow',
+                                               extra_predicates={'charged': 1}))
+                overrides.append(make_override(gear_type, model, model_suffix='_firework',
+                                               extra_predicates={'charged': 1, 'firework': 1}))
+
+    return {
+        '__comment__': 'Lite gear model',
+        'parent': parent,
+        'textures': {
+            'layer0': 'silentgear:item/' + gear_type + '/rod_generic_lc',
+            'layer1': 'silentgear:item/' + gear_type + '/head_generic_hc',
+            'layer2': 'silentgear:item/' + gear_type + '/_highlight',
+        },
+        'overrides': overrides
+    }
 
 
-def tex_name(tool: str, tex: str, frame=-1):
+def make_override(gear_type: str, model: dict, frame=-1, model_suffix='', extra_predicates={}) -> dict:
+    predicate_base = {('silentgear:lite_' + key): model[key] for key in model.keys()}
+    predicate = {**predicate_base, **extra_predicates}
+    return {
+        'predicate': predicate,
+        'model': model_name(gear_type, model, frame) + model_suffix
+    }
+
+
+def make_gear_model(gear_type: str, model_type: dict, frame=-1, loaded_ammo: str = None) -> dict:
+    texture_list = make_texture_list(gear_type, model_type, frame, loaded_ammo)
+    textures = {'layer' + str(i): texture_list[i] for i in range(len(texture_list))}
+    if 'head' in model_type and model_type['head'] == 3:
+        textures['layer' + str(len(textures))] = tex_name(gear_type, '_highlight')
+    return {
+        '__comment__': 'Lite gear model',
+        'parent': 'silentgear:item/' + gear_type,
+        'textures': textures
+    }
+
+
+def make_texture_list(gear_type: str, model: dict, frame=-1, loaded_ammo: str = None) -> list:
+    textures = []
+    for tex in textures_map.keys():
+        if tex in model:
+            if tex == 'bowstring' and loaded_ammo:
+                textures.append(tex_name(gear_type, 'bowstring_string_' + loaded_ammo))
+            else:
+                textures.append(tex_name(gear_type, textures_map[tex][model[tex]], frame))
+        else:
+            textures.append(blank_texture)
+
+    # Remove trailing blanks
+    while len(textures) > 0 and textures[-1] == blank_texture:
+        textures.pop()
+
+    return textures
+
+
+def model_name(gear_type: str, model: dict, frame=-1) -> str:
+    return 'silentgear:item/' + short_model_name(gear_type, model, frame)
+
+
+def short_model_name(gear_type: str, model: dict, frame=-1) -> str:
+    parts_str = '_'.join(key + str(model[key]) for key in model.keys())
+    frame_str = '' if frame < 0 else '_' + str(frame)
+    return '{0}/{1}{2}'.format(gear_type, parts_str, frame_str)
+
+
+def tex_name(gear_type: str, tex: str, frame=-1) -> str:
     if not tex:
         return blank_texture
     frame_str = '' if frame < 0 else '_' + str(frame)
-    return 'silentgear:item/{0}/{1}{2}'.format(tool, tex, frame_str)
-
-
-def make_model_override(tool: str, part_types):
-    return {
-        "predicate": {
-            "silentgear:model_type": model_id(part_types)
-        },
-        "model": model_name(tool, part_types)
-    }
-
-
-def make_root_model(tool: str, models, textures):
-    print(tool + ' root model')
-    tex = {'layer' + str(i): tex_name(tool, textures[i])
-           for i in range(len(textures))}
-    overrides = [make_model_override(tool, parts) for parts in models]
-
-    data = {
-        "__comment__": "Lite gear model",
-        "parent": "item/handheld",
-        "textures": tex,
-        "overrides": overrides
-    }
-    write_json(tool, data)
-
-
-def make_model(tool: str, model: str, *textures):
-    print(tool + '_' + model, textures)
-    tex = {'layer' + str(i): tex_name(tool, textures[i])
-           for i in range(len(textures))}
-    data = {
-        "__comment__": "Lite gear model",
-        "parent": 'item/handheld',
-        "textures": tex
-    }
-    write_json(tool + '/' + model, data)
+    return 'silentgear:item/{0}/{1}{2}'.format(gear_type, tex, frame_str)
 
 
 def is_valid_bow_configuration(model_type):
-    return PartType.ROD in model_type and PartType.HEAD in model_type and PartType.BOWSTRING in model_type
-
-
-def make_bow_overrides(tool: str):
-    ret = []
-    for model_type in bow_models:
-        model = model_name(tool, model_type)
-        ret.append({
-            "predicate": {
-                "silentgear:model_type": model_id(model_type)
-            },
-            "model": model
-        })
-        if is_valid_bow_configuration(model_type):
-            ret.append({
-                "predicate": {
-                    "silentgear:model_type": model_id(model_type),
-                    "pulling": 1
-                },
-                "model": model + '_1'
-            })
-            ret.append({
-                "predicate": {
-                    "silentgear:model_type": model_id(model_type),
-                    "pulling": 1,
-                    "pull": 0.65
-                },
-                "model": model + '_2'
-            })
-            ret.append({
-                "predicate": {
-                    "silentgear:model_type": model_id(model_type),
-                    "pulling": 1,
-                    "pull": 0.9
-                },
-                "model": model + '_3'
-            })
-    return ret
-
-
-def make_bow_root_model(tool: str, model: str, textures):
-    print(tool + ' root model')
-    tex = {'layer' + str(i): tex_name(tool, textures[i])
-           for i in range(len(textures))}
-    overrides = make_bow_overrides(tool)
-    data = {
-        "__comment__": "Lite gear model",
-        "parent": 'item/bow',
-        "textures": tex,
-        "overrides": overrides
-    }
-    write_json(tool, data)
+    return 'rod' in model_type and 'head' in model_type and 'bowstring' in model_type
 
 
 def write_json(filename, data):
@@ -186,64 +219,29 @@ def write_json(filename, data):
 
 
 if __name__ == '__main__':
+    # Tools, melee weapons
     for tool in tools:
         if not os.path.exists('output/' + tool):
             os.makedirs('output/' + tool)
 
-        rod = 'rod_generic_lc'
-        head = 'head_generic_hc'
-        tip = 'tip_iron'
-        shine = '_highlight'
+        write_json(tool, make_root_model(tool, tool_models))
+        for model in tool_models:
+            write_json(short_model_name(tool, model), make_gear_model(tool, model))
 
-        make_root_model(tool, tool_models, tool_textures)
-        if (tool == 'sword'):
-            guard = 'guard_generic_hc'
-            # rod, head, tip, guard, shine
-            make_model(tool, 'head', None, head, None, guard, shine)
-            make_model(tool, 'rod_head', rod, head, None, guard, shine)
-            make_model(tool, 'rod', rod, None, None, guard)
-            make_model(tool, 'head_tip', None, head, tip, guard, shine)
-            make_model(tool, 'rod_head_tip', rod, head, tip, guard, shine)
-        else:
-            # rod, head, tip, shine
-            make_model(tool, 'rod', rod)
-            make_model(tool, 'head', None, head, shine)
-            make_model(tool, 'rod_head', rod, head, shine)
-            make_model(tool, 'head_tip', None, head, tip, shine)
-            make_model(tool, 'rod_head_tip', rod, head, tip, shine)
-
-    for bow in bows:
+    # Ranged weapons
+    for bow, parent in bows.items():
         if not os.path.exists('output/' + bow):
             os.makedirs('output/' + bow)
 
-        rod = default_textures[PartType.ROD]
-        head = default_textures[PartType.HEAD]
-        tip = default_textures[PartType.TIP]
-        shine = '_highlight'
-        bowstring = default_textures[PartType.BOWSTRING] + '_0'
-
-        make_bow_root_model(bow, bow_models, bow_textures)
-        # Incomplete tools cannot be fired (and thus are not animated)
-        make_model(bow, 'rod', rod)
-        make_model(bow, 'head', None, head, shine)
-        make_model(bow, 'rod_head', rod, head, shine)
-        make_model(bow, 'head_tip', None, head, tip, shine)
-        make_model(bow, 'rod_head_tip', rod, head, tip, shine)
-        make_model(bow, 'head_bowstring', None, head, shine, bowstring)
-        make_model(bow, 'head_tip_bowstring',
-                   None, head, tip, shine, bowstring)
-        # Animated base models
-        make_model(bow, 'rod_head_bowstring', rod, head, shine, bowstring)
-        make_model(bow, 'rod_head_tip_bowstring',
-                   rod, head, tip, shine, bowstring)
-
-        for frame in range(4):
-            bowstring = default_textures[PartType.BOWSTRING] + '_' + str(frame)
-            if (frame == 3 and bow == 'bow'):
-                head = head + '_3'
-                tip = tip + '_3'
-            # rod, head, tip, shine, bowstring
-            make_model(bow, 'rod_head_bowstring_' + str(frame),
-                       rod, head, shine, bowstring)
-            make_model(bow, 'rod_head_tip_bowstring_' + str(frame),
-                       rod, head, tip, shine, bowstring)
+        write_json(bow, make_root_model(bow, bow_models, parent=parent))
+        for model in bow_models:
+            write_json(short_model_name(bow, model), make_gear_model(bow, model))
+            if (is_valid_bow_configuration(model)):
+                # Loaded crossbows
+                if bow == 'crossbow':
+                    for ammo in ['arrow', 'firework']:
+                        model_data = make_gear_model(bow, model, frame=3, loaded_ammo=ammo)
+                        write_json(short_model_name(bow, model) + '_' + ammo, model_data)
+                # Pulling animation frames
+                for i in range(1, 4):
+                    write_json(short_model_name(bow, model, frame=i), make_gear_model(bow, model, frame=i))

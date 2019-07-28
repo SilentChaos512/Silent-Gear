@@ -1,0 +1,10 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/shovel",
+  "textures": {
+    "layer0": "silentgear:item/shovel/rod_generic_hc",
+    "layer1": "silentgear:item/shovel/grip_wool",
+    "layer2": "silentgear:item/shovel/head_generic_lc",
+    "layer3": "silentgear:item/shovel/tip_iron"
+  }
+}

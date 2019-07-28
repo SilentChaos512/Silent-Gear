@@ -1,0 +1,12 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/crossbow",
+  "textures": {
+    "layer0": "silentgear:item/crossbow/rod_generic_hc_3",
+    "layer1": "silentgear:item/blank",
+    "layer2": "silentgear:item/crossbow/head_generic_hc_3",
+    "layer3": "silentgear:item/crossbow/tip_iron_3",
+    "layer4": "silentgear:item/crossbow/bowstring_string_firework",
+    "layer5": "silentgear:item/crossbow/_highlight"
+  }
+}

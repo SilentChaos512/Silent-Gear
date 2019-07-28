@@ -4,133 +4,905 @@
   "textures": {
     "layer0": "silentgear:item/crossbow/rod_generic_lc",
     "layer1": "silentgear:item/crossbow/head_generic_hc",
-    "layer2": "silentgear:item/crossbow/_highlight",
-    "layer3": "silentgear:item/crossbow/bowstring_string_0"
+    "layer2": "silentgear:item/crossbow/_highlight"
   },
   "overrides": [
     {
       "predicate": {
-        "silentgear:model_type": 1
+        "silentgear:lite_rod": 1
       },
-      "model": "silentgear:item/crossbow/rod"
+      "model": "silentgear:item/crossbow/rod1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 2
+        "silentgear:lite_rod": 2
       },
-      "model": "silentgear:item/crossbow/head"
+      "model": "silentgear:item/crossbow/rod2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 3
+        "silentgear:lite_head": 1
       },
-      "model": "silentgear:item/crossbow/rod_head"
+      "model": "silentgear:item/crossbow/head1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 6
+        "silentgear:lite_head": 2
       },
-      "model": "silentgear:item/crossbow/head_tip"
+      "model": "silentgear:item/crossbow/head2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 7
+        "silentgear:lite_head": 3
       },
-      "model": "silentgear:item/crossbow/rod_head_tip"
+      "model": "silentgear:item/crossbow/head3"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1
       },
-      "model": "silentgear:item/crossbow/rod_head_bowstring"
+      "model": "silentgear:item/crossbow/rod1_head1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/crossbow/rod1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/crossbow/rod2_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/crossbow/rod1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/crossbow/rod2_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1
       },
-      "model": "silentgear:item/crossbow/rod_head_bowstring_1"
+      "model": "silentgear:item/crossbow/rod1_head1_bowstring1_1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
-        "pull": 0.58
+        "pull": 0.65
       },
-      "model": "silentgear:item/crossbow/rod_head_bowstring_2"
+      "model": "silentgear:item/crossbow/rod1_head1_bowstring1_2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
-        "pull": 1.0
+        "pull": 0.9
       },
-      "model": "silentgear:item/crossbow/rod_head_bowstring_3"
+      "model": "silentgear:item/crossbow/rod1_head1_bowstring1_3"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "charged": 1
       },
-      "model": "silentgear:item/crossbow/rod_head_bowstring_arrow"
+      "model": "silentgear:item/crossbow/rod1_head1_bowstring1_arrow"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "charged": 1,
         "firework": 1
       },
-      "model": "silentgear:item/crossbow/rod_head_bowstring_firework"
+      "model": "silentgear:item/crossbow/rod1_head1_bowstring1_firework"
     },
     {
       "predicate": {
-        "silentgear:model_type": 14
-      },
-      "model": "silentgear:item/crossbow/head_tip_bowstring"
-    },
-    {
-      "predicate": {
-        "silentgear:model_type": 15
-      },
-      "model": "silentgear:item/crossbow/rod_head_tip_bowstring"
-    },
-    {
-      "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1
       },
-      "model": "silentgear:item/crossbow/rod_head_tip_bowstring_1"
+      "model": "silentgear:item/crossbow/rod2_head1_bowstring1_1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
-        "pull": 0.58
+        "pull": 0.65
       },
-      "model": "silentgear:item/crossbow/rod_head_tip_bowstring_2"
+      "model": "silentgear:item/crossbow/rod2_head1_bowstring1_2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
-        "pull": 1.0
+        "pull": 0.9
       },
-      "model": "silentgear:item/crossbow/rod_head_tip_bowstring_3"
+      "model": "silentgear:item/crossbow/rod2_head1_bowstring1_3"
     },
     {
       "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "charged": 1
       },
-      "model": "silentgear:item/crossbow/rod_head_tip_bowstring_arrow"
+      "model": "silentgear:item/crossbow/rod2_head1_bowstring1_arrow"
     },
     {
       "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "charged": 1,
         "firework": 1
       },
-      "model": "silentgear:item/crossbow/rod_head_tip_bowstring_firework"
+      "model": "silentgear:item/crossbow/rod2_head1_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_tip2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head1_tip2_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_tip2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head1_tip2_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_tip2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head2_tip2_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_tip2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head2_tip2_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_tip2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod1_head3_tip2_bowstring1_firework"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_tip2_bowstring1_arrow"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "charged": 1,
+        "firework": 1
+      },
+      "model": "silentgear:item/crossbow/rod2_head3_tip2_bowstring1_firework"
     }
   ]
 }

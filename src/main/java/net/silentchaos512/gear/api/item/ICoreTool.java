@@ -49,6 +49,11 @@ public interface ICoreTool extends ICoreItem {
         return type == PartType.MAIN || type == PartType.ROD;
     }
 
+    @Override
+    default boolean supportsPartOfType(PartType type) {
+        return type != PartType.BOWSTRING;
+    }
+
     /**
      * The base damage done to the item when breaking a block, not considering enchantments
      * @param gear The item

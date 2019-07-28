@@ -1,0 +1,7 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/sickle",
+  "textures": {
+    "layer0": "silentgear:item/sickle/rod_generic_hc"
+  }
+}

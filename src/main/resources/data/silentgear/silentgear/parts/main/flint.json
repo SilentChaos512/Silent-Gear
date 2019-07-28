@@ -31,6 +31,8 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "high_contrast",
+            "highlight": false,
             "texture_domain": "silentgear",
             "texture_suffix": "flint",
             "normal_color": "#FFFFFF",

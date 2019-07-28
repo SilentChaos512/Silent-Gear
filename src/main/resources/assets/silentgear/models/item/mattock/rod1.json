@@ -1,0 +1,7 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/mattock",
+  "textures": {
+    "layer0": "silentgear:item/mattock/rod_generic_lc"
+  }
+}

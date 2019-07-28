@@ -1,0 +1,7 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/axe",
+  "textures": {
+    "layer0": "silentgear:item/axe/rod_generic_hc"
+  }
+}

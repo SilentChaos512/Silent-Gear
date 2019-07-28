@@ -23,6 +23,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "low_contrast",
             "texture_suffix": "iron",
             "normal_color": "#D83200",
             "broken_color": "#D83200"

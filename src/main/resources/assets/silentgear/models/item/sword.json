@@ -4,39 +4,251 @@
   "textures": {
     "layer0": "silentgear:item/sword/rod_generic_lc",
     "layer1": "silentgear:item/sword/head_generic_hc",
-    "layer2": "silentgear:item/sword/guard_generic_hc",
-    "layer3": "silentgear:item/sword/_highlight"
+    "layer2": "silentgear:item/sword/_highlight"
   },
   "overrides": [
     {
       "predicate": {
-        "silentgear:model_type": 1
+        "silentgear:lite_rod": 1
       },
-      "model": "silentgear:item/sword/rod"
+      "model": "silentgear:item/sword/rod1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 2
+        "silentgear:lite_rod": 2
       },
-      "model": "silentgear:item/sword/head"
+      "model": "silentgear:item/sword/rod2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 3
+        "silentgear:lite_head": 1
       },
-      "model": "silentgear:item/sword/rod_head"
+      "model": "silentgear:item/sword/head1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 6
+        "silentgear:lite_head": 2
       },
-      "model": "silentgear:item/sword/head_tip"
+      "model": "silentgear:item/sword/head2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 7
+        "silentgear:lite_head": 3
       },
-      "model": "silentgear:item/sword/rod_head_tip"
+      "model": "silentgear:item/sword/head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/sword/rod1_grip1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/sword/rod2_grip1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/sword/rod1_grip1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/sword/rod2_grip1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/sword/rod1_grip1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/sword/rod2_grip1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/sword/rod1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/sword/rod2_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/sword/rod1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/sword/rod2_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/sword/rod1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/sword/rod2_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod2_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod2_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod1_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod2_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod1_grip1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod2_grip1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod1_grip1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod2_grip1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod1_grip1_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/sword/rod2_grip1_head3_tip2"
     }
   ]
 }

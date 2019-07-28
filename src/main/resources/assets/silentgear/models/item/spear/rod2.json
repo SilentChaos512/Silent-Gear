@@ -1,0 +1,7 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/spear",
+  "textures": {
+    "layer0": "silentgear:item/spear/rod_generic_hc"
+  }
+}

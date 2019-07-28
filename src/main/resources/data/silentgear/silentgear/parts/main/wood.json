@@ -33,6 +33,8 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "low_contrast",
+            "highlight": false,
             "texture_domain": "silentgear",
             "texture_suffix": "wood",
             "texture_color": "FFFFFF",

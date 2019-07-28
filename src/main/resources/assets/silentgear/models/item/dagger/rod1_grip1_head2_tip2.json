@@ -1,0 +1,10 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/dagger",
+  "textures": {
+    "layer0": "silentgear:item/dagger/rod_generic_lc",
+    "layer1": "silentgear:item/dagger/grip_wool",
+    "layer2": "silentgear:item/dagger/head_generic_hc",
+    "layer3": "silentgear:item/dagger/tip_iron"
+  }
+}

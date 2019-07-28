@@ -64,18 +64,20 @@ public final class ColorHandlers {
             return part.getFallbackColor(stack, 0);
         }
         if (tintIndex == 1) {
+            // Grip
+            PartData part = GearData.getPartOfType(stack, PartType.GRIP);
+            if (part == null) return Color.VALUE_WHITE;
+            return part.getFallbackColor(stack, 0);
+        }
+        if (tintIndex == 2) {
             // Main
             return GearData.getHeadColor(stack, true);
         }
-        if (tintIndex == 2) {
+        if (tintIndex == 3) {
             // Tip
             PartData part = GearData.getPartOfType(stack, PartType.TIP);
             if (part == null) return Color.VALUE_WHITE;
             return part.getFallbackColor(stack, 0);
-        }
-        if (tintIndex == 3 && stack.getItem() == ModItems.sword) {
-            // Guard (just use primary for now)
-            return GearData.getHeadColor(stack, true);
         }
         return Color.VALUE_WHITE;
     }
@@ -84,6 +86,12 @@ public final class ColorHandlers {
         if (tintIndex == 0) {
             // Main
             return GearData.getHeadColor(stack, true);
+        }
+        if (tintIndex == 1) {
+            // Tip
+            PartData part = GearData.getPartOfType(stack, PartType.TIP);
+            if (part == null) return Color.VALUE_WHITE;
+            return part.getFallbackColor(stack, 0);
         }
         return Color.VALUE_WHITE;
     }

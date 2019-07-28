@@ -27,6 +27,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "high_contrast",
             "texture_domain": "silentgear",
             "texture_suffix": "end",
             "normal_color": "white",

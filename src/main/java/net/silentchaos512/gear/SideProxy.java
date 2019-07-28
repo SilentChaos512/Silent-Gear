@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -17,6 +18,8 @@ import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
+import net.silentchaos512.gear.client.models.ArmorItemModel;
+import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -124,8 +127,8 @@ class SideProxy implements IProxy {
             }
 
             // FIXME: These do not work!
-//            ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
-//            ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
+            ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
+            ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {

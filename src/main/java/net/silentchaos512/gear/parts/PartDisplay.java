@@ -6,16 +6,18 @@ import net.minecraft.util.JSONUtils;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.utils.Color;
+import net.silentchaos512.utils.EnumUtils;
 
 public final class PartDisplay implements IPartDisplay {
     public static final PartDisplay DEFAULT = new PartDisplay();
 
-    String textureDomain;
-    String textureSuffix;
-    int normalColor;
-    int brokenColor;
-    int fallbackColor;
-    boolean highlight;
+    private String textureDomain;
+    private String textureSuffix;
+    private int normalColor;
+    private int brokenColor;
+    private int fallbackColor;
+    private boolean highlight;
+    private PartTextureType liteTexture;
 
     PartDisplay() {
         textureDomain = SilentGear.MOD_ID;
@@ -65,6 +67,11 @@ public final class PartDisplay implements IPartDisplay {
         return highlight;
     }
 
+    @Override
+    public PartTextureType getLiteTexture() {
+        return liteTexture;
+    }
+
     public static PartDisplay from(JsonObject json, IPartDisplay defaultProps) {
         String textureDomain = JSONUtils.getString(json, "texture_domain", defaultProps.getTextureDomain());
         String textureSuffix = JSONUtils.getString(json, "texture_suffix", defaultProps.getTextureSuffix());
@@ -76,6 +83,7 @@ public final class PartDisplay implements IPartDisplay {
         PartDisplay props = new PartDisplay(textureDomain, textureSuffix, normalColor, brokenColor, fallbackColor);
 
         props.highlight = JSONUtils.getBoolean(json, "highlight", props.highlight);
+        props.liteTexture = EnumUtils.byName(JSONUtils.getString(json, "lite_texture", ""), PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT);
 
         return props;
     }
@@ -96,6 +104,8 @@ public final class PartDisplay implements IPartDisplay {
         display.normalColor = buffer.readVarInt();
         display.brokenColor = buffer.readVarInt();
         display.fallbackColor = buffer.readVarInt();
+        display.highlight = buffer.readBoolean();
+        display.liteTexture = EnumUtils.byOrdinal(buffer.readByte(), PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT);
         return display;
     }
 
@@ -105,6 +115,8 @@ public final class PartDisplay implements IPartDisplay {
         buffer.writeVarInt(display.normalColor);
         buffer.writeVarInt(display.brokenColor);
         buffer.writeVarInt(display.fallbackColor);
+        buffer.writeBoolean(display.highlight);
+        buffer.writeByte(display.liteTexture.getIndex());
     }
 
     @Override

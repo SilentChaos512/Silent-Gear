@@ -26,6 +26,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "high_contrast",
             "texture_suffix": "redstone",
             "normal_color": "white",
             "fallback_color": "#BB0000"

@@ -23,6 +23,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "low_contrast",
             "texture_domain": "silentgear",
             "texture_suffix": "bone",
             "normal_color": "white",

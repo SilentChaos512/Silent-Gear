@@ -28,6 +28,7 @@
     },
     "textures": {
         "all": {
+            "lite_texture": "low_contrast",
             "texture_domain": "silentgear",
             "texture_suffix": "wool",
             "normal_color": "#F38BAA"

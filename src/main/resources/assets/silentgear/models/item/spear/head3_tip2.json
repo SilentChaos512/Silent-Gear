@@ -1,0 +1,11 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/spear",
+  "textures": {
+    "layer0": "silentgear:item/blank",
+    "layer1": "silentgear:item/blank",
+    "layer2": "silentgear:item/spear/head_generic_hc",
+    "layer3": "silentgear:item/spear/tip_iron",
+    "layer4": "silentgear:item/spear/_highlight"
+  }
+}

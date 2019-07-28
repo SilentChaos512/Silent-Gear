@@ -1,0 +1,7 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/slingshot",
+  "textures": {
+    "layer0": "silentgear:item/slingshot/rod_generic_lc"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/bow",
+  "textures": {
+    "layer0": "silentgear:item/bow/rod_generic_hc_2",
+    "layer1": "silentgear:item/blank",
+    "layer2": "silentgear:item/bow/head_generic_lc_2",
+    "layer3": "silentgear:item/bow/tip_iron_2",
+    "layer4": "silentgear:item/bow/bowstring_string_2"
+  }
+}

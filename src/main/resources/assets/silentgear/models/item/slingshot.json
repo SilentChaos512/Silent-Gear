@@ -4,103 +4,665 @@
   "textures": {
     "layer0": "silentgear:item/slingshot/rod_generic_lc",
     "layer1": "silentgear:item/slingshot/head_generic_hc",
-    "layer2": "silentgear:item/slingshot/_highlight",
-    "layer3": "silentgear:item/slingshot/bowstring_string_0"
+    "layer2": "silentgear:item/slingshot/_highlight"
   },
   "overrides": [
     {
       "predicate": {
-        "silentgear:model_type": 1
+        "silentgear:lite_rod": 1
       },
-      "model": "silentgear:item/slingshot/rod"
+      "model": "silentgear:item/slingshot/rod1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 2
+        "silentgear:lite_rod": 2
       },
-      "model": "silentgear:item/slingshot/head"
+      "model": "silentgear:item/slingshot/rod2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 3
+        "silentgear:lite_head": 1
       },
-      "model": "silentgear:item/slingshot/rod_head"
+      "model": "silentgear:item/slingshot/head1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 6
+        "silentgear:lite_head": 2
       },
-      "model": "silentgear:item/slingshot/head_tip"
+      "model": "silentgear:item/slingshot/head2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 7
+        "silentgear:lite_head": 3
       },
-      "model": "silentgear:item/slingshot/rod_head_tip"
+      "model": "silentgear:item/slingshot/head3"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1
       },
-      "model": "silentgear:item/slingshot/rod_head_bowstring"
+      "model": "silentgear:item/slingshot/rod1_head1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/slingshot/rod1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/slingshot/rod2_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/slingshot/rod1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/slingshot/rod2_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/rod1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/rod2_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head1_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head1_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head1_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_tip2_bowstring1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1
       },
-      "model": "silentgear:item/slingshot/rod_head_bowstring_1"
+      "model": "silentgear:item/slingshot/rod1_head1_bowstring1_1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
         "pull": 0.65
       },
-      "model": "silentgear:item/slingshot/rod_head_bowstring_2"
+      "model": "silentgear:item/slingshot/rod1_head1_bowstring1_2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 11,
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
         "pull": 0.9
       },
-      "model": "silentgear:item/slingshot/rod_head_bowstring_3"
+      "model": "silentgear:item/slingshot/rod1_head1_bowstring1_3"
     },
     {
       "predicate": {
-        "silentgear:model_type": 14
-      },
-      "model": "silentgear:item/slingshot/head_tip_bowstring"
-    },
-    {
-      "predicate": {
-        "silentgear:model_type": 15
-      },
-      "model": "silentgear:item/slingshot/rod_head_tip_bowstring"
-    },
-    {
-      "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1
       },
-      "model": "silentgear:item/slingshot/rod_head_tip_bowstring_1"
+      "model": "silentgear:item/slingshot/rod2_head1_bowstring1_1"
     },
     {
       "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
         "pull": 0.65
       },
-      "model": "silentgear:item/slingshot/rod_head_tip_bowstring_2"
+      "model": "silentgear:item/slingshot/rod2_head1_bowstring1_2"
     },
     {
       "predicate": {
-        "silentgear:model_type": 15,
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_bowstring": 1,
         "pulling": 1,
         "pull": 0.9
       },
-      "model": "silentgear:item/slingshot/rod_head_tip_bowstring_3"
+      "model": "silentgear:item/slingshot/rod2_head1_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head1_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod1_head1_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod1_head1_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head1_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod2_head1_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod2_head1_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod1_head2_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod2_head2_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod1_head3_tip2_bowstring1_3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_tip2_bowstring1_1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_tip2_bowstring1_2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2,
+        "silentgear:lite_bowstring": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "silentgear:item/slingshot/rod2_head3_tip2_bowstring1_3"
     }
   ]
 }

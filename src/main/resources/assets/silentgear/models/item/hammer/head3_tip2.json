@@ -1,0 +1,11 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/hammer",
+  "textures": {
+    "layer0": "silentgear:item/blank",
+    "layer1": "silentgear:item/blank",
+    "layer2": "silentgear:item/hammer/head_generic_hc",
+    "layer3": "silentgear:item/hammer/tip_iron",
+    "layer4": "silentgear:item/hammer/_highlight"
+  }
+}

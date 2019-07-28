@@ -1,0 +1,12 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/slingshot",
+  "textures": {
+    "layer0": "silentgear:item/slingshot/rod_generic_hc_2",
+    "layer1": "silentgear:item/blank",
+    "layer2": "silentgear:item/slingshot/head_generic_hc_2",
+    "layer3": "silentgear:item/blank",
+    "layer4": "silentgear:item/slingshot/bowstring_string_2",
+    "layer5": "silentgear:item/slingshot/_highlight"
+  }
+}

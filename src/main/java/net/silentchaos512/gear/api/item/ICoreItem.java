@@ -54,6 +54,10 @@ public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor
         return type == PartType.MAIN;
     }
 
+    default boolean supportsPartOfType(PartType type) {
+        return requiresPartOfType(type);
+    }
+
     //endregion
 
     //region Stats and config
