@@ -8,8 +8,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartTraitInstance;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -30,7 +32,6 @@ public final class TooltipHandler {
     // Display a single trait and cycling through the list. Main problem with this is it affects
     // JEI's tooltip cache. When disabled, you can search for parts with certain traits.
     private static final boolean TRAIT_DISPLAY_CYCLE = false;
-    private static final boolean DETAILED_MATERIAL_INFO = false;
 
     private TooltipHandler() {}
 
@@ -66,9 +67,6 @@ public final class TooltipHandler {
         event.getToolTip().add(part.getType().getDisplayName(part.getTier()).applyTextStyle(TextFormatting.GREEN));
 
         ITooltipFlag flags = event.getFlags();
-        if (flags.isAdvanced() && DETAILED_MATERIAL_INFO && SilentGear.isDevBuild()) {
-            addDetailedMaterialInfo(event, part);
-        }
 
         // Traits
         List<PartTraitInstance> traits = partData.getTraits().stream()
@@ -101,18 +99,6 @@ public final class TooltipHandler {
             }
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").applyTextStyle(TextFormatting.GOLD));
         }
-    }
-
-    private static void addDetailedMaterialInfo(ItemTooltipEvent event, IGearPart part) {
-        IPartMaterial mat = part.getMaterials();
-        if (mat.getItem() != null)
-            event.getToolTip().add(new StringTextComponent("item: " + mat.getItem().asItem().getRegistryName()));
-        if (mat.getTag() != null)
-            event.getToolTip().add(new StringTextComponent("tag: " + mat.getTag().getId()));
-        if (mat.getSmallItem() != null)
-            event.getToolTip().add(new StringTextComponent("itemSmall: " + mat.getSmallItem().asItem().getRegistryName()));
-        if (mat.getSmallTag() != null)
-            event.getToolTip().add(new StringTextComponent("tagSmall: " + mat.getSmallTag().getId()));
     }
 
     private static int getTraitDisplayIndex(int numTraits) {

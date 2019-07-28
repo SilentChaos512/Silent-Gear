@@ -23,11 +23,9 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:emerald",
             "tag": "forge:gems/emerald"
         },
         "small": {
-            "item": "silentgear:emerald_shard",
             "tag": "forge:nuggets/emerald",
             "size": 9
         }
@@ -46,6 +44,6 @@
     },
     "availability": {
         "tier": 3,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

@@ -34,6 +34,6 @@
     },
     "availability": {
         "enabled": true,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

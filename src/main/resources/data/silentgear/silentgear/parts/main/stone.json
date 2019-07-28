@@ -23,7 +23,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:cobblestone"
+            "tag": "forge:cobblestone"
         }
     },
     "name": {
@@ -40,6 +40,6 @@
     },
     "availability": {
         "tier": 1,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

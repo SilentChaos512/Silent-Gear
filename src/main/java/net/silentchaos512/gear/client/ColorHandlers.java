@@ -8,6 +8,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.CustomTippedUpgrade;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.utils.Color;
@@ -26,6 +27,8 @@ public final class ColorHandlers {
             SilentGear.LOGGER.error("ItemColors is null?", new IllegalStateException("wat?"));
             return;
         }
+
+        itemColors.register(CustomTippedUpgrade::getItemColor, ModItems.customTippedUpgrade);
 
         // Tools/Armor - mostly used for broken color, but colors could be changed at any time
         itemColors.register(ColorHandlers::getToolLiteColor,

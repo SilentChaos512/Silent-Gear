@@ -23,11 +23,9 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:gold_ingot",
             "tag": "forge:ingots/gold"
         },
         "small": {
-            "item": "minecraft:gold_nugget",
             "tag": "forge:nuggets/gold",
             "size": 9
         }
@@ -46,6 +44,6 @@
     },
     "availability": {
         "tier": 2,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

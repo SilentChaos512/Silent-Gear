@@ -17,7 +17,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:rough_rod",
             "tag": "silentgear:rods/rough"
         }
     },
@@ -35,6 +34,6 @@
     },
     "availability": {
         "tier": 0,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

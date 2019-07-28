@@ -24,7 +24,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:oak_planks",
             "tag": "minecraft:planks"
         }
     },
@@ -42,6 +41,6 @@
     },
     "availability": {
         "tier": 0,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

@@ -25,7 +25,7 @@ public final class PartData {
     private final ItemStack craftingItem;
 
     private PartData(IGearPart part, MaterialGrade grade) {
-        this(part, grade, new ItemStack(part.getMaterials().getItem()));
+        this(part, grade, part.getMaterials().getDisplayItem(0));
     }
 
     private PartData(IGearPart part, MaterialGrade grade, ItemStack craftingItem) {

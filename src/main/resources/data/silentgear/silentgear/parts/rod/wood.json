@@ -14,7 +14,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:stick",
             "tag": "forge:rods/wooden"
         }
     },
@@ -32,6 +31,6 @@
     },
     "availability": {
         "tier": 0,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

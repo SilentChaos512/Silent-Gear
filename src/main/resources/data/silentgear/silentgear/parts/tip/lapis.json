@@ -32,6 +32,6 @@
         }
     },
     "availability": {
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

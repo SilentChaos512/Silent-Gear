@@ -4,7 +4,7 @@
     "traits": [],
     "crafting_items": {
         "normal": {
-            "tag": "none:invalid"
+            "tag": "silentgear:empty"
         }
     },
     "name": {

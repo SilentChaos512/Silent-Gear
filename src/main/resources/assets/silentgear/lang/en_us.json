@@ -118,6 +118,8 @@
   "item.silentgear.blueprint_package.desc2": "Right-click to open",
   "item.silentgear.flaxseeds": "Flaxseeds",
   "item.silentgear.nether_banana": "Nether Banana",
+  "item.silentgear.custom_tipped_upgrade": "Custom Tipped Upgrade",
+  "item.silentgear.custom_tipped_upgrade.nameProper": "%s Upgrade",
   "item.silentgear.diamond_tipped_upgrade": "Diamond-Tipped Upgrade",
   "item.silentgear.emerald_tipped_upgrade": "Emerald-Tipped Upgrade",
   "item.silentgear.flax_bowstring": "Flax Bowstring",

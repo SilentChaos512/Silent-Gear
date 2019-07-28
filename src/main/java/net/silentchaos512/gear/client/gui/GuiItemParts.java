@@ -43,6 +43,7 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.client.gui.button.GuiDropDownElement;
 import net.silentchaos512.lib.client.gui.button.GuiDropDownList;
+import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.lib.util.TextRenderUtils;
 import net.silentchaos512.utils.Color;
 
@@ -159,8 +160,7 @@ public class GuiItemParts extends Screen {
         if (minecraft == null) return;
 
         if (selectedPart != null && !selectedPartInfo.isEmpty()) {
-            ItemStack stack = new ItemStack(selectedPart.getMaterials().getItem());
-//            AssetUtil.renderStackToGui(stack, res.getScaledWidth() - 194, 30, 2.5f);
+            ItemStack stack = selectedPart.getMaterials().getDisplayItem(ClientTicks.ticksInGame());
             minecraft.getItemRenderer().renderItemIntoGUI(stack, minecraft.mainWindow.getScaledWidth() - 194, 30);
 
             final int maxWidth = 140;
@@ -237,8 +237,8 @@ public class GuiItemParts extends Screen {
             if (this.visible) {
                 this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
-                // Render item TODO: would it be possible to get all tagged items?
-                ItemStack stack = new ItemStack(part.getMaterials().getItem());
+                // Render matching items
+                ItemStack stack = part.getMaterials().getDisplayItem(ClientTicks.ticksInGame());
                 if (stack.isEmpty()) {
                     stack = new ItemStack(Blocks.BARRIER);
                 }
@@ -252,7 +252,7 @@ public class GuiItemParts extends Screen {
 
         void drawHover(Minecraft mc, int mouseX, int mouseY) {
             if (this.isMouseOver(mouseX, mouseY)) {
-                ItemStack craftingStack = new ItemStack(part.getMaterials().getItem());
+                ItemStack craftingStack = part.getMaterials().getDisplayItem(ClientTicks.ticksInGame());
                 List<String> tooltip = craftingStack.getTooltip(mc.player, () -> false)
                         .stream()
                         .map(ITextComponent::getFormattedText)

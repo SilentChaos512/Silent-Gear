@@ -14,7 +14,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:iron_rod",
             "tag": "forge:rods/iron"
         }
     },
@@ -32,6 +31,6 @@
     },
     "availability": {
         "tier": 2,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

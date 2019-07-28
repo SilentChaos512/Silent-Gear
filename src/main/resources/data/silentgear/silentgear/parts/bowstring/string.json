@@ -12,18 +12,16 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:plain_bowstring",
             "tag": "silentgear:bowstrings/plain"
         },
         "small": {
-            "item": "minecraft:string",
             "tag": "forge:string/string",
             "size": 3
         }
     },
     "name": {
         "translate": true,
-        "name": "part.silentgear.bowstring.plain"
+        "name": "part.silentgear.bowstring.string"
     },
     "textures": {
         "all": {
@@ -34,6 +32,6 @@
     },
     "availability": {
         "tier": 1,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

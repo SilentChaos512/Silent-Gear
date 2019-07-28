@@ -31,6 +31,6 @@
     },
     "availability": {
         "tier": 1,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

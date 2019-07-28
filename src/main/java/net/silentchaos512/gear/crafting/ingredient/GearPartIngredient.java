@@ -70,12 +70,7 @@ public final class GearPartIngredient extends Ingredient {
         Collection<IGearPart> parts = PartManager.getPartsOfType(this.type);
         if (!parts.isEmpty()) {
             return parts.stream()
-                    .flatMap(part -> {
-                        if (part.getMaterials().getTag() != null)
-                            part.getMaterials().getTag().getAllElements();
-                        return Stream.of(part.getMaterials().getItem());
-                    })
-                    .map(ItemStack::new)
+                    .flatMap(part -> Stream.of(part.getMaterials().getNormal().getMatchingStacks()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
         }

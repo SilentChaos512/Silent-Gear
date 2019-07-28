@@ -22,11 +22,9 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:iron_ingot",
             "tag": "forge:ingots/iron"
         },
         "small": {
-            "item": "minecraft:iron_nugget",
             "tag": "forge:nuggets/iron",
             "size": 9
         }
@@ -45,6 +43,6 @@
     },
     "availability": {
         "tier": 2,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

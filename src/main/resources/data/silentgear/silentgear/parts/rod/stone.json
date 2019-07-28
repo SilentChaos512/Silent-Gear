@@ -14,7 +14,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:stone_rod",
             "tag": "forge:rods/stone"
         }
     },
@@ -32,6 +31,6 @@
     },
     "availability": {
         "tier": 1,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

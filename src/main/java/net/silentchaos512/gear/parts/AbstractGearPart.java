@@ -8,14 +8,12 @@ import com.google.gson.JsonParseException;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -253,35 +251,7 @@ public abstract class AbstractGearPart implements IGearPart {
             }
 
             // Crafting Items
-            JsonObject craftingItems = getRequiredObj(json, "crafting_items");
-            JsonObject craftingNormal = getRequiredObj(craftingItems, "normal");
-            // Normal (required)
-            if (!craftingNormal.has("item") && !craftingNormal.has("tag")) {
-                throw new JsonParseException("crafting_items.normal must contain either 'item', 'tag', or both");
-            }
-            if (craftingNormal.has("item")) {
-                final ResourceLocation itemName = new ResourceLocation(JSONUtils.getString(craftingNormal, "item"));
-                part.materials.item = ForgeRegistries.ITEMS.getValue(itemName);
-            }
-            if (craftingNormal.has("tag")) {
-                final ResourceLocation tagName = new ResourceLocation(JSONUtils.getString(craftingNormal, "tag"));
-                part.materials.tag = ItemTags.getCollection().getOrCreate(tagName);
-            }
-            // Small (optional)
-            JsonObject craftingSmall = getOptionalObj(craftingItems, "small");
-            if (craftingSmall != null) {
-                if (!craftingSmall.has("item") && !craftingSmall.has("tag")) {
-                    throw new JsonParseException("crafting_items.small must contain either 'item', 'tag', or both");
-                }
-                if (craftingSmall.has("item")) {
-                    final ResourceLocation itemName = new ResourceLocation(JSONUtils.getString(craftingSmall, "item"));
-                    part.materials.itemSmall = ForgeRegistries.ITEMS.getValue(itemName);
-                }
-                if (craftingSmall.has("tag")) {
-                    final ResourceLocation tagName = new ResourceLocation(JSONUtils.getString(craftingSmall, "tag"));
-                    part.materials.tagSmall = ItemTags.getCollection().getOrCreate(tagName);
-                }
-            }
+            part.materials = PartMaterial.deserialize(id, json.getAsJsonObject("crafting_items"));
 
             // Name
             JsonElement elementName = json.get("name");
@@ -342,24 +312,6 @@ public abstract class AbstractGearPart implements IGearPart {
             else if (json.has("tool_blacklist"))
                 return JSONUtils.getJsonArray(json, "tool_blacklist");
             return null;
-        }
-
-        private static JsonObject getRequiredObj(JsonObject json, String name) {
-            if (!json.has(name))
-                throw new JsonParseException("Expected required object '" + name + "', found none");
-            JsonElement elem = json.get(name);
-            if (!elem.isJsonObject())
-                throw new JsonParseException("Expected '" + name + "' to be an object");
-            return elem.getAsJsonObject();
-        }
-
-        @Nullable
-        private static JsonObject getOptionalObj(JsonObject json, String name) {
-            if (!json.has(name)) return null;
-            JsonElement elem = json.get(name);
-            if (!elem.isJsonObject())
-                throw new JsonParseException("Expected '" + name + "' to be an object");
-            return elem.getAsJsonObject();
         }
 
         @Override

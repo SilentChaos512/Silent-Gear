@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.compat.jei;
 
-import com.google.common.collect.ImmutableList;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -11,7 +10,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -110,11 +108,7 @@ public class PartAnalyzerCategory implements IRecipeCategory<PartAnalyzerCategor
         }
 
         List<ItemStack> getInputs() {
-            Ingredient ingredient = this.part.getMaterials().getIngredient();
-            if (ingredient == null) {
-                return ImmutableList.of();
-            }
-            return Arrays.stream(ingredient.getMatchingStacks()).collect(Collectors.toList());
+            return Arrays.asList(part.getMaterials().getNormal().getMatchingStacks());
         }
 
         static List<ItemStack> getCatalysts() {

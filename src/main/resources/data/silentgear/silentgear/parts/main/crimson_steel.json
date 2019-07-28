@@ -48,7 +48,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:crimson_steel_ingot",
             "tag": "forge:ingots/crimson_steel"
         },
         "small": {
@@ -70,6 +69,6 @@
     },
     "availability": {
         "tier": 3,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

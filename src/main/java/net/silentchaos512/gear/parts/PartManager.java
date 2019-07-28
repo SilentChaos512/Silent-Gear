@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -41,7 +40,6 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     private static final String DATA_PATH = "silentgear/parts";
     private static final Map<ResourceLocation, IGearPart> MAP = new LinkedHashMap<>();
-    private static final Map<IItemProvider, IGearPart> ITEM_TO_PART = new HashMap<>();
     private static int highestMainPartTier = 0;
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
@@ -55,7 +53,6 @@ public final class PartManager implements IResourceManagerReloadListener {
         if (resources.isEmpty()) return;
 
         MAP.clear();
-        ITEM_TO_PART.clear();
         ERROR_LIST.clear();
         SilentGear.LOGGER.info(MARKER, "Reloading part files");
 
@@ -130,14 +127,9 @@ public final class PartManager implements IResourceManagerReloadListener {
     public static IGearPart from(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
-        IItemProvider item = stack.getItem();
-        if (ITEM_TO_PART.containsKey(item)) {
-            return ITEM_TO_PART.get(item);
-        }
-
+        // We can't reliable keep an IItemProvider -> IGearPart map anymore
         for (IGearPart part : MAP.values()) {
-            if (part.getMaterials().matches(item)) {
-                ITEM_TO_PART.put(item, part);
+            if (part.getMaterials().test(stack)) {
                 return part;
             }
         }

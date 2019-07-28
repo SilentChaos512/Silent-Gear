@@ -23,11 +23,9 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:diamond",
             "tag": "forge:gems/diamond"
         },
         "small": {
-            "item": "silentgear:diamond_shard",
             "tag": "forge:nuggets/diamond",
             "size": 9
         }
@@ -46,6 +44,6 @@
     },
     "availability": {
         "tier": 3,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

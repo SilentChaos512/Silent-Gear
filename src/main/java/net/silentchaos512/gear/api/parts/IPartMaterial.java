@@ -1,46 +1,38 @@
 package net.silentchaos512.gear.api.parts;
 
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.IItemProvider;
+import net.silentchaos512.lib.event.ClientTicks;
 
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
-public interface IPartMaterial {
-    boolean matches(IItemProvider input);
-
-    @Nullable
-    IItemProvider getItem();
-
-    @Nullable
-    IItemProvider getSmallItem();
-
-    @Nullable
-    Tag<Item> getTag();
-
-    @Nullable
-    Tag<Item> getSmallTag();
+public interface IPartMaterial extends Predicate<ItemStack> {
+    /**
+     * Gets the ingredient used for crafting (ingot, gem, etc.)
+     *
+     * @return The crafting ingredient
+     */
+    Ingredient getNormal();
 
     /**
-     * Gets an {@link Ingredient} to represent this part. Useful for the JEI plugin.
+     * Gets the "small" ingredient (nuggets, etc.) Currently not used for anything.
      *
-     * @return An {@link Ingredient} which prioritizes the tag over the item, or null if neither is
-     * present
+     * @return The small crafting ingredient
      */
-    @Nullable
-    default Ingredient getIngredient() {
-        // Prioritize tag
-        Tag<Item> tag = getTag();
-        if (tag != null) {
-            return Ingredient.fromTag(tag);
-        }
-        // Then item
-        IItemProvider item = getItem();
-        if (item != null) {
-            return Ingredient.fromItems(item);
-        }
-        // Part has neither?
-        return null;
+    Ingredient getSmall();
+
+    /**
+     * Get an {@code ItemStack} which matches the normal ingredient. The {@code ticks} parameter can
+     * be used to cycle between possible matches.
+     *
+     * @param ticks Used to index into matching stacks. If on the client, {@link
+     *              ClientTicks#totalTicks()} can be used. Zero will consistently return the first
+     *              item in the matching stacks array.
+     * @return An item matching the normal ingredient, or {@link ItemStack#EMPTY} if there are none
+     */
+    default ItemStack getDisplayItem(int ticks) {
+        ItemStack[] stacks = getNormal().getMatchingStacks();
+        if (stacks.length == 0) return ItemStack.EMPTY;
+        return stacks[(ticks / 20) % stacks.length];
     }
 }

@@ -14,7 +14,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:netherwood_stick",
             "tag": "silentgear:rods/netherwood"
         }
     },
@@ -31,6 +30,6 @@
     },
     "availability": {
         "tier": 0,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

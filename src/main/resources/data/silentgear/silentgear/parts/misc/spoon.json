@@ -21,6 +21,6 @@
         "name_color": "dark_aqua"
     },
     "availability": {
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

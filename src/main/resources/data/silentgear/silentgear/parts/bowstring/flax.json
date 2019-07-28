@@ -12,11 +12,9 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:flax_bowstring",
             "tag": "silentgear:bowstrings/flax"
         },
         "small": {
-            "item": "silentgear:flax_string",
             "tag": "forge:string/flax",
             "size": 3
         }
@@ -34,6 +32,6 @@
     },
     "availability": {
         "tier": 1,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

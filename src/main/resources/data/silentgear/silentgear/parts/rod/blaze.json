@@ -17,7 +17,6 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:blaze_rod",
             "tag": "forge:rods/blaze"
         }
     },
@@ -35,6 +34,6 @@
     },
     "availability": {
         "tier": 3,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }

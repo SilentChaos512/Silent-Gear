@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.item.BlueprintPackageItem;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.CustomTippedUpgrade;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.gear.*;
@@ -32,6 +33,7 @@ public final class ModItems {
     static final Map<String, BlockItem> blocksToRegister = new LinkedHashMap<>();
 
     public static BlueprintPackageItem blueprintPackage;
+    public static CustomTippedUpgrade customTippedUpgrade;
 
     public static BlockNamedItem flaxseeds;
     public static Item netherBanana;
@@ -77,6 +79,8 @@ public final class ModItems {
         for (CraftingItems item : CraftingItems.values()) {
             register(item.getName(), item.asItem());
         }
+
+        customTippedUpgrade = register("custom_tipped_upgrade", new CustomTippedUpgrade());
 
         flaxseeds = register("flaxseeds", new BlockNamedItem(ModBlocks.FLAX_PLANT.asBlock(), getBaseProperties()));
         netherBanana = register("nether_banana", new Item(getBaseProperties()

@@ -12,11 +12,9 @@
     ],
     "crafting_items": {
         "normal": {
-            "item": "silentgear:sinew_bowstring",
             "tag": "silentgear:bowstrings/sinew"
         },
         "small": {
-            "item": "silentgear:sinew_fiber",
             "tag": "forge:string/sinew",
             "size": 3
         }
@@ -34,6 +32,6 @@
     },
     "availability": {
         "tier": 1,
-        "tool_blacklist": []
+        "gear_blacklist": []
     }
 }
