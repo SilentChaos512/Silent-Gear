@@ -40,54 +40,6 @@
     {
       "predicate": {
         "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 1
-      },
-      "model": "silentgear:item/hammer/rod1_grip1_head1"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 1
-      },
-      "model": "silentgear:item/hammer/rod2_grip1_head1"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 2
-      },
-      "model": "silentgear:item/hammer/rod1_grip1_head2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 2
-      },
-      "model": "silentgear:item/hammer/rod2_grip1_head2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 3
-      },
-      "model": "silentgear:item/hammer/rod1_grip1_head3"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 3
-      },
-      "model": "silentgear:item/hammer/rod2_grip1_head3"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
         "silentgear:lite_head": 1
       },
       "model": "silentgear:item/hammer/rod1_head1"
@@ -147,6 +99,54 @@
         "silentgear:lite_tip": 2
       },
       "model": "silentgear:item/hammer/head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/hammer/rod1_grip1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/hammer/rod2_grip1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/hammer/rod1_grip1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/hammer/rod2_grip1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/hammer/rod1_grip1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/hammer/rod2_grip1_head3"
     },
     {
       "predicate": {

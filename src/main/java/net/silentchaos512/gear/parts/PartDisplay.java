@@ -17,7 +17,7 @@ public final class PartDisplay implements IPartDisplay {
     private int brokenColor;
     private int fallbackColor;
     private boolean highlight;
-    private PartTextureType liteTexture;
+    private PartTextureType liteTexture = PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT;
 
     PartDisplay() {
         textureDomain = SilentGear.MOD_ID;
@@ -83,7 +83,7 @@ public final class PartDisplay implements IPartDisplay {
         PartDisplay props = new PartDisplay(textureDomain, textureSuffix, normalColor, brokenColor, fallbackColor);
 
         props.highlight = JSONUtils.getBoolean(json, "highlight", props.highlight);
-        props.liteTexture = EnumUtils.byName(JSONUtils.getString(json, "lite_texture", ""), PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT);
+        props.liteTexture = EnumUtils.byName(JSONUtils.getString(json, "lite_texture", ""), props.liteTexture);
 
         return props;
     }

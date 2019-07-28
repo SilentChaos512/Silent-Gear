@@ -33,13 +33,6 @@ tool_models = [
     {'head': 1},
     {'head': 2},
     {'head': 3},
-    # rod, grip, head
-    {'rod': 1, 'grip': 1, 'head': 1},
-    {'rod': 2, 'grip': 1, 'head': 1},
-    {'rod': 1, 'grip': 1, 'head': 2},
-    {'rod': 2, 'grip': 1, 'head': 2},
-    {'rod': 1, 'grip': 1, 'head': 3},
-    {'rod': 2, 'grip': 1, 'head': 3},
     # rod, head
     {'rod': 1, 'head': 1},
     {'rod': 2, 'head': 1},
@@ -51,6 +44,13 @@ tool_models = [
     {'head': 1, 'tip': 2},
     {'head': 2, 'tip': 2},
     {'head': 3, 'tip': 2},
+    # rod, grip, head
+    {'rod': 1, 'grip': 1, 'head': 1},
+    {'rod': 2, 'grip': 1, 'head': 1},
+    {'rod': 1, 'grip': 1, 'head': 2},
+    {'rod': 2, 'grip': 1, 'head': 2},
+    {'rod': 1, 'grip': 1, 'head': 3},
+    {'rod': 2, 'grip': 1, 'head': 3},
     # rod, head, tip
     {'rod': 1, 'head': 1, 'tip': 2},
     {'rod': 2, 'head': 1, 'tip': 2},

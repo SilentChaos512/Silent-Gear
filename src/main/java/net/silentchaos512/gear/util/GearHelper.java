@@ -259,16 +259,13 @@ public final class GearHelper {
     }
 
     public static void addModelTypeProperty(ICoreItem item) {
-        //noinspection OverlyLongLambda
         PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
-            if (item.supportsPartOfType(partType)) {
-                item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
-                    PartData part = GearData.getPartOfType(stack, partType);
-                    return part != null
-                            ? part.getPart().getDisplayProperties(part, ItemStack.EMPTY, 0).getLiteTexture().getIndex()
-                            : 0;
-                });
-            }
+            item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
+                PartData part = GearData.getPartOfType(stack, partType);
+                return part != null
+                        ? part.getPart().getDisplayProperties(part, ItemStack.EMPTY, 0).getLiteTexture().getIndex()
+                        : -1;
+            });
         });
     }
 
