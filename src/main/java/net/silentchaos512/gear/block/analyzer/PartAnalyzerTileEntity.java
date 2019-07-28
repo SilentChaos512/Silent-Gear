@@ -90,10 +90,15 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
 
     @Override
     public void tick() {
-        assert (world != null);
-        ItemStack input = getInputStack();
-        IGearPart part = PartManager.from(input);
+        if (world == null) return;
 
+        // Don't waste time if there is no input or no free output slots
+        ItemStack input = getInputStack();
+        if (input.isEmpty()) return;
+        int outputSlot = getFreeOutputSlot();
+        if (outputSlot < 0) return;
+
+        IGearPart part = PartManager.from(input);
         if (part != null) {
             // Analyzing
             if (progress < BASE_ANALYZE_TIME) {
@@ -103,35 +108,32 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
 
             // Grade part if any output slot is free
             if (progress >= BASE_ANALYZE_TIME && !world.isRemote) {
-                int outputSlot = getFreeOutputSlot();
-                if (outputSlot > 0) {
-                    progress = 0;
+                progress = 0;
 
-                    // Take one from input stack
-                    ItemStack stack = input.copy();
-                    stack.setCount(1);
-                    input.shrink(1);
+                // Take one from input stack
+                ItemStack stack = input.copy();
+                stack.setCount(1);
+                input.shrink(1);
 
-                    // Get catalyst
-                    ItemStack catalyst = getCatalystStack();
-                    int catalystTier = getCatalystTier(catalyst);
-                    if (catalystTier > 0 && !catalyst.isEmpty()) {
-                        catalyst.shrink(1);
-                    }
+                // Get catalyst
+                ItemStack catalyst = getCatalystStack();
+                int catalystTier = getCatalystTier(catalyst);
+                if (catalystTier > 0 && !catalyst.isEmpty()) {
+                    catalyst.shrink(1);
+                }
 
-                    // Assign grade, move to output slot
-                    MaterialGrade.selectWithCatalyst(SilentGear.random, catalystTier).setGradeOnStack(stack);
-                    setInventorySlotContents(outputSlot, stack);
-                    if (input.getCount() <= 0) {
-                        for (int slot : SLOTS_INPUT) {
-                            if (getStackInSlot(slot).isEmpty()) {
-                                setInventorySlotContents(slot, ItemStack.EMPTY);
-                            }
+                // Assign grade, move to output slot
+                MaterialGrade.selectWithCatalyst(SilentGear.random, catalystTier).setGradeOnStack(stack);
+                setInventorySlotContents(outputSlot, stack);
+                if (input.getCount() <= 0) {
+                    for (int slot : SLOTS_INPUT) {
+                        if (getStackInSlot(slot).isEmpty()) {
+                            setInventorySlotContents(slot, ItemStack.EMPTY);
                         }
                     }
-
-                    requireClientSync = true;
                 }
+
+//                requireClientSync = true;
             }
         } else {
             progress = 0;
@@ -151,9 +153,11 @@ public class PartAnalyzerTileEntity extends LockableSidedInventoryTileEntity imp
 
     private ItemStack getInputStack() {
         ItemStack stack = getStackInSlot(INPUT_SLOT);
-        IGearPart part = PartManager.from(stack);
-        if (part != null && part.getType() == PartType.MAIN && MaterialGrade.fromStack(stack) == MaterialGrade.NONE) {
-            return stack;
+        if (!stack.isEmpty()) {
+            IGearPart part = PartManager.from(stack);
+            if (part != null && part.getType() == PartType.MAIN && MaterialGrade.fromStack(stack) == MaterialGrade.NONE) {
+                return stack;
+            }
         }
         return ItemStack.EMPTY;
     }

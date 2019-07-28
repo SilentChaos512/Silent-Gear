@@ -5,7 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Custom tipped upgrades. This is a single item which allows the part to be changed with NBT. Just set "PartID" to the ID of the part. For the crafting items of the part, replace the usual "normal" object with an empty "custom_tipped_upgrade" object. You will need to create the recipe for the upgrade yourself.
 - The "nerfed gear" config is back. Disabled by default. You can set any damageable item to have reduced durability, to encourage use of Silent Gear over vanilla items (or items from other mods if you wish). This may not work for all items.
+### Changed
+- Part analyzer optimized a bit. Should reduce tick time when it's not working.
+- Internal changes to how parts are detected. May reduce performance slightly in some cases. This was needed for custom tipped upgrades.
 
 ## [1.3.1] - 2019-07-24
 ### Added
