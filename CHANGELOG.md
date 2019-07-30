@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.3]
 ### Fixed
 - Hammers destroying the NBT of certain blocks, like shulker boxes and soul urns [Silent's Gems #384]
+- Color handlers crashing the game in some cases [#39]
 
 ## [1.3.2] - 2019-07-28
 ### Added
