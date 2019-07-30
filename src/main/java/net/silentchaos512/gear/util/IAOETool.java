@@ -27,6 +27,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SChangeBlockPacket;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -165,16 +166,17 @@ public interface IAOETool {
                         continue;
 
                     if (player.abilities.isCreativeMode) {
-                        state.getBlock().onBlockHarvested(world, pos2, state, player);
-                        if (state.getBlock().removedByPlayer(state, world, pos2, player, false, state.getFluidState()))
+                        if (state.removedByPlayer(world, pos2, player, true, state.getFluidState()))
                             state.getBlock().onPlayerDestroy(world, pos2, state);
                     } else {
                         int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).interactionManager.getGameType(), (ServerPlayerEntity) player, pos2);
+                        if (xp == -1) continue;
                         state.getBlock().onBlockHarvested(world, pos2, state, player);
                         tool.getItem().onBlockDestroyed(tool, world, state, pos2, player);
-                        if (state.getBlock().removedByPlayer(state, world, pos2, player, true, state.getFluidState())) {
+                        TileEntity tileEntity = world.getTileEntity(pos2);
+                        if (state.removedByPlayer(world, pos2, player, true, state.getFluidState())) {
                             state.getBlock().onPlayerDestroy(world, pos2, state);
-                            state.getBlock().harvestBlock(world, player, pos2, state, world.getTileEntity(pos2), tool);
+                            state.getBlock().harvestBlock(world, player, pos2, state, tileEntity, tool);
                             state.getBlock().dropXpOnBlockBreak(world, pos2, xp);
                         }
                     }
