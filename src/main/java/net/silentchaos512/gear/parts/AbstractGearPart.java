@@ -1,10 +1,7 @@
 package net.silentchaos512.gear.parts;
 
 import com.google.common.collect.Multimap;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -139,7 +136,7 @@ public abstract class AbstractGearPart implements IGearPart {
             }
         }
         // Default
-        return display.get("all");
+        return display.getOrDefault("all", PartDisplay.DEFAULT);
     }
 
     @Nullable
@@ -251,7 +248,12 @@ public abstract class AbstractGearPart implements IGearPart {
             }
 
             // Crafting Items
-            part.materials = PartMaterial.deserialize(id, json.getAsJsonObject("crafting_items"));
+            JsonElement craftingItems = json.get("crafting_items");
+            if (craftingItems != null && craftingItems.isJsonObject()) {
+                part.materials = PartMaterial.deserialize(id, craftingItems.getAsJsonObject());
+            } else {
+                throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
+            }
 
             // Name
             JsonElement elementName = json.get("name");
@@ -264,8 +266,8 @@ public abstract class AbstractGearPart implements IGearPart {
                 } else {
                     part.displayName = new StringTextComponent(nameValue);
                 }
-            } else if (elementName != null) {
-                throw new JsonParseException("Expected 'name' to be an object");
+            } else {
+                throw new JsonSyntaxException("Expected 'name' to be an object");
             }
 
             // Textures
@@ -287,6 +289,8 @@ public abstract class AbstractGearPart implements IGearPart {
                         part.display.put(key, PartDisplay.from(jsonObject, defaultProps));
                     }
                 }
+            } else {
+                throw new JsonSyntaxException("Expected 'textures' to be an object");
             }
 
             // Availability
@@ -300,6 +304,8 @@ public abstract class AbstractGearPart implements IGearPart {
                     part.blacklistedGearTypes.clear();
                     blacklist.forEach(e -> part.blacklistedGearTypes.add(e.getAsString()));
                 }
+            } else {
+                throw new JsonSyntaxException("Expected 'availability' to be an object");
             }
 
             return part;
