@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.3.3]
+### Changed
+- Make parsing of part crafting items less strict. The `item` property will be removed if `tag` is present. Undefined tags will no longer prevent the part from loading (but you still won't be able to craft with it, of course)
 ### Fixed
 - Hammers destroying the NBT of certain blocks, like shulker boxes and soul urns [Silent's Gems #384]
 - Color handlers crashing the game in some cases [#39]

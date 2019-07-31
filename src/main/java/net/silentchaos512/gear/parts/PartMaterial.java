@@ -1,11 +1,16 @@
 package net.silentchaos512.gear.parts;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartMaterial;
 import net.silentchaos512.gear.crafting.ingredient.CustomTippedUpgradeIngredient;
@@ -40,12 +45,12 @@ public class PartMaterial implements IPartMaterial {
         if (json.has("custom_tipped_upgrade"))
             material.normal = CustomTippedUpgradeIngredient.of(partId);
         else if (json.has("normal"))
-            material.normal = Ingredient.deserialize(json.get("normal"));
+            material.normal = deserialize(partId, json.get("normal"));
         else
             throw new JsonSyntaxException("Missing non-small crafting_items");
 
         if (json.has("small"))
-            material.small = Ingredient.deserialize(json.get("small"));
+            material.small = deserialize(partId, json.get("small"));
 
         return material;
     }
@@ -60,5 +65,32 @@ public class PartMaterial implements IPartMaterial {
     public void write(PacketBuffer buffer) {
         normal.write(buffer);
         small.write(buffer);
+    }
+
+    // Simple wrapper which will sidestep some of the exceptions thrown by vanilla, allowing
+    // outdated part files to load anyway
+    private static Ingredient deserialize(ResourceLocation partId, JsonElement json) {
+        if (json.isJsonObject()) {
+            JsonObject obj = json.getAsJsonObject();
+
+            // Remove item property, to allow older files to load
+            if (obj.has("item") && obj.has("tag")) {
+                SilentGear.LOGGER.warn("Part '{}' has a crafting item with both an 'item' and 'tag' property. Ignoring 'item'.", partId);
+                obj.remove("item");
+            }
+
+            // Check for non-existent tag
+            if (obj.has("tag")) {
+                ResourceLocation tagId = new ResourceLocation(JSONUtils.getString(obj, "tag"));
+                if (ItemTags.getCollection().get(tagId) == null) {
+                    SilentGear.LOGGER.warn("Unknown item tag '{}' on part '{}'. Part will not be usable for crafting.", tagId, partId);
+                    return Ingredient.EMPTY;
+                }
+            }
+
+            return Ingredient.deserialize(obj);
+        }
+        // For arrays, we'll assume all is well
+        return CraftingHelper.getIngredient(json);
     }
 }
