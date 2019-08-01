@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.LightType;
@@ -40,13 +41,17 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.lib.advancements.LibTriggers;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -55,6 +60,11 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public final class GearEvents {
+    private static final ResourceLocation APPLY_TIP_UPGRADE = SilentGear.getId("apply_tip_upgrade");
+    private static final ResourceLocation MAX_DURABILITY = SilentGear.getId("max_durability");
+    private static final ResourceLocation REPAIR_FROM_BROKEN = SilentGear.getId("repair_from_broken");
+    private static final ResourceLocation UNIQUE_MAIN_PARTS = SilentGear.getId("unique_main_parts");
+
     private GearEvents() {}
 
     @SubscribeEvent
@@ -189,5 +199,38 @@ public final class GearEvents {
 
         int bonusXp = (int) (event.getExpToDrop() * TraitConst.ANCIENT_XP_BOOST * ancientLevel);
         event.setExpToDrop(event.getExpToDrop() + bonusXp);
+    }
+
+    @SubscribeEvent
+    public static void onGearCrafted(net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent event) {
+        ItemStack result = event.getCrafting();
+        if (!(result.getItem() instanceof ICoreItem)) return;
+
+        if (event.getPlayer() instanceof ServerPlayerEntity) {
+            // Try to trigger some advancments
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+
+            // Repair from broken
+            int brokenCount = GearData.getBrokenCount(result);
+            int repairCount = GearData.getRepairCount(result);
+            if (brokenCount > 0 && repairCount > 0) {
+                LibTriggers.GENERIC_INT.trigger(player, REPAIR_FROM_BROKEN, brokenCount);
+            }
+
+            // High durability
+            LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, result.getMaxDamage());
+
+            PartDataList parts = GearData.getConstructionParts(result);
+
+            // Add tip upgrade?
+            if (!parts.getTips().isEmpty()) {
+                LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
+            }
+
+            // Mixed materials?
+            int mainCount = parts.getUniqueParts(true).size();
+            SilentGear.LOGGER.debug("mainCount = {}", mainCount);
+            LibTriggers.GENERIC_INT.trigger(player, UNIQUE_MAIN_PARTS, mainCount);
+        }
     }
 }

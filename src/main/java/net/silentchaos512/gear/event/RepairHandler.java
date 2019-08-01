@@ -2,15 +2,12 @@ package net.silentchaos512.gear.event;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.RepairContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
@@ -19,17 +16,12 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.advancements.LibTriggers;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class RepairHandler {
-    private static final ResourceLocation APPLY_TIP_UPGRADE = SilentGear.getId("apply_tip_upgrade");
-    private static final ResourceLocation MAX_DURABILITY = SilentGear.getId("max_durability");
-    private static final ResourceLocation REPAIR_FROM_BROKEN = SilentGear.getId("repair_from_broken");
-
     private RepairHandler() {}
 
     @SubscribeEvent
@@ -149,31 +141,5 @@ public final class RepairHandler {
         }
 
         return itemstack;
-    }
-
-    @SubscribeEvent
-    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-        ItemStack result = event.getCrafting();
-        if (!(result.getItem() instanceof ICoreItem)) return;
-
-        if (event.getPlayer() instanceof ServerPlayerEntity) {
-            // Try to trigger some advancments
-            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-
-            // Repair from broken
-            int brokenCount = GearData.getBrokenCount(result);
-            int repairCount = GearData.getRepairCount(result);
-            if (brokenCount > 0 && repairCount > 0) {
-                LibTriggers.GENERIC_INT.trigger(player, REPAIR_FROM_BROKEN, brokenCount);
-            }
-
-            // High durability
-            LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, result.getMaxDamage());
-
-            // Add tip upgrade
-            if (!GearData.getConstructionParts(result).getTips().isEmpty()) {
-                LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
-            }
-        }
     }
 }

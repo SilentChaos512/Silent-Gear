@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Custom tipped upgrades should now show up in JEI and creative tabs
+- A couple more advancements
 ### Fixed
 - Parts with malformed JSON not raising an error (may not detect all cases still...) [#41]
 
