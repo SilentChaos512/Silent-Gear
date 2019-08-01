@@ -27,9 +27,15 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * Base class for all gear parts. Mods should prefer to extend this instead of just implementing
+ * {@link IGearPart}.
+ */
 public abstract class AbstractGearPart implements IGearPart {
     // Identity
+    // Part ID
     private final ResourceLocation name;
+    // Crafting items
     PartMaterial materials = new PartMaterial();
     int tier = -1;
     List<String> blacklistedGearTypes = new ArrayList<>();
@@ -40,6 +46,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     // Display
     ITextComponent displayName;
+    // Textures, colors, etc.
     final Map<String, PartDisplay> display = new HashMap<>();
     // Model index: re-evaluate
     int modelIndex;

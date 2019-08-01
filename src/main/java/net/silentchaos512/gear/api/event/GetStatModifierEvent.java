@@ -9,7 +9,8 @@ import net.silentchaos512.gear.parts.PartData;
 import java.util.List;
 
 /**
- * TODO
+ * Fired when collecting the stat modifiers for a gear part. This allows modifiers to be added or
+ * removed.
  *
  * @author SilentChaos512
  * @since Experimental
