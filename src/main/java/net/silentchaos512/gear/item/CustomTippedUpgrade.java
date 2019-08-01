@@ -2,13 +2,16 @@ package net.silentchaos512.gear.item;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.crafting.ingredient.CustomTippedUpgradeIngredient;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
@@ -64,5 +67,13 @@ public class CustomTippedUpgrade extends Item {
         if (part != null) {
             tooltip.add(PartData.of(part).getDisplayName(ItemStack.EMPTY));
         }
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (!isInGroup(group)) return;
+        PartManager.getValues().stream()
+                .filter(p -> p.getMaterials().getNormal() instanceof CustomTippedUpgradeIngredient)
+                .forEach(p -> items.add(getStack(p.getId())));
     }
 }
