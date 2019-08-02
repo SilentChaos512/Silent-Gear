@@ -20,6 +20,7 @@ package net.silentchaos512.gear.client.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -36,13 +37,11 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.lib.client.gui.button.GuiDropDownElement;
-import net.silentchaos512.lib.client.gui.button.GuiDropDownList;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.lib.util.TextRenderUtils;
 import net.silentchaos512.utils.Color;
@@ -74,18 +73,13 @@ public class GuiItemParts extends Screen {
     public void init() {
         if (minecraft == null) return;
 
-        GuiDropDownList dropDownList = new GuiDropDownList(minecraft.mainWindow.getWidth() - 120, 5, "Sort Order", GuiDropDownList.ExpandDirection.DOWN);
-        dropDownList.addElement(new GuiDropDownElement("Name", b -> sortParts(false, Comparator.comparing(part -> part.getDisplayName(null, ItemStack.EMPTY).getFormattedText()))), buttons);
-        dropDownList.addElement(new GuiDropDownElement("Type", b -> sortParts(false, Comparator.comparing(part -> part.getType().getName()))), buttons);
+        List<Pair<String, Button.IPressable>> sortOptions = new ArrayList<>();
+        sortOptions.add(new Pair<>("Name", b -> sortParts(false, Comparator.comparing(p -> p.getDisplayName(null, ItemStack.EMPTY).getFormattedText()))));
+        sortOptions.add(new Pair<>("Type", b -> sortParts(false, Comparator.comparing(p -> p.getType().getName()))));
         ItemStat.ALL_STATS.values().stream()
                 .filter(stat -> !stat.isHidden())
-                .forEachOrdered(stat -> {
-                    String statName = stat.getDisplayName().getFormattedText();
-                    dropDownList.addElement(new GuiDropDownElement(statName, b -> {
-                        sortParts(true, Comparator.comparingDouble(part -> part.computeStatValue(stat)));
-                    }), buttons);
-                });
-        buttons.add(dropDownList);
+                .forEachOrdered(stat -> sortOptions.add(new Pair<>(stat.getDisplayName().getFormattedText(), b -> sortParts(true, Comparator.comparing(p -> p.computeStatValue(stat))))));
+        this.addButton(new SortButton(5, minecraft.mainWindow.getScaledHeight() - 30, 100, 20, sortOptions));
 
         // Build part button list
         int i = 0;
@@ -262,6 +256,27 @@ public class GuiItemParts extends Screen {
                 GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, mc.mainWindow.getWidth(), mc.mainWindow.getHeight(), -1, mc.fontRenderer);
                 GuiUtils.postItemToolTip();
             }
+        }
+    }
+
+    public static class SortButton extends Button {
+        private final List<Pair<String, IPressable>> options;
+        private int selected = -1;
+
+        SortButton(int x, int y, int widthIn, int heightIn, List<Pair<String, IPressable>> optionsIn) {
+            super(x, y, widthIn, heightIn, "Default", SortButton::onPress);
+            this.options = new ArrayList<>(optionsIn);
+        }
+
+        private static void onPress(Button b) {
+            SortButton button = (SortButton) b;
+            ++button.selected;
+            if (button.selected >= button.options.size()) {
+                button.selected = 0;
+            }
+            Pair<String, IPressable> pair = button.options.get(button.selected);
+            button.setMessage(pair.getFirst());
+            pair.getSecond().onPress(b);
         }
     }
 }

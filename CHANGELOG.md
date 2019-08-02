@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Custom tipped upgrades should now show up in JEI and creative tabs
 - A couple more advancements
+- Sort button to parts GUI. This is no longer a drop down list, it just cycles the options (just wanted a quick fix for right now)
 ### Fixed
 - Parts with malformed JSON not raising an error (may not detect all cases still...) [#41]
 
