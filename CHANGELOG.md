@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sort button to parts GUI. This is no longer a drop down list, it just cycles the options (just wanted a quick fix for right now)
 ### Fixed
 - Parts with malformed JSON not raising an error (may not detect all cases still...) [#41]
+- Tool head swapping restoring durability in some cases [#43]
 
 ## [1.3.3] - 2019-07-30
 ### Changed
