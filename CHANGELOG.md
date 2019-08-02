@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.4] - 2019-08-02
 ### Added
 - Custom tipped upgrades should now show up in JEI and creative tabs
 - A couple more advancements
@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Parts with malformed JSON not raising an error (may not detect all cases still...) [#41]
 - Tool head swapping restoring durability in some cases [#43]
+- Some armor items missing color
 
 ## [1.3.3] - 2019-07-30
 ### Changed
