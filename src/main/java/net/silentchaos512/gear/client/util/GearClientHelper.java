@@ -203,15 +203,17 @@ public final class GearClientHelper {
 
     public static void tooltipListParts(ItemStack gear, List<ITextComponent> tooltip, Collection<PartData> parts) {
         for (PartData part : parts) {
-            ITextComponent text = new StringTextComponent("- ").appendSibling(part.getDisplayName(gear));
-            if (part.getPart().getType() == PartType.MAIN) {
-                ITextComponent gradeText = new StringTextComponent(" (")
-                        .applyTextStyle(TextFormatting.RESET)
-                        .appendSibling(part.getGrade().getDisplayName())
-                        .appendText(")");
-                text.appendSibling(gradeText);
+            if (part.getPart().isVisible()) {
+                ITextComponent text = new StringTextComponent("- ").appendSibling(part.getDisplayName(gear));
+                if (part.getPart().getType() == PartType.MAIN) {
+                    ITextComponent gradeText = new StringTextComponent(" (")
+                            .applyTextStyle(TextFormatting.RESET)
+                            .appendSibling(part.getGrade().getDisplayName())
+                            .appendText(")");
+                    text.appendSibling(gradeText);
+                }
+                tooltip.add(text);
             }
-            tooltip.add(text);
         }
     }
 

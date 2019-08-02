@@ -64,7 +64,10 @@ public class ReplaceToolHeadRecipe extends SpecialRecipe {
     }
 
     private static boolean isToolHead(PartDataList parts) {
-        return parts.size() == parts.getMains().size();
+        return parts.stream().allMatch(p -> {
+            PartType type = p.getType();
+            return type == PartType.MAIN || type == PartType.TIP || type == PartType.HIGHLIGHT;
+        });
     }
 
     @Override

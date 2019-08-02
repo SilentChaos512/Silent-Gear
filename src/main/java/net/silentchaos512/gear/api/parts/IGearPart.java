@@ -114,4 +114,13 @@ public interface IGearPart {
 
     @OnlyIn(Dist.CLIENT)
     void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag);
+
+    /**
+     * Whether or not the part should be displayed in tooltips and such.
+     *
+     * @return True if the part should be shown, false if it should be hidden.
+     */
+    default boolean isVisible() {
+        return true;
+    }
 }

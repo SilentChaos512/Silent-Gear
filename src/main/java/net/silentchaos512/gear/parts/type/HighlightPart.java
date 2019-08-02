@@ -59,4 +59,9 @@ public class HighlightPart extends AbstractGearPart {
         String path = "items/" + gearClass + "/_" + props.getTextureSuffix() + frameStr;
         return new ResourceLocation(props.getTextureDomain(), path);
     }
+
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 }
