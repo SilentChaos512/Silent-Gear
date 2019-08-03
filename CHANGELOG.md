@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Tool head swapping restoring durability in some cases... for real this time [#45]
+
 ## [1.3.4] - 2019-08-02
 ### Added
 - Custom tipped upgrades should now show up in JEI and creative tabs

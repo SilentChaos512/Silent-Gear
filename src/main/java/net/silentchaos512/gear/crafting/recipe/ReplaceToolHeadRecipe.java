@@ -97,9 +97,9 @@ public class ReplaceToolHeadRecipe extends SpecialRecipe {
         toolParts.addAll(newHead);
 
         ItemStack result = tool.copy();
-        result.setDamage(toolHead.getDamage());
         GearData.writeConstructionParts(result, toolParts);
         GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
+        result.setDamage(toolHead.getDamage());
         return result;
     }
 
