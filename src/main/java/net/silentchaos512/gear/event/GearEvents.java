@@ -202,7 +202,7 @@ public final class GearEvents {
     }
 
     @SubscribeEvent
-    public static void onGearCrafted(net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent event) {
+    public static void onGearCrafted(PlayerEvent.ItemCraftedEvent event) {
         ItemStack result = event.getCrafting();
         if (!(result.getItem() instanceof ICoreItem)) return;
 

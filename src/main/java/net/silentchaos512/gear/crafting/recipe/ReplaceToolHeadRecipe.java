@@ -104,6 +104,11 @@ public class ReplaceToolHeadRecipe extends SpecialRecipe {
     }
 
     @Override
+    public boolean canFit(int width, int height) {
+        return true;
+    }
+
+    @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
