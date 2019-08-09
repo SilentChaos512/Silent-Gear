@@ -47,7 +47,7 @@ public final class ColorHandlers {
 
     // TODO: When models get fixed, switch back to this
     @SuppressWarnings("unused")
-    private static int getGearLayerColor(ItemStack stack, int tintIndex) {
+    public static int getGearLayerColor(ItemStack stack, int tintIndex) {
         if (!(stack.getItem() instanceof ICoreItem) || tintIndex < 0) return Color.VALUE_WHITE;
 
         String modelKey = GearData.getCachedModelKey(stack, 0);
@@ -56,7 +56,7 @@ public final class ColorHandlers {
     }
 
     // Temporary rendering solution until Forge fixes their stuff
-    private static int getToolLiteColor(ItemStack stack, int tintIndex) {
+    public static int getToolLiteColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
             // Rod
             PartData part = GearData.getPartOfType(stack, PartType.ROD);
@@ -82,7 +82,7 @@ public final class ColorHandlers {
         return Color.VALUE_WHITE;
     }
 
-    private static int getArmorLiteColor(ItemStack stack, int tintIndex) {
+    public static int getArmorLiteColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
             // Main
             return GearData.getHeadColor(stack, true);

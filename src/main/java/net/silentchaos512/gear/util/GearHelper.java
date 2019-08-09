@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -28,7 +29,9 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.item.MiscUpgrades;
+import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.lib.advancements.LibTriggers;
@@ -477,5 +480,28 @@ public final class GearHelper {
         }
 
         return gearName;
+    }
+
+    public static Collection<PartData> getExamplePartsFromRecipe(Iterable<Ingredient> ingredients) {
+        PartDataList list = PartDataList.of();
+
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient instanceof GearPartIngredient) {
+                PartType type = ((GearPartIngredient) ingredient).getPartType();
+                if (type == PartType.MAIN)
+                    list.add(PartData.fromId(PartConst.MAIN_EXAMPLE));
+                else if (type == PartType.ROD)
+                    list.add(PartData.fromId(PartConst.ROD_EXAMPLE));
+            } else {
+                ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+                if (matchingStacks.length > 0) {
+                    PartData part = PartData.fromStackFast(matchingStacks[0]);
+                    if (part != null)
+                        list.add(part);
+                }
+            }
+        }
+
+        return list;
     }
 }

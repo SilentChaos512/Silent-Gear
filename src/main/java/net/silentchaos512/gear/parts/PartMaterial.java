@@ -46,6 +46,8 @@ public class PartMaterial implements IPartMaterial {
             material.normal = CustomTippedUpgradeIngredient.of(partId);
         else if (json.has("normal"))
             material.normal = deserialize(partId, json.get("normal"));
+        else if (json.has("uncraftable"))
+            material.normal = Ingredient.EMPTY;
         else
             throw new JsonSyntaxException("Missing non-small crafting_items");
 

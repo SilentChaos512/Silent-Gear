@@ -37,6 +37,8 @@ public abstract class AbstractGearPart implements IGearPart {
     private final ResourceLocation name;
     // Crafting items
     PartMaterial materials = new PartMaterial();
+    // Availability
+    boolean visible = true;
     int tier = -1;
     List<String> blacklistedGearTypes = new ArrayList<>();
 
@@ -191,6 +193,11 @@ public abstract class AbstractGearPart implements IGearPart {
     public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) { }
 
     @Override
+    public boolean isVisible() {
+        return visible;
+    }
+
+    @Override
     public String toString() {
         return "AbstractGearPart{" +
                 this.name +
@@ -305,6 +312,7 @@ public abstract class AbstractGearPart implements IGearPart {
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
                 part.tier = JSONUtils.getInt(obj, "tier", part.tier);
+                part.visible = JSONUtils.getBoolean(obj, "visible", part.visible);
 
                 JsonArray blacklist = getGearBlacklist(obj);
                 if (blacklist != null) {

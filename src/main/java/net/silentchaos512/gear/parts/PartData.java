@@ -75,6 +75,11 @@ public final class PartData {
     }
 
     @Nullable
+    public static PartData fromId(ResourceLocation partId) {
+        return ofNullable(PartManager.get(partId));
+    }
+
+    @Nullable
     public static PartData read(CompoundNBT tags) {
         String key = tags.getString(NBT_ID);
         IGearPart part = PartManager.get(new ResourceLocation(key));

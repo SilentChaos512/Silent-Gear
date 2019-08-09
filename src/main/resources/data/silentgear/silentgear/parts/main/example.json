@@ -1,0 +1,43 @@
+{
+    "type": "silentgear:main",
+    "stats": [
+        {"name": "durability",      "value": 1000},
+        {"name": "armor_durability","value":   62},
+        {"name": "enchantability",  "value":    1},
+        {"name": "harvest_level",   "value":    0},
+        {"name": "harvest_speed",   "value":    1},
+        {"name": "melee_damage",    "value":    1},
+        {"name": "magic_damage",    "value":    1},
+        {"name": "attack_speed",    "value":  0.0},
+        {"name": "armor",           "value":    1},
+        {"name": "armor_toughness", "value":    1},
+        {"name": "magic_armor",     "value":    1},
+        {"name": "ranged_damage",   "value":    0},
+        {"name": "ranged_speed",    "value":  0.0},
+        {"name": "rarity",          "value":    1},
+        {"name": "chargeability",   "value":  1.0}
+    ],
+    "traits": [],
+    "crafting_items": {
+        "uncraftable": {}
+    },
+    "name": {
+        "translate": true,
+        "name": "part.silentgear.main.example"
+    },
+    "textures": {
+        "all": {
+            "lite_texture": "high_contrast",
+            "highlight": true,
+            "texture_domain": "silentgear",
+            "texture_suffix": "generic_hc",
+            "normal_color": "white",
+            "broken_color": "white"
+        }
+    },
+    "availability": {
+        "visible": false,
+        "tier": 0,
+        "gear_blacklist": ["all"]
+    }
+}

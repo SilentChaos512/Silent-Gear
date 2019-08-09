@@ -12,6 +12,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapedRecipe;
 
@@ -58,5 +60,13 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe {
                 .map(PartData::from)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        // Create an example item, so we're not just showing a broken item
+        ItemStack result = item.construct(GearHelper.getExamplePartsFromRecipe(getIngredients()));
+        GearData.setExampleTag(result, true);
+        return result;
     }
 }

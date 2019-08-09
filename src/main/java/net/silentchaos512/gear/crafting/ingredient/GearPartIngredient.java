@@ -41,7 +41,7 @@ public final class GearPartIngredient extends Ingredient {
 
     private GearPartIngredient(PartType type) {
         // Note: gear parts are NOT loaded at this time!
-        super(getStream(type));
+        super(Stream.of());
         this.type = type;
     }
 
@@ -49,11 +49,8 @@ public final class GearPartIngredient extends Ingredient {
         return new GearPartIngredient(type);
     }
 
-    private static Stream<IItemList> getStream(PartType type) {
-//        PartIcons icon = PartIcons.getIconForType(type);
-//        if (icon == null) return Stream.of();
-//        return Stream.of(new SingleItemList(new ItemStack(icon.asItem())));
-        return Stream.of();
+    public PartType getPartType() {
+        return type;
     }
 
     @Override

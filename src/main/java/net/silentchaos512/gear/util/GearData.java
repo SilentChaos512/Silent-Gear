@@ -758,7 +758,7 @@ public final class GearData {
         return getData(stack, NBT_ROOT_STATISTICS);
     }
 
-    static void setExampleTag(ItemStack stack, boolean value) {
+    public static void setExampleTag(ItemStack stack, boolean value) {
         getData(stack, NBT_ROOT_CONSTRUCTION).putBoolean(NBT_IS_EXAMPLE, value);
     }
 
