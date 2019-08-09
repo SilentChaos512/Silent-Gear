@@ -392,7 +392,9 @@ def writeUpdateJson() {
     def json = slurper.parse(file)
 
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
-    json[project.mc_version][version.toString()] = 'See changelog on GitHub'
+    if (!json[project.mc_version].containsKey(version.toString()))
+        json[project.mc_version][version.toString()] = 'https://github.com/SilentChaos512/Silent-Gear/blob/1.14/CHANGELOG.md'
+    json[project.mc_version] = json[project.mc_version].sort([compare: {a, b -> b.compareTo(a)}] as Comparator)
     json['promos']["${project.mc_version}-latest"] = version
     json['promos']["${project.mc_version}-recommended"] = version
 
