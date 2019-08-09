@@ -8,6 +8,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
@@ -17,6 +18,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.event.ClientTicks;
@@ -98,6 +100,17 @@ public final class TooltipHandler {
                 getGradeLine(event, grade);
             }
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").applyTextStyle(TextFormatting.GOLD));
+        }
+
+        // Gear type blacklist?
+        if (part instanceof AbstractGearPart) {
+            List<GearType> blacklist = ((AbstractGearPart) part).getBlacklistedGearTypes();
+            if (!blacklist.isEmpty()) {
+                int index = (ClientTicks.ticksInGame() / 20) % blacklist.size();
+                GearType gearType = blacklist.get(index);
+                ITextComponent typeName = gearType.getDisplayName().applyTextStyle(TextFormatting.WHITE);
+                event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.blacklist", typeName).applyTextStyle(TextFormatting.RED));
+            }
         }
     }
 

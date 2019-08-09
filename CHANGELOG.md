@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Stat multiplier configs for gear. These allow the stat values of all items to be increased or decreased without overwriting every part file.
+- Gear type blacklist to part tooltips
 
 ## [1.3.5] - 2019-08-06
 Updated for Forge 28.0.45

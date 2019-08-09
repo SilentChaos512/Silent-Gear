@@ -1,7 +1,10 @@
 package net.silentchaos512.gear.parts;
 
 import com.google.common.collect.Multimap;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -26,6 +29,7 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Base class for all gear parts. Mods should prefer to extend this instead of just implementing
@@ -191,6 +195,19 @@ public abstract class AbstractGearPart implements IGearPart {
 
     @Override
     public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) { }
+
+    /**
+     * List of blacklisted {@link GearType}s, mostly used for part tooltips. To know whether of not
+     * a part may be used in crafting, use {@link #isCraftingAllowed(GearType)} instead.
+     *
+     * @return The List of GearTypes the part may not be used to craft (may be empty)
+     */
+    public List<GearType> getBlacklistedGearTypes() {
+        return blacklistedGearTypes.stream()
+                .map(GearType::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public boolean isVisible() {

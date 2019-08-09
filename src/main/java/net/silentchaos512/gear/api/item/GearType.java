@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.api.item;
 
 import lombok.Getter;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -79,5 +81,9 @@ public final class GearType {
      */
     public boolean matches(String type) {
         return name.equals(type) || (parent != null && parent.matches(type));
+    }
+
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("gearType.silentgear." + this.name);
     }
 }
