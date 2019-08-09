@@ -8,9 +8,9 @@ import net.minecraft.nbt.EndNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -22,6 +22,7 @@ import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
@@ -127,12 +128,13 @@ public final class GearData {
                 // Some stats will be reduced if tool rod is missing (and required)
                 final float withMissingParts = hasMissingRod ? stat.withMissingRodEffect(initialValue) : initialValue;
                 // Allow traits to modify stat
-                final float value = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) -> {
+                final float withTraits = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) -> {
                     TraitActionContext context = new TraitActionContext(player, level, stack);
                     return trait.onGetStat(context, stat, val, damageRatio);
                 });
+                final float value = Config.GENERAL.getStatWithMultiplier(stat, withTraits);
                 // SilentGear.log.debug(stat, value);
-                propertiesCompound.putFloat(stat.getName().getPath(), value);
+                propertiesCompound.putFloat(stat.getName().getPath(), stat.clampValue(value));
             }
 
             if (player != null) {

@@ -2,7 +2,11 @@ package net.silentchaos512.gear.init;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -11,6 +15,7 @@ import net.silentchaos512.gear.config.Config;
 import java.lang.reflect.Field;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class NerfedGear {
     public static final List<String> DEFAULT_ITEMS = ImmutableList.of(
             "diamond_axe", "iron_axe", "golden_axe", "stone_axe", "wooden_axe",
@@ -35,7 +40,7 @@ public final class NerfedGear {
 
         for (Item item : ForgeRegistries.ITEMS) {
             if (isNerfedItem(item)) {
-                SilentGear.LOGGER.debug("Try nerf {}", item.getRegistryName());
+                SilentGear.LOGGER.debug("Try nerf durability of {}", item.getRegistryName());
                 try {
                     int maxDamage = (int) itemDamageField.get(item);
                     int newMax = MathHelper.clamp((int) (maxDamage * Config.GENERAL.nerfedItemDurabilityMulti.get()), 1, maxDamage);
@@ -49,5 +54,14 @@ public final class NerfedGear {
 
     private static boolean isNerfedItem(Item item) {
         return item.isDamageable() && Config.GENERAL.isNerfedItem(item);
+    }
+
+    @SubscribeEvent
+    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        ItemStack heldItem = event.getPlayer().getHeldItemMainhand();
+        if (isNerfedItem(heldItem.getItem())) {
+            float newSpeed = event.getNewSpeed() * Config.GENERAL.nerfedItemHarvestSpeedMulti.get().floatValue();
+            event.setNewSpeed(Math.max(newSpeed, 1));
+        }
     }
 }

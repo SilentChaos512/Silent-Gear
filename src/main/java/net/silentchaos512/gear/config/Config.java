@@ -9,12 +9,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.utils.config.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,6 +40,7 @@ public class Config {
         // Nerfed gear
         public final BooleanValue nerfedItemsEnabled;
         public final DoubleValue nerfedItemDurabilityMulti;
+        public final DoubleValue nerfedItemHarvestSpeedMulti;
         final ConfigValue<List<? extends String>> nerfedItems;
         // Sinew
         public final DoubleValue sinewDropRate;
@@ -48,6 +52,7 @@ public class Config {
         public final DoubleValue repairFactorAnvil;
         public final DoubleValue repairFactorQuick;
         public final BooleanValue upgradesInAnvilOnly;
+        private final Map<ItemStat, DoubleValue> statMultipliers = new HashMap<>();
         // Grading
         public final EnumValue<MaterialGrade> randomGradeMean;
         public final EnumValue<MaterialGrade> randomGradeMax;
@@ -113,6 +118,10 @@ public class Config {
                     .builder("item.nerfedItems.durabilityMultiplier")
                     .comment("Multiplies max durability by this value. If the result would be zero, a value of 1 is assigned.")
                     .defineInRange(0.05, 0, 1);
+            nerfedItemHarvestSpeedMulti = wrapper
+                    .builder("item.nerfedItems.harvestSpeedMultiplier")
+                    .comment("Multiplies harvest speed by this value.")
+                    .defineInRange(0.5, 0, 1);
             nerfedItems = wrapper
                     .builder("item.nerfedItems.items")
                     .comment("These items will have reduced durability")
@@ -172,6 +181,17 @@ public class Config {
                     .comment("If true, upgrade parts may only be applied in an anvil.")
                     .define(false);
 
+            wrapper.comment("item.gear.statMultipliers",
+                    "Multipliers for stats on all gear. This allows the stats on all items to be increased or decreased",
+                    "without overriding every single file.");
+
+            ItemStat.ALL_STATS.forEach((name, stat) -> {
+                DoubleValue config = wrapper
+                        .builder("item.gear.statMultipliers." + name)
+                        .defineInRange(1, 0, Double.MAX_VALUE);
+                statMultipliers.put(stat, config);
+            });
+
             // Grading
             wrapper.comment("item.grading.random",
                     "Settings for random grading of ungraded materials. This affects gear items crafted with ungraded parts, not parts graded in the part analyzer.",
@@ -212,6 +232,12 @@ public class Config {
                     .comment("Log additional information related to loading and synchronizing gear parts and traits.",
                             "This might help track down more obscure issues.")
                     .define(false);
+        }
+
+        public float getStatWithMultiplier(ItemStat stat, float value) {
+            if (statMultipliers.containsKey(stat))
+                return statMultipliers.get(stat).get().floatValue() * value;
+            return value;
         }
 
         @SuppressWarnings("TypeMayBeWeakened")

@@ -59,7 +59,7 @@ public class ItemStat {
         ALL_STATS.put(name.getPath(), this);
     }
 
-    private float clampValue(float value) {
+    public float clampValue(float value) {
         value = MathHelper.clamp(value, minimumValue, maximumValue);
         return value;
     }
