@@ -492,6 +492,8 @@ public final class GearHelper {
                     list.add(PartData.fromId(PartConst.MAIN_EXAMPLE));
                 else if (type == PartType.ROD)
                     list.add(PartData.fromId(PartConst.ROD_EXAMPLE));
+                else if (type == PartType.BOWSTRING)
+                    list.add(PartData.fromId(PartConst.BOWSTRING_EXAMPLE));
             } else {
                 ItemStack[] matchingStacks = ingredient.getMatchingStacks();
                 if (matchingStacks.length > 0) {

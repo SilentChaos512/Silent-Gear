@@ -1,5 +1,5 @@
 {
-    "type": "silentgear:rod",
+    "type": "silentgear:bowstring",
     "stats": [],
     "traits": [],
     "crafting_items": {
@@ -7,19 +7,17 @@
     },
     "name": {
         "translate": true,
-        "name": "part.silentgear.rod.example"
+        "name": "part.silentgear.bowstring.example"
     },
     "textures": {
         "all": {
             "lite_texture": "low_contrast",
             "texture_domain": "silentgear",
-            "texture_suffix": "generic_lc",
-            "normal_color": "white",
-            "fallback_color": "white"
+            "texture_suffix": "string",
+            "normal_color": "white"
         }
     },
     "availability": {
-        "visible": false,
         "tier": 0,
         "gear_blacklist": ["all"]
     }

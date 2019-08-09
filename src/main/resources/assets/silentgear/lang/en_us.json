@@ -279,6 +279,7 @@
   "stat.silentgear.grade.SS": "SS",
   "stat.silentgear.grade.SSS": "SSS",
   "part.silentgear.gradeOnPart": "Grade: %s",
+  "part.silentgear.bowstring.example": "Example Bowstring",
   "part.silentgear.bowstring.flax": "Flax Bowstring",
   "part.silentgear.bowstring.sinew": "Sinew Bowstring",
   "part.silentgear.bowstring.string": "Plain Bowstring",
