@@ -9,26 +9,22 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -112,42 +108,72 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
         }
     }
 
-    protected void fireProjectile(ItemStack stack, World worldIn, PlayerEntity player, ItemStack ammo, float velocity, boolean hasInfiniteAmmo) {
-        ArrowItem itemarrow = (ArrowItem) (ammo.getItem() instanceof ArrowItem ? ammo.getItem() : Items.ARROW);
-        AbstractArrowEntity entityarrow = itemarrow.createArrow(worldIn, ammo, player);
-        entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity * 3.0F, 1.0F);
-
-        if (MathUtils.doublesEqual(velocity, 1.0F)) {
-            entityarrow.setIsCritical(true);
-        }
-
-        int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-        float powerBoost = power > 0 ? power * 0.5f + 0.5f : 0.0f;
-        float damageBoost = getArrowDamage(stack);
-        entityarrow.setDamage(damageBoost + powerBoost);
-
-        int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-        if (punchLevel > 0) {
-            entityarrow.setKnockbackStrength(punchLevel);
-        }
-
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
-            entityarrow.setFire(100);
-
-        stack.damageItem(1, player, p -> p.sendBreakAnimation(p.getActiveHand()));
-
-        if (hasInfiniteAmmo)
-            entityarrow.pickupStatus = ArrowEntity.PickupStatus.CREATIVE_ONLY;
-
-        worldIn.addEntity(entityarrow);
-    }
-
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         if (worldIn.isRemote) {
             ToolModel.bowPull.remove(GearData.getUUID(stack));
         }
-        super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
+
+        if (entityLiving instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entityLiving;
+            boolean infiniteAmmo = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
+            ItemStack ammoItem = player.findAmmo(stack);
+
+            int i = this.getUseDuration(stack) - timeLeft;
+            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, player, i, !ammoItem.isEmpty() || infiniteAmmo);
+            if (i < 0) return;
+
+            if (!ammoItem.isEmpty() || infiniteAmmo) {
+                if (ammoItem.isEmpty()) {
+                    ammoItem = new ItemStack(Items.ARROW);
+                }
+
+                float f = getArrowVelocity(i);
+                if (!((double) f < 0.1D)) {
+                    boolean flag1 = player.abilities.isCreativeMode || (ammoItem.getItem() instanceof ArrowItem && ((ArrowItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
+                    if (!worldIn.isRemote) {
+                        ArrowItem arrowitem = (ArrowItem) (ammoItem.getItem() instanceof ArrowItem ? ammoItem.getItem() : Items.ARROW);
+                        AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoItem, player);
+                        arrowEntity.setDamage(arrowEntity.getDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
+                        arrowEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+                        if (f == 1.0F) {
+                            arrowEntity.setIsCritical(true);
+                        }
+
+                        int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+                        if (powerLevel > 0) {
+                            arrowEntity.setDamage(arrowEntity.getDamage() + (double) powerLevel * 0.5D + 0.5D);
+                        }
+
+                        int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+                        if (punchLevel > 0) {
+                            arrowEntity.setKnockbackStrength(punchLevel);
+                        }
+
+                        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
+                            arrowEntity.setFire(100);
+                        }
+
+                        stack.damageItem(1, player, (p) -> p.sendBreakAnimation(p.getActiveHand()));
+                        if (flag1 || player.abilities.isCreativeMode && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
+                            arrowEntity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                        }
+
+                        worldIn.addEntity(arrowEntity);
+                    }
+
+                    worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    if (!flag1 && !player.abilities.isCreativeMode) {
+                        ammoItem.shrink(1);
+                        if (ammoItem.isEmpty()) {
+                            player.inventory.deleteStack(ammoItem);
+                        }
+                    }
+
+                    player.addStat(Stats.ITEM_USED.get(this));
+                }
+            }
+        }
     }
 
     //endregion

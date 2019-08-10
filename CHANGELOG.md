@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stat multiplier configs for gear. These allow the stat values of all items to be increased or decreased without overwriting every part file.
 - Gear type blacklist to part tooltips
 - Texture for phantom light item, translated name [#44]
+### Fixed
+- Ranged damage stat being ignored
 
 ## [1.3.5] - 2019-08-06
 Updated for Forge 28.0.45

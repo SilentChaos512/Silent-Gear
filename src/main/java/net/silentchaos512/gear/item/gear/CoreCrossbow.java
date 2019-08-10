@@ -26,8 +26,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
@@ -236,75 +234,76 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         return f;
     }
 
-    private static void func_220016_a(World p_220016_0_, LivingEntity p_220016_1_, Hand p_220016_2_, ItemStack p_220016_3_, ItemStack p_220016_4_, float p_220016_5_, boolean p_220016_6_, float p_220016_7_, float p_220016_8_, float p_220016_9_) {
-        if (!p_220016_0_.isRemote) {
-            boolean flag = p_220016_4_.getItem() == Items.FIREWORK_ROCKET;
+    private static void func_220016_a(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float p_220016_5_, boolean p_220016_6_, float p_220016_7_, float p_220016_8_, float p_220016_9_) {
+        if (!world.isRemote) {
+            boolean flag = projectile.getItem() == Items.FIREWORK_ROCKET;
             IProjectile iprojectile;
             if (flag) {
-                iprojectile = new FireworkRocketEntity(p_220016_0_, p_220016_4_, p_220016_1_.posX, p_220016_1_.posY + (double)p_220016_1_.getEyeHeight() - (double)0.15F, p_220016_1_.posZ, true);
+                iprojectile = new FireworkRocketEntity(world, projectile, shooter.posX, shooter.posY + (double)shooter.getEyeHeight() - (double)0.15F, shooter.posZ, true);
             } else {
-                iprojectile = func_220024_a(p_220016_0_, p_220016_1_, p_220016_3_, p_220016_4_);
+                iprojectile = func_220024_a(world, shooter, crossbow, projectile);
                 if (p_220016_6_ || p_220016_9_ != 0.0F) {
                     ((AbstractArrowEntity)iprojectile).pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                 }
             }
 
-            if (p_220016_1_ instanceof ICrossbowUser) {
-                ICrossbowUser icrossbowuser = (ICrossbowUser)p_220016_1_;
-                icrossbowuser.shoot(icrossbowuser.getAttackTarget(), p_220016_3_, iprojectile, p_220016_9_);
+            if (shooter instanceof ICrossbowUser) {
+                ICrossbowUser icrossbowuser = (ICrossbowUser)shooter;
+                icrossbowuser.shoot(icrossbowuser.getAttackTarget(), crossbow, iprojectile, p_220016_9_);
             } else {
-                Vec3d vec3d1 = p_220016_1_.func_213286_i(1.0F);
+                Vec3d vec3d1 = shooter.func_213286_i(1.0F);
                 Quaternion quaternion = new Quaternion(new Vector3f(vec3d1), p_220016_9_, true);
-                Vec3d vec3d = p_220016_1_.getLook(1.0F);
+                Vec3d vec3d = shooter.getLook(1.0F);
                 Vector3f vector3f = new Vector3f(vec3d);
                 vector3f.func_214905_a(quaternion);
-                iprojectile.shoot((double)vector3f.getX(), (double)vector3f.getY(), (double)vector3f.getZ(), p_220016_7_, p_220016_8_);
+                iprojectile.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), p_220016_7_, p_220016_8_);
             }
 
-            p_220016_3_.damageItem(flag ? 3 : 1, p_220016_1_, (p_220017_1_) -> {
-                p_220017_1_.sendBreakAnimation(p_220016_2_);
+            crossbow.damageItem(flag ? 3 : 1, shooter, (p_220017_1_) -> {
+                p_220017_1_.sendBreakAnimation(hand);
             });
-            p_220016_0_.addEntity((Entity)iprojectile);
-            p_220016_0_.playSound(null, p_220016_1_.posX, p_220016_1_.posY, p_220016_1_.posZ, SoundEvents.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, p_220016_5_);
+            world.addEntity((Entity)iprojectile);
+            world.playSound(null, shooter.posX, shooter.posY, shooter.posZ, SoundEvents.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, p_220016_5_);
         }
     }
 
-    private static AbstractArrowEntity func_220024_a(World p_220024_0_, LivingEntity p_220024_1_, ItemStack p_220024_2_, ItemStack p_220024_3_) {
-        ArrowItem arrowitem = (ArrowItem)(p_220024_3_.getItem() instanceof ArrowItem ? p_220024_3_.getItem() : Items.ARROW);
-        AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(p_220024_0_, p_220024_3_, p_220024_1_);
-        if (p_220024_1_ instanceof PlayerEntity) {
-            abstractarrowentity.setIsCritical(true);
+    private static AbstractArrowEntity func_220024_a(World world, LivingEntity shooter, ItemStack crossbow, ItemStack projectile) {
+        ArrowItem arrowitem = (ArrowItem)(projectile.getItem() instanceof ArrowItem ? projectile.getItem() : Items.ARROW);
+        AbstractArrowEntity arrowEntity = arrowitem.createArrow(world, projectile, shooter);
+        if (shooter instanceof PlayerEntity) {
+            arrowEntity.setIsCritical(true);
         }
+        arrowEntity.setDamage(arrowEntity.getDamage() + GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
 
-        abstractarrowentity.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
-        abstractarrowentity.func_213865_o(true);
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.PIERCING, p_220024_2_);
+        arrowEntity.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
+        arrowEntity.func_213865_o(true);
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.PIERCING, crossbow);
         if (i > 0) {
-            abstractarrowentity.func_213872_b((byte)i);
+            arrowEntity.func_213872_b((byte)i);
         }
 
-        return abstractarrowentity;
+        return arrowEntity;
     }
 
-    public static void fireProjectiles(World p_220014_0_, LivingEntity p_220014_1_, Hand p_220014_2_, ItemStack p_220014_3_, float p_220014_4_, float p_220014_5_) {
-        List<ItemStack> list = getChargedProjectiles(p_220014_3_);
-        float[] afloat = func_220028_a(p_220014_1_.getRNG());
+    public static void fireProjectiles(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, float p_220014_4_, float p_220014_5_) {
+        List<ItemStack> list = getChargedProjectiles(crossbow);
+        float[] afloat = func_220028_a(shooter.getRNG());
 
         for(int i = 0; i < list.size(); ++i) {
             ItemStack itemstack = list.get(i);
-            boolean flag = p_220014_1_ instanceof PlayerEntity && ((PlayerEntity)p_220014_1_).abilities.isCreativeMode;
+            boolean flag = shooter instanceof PlayerEntity && ((PlayerEntity)shooter).abilities.isCreativeMode;
             if (!itemstack.isEmpty()) {
                 if (i == 0) {
-                    func_220016_a(p_220014_0_, p_220014_1_, p_220014_2_, p_220014_3_, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 0.0F);
+                    func_220016_a(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 0.0F);
                 } else if (i == 1) {
-                    func_220016_a(p_220014_0_, p_220014_1_, p_220014_2_, p_220014_3_, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, -10.0F);
+                    func_220016_a(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, -10.0F);
                 } else if (i == 2) {
-                    func_220016_a(p_220014_0_, p_220014_1_, p_220014_2_, p_220014_3_, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 10.0F);
+                    func_220016_a(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 10.0F);
                 }
             }
         }
 
-        func_220015_a(p_220014_0_, p_220014_1_, p_220014_3_);
+        func_220015_a(world, shooter, crossbow);
     }
 
     private static float[] func_220028_a(Random p_220028_0_) {
