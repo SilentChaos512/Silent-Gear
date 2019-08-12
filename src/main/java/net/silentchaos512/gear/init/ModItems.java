@@ -54,6 +54,7 @@ public final class ModItems {
     public static CoreBow bow = new CoreBow();
     public static CoreCrossbow crossbow = new CoreCrossbow();
     public static CoreSlingshot slingshot = new CoreSlingshot();
+    public static CoreShield shield = new CoreShield();
 
     public static CoreArmor helmet = new CoreArmor(EquipmentSlotType.HEAD, "helmet");
     public static CoreArmor chestplate = new CoreArmor(EquipmentSlotType.CHEST, "chestplate");
@@ -95,8 +96,7 @@ public final class ModItems {
 //        pebble = register("pebble", new SlingshotAmmoItem());
 
         // Register gear classes
-        toolClasses.forEach((key, item) -> register(key, item.asItem()));
-        armorClasses.forEach((key, item) -> register(key, item.asItem()));
+        gearClasses.forEach((key, item) -> register(key, item.asItem()));
 
 //        for (PartIcons icon : PartIcons.values()) {
 //            register("dummy_icon_" + icon.name().toLowerCase(Locale.ROOT), icon.asItem());
@@ -134,6 +134,7 @@ public final class ModItems {
         armorClasses.put("leggings", leggings);
         armorClasses.put("boots", boots);
 
+//        gearClasses.put("shield", shield);
         gearClasses.putAll(toolClasses);
         gearClasses.putAll(armorClasses);
     }

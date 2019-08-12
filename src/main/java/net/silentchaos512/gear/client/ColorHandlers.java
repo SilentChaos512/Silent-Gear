@@ -43,6 +43,7 @@ public final class ColorHandlers {
                         .map(ICoreItem::asItem)
                         .toArray(Item[]::new)
         );
+        itemColors.register(ColorHandlers::getShieldColor, ModItems.shield);
     }
 
     // TODO: When models get fixed, switch back to this
@@ -94,5 +95,17 @@ public final class ColorHandlers {
             return part.getFallbackColor(stack, 0);
         }
         return Color.VALUE_WHITE;
+    }
+
+    private static int getShieldColor(ItemStack stack, int tintIndex) {
+        if (tintIndex == 0) {
+            PartData part = GearData.getPartOfType(stack, PartType.ROD);
+            if (part == null) return Color.VALUE_WHITE;
+            return part.getFallbackColor(stack, 0);
+        }
+        if (tintIndex == 1) {
+            return GearData.getHeadColor(stack, true);
+        }
+        return 0xFFFFFF;
     }
 }
