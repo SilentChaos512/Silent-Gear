@@ -82,7 +82,7 @@ public final class GearType {
      * @return True if this type's name is equal to type, or if its parent matches (recursive)
      */
     public boolean matches(String type) {
-        return name.equals(type) || (parent != null && parent.matches(type));
+        return "all".equals(type) || name.equals(type) || (parent != null && parent.matches(type));
     }
 
     public ITextComponent getDisplayName() {

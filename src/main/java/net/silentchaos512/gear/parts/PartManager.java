@@ -42,6 +42,10 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     private PartManager() {}
 
+    public static int getHighestMainPartTier() {
+        return highestMainPartTier;
+    }
+
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
@@ -66,7 +70,9 @@ public final class PartManager implements IResourceManagerReloadListener {
                 if (json == null) {
                     SilentGear.LOGGER.error(MARKER, "Could not load part {} as it's null or empty", name);
                 } else {
-                    addPart(PartSerializers.deserialize(name, json));
+                    IGearPart part = PartSerializers.deserialize(name, json);
+                    addPart(part);
+                    highestMainPartTier = Math.max(highestMainPartTier, part.getTier());
                 }
             } catch (IllegalArgumentException | JsonParseException ex) {
                 SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", name, ex);

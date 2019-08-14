@@ -20,6 +20,7 @@ package net.silentchaos512.gear.util;
 
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -39,24 +40,28 @@ public final class GearGenerator {
         throw new IllegalAccessError("Utility class");
     }
 
-    public static Optional<IGearPart> selectRandom(PartType type) {
-        return selectRandom(type, -1);
+    public static Optional<IGearPart> selectRandom(GearType gearType, PartType type) {
+        return selectRandom(gearType, type, -1);
     }
 
-    public static Optional<IGearPart> selectRandom(PartType type, final int partTier) {
+    public static Optional<IGearPart> selectRandom(GearType gearType, PartType type, final int partTier) {
+        return selectRandom(gearType, type, partTier, partTier);
+    }
+
+    public static Optional<IGearPart> selectRandom(GearType gearType, PartType type, final int minTier, final int maxTier) {
         List<IGearPart> list = PartManager.getValues().stream()
-                .filter(p -> p.getType() == type)
-                .filter(p -> partTier == -1 || p.getTier() == partTier)
+                .filter(p -> p.getType() == type && p.isCraftingAllowed(gearType))
+                .filter(p -> minTier == -1 || (p.getTier() >= minTier && p.getTier() <= maxTier))
                 .collect(Collectors.toList());
         if (!list.isEmpty())
             return Optional.of(list.get(SilentGear.random.nextInt(list.size())));
         return Optional.ofNullable(PartManager.tryGetFallback(type));
     }
 
-    public static Collection<IGearPart> selectRandomMains(int count, int partTier) {
+    public static Collection<IGearPart> selectRandomMains(GearType gearType, int count, int partTier) {
         Collection<IGearPart> list = new ArrayList<>();
         for (int i = 0; i < count; ++i) {
-            selectRandom(PartType.MAIN, partTier).ifPresent(list::add);
+            selectRandom(gearType, PartType.MAIN, partTier).ifPresent(list::add);
         }
         return list;
     }
@@ -68,9 +73,19 @@ public final class GearGenerator {
     }
 
     public static ItemStack create(ICoreItem item, int tier) {
+        return randomizeParts(new ItemStack(item), tier);
+    }
+
+    public static ItemStack randomizeParts(ItemStack stack, int tier) {
+        if (!(stack.getItem() instanceof ICoreItem)) {
+            throw new RuntimeException("Called GearGenerator.randomizeParts on non-gear");
+        }
+        ICoreItem item = (ICoreItem) stack.getItem();
+        GearType gearType = item.getGearType();
+
         // Select main and rod
-        Collection<IGearPart> mains = selectRandomMains(getMainPartCount(), tier);
-        Optional<IGearPart> rod = selectRandom(PartType.ROD);
+        Collection<IGearPart> mains = selectRandomMains(gearType, getMainPartCount(), tier);
+        Optional<IGearPart> rod = selectRandom(gearType, PartType.ROD, 0, tier);
         if (mains.isEmpty() || !rod.isPresent()) {
             //SilentGear.LOGGER.error("Could not create {} of tier {}", item.getGearType().getName(), tier);
             return ItemStack.EMPTY;
@@ -85,14 +100,15 @@ public final class GearGenerator {
         }
         // Requires bowstring?
         if (item.requiresPartOfType(PartType.BOWSTRING)) {
-            Optional<IGearPart> bowstring = selectRandom(PartType.BOWSTRING, tier);
+            Optional<IGearPart> bowstring = selectRandom(gearType, PartType.BOWSTRING, 0, tier);
             bowstring.ifPresent(parts::addPart);
         }
-        ItemStack result = item.construct(parts);
+        ItemStack result = stack.copy();
+        GearData.writeConstructionParts(result, parts);
 
         // Apply some random upgrades?
         if (item instanceof ICoreTool && SilentGear.random.nextFloat() < 0.2f * tier + 0.1f) {
-            Optional<IGearPart> tip = selectRandom(PartType.TIP);
+            Optional<IGearPart> tip = selectRandom(gearType, PartType.TIP);
             tip.ifPresent(part -> GearData.addUpgradePart(result, PartData.of(part)));
         }
 
