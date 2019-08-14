@@ -8,6 +8,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
@@ -20,6 +21,7 @@ import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.models.ArmorItemModel;
 import net.silentchaos512.gear.client.models.ToolModel;
+import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -58,6 +60,10 @@ class SideProxy implements IProxy {
 
         ModLootStuff.init();
         ModRecipes.init();
+
+        if (ModList.get().isLoaded("mmorpg") && Config.GENERAL.mineAndSlashSupport.get()) {
+            MineAndSlashCompat.init();
+        }
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {

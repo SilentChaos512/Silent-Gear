@@ -61,6 +61,8 @@ public class Config {
         // Salvager
         public final DoubleValue salvagerMinLossRate;
         public final DoubleValue salvagerMaxLossRate;
+        // Compatibility
+        public final BooleanValue mineAndSlashSupport;
         // Debug
         public final BooleanValue extraPartAndTraitLogging;
 
@@ -226,6 +228,11 @@ public class Config {
                     .comment("Maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
                             "Rate depends on remaining durability.")
                     .defineInRange(0.5, 0, 1);
+
+            mineAndSlashSupport = wrapper
+                    .builder("compat.mineAndSlash.enabled")
+                    .comment("Enable compatibility with the Mine and Slash mod, if installed")
+                    .define(true);
 
             extraPartAndTraitLogging = wrapper
                     .builder("debug.logging.extraPartAndTraitInfo")

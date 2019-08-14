@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.7] - 2019-08-13
+### Added
+- Basic compatibility for Mine and Slash
+### Fixed
+- Parts blacklisted for "all" gear types not actually being blacklisted
+
 ## [1.3.6] - 2019-08-12
 ### Added
 - Stat multiplier configs for gear. These allow the stat values of all items to be increased or decreased without overwriting every part file.
