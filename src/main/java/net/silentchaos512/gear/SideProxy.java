@@ -60,10 +60,6 @@ class SideProxy implements IProxy {
 
         ModLootStuff.init();
         ModRecipes.init();
-
-        if (ModList.get().isLoaded("mmorpg") && Config.GENERAL.mineAndSlashSupport.get()) {
-            MineAndSlashCompat.init();
-        }
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {
@@ -81,6 +77,10 @@ class SideProxy implements IProxy {
         LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
 
         NerfedGear.init();
+
+        if (ModList.get().isLoaded("mmorpg") && Config.GENERAL.mineAndSlashSupport.get()) {
+            MineAndSlashCompat.init();
+        }
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {}
