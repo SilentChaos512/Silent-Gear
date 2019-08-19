@@ -171,7 +171,6 @@ public interface IAOETool {
                     } else {
                         int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).interactionManager.getGameType(), (ServerPlayerEntity) player, pos2);
                         if (xp == -1) continue;
-                        state.getBlock().onBlockHarvested(world, pos2, state, player);
                         tool.getItem().onBlockDestroyed(tool, world, state, pos2, player);
                         TileEntity tileEntity = world.getTileEntity(pos2);
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState())) {

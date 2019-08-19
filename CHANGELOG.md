@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mine and Slash random drops are now tier 1 minimum
 - Mine and Slash random drops should now be salvagable
 ### Fixed
+- Hammer dupe [#51]
 - JEI failing to load on servers [#52]
 - JEI complaining about QuickRepairRecipe
 
