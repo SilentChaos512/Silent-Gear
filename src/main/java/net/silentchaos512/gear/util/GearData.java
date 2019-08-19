@@ -693,7 +693,7 @@ public final class GearData {
         return false;
     }
 
-    public static void writeConstructionParts(ItemStack stack, Collection<PartData> parts) {
+    public static void writeConstructionParts(ItemStack stack, Collection<? extends IPartData> parts) {
         if (!GearHelper.isGear(stack)) {
             SilentGear.LOGGER.error("Called writeConstructionParts on non-gear item, {}", stack);
             SilentGear.LOGGER.catching(new IllegalArgumentException());

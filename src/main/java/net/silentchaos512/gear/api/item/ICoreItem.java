@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
+import net.silentchaos512.gear.api.parts.IPartData;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -25,7 +26,7 @@ import java.util.Set;
 public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor {
     //region Item properties and construction
 
-    default ItemStack construct(Collection<PartData> parts) {
+    default ItemStack construct(Collection<? extends IPartData> parts) {
         ItemStack result = new ItemStack(this);
         GearData.writeConstructionParts(result, parts);
         GearData.recalculateStats(result, null);

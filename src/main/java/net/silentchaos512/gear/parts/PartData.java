@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class PartData {
+public final class PartData implements IPartData {
     private static final Map<ResourceLocation, PartData> CACHE_UNGRADED_PARTS = new HashMap<>();
     public static final String NBT_ID = "ID";
 
@@ -99,6 +99,7 @@ public final class PartData {
         return of(part);
     }
 
+    @Override
     public CompoundNBT write(@Nonnull CompoundNBT tags) {
         tags.putString("ID", part.getId().toString());
         if (this.grade != MaterialGrade.NONE) {
@@ -111,22 +112,33 @@ public final class PartData {
         return tags;
     }
 
+    @Override
+    public ResourceLocation getPartId() {
+        return part.getId();
+    }
+
+    @Nonnull
+    @Override
     public IGearPart getPart() {
         return part;
     }
 
+    @Override
     public MaterialGrade getGrade() {
         return grade;
     }
 
+    @Override
     public ItemStack getCraftingItem() {
         return craftingItem;
     }
 
+    @Override
     public int getTier() {
         return part.getTier();
     }
 
+    @Override
     public PartType getType() {
         return part.getType();
     }
@@ -139,6 +151,7 @@ public final class PartData {
         return part.getStatModifiers(gear, stat, this);
     }
 
+    @Override
     public List<PartTraitInstance> getTraits() {
         return getTraits(ItemStack.EMPTY);
     }

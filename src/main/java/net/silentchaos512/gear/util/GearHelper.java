@@ -31,9 +31,7 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.item.MiscUpgrades;
-import net.silentchaos512.gear.parts.PartConst;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartPositions;
+import net.silentchaos512.gear.parts.*;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
 import javax.annotation.Nonnull;
@@ -447,7 +445,7 @@ public final class GearHelper {
 
         Collection<ItemStack> list = new ArrayList<>();
         // Create a few samples of each tool type, because rendering performance is a problem on many machines.
-        for (int i = 1; i <= 3 /*PartRegistry.getHighestMainPartTier()*/; ++i) {
+        for (int i = 3; i <= Math.max(3, PartManager.getHighestMainPartTier()); ++i) {
             ItemStack stack = createSampleItem(item, i);
             if (!stack.isEmpty()) {
                 list.add(stack);
@@ -458,6 +456,15 @@ public final class GearHelper {
 
     private static ItemStack createSampleItem(ICoreItem item, int tier) {
         ItemStack result = GearGenerator.create(item, tier);
+        if (result.isEmpty()) {
+            Collection<IPartData> parts = new ArrayList<>();
+            parts.add(new LazyPartData(PartConst.MAIN_EXAMPLE));
+            if (item.requiresPartOfType(PartType.ROD))
+                parts.add(new LazyPartData(PartConst.ROD_EXAMPLE));
+            if (item.requiresPartOfType(PartType.BOWSTRING))
+                parts.add(new LazyPartData(PartConst.BOWSTRING_EXAMPLE));
+            result = item.construct(parts);
+        }
         GearData.setExampleTag(result, true);
         return result;
     }
@@ -482,19 +489,20 @@ public final class GearHelper {
         return gearName;
     }
 
-    public static Collection<PartData> getExamplePartsFromRecipe(Iterable<Ingredient> ingredients) {
-        PartDataList list = PartDataList.of();
+    public static Collection<IPartData> getExamplePartsFromRecipe(Iterable<Ingredient> ingredients) {
+        Collection<IPartData> list = new ArrayList<>();
 
         for (Ingredient ingredient : ingredients) {
             if (ingredient instanceof GearPartIngredient) {
                 PartType type = ((GearPartIngredient) ingredient).getPartType();
                 if (type == PartType.MAIN)
-                    list.add(PartData.fromId(PartConst.MAIN_EXAMPLE));
+                    list.add(new LazyPartData(PartConst.MAIN_EXAMPLE));
                 else if (type == PartType.ROD)
-                    list.add(PartData.fromId(PartConst.ROD_EXAMPLE));
+                    list.add(new LazyPartData(PartConst.ROD_EXAMPLE));
                 else if (type == PartType.BOWSTRING)
-                    list.add(PartData.fromId(PartConst.BOWSTRING_EXAMPLE));
+                    list.add(new LazyPartData(PartConst.BOWSTRING_EXAMPLE));
             } else {
+                // This isn't perfect, since parts may not be loaded at this time...
                 ItemStack[] matchingStacks = ingredient.getMatchingStacks();
                 if (matchingStacks.length > 0) {
                     PartData part = PartData.fromStackFast(matchingStacks[0]);
