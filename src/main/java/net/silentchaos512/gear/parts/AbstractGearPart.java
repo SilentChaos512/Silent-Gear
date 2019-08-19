@@ -52,6 +52,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     // Display
     ITextComponent displayName;
+    @Nullable ITextComponent namePrefix = null;
     // Textures, colors, etc.
     final Map<String, PartDisplay> display = new HashMap<>();
     // Model index: re-evaluate
@@ -184,6 +185,11 @@ public abstract class AbstractGearPart implements IGearPart {
         return displayName;
     }
 
+    @Override
+    public ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
+        return namePrefix;
+    }
+
     public int getModelIndex() {
         return modelIndex;
     }
@@ -290,12 +296,9 @@ public abstract class AbstractGearPart implements IGearPart {
             JsonElement elementName = json.get("name");
             if (elementName != null && elementName.isJsonObject()) {
                 JsonObject obj = elementName.getAsJsonObject();
-                boolean translate = JSONUtils.getBoolean(obj, "translate", false);
-                String nameValue = JSONUtils.getString(obj, "name");
-                if (translate) {
-                    part.displayName = new TranslationTextComponent(nameValue);
-                } else {
-                    part.displayName = new StringTextComponent(nameValue);
+                part.displayName = deserializeText(obj);
+                if (obj.has("prefix")) {
+                    part.namePrefix = deserializeText(obj.getAsJsonObject("prefix"));
                 }
             } else {
                 throw new JsonSyntaxException("Expected 'name' to be an object");
@@ -343,6 +346,14 @@ public abstract class AbstractGearPart implements IGearPart {
             return part;
         }
 
+        private static ITextComponent deserializeText(JsonObject json) {
+            boolean translate = JSONUtils.getBoolean(json, "translate", false);
+            String name = JSONUtils.getString(json, "name");
+            if (translate)
+                return new TranslationTextComponent(name);
+            return new StringTextComponent(name);
+        }
+
         @Nullable
         private static JsonArray getGearBlacklist(JsonObject json) {
             if (json.has("gear_blacklist"))
@@ -357,6 +368,8 @@ public abstract class AbstractGearPart implements IGearPart {
             T part = function.apply(id);
 
             part.displayName = buffer.readTextComponent();
+            if (buffer.readBoolean())
+                part.namePrefix = buffer.readTextComponent();
             part.materials = PartMaterial.read(buffer);
             part.tier = buffer.readByte();
 
@@ -384,6 +397,9 @@ public abstract class AbstractGearPart implements IGearPart {
         @Override
         public void write(PacketBuffer buffer, T part) {
             buffer.writeTextComponent(part.getDisplayName(null, ItemStack.EMPTY));
+            buffer.writeBoolean(part.namePrefix != null);
+            if (part.namePrefix != null)
+                buffer.writeTextComponent(part.namePrefix);
             part.materials.write(buffer);
             buffer.writeByte(part.getTier());
 

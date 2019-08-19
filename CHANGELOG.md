@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Gear name prefixes. Can be added to individual parts (see rough rods for any example), or through an event (GearNamePrefixesEvent)
 ### Changed
 - Mine and Slash random drops are now tier 1 minimum
 - Mine and Slash random drops should now be salvagable

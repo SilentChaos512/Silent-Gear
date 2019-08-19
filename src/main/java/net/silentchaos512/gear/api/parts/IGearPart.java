@@ -108,6 +108,11 @@ public interface IGearPart {
 
     ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
 
+    @Nullable
+    default ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
+        return null;
+    }
+
     // May be removed or changed?
     @Deprecated
     String getModelIndex(PartData part, int animationFrame);

@@ -22,7 +22,11 @@
     },
     "name": {
         "translate": true,
-        "name": "part.silentgear.rod.rough"
+        "name": "part.silentgear.rod.rough",
+        "prefix": {
+            "translate": true,
+            "name": "part.silentgear.rod.rough.prefix"
+        }
     },
     "textures": {
         "all": {

@@ -18,14 +18,20 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.IPartData;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
@@ -475,18 +481,31 @@ public final class GearHelper {
 
         ITextComponent partName = part.getDisplayName(gear);
         ITextComponent gearName = new TranslationTextComponent(gear.getTranslationKey() + ".nameProper", partName);
+        ITextComponent result = gearName;
 
         if (gear.getItem() instanceof ICoreTool) {
             ICoreItem item = (ICoreItem) gear.getItem();
             if (item.requiresPartOfType(PartType.ROD) && GearData.getPartOfType(gear, PartType.ROD) == null) {
-                return new TranslationTextComponent(gear.getTranslationKey() + ".noRod", gearName);
-            }
-            if (item.requiresPartOfType(PartType.BOWSTRING) && GearData.getPartOfType(gear, PartType.BOWSTRING) == null) {
-                return new TranslationTextComponent(gear.getTranslationKey() + ".unstrung", gearName);
+                result = new TranslationTextComponent(gear.getTranslationKey() + ".noRod", gearName);
+            } else if (item.requiresPartOfType(PartType.BOWSTRING) && GearData.getPartOfType(gear, PartType.BOWSTRING) == null) {
+                result = new TranslationTextComponent(gear.getTranslationKey() + ".unstrung", gearName);
             }
         }
 
-        return gearName;
+        // Prefixes
+        // TODO: Probably should cache this somehow...
+        for (ITextComponent t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
+            // TODO: Spaces are probably inappropriate for some languages?
+            result = t.deepCopy().appendSibling(new StringTextComponent(" ")).appendSibling(result);
+        }
+
+        return result;
+    }
+
+    private static Collection<ITextComponent> getNamePrefixes(ItemStack gear, PartDataList parts) {
+        GearNamePrefixesEvent event = new GearNamePrefixesEvent(gear, parts);
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.getPrefixes();
     }
 
     public static Collection<IPartData> getExamplePartsFromRecipe(Iterable<Ingredient> ingredients) {
