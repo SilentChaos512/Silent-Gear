@@ -21,8 +21,8 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -30,7 +30,6 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.RepairContext;
@@ -39,9 +38,13 @@ import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
 
-public class QuickRepairRecipe implements ICraftingRecipe {
+public class QuickRepairRecipe extends SpecialRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("quick_repair");
     public static final Serializer SERIALIZER = new Serializer();
+
+    public QuickRepairRecipe(ResourceLocation idIn) {
+        super(idIn);
+    }
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
@@ -103,13 +106,7 @@ public class QuickRepairRecipe implements ICraftingRecipe {
 
     @Override
     public boolean canFit(int width, int height) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getRecipeOutput() {
-        // Just so JEI won't complain
-        return new ItemStack(ModItems.pickaxe);
+        return width * height >= 2;
     }
 
     @Override
@@ -123,15 +120,14 @@ public class QuickRepairRecipe implements ICraftingRecipe {
     }
 
     public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<QuickRepairRecipe> {
-
         @Override
         public QuickRepairRecipe read(ResourceLocation recipeId, JsonObject json) {
-            return new QuickRepairRecipe();
+            return new QuickRepairRecipe(recipeId);
         }
 
         @Override
         public QuickRepairRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            return new QuickRepairRecipe();
+            return new QuickRepairRecipe(recipeId);
         }
 
         @Override

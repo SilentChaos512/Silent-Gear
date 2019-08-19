@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mine and Slash random drops should now be salvagable
 ### Fixed
 - JEI failing to load on servers [#52]
+- JEI complaining about QuickRepairRecipe
 
 ## [1.3.8] - 2019-08-13
 ### Fixed
