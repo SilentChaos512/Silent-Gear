@@ -86,6 +86,10 @@ minecraft {
 repositories {
     jcenter()
     mavenLocal()
+    // Silent Lib
+    maven {
+        url  "https://dl.bintray.com/silentchaos512/silent-lib"
+    }
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -96,12 +100,12 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
-    maven {
-        url 'https://jitpack.io'
-    }
     // Curios
     maven {
         url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        url 'https://jitpack.io'
     }
 }
 
@@ -119,9 +123,10 @@ dependencies {
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:${project.jei_version}")
 
-//    runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
-//        exclude module: "silent-gear-${project.mc_version}"
-//    }
+    runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
+        exclude module: "cc-tweaked-${project.mc_version}"
+        exclude module: "silent-gear-${project.mc_version}"
+    }
 //    runtimeOnly 'net.silentchaos512:wit:1.+'
 
     // Curios

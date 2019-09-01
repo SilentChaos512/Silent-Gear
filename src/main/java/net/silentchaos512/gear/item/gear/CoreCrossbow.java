@@ -279,7 +279,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         arrowEntity.func_213865_o(true);
         int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.PIERCING, crossbow);
         if (i > 0) {
-            arrowEntity.func_213872_b((byte)i);
+            arrowEntity.setPierceLevel((byte)i);
         }
 
         return arrowEntity;

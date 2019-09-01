@@ -137,7 +137,7 @@ public final class RepairHandler {
         }
 
         for (int i = 0; i < map.size(); ++i) {
-            itemstack.setRepairCost(RepairContainer.func_216977_d(itemstack.getRepairCost()));
+            itemstack.setRepairCost(RepairContainer.getNewRepairCost(itemstack.getRepairCost()));
         }
 
         return itemstack;

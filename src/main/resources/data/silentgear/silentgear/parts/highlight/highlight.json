@@ -3,9 +3,7 @@
     "stats": [],
     "traits": [],
     "crafting_items": {
-        "normal": {
-            "tag": "silentgear:empty"
-        }
+        "uncraftable": {}
     },
     "name": {
         "translate": true,
