@@ -388,7 +388,7 @@ public final class GearData {
 
         CompoundNBT data = getData(gear, NBT_ROOT_CONSTRUCTION);
         if (!data.contains(NBT_TIER)) {
-            PartDataList parts = getConstructionParts(gear);
+            List<PartData> parts = getConstructionParts(gear).getMains();
             int max = 0;
             for (PartData part : parts) {
                 if (part.getTier() > max) {

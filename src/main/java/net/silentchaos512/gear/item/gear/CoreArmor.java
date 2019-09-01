@@ -177,8 +177,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public int getColor(ItemStack stack) {
-        PartData renderPart = GearData.getPrimaryRenderPartFast(stack);
-        return renderPart != null ? renderPart.getColor(stack, 0) : 0xFF00FF;
+        return GearData.getHeadColor(stack, true);
     }
 
     @Override
