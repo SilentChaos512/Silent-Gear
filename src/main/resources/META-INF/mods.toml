@@ -18,7 +18,7 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="forge"
     mandatory=true
-    versionRange="[28.0.45,)"
+    versionRange="[28.0.83,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]

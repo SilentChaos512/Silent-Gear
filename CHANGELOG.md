@@ -4,7 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+Update requires Forge 28.0.83 or higher
 ### Fixed
+- Armor not using blended colors
 - Should fix barrier items being produced when salvaging some items
 
 ## [1.3.9] - 2019-08-19

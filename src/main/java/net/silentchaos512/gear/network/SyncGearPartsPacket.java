@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SyncGearPartsPacket {
+public class SyncGearPartsPacket extends LoginPacket {
     private List<IGearPart> parts;
 
     public SyncGearPartsPacket() {

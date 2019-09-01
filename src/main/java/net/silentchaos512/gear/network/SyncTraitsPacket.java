@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SyncTraitsPacket {
+public class SyncTraitsPacket extends LoginPacket {
     private List<ITrait> traits;
 
     public SyncTraitsPacket() {
