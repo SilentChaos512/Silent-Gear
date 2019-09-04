@@ -27,8 +27,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.netherrack"
+        "translate": "part.silentgear.main.netherrack"
     },
     "textures": {
         "all": {

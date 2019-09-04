@@ -28,8 +28,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.wood"
+        "translate": "part.silentgear.main.wood"
     },
     "textures": {
         "all": {
@@ -37,8 +36,8 @@
             "highlight": false,
             "texture_domain": "silentgear",
             "texture_suffix": "wood",
-            "texture_color": "FFFFFF",
-            "broken_color": "866526"
+            "normal_color": "#FFFFFF",
+            "broken_color": "#866526"
         }
     },
     "availability": {

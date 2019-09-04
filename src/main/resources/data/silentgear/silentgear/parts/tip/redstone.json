@@ -21,8 +21,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.tip.redstone"
+        "translate": "part.silentgear.tip.redstone"
     },
     "textures": {
         "all": {

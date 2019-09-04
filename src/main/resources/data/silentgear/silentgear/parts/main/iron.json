@@ -30,8 +30,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.iron"
+        "translate": "part.silentgear.main.iron"
     },
     "textures": {
         "all": {

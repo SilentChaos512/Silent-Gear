@@ -27,8 +27,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.netherwood"
+        "translate": "part.silentgear.main.netherwood"
     },
     "textures": {
         "all": {

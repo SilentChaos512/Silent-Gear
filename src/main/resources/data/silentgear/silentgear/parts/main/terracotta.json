@@ -27,8 +27,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.terracotta"
+        "translate": "part.silentgear.main.terracotta"
     },
     "textures": {
         "all": {

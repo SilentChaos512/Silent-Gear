@@ -22,8 +22,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.rod.end"
+        "translate": "part.silentgear.rod.end"
     },
     "textures": {
         "all": {

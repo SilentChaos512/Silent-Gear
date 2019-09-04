@@ -22,8 +22,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.tip.emerald"
+        "translate": "part.silentgear.tip.emerald"
     },
     "textures": {
         "all": {

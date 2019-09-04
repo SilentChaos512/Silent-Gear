@@ -6,8 +6,7 @@
         "uncraftable": {}
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.bowstring.example"
+        "translate": "part.silentgear.bowstring.example"
     },
     "textures": {
         "all": {

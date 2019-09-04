@@ -18,8 +18,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.rod.netherwood"
+        "translate": "part.silentgear.rod.netherwood"
     },
     "textures": {
         "all": {

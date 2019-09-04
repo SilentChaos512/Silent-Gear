@@ -27,8 +27,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.stone"
+        "translate": "part.silentgear.main.stone"
     },
     "textures": {
         "all": {

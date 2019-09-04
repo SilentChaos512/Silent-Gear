@@ -22,8 +22,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.tip.glowstone"
+        "translate": "part.silentgear.tip.glowstone"
     },
     "textures": {
         "all": {

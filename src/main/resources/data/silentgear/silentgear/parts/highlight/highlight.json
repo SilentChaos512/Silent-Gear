@@ -6,8 +6,7 @@
         "uncraftable": {}
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.highlight"
+        "translate": "part.silentgear.highlight"
     },
     "textures": {
         "all": {

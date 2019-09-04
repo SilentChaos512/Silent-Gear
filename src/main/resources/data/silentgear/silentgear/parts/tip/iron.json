@@ -21,8 +21,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.tip.iron"
+        "translate": "part.silentgear.tip.iron"
     },
     "textures": {
         "all": {

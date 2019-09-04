@@ -295,13 +295,15 @@ public abstract class AbstractGearPart implements IGearPart {
             // Name
             JsonElement elementName = json.get("name");
             if (elementName != null && elementName.isJsonObject()) {
-                JsonObject obj = elementName.getAsJsonObject();
-                part.displayName = deserializeText(obj);
-                if (obj.has("prefix")) {
-                    part.namePrefix = deserializeText(obj.getAsJsonObject("prefix"));
-                }
+                part.displayName = deserializeText(elementName);
             } else {
-                throw new JsonSyntaxException("Expected 'name' to be an object");
+                throw new JsonSyntaxException("Expected 'name' element");
+            }
+
+            // Name Prefix
+            JsonElement elementNamePrefix = json.get("name_prefix");
+            if (elementNamePrefix != null) {
+                part.namePrefix = deserializeText(elementNamePrefix);
             }
 
             // Textures
@@ -346,12 +348,16 @@ public abstract class AbstractGearPart implements IGearPart {
             return part;
         }
 
-        private static ITextComponent deserializeText(JsonObject json) {
-            boolean translate = JSONUtils.getBoolean(json, "translate", false);
-            String name = JSONUtils.getString(json, "name");
-            if (translate)
-                return new TranslationTextComponent(name);
-            return new StringTextComponent(name);
+        private static ITextComponent deserializeText(JsonElement json) {
+            // Handle the old style
+            if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
+                boolean translate = JSONUtils.getBoolean(json.getAsJsonObject(), "translate", false);
+                String name = JSONUtils.getString(json.getAsJsonObject(), "name");
+                return translate ? new TranslationTextComponent(name) : new StringTextComponent(name);
+            }
+
+            // Deserialize use vanilla serializer
+            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
         }
 
         @Nullable

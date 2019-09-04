@@ -10,8 +10,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.misc.spoon"
+        "translate": "part.silentgear.misc.spoon"
     },
     "textures": {
         "all": {

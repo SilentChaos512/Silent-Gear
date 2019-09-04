@@ -22,8 +22,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.tip.quartz"
+        "translate": "part.silentgear.tip.quartz"
     },
     "textures": {
         "all": {

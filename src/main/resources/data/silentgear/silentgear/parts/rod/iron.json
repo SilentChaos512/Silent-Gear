@@ -18,8 +18,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.rod.iron"
+        "translate": "part.silentgear.rod.iron"
     },
     "textures": {
         "all": {

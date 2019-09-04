@@ -2,7 +2,10 @@ package net.silentchaos512.gear.parts;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
@@ -13,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -69,6 +73,8 @@ public final class PartManager implements IResourceManagerReloadListener {
                 JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                 if (json == null) {
                     SilentGear.LOGGER.error(MARKER, "Could not load part {} as it's null or empty", name);
+                } else if (!CraftingHelper.processConditions(json, "conditions")) {
+                    SilentGear.LOGGER.info("Skipping loading gear part {} as it's conditions were not met", name);
                 } else {
                     IGearPart part = PartSerializers.deserialize(name, json);
                     addPart(part);

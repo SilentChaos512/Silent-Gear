@@ -18,8 +18,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.rod.wood"
+        "translate": "part.silentgear.rod.wood"
     },
     "textures": {
         "all": {

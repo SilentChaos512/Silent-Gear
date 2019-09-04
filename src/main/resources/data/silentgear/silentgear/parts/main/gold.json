@@ -31,8 +31,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.gold"
+        "translate": "part.silentgear.main.gold"
     },
     "textures": {
         "all": {

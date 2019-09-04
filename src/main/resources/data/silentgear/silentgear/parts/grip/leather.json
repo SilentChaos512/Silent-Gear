@@ -22,15 +22,14 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.grip.leather"
+        "translate": "part.silentgear.grip.leather"
     },
     "textures": {
         "all": {
             "lite_texture": "low_contrast",
             "texture_domain": "silentgear",
             "texture_suffix": "leather",
-            "normal_color": "white"
+            "fallback_color": "#C65C35"
         }
     },
     "availability": {

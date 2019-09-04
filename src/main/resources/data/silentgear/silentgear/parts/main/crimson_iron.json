@@ -31,8 +31,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.crimson_iron"
+        "translate": "part.silentgear.main.crimson_iron"
     },
     "textures": {
         "all": {

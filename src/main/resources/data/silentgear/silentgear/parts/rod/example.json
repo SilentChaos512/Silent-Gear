@@ -6,8 +6,7 @@
         "uncraftable": {}
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.rod.example"
+        "translate": "part.silentgear.rod.example"
     },
     "textures": {
         "all": {

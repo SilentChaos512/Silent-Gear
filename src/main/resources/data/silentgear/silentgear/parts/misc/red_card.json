@@ -10,8 +10,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.misc.red_card"
+        "translate": "part.silentgear.misc.red_card"
     },
     "textures": {
         "all": {

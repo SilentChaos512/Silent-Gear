@@ -22,8 +22,7 @@
         "uncraftable": {}
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.example"
+        "translate": "part.silentgear.main.example"
     },
     "textures": {
         "all": {

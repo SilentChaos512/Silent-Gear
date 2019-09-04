@@ -23,8 +23,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.grip.black_wool"
+        "translate": "part.silentgear.grip.black_wool"
     },
     "textures": {
         "all": {

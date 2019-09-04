@@ -56,8 +56,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.crimson_steel"
+        "translate": "part.silentgear.main.crimson_steel"
     },
     "textures": {
         "all": {

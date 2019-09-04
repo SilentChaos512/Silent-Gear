@@ -3,8 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.10] - 2019-09-04
 Update requires Forge 28.0.83 or higher
+### Added
+- A joke part: barrier
+### Changed
+- Part names and prefixes are now serialized like vanilla text (`translate` to translate, `text` for literal text). Old part files will load correctly.
+- Part name prefixes no longer nested in `name`, moved to `name_prefix`
 ### Fixed
 - Armor not using blended colors
 - Should fix barrier items being produced when salvaging some items

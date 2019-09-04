@@ -21,8 +21,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.tip.lapis"
+        "translate": "part.silentgear.tip.lapis"
     },
     "textures": {
         "all": {

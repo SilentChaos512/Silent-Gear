@@ -27,8 +27,7 @@
         }
     },
     "name": {
-        "translate": true,
-        "name": "part.silentgear.main.obsidian"
+        "translate": "part.silentgear.main.obsidian"
     },
     "textures": {
         "all": {
