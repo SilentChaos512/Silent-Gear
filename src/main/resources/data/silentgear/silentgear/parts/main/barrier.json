@@ -1,0 +1,47 @@
+{
+    "__comment__": "Joke part for MLGnoobhunter",
+    "type": "silentgear:main",
+    "stats": [
+        {"name": "durability",      "value": 1337},
+        {"name": "armor_durability","value":   84},
+        {"name": "enchantability",  "value":    5},
+        {"name": "harvest_level",   "value":    0},
+        {"name": "harvest_speed",   "value":    5},
+        {"name": "melee_damage",    "value":    1},
+        {"name": "magic_damage",    "value":    1},
+        {"name": "attack_speed",    "value":  0.0},
+        {"name": "armor",           "value":   15},
+        {"name": "armor_toughness", "value":    2},
+        {"name": "magic_armor",     "value":   10},
+        {"name": "ranged_damage",   "value":    1},
+        {"name": "ranged_speed",    "value":  0.0},
+        {"name": "rarity",          "value":  111},
+        {"name": "chargeability",   "value":  0.5}
+    ],
+    "traits": [
+        {"name": "silentgear:adamant", "level": 5},
+        {"name": "silentgear:holy", "level": 5}
+    ],
+    "crafting_items": {
+        "normal": {
+            "item": "minecraft:barrier"
+        }
+    },
+    "name": {
+        "text": "Barrier"
+    },
+    "textures": {
+        "all": {
+            "lite_texture": "high_contrast_with_highlight",
+            "highlight": true,
+            "texture_domain": "silentgear",
+            "texture_suffix": "generic_hc",
+            "normal_color": "#FF0000"
+        }
+    },
+    "availability": {
+        "visible": false,
+        "tier": 3,
+        "gear_blacklist": []
+    }
+}
