@@ -19,7 +19,7 @@ public class FlaxPlant extends CropsBlock {
                 .hardnessAndResistance(0)
                 .doesNotBlockMovement()
                 .tickRandomly()
-                .sound(SoundType.PLANT)
+                .sound(SoundType.CROP)
         );
         this.wild = wild;
     }
