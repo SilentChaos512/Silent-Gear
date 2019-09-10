@@ -11,11 +11,9 @@
         }
     ],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.soft"
+        "translate": "trait.silentgear.soft"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.soft.desc"
+        "translate": "trait.silentgear.soft.desc"
     }
 }

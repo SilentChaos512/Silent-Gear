@@ -3,11 +3,9 @@
     "max_level": 1,
     "cancels_with": [],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.magmatic"
+        "translate": "trait.silentgear.magmatic"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.magmatic.desc"
+        "translate": "trait.silentgear.magmatic.desc"
     }
 }

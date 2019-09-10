@@ -3,11 +3,9 @@
     "max_level": 5,
     "cancels_with": [],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.lustrous"
+        "translate": "trait.silentgear.lustrous"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.lustrous.desc"
+        "translate": "trait.silentgear.lustrous.desc"
     }
 }

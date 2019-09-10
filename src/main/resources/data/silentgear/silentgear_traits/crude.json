@@ -3,11 +3,9 @@
     "max_level": 5,
     "cancels_with": ["silentgear:synergistic"],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.crude"
+        "translate": "trait.silentgear.crude"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.crude.desc"
+        "translate": "trait.silentgear.crude.desc"
     }
 }

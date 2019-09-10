@@ -5,11 +5,9 @@
     "effect_scale": -1,
     "activation_chance": 0.1,
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.malleable"
+        "translate": "trait.silentgear.malleable"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.malleable.desc"
+        "translate": "trait.silentgear.malleable.desc"
     }
 }

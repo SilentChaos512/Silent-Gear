@@ -5,11 +5,9 @@
     "effect_scale": 1,
     "activation_chance": 0.1,
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.brittle"
+        "translate": "trait.silentgear.brittle"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.brittle.desc"
+        "translate": "trait.silentgear.brittle.desc"
     }
 }

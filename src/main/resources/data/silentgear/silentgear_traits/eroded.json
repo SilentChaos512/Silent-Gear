@@ -17,11 +17,9 @@
         }
     ],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.eroded"
+        "translate": "trait.silentgear.eroded"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.eroded.desc"
+        "translate": "trait.silentgear.eroded.desc"
     }
 }

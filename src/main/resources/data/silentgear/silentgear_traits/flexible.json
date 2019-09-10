@@ -5,11 +5,9 @@
     "effect_scale": -1,
     "activation_chance": 0.05,
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.flexible"
+        "translate": "trait.silentgear.flexible"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.flexible.desc"
+        "translate": "trait.silentgear.flexible.desc"
     }
 }

@@ -20,11 +20,9 @@
         ]
     },
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.fiery"
+        "translate": "trait.silentgear.fiery"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.fiery.desc"
+        "translate": "trait.silentgear.fiery.desc"
     }
 }

@@ -5,11 +5,9 @@
     "damage_type": "holy",
     "damage_bonus": 2,
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.holy"
+        "translate": "trait.silentgear.holy"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.holy.desc"
+        "translate": "trait.silentgear.holy.desc"
     }
 }

@@ -12,11 +12,9 @@
         ]
     },
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.aquatic"
+        "translate": "trait.silentgear.aquatic"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.aquatic.desc"
+        "translate": "trait.silentgear.aquatic.desc"
     }
 }

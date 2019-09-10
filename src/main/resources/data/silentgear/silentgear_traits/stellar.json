@@ -27,11 +27,9 @@
         ]
     },
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.stellar"
+        "translate": "trait.silentgear.stellar"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.stellar.desc"
+        "translate": "trait.silentgear.stellar.desc"
     }
 }

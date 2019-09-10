@@ -17,11 +17,9 @@
         }
     ],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.organic"
+        "translate": "trait.silentgear.organic"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.organic.desc"
+        "translate": "trait.silentgear.organic.desc"
     }
 }

@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -135,8 +136,8 @@ public class SimpleTrait implements ITrait {
         public T read(ResourceLocation id, JsonObject json) {
             T trait = factory.apply(id);
             trait.maxLevel = JSONUtils.getInt(json, "max_level", 1);
-            trait.displayName = readTextComponent(json, "name");
-            trait.description = readTextComponent(json, "description");
+            trait.displayName = deserializeText(json.get("name"));
+            trait.description = deserializeText(json.get("description"));
             trait.hidden = JSONUtils.getBoolean(json, "hidden", false);
 
             if (json.has("cancels_with")) {
@@ -193,6 +194,18 @@ public class SimpleTrait implements ITrait {
         @Override
         public ResourceLocation getName() {
             return serializerId;
+        }
+
+        private static ITextComponent deserializeText(JsonElement json) {
+            // Handle the old style
+            if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
+                boolean translate = JSONUtils.getBoolean(json.getAsJsonObject(), "translate", false);
+                String name = JSONUtils.getString(json.getAsJsonObject(), "name");
+                return translate ? new TranslationTextComponent(name) : new StringTextComponent(name);
+            }
+
+            // Deserialize use vanilla serializer
+            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
         }
 
         private static ITextComponent readTextComponent(JsonObject json, String name) {

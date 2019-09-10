@@ -3,11 +3,9 @@
     "max_level": 5,
     "cancels_with": [],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.refractive"
+        "translate": "trait.silentgear.refractive"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.refractive.desc"
+        "translate": "trait.silentgear.refractive.desc"
     }
 }

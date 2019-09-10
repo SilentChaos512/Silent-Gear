@@ -17,11 +17,9 @@
         ]
     },
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.adamant"
+        "translate": "trait.silentgear.adamant"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.adamant.desc"
+        "translate": "trait.silentgear.adamant.desc"
     }
 }

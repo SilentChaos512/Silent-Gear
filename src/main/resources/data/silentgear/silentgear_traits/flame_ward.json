@@ -12,11 +12,9 @@
         ]
     },
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.flame_ward"
+        "translate": "trait.silentgear.flame_ward"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.flame_ward.desc"
+        "translate": "trait.silentgear.flame_ward.desc"
     }
 }

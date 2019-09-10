@@ -11,11 +11,9 @@
         }
     ],
     "name": {
-        "translate": true,
-        "name": "trait.silentgear.bulky"
+        "translate": "trait.silentgear.bulky"
     },
     "description": {
-        "translate": true,
-        "name": "trait.silentgear.bulky.desc"
+        "translate": "trait.silentgear.bulky.desc"
     }
 }
