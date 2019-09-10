@@ -84,7 +84,7 @@ public class GuiItemParts extends Screen {
         // Build part button list
         int i = 0;
         for (IGearPart part : PartManager.getValues()) {
-            if (part.isCraftingAllowed(null)) {
+            if (part.isCraftingAllowed(null) && part.isVisible()) {
                 partList.add(part);
                 final int x = i % BUTTON_ROW_LENGTH;
                 final int y = i / BUTTON_ROW_LENGTH;

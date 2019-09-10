@@ -17,6 +17,7 @@
         }
     },
     "availability": {
+        "visible": false,
         "tier": 0,
         "gear_blacklist": ["all"]
     }

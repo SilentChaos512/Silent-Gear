@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Data paths for parts and traits changed. silentgear/parts is now silentgear_parts and silentgear/traits is now silentgear_traits. Files in the old location will still load for now.
 ### Fixed
+- Hidden parts appearing on the parts screen in the crafting station
 - Sound type of flax plants
 
 ## [1.3.10] - 2019-09-04

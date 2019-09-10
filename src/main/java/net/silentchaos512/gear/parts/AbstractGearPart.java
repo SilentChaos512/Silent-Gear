@@ -378,6 +378,7 @@ public abstract class AbstractGearPart implements IGearPart {
                 part.namePrefix = buffer.readTextComponent();
             part.materials = PartMaterial.read(buffer);
             part.tier = buffer.readByte();
+            part.visible = buffer.readBoolean();
 
             part.blacklistedGearTypes.clear();
             int blacklistSize = buffer.readByte();
@@ -408,6 +409,7 @@ public abstract class AbstractGearPart implements IGearPart {
                 buffer.writeTextComponent(part.namePrefix);
             part.materials.write(buffer);
             buffer.writeByte(part.getTier());
+            buffer.writeBoolean(part.visible);
 
             buffer.writeByte(part.blacklistedGearTypes.size());
             part.blacklistedGearTypes.forEach(buffer::writeString);
