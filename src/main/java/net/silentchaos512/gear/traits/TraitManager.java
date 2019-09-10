@@ -38,7 +38,8 @@ public final class TraitManager implements IResourceManagerReloadListener {
 
     public static final Marker MARKER = MarkerManager.getMarker("TraitManager");
 
-    private static final String DATA_PATH = "silentgear/traits";
+    private static final String DATA_PATH = "silentgear_traits";
+    private static final String DATA_PATH_OLD = "silentgear/traits";
     private static final Map<ResourceLocation, ITrait> MAP = new LinkedHashMap<>();
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
@@ -47,8 +48,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-        Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(
-                DATA_PATH, s -> s.endsWith(".json"));
+        Collection<ResourceLocation> resources = getAllResources(resourceManager);
         if (resources.isEmpty()) return;
 
         MAP.clear();
@@ -80,6 +80,13 @@ public final class TraitManager implements IResourceManagerReloadListener {
         }
 
         SilentGear.LOGGER.info(MARKER, "Registered {} traits", MAP.size());
+    }
+
+    private static Collection<ResourceLocation> getAllResources(IResourceManager resourceManager) {
+        Collection<ResourceLocation> list = new ArrayList<>();
+        list.addAll(resourceManager.getAllResourceLocations(DATA_PATH, s -> s.endsWith(".json")));
+        list.addAll(resourceManager.getAllResourceLocations(DATA_PATH_OLD, s -> s.endsWith(".json")));
+        return list;
     }
 
     private static void addTrait(ITrait trait) {
