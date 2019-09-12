@@ -41,7 +41,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     private static final String DATA_PATH = "silentgear_parts";
     private static final String DATA_PATH_OLD = "silentgear/parts";
-    private static final Map<ResourceLocation, IGearPart> MAP = new LinkedHashMap<>();
+    private static final Map<ResourceLocation, IGearPart> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
     private static int highestMainPartTier = 0;
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
@@ -108,7 +108,9 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     public static Collection<IGearPart> getValues() {
-        return MAP.values();
+        synchronized (MAP) {
+            return MAP.values();
+        }
     }
 
     public static List<IGearPart> getPartsOfType(PartType type) {
@@ -144,7 +146,7 @@ public final class PartManager implements IResourceManagerReloadListener {
         if (stack.isEmpty()) return null;
 
         // We can't reliable keep an IItemProvider -> IGearPart map anymore
-        for (IGearPart part : MAP.values()) {
+        for (IGearPart part : getValues()) {
             if (part.getMaterials().test(stack)) {
                 return part;
             }

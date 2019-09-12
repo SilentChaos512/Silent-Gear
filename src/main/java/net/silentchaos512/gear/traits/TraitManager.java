@@ -25,10 +25,7 @@ import org.apache.logging.log4j.MarkerManager;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -40,7 +37,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
 
     private static final String DATA_PATH = "silentgear_traits";
     private static final String DATA_PATH_OLD = "silentgear/traits";
-    private static final Map<ResourceLocation, ITrait> MAP = new LinkedHashMap<>();
+    private static final Map<ResourceLocation, ITrait> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
     private TraitManager() {}
@@ -98,11 +95,15 @@ public final class TraitManager implements IResourceManagerReloadListener {
     }
 
     public static Collection<ResourceLocation> getKeys() {
-        return MAP.keySet();
+        synchronized (MAP) {
+            return MAP.keySet();
+        }
     }
 
     public static Collection<ITrait> getValues() {
-        return MAP.values();
+        synchronized (MAP) {
+            return MAP.values();
+        }
     }
 
     @Nullable
