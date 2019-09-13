@@ -397,7 +397,8 @@ public final class GearData {
         NBTTagList tagList = new NBTTagList();
 
         for (ItemPartData data : parts)
-            tagList.appendTag(data.writeToNBT(new NBTTagCompound()));
+            if (data != null)
+                tagList.appendTag(data.writeToNBT(new NBTTagCompound()));
         tags.setTag(NBT_CONSTRUCTION_PARTS, tagList);
     }
 

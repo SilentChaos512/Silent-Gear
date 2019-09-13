@@ -10,6 +10,10 @@ Fixed many 1.12-specific trait issues.
 ### Fixed
 - Trait name overrides not working
 
+## [0.6.5]
+### Fixed
+- Crash in [#61]
+
 ## [0.6.3] - 2019-07-13
 ### Changed
 - Disabled refractive trait's effect (placing phantom lights)

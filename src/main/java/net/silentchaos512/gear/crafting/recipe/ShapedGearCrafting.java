@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ShapedGearCrafting extends ShapedRecipes {
@@ -81,6 +82,7 @@ public class ShapedGearCrafting extends ShapedRecipes {
 
         List<ItemPartData> parts = items.stream()
                 .map(ItemPartData::fromStack)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return this.item.construct(this.item.getItem(), parts);
     }
