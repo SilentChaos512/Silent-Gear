@@ -3,9 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.0]
+Bump required Forge version to 28.1+, Silent Lib 4.4.0
 ### Fixed
 - Should make part and trait maps thread-safe (I hope) [#59]
+### Fixed
+- Upgrade parts applying to invalid gear items
 
 ## [1.3.11] - 2019-09-10
 ### Changed

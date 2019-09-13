@@ -48,12 +48,19 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
         StackList list = StackList.from(inv);
         // Require 1 and only 1 gear item
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
+        if (gear.isEmpty()) return false;
+
         // Require at least 1 upgrade part
         ItemStack upgrade = list.firstMatch(stack -> {
             PartData part = PartData.fromStackFast(stack);
-            return part != null && part.getPart() instanceof IUpgradePart;
+            return part != null && canApplyUpgrade(gear, part);
         });
         return !gear.isEmpty() && !upgrade.isEmpty();
+    }
+
+    private static boolean canApplyUpgrade(ItemStack gear, PartData part) {
+        ICoreItem gearItem = (ICoreItem) gear.getItem();
+        return part.getPart() instanceof IUpgradePart && ((IUpgradePart) part.getPart()).isValidFor(gearItem);
     }
 
     @Override
@@ -103,7 +110,6 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
     }
 
     public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<UpgradeGearRecipe> {
-
         @Override
         public UpgradeGearRecipe read(ResourceLocation recipeId, JsonObject json) {
             return new UpgradeGearRecipe();

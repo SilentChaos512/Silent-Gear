@@ -16,8 +16,7 @@
         "all": {
             "texture_suffix": "",
             "texture_color": "white"
-        },
-        "name_color": "dark_aqua"
+        }
     },
     "availability": {
         "gear_blacklist": []

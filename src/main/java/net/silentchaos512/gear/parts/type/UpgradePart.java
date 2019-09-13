@@ -23,8 +23,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.parts.AbstractGearPart;
+import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 
@@ -60,5 +63,13 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
     @Override
     public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(1, part.getDisplayName(gear));
+    }
+
+    @Override
+    public boolean isValidFor(ICoreItem gearItem) {
+        // TODO: Temp fix. Should define this in JSON...
+        if (this.getId().equals(PartConst.MISC_SPOON))
+            return gearItem == ModItems.pickaxe;
+        return IUpgradePart.super.isValidFor(gearItem);
     }
 }

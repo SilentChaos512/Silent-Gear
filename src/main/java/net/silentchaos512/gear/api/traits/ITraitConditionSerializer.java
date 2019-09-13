@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Conditions for traits applied to parts. These affect when a trait given to a part will actually
  * apply to a gear item, such as required a specific gear type or a minimum number of parts. Heavily
- * inspired by Forge's recipe conditions ({@link net.minecraftforge.common.crafting.IConditionSerializer}).
+ * inspired by Forge's recipe conditions (what was IConditionSerializer).
  */
 @FunctionalInterface
 public interface ITraitConditionSerializer {
