@@ -3,16 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.5]
+### Fixed
+- Crash in [#61]
+
 ## [0.6.4] - 2019-07-21
 Fixed many 1.12-specific trait issues.
 ### Added
 - NBT trait, allows arbitrary NBT to be assigned to gear when crafted [#34]
 ### Fixed
 - Trait name overrides not working
-
-## [0.6.5]
-### Fixed
-- Crash in [#61]
 
 ## [0.6.3] - 2019-07-13
 ### Changed
