@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Part analyzer not dropping inventory when broken [#62]
 - Axes breaking permanently when stripping bark [#63]
 - Broken shovels being usable with Dirt2Path [#63]
 

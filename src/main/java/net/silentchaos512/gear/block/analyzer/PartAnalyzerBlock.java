@@ -25,6 +25,8 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -64,6 +66,17 @@ public class PartAnalyzerBlock extends ContainerBlock {
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new PartAnalyzerTileEntity();
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof IInventory) {
+            IInventory inventory = (IInventory) tileEntity;
+            InventoryHelper.dropInventoryItems(worldIn, pos, inventory);
+        }
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
     @SuppressWarnings("deprecation")
