@@ -27,6 +27,7 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -90,13 +91,10 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         // No action if broken or player is sneaking
-        if (GearHelper.isBroken(context.getItem())
-                || context.getPlayer() != null && context.getPlayer().isSneaking()) {
+        if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isSneaking())
             return ActionResultType.PASS;
-        }
-
         // Make paths or whatever
-        return super.onItemUse(context);
+        return GearHelper.useAndCheckBroken(context, super::onItemUse);
     }
 
     //endregion
@@ -128,6 +126,13 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
 //        super.setHarvestLevel(toolClass, level);
 //        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
 //    }
+
+    @Override
+    public Set<ToolType> getToolTypes(ItemStack stack) {
+        if (GearHelper.isBroken(stack))
+            return Collections.emptySet();
+        return super.getToolTypes(stack);
+    }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {

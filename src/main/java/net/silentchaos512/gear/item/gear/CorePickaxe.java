@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.parts.PartConst;
@@ -27,6 +27,7 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -137,7 +138,6 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
 //        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
 //    }
 
-
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
@@ -183,7 +183,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
             }
         }
         // Broken
-        return ImmutableSet.of();
+        return Collections.emptySet();
     }
 
     @Override

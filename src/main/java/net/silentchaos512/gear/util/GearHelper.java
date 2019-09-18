@@ -10,10 +10,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -43,6 +40,7 @@ import net.silentchaos512.lib.advancements.LibTriggers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Contains various methods used by gear items. Many are delegates for item overrides, to cut down
@@ -203,6 +201,13 @@ public final class GearHelper {
             }
             stack.shrink(1);
         }
+    }
+
+    public static ActionResultType useAndCheckBroken(ItemUseContext context, Function<ItemUseContext, ActionResultType> useFunction) {
+        ActionResultType result = useFunction.apply(context);
+        if (context.getPlayer() instanceof ServerPlayerEntity)
+            handleBrokenItem(context.getItem(), (ServerPlayerEntity) context.getPlayer(), context.getHand() == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
+        return result;
     }
 
     private static void onDamageFactorChange(ServerPlayerEntity player, int preDamageFactor, int newDamageFactor) {

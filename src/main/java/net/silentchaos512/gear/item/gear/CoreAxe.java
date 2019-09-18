@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -18,14 +19,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -89,6 +91,15 @@ public class CoreAxe extends AxeItem implements ICoreTool {
         return super.canHarvestBlock(state);
     }
 
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        // No action if broken or player is sneaking
+        if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isSneaking())
+            return ActionResultType.PASS;
+        // Strip bark
+        return GearHelper.useAndCheckBroken(context, super::onItemUse);
+    }
+
     //endregion
 
     //region Standard tool overrides
@@ -118,6 +129,14 @@ public class CoreAxe extends AxeItem implements ICoreTool {
 //        super.setHarvestLevel(toolClass, level);
 //        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
 //    }
+
+
+    @Override
+    public Set<ToolType> getToolTypes(ItemStack stack) {
+        if (GearHelper.isBroken(stack))
+            return Collections.emptySet();
+        return super.getToolTypes(stack);
+    }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {

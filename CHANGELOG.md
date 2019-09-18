@@ -3,7 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.4.0]
+## [Unreleased]
+### Fixed
+- Axes breaking permanently when stripping bark [#63]
+- Broken shovels being usable with Dirt2Path [#63]
+
+## [1.4.0] - 2019-09-13
 Bump required Forge version to 28.1+, Silent Lib 4.4.0
 ### Fixed
 - Should make part and trait maps thread-safe (I hope) [#59]
