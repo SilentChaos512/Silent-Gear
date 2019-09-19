@@ -22,15 +22,15 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ExtraBlockBreakHandler implements IResourceManagerReloadListener {
 
     public static final ExtraBlockBreakHandler INSTANCE = new ExtraBlockBreakHandler(Minecraft.getMinecraft());
 
-    private final Map<Integer, DestroyExtraBlocksProgress> extraDamagedBlocks = new HashMap<Integer, DestroyExtraBlocksProgress>();
+    private final Map<Integer, DestroyExtraBlocksProgress> extraDamagedBlocks = new ConcurrentHashMap<>();
     private Minecraft mc;
     private final TextureManager renderEngine;
     private final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
