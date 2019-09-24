@@ -50,10 +50,12 @@ public class CraftingStationBlock extends ContainerBlock {
     @SuppressWarnings("deprecation")
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if (tileEntity instanceof CraftingStationTileEntity) {
-            CraftingStationTileEntity tileCraftingStation = (CraftingStationTileEntity) tileEntity;
-            InventoryHelper.dropInventoryItems(worldIn, pos, tileCraftingStation.getInternalStorage());
+        if (state.getBlock() != newState.getBlock()) {
+            TileEntity tileEntity = worldIn.getTileEntity(pos);
+            if (tileEntity instanceof CraftingStationTileEntity) {
+                CraftingStationTileEntity tileCraftingStation = (CraftingStationTileEntity) tileEntity;
+                InventoryHelper.dropInventoryItems(worldIn, pos, tileCraftingStation.getInternalStorage());
+            }
         }
         super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
