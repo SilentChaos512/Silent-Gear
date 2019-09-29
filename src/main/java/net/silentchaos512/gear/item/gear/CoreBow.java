@@ -206,6 +206,11 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     }
 
     @Override
+    public void setDamage(ItemStack stack, int damage) {
+        GearHelper.setDamage(stack, damage, super::setDamage);
+    }
+
+    @Override
     public int getMaxDamage(ItemStack stack) {
         return GearData.getStatInt(stack, ItemStats.DURABILITY);
     }

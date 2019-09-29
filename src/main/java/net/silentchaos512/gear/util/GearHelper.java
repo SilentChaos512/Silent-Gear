@@ -40,6 +40,7 @@ import net.silentchaos512.lib.advancements.LibTriggers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -260,6 +261,22 @@ public final class GearHelper {
     public static boolean isUnbreakable(ItemStack stack) {
         // TODO: Is this the best solution?
         return stack.getMaxDamage() >= ItemStats.DURABILITY.getMaximumValue();
+    }
+
+    public static void setDamage(ItemStack stack, int damage, BiConsumer<ItemStack, Integer> superFunction) {
+        int newDamage = GearHelper.calcDamageClamped(stack, damage);
+        int diff = newDamage - stack.getDamage();
+        if (diff > 0 && !GearHelper.isBroken(stack)) {
+            GearHelper.damageParts(stack, diff);
+        }
+        superFunction.accept(stack, newDamage);
+        if (GearHelper.isBroken(stack)) {
+            GearData.recalculateStats(stack, null);
+        }
+    }
+
+    public static void damageParts(ItemStack stack, int amount) {
+        GearData.getConstructionParts(stack).forEach(p -> p.getPart().onGearDamaged(p, stack, amount));
     }
 
     //endregion

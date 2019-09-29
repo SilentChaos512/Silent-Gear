@@ -96,6 +96,16 @@ public interface IGearPart {
         return true;
     }
 
+    /**
+     * Called when a gear item containing this part is damaged.
+     *
+     * @param part   The part
+     * @param gear   The gear item
+     * @param amount The amount of damage done to the item
+     */
+    default void onGearDamaged(PartData part, ItemStack gear, int amount) {
+    }
+
     IPartDisplay getDisplayProperties(PartData part, ItemStack gear, int animationFrame);
 
     @Nullable

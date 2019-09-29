@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     // Just copied from ArmorItem, access transformers are too flaky
@@ -116,10 +117,25 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
-        if (GearHelper.isUnbreakable(stack)) return;
+        if (GearHelper.isUnbreakable(stack))
+            return;
         if (!Config.GENERAL.gearBreaksPermanently.get())
             damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
         super.setDamage(stack, damage);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        int value;
+        if (GearHelper.isUnbreakable(stack)) {
+            value = 0;
+        } else if (!Config.GENERAL.gearBreaksPermanently.get()) {
+            value = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
+        } else {
+            value = super.damageItem(stack, amount, entity, onBroken);
+        }
+        GearHelper.damageParts(stack, value);
+        return value;
     }
 
     @Override
