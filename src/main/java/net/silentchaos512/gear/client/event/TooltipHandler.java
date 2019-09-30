@@ -58,7 +58,8 @@ public final class TooltipHandler {
 
         // Nerfed gear?
         if (Config.GENERAL.isNerfedItem(stack.getItem())) {
-            event.getToolTip().add(1, new TranslationTextComponent("misc.silentgear.poorlyMade").applyTextStyle(TextFormatting.RED));
+            List<ITextComponent> toolTip = event.getToolTip();
+            toolTip.add(Math.min(1, toolTip.size()), new TranslationTextComponent("misc.silentgear.poorlyMade").applyTextStyle(TextFormatting.RED));
         }
     }
 

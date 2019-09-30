@@ -64,12 +64,12 @@ public final class GearClientHelper {
         ICoreItem item = (ICoreItem) stack.getItem();
 
         if (GearHelper.isBroken(stack)) {
-            tooltip.add(1, misc("broken").applyTextStyle(TextFormatting.RED));
+            tooltip.add(Math.min(1, tooltip.size()), misc("broken").applyTextStyle(TextFormatting.RED));
         }
 
         if (GearData.isExampleGear(stack)) {
-            tooltip.add(1, misc("exampleOutput1").applyTextStyle(TextFormatting.YELLOW));
-            tooltip.add(2, misc("exampleOutput2").applyTextStyle(TextFormatting.YELLOW));
+            tooltip.add(Math.min(1, tooltip.size()), misc("exampleOutput1").applyTextStyle(TextFormatting.YELLOW));
+            tooltip.add(Math.min(2, tooltip.size()), misc("exampleOutput2").applyTextStyle(TextFormatting.YELLOW));
         }
 
         PartDataList constructionParts = GearData.getConstructionParts(stack);

@@ -41,7 +41,8 @@ public final class TipPart extends AbstractGearPart implements IUpgradePart {
 
     @Override
     public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        tooltip.add(1, part.getDisplayName(gear));
+        // Add just below item name. Check list size in case it's been tampered with.
+        tooltip.add(Math.min(1, tooltip.size()), part.getDisplayName(gear));
     }
 
     @Override
