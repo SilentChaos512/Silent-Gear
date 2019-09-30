@@ -26,6 +26,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.ItemPart;
@@ -219,5 +221,9 @@ public class TilePartAnalyzer extends TileSidedInventorySL implements ITickable 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index != INPUT_SLOT;
+    }
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return oldState.getBlock() != newState.getBlock();
     }
 }
