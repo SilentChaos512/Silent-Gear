@@ -1,0 +1,9 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "silentgear:item/lumber_axe",
+  "textures": {
+    "layer0": "silentgear:item/lumber_axe/rod_generic_hc",
+    "layer1": "silentgear:item/blank",
+    "layer2": "silentgear:item/lumber_axe/head_generic_lc"
+  }
+}

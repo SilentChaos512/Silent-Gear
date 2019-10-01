@@ -49,6 +49,7 @@ public final class ModItems {
     public static CoreAxe axe = new CoreAxe();
     public static CoreHammer hammer = new CoreHammer();
     public static CoreExcavator excavator = new CoreExcavator();
+    public static CoreLumberAxe lumberAxe = new CoreLumberAxe();
     public static CoreMattock mattock = new CoreMattock();
     public static CoreSickle sickle = new CoreSickle();
     public static CoreBow bow = new CoreBow();
@@ -123,6 +124,7 @@ public final class ModItems {
         toolClasses.put("axe", axe);
         toolClasses.put("hammer", hammer);
         toolClasses.put("excavator", excavator);
+        toolClasses.put("lumber_axe", lumberAxe);
         toolClasses.put("mattock", mattock);
         toolClasses.put("sickle", sickle);
         toolClasses.put("bow", bow);

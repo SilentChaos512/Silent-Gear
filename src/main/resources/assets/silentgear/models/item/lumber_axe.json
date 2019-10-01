@@ -1,0 +1,254 @@
+{
+  "__comment__": "Lite gear model",
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/lumber_axe/rod_generic_lc",
+    "layer1": "silentgear:item/lumber_axe/head_generic_hc",
+    "layer2": "silentgear:item/lumber_axe/_highlight"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1
+      },
+      "model": "silentgear:item/lumber_axe/rod1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/lumber_axe/head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/lumber_axe/head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/lumber_axe/head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/lumber_axe/rod1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/lumber_axe/rod2_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/lumber_axe/rod1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/lumber_axe/rod2_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/lumber_axe/rod1_grip1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1
+      },
+      "model": "silentgear:item/lumber_axe/rod2_grip1_head1"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_grip1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_grip1_head2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/lumber_axe/rod1_grip1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3
+      },
+      "model": "silentgear:item/lumber_axe/rod2_grip1_head3"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_grip1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 1,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_grip1_head1_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_grip1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 2,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_grip1_head2_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 1,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod1_grip1_head3_tip2"
+    },
+    {
+      "predicate": {
+        "silentgear:lite_rod": 2,
+        "silentgear:lite_grip": 1,
+        "silentgear:lite_head": 3,
+        "silentgear:lite_tip": 2
+      },
+      "model": "silentgear:item/lumber_axe/rod2_grip1_head3_tip2"
+    }
+  ]
+}

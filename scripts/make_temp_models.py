@@ -10,6 +10,7 @@ tools = [
     'excavator',
     'hammer',
     'katana',
+    'lumber_axe',
     'machete',
     'mattock',
     'pickaxe',
