@@ -37,7 +37,7 @@ public final class TooltipHandler {
 
     private TooltipHandler() {}
 
-    @SubscribeEvent
+    @SubscribeEvent(receiveCanceled = true)
     public void onTooltip(ItemTooltipEvent event) {
         /*
         LoaderState state = Loader.instance().getLoaderState();

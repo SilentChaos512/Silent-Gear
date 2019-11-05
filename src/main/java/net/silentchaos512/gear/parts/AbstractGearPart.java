@@ -87,6 +87,10 @@ public abstract class AbstractGearPart implements IGearPart {
         }
     }
 
+    public void updateCraftingItems(PartMaterial material) {
+        this.materials = material;
+    }
+
     @Override
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));

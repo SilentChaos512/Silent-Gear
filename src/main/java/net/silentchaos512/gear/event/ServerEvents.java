@@ -6,7 +6,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SyncGearCraftingItemsPacket;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitManager;
 
@@ -24,6 +27,10 @@ public final class ServerEvents {
         if (!(player instanceof ServerPlayerEntity)) return;
 
         ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
+
+        // Send parts crafting item packet to correct for registry changes
+        SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
+        Network.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 
         PartManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
         TraitManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);

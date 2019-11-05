@@ -64,11 +64,6 @@ public class PartMaterial implements IPartMaterial {
         return material;
     }
 
-    public void write(PacketBuffer buffer) {
-        normal.write(buffer);
-        small.write(buffer);
-    }
-
     // Simple wrapper which will sidestep some of the exceptions thrown by vanilla, allowing
     // outdated part files to load anyway
     private static Ingredient deserialize(ResourceLocation partId, JsonElement json) {

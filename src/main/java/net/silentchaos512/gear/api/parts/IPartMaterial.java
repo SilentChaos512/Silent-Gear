@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.function.Predicate;
@@ -34,5 +35,10 @@ public interface IPartMaterial extends Predicate<ItemStack> {
         ItemStack[] stacks = getNormal().getMatchingStacks();
         if (stacks.length == 0) return ItemStack.EMPTY;
         return stacks[(ticks / 20) % stacks.length];
+    }
+
+    default void write(PacketBuffer buffer) {
+        getNormal().write(buffer);
+        getSmall().write(buffer);
     }
 }

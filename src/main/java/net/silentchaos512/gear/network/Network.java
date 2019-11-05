@@ -49,6 +49,11 @@ public final class Network {
                 .encoder((msg, buffer) -> {})
                 .consumer(FMLHandshakeHandler.indexFirst((hh, msg, ctx) -> msg.handle(ctx)))
                 .add();
+        channel.messageBuilder(SyncGearCraftingItemsPacket.class, 4)
+                .encoder(SyncGearCraftingItemsPacket::toBytes)
+                .decoder(SyncGearCraftingItemsPacket::fromBytes)
+                .consumer(SyncGearCraftingItemsPacket::handle)
+                .add();
     }
 
     private Network() {}
