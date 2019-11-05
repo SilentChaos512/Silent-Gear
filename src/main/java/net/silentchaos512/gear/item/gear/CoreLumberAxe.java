@@ -21,7 +21,7 @@ public class CoreLumberAxe extends CoreAxe {
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
         if (stat == ItemStats.MELEE_DAMAGE)
-            return Optional.of(StatInstance.makeBaseMod(2));
+            return Optional.of(StatInstance.makeBaseMod(6));
         if (stat == ItemStats.ATTACK_SPEED)
             return Optional.of(StatInstance.makeBaseMod(-3.3f));
         if (stat == ItemStats.REPAIR_EFFICIENCY)

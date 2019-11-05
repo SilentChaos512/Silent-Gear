@@ -1,0 +1,97 @@
+{
+    "type": "silentgear:main",
+    "stats": [
+        {
+            "name": "durability",
+            "value": 1024
+        },
+        {
+            "name": "armor_durability",
+            "value": 22
+        },
+        {
+            "name": "enchantability",
+            "value": 10
+        },
+        {
+            "name": "harvest_level",
+            "value": 3
+        },
+        {
+            "name": "harvest_speed",
+            "value": 7
+        },
+        {
+            "name": "melee_damage",
+            "value": 2
+        },
+        {
+            "name": "magic_damage",
+            "value": 3
+        },
+        {
+            "name": "attack_speed",
+            "value": -0.2
+        },
+        {
+            "name": "armor",
+            "value": 16
+        },
+        {
+            "name": "armor_toughness",
+            "value": 1
+        },
+        {
+            "name": "magic_armor",
+            "value": 6
+        },
+        {
+            "name": "ranged_damage",
+            "value": 0
+        },
+        {
+            "name": "ranged_speed",
+            "value": -0.4
+        },
+        {
+            "name": "rarity",
+            "value": 25
+        },
+        {
+            "name": "chargeability",
+            "value": 0.8
+        }
+    ],
+    "traits": [
+        {
+            "name": "silentgear:jagged",
+            "level": 3
+        },
+        {
+            "name": "silentgear:ancient",
+            "level": 2
+        }
+    ],
+    "crafting_items": {
+        "normal": {
+            "tag": "forge:end_stones"
+        }
+    },
+    "name": {
+        "translate": "part.silentgear.main.end_stone"
+    },
+    "textures": {
+        "all": {
+            "lite_texture": "low_contrast",
+            "highlight": false,
+            "texture_domain": "silentgear",
+            "texture_suffix": "generic_lc",
+            "texture_color": "#FFFFCC",
+            "broken_color": "#FFFFCC"
+        }
+    },
+    "availability": {
+        "tier": 3,
+        "gear_blacklist": []
+    }
+}
