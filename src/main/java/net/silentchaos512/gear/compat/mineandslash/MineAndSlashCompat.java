@@ -15,5 +15,9 @@ public final class MineAndSlashCompat {
         MineAndSlashAPI.addCompatibleItem("silentgear:sword", new SGearConfigItem());
         MineAndSlashAPI.addCompatibleItem("silentgear:bow", new SGearConfigItem().setType("Bow"));
         MineAndSlashAPI.addCompatibleItem("silentgear:crossbow", new SGearConfigItem().setType("Crossbow"));
+		MineAndSlashAPI.addCompatibleItem("silentgear:helmet", new SGearConfigItem().setType("Helmet"));
+		MineAndSlashAPI.addCompatibleItem("silentgear:chestplate", new SGearConfigItem().setType("Chest"));
+		MineAndSlashAPI.addCompatibleItem("silentgear:leggings", new SGearConfigItem().setType("Pants"));
+		MineAndSlashAPI.addCompatibleItem("silentgear:boots", new SGearConfigItem().setType("Boots"));
     }
 }
