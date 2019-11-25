@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.5] - 2019-11-25
 ### Changed
 - Armor now gains Mine and Slash stats (AzureZhen) [#78, #79]
+- Remove material mixing tooltip from blueprints, as they are no longer true [#73)]
 
 ## [1.4.4] - 2019-11-05
 ### Added
