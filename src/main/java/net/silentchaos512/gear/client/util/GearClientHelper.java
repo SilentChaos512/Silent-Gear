@@ -97,7 +97,7 @@ public final class GearClientHelper {
         // Traits
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
         List<ITrait> visibleTraits = traits.keySet().stream()
-                .filter(t -> t.showInTooltip(flag))
+                .filter(t -> t != null && t.showInTooltip(flag))
                 .collect(Collectors.toList());
         int numTraits = visibleTraits.size();
         int traitIndex = getTraitDisplayIndex(numTraits, ctrlDown);

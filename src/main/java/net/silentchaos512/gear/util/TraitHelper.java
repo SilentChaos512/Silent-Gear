@@ -145,7 +145,9 @@ public final class TraitHelper {
                 String name = tagCompound.getString("Name");
                 ITrait trait = TraitManager.get(name);
                 int level = tagCompound.getByte("Level");
-                result.put(trait, level);
+                if (trait != null && level > 0) {
+                    result.put(trait, level);
+                }
             }
         }
 
