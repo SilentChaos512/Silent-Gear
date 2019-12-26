@@ -1,6 +1,8 @@
 package net.silentchaos512.gear;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +17,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
@@ -60,6 +63,8 @@ class SideProxy implements IProxy {
 
         ModLootStuff.init();
         ModRecipes.init();
+
+        ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new ArgumentSerializer<>(MaterialGrade.Argument::new));
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {
