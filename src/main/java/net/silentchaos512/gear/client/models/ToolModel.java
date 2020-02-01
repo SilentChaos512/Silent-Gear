@@ -1,51 +1,8 @@
 package net.silentchaos512.gear.client.models;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.ISprite;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ItemLayerModel;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.model.TRSRTransformation;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartPosition;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.gear.CoreBow;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.PartPositions;
-import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.gear.util.GearHelper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Function;
-
 @SuppressWarnings("deprecation")
-public final class ToolModel implements IUnbakedModel {
-    private static final IUnbakedModel MODEL = new ToolModel();
+public final class ToolModel /*implements IUnbakedModel*/ {
+    /*private static final IUnbakedModel MODEL = new ToolModel();
 
     public static final Map<UUID, Float> bowPull = new HashMap<>();
 
@@ -230,7 +187,7 @@ public final class ToolModel implements IUnbakedModel {
                 Function<ResourceLocation, IUnbakedModel> modelGetter = location -> null;
                 Function<ResourceLocation, TextureAtlasSprite> spriteGetter = location ->
                         Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
-/*                IBakedModel bakedModel = parent.bake(
+*//*                IBakedModel bakedModel = parent.bake(
                         modelGetter,
                         spriteGetter,
                         new SimpleModelState(ImmutableMap.of()),
@@ -243,7 +200,7 @@ public final class ToolModel implements IUnbakedModel {
                         .map(part -> part.getColor(stack, animationFrame))
                         .toArray(Integer[]::new));
 
-                return bakedModel;*/
+                return bakedModel;*//*
                 return null;
             }
 
@@ -303,5 +260,5 @@ public final class ToolModel implements IUnbakedModel {
         public boolean isBuiltInRenderer() {
             return true;
         }
-    }
+    }*/
 }

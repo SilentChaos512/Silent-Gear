@@ -4,11 +4,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.PlantType;
+import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.init.ModItems;
 
 public class FlaxPlant extends CropsBlock {
@@ -31,7 +31,7 @@ public class FlaxPlant extends CropsBlock {
     @Override
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
         if (wild) {
-            return state.isIn(BlockTags.DIRT_LIKE);
+            return state.isIn(Tags.Blocks.DIRT);
         }
         return super.isValidGround(state, worldIn, pos);
     }

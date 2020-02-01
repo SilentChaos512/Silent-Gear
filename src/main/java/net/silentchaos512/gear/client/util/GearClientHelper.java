@@ -40,13 +40,13 @@ public final class GearClientHelper {
     private GearClientHelper() {}
 
     public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        TooltipFlagTC flagTC = flag instanceof TooltipFlagTC
-                ? (TooltipFlagTC) flag
-                : TooltipFlagTC.withModifierKeys(flag.isAdvanced(), true, true);
+        GearTooltipFlag flagTC = flag instanceof GearTooltipFlag
+                ? (GearTooltipFlag) flag
+                : GearTooltipFlag.withModifierKeys(flag.isAdvanced(), true, true);
         addInformation(stack, world, tooltip, flagTC);
     }
 
-    public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, TooltipFlagTC flag) {
+    public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, GearTooltipFlag flag) {
         /*
         LoaderState state = Loader.instance().getLoaderState();
         if (state == LoaderState.INITIALIZATION || state == LoaderState.SERVER_ABOUT_TO_START || state == LoaderState.SERVER_STOPPING) {

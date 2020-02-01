@@ -52,6 +52,7 @@ public final class GearData {
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
+    @Deprecated
     private static final String NBT_RANDOM_GRADING_DONE = "RandomGradingDone";
     private static final String NBT_SYNERGY = "synergy";
     private static final String NBT_TIER = "Tier";
@@ -83,6 +84,7 @@ public final class GearData {
      *               use {@link net.minecraftforge.common.ForgeHooks#getCraftingPlayer} the get the
      *               player during crafting.
      */
+    @SuppressWarnings("OverlyLongMethod")
     public static void recalculateStats(ItemStack stack, @Nullable PlayerEntity player) {
         if (!GearHelper.isGear(stack)) {
             SilentGear.LOGGER.error("Called recalculateStats on non-gear item, {}", stack);
@@ -361,10 +363,12 @@ public final class GearData {
                     // Add to list if max per item of type is not exceeded
                     // Max is 9 for mains, and typically 1 for others
                     PartType type = part.getType();
-                    int count = partCounts.getOrDefault(type, 0);
-                    if (count < type.getMaxPerItem()) {
-                        list.add(part);
-                        partCounts.put(type, count + 1);
+                    if (type != null) {
+                        int count = partCounts.getOrDefault(type, 0);
+                        if (count < type.getMaxPerItem()) {
+                            list.add(part);
+                            partCounts.put(type, count + 1);
+                        }
                     }
                 }
             }
@@ -727,7 +731,7 @@ public final class GearData {
         if (!GearHelper.isGear(gear)) {
             SilentGear.LOGGER.error("Called getUUID on non-gear item, {}", gear);
             SilentGear.LOGGER.catching(new IllegalArgumentException());
-            return null;
+            return new UUID(0, 0);
         }
 
         CompoundNBT tags = gear.getOrCreateTag();
@@ -768,10 +772,12 @@ public final class GearData {
         return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_IS_EXAMPLE);
     }
 
+    @Deprecated
     public static boolean isRandomGradingDone(ItemStack stack) {
         return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_RANDOM_GRADING_DONE);
     }
 
+    @Deprecated
     static void setRandomGradingDone(ItemStack stack, boolean value) {
         getData(stack, NBT_ROOT_CONSTRUCTION).putBoolean(NBT_RANDOM_GRADING_DONE, value);
     }

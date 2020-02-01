@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
@@ -20,6 +21,7 @@ import net.silentchaos512.utils.Lazy;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public enum ModBlocks implements IBlockProvider, IStringSerializable {
@@ -37,7 +39,7 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     NETHERWOOD_LEAVES(NetherwoodLeaves::new),
     NETHERWOOD_SAPLING(NetherwoodSapling::new),
     CRIMSON_IRON_ORE(CrimsonIronOre::new),
-    POTTED_NETHERWOOD_SAPLING(() -> makePottedPlant(NETHERWOOD_SAPLING), () -> null),
+    POTTED_NETHERWOOD_SAPLING(() -> makePottedPlant(NETHERWOOD_SAPLING::asBlock), () -> null),
     PHANTOM_LIGHT(PhantomLight::new);
 
     private final Lazy<Block> block;
@@ -74,8 +76,11 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
         return new WallOrFloorItem(STONE_TORCH.asBlock(), WALL_STONE_TORCH.asBlock(), new Item.Properties());
     }
 
-    private static FlowerPotBlock makePottedPlant(IBlockProvider flower) {
-        return new FlowerPotBlock(flower.asBlock(), Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0));
+    private static FlowerPotBlock makePottedPlant(Supplier<Block> flower) {
+        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT.delegate.get(), flower, Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0));
+        ResourceLocation flowerId = Objects.requireNonNull(flower.get().getRegistryName());
+        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
+        return potted;
     }
 
     @Override

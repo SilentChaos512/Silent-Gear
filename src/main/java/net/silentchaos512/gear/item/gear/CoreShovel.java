@@ -91,7 +91,7 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         // No action if broken or player is sneaking
-        if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isSneaking())
+        if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isCrouching())
             return ActionResultType.PASS;
         // Make paths or whatever
         return GearHelper.useAndCheckBroken(context, super::onItemUse);

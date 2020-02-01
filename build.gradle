@@ -117,25 +117,28 @@ dependencies {
     }
 
     // JEI
-//    compile 'com.github.mezz:JustEnoughItems:1.13-SNAPSHOT'
-    // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.14.4:${project.jei_version}:api")
-    // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:${project.jei_version}")
-
-    runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
-        exclude module: "cc-tweaked-${project.mc_version}"
-        exclude module: "silent-gear-${project.mc_version}"
+    if (project.hasProperty('jei_version')) {
+        // compile against the JEI API but do not include it at runtime
+        compileOnly fg.deobf("mezz.jei:jei-${project.jei_version}:api")
+        // at runtime, use the full JEI jar
+        runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
     }
+
+    // runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
+    //     exclude module: "cc-tweaked-${project.mc_version}"
+    //     exclude module: "silent-gear-${project.mc_version}"
+    // }
 //    runtimeOnly 'net.silentchaos512:wit:1.+'
 
     // Curios
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios:${project.curios_version}")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios:${project.curios_version}:api")
-
-    compile('com.robertx22:mine-and-slash-1.14.4:2.+') {
-        exclude module: 'curios'
+    if (project.hasProperty('curios_version')) {
+        runtimeOnly fg.deobf("top.theillusivec4.curios:curios:${project.curios_version}")
+        compileOnly fg.deobf("top.theillusivec4.curios:curios:${project.curios_version}:api")
     }
+
+    // compile('com.robertx22:mine-and-slash-1.14.4:2.+') {
+    //     exclude module: 'curios'
+    // }
 }
 
 jar {
@@ -410,7 +413,7 @@ def writeUpdateJson() {
 
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
     if (!json[project.mc_version].containsKey(version.toString()))
-        json[project.mc_version][version.toString()] = 'https://github.com/SilentChaos512/Silent-Gear/blob/1.14/CHANGELOG.md'
+        json[project.mc_version][version.toString()] = 'https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md'
     json[project.mc_version] = json[project.mc_version].sort([compare: {a, b -> b.compareTo(a)}] as Comparator)
     json['promos']["${project.mc_version}-latest"] = version
     json['promos']["${project.mc_version}-recommended"] = version

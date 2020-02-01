@@ -17,8 +17,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class NetherFloorWithExtra extends Placement<NetherFloorWithExtraConfig> {
-    public static NetherFloorWithExtra INSTANCE = new NetherFloorWithExtra(NetherFloorWithExtraConfig::deserialize);
-
     private static final int TRACE_DEPTH = 32;
 
     public NetherFloorWithExtra(Function<Dynamic<?>, ? extends NetherFloorWithExtraConfig> p_i51371_1_) {

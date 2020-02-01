@@ -27,6 +27,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -53,13 +54,14 @@ public class SalvagerBlock extends ContainerBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof SalvagerTileEntity) {
             player.openContainer((INamedContainerProvider) tileEntity);
             //player.addStat(...);
+            return ActionResultType.SUCCESS;
         }
-        return true;
+        return ActionResultType.PASS;
     }
 
     @Override
@@ -67,7 +69,6 @@ public class SalvagerBlock extends ContainerBlock {
         tooltip.add(new TranslationTextComponent("block.silentgear.salvager.desc"));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;

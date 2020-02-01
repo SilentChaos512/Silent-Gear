@@ -151,12 +151,6 @@ public final class GearHelper {
         return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
     }
 
-    @Deprecated
-    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity) {
-        // TODO: Remove this version when Gems updates
-        attemptDamage(stack, amount, entity);
-    }
-
     public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity, Hand hand) {
         attemptDamage(stack, amount, entity, hand == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
     }
@@ -287,7 +281,7 @@ public final class GearHelper {
         return b;
     }
 
-    public static void addModelTypeProperty(ICoreItem item) {
+    public static void addModelTypeProperty(@SuppressWarnings("TypeMayBeWeakened") ICoreItem item) {
         PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
             item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
                 PartData part = GearData.getPartOfType(stack, partType);

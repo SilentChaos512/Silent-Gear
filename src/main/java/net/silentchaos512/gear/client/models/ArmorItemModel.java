@@ -1,48 +1,7 @@
 package net.silentchaos512.gear.client.models;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.ISprite;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ItemLayerModel;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.model.TRSRTransformation;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartPosition;
-import net.silentchaos512.gear.client.ColorHandlers;
-import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.PartPositions;
-import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.gear.util.GearHelper;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Function;
-
-public class ArmorItemModel implements IUnbakedModel {
-    private static final IUnbakedModel MODEL = new ArmorItemModel();
+public class ArmorItemModel /*implements IUnbakedModel*/ {
+    /*private static final IUnbakedModel MODEL = new ArmorItemModel();
 
     @Nullable
     private final ResourceLocation textureMain;
@@ -184,14 +143,14 @@ public class ArmorItemModel implements IUnbakedModel {
                 Function<ResourceLocation, IUnbakedModel> modelGetter = location -> null;
                 Function<ResourceLocation, TextureAtlasSprite> spriteGetter = location ->
                         Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
-                /*IBakedModel bakedModel = parent.bake(
+                *//*IBakedModel bakedModel = parent.bake(
                         modelGetter,
                         spriteGetter,
                         new SimpleModelState(model.transforms),
                         false,
                         model.getVertexFormat());
                 GearClientHelper.modelCache.put(key, bakedModel);
-                return bakedModel;*/
+                return bakedModel;*//*
                 return null;
             }
 
@@ -238,5 +197,5 @@ public class ArmorItemModel implements IUnbakedModel {
         public boolean isBuiltInRenderer() {
             return true;
         }
-    }
+    }*/
 }

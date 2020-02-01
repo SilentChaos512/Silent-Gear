@@ -76,7 +76,7 @@ public class CoreMachete extends CoreSword {
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
         // Allow clearing vegetation, just like sickles but with a smaller range
-        if (!player.isSneaking())
+        if (!player.isCrouching())
             return ModItems.sickle.onSickleStartBreak(itemstack, pos, player, BREAK_RANGE, EFFECTIVE_MATERIALS);
         return super.onBlockStartBreak(itemstack, pos, player);
     }

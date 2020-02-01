@@ -71,8 +71,6 @@ public final class ModItems {
     private ModItems() {}
 
     public static void registerAll(RegistryEvent.Register<Item> event) {
-        if (!event.getName().equals(ForgeRegistries.ITEMS.getRegistryName())) return;
-
         blocksToRegister.forEach(ModItems::register);
 
         // Initializes, but does not register gear classes, fills maps

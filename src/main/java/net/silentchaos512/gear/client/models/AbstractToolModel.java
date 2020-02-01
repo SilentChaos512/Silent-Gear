@@ -1,28 +1,9 @@
 package net.silentchaos512.gear.client.models;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.common.model.TRSRTransformation;
-import net.silentchaos512.lib.client.model.LayeredBakedModel;
-import org.apache.commons.lang3.tuple.Pair;
-
-import javax.annotation.Nonnull;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
-import java.util.Map;
-
 @SuppressWarnings("deprecation")
-public abstract class AbstractToolModel extends LayeredBakedModel {
+public abstract class AbstractToolModel /*extends LayeredBakedModel*/ {
 
-    protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
+    /*protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 
     public AbstractToolModel(IModel parent, ImmutableList<ImmutableList<BakedQuad>> immutableList, VertexFormat format,
                              ImmutableMap<TransformType, TRSRTransformation> transforms,
@@ -79,5 +60,5 @@ public abstract class AbstractToolModel extends LayeredBakedModel {
     @Override
     public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
-    }
+    }*/
 }

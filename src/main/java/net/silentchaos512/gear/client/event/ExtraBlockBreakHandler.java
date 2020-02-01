@@ -1,20 +1,15 @@
 package net.silentchaos512.gear.client.event;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -43,13 +38,13 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
 
     @SubscribeEvent
     public void renderBlockBreakAnim(RenderWorldLastEvent event) {
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+/*        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         this.mc.getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
         this.drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), this.mc.getRenderViewEntity(), event.getPartialTicks());
         this.mc.getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.disableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        RenderSystem.disableBlend();*/
     }
 
     @SubscribeEvent
@@ -63,29 +58,29 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
     }
 
     private static void preRenderDamagedBlocks() {
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.enableBlend();
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
-        GlStateManager.polygonOffset(-3.0F, -3.0F);
-        GlStateManager.enablePolygonOffset();
-        GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.enableAlphaTest();
-        GlStateManager.pushMatrix();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        RenderSystem.enableBlend();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
+        RenderSystem.polygonOffset(-3.0F, -3.0F);
+        RenderSystem.enablePolygonOffset();
+        RenderSystem.alphaFunc(516, 0.1F);
+        RenderSystem.enableAlphaTest();
+        RenderSystem.pushMatrix();
     }
 
     private static void postRenderDamagedBlocks() {
-        GlStateManager.disableAlphaTest();
-        GlStateManager.polygonOffset(0.0F, 0.0F);
-        GlStateManager.disablePolygonOffset();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.depthMask(true);
-        GlStateManager.popMatrix();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.polygonOffset(0.0F, 0.0F);
+        RenderSystem.disablePolygonOffset();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.depthMask(true);
+        RenderSystem.popMatrix();
     }
 
     private void drawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder bufferBuilderIn, Entity entityIn, float partialTicks) {
-        double d3 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double) partialTicks;
-        double d4 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
-        double d5 = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double) partialTicks;
+/*        double d3 = entityIn.lastTickPosX + (entityIn.func_226277_ct_() - entityIn.lastTickPosX) * (double) partialTicks;
+        double d4 = entityIn.lastTickPosY + (entityIn.func_226278_cu_() - entityIn.lastTickPosY) * (double) partialTicks;
+        double d5 = entityIn.lastTickPosZ + (entityIn.func_226281_cx_() - entityIn.lastTickPosZ) * (double) partialTicks;
 
         if (this.mc.world.getGameTime() % 20 == 0) {
             this.cleanupExtraDamagedBlocks();
@@ -132,7 +127,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
             tessellatorIn.draw();
             bufferBuilderIn.setTranslation(0.0D, 0.0D, 0.0D);
             ExtraBlockBreakHandler.postRenderDamagedBlocks();
-        }
+        }*/
     }
 
     private void cleanupExtraDamagedBlocks() {
@@ -148,12 +143,12 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-        AtlasTexture texturemap = this.mc.getTextureMap();
+/*        AtlasTexture texturemap = this.mc.getTextureMap();
         if (texturemap == null) return;
 
         for (int i = 0; i < this.destroyBlockIcons.length; ++i) {
             this.destroyBlockIcons[i] = texturemap.getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
-        }
+        }*/
     }
 
     public void sendBlockBreakProgress(int breakerId, BlockPos[] positions, int progress) {
@@ -181,18 +176,15 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
         private int createdAtWorldTick;
 
         public DestroyExtraBlocksProgress(int miningPlayerEntIdIn, BlockPos... positionsIn) {
-
             this.miningPlayerEntId = miningPlayerEntIdIn;
             this.positions = positionsIn;
         }
 
         public BlockPos[] getPositions() {
-
             return this.positions;
         }
 
         public void setPartialBlockDamage(int damage) {
-
             if (damage > 10) {
                 damage = 10;
             }
@@ -201,7 +193,6 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
         }
 
         public int getPartialBlockDamage() {
-
             return this.partialBlockProgress;
         }
 
@@ -209,7 +200,6 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
          * saves the current world tick into the DestroyExtraBlocksProgress
          */
         public void setWorldTick(int createdAtWorldTickIn) {
-
             this.createdAtWorldTick = createdAtWorldTickIn;
         }
 
@@ -217,7 +207,6 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
          * retrieves the 'date' at which the DestroyExtraBlocksProgress was created
          */
         public int getCreationWorldTick() {
-
             return this.createdAtWorldTick;
         }
     }

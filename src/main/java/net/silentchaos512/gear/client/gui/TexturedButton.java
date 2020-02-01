@@ -1,12 +1,13 @@
 package net.silentchaos512.gear.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +36,14 @@ public class TexturedButton extends Button {
         if (this.visible) {
             Minecraft mc = Minecraft.getInstance();
             mc.getTextureManager().bindTexture(this.resLoc);
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int k = this.getYImage(this.isHovered());
             if (k == 0) {
                 k = 1;
             }
 
-            GlStateManager.disableDepthTest();
+            RenderSystem.disableDepthTest();
             this.blit(
                     this.x,
                     this.y,
@@ -50,19 +51,20 @@ public class TexturedButton extends Button {
                     this.texturePosY - this.height + k * this.height,
                     this.width,
                     this.height);
-            GlStateManager.enableDepthTest();
+            RenderSystem.enableDepthTest();
         }
     }
 
     public void drawHover(int x, int y) {
         if (this.isMouseOver(x, y)) {
             Minecraft mc = Minecraft.getInstance();
+            MainWindow mainWindow = mc.getMainWindow();
             GuiUtils.drawHoveringText(
                     this.textList,
                     x,
                     y,
-                    mc.mainWindow.getWidth(),
-                    mc.mainWindow.getHeight(),
+                    mainWindow.getWidth(),
+                    mainWindow.getHeight(),
                     -1,
                     mc.fontRenderer);
         }

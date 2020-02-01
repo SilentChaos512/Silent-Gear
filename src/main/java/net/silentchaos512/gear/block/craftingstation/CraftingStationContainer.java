@@ -136,8 +136,8 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
     }
 
     @Override
-    public void func_201771_a(RecipeItemHelper p_201771_1_) {
-        craftMatrix.fillStackedContents(p_201771_1_);
+    public void fillStackedContents(RecipeItemHelper itemHelperIn) {
+        craftMatrix.fillStackedContents(itemHelperIn);
     }
 
     @Override

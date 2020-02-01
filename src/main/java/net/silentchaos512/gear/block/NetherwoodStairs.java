@@ -29,7 +29,7 @@ import net.silentchaos512.gear.init.ModBlocks;
 
 public class NetherwoodStairs extends StairsBlock {
     public NetherwoodStairs() {
-        super(ModBlocks.NETHERWOOD_PLANKS.asBlockState(), Properties.create(Material.WOOD)
+        super(ModBlocks.NETHERWOOD_PLANKS::asBlockState, Properties.create(Material.WOOD)
                 .hardnessAndResistance(2, 3)
                 .sound(SoundType.WOOD)
         );

@@ -111,7 +111,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         if (f >= 1.0F && !isCharged(stack) && hasAmmo(entityLiving, stack)) {
             setCharged(stack, true);
             SoundCategory soundcategory = entityLiving instanceof PlayerEntity ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
-            worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, SoundEvents.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (random.nextFloat() * 0.5F + 1.0F) + 0.2F);
+            worldIn.playSound(null, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), SoundEvents.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (random.nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
     }
 
@@ -239,7 +239,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
             boolean flag = projectile.getItem() == Items.FIREWORK_ROCKET;
             IProjectile iprojectile;
             if (flag) {
-                iprojectile = new FireworkRocketEntity(world, projectile, shooter.posX, shooter.posY + (double)shooter.getEyeHeight() - (double)0.15F, shooter.posZ, true);
+                iprojectile = new FireworkRocketEntity(world, projectile, shooter.getPosX(), shooter.getPosY() + (double)shooter.getEyeHeight() - (double)0.15F, shooter.getPosZ(), true);
             } else {
                 iprojectile = func_220024_a(world, shooter, crossbow, projectile);
                 if (p_220016_6_ || p_220016_9_ != 0.0F) {
@@ -249,13 +249,16 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
             if (shooter instanceof ICrossbowUser) {
                 ICrossbowUser icrossbowuser = (ICrossbowUser)shooter;
-                icrossbowuser.shoot(icrossbowuser.getAttackTarget(), crossbow, iprojectile, p_220016_9_);
+                LivingEntity attackTarget = icrossbowuser.getAttackTarget();
+                if (attackTarget != null) {
+                    icrossbowuser.shoot(attackTarget, crossbow, iprojectile, p_220016_9_);
+                }
             } else {
-                Vec3d vec3d1 = shooter.func_213286_i(1.0F);
+                Vec3d vec3d1 = shooter.getUpVector(1.0F);
                 Quaternion quaternion = new Quaternion(new Vector3f(vec3d1), p_220016_9_, true);
                 Vec3d vec3d = shooter.getLook(1.0F);
                 Vector3f vector3f = new Vector3f(vec3d);
-                vector3f.func_214905_a(quaternion);
+                vector3f.transform(quaternion);
                 iprojectile.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), p_220016_7_, p_220016_8_);
             }
 
@@ -263,7 +266,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
                 p_220017_1_.sendBreakAnimation(hand);
             });
             world.addEntity((Entity)iprojectile);
-            world.playSound(null, shooter.posX, shooter.posY, shooter.posZ, SoundEvents.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, p_220016_5_);
+            world.playSound(null, shooter.getPosX(), shooter.getPosY(), shooter.getPosZ(), SoundEvents.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, p_220016_5_);
         }
     }
 
@@ -276,7 +279,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         arrowEntity.setDamage(arrowEntity.getDamage() + GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
 
         arrowEntity.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
-        arrowEntity.func_213865_o(true);
+        arrowEntity.setShotFromCrossbow(true);
         int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.PIERCING, crossbow);
         if (i > 0) {
             arrowEntity.setPierceLevel((byte)i);
@@ -343,12 +346,12 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
             if (f >= 0.2F && !this.field_220034_c) {
                 this.field_220034_c = true;
-                worldIn.playSound(null, livingEntityIn.posX, livingEntityIn.posY, livingEntityIn.posZ, soundevent, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                worldIn.playSound(null, livingEntityIn.getPosX(), livingEntityIn.getPosY(), livingEntityIn.getPosZ(), soundevent, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
 
             if (f >= 0.5F && soundevent1 != null && !this.field_220035_d) {
                 this.field_220035_d = true;
-                worldIn.playSound(null, livingEntityIn.posX, livingEntityIn.posY, livingEntityIn.posZ, soundevent1, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                worldIn.playSound(null, livingEntityIn.getPosX(), livingEntityIn.getPosY(), livingEntityIn.getPosZ(), soundevent1, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
         }
 

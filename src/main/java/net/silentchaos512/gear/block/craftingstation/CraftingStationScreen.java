@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.block.craftingstation;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.I18n;
@@ -17,7 +17,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.gui.GuiItemParts;
 import net.silentchaos512.gear.client.gui.TexturedButton;
-import net.silentchaos512.gear.client.util.TooltipFlagTC;
+import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.lib.util.TextRenderUtils;
 
 import java.util.List;
@@ -71,7 +71,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
         boolean ctrl = stack.getItem() instanceof ICoreItem || KeyTracker.isControlDown();
         boolean alt = KeyTracker.isAltDown();
         boolean shift = KeyTracker.isShiftDown();
-        return new TooltipFlagTC(ctrl, alt, shift, false);
+        return new GearTooltipFlag(ctrl, alt, shift, false);
     }
 
     @Override
@@ -123,8 +123,8 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
             int yPos = (int) ((this.ySize - 160) / scale);
             // SilentGear.log.debug(xPos, yPos);
 
-            GlStateManager.pushMatrix();
-            GlStateManager.scalef(scale, scale, 1);
+            RenderSystem.pushMatrix();
+            RenderSystem.scalef(scale, scale, 1);
 
             int step = (int) (scale * 10);
             for (String line : tooltip) {
@@ -132,7 +132,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
                 yPos += Math.round(step / scale);
             }
 
-            GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
         }
     }
 
@@ -141,7 +141,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
         if (minecraft == null) return;
 
         // Main window
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
         minecraft.getTextureManager().bindTexture(TEXTURE);
         int xPos = (this.width - this.xSize) / 2;
         int yPos = (this.height - this.ySize) / 2;
@@ -185,7 +185,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
 
         TextureManager textureManager = minecraft.getTextureManager();
         textureManager.bindTexture(TEXTURE);
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
         final int textureY = 245;
         int textureX;
         if (craftResult.isEmpty()) {

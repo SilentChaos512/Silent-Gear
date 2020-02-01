@@ -19,9 +19,10 @@
 package net.silentchaos512.gear.client.gui;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
@@ -33,7 +34,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -79,7 +80,7 @@ public class GuiItemParts extends Screen {
         ItemStat.ALL_STATS.values().stream()
                 .filter(stat -> !stat.isHidden())
                 .forEachOrdered(stat -> sortOptions.add(new Pair<>(stat.getDisplayName().getFormattedText(), b -> sortParts(true, Comparator.comparing(p -> p.computeStatValue(stat))))));
-        this.addButton(new SortButton(5, minecraft.mainWindow.getScaledHeight() - 30, 100, 20, sortOptions));
+        this.addButton(new SortButton(5, minecraft.getMainWindow().getScaledHeight() - 30, 100, 20, sortOptions));
 
         // Build part button list
         int i = 0;
@@ -155,10 +156,11 @@ public class GuiItemParts extends Screen {
 
         if (selectedPart != null && !selectedPartInfo.isEmpty()) {
             ItemStack stack = selectedPart.getMaterials().getDisplayItem(ClientTicks.ticksInGame());
-            minecraft.getItemRenderer().renderItemIntoGUI(stack, minecraft.mainWindow.getScaledWidth() - 194, 30);
+            int scaledWidth = minecraft.getMainWindow().getScaledWidth();
+            minecraft.getItemRenderer().renderItemIntoGUI(stack, scaledWidth - 194, 30);
 
             final int maxWidth = 140;
-            final int x = minecraft.mainWindow.getScaledWidth() - (maxWidth + 10);
+            final int x = scaledWidth - (maxWidth + 10);
             int y = 35;
 
             String translatedName = selectedPart.getDisplayName(PartData.of(selectedPart), ItemStack.EMPTY).getFormattedText();
@@ -236,11 +238,11 @@ public class GuiItemParts extends Screen {
                 if (stack.isEmpty()) {
                     stack = new ItemStack(Blocks.BARRIER);
                 }
-                GlStateManager.enableRescaleNormal();
-                RenderHelper.enableGUIStandardItemLighting();
+                RenderSystem.enableRescaleNormal();
+                RenderHelper.enableStandardItemLighting();
                 Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(stack, this.x, this.y);
                 RenderHelper.disableStandardItemLighting();
-                GlStateManager.disableRescaleNormal();
+                RenderSystem.disableRescaleNormal();
             }
         }
 
@@ -253,7 +255,8 @@ public class GuiItemParts extends Screen {
                         .collect(Collectors.toList());
                 GuiUtils.preItemToolTip(craftingStack);
                 tooltip.add(0, part.getDisplayName(null, ItemStack.EMPTY).applyTextStyle(TextFormatting.UNDERLINE).getFormattedText());
-                GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, mc.mainWindow.getWidth(), mc.mainWindow.getHeight(), -1, mc.fontRenderer);
+                MainWindow mainWindow = mc.getMainWindow();
+                GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, mainWindow.getWidth(), mainWindow.getHeight(), -1, mc.fontRenderer);
                 GuiUtils.postItemToolTip();
             }
         }

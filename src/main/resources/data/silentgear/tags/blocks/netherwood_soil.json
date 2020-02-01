@@ -3,6 +3,6 @@
     "values": [
         "minecraft:netherrack",
         "minecraft:farmland",
-        "#minecraft:dirt_like"
+        "#forge:dirt"
     ]
 }

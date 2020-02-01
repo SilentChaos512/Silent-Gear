@@ -32,6 +32,7 @@ public class NetherwoodLeaves extends LeavesBlock {
                 .hardnessAndResistance(0.2f)
                 .tickRandomly()
                 .sound(SoundType.PLANT)
+                .notSolid()
         );
     }
 

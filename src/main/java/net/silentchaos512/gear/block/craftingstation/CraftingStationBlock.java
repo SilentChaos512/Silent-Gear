@@ -12,6 +12,7 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -62,8 +63,8 @@ public class CraftingStationBlock extends ContainerBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        return !player.isSneaking() && (worldIn.isRemote || openGui(player, worldIn, pos));
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        return !player.isCrouching() && (worldIn.isRemote || openGui(player, worldIn, pos)) ? ActionResultType.SUCCESS : ActionResultType.PASS;
     }
 
     private static boolean openGui(PlayerEntity player, World worldIn, BlockPos pos) {

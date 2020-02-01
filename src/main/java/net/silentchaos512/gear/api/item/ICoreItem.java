@@ -14,7 +14,6 @@ import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
-import net.silentchaos512.lib.item.ICustomEnchantColor;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -23,7 +22,7 @@ import java.util.Set;
 /**
  * Interface for all equipment items, including tools and armor.
  */
-public interface ICoreItem extends IItemProvider, IStatItem, ICustomEnchantColor {
+public interface ICoreItem extends IItemProvider, IStatItem {
     //region Item properties and construction
 
     default ItemStack construct(Collection<? extends IPartData> parts) {

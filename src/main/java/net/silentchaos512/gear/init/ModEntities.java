@@ -6,11 +6,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.client.renderer.entity.RenderSlingshotProjectile;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 import net.silentchaos512.utils.Lazy;
 
@@ -49,6 +47,6 @@ public enum ModEntities {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderers(FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(SlingshotProjectile.class, new RenderSlingshotProjectile.Factory());
+//        RenderingRegistry.registerEntityRenderingHandler(SlingshotProjectile.class, new RenderSlingshotProjectile.Factory());
     }
 }

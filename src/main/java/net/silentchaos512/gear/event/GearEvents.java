@@ -30,17 +30,17 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.ILightReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.event.TickEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -109,7 +109,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        final PlayerEntity player = event.getEntityPlayer();
+        final PlayerEntity player = event.getPlayer();
         ItemStack tool = player.getHeldItemMainhand();
 
         if (tool.getItem() instanceof ICoreItem) {
@@ -129,7 +129,7 @@ public final class GearEvents {
         }
     }
 
-    public static int getLightForLustrousTrait(IEnviromentBlockReader world, BlockPos pos) {
+    public static int getLightForLustrousTrait(ILightReader world, BlockPos pos) {
         int blockLight = world.getLightFor(LightType.BLOCK, pos);
         int skyLight = world.getLightFor(LightType.SKY, pos);
         // Block light is less effective

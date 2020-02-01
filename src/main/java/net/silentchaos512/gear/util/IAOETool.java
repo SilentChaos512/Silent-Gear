@@ -32,10 +32,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
@@ -74,7 +73,7 @@ public interface IAOETool {
     default List<BlockPos> getExtraBlocks(World world, @Nullable BlockRayTraceResult rt, PlayerEntity player, ItemStack stack) {
         List<BlockPos> positions = new ArrayList<>();
 
-        if (player.isSneaking() || rt == null || rt.getPos() == null || rt.getFace() == null)
+        if (player.isCrouching() || rt == null || rt.getPos() == null || rt.getFace() == null)
             return positions;
 
         BlockPos pos = rt.getPos();
@@ -237,7 +236,7 @@ public interface IAOETool {
         private HighlightHandler() {}
 
         @SubscribeEvent
-        public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+        public static void onDrawBlockHighlight(DrawHighlightEvent event) {
             ActiveRenderInfo info = event.getInfo();
             Entity entity = info.getRenderViewEntity();
             if (!(entity instanceof PlayerEntity)) return;
@@ -246,7 +245,7 @@ public interface IAOETool {
 
             RayTraceResult rt = event.getTarget();
 
-            if (event.getSubID() == 0 && rt.getType() == RayTraceResult.Type.BLOCK) {
+            if (/*event.getSubID() == 0 &&*/ rt.getType() == RayTraceResult.Type.BLOCK) {
                 ItemStack stack = player.getHeldItemMainhand();
 
                 if (stack.getItem() instanceof IAOETool) {
@@ -254,7 +253,8 @@ public interface IAOETool {
                     IAOETool item = (IAOETool) stack.getItem();
 
                     for (BlockPos pos : item.getExtraBlocks(world, (BlockRayTraceResult) rt, player, stack)) {
-                        event.getContext().drawSelectionBox(info, new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos, false), 0);
+                        // FIXME
+//                        event.getContext().drawSelectionBox(info, new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos, false), 0);
                     }
                 }
             }

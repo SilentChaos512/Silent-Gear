@@ -1,24 +1,7 @@
 package net.silentchaos512.gear.client.renderer.entity;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
-
-import javax.annotation.Nullable;
-
-public class RenderSlingshotProjectile extends EntityRenderer<SlingshotProjectile> {
-    protected RenderSlingshotProjectile(EntityRendererManager renderManager) {
+public class RenderSlingshotProjectile /*extends EntityRenderer<SlingshotProjectile>*/ {
+    /*protected RenderSlingshotProjectile(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
@@ -77,5 +60,5 @@ public class RenderSlingshotProjectile extends EntityRenderer<SlingshotProjectil
         public EntityRenderer<? super SlingshotProjectile> createRenderFor(EntityRendererManager manager) {
             return new RenderSlingshotProjectile(manager);
         }
-    }
+    }*/
 }

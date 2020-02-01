@@ -21,7 +21,6 @@ import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.client.models.ToolModel;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -85,7 +84,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         if (player.world.isRemote) {
             float pull = (stack.getUseDuration() - player.getItemInUseCount()) / getDrawDelay(stack);
-            ToolModel.bowPull.put(GearData.getUUID(stack), pull);
+//            ToolModel.bowPull.put(GearData.getUUID(stack), pull);
         }
         super.onUsingTick(stack, player, count);
     }
@@ -111,7 +110,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         if (worldIn.isRemote) {
-            ToolModel.bowPull.remove(GearData.getUUID(stack));
+//            ToolModel.bowPull.remove(GearData.getUUID(stack));
         }
 
         if (entityLiving instanceof PlayerEntity) {
@@ -162,7 +161,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
                         worldIn.addEntity(arrowEntity);
                     }
 
-                    worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !player.abilities.isCreativeMode) {
                         ammoItem.shrink(1);
                         if (ammoItem.isEmpty()) {
