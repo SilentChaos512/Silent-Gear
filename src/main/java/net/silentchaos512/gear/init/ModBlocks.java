@@ -4,16 +4,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.WallOrFloorItem;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
-import net.silentchaos512.gear.block.analyzer.PartAnalyzerBlock;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.lib.block.IBlockProvider;
@@ -60,6 +64,12 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
         for (ModBlocks block : values()) {
             register(block.getName(), block.asBlock(), block.item.get());
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void registerRenderTypes(FMLClientSetupEvent event) {
+        RenderTypeLookup.setRenderLayer(ModBlocks.NETHERWOOD_SAPLING.asBlock(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.POTTED_NETHERWOOD_SAPLING.asBlock(), RenderType.cutout());
     }
 
     private static void register(String name, Block block, @Nullable BlockItem item) {

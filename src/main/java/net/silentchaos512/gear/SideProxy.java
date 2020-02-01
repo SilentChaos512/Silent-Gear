@@ -11,6 +11,8 @@ import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -37,6 +39,7 @@ import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
+import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 import net.silentchaos512.lib.util.LibHooks;
 
@@ -92,6 +95,8 @@ class SideProxy implements IProxy {
         if (ModList.get().isLoaded("mmorpg") && Config.GENERAL.mineAndSlashSupport.get()) {
             MineAndSlashCompat.init();
         }
+
+        Greetings.addMessage(SideProxy::detectDataLoadingFailure);
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {}
@@ -149,6 +154,7 @@ class SideProxy implements IProxy {
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {
+            ModBlocks.registerRenderTypes(event);
             ModEntities.registerRenderers(event);
             ModTileEntities.registerRenderers(event);
             ModContainers.registerScreens(event);
@@ -183,5 +189,17 @@ class SideProxy implements IProxy {
         }
 
         private void serverSetup(FMLDedicatedServerSetupEvent event) {}
+    }
+
+    @Nullable
+    public static ITextComponent detectDataLoadingFailure(PlayerEntity player) {
+        // Check if parts/traits have loaded. If not, a mod has likely broken the data loading process.
+        // We should inform the user and tell them what to look for in the log.
+        if (PartManager.getValues().isEmpty() || TraitManager.getValues().isEmpty()) {
+            String msg = "Parts and/or traits have not loaded! This may be caused by a broken mod, even those not related to Silent Gear. Search your log for \"Failed to reload data packs\" to find the error.";
+            SilentGear.LOGGER.error(msg);
+            return new StringTextComponent(msg);
+        }
+        return null;
     }
 }

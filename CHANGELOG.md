@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.0]
 Ported to Minecraft 1.15.2
+### Added
+- Login message to warn the player when parts and traits fail to load. Instructs the player on what to search for in their log file ("Failed to reload data packs").
 ### Removed
 - The part analyzer and part grading. See issue [#83](https://github.com/SilentChaos512/Silent-Gear/issues/83) for plans/discussion.
 
