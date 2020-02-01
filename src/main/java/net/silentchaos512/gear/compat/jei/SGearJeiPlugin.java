@@ -4,7 +4,6 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
@@ -18,7 +17,6 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
-import net.silentchaos512.gear.parts.PartManager;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +27,6 @@ import java.util.stream.Stream;
 @JeiPlugin
 public class SGearJeiPlugin implements IModPlugin {
     private static final ResourceLocation PLUGIN_UID = SilentGear.getId("plugin/main");
-    static final ResourceLocation PART_ANALYZER = SilentGear.getId("category/part_analyzer");
     static final ResourceLocation GUI_TEXTURE = SilentGear.getId("textures/gui/recipe_display.png");
 
     private static boolean initFailed = false;
@@ -45,28 +42,14 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration reg) {
-        initFailed = true;
-
-        IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
-        reg.addRecipeCategories(new PartAnalyzerCategory(guiHelper));
-
-        initFailed = false;
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration reg) {
         initFailed = true;
 
-        // Part analyzer hints
-        List<PartAnalyzerCategory.Recipe> analyzerHints = PartManager.getMains().stream()
-                .map(PartAnalyzerCategory.Recipe::new)
-                .filter(PartAnalyzerCategory.Recipe::isValid)
-                .collect(Collectors.toList());
-        reg.addRecipes(analyzerHints, PART_ANALYZER);
-
         // Info pages
         addInfoPage(reg, ModBlocks.CRAFTING_STATION);
-        addInfoPage(reg, ModBlocks.PART_ANALYZER);
         // FIXME: Fails on servers
 /*        addInfoPage(reg, "tip_upgrade", PartManager.getPartsOfType(PartType.TIP).stream()
                 .flatMap(part -> {
@@ -88,7 +71,6 @@ public class SGearJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.CRAFTING_STATION), VanillaRecipeCategoryUid.CRAFTING);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.PART_ANALYZER), PART_ANALYZER);
     }
 
     @Override

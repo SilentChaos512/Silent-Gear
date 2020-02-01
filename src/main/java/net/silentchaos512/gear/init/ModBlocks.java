@@ -26,7 +26,6 @@ import java.util.function.Supplier;
 
 public enum ModBlocks implements IBlockProvider, IStringSerializable {
     CRAFTING_STATION(CraftingStationBlock::new),
-    PART_ANALYZER(PartAnalyzerBlock::new),
     SALVAGER(SalvagerBlock::new),
     FLAX_PLANT(() -> new FlaxPlant(false), () -> null),
     WILD_FLAX_PLANT(() -> new FlaxPlant(true), () -> null),

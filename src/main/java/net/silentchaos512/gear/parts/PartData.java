@@ -21,6 +21,7 @@ public final class PartData implements IPartData {
     public static final String NBT_ID = "ID";
 
     private final IGearPart part;
+    @Deprecated
     private final MaterialGrade grade;
     private final ItemStack craftingItem;
 
@@ -46,10 +47,16 @@ public final class PartData implements IPartData {
         return inst;
     }
 
+    public static PartData of(IGearPart part, ItemStack craftingItem) {
+        return new PartData(part, MaterialGrade.NONE, craftingItem);
+    }
+
+    @Deprecated
     public static PartData of(IGearPart part, MaterialGrade grade) {
         return new PartData(part, grade);
     }
 
+    @Deprecated
     public static PartData of(IGearPart part, MaterialGrade grade, ItemStack craftingItem) {
         return new PartData(part, grade, craftingItem);
     }
@@ -64,9 +71,7 @@ public final class PartData implements IPartData {
     public static PartData from(ItemStack craftingItem) {
         IGearPart part = PartManager.from(craftingItem);
         if (part == null) return null;
-
-        MaterialGrade grade = MaterialGrade.fromStack(craftingItem);
-        return of(part, grade, craftingItem);
+        return of(part, craftingItem);
     }
 
     @Nullable
@@ -123,6 +128,7 @@ public final class PartData implements IPartData {
         return part;
     }
 
+    @Deprecated
     @Override
     public MaterialGrade getGrade() {
         return grade;
@@ -195,7 +201,6 @@ public final class PartData implements IPartData {
     public String toString() {
         return "PartData{" +
                 this.part +
-                ", Grade: " + this.grade +
                 "}";
     }
 }

@@ -10,7 +10,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.block.analyzer.PartAnalyzerTileEntity;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
 import net.silentchaos512.utils.Lazy;
@@ -20,7 +19,6 @@ import java.util.function.Supplier;
 
 public enum ModTileEntities {
     CRAFTING_STATION(CraftingStationTileEntity::new, ModBlocks.CRAFTING_STATION::asBlock),
-    PART_ANALYZER(PartAnalyzerTileEntity::new, ModBlocks.PART_ANALYZER::asBlock),
     SALVAGER(SalvagerTileEntity::new, ModBlocks.SALVAGER::asBlock);
 
     private final Lazy<TileEntityType<?>> type;

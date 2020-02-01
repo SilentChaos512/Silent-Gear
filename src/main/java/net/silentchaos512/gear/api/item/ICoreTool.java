@@ -81,7 +81,7 @@ public interface ICoreTool extends ICoreItem {
     default PartData getSecondaryPart(ItemStack stack) {
         PartData data = GearData.getSecondaryPart(stack);
         if (data != null) return data;
-        return PartData.of(PartManager.tryGetFallback(PartType.MAIN));
+        return Objects.requireNonNull(PartData.ofNullable(PartManager.tryGetFallback(PartType.MAIN)));
     }
 
     @Nullable

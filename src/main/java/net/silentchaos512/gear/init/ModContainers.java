@@ -9,8 +9,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.block.analyzer.PartAnalyzerContainer;
-import net.silentchaos512.gear.block.analyzer.PartAnalyzerScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
@@ -21,7 +19,6 @@ import java.util.Locale;
 
 public enum ModContainers {
     CRAFTING_STATION(CraftingStationContainer::new),
-    PART_ANALYZER(PartAnalyzerContainer::new),
     SALVAGER(SalvagerContainer::new);
 
     private final Lazy<ContainerType<?>> type;
@@ -46,7 +43,6 @@ public enum ModContainers {
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
         ScreenManager.registerFactory((ContainerType<? extends CraftingStationContainer>) CRAFTING_STATION.type(), CraftingStationScreen::new);
-        ScreenManager.registerFactory((ContainerType<? extends PartAnalyzerContainer>) PART_ANALYZER.type(), PartAnalyzerScreen::new);
         ScreenManager.registerFactory((ContainerType<? extends SalvagerContainer>) SALVAGER.type(), SalvagerScreen::new);
     }
 

@@ -16,6 +16,7 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -54,7 +55,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         PartData data = GearData.getPrimaryPart(stack);
         if (data != null) return data;
 
-        return PartData.ofNullable(PartManager.tryGetFallback(PartType.MAIN));
+        return Objects.requireNonNull(PartData.ofNullable(PartManager.tryGetFallback(PartType.MAIN)));
     }
 
     default boolean requiresPartOfType(PartType type) {

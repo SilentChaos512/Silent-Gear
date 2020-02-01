@@ -26,7 +26,6 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.IPartData;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -404,31 +403,6 @@ public final class GearHelper {
     // Formerly onUpdate
     public static void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
         @Nullable PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity) entity : null;
-
-        if (world.getGameTime() % 20 == 0) {
-            // Any ungraded parts get a random grade
-            if (!GearData.isRandomGradingDone(stack)) {
-                MaterialGrade median = Config.GENERAL.randomGradeMean.get();
-                MaterialGrade maxGrade = Config.GENERAL.randomGradeMax.get();
-                double stdDev = Config.GENERAL.randomGradeStd.get();
-                MaterialGrade gradeForAll = MaterialGrade.selectRandom(SilentGear.random, median, stdDev, maxGrade);
-
-                PartDataList parts = PartDataList.of();
-                for (PartData data : GearData.getConstructionParts(stack)) {
-                    if (data.getGrade() == MaterialGrade.NONE) {
-                        MaterialGrade grade = Config.GENERAL.randomGradeSameOnAllParts.get()
-                                ? gradeForAll
-                                : MaterialGrade.selectRandom(SilentGear.random, median, stdDev, maxGrade);
-                        parts.add(PartData.of(data.getPart(), grade, data.getCraftingItem()));
-                    } else {
-                        parts.add(data);
-                    }
-                }
-                GearData.writeConstructionParts(stack, parts);
-                GearData.setRandomGradingDone(stack, true);
-                GearData.recalculateStats(stack, player);
-            }
-        }
 
         if (!world.isRemote) {
             TraitHelper.tickTraits(world, player, stack, isSelected);

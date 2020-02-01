@@ -205,13 +205,6 @@ public final class GearClientHelper {
         for (PartData part : parts) {
             if (part.getPart().isVisible()) {
                 ITextComponent text = new StringTextComponent("- ").appendSibling(part.getDisplayName(gear));
-                if (part.getPart().getType() == PartType.MAIN) {
-                    ITextComponent gradeText = new StringTextComponent(" (")
-                            .applyTextStyle(TextFormatting.RESET)
-                            .appendSibling(part.getGrade().getDisplayName())
-                            .appendText(")");
-                    text.appendSibling(gradeText);
-                }
                 tooltip.add(text);
             }
         }
