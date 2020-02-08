@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
@@ -53,11 +52,6 @@ public class Config {
         public final DoubleValue repairFactorQuick;
         public final BooleanValue upgradesInAnvilOnly;
         private final Map<ItemStat, DoubleValue> statMultipliers = new HashMap<>();
-        // Grading
-        public final EnumValue<MaterialGrade> randomGradeMean;
-        public final EnumValue<MaterialGrade> randomGradeMax;
-        public final DoubleValue randomGradeStd;
-        public final BooleanValue randomGradeSameOnAllParts;
         // Salvager
         public final DoubleValue salvagerMinLossRate;
         public final DoubleValue salvagerMaxLossRate;
@@ -193,28 +187,6 @@ public class Config {
                         .defineInRange(1, 0, Double.MAX_VALUE);
                 statMultipliers.put(stat, config);
             });
-
-            // Grading
-            wrapper.comment("item.grading.random",
-                    "Settings for random grading of ungraded materials. This affects gear items crafted with ungraded parts, not parts graded in the part analyzer.",
-                    "Grading follows a normal distribution, which means that values closer to the mean (average) are more common.");
-            randomGradeMean = wrapper
-                    .builder("item.grading.random.mean")
-                    .comment("The mean (average) grade assigned to ungraded parts.")
-                    .defineEnum(MaterialGrade.C);
-            randomGradeMax = wrapper
-                    .builder("item.grading.random.max")
-                    .comment("The maximum grade that ungraded parts can receive.")
-                    .defineEnum(MaterialGrade.S);
-            randomGradeStd = wrapper
-                    .builder("item.grading.random.standardDeviation")
-                    .comment("The standard deviation (how 'spread out' the curve is) for random grading. Must be non-negative.",
-                            "Setting to zero would disable all randomness and grade all parts at the mean.")
-                    .defineInRange(1.5, 0, 10);
-            randomGradeSameOnAllParts = wrapper
-                    .builder("item.grading.random.sameOnAllParts")
-                    .comment("Apply the same grade to all parts on the tool. This makes stats more random.")
-                    .define(true);
 
             wrapper.comment("salvager", "Settings for the salvager");
 
