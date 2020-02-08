@@ -9,6 +9,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SharedConstants;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -169,7 +170,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
     }
 
     private void renderVersionString() {
-        String versionNumString = "Version: " + SilentGear.getLongVersion() + (SilentGear.isDevBuild() ? " (dev)" : "");
+        String versionNumString = String.format("Version: %s-%s%s", SharedConstants.getVersion().getName(), SilentGear.getVersion(), SilentGear.isDevBuild() ? " (dev)" : "");
         int versionNumStringWidth = font.getStringWidth(versionNumString);
         float versionNumScale = 0.65f;
         TextRenderUtils.renderScaled(font, versionNumString,

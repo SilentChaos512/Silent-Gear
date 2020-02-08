@@ -54,10 +54,6 @@ public final class SilentGear {
         return "0.0.0";
     }
 
-    public static String getLongVersion() {
-        return "1.14.4-" + getVersion();
-    }
-
     public static boolean isDevBuild() {
         // TODO: Is there a better way? Guess it works though...
         String version = getVersion(false);
