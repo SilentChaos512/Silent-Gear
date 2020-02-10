@@ -53,7 +53,7 @@ public final class ModWorldFeatures {
         biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
                 (new PlantFeature(((FlaxPlant) ModBlocks.WILD_FLAX_PLANT.asBlock()).getMaturePlant(), 32, 4))
                         .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-                        .func_227228_a_(Placement.COUNT_HEIGHTMAP_32.func_227446_a_(new FrequencyConfig(1)))
+                        .withPlacement(Placement.COUNT_HEIGHTMAP_32.configure(new FrequencyConfig(1)))
         );
     }
 
@@ -61,8 +61,8 @@ public final class ModWorldFeatures {
         SilentGear.LOGGER.info("Add netherwood trees to {}", biome.getRegistryName());
         biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.ACACIA_TREE
                 .withConfiguration(NETHERWOOD_TREE_CONFIG)
-                .func_227228_a_(ModPlacement.NETHER_FLOOR_WITH_EXTRA
-                        .func_227446_a_(new NetherFloorWithExtraConfig(1, 0.25f, 11, 32, 96)))
+                .withPlacement(ModPlacement.NETHER_FLOOR_WITH_EXTRA
+                        .configure(new NetherFloorWithExtraConfig(1, 0.25f, 11, 32, 96)))
         );
     }
 
@@ -70,7 +70,7 @@ public final class ModWorldFeatures {
         SilentGear.LOGGER.info("Add crimson iron ore to {}", biome.getRegistryName());
         biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHERRACK, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 6))
-                .func_227228_a_(Placement.COUNT_RANGE.func_227446_a_(new CountRangeConfig(24, 24, 0, 120)))
+                .withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(24, 24, 0, 120)))
         );
     }
 }
