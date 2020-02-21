@@ -68,11 +68,12 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderTypes(FMLClientSetupEvent event) {
-        RenderTypeLookup.setRenderLayer(ModBlocks.FLAX_PLANT.asBlock(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.NETHERWOOD_SAPLING.asBlock(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.POTTED_NETHERWOOD_SAPLING.asBlock(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.STONE_TORCH.asBlock(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WILD_FLAX_PLANT.asBlock(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(FLAX_PLANT.asBlock(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(NETHERWOOD_SAPLING.asBlock(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(POTTED_NETHERWOOD_SAPLING.asBlock(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(STONE_TORCH.asBlock(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(WALL_STONE_TORCH.asBlock(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(WILD_FLAX_PLANT.asBlock(), RenderType.cutout());
     }
 
     private static void register(String name, Block block, @Nullable BlockItem item) {
