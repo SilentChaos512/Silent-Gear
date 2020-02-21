@@ -57,7 +57,7 @@ class SideProxy implements IProxy {
 
         modEventBus.addGenericListener(Block.class, ModBlocks::registerAll);
         modEventBus.addGenericListener(ContainerType.class, ModContainers::registerAll);
-        modEventBus.addGenericListener(EntityType.class, ModEntities::registerAll);
+        modEventBus.addGenericListener(EntityType.class, ModEntities::registerTypes);
         modEventBus.addGenericListener(Item.class, ModItems::registerAll);
         modEventBus.addGenericListener(Placement.class, ModPlacement::registerAll);
         modEventBus.addGenericListener(TileEntityType.class, ModTileEntities::registerAll);

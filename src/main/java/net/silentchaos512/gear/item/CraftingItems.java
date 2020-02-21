@@ -29,7 +29,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 
 import javax.annotation.Nullable;
@@ -77,8 +76,7 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     SINEW_BOWSTRING,
     // Misc Upgrades
     SPOON_UPGRADE,
-    RED_CARD_UPGRADE
-    ;
+    RED_CARD_UPGRADE;
 
     private final Item item;
     private final String requiredMod;
@@ -117,9 +115,9 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
 
         @Override
         public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-            if (CraftingItems.this.requiredMod.isEmpty() || ModList.get().isLoaded(CraftingItems.this.requiredMod)) {
-                super.fillItemGroup(group, items);
-            }
+//            if (CraftingItems.this.requiredMod.isEmpty() || ModList.get().isLoaded(CraftingItems.this.requiredMod)) {
+            super.fillItemGroup(group, items);
+//            }
         }
     }
 }
