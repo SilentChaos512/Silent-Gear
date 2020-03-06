@@ -1,0 +1,29 @@
+{
+  "item_type": "cloth_boots",
+  "item_id": "silentgear:boots",
+  "id": "cloth_boots:silentgear:boots",
+  "gear_type": {
+    "normal_item_weight": 80,
+    "runed_item_weight": 20,
+    "unique_item_weight": 0
+  },
+  "rarity": {
+    "min_rarity": 0,
+    "max_rarity": 5
+  },
+  "misc": {
+    "only_add_stats_if_loot_drop": false,
+    "add_to_loot_drops": true,
+    "loot_drop_weight": 1000,
+    "can_be_salvaged": false
+  },
+  "level": {
+    "min_level": 1,
+    "max_level": 100,
+    "level_variance": 0
+  },
+  "unique": {
+    "if_unique_random_up_to_tier": 10,
+    "unique_id": ""
+  }
+}
