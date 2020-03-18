@@ -12,7 +12,6 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
-import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -85,11 +84,7 @@ public final class TooltipHandler {
             ++i;
         }
 
-        MaterialGrade grade = MaterialGrade.fromStack(stack);
         if (KeyTracker.isControlDown()) {
-            if (part.getType() == PartType.MAIN) {
-                getGradeLine(event, grade);
-            }
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats")
                     .applyTextStyle(TextFormatting.GOLD)
                     .appendSibling(new StringTextComponent(" (Silent Gear)")
@@ -97,9 +92,6 @@ public final class TooltipHandler {
                             .applyTextStyle(TextFormatting.ITALIC)));
             getPartStatLines(event, stack, part);
         } else {
-            if (grade != MaterialGrade.NONE && part.getType() == PartType.MAIN) {
-                getGradeLine(event, grade);
-            }
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").applyTextStyle(TextFormatting.GOLD));
         }
 
