@@ -9,11 +9,11 @@
   },
   "rarity": {
     "min_rarity": 0,
-    "max_rarity": 5
+    "max_rarity": 3
   },
   "misc": {
     "only_add_stats_if_loot_drop": false,
-    "add_to_loot_drops": true,
+    "add_to_loot_drops": false,
     "loot_drop_weight": 1000,
     "can_be_salvaged": false
   },
