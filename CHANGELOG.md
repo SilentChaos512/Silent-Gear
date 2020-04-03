@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.5]
+### Removed
+- Part analyzer advancement
+### Fixed
+- Possible solution for CME in PartManager [#104]
+
 ## [1.5.4] - 2020-03-18
 ### Fixed
 - Main parts still showing grade tooltip [#83]

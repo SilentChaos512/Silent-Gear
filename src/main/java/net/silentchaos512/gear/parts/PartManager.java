@@ -42,6 +42,7 @@ public final class PartManager implements IResourceManagerReloadListener {
     private static final String DATA_PATH = "silentgear_parts";
     private static final String DATA_PATH_OLD = "silentgear/parts";
     private static final Map<ResourceLocation, IGearPart> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
+    private static boolean isReloading = false;
     private static int highestMainPartTier = 0;
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
@@ -57,6 +58,7 @@ public final class PartManager implements IResourceManagerReloadListener {
         Collection<ResourceLocation> resources = getAllResources(resourceManager);
         if (resources.isEmpty()) return;
 
+        isReloading = true;
         MAP.clear();
         ERROR_LIST.clear();
         SilentGear.LOGGER.info(MARKER, "Reloading part files");
@@ -89,6 +91,7 @@ public final class PartManager implements IResourceManagerReloadListener {
             }
         }
 
+        isReloading = false;
         SilentGear.LOGGER.info(MARKER, "Registered {} parts", MAP.size());
     }
 
@@ -108,6 +111,10 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     public static Collection<IGearPart> getValues() {
+        if (isReloading) {
+            return Collections.emptyList();
+        }
+
         synchronized (MAP) {
             return MAP.values();
         }
