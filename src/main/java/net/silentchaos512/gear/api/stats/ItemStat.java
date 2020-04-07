@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.stats;
 
-import lombok.Getter;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -26,10 +25,10 @@ import java.util.function.Function;
 public class ItemStat {
     public static final Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
 
-    @Getter protected final ResourceLocation name;
-    @Getter protected final float defaultValue;
-    @Getter protected final float minimumValue;
-    @Getter protected final float maximumValue;
+    protected final ResourceLocation name;
+    protected final float defaultValue;
+    protected final float minimumValue;
+    protected final float maximumValue;
     Function<Float, Float> missingRodFunction;
     // TODO: Hide hidden stats!
     private boolean isHidden = false;
@@ -57,6 +56,22 @@ public class ItemStat {
         }
 
         ALL_STATS.put(name.getPath(), this);
+    }
+
+    public ResourceLocation getName() {
+        return name;
+    }
+
+    public float getDefaultValue() {
+        return defaultValue;
+    }
+
+    public float getMinimumValue() {
+        return minimumValue;
+    }
+
+    public float getMaximumValue() {
+        return maximumValue;
     }
 
     public float clampValue(float value) {

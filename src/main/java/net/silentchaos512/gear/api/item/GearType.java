@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.item;
 
-import lombok.Getter;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -64,19 +63,31 @@ public final class GearType {
         return VALUES.computeIfAbsent(name, k -> new GearType(name, parent));
     }
 
-    @Getter
     private final String name;
-    @Nullable
-    @Getter
-    private final GearType parent;
+    @Nullable private final GearType parent;
 
     private GearType(String name, @Nullable GearType parent) {
         this.name = name;
         this.parent = parent;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
-     * Check if this type's name matches the given string, or if its parent type does.
+     * Gets the parent gear type, if there is one. The parent type may also have a parent.
+     *
+     * @return The parent type
+     */
+    @Nullable
+    public GearType getParent() {
+        return parent;
+    }
+
+    /**
+     * Check if this type's name matches the given string, or if its parent type does. The type
+     * "all" will match anything.
      *
      * @param type The string representation of the type
      * @return True if this type's name is equal to type, or if its parent matches (recursive)

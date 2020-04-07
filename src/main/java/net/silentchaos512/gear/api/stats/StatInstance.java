@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.stats;
 
-import lombok.Getter;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -16,7 +15,6 @@ import javax.annotation.Nonnegative;
  * @author SilentChaos512
  * @since Experimental
  */
-@Getter
 public class StatInstance {
     public enum Operation {
         AVG, ADD, MUL1, MUL2, MAX;
@@ -39,6 +37,34 @@ public class StatInstance {
         this.id = id;
         this.value = value;
         this.op = op;
+    }
+
+    /**
+     * Get the ID of the stat modifier. ID's are used to filter duplicate modifiers in {@link
+     * StatModifierMap} and for debugging purposes.
+     *
+     * @return The modifier ID
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Get the value of the stat or stat modifier
+     *
+     * @return The modifier value
+     */
+    public float getValue() {
+        return value;
+    }
+
+    /**
+     * Get the operator of the stat modifier
+     *
+     * @return The modifier operator
+     */
+    public Operation getOp() {
+        return op;
     }
 
     public static StatInstance makeBaseMod(float value) {
