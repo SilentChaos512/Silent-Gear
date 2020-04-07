@@ -1,10 +1,13 @@
 package net.silentchaos512.gear.traits;
 
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -101,6 +104,10 @@ public class SimpleTrait implements ITrait {
     @Override
     public float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio) {
         return value;
+    }
+
+    @Override
+    public void onGetAttributeModifiers(TraitActionContext context, Multimap<String, AttributeModifier> modifiers, EquipmentSlotType slot) {
     }
 
     @Override

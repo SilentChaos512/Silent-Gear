@@ -3,7 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.5]
+## [1.5.6] - 2020-04-07
+### Added
+- Attribute modifier traits. These will apply attribute modifiers to gear items based on the type of gear and the trait level.
+### Changed
+- (API) Replace Lombok getters with normal getters. API unchanged, just makes the code clearer.
+
+## [1.5.5] - 2020-04-03
 ### Removed
 - Part analyzer advancement
 ### Fixed

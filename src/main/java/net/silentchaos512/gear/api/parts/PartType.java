@@ -18,7 +18,6 @@
 
 package net.silentchaos512.gear.api.parts;
 
-import lombok.Getter;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -74,9 +73,9 @@ public final class PartType {
         return VALUES.values();
     }
 
-    @Getter private final ResourceLocation name;
-    @Getter private final String debugSymbol;
-    @Getter private final int maxPerItem;
+    private final ResourceLocation name;
+    private final String debugSymbol;
+    private final int maxPerItem;
     private final IPartSerializer<? extends IGearPart> serializer;
 
     private PartType(ResourceLocation name, String debugSymbol, int maxPerItem, IPartSerializer<? extends IGearPart> serializer) {
@@ -84,6 +83,14 @@ public final class PartType {
         this.debugSymbol = debugSymbol;
         this.maxPerItem = maxPerItem;
         this.serializer = serializer;
+    }
+
+    public ResourceLocation getName() {
+        return name;
+    }
+
+    public int getMaxPerItem() {
+        return maxPerItem;
     }
 
     public ITextComponent getDisplayName(int tier) {

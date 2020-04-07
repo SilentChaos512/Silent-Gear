@@ -1,7 +1,10 @@
 package net.silentchaos512.gear.api.traits;
 
+import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -81,6 +84,8 @@ public interface ITrait {
     void onGearCrafted(TraitActionContext context);
 
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
+
+    void onGetAttributeModifiers(TraitActionContext context, Multimap<String, AttributeModifier> modifiers, EquipmentSlotType slot);
 
     void onUpdate(TraitActionContext context, boolean isEquipped);
 

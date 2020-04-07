@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.util;
 
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -107,24 +108,26 @@ public final class GearHelper {
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         // Need to use this version to prevent stack overflow
-        @SuppressWarnings("deprecation") Multimap<String, AttributeModifier> map = stack.getItem().getAttributeModifiers(slot);
+        @SuppressWarnings("deprecation") Multimap<String, AttributeModifier> map = LinkedHashMultimap.create(stack.getItem().getAttributeModifiers(slot));
 
+        return getAttributeModifiers(slot, stack, map);
+    }
+
+    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<String, AttributeModifier> map) {
         if (slot == EquipmentSlotType.MAINHAND) {
             // Melee Damage
-            String key = SharedMonsterAttributes.ATTACK_DAMAGE.getName();
-            float value = getMeleeDamageModifier(stack);
-            replaceAttributeModifierInMap(map, key, value);
+            replaceAttributeModifierInMap(map, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), getMeleeDamageModifier(stack));
 
             // Melee Speed
-            key = SharedMonsterAttributes.ATTACK_SPEED.getName();
-            value = getAttackSpeedModifier(stack);
-            replaceAttributeModifierInMap(map, key, value);
+            replaceAttributeModifierInMap(map, SharedMonsterAttributes.ATTACK_SPEED.getName(), getAttackSpeedModifier(stack));
 
             // Reach distance
             float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE);
             AttributeModifier reachModifier = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
             map.put(PlayerEntity.REACH_DISTANCE.getName(), reachModifier);
         }
+
+        TraitHelper.getCachedTraits(stack).forEach((trait, level) -> trait.onGetAttributeModifiers(new TraitActionContext(null, level, stack), map, slot));
 
         return map;
     }

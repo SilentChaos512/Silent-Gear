@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -96,13 +96,13 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     @Nonnull
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
+        Multimap<String, AttributeModifier> multimap = LinkedHashMultimap.create();
         if (slot == this.getEquipmentSlot()) {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
             multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
             multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
         }
-        return multimap;
+        return GearHelper.getAttributeModifiers(slot, stack, multimap);
     }
 
     //endregion

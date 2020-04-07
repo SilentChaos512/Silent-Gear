@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.event;
 
-import lombok.Getter;
 import net.minecraftforge.eventbus.api.Event;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -15,7 +14,6 @@ import java.util.List;
  * @author SilentChaos512
  * @since Experimental
  */
-@Getter
 public class GetStatModifierEvent extends Event {
     private final ItemStat stat;
     private final List<StatInstance> modifiers;
@@ -23,6 +21,7 @@ public class GetStatModifierEvent extends Event {
 
     public GetStatModifierEvent(PartData part, ItemStat stat, List<StatInstance> modifiers) {
         this.stat = stat;
+        //noinspection AssignmentOrReturnOfFieldWithMutableType
         this.modifiers = modifiers;
         this.part = part;
     }
@@ -30,5 +29,18 @@ public class GetStatModifierEvent extends Event {
     @Override
     public boolean isCancelable() {
         return false;
+    }
+
+    public ItemStat getStat() {
+        return stat;
+    }
+
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
+    public List<StatInstance> getModifiers() {
+        return modifiers;
+    }
+
+    public PartData getPart() {
+        return part;
     }
 }
