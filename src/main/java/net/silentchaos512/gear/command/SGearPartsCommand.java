@@ -16,11 +16,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.ShowPartsScreenPacket;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
@@ -41,11 +44,11 @@ public final class SGearPartsCommand {
     private SGearPartsCommand() {}
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sgear_parts")
-                .requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sgear_parts");
 
         // Add
         builder.then(Commands.literal("add")
+                .requires(source -> source.hasPermissionLevel(2))
                 .then(Commands.argument("partID", ResourceLocationArgument.resourceLocation())
                         .suggests(partIdSuggestions)
                         .then(Commands.argument("grade", new MaterialGrade.Argument())
@@ -59,6 +62,7 @@ public final class SGearPartsCommand {
         );
         // Remove
         builder.then(Commands.literal("remove")
+                .requires(source -> source.hasPermissionLevel(2))
                 .then(Commands.argument("partID", ResourceLocationArgument.resourceLocation())
                         .suggests(partInGearSuggestions)
                         .executes(
@@ -76,6 +80,14 @@ public final class SGearPartsCommand {
                 .executes(
                         SGearPartsCommand::runList
                 )
+        );
+        // Show GUI
+        builder.then(Commands.literal("show_gui")
+                .executes(context -> {
+                    ServerPlayerEntity playerMP = context.getSource().asPlayer();
+                    Network.channel.sendTo(new ShowPartsScreenPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+                    return 1;
+                })
         );
 
         dispatcher.register(builder);

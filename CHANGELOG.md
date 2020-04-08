@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Command to show parts GUI (`/sgear_parts show_gui`). Does not require OP perms. [#107]
+### Changed
+- Updated compatible items to remove from drop system of Mine and Slash (AzureDoom) [#97]
+- `/sgear_parts list` no longer requires OP perms
+
 ## [1.5.6] - 2020-04-07
 ### Added
 - Attribute modifier traits. These will apply attribute modifiers to gear items based on the type of gear and the trait level.

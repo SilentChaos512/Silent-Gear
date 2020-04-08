@@ -142,6 +142,7 @@ public final class GearEvents {
 
     // endregion
 
+    @Deprecated
     @SubscribeEvent
     public static void onBlockDrops(BlockEvent.HarvestDropsEvent event) {
         PlayerEntity harvester = event.getHarvester();
