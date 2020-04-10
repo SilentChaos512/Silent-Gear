@@ -3,6 +3,7 @@ package net.silentchaos512.gear.init;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -29,6 +30,9 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public enum ModBlocks implements IBlockProvider, IStringSerializable {
+    CRIMSON_IRON_ORE(CrimsonIronOre::new),
+    CRIMSON_IRON_BLOCK(() -> new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL))),
+    CRIMSON_STEEL_BLOCK(() -> new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL))),
     CRAFTING_STATION(CraftingStationBlock::new),
     SALVAGER(SalvagerBlock::new),
     FLAX_PLANT(() -> new FlaxPlant(false), () -> null),
@@ -41,7 +45,6 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     NETHERWOOD_STAIRS(NetherwoodStairs::new),
     NETHERWOOD_LEAVES(NetherwoodLeaves::new),
     NETHERWOOD_SAPLING(NetherwoodSapling::new),
-    CRIMSON_IRON_ORE(CrimsonIronOre::new),
     POTTED_NETHERWOOD_SAPLING(() -> makePottedPlant(NETHERWOOD_SAPLING::asBlock), () -> null),
     PHANTOM_LIGHT(PhantomLight::new);
 
