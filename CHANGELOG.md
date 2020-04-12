@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated compatible items to remove from drop system of Mine and Slash (AzureDoom) [#97]
 - `/sgear_parts list` no longer requires OP perms
+### Fixed
+- Magmatic trait not working [#109]
 
 ## [1.5.6] - 2020-04-07
 ### Added

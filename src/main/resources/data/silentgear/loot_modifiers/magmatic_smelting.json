@@ -1,0 +1,9 @@
+{
+    "conditions": [
+        {
+            "condition": "silentgear:has_trait",
+            "trait": "silentgear:magmatic"
+        }
+    ],
+    "function": "silentgear:magmatic_smelting"
+}

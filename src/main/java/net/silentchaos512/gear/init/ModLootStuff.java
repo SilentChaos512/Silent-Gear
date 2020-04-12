@@ -18,15 +18,18 @@
 
 package net.silentchaos512.gear.init;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasPartCondition;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
+import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 
 public final class ModLootStuff {
     private ModLootStuff() {}
@@ -36,11 +39,15 @@ public final class ModLootStuff {
         LootConditionManager.registerCondition(HasTraitCondition.SERIALIZER);
         LootFunctionManager.registerFunction(SelectGearTierLootFunction.SERIALIZER);
         LootFunctionManager.registerFunction(SetPartsFunction.SERIALIZER);
-
-        MinecraftForge.EVENT_BUS.addListener(ModLootStuff::onLootTableLoad);
     }
 
-    @SubscribeEvent
-    public static void onLootTableLoad(LootTableLoadEvent event) {
+    public static void registerGlobalModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+        register("magmatic_smelting", new MagmaticTraitLootModifier.Serializer());
+    }
+
+    private static <T extends GlobalLootModifierSerializer<?>> void register(String name, T serializer) {
+        ResourceLocation id = SilentGear.getId(name);
+        serializer.setRegistryName(id);
+        ForgeRegistries.LOOT_MODIFIER_SERIALIZERS.register(serializer);
     }
 }
