@@ -5,6 +5,8 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,6 +22,7 @@ import net.silentchaos512.gear.item.SlingshotAmmoItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.gear.*;
+import net.silentchaos512.lib.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -38,6 +41,7 @@ public final class ModItems {
 
     public static BlockNamedItem flaxseeds;
     public static Item netherBanana;
+    public static Item goldenNetherBanana;
     public static Item pebble;
 
     public static CoreSword sword = new CoreSword();
@@ -92,6 +96,15 @@ public final class ModItems {
         flaxseeds = register("flaxseeds", new BlockNamedItem(ModBlocks.FLAX_PLANT.asBlock(), getBaseProperties()));
         netherBanana = register("nether_banana", new Item(getBaseProperties()
                 .food(new Food.Builder().hunger(5).saturation(0.4f).build())));
+        goldenNetherBanana = register("golden_nether_banana", new Item(getBaseProperties()
+                .food(new Food.Builder()
+                        .hunger(10)
+                        .saturation(1.0f)
+                        .setAlwaysEdible()
+                        .effect(() -> new EffectInstance(Effects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
+                        .effect(() -> new EffectInstance(Effects.RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
+                        .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
+                        .build())));
 
         pebble = register("pebble", new SlingshotAmmoItem());
 
