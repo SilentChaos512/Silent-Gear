@@ -3,9 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.5.8] - 2020-04-15
 ### Fixed
-- Part texture properties for more specific types (like "armor") being ignored (see [Silent's Gems #454](https://github.com/SilentChaos512/SilentGems/issues/454))
+- Server crash caused by new command added in 1.5.7 [#112]
+- Issues with armor coloring being incorrect, adds a couple new texture properties to part JSONs (see [Silent's Gems #454](https://github.com/SilentChaos512/SilentGems/issues/454))
+    - `armor_color` - The color of the armor model (defaults to `fallback_color`)
+    - `armor_texture` - The prefix of the armor texture path (defaults to `texture_suffix`)
+    - You can leave these new properties out (default) in most cases
+    - This fix disables color blending for armor models (items will still show blending)
 
 ## [1.5.7] - 2020-04-12
 Requires Forge 31.1.18 or higher
