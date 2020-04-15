@@ -65,7 +65,8 @@
             "texture_domain": "silentgear",
             "texture_suffix": "crimson_steel",
             "normal_color": "#FFFFFF",
-            "broken_color": "#DC143C"
+            "broken_color": "#DC143C",
+            "armor_color": "#FFFFFF"
         }
     },
     "availability": {

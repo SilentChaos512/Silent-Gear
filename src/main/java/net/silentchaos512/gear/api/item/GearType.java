@@ -93,7 +93,20 @@ public final class GearType {
      * @return True if this type's name is equal to type, or if its parent matches (recursive)
      */
     public boolean matches(String type) {
-        return "all".equals(type) || name.equals(type) || (parent != null && parent.matches(type));
+        return matches(type, true);
+    }
+
+    /**
+     * Check if this type's name matches the given string, or if its parent type does. The type
+     * "all" will match anything if {@code includeAll} is true.
+     *
+     * @param type       The string representation of the type
+     * @param includeAll Whether or not to consider the "all" type. This should be excluded if
+     *                   trying to match more specific types.
+     * @return True if this type's name is equal to type, or if its parent matches (recursive)
+     */
+    public boolean matches(String type, boolean includeAll) {
+        return (includeAll && "all".equals(type)) || name.equals(type) || (parent != null && parent.matches(type, includeAll));
     }
 
     public ITextComponent getDisplayName() {

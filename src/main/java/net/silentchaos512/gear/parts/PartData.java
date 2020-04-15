@@ -174,11 +174,13 @@ public final class PartData implements IPartData {
         return part.getRepairAmount(new RepairContext(type, gear, this));
     }
 
+    @Deprecated
     @Nullable
     public ResourceLocation getTexture(ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
         return part.getTexture(this, gear, gearClass, position, animationFrame);
     }
 
+    @Deprecated
     @Nullable
     public ResourceLocation getBrokenTexture(ItemStack gear, GearType gearClass, IPartPosition position) {
         return part.getBrokenTexture(this, gear, gearClass, position);
@@ -195,6 +197,10 @@ public final class PartData implements IPartData {
 
     public int getFallbackColor(ItemStack gear, int animationFrame) {
         return part.getDisplayProperties(this, gear, animationFrame).getFallbackColor();
+    }
+
+    public int getArmorColor(ItemStack gear) {
+        return part.getDisplayProperties(this, gear, 0).getArmorColor();
     }
 
     @Override

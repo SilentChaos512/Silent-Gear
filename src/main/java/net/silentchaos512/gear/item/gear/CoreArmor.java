@@ -180,7 +180,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         // Actual armor texture
         IPartDisplay props = part.getPart().getDisplayProperties(part, stack, 0);
         return props.getTextureDomain() + ":textures/models/armor/"
-                + props.getTextureSuffix()
+                + props.getArmorTexturePrefix()
                 + "_layer_" + layer
                 + (type != null ? "_" + type : "")
                 + ".png";
@@ -193,7 +193,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public int getColor(ItemStack stack) {
-        return GearData.getHeadColor(stack, true);
+        return GearData.getArmorColor(stack);
     }
 
     @Override

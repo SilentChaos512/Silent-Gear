@@ -108,9 +108,11 @@ public interface IGearPart {
 
     IPartDisplay getDisplayProperties(PartData part, ItemStack gear, int animationFrame);
 
+    @Deprecated
     @Nullable
     ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame);
 
+    @Deprecated
     @Nullable
     ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position);
 

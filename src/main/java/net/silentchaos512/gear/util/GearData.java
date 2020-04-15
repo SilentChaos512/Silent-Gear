@@ -48,6 +48,7 @@ public final class GearData {
     private static final String NBT_ROOT_RENDERING = "Rendering";
     private static final String NBT_ROOT_STATISTICS = "Statistics";
 
+    private static final String NBT_ARMOR_COLOR = "ArmorColor";
     private static final String NBT_BLENDED_HEAD_COLOR = "BlendedHeadColor";
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
@@ -225,7 +226,9 @@ public final class GearData {
 
     private static void updateRenderingInfo(ItemStack stack, PartDataList parts) {
         CompoundNBT nbt = getData(stack, NBT_ROOT_RENDERING);
-        nbt.putInt(NBT_BLENDED_HEAD_COLOR, calculateBlendedHeadColor(stack, parts.getMains()));
+        List<PartData> mains = parts.getMains();
+        nbt.putInt(NBT_ARMOR_COLOR, calculateArmorColor(stack, mains));
+        nbt.putInt(NBT_BLENDED_HEAD_COLOR, calculateBlendedHeadColor(stack, mains));
 
         createAndSaveModelKeys(stack, ((ICoreItem) stack.getItem()), parts);
     }
@@ -411,6 +414,18 @@ public final class GearData {
             return part.getFallbackColor(stack, 0);
         }
         return getData(stack, NBT_ROOT_RENDERING).getInt(NBT_BLENDED_HEAD_COLOR);
+    }
+
+    public static int getArmorColor(ItemStack stack) {
+        return getData(stack, NBT_ROOT_RENDERING).getInt(NBT_ARMOR_COLOR);
+    }
+
+    private static int calculateArmorColor(ItemStack gear, List<PartData> parts) {
+        if (!parts.isEmpty()) {
+            PartData part = parts.get(0);
+            return part.getArmorColor(gear);
+        }
+        return Color.VALUE_WHITE;
     }
 
     @SuppressWarnings("OverlyLongMethod")

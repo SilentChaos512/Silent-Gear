@@ -148,7 +148,7 @@ public abstract class AbstractGearPart implements IGearPart {
             }
             // Parent type overrides, like "armor"
             for (String key : display.keySet()) {
-                if (gearType.matches(key)) {
+                if (gearType.matches(key, false)) {
                     return display.get(key);
                 }
             }

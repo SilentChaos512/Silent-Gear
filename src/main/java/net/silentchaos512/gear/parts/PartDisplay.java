@@ -11,31 +11,15 @@ import net.silentchaos512.utils.EnumUtils;
 public final class PartDisplay implements IPartDisplay {
     public static final PartDisplay DEFAULT = new PartDisplay();
 
-    private String textureDomain;
-    private String textureSuffix;
-    private int normalColor;
-    private int brokenColor;
-    private int fallbackColor;
-    private boolean highlight;
+    private String textureDomain = SilentGear.MOD_ID;
+    private String textureSuffix = "";
+    private String armorTexture = "";
+    private int normalColor = Color.VALUE_WHITE;
+    private int brokenColor = Color.VALUE_WHITE;
+    private int fallbackColor = Color.VALUE_WHITE;
+    private int armorColor = Color.VALUE_WHITE;
+    private boolean highlight = false;
     private PartTextureType liteTexture = PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT;
-
-    PartDisplay() {
-        textureDomain = SilentGear.MOD_ID;
-        textureSuffix = "";
-        normalColor = brokenColor = fallbackColor = Color.VALUE_WHITE;
-    }
-
-    public PartDisplay(String textureDomain, String textureSuffix) {
-        this(textureDomain, textureSuffix, Color.VALUE_WHITE, Color.VALUE_WHITE, Color.VALUE_WHITE);
-    }
-
-    public PartDisplay(String textureDomain, String textureSuffix, int normalColor, int brokenColor, int fallbackColor) {
-        this.textureDomain = textureDomain;
-        this.textureSuffix = textureSuffix;
-        this.normalColor = normalColor;
-        this.brokenColor = brokenColor;
-        this.fallbackColor = fallbackColor;
-    }
 
     @Override
     public String getTextureDomain() {
@@ -45,6 +29,11 @@ public final class PartDisplay implements IPartDisplay {
     @Override
     public String getTextureSuffix() {
         return textureSuffix;
+    }
+
+    @Override
+    public String getArmorTexturePrefix() {
+        return armorTexture;
     }
 
     @Override
@@ -63,6 +52,11 @@ public final class PartDisplay implements IPartDisplay {
     }
 
     @Override
+    public int getArmorColor() {
+        return armorColor;
+    }
+
+    @Override
     public boolean hasHighlight() {
         return highlight;
     }
@@ -73,14 +67,16 @@ public final class PartDisplay implements IPartDisplay {
     }
 
     public static PartDisplay from(JsonObject json, IPartDisplay defaultProps) {
-        String textureDomain = JSONUtils.getString(json, "texture_domain", defaultProps.getTextureDomain());
-        String textureSuffix = JSONUtils.getString(json, "texture_suffix", defaultProps.getTextureSuffix());
+        PartDisplay props = new PartDisplay();
 
-        int normalColor = loadColor(json, defaultProps.getNormalColor(), defaultProps.getNormalColor(), "normal_color", "texture_color");
-        int brokenColor = loadColor(json, defaultProps.getBrokenColor(), normalColor, "broken_color");
-        int fallbackColor = loadColor(json, defaultProps.getFallbackColor(), brokenColor, "fallback_color");
+        props.textureDomain = JSONUtils.getString(json, "texture_domain", defaultProps.getTextureDomain());
+        props.textureSuffix = JSONUtils.getString(json, "texture_suffix", defaultProps.getTextureSuffix());
+        props.armorTexture = JSONUtils.getString(json, "armor_texture", props.textureSuffix);
 
-        PartDisplay props = new PartDisplay(textureDomain, textureSuffix, normalColor, brokenColor, fallbackColor);
+        props.normalColor = loadColor(json, defaultProps.getNormalColor(), defaultProps.getNormalColor(), "normal_color", "texture_color");
+        props.brokenColor = loadColor(json, defaultProps.getBrokenColor(), props.normalColor, "broken_color");
+        props.fallbackColor = loadColor(json, defaultProps.getFallbackColor(), props.brokenColor, "fallback_color");
+        props.armorColor = loadColor(json, defaultProps.getArmorColor(), props.fallbackColor, "armor_color");
 
         props.highlight = JSONUtils.getBoolean(json, "highlight", props.highlight);
         props.liteTexture = EnumUtils.byName(JSONUtils.getString(json, "lite_texture", ""), props.liteTexture);
@@ -101,9 +97,11 @@ public final class PartDisplay implements IPartDisplay {
         PartDisplay display = new PartDisplay();
         display.textureDomain = buffer.readString(255);
         display.textureSuffix = buffer.readString(32676);
+        display.armorTexture = buffer.readString(32676);
         display.normalColor = buffer.readVarInt();
         display.brokenColor = buffer.readVarInt();
         display.fallbackColor = buffer.readVarInt();
+        display.armorColor = buffer.readVarInt();
         display.highlight = buffer.readBoolean();
         display.liteTexture = EnumUtils.byOrdinal(buffer.readByte(), PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT);
         return display;
@@ -112,9 +110,11 @@ public final class PartDisplay implements IPartDisplay {
     public static void write(PacketBuffer buffer, PartDisplay display) {
         buffer.writeString(display.textureDomain);
         buffer.writeString(display.textureSuffix);
+        buffer.writeString(display.armorTexture);
         buffer.writeVarInt(display.normalColor);
         buffer.writeVarInt(display.brokenColor);
         buffer.writeVarInt(display.fallbackColor);
+        buffer.writeVarInt(display.armorColor);
         buffer.writeBoolean(display.highlight);
         buffer.writeByte(display.liteTexture.getIndex());
     }
@@ -124,9 +124,11 @@ public final class PartDisplay implements IPartDisplay {
         return "PartDisplay{" +
                 "textureDomain='" + textureDomain + '\'' +
                 ", textureSuffix='" + textureSuffix + '\'' +
+                ", armorTexture='" + armorTexture + '\'' +
                 ", normalColor=" + Integer.toHexString(normalColor) +
                 ", brokenColor=" + Integer.toHexString(brokenColor) +
                 ", fallbackColor=" + Integer.toHexString(fallbackColor) +
+                ", armorColor=" + Integer.toHexString(armorColor) +
                 ", highlight=" + highlight +
                 '}';
     }

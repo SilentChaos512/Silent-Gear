@@ -40,7 +40,8 @@
             "texture_domain": "silentgear",
             "texture_suffix": "emerald",
             "normal_color": "#FFFFFF",
-            "broken_color": "#41F384"
+            "broken_color": "#41F384",
+            "armor_color": "#FFFFFF"
         }
     },
     "availability": {
