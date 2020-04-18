@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (API) PartTypes can now specify a fallback part, deprecates `PartManager.tryGetFallback`
 - (API) Gear class maps in ModItems now use ResourceLocations for keys, to allow other mods to add gear types
 ### Fixed
+- Part names being underlined after viewing them in the parts menu
 - Gear randomizer not selecting parts in some cases
 - Salvager attaching grade NBT to returned items
 
