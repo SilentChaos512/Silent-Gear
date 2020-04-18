@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - (API) `IGearPart.randomizeData`, creates a PartData object used during random gear generation
 ### Changed
+- Move all gear crafting recipes to their own tab in JEI [#106]
 - (API) PartTypes can now specify a fallback part, deprecates `PartManager.tryGetFallback`
 - (API) Gear class maps in ModItems now use ResourceLocations for keys, to allow other mods to add gear types
 ### Fixed

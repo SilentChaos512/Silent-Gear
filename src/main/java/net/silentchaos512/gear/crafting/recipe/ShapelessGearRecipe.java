@@ -69,4 +69,9 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe {
         GearData.setExampleTag(result, true);
         return result;
     }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
 }

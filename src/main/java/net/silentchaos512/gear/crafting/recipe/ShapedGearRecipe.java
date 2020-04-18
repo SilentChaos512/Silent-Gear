@@ -69,4 +69,9 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe {
         GearData.setExampleTag(result, true);
         return result;
     }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
 }

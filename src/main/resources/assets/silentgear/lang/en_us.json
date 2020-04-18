@@ -431,6 +431,7 @@
   "jei.silentgear.tool_head.desc": "Tool heads, blades, bow limbs, and more! These are the core of tools and weapons, constructed with a blueprint/template and some number of main tool materials. Check the blueprint/template tooltip for more info.",
   "jei.silentgear.tooltip.sample1": "Sample recipe",
   "jei.silentgear.tooltip.sample2": "Gear made with any materials will work",
+  "gui.silentgear.category.gearCrafting": "Gear Crafting",
   "misc.silentgear.tooltip.blacklist": "Blacklist: %s",
   "misc.silentgear.tooltip.construction.key": "<Press Alt>",
   "misc.silentgear.tooltip.construction": "Construction",

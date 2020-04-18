@@ -4,8 +4,13 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.*;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -13,6 +18,8 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
+import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
+import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -28,6 +35,7 @@ import java.util.stream.Stream;
 public class SGearJeiPlugin implements IModPlugin {
     private static final ResourceLocation PLUGIN_UID = SilentGear.getId("plugin/main");
     static final ResourceLocation GUI_TEXTURE = SilentGear.getId("textures/gui/recipe_display.png");
+    static final ResourceLocation GEAR_CRAFTING = SilentGear.getId("category/gear_crafting");
 
     private static boolean initFailed = false;
 
@@ -42,11 +50,17 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration reg) {
+        IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
+        reg.addRecipeCategories(new GearCraftingRecipeCategoryJei(guiHelper));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration reg) {
         initFailed = true;
+
+        reg.addRecipes(Minecraft.getInstance().world.getRecipeManager().getRecipes().stream()
+                .filter(this::isGearCraftingRecipe)
+                .collect(Collectors.toList()), GEAR_CRAFTING);
 
         // Info pages
         addInfoPage(reg, ModBlocks.CRAFTING_STATION);
@@ -68,9 +82,16 @@ public class SGearJeiPlugin implements IModPlugin {
         initFailed = false;
     }
 
+    private boolean isGearCraftingRecipe(IRecipe<?> recipe) {
+        IRecipeSerializer<?> serializer = recipe.getSerializer();
+        return serializer == ShapedGearRecipe.SERIALIZER || serializer == ShapelessGearRecipe.SERIALIZER;
+    }
+
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.CRAFTING_STATION), VanillaRecipeCategoryUid.CRAFTING);
+        reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.CRAFTING_STATION), GEAR_CRAFTING);
     }
 
     @Override
