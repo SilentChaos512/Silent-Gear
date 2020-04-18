@@ -4,7 +4,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 import net.silentchaos512.gear.api.parts.IPartData;
-import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -30,11 +29,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         GearData.writeConstructionParts(result, parts);
         GearData.recalculateStats(result, null);
         // Allow upgrade parts to add additional data
-        parts.forEach(p -> {
-            if (p.getPart() instanceof IUpgradePart) {
-                ((IUpgradePart) p.getPart()).onAddToGear(result, p.getCraftingItem());
-            }
-        });
+        parts.forEach(p -> p.onAddToGear(result));
         // Allow traits to make any needed changes (must be done after a recalculate)
         TraitHelper.activateTraits(result, 0, (trait, level, nothing) -> {
             trait.onGearCrafted(new TraitActionContext(null, level, result));

@@ -140,4 +140,14 @@ public interface IGearPart {
     default boolean isVisible() {
         return true;
     }
+
+    /**
+     * Creates a {@link PartData} instance with possibly randomized data. This can be overridden to
+     * apply custom data to randomized parts (see {@link net.silentchaos512.gear.util.GearGenerator}).
+     *
+     * @return Part data instance
+     */
+    default PartData randomizeData() {
+        return PartData.of(this);
+    }
 }

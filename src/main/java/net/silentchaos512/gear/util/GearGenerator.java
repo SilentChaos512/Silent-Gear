@@ -98,26 +98,27 @@ public final class GearGenerator {
 
         // Make the base item
         PartDataList parts = PartDataList.of();
-        mains.forEach(p -> parts.add(PartData.of(p)));
+        mains.forEach(p -> parts.add(p.randomizeData()));
         // Requires a rod?
         if (item.requiresPartOfType(PartType.ROD)) {
-            parts.addPart(rod.get());
+            parts.add(rod.get().randomizeData());
         }
         // Requires bowstring?
         if (item.requiresPartOfType(PartType.BOWSTRING)) {
             Optional<IGearPart> bowstring = selectRandom(gearType, PartType.BOWSTRING, 0, tier);
-            bowstring.ifPresent(parts::addPart);
+            bowstring.ifPresent(p -> parts.add(p.randomizeData()));
         }
 
         // Select other required parts
         for (PartType partType : PartType.getValues()) {
             if (item.requiresPartOfType(partType) && partType != PartType.MAIN && partType != PartType.ROD && partType != PartType.BOWSTRING) {
                 Optional<IGearPart> requiredPart = selectRandom(gearType, partType, tier);
-                requiredPart.ifPresent(parts::addPart);
+                requiredPart.ifPresent(p -> parts.add(p.randomizeData()));
             }
         }
 
         ItemStack result = stack.copy();
+        parts.forEach(p -> p.onAddToGear(result));
         GearData.writeConstructionParts(result, parts);
 
         // Apply some random upgrades?

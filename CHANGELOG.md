@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- (API) `IGearPart.randomizeData`, creates a PartData object used during random gear generation
 ### Changed
 - (API) PartTypes can now specify a fallback part, deprecates `PartManager.tryGetFallback`
 - (API) Gear class maps in ModItems now use ResourceLocations for keys, to allow other mods to add gear types

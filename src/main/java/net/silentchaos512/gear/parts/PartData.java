@@ -204,6 +204,13 @@ public final class PartData implements IPartData {
     }
 
     @Override
+    public void onAddToGear(ItemStack gear) {
+        if (this.part instanceof IUpgradePart) {
+            ((IUpgradePart) this.part).onAddToGear(gear, this.craftingItem);
+        }
+    }
+
+    @Override
     public String toString() {
         return "PartData{" +
                 this.part +

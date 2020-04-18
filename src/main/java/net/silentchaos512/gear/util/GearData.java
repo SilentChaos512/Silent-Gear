@@ -621,7 +621,7 @@ public final class GearData {
                 parts.removeIf(p -> p.getPart().getPartPosition() == part.getPart().getPartPosition());
 
             // Allow the part to make additional changes if needed
-            upgradePart.onAddToGear(gear, part.getCraftingItem());
+            part.onAddToGear(gear);
         }
 
         // Other upgrades allow no exact duplicates, but any number of total upgrades

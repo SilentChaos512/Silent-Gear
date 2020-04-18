@@ -48,4 +48,7 @@ public interface IPartData {
     default List<PartTraitInstance> getTraits() {
         return Collections.emptyList();
     }
+
+    default void onAddToGear(ItemStack gear) {
+    }
 }
