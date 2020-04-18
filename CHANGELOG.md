@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (API) Gear class maps in ModItems now use ResourceLocations for keys, to allow other mods to add gear types
 ### Fixed
 - Gear randomizer not selecting parts in some cases
+- Salvager attaching grade NBT to returned items
 
 ## [1.5.8] - 2020-04-15
 ### Fixed

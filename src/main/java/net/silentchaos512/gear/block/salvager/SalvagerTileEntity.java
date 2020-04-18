@@ -171,7 +171,6 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
     }
 
     private static Collection<ItemStack> getSalvageFromGearItem(ItemStack stack) {
-        ICoreItem item = (ICoreItem) stack.getItem();
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
 
         for (PartData part : GearData.getConstructionParts(stack)) {
@@ -179,11 +178,6 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
                 ItemStack rod = part.getCraftingItem().copy();
                 rod.setCount(1);
                 builder.add(rod);
-            } else if (part.getType() == PartType.MAIN) {
-                ItemStack craftingItem = part.getCraftingItem().copy();
-                // TODO: Add a chance of grade loss?
-                part.getGrade().setGradeOnStack(craftingItem);
-                builder.add(craftingItem);
             } else {
                 builder.add(part.getCraftingItem().copy());
             }
