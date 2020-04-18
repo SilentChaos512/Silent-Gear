@@ -13,7 +13,6 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.type.BowstringPart;
 import net.silentchaos512.gear.parts.type.GripPart;
@@ -81,7 +80,7 @@ public interface ICoreTool extends ICoreItem {
     default PartData getSecondaryPart(ItemStack stack) {
         PartData data = GearData.getSecondaryPart(stack);
         if (data != null) return data;
-        return Objects.requireNonNull(PartData.ofNullable(PartManager.tryGetFallback(PartType.MAIN)));
+        return Objects.requireNonNull(PartData.ofNullable(PartType.MAIN.getFallbackPart()));
     }
 
     @Nullable

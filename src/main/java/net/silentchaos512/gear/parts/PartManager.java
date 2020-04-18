@@ -167,19 +167,12 @@ public final class PartManager implements IResourceManagerReloadListener {
      *
      * @param type The part type
      * @return The fallback part if it exists
+     * @deprecated Use {@link PartType#getFallbackPart()} instead
      */
+    @Deprecated
     @Nullable
     public static IGearPart tryGetFallback(PartType type) {
-        ResourceLocation name = null;
-        if (type == PartType.MAIN)
-            name = PartConst.FALLBACK_MAIN;
-        else if (type == PartType.ROD)
-            name = PartConst.FALLBACK_ROD;
-        else if (type == PartType.BOWSTRING)
-            name = PartConst.FALLBACK_BOWSTRING;
-
-        if (name == null) return null;
-        return get(name);
+        return type.getFallbackPart();
     }
 
     public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {

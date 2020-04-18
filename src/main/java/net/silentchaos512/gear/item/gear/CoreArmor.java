@@ -23,7 +23,6 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -175,7 +174,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
 
         PartData part = GearData.getPrimaryRenderPartFast(stack);
-        if (part == null) part = PartData.ofNullable(PartManager.tryGetFallback(PartType.MAIN));
+        if (part == null) part = PartData.ofNullable(PartType.MAIN.getFallbackPart());
 
         // Actual armor texture
         IPartDisplay props = part.getPart().getDisplayProperties(part, stack, 0);

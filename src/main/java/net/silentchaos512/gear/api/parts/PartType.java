@@ -23,6 +23,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.parts.AbstractGearPart;
+import net.silentchaos512.gear.parts.PartConst;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.*;
 
 import javax.annotation.Nullable;
@@ -34,26 +36,30 @@ import java.util.function.Function;
 public final class PartType {
     private static final Map<ResourceLocation, PartType> VALUES = new HashMap<>();
 
-    public static final PartType BINDING = create(SilentGear.getId("binding"), "b", createSerializer("binding", BindingPart::new));
-    public static final PartType BOWSTRING = create(SilentGear.getId("bowstring"), "B", createSerializer("bowstring", BowstringPart::new));
-    public static final PartType GRIP = create(SilentGear.getId("grip"), "G", createSerializer("grip", GripPart::new));
-    public static final PartType HIGHLIGHT = create(SilentGear.getId("highlight"), "h", createSerializer("highlight", HighlightPart::new));
-    public static final PartType MAIN = create(SilentGear.getId("main"), "M", createSerializer("main", MainPart::new));
-    public static final PartType MISC_UPGRADE = create(SilentGear.getId("misc_upgrade"), "U", createSerializer("misc_upgrade", UpgradePart::new));
-    public static final PartType ROD = create(SilentGear.getId("rod"), "R", createSerializer("rod", RodPart::new));
-    public static final PartType TIP = create(SilentGear.getId("tip"), "T", createSerializer("tip", TipPart::new));
+    public static final PartType BINDING = create(SilentGear.getId("binding"), createSerializer("binding", BindingPart::new));
+    public static final PartType BOWSTRING = create(SilentGear.getId("bowstring"), createSerializer("bowstring", BowstringPart::new), PartConst.FALLBACK_BOWSTRING);
+    public static final PartType GRIP = create(SilentGear.getId("grip"), createSerializer("grip", GripPart::new));
+    public static final PartType HIGHLIGHT = create(SilentGear.getId("highlight"), createSerializer("highlight", HighlightPart::new));
+    public static final PartType MAIN = create(SilentGear.getId("main"), createSerializer("main", MainPart::new), PartConst.FALLBACK_MAIN);
+    public static final PartType MISC_UPGRADE = create(SilentGear.getId("misc_upgrade"), createSerializer("misc_upgrade", UpgradePart::new));
+    public static final PartType ROD = create(SilentGear.getId("rod"), createSerializer("rod", RodPart::new), PartConst.FALLBACK_ROD);
+    public static final PartType TIP = create(SilentGear.getId("tip"), createSerializer("tip", TipPart::new));
 
     @Deprecated
-    public static PartType create(String name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
-        return create(new ResourceLocation(name), debugSymbol, serializer);
+    public static PartType create(ResourceLocation name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
+        return create(name, serializer);
     }
 
-    public static PartType create(ResourceLocation name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
+    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer) {
+        return create(name, serializer, null);
+    }
+
+    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart) {
         if (VALUES.containsKey(name))
             throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", name));
 
         int maxPerItem = name.equals(SilentGear.getId("main")) ? 9 : 1;
-        PartType type = new PartType(name, debugSymbol, maxPerItem, serializer);
+        PartType type = new PartType(name, maxPerItem, serializer, fallbackPart);
         VALUES.put(name, type);
         return type;
     }
@@ -74,15 +80,15 @@ public final class PartType {
     }
 
     private final ResourceLocation name;
-    private final String debugSymbol;
     private final int maxPerItem;
     private final IPartSerializer<? extends IGearPart> serializer;
+    @Nullable private final ResourceLocation fallbackPart;
 
-    private PartType(ResourceLocation name, String debugSymbol, int maxPerItem, IPartSerializer<? extends IGearPart> serializer) {
+    private PartType(ResourceLocation name, int maxPerItem, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart) {
         this.name = name;
-        this.debugSymbol = debugSymbol;
         this.maxPerItem = maxPerItem;
         this.serializer = serializer;
+        this.fallbackPart = fallbackPart;
     }
 
     public ResourceLocation getName() {
@@ -101,9 +107,17 @@ public final class PartType {
         return serializer;
     }
 
+    @Nullable
+    public IGearPart getFallbackPart() {
+        if (fallbackPart == null) {
+            return null;
+        }
+        return PartManager.get(fallbackPart);
+    }
+
     @Override
     public String toString() {
-        return "PartType[" + debugSymbol + "]{" +
+        return "PartType{" +
                 "name='" + name + "'}";
     }
 

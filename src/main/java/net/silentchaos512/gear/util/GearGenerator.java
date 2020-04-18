@@ -55,7 +55,12 @@ public final class GearGenerator {
                 .collect(Collectors.toList());
         if (!list.isEmpty())
             return Optional.of(list.get(SilentGear.random.nextInt(list.size())));
-        return Optional.ofNullable(PartManager.tryGetFallback(type));
+
+        // No parts matching the tier, select from everything
+        if (minTier != -1)
+            return selectRandom(gearType, type, -1);
+
+        return Optional.ofNullable(type.getFallbackPart());
     }
 
     public static Collection<IGearPart> selectRandomMains(GearType gearType, int count, int partTier) {
@@ -103,6 +108,15 @@ public final class GearGenerator {
             Optional<IGearPart> bowstring = selectRandom(gearType, PartType.BOWSTRING, 0, tier);
             bowstring.ifPresent(parts::addPart);
         }
+
+        // Select other required parts
+        for (PartType partType : PartType.getValues()) {
+            if (item.requiresPartOfType(partType) && partType != PartType.MAIN && partType != PartType.ROD && partType != PartType.BOWSTRING) {
+                Optional<IGearPart> requiredPart = selectRandom(gearType, partType, tier);
+                requiredPart.ifPresent(parts::addPart);
+            }
+        }
+
         ItemStack result = stack.copy();
         GearData.writeConstructionParts(result, parts);
 

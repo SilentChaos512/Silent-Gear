@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- (API) PartTypes can now specify a fallback part, deprecates `PartManager.tryGetFallback`
+- (API) Gear class maps in ModItems now use ResourceLocations for keys, to allow other mods to add gear types
+### Fixed
+- Gear randomizer not selecting parts in some cases
+
 ## [1.5.8] - 2020-04-15
 ### Fixed
 - Server crash caused by new command added in 1.5.7 [#112]

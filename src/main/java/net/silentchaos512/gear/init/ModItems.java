@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Map;
 
 public final class ModItems {
-    public static final Map<String, ICoreTool> toolClasses = new LinkedHashMap<>();
-    public static final Map<String, ICoreArmor> armorClasses = new LinkedHashMap<>();
-    public static final Map<String, ICoreItem> gearClasses = new LinkedHashMap<>();
+    public static final Map<ResourceLocation, ICoreTool> toolClasses = new LinkedHashMap<>();
+    public static final Map<ResourceLocation, ICoreArmor> armorClasses = new LinkedHashMap<>();
+    public static final Map<ResourceLocation, ICoreItem> gearClasses = new LinkedHashMap<>();
     public static final List<GearBlueprintItem> blueprints = new ArrayList<>();
     static final Map<String, BlockItem> blocksToRegister = new LinkedHashMap<>();
 
@@ -126,27 +126,27 @@ public final class ModItems {
 
     private static void initializeGear() {
         // Build gear maps now because blueprints need them
-        toolClasses.put("sword", sword);
-        toolClasses.put("dagger", dagger);
-        toolClasses.put("katana", katana);
-        toolClasses.put("machete", machete);
-        toolClasses.put("spear", spear);
-        toolClasses.put("pickaxe", pickaxe);
-        toolClasses.put("shovel", shovel);
-        toolClasses.put("axe", axe);
-        toolClasses.put("hammer", hammer);
-        toolClasses.put("excavator", excavator);
-        toolClasses.put("lumber_axe", lumberAxe);
-        toolClasses.put("mattock", mattock);
-        toolClasses.put("sickle", sickle);
-        toolClasses.put("bow", bow);
-        toolClasses.put("crossbow", crossbow);
+        toolClasses.put(SilentGear.getId("sword"), sword);
+        toolClasses.put(SilentGear.getId("dagger"), dagger);
+        toolClasses.put(SilentGear.getId("katana"), katana);
+        toolClasses.put(SilentGear.getId("machete"), machete);
+        toolClasses.put(SilentGear.getId("spear"), spear);
+        toolClasses.put(SilentGear.getId("pickaxe"), pickaxe);
+        toolClasses.put(SilentGear.getId("shovel"), shovel);
+        toolClasses.put(SilentGear.getId("axe"), axe);
+        toolClasses.put(SilentGear.getId("hammer"), hammer);
+        toolClasses.put(SilentGear.getId("excavator"), excavator);
+        toolClasses.put(SilentGear.getId("lumber_axe"), lumberAxe);
+        toolClasses.put(SilentGear.getId("mattock"), mattock);
+        toolClasses.put(SilentGear.getId("sickle"), sickle);
+        toolClasses.put(SilentGear.getId("bow"), bow);
+        toolClasses.put(SilentGear.getId("crossbow"), crossbow);
 //        toolClasses.put("slingshot", slingshot);
 
-        armorClasses.put("helmet", helmet);
-        armorClasses.put("chestplate", chestplate);
-        armorClasses.put("leggings", leggings);
-        armorClasses.put("boots", boots);
+        armorClasses.put(SilentGear.getId("helmet"), helmet);
+        armorClasses.put(SilentGear.getId("chestplate"), chestplate);
+        armorClasses.put(SilentGear.getId("leggings"), leggings);
+        armorClasses.put(SilentGear.getId("boots"), boots);
 
 //        gearClasses.put("shield", shield);
         gearClasses.putAll(toolClasses);
@@ -154,7 +154,10 @@ public final class ModItems {
     }
 
     private static <T extends Item> T register(String name, T item) {
-        ResourceLocation id = new ResourceLocation(SilentGear.MOD_ID, name);
+        return register(SilentGear.getId(name), item);
+    }
+
+    private static <T extends Item> T register(ResourceLocation id, T item) {
         item.setRegistryName(id);
         ForgeRegistries.ITEMS.register(item);
         return item;
@@ -164,7 +167,7 @@ public final class ModItems {
         gearClasses.forEach((key, item) -> {
             GearBlueprintItem blueprint = new GearBlueprintItem(singleUse, item);
             blueprints.add(blueprint);
-            register(name + "_" + key, blueprint);
+            register(new ResourceLocation(key.getNamespace(), name + "_" + key.getPath()), blueprint);
         });
 
         // Part blueprints
