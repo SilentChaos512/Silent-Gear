@@ -12,23 +12,29 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
-    private final ICoreItem gearItem;
+    private final Supplier<ICoreItem> gearItem;
 
+    @Deprecated
     public GearBlueprintItem(boolean singleUse, ICoreItem gearItem) {
+        this(singleUse, () -> gearItem);
+    }
+
+    public GearBlueprintItem(boolean singleUse, Supplier<ICoreItem> gearItem) {
         super(new Properties().group(SilentGear.ITEM_GROUP), singleUse);
         this.gearItem = gearItem;
     }
 
     @Override
     protected ITextComponent getCraftedName(ItemStack stack) {
-        return new TranslationTextComponent(this.gearItem.asItem().getTranslationKey());
+        return new TranslationTextComponent(this.gearItem.get().asItem().getTranslationKey());
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-        String itemClass = this.gearItem.getGearType().getName();
+        String itemClass = this.gearItem.get().getGearType().getName();
 
         // Flavor text
         if (this.gearItem instanceof ICoreTool) {

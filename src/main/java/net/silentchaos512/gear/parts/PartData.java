@@ -210,6 +210,10 @@ public final class PartData implements IPartData {
         }
     }
 
+    public void onRemoveFromGear(ItemStack gear) {
+        this.part.onRemoveFromGear(gear, this);
+    }
+
     @Override
     public String toString() {
         return "PartData{" +

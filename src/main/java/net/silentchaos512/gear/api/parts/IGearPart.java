@@ -150,4 +150,7 @@ public interface IGearPart {
     default PartData randomizeData() {
         return PartData.of(this);
     }
+
+    default void onRemoveFromGear(ItemStack gear, PartData part) {
+    }
 }

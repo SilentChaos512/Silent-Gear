@@ -5,10 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -27,13 +24,13 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
 
     private final Map<Integer, DestroyExtraBlocksProgress> extraDamagedBlocks = new HashMap<>();
     private Minecraft mc;
-    private final TextureManager renderEngine;
-    private final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
+//    private final TextureManager renderEngine;
+//    private final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
 
     private ExtraBlockBreakHandler(Minecraft mcIn) {
         this.mc = mcIn;
-        this.renderEngine = mcIn.getTextureManager();
-        ((IReloadableResourceManager) mc.getResourceManager()).addReloadListener(this);
+//        this.renderEngine = mcIn.getTextureManager();
+//        ((IReloadableResourceManager) mc.getResourceManager()).addReloadListener(this);
     }
 
     @SubscribeEvent

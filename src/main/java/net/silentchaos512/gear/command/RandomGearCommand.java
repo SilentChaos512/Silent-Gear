@@ -65,7 +65,7 @@ public final class RandomGearCommand {
             ItemStack stack = GearGenerator.create((ICoreItem) item, tier);
             if (!stack.isEmpty()) {
                 context.getSource().sendFeedback(new TranslationTextComponent("commands.give.success.single", 1, stack.getTextComponent(), player.getDisplayName()), true);
-                PlayerUtils.giveItem(context.getSource().asPlayer(), stack.copy());
+                PlayerUtils.giveItem(player, stack.copy());
             }
         }
 

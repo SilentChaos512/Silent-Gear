@@ -24,18 +24,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
+import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
+import java.util.List;
 
 public class UpgradeGearRecipe implements ICraftingRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "upgrade_gear");
@@ -81,6 +86,36 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
         }
         GearData.recalculateStats(result, null);
         return result;
+    }
+
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        StackList stackList = StackList.from(inv);
+        ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
+        PartDataList oldParts = GearData.getConstructionParts(gear);
+
+        for (int i = 0; i < list.size(); ++i) {
+            ItemStack stack = inv.getStackInSlot(i);
+
+            if (stack.getItem() instanceof ICoreItem) {
+                list.set(i, ItemStack.EMPTY);
+            } else {
+                IGearPart part = PartManager.from(stack);
+                if (part != null) {
+                    List<PartData> partsOfType = oldParts.getPartsOfType(part.getType());
+                    if (!partsOfType.isEmpty()) {
+                        PartData partData = partsOfType.get(0);
+                        partData.onRemoveFromGear(gear);
+                        list.set(i, partData.getCraftingItem());
+                    } else {
+                        list.set(i, ItemStack.EMPTY);
+                    }
+                }
+            }
+        }
+
+        return list;
     }
 
     @Override

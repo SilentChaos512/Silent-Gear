@@ -105,6 +105,7 @@ public final class GearData {
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
+            parts.forEach(p -> p.onAddToGear(stack));
             clearCachedData(stack);
             addOrRemoveHighlightPart(stack, parts);
             PartDataList uniqueParts = parts.getUniqueParts(true);

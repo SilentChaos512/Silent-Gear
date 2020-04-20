@@ -165,7 +165,7 @@ public final class ModItems {
 
     private static void registerBlueprints(String name, boolean singleUse) {
         gearClasses.forEach((key, item) -> {
-            GearBlueprintItem blueprint = new GearBlueprintItem(singleUse, item);
+            GearBlueprintItem blueprint = new GearBlueprintItem(singleUse, () -> item);
             blueprints.add(blueprint);
             register(new ResourceLocation(key.getNamespace(), name + "_" + key.getPath()), blueprint);
         });
