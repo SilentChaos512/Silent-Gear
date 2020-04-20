@@ -23,7 +23,11 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     public GearBlueprintItem(boolean singleUse, Supplier<ICoreItem> gearItem) {
-        super(new Properties().group(SilentGear.ITEM_GROUP), singleUse);
+        this(singleUse, gearItem, new Properties().group(SilentGear.ITEM_GROUP));
+    }
+
+    public GearBlueprintItem(boolean singleUse, Supplier<ICoreItem> gearItem, Properties properties) {
+        super(properties, singleUse);
         this.gearItem = gearItem;
     }
 
