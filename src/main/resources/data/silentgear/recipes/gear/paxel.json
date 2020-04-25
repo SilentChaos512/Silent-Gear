@@ -1,0 +1,36 @@
+{
+    "type": "silentgear:gear_crafting",
+    "group": "silentgear:paxels",
+    "ingredients": [
+        {
+            "tag": "silentgear:blueprints/paxel"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "rod"
+        }
+    ],
+    "result": {
+        "item": "silentgear:paxel"
+    }
+}

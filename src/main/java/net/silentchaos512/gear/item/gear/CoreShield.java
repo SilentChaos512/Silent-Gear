@@ -133,4 +133,9 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
+
+    @Override
+    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
+        return true;
+    }
 }

@@ -56,14 +56,12 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     private final Set<Material> extraMaterials;
 
     public CorePickaxe() {
-        this(true);
+        this(EXTRA_EFFECTIVE_MATERIALS);
     }
 
-    public CorePickaxe(boolean effectiveOnExtraMaterials) {
+    public CorePickaxe(Set<Material> extraMaterials) {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.PICKAXE));
-        this.extraMaterials = effectiveOnExtraMaterials
-                ? EXTRA_EFFECTIVE_MATERIALS
-                : ImmutableSet.of();
+        this.extraMaterials = extraMaterials;
         GearHelper.addModelTypeProperty(this);
     }
 

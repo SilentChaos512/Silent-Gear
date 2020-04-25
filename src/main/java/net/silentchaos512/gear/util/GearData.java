@@ -105,7 +105,6 @@ public final class GearData {
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
-            parts.forEach(p -> p.onAddToGear(stack));
             clearCachedData(stack);
             addOrRemoveHighlightPart(stack, parts);
             PartDataList uniqueParts = parts.getUniqueParts(true);
@@ -722,6 +721,7 @@ public final class GearData {
 
         CompoundNBT tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = new ListNBT();
+        PartDataList oldParts = getConstructionParts(stack);
 
         // Mains must be first in the list!
         parts.stream().filter(p -> p.getType() == PartType.MAIN)

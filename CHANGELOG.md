@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Paxels are back! Requires 5 mains and a rod. Small durability bonus, small penalty to harvest speed and enchantability. [#114]
+- Shields are here (technically). Model currently has issues and colors do not work. Not sure how to fix this just yet. [#114]
+
 ## [1.6.0] - 2020-04-20
 ### Added
 - (API) `IGearPart.randomizeData`, creates a PartData object used during random gear generation

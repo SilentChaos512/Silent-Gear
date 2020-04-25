@@ -13,6 +13,7 @@ tools = [
     'lumber_axe',
     'machete',
     'mattock',
+    'paxel',
     'pickaxe',
     'shovel',
     'sickle',

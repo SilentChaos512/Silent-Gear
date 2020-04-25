@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 public class CoreHammer extends CorePickaxe implements IAOETool {
     public CoreHammer() {
-        super(false);
+        super(ImmutableSet.of());
     }
 
     @Override

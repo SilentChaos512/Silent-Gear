@@ -52,6 +52,7 @@ public final class ModItems {
     public static CorePickaxe pickaxe = new CorePickaxe();
     public static CoreShovel shovel = new CoreShovel();
     public static CoreAxe axe = new CoreAxe();
+    public static CorePaxel paxel = new CorePaxel();
     public static CoreHammer hammer = new CoreHammer();
     public static CoreExcavator excavator = new CoreExcavator();
     public static CoreLumberAxe lumberAxe = new CoreLumberAxe();
@@ -134,6 +135,7 @@ public final class ModItems {
         toolClasses.put(SilentGear.getId("pickaxe"), pickaxe);
         toolClasses.put(SilentGear.getId("shovel"), shovel);
         toolClasses.put(SilentGear.getId("axe"), axe);
+        toolClasses.put(SilentGear.getId("paxel"), paxel);
         toolClasses.put(SilentGear.getId("hammer"), hammer);
         toolClasses.put(SilentGear.getId("excavator"), excavator);
         toolClasses.put(SilentGear.getId("lumber_axe"), lumberAxe);
@@ -148,7 +150,7 @@ public final class ModItems {
         armorClasses.put(SilentGear.getId("leggings"), leggings);
         armorClasses.put(SilentGear.getId("boots"), boots);
 
-//        gearClasses.put("shield", shield);
+        gearClasses.put(SilentGear.getId("shield"), shield);
         gearClasses.putAll(toolClasses);
         gearClasses.putAll(armorClasses);
     }
