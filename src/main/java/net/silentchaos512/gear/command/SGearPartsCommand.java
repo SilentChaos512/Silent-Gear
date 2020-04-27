@@ -29,7 +29,6 @@ import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.stream.Collectors;
 
 public final class SGearPartsCommand {
@@ -99,9 +98,7 @@ public final class SGearPartsCommand {
         ItemStack gear = getGear(ctx);
         if (gear.isEmpty()) return 0;
 
-        Collection<PartData> partList = GearData.getConstructionParts(gear);
-        partList.add(PartData.of(part, grade));
-        GearData.writeConstructionParts(gear, partList);
+        GearData.addPart(gear, PartData.of(part));
         GearData.recalculateStats(gear, ctx.getSource().asPlayer());
         return 1;
     }

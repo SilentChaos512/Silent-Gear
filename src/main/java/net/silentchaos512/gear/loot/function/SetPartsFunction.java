@@ -12,6 +12,7 @@ import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.parts.LazyPartData;
+import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 
 import java.util.ArrayList;
@@ -31,7 +32,9 @@ public final class SetPartsFunction extends LootFunction {
     protected ItemStack doApply(ItemStack stack, LootContext context) {
         if (!(stack.getItem() instanceof ICoreItem)) return stack;
         ItemStack result = stack.copy();
-        GearData.writeConstructionParts(result, LazyPartData.createPartList(parts));
+        List<PartData> parts = LazyPartData.createPartList(this.parts);
+        parts.forEach(p -> p.onAddToGear(result));
+        GearData.writeConstructionParts(result, parts);
         GearData.recalculateStats(result, null);
         return result;
     }

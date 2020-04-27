@@ -23,6 +23,7 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GearPartSwapRecipe implements ICraftingRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "swap_gear_part");
@@ -72,8 +73,11 @@ public class GearPartSwapRecipe implements ICraftingRecipe {
 
             // Remove old part of type, replace
             PartType type = part.getType();
-            parts.removeIf(p -> p.getType() == type);
+            Collection<PartData> toRemove = parts.stream().filter(p -> p.getType() == type).collect(Collectors.toList());
+            parts.removeAll(toRemove);
+            toRemove.forEach(p -> p.onRemoveFromGear(result));
             parts.add(part);
+            part.onAddToGear(result);
         }
 
         GearData.writeConstructionParts(result, parts);

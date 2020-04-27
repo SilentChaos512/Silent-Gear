@@ -86,7 +86,7 @@ public class LazyPartData implements IPartData {
     public static List<PartData> createPartList(Collection<LazyPartData> parts) {
         return parts.stream()
                 .filter(LazyPartData::isValid)
-                .map(p -> PartData.of(p.getPart(), p.grade))
+                .map(p -> PartData.of(p.getPart()))
                 .collect(Collectors.toList());
     }
 }

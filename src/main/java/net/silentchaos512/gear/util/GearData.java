@@ -712,6 +712,23 @@ public final class GearData {
         return false;
     }
 
+    public static void addPart(ItemStack gear, PartData part) {
+        PartDataList parts = getConstructionParts(gear);
+        parts.add(part);
+        writeConstructionParts(gear, parts);
+        part.onAddToGear(gear);
+    }
+
+    public static boolean removePart(ItemStack gear, PartData part) {
+        PartDataList parts = getConstructionParts(gear);
+        boolean removed = parts.remove(part);
+        if (removed) {
+            writeConstructionParts(gear, parts);
+            part.onRemoveFromGear(gear);
+        }
+        return removed;
+    }
+
     public static void writeConstructionParts(ItemStack stack, Collection<? extends IPartData> parts) {
         if (!GearHelper.isGear(stack)) {
             SilentGear.LOGGER.error("Called writeConstructionParts on non-gear item, {}", stack);
@@ -721,7 +738,6 @@ public final class GearData {
 
         CompoundNBT tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = new ListNBT();
-        PartDataList oldParts = getConstructionParts(stack);
 
         // Mains must be first in the list!
         parts.stream().filter(p -> p.getType() == PartType.MAIN)

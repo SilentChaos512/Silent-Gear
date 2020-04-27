@@ -97,6 +97,9 @@ public class ReplaceToolHeadRecipe extends SpecialRecipe {
         toolParts.addAll(newHead);
 
         ItemStack result = tool.copy();
+        oldHead.forEach(p -> p.onRemoveFromGear(result));
+        newHead.forEach(p -> p.onAddToGear(result));
+
         GearData.writeConstructionParts(result, toolParts);
         GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
         result.setDamage(toolHead.getDamage());
@@ -123,7 +126,9 @@ public class ReplaceToolHeadRecipe extends SpecialRecipe {
                 // Create a "new" tool head with the main parts of this tool
                 ItemStack toolHead = StackList.from(inv).uniqueMatch(s -> isToolHead(GearData.getConstructionParts(s)));
                 ItemStack copy = toolHead.copy();
-                parts.removeIf(p -> p.getType() != PartType.MAIN);
+                List<PartData> toRemove = parts.getParts(p -> p.getType() != PartType.MAIN);
+                parts.removeAll(toRemove);
+                toRemove.forEach(p -> p.onRemoveFromGear(copy));
                 GearData.writeConstructionParts(copy, parts);
                 GearData.recalculateStats(copy, ForgeHooks.getCraftingPlayer());
                 copy.setDamage(stack.getDamage());

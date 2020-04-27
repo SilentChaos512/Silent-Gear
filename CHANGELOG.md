@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Netherwood trees not spawning [#110]
 - A possible lumber axe crash when used on large trees [#84]
+- (API) `PartData.onAddedToGear` being called too often [[Super Multi-Drills #19](https://github.com/SilentChaos512/SuperMultiDrills/issues/19)]
 
 ## [1.6.0] - 2020-04-20
 ### Added
