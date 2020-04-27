@@ -120,7 +120,7 @@ public class CoreLumberAxe extends CoreAxe {
                             int yDist = yPos - yStart;
                             int zDist = zPos - zStart;
 
-                            if (9 * xDist * xDist + yDist * yDist + 9 * zDist * zDist < 2500) {
+                            if (9 * xDist * xDist + yDist * yDist + 9 * zDist * zDist < 1000) {
                                 if (cancel) {
                                     breakTree(result, world, xPos, yPos, zPos, xStart, yStart, zStart, tool, state, player);
                                 } else {

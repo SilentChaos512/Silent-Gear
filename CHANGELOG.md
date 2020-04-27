@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shields are here (technically). Model currently has issues and colors do not work. Not sure how to fix this just yet. [#114]
 ### Fixed
 - Netherwood trees not spawning [#110]
+- A possible lumber axe crash when used on large trees [#84]
 
 ## [1.6.0] - 2020-04-20
 ### Added
