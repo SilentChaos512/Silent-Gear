@@ -12,15 +12,21 @@ import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModPlacement;
+import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
+import net.silentchaos512.gear.world.placement.NetherFloorWithExtra;
 import net.silentchaos512.gear.world.placement.NetherFloorWithExtraConfig;
 import net.silentchaos512.lib.world.feature.PlantFeature;
 
 public final class ModWorldFeatures {
+    public static final NetherwoodTreeFeature NETHERWOOD_TREE_FEATURE = new NetherwoodTreeFeature(TreeFeatureConfig::func_227338_a_);
+
+    public static final Placement<NetherFloorWithExtraConfig> NETHER_FLOOR_WITH_EXTRA = new NetherFloorWithExtra(NetherFloorWithExtraConfig::deserialize);
+
     public static final TreeFeatureConfig NETHERWOOD_TREE_CONFIG = (new TreeFeatureConfig.Builder(
             new SimpleBlockStateProvider(ModBlocks.NETHERWOOD_LOG.asBlockState()),
             new SimpleBlockStateProvider(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
@@ -34,6 +40,14 @@ public final class ModWorldFeatures {
             .build());
 
     private ModWorldFeatures() {}
+
+    public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
+        event.getRegistry().register(NETHERWOOD_TREE_FEATURE.setRegistryName(SilentGear.getId("netherwood_tree")));
+    }
+
+    public static void registerPlacements(RegistryEvent.Register<Placement<?>> event) {
+        event.getRegistry().register(NETHER_FLOOR_WITH_EXTRA.setRegistryName(SilentGear.getId("nether_floor_with_extra")));
+    }
 
     public static void addFeaturesToBiomes() {
         for (Biome biome : ForgeRegistries.BIOMES) {
@@ -59,9 +73,9 @@ public final class ModWorldFeatures {
 
     private static void addNetherwoodTrees(Biome biome) {
         SilentGear.LOGGER.info("Add netherwood trees to {}", biome.getRegistryName());
-        biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.ACACIA_TREE
+        biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, NETHERWOOD_TREE_FEATURE
                 .withConfiguration(NETHERWOOD_TREE_CONFIG)
-                .withPlacement(ModPlacement.NETHER_FLOOR_WITH_EXTRA
+                .withPlacement(NETHER_FLOOR_WITH_EXTRA
                         .configure(new NetherFloorWithExtraConfig(1, 0.25f, 11, 32, 96)))
         );
     }

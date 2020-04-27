@@ -13,6 +13,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -59,9 +60,10 @@ class SideProxy implements IProxy {
         modEventBus.addGenericListener(Block.class, ModBlocks::registerAll);
         modEventBus.addGenericListener(ContainerType.class, ModContainers::registerAll);
         modEventBus.addGenericListener(EntityType.class, ModEntities::registerTypes);
+        modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootStuff::registerGlobalModifiers);
         modEventBus.addGenericListener(Item.class, ModItems::registerAll);
-        modEventBus.addGenericListener(Placement.class, ModPlacement::registerAll);
+        modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
         modEventBus.addGenericListener(TileEntityType.class, ModTileEntities::registerAll);
 
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverAboutToStart);

@@ -30,7 +30,7 @@ public class NetherFloorWithExtra extends Placement<NetherFloorWithExtraConfig> 
             count += config.extraCount;
         }
 
-        final int height = random.nextInt(config.minHeight) + config.maxHeight;
+        final int height = random.nextInt(config.maxHeight - config.minHeight + 1) + config.minHeight;
 
         return IntStream.range(0, count).mapToObj((p_215051_3_) -> {
             BlockPos pos1 = new BlockPos(
