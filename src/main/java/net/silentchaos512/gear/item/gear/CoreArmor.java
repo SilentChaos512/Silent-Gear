@@ -175,7 +175,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
 
         PartData part = GearData.getPrimaryRenderPartFast(stack);
-        if (part == null) part = PartData.ofNullable(PartType.MAIN.getFallbackPart());
+        if (part == null) {
+            part = PartData.ofNullable(PartType.MAIN.getFallbackPart());
+        }
+        if (part == null) {
+            return "silentgear:textures/models/armor/generic_hc_layer_" + layer + (type != null ? "_" + type : "") + ".png";
+        }
 
         // Actual armor texture
         IPartDisplay props = part.getPart().getDisplayProperties(part, stack, 0);
