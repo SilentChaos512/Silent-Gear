@@ -100,8 +100,9 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
             multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
             multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
+            return GearHelper.getAttributeModifiers(slot, stack, multimap);
         }
-        return GearHelper.getAttributeModifiers(slot, stack, multimap);
+        return multimap;
     }
 
     //endregion
