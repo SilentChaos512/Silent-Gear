@@ -111,6 +111,11 @@ public class ItemStat {
         if (count > 0)
             f0 /= totalWeight;
 
+        // Maximum
+        for (StatInstance mod : modifiers)
+            if (mod.getOp() == StatInstance.Operation.MAX)
+                f0 = Math.max(f0, mod.getValue());
+
         // Additive
         for (StatInstance mod : modifiers)
             if (mod.getOp() == StatInstance.Operation.ADD)
@@ -126,11 +131,6 @@ public class ItemStat {
         for (StatInstance mod : modifiers)
             if (mod.getOp() == StatInstance.Operation.MUL2)
                 f1 *= 1.0f + mod.getValue();
-
-        // Maximum
-        for (StatInstance mod : modifiers)
-            if (mod.getOp() == StatInstance.Operation.MAX)
-                f1 = Math.max(f1, mod.getValue());
 
         return clampValue ? clampValue(f1) : f1;
     }
