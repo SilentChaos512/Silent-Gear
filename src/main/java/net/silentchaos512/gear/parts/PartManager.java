@@ -42,7 +42,6 @@ public final class PartManager implements IResourceManagerReloadListener {
     private static final String DATA_PATH = "silentgear_parts";
     private static final String DATA_PATH_OLD = "silentgear/parts";
     private static final Map<ResourceLocation, IGearPart> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
-    private static boolean isReloading = false;
     private static int highestMainPartTier = 0;
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
 
@@ -58,41 +57,41 @@ public final class PartManager implements IResourceManagerReloadListener {
         Collection<ResourceLocation> resources = getAllResources(resourceManager);
         if (resources.isEmpty()) return;
 
-        isReloading = true;
-        MAP.clear();
-        ERROR_LIST.clear();
-        SilentGear.LOGGER.info(MARKER, "Reloading part files");
+        synchronized (MAP) {
+            MAP.clear();
+            ERROR_LIST.clear();
+            SilentGear.LOGGER.info(MARKER, "Reloading part files");
 
-        for (ResourceLocation id : resources) {
-            String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
-            ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
+            for (ResourceLocation id : resources) {
+                String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
+                ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
-            try (IResource iresource = resourceManager.getResource(id)) {
-                if (SilentGear.LOGGER.isTraceEnabled()) {
-                    SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
+                try (IResource iresource = resourceManager.getResource(id)) {
+                    if (SilentGear.LOGGER.isTraceEnabled()) {
+                        SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
+                    }
+
+                    JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    if (json == null) {
+                        SilentGear.LOGGER.error(MARKER, "Could not load part {} as it's null or empty", name);
+                    } else if (!CraftingHelper.processConditions(json, "conditions")) {
+                        SilentGear.LOGGER.info("Skipping loading gear part {} as it's conditions were not met", name);
+                    } else {
+                        IGearPart part = PartSerializers.deserialize(name, json);
+                        addPart(part);
+                        highestMainPartTier = Math.max(highestMainPartTier, part.getTier());
+                    }
+                } catch (IllegalArgumentException | JsonParseException ex) {
+                    SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", name, ex);
+                    ERROR_LIST.add(name);
+                } catch (IOException ex) {
+                    SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", name, ex);
+                    ERROR_LIST.add(name);
                 }
-
-                JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
-                if (json == null) {
-                    SilentGear.LOGGER.error(MARKER, "Could not load part {} as it's null or empty", name);
-                } else if (!CraftingHelper.processConditions(json, "conditions")) {
-                    SilentGear.LOGGER.info("Skipping loading gear part {} as it's conditions were not met", name);
-                } else {
-                    IGearPart part = PartSerializers.deserialize(name, json);
-                    addPart(part);
-                    highestMainPartTier = Math.max(highestMainPartTier, part.getTier());
-                }
-            } catch (IllegalArgumentException | JsonParseException ex) {
-                SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", name, ex);
-                ERROR_LIST.add(name);
-            } catch (IOException ex) {
-                SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", name, ex);
-                ERROR_LIST.add(name);
             }
-        }
 
-        isReloading = false;
-        SilentGear.LOGGER.info(MARKER, "Registered {} parts", MAP.size());
+            SilentGear.LOGGER.info(MARKER, "Registered {} parts", MAP.size());
+        }
     }
 
     private static Collection<ResourceLocation> getAllResources(IResourceManager resourceManager) {
@@ -111,10 +110,6 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     public static Collection<IGearPart> getValues() {
-        if (isReloading) {
-            return Collections.emptyList();
-        }
-
         synchronized (MAP) {
             return MAP.values();
         }
@@ -139,7 +134,9 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     @Nullable
     public static IGearPart get(ResourceLocation id) {
-        return MAP.get(id);
+        synchronized (MAP) {
+            return MAP.get(id);
+        }
     }
 
     @Nullable
@@ -176,13 +173,15 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {
-        Map<ResourceLocation, IGearPart> oldParts = ImmutableMap.copyOf(MAP);
-        MAP.clear();
-        packet.getParts().forEach(part -> {
-            part.retainData(oldParts.get(part.getId()));
-            MAP.put(part.getId(), part);
-        });
-        SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
+        synchronized (MAP) {
+            Map<ResourceLocation, IGearPart> oldParts = ImmutableMap.copyOf(MAP);
+            MAP.clear();
+            packet.getParts().forEach(part -> {
+                part.retainData(oldParts.get(part.getId()));
+                MAP.put(part.getId(), part);
+            });
+            SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
+        }
         context.get().setPacketHandled(true);
     }
 

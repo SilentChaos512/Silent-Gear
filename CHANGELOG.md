@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Possible crash with armor and Quark [#115]
+- Possible solution for CME in PartManager [#104]
 - "Add harvest level" stat modifiers not working (ornate gold rod from SGems). This moves the "max" operation to right after the "avg" operation. Shouldn't effect stat calculations in most other cases. [#70]
 - Armor showing "When in main hand" in tooltip
 
