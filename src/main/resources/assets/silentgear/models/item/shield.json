@@ -3,27 +3,27 @@
   "display": {
     "thirdperson_righthand": {
       "rotation": [ 0, -90, 0 ],
-      "translation": [ 10, 6, -4 ],
+      "translation": [ 3, 2, 0 ],
       "scale": [ 1, 1, 1 ]
     },
     "thirdperson_lefthand": {
       "rotation": [ 0, -90, 0 ],
-      "translation": [ 10, 6, 12 ],
+      "translation": [ 4, 1, 0 ],
       "scale": [ 1, 1, 1 ]
     },
     "firstperson_righthand": {
       "rotation": [ 0, 0, 5 ],
-      "translation": [ -10, 2, -10 ],
-      "scale": [ 1.25, 1.25, 1.25 ]
+      "translation": [ 10, -10, -10 ],
+      "scale": [ 1.15, 1.15, 1.15 ]
     },
     "firstperson_lefthand": {
       "rotation": [ 0, 0, 5 ],
-      "translation": [ 10, 0, -10 ],
-      "scale": [ 1.25, 1.25, 1.25 ]
+      "translation": [ 10, -10, -10 ],
+      "scale": [ 1.15, 1.15, 1.15 ]
     },
     "gui": {
       "rotation": [ 15, 155, -5 ],
-      "translation": [ 2, 3, 0 ],
+      "translation": [ 0, 2, 0 ],
       "scale": [ 0.65, 0.65, 0.65 ]
     },
     "fixed": {
