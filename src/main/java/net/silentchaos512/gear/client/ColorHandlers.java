@@ -98,14 +98,12 @@ public final class ColorHandlers {
     }
 
     private static int getShieldColor(ItemStack stack, int tintIndex) {
-        // FIXME: Does not work... why?
-        //  This method seems to only get called one time
-        if (tintIndex == 1) {
+        if (tintIndex == 0) {
             PartData part = GearData.getPartOfType(stack, PartType.ROD);
             if (part == null) return Color.VALUE_WHITE;
             return part.getFallbackColor(stack, 0);
         }
-        if (tintIndex == 0) {
+        if (tintIndex == 1) {
             return GearData.getHeadColor(stack, true);
         }
         return 0xFFFFFF;
