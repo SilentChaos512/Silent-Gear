@@ -1,6 +1,10 @@
 package net.silentchaos512.gear.api.stats;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -8,6 +12,8 @@ import net.silentchaos512.utils.EnumUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Represents either a stat modifier or a calculated stat value.
@@ -25,18 +31,34 @@ public class StatInstance {
                     return op;
             return AVG;
         }
+
+        @Nullable
+        public static Operation byNameOrNull(String str) {
+            for (Operation op : values())
+                if (op.name().equalsIgnoreCase(str))
+                    return op;
+            return null;
+        }
     }
 
-    public static final StatInstance ZERO = new StatInstance("__zero__", 0f, StatInstance.Operation.ADD);
+    public static final StatInstance ZERO = new StatInstance(0f, Operation.ADD);
 
-    private final String id;
     private final float value;
-    private final StatInstance.Operation op;
+    private final Operation op;
 
-    public StatInstance(String id, float value, StatInstance.Operation op) {
-        this.id = id;
+    @Deprecated
+    public StatInstance(String id, float value, Operation op) {
         this.value = value;
         this.op = op;
+    }
+
+    public StatInstance(float value, Operation op) {
+        this.value = value;
+        this.op = op;
+    }
+
+    public StatInstance copy() {
+        return new StatInstance(this.value, this.op);
     }
 
     /**
@@ -44,9 +66,11 @@ public class StatInstance {
      * StatModifierMap} and for debugging purposes.
      *
      * @return The modifier ID
+     * @deprecated Will remove in 1.16
      */
+    @Deprecated
     public String getId() {
-        return id;
+        return "DEPRECATED";
     }
 
     /**
@@ -75,10 +99,12 @@ public class StatInstance {
         return new StatInstance("_gear_mod", multi, Operation.MUL1);
     }
 
+    @Deprecated
     public StatInstance copyAppendId(String append) {
-        return copyWithNewId(this.id + append);
+        return copyWithNewId(this.getId() + append);
     }
 
+    @Deprecated
     public StatInstance copyWithNewId(String newId) {
         return new StatInstance(newId, this.value, this.op);
     }
@@ -120,13 +146,59 @@ public class StatInstance {
 
     @Override
     public String toString() {
-        return String.format("StatInstance{%s, value=%f, op=%s}", this.id, this.value, this.op);
+        return String.format("StatInstance{value=%f, op=%s}", this.value, this.op);
     }
 
+    public static StatInstance read(IGearPart part, ItemStat stat, JsonElement json) {
+        if (json.isJsonPrimitive()) {
+            // Primitive default op shorthand
+            return new StatInstance(json.getAsFloat(), part.getDefaultStatOperation(stat));
+        } else if (json.isJsonObject()) {
+            // Either a specified op shorthand or classic format
+            JsonObject jsonObj = json.getAsJsonObject();
+            StatInstance result = readShorthandObject(part, stat, jsonObj);
+            if (result != null) {
+                return result;
+            } else {
+                // Classic format
+                float value = JSONUtils.getFloat(jsonObj, "value", 0f);
+                Operation op = jsonObj.has("op")
+                        ? Operation.byName(JSONUtils.getString(jsonObj, "op"))
+                        : part.getDefaultStatOperation(stat);
+                return new StatInstance(value, op);
+            }
+        }
+        throw new JsonParseException("Expected stat modifier JSON to be float or object");
+    }
+
+    @Nullable
+    private static StatInstance readShorthandObject(IGearPart part, ItemStat stat, JsonObject json) {
+        StatInstance result = null;
+        for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
+            Operation op = Operation.byNameOrNull(entry.getKey());
+            if (op != null) {
+                if (result == null) {
+                    result = new StatInstance(entry.getValue().getAsFloat(), op);
+                } else {
+                    // Found multiple ops in the object. This does not make sense!
+                    throw new JsonParseException("Found multiple op keys in stat modifier object");
+                }
+            }
+        }
+        return result;
+    }
+
+    @Deprecated
     public static StatInstance read(String id, PacketBuffer buffer) {
         float value = buffer.readFloat();
         Operation op = EnumUtils.byOrdinal(buffer.readByte(), Operation.AVG);
         return new StatInstance(id, value, op);
+    }
+
+    public static StatInstance read(PacketBuffer buffer) {
+        float value = buffer.readFloat();
+        Operation op = EnumUtils.byOrdinal(buffer.readByte(), Operation.AVG);
+        return new StatInstance(value, op);
     }
 
     public void write(PacketBuffer buffer) {

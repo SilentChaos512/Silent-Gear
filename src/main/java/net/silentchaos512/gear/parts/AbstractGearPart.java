@@ -246,30 +246,11 @@ public abstract class AbstractGearPart implements IGearPart {
 
             // Stats
             JsonElement elementStats = json.get("stats");
-            if (elementStats != null && elementStats.isJsonArray()) {
-                JsonArray array = elementStats.getAsJsonArray();
-                Multimap<ItemStat, StatInstance> statMap = new StatModifierMap();
-                for (JsonElement element : array) {
-                    JsonObject obj = element.getAsJsonObject();
-                    String name = JSONUtils.getString(obj, "name", "");
-                    ItemStat stat = ItemStat.ALL_STATS.get(name);
-
-                    if (stat != null) {
-                        float value = JSONUtils.getFloat(obj, "value", 0f);
-                        StatInstance.Operation op = obj.has("op")
-                                ? StatInstance.Operation.byName(JSONUtils.getString(obj, "op"))
-                                : part.getDefaultStatOperation(stat);
-                        String statId = String.format("mat_%s_%s%d", part.getId(), stat.getName(),
-                                statMap.get(stat).size() + 1);
-                        statMap.put(stat, new StatInstance(statId, value, op));
-                    }
-                }
-
+            if (elementStats != null) {
+                Multimap<ItemStat, StatInstance> statMap = StatModifierMap.read(part, elementStats);
                 // Move the newly loaded modifiers into the stat map, replacing existing ones
-                statMap.forEach((stat, instance) -> {
-                    part.stats.removeAll(stat);
-                    part.stats.put(stat, instance);
-                });
+                statMap.keySet().forEach(stat -> part.stats.removeAll(stat));
+                statMap.forEach((stat, mod) -> part.stats.put(stat, mod));
             }
 
             // Traits

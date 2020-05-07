@@ -3,7 +3,12 @@ package net.silentchaos512.gear.api.stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
+import net.silentchaos512.gear.api.parts.IGearPart;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -41,10 +46,6 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
 
     @Override
     public boolean put(ItemStat key, StatInstance value) {
-        // Disallow duplicate IDs
-        for (StatInstance inst : this.map.get(key))
-            if (inst.getId().equals(value.getId()))
-                return false;
         return this.map.put(key, value);
     }
 
@@ -108,13 +109,40 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
         return this.map.asMap();
     }
 
+    public static StatModifierMap read(IGearPart part, JsonElement json) {
+        StatModifierMap map = new StatModifierMap();
+        if (json.isJsonObject()) {
+            for (Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
+                ItemStat stat = ItemStat.ALL_STATS.get(entry.getKey());
+                if (stat != null) {
+                    JsonElement value = entry.getValue();
+                    if (value.isJsonArray())
+                        value.getAsJsonArray().forEach(e -> map.put(stat, StatInstance.read(part, stat, e)));
+                    else
+                        map.put(stat, StatInstance.read(part, stat, value));
+                }
+            }
+        } else if (json.isJsonArray()) {
+            for (JsonElement element : json.getAsJsonArray()) {
+                JsonObject jsonObj = element.getAsJsonObject();
+                ItemStat stat = ItemStat.ALL_STATS.get(JSONUtils.getString(jsonObj, "name"));
+                if (stat != null) {
+                    map.put(stat, StatInstance.read(part, stat, element));
+                }
+            }
+        } else {
+            throw new JsonParseException("Expected object or array");
+        }
+        return map;
+    }
+
     public static StatModifierMap read(PacketBuffer buffer) {
         StatModifierMap map = new StatModifierMap();
 
         int count = buffer.readVarInt();
         for (int i = 0; i < count; ++i) {
             ItemStat stat = ItemStat.ALL_STATS.get(buffer.readString(255));
-            StatInstance instance = StatInstance.read("p" + i, buffer);
+            StatInstance instance = StatInstance.read(buffer);
             map.put(stat, instance);
         }
 

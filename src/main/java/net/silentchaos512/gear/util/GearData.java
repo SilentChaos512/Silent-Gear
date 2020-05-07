@@ -18,7 +18,6 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -262,23 +261,10 @@ public final class GearData {
                 item.getStatModifier(stat).ifPresent(mod -> stats.put(stat, mod));
             }
             // Part modifiers
-            int partCount = 0;
-            for (PartData partData : parts) {
-                String idSuffix = "_" + (++partCount);
-                // Allow "duplicate" AVG modifiers
-                for (StatInstance inst : partData.getStatModifiers(stack, stat)) {
-                    if (inst.getOp() == Operation.AVG && stat.isAffectedByGrades()) {
-                        float gradeBonus = 1f + partData.getGrade().bonusPercent / 100f;
-                        float statValue = inst.getValue() * gradeBonus;
-                        stats.put(stat, new StatInstance(inst.getId() + idSuffix, statValue, Operation.AVG));
-                    } else {
-                        stats.put(stat, inst.copyAppendId(idSuffix));
-                    }
-                }
-            }
+            parts.forEach(part -> part.getStatModifiers(stack, stat).forEach(mod -> stats.put(stat, mod.copy())));
             // Synergy bonus?
             if (stat.doesSynergyApply())
-                stats.put(stat, new StatInstance("synergy_multi", (float) synergy - 1, StatInstance.Operation.MUL2));
+                stats.put(stat, new StatInstance((float) synergy - 1, StatInstance.Operation.MUL2));
         }
         return stats;
     }

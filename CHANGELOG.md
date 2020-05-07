@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Shield durability is now based on the "armor durability" stat. Iron shields should be the same durability as vanilla shields.
+- Reworked the way stat modifiers are read from part JSONs. Old files are still compatible. New style is less verbose.
 ### Fixed
 - Shield models in wrong location (Partonetrain) [#117]
 - Shields not having any color [#114]
+- Netherwood sticks will no longer lower durability below 20
+- Multiple modifiers on a single stat for a part not working
 
 ## [1.6.2] - 2020-05-02
 ### Fixed
