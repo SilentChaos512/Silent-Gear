@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Set;
 
 public class CoreShield extends ShieldItem implements ICoreItem {
+    private static final float DURABILITY_MULTI = 337f / 15f;
+
     public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.ENCHANTABILITY,
@@ -96,7 +98,7 @@ public class CoreShield extends ShieldItem implements ICoreItem {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, ItemStats.DURABILITY);
+        return Math.round(DURABILITY_MULTI * GearData.getStat(stack, ItemStats.ARMOR_DURABILITY));
     }
 
     @Override

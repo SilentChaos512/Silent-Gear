@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Shield durability is now based on the "armor durability" stat. Iron shields should be the same durability as vanilla shields.
+### Fixed
+- Shield models in wrong location (Partonetrain) [#117]
+- Shields not having any color [#114]
+
 ## [1.6.2] - 2020-05-02
 ### Fixed
 - Possible crash with armor and Quark [#115]
