@@ -1,26 +1,32 @@
 {
     "__comment__": "Joke part for MLGnoobhunter",
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value": 1337},
-        {"name": "armor_durability","value":   84},
-        {"name": "enchantability",  "value":    5},
-        {"name": "harvest_level",   "value":    0},
-        {"name": "harvest_speed",   "value":    5},
-        {"name": "melee_damage",    "value":    1},
-        {"name": "magic_damage",    "value":    1},
-        {"name": "attack_speed",    "value":  0.0},
-        {"name": "armor",           "value":   15},
-        {"name": "armor_toughness", "value":    2},
-        {"name": "magic_armor",     "value":   10},
-        {"name": "ranged_damage",   "value":    1},
-        {"name": "ranged_speed",    "value":  0.0},
-        {"name": "rarity",          "value":  111},
-        {"name": "chargeability",   "value":  0.5}
-    ],
+    "stats": {
+        "durability": 1337,
+        "armor_durability": 84,
+        "enchantability": 5,
+        "harvest_level": 0,
+        "harvest_speed": 5,
+        "melee_damage": 1,
+        "magic_damage": 1,
+        "attack_speed": 0.0,
+        "armor": 15,
+        "armor_toughness": 2,
+        "magic_armor": 10,
+        "ranged_damage": 1,
+        "ranged_speed": 0.0,
+        "rarity": 111,
+        "chargeability": 0.5
+    },
     "traits": [
-        {"name": "silentgear:adamant", "level": 5},
-        {"name": "silentgear:holy", "level": 5}
+        {
+            "name": "silentgear:adamant",
+            "level": 5
+        },
+        {
+            "name": "silentgear:holy",
+            "level": 5
+        }
     ],
     "crafting_items": {
         "normal": {

@@ -1,20 +1,32 @@
 {
     "type": "silentgear:tip",
-    "stats": [
-        {"name": "durability",      "value":    0, "op": "ADD"},
-        {"name": "enchantability",  "value":  0.1, "op": "MUL2"},
-        {"name": "harvest_level",   "value":    0, "op": "MAX"},
-        {"name": "harvest_speed",   "value":  0.4, "op": "MUL2"},
-        {"name": "melee_damage",    "value":  2.0, "op": "ADD"},
-        {"name": "magic_damage",    "value":  2.0, "op": "ADD"},
-        {"name": "attack_speed",    "value":  0.0, "op": "ADD"},
-        {"name": "ranged_damage",   "value":  0.0, "op": "ADD"},
-        {"name": "ranged_speed",    "value":  0.3, "op": "MUL2"},
-        {"name": "rarity",          "value":   10}
-    ],
+    "stats": {
+        "enchantability": {
+            "mul2": 0.1
+        },
+        "harvest_speed": {
+            "mul2": 0.4
+        },
+        "melee_damage": {
+            "add": 2
+        },
+        "magic_damage": {
+            "add": 2
+        },
+        "ranged_speed": {
+            "mul2": 0.3
+        },
+        "rarity": 10
+    },
     "traits": [
-        {"name": "silentgear:refractive", "level": 1},
-        {"name": "silentgear:lustrous", "level": 4}
+        {
+            "name": "silentgear:refractive",
+            "level": 1
+        },
+        {
+            "name": "silentgear:lustrous",
+            "level": 4
+        }
     ],
     "crafting_items": {
         "normal": {

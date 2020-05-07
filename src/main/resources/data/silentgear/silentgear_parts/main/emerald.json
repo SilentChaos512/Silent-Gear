@@ -1,25 +1,31 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value": 1280},
-        {"name": "armor_durability","value":   28},
-        {"name": "enchantability",  "value":   15},
-        {"name": "harvest_level",   "value":    2},
-        {"name": "harvest_speed",   "value":   10},
-        {"name": "melee_damage",    "value":    2},
-        {"name": "magic_damage",    "value":    2},
-        {"name": "attack_speed",    "value":  0.0},
-        {"name": "armor",           "value":   16},
-        {"name": "armor_toughness", "value":    4},
-        {"name": "magic_armor",     "value":    6},
-        {"name": "ranged_damage",   "value":    1},
-        {"name": "ranged_speed",    "value": -0.1},
-        {"name": "rarity",          "value":   35},
-        {"name": "chargeability",   "value":  0.9}
-    ],
+    "stats": {
+        "durability": 1280,
+        "armor_durability": 28,
+        "enchantability": 15,
+        "harvest_level": 2,
+        "harvest_speed": 10,
+        "melee_damage": 2,
+        "magic_damage": 2,
+        "attack_speed": 0.0,
+        "armor": 16,
+        "armor_toughness": 4,
+        "magic_armor": 6,
+        "ranged_damage": 1,
+        "ranged_speed": -0.1,
+        "rarity": 35,
+        "chargeability": 0.9
+    },
     "traits": [
-        {"name": "silentgear:brittle", "level": 1},
-        {"name": "silentgear:synergistic", "level": 2}
+        {
+            "name": "silentgear:brittle",
+            "level": 1
+        },
+        {
+            "name": "silentgear:synergistic",
+            "level": 2
+        }
     ],
     "crafting_items": {
         "normal": {

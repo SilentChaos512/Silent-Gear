@@ -1,26 +1,35 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value":  59},
-        {"name": "armor_durability","value":   9},
-        {"name": "enchantability",  "value":  15},
-        {"name": "harvest_level",   "value":   0},
-        {"name": "harvest_speed",   "value":   2},
-        {"name": "melee_damage",    "value":   0},
-        {"name": "magic_damage",    "value":   0},
-        {"name": "attack_speed",    "value": 0.0},
-        {"name": "armor",           "value":   7},
-        {"name": "armor_toughness", "value":   0},
-        {"name": "magic_armor",     "value":   1},
-        {"name": "ranged_damage",   "value":   0},
-        {"name": "ranged_speed",    "value": 0.0},
-        {"name": "rarity",          "value":   0},
-        {"name": "chargeability",   "value": 0.6}
-    ],
+    "stats": {
+        "durability": 59,
+        "armor_durability": 9,
+        "enchantability": 15,
+        "harvest_level": 0,
+        "harvest_speed": 2,
+        "melee_damage": 0,
+        "magic_damage": 0,
+        "attack_speed": 0.0,
+        "armor": 7,
+        "armor_toughness": 0,
+        "magic_armor": 1,
+        "ranged_damage": 0,
+        "ranged_speed": 0.0,
+        "rarity": 0,
+        "chargeability": 0.6
+    },
     "traits": [
-        {"name": "silentgear:flexible", "level": 2},
-        {"name": "silentgear:soft", "level": 1},
-        {"name": "silentgear:jagged", "level": 1}
+        {
+            "name": "silentgear:flexible",
+            "level": 2
+        },
+        {
+            "name": "silentgear:soft",
+            "level": 1
+        },
+        {
+            "name": "silentgear:jagged",
+            "level": 1
+        }
     ],
     "crafting_items": {
         "normal": {

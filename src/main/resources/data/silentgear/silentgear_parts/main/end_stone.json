@@ -1,67 +1,22 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {
-            "name": "durability",
-            "value": 1024
-        },
-        {
-            "name": "armor_durability",
-            "value": 22
-        },
-        {
-            "name": "enchantability",
-            "value": 10
-        },
-        {
-            "name": "harvest_level",
-            "value": 3
-        },
-        {
-            "name": "harvest_speed",
-            "value": 7
-        },
-        {
-            "name": "melee_damage",
-            "value": 2
-        },
-        {
-            "name": "magic_damage",
-            "value": 3
-        },
-        {
-            "name": "attack_speed",
-            "value": -0.2
-        },
-        {
-            "name": "armor",
-            "value": 16
-        },
-        {
-            "name": "armor_toughness",
-            "value": 1
-        },
-        {
-            "name": "magic_armor",
-            "value": 6
-        },
-        {
-            "name": "ranged_damage",
-            "value": 0
-        },
-        {
-            "name": "ranged_speed",
-            "value": -0.4
-        },
-        {
-            "name": "rarity",
-            "value": 25
-        },
-        {
-            "name": "chargeability",
-            "value": 0.8
-        }
-    ],
+    "stats": {
+        "durability": 1024,
+        "armor_durability": 22,
+        "enchantability": 10,
+        "harvest_level": 3,
+        "harvest_speed": 7,
+        "melee_damage": 2,
+        "magic_damage": 3,
+        "attack_speed": -0.2,
+        "armor": 16,
+        "armor_toughness": 1,
+        "magic_armor": 6,
+        "ranged_damage": 0,
+        "ranged_speed": -0.4,
+        "rarity": 25,
+        "chargeability": 0.8
+    },
     "traits": [
         {
             "name": "silentgear:jagged",

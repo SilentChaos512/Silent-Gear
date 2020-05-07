@@ -1,25 +1,31 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value": 1561},
-        {"name": "armor_durability","value":   33},
-        {"name": "enchantability",  "value":   10},
-        {"name": "harvest_level",   "value":    3},
-        {"name": "harvest_speed",   "value":    8},
-        {"name": "melee_damage",    "value":    3},
-        {"name": "magic_damage",    "value":    1},
-        {"name": "attack_speed",    "value":  0.0},
-        {"name": "armor",           "value":   20},
-        {"name": "armor_toughness", "value":    8},
-        {"name": "magic_armor",     "value":    4},
-        {"name": "ranged_damage",   "value":    2},
-        {"name": "ranged_speed",    "value": -0.2},
-        {"name": "rarity",          "value":   40},
-        {"name": "chargeability",   "value":  0.8}
-    ],
+    "stats": {
+        "durability": 1561,
+        "armor_durability": 33,
+        "enchantability": 10,
+        "harvest_level": 3,
+        "harvest_speed": 8,
+        "melee_damage": 3,
+        "magic_damage": 1,
+        "attack_speed": 0.0,
+        "armor": 20,
+        "armor_toughness": 8,
+        "magic_armor": 4,
+        "ranged_damage": 2,
+        "ranged_speed": -0.2,
+        "rarity": 40,
+        "chargeability": 0.8
+    },
     "traits": [
-        {"name": "silentgear:brittle", "level": 2},
-        {"name": "silentgear:lustrous", "level": 3}
+        {
+            "name": "silentgear:brittle",
+            "level": 2
+        },
+        {
+            "name": "silentgear:lustrous",
+            "level": 3
+        }
     ],
     "crafting_items": {
         "normal": {

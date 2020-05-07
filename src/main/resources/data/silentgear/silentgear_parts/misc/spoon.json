@@ -1,9 +1,11 @@
 {
     "type": "silentgear:misc_upgrade",
-    "stats": [
-        {"name": "durability",      "value": 0.2, "op": "MUL1"},
-        {"name": "rarity",          "value":  10}
-    ],
+    "stats": {
+        "durability": {
+            "mul1": 0.2
+        },
+        "rarity": 10
+    },
     "crafting_items": {
         "normal": {
             "item": "silentgear:spoon_upgrade"

@@ -1,17 +1,25 @@
 {
     "type": "silentgear:rod",
-    "stats": [
-        {"name": "durability",      "value":  -50, "op": "ADD"},
-        {"name": "enchantability",  "value": -0.1, "op": "MUL2"},
-        {"name": "harvest_level",   "value":    0, "op": "ADD"},
-        {"name": "harvest_speed",   "value":    1, "op": "ADD"},
-        {"name": "melee_damage",    "value":  0.5, "op": "ADD"},
-        {"name": "magic_damage",    "value":  0.0, "op": "MUL2"},
-        {"name": "attack_speed",    "value":  0.0, "op": "ADD"},
-        {"name": "ranged_damage",   "value":  0.0, "op": "MUL2"},
-        {"name": "ranged_speed",    "value":  0.0, "op": "MUL2"},
-        {"name": "rarity",          "value":    0}
-    ],
+    "stats": {
+        "durability": [
+            {
+                "max": 70
+            },
+            {
+                "add": -50
+            }
+        ],
+        "enchantability": {
+            "mul2": -0.1
+        },
+        "harvest_speed": {
+            "add": 1
+        },
+        "melee_damage": {
+            "add": 0.5
+        },
+        "rarity": 3
+    },
     "crafting_items": {
         "normal": {
             "tag": "silentgear:rods/netherwood"

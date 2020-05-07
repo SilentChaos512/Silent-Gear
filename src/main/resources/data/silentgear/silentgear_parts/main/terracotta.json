@@ -1,25 +1,31 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value":  175},
-        {"name": "armor_durability","value":   11},
-        {"name": "enchantability",  "value":    9},
-        {"name": "harvest_level",   "value":    1},
-        {"name": "harvest_speed",   "value":    4},
-        {"name": "melee_damage",    "value":  1.5},
-        {"name": "magic_damage",    "value":    0},
-        {"name": "attack_speed",    "value":  0.2},
-        {"name": "armor",           "value":    9},
-        {"name": "armor_toughness", "value":    0},
-        {"name": "magic_armor",     "value":    3},
-        {"name": "ranged_damage",   "value":    0},
-        {"name": "ranged_speed",    "value": -0.2},
-        {"name": "rarity",          "value":    7},
-        {"name": "chargeability",   "value":  1.0}
-    ],
+    "stats": {
+        "durability": 175,
+        "armor_durability": 11,
+        "enchantability": 9,
+        "harvest_level": 1,
+        "harvest_speed": 4,
+        "melee_damage": 1.5,
+        "magic_damage": 0,
+        "attack_speed": 0.2,
+        "armor": 9,
+        "armor_toughness": 0,
+        "magic_armor": 3,
+        "ranged_damage": 0,
+        "ranged_speed": -0.2,
+        "rarity": 7,
+        "chargeability": 1.0
+    },
     "traits": [
-        {"name": "silentgear:brittle", "level": 1},
-        {"name": "silentgear:chipping", "level": 2}
+        {
+            "name": "silentgear:brittle",
+            "level": 1
+        },
+        {
+            "name": "silentgear:chipping",
+            "level": 2
+        }
     ],
     "crafting_items": {
         "normal": {

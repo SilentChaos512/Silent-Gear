@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.3] - 2020-05-07
 ### Changed
 - Shield durability is now based on the "armor durability" stat. Iron shields should be the same durability as vanilla shields.
 - Reworked the way stat modifiers are read from part JSONs. Old files are still compatible. New style is less verbose.

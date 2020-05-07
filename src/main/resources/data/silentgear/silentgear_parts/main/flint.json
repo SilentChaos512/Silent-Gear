@@ -1,24 +1,27 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value":  124},
-        {"name": "armor_durability","value":    4},
-        {"name": "enchantability",  "value":    3},
-        {"name": "harvest_level",   "value":    1},
-        {"name": "harvest_speed",   "value":    5},
-        {"name": "melee_damage",    "value":    2},
-        {"name": "magic_damage",    "value":    0},
-        {"name": "attack_speed",    "value": -0.2},
-        {"name": "armor",           "value":    4},
-        {"name": "armor_toughness", "value":    0},
-        {"name": "magic_armor",     "value":    0},
-        {"name": "ranged_damage",   "value":    1},
-        {"name": "ranged_speed",    "value": -0.3},
-        {"name": "rarity",          "value":    6},
-        {"name": "chargeability",   "value":  0.8}
-    ],
+    "stats": {
+        "durability": 124,
+        "armor_durability": 4,
+        "enchantability": 3,
+        "harvest_level": 1,
+        "harvest_speed": 5,
+        "melee_damage": 2,
+        "magic_damage": 0,
+        "attack_speed": -0.2,
+        "armor": 4,
+        "armor_toughness": 0,
+        "magic_armor": 0,
+        "ranged_damage": 1,
+        "ranged_speed": -0.3,
+        "rarity": 6,
+        "chargeability": 0.8
+    },
     "traits": [
-        {"name": "silentgear:jagged", "level": 3}
+        {
+            "name": "silentgear:jagged",
+            "level": 3
+        }
     ],
     "crafting_items": {
         "normal": {

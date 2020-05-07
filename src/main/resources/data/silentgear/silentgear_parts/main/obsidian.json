@@ -1,29 +1,35 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value": 4096},
-        {"name": "armor_durability","value":   42},
-        {"name": "enchantability",  "value":    7},
-        {"name": "harvest_level",   "value":    3},
-        {"name": "harvest_speed",   "value":    5},
-        {"name": "melee_damage",    "value":    3},
-        {"name": "magic_damage",    "value":    2},
-        {"name": "attack_speed",    "value": -0.4},
-        {"name": "armor",           "value":   20},
-        {"name": "armor_toughness", "value":    6},
-        {"name": "magic_armor",     "value":    6},
-        {"name": "ranged_damage",   "value":    0},
-        {"name": "ranged_speed",    "value": -0.4},
-        {"name": "rarity",          "value":   30},
-        {"name": "chargeability",   "value":  0.8}
-    ],
+    "stats": {
+        "durability": 4096,
+        "armor_durability": 42,
+        "enchantability": 7,
+        "harvest_level": 3,
+        "harvest_speed": 5,
+        "melee_damage": 3,
+        "magic_damage": 2,
+        "attack_speed": -0.4,
+        "armor": 20,
+        "armor_toughness": 6,
+        "magic_armor": 6,
+        "ranged_damage": 0,
+        "ranged_speed": -0.4,
+        "rarity": 30,
+        "chargeability": 0.8
+    },
     "traits": [
-        {"name": "silentgear:jagged", "level": 4},
-        {"name": "silentgear:chipping", "level": 2}
+        {
+            "name": "silentgear:jagged",
+            "level": 4
+        },
+        {
+            "name": "silentgear:chipping",
+            "level": 2
+        }
     ],
     "crafting_items": {
         "normal": {
-            "item": "minecraft:obsidian"
+            "tag": "forge:obsidian"
         }
     },
     "name": {

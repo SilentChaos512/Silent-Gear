@@ -1,25 +1,31 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value":  420},
-        {"name": "armor_durability","value":   27},
-        {"name": "enchantability",  "value":   14},
-        {"name": "harvest_level",   "value":    3},
-        {"name": "harvest_speed",   "value":   10},
-        {"name": "melee_damage",    "value":    3},
-        {"name": "magic_damage",    "value":    3},
-        {"name": "attack_speed",    "value": -0.1},
-        {"name": "armor",           "value":   18},
-        {"name": "armor_toughness", "value":    2},
-        {"name": "magic_armor",     "value":    6},
-        {"name": "ranged_damage",   "value":    2},
-        {"name": "ranged_speed",    "value": -0.1},
-        {"name": "rarity",          "value":   35},
-        {"name": "chargeability",   "value":  0.7}
-    ],
+    "stats": {
+        "durability": 420,
+        "armor_durability": 27,
+        "enchantability": 14,
+        "harvest_level": 3,
+        "harvest_speed": 10,
+        "melee_damage": 3,
+        "magic_damage": 3,
+        "attack_speed": -0.1,
+        "armor": 18,
+        "armor_toughness": 2,
+        "magic_armor": 6,
+        "ranged_damage": 2,
+        "ranged_speed": -0.1,
+        "rarity": 35,
+        "chargeability": 0.7
+    },
     "traits": [
-        {"name": "silentgear:fiery", "level": 2},
-        {"name": "silentgear:malleable", "level": 3}
+        {
+            "name": "silentgear:fiery",
+            "level": 2
+        },
+        {
+            "name": "silentgear:malleable",
+            "level": 3
+        }
     ],
     "crafting_items": {
         "normal": {

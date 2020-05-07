@@ -1,20 +1,44 @@
 {
     "type": "silentgear:rod",
-    "stats": [
-        {"name": "durability",      "value":  0.5, "op": "MUL2"},
-        {"name": "enchantability",  "value":  0.2, "op": "MUL2"},
-        {"name": "harvest_level",   "value":    1, "op": "ADD"},
-        {"name": "harvest_speed",   "value":  0.4, "op": "MUL2"},
-        {"name": "melee_damage",    "value":  0.2, "op": "MUL2"},
-        {"name": "magic_damage",    "value":  0.2, "op": "MUL2"},
-        {"name": "attack_speed",    "value":  0.2, "op": "ADD"},
-        {"name": "ranged_damage",   "value":  0.2, "op": "MUL2"},
-        {"name": "ranged_speed",    "value":  0.2, "op": "MUL2"},
-        {"name": "rarity",          "value":   40}
-    ],
+    "stats": {
+        "durability": {
+            "mul2": 0.5
+        },
+        "enchantability": {
+            "mul2": 0.2
+        },
+        "harvest_level": {
+            "add": 1
+        },
+        "harvest_speed": {
+            "mul2": 0.4
+        },
+        "melee_damage": {
+            "mul2": 0.2
+        },
+        "magic_damage": {
+            "mul2": 0.2
+        },
+        "attack_speed": {
+            "add": 0.2
+        },
+        "ranged_damage": {
+            "mul2": 0.2
+        },
+        "ranged_speed": {
+            "mul2": 0.2
+        },
+        "rarity": 40
+    },
     "traits": [
-        {"name": "silentgear:lustrous", "level": 3},
-        {"name": "silentgear:ancient", "level": 2}
+        {
+            "name": "silentgear:lustrous",
+            "level": 3
+        },
+        {
+            "name": "silentgear:ancient",
+            "level": 2
+        }
     ],
     "crafting_items": {
         "normal": {

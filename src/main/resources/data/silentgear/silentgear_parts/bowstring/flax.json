@@ -1,14 +1,22 @@
 {
     "type": "silentgear:bowstring",
-    "stats": [
-        {"name": "durability",      "value":  0.05, "op": "MUL1"},
-        {"name": "enchantability",  "value":  0.00, "op": "MUL1"},
-        {"name": "ranged_damage",   "value": -0.10, "op": "MUL1"},
-        {"name": "ranged_speed",    "value":  0.20, "op": "MUL1"},
-        {"name": "rarity",          "value":  6}
-    ],
+    "stats": {
+        "durability": {
+            "mul1": 0.05
+        },
+        "ranged_damage": {
+            "mul1": -0.1
+        },
+        "ranged_speed": {
+            "mul1": 0.2
+        },
+        "rarity": 6
+    },
     "traits": [
-        {"name": "silentgear:synergistic", "level": 2}
+        {
+            "name": "silentgear:synergistic",
+            "level": 2
+        }
     ],
     "crafting_items": {
         "normal": {

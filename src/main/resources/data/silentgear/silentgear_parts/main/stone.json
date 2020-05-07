@@ -1,25 +1,31 @@
 {
     "type": "silentgear:main",
-    "stats": [
-        {"name": "durability",      "value":  131},
-        {"name": "armor_durability","value":    5},
-        {"name": "enchantability",  "value":    5},
-        {"name": "harvest_level",   "value":    1},
-        {"name": "harvest_speed",   "value":    4},
-        {"name": "melee_damage",    "value":    1},
-        {"name": "magic_damage",    "value":    0},
-        {"name": "attack_speed",    "value":  0.0},
-        {"name": "armor",           "value":    5},
-        {"name": "armor_toughness", "value":    0},
-        {"name": "magic_armor",     "value":    0},
-        {"name": "ranged_damage",   "value":    0},
-        {"name": "ranged_speed",    "value": -0.2},
-        {"name": "rarity",          "value":    5},
-        {"name": "chargeability",   "value":  0.5}
-    ],
+    "stats": {
+        "durability": 131,
+        "armor_durability": 5,
+        "enchantability": 5,
+        "harvest_level": 1,
+        "harvest_speed": 4,
+        "melee_damage": 1,
+        "magic_damage": 0,
+        "attack_speed": 0.0,
+        "armor": 5,
+        "armor_toughness": 0,
+        "magic_armor": 0,
+        "ranged_damage": 0,
+        "ranged_speed": -0.2,
+        "rarity": 5,
+        "chargeability": 0.5
+    },
     "traits": [
-        {"name": "silentgear:brittle", "level": 1},
-        {"name": "silentgear:ancient", "level": 1}
+        {
+            "name": "silentgear:brittle",
+            "level": 1
+        },
+        {
+            "name": "silentgear:ancient",
+            "level": 1
+        }
     ],
     "crafting_items": {
         "normal": {
