@@ -31,16 +31,17 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class UpgradeGearRecipe implements ICraftingRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "upgrade_gear");
@@ -56,16 +57,32 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
         if (gear.isEmpty()) return false;
 
         // Require at least 1 upgrade part
-        ItemStack upgrade = list.firstMatch(stack -> {
+        Collection<ItemStack> upgrades = list.allMatches(stack -> {
             PartData part = PartData.fromStackFast(stack);
-            return part != null && canApplyUpgrade(gear, part);
+            return part != null && part.getPart() instanceof IUpgradePart;
         });
-        return !gear.isEmpty() && !upgrade.isEmpty();
+        if (upgrades.isEmpty()) return false;
+
+
+        // Test applying the upgrades, make sure there is only one upgrade per position
+        Set<IPartPosition> positions = new HashSet<>();
+        ItemStack test = gear.copy();
+        for (ItemStack upgrade : upgrades) {
+            PartData part = PartData.fromStackFast(upgrade);
+            if (part == null || positions.contains(part.getPartPosition()) || !canApplyUpgrade(test, part))
+                return false;
+            if (part.getPartPosition() != PartPositions.ANY)
+                positions.add(part.getPartPosition());
+            GearData.addUpgradePart(test, part);
+        }
+
+        return true;
     }
 
     private static boolean canApplyUpgrade(ItemStack gear, PartData part) {
         ICoreItem gearItem = (ICoreItem) gear.getItem();
-        return part.getPart() instanceof IUpgradePart && ((IUpgradePart) part.getPart()).isValidFor(gearItem);
+        IGearPart gearPart = part.getPart();
+        return !GearData.hasPart(gear, gearPart) && gearPart instanceof IUpgradePart && ((IUpgradePart) gearPart).isValidFor(gearItem);
     }
 
     @Override

@@ -6,7 +6,9 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.CustomTippedUpgradeIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
@@ -15,7 +17,7 @@ import net.silentchaos512.gear.crafting.recipe.*;
 public final class ModRecipes {
     private ModRecipes() {}
 
-    public static void init() {
+    public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
         // Recipe serializers
         register(ShapedGearRecipe.NAME, ShapedGearRecipe.SERIALIZER);
         register(ShapelessGearRecipe.NAME, ShapelessGearRecipe.SERIALIZER);
@@ -35,7 +37,7 @@ public final class ModRecipes {
     }
 
     private static void register(ResourceLocation id, IRecipeSerializer<?> serializer) {
-        IRecipeSerializer.register(id.toString(), serializer);
+        ForgeRegistries.RECIPE_SERIALIZERS.register(serializer.setRegistryName(id));
     }
 
     private static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {

@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
@@ -63,6 +64,7 @@ class SideProxy implements IProxy {
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootStuff::registerGlobalModifiers);
         modEventBus.addGenericListener(Item.class, ModItems::registerAll);
+        modEventBus.addGenericListener(IRecipeSerializer.class, ModRecipes::registerRecipeSerializers);
         modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
         modEventBus.addGenericListener(TileEntityType.class, ModTileEntities::registerAll);
 
@@ -75,7 +77,6 @@ class SideProxy implements IProxy {
         Network.init();
 
         ModLootStuff.init();
-        ModRecipes.init();
 
         ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new ArgumentSerializer<>(MaterialGrade.Argument::new));
     }
