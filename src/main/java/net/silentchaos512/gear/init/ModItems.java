@@ -63,10 +63,10 @@ public final class ModItems {
     public static CoreSlingshot slingshot = new CoreSlingshot();
     public static CoreShield shield = new CoreShield();
 
-    public static CoreArmor helmet = new CoreArmor(EquipmentSlotType.HEAD, "helmet");
-    public static CoreArmor chestplate = new CoreArmor(EquipmentSlotType.CHEST, "chestplate");
-    public static CoreArmor leggings = new CoreArmor(EquipmentSlotType.LEGS, "leggings");
-    public static CoreArmor boots = new CoreArmor(EquipmentSlotType.FEET, "boots");
+    public static CoreArmor helmet = new CoreArmor(EquipmentSlotType.HEAD);
+    public static CoreArmor chestplate = new CoreArmor(EquipmentSlotType.CHEST);
+    public static CoreArmor leggings = new CoreArmor(EquipmentSlotType.LEGS);
+    public static CoreArmor boots = new CoreArmor(EquipmentSlotType.FEET);
 
     static {
         // Seems colors events can fire before items are initialized in some case?

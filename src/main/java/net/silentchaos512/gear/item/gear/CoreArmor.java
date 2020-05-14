@@ -40,11 +40,13 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     // Same values as in ArmorItem.
     private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
 
-    private final String itemName;
-
-    public CoreArmor(EquipmentSlotType slot, String name) {
+    public CoreArmor(EquipmentSlotType slot) {
         super(ArmorMaterial.DIAMOND, slot, GearHelper.getBuilder(null));
-        this.itemName = name;
+    }
+
+    @Deprecated
+    public CoreArmor(EquipmentSlotType slot, String name) {
+        this(slot);
     }
 
     @Override
@@ -168,6 +170,9 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         // 1. Armor texture must be named using the vanilla convention
         // 2. Return value of this may NOT be cached... wat? Not a big deal I guess.
         // 3. You got lucky. The tiniest change can break everything for no apparent reason.
+
+        // Empty texture if broken
+        if (GearHelper.isBroken(stack)) return SilentGear.MOD_ID + ":textures/models/armor/empty.png";
 
         int layer = slot == EquipmentSlotType.LEGS ? 2 : 1;
         // Overlay - default to a blank texture
