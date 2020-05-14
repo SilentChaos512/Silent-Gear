@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lucky trait, increases luck when in main or off hand
 ### Changed
 - Broken armor no longer renders on the player
+- Prettified stat tooltips on gear items (with colors!)
 ### Fixed
 - Ranged speed stat not working on bows [#119]
 - Bows and crossbows displaying "When in main hand" with no modifiers

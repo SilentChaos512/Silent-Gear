@@ -131,10 +131,10 @@ public final class GearClientHelper {
             tooltip.add(misc("tier", GearData.getTier(stack)));
 
             // Display only stats relevant to the item class
-            Collection<ItemStat> relevantStats = flag.isAdvanced() && SilentGear.isDevBuild()
-                    ? ItemStat.ALL_STATS.values()
-                    : item.getRelevantStats(stack);
-            for (ItemStat stat : relevantStats) {
+            Collection<ItemStat> relevantStats = item.getRelevantStats(stack);
+            Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStat.ALL_STATS.values() : relevantStats;
+
+            for (ItemStat stat : displayStats) {
                 float statValue = GearData.getStat(stack, stat);
 
                 // Used for the total armor/toughness a full suit of armor would provide
@@ -151,8 +151,9 @@ public final class GearClientHelper {
                     }
                 }
 
-                StatInstance inst = new StatInstance("display_" + stat.getName(), statValue, StatInstance.Operation.AVG);
-                ITextComponent textName = new StringTextComponent("- ").appendSibling(stat.getDisplayName());
+                StatInstance inst = new StatInstance(statValue, StatInstance.Operation.AVG);
+                TextFormatting nameColor = relevantStats.contains(stat) ? stat.displayColor : TextFormatting.DARK_GRAY;
+                ITextComponent textName = new StringTextComponent("- ").appendSibling(stat.getDisplayName().applyTextStyle(nameColor));
                 ITextComponent textStat = new StringTextComponent(inst.formattedString(stat.displayAsInt ? 0 : 1, false));
 
                 // Some stat-specific formatting...
