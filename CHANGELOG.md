@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Indestructible trait, prevents durability loss (not found on any default part for now, but the trait does work)
+- Lucky trait, increases luck when in main or off hand
 ### Changed
 - Broken armor no longer renders on the player
 ### Fixed

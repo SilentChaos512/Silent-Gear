@@ -402,6 +402,8 @@
   "trait.silentgear.indestructible.desc": "Prevents durability loss",
   "trait.silentgear.jagged": "Jagged",
   "trait.silentgear.jagged.desc": "Increases attack damage as tool is damaged",
+  "trait.silentgear.lucky": "Lucky",
+  "trait.silentgear.lucky.desc": "Adds luck when held",
   "trait.silentgear.lustrous": "Lustrous",
   "trait.silentgear.lustrous.desc": "Tools gain a large harvest speed boost when in light",
   "trait.silentgear.magmatic": "Magmatic",

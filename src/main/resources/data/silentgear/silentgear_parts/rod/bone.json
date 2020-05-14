@@ -18,6 +18,12 @@
         },
         "rarity": 5
     },
+    "traits": [
+        {
+            "name": "silentgear:lucky",
+            "level": 2
+        }
+    ],
     "crafting_items": {
         "normal": {
             "item": "minecraft:bone"
