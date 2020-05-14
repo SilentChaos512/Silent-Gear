@@ -1,0 +1,11 @@
+{
+    "type": "silentgear:simple_trait",
+    "max_level": 5,
+    "cancels_with": [],
+    "name": {
+        "translate": "trait.silentgear.indestructible"
+    },
+    "description": {
+        "translate": "trait.silentgear.indestructible.desc"
+    }
+}

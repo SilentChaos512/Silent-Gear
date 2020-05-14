@@ -7,6 +7,7 @@ public class TraitConst {
     // Traits needed somewhere in the code
     public static final ResourceLocation ANCIENT = SilentGear.getId("ancient");
     public static final ResourceLocation CRUDE = SilentGear.getId("crude");
+    public static final ResourceLocation INDESTRUCTIBLE = SilentGear.getId("indestructible");
     public static final ResourceLocation LUSTROUS = SilentGear.getId("lustrous");
     public static final ResourceLocation MAGMATIC = SilentGear.getId("magmatic");
     public static final ResourceLocation SYNERGISTIC = SilentGear.getId("synergistic");

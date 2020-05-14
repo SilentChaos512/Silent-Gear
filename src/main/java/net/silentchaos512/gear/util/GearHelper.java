@@ -35,6 +35,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
 import javax.annotation.Nonnull;
@@ -242,12 +243,7 @@ public final class GearHelper {
     }
 
     public static boolean isBroken(ItemStack stack) {
-        // if (gear.getItem() instanceof ItemGemArrow) {
-        // // Quick hack for arrow coloring.
-        // return true;
-        // }
-
-        if (stack.isEmpty() || canBreakPermanently(stack))
+        if (stack.isEmpty() || canBreakPermanently(stack) || isUnbreakable(stack))
             return false;
 
         int maxDamage = stack.getMaxDamage();
@@ -255,8 +251,7 @@ public final class GearHelper {
     }
 
     public static boolean isUnbreakable(ItemStack stack) {
-        // TODO: Is this the best solution?
-        return stack.getMaxDamage() >= ItemStats.DURABILITY.getMaximumValue();
+        return TraitHelper.getTraitLevel(stack, TraitConst.INDESTRUCTIBLE) > 0;
     }
 
     public static void setDamage(ItemStack stack, int damage, BiConsumer<ItemStack, Integer> superFunction) {

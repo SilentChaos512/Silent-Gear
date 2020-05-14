@@ -398,6 +398,8 @@
   "trait.silentgear.flexible.desc": "Gear occasionally takes less damage (cancels with Brittle)",
   "trait.silentgear.holy": "Holy",
   "trait.silentgear.holy.desc": "Deals extra damage to the undead",
+  "trait.silentgear.indestructible": "Indestructible",
+  "trait.silentgear.indestructible.desc": "Prevents durability loss",
   "trait.silentgear.jagged": "Jagged",
   "trait.silentgear.jagged.desc": "Increases attack damage as tool is damaged",
   "trait.silentgear.lustrous": "Lustrous",
