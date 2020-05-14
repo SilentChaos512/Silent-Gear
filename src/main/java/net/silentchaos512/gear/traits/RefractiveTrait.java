@@ -18,55 +18,53 @@
 
 package net.silentchaos512.gear.traits;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.traits.ITraitSerializer;
+import net.silentchaos512.gear.block.PhantomLight;
 import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.lib.item.FakeItemUseContext;
 
 public class RefractiveTrait extends SimpleTrait {
-    // TODO: Serializer needed to load trait correctly
-    private static final int ACTIVATE_RATE = 20;
-    private static final int CHECK_RANGE = 3;
-    private static final int VERTICAL_RANGE = 5;
+    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("refractive");
+    static final ITraitSerializer<RefractiveTrait> SERIALIZER = new Serializer<>(SERIALIZER_ID, RefractiveTrait::new);
+
+    private static final int DURABILITY_COST = 5;
 
     public RefractiveTrait(ResourceLocation name) {
-        super(name);
+        super(name, SERIALIZER);
     }
 
     @Override
-    public void onUpdate(TraitActionContext context, boolean isEquipped) {
-        super.onUpdate(context, isEquipped);
+    public ActionResultType onItemUse(ItemUseContext context, int traitLevel) {
+        ItemStack stack = context.getItem();
 
-        PlayerEntity player = context.getPlayer();
-        if (player != null && player.ticksExisted % ACTIVATE_RATE == 0) {
-            // TODO: Phantom lights, block config?
-            // This fails with torches to some extent, they don't attach to walls
-            placeLight(player.world, player, ModBlocks.PHANTOM_LIGHT.asBlockState());
-        }
-    }
-
-    @SuppressWarnings("TypeMayBeWeakened")
-    private static void placeLight(World world, PlayerEntity player, BlockState state) {
-        BlockPos bottomPos = player.getPosition()
-                .offset(Direction.NORTH, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE))
-                .offset(Direction.WEST, MathUtils.nextIntInclusive(-CHECK_RANGE, CHECK_RANGE));
-        if (world.getLightFor(LightType.BLOCK, bottomPos) > 7)
-            return;
-
-        for (BlockPos pos = bottomPos.up(VERTICAL_RANGE); pos.getY() >= bottomPos.getY(); pos = pos.down()) {
-            // FIXME
-            /*
-            if (world.isAirBlock(pos) && state.getBlock().canPlaceBlockAt(world, pos)) {
-                world.setBlockState(pos, state, 3);
-                break;
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
+        if (!world.isRemote && stack.getDamage() < stack.getMaxDamage() - DURABILITY_COST - 1) {
+            // Try place light, damage tool if successful
+            ItemStack fakeBlockStack = new ItemStack(ModBlocks.PHANTOM_LIGHT);
+            ActionResultType result = fakeBlockStack.onItemUse(new FakeItemUseContext(context, fakeBlockStack));
+            if (result == ActionResultType.SUCCESS) {
+                GearHelper.attemptDamage(stack, DURABILITY_COST, context.getPlayer(), context.getHand());
+                // TODO: Custom sound effect?
+                world.playSound(null, pos, SoundEvents.BLOCK_GLASS_PLACE, SoundCategory.BLOCKS, 1f, 1f);
             }
-            */
+            return result;
         }
+
+        for (int i = 0; i < 5; i++) {
+            PhantomLight.spawnParticle(world, pos.offset(context.getFace()), SilentGear.random);
+        }
+
+        return ActionResultType.SUCCESS;
     }
 }

@@ -1,5 +1,5 @@
 {
-    "type": "silentgear:simple_trait",
+    "type": "silentgear:refractive",
     "max_level": 5,
     "cancels_with": [],
     "name": {

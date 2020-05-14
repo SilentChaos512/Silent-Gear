@@ -26,6 +26,7 @@ public final class TraitSerializers {
         register(PotionEffectTrait.SERIALIZER);
         register(StatModifierTrait.SERIALIZER);
         register(AttributeTrait.SERIALIZER);
+        register(RefractiveTrait.SERIALIZER);
     }
 
     private TraitSerializers() {}

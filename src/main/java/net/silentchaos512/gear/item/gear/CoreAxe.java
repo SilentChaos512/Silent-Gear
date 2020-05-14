@@ -97,7 +97,10 @@ public class CoreAxe extends AxeItem implements ICoreTool {
         if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isCrouching())
             return ActionResultType.PASS;
         // Strip bark
-        return GearHelper.useAndCheckBroken(context, super::onItemUse);
+        ActionResultType stripResult = GearHelper.useAndCheckBroken(context, super::onItemUse);
+        if (stripResult == ActionResultType.PASS)
+            return GearHelper.onItemUse(context);
+        return stripResult;
     }
 
     //endregion

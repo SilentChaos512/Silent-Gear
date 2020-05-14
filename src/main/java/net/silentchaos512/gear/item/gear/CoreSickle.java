@@ -162,7 +162,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
             return ActionResultType.SUCCESS;
         }
 
-        return ActionResultType.PASS;
+        return GearHelper.onItemUse(context);
     }
 
     @Override

@@ -23,11 +23,16 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class PhantomLight extends Block {
     private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(5, 5, 5, 11, 11, 11);
@@ -61,5 +66,22 @@ public class PhantomLight extends Block {
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.INVISIBLE;
+    }
+
+    @Override
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (rand.nextInt(2) == 0) {
+            spawnParticle(worldIn, pos, rand);
+        }
+    }
+
+    public static void spawnParticle(IWorld worldIn, BlockPos pos, Random rand) {
+        double x = (double) pos.getX() + 0.5;
+        double y = (double) pos.getY() + 0.5;
+        double z = (double) pos.getZ() + 0.5;
+        double xSpeed = 0.01 * rand.nextGaussian();
+        double ySpeed = Math.abs(0.03 * rand.nextGaussian());
+        double zSpeed = 0.01 * rand.nextGaussian();
+        worldIn.addParticle(ParticleTypes.END_ROD, x, y, z, xSpeed, ySpeed, zSpeed);
     }
 }

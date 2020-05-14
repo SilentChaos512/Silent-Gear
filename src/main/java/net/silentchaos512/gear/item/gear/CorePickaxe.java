@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -40,7 +41,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
             Material.IRON,
             Material.PACKED_ICE,
             Material.ROCK
-            );
+    );
     private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(
             Material.MISCELLANEOUS,
             Material.GLASS,
@@ -109,7 +110,6 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     //endregion
 
     //region Standard tool overrides
-
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
@@ -209,6 +209,11 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+    }
+
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        return GearHelper.onItemUse(context);
     }
 
     //endregion

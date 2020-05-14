@@ -5,7 +5,9 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -86,6 +88,8 @@ public interface ITrait {
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
     void onGetAttributeModifiers(TraitActionContext context, Multimap<String, AttributeModifier> modifiers, EquipmentSlotType slot);
+
+    ActionResultType onItemUse(ItemUseContext context, int traitLevel);
 
     void onUpdate(TraitActionContext context, boolean isEquipped);
 

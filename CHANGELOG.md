@@ -3,13 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.4] - 2020-05-13
 ### Added
 - Indestructible trait, prevents durability loss (not found on any default part for now, but the trait does work)
 - Lucky trait, increases luck when in main or off hand
 ### Changed
+- Refractive trait now places phantom lights on right-click at the cost of 5 durability [#105]
+- Phantom lights now generate particles
 - Broken armor no longer renders on the player
 - Prettified stat tooltips on gear items (with colors!)
+- (API) Traits can now modify the right-click action of tools
 ### Fixed
 - Ranged speed stat not working on bows [#119]
 - Bows and crossbows displaying "When in main hand" with no modifiers

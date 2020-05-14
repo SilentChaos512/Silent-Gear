@@ -8,7 +8,9 @@ import com.google.gson.JsonParseException;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -108,6 +110,11 @@ public class SimpleTrait implements ITrait {
 
     @Override
     public void onGetAttributeModifiers(TraitActionContext context, Multimap<String, AttributeModifier> modifiers, EquipmentSlotType slot) {
+    }
+
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context, int traitLevel) {
+        return ActionResultType.PASS;
     }
 
     @Override

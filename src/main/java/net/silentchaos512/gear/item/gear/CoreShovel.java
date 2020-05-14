@@ -94,7 +94,10 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
         if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isCrouching())
             return ActionResultType.PASS;
         // Make paths or whatever
-        return GearHelper.useAndCheckBroken(context, super::onItemUse);
+        ActionResultType makePathResult = GearHelper.useAndCheckBroken(context, super::onItemUse);
+        if (makePathResult == ActionResultType.PASS)
+            return GearHelper.onItemUse(context);
+        return makePathResult;
     }
 
     //endregion

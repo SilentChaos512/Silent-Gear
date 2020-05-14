@@ -415,7 +415,7 @@
   "trait.silentgear.organic": "Organic",
   "trait.silentgear.organic.desc": "Gains enchantability, but loses magic damage as the item is damaged",
   "trait.silentgear.refractive": "Refractive",
-  "trait.silentgear.refractive.desc": "Places lights in dark areas nearby",
+  "trait.silentgear.refractive.desc": "Place phantom lights when used",
   "trait.silentgear.silky": "Silky",
   "trait.silentgear.silky.desc": "Adds Silk Touch to harvest tools",
   "trait.silentgear.soft": "Soft",

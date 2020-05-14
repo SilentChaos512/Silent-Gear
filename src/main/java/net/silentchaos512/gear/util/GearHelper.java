@@ -30,6 +30,7 @@ import net.silentchaos512.gear.api.parts.IPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
@@ -162,11 +163,11 @@ public final class GearHelper {
         return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity, Hand hand) {
+    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, Hand hand) {
         attemptDamage(stack, amount, entity, hand == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity, EquipmentSlotType slot) {
+    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, EquipmentSlotType slot) {
         if (isUnbreakable(stack) || (entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.isCreativeMode))
             return;
 
@@ -413,6 +414,18 @@ public final class GearHelper {
         if (!world.isRemote) {
             TraitHelper.tickTraits(world, player, stack, isSelected);
         }
+    }
+
+    public static ActionResultType onItemUse(ItemUseContext context) {
+        ActionResultType ret = ActionResultType.PASS;
+        Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(context.getItem());
+        for (Map.Entry<ITrait, Integer> entry : traits.entrySet()) {
+            ActionResultType result = entry.getKey().onItemUse(context, entry.getValue());
+            if (result != ActionResultType.PASS) {
+                ret = result;
+            }
+        }
+        return ret;
     }
 
     public static boolean shouldUseFallbackColor(ItemStack stack, PartData part) {
