@@ -379,7 +379,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        return GearHelper.getAttributeModifiers(slot, stack);
+        return GearHelper.getAttributeModifiers(slot, stack, false);
     }
 
     @Override

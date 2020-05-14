@@ -38,6 +38,13 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
         // Max damage doesn't matter, just needs to be greater than zero
         super(GearHelper.getBuilder(null).defaultMaxDamage(100));
         GearHelper.addModelTypeProperty(this);
+        this.addPropertyOverride(new ResourceLocation("pull"), (stack, world, entity) -> {
+            if (entity == null) {
+                return 0.0F;
+            } else {
+                return !(entity.getActiveItemStack().getItem() instanceof CoreBow) ? 0.0F : (float)(stack.getUseDuration() - entity.getItemInUseCount()) / getDrawDelay(stack);
+            }
+        });
     }
 
     @Override
@@ -127,7 +134,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
                     ammoItem = new ItemStack(Items.ARROW);
                 }
 
-                float f = getArrowVelocity(i);
+                float f = getArrowVelocity(stack, i);
                 if (!((double) f < 0.1D)) {
                     boolean flag1 = player.abilities.isCreativeMode || (ammoItem.getItem() instanceof ArrowItem && ((ArrowItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
                     if (!worldIn.isRemote) {
@@ -186,7 +193,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        return GearHelper.getAttributeModifiers(slot, stack);
+        return GearHelper.getAttributeModifiers(slot, stack, false);
     }
 
     @Override

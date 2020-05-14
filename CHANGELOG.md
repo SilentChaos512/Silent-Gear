@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Indestructible trait, prevents durability loss (not found on any default part for now, but the trait does work)
 ### Changed
 - Broken armor no longer renders on the player
+### Fixed
+- Ranged speed stat not working on bows [#119]
+- Bows and crossbows displaying "When in main hand" with no modifiers
 
 ## [1.6.3] - 2020-05-07
 ### Changed

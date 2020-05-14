@@ -108,14 +108,22 @@ public final class GearHelper {
     }
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+        return getAttributeModifiers(slot, stack, true);
+    }
+
+    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, boolean addStandardMainHandMods) {
         // Need to use this version to prevent stack overflow
         @SuppressWarnings("deprecation") Multimap<String, AttributeModifier> map = LinkedHashMultimap.create(stack.getItem().getAttributeModifiers(slot));
 
-        return getAttributeModifiers(slot, stack, map);
+        return getAttributeModifiers(slot, stack, map, addStandardMainHandMods);
     }
 
     public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<String, AttributeModifier> map) {
-        if (slot == EquipmentSlotType.MAINHAND) {
+        return getAttributeModifiers(slot, stack, map, true);
+    }
+
+    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<String, AttributeModifier> map, boolean addStandardMainHandMods) {
+        if (addStandardMainHandMods && slot == EquipmentSlotType.MAINHAND) {
             // Melee Damage
             replaceAttributeModifierInMap(map, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), getMeleeDamageModifier(stack));
 
