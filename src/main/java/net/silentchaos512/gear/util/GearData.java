@@ -60,6 +60,7 @@ public final class GearData {
 
     private static final String NBT_BROKEN_COUNT = "BrokenCount";
     private static final String NBT_REPAIR_COUNT = "RepairCount";
+    public static final String NBT_STATS = "Stats";
 
     private GearData() {
         throw new IllegalAccessError("Utility class");
@@ -125,6 +126,7 @@ public final class GearData {
 
             // Calculate and write stats
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
+            CompoundNBT statsCompound = propertiesCompound.getCompound("Stats");
             for (ItemStat stat : stats.keySet()) {
                 final float initialValue = stat.compute(0f, stats.get(stat));
                 // Some stats will be reduced if tool rod is missing (and required)
@@ -136,8 +138,11 @@ public final class GearData {
                 });
                 final float value = Config.GENERAL.getStatWithMultiplier(stat, withTraits);
                 // SilentGear.log.debug(stat, value);
-                propertiesCompound.putFloat(stat.getName().getPath(), stat.clampValue(value));
+                ResourceLocation statId = Objects.requireNonNull(stat.getRegistryName());
+                propertiesCompound.remove(statId.getPath()); // Remove old keys
+                statsCompound.putFloat(statId.toString(), stat.clampValue(value));
             }
+            propertiesCompound.put(NBT_STATS, statsCompound);
 
             if (player != null) {
                 printStatsForDebugging(stack, oldStatValues);
@@ -162,7 +167,7 @@ public final class GearData {
         // Get current stats from the item, this is used for logging stat changes
         if (STAT_DEBUGGING) { // TODO: Add config
             Map<ItemStat, Float> map = new HashMap<>();
-            ItemStat.ALL_STATS.values().forEach(stat -> map.put(stat, getStat(stack, stat)));
+            ItemStats.REGISTRY.get().getValues().forEach(stat -> map.put(stat, getStat(stack, stat)));
             return map;
         }
         return null;
@@ -176,11 +181,11 @@ public final class GearData {
             assert newStats != null;
 
             int changeCount = 0;
-            for (ItemStat stat : ItemStat.ALL_STATS.values()) {
+            for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
                 float oldValue = oldStats.get(stat);
                 float newValue = newStats.get(stat);
                 if (!MathUtils.doublesEqual(oldValue, newValue)) {
-                    SilentGear.LOGGER.debug(" - {}: {} -> {}", stat.getName().getPath(), oldValue, newValue);
+                    SilentGear.LOGGER.debug(" - {}: {} -> {}", stat.getRegistryName(), oldValue, newValue);
                     ++changeCount;
                 }
             }
@@ -254,7 +259,7 @@ public final class GearData {
 
     public static Multimap<ItemStat, StatInstance> getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
         Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
-        for (ItemStat stat : ItemStat.ALL_STATS.values()) {
+        for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
             // Item class modifiers
             if (item != null) {
                 item.getBaseStatModifier(stat).ifPresent(mod -> stats.put(stat, mod));
@@ -318,8 +323,8 @@ public final class GearData {
     }
 
     public static float getStat(ItemStack stack, ItemStat stat) {
-        CompoundNBT tags = getData(stack, NBT_ROOT_PROPERTIES);
-        String key = stat.getName().getPath();
+        CompoundNBT tags = getData(stack, NBT_ROOT_PROPERTIES).getCompound(NBT_STATS);
+        String key = Objects.requireNonNull(stat.getRegistryName()).toString();
         return tags.contains(key) ? tags.getFloat(key) : stat.getDefaultValue();
     }
 
@@ -414,7 +419,6 @@ public final class GearData {
         return Color.VALUE_WHITE;
     }
 
-    @SuppressWarnings("OverlyLongMethod")
     private static int calculateBlendedHeadColor(ItemStack gear, List<PartData> parts) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;

@@ -25,11 +25,13 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class StatModifierTrait extends SimpleTrait {
     static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
@@ -65,7 +67,7 @@ public final class StatModifierTrait extends SimpleTrait {
             if (element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
                 String statName = JSONUtils.getString(obj, "name", "");
-                ItemStat stat = ItemStat.ALL_STATS.get(statName);
+                ItemStat stat = ItemStats.byName(statName);
 
                 if (stat != null) {
                     trait.mods.put(stat, StatMod.fromJson(obj));
@@ -78,7 +80,7 @@ public final class StatModifierTrait extends SimpleTrait {
         trait.mods.clear();
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
-            ItemStat stat = ItemStat.ALL_STATS.get(buffer.readString());
+            ItemStat stat = ItemStats.REGISTRY.get().getValue(buffer.readResourceLocation());
             trait.mods.put(stat, StatMod.read(buffer));
         }
     }
@@ -86,7 +88,7 @@ public final class StatModifierTrait extends SimpleTrait {
     private static void writeBuffer(StatModifierTrait trait, PacketBuffer buffer) {
         buffer.writeByte(trait.mods.size());
         trait.mods.forEach((stat, mod) -> {
-            buffer.writeString(stat.getName().getPath());
+            buffer.writeResourceLocation(Objects.requireNonNull(stat.getRegistryName()));
             mod.write(buffer);
         });
     }

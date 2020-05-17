@@ -4,33 +4,32 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
  * A stat that any ICoreItem can use. See {@link ItemStats} for stats that can be used.
  *
+ * TODO: Rename to GearStat in 2.0
+ *
  * @author SilentChaos512
  * @since Experimental
  */
 @ParametersAreNonnullByDefault
-public class ItemStat {
-    public static final Map<String, ItemStat> ALL_STATS = new LinkedHashMap<>();
-
-    protected final ResourceLocation name;
+public class ItemStat extends ForgeRegistryEntry<ItemStat> {
     protected final float defaultValue;
     protected final float minimumValue;
     protected final float maximumValue;
     Function<Float, Float> missingRodFunction;
-    // TODO: Hide hidden stats!
     private boolean isHidden = false;
     private boolean synergyApplies = false;
     private boolean affectedByGrades = true;
@@ -38,8 +37,7 @@ public class ItemStat {
     public final boolean displayAsInt;
     public final TextFormatting displayColor;
 
-    public ItemStat(ResourceLocation name, float defaultValue, float minValue, float maxValue, boolean displayAsInt, TextFormatting displayColor) {
-        this.name = name;
+    public ItemStat(float defaultValue, float minValue, float maxValue, boolean displayAsInt, TextFormatting displayColor) {
         this.defaultValue = defaultValue;
         this.minimumValue = minValue;
         this.maximumValue = maxValue;
@@ -54,12 +52,20 @@ public class ItemStat {
         } else if (this.defaultValue > this.maximumValue) {
             throw new IllegalArgumentException("Default value cannot be bigger than maximum value!");
         }
-
-        ALL_STATS.put(name.getPath(), this);
     }
 
+    @Deprecated
+    public ItemStat(ResourceLocation name, float defaultValue, float minValue, float maxValue, boolean displayAsInt, TextFormatting displayColor) {
+        this(defaultValue, minValue, maxValue, displayAsInt, displayColor);
+    }
+
+    /**
+     * @deprecated Use {@link #getRegistryName()} instead
+     * @return The stat name
+     */
+    @Deprecated
     public ResourceLocation getName() {
-        return name;
+        return getRegistryName();
     }
 
     public float getDefaultValue() {
@@ -167,13 +173,8 @@ public class ItemStat {
         }
 
         float value = compute(baseValue + add, false, modifiers) - add;
-        if (affectedByGrades) {
-            // FIXME: This doesn't exactly match the calculations done in GearData
-            float gradeBonus = 1f + grade.bonusPercent / 100f;
-            value *= gradeBonus;
-        }
         Operation op = modifiers.iterator().next().getOp();
-        return new StatInstance("display_" + this.name, value, op);
+        return new StatInstance(value, op);
     }
 
     public boolean isHidden() {
@@ -214,15 +215,19 @@ public class ItemStat {
     }
 
     public String toString() {
-        return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", name, defaultValue, minimumValue, maximumValue);
+        return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", getRegistryName(), defaultValue, minimumValue, maximumValue);
     }
 
     @Deprecated
     public String translatedName() {
+        ResourceLocation name = Objects.requireNonNull(getRegistryName());
         return I18n.format("stat." + name.getNamespace() + "." + name.getPath());
     }
 
     public ITextComponent getDisplayName() {
+        ResourceLocation name = getRegistryName();
+        if (name == null)
+            return new StringTextComponent("Unregistered stat: " + this);
         return new TranslationTextComponent("stat." + name.getNamespace() + "." + name.getPath());
     }
 }

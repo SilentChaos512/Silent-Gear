@@ -122,7 +122,7 @@ public final class TooltipHandler {
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, IGearPart part) {
         PartData partData = PartData.of(part, MaterialGrade.fromStack(stack), stack);
-        for (ItemStat stat : ItemStat.ALL_STATS.values()) {
+        for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
             if (!modifiers.isEmpty()) {

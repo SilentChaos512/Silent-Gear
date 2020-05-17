@@ -132,7 +132,7 @@ public final class GearClientHelper {
 
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = item.getRelevantStats(stack);
-            Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStat.ALL_STATS.values() : relevantStats;
+            Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStats.REGISTRY.get().getValues() : relevantStats;
 
             for (ItemStat stat : displayStats) {
                 float statValue = GearData.getStat(stack, stat);

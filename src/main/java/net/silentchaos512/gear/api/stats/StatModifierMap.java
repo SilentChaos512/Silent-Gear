@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
@@ -113,7 +114,7 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
         StatModifierMap map = new StatModifierMap();
         if (json.isJsonObject()) {
             for (Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
-                ItemStat stat = ItemStat.ALL_STATS.get(entry.getKey());
+                ItemStat stat = ItemStats.byName(entry.getKey());
                 if (stat != null) {
                     JsonElement value = entry.getValue();
                     if (value.isJsonArray())
@@ -125,7 +126,7 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
         } else if (json.isJsonArray()) {
             for (JsonElement element : json.getAsJsonArray()) {
                 JsonObject jsonObj = element.getAsJsonObject();
-                ItemStat stat = ItemStat.ALL_STATS.get(JSONUtils.getString(jsonObj, "name"));
+                ItemStat stat = ItemStats.byName(JSONUtils.getString(jsonObj, "name"));
                 if (stat != null) {
                     map.put(stat, StatInstance.read(part, stat, element));
                 }
@@ -141,7 +142,7 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
 
         int count = buffer.readVarInt();
         for (int i = 0; i < count; ++i) {
-            ItemStat stat = ItemStat.ALL_STATS.get(buffer.readString(255));
+            ItemStat stat = ItemStats.REGISTRY.get().getValue(buffer.readResourceLocation());
             StatInstance instance = StatInstance.read(buffer);
             map.put(stat, instance);
         }
@@ -152,7 +153,7 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
     public void write(PacketBuffer buffer) {
         buffer.writeVarInt(this.size());
         this.forEach((stat, instance) -> {
-            buffer.writeString(stat.name.getPath());
+            buffer.writeResourceLocation(Objects.requireNonNull(stat.getRegistryName()));
             instance.write(buffer);
         });
     }

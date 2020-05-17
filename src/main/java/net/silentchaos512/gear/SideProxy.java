@@ -29,6 +29,8 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
@@ -58,6 +60,7 @@ class SideProxy implements IProxy {
         modEventBus.addListener(SideProxy::imcEnqueue);
         modEventBus.addListener(SideProxy::imcProcess);
 
+        modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Block.class, ModBlocks::registerAll);
         modEventBus.addGenericListener(ContainerType.class, ModContainers::registerAll);
         modEventBus.addGenericListener(EntityType.class, ModEntities::registerTypes);
@@ -65,6 +68,7 @@ class SideProxy implements IProxy {
         modEventBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootStuff::registerGlobalModifiers);
         modEventBus.addGenericListener(Item.class, ModItems::registerAll);
         modEventBus.addGenericListener(IRecipeSerializer.class, ModRecipes::registerRecipeSerializers);
+        modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
         modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
         modEventBus.addGenericListener(TileEntityType.class, ModTileEntities::registerAll);
 

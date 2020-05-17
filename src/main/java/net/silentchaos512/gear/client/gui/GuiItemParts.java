@@ -28,7 +28,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -77,7 +76,7 @@ public class GuiItemParts extends Screen {
         List<Pair<String, Button.IPressable>> sortOptions = new ArrayList<>();
         sortOptions.add(new Pair<>("Name", b -> sortParts(false, Comparator.comparing(p -> p.getDisplayName(null, ItemStack.EMPTY).getFormattedText()))));
         sortOptions.add(new Pair<>("Type", b -> sortParts(false, Comparator.comparing(p -> p.getType().getName()))));
-        ItemStat.ALL_STATS.values().stream()
+        ItemStats.REGISTRY.get().getValues().stream()
                 .filter(stat -> !stat.isHidden())
                 .forEachOrdered(stat -> sortOptions.add(new Pair<>(stat.getDisplayName().getFormattedText(), b -> sortParts(true, Comparator.comparing(p -> p.computeStatValue(stat))))));
         this.addButton(new SortButton(5, minecraft.getMainWindow().getScaledHeight() - 30, 100, 20, sortOptions));
@@ -185,7 +184,7 @@ public class GuiItemParts extends Screen {
         List<Tuple<String, String>> list = new ArrayList<>();
 
         PartData partData = PartData.of(part);
-        for (ItemStat stat : ItemStat.ALL_STATS.values()) {
+        for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
             if (!modifiers.isEmpty()) {
@@ -195,7 +194,7 @@ public class GuiItemParts extends Screen {
                     boolean isZero = inst.getValue() == 0;
                     TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                    String nameStr = nameColor + I18n.format("stat." + stat.getName().getNamespace() + "." + stat.getName().getPath());
+                    String nameStr = nameColor + stat.getDisplayName().toString();
                     int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
                     String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");

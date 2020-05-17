@@ -9,15 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.utils.config.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Config {
@@ -181,9 +179,10 @@ public class Config {
                     "Multipliers for stats on all gear. This allows the stats on all items to be increased or decreased",
                     "without overriding every single file.");
 
-            ItemStat.ALL_STATS.forEach((name, stat) -> {
+            ItemStats.REGISTRY.get().getValues().forEach(stat -> {
+                ResourceLocation name = Objects.requireNonNull(stat.getRegistryName());
                 DoubleValue config = wrapper
-                        .builder("item.gear.statMultipliers." + name)
+                        .builder("item.gear.statMultipliers." + name.getNamespace() + "." + name.getPath())
                         .defineInRange(1, 0, Double.MAX_VALUE);
                 statMultipliers.put(stat, config);
             });
