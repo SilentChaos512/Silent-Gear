@@ -333,12 +333,12 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public void func_219972_a(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int p_219972_4_) {
+    public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
         if (!worldIn.isRemote) {
             int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
             SoundEvent soundevent = this.func_220025_a(i);
             SoundEvent soundevent1 = i == 0 ? SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE : null;
-            float f = (float)(stack.getUseDuration() - p_219972_4_) / getChargeTime(stack);
+            float f = (float)(stack.getUseDuration() - count) / getChargeTime(stack);
             if (f < 0.2F) {
                 this.field_220034_c = false;
                 this.field_220035_d = false;

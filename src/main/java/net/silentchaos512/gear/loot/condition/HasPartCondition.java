@@ -7,14 +7,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
-public class HasPartCondition implements ILootCondition {
+public class HasPartCondition extends GearLootCondition {
     public static final Serializer SERIALIZER = new Serializer();
 
     private final ResourceLocation partId;
@@ -27,8 +26,8 @@ public class HasPartCondition implements ILootCondition {
 
     @Override
     public boolean test(LootContext context) {
-        ItemStack tool = context.get(LootParameters.TOOL);
-        if (!GearHelper.isGearNullable(tool)) return false;
+        ItemStack tool = getItemUsed(context);
+        if (!GearHelper.isGear(tool)) return false;
         return GearData.hasPart(tool, partId, gradeRange);
     }
 

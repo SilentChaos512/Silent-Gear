@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Blueprint paper recipe not accepting tagged dyes [#122]
 - Duplication of upgrade parts in some cases [#121]
+- `silentgear:has_part` and `silentgear:has_trait` loot conditions not working for weapons
 
 ## [1.6.4] - 2020-05-13
 ### Added

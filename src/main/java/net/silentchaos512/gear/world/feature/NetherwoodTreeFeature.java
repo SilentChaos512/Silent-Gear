@@ -31,7 +31,7 @@ public class NetherwoodTreeFeature extends AcaciaFeature {
                     while(l <= j1) {
                         if (i1 + blockpos.getY() >= 0 && i1 + blockpos.getY() < p_227212_1_.getMaxHeight()) {
                             blockpos$mutable.setPos(k + blockpos.getX(), i1 + blockpos.getY(), l + blockpos.getZ());
-                            if (func_214587_a(p_227212_1_, blockpos$mutable) && (treeFeatureConfigIn.ignoreVines || !func_227222_d_(p_227212_1_, blockpos$mutable))) {
+                            if (canBeReplacedByLogs(p_227212_1_, blockpos$mutable) && (treeFeatureConfigIn.ignoreVines || !isVine(p_227212_1_, blockpos$mutable))) {
                                 ++l;
                                 continue;
                             }

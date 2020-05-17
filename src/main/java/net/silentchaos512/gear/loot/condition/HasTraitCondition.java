@@ -7,13 +7,13 @@ import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 
-public class HasTraitCondition implements ILootCondition {
+public class HasTraitCondition extends GearLootCondition {
     public static final Serializer SERIALIZER = new Serializer();
 
     private final ResourceLocation traitId;
@@ -28,8 +28,8 @@ public class HasTraitCondition implements ILootCondition {
 
     @Override
     public boolean test(LootContext context) {
-        ItemStack tool = context.get(LootParameters.TOOL);
-        if (!GearHelper.isGearNullable(tool)) return false;
+        ItemStack tool = getItemUsed(context);
+        if (!GearHelper.isGear(tool)) return false;
         int level = TraitHelper.getTraitLevel(tool, traitId);
         return level >= minLevel && level <= maxLevel;
     }

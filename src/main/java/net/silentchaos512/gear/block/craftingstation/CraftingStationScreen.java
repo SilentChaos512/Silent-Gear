@@ -63,7 +63,7 @@ public class CraftingStationScreen extends ContainerScreen<CraftingStationContai
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
 
-        if (buttonShowAllParts.isMouseOver(mouseX, mouseY)) { // TODO: right params?
+        if (buttonShowAllParts.isMouseOver(mouseX, mouseY)) {
             buttonShowAllParts.drawHover(mouseX, mouseY);
         }
     }
