@@ -68,7 +68,7 @@ public class SimpleTrait implements ITrait {
     @Override
     public ITextComponent getDisplayName(int level) {
         ITextComponent text = displayName.deepCopy();
-        if (level > 0) {
+        if (level > 0 && maxLevel > 1) {
             text.appendText(" ").appendSibling(new TranslationTextComponent("enchantment.level." + level));
         }
         return text;

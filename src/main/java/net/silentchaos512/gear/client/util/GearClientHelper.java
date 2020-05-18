@@ -3,7 +3,6 @@ package net.silentchaos512.gear.client.util;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -37,7 +36,8 @@ import java.util.stream.Collectors;
 public final class GearClientHelper {
     public static Map<String, IBakedModel> modelCache = new HashMap<>();
 
-    private GearClientHelper() {}
+    private GearClientHelper() {
+    }
 
     public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         GearTooltipFlag flagTC = flag instanceof GearTooltipFlag
@@ -58,9 +58,6 @@ public final class GearClientHelper {
 
         if (!(stack.getItem() instanceof ICoreItem)) return;
 
-        boolean ctrlDown = flag.ctrlDown;
-        boolean altDown = flag.altDown;
-
         ICoreItem item = (ICoreItem) stack.getItem();
 
         if (GearHelper.isBroken(stack)) {
@@ -80,6 +77,7 @@ public final class GearClientHelper {
         } else if (GearData.hasLockedStats(stack)) {
             tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.YELLOW));
         } else {
+            // TODO: Need to generify this
             if (item.requiresPartOfType(PartType.ROD) && constructionParts.getRods().isEmpty()) {
                 tooltip.add(misc("missingRod").applyTextStyle(TextFormatting.RED));
             }
@@ -95,40 +93,35 @@ public final class GearClientHelper {
         }
 
         // Traits
-        Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
-        List<ITrait> visibleTraits = traits.keySet().stream()
-                .filter(t -> t != null && t.showInTooltip(flag))
-                .collect(Collectors.toList());
-        int numTraits = visibleTraits.size();
-        int traitIndex = getTraitDisplayIndex(numTraits, ctrlDown);
-        int i = 0;
-        for (ITrait trait : visibleTraits) {
-            if (traitIndex < 0 || traitIndex == i) {
-                final int level = traits.get(trait);
-                trait.addInformation(level, tooltip, flag);
-            }
-            ++i;
+        addTraitsInfo(stack, tooltip, flag);
+
+        // Stats
+        addStatsInfo(stack, tooltip, flag, item);
+
+        // Tool construction
+        ITextComponent textConstruction = misc("tooltip.construction").applyTextStyle(TextFormatting.GOLD);
+        if (flag.altDown && flag.showConstruction) {
+            tooltip.add(textConstruction);
+            Collections.reverse(constructionParts);
+            tooltipListParts(stack, tooltip, constructionParts);
+        } else if (flag.showConstruction) {
+            textConstruction.appendSibling(new StringTextComponent(" ")
+                    .applyTextStyle(TextFormatting.GRAY)
+                    .appendSibling(misc("tooltip.construction.key")));
+            tooltip.add(textConstruction);
         }
+    }
 
-        float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
-        TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
-        tooltip.add(new StringTextComponent("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue))));
-
-        if (flag.isAdvanced()) {
-            // ICoreTool itemTool = (ICoreTool) item;
-            // tooltip.add(itemTool.getGearClass());
-            CompoundNBT tagCompound = stack.getOrCreateTag();
-            if (tagCompound.contains("debug_modelkey")) {
-                tooltip.add(new StringTextComponent(tagCompound.getString("debug_modelkey")).applyTextStyle(TextFormatting.DARK_GRAY));
-            }
-        }
-
-        // Stats!
+    public static void addStatsInfo(ItemStack stack, List<ITextComponent> tooltip, GearTooltipFlag flag, ICoreItem item) {
         ITextComponent textStats = misc("tooltip.stats").applyTextStyle(TextFormatting.GOLD);
-        if (ctrlDown && flag.showStats) {
+        if (flag.ctrlDown && flag.showStats) {
             tooltip.add(textStats);
 
             tooltip.add(misc("tier", GearData.getTier(stack)));
+
+            float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
+            TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
+            tooltip.add(new StringTextComponent("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue))));
 
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = item.getRelevantStats(stack);
@@ -173,23 +166,38 @@ public final class GearClientHelper {
             textStats.appendText(" ").appendSibling(misc("tooltip.stats.key").applyTextStyle(TextFormatting.GRAY));
             tooltip.add(textStats);
         }
+    }
 
-        // Tool construction
-        ITextComponent textConstruction = misc("tooltip.construction").applyTextStyle(TextFormatting.GOLD);
-        if (altDown && flag.showConstruction) {
-            tooltip.add(textConstruction);
-            Collections.reverse(constructionParts);
-            tooltipListParts(stack, tooltip, constructionParts);
-        } else if (flag.showConstruction) {
-            textConstruction.appendSibling(new StringTextComponent(" ")
-                    .applyTextStyle(TextFormatting.GRAY)
-                    .appendSibling(misc("tooltip.construction.key")));
-            tooltip.add(textConstruction);
+    private static void addTraitsInfo(ItemStack stack, List<ITextComponent> tooltip, GearTooltipFlag flag) {
+        Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
+        List<ITrait> visibleTraits = traits.keySet().stream()
+                .filter(t -> t != null && t.showInTooltip(flag))
+                .collect(Collectors.toList());
+        int traitIndex = getTraitDisplayIndex(visibleTraits.size(), flag);
+        if (traitIndex < 0) {
+            tooltip.add(misc("tooltip.traits").applyTextStyle(TextFormatting.GOLD));
+        }
+        int i = 0;
+        for (ITrait trait : visibleTraits) {
+            if (traitIndex < 0 || traitIndex == i) {
+                final int level = traits.get(trait);
+                trait.addInformation(level, tooltip, flag, text -> {
+                    if (traitIndex >= 0) {
+                        return misc("tooltip.traits")
+                                .applyTextStyle(TextFormatting.GOLD)
+                                .appendSibling(new StringTextComponent(": ")
+                                        .applyTextStyle(TextFormatting.WHITE)
+                                        .appendSibling(text));
+                    }
+                    return new StringTextComponent("- ").appendSibling(text);
+                });
+            }
+            ++i;
         }
     }
 
-    private static int getTraitDisplayIndex(int numTraits, boolean ctrlDown) {
-        if (ctrlDown || numTraits == 0)
+    private static int getTraitDisplayIndex(int numTraits, GearTooltipFlag flag) {
+        if (flag.ctrlDown || numTraits == 0)
             return -1;
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }

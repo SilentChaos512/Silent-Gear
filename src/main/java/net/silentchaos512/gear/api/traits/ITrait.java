@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.client.KeyTracker;
 
 import java.util.List;
+import java.util.function.Function;
 
 public interface ITrait {
     ResourceLocation getId();
@@ -63,12 +64,27 @@ public interface ITrait {
      * @param flag    The tooltip flag
      */
     default void addInformation(int level, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        addInformation(level, tooltip, flag, t -> t);
+    }
+
+    /**
+     * Add tooltip information for this trait. Normally, this consists of just the trait's
+     * translated name and level, but may include a description under certain conditions. If the
+     * trait is hidden ({@link #isHidden()}), nothing is shown unless advanced tooltips are
+     * enabled.
+     *
+     * @param level      The trait level
+     * @param tooltip    The tooltip list
+     * @param flag       The tooltip flag
+     * @param affixFirst A function which can be used to make additional changes to the first line (display name)
+     */
+    default void addInformation(int level, List<ITextComponent> tooltip, ITooltipFlag flag, Function<ITextComponent, ITextComponent> affixFirst) {
         if (!showInTooltip(flag)) return;
 
         // Display name
         ITextComponent displayName = this.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC);
         if (isHidden()) displayName.applyTextStyle(TextFormatting.DARK_GRAY);
-        tooltip.add(displayName);
+        tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)
         if (KeyTracker.isAltDown()) {

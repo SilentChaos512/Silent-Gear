@@ -33,3 +33,9 @@ authors="SilentChaos512"
     versionRange="[4.6,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.silentgear]]
+    modId="silentgems"
+    mandatory=false
+    versionRange="[3.5.4,)"
+    ordering="NONE"
+    side="BOTH"

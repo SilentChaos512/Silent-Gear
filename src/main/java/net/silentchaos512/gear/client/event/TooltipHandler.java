@@ -121,12 +121,12 @@ public final class TooltipHandler {
     private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, IGearPart part) {
-        PartData partData = PartData.of(part, MaterialGrade.fromStack(stack), stack);
+        PartData partData = PartData.of(part, stack);
         for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
             if (!modifiers.isEmpty()) {
-                StatInstance inst = stat.computeForDisplay(0, partData.getGrade(), modifiers);
+                StatInstance inst = stat.computeForDisplay(0, modifiers);
                 if (inst.shouldList(part, stat, event.getFlags().isAdvanced())) {
                     boolean isZero = inst.getValue() == 0;
                     TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;

@@ -159,9 +159,14 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return (float) Math.pow(weightBaseClamped, -(count == 0 ? count : 0.5 + 0.5f * count));
     }
 
+    @Deprecated
     public StatInstance computeForDisplay(float baseValue, MaterialGrade grade, Collection<StatInstance> modifiers) {
+        return computeForDisplay(baseValue, modifiers);
+    }
+
+    public StatInstance computeForDisplay(float baseValue, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
-            return new StatInstance("no_mods", baseValue, Operation.AVG);
+            return new StatInstance(baseValue, Operation.AVG);
 
         int add = 1;
         for (StatInstance inst : modifiers) {
