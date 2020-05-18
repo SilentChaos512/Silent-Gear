@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Spoon trait. This allows any part to function like a spoon upgrade. It will only work on pickaxes, same as before.
+- ru_ru.json lang file (vanja-san) [#118]
 ### Changed
 - Reworked some gear tooltip stuff. Synergy is under stats. Traits are more clearly labeled.
 - (API) - Stats are now a Forge registry and should be registered using the Register event. Stat names with the `silentgear` namespace can continue to omit the namespace in JSON files, others should include it.
