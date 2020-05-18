@@ -14,6 +14,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Represents either a stat modifier or a calculated stat value.
@@ -42,6 +43,9 @@ public class StatInstance {
     }
 
     public static final StatInstance ZERO = new StatInstance(0f, Operation.ADD);
+
+    private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
+    private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
 
     private final float value;
     private final Operation op;
@@ -116,23 +120,30 @@ public class StatInstance {
         switch (this.op) {
             case ADD:
                 color = getFormattedColor(this.value, 0f, addColor);
-                return color + String.format(format, this.value < 0 ? "" : "+", this.value, "");
+                return trimNumber(color + String.format(format, this.value < 0 ? "" : "+", this.value, ""));
             case AVG:
-                return String.format(format, "", this.value, "");
+                return trimNumber(String.format(format, "", this.value, ""));
             case MAX:
-                return String.format(format, "^", this.value, "");
+                return trimNumber(String.format(format, "^", this.value, ""));
             case MUL1:
                 int percent = Math.round(100 * this.value);
                 color = getFormattedColor(percent, 0f, addColor);
-                format = "%s%d%%";
-                return color + String.format(format, percent < 0 ? "" : "+", percent);
+                return trimNumber(color + String.format("%s%d%%", percent < 0 ? "" : "+", percent));
             case MUL2:
                 float val = 1f + this.value;
                 color = getFormattedColor(val, 1f, addColor);
-                return color + String.format(format, "x", val, "");
+                return trimNumber(color + String.format(format, "x", val, ""));
             default:
                 throw new NotImplementedException("Unknown operation: " + op);
         }
+    }
+
+    private static String trimNumber(CharSequence str) {
+        // Trim number to an int if possible, or just trim off any trailing zeros
+        String trimToInt = REGEX_TRIM_TO_INT.matcher(str).replaceFirst("");
+        if (trimToInt.contains("."))
+            return REGEX_REMOVE_TRAILING_ZEROS.matcher(trimToInt).replaceFirst("");
+        return trimToInt;
     }
 
     private TextFormatting getFormattedColor(float val, float whiteVal, boolean addColor) {
@@ -142,6 +153,10 @@ public class StatInstance {
 
     public boolean shouldList(IGearPart part, ItemStat stat, boolean advanced) {
         return advanced || value != 0 || (part.getType() == PartType.MAIN && stat == ItemStats.HARVEST_LEVEL);
+    }
+
+    public int getPreferredDecimalPlaces(ItemStat stat, int max) {
+        return stat.isDisplayAsInt() && op != Operation.MUL1 && op != Operation.MUL2 ? 0 : 2;
     }
 
     @Override

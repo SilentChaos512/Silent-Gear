@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
+// TODO: Might remove in 2.0? Traits are much more reliable
 public class HasPartCondition extends GearLootCondition {
     public static final Serializer SERIALIZER = new Serializer();
 

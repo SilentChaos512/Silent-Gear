@@ -125,7 +125,7 @@ public final class GearClientHelper {
 
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = item.getRelevantStats(stack);
-            Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStats.REGISTRY.get().getValues() : relevantStats;
+            Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStats.allStatsOrdered() : relevantStats;
 
             for (ItemStat stat : displayStats) {
                 float statValue = GearData.getStat(stack, stat);
@@ -145,9 +145,9 @@ public final class GearClientHelper {
                 }
 
                 StatInstance inst = new StatInstance(statValue, StatInstance.Operation.AVG);
-                TextFormatting nameColor = relevantStats.contains(stat) ? stat.displayColor : TextFormatting.DARK_GRAY;
+                TextFormatting nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TextFormatting.DARK_GRAY;
                 ITextComponent textName = new StringTextComponent("- ").appendSibling(stat.getDisplayName().applyTextStyle(nameColor));
-                ITextComponent textStat = new StringTextComponent(inst.formattedString(stat.displayAsInt ? 0 : 1, false));
+                ITextComponent textStat = new StringTextComponent(inst.formattedString(stat.isDisplayAsInt() ? 0 : 1, false));
 
                 // Some stat-specific formatting...
                 if (stat == ItemStats.DURABILITY) {

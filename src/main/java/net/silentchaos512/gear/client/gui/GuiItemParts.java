@@ -36,7 +36,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -76,8 +75,8 @@ public class GuiItemParts extends Screen {
         List<Pair<String, Button.IPressable>> sortOptions = new ArrayList<>();
         sortOptions.add(new Pair<>("Name", b -> sortParts(false, Comparator.comparing(p -> p.getDisplayName(null, ItemStack.EMPTY).getFormattedText()))));
         sortOptions.add(new Pair<>("Type", b -> sortParts(false, Comparator.comparing(p -> p.getType().getName()))));
-        ItemStats.REGISTRY.get().getValues().stream()
-                .filter(stat -> !stat.isHidden())
+        ItemStats.allStatsOrdered().stream()
+                .filter(ItemStat::isVisible)
                 .forEachOrdered(stat -> sortOptions.add(new Pair<>(stat.getDisplayName().getFormattedText(), b -> sortParts(true, Comparator.comparing(p -> p.computeStatValue(stat))))));
         this.addButton(new SortButton(5, minecraft.getMainWindow().getScaledHeight() - 30, 100, 20, sortOptions));
 
@@ -184,18 +183,18 @@ public class GuiItemParts extends Screen {
         List<Tuple<String, String>> list = new ArrayList<>();
 
         PartData partData = PartData.of(part);
-        for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
+        for (ItemStat stat : ItemStats.allStatsOrdered()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
             if (!modifiers.isEmpty()) {
-                StatInstance inst = stat.computeForDisplay(0, MaterialGrade.NONE, modifiers);
+                StatInstance inst = stat.computeForDisplay(0, modifiers);
                 if (inst.shouldList(part, stat, true)) {
                     // Just copied from TooltipHandler for now... Should probably have a Lib utility for rounding?
                     boolean isZero = inst.getValue() == 0;
-                    TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
+                    TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.getNameColor();
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
                     String nameStr = nameColor + stat.getDisplayName().toString();
-                    int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
+                    int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
                     String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");
                     if (statStr.contains("."))

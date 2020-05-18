@@ -179,6 +179,7 @@ public class Config {
                     "Multipliers for stats on all gear. This allows the stats on all items to be increased or decreased",
                     "without overriding every single file.");
 
+            // FIXME: Does not work, called too early
             ItemStats.REGISTRY.get().getValues().forEach(stat -> {
                 ResourceLocation name = Objects.requireNonNull(stat.getRegistryName());
                 DoubleValue config = wrapper

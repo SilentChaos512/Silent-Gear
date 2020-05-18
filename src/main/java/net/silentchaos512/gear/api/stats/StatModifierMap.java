@@ -8,6 +8,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.parts.IGearPart;
 
 import javax.annotation.Nonnull;
@@ -19,6 +21,23 @@ import java.util.Set;
 
 public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
     private final Multimap<ItemStat, StatInstance> map = ArrayListMultimap.create();
+
+    public static ITextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
+        if (mods.size() == 1) {
+            StatInstance inst = mods.iterator().next();
+            int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
+            return new StringTextComponent(inst.formattedString(decimalPlaces, false));
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (StatInstance inst : mods) {
+            if (result.length() > 0)
+                result.append(", ");
+            int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
+            result.append(inst.formattedString(decimalPlaces, false));
+        }
+        return new StringTextComponent(result.toString());
+    }
 
     @Override
     public int size() {

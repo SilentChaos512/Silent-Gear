@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.stats;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -13,7 +12,6 @@ import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -26,24 +24,25 @@ import java.util.function.Function;
  */
 @ParametersAreNonnullByDefault
 public class ItemStat extends ForgeRegistryEntry<ItemStat> {
-    protected final float defaultValue;
-    protected final float minimumValue;
-    protected final float maximumValue;
-    Function<Float, Float> missingRodFunction;
-    private boolean isHidden = false;
-    private boolean synergyApplies = false;
-    private boolean affectedByGrades = true;
+    private final float defaultValue;
+    private final float minimumValue;
+    private final float maximumValue;
+    private final TextFormatting nameColor;
+    private final boolean visible;
+    private final boolean synergyApplies;
+    private final boolean displayAsInt;
+    private final Function<Float, Float> missingRodFunction;
 
-    public final boolean displayAsInt;
-    public final TextFormatting displayColor;
-
-    public ItemStat(float defaultValue, float minValue, float maxValue, boolean displayAsInt, TextFormatting displayColor) {
+    public ItemStat(float defaultValue, float minValue, float maxValue, TextFormatting nameColor, Properties properties) {
         this.defaultValue = defaultValue;
         this.minimumValue = minValue;
         this.maximumValue = maxValue;
+        this.nameColor = nameColor;
 
-        this.displayAsInt = displayAsInt;
-        this.displayColor = displayColor;
+        this.displayAsInt = properties.displayAsInt;
+        this.visible = properties.visible;
+        this.synergyApplies = properties.synergyApplies;
+        this.missingRodFunction = properties.missingRodFunction;
 
         if (this.minimumValue > this.maximumValue) {
             throw new IllegalArgumentException("Minimum value cannot be bigger than maximum value!");
@@ -52,11 +51,8 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         } else if (this.defaultValue > this.maximumValue) {
             throw new IllegalArgumentException("Default value cannot be bigger than maximum value!");
         }
-    }
 
-    @Deprecated
-    public ItemStat(ResourceLocation name, float defaultValue, float minValue, float maxValue, boolean displayAsInt, TextFormatting displayColor) {
-        this(defaultValue, minValue, maxValue, displayAsInt, displayColor);
+        ItemStats.STATS_IN_ORDER.add(this);
     }
 
     /**
@@ -80,6 +76,14 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return maximumValue;
     }
 
+    public boolean isDisplayAsInt() {
+        return displayAsInt;
+    }
+
+    public TextFormatting getNameColor() {
+        return nameColor;
+    }
+
     public float clampValue(float value) {
         value = MathHelper.clamp(value, minimumValue, maximumValue);
         return value;
@@ -93,6 +97,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return compute(baseValue, true, modifiers);
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     public float compute(float baseValue, boolean clampValue, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
             return baseValue;
@@ -182,31 +187,12 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return new StatInstance(value, op);
     }
 
-    public boolean isHidden() {
-        return isHidden;
-    }
-
-    public ItemStat setHidden(boolean value) {
-        this.isHidden = value;
-        return this;
+    public boolean isVisible() {
+        return visible;
     }
 
     public boolean doesSynergyApply() {
         return synergyApplies;
-    }
-
-    public ItemStat setSynergyApplies(boolean value) {
-        this.synergyApplies = value;
-        return this;
-    }
-
-    public boolean isAffectedByGrades() {
-        return affectedByGrades;
-    }
-
-    public ItemStat setAffectedByGrades(boolean value) {
-        this.affectedByGrades = value;
-        return this;
     }
 
     public float withMissingRodEffect(float statValue) {
@@ -214,19 +200,8 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return missingRodFunction.apply(statValue);
     }
 
-    public ItemStat setMissingRodEffect(Function<Float, Float> function) {
-        this.missingRodFunction = function;
-        return this;
-    }
-
     public String toString() {
         return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", getRegistryName(), defaultValue, minimumValue, maximumValue);
-    }
-
-    @Deprecated
-    public String translatedName() {
-        ResourceLocation name = Objects.requireNonNull(getRegistryName());
-        return I18n.format("stat." + name.getNamespace() + "." + name.getPath());
     }
 
     public ITextComponent getDisplayName() {
@@ -234,5 +209,32 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         if (name == null)
             return new StringTextComponent("Unregistered stat: " + this);
         return new TranslationTextComponent("stat." + name.getNamespace() + "." + name.getPath());
+    }
+
+    public static class Properties {
+        private boolean displayAsInt;
+        private boolean visible = true;
+        private boolean synergyApplies = false;
+        private Function<Float, Float> missingRodFunction;
+
+        public Properties displayAsInt() {
+            displayAsInt = true;
+            return this;
+        }
+
+        public Properties hidden() {
+            visible = false;
+            return this;
+        }
+
+        public Properties synergyApplies() {
+            synergyApplies = true;
+            return this;
+        }
+
+        public Properties missingRodFunction(Function<Float, Float> function) {
+            missingRodFunction = function;
+            return this;
+        }
     }
 }

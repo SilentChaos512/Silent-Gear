@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.AbstractGearPart;
@@ -24,7 +25,6 @@ import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class TooltipHandler {
@@ -117,32 +117,29 @@ public final class TooltipHandler {
         event.getToolTip().add(grade.getDisplayName().applyTextStyle(TextFormatting.AQUA));
     }
 
-    private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
-    private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
-
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, IGearPart part) {
         PartData partData = PartData.of(part, stack);
-        for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
+        for (ItemStat stat : ItemStats.allStatsOrdered()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
 
             if (!modifiers.isEmpty()) {
                 StatInstance inst = stat.computeForDisplay(0, modifiers);
                 if (inst.shouldList(part, stat, event.getFlags().isAdvanced())) {
                     boolean isZero = inst.getValue() == 0;
-                    TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.displayColor;
+                    TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.getNameColor();
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
                     ITextComponent nameStr = stat.getDisplayName().applyTextStyle(nameColor);
-                    int decimalPlaces = stat.displayAsInt && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
+                    int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
-                    String statStr = statColor + REGEX_TRIM_TO_INT.matcher(inst.formattedString(decimalPlaces, false)).replaceFirst("");
-                    if (statStr.contains("."))
-                        statStr = REGEX_REMOVE_TRAILING_ZEROS.matcher(statStr).replaceFirst("");
-                    if (modifiers.size() > 1)
-                        statStr += "*";
-                    if (stat == ItemStats.ARMOR_DURABILITY)
-                        statStr += "x";
+//                    String statStr = statColor + inst.formattedString(decimalPlaces, false);
+//                    if (stat == ItemStats.ARMOR_DURABILITY)
+//                        statStr += "x";
+//                    if (modifiers.size() > 1)
+//                        statStr += "*";
+                    ITextComponent statListText = StatModifierMap.formatText(modifiers, stat, decimalPlaces).applyTextStyle(statColor);
 
-                    event.getToolTip().add(new StringTextComponent("- ").appendSibling(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statStr)));
+                    event.getToolTip().add(new StringTextComponent("- ")
+                            .appendSibling(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statListText.getFormattedText())));
                 }
             }
         }

@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ru_ru.json lang file (vanja-san) [#118]
 ### Changed
 - Reworked some gear tooltip stuff. Synergy is under stats. Traits are more clearly labeled.
-- (API) - Stats are now a Forge registry and should be registered using the Register event. Stat names with the `silentgear` namespace can continue to omit the namespace in JSON files, others should include it.
+- (API) - Stats are now a Forge registry and should be registered using the Register event.
+    - Stat names with the `silentgear` namespace can continue to omit the namespace in JSON files, others should include it.
+    - The stat multiplier config settings are currently broken
 ### Fixed
 - Balanced armor and shield repairs (now based on armor durability stat) [#123]
 - Blueprint paper recipe not accepting tagged dyes [#122]

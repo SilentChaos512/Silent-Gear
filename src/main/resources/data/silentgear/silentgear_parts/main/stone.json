@@ -15,7 +15,7 @@
         "ranged_damage": 0,
         "ranged_speed": -0.2,
         "rarity": 5,
-        "chargeability": 0.5
+        "silentgems:chargeability": 0.5
     },
     "traits": [
         {
