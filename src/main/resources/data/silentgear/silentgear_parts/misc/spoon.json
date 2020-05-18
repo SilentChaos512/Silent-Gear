@@ -6,6 +6,18 @@
         },
         "rarity": 10
     },
+    "traits": [
+        {
+            "name": "silentgear:spoon",
+            "level": 1,
+            "conditions": [
+                {
+                    "type": "silentgear:gear_type",
+                    "gear_type": "pickaxe"
+                }
+            ]
+        }
+    ],
     "crafting_items": {
         "normal": {
             "item": "silentgear:spoon_upgrade"

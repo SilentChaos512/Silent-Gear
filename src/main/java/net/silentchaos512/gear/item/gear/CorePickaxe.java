@@ -23,9 +23,10 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.parts.PartConst;
+import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TraitHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -169,7 +170,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     @Override
     public Set<ToolType> getToolTypes(ItemStack stack) {
         if (!GearHelper.isBroken(stack)) {
-            if (GearData.hasPart(stack, PartConst.MISC_SPOON)) {
+            if (TraitHelper.getTraitLevel(stack, TraitConst.SPOON) > 0) {
                 // Pickaxe with spoon
                 return TOOL_CLASSES_WITH_SPOON;
             } else {

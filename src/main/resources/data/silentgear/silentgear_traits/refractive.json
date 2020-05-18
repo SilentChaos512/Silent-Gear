@@ -1,6 +1,6 @@
 {
     "type": "silentgear:refractive",
-    "max_level": 5,
+    "max_level": 1,
     "cancels_with": [],
     "name": {
         "translate": "trait.silentgear.refractive"

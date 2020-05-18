@@ -10,6 +10,7 @@ public class TraitConst {
     public static final ResourceLocation INDESTRUCTIBLE = SilentGear.getId("indestructible");
     public static final ResourceLocation LUSTROUS = SilentGear.getId("lustrous");
     public static final ResourceLocation MAGMATIC = SilentGear.getId("magmatic");
+    public static final ResourceLocation SPOON = SilentGear.getId("spoon");
     public static final ResourceLocation SYNERGISTIC = SilentGear.getId("synergistic");
 
     // Misc constants
