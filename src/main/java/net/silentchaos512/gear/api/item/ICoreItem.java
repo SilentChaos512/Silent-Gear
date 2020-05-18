@@ -6,6 +6,7 @@ import net.minecraft.util.IItemProvider;
 import net.silentchaos512.gear.api.parts.IPartData;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.parts.PartData;
@@ -76,6 +77,10 @@ public interface ICoreItem extends IItemProvider, IStatItem {
 
     default Optional<StatInstance> getStatModifier(ItemStat stat) {
         return Optional.empty();
+    }
+
+    default ItemStat getDurabilityStat() {
+        return ItemStats.DURABILITY;
     }
 
     //endregion

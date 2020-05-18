@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
@@ -67,6 +68,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     //region Stats and attributes
 
+
+    @Override
+    public ItemStat getDurabilityStat() {
+        return ItemStats.ARMOR_DURABILITY;
+    }
+
     public double getArmorProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
         return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.ARMOR);
@@ -113,7 +120,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int maxDamageFactor = GearData.getStatInt(stack, ItemStats.ARMOR_DURABILITY);
+        int maxDamageFactor = GearData.getStatInt(stack, getDurabilityStat());
         return MAX_DAMAGE_ARRAY[this.getEquipmentSlot().getIndex()] * maxDamageFactor;
     }
 

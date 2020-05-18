@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked some gear tooltip stuff. Synergy is under stats. Traits are more clearly labeled.
 - (API) - Stats are now a Forge registry and should be registered using the Register event. Stat names with the `silentgear` namespace can continue to omit the namespace in JSON files, others should include it.
 ### Fixed
+- Balanced armor and shield repairs (now based on armor durability stat) [#123]
 - Blueprint paper recipe not accepting tagged dyes [#122]
 - Duplication of upgrade parts in some cases [#121]
 - `silentgear:has_part` and `silentgear:has_trait` loot conditions not working for weapons

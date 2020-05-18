@@ -111,20 +111,24 @@ public abstract class AbstractGearPart implements IGearPart {
 
     @Override
     public float getRepairAmount(RepairContext context) {
-        // Base value on material durability
         PartData material = context.getMaterial();
-        if (material.getType() != PartType.MAIN) return 0;
+        if (material.getType() != PartType.MAIN || !(context.getGear().getItem() instanceof ICoreItem)) return 0;
 
         // Material tier must be equal to or higher than gear's primary
         if (material.getTier() < GearData.getTier(context.getGear())) return 0;
-        Collection<StatInstance> mods = getStatModifiers(context.getGear(), ItemStats.DURABILITY, material);
-        float durability = ItemStats.DURABILITY.compute(0f, mods);
+
+        // Base repair values on the appropriate durability stat
+        ICoreItem gearItem = (ICoreItem) context.getGear().getItem();
+        ItemStat durabilityStat = gearItem.getDurabilityStat();
+        Collection<StatInstance> mods = getStatModifiers(context.getGear(), durabilityStat, material);
+        float durability = durabilityStat.compute(0f, mods);
+        float multiplier = durabilityStat == ItemStats.ARMOR_DURABILITY ? 12f : 1f;
 
         switch (context.getRepairType()) {
             case QUICK:
-                return Config.GENERAL.repairFactorQuick.get().floatValue() * durability;
+                return Config.GENERAL.repairFactorQuick.get().floatValue() * multiplier * durability;
             case ANVIL:
-                return Config.GENERAL.repairFactorAnvil.get().floatValue() * durability;
+                return Config.GENERAL.repairFactorAnvil.get().floatValue() * multiplier * durability;
             default:
                 throw new IllegalArgumentException("Unknown RepairContext: " + context);
         }

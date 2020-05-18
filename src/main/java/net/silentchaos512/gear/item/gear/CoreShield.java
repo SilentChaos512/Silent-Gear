@@ -54,6 +54,11 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
+    public ItemStat getDurabilityStat() {
+        return ItemStats.ARMOR_DURABILITY;
+    }
+
+    @Override
     public boolean requiresPartOfType(PartType type) {
         return type == PartType.ROD || ICoreItem.super.requiresPartOfType(type);
     }
