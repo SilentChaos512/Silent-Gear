@@ -18,17 +18,23 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.ShowPartsScreenPacket;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class SGearPartsCommand {
@@ -39,8 +45,10 @@ public final class SGearPartsCommand {
         return ISuggestionProvider.func_212476_a(parts.getUniqueParts(false).stream().map(part ->
                 part.getPart().getId()), builder);
     };
+    private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
-    private SGearPartsCommand() {}
+    private SGearPartsCommand() {
+    }
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sgear_parts");
@@ -78,6 +86,12 @@ public final class SGearPartsCommand {
         builder.then(Commands.literal("list")
                 .executes(
                         SGearPartsCommand::runList
+                )
+        );
+        // Dump to CSV
+        builder.then(Commands.literal("dump")
+                .executes(
+                        SGearPartsCommand::runDumpCsv
                 )
         );
         // Show GUI
@@ -161,6 +175,68 @@ public final class SGearPartsCommand {
         }
 
         return 1;
+    }
+
+    private static int runDumpCsv(CommandContext<CommandSource> context) {
+        String fileName = "part_export.tsv";
+        String dirPath = "output/silentgear";
+        File output = new File(dirPath, fileName);
+        File directory = output.getParentFile();
+        if (!directory.exists() && !directory.mkdirs()) {
+            context.getSource().sendErrorMessage(new StringTextComponent("Could not create directory: " + output.getParent()));
+            return 0;
+        }
+
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
+            StringBuilder builder = new StringBuilder("Name\tID\tType\tTier\t");
+            ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getFormattedText()).append("\t"));
+            builder.append("Traits\tLite Texture\tNormal Color\tBroken Color\tFallback Color\tArmor Color");
+            writer.write(builder.toString());
+
+            for (IGearPart part : PartManager.getValues()) {
+                writer.write(partToTsvLine(part) + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            context.getSource().sendFeedback(new StringTextComponent("Wrote to " + output.getAbsolutePath()), true);
+        }
+
+        return 1;
+    }
+
+    private static String partToTsvLine(IGearPart part) {
+        StringBuilder builder = new StringBuilder();
+        PartData partData = PartData.of(part);
+        appendTsv(builder, part.getDisplayName(partData, ItemStack.EMPTY).getString());
+        appendTsv(builder, part.getId().toString());
+        appendTsv(builder, part.getType().getName());
+        appendTsv(builder, part.getTier());
+
+        // Stats
+        for (ItemStat stat : ItemStats.allStatsOrdered()) {
+            Collection<StatInstance> statModifiers = part.getStatModifiers(stat, partData);
+            appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
+        }
+
+        // Traits
+        appendTsv(builder, part.getTraits(partData).stream()
+                .map(t -> t.getTrait().getDisplayName(t.getLevel()).getFormattedText())
+                .collect(Collectors.joining(", ")));
+
+        // Display
+        IPartDisplay display = part.getDisplayProperties(partData, ItemStack.EMPTY, 0);
+        appendTsv(builder, display.getLiteTexture());
+        appendTsv(builder, Color.format(display.getNormalColor() & 0xFFFFFF));
+        appendTsv(builder, Color.format(display.getBrokenColor() & 0xFFFFFF));
+        appendTsv(builder, Color.format(display.getFallbackColor() & 0xFFFFFF));
+        appendTsv(builder, Color.format(display.getArmorColor() & 0xFFFFFF));
+
+        return builder.toString();
+    }
+
+    private static void appendTsv(StringBuilder builder, Object value) {
+        builder.append(value).append("\t");
     }
 
     @Nullable
