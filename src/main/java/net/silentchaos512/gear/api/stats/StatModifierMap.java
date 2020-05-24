@@ -26,7 +26,7 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
         if (mods.size() == 1) {
             StatInstance inst = mods.iterator().next();
             int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
-            return new StringTextComponent(inst.formattedString(decimalPlaces, false));
+            return new StringTextComponent(inst.formattedString(stat, decimalPlaces, false));
         }
 
         StringBuilder result = new StringBuilder();
@@ -34,7 +34,7 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
             if (result.length() > 0)
                 result.append(", ");
             int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
-            result.append(inst.formattedString(decimalPlaces, false));
+            result.append(inst.formattedString(stat, decimalPlaces, false));
         }
         return new StringTextComponent(result.toString());
     }
@@ -129,7 +129,12 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
         return this.map.asMap();
     }
 
+    @Deprecated
     public static StatModifierMap read(IGearPart part, JsonElement json) {
+        return read(json);
+    }
+
+    public static StatModifierMap read(JsonElement json) {
         StatModifierMap map = new StatModifierMap();
         if (json.isJsonObject()) {
             for (Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
@@ -137,9 +142,9 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
                 if (stat != null) {
                     JsonElement value = entry.getValue();
                     if (value.isJsonArray())
-                        value.getAsJsonArray().forEach(e -> map.put(stat, StatInstance.read(part, stat, e)));
+                        value.getAsJsonArray().forEach(e -> map.put(stat, StatInstance.read(stat, e)));
                     else
-                        map.put(stat, StatInstance.read(part, stat, value));
+                        map.put(stat, StatInstance.read(stat, value));
                 }
             }
         } else if (json.isJsonArray()) {
@@ -147,7 +152,7 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
                 JsonObject jsonObj = element.getAsJsonObject();
                 ItemStat stat = ItemStats.byName(JSONUtils.getString(jsonObj, "name"));
                 if (stat != null) {
-                    map.put(stat, StatInstance.read(part, stat, element));
+                    map.put(stat, StatInstance.read(stat, element));
                 }
             }
         } else {

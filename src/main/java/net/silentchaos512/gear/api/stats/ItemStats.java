@@ -38,7 +38,7 @@ public final class ItemStats {
     public static final ItemStat RARITY = new ItemStat(0f, 0f, 10000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().hidden());
 
     // Harvesting Tools
-    public static final ItemStat HARVEST_LEVEL = new ItemStat(0f, 0f, 10000f, TextFormatting.YELLOW, new ItemStat.Properties().displayAsInt());
+    public static final ItemStat HARVEST_LEVEL = new ItemStat(0f, 0f, 10000f, TextFormatting.YELLOW, new ItemStat.Properties().defaultOp(StatInstance.Operation.MAX).displayAsInt());
     public static final ItemStat HARVEST_SPEED = new ItemStat(1f, 0f, 10000f, TextFormatting.YELLOW, new ItemStat.Properties().synergyApplies().missingRodFunction(f -> Math.max(2, f / 8)));
     public static final ItemStat REACH_DISTANCE = new ItemStat(0f, -100f, 100f, TextFormatting.YELLOW, new ItemStat.Properties().missingRodFunction(f -> f - 1.5f));
 

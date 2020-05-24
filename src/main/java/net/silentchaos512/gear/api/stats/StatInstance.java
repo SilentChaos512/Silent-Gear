@@ -113,23 +113,29 @@ public class StatInstance {
         return new StatInstance(newId, this.value, this.op);
     }
 
-    public String formattedString(@Nonnegative int decimalPlaces, boolean addColor) {
+    public String formattedString(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         String format = "%s" + ("%." + decimalPlaces + "f") + "%s";
         TextFormatting color;
 
         switch (this.op) {
             case ADD:
+                // +/-v
                 color = getFormattedColor(this.value, 0f, addColor);
                 return trimNumber(color + String.format(format, this.value < 0 ? "" : "+", this.value, ""));
             case AVG:
-                return trimNumber(String.format(format, "", this.value, ""));
+                // v (or vx for armor durability)
+                String ret = trimNumber(String.format(format, "", this.value, ""));
+                return stat == ItemStats.ARMOR_DURABILITY ? ret + "x" : ret;
             case MAX:
+                // ^v
                 return trimNumber(String.format(format, "^", this.value, ""));
             case MUL1:
+                // +/-v%
                 int percent = Math.round(100 * this.value);
                 color = getFormattedColor(percent, 0f, addColor);
                 return trimNumber(color + String.format("%s%d%%", percent < 0 ? "" : "+", percent));
             case MUL2:
+                // vx
                 float val = 1f + this.value;
                 color = getFormattedColor(val, 1f, addColor);
                 return trimNumber(color + String.format(format, "x", val, ""));
@@ -164,14 +170,23 @@ public class StatInstance {
         return String.format("StatInstance{value=%f, op=%s}", this.value, this.op);
     }
 
+    @Deprecated
     public static StatInstance read(IGearPart part, ItemStat stat, JsonElement json) {
+        return read(stat, part.getDefaultStatOperation(stat), json);
+    }
+
+    public static StatInstance read(ItemStat stat, JsonElement json) {
+        return read(stat, stat.getDefaultOperation(), json);
+    }
+
+    public static StatInstance read(ItemStat stat, Operation defaultOp, JsonElement json) {
         if (json.isJsonPrimitive()) {
             // Primitive default op shorthand
-            return new StatInstance(json.getAsFloat(), part.getDefaultStatOperation(stat));
+            return new StatInstance(json.getAsFloat(), defaultOp);
         } else if (json.isJsonObject()) {
             // Either a specified op shorthand or classic format
             JsonObject jsonObj = json.getAsJsonObject();
-            StatInstance result = readShorthandObject(part, stat, jsonObj);
+            StatInstance result = readShorthandObject(stat, jsonObj);
             if (result != null) {
                 return result;
             } else {
@@ -179,7 +194,7 @@ public class StatInstance {
                 float value = JSONUtils.getFloat(jsonObj, "value", 0f);
                 Operation op = jsonObj.has("op")
                         ? Operation.byName(JSONUtils.getString(jsonObj, "op"))
-                        : part.getDefaultStatOperation(stat);
+                        : defaultOp;
                 return new StatInstance(value, op);
             }
         }
@@ -187,7 +202,7 @@ public class StatInstance {
     }
 
     @Nullable
-    private static StatInstance readShorthandObject(IGearPart part, ItemStat stat, JsonObject json) {
+    private static StatInstance readShorthandObject(ItemStat stat, JsonObject json) {
         StatInstance result = null;
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
             Operation op = Operation.byNameOrNull(entry.getKey());

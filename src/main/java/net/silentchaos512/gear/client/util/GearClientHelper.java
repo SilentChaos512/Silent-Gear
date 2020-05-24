@@ -147,7 +147,7 @@ public final class GearClientHelper {
                 StatInstance inst = new StatInstance(statValue, StatInstance.Operation.AVG);
                 TextFormatting nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TextFormatting.DARK_GRAY;
                 ITextComponent textName = new StringTextComponent("- ").appendSibling(stat.getDisplayName().applyTextStyle(nameColor));
-                ITextComponent textStat = new StringTextComponent(inst.formattedString(stat.isDisplayAsInt() ? 0 : 2, false));
+                ITextComponent textStat = new StringTextComponent(inst.formattedString(stat, stat.isDisplayAsInt() ? 0 : 2, false));
 
                 // Some stat-specific formatting...
                 if (stat == ItemStats.DURABILITY) {

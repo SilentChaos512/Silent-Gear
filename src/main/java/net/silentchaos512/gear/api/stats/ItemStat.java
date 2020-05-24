@@ -27,6 +27,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
     private final float defaultValue;
     private final float minimumValue;
     private final float maximumValue;
+    private final Operation defaultOperation;
     private final TextFormatting nameColor;
     private final boolean visible;
     private final boolean synergyApplies;
@@ -39,6 +40,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         this.maximumValue = maxValue;
         this.nameColor = nameColor;
 
+        this.defaultOperation = properties.defaultOp;
         this.displayAsInt = properties.displayAsInt;
         this.visible = properties.visible;
         this.synergyApplies = properties.synergyApplies;
@@ -74,6 +76,10 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
 
     public float getMaximumValue() {
         return maximumValue;
+    }
+
+    public Operation getDefaultOperation() {
+        return defaultOperation;
     }
 
     public boolean isDisplayAsInt() {
@@ -212,10 +218,16 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
     }
 
     public static class Properties {
+        private Operation defaultOp = Operation.AVG;
         private boolean displayAsInt;
         private boolean visible = true;
         private boolean synergyApplies = false;
         private Function<Float, Float> missingRodFunction;
+
+        public Properties defaultOp(Operation op) {
+            this.defaultOp = op;
+            return this;
+        }
 
         public Properties displayAsInt() {
             displayAsInt = true;

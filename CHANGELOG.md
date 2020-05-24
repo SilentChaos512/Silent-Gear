@@ -3,8 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Parts GUI not displaying stats correctly [#128]
+
 ## [1.7.0] - 2020-05-20
 ### Added
+- Command to export part data to a TSV file, `/sgear_parts dump`. A TSV file can be imported into any spreadsheet program.
 - Spoon trait. This allows any part to function like a spoon upgrade. It will only work on pickaxes, same as before.
 - Crushing trait. Increases armor and decreases attack damage as gear is damaged.
 - ru_ru.json lang file (vanja-san) [#118]

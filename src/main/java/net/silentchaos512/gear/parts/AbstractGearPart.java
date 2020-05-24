@@ -47,7 +47,7 @@ public abstract class AbstractGearPart implements IGearPart {
     List<String> blacklistedGearTypes = new ArrayList<>();
 
     // Stats and Traits
-    StatModifierMap stats = new StatModifierMap();
+    protected StatModifierMap stats = new StatModifierMap();
     List<PartTraitInstance> traits = new ArrayList<>();
 
     // Display
@@ -251,7 +251,7 @@ public abstract class AbstractGearPart implements IGearPart {
             // Stats
             JsonElement elementStats = json.get("stats");
             if (elementStats != null) {
-                Multimap<ItemStat, StatInstance> statMap = StatModifierMap.read(part, elementStats);
+                Multimap<ItemStat, StatInstance> statMap = StatModifierMap.read(elementStats);
                 // Move the newly loaded modifiers into the stat map, replacing existing ones
                 statMap.keySet().forEach(stat -> part.stats.removeAll(stat));
                 statMap.forEach((stat, mod) -> part.stats.put(stat, mod));

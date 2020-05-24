@@ -50,6 +50,7 @@ public interface IGearPart {
 
     List<PartTraitInstance> getTraits(ItemStack gear, PartData part);
 
+    @Deprecated
     StatInstance.Operation getDefaultStatOperation(ItemStat stat);
 
     float getRepairAmount(RepairContext context);

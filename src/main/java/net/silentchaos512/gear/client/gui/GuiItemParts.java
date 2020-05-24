@@ -29,16 +29,15 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.gui.GuiUtils;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.event.ClientTicks;
@@ -57,7 +56,6 @@ public class GuiItemParts extends Screen {
     private static final int BUTTON_SPACING = PartButton.SIZE + 4;
     private static final int BUTTON_ROW_LENGTH = 12;
     private static final int BUTTON_INITIAL_OFFSET = 5;
-    private static final ResourceLocation TEX_WHITE = new ResourceLocation(SilentGear.MOD_ID, "textures/gui/white.png");
 
     private List<IGearPart> partList = new ArrayList<>();
     private List<PartButton> partButtons = new ArrayList<>();
@@ -193,18 +191,10 @@ public class GuiItemParts extends Screen {
                     boolean isZero = inst.getValue() == 0;
                     TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.getNameColor();
                     TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                    String nameStr = nameColor + stat.getDisplayName().toString();
+                    String nameStr = nameColor + stat.getDisplayName().getFormattedText();
                     int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
-
-                    String statStr = statColor + inst.formattedString(decimalPlaces, false).replaceFirst("\\.0+$", "");
-                    if (statStr.contains("."))
-                        statStr = statStr.replaceFirst("0+$", "");
-                    if (modifiers.size() > 1)
-                        statStr += "*";
-                    if (stat == ItemStats.ARMOR_DURABILITY)
-                        statStr += "x";
-
-                    list.add(new Tuple<>(nameStr, statStr));
+                    String statListStr = StatModifierMap.formatText(modifiers, stat, decimalPlaces).applyTextStyle(statColor).getFormattedText();
+                    list.add(new Tuple<>(nameStr, statListStr));
                 }
             }
         }
