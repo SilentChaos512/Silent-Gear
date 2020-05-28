@@ -19,12 +19,12 @@
     },
     "traits": [
         {
-            "name": "silentgear:flexible",
-            "level": 2
+            "name": "silentgear:flammable",
+            "level": 1
         },
         {
-            "name": "silentgear:soft",
-            "level": 1
+            "name": "silentgear:flexible",
+            "level": 2
         },
         {
             "name": "silentgear:jagged",

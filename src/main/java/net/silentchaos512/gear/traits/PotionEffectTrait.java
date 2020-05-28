@@ -60,7 +60,7 @@ public final class PotionEffectTrait extends SimpleTrait {
 
         int count = 0;
         for (ItemStack stack : player.getArmorInventoryList()) {
-            if (stack.getItem() instanceof ICoreArmor && TraitHelper.getTraitLevel(stack, this) > 0) {
+            if (stack.getItem() instanceof ICoreArmor && TraitHelper.hasTrait(stack, this)) {
                 ++count;
             }
         }

@@ -11,6 +11,7 @@ import net.silentchaos512.gear.item.CraftingItems;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
@@ -57,6 +58,13 @@ public final class SilentGear {
 
     public static ResourceLocation getId(String path) {
         return new ResourceLocation(MOD_ID, path);
+    }
+
+    @Nullable
+    public static ResourceLocation getIdWithDefaultNamespace(String name) {
+        if (name.contains(":"))
+            return ResourceLocation.tryCreate(name);
+        return ResourceLocation.tryCreate(RESOURCE_PREFIX + name);
     }
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {

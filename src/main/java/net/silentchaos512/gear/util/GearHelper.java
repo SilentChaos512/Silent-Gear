@@ -29,6 +29,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.IPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -161,6 +162,10 @@ public final class GearHelper {
         PartData data = GearData.getPrimaryPart(stack);
         PartData dataMaterial = PartData.from(material);
         return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
+    }
+
+    public static ItemStat getDurabilityStat(ItemStack gear) {
+        return gear.getItem() instanceof ICoreItem ? ((ICoreItem) gear.getItem()).getDurabilityStat() : ItemStats.DURABILITY;
     }
 
     public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, Hand hand) {

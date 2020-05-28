@@ -36,6 +36,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.type.ComplexRodPart;
 import net.silentchaos512.gear.traits.TraitManager;
 
 import javax.annotation.Nullable;
@@ -96,6 +97,18 @@ public final class TraitHelper {
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */
     public static int getTraitLevel(ItemStack gear, ITrait trait) {
+        return getTraitLevel(gear, trait.getId());
+    }
+
+    /**
+     * Gets the level of the trait on the gear using the trait ID.
+     *
+     * @param gear    The gear item
+     * @param traitId The trait's ID
+     * @return The level of the trait on the gear, or zero if the item does not have the trait or
+     * the trait does not exist.
+     */
+    public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
         if (!GearHelper.isGear(gear)) {
             SilentGear.LOGGER.error("Called getTraitLevel on non-gear item, {}", gear);
             SilentGear.LOGGER.catching(new IllegalArgumentException());
@@ -108,9 +121,7 @@ public final class TraitHelper {
             if (nbt instanceof CompoundNBT) {
                 CompoundNBT tagCompound = (CompoundNBT) nbt;
                 String regName = tagCompound.getString("Name");
-                ITrait traitOnGear = TraitManager.get(regName);
-
-                if (traitOnGear == trait) {
+                if (regName.equals(traitId.toString())) {
                     return tagCompound.getByte("Level");
                 }
             }
@@ -120,17 +131,45 @@ public final class TraitHelper {
     }
 
     /**
-     * Shortcut for {@link #getTraitLevel(ItemStack, ITrait)}, which acquires the trait from the
-     * TraitManager for you.
+     * Check if the gear item has the given trait at any level. Use {@link #getTraitLevel(ItemStack,
+     * ITrait)} to check the actual level.
+     *
+     * @param gear  The gear item
+     * @param trait The trait
+     * @return True if and only if the gear item has the trait
+     */
+    public static boolean hasTrait(ItemStack gear, ITrait trait) {
+        return hasTrait(gear, trait.getId());
+    }
+
+    /**
+     * Check if the gear item has the given trait at any level. Use {@link #getTraitLevel(ItemStack,
+     * ResourceLocation)} to check the actual level.
      *
      * @param gear    The gear item
-     * @param traitId The trait's ID
-     * @return The level of the trait on the gear, or zero if the item does not have the trait or
-     * the trait does not exist.
+     * @param traitId The trait ID
+     * @return True if and only if the gear item has the trait
      */
-    public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
-        ITrait trait = TraitManager.get(traitId);
-        return trait != null ? getTraitLevel(gear, trait) : 0;
+    public static boolean hasTrait(ItemStack gear, ResourceLocation traitId) {
+        if (!GearHelper.isGear(gear)) {
+            SilentGear.LOGGER.error("Called getTraitLevel on non-gear item, {}", gear);
+            SilentGear.LOGGER.catching(new IllegalArgumentException());
+            return false;
+        }
+
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+
+        for (INBT nbt : tagList) {
+            if (nbt instanceof CompoundNBT) {
+                CompoundNBT tagCompound = (CompoundNBT) nbt;
+                String regName = tagCompound.getString("Name");
+                if (regName.equals(traitId.toString())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public static Map<ITrait, Integer> getCachedTraits(ItemStack gear) {
@@ -156,8 +195,8 @@ public final class TraitHelper {
 
     /**
      * Gets a Map of Traits and levels from the parts, used to calculate trait levels and should not
-     * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ITrait)} when
-     * appropriate.
+     * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ResourceLocation)} or
+     * {@link #hasTrait(ItemStack, ResourceLocation)} when appropriate.
      *
      * @param gear  The item
      * @param parts The list of all parts used in constructing the gear.

@@ -23,6 +23,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipe;
@@ -36,8 +37,10 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -50,6 +53,8 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
@@ -103,6 +108,38 @@ public final class GearEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent event) {
+        if (event.getEntity() instanceof PlayerEntity && isFireDamage(event.getSource())) {
+            for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+                ItemStack stack = event.getEntityLiving().getItemStackFromSlot(slot);
+                if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, TraitConst.FLAMMABLE)) {
+                    GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
+                    if (GearHelper.isBroken(stack)) {
+                        event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack));
+                        event.getEntityLiving().sendBreakAnimation(slot);
+                        stack.shrink(1);
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isFireDamage(DamageSource source) {
+        return source == DamageSource.IN_FIRE || source == DamageSource.ON_FIRE || source == DamageSource.LAVA;
+    }
+
+    private static final float BURN_TICKS_PER_DURABILITY = 200f / 50f;
+
+    @SubscribeEvent
+    public static void onFurnaceFuelBurnTimeEvent(FurnaceFuelBurnTimeEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, TraitConst.FLAMMABLE)) {
+            float durability = GearData.getStat(stack, GearHelper.getDurabilityStat(stack));
+            event.setBurnTime((int) (durability * BURN_TICKS_PER_DURABILITY));
+        }
+    }
+
     //endregion
 
     //region Lustrous trait
@@ -121,8 +158,7 @@ public final class GearEvents {
             final boolean canHarvest = toolLevel >= blockLevel;
 
             if (canHarvest) {
-                ITrait lustrous = TraitManager.get(TraitConst.LUSTROUS);
-                int level = TraitHelper.getTraitLevel(tool, lustrous);
+                int level = TraitHelper.getTraitLevel(tool, TraitConst.LUSTROUS);
                 int light = getLightForLustrousTrait(player.world, player.getPosition());
                 event.setNewSpeed(event.getOriginalSpeed() + getLustrousSpeedBonus(level, light));
             }
