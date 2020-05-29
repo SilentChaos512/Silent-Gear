@@ -1,0 +1,23 @@
+{
+    "type": "silentgear:complex_rod",
+    "crafting_items": {
+        "uncraftable": {
+            "remove": "me!"
+        },
+        "fixme_normal": {
+            "item": "silentgear:tool_rod"
+        }
+    },
+    "name": {
+        "translate": "part.silentgear.complex_rod"
+    },
+    "textures": {
+        "all": {
+            "lite_texture": "high_contrast",
+            "normal_color": "white"
+        }
+    },
+    "availability": {
+        "tier": -1
+    }
+}

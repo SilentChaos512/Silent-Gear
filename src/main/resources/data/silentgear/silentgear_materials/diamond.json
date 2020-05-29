@@ -1,0 +1,101 @@
+{
+    "availability": {
+        "tier": 3
+    },
+    "stats": {
+        "main": {
+            "durability": 1561,
+            "armor_durability": 33,
+            "enchantability": 10,
+            "harvest_level": 3,
+            "harvest_speed": 8,
+            "melee_damage": 3,
+            "magic_damage": 1,
+            "attack_speed": 0.0,
+            "armor": 20,
+            "armor_toughness": 8,
+            "magic_armor": 4,
+            "ranged_damage": 2,
+            "ranged_speed": -0.2,
+            "rarity": 40,
+            "chargeability": 0.8
+        },
+        "rod": {
+            "durability": {
+                "mul2": 0.4
+            },
+            "enchantability": {
+                "mul2": -0.2
+            },
+            "rarity": 40
+        },
+        "tip": {
+            "durability": {
+                "add": 256
+            },
+            "enchantability": {
+                "add": -2
+            },
+            "harvest_level": {
+                "max": 3
+            },
+            "harvest_speed": {
+                "add": 2
+            },
+            "melee_damage": {
+                "add": 2
+            },
+            "magic_damage": {
+                "add": 1
+            },
+            "ranged_damage": {
+                "add": 0.5
+            },
+            "rarity": 10
+        }
+    },
+    "traits": {
+        "main": [
+            {
+                "name": "silentgear:brittle",
+                "level": 2
+            },
+            {
+                "name": "silentgear:lustrous",
+                "level": 3
+            }
+        ],
+        "tip": [
+            {
+                "name": "silentgear:brittle",
+                "level": 2
+            },
+            {
+                "name": "silentgear:lustrous",
+                "level": 2
+            }
+        ]
+    },
+    "crafting_items": {
+        "main": {
+            "tag": "forge:gems/diamond"
+        }
+    },
+    "name": {
+        "translate": "material.silentgear.iron"
+    },
+    "display": {
+        "main/all": {
+            "lite_texture": "high_contrast_with_highlight",
+            "color": "#33EBCB"
+        },
+        "rod/all": {
+            "lite_texture": "high_contrast",
+            "color": "#33EBCB"
+        },
+        "tip/all": {
+            "lite_texture": "high_contrast",
+            "color": "#33EBCB"
+        }
+    }
+}

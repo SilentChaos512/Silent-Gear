@@ -1,0 +1,20 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "silentgear:item/rod/long_generic_hc"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "silentgear:rod_type": 1
+      },
+      "model": "silentgear:item/rod/long_generic_lc"
+    },
+    {
+      "predicate": {
+        "silentgear:rod_type": 2
+      },
+      "model": "silentgear:item/rod/long_generic_hc"
+    }
+  ]
+}

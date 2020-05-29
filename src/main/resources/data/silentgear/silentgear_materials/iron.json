@@ -1,0 +1,97 @@
+{
+    "availability": {
+        "tier": 2
+    },
+    "stats": {
+        "main": {
+            "durability": 250,
+            "armor_durability": 15,
+            "enchantability": 14,
+            "harvest_level": 2,
+            "harvest_speed": 6,
+            "melee_damage": 2,
+            "magic_damage": 1,
+            "attack_speed": -0.1,
+            "armor": 15,
+            "armor_toughness": 0,
+            "magic_armor": 6,
+            "ranged_damage": 1,
+            "ranged_speed": 0.1,
+            "rarity": 20,
+            "chargeability": 0.7
+        },
+        "rod": {
+            "durability": {
+                "mul2": 0.3
+            },
+            "enchantability": [
+                {
+                    "add": -2
+                },
+                {
+                    "mul2": -0.1
+                }
+            ],
+            "melee_damage": {
+                "mul2": 0.1
+            },
+            "rarity": 20
+        },
+        "tip": {
+            "durability": {
+                "add": 128
+            },
+            "enchantability": {
+                "add": 2
+            },
+            "harvest_level": {
+                "max": 2
+            },
+            "harvest_speed": {
+                "add": 1
+            },
+            "melee_damage": {
+                "add": 1
+            },
+            "rarity": 10
+        }
+    },
+    "traits": {
+        "main": [
+            {
+                "silentgear:malleable": 3,
+                "conditions": []
+            }
+        ],
+        "tip": [
+            {
+                "silentgear:malleable": 2
+            }
+        ]
+    },
+    "crafting_items": {
+        "main": {
+            "tag": "forge:ingots/iron"
+        },
+        "rod/sub": {
+            "tag": "forge:rods/iron"
+        }
+    },
+    "name": {
+        "translate": "material.silentgear.iron"
+    },
+    "display": {
+        "main/all": {
+            "lite_texture": "high_contrast_with_highlight",
+            "color": "white"
+        },
+        "rod/all": {
+            "lite_texture": "low_contrast",
+            "color": "#D8D8D8"
+        },
+        "tip/all": {
+            "lite_texture": "high_contrast",
+            "color": "white"
+        }
+    }
+}

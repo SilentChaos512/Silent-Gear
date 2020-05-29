@@ -15,10 +15,7 @@ import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.item.BlueprintPackageItem;
-import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.CustomTippedUpgrade;
-import net.silentchaos512.gear.item.SlingshotAmmoItem;
+import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.gear.*;
@@ -93,6 +90,7 @@ public final class ModItems {
         }
 
         register("custom_tipped_upgrade", customTippedUpgrade);
+//        register("tool_rod", new PartItem(SilentGear.getId("complex_rod"), new Item.Properties().group(SilentGear.ITEM_GROUP)));
 
         flaxseeds = register("flaxseeds", new BlockNamedItem(ModBlocks.FLAX_PLANT.asBlock(), getBaseProperties()));
         netherBanana = register("nether_banana", new Item(getBaseProperties()

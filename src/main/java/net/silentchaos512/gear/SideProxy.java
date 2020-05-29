@@ -37,6 +37,7 @@ import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.Network;
@@ -114,6 +115,7 @@ class SideProxy implements IProxy {
 
     private static void serverAboutToStart(FMLServerAboutToStartEvent event) {
         IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
+        resourceManager.addReloadListener(MaterialManager.INSTANCE);
         resourceManager.addReloadListener(TraitManager.INSTANCE);
         resourceManager.addReloadListener(PartManager.INSTANCE);
     }
@@ -124,8 +126,9 @@ class SideProxy implements IProxy {
 
     private static void serverStarted(FMLServerStartedEvent event) {
         server = event.getServer();
-        SilentGear.LOGGER.info(TraitManager.MARKER, "Gear traits loaded: {}", TraitManager.getValues().size());
-        SilentGear.LOGGER.info(PartManager.MARKER, "Gear parts loaded: {}", PartManager.getValues().size());
+        SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
+        SilentGear.LOGGER.info(TraitManager.MARKER, "Traits loaded: {}", TraitManager.getValues().size());
+        SilentGear.LOGGER.info(PartManager.MARKER, "Parts loaded: {}", PartManager.getValues().size());
     }
 
     private static void serverStopping(FMLServerStoppingEvent event) {
@@ -204,8 +207,8 @@ class SideProxy implements IProxy {
     public static ITextComponent detectDataLoadingFailure(PlayerEntity player) {
         // Check if parts/traits have loaded. If not, a mod has likely broken the data loading process.
         // We should inform the user and tell them what to look for in the log.
-        if (PartManager.getValues().isEmpty() || TraitManager.getValues().isEmpty()) {
-            String msg = "Parts and/or traits have not loaded! This may be caused by a broken mod, even those not related to Silent Gear. Search your log for \"Failed to reload data packs\" to find the error.";
+        if (MaterialManager.getValues().isEmpty() || PartManager.getValues().isEmpty() || TraitManager.getValues().isEmpty()) {
+            String msg = "Materials, parts, and/or traits have not loaded! This may be caused by a broken mod, even those not related to Silent Gear. Search your log for \"Failed to reload data packs\" to find the error.";
             SilentGear.LOGGER.error(msg);
             return new StringTextComponent(msg);
         }
