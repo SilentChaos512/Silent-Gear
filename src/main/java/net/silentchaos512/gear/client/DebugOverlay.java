@@ -22,6 +22,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -57,6 +61,8 @@ public class DebugOverlay extends DebugRenderOverlay {
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity player = mc.player;
         if (player == null) return list;
+
+//        addAttributeInfo(list, player, SharedMonsterAttributes.LUCK);
 
         ItemStack heldItem = player.getHeldItem(Hand.MAIN_HAND);
         if (heldItem.isEmpty()) return list;
@@ -110,6 +116,11 @@ public class DebugOverlay extends DebugRenderOverlay {
         }
 
         return list;
+    }
+
+    private static void addAttributeInfo(List<String> list, PlayerEntity player, IAttribute attribute) {
+        IAttributeInstance attribute1 = player.getAttribute(attribute);
+        list.add(String.format("%s=%.1f (%dx mods)", attribute.getName(), attribute1.getValue(), attribute1.func_225505_c_().size()));
     }
 
     @Override

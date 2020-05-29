@@ -48,7 +48,7 @@ public class AttributeTrait extends SimpleTrait {
                 mods.forEach(d -> {
                     String modName = String.format("%s_%s_%d_%s_%s", this.getId().getNamespace(), this.getId().getPath(), traitLevel, d.name, key);
                     float modValue = d.values[MathHelper.clamp(traitLevel - 1, 0, d.values.length - 1)];
-                    map.put(d.name, new AttributeModifier(modName, modValue, d.operation));
+                    map.put(d.name, new AttributeModifier(d.uuid, modName, modValue, d.operation));
                 });
             }
         }
@@ -142,9 +142,11 @@ public class AttributeTrait extends SimpleTrait {
         private String name;
         private float[] values;
         private AttributeModifier.Operation operation = AttributeModifier.Operation.ADDITION;
+        private UUID uuid;
 
         static ModifierData from(JsonObject json) {
             ModifierData ret = new ModifierData();
+            ret.uuid = UUID.randomUUID();
 
             if (!json.has("attribute")) {
                 throw new JsonParseException("attribute element not found, should be string");
