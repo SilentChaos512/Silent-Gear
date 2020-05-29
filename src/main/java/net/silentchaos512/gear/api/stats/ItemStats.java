@@ -75,15 +75,8 @@ public final class ItemStats {
      */
     @Nullable
     public static ItemStat byName(String name) {
-        ResourceLocation id = withDefaultNamespace(name);
+        ResourceLocation id = SilentGear.getIdWithDefaultNamespace(name);
         return id != null ? REGISTRY.get().getValue(id) : null;
-    }
-
-    @Nullable
-    private static ResourceLocation withDefaultNamespace(String name) {
-        if (name.contains(":"))
-            return ResourceLocation.tryCreate(name);
-        return ResourceLocation.tryCreate(SilentGear.RESOURCE_PREFIX + name);
     }
 
     // region Registry creation - other mods should not call these methods!

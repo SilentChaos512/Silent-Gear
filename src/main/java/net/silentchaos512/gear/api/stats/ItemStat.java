@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 /**
  * A stat that any ICoreItem can use. See {@link ItemStats} for stats that can be used.
- *
+ * <p>
  * TODO: Rename to GearStat in 2.0
  *
  * @author SilentChaos512
@@ -58,8 +58,8 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
     }
 
     /**
-     * @deprecated Use {@link #getRegistryName()} instead
      * @return The stat name
+     * @deprecated Use {@link #getRegistryName()} instead
      */
     @Deprecated
     public ResourceLocation getName() {
@@ -108,25 +108,10 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         if (modifiers.isEmpty())
             return baseValue;
 
-        // Used for weighted average. Percent difference in the value between each part and the primary part affects
-        // weight. The bigger the difference, the less weight the part has.
-        final float primaryMod = getPrimaryMod(modifiers);
-
         float f0 = baseValue;
 
         // Average (weighted, used for mains)
-        int count = 0;
-        float totalWeight = 0f;
-        for (StatInstance mod : modifiers) {
-            if (mod.getOp() == StatInstance.Operation.AVG) {
-                ++count;
-                float weight = getModifierWeight(mod, primaryMod, count);
-                totalWeight += weight;
-                f0 += mod.getValue() * weight;
-            }
-        }
-        if (count > 0)
-            f0 /= totalWeight;
+        f0 += getWeightedAverage(modifiers, Operation.AVG);
 
         // Maximum
         for (StatInstance mod : modifiers)
@@ -152,16 +137,32 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return clampValue ? clampValue(f1) : f1;
     }
 
-    private static float getPrimaryMod(Iterable<StatInstance> modifiers) {
+    private static float getPrimaryMod(Iterable<StatInstance> modifiers, Operation op) {
         float primaryMod = -1f;
         for (StatInstance mod : modifiers) {
-            if (mod.getOp() == StatInstance.Operation.AVG) {
+            if (mod.getOp() == op) {
                 if (primaryMod < 0f) {
                     primaryMod = mod.getValue();
                 }
             }
         }
         return primaryMod > 0 ? primaryMod : 1;
+    }
+
+    public static float getWeightedAverage(Collection<StatInstance> modifiers, Operation op) {
+        float primaryMod = getPrimaryMod(modifiers, op);
+        float ret = 0;
+        int count = 0;
+        float totalWeight = 0f;
+        for (StatInstance mod : modifiers) {
+            if (mod.getOp() == op) {
+                ++count;
+                float weight = getModifierWeight(mod, primaryMod, count);
+                totalWeight += weight;
+                ret += mod.getValue() * weight;
+            }
+        }
+        return count > 0 ? ret / totalWeight : ret;
     }
 
     private static float getModifierWeight(StatInstance mod, float primaryMod, int count) {
@@ -217,6 +218,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return new TranslationTextComponent("stat." + name.getNamespace() + "." + name.getPath());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class Properties {
         private Operation defaultOp = Operation.AVG;
         private boolean displayAsInt;

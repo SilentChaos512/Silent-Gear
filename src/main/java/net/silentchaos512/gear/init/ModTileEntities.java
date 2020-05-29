@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -12,20 +11,21 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
+import net.silentchaos512.lib.block.IBlockProvider;
 import net.silentchaos512.utils.Lazy;
 
 import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum ModTileEntities {
-    CRAFTING_STATION(CraftingStationTileEntity::new, ModBlocks.CRAFTING_STATION::asBlock),
-    SALVAGER(SalvagerTileEntity::new, ModBlocks.SALVAGER::asBlock);
+    CRAFTING_STATION(CraftingStationTileEntity::new, ModBlocks.CRAFTING_STATION),
+    SALVAGER(SalvagerTileEntity::new, ModBlocks.SALVAGER);
 
     private final Lazy<TileEntityType<?>> type;
 
-    ModTileEntities(Supplier<TileEntity> tileEntitySupplier, Supplier<Block> blockSupplier) {
+    ModTileEntities(Supplier<TileEntity> tileEntitySupplier, IBlockProvider block) {
         //noinspection ConstantConditions -- null in build
-        this.type = Lazy.of(() -> TileEntityType.Builder.create(tileEntitySupplier, blockSupplier.get()).build(null));
+        this.type = Lazy.of(() -> TileEntityType.Builder.create(tileEntitySupplier, block.asBlock()).build(null));
     }
 
     public TileEntityType<?> type() {
@@ -33,8 +33,6 @@ public enum ModTileEntities {
     }
 
     public static void registerAll(RegistryEvent.Register<TileEntityType<?>> event) {
-        if (!event.getName().equals(ForgeRegistries.TILE_ENTITIES.getRegistryName())) return;
-
         for (ModTileEntities tileEnum : values()) {
             register(tileEnum.name().toLowerCase(Locale.ROOT), tileEnum.type());
         }

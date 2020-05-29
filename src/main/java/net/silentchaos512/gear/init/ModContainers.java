@@ -32,8 +32,6 @@ public enum ModContainers {
     }
 
     public static void registerAll(RegistryEvent.Register<ContainerType<?>> event) {
-        if (!event.getName().equals(ForgeRegistries.CONTAINERS.getRegistryName())) return;
-
         for (ModContainers container : values()) {
             register(container.name().toLowerCase(Locale.ROOT), container.type());
         }

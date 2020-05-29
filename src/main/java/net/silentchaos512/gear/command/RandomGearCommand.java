@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearGenerator;
@@ -25,7 +26,7 @@ import java.util.Collection;
 
 public final class RandomGearCommand {
     private static final SuggestionProvider<CommandSource> itemIdSuggestions = (context, builder) ->
-            ISuggestionProvider.func_212476_a(ModItems.gearClasses.keySet().stream(), builder);
+            ISuggestionProvider.func_212476_a(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ICoreItem).map(ForgeRegistryEntry::getRegistryName), builder);
 
     private RandomGearCommand() {}
 

@@ -58,6 +58,17 @@
                     "weight": 8
                 }
             ]
+        },
+        {
+            "name": "shield",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "silentgear:blueprint_shield",
+                    "weight": 1
+                }
+            ]
         }
     ]
 }

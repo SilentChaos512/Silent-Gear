@@ -62,8 +62,6 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     }
 
     public static void registerAll(RegistryEvent.Register<Block> event) {
-        if (!event.getName().equals(ForgeRegistries.BLOCKS.getRegistryName())) return;
-
         for (ModBlocks block : values()) {
             register(block.getName(), block.asBlock(), block.item.get());
         }

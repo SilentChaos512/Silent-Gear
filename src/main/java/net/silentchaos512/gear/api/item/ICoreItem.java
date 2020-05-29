@@ -117,6 +117,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return getModelKey(stack, animationFrame, getRenderParts(stack));
     }
 
+    @Deprecated
     PartData[] getRenderParts(ItemStack stack);
 
     //endregion

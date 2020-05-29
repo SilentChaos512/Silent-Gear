@@ -198,6 +198,7 @@ public abstract class AbstractGearPart implements IGearPart {
         return namePrefix != null ? namePrefix.deepCopy() : null;
     }
 
+    @Deprecated
     public int getModelIndex() {
         return modelIndex;
     }
