@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- `/sgear_mats` command for interacting with new WIP material system (currently unused)
+
 ## [1.7.1] - 2020-05-29
 ### Added
 - Flammable trait (only on wood by default). Flammable items take damage if the player is on fire and the item is equipped. They can also be used as fuel in furnaces, with the burn time being proportional to the item's durability.

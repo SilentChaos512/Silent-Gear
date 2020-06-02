@@ -7,6 +7,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.silentchaos512.gear.item.CraftingItems;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +20,6 @@ import java.util.Random;
 public final class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
-    public static final String VERSION = "1.2.0";
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 
@@ -29,31 +29,26 @@ public final class SilentGear {
     public static SilentGear INSTANCE;
     public static IProxy PROXY;
 
-    @SuppressWarnings("Convert2MethodRef")
     public SilentGear() {
         INSTANCE = this;
-        PROXY = DistExecutor.runForDist(() -> () -> new SideProxy.Client(), () -> () -> new SideProxy.Server());
+        PROXY = DistExecutor.safeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
     }
 
     public static String getVersion() {
-        return getVersion(false);
-    }
-
-    public static String getVersion(boolean correctInDev) {
         Optional<? extends ModContainer> o = ModList.get().getModContainerById(MOD_ID);
         if (o.isPresent()) {
-            String str = o.get().getModInfo().getVersion().toString();
-            if (correctInDev && "NONE".equals(str))
-                return VERSION;
-            return str;
+            return o.get().getModInfo().getVersion().toString();
         }
         return "0.0.0";
     }
 
+    @Deprecated
+    public static String getVersion(boolean correctInDev) {
+        return getVersion();
+    }
+
     public static boolean isDevBuild() {
-        // TODO: Is there a better way? Guess it works though...
-        String version = getVersion(false);
-        return "NONE".equals(version);
+        return "NONE".equals(getVersion()) || !FMLLoader.isProduction();
     }
 
     public static ResourceLocation getId(String path) {

@@ -26,6 +26,7 @@ public final class GearType {
     public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL);
     public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL);
     public static final GearType PICKAXE = getOrCreate("pickaxe", HARVEST_TOOL);
+    public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL);
     public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL);
     public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL);
     // Melee weapons (swords)
@@ -107,6 +108,9 @@ public final class GearType {
      * @return True if this type's name is equal to type, or if its parent matches (recursive)
      */
     public boolean matches(String type, boolean includeAll) {
+        if (type.contains("/")) {
+            return matches(type.split("/")[1], includeAll);
+        }
         return (includeAll && "all".equals(type)) || name.equals(type) || (parent != null && parent.matches(type, includeAll));
     }
 

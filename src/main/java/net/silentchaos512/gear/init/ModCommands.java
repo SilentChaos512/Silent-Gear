@@ -11,12 +11,9 @@ public final class ModCommands {
     public static void registerAll(CommandDispatcher<CommandSource> dispatcher) {
         LockStatsCommand.register(dispatcher);
         RecalculateStatsCommand.register(dispatcher);
+        SGearMaterialsCommand.register(dispatcher);
         SGearPartsCommand.register(dispatcher);
         SGearTraitsCommand.register(dispatcher);
         RandomGearCommand.register(dispatcher);
-
-        if (SilentGear.isDevBuild()) {
-            GradeTestCommand.register(dispatcher);
-        }
     }
 }

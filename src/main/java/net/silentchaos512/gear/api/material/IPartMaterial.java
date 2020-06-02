@@ -28,6 +28,8 @@ public interface IPartMaterial {
     // FIXME: PartType param should not be used?
     Ingredient getIngredient(PartType partType);
 
+    boolean allowedInPart(PartType partType);
+
     void retainData(@Nullable IPartMaterial oldMaterial);
 
     Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartType partType);

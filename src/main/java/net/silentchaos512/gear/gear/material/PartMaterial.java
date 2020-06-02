@@ -12,13 +12,15 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.MaterialDisplay;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.parts.PartDisplay;
 import net.silentchaos512.gear.parts.PartTextureType;
 
 import javax.annotation.Nullable;
@@ -35,7 +37,8 @@ public class PartMaterial implements IPartMaterial {
 
     ITextComponent displayName;
     @Nullable ITextComponent namePrefix = null;
-    final Map<String, PartDisplay> display = new HashMap<>();
+    // Keys are part_type/gear_type
+    final Map<String, MaterialDisplay> display = new HashMap<>();
 
     public PartMaterial(ResourceLocation id) {
         this.materialId = id;
@@ -57,6 +60,11 @@ public class PartMaterial implements IPartMaterial {
     }
 
     @Override
+    public boolean allowedInPart(PartType partType) {
+        return stats.containsKey(partType);
+    }
+
+    @Override
     public void retainData(@Nullable IPartMaterial oldMaterial) {
         if (oldMaterial instanceof PartMaterial) {
             // Copy trait instances, the client doesn't need to know conditions
@@ -72,29 +80,59 @@ public class PartMaterial implements IPartMaterial {
 
     @Override
     public Collection<PartTraitInstance> getTraits(ItemStack gear, PartType partType) {
-        return Collections.unmodifiableList(traits.get(partType));
+        return Collections.unmodifiableList(traits.getOrDefault(partType, Collections.emptyList()));
     }
 
     @Override
     public int getColor(ItemStack gear, PartType partType) {
-        return 0;
+        return getMaterialDisplay(gear, partType).getColor();
     }
 
     @Override
     public PartTextureType getTexture(ItemStack gear, PartType partType) {
-        return null;
+        return getMaterialDisplay(gear, partType).getTexture();
+    }
+
+    private MaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType) {
+        if (!gear.isEmpty()) {
+            GearType gearType = ((ICoreItem) gear.getItem()).getGearType();
+
+            // Gear class-specific override
+            String gearTypeKey = partType + "/" + gearType.getName();
+            if (display.containsKey(gearTypeKey)) {
+                return display.get(gearTypeKey);
+            }
+            // Parent type overrides, like "armor"
+            for (String key : display.keySet()) {
+                if (gearType.matches(key, false)) {
+                    return display.get(key);
+                }
+            }
+        }
+        return display.getOrDefault(partType + "/all", MaterialDisplay.DEFAULT);
     }
 
     @Override
     public ITextComponent getDisplayName(ItemStack gear, PartType partType) {
-        return null;
+        return displayName;
     }
 
     public boolean isVisible() {
         return this.visible;
     }
 
-    public static class Serializer {
+    @Override
+    public String toString() {
+        return "PartMaterial{" +
+                "id=" + materialId +
+                ", tier=" + tier +
+                ", ingredient=" + ingredient +
+                '}';
+    }
+
+    public static final class Serializer {
+        private Serializer() {throw new IllegalAccessError("Utility class");}
+
         public static PartMaterial deserialize(ResourceLocation id, JsonObject json) {
             PartMaterial ret = new PartMaterial(id);
 
@@ -146,7 +184,7 @@ public class PartMaterial implements IPartMaterial {
             JsonElement elementDisplay = json.get("display");
             if (elementDisplay != null && elementDisplay.isJsonObject()) {
                 JsonObject obj = elementDisplay.getAsJsonObject();
-                PartDisplay defaultProps = ret.display.getOrDefault("all", PartDisplay.DEFAULT);
+                MaterialDisplay defaultProps = ret.display.getOrDefault("all", MaterialDisplay.DEFAULT);
 
                 if (!ret.display.containsKey("all")) {
                     ret.display.put("all", defaultProps);
@@ -158,7 +196,7 @@ public class PartMaterial implements IPartMaterial {
 
                     if (value.isJsonObject()) {
                         JsonObject jsonObject = value.getAsJsonObject();
-                        ret.display.put(key, PartDisplay.from(jsonObject, defaultProps));
+                        ret.display.put(key, MaterialDisplay.deserialize(jsonObject, defaultProps));
                     }
                 }
             } else {

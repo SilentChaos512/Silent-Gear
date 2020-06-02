@@ -18,7 +18,7 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="forge"
     mandatory=true
-    versionRange="[31.1.18,)"
+    versionRange="[31.2.5,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]
@@ -37,5 +37,5 @@ authors="SilentChaos512"
     modId="silentgems"
     mandatory=false
     versionRange="[3.5.4,)"
-    ordering="NONE"
+    ordering="BEFORE"
     side="BOTH"
