@@ -40,7 +40,7 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     );
 
     public CoreShield() {
-        super(GearHelper.getBuilder(null));
+        super(GearHelper.getBuilder(null).maxDamage(100));
     }
 
     @Override
@@ -86,6 +86,11 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     @Override
     public int getItemEnchantability(ItemStack stack) {
         return GearData.getStatInt(stack, ItemStats.ENCHANTABILITY);
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
     }
 
     @Override

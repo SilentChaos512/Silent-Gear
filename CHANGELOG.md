@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Shears (NOTE: these do not function correctly because of missing Forge patches!) [#103]
 - `/sgear_mats` command for interacting with new WIP material system (currently unused)
+### Fixed
+- Flammable's item destroyed message not giving the item name
+- Shields not being enchantable
 
 ## [1.7.1] - 2020-05-29
 ### Added

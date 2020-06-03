@@ -48,10 +48,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.traits.TraitConst;
-import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
@@ -116,7 +114,7 @@ public final class GearEvents {
                 if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, TraitConst.FLAMMABLE)) {
                     GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
                     if (GearHelper.isBroken(stack)) {
-                        event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack));
+                        event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getDisplayName()));
                         event.getEntityLiving().sendBreakAnimation(slot);
                         stack.shrink(1);
                     }

@@ -107,16 +107,12 @@ public final class GearData {
             // We should recalculate the item's stats!
             clearCachedData(stack);
             addOrRemoveHighlightPart(stack, parts);
+            propertiesCompound.putString("ModVersion", SilentGear.getVersion());
             PartDataList uniqueParts = parts.getUniqueParts(true);
             Map<ITrait, Integer> traits = TraitHelper.getTraits(stack, parts);
 
             double synergy = calculateSynergyValue(parts, uniqueParts, traits);
             boolean hasMissingRod = item instanceof ICoreTool && parts.getRods().isEmpty();
-
-            // Only consider stats relevant to the item
-            // Collection<ItemStat> relevantStats = stack.getItem() instanceof ICoreItem
-            // ? item.getRelevantStats(stack)
-            // : ItemStat.ALL_STATS.values();
 
             // Get all stat modifiers from all parts and item class modifiers
             Multimap<ItemStat, StatInstance> stats = getStatModifiers(stack, item, parts, synergy);
@@ -154,20 +150,38 @@ public final class GearData {
             propertiesCompound.put("Traits", traitList);
 
             propertiesCompound.putFloat(NBT_SYNERGY, (float) synergy);
+        } else {
+            SilentGear.LOGGER.debug("Not recalculating stats for {}'s {}", player, stack);
+            fixStatsCompound(propertiesCompound);
         }
 
         // Update rendering info even if we didn't update stats
         updateRenderingInfo(stack, parts);
     }
 
-    private static final boolean STAT_DEBUGGING = true;
+    private static void fixStatsCompound(CompoundNBT properties) {
+        // Update the stats NBT to 1.7.0+ format
+        CompoundNBT statsTag = properties.getCompound("Stats");
+        for (ItemStat stat : ItemStats.REGISTRY.get()) {
+            ResourceLocation statId = Objects.requireNonNull(stat.getRegistryName());
+            String oldKey = statId.getPath();
+            if (properties.contains(oldKey)) {
+                float value = properties.getFloat(oldKey);
+                properties.remove(oldKey);
+                statsTag.putFloat(statId.toString(), value);
+            }
+        }
+        properties.put("Stats", statsTag);
+    }
+
+    private static final boolean STAT_DEBUGGING = false;
 
     @Nullable
     private static Map<ItemStat, Float> getCurrentStatsForDebugging(ItemStack stack) {
         // Get current stats from the item, this is used for logging stat changes
         if (STAT_DEBUGGING) { // TODO: Add config
             Map<ItemStat, Float> map = new HashMap<>();
-            ItemStats.REGISTRY.get().getValues().forEach(stat -> map.put(stat, getStat(stack, stat)));
+            ItemStats.allStatsOrdered().forEach(stat -> map.put(stat, getStat(stack, stat)));
             return map;
         }
         return null;
