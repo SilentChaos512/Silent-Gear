@@ -15,6 +15,7 @@ tools = [
     'mattock',
     'paxel',
     'pickaxe',
+    'shears',
     'shovel',
     'sickle',
     'spear',

@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Shears (NOTE: these do not function correctly because of missing Forge patches!) [#103]
 - `/sgear_mats` command for interacting with new WIP material system (currently unused)
 
 ## [1.7.1] - 2020-05-29

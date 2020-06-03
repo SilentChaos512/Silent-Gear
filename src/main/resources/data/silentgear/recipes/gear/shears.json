@@ -1,0 +1,24 @@
+{
+    "type": "silentgear:gear_crafting",
+    "group": "silentgear:shears",
+    "ingredients": [
+        {
+            "tag": "silentgear:blueprints/shears"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        {
+            "type": "silentgear:part_type",
+            "part_type": "rod"
+        }
+    ],
+    "result": {
+        "item": "silentgear:shears"
+    }
+}

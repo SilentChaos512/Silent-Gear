@@ -55,6 +55,7 @@ public final class ModItems {
     public static CoreLumberAxe lumberAxe = new CoreLumberAxe();
     public static CoreMattock mattock = new CoreMattock();
     public static CoreSickle sickle = new CoreSickle();
+    public static CoreShears shears = new CoreShears();
     public static CoreBow bow = new CoreBow();
     public static CoreCrossbow crossbow = new CoreCrossbow();
     public static CoreSlingshot slingshot = new CoreSlingshot();
@@ -139,9 +140,10 @@ public final class ModItems {
         toolClasses.put(SilentGear.getId("lumber_axe"), lumberAxe);
         toolClasses.put(SilentGear.getId("mattock"), mattock);
         toolClasses.put(SilentGear.getId("sickle"), sickle);
+        toolClasses.put(SilentGear.getId("shears"), shears);
         toolClasses.put(SilentGear.getId("bow"), bow);
         toolClasses.put(SilentGear.getId("crossbow"), crossbow);
-//        toolClasses.put("slingshot", slingshot);
+//        toolClasses.put(SilentGear.getId("slingshot"), slingshot);
 
         armorClasses.put(SilentGear.getId("helmet"), helmet);
         armorClasses.put(SilentGear.getId("chestplate"), chestplate);
