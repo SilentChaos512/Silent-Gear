@@ -30,6 +30,10 @@ public interface IGearPart {
 
     IPartSerializer<?> getSerializer();
 
+    default String getPackName() {
+        return "PACK UNKNOWN";
+    }
+
     /**
      * Used to copy data that is only needed on the server. This prevents certain things like trait
      * conditions from being lost when synchronizing parts in singleplayer.

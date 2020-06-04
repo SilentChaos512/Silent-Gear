@@ -163,9 +163,11 @@ public class GuiItemParts extends Screen {
             TextRenderUtils.renderScaled(minecraft.fontRenderer, translatedName, x, y, 1, Color.VALUE_WHITE, false);
             String regName = TextFormatting.GRAY + selectedPart.getId().toString();
             TextRenderUtils.renderScaled(minecraft.fontRenderer, regName, x, y + 10, 0.5f, Color.VALUE_WHITE, false);
+            String packName = TextFormatting.GRAY + "Data pack: " + selectedPart.getPackName();
+            TextRenderUtils.renderScaled(minecraft.fontRenderer, packName, x, y + 16, 0.5f, Color.VALUE_WHITE, false);
             String typeName = selectedPart.getType().getDisplayName(selectedPart.getTier()).getFormattedText();
-            TextRenderUtils.renderScaled(minecraft.fontRenderer, TextFormatting.GREEN + typeName, x, y + 16, 0.8f, Color.VALUE_WHITE, false);
-            y += 30;
+            TextRenderUtils.renderScaled(minecraft.fontRenderer, TextFormatting.GREEN + typeName, x, y + 22, 0.8f, Color.VALUE_WHITE, false);
+            y += 36;
 
             for (Tuple<String, String> pair : selectedPartInfo) {
                 font.drawString(pair.getA(), x, y, Color.VALUE_WHITE);

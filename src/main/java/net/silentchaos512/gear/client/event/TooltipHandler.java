@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.client.event;
 
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -68,18 +67,21 @@ public final class TooltipHandler {
         // Type, tier
         event.getToolTip().add(part.getType().getDisplayName(part.getTier()).applyTextStyle(TextFormatting.GREEN));
 
-        ITooltipFlag flags = event.getFlags();
+        if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
+            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getId()).applyTextStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.getPackName()).applyTextStyle(TextFormatting.DARK_GRAY));
+        }
 
         // Traits
         List<PartTraitInstance> traits = partData.getTraits().stream()
-                .filter(inst -> inst.getTrait().showInTooltip(flags))
+                .filter(inst -> inst.getTrait().showInTooltip(event.getFlags()))
                 .collect(Collectors.toList());
         int numTraits = traits.size();
         int traitIndex = getTraitDisplayIndex(numTraits);
         int i = 0;
         for (PartTraitInstance inst : traits) {
             if (traitIndex < 0 || traitIndex == i) {
-                inst.getTrait().addInformation(inst.getLevel(), event.getToolTip(), flags);
+                inst.getTrait().addInformation(inst.getLevel(), event.getToolTip(), event.getFlags());
             }
             ++i;
         }

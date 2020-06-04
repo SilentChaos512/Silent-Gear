@@ -78,6 +78,9 @@ public final class PartManager implements IResourceManagerReloadListener {
                         SilentGear.LOGGER.info("Skipping loading gear part {} as it's conditions were not met", name);
                     } else {
                         IGearPart part = PartSerializers.deserialize(name, json);
+                        if (part instanceof AbstractGearPart) {
+                            ((AbstractGearPart) part).packName = iresource.getPackName();
+                        }
                         addPart(part);
                         highestMainPartTier = Math.max(highestMainPartTier, part.getTier());
                     }

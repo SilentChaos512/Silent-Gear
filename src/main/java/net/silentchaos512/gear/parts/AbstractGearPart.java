@@ -39,6 +39,9 @@ public abstract class AbstractGearPart implements IGearPart {
     // Identity
     // Part ID
     private final ResourceLocation name;
+    // TODO: Need a better way to set this...
+    // TODO: Can we track all data packs that override the file? Maybe a Set?
+    String packName = "UNKNOWN PACK";
     // Crafting items
     PartMaterial materials = new PartMaterial();
     // Availability
@@ -76,6 +79,11 @@ public abstract class AbstractGearPart implements IGearPart {
     @Override
     public IPartMaterial getMaterials() {
         return materials;
+    }
+
+    @Override
+    public String getPackName() {
+        return packName;
     }
 
     @Override
@@ -363,6 +371,8 @@ public abstract class AbstractGearPart implements IGearPart {
         public T read(ResourceLocation id, PacketBuffer buffer) {
             T part = function.apply(id);
 
+            part.packName = buffer.readString();
+
             part.displayName = buffer.readTextComponent();
             if (buffer.readBoolean())
                 part.namePrefix = buffer.readTextComponent();
@@ -393,6 +403,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
         @Override
         public void write(PacketBuffer buffer, T part) {
+            buffer.writeString(part.packName);
             buffer.writeTextComponent(part.getDisplayName(null, ItemStack.EMPTY));
             buffer.writeBoolean(part.namePrefix != null);
             if (part.namePrefix != null)
