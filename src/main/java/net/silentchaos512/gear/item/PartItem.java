@@ -10,7 +10,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 
@@ -39,7 +38,7 @@ public class PartItem extends Item {
                 .collect(Collectors.toList()));
     }
 
-    public ItemStack create(Collection<IMaterialInstance> materials) {
+    public ItemStack create(Collection<MaterialInstance> materials) {
         ListNBT materialListNbt = new ListNBT();
         materials.forEach(m -> materialListNbt.add(m.write(new CompoundNBT())));
 
@@ -51,7 +50,7 @@ public class PartItem extends Item {
         return result;
     }
 
-    public Collection<IMaterialInstance> getMaterials(ItemStack stack) {
+    public static Collection<MaterialInstance> getMaterials(ItemStack stack) {
         ListNBT materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, 10);
         return materialListNbt.stream()
                 .filter(nbt -> nbt instanceof CompoundNBT)

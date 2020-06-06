@@ -5,13 +5,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.material.IPartMaterial;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.PartItem;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
@@ -22,7 +21,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class ComplexRodPart extends AbstractGearPart {
     public static final IPartSerializer<ComplexRodPart> SERIALIZER = new Serializer(SilentGear.getId("complex_rod"), ComplexRodPart::new);
@@ -56,12 +54,9 @@ public final class ComplexRodPart extends AbstractGearPart {
         }
 
         // Get the rod materials and all the stat modifiers they provide for this stat
-        Collection<IMaterialInstance> materials = ((PartItem) stack.getItem()).getMaterials(stack);
+        Collection<MaterialInstance> materials = PartItem.getMaterials(stack);
         Collection<StatInstance> statMods = materials.stream()
-                .flatMap(m -> {
-                    IPartMaterial material = m.getMaterial();
-                    return material != null ? material.getStatModifiers(gear, stat, this.getType()).stream() : Stream.of();
-                })
+                .flatMap(m -> m.getStatModifiers(stat, this.getType(), gear).stream())
                 .collect(Collectors.toList());
 
         // Average together all modifiers of the same op. This makes things like rods with varying
@@ -70,7 +65,7 @@ public final class ComplexRodPart extends AbstractGearPart {
         for (StatInstance.Operation op : StatInstance.Operation.values()) {
             Collection<StatInstance> modsForOp = statMods.stream().filter(s -> s.getOp() == op).collect(Collectors.toList());
             if (!modsForOp.isEmpty()) {
-                ret.add(new StatInstance(ItemStat.getWeightedAverage(modsForOp, op), op));
+                ret.add(StatInstance.getWeightedAverageMod(modsForOp, op));
             }
         }
 

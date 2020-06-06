@@ -13,6 +13,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -101,6 +102,10 @@ public class StatInstance {
 
     public static StatInstance makeGearMod(float multi) {
         return new StatInstance("_gear_mod", multi, Operation.MUL1);
+    }
+
+    public static StatInstance getWeightedAverageMod(Collection<StatInstance> modifiers, Operation op) {
+        return new StatInstance(ItemStat.getWeightedAverage(modifiers, op), op);
     }
 
     @Deprecated

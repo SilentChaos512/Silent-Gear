@@ -31,6 +31,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
     private final TextFormatting nameColor;
     private final boolean visible;
     private final boolean synergyApplies;
+    private final boolean affectedByGrades;
     private final boolean displayAsInt;
     private final Function<Float, Float> missingRodFunction;
 
@@ -44,6 +45,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         this.displayAsInt = properties.displayAsInt;
         this.visible = properties.visible;
         this.synergyApplies = properties.synergyApplies;
+        this.affectedByGrades = properties.affectedByGrades;
         this.missingRodFunction = properties.missingRodFunction;
 
         if (this.minimumValue > this.maximumValue) {
@@ -202,6 +204,10 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         return synergyApplies;
     }
 
+    public boolean isAffectedByGrades() {
+        return affectedByGrades;
+    }
+
     public float withMissingRodEffect(float statValue) {
         if (missingRodFunction == null) return statValue;
         return missingRodFunction.apply(statValue);
@@ -224,6 +230,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
         private boolean displayAsInt;
         private boolean visible = true;
         private boolean synergyApplies = false;
+        private boolean affectedByGrades = true;
         private Function<Float, Float> missingRodFunction;
 
         public Properties defaultOp(Operation op) {
@@ -243,6 +250,11 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
 
         public Properties synergyApplies() {
             synergyApplies = true;
+            return this;
+        }
+
+        public Properties affectedByGrades(boolean value) {
+            affectedByGrades = value;
             return this;
         }
 
