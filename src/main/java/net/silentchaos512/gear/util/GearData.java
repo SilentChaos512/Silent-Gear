@@ -298,7 +298,6 @@ public final class GearData {
 
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<ITrait, Integer> traits) {
         // First, we add a bonus for the number of unique main parts
-//        double synergy = 1.0 + 0.2 * Math.log(5 * uniqueParts.getMains().size() - 4);
         double synergy = getBaseSynergy(uniqueParts);
 
         // Second, reduce synergy for difference in rarity and tier

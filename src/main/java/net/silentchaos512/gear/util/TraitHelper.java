@@ -36,7 +36,6 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.type.ComplexRodPart;
 import net.silentchaos512.gear.traits.TraitManager;
 
 import javax.annotation.Nullable;
@@ -109,20 +108,16 @@ public final class TraitHelper {
      * the trait does not exist.
      */
     public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
-        if (!GearHelper.isGear(gear)) {
-            SilentGear.LOGGER.error("Called getTraitLevel on non-gear item, {}", gear);
-            SilentGear.LOGGER.catching(new IllegalArgumentException());
-            return 0;
-        }
+        if (GearHelper.isGear(gear)) {
+            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
 
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
-
-        for (INBT nbt : tagList) {
-            if (nbt instanceof CompoundNBT) {
-                CompoundNBT tagCompound = (CompoundNBT) nbt;
-                String regName = tagCompound.getString("Name");
-                if (regName.equals(traitId.toString())) {
-                    return tagCompound.getByte("Level");
+            for (INBT nbt : tagList) {
+                if (nbt instanceof CompoundNBT) {
+                    CompoundNBT tagCompound = (CompoundNBT) nbt;
+                    String regName = tagCompound.getString("Name");
+                    if (regName.equals(traitId.toString())) {
+                        return tagCompound.getByte("Level");
+                    }
                 }
             }
         }
@@ -151,25 +146,35 @@ public final class TraitHelper {
      * @return True if and only if the gear item has the trait
      */
     public static boolean hasTrait(ItemStack gear, ResourceLocation traitId) {
-        if (!GearHelper.isGear(gear)) {
-            SilentGear.LOGGER.error("Called getTraitLevel on non-gear item, {}", gear);
-            SilentGear.LOGGER.catching(new IllegalArgumentException());
+        if (GearHelper.isGear(gear)) {
+            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+
+            for (INBT nbt : tagList) {
+                if (nbt instanceof CompoundNBT) {
+                    CompoundNBT tagCompound = (CompoundNBT) nbt;
+                    String regName = tagCompound.getString("Name");
+                    if (regName.equals(traitId.toString())) {
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
-
-        for (INBT nbt : tagList) {
-            if (nbt instanceof CompoundNBT) {
-                CompoundNBT tagCompound = (CompoundNBT) nbt;
-                String regName = tagCompound.getString("Name");
-                if (regName.equals(traitId.toString())) {
-                    return true;
-                }
-            }
-        }
-
         return false;
+    }
+
+    public static int getHighestLevelEitherHand(PlayerEntity player, ResourceLocation traitId) {
+        ItemStack main = player.getHeldItemMainhand();
+        ItemStack off = player.getHeldItemOffhand();
+        return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
+    }
+
+    public static boolean hasTraitEitherHand(PlayerEntity player, ResourceLocation traitId) {
+        ItemStack main = player.getHeldItemMainhand();
+        ItemStack off = player.getHeldItemOffhand();
+        return hasTrait(main, traitId) || hasTrait(off, traitId);
     }
 
     public static Map<ITrait, Integer> getCachedTraits(ItemStack gear) {

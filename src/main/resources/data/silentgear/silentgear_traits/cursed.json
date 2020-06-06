@@ -2,20 +2,20 @@
     "type": "silentgear:attribute_trait",
     "max_level": 7,
     "cancels_with": [
-        "cursed"
+        "lucky"
     ],
     "attribute_modifiers": {
         "all/mainhand": [
             {
                 "attribute": "generic.luck",
                 "value": [
-                    0.5,
-                    1.0,
-                    1.5,
-                    2.0,
-                    3.0,
-                    4.0,
-                    5.0
+                    -0.5,
+                    -1.0,
+                    -1.5,
+                    -2.0,
+                    -3.0,
+                    -4.0,
+                    -5.0
                 ],
                 "operation": 0
             }
@@ -24,22 +24,22 @@
             {
                 "attribute": "generic.luck",
                 "value": [
-                    0.5,
-                    1.0,
-                    1.5,
-                    2.0,
-                    3.0,
-                    4.0,
-                    5.0
+                    -0.5,
+                    -1.0,
+                    -1.5,
+                    -2.0,
+                    -3.0,
+                    -4.0,
+                    -5.0
                 ],
                 "operation": 0
             }
         ]
     },
     "name": {
-        "translate": "trait.silentgear.lucky"
+        "translate": "trait.silentgear.cursed"
     },
     "description": {
-        "translate": "trait.silentgear.lucky.desc"
+        "translate": "trait.silentgear.cursed.desc"
     }
 }

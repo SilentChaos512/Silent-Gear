@@ -43,7 +43,7 @@ public final class PartManager implements IResourceManagerReloadListener {
     private static final String DATA_PATH_OLD = "silentgear/parts";
     private static final Map<ResourceLocation, IGearPart> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
     private static int highestMainPartTier = 0;
-    private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
+    private static final Collection<String> ERROR_LIST = new ArrayList<>();
 
     private PartManager() {}
 
@@ -66,7 +66,9 @@ public final class PartManager implements IResourceManagerReloadListener {
                 String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
+                String packName = "ERROR";
                 try (IResource iresource = resourceManager.getResource(id)) {
+                    packName = iresource.getPackName();
                     if (SilentGear.LOGGER.isTraceEnabled()) {
                         SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
                     }
@@ -86,10 +88,10 @@ public final class PartManager implements IResourceManagerReloadListener {
                     }
                 } catch (IllegalArgumentException | JsonParseException ex) {
                     SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", name, ex);
-                    ERROR_LIST.add(name);
+                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 } catch (IOException ex) {
                     SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", name, ex);
-                    ERROR_LIST.add(name);
+                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 }
             }
 
@@ -190,7 +192,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     public static Collection<ITextComponent> getErrorMessages(ServerPlayerEntity player) {
         if (!ERROR_LIST.isEmpty()) {
-            String listStr = ERROR_LIST.stream().map(ResourceLocation::toString).collect(Collectors.joining(", "));
+            String listStr = String.join(", ", ERROR_LIST);
             return ImmutableList.of(
                     new StringTextComponent("[Silent Gear] The following gear parts failed to load, check your log file:")
                             .applyTextStyle(TextFormatting.RED),

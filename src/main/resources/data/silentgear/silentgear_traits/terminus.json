@@ -1,0 +1,16 @@
+{
+    "type": "silentgear:block_placer",
+    "block": "minecraft:stone",
+    "damage_on_use": 1,
+    "sound": "minecraft:block.stone.place",
+    "sound_volume": 1.0,
+    "sound_pitch": 1.0,
+    "max_level": 1,
+    "cancels_with": [],
+    "name": {
+        "translate": "trait.silentgear.terminus"
+    },
+    "description": {
+        "translate": "trait.silentgear.terminus.desc"
+    }
+}

@@ -1,5 +1,10 @@
 {
-    "type": "silentgear:refractive",
+    "type": "silentgear:block_placer",
+    "block": "silentgear:phantom_light",
+    "damage_on_use": 3,
+    "sound": "minecraft:entity.item.pickup",
+    "sound_volume": 0.75,
+    "sound_pitch": 0.5,
     "max_level": 1,
     "cancels_with": [],
     "name": {

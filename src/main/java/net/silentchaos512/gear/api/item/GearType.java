@@ -18,6 +18,7 @@ public final class GearType {
 
     // Parent of everything except armor
     public static final GearType TOOL = getOrCreate("tool");
+    public static final GearType WEAPON = getOrCreate("weapon");
     // Harvest tools
     public static final GearType HARVEST_TOOL = getOrCreate("harvest_tool", TOOL);
     public static final GearType AXE = getOrCreate("axe", HARVEST_TOOL);
@@ -30,14 +31,14 @@ public final class GearType {
     public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL);
     public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL);
     // Melee weapons (swords)
-    public static final GearType MELEE_WEAPON = getOrCreate("melee_weapon", TOOL);
+    public static final GearType MELEE_WEAPON = getOrCreate("melee_weapon", WEAPON);
     public static final GearType DAGGER = getOrCreate("dagger", MELEE_WEAPON);
     public static final GearType KATANA = getOrCreate("katana", MELEE_WEAPON);
     public static final GearType MACHETE = getOrCreate("machete", MELEE_WEAPON);
     public static final GearType SPEAR = getOrCreate("spear", MELEE_WEAPON);
     public static final GearType SWORD = getOrCreate("sword", MELEE_WEAPON);
     // Ranged weapons (bows)
-    public static final GearType RANGED_WEAPON = getOrCreate("ranged_weapon", TOOL);
+    public static final GearType RANGED_WEAPON = getOrCreate("ranged_weapon", WEAPON);
     public static final GearType BOW = getOrCreate("bow", RANGED_WEAPON);
     public static final GearType CROSSBOW = getOrCreate("crossbow", RANGED_WEAPON);
     public static final GearType SLINGSHOT = getOrCreate("slingshot", RANGED_WEAPON);

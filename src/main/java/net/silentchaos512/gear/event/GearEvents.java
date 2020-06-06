@@ -18,30 +18,55 @@
 
 package net.silentchaos512.gear.event;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.passive.CatEntity;
+import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.fish.CodEntity;
+import net.minecraft.entity.passive.fish.PufferfishEntity;
+import net.minecraft.entity.passive.fish.SalmonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ILightReader;
 import net.minecraft.world.LightType;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
@@ -55,11 +80,10 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.advancements.LibTriggers;
+import net.silentchaos512.lib.util.EntityHelper;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 
 @Mod.EventBusSubscriber
 public final class GearEvents {
@@ -222,18 +246,34 @@ public final class GearEvents {
         event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
     }
 
+    private static final List<Function<World, Entity>> JABBERWOCKY_MOBS = ImmutableList.of(
+            world -> new WolfEntity(EntityType.WOLF, world),
+            world -> new CatEntity(EntityType.CAT, world),
+            world -> new RabbitEntity(EntityType.RABBIT, world),
+            world -> new ChickenEntity(EntityType.CHICKEN, world),
+            world -> new CodEntity(EntityType.COD, world),
+            world -> new SalmonEntity(EntityType.SALMON, world),
+            world -> new PufferfishEntity(EntityType.PUFFERFISH, world)
+    );
+
     @SubscribeEvent
-    public static void onBlockXpDrop(BlockEvent.BreakEvent event) {
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (event.getPlayer() == null) return;
 
         ItemStack tool = event.getPlayer().getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
         int ancientLevel = TraitHelper.getTraitLevel(tool, TraitConst.ANCIENT);
-        if (ancientLevel == 0) return;
+        if (ancientLevel > 0) {
+            int bonusXp = (int) (event.getExpToDrop() * TraitConst.ANCIENT_XP_BOOST * ancientLevel);
+            event.setExpToDrop(event.getExpToDrop() + bonusXp);
+        }
 
-        int bonusXp = (int) (event.getExpToDrop() * TraitConst.ANCIENT_XP_BOOST * ancientLevel);
-        event.setExpToDrop(event.getExpToDrop() + bonusXp);
+        if (TraitHelper.hasTrait(tool, TraitConst.JABBERWOCKY) && event.getState().isIn(Tags.Blocks.ORES_DIAMOND) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool) == 0) {
+            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.random.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getPlayer().getEntityWorld());
+            entity.setPositionAndUpdate(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
+            EntityHelper.safeSpawn(entity);
+        }
     }
 
     @SubscribeEvent
@@ -266,6 +306,62 @@ public final class GearEvents {
             int mainCount = parts.getUniqueParts(true).size();
             SilentGear.LOGGER.debug("mainCount = {}", mainCount);
             LibTriggers.GENERIC_INT.trigger(player, UNIQUE_MAIN_PARTS, mainCount);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onLivingDeath(LivingDeathEvent event) {
+        Entity killer = event.getSource().getTrueSource();
+        if (killer instanceof PlayerEntity && !killer.world.isRemote) {
+            PlayerEntity player = (PlayerEntity) killer;
+            if (TraitHelper.hasTraitEitherHand(player, TraitConst.CONFETTI)) {
+                for (int i = 0; i < 3; ++i) {
+                    FireworkRocketEntity rocket = new FireworkRocketEntity(player.world, event.getEntity().getPosX(), event.getEntity().getPosYEye(), event.getEntity().getPosZ(), createRandomFirework());
+                    EntityHelper.safeSpawn(rocket);
+                }
+            }
+        }
+    }
+
+    private static ItemStack createRandomFirework() {
+        ItemStack ret = new ItemStack(Items.FIREWORK_ROCKET);
+        CompoundNBT nbt = ret.getOrCreateChildTag("Fireworks");
+        nbt.putByte("Flight", (byte) (SilentGear.random.nextInt(3) + 1));
+        CompoundNBT explosion = new CompoundNBT();
+        explosion.putByte("Type", (byte) SilentGear.random.nextInt(FireworkRocketItem.Shape.values().length));
+        ListNBT colors = new ListNBT();
+        for (int i = 0; i < SilentGear.random.nextInt(4) + 1; ++i) {
+            DyeColor dye = DyeColor.values()[SilentGear.random.nextInt(DyeColor.values().length)];
+            SilentGear.LOGGER.debug(dye);
+            colors.add(IntNBT.valueOf(dye.getFireworkColor()));
+        }
+        explosion.put("Colors", colors);
+        ListNBT explosions = new ListNBT();
+        explosions.add(explosion);
+        nbt.put("Explosions", explosions);
+        return ret;
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (!event.player.world.isRemote) {
+            int magnetic = TraitHelper.getHighestLevelEitherHand(event.player, TraitConst.MAGNETIC);
+            if (magnetic > 0) {
+                final int range = magnetic * 3 + 1;
+                Vec3d target = new Vec3d(event.player.getPosX(), event.player.getPosYHeight(0.5), event.player.getPosZ());
+
+                AxisAlignedBB aabb = new AxisAlignedBB(event.player.getPosX() - range, event.player.getPosY() - range, event.player.getPosZ() - range, event.player.getPosX() + range + 1, event.player.getPosY() + range + 1, event.player.getPosZ() + range + 1);
+                for (ItemEntity entity : event.player.world.getEntitiesWithinAABB(ItemEntity.class, aabb, e -> e.getDistanceSq(event.player) < range * range)) {
+                    // Accelerate to target point
+                    Vec3d vec = entity.getPositionVector().subtractReverse(target);
+                    vec = vec.normalize().scale(0.03);
+                    if (entity.getPosY() < target.y) {
+                        double xzDistanceSq = (entity.getPosX() - target.x) * (entity.getPosX() - target.x) + (entity.getPosZ() - target.z) * (entity.getPosZ() - target.z);
+                        vec = vec.add(0, 0.005 + xzDistanceSq / 1000, 0);
+                    }
+                    entity.addVelocity(vec.x, vec.y, vec.z);
+                }
+            }
         }
     }
 }

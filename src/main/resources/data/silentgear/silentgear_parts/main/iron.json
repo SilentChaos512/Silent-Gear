@@ -21,6 +21,16 @@
         {
             "name": "silentgear:malleable",
             "level": 3
+        },
+        {
+            "name": "silentgear:magnetic",
+            "level": 2,
+            "conditions": [
+                {
+                    "type": "silentgear:material_ratio",
+                    "ratio": 0.66
+                }
+            ]
         }
     ],
     "crafting_items": {

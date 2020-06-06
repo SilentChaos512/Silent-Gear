@@ -5,8 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Moar new traits!
+    - Cursed - Reduces luck. Cancels with Lucky. Max level 7, same as Lucky.
+    - Magnetic - Pulls in nearby items, range based on level
+    - Terminus - Creates and places stone blocks, costs 1 durability per use
+    - A couple of secret traits of questionable usefulness...
 - Shears (NOTE: these do not function correctly because of missing Forge patches!) [#103]
 - `/sgear_mats` command for interacting with new WIP material system (currently unused)
+### Changed
+- The `silentgear:refractive` trait type has been replaced with `silentgear:block_placer`, which can be made to place any block!
 ### Fixed
 - Flammable's item destroyed message not giving the item name
 - Shields not being enchantable
