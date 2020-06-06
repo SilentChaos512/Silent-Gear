@@ -1,0 +1,5 @@
+{
+    "__comment__": "Key is the part ID, value is the game stage(s) required (string or array)",
+    "silentgear:main/example": [],
+    "silentgear:main/iron": "test_stage"
+}

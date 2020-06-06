@@ -47,7 +47,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
-        return getParts(inv).stream().allMatch(part -> part.getPart().isCraftingAllowed(gearType));
+        return getParts(inv).stream().allMatch(part -> part.getPart().isCraftingAllowed(gearType, inv));
     }
 
     @Override

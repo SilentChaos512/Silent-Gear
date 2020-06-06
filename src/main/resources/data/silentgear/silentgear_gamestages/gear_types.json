@@ -1,0 +1,5 @@
+{
+    "__comment__": "Key is the gear type, value is the game stage(s) required (string or array)",
+    "armor": [],
+    "pickaxe": []
+}

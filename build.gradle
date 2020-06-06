@@ -105,6 +105,9 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
     maven {
+        url 'https://maven.mcmoddev.com'
+    }
+    maven {
         url 'https://jitpack.io'
     }
 }
@@ -139,6 +142,10 @@ dependencies {
     // compile('com.robertx22:mine-and-slash-1.14.4:2.+') {
     //     exclude module: 'curios'
     // }
+
+    // Game Stages
+    compile fg.deobf("net.darkhax.bookshelf:Bookshelf-${project.bookshelf_version}")
+    compile fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
 }
 
 jar {

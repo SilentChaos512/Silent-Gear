@@ -35,6 +35,7 @@ import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
+import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -115,9 +116,14 @@ class SideProxy implements IProxy {
 
     private static void serverAboutToStart(FMLServerAboutToStartEvent event) {
         IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
+
         resourceManager.addReloadListener(MaterialManager.INSTANCE);
         resourceManager.addReloadListener(TraitManager.INSTANCE);
         resourceManager.addReloadListener(PartManager.INSTANCE);
+
+        if (ModList.get().isLoaded("gamestages")) {
+            resourceManager.addReloadListener(GameStagesCompat.INSTANCE);
+        }
     }
 
     private static void serverStarting(FMLServerStartingEvent event) {

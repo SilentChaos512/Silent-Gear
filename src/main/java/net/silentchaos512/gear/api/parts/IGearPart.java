@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -99,6 +100,13 @@ public interface IGearPart {
                 return computeUnclampedStatValue(ItemStats.DURABILITY) > 0;
         }
         return true;
+    }
+
+    default boolean isCraftingAllowed(@Nullable GearType gearType, CraftingInventory inventory) {
+/*        if (!GameStagesCompatProxy.canCraft(gearType, inventory) || !GameStagesCompatProxy.canCraft(this, inventory)) {
+            return false;
+        }*/
+        return isCraftingAllowed(gearType);
     }
 
     /**
