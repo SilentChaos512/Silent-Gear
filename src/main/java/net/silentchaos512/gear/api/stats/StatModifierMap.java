@@ -30,12 +30,11 @@ public class StatModifierMap implements Multimap<ItemStat, StatInstance> {
         }
 
         StringBuilder result = new StringBuilder();
-        for (StatInstance inst : mods) {
+        mods.forEach(inst -> {
             if (result.length() > 0)
                 result.append(", ");
-            int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
-            result.append(inst.formattedString(stat, decimalPlaces, false));
-        }
+            result.append(inst.formattedString(stat, inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces), false));
+        });
         return new StringTextComponent(result.toString());
     }
 

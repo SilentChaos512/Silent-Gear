@@ -18,7 +18,7 @@
             "ranged_damage": 2,
             "ranged_speed": -0.2,
             "rarity": 40,
-            "chargeability": 0.8
+            "silentgems:chargeability": 0.8
         },
         "rod": {
             "durability": {

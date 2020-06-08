@@ -10,7 +10,7 @@ import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.parts.type.ComplexRodPart;
+import net.silentchaos512.gear.parts.type.CompoundRodPart;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public final class PartSerializers {
         for (PartType type : PartType.getValues()) {
             register(type.getSerializer());
         }
-        register(ComplexRodPart.SERIALIZER);
+        register(CompoundRodPart.SERIALIZER);
     }
 
     private PartSerializers() {}

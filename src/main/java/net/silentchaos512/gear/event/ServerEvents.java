@@ -33,8 +33,8 @@ public final class ServerEvents {
         SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
         Network.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 
-        MaterialManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
         TraitManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
+        MaterialManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
         PartManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
     }
 }

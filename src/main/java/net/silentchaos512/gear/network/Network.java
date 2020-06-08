@@ -5,6 +5,7 @@ import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitManager;
 
@@ -58,6 +59,16 @@ public final class Network {
                 .encoder((packet, buffer) -> {})
                 .decoder(buffer -> new ShowPartsScreenPacket())
                 .consumer(ShowPartsScreenPacket::handle)
+                .add();
+        channel.messageBuilder(SyncMaterialsPacket.class, 6)
+                .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
+                .decoder(SyncMaterialsPacket::fromBytes)
+                .encoder(SyncMaterialsPacket::toBytes)
+                .markAsLoginPacket()
+                .consumer(FMLHandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
+                    MaterialManager.handleSyncPacket(msg, ctx);
+                    channel.reply(new LoginPacket.Reply(), ctx.get());
+                }))
                 .add();
     }
 

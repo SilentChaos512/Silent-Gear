@@ -1,0 +1,20 @@
+{
+    "type": "silentgear:compound_rod",
+    "crafting_items": {
+        "normal": {
+            "item": "silentgear:long_rod"
+        }
+    },
+    "name": {
+        "translate": "part.silentgear.long_rod"
+    },
+    "textures": {
+        "all": {
+            "lite_texture": "high_contrast",
+            "normal_color": "white"
+        }
+    },
+    "availability": {
+        "tier": -1
+    }
+}

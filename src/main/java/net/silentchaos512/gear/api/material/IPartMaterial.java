@@ -32,16 +32,16 @@ public interface IPartMaterial {
 
     void retainData(@Nullable IPartMaterial oldMaterial);
 
-    Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartType partType);
+    Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear);
 
     default Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
-        return getStatModifiers(ItemStack.EMPTY, stat, partType);
+        return getStatModifiers(stat, partType, ItemStack.EMPTY);
     }
 
-    Collection<PartTraitInstance> getTraits(ItemStack gear, PartType partType);
+    Collection<PartTraitInstance> getTraits(PartType partType, ItemStack gear);
 
     default Collection<PartTraitInstance> getTraits(PartType partType) {
-        return getTraits(ItemStack.EMPTY, partType);
+        return getTraits(partType, ItemStack.EMPTY);
     }
 
     default float getStat(ItemStat stat, PartType partType) {
@@ -52,6 +52,7 @@ public interface IPartMaterial {
         return stat.compute(0, false, getStatModifiers(stat, partType));
     }
 
+    @Deprecated
     default boolean isCraftingAllowed(ICoreItem item, PartType partType) {
         if (partType == PartType.MAIN) {
             return getStatUnclamped(item.getDurabilityStat(), partType) > 0;
@@ -59,11 +60,16 @@ public interface IPartMaterial {
         return true;
     }
 
+    default boolean isCraftingAllowed(PartType partType) {
+        // TODO: Something to distinguish armor, in order to check correct durability stat?
+        return true;
+    }
+
     int getColor(ItemStack gear, PartType partType);
 
-    PartTextureType getTexture(ItemStack gear, PartType partType);
+    PartTextureType getTexture(PartType partType, ItemStack gear);
 
-    ITextComponent getDisplayName(ItemStack gear, PartType partType);
+    ITextComponent getDisplayName(PartType partType, ItemStack gear);
 
     @Nullable
     default ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {

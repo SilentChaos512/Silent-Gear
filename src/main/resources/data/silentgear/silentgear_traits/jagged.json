@@ -8,6 +8,12 @@
             "value": 0.1667,
             "factor_damage": true,
             "factor_value": true
+        },
+        {
+            "name": "ranged_damage",
+            "value": -0.1667,
+            "factor_damage": true,
+            "factor_value": true
         }
     ],
     "name": {

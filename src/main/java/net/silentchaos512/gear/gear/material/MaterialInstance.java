@@ -50,11 +50,20 @@ public class MaterialInstance implements IMaterialInstance {
     }
 
     public static MaterialInstance of(IPartMaterial material, ItemStack craftingItem) {
-        return new MaterialInstance(material, craftingItem);
+        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem), craftingItem);
     }
 
     public static MaterialInstance of(IPartMaterial material, MaterialGrade grade, ItemStack craftingItem) {
         return new MaterialInstance(material, grade, craftingItem);
+    }
+
+    @Nullable
+    public static MaterialInstance from(ItemStack stack) {
+        IPartMaterial material = MaterialManager.from(stack);
+        if (material != null) {
+            return of(material, stack);
+        }
+        return null;
     }
 
     @Override
@@ -79,7 +88,7 @@ public class MaterialInstance implements IMaterialInstance {
     }
 
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
-        Collection<StatInstance> mods = material.getStatModifiers(gear, stat, partType);
+        Collection<StatInstance> mods = material.getStatModifiers(stat, partType, gear);
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
             float bonus = grade.bonusPercent / 100f;
             mods.add(new StatInstance(bonus, StatInstance.Operation.MUL1));

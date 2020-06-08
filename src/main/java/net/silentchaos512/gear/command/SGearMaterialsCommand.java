@@ -18,6 +18,8 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.gear.material.PartMaterial;
+import net.silentchaos512.utils.Color;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -73,9 +75,9 @@ public final class SGearMaterialsCommand {
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder("Name\tID\tType\tTier\t");
+            StringBuilder builder = new StringBuilder("Name\tID\tParent\tType\tTier\t");
             ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getFormattedText()).append("\t"));
-            builder.append("Traits\tTexture\tColor");
+            builder.append("Traits\tTexture\tColor\n");
             writer.write(builder.toString());
 
             for (IPartMaterial material : MaterialManager.getValues()) {
@@ -96,8 +98,9 @@ public final class SGearMaterialsCommand {
 
     private static String makeTsvLine(IPartMaterial material, PartType partType) {
         StringBuilder builder = new StringBuilder();
-        appendTsv(builder, material.getDisplayName(ItemStack.EMPTY, partType).getString());
+        appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
         appendTsv(builder, material.getId().toString());
+        appendTsv(builder, getParentId(material));
         appendTsv(builder, partType.getName());
         appendTsv(builder, material.getTier(partType));
 
@@ -113,10 +116,20 @@ public final class SGearMaterialsCommand {
                 .collect(Collectors.joining(", ")));
 
         // Display
-        appendTsv(builder, material.getTexture(ItemStack.EMPTY, partType));
-        appendTsv(builder, material.getColor(ItemStack.EMPTY, partType));
+        appendTsv(builder, material.getTexture(partType, ItemStack.EMPTY));
+        appendTsv(builder, Color.format(material.getColor(ItemStack.EMPTY, partType) & 0xFFFFFF));
 
         return builder.toString();
+    }
+
+    private static String getParentId(IPartMaterial material) {
+        if (material instanceof PartMaterial) {
+            IPartMaterial parent = ((PartMaterial) material).getParent();
+            if (parent != null) {
+                return parent.getId().toString();
+            }
+        }
+        return "";
     }
 
     private static void appendTsv(StringBuilder builder, Object value) {

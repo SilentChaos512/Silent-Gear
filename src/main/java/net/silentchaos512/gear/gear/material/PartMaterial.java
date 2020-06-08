@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -19,6 +20,7 @@ import net.silentchaos512.gear.api.material.MaterialDisplay;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.parts.PartTextureType;
@@ -26,22 +28,27 @@ import net.silentchaos512.gear.parts.PartTextureType;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class PartMaterial implements IPartMaterial {
+public final class PartMaterial implements IPartMaterial {
+    private static final StatModifierMap EMPTY_STAT_MAP = new StatModifierMap();
+
     private final ResourceLocation materialId;
+    @Nullable private ResourceLocation parent;
+    private final String packName;
     private Ingredient ingredient = Ingredient.EMPTY;
-    boolean visible = true;
-    int tier = -1;
+    private boolean visible = true;
+    private int tier = -1;
 
-    Map<PartType, StatModifierMap> stats = new HashMap<>();
-    Map<PartType, List<PartTraitInstance>> traits = new HashMap<>();
+    private Map<PartType, StatModifierMap> stats = new HashMap<>();
+    private Map<PartType, List<PartTraitInstance>> traits = new HashMap<>();
 
-    ITextComponent displayName;
-    @Nullable ITextComponent namePrefix = null;
+    private ITextComponent displayName;
+    @Nullable private ITextComponent namePrefix = null;
     // Keys are part_type/gear_type
-    final Map<String, MaterialDisplay> display = new HashMap<>();
+    private final Map<String, MaterialDisplay> display = new HashMap<>();
 
-    public PartMaterial(ResourceLocation id) {
+    private PartMaterial(ResourceLocation id, String packName) {
         this.materialId = id;
+        this.packName = packName;
     }
 
     @Override
@@ -49,8 +56,19 @@ public class PartMaterial implements IPartMaterial {
         return this.materialId;
     }
 
+    @Nullable
+    public IPartMaterial getParent() {
+        if (parent != null) {
+            return MaterialManager.get(parent);
+        }
+        return null;
+    }
+
     @Override
     public int getTier(PartType partType) {
+        if (tier < 0 && getParent() != null) {
+            return getParent().getTier(partType);
+        }
         return this.tier;
     }
 
@@ -61,7 +79,7 @@ public class PartMaterial implements IPartMaterial {
 
     @Override
     public boolean allowedInPart(PartType partType) {
-        return stats.containsKey(partType);
+        return stats.containsKey(partType) || (getParent() != null && getParent().allowedInPart(partType));
     }
 
     @Override
@@ -74,13 +92,21 @@ public class PartMaterial implements IPartMaterial {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartType partType) {
-        return stats.get(partType).get(stat);
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
+        Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(stat));
+        if (getParent() != null) {
+            ret.addAll(getParent().getStatModifiers(stat, partType, gear));
+        }
+        return ret;
     }
 
     @Override
-    public Collection<PartTraitInstance> getTraits(ItemStack gear, PartType partType) {
-        return Collections.unmodifiableList(traits.getOrDefault(partType, Collections.emptyList()));
+    public Collection<PartTraitInstance> getTraits(PartType partType, ItemStack gear) {
+        Collection<PartTraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
+        if (getParent() != null) {
+            ret.addAll(getParent().getTraits(partType, gear));
+        }
+        return ret;
     }
 
     @Override
@@ -89,7 +115,7 @@ public class PartMaterial implements IPartMaterial {
     }
 
     @Override
-    public PartTextureType getTexture(ItemStack gear, PartType partType) {
+    public PartTextureType getTexture(PartType partType, ItemStack gear) {
         return getMaterialDisplay(gear, partType).getTexture();
     }
 
@@ -98,7 +124,7 @@ public class PartMaterial implements IPartMaterial {
             GearType gearType = ((ICoreItem) gear.getItem()).getGearType();
 
             // Gear class-specific override
-            String gearTypeKey = partType + "/" + gearType.getName();
+            String gearTypeKey = partType.getName() + "/" + gearType.getName();
             if (display.containsKey(gearTypeKey)) {
                 return display.get(gearTypeKey);
             }
@@ -109,15 +135,16 @@ public class PartMaterial implements IPartMaterial {
                 }
             }
         }
-        return display.getOrDefault(partType + "/all", MaterialDisplay.DEFAULT);
+        return display.getOrDefault(partType.getName().getPath() + "/all", display.getOrDefault(partType.getName() + "/all", MaterialDisplay.DEFAULT));
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack gear, PartType partType) {
+    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
         return displayName;
     }
 
-    public boolean isVisible() {
+    @Override
+    public boolean isVisible(PartType partType) {
         return this.visible;
     }
 
@@ -131,30 +158,58 @@ public class PartMaterial implements IPartMaterial {
     }
 
     public static final class Serializer {
+        static final int PACK_NAME_MAX_LENGTH = 32;
+
         private Serializer() {throw new IllegalAccessError("Utility class");}
 
-        public static PartMaterial deserialize(ResourceLocation id, JsonObject json) {
-            PartMaterial ret = new PartMaterial(id);
+        //region deserialize
 
-            // Stats
-            readStats(json, ret);
+        public static PartMaterial deserialize(ResourceLocation id, String packName, JsonObject json) {
+            PartMaterial ret = new PartMaterial(id, packName);
 
-            // Traits
-            JsonElement elementTraits = json.get("traits");
-            if (elementTraits != null && elementTraits.isJsonArray()) {
-                JsonArray array = elementTraits.getAsJsonArray();
-                Collection<PartTraitInstance> traitsList = new ArrayList<>();
-
-                for (JsonElement element : array) {
-                    traitsList.add(PartTraitInstance.deserialize(element.getAsJsonObject()));
-                }
-
-                if (!traitsList.isEmpty()) {
-//                    ret.traits.addAll(traitsList);
-                }
+            if (json.has("parent")) {
+                ret.parent = new ResourceLocation(JSONUtils.getString(json, "parent"));
             }
 
-            // Crafting Items
+            deserializeStats(json, ret);
+            deserializeTraits(json, ret);
+            deserializeCraftingItems(json, ret);
+            deserializeNames(json, ret);
+            deserializeDisplayProps(json, ret);
+            deserializeAvailability(json, ret);
+
+            return ret;
+        }
+
+        static void deserializeStats(JsonObject json, PartMaterial ret) {
+            JsonElement elementStats = json.get("stats");
+            if (elementStats != null && elementStats.isJsonObject()) {
+                for (Map.Entry<String, JsonElement> entry : elementStats.getAsJsonObject().entrySet()) {
+                    ResourceLocation partTypeName = SilentGear.getIdWithDefaultNamespace(entry.getKey());
+                    if (partTypeName != null) {
+                        PartType partType = PartType.get(partTypeName);
+                        StatModifierMap statMods = StatModifierMap.read(entry.getValue());
+                        ret.stats.put(partType, statMods);
+                    }
+                }
+            }
+        }
+
+        private static void deserializeTraits(JsonObject json, PartMaterial ret) {
+            JsonElement elementTraits = json.get("traits");
+            if (elementTraits != null && elementTraits.isJsonObject()) {
+                for (Map.Entry<String, JsonElement> entry : elementTraits.getAsJsonObject().entrySet()) {
+                    PartType partType = PartType.get(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(entry.getKey())));
+                    if (partType != null) {
+                        List<PartTraitInstance> list = new ArrayList<>();
+                        entry.getValue().getAsJsonArray().forEach(e -> list.add(PartTraitInstance.deserialize(e.getAsJsonObject())));
+                        ret.traits.put(partType, list);
+                    }
+                }
+            }
+        }
+
+        private static void deserializeCraftingItems(JsonObject json, PartMaterial ret) {
             JsonElement craftingItems = json.get("crafting_items");
             if (craftingItems != null && craftingItems.isJsonObject()) {
                 JsonElement main = craftingItems.getAsJsonObject().get("main");
@@ -165,7 +220,9 @@ public class PartMaterial implements IPartMaterial {
             } else {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
             }
+        }
 
+        private static void deserializeNames(JsonObject json, PartMaterial ret) {
             // Name
             JsonElement elementName = json.get("name");
             if (elementName != null && elementName.isJsonObject()) {
@@ -179,8 +236,9 @@ public class PartMaterial implements IPartMaterial {
             if (elementNamePrefix != null) {
                 ret.namePrefix = deserializeText(elementNamePrefix);
             }
+        }
 
-            // Display Properties
+        private static void deserializeDisplayProps(JsonObject json, PartMaterial ret) {
             JsonElement elementDisplay = json.get("display");
             if (elementDisplay != null && elementDisplay.isJsonObject()) {
                 JsonObject obj = elementDisplay.getAsJsonObject();
@@ -202,8 +260,9 @@ public class PartMaterial implements IPartMaterial {
             } else {
                 throw new JsonSyntaxException("Expected 'display' to be an object");
             }
+        }
 
-            // Availability
+        private static void deserializeAvailability(JsonObject json, PartMaterial ret) {
             JsonElement elementAvailability = json.get("availability");
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
@@ -216,24 +275,8 @@ public class PartMaterial implements IPartMaterial {
 //                    ret.blacklistedGearTypes.clear();
 //                    blacklist.forEach(e -> ret.blacklistedGearTypes.add(e.getAsString()));
 //                }
-            } else {
+            } else if (ret.parent == null) {
                 throw new JsonSyntaxException("Expected 'availability' to be an object");
-            }
-
-            return ret;
-        }
-
-        public static void readStats(JsonObject json, PartMaterial ret) {
-            JsonElement elementStats = json.get("stats");
-            if (elementStats != null && elementStats.isJsonObject()) {
-                for (Map.Entry<String, JsonElement> entry : elementStats.getAsJsonObject().entrySet()) {
-                    ResourceLocation partTypeName = SilentGear.getIdWithDefaultNamespace(entry.getKey());
-                    if (partTypeName != null) {
-                        PartType partType = PartType.get(partTypeName);
-                        StatModifierMap statMods = StatModifierMap.read(entry.getValue());
-                        ret.stats.put(partType, statMods);
-                    }
-                }
             }
         }
 
@@ -257,5 +300,129 @@ public class PartMaterial implements IPartMaterial {
                 return JSONUtils.getJsonArray(json, "tool_blacklist");
             return null;
         }
+
+        // endregion
+
+        // region read/write
+
+        public static PartMaterial read(PacketBuffer buffer) {
+            PartMaterial material = new PartMaterial(buffer.readResourceLocation(), buffer.readString(PACK_NAME_MAX_LENGTH));
+
+            if (buffer.readBoolean())
+                material.parent = buffer.readResourceLocation();
+
+            material.displayName = buffer.readTextComponent();
+            if (buffer.readBoolean())
+                material.namePrefix = buffer.readTextComponent();
+            material.ingredient = Ingredient.read(buffer);
+            material.tier = buffer.readByte();
+            material.visible = buffer.readBoolean();
+
+//            material.blacklistedGearTypes.clear();
+//            int blacklistSize = buffer.readByte();
+//            for (int i = 0; i < blacklistSize; ++i) {
+//                material.blacklistedGearTypes.add(buffer.readString());
+//            }
+
+            // Textures
+            int displayCount = buffer.readVarInt();
+            for (int i = 0; i < displayCount; ++i) {
+                String key = buffer.readString(255);
+                MaterialDisplay display = MaterialDisplay.read(buffer);
+                material.display.put(key, display);
+            }
+
+            // Stats and traits
+            readStats(buffer, material);
+            readTraits(buffer, material);
+
+            return material;
+        }
+
+        public static void write(PacketBuffer buffer, PartMaterial material) {
+            buffer.writeResourceLocation(material.materialId);
+            buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
+
+            buffer.writeBoolean(material.parent != null);
+            if (material.parent != null)
+                buffer.writeResourceLocation(material.parent);
+
+            buffer.writeTextComponent(material.displayName);
+            buffer.writeBoolean(material.namePrefix != null);
+            if (material.namePrefix != null)
+                buffer.writeTextComponent(material.namePrefix);
+            material.ingredient.write(buffer);
+            buffer.writeByte(material.tier);
+            buffer.writeBoolean(material.visible);
+
+//            buffer.writeByte(material.blacklistedGearTypes.size());
+//            material.blacklistedGearTypes.forEach(buffer::writeString);
+
+            // Textures
+            buffer.writeVarInt(material.display.size());
+            material.display.forEach((s, display) -> {
+                buffer.writeString(s);
+                display.write(buffer);
+            });
+
+            // Stats and traits
+            writeStats(buffer, material);
+            writeTraits(buffer, material);
+        }
+
+        private static void readStats(PacketBuffer buffer, PartMaterial material) {
+            material.stats.clear();
+            int typeCount = buffer.readByte();
+            for (int i = 0; i < typeCount; ++i) {
+                PartType partType = PartType.get(buffer.readResourceLocation());
+                int statCount = buffer.readByte();
+                StatModifierMap map = new StatModifierMap();
+                for (int j = 0; j < statCount; ++j) {
+                    ItemStat stat = ItemStats.REGISTRY.get().getValue(buffer.readResourceLocation());
+                    StatInstance mod = StatInstance.read(buffer);
+                    map.put(stat, mod);
+                }
+                material.stats.put(partType, map);
+            }
+        }
+
+        private static void writeStats(PacketBuffer buffer, PartMaterial material) {
+            buffer.writeByte(material.stats.size());
+            //noinspection OverlyLongLambda
+            material.stats.forEach((partType, map) -> {
+                buffer.writeResourceLocation(partType.getName());
+                buffer.writeByte(map.size());
+                map.forEach((stat, mod) -> {
+                    buffer.writeResourceLocation(Objects.requireNonNull(stat.getRegistryName()));
+                    mod.write(buffer);
+                });
+            });
+        }
+
+        private static void readTraits(PacketBuffer buffer, PartMaterial material) {
+            material.traits.clear();
+            int typeCount = buffer.readByte();
+            for (int i = 0; i < typeCount; ++i) {
+                PartType partType = PartType.get(buffer.readResourceLocation());
+                int traitCount = buffer.readByte();
+                List<PartTraitInstance> list = new ArrayList<>();
+                for (int j = 0; j < traitCount; ++j) {
+                    PartTraitInstance trait = PartTraitInstance.read(buffer);
+                    list.add(trait);
+                }
+                material.traits.put(partType, list);
+            }
+        }
+
+        private static void writeTraits(PacketBuffer buffer, PartMaterial material) {
+            buffer.writeByte(material.traits.size());
+            material.traits.forEach((partType, list) -> {
+                buffer.writeResourceLocation(partType.getName());
+                buffer.writeByte(list.size());
+                list.forEach(trait -> trait.write(buffer));
+            });
+        }
+
+        //endregion
     }
 }

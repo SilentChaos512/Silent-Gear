@@ -117,8 +117,8 @@ class SideProxy implements IProxy {
     private static void serverAboutToStart(FMLServerAboutToStartEvent event) {
         IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
 
-        resourceManager.addReloadListener(MaterialManager.INSTANCE);
         resourceManager.addReloadListener(TraitManager.INSTANCE);
+        resourceManager.addReloadListener(MaterialManager.INSTANCE);
         resourceManager.addReloadListener(PartManager.INSTANCE);
 
         if (ModList.get().isLoaded("gamestages")) {
@@ -132,8 +132,8 @@ class SideProxy implements IProxy {
 
     private static void serverStarted(FMLServerStartedEvent event) {
         server = event.getServer();
-        SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
         SilentGear.LOGGER.info(TraitManager.MARKER, "Traits loaded: {}", TraitManager.getValues().size());
+        SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
         SilentGear.LOGGER.info(PartManager.MARKER, "Parts loaded: {}", PartManager.getValues().size());
     }
 

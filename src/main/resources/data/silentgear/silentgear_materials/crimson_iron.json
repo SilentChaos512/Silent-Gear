@@ -4,54 +4,54 @@
     },
     "stats": {
         "main": {
-            "durability": 250,
-            "armor_durability": 15,
+            "durability": 420,
+            "armor_durability": 27,
             "enchantability": 14,
-            "harvest_level": 2,
-            "harvest_speed": 6,
-            "melee_damage": 2,
-            "magic_damage": 1,
+            "harvest_level": 3,
+            "harvest_speed": 10,
+            "melee_damage": 3,
+            "magic_damage": 3,
             "attack_speed": -0.1,
-            "armor": 15,
-            "armor_toughness": 0,
+            "armor": 18,
+            "armor_toughness": 2,
             "magic_armor": 6,
-            "ranged_damage": 1,
-            "ranged_speed": 0.1,
-            "rarity": 20,
+            "ranged_damage": 2,
+            "ranged_speed": -0.1,
+            "rarity": 35,
             "silentgems:chargeability": 0.7
         },
         "rod": {
             "durability": {
-                "mul2": 0.2
+                "mul2": 0.3
             },
             "enchantability": [
                 {
-                    "add": -2
+                    "add": 1
                 },
                 {
-                    "mul2": -0.1
+                    "mul2": 0.2
                 }
             ],
             "melee_damage": {
                 "mul2": 0.1
             },
-            "rarity": 20
+            "rarity": 30
         },
         "tip": {
             "durability": {
-                "add": 128
+                "add": 224
             },
-            "enchantability": {
-                "add": 2
+            "armor_durability": {
+                "add": 8
             },
             "harvest_level": {
-                "max": 2
+                "max": 3
             },
             "harvest_speed": {
-                "add": 1
+                "add": 2
             },
             "melee_damage": {
-                "add": 1
+                "add": 2
             },
             "rarity": 10
         }
@@ -60,23 +60,13 @@
         "main": [
             {
                 "name": "silentgear:malleable",
-                "level": 3
-            },
-            {
-                "name": "silentgear:magnetic",
-                "level": 1,
-                "conditions": [
-                    {
-                        "type": "silentgear:material_ratio",
-                        "ratio": 0.66
-                    }
-                ]
+                "level": 4
             }
         ],
         "rod": [
             {
-                "name": "silentgear:magnetic",
-                "level": 2,
+                "name": "silentgear:malleable",
+                "level": 4,
                 "conditions": [
                     {
                         "type": "silentgear:material_ratio",
@@ -87,34 +77,37 @@
         ],
         "tip": [
             {
-                "name": "silentgear:malleable",
-                "level": 2
+                "name": "silentgear:fiery",
+                "level": 2,
+                "conditions": [
+                    {
+                        "type": "silentgear:gear_type",
+                        "gear_type": "weapon"
+                    }
+                ]
             }
         ]
     },
     "crafting_items": {
         "main": {
-            "tag": "forge:ingots/iron"
-        },
-        "rod/sub": {
-            "tag": "forge:rods/iron"
+            "tag": "forge:ingots/crimson_iron"
         }
     },
     "name": {
-        "translate": "material.silentgear.iron"
+        "translate": "material.silentgear.crimson_iron"
     },
     "display": {
         "main/all": {
             "lite_texture": "high_contrast_with_highlight",
-            "color": "white"
+            "color": "#FF6189"
         },
         "rod/all": {
             "lite_texture": "low_contrast",
-            "color": "#D8D8D8"
+            "color": "#FF6189"
         },
         "tip/all": {
             "lite_texture": "high_contrast",
-            "color": "white"
+            "color": "#FF6189"
         }
     }
 }

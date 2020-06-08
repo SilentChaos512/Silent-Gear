@@ -1,0 +1,49 @@
+{
+    "availability": {
+        "tier": 0,
+        "visible": false,
+        "gear_blacklist": [
+            "all"
+        ]
+    },
+    "stats": {
+        "main": {
+            "durability": 100,
+            "armor_durability": 6,
+            "enchantability": 1,
+            "harvest_level": 0,
+            "harvest_speed": 1,
+            "melee_damage": 1,
+            "magic_damage": 1,
+            "attack_speed": 0.0,
+            "armor": 1,
+            "armor_toughness": 1,
+            "magic_armor": 1,
+            "ranged_damage": 0,
+            "ranged_speed": 0.0,
+            "rarity": 1,
+            "silentgems:chargeability": 1.0
+        },
+        "rod": {},
+        "bowstring": {}
+    },
+    "traits": {
+        "main": [],
+        "rod": [],
+        "bowstring": []
+    },
+    "crafting_items": {},
+    "name": {
+        "translate": "material.silentgear.example"
+    },
+    "display": {
+        "main/all": {
+            "texture": "low_contrast",
+            "color": "white"
+        },
+        "rod/all": {
+            "texture": "low_contrast",
+            "color": "white"
+        }
+    }
+}

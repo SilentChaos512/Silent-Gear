@@ -1,15 +1,12 @@
 {
-    "type": "silentgear:complex_rod",
+    "type": "silentgear:compound_rod",
     "crafting_items": {
-        "uncraftable": {
-            "remove": "me!"
-        },
-        "fixme_normal": {
-            "item": "silentgear:tool_rod"
+        "normal": {
+            "item": "silentgear:rod"
         }
     },
     "name": {
-        "translate": "part.silentgear.complex_rod"
+        "translate": "part.silentgear.rod"
     },
     "textures": {
         "all": {

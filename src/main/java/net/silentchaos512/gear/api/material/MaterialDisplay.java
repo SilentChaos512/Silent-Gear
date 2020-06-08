@@ -57,10 +57,10 @@ public class MaterialDisplay implements IMaterialDisplay {
         return props;
     }
 
-    public static void write(PacketBuffer buffer, MaterialDisplay props) {
-        buffer.writeVarInt(props.color);
-        buffer.writeVarInt(props.armorColor);
-        buffer.writeEnumValue(props.texture);
+    public void write(PacketBuffer buffer) {
+        buffer.writeVarInt(this.color);
+        buffer.writeVarInt(this.armorColor);
+        buffer.writeEnumValue(this.texture);
     }
 
     @Override

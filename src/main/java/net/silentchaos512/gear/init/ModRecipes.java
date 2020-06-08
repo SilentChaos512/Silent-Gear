@@ -11,7 +11,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.CustomTippedUpgradeIngredient;
+import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
+import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
 
 public final class ModRecipes {
@@ -19,6 +21,7 @@ public final class ModRecipes {
 
     public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
         // Recipe serializers
+        register(ShapelessCompoundPartRecipe.NAME, ShapelessCompoundPartRecipe.SERIALIZER);
         register(ShapedGearRecipe.NAME, ShapedGearRecipe.SERIALIZER);
         register(ShapelessGearRecipe.NAME, ShapelessGearRecipe.SERIALIZER);
         register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
@@ -29,7 +32,9 @@ public final class ModRecipes {
 
         // Ingredient serializers
         CraftingHelper.register(CustomTippedUpgradeIngredient.Serializer.NAME, CustomTippedUpgradeIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(ExclusionIngredient.Serializer.NAME, ExclusionIngredient.Serializer.INSTANCE);
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(PartMaterialIngredient.Serializer.NAME, PartMaterialIngredient.Serializer.INSTANCE);
 
         if (SilentGear.isDevBuild()) {
 //            MinecraftForge.EVENT_BUS.addListener(ModRecipes::onPlayerJoinServer);

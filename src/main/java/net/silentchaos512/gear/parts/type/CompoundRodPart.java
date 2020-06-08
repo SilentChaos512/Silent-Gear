@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public final class ComplexRodPart extends AbstractGearPart {
-    public static final IPartSerializer<ComplexRodPart> SERIALIZER = new Serializer(SilentGear.getId("complex_rod"), ComplexRodPart::new);
+public final class CompoundRodPart extends AbstractGearPart {
+    public static final IPartSerializer<CompoundRodPart> SERIALIZER = new Serializer(SilentGear.getId("compound_rod"), CompoundRodPart::new);
 
-    public ComplexRodPart(ResourceLocation name) {
+    public CompoundRodPart(ResourceLocation name) {
         super(name);
     }
 
@@ -74,8 +74,8 @@ public final class ComplexRodPart extends AbstractGearPart {
         return event.getModifiers();
     }
 
-    private static class Serializer extends AbstractGearPart.Serializer<ComplexRodPart> {
-        public Serializer(ResourceLocation serializerId, Function<ResourceLocation, ComplexRodPart> function) {
+    private static class Serializer extends AbstractGearPart.Serializer<CompoundRodPart> {
+        public Serializer(ResourceLocation serializerId, Function<ResourceLocation, CompoundRodPart> function) {
             super(serializerId, function);
         }
     }

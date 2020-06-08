@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -9,16 +10,19 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IPartMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.network.SyncMaterialsPacket;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -27,20 +31,20 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
-@SuppressWarnings("deprecation")
-public class MaterialManager implements IResourceManagerReloadListener {
+public class MaterialManager implements ISelectiveResourceReloadListener {
     public static final MaterialManager INSTANCE = new MaterialManager();
 
     public static final Marker MARKER = MarkerManager.getMarker("MaterialManager");
 
     private static final String DATA_PATH = "silentgear_materials";
     private static final Map<ResourceLocation, IPartMaterial> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
-    private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
+    private static final Collection<String> ERROR_LIST = new ArrayList<>();
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(DATA_PATH, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
@@ -54,22 +58,24 @@ public class MaterialManager implements IResourceManagerReloadListener {
                 String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
+                String packName = "ERROR";
                 try (IResource iresource = resourceManager.getResource(id)) {
+                    packName = iresource.getPackName();
                     JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                     if (json == null) {
                         SilentGear.LOGGER.error(MARKER, "Could not load material {} as it's null or empty", name);
                     } else if (!CraftingHelper.processConditions(json, "conditions")) {
                         SilentGear.LOGGER.info("Skipping loading material {} as its conditions were not met", name);
                     } else {
-                        IPartMaterial material = PartMaterial.Serializer.deserialize(name, json);
+                        IPartMaterial material = PartMaterial.Serializer.deserialize(name, packName, json);
                         MAP.put(material.getId(), material);
                     }
                 } catch (IllegalArgumentException | JsonParseException ex) {
                     SilentGear.LOGGER.error(MARKER, "Parsing error loading material {}", name, ex);
-                    ERROR_LIST.add(name);
+                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 } catch (IOException ex) {
                     SilentGear.LOGGER.error(MARKER, "Could not read material {}", name, ex);
-                    ERROR_LIST.add(name);
+                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 }
             }
         }
@@ -103,9 +109,22 @@ public class MaterialManager implements IResourceManagerReloadListener {
         return null;
     }
 
+    public static void handleSyncPacket(SyncMaterialsPacket msg, Supplier<NetworkEvent.Context> ctx) {
+        synchronized (MAP) {
+            Map<ResourceLocation, IPartMaterial> oldMaterials = ImmutableMap.copyOf(MAP);
+            MAP.clear();
+            msg.getMaterials().forEach(mat -> {
+                mat.retainData(oldMaterials.get(mat.getId()));
+                MAP.put(mat.getId(), mat);
+            });
+            SilentGear.LOGGER.info("Read {} materials from server", MAP.size());
+        }
+        ctx.get().setPacketHandled(true);
+    }
+
     public static Collection<ITextComponent> getErrorMessages(ServerPlayerEntity player) {
         if (!ERROR_LIST.isEmpty()) {
-            String listStr = ERROR_LIST.stream().map(ResourceLocation::toString).collect(Collectors.joining(", "));
+            String listStr = String.join(", ", ERROR_LIST);
             return ImmutableList.of(
                     new StringTextComponent("[Silent Gear] The following materials failed to load, check your log file:")
                             .applyTextStyle(TextFormatting.RED),
