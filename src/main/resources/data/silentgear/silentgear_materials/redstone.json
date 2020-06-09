@@ -22,6 +22,9 @@
     "traits": {
     },
     "crafting_items": {
+        "main": {
+            "tag": "forge:dusts/redstone"
+        }
     },
     "name": {
         "translate": "material.silentgear.redstone"

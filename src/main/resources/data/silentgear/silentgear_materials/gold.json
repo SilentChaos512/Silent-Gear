@@ -1,0 +1,107 @@
+{
+    "availability": {
+        "tier": 2
+    },
+    "stats": {
+        "main": {
+            "durability": 32,
+            "armor_durability": 7,
+            "enchantability": 22,
+            "harvest_level": 0,
+            "harvest_speed": 12,
+            "melee_damage": 0,
+            "magic_damage": 4,
+            "attack_speed": 0.2,
+            "armor": 11,
+            "armor_toughness": 0,
+            "magic_armor": 8,
+            "ranged_damage": 0,
+            "ranged_speed": 0.3,
+            "rarity": 30,
+            "silentgems:chargeability": 1.2
+        },
+        "rod": {
+            "durability": {
+                "mul2": 0.1
+            },
+            "enchantability": {
+                "add": 3
+            },
+            "rarity": 20
+        },
+        "tip": {
+            "durability": {
+                "add": 16
+            },
+            "armor_durability": {
+                "add": 1
+            },
+            "enchantability": {
+                "add": 3
+            },
+            "harvest_speed": {
+                "add": 6
+            },
+            "magic_damage": {
+                "add": 2
+            },
+            "ranged_speed": {
+                "add": 0.2
+            },
+            "rarity": 12
+        }
+    },
+    "traits": {
+        "main": [
+            {
+                "name": "silentgear:malleable",
+                "level": 1
+            },
+            {
+                "name": "silentgear:soft",
+                "level": 3
+            }
+        ],
+        "rod": [
+            {
+                "name": "silentgear:malleable",
+                "level": 1
+            }
+        ],
+        "tip": [
+            {
+                "name": "silentgear:malleable",
+                "level": 1
+            },
+            {
+                "name": "silentgear:soft",
+                "level": 3
+            }
+        ]
+    },
+    "crafting_items": {
+        "main": {
+            "tag": "forge:ingots/gold"
+        },
+        "rod/sub": {
+            "tag": "forge:rods/gold"
+        }
+    },
+    "name": {
+        "translate": "material.silentgear.gold"
+    },
+    "display": {
+        "main/all": {
+            "lite_texture": "high_contrast_with_highlight",
+            "color": "#EAEE57"
+        },
+        "rod/all": {
+            "lite_texture": "low_contrast",
+            "color": "#EAEE57"
+        },
+        "tip/all": {
+            "lite_texture": "high_contrast",
+            "color": "#E9B115"
+        }
+    }
+}

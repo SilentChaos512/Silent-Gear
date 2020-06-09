@@ -1,0 +1,73 @@
+{
+    "availability": {
+        "tier": 2
+    },
+    "stats": {
+        "main": {
+            "durability": 1280,
+            "armor_durability": 27,
+            "enchantability": 10,
+            "harvest_level": 2,
+            "harvest_speed": 8,
+            "melee_damage": 2,
+            "magic_damage": 3,
+            "attack_speed": -0.1,
+            "armor": 16,
+            "armor_toughness": 1,
+            "magic_armor": 6,
+            "ranged_damage": 0,
+            "ranged_speed": -0.3,
+            "rarity": 32,
+            "silentgems:chargeability": 0.9
+        },
+        "rod": {
+            "durability": {
+                "mul2": 0.1
+            },
+            "enchantability": {
+                "mul2": 0.1
+            },
+            "rarity": 26
+        }
+    },
+    "traits": {
+        "main": [
+            {
+                "name": "silentgear:jagged",
+                "level": 3
+            },
+            {
+                "name": "silentgear:ancient",
+                "level": 2
+            }
+        ],
+        "rod": [
+            {
+                "name": "silentgear:jagged",
+                "level": 2
+            },
+            {
+                "name": "silentgear:ancient",
+                "level": 4
+            }
+        ]
+    },
+    "crafting_items": {
+        "main": {
+            "tag": "forge:end_stones"
+        }
+    },
+    "name": {
+        "translate": "material.silentgear.end_stone"
+    },
+    "display": {
+        "main/all": {
+            "texture": "low_contrast",
+            "color": "#FFFFCC"
+        },
+        "rod/all": {
+            "texture": "low_contrast",
+            "color": "#FFFFCC"
+        }
+    }
+}

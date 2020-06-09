@@ -1,0 +1,50 @@
+{
+    "availability": {
+        "tier": 5
+    },
+    "stats": {
+        "main": {
+            "durability": 1337,
+            "armor_durability": 84,
+            "enchantability": 5,
+            "harvest_level": 0,
+            "harvest_speed": 5,
+            "melee_damage": 1,
+            "magic_damage": 1,
+            "attack_speed": 0.0,
+            "armor": 20,
+            "armor_toughness": 10,
+            "magic_armor": 10,
+            "ranged_damage": 1,
+            "ranged_speed": 0.0,
+            "rarity": 111,
+            "silentgems:chargeability": 0.5
+        }
+    },
+    "traits": {
+        "main": [
+            {
+                "name": "silentgear:adamant",
+                "level": 5
+            },
+            {
+                "name": "silentgear:holy",
+                "level": 5
+            }
+        ]
+    },
+    "crafting_items": {
+        "main": {
+            "item": "minecraft:barrier"
+        }
+    },
+    "name": {
+        "text": "Barrier"
+    },
+    "display": {
+        "main/all": {
+            "lite_texture": "high_contrast_with_highlight",
+            "color": "#FF0000"
+        }
+    }
+}

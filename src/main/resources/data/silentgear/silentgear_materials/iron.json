@@ -41,6 +41,9 @@
             "durability": {
                 "add": 128
             },
+            "armor_durability": {
+                "add": 4
+            },
             "enchantability": {
                 "add": 2
             },

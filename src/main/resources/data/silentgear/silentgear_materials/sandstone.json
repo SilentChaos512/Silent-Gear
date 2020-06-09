@@ -1,0 +1,73 @@
+{
+    "availability": {
+        "tier": 1
+    },
+    "stats": {
+        "main": {
+            "durability": 117,
+            "armor_durability": 6,
+            "enchantability": 7,
+            "harvest_level": 1,
+            "harvest_speed": 4,
+            "melee_damage": 1,
+            "magic_damage": 0,
+            "attack_speed": 0.1,
+            "armor": 5,
+            "armor_toughness": 0,
+            "magic_armor": 0,
+            "ranged_damage": 0,
+            "ranged_speed": -0.1,
+            "rarity": 7,
+            "silentgems:chargeability": 0.7
+        },
+        "rod": {
+            "durability": {
+                "mul2": -0.2
+            },
+            "enchantability": {
+                "mul2": -0.1
+            },
+            "rarity": 7
+        }
+    },
+    "traits": {
+        "main": [
+            {
+                "name": "silentgear:brittle",
+                "level": 2
+            },
+            {
+                "name": "silentgear:chipping",
+                "level": 3
+            }
+        ],
+        "rod": [
+            {
+                "name": "silentgear:brittle",
+                "level": 3
+            },
+            {
+                "name": "silentgear:crushing",
+                "level": 2
+            }
+        ]
+    },
+    "crafting_items": {
+        "main": {
+            "tag": "forge:sandstone"
+        }
+    },
+    "name": {
+        "translate": "material.silentgear.sandstone"
+    },
+    "display": {
+        "main/all": {
+            "texture": "low_contrast",
+            "color": "#E3DBB0"
+        },
+        "rod/all": {
+            "texture": "low_contrast",
+            "color": "#E3DBB0"
+        }
+    }
+}

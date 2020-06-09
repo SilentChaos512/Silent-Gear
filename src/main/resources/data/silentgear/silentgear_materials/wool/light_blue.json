@@ -1,0 +1,17 @@
+{
+    "parent": "silentgear:wool",
+    "crafting_items": {
+        "main": {
+            "item": "minecraft:light_blue_wool"
+        }
+    },
+    "name": {
+        "translate": "material.silentgear.wool.light_blue"
+    },
+    "display": {
+        "grip/all": {
+            "texture": "low_contrast",
+            "color": "#3AB3DA"
+        }
+    }
+}

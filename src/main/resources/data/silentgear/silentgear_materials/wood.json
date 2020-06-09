@@ -41,14 +41,10 @@
                 "level": 1
             }
         ],
-        "tip": [
+        "rod": [
             {
-                "name": "silentgear:brittle",
-                "level": 2
-            },
-            {
-                "name": "silentgear:lustrous",
-                "level": 2
+                "name": "silentgear:flexible",
+                "level": 1
             }
         ]
     },
@@ -64,7 +60,8 @@
                 "minecraft:dark_oak_planks",
                 "minecraft:oak_planks",
                 "minecraft:jungle_planks",
-                "minecraft:spruce_planks"
+                "minecraft:spruce_planks",
+                "silentgear:netherwood_planks"
             ]
         },
         "rod/sub": {

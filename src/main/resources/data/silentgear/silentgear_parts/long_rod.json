@@ -1,5 +1,10 @@
 {
     "type": "silentgear:compound_rod",
+    "stats": {
+        "reach_distance": {
+            "add": 1
+        }
+    },
     "crafting_items": {
         "normal": {
             "item": "silentgear:long_rod"

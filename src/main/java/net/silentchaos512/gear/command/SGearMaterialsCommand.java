@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -47,9 +48,10 @@ public final class SGearMaterialsCommand {
         );
         // Dump to CSV
         builder.then(Commands.literal("dump")
-                .executes(
-                        SGearMaterialsCommand::runDump
+                .then(Commands.argument("includeChildren", BoolArgumentType.bool())
+                        .executes(context -> runDump(context, context.getArgument("includeChildren", Boolean.class)))
                 )
+                .executes(context -> runDump(context, true))
         );
 
         dispatcher.register(builder);
@@ -64,7 +66,7 @@ public final class SGearMaterialsCommand {
         return 1;
     }
 
-    private static int runDump(CommandContext<CommandSource> context) {
+    private static int runDump(CommandContext<CommandSource> context, boolean includeChildren) {
         String fileName = "material_export.tsv";
         String dirPath = "output/silentgear";
         File output = new File(dirPath, fileName);
@@ -75,15 +77,17 @@ public final class SGearMaterialsCommand {
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder("Name\tID\tParent\tType\tTier\t");
+            StringBuilder builder = new StringBuilder("Name\tType\tID\tParent\tTier\t");
             ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getFormattedText()).append("\t"));
             builder.append("Traits\tTexture\tColor\n");
             writer.write(builder.toString());
 
             for (IPartMaterial material : MaterialManager.getValues()) {
-                for (PartType partType : PartType.getValues()) {
-                    if (material.allowedInPart(partType)) {
-                        writer.write(makeTsvLine(material, partType) + "\n");
+                if (includeChildren || getParentId(material).isEmpty()) {
+                    for (PartType partType : PartType.getValues()) {
+                        if (material.allowedInPart(partType)) {
+                            writer.write(makeTsvLine(material, partType) + "\n");
+                        }
                     }
                 }
             }
@@ -99,10 +103,12 @@ public final class SGearMaterialsCommand {
     private static String makeTsvLine(IPartMaterial material, PartType partType) {
         StringBuilder builder = new StringBuilder();
         appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
+        int tier = material.getTier(partType);
+//        appendTsv(builder, partType.getDisplayName(tier).getFormattedText());
+        appendTsv(builder, partType.getName().toString());
         appendTsv(builder, material.getId().toString());
         appendTsv(builder, getParentId(material));
-        appendTsv(builder, partType.getName());
-        appendTsv(builder, material.getTier(partType));
+        appendTsv(builder, tier);
 
         // Stats
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
