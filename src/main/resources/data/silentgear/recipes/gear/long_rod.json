@@ -18,6 +18,7 @@
         }
     ],
     "result": {
-        "item": "silentgear:long_rod"
+        "item": "silentgear:long_rod",
+        "count": 2
     }
 }

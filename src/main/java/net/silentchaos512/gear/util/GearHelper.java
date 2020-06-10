@@ -435,7 +435,7 @@ public final class GearHelper {
 
     public static boolean shouldUseFallbackColor(ItemStack stack, PartData part) {
         // TODO
-        return false;
+        return true;
     }
 
     public static Rarity getRarity(ItemStack stack) {

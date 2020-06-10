@@ -66,6 +66,10 @@ public class PartItem extends Item {
         return stack.getOrCreateTag().getInt(NBT_COLOR);
     }
 
+    public static int getColor(ItemStack stack, int tintIndex) {
+        return getColor(stack);
+    }
+
     private int calculateBlendedColor(Collection<MaterialInstance> materials) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;

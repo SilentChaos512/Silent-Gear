@@ -10,6 +10,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -17,8 +18,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IPartMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -31,10 +30,10 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class MaterialManager implements ISelectiveResourceReloadListener {
+@SuppressWarnings("deprecation")
+public class MaterialManager implements IResourceManagerReloadListener {
     public static final MaterialManager INSTANCE = new MaterialManager();
 
     public static final Marker MARKER = MarkerManager.getMarker("MaterialManager");
@@ -44,7 +43,7 @@ public class MaterialManager implements ISelectiveResourceReloadListener {
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+    public void onResourceManagerReload(IResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(DATA_PATH, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;

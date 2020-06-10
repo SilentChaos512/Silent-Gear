@@ -32,16 +32,16 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.traits.TraitManager;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public final class TraitHelper {
     private TraitHelper() {throw new IllegalAccessError("Utility class");}
@@ -238,6 +238,37 @@ public final class TraitHelper {
 
         cancelTraits(result, keys);
         MinecraftForge.EVENT_BUS.post(new GetTraitsEvent(gear, parts, result));
+        return result;
+    }
+
+    public static Map<ITrait, Integer> getTraits(Collection<MaterialInstance> materials, PartType partType, ItemStack gear) {
+        if (materials.isEmpty())
+            return Collections.emptyMap();
+
+        Map<ITrait, Integer> result = new LinkedHashMap<>();
+        Map<ITrait, Integer> countPartsWithTrait = new HashMap<>();
+
+        for (MaterialInstance material : materials) {
+            for (PartTraitInstance inst : material.getMaterial().getTraits(partType, gear)) {
+                if (inst.conditionsMatch(materials, gear)) {
+                    result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
+                    countPartsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
+                }
+            }
+        }
+
+        ITrait[] keys = result.keySet().toArray(new ITrait[0]);
+
+        for (ITrait trait : keys) {
+            final int partsWithTrait = countPartsWithTrait.get(trait);
+            final float divisor = Math.max(materials.size() / 2f, partsWithTrait);
+            final int value = Math.round(result.get(trait) / divisor);
+            result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
+        }
+
+        cancelTraits(result, keys);
+        // FIXME
+//        MinecraftForge.EVENT_BUS.post(new GetTraitsEvent(gear, materials, result));
         return result;
     }
 

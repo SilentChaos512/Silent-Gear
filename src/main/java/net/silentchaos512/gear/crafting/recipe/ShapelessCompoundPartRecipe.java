@@ -51,11 +51,14 @@ public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public ItemStack getCraftingResult(CraftingInventory inv) {
-        return item.create(getMaterials(inv));
+        ItemStack result = item.create(getMaterials(inv));
+        result.setCount(getBaseRecipe().getRecipeOutput().getCount());
+        return result;
     }
 
     private static Collection<MaterialInstance> getMaterials(IInventory inv) {
         return StackList.from(inv).stream()
+                .map(stack -> stack.copy().split(1))
                 .map(MaterialInstance::from)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -67,6 +70,7 @@ public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
         IPartMaterial material = MaterialManager.get(SilentGear.getId("example"));
         assert material != null;
         ItemStack result = item.create(Collections.singleton(MaterialInstance.of(material)));
+        result.setCount(getBaseRecipe().getRecipeOutput().getCount());
 //        GearData.setExampleTag(result, true);
         return result;
     }

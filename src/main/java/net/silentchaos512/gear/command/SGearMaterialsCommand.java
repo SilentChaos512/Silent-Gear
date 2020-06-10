@@ -77,7 +77,7 @@ public final class SGearMaterialsCommand {
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder("Name\tType\tID\tParent\tTier\t");
+            StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\tTier\t");
             ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getFormattedText()).append("\t"));
             builder.append("Traits\tTexture\tColor\n");
             writer.write(builder.toString());
@@ -102,6 +102,7 @@ public final class SGearMaterialsCommand {
 
     private static String makeTsvLine(IPartMaterial material, PartType partType) {
         StringBuilder builder = new StringBuilder();
+        appendTsv(builder, material.getPackName());
         appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
         int tier = material.getTier(partType);
 //        appendTsv(builder, partType.getDisplayName(tier).getFormattedText());

@@ -167,6 +167,7 @@ public final class ModItems {
     }
 
     private static void registerBlueprints(String name, boolean singleUse) {
+        // TODO: Change item ID's from "blueprint_item" to "item_blueprint"
         gearClasses.forEach((key, item) -> {
             GearBlueprintItem blueprint = new GearBlueprintItem(singleUse, () -> item);
             blueprints.add(blueprint);
@@ -176,5 +177,6 @@ public final class ModItems {
         // Part blueprints
         register(name + "_rod", new PartBlueprintItem(singleUse, PartType.ROD));
         register(name + "_bowstring", new PartBlueprintItem(singleUse, PartType.BOWSTRING));
+        register(name + "_grip", new PartBlueprintItem(singleUse, PartType.GRIP));
     }
 }

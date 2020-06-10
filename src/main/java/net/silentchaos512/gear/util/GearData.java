@@ -12,6 +12,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.*;
@@ -43,12 +44,16 @@ public final class GearData {
     private static final String NBT_ROOT = "SGear_Data";
     private static final String NBT_ROOT_CONSTRUCTION = "Construction";
     private static final String NBT_ROOT_PROPERTIES = "Properties";
+    @Deprecated
     private static final String NBT_ROOT_MODEL_KEYS = "ModelKeys";
     private static final String NBT_ROOT_RENDERING = "Rendering";
     private static final String NBT_ROOT_STATISTICS = "Statistics";
 
+    @Deprecated
     private static final String NBT_ARMOR_COLOR = "ArmorColor";
+    @Deprecated
     private static final String NBT_BLENDED_HEAD_COLOR = "BlendedHeadColor";
+    private static final String NBT_COLORS = "Colors";
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
@@ -209,6 +214,7 @@ public final class GearData {
         }
     }
 
+    @Deprecated
     private static void addOrRemoveHighlightPart(ItemStack stack, PartDataList parts) {
         final PartData primary = parts.getPrimaryMain();
         if (primary == null) return;
@@ -245,30 +251,46 @@ public final class GearData {
     private static void updateRenderingInfo(ItemStack stack, PartDataList parts) {
         CompoundNBT nbt = getData(stack, NBT_ROOT_RENDERING);
         List<PartData> mains = parts.getMains();
-        nbt.putInt(NBT_ARMOR_COLOR, calculateArmorColor(stack, mains));
-        nbt.putInt(NBT_BLENDED_HEAD_COLOR, calculateBlendedHeadColor(stack, mains));
+
+        // Remove deprecated keys
+        nbt.remove(NBT_ARMOR_COLOR);
+        nbt.remove(NBT_BLENDED_HEAD_COLOR);
+
+        // Cache part colors
+        CompoundNBT colors = nbt.getCompound(NBT_COLORS);
+        for (PartType partType : PartType.getValues()) {
+            List<PartData> list = parts.getPartsOfType(partType);
+            String key = partType.getName().getPath();
+            colors.remove(key);
+            if (!list.isEmpty()) {
+                int color = getBlendedColor(stack, list) & 0xFFFFFF;
+                if (color < 0xFFFFFF) {
+                    colors.putInt(key, color);
+                }
+            }
+        }
+
+        // Cache armor color
+        if (stack.getItem() instanceof ICoreArmor) {
+            colors.putInt("armor", getPrimaryColor(stack, mains));
+        } else {
+            colors.remove("armor");
+        }
+
+        nbt.put(NBT_COLORS, colors);
 
         createAndSaveModelKeys(stack, ((ICoreItem) stack.getItem()), parts);
     }
 
+    @Deprecated
     private static void createAndSaveModelKeys(ItemStack stack, ICoreItem item, PartDataList parts) {
-        // Save model keys for performance
-        // Remove the old keys first, then get new ones from ICoreItem
+        // Remove old model keys
         stack.getOrCreateChildTag(NBT_ROOT).remove(NBT_ROOT_MODEL_KEYS);
-        CompoundNBT modelKeys = getData(stack, NBT_ROOT_MODEL_KEYS);
-        for (int i = 0; i < item.getAnimationFrames(); ++i) {
-            modelKeys.putString(Integer.toString(i), item.getModelKey(stack, i, parts.toArray(new PartData[0])));
-        }
     }
 
+    @Deprecated
     public static String getCachedModelKey(ItemStack stack, int animationFrame) {
-        if (!(stack.getItem() instanceof ICoreItem)) return "Invalid item!";
-
-        CompoundNBT tags = getData(stack, NBT_ROOT_MODEL_KEYS);
-        String key = Integer.toString(animationFrame);
-        if (!tags.contains(key))
-            tags.putString(key, ((ICoreItem) stack.getItem()).getModelKey(stack, animationFrame));
-        return tags.getString(Integer.toString(animationFrame));
+        return "DEPRECATED";
     }
 
     public static Multimap<ItemStat, StatInstance> getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
@@ -411,20 +433,21 @@ public final class GearData {
         return data.getInt(NBT_TIER);
     }
 
+    public static int getColor(ItemStack stack, PartType partType) {
+        CompoundNBT colors = getData(stack, NBT_ROOT_RENDERING).getCompound(NBT_COLORS);
+        String key = partType.getName().getPath();
+        return colors.contains(key) ? colors.getInt(key) : Color.VALUE_WHITE;
+    }
+
     public static int getHeadColor(ItemStack stack, boolean colorBlending) {
-        if (!colorBlending) {
-            PartData part = getPrimaryRenderPartFast(stack);
-            if (part == null) return Color.VALUE_WHITE;
-            return part.getFallbackColor(stack, 0);
-        }
-        return getData(stack, NBT_ROOT_RENDERING).getInt(NBT_BLENDED_HEAD_COLOR);
+        return getColor(stack, PartType.MAIN);
     }
 
     public static int getArmorColor(ItemStack stack) {
-        return getData(stack, NBT_ROOT_RENDERING).getInt(NBT_ARMOR_COLOR);
+        return getData(stack, NBT_ROOT_RENDERING).getCompound(NBT_COLORS).getInt("armor");
     }
 
-    private static int calculateArmorColor(ItemStack gear, List<PartData> parts) {
+    private static int getPrimaryColor(ItemStack gear, List<PartData> parts) {
         if (!parts.isEmpty()) {
             PartData part = parts.get(0);
             return part.getArmorColor(gear);
@@ -432,7 +455,7 @@ public final class GearData {
         return Color.VALUE_WHITE;
     }
 
-    private static int calculateBlendedHeadColor(ItemStack gear, List<PartData> parts) {
+    private static int getBlendedColor(ItemStack gear, List<PartData> parts) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;
@@ -440,7 +463,7 @@ public final class GearData {
         int partCount = parts.size();
         for (int i = 0; i < partCount; ++i) {
             PartData part = parts.get(i);
-            int color = part.getFallbackColor(gear, 0);
+            int color = part.getPart().getColor(part, gear, 0);
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;

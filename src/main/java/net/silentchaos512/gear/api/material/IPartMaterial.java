@@ -21,6 +21,8 @@ import java.util.Collection;
  * @since 2.0.0
  */
 public interface IPartMaterial {
+    String getPackName();
+
     ResourceLocation getId();
 
     int getTier(PartType partType);

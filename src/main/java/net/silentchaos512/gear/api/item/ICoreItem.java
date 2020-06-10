@@ -1,8 +1,11 @@
 package net.silentchaos512.gear.api.item;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.parts.IPartData;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -13,6 +16,7 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.utils.Color;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -89,6 +93,11 @@ public interface ICoreItem extends IItemProvider, IStatItem {
 
     default int getAnimationFrames() {
         return 1;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    default IItemColor getItemColors() {
+        return (stack, tintIndex) -> Color.VALUE_WHITE;
     }
 
     @SuppressWarnings("deprecation")

@@ -45,7 +45,7 @@ public class CustomTippedUpgrade extends Item {
         if (tintIndex == 1) {
             IGearPart part = getPart(stack);
             if (part != null) {
-                return PartData.of(part).getColor(ItemStack.EMPTY, 0);
+                return PartData.of(part, stack).getColor(ItemStack.EMPTY, 0);
             }
         }
         return 0xFFFFFF;
@@ -55,7 +55,7 @@ public class CustomTippedUpgrade extends Item {
     public ITextComponent getDisplayName(ItemStack stack) {
         IGearPart part = getPart(stack);
         if (part != null) {
-            ITextComponent partDisplayName = PartData.of(part).getDisplayName(ItemStack.EMPTY);
+            ITextComponent partDisplayName = PartData.of(part, stack).getDisplayName(ItemStack.EMPTY);
             return new TranslationTextComponent("item.silentgear.custom_tipped_upgrade.nameProper", partDisplayName);
         }
         return super.getDisplayName(stack);
@@ -65,7 +65,7 @@ public class CustomTippedUpgrade extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         IGearPart part = getPart(stack);
         if (part != null) {
-            tooltip.add(PartData.of(part).getDisplayName(ItemStack.EMPTY));
+            tooltip.add(PartData.of(part, stack).getDisplayName(ItemStack.EMPTY));
         }
     }
 

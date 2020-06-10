@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.traits.TraitManager;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.List;
  * A trait, level, and optional conditions found on a gear part. Note that conditions are NOT sent
  * to the client when syncing parts, so the conditions loaded from JSON must be retained.
  */
+// TODO: Rename to TraitInstance?
 public class PartTraitInstance {
     private final ITrait trait;
     private final int level;
@@ -44,6 +46,12 @@ public class PartTraitInstance {
 
     public boolean conditionsMatch(ItemStack gear, PartDataList parts) {
         return conditions.stream().allMatch(c -> c.matches(gear, parts, this.trait));
+    }
+
+    public boolean conditionsMatch(Collection<MaterialInstance> materials, ItemStack gear) {
+        // FIXME
+//        return conditions.stream().allMatch(c -> c.matches(gear, materials, this.trait));
+        return true;
     }
 
     public static PartTraitInstance deserialize(JsonObject json) {

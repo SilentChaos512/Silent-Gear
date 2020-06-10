@@ -52,6 +52,11 @@ public final class PartMaterial implements IPartMaterial {
     }
 
     @Override
+    public String getPackName() {
+        return packName;
+    }
+
+    @Override
     public ResourceLocation getId() {
         return this.materialId;
     }
@@ -101,8 +106,8 @@ public final class PartMaterial implements IPartMaterial {
     }
 
     @Override
-    public Collection<PartTraitInstance> getTraits(PartType partType, ItemStack gear) {
-        Collection<PartTraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
+    public List<PartTraitInstance> getTraits(PartType partType, ItemStack gear) {
+        List<PartTraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
         if (getParent() != null) {
             ret.addAll(getParent().getTraits(partType, gear));
         }

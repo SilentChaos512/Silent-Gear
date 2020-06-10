@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,6 +22,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
@@ -61,6 +63,11 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     @Override
     public boolean requiresPartOfType(PartType type) {
         return type == PartType.ROD || ICoreItem.super.requiresPartOfType(type);
+    }
+
+    @Override
+    public IItemColor getItemColors() {
+        return ColorHandlers::getShieldColor;
     }
 
     @Override

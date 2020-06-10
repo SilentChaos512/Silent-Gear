@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.item;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +13,7 @@ import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.type.BowstringPart;
@@ -109,6 +111,11 @@ public interface ICoreTool extends ICoreItem {
         for (PartData data : GearData.getConstructionParts(stack))
             if (data.getPart() instanceof BowstringPart) return data;
         return null;
+    }
+
+    @Override
+    default IItemColor getItemColors() {
+        return ColorHandlers::getToolColor;
     }
 
     @Override

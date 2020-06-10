@@ -10,10 +10,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resources.IFutureReloadListener;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -22,12 +21,12 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * Do not use directly, use {@link GameStagesCompatProxy} instead.
  */
-public class GameStagesCompat implements ISelectiveResourceReloadListener {
+@SuppressWarnings("deprecation")
+public class GameStagesCompat implements IResourceManagerReloadListener {
     public static final IFutureReloadListener INSTANCE = new GameStagesCompat();
 
     private static final Map<ResourceLocation, List<String>> PARTS = Collections.synchronizedMap(new HashMap<>());
@@ -67,7 +66,7 @@ public class GameStagesCompat implements ISelectiveResourceReloadListener {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+    public void onResourceManagerReload(IResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations("silentgear_gamestages", s -> s.endsWith(".json"));
 

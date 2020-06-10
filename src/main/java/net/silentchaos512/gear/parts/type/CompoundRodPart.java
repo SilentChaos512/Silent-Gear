@@ -7,6 +7,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
+import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -15,9 +16,11 @@ import net.silentchaos512.gear.item.PartItem;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
+import net.silentchaos512.gear.util.TraitHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -42,6 +45,11 @@ public final class CompoundRodPart extends AbstractGearPart {
     @Override
     public IPartSerializer<?> getSerializer() {
         return SERIALIZER;
+    }
+
+    @Override
+    public int getColor(PartData part, ItemStack gear, int animationFrame) {
+        return PartItem.getColor(part.getCraftingItem());
     }
 
     @Override
@@ -72,6 +80,14 @@ public final class CompoundRodPart extends AbstractGearPart {
         GetStatModifierEvent event = new GetStatModifierEvent(part, stat, ret);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
+    }
+
+    @Override
+    public List<PartTraitInstance> getTraits(ItemStack gear, PartData part) {
+        List<PartTraitInstance> ret = new ArrayList<>(super.getTraits(gear, part));
+        TraitHelper.getTraits(PartItem.getMaterials(part.getCraftingItem()), PartType.ROD, gear).forEach((trait, level) ->
+                ret.add(new PartTraitInstance(trait, level, Collections.emptyList())));
+        return ret;
     }
 
     private static class Serializer extends AbstractGearPart.Serializer<CompoundRodPart> {

@@ -50,7 +50,7 @@ public final class TooltipHandler {
         IGearPart part = !stack.isEmpty() ? PartManager.from(stack) : null;
 
         if (part != null /*&& !part.isBlacklisted(stack)*/) {
-            onPartTooltip(event, stack, PartData.of(part));
+            onPartTooltip(event, stack, PartData.of(part, stack));
             return;
         }
 
