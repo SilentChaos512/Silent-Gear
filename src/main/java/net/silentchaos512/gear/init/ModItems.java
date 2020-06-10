@@ -144,7 +144,7 @@ public final class ModItems {
         toolClasses.put(SilentGear.getId("shears"), shears);
         toolClasses.put(SilentGear.getId("bow"), bow);
         toolClasses.put(SilentGear.getId("crossbow"), crossbow);
-//        toolClasses.put(SilentGear.getId("slingshot"), slingshot);
+        toolClasses.put(SilentGear.getId("slingshot"), slingshot);
 
         armorClasses.put(SilentGear.getId("helmet"), helmet);
         armorClasses.put(SilentGear.getId("chestplate"), chestplate);

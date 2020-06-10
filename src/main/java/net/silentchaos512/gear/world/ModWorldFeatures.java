@@ -23,7 +23,7 @@ import net.silentchaos512.gear.world.placement.NetherFloorWithExtraConfig;
 import net.silentchaos512.lib.world.feature.PlantFeature;
 
 public final class ModWorldFeatures {
-    public static final NetherwoodTreeFeature NETHERWOOD_TREE_FEATURE = new NetherwoodTreeFeature(TreeFeatureConfig::func_227338_a_);
+    public static final NetherwoodTreeFeature NETHERWOOD_TREE_FEATURE = new NetherwoodTreeFeature(TreeFeatureConfig::deserializeAcacia);
 
     public static final Placement<NetherFloorWithExtraConfig> NETHER_FLOOR_WITH_EXTRA = new NetherFloorWithExtra(NetherFloorWithExtraConfig::deserialize);
 

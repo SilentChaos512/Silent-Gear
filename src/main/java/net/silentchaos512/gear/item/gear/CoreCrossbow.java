@@ -78,6 +78,12 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     //region Crossbow stuff
 
+
+    @Override
+    public boolean isCrossbow(ItemStack stack) {
+        return true;
+    }
+
     @Override
     public UseAction getUseAction(ItemStack stack) {
         // FIXME: Vanilla is dumb. Non-vanilla crossbows do not render in first person correctly.

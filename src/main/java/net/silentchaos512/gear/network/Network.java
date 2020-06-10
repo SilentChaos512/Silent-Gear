@@ -2,6 +2,7 @@ package net.silentchaos512.gear.network;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.silentchaos512.gear.SilentGear;
@@ -69,6 +70,12 @@ public final class Network {
                     MaterialManager.handleSyncPacket(msg, ctx);
                     channel.reply(new LoginPacket.Reply(), ctx.get());
                 }))
+                .add();
+        // uwu
+        channel.messageBuilder(FMLPlayMessages.SpawnEntity.class, 7)
+                .encoder(FMLPlayMessages.SpawnEntity::encode)
+                .decoder(FMLPlayMessages.SpawnEntity::decode)
+                .consumer(FMLPlayMessages.SpawnEntity::handle)
                 .add();
     }
 

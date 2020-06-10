@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Slingshots (finally). Faster to draw but weaker than bows. Uses pebbles for ammo. Ammo cannot be retrieved.
 ### Changed
 - Some changes to how colors are handled. All layer colors are now cached in NBT. Locked and unlocked gear should update.
 - Gear items will now exclude some stats from their NBT, such as armor stats on tools. This should have no impact on how the mod plays.

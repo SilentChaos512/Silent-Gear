@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.SlingshotAmmoItem;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.lib.util.EntityHelper;
 import net.silentchaos512.utils.MathUtils;
 
 import java.util.Optional;
@@ -64,7 +65,7 @@ public class CoreSlingshot extends CoreBow {
     }
 
     @Override
-    public Predicate<ItemStack> getAmmoPredicate() {
+    public Predicate<ItemStack> getInventoryAmmoPredicate() {
         return stack -> stack.getItem() instanceof ISlingshotAmmo;
     }
 
@@ -147,7 +148,7 @@ public class CoreSlingshot extends CoreBow {
                             shot.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                         }
 
-                        worldIn.addEntity(shot);
+                        EntityHelper.spawnWithClientPacket(worldIn, shot);
                     }
 
                     worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);

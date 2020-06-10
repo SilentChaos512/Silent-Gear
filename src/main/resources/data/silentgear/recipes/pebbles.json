@@ -1,0 +1,16 @@
+{
+  "type": "silentlib:damage_item",
+  "damage": 1,
+  "ingredients": [
+    {
+      "tag": "forge:hammers"
+    },
+    {
+      "tag": "forge:cobblestone"
+    }
+  ],
+  "result": {
+    "item": "silentgear:pebble",
+    "count": 9
+  }
+}

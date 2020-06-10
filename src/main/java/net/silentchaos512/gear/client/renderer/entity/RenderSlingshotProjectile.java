@@ -11,7 +11,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 
 public class RenderSlingshotProjectile extends EntityRenderer<SlingshotProjectile> {
-    private static final ResourceLocation PEBBLE_TEXTURE = SilentGear.getId("textures/item/pebble");
+    private static final ResourceLocation PEBBLE_TEXTURE = SilentGear.getId("textures/item/pebble.png");
     private static final RenderType RENDER_TYPE = RenderType.getEntityCutoutNoCull(PEBBLE_TEXTURE);
 
     public RenderSlingshotProjectile(EntityRendererManager renderManager) {
