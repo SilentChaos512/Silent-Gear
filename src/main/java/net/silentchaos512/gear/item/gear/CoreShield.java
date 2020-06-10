@@ -35,10 +35,21 @@ import java.util.Set;
 public class CoreShield extends ShieldItem implements ICoreItem {
     private static final float DURABILITY_MULTI = 337f / 15f;
 
-    public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
+    private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.ENCHANTABILITY,
             ItemStats.RARITY
+    );
+
+    private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
+            ItemStats.HARVEST_LEVEL,
+            ItemStats.HARVEST_SPEED,
+            ItemStats.REACH_DISTANCE,
+            ItemStats.MELEE_DAMAGE,
+            ItemStats.MAGIC_DAMAGE,
+            ItemStats.ATTACK_SPEED,
+            ItemStats.RANGED_DAMAGE,
+            ItemStats.RANGED_SPEED
     );
 
     public CoreShield() {
@@ -53,6 +64,10 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     @Override
     public Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
+    }
+
+    public static Set<ItemStat> getExcludedStats() {
+        return EXCLUDED_STATS;
     }
 
     @Override

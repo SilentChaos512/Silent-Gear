@@ -18,10 +18,7 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Interface for all equipment items, including tools and armor.
@@ -74,7 +71,31 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return GearData.getStat(stack, stat);
     }
 
+    /**
+     * Gets a set of stats to display in the item's tooltip. Relevant stats allow only the most
+     * important stats to be shown to the player. Stats not in this set will still be calculated and
+     * stored.
+     * <p>
+     * Also see: {@link #getExcludedStats(ItemStack)}
+     *
+     * @param stack The item
+     * @return A set of stats to display in the item's tooltip
+     */
     Set<ItemStat> getRelevantStats(ItemStack stack);
+
+    /**
+     * Gets all stats that will not be calculated or stored for this item. <em>Be very careful with
+     * this!</em> If you are not sure if a stat should be excluded, then do not exclude it. The
+     * default implementation should be suitable for most cases.
+     * <p>
+     * Examples of logical exclusions are armor stats for harvest tools, or weapon stats for armor.
+     *
+     * @param stack The item
+     * @return A set of stats to not include.
+     */
+    default Set<ItemStat> getExcludedStats(ItemStack stack) {
+        return Collections.emptySet();
+    }
 
     default Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
         return Optional.empty();

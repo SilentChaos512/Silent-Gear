@@ -9,10 +9,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.util.Lazy;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Stats used by all equipment types.
@@ -65,6 +62,12 @@ public final class ItemStats {
      */
     public static Collection<ItemStat> allStatsOrdered() {
         return Collections.unmodifiableList(STATS_IN_ORDER);
+    }
+
+    public static Collection<ItemStat> allStatsOrderedExcluding(Collection<ItemStat> exclude) {
+        Collection<ItemStat> ret = new ArrayList<>(STATS_IN_ORDER);
+        ret.removeIf(exclude::contains);
+        return ret;
     }
 
     /**

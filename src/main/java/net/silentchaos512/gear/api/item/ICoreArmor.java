@@ -20,9 +20,25 @@ public interface ICoreArmor extends ICoreItem {
             ItemStats.RARITY
     );
 
+    Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
+            ItemStats.HARVEST_LEVEL,
+            ItemStats.HARVEST_SPEED,
+            ItemStats.REACH_DISTANCE,
+            ItemStats.MELEE_DAMAGE,
+            ItemStats.MAGIC_DAMAGE,
+            ItemStats.ATTACK_SPEED,
+            ItemStats.RANGED_DAMAGE,
+            ItemStats.RANGED_SPEED
+    );
+
     @Override
     default Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
+    }
+
+    @Override
+    default Set<ItemStat> getExcludedStats(ItemStack stack) {
+        return EXCLUDED_STATS;
     }
 
     @Override

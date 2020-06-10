@@ -30,10 +30,10 @@ import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.utils.Color;
-import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Includes many methods for getting values from the NBT of gear items. Please make sure all
@@ -110,6 +110,9 @@ public final class GearData {
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
+            if (player != null) {
+                SilentGear.LOGGER.debug("Recalculating for {}'s {}", player.getScoreboardName(), stack.getDisplayName().getFormattedText());
+            }
             clearCachedData(stack);
             addOrRemoveHighlightPart(stack, parts);
             propertiesCompound.putString("ModVersion", SilentGear.getVersion());
@@ -127,7 +130,7 @@ public final class GearData {
 
             // Calculate and write stats
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
-            CompoundNBT statsCompound = propertiesCompound.getCompound("Stats");
+            CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.keySet()) {
                 final float initialValue = stat.compute(0f, stats.get(stat));
                 // Some stats will be reduced if tool rod is missing (and required)
@@ -146,7 +149,7 @@ public final class GearData {
             propertiesCompound.put(NBT_STATS, statsCompound);
 
             if (player != null) {
-                printStatsForDebugging(stack, oldStatValues);
+                printStatsForDebugging(stack, stats, oldStatValues);
             }
 
             // Cache traits in properties compound as well
@@ -179,7 +182,7 @@ public final class GearData {
         properties.put("Stats", statsTag);
     }
 
-    private static final boolean STAT_DEBUGGING = false;
+    private static final boolean STAT_DEBUGGING = true;
 
     @Nullable
     private static Map<ItemStat, Float> getCurrentStatsForDebugging(ItemStack stack) {
@@ -192,25 +195,24 @@ public final class GearData {
         return null;
     }
 
-    private static void printStatsForDebugging(ItemStack stack, @Nullable Map<ItemStat, Float> oldStats) {
+    private static void printStatsForDebugging(ItemStack stack, Multimap<ItemStat, StatInstance> stats, @Nullable Map<ItemStat, Float> oldStats) {
         // Prints stats that have changed for debugging purposes
         if (oldStats != null && SilentGear.LOGGER.isDebugEnabled()) {
-            SilentGear.LOGGER.debug("Stats change on {}", stack.getDisplayName().getFormattedText());
             Map<ItemStat, Float> newStats = getCurrentStatsForDebugging(stack);
             assert newStats != null;
 
-            int changeCount = 0;
-            for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
+            for (ItemStat stat : stats.keySet()) {
                 float oldValue = oldStats.get(stat);
                 float newValue = newStats.get(stat);
-                if (!MathUtils.doublesEqual(oldValue, newValue)) {
-                    SilentGear.LOGGER.debug(" - {}: {} -> {}", stat.getRegistryName(), oldValue, newValue);
-                    ++changeCount;
-                }
+                float change = newValue - oldValue;
+                SilentGear.LOGGER.debug(" - {}: {} -> {} ({}) - mods: [{}]",
+                        stat.getDisplayName().getFormattedText(),
+                        oldValue,
+                        newValue,
+                        change < 0 ? change : "+" + change,
+                        stats.get(stat).stream().map(m -> m.formattedString(stat, 5, false)).collect(Collectors.joining(", "))
+                );
             }
-
-            if (changeCount == 0)
-                SilentGear.LOGGER.debug(" - No changes");
         }
     }
 
@@ -295,7 +297,7 @@ public final class GearData {
 
     public static Multimap<ItemStat, StatInstance> getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
         Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
-        for (ItemStat stat : ItemStats.REGISTRY.get().getValues()) {
+        for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item != null ? item.getExcludedStats(stack) : Collections.emptyList())) {
             // Item class modifiers
             if (item != null) {
                 item.getBaseStatModifier(stat).ifPresent(mod -> stats.put(stat, mod));

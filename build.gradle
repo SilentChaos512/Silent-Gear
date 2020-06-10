@@ -88,7 +88,7 @@ repositories {
     mavenLocal()
     // Silent Lib
     maven {
-        url  "https://dl.bintray.com/silentchaos512/silent-lib"
+        url "https://dl.bintray.com/silentchaos512/silent-lib"
     }
     maven {
         // location of the maven that hosts JEI files
@@ -144,8 +144,14 @@ dependencies {
     // }
 
     // Game Stages
-    compile fg.deobf("net.darkhax.bookshelf:Bookshelf-${project.bookshelf_version}")
-    compile fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
+    if (project.hasProperty("bookshelf_version")) {
+        compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-${project.bookshelf_version}")
+        runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-${project.bookshelf_version}")
+    }
+    if (project.hasProperty("gamestages_version")) {
+        compileOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
+        runtimeOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
+    }
 }
 
 jar {
@@ -421,7 +427,7 @@ def writeUpdateJson() {
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
     if (!json[project.mc_version].containsKey(version.toString()))
         json[project.mc_version][version.toString()] = 'https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md'
-    json[project.mc_version] = json[project.mc_version].sort([compare: {a, b -> b.compareTo(a)}] as Comparator)
+    json[project.mc_version] = json[project.mc_version].sort([compare: { a, b -> b.compareTo(a) }] as Comparator)
     json['promos']["${project.mc_version}-latest"] = version
     json['promos']["${project.mc_version}-recommended"] = version
 

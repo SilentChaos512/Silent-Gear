@@ -40,9 +40,21 @@ public interface ICoreTool extends ICoreItem {
             ItemStats.RARITY
     );
 
+    Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
+            ItemStats.ARMOR_DURABILITY,
+            ItemStats.ARMOR,
+            ItemStats.ARMOR_TOUGHNESS,
+            ItemStats.MAGIC_ARMOR
+    );
+
     @Override
     default Set<ItemStat> getRelevantStats(@Nonnull ItemStack stack) {
         return RELEVANT_STATS;
+    }
+
+    @Override
+    default Set<ItemStat> getExcludedStats(ItemStack stack) {
+        return EXCLUDED_STATS;
     }
 
     @Override

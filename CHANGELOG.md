@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Some changes to how colors are handled. All layer colors are now cached in NBT. Locked and unlocked gear should update.
+- Gear items will now exclude some stats from their NBT, such as armor stats on tools. This should have no impact on how the mod plays.
+- Debug log will now contain detailed information on stat recalculations (forced on for now)
 - (API) `ICoreItem` now has a method to return an `IItemColor`, which will be automatically registered. This defaults to the appropriate method for most items.
+- (API) `ICoreItem` now has a method called `getExcludedStats`. Stats returned here will not be calculated or stored in NBT. The default implementations should be suitable for most items.
 
 ## [1.7.2] - 2020-06-05
 ### Added
