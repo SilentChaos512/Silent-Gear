@@ -19,7 +19,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.network.SyncMaterialsPacket;
 import org.apache.commons.io.IOUtils;
@@ -39,7 +39,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
     public static final Marker MARKER = MarkerManager.getMarker("MaterialManager");
 
     private static final String DATA_PATH = "silentgear_materials";
-    private static final Map<ResourceLocation, IPartMaterial> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
+    private static final Map<ResourceLocation, IMaterial> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
 
     @Override
@@ -66,7 +66,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
                     } else if (!CraftingHelper.processConditions(json, "conditions")) {
                         SilentGear.LOGGER.info("Skipping loading material {} as its conditions were not met", name);
                     } else {
-                        IPartMaterial material = PartMaterial.Serializer.deserialize(name, packName, json);
+                        IMaterial material = PartMaterial.Serializer.deserialize(name, packName, json);
                         MAP.put(material.getId(), material);
                     }
                 } catch (IllegalArgumentException | JsonParseException ex) {
@@ -80,14 +80,14 @@ public class MaterialManager implements IResourceManagerReloadListener {
         }
     }
 
-    public static Collection<IPartMaterial> getValues() {
+    public static Collection<IMaterial> getValues() {
         synchronized (MAP) {
             return MAP.values();
         }
     }
 
     @Nullable
-    public static IPartMaterial get(@Nullable ResourceLocation id) {
+    public static IMaterial get(@Nullable ResourceLocation id) {
         if (id == null) return null;
 
         synchronized (MAP) {
@@ -96,10 +96,10 @@ public class MaterialManager implements IResourceManagerReloadListener {
     }
 
     @Nullable
-    public static IPartMaterial from(ItemStack stack) {
+    public static IMaterial from(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
-        for (IPartMaterial material : getValues()) {
+        for (IMaterial material : getValues()) {
             if (material.getIngredient(PartType.MAIN).test(stack)) {
                 return material;
             }
@@ -110,7 +110,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
 
     public static void handleSyncPacket(SyncMaterialsPacket msg, Supplier<NetworkEvent.Context> ctx) {
         synchronized (MAP) {
-            Map<ResourceLocation, IPartMaterial> oldMaterials = ImmutableMap.copyOf(MAP);
+            Map<ResourceLocation, IMaterial> oldMaterials = ImmutableMap.copyOf(MAP);
             MAP.clear();
             msg.getMaterials().forEach(mat -> {
                 mat.retainData(oldMaterials.get(mat.getId()));

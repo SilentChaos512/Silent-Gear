@@ -3,7 +3,7 @@ package net.silentchaos512.gear.api.material;
 import net.silentchaos512.gear.parts.PartTextureType;
 
 /**
- * An object with display properties used by {@link IPartMaterial}
+ * An object with display properties used by {@link IMaterial}
  */
 public interface IMaterialDisplay {
     /**

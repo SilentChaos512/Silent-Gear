@@ -79,12 +79,14 @@ public interface ICoreTool extends ICoreItem {
         return 2;
     }
 
+    @Deprecated
     default PartData getSecondaryPart(ItemStack stack) {
         PartData data = GearData.getSecondaryPart(stack);
         if (data != null) return data;
         return Objects.requireNonNull(PartData.ofNullable(PartType.MAIN.getFallbackPart()));
     }
 
+    @Deprecated
     @Nullable
     default PartData getRodPart(ItemStack stack) {
         for (PartData data : GearData.getConstructionParts(stack))
@@ -92,6 +94,7 @@ public interface ICoreTool extends ICoreItem {
         return null;
     }
 
+    @Deprecated
     @Nullable
     default PartData getGripPart(ItemStack stack) {
         for (PartData part : GearData.getConstructionParts(stack))
@@ -99,6 +102,7 @@ public interface ICoreTool extends ICoreItem {
         return null;
     }
 
+    @Deprecated
     @Nullable
     default PartData getTipPart(ItemStack stack) {
         for (PartData data : GearData.getConstructionParts(stack))
@@ -106,6 +110,7 @@ public interface ICoreTool extends ICoreItem {
         return null;
     }
 
+    @Deprecated
     @Nullable
     default PartData getBowstringPart(ItemStack stack) {
         for (PartData data : GearData.getConstructionParts(stack))

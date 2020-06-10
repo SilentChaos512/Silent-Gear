@@ -49,6 +49,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
 
     GearType getGearType();
 
+    @Deprecated
     default PartData getPrimaryPart(ItemStack stack) {
         PartData data = GearData.getPrimaryPart(stack);
         if (data != null) return data;
@@ -100,7 +101,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return (stack, tintIndex) -> Color.VALUE_WHITE;
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated
     default String getModelKey(ItemStack stack, int animationFrame, PartData... parts) {
         StringBuilder builder = new StringBuilder(getGearType().getName());
         if (GearHelper.isBroken(stack))
@@ -122,6 +123,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return builder.toString();
     }
 
+    @Deprecated
     default String getModelKey(ItemStack stack, int animationFrame) {
         return getModelKey(stack, animationFrame, getRenderParts(stack));
     }

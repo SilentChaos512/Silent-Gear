@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.event;
 
 import net.minecraftforge.eventbus.api.Event;
-import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 
@@ -17,9 +17,9 @@ import java.util.List;
 public class GetMaterialStatsEvent extends Event {
     private final ItemStat stat;
     private final List<StatInstance> modifiers;
-    private final IPartMaterial material;
+    private final IMaterial material;
 
-    public GetMaterialStatsEvent(IPartMaterial material, ItemStat stat, List<StatInstance> modifiers) {
+    public GetMaterialStatsEvent(IMaterial material, ItemStat stat, List<StatInstance> modifiers) {
         this.stat = stat;
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         this.modifiers = modifiers;

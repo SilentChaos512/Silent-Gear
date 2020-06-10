@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 public final class SGearMaterialsCommand {
     private static final SuggestionProvider<CommandSource> MATERIAL_ID_SUGGESTIONS = (ctx, builder) ->
-            ISuggestionProvider.func_212476_a(MaterialManager.getValues().stream().map(IPartMaterial::getId), builder);
+            ISuggestionProvider.func_212476_a(MaterialManager.getValues().stream().map(IMaterial::getId), builder);
 
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
@@ -82,7 +82,7 @@ public final class SGearMaterialsCommand {
             builder.append("Traits\tTexture\tColor\n");
             writer.write(builder.toString());
 
-            for (IPartMaterial material : MaterialManager.getValues()) {
+            for (IMaterial material : MaterialManager.getValues()) {
                 if (includeChildren || getParentId(material).isEmpty()) {
                     for (PartType partType : PartType.getValues()) {
                         if (material.allowedInPart(partType)) {
@@ -100,7 +100,7 @@ public final class SGearMaterialsCommand {
         return 1;
     }
 
-    private static String makeTsvLine(IPartMaterial material, PartType partType) {
+    private static String makeTsvLine(IMaterial material, PartType partType) {
         StringBuilder builder = new StringBuilder();
         appendTsv(builder, material.getPackName());
         appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
@@ -129,9 +129,9 @@ public final class SGearMaterialsCommand {
         return builder.toString();
     }
 
-    private static String getParentId(IPartMaterial material) {
+    private static String getParentId(IMaterial material) {
         if (material instanceof PartMaterial) {
-            IPartMaterial parent = ((PartMaterial) material).getParent();
+            IMaterial parent = ((PartMaterial) material).getParent();
             if (parent != null) {
                 return parent.getId().toString();
             }

@@ -103,7 +103,7 @@ public final class PartDisplay implements IPartDisplay {
         display.fallbackColor = buffer.readVarInt();
         display.armorColor = buffer.readVarInt();
         display.highlight = buffer.readBoolean();
-        display.liteTexture = EnumUtils.byOrdinal(buffer.readByte(), PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT);
+        display.liteTexture = buffer.readEnumValue(PartTextureType.class);
         return display;
     }
 
@@ -116,7 +116,7 @@ public final class PartDisplay implements IPartDisplay {
         buffer.writeVarInt(display.fallbackColor);
         buffer.writeVarInt(display.armorColor);
         buffer.writeBoolean(display.highlight);
-        buffer.writeByte(display.liteTexture.getIndex());
+        buffer.writeEnumValue(display.liteTexture);
     }
 
     @Override

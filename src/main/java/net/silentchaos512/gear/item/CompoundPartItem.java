@@ -14,14 +14,14 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class PartItem extends Item {
+public class CompoundPartItem extends Item {
     private static final String NBT_COLOR = "Color";
     private static final String NBT_MATERIALS = "Materials";
 
     private final ResourceLocation partId;
     private final PartType partType;
 
-    public PartItem(ResourceLocation partId, PartType partType, Properties properties) {
+    public CompoundPartItem(ResourceLocation partId, PartType partType, Properties properties) {
         super(properties);
         this.partId = partId;
         this.partType = partType;

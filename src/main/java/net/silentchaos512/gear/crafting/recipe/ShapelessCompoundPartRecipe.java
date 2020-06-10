@@ -9,10 +9,10 @@ import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.item.PartItem;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
@@ -25,16 +25,16 @@ public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("compound_part");
     public static final Serializer<ShapelessCompoundPartRecipe> SERIALIZER = Serializer.basic(ShapelessCompoundPartRecipe::new);
 
-    private final PartItem item;
+    private final CompoundPartItem item;
 
     private ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
         ItemStack output = recipe.getRecipeOutput();
-        if (!(output.getItem() instanceof PartItem)) {
+        if (!(output.getItem() instanceof CompoundPartItem)) {
             throw new JsonParseException("result is not a compound part item: " + output);
         }
-        this.item = (PartItem) output.getItem();
+        this.item = (CompoundPartItem) output.getItem();
     }
 
     @Override
@@ -67,7 +67,7 @@ public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         // Create an example item, so we're not just showing a broken item
-        IPartMaterial material = MaterialManager.get(SilentGear.getId("example"));
+        IMaterial material = MaterialManager.get(SilentGear.getId("example"));
         assert material != null;
         ItemStack result = item.create(Collections.singleton(MaterialInstance.of(material)));
         result.setCount(getBaseRecipe().getRecipeOutput().getCount());

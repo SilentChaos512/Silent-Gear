@@ -195,6 +195,7 @@ public final class PartData implements IPartData {
         return part.getColor(this, gear, animationFrame);
     }
 
+    @Deprecated
     public int getFallbackColor(ItemStack gear, int animationFrame) {
         return part.getDisplayProperties(this, gear, animationFrame).getFallbackColor();
     }

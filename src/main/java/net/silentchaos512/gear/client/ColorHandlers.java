@@ -10,7 +10,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
-import net.silentchaos512.gear.item.PartItem;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.utils.Color;
 
@@ -39,7 +39,7 @@ public final class ColorHandlers {
                 .forEach(item -> itemColors.register(item.getItemColors(), item));
 
         // Compound part items
-        itemColors.register(PartItem::getColor, ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof PartItem).toArray(IItemProvider[]::new));
+        itemColors.register(CompoundPartItem::getColor, ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof CompoundPartItem).toArray(IItemProvider[]::new));
     }
 
     /**

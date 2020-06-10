@@ -2,7 +2,7 @@ package net.silentchaos512.gear.network;
 
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.material.PartMaterial;
 
@@ -12,13 +12,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class SyncMaterialsPacket extends LoginPacket {
-    private List<IPartMaterial> materials;
+    private List<IMaterial> materials;
 
     public SyncMaterialsPacket() {
         this(MaterialManager.getValues());
     }
 
-    public SyncMaterialsPacket(Collection<IPartMaterial> materials) {
+    public SyncMaterialsPacket(Collection<IMaterial> materials) {
         this.materials = new ArrayList<>(materials);
     }
 
@@ -40,7 +40,7 @@ public class SyncMaterialsPacket extends LoginPacket {
         this.materials.forEach(mat -> PartMaterial.Serializer.write(buf, (PartMaterial) mat));
     }
 
-    public List<IPartMaterial> getMaterials() {
+    public List<IMaterial> getMaterials() {
         return Collections.unmodifiableList(this.materials);
     }
 }

@@ -26,5 +26,6 @@ public interface IPartPosition {
 
     String getTexturePrefix();
 
+    @Deprecated
     String getModelIndex();
 }

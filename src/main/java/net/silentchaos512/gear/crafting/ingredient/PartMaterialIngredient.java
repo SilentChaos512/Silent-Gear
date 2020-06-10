@@ -10,7 +10,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 
@@ -37,13 +37,13 @@ public final class PartMaterialIngredient extends Ingredient {
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        IPartMaterial material = MaterialManager.from(stack);
+        IMaterial material = MaterialManager.from(stack);
         return material != null && material.isCraftingAllowed(type);
     }
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        Collection<IPartMaterial> materials = MaterialManager.getValues();
+        Collection<IMaterial> materials = MaterialManager.getValues();
         if (!materials.isEmpty()) {
             return materials.stream()
                     .filter(mat -> mat.isCraftingAllowed(this.type))

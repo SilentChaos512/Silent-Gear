@@ -29,7 +29,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.lib.util.Lazy;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -78,7 +80,7 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     SPOON_UPGRADE,
     RED_CARD_UPGRADE;
 
-    private final Item item;
+    private final Lazy<Item> item;
     private final String requiredMod;
 
     CraftingItems() {
@@ -86,13 +88,13 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     }
 
     CraftingItems(String requiredMod) {
-        this.item = new ItemInternal();
+        this.item = Lazy.of(ItemInternal::new);
         this.requiredMod = requiredMod;
     }
 
     @Override
     public Item asItem() {
-        return this.item;
+        return this.item.get();
     }
 
     @Override
@@ -118,6 +120,11 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
 //            if (CraftingItems.this.requiredMod.isEmpty() || ModList.get().isLoaded(CraftingItems.this.requiredMod)) {
             super.fillItemGroup(group, items);
 //            }
+        }
+
+        @Override
+        public boolean isBeaconPayment(ItemStack stack) {
+            return this.isIn(Tags.Items.INGOTS) || this == GLITTERY_DUST.asItem();
         }
     }
 }

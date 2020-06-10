@@ -12,7 +12,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.item.PartItem;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
@@ -49,7 +49,7 @@ public final class CompoundRodPart extends AbstractGearPart {
 
     @Override
     public int getColor(PartData part, ItemStack gear, int animationFrame) {
-        return PartItem.getColor(part.getCraftingItem());
+        return CompoundPartItem.getColor(part.getCraftingItem());
     }
 
     @Override
@@ -57,12 +57,12 @@ public final class CompoundRodPart extends AbstractGearPart {
         // Get any base modifiers for this part (should be none, normally?)
         Collection<StatInstance> baseStats = new ArrayList<>(this.stats.get(stat));
         ItemStack stack = part.getCraftingItem();
-        if (!(stack.getItem() instanceof PartItem)) {
+        if (!(stack.getItem() instanceof CompoundPartItem)) {
             return baseStats;
         }
 
         // Get the rod materials and all the stat modifiers they provide for this stat
-        Collection<MaterialInstance> materials = PartItem.getMaterials(stack);
+        Collection<MaterialInstance> materials = CompoundPartItem.getMaterials(stack);
         Collection<StatInstance> statMods = materials.stream()
                 .flatMap(m -> m.getStatModifiers(stat, this.getType(), gear).stream())
                 .collect(Collectors.toList());
@@ -85,7 +85,7 @@ public final class CompoundRodPart extends AbstractGearPart {
     @Override
     public List<PartTraitInstance> getTraits(ItemStack gear, PartData part) {
         List<PartTraitInstance> ret = new ArrayList<>(super.getTraits(gear, part));
-        TraitHelper.getTraits(PartItem.getMaterials(part.getCraftingItem()), PartType.ROD, gear).forEach((trait, level) ->
+        TraitHelper.getTraits(CompoundPartItem.getMaterials(part.getCraftingItem()), PartType.ROD, gear).forEach((trait, level) ->
                 ret.add(new PartTraitInstance(trait, level, Collections.emptyList())));
         return ret;
     }

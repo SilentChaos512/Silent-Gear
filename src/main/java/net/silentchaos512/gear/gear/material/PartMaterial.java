@@ -15,7 +15,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.material.IPartMaterial;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.MaterialDisplay;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -28,7 +28,7 @@ import net.silentchaos512.gear.parts.PartTextureType;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public final class PartMaterial implements IPartMaterial {
+public final class PartMaterial implements IMaterial {
     private static final StatModifierMap EMPTY_STAT_MAP = new StatModifierMap();
 
     private final ResourceLocation materialId;
@@ -62,7 +62,7 @@ public final class PartMaterial implements IPartMaterial {
     }
 
     @Nullable
-    public IPartMaterial getParent() {
+    public IMaterial getParent() {
         if (parent != null) {
             return MaterialManager.get(parent);
         }
@@ -88,7 +88,7 @@ public final class PartMaterial implements IPartMaterial {
     }
 
     @Override
-    public void retainData(@Nullable IPartMaterial oldMaterial) {
+    public void retainData(@Nullable IMaterial oldMaterial) {
         if (oldMaterial instanceof PartMaterial) {
             // Copy trait instances, the client doesn't need to know conditions
             this.traits.clear();

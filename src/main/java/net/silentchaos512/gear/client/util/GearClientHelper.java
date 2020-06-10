@@ -232,6 +232,7 @@ public final class GearClientHelper {
         return !oldStack.equals(newStack);
     }
 
+    @Deprecated
     public static Map<String, PartData> getRenderParts(ItemStack stack) {
         Map<String, PartData> map = new LinkedHashMap<>();
 

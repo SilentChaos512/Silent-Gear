@@ -11,7 +11,7 @@ public interface IMaterialInstance {
     ResourceLocation getMaterialId();
 
     @Nullable
-    IPartMaterial getMaterial();
+    IMaterial getMaterial();
 
     MaterialGrade getGrade();
 

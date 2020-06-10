@@ -20,7 +20,7 @@ import java.util.Collection;
  *
  * @since 2.0.0
  */
-public interface IPartMaterial {
+public interface IMaterial {
     String getPackName();
 
     ResourceLocation getId();
@@ -32,7 +32,7 @@ public interface IPartMaterial {
 
     boolean allowedInPart(PartType partType);
 
-    void retainData(@Nullable IPartMaterial oldMaterial);
+    void retainData(@Nullable IMaterial oldMaterial);
 
     Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear);
 

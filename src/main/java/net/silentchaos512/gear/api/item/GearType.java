@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
 /**
  * Used for classifying gear for certain purposes, such as rendering. For example, any armor type
  * can be matched individually (helmet, chestplate, etc.), or all together with "armor".
+ * <p>
+ * New gear types can be added with {@link #getOrCreate(String, GearType)}. It is recommended to
+ * store this in a static final field in your item class, but the location doesn't matter.
  */
 public final class GearType {
     private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]");
@@ -51,15 +54,41 @@ public final class GearType {
     public static final GearType HELMET = getOrCreate("helmet", ARMOR);
     public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR);
 
+    /**
+     * Gets the gear type of the given name, or null if it does not exist.
+     *
+     * @param name The gear type name
+     * @return The gear type, or null if it does not exist
+     */
     @Nullable
     public static GearType get(String name) {
         return VALUES.get(name);
     }
 
+    /**
+     * Gets or creates a new gear type without a parent. This should NOT be used in most cases. If
+     * the gear type already exists, the existing instance is not modified in any way.
+     *
+     * @param name The gear type name. Must be unique and contain only lowercase letters and
+     *             underscores.
+     * @return The newly created gear type, or the existing instance if it already exists
+     * @throws IllegalArgumentException if the name is invalid
+     */
     public static GearType getOrCreate(String name) {
         return getOrCreate(name, null);
     }
 
+    /**
+     * Gets or creates a new gear type with the given parent. If the gear type already exists, the
+     * existing instance is not modified in any way.
+     *
+     * @param name   The gear type name. Must be unique and contain only lowercase letters and
+     *               underscores.
+     * @param parent The parent gear type. This will typically be harvest_tool, melee_weapon, or
+     *               ranged_weapon, but it could be any existing type.
+     * @return The newly created gear type, or the existing instance if it already exists
+     * @throws IllegalArgumentException if the name is invalid
+     */
     public static GearType getOrCreate(String name, @Nullable GearType parent) {
         if (VALID_NAME.matcher(name).find())
             throw new IllegalArgumentException("Invalid name: " + name);
