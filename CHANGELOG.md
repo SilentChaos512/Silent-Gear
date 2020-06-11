@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.7.3] - 2020-06-10
 - Requires Silent Lib 4.6.2
 - 'b' build updates mods.toml to contain correct Silent Lib version
+- 'c' build fixes a crash in `ExclusionIngredient`
 ### Added
 - Slingshots (finally). Faster to draw but weaker than bows. Uses pebbles for ammo. Ammo cannot be retrieved.
 - Synergy traits. This allows the existing Synergistic and Crude traits to be customized, as well as allowing new synergy traits to be added.

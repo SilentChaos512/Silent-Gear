@@ -30,7 +30,7 @@ public class ExclusionIngredient extends Ingredient {
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        List<ItemStack> ret = Arrays.asList(parent.getMatchingStacks());
+        List<ItemStack> ret = new ArrayList<>(Arrays.asList(parent.getMatchingStacks()));
         exclusions.forEach(id -> ret.removeIf(stack -> isItem(id, stack)));
         return ret.toArray(new ItemStack[0]);
     }
