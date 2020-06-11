@@ -1,7 +1,11 @@
 {
-    "type": "silentgear:simple_trait",
+    "type": "silentgear:synergy",
+    "synergy_multi": -0.04,
     "max_level": 5,
-    "cancels_with": ["silentgear:synergistic"],
+    "cancels_with": [
+        "silentgear:rustic",
+        "silentgear:synergistic"
+    ],
     "name": {
         "translate": "trait.silentgear.crude"
     },

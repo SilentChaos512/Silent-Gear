@@ -4,7 +4,7 @@
     },
     "stats": {
         "main": {
-            "durability": 175,
+            "durability": 165,
             "armor_durability": 11,
             "enchantability": 9,
             "harvest_level": 1,
@@ -42,6 +42,10 @@
             {
                 "name": "silentgear:chipping",
                 "level": 2
+            },
+            {
+                "name": "silentgear:rustic",
+                "level": 1
             }
         ],
         "rod": [
@@ -52,6 +56,10 @@
             {
                 "name": "silentgear:crushing",
                 "level": 1
+            },
+            {
+                "name": "silentgear:rustic",
+                "level": 2
             }
         ]
     },

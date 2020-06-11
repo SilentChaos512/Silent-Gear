@@ -121,7 +121,7 @@ public final class GearClientHelper {
 
             float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
             TextFormatting color = synergyDisplayValue < 1 ? TextFormatting.RED : synergyDisplayValue > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
-            tooltip.add(new StringTextComponent("Synergy: " + color + String.format("%d%%", (int) (100 * synergyDisplayValue))));
+            tooltip.add(new StringTextComponent("Synergy: " + color + String.format("%d%%", Math.round(100 * synergyDisplayValue))));
 
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = item.getRelevantStats(stack);

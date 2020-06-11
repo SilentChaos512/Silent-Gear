@@ -26,8 +26,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.traits.TraitConst;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.traits.SynergyTrait;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.utils.Color;
 
@@ -344,16 +343,11 @@ public final class GearData {
             }
         }
 
-        // Synergy Boost (only if higher than 100%)
-        ITrait synergistic = TraitManager.get(TraitConst.SYNERGISTIC);
-        if (synergy > 1 && traits.containsKey(synergistic)) {
-            int level = traits.get(synergistic);
-            synergy += level * TraitConst.SYNERGY_BOOST_MULTI;
-        }
-        ITrait crude = TraitManager.get(TraitConst.CRUDE);
-        if (traits.containsKey(crude)) {
-            int level = traits.get(crude);
-            synergy -= level * TraitConst.SYNERGY_BOOST_MULTI;
+        // Synergy traits
+        for (ITrait trait : traits.keySet()) {
+            if (trait instanceof SynergyTrait) {
+                synergy = ((SynergyTrait) trait).apply(synergy, traits.get(trait));
+            }
         }
 
         return synergy;

@@ -25,6 +25,10 @@
         {
             "name": "silentgear:chipping",
             "level": 2
+        },
+        {
+            "name": "silentgear:rustic",
+            "level": 1
         }
     ],
     "crafting_items": {

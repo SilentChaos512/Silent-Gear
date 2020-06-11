@@ -19,5 +19,6 @@ public class TraitConst {
 
     // Misc constants
     public static final float ANCIENT_XP_BOOST = 0.25f;
+    @Deprecated
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
 }

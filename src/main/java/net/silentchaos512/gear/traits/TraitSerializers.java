@@ -27,6 +27,7 @@ public final class TraitSerializers {
         register(StatModifierTrait.SERIALIZER);
         register(AttributeTrait.SERIALIZER);
         register(BlockPlacerTrait.SERIALIZER);
+        register(SynergyTrait.SERIALIZER);
     }
 
     private TraitSerializers() {}

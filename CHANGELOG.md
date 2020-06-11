@@ -3,9 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.7.3] - 2020-06-10
+Requires Silent Lib 4.6.2
 ### Added
 - Slingshots (finally). Faster to draw but weaker than bows. Uses pebbles for ammo. Ammo cannot be retrieved.
+- Synergy traits. This allows the existing Synergistic and Crude traits to be customized, as well as allowing new synergy traits to be added.
+- Rustic trait. Increases synergy, but only if the base value is between 75% and 100%.
+- Compound rods are technically craftable and usable in this build. Not thoroughly tested yet! The recipe does not show in JEI. It's a rod blueprint and two materials.
+    - Note this uses the new material system! Any main parts previously added by data packs will not work.
 ### Changed
 - Some changes to how colors are handled. All layer colors are now cached in NBT. Locked and unlocked gear should update.
 - Gear items will now exclude some stats from their NBT, such as armor stats on tools. This should have no impact on how the mod plays.
