@@ -4,7 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.7.3] - 2020-06-10
-Requires Silent Lib 4.6.2
+- Requires Silent Lib 4.6.2
+- 'b' build updates mods.toml to contain correct Silent Lib version
 ### Added
 - Slingshots (finally). Faster to draw but weaker than bows. Uses pebbles for ammo. Ammo cannot be retrieved.
 - Synergy traits. This allows the existing Synergistic and Crude traits to be customized, as well as allowing new synergy traits to be added.
@@ -19,6 +20,7 @@ Requires Silent Lib 4.6.2
 - (API) `ICoreItem` now has a method called `getExcludedStats`. Stats returned here will not be calculated or stored in NBT. The default implementations should be suitable for most items.
 
 ## [1.7.2] - 2020-06-05
+Requires Forge 31.2.5 or higher
 ### Added
 - Moar new traits!
     - Cursed - Reduces luck. Cancels with Lucky. Max level 7, same as Lucky.
