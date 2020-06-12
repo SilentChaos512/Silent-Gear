@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -40,7 +41,7 @@ public class CompoundPartItem extends Item {
                 .collect(Collectors.toList()));
     }
 
-    public ItemStack create(Collection<MaterialInstance> materials) {
+    public ItemStack create(Collection<? extends IMaterialInstance> materials) {
         ListNBT materialListNbt = new ListNBT();
         materials.forEach(m -> materialListNbt.add(m.write(new CompoundNBT())));
 
@@ -70,14 +71,14 @@ public class CompoundPartItem extends Item {
         return getColor(stack);
     }
 
-    private int calculateBlendedColor(Collection<MaterialInstance> materials) {
+    private int calculateBlendedColor(Collection<? extends IMaterialInstance> materials) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;
 
         int i = 0;
-        for (MaterialInstance mat : materials) {
-            int color = mat.getMaterial().getColor(ItemStack.EMPTY, partType);
+        for (IMaterialInstance mat : materials) {
+            int color = mat.getColor(partType);
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;

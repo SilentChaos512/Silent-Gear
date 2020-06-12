@@ -9,9 +9,8 @@ import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
@@ -67,9 +66,7 @@ public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         // Create an example item, so we're not just showing a broken item
-        IMaterial material = MaterialManager.get(SilentGear.getId("example"));
-        assert material != null;
-        ItemStack result = item.create(Collections.singleton(MaterialInstance.of(material)));
+        ItemStack result = item.create(Collections.singleton(new LazyMaterialInstance(SilentGear.getId("example"))));
         result.setCount(getBaseRecipe().getRecipeOutput().getCount());
 //        GearData.setExampleTag(result, true);
         return result;

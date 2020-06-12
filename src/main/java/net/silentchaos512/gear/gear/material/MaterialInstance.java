@@ -123,4 +123,9 @@ public class MaterialInstance implements IMaterialInstance {
         nbt.put("Item", item.write(new CompoundNBT()));
         return nbt;
     }
+
+    @Override
+    public int getColor(PartType partType, ItemStack gear) {
+        return material.getColor(gear, partType);
+    }
 }

@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Crash with `ShapelessCompoundPartRecipe` and `MaterialInstance` [#135]
+
 ## [1.7.3] - 2020-06-10
 - Requires Silent Lib 4.6.2
 - 'b' build updates mods.toml to contain correct Silent Lib version
