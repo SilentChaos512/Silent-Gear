@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "tag": "forge:dusts/blaze_gold"
+  },
+  "result": "silentgear:blaze_gold_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

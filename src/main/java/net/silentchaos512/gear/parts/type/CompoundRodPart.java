@@ -73,7 +73,8 @@ public final class CompoundRodPart extends AbstractGearPart {
         for (StatInstance.Operation op : StatInstance.Operation.values()) {
             Collection<StatInstance> modsForOp = statMods.stream().filter(s -> s.getOp() == op).collect(Collectors.toList());
             if (!modsForOp.isEmpty()) {
-                ret.add(StatInstance.getWeightedAverageMod(modsForOp, op));
+                StatInstance mod = StatInstance.getWeightedAverageMod(modsForOp, op);
+                ret.add(mod);
             }
         }
 

@@ -41,7 +41,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 public enum MaterialGrade {
-    NONE(0), E(-8), D(-4), C(0), B(5), A(10), S(20), SS(30), SSS(40);
+    NONE(0), E(1), D(2), C(3), B(4), A(5), S(10), SS(15), SSS(25);
 
     private static final String NBT_KEY = "SGear_Grade";
     private static final double GRADE_STD_DEV = 1.5;
@@ -72,49 +72,17 @@ public enum MaterialGrade {
     }
 
     /**
-     * Gets a copy of the item with this grade applied. Does not modify the original item stack.
-     *
-     * @param original The original item stack
-     * @return A graded copy of original
-     */
-    public ItemStack applyTo(ItemStack original) {
-        ItemStack result = original.copy();
-        if (this == NONE) {
-            return result;
-        }
-        setGradeOnStack(result);
-        return result;
-    }
-
-    public static MaterialGrade selectRandom(Random random) {
-        return selectRandom(random, SSS);
-    }
-
-    /**
-     * Select a random grade, with median based on the catalyst tier. Standard median is B, each
-     * catalyst tier adds one to the median.
+     * Select a random grade, with median based on the catalyst tier. Standard median is C at
+     * catalyst tier 1, each catalyst tier adds one to the median.
      *
      * @param random       A random object to use
      * @param catalystTier The catalyst tier (or zero if there is no catalyst
      * @return A MaterialGrade that is not NONE
      */
     public static MaterialGrade selectWithCatalyst(Random random, @Nonnegative int catalystTier) {
-        int ordinal = MaterialGrade.B.ordinal() + catalystTier - 1;
+        int ordinal = MaterialGrade.C.ordinal() + catalystTier - 1;
         MaterialGrade median = EnumUtils.byOrdinal(ordinal, SSS);
         return selectRandom(random, median, GRADE_STD_DEV, SSS);
-    }
-
-    /**
-     * Select a random grade with default settings (median B and 1.5 standard deviation)
-     *
-     * @param random   A random object to use.
-     * @param maxGrade The highest grade that can be selected
-     * @return A MaterialGrade that is not NONE
-     */
-    public static MaterialGrade selectRandom(Random random, MaterialGrade maxGrade) {
-        // If I understand the math here, 95% of the time, we should get grades between E and SS,
-        // inclusive. SSS should be about 2.5% chance, I think. E picks up the 2.5% on the low end.
-        return selectRandom(random, B, GRADE_STD_DEV, maxGrade);
     }
 
     /**

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "#forge:storage_blocks/blaze_gold",
     "#forge:storage_blocks/crimson_iron",
     "#forge:storage_blocks/crimson_steel"
   ]

@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MaterialInstance implements IMaterialInstance {
     private static final Map<ResourceLocation, MaterialInstance> QUICK_CACHE = new HashMap<>();
@@ -90,8 +91,9 @@ public class MaterialInstance implements IMaterialInstance {
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
         Collection<StatInstance> mods = material.getStatModifiers(stat, partType, gear);
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
-            float bonus = grade.bonusPercent / 100f;
-            mods.add(new StatInstance(bonus, StatInstance.Operation.MUL1));
+            // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
+            float bonus = 1f + grade.bonusPercent / 100f;
+            return mods.stream().map(m -> new StatInstance(m.getValue() * bonus, m.getOp())).collect(Collectors.toList());
         }
         return mods;
     }

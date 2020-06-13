@@ -1,0 +1,31 @@
+{
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "silents_mechanisms"
+        }
+    ],
+    "type": "silents_mechanisms:alloy_smelting",
+    "process_time": 200,
+    "ingredients": [
+        {
+            "values": [
+                {
+                    "tag": "forge:dusts/gold"
+                },
+                {
+                    "tag": "forge:ingots/gold"
+                }
+            ],
+            "count": 1
+        },
+        {
+            "item": "minecraft:blaze_powder",
+            "count": 3
+        }
+    ],
+    "result": {
+        "item": "silentgear:blaze_gold_ingot",
+        "count": 1
+    }
+}

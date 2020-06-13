@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "#forge:ingots/blaze_gold",
     "#forge:ingots/crimson_steel",
     "#forge:ingots/crimson_iron"
   ]

@@ -21,11 +21,9 @@ package net.silentchaos512.gear.item;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -43,12 +41,16 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     ADVANCED_UPGRADE_BASE,
     CRIMSON_IRON_INGOT,
     CRIMSON_STEEL_INGOT,
+    BLAZE_GOLD_INGOT,
     CRIMSON_IRON_NUGGET,
     CRIMSON_STEEL_NUGGET,
-    CRIMSON_IRON_CHUNKS("silents-mechanisms"),
-    CRIMSON_IRON_DUST("silents-mechanisms"),
+    BLAZE_GOLD_NUGGET,
+    CRIMSON_IRON_CHUNKS,
+    CRIMSON_IRON_DUST,
+    BLAZE_GOLD_DUST,
     DIAMOND_SHARD,
     EMERALD_SHARD,
+    BLAZING_DUST,
     GLITTERY_DUST,
     LEATHER_SCRAP,
     SINEW,
@@ -81,15 +83,9 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     RED_CARD_UPGRADE;
 
     private final Lazy<Item> item;
-    private final String requiredMod;
 
     CraftingItems() {
-        this("");
-    }
-
-    CraftingItems(String requiredMod) {
         this.item = Lazy.of(ItemInternal::new);
-        this.requiredMod = requiredMod;
     }
 
     @Override
@@ -113,13 +109,6 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
             if (I18n.hasKey(descKey)) {
                 tooltip.add(new TranslationTextComponent(descKey));
             }
-        }
-
-        @Override
-        public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-//            if (CraftingItems.this.requiredMod.isEmpty() || ModList.get().isLoaded(CraftingItems.this.requiredMod)) {
-            super.fillItemGroup(group, items);
-//            }
         }
 
         @Override

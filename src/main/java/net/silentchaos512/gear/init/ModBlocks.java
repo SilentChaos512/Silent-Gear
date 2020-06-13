@@ -34,6 +34,7 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     CRIMSON_IRON_ORE(CrimsonIronOre::new),
     CRIMSON_IRON_BLOCK(() -> new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL))),
     CRIMSON_STEEL_BLOCK(() -> new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL))),
+    BLAZE_GOLD_BLOCK(() -> new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL))),
     MATERIAL_GRADER(() -> new GraderBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 30))),
     CRAFTING_STATION(CraftingStationBlock::new),
     SALVAGER(SalvagerBlock::new),

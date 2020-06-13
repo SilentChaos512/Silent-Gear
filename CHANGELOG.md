@@ -4,6 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+Requires Silent Lib 4.6.3
+### Added
+- New material grader (only works with the new material system). Works like the part analyzer, but with some changes. [#83]
+    - Catalysts are now **required**.
+    - There are now five catalyst tier tags. Tier 1 has a median grade of C. Tiers 4 & 5 are empty by default.
+    - Graded materials (less than SSS) can now be "re-rolled" by placing them back into the input slot. The grader will consume catalyst until a higher grade is rolled. If a lower grade is rolled, the item is unchanged and remains in the input slot.
+- Blaze gold, can be used for crafting with the new material system
+- Blazing dust, tier 2 grader catalyst
+### Changed
+- Grade bonus percentages - no more negative values, but the top grades have had there bonuses reduced since they apply to non-main parts now.
+- Glittery dust is now a tier 3 grader catalyst
 ### Fixed
 - Crash with `ShapelessCompoundPartRecipe` and `MaterialInstance` [#135]
 - Compound rods being craftable with non-rod materials

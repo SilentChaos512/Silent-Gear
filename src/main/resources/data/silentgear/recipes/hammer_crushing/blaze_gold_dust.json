@@ -1,0 +1,16 @@
+{
+  "type": "silentlib:damage_item",
+  "damage": 1,
+  "ingredients": [
+    {
+      "tag": "forge:hammers"
+    },
+    {
+      "tag": "forge:ingots/blaze_gold"
+    }
+  ],
+  "result": {
+    "item": "silentgear:blaze_gold_dust",
+    "count": 1
+  }
+}
