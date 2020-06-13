@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Crash with `ShapelessCompoundPartRecipe` and `MaterialInstance` [#135]
+- Compound rods being craftable with non-rod materials
 
 ## [1.7.3] - 2020-06-10
 - Requires Silent Lib 4.6.2

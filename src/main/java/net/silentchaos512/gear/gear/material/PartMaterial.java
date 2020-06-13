@@ -115,6 +115,11 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
+    public boolean isCraftingAllowed(PartType partType) {
+        return stats.containsKey(partType);
+    }
+
+    @Override
     public int getColor(ItemStack gear, PartType partType) {
         return getMaterialDisplay(gear, partType).getColor();
     }
