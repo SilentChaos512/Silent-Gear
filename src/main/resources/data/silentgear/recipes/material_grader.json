@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "QIQ",
+        "I#I",
+        "GCG"
+    ],
+    "key": {
+        "Q": {
+            "tag": "forge:gems/quartz"
+        },
+        "#": {
+            "tag": "silentgear:upgrade_bases/advanced"
+        },
+        "G": {
+            "tag": "forge:ingots/gold"
+        },
+        "I": {
+            "tag": "forge:ingots/iron"
+        },
+        "C": {
+            "tag": "forge:ingots/crimson_steel"
+        }
+    },
+    "result": {
+        "item": "silentgear:material_grader"
+    }
+}

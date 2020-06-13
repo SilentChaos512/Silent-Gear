@@ -99,7 +99,7 @@ public enum MaterialGrade {
      * @return A MaterialGrade that is not NONE
      */
     public static MaterialGrade selectWithCatalyst(Random random, @Nonnegative int catalystTier) {
-        int ordinal = MaterialGrade.B.ordinal() + catalystTier;
+        int ordinal = MaterialGrade.B.ordinal() + catalystTier - 1;
         MaterialGrade median = EnumUtils.byOrdinal(ordinal, SSS);
         return selectRandom(random, median, GRADE_STD_DEV, SSS);
     }

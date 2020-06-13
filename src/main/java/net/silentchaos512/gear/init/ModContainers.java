@@ -11,6 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
+import net.silentchaos512.gear.block.grader.GraderContainer;
+import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.utils.Lazy;
@@ -18,6 +20,7 @@ import net.silentchaos512.utils.Lazy;
 import java.util.Locale;
 
 public enum ModContainers {
+    MATERIAL_GRADER(GraderContainer::new),
     CRAFTING_STATION(CraftingStationContainer::new),
     SALVAGER(SalvagerContainer::new);
 
@@ -40,6 +43,7 @@ public enum ModContainers {
     @SuppressWarnings("unchecked")
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
+        ScreenManager.registerFactory((ContainerType<? extends GraderContainer>) MATERIAL_GRADER.type(), GraderScreen::new);
         ScreenManager.registerFactory((ContainerType<? extends CraftingStationContainer>) CRAFTING_STATION.type(), CraftingStationScreen::new);
         ScreenManager.registerFactory((ContainerType<? extends SalvagerContainer>) SALVAGER.type(), SalvagerScreen::new);
     }

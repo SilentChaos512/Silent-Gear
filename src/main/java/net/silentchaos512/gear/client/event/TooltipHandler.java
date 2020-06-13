@@ -8,6 +8,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
@@ -17,6 +18,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
@@ -47,8 +49,14 @@ public final class TooltipHandler {
         */
 
         ItemStack stack = event.getItemStack();
-        IGearPart part = !stack.isEmpty() ? PartManager.from(stack) : null;
 
+        MaterialInstance material = MaterialInstance.from(stack);
+        if (material != null) {
+            onMaterialTooltip(event, stack, material);
+//            return;
+        }
+
+        IGearPart part = !stack.isEmpty() ? PartManager.from(stack) : null;
         if (part != null /*&& !part.isBlacklisted(stack)*/) {
             onPartTooltip(event, stack, PartData.of(part, stack));
             return;
@@ -58,6 +66,27 @@ public final class TooltipHandler {
         if (Config.GENERAL.isNerfedItem(stack.getItem())) {
             List<ITextComponent> toolTip = event.getToolTip();
             toolTip.add(Math.min(1, toolTip.size()), new TranslationTextComponent("misc.silentgear.poorlyMade").applyTextStyle(TextFormatting.RED));
+        }
+    }
+
+    private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, IMaterialInstance material) {
+        event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").applyTextStyle(TextFormatting.GOLD));
+        if (event.getFlags().isAdvanced()) {
+            event.getToolTip().add(new StringTextComponent("Material ID: " + material.getMaterialId()).applyTextStyle(TextFormatting.DARK_GRAY));
+        }
+        if (KeyTracker.isControlDown()) {
+            getGradeLine(event, material.getGrade());
+/*            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats")
+                    .applyTextStyle(TextFormatting.GOLD)
+                    .appendSibling(new StringTextComponent(" (Silent Gear)")
+                            .applyTextStyle(TextFormatting.RESET)
+                            .applyTextStyle(TextFormatting.ITALIC)));
+            getPartStatLines(event, stack, part);*/
+        } else {
+            if (material.getGrade() != MaterialGrade.NONE) {
+                getGradeLine(event, material.getGrade());
+            }
+//            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").applyTextStyle(TextFormatting.GOLD));
         }
     }
 

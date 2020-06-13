@@ -10,6 +10,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
+import net.silentchaos512.gear.block.grader.GraderTileEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
 import net.silentchaos512.lib.block.IBlockProvider;
 import net.silentchaos512.utils.Lazy;
@@ -18,6 +19,7 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum ModTileEntities {
+    MATERIAL_GRADER(GraderTileEntity::new, ModBlocks.MATERIAL_GRADER),
     CRAFTING_STATION(CraftingStationTileEntity::new, ModBlocks.CRAFTING_STATION),
     SALVAGER(SalvagerTileEntity::new, ModBlocks.SALVAGER);
 

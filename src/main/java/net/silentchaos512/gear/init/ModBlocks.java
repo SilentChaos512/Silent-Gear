@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationBlock;
+import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.lib.block.IBlockProvider;
 import net.silentchaos512.utils.Lazy;
@@ -33,6 +34,7 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     CRIMSON_IRON_ORE(CrimsonIronOre::new),
     CRIMSON_IRON_BLOCK(() -> new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL))),
     CRIMSON_STEEL_BLOCK(() -> new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL))),
+    MATERIAL_GRADER(() -> new GraderBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 30))),
     CRAFTING_STATION(CraftingStationBlock::new),
     SALVAGER(SalvagerBlock::new),
     FLAX_PLANT(() -> new FlaxPlant(false), () -> null),
