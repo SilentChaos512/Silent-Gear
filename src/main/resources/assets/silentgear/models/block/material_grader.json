@@ -2,8 +2,8 @@
   "__comment": "model generated using mrcrayfish's model creator (http://mrcrayfish.com/modelcreator/)",
   "parent": "block/block",
   "textures": {
-    "particle": "block/gold_block",
-    "0": "block/gold_block",
+    "particle": "silentgear:block/blaze_gold_block",
+    "0": "silentgear:block/blaze_gold_block",
     "1": "block/iron_block",
     "2": "block/lapis_block"
   },

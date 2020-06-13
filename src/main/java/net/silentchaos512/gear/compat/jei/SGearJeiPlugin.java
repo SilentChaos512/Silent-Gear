@@ -19,6 +19,7 @@ import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
 import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
+import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
@@ -59,7 +60,7 @@ public class SGearJeiPlugin implements IModPlugin {
         initFailed = true;
 
         reg.addRecipes(Minecraft.getInstance().world.getRecipeManager().getRecipes().stream()
-                .filter(this::isGearCraftingRecipe)
+                .filter(SGearJeiPlugin::isGearCraftingRecipe)
                 .collect(Collectors.toList()), GEAR_CRAFTING);
 
         // Info pages
@@ -82,9 +83,9 @@ public class SGearJeiPlugin implements IModPlugin {
         initFailed = false;
     }
 
-    private boolean isGearCraftingRecipe(IRecipe<?> recipe) {
+    private static boolean isGearCraftingRecipe(IRecipe<?> recipe) {
         IRecipeSerializer<?> serializer = recipe.getSerializer();
-        return serializer == ShapedGearRecipe.SERIALIZER || serializer == ShapelessGearRecipe.SERIALIZER;
+        return serializer == ShapedGearRecipe.SERIALIZER || serializer == ShapelessGearRecipe.SERIALIZER || serializer == ShapelessCompoundPartRecipe.SERIALIZER;
     }
 
     @Override

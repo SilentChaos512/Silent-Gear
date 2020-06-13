@@ -116,7 +116,7 @@ public final class PartMaterial implements IMaterial {
 
     @Override
     public boolean isCraftingAllowed(PartType partType) {
-        return stats.containsKey(partType);
+        return stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(partType));
     }
 
     @Override

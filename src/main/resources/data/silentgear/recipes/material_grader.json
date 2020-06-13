@@ -3,7 +3,7 @@
     "pattern": [
         "QIQ",
         "I#I",
-        "GCG"
+        "GGG"
     ],
     "key": {
         "Q": {
@@ -13,13 +13,10 @@
             "tag": "silentgear:upgrade_bases/advanced"
         },
         "G": {
-            "tag": "forge:ingots/gold"
+            "tag": "forge:ingots/blaze_gold"
         },
         "I": {
             "tag": "forge:ingots/iron"
-        },
-        "C": {
-            "tag": "forge:ingots/crimson_steel"
         }
     },
     "result": {

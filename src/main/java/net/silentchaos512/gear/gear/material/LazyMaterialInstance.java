@@ -3,6 +3,8 @@ package net.silentchaos512.gear.gear.material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -57,5 +59,11 @@ public class LazyMaterialInstance implements IMaterialInstance {
     public int getColor(PartType partType, ItemStack gear) {
         IMaterial material = getMaterial();
         return material != null ? material.getColor(gear, partType) : Color.VALUE_WHITE;
+    }
+
+    @Override
+    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+        IMaterial material = getMaterial();
+        return material != null ? material.getDisplayName(partType, gear) : new StringTextComponent("INVALID");
     }
 }

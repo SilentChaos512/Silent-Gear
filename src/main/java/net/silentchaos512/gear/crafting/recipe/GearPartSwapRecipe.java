@@ -47,7 +47,7 @@ public class GearPartSwapRecipe implements ICraftingRecipe {
 
             // Only required part types (no mains), and no duplicates
             PartType type = part.getType();
-            if (type == PartType.MAIN || !item.requiresPartOfType(type) || typesFound.contains(type)) {
+            if (type == PartType.MAIN || !item.supportsPartOfType(type) || typesFound.contains(type)) {
                 return false;
             }
             typesFound.add(type);

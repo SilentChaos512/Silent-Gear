@@ -1,0 +1,16 @@
+{
+    "type": "silentgear:compound_part",
+    "ingredients": [
+        {
+            "tag": "silentgear:blueprints/grip"
+        },
+        {
+            "type": "silentgear:material",
+            "part_type": "grip"
+        }
+    ],
+    "result": {
+        "item": "silentgear:grip",
+        "count": 1
+    }
+}

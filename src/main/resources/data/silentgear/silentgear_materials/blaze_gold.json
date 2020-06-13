@@ -128,15 +128,15 @@
     },
     "display": {
         "main/all": {
-            "lite_texture": "high_contrast_with_highlight",
+            "texture": "high_contrast_with_highlight",
             "color": "#F28D21"
         },
         "rod/all": {
-            "lite_texture": "low_contrast",
+            "texture": "low_contrast",
             "color": "#F28D21"
         },
         "tip/all": {
-            "lite_texture": "high_contrast",
+            "texture": "high_contrast",
             "color": "#F28D21"
         }
     }

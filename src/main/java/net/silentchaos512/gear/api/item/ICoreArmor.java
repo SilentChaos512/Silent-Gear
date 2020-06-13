@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.item;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.client.ColorHandlers;
@@ -49,5 +50,10 @@ public interface ICoreArmor extends ICoreItem {
     @Override
     default PartData[] getRenderParts(ItemStack stack) {
         return new PartData[]{getPrimaryPart(stack)};
+    }
+
+    @Override
+    default boolean supportsPartOfType(PartType type) {
+        return type == PartType.MAIN || type == PartType.TIP;
     }
 }

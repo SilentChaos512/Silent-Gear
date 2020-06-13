@@ -93,6 +93,7 @@ public final class ModItems {
         register("custom_tipped_upgrade", customTippedUpgrade);
         register("rod", new CompoundPartItem(SilentGear.getId("rod"), PartType.ROD, new Item.Properties().group(SilentGear.ITEM_GROUP)));
         register("long_rod", new CompoundPartItem(SilentGear.getId("long_rod"), PartType.ROD, new Item.Properties().group(SilentGear.ITEM_GROUP)));
+        register("grip", new CompoundPartItem(SilentGear.getId("grip"), PartType.GRIP, new Item.Properties().group(SilentGear.ITEM_GROUP)));
 
         flaxseeds = register("flaxseeds", new BlockNamedItem(ModBlocks.FLAX_PLANT.asBlock(), getBaseProperties()));
         netherBanana = register("nether_banana", new Item(getBaseProperties()

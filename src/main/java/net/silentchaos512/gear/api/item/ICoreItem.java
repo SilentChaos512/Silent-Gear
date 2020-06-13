@@ -59,7 +59,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     default boolean supportsPartOfType(PartType type) {
-        return requiresPartOfType(type);
+        return requiresPartOfType(type) || type == PartType.BINDING || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
     }
 
     //endregion

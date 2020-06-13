@@ -144,6 +144,7 @@ public final class PartData implements IPartData {
         return part.getTier();
     }
 
+    @Nonnull
     @Override
     public PartType getType() {
         return part.getType();

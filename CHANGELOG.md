@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.7.4] - 2020-06-13
 Requires Silent Lib 4.6.3
 ### Added
+- Compound grip parts and grip blueprint
 - New material grader (only works with the new material system). Works like the part analyzer, but with some changes. [#83]
     - Catalysts are now **required**.
     - There are now five catalyst tier tags. Tier 1 has a median grade of C. Tiers 4 & 5 are empty by default.
@@ -15,6 +16,9 @@ Requires Silent Lib 4.6.3
 ### Changed
 - Grade bonus percentages - no more negative values, but the top grades have had there bonuses reduced since they apply to non-main parts now.
 - Glittery dust is now a tier 3 grader catalyst
+- Materials dump command (`/sgear_mats dump`)
+    - Clicking the file name in chat will open the generated file
+    - Sorted entries by part type then material ID
 ### Fixed
 - Crash with `ShapelessCompoundPartRecipe` and `MaterialInstance` [#135]
 - Compound rods being craftable with non-rod materials

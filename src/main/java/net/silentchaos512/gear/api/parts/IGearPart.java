@@ -12,6 +12,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartTextureType;
 import net.silentchaos512.gear.parts.RepairContext;
 
 import javax.annotation.Nullable;
@@ -120,6 +121,10 @@ public interface IGearPart {
     }
 
     IPartDisplay getDisplayProperties(PartData part, ItemStack gear, int animationFrame);
+
+    default PartTextureType getLiteTexture(PartData part, ItemStack gear) {
+        return getDisplayProperties(part, gear, 0).getLiteTexture();
+    }
 
     @Deprecated
     @Nullable

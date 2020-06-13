@@ -1,5 +1,7 @@
 {
-    "type": "silentgear:compound_rod",
+    "type": "silentgear:compound_part",
+    "part_type": "silentgear:rod",
+    "part_position": "rod",
     "crafting_items": {
         "normal": {
             "item": "silentgear:rod"

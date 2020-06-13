@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "silentgear:blueprints_grip",
+  "ingredients": [
+    {
+      "tag": "minecraft:wooden_slabs"
+    },
+    {
+      "tag": "minecraft:wooden_slabs"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "grip"
+    }
+  ],
+  "result": {
+    "item": "silentgear:template_grip"
+  }
+}

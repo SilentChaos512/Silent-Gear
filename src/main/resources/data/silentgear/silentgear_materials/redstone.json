@@ -31,7 +31,7 @@
     },
     "display": {
         "tip/all": {
-            "lite_texture": "high_contrast",
+            "texture": "high_contrast",
             "color": "#BB0000"
         }
     }

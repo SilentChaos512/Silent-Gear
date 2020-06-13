@@ -3,6 +3,7 @@ package net.silentchaos512.gear.gear.material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -129,5 +130,10 @@ public class MaterialInstance implements IMaterialInstance {
     @Override
     public int getColor(PartType partType, ItemStack gear) {
         return material.getColor(gear, partType);
+    }
+
+    @Override
+    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+        return material.getDisplayName(partType, gear);
     }
 }

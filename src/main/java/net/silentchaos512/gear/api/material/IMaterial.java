@@ -73,6 +73,10 @@ public interface IMaterial {
 
     ITextComponent getDisplayName(PartType partType, ItemStack gear);
 
+    default ITextComponent getDisplayName(PartType partType) {
+        return getDisplayName(partType, ItemStack.EMPTY);
+    }
+
     @Nullable
     default ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
         return null;

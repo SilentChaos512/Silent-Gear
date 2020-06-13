@@ -108,15 +108,15 @@
     },
     "display": {
         "main/all": {
-            "lite_texture": "high_contrast_with_highlight",
+            "texture": "high_contrast_with_highlight",
             "color": "white"
         },
         "rod/all": {
-            "lite_texture": "low_contrast",
+            "texture": "low_contrast",
             "color": "#D8D8D8"
         },
         "tip/all": {
-            "lite_texture": "high_contrast",
+            "texture": "high_contrast",
             "color": "white"
         }
     }

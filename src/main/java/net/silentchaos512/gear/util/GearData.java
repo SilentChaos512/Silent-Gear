@@ -564,7 +564,7 @@ public final class GearData {
 
         for (INBT nbt : tagList) {
             if (nbt instanceof CompoundNBT) {
-                PartData part = PartData.readFast((CompoundNBT) nbt);
+                PartData part = PartData.read((CompoundNBT) nbt);
                 if (part != null && part.getType() == type) return part;
             }
         }

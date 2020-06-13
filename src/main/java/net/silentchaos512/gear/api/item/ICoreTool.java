@@ -64,7 +64,7 @@ public interface ICoreTool extends ICoreItem {
 
     @Override
     default boolean supportsPartOfType(PartType type) {
-        return type != PartType.BOWSTRING;
+        return requiresPartOfType(type) || type == PartType.BINDING || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
     }
 
     /**

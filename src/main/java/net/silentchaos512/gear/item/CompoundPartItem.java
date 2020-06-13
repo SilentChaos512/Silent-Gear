@@ -3,14 +3,18 @@ package net.silentchaos512.gear.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.utils.Color;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -48,9 +52,9 @@ public class CompoundPartItem extends Item {
         CompoundNBT tag = new CompoundNBT();
         tag.put(NBT_MATERIALS, materialListNbt);
         tag.putInt(NBT_COLOR, calculateBlendedColor(materials));
+
         ItemStack result = new ItemStack(this);
         result.setTag(tag);
-
         return result;
     }
 
@@ -61,6 +65,18 @@ public class CompoundPartItem extends Item {
                 .map(nbt -> (CompoundNBT) nbt)
                 .map(MaterialInstance::read)
                 .collect(Collectors.toList());
+    }
+
+    @Nullable
+    public static MaterialInstance getPrimaryMaterial(ItemStack stack) {
+        ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, 10);
+        if (!listNbt.isEmpty()) {
+            INBT nbt = listNbt.get(0);
+            if (nbt instanceof CompoundNBT) {
+                return MaterialInstance.read((CompoundNBT) nbt);
+            }
+        }
+        return null;
     }
 
     public static int getColor(ItemStack stack) {
@@ -83,7 +99,7 @@ public class CompoundPartItem extends Item {
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;
             // Add earlier colors multiple times, to give them greater weight
-            int colorWeight = (materials.size() - i) * (materials.size() - i);
+            int colorWeight = (materials.size() - i);
             for (int j = 0; j < colorWeight; ++j) {
                 maxColorSum += Math.max(r, Math.max(g, b));
                 componentSums[0] += r;
@@ -109,5 +125,14 @@ public class CompoundPartItem extends Item {
         }
 
         return Color.VALUE_WHITE;
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack) {
+        MaterialInstance material = getPrimaryMaterial(stack);
+        if (material != null) {
+            return new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(partType));
+        }
+        return super.getDisplayName(stack);
     }
 }

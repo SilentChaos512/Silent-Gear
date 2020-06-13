@@ -1,0 +1,32 @@
+{
+    "parent": "silentgear:sandstone",
+    "crafting_items": {
+        "main": [
+            {
+                "item": "minecraft:sandstone"
+            },
+            {
+                "item": "minecraft:chiseled_red_sandstone"
+            },
+            {
+                "item": "minecraft:cut_red_sandstone"
+            },
+            {
+                "item": "minecraft:smooth_red_sandstone"
+            }
+        ]
+    },
+    "name": {
+        "translate": "material.silentgear.sandstone.red"
+    },
+    "display": {
+        "main/all": {
+            "texture": "low_contrast",
+            "color": "#D97B30"
+        },
+        "rod/all": {
+            "texture": "low_contrast",
+            "color": "#D97B30"
+        }
+    }
+}

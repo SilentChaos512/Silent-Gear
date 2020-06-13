@@ -29,7 +29,7 @@ public interface ICoreRangedWeapon extends ICoreTool {
 
     @Override
     default boolean supportsPartOfType(PartType type) {
-        return true;
+        return requiresPartOfType(type) || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
     }
 
     @Override

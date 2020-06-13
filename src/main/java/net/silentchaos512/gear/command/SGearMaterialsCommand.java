@@ -11,7 +11,9 @@ import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.event.ClickEvent;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -24,7 +26,10 @@ import net.silentchaos512.utils.Color;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -82,9 +87,11 @@ public final class SGearMaterialsCommand {
             builder.append("Traits\tTexture\tColor\n");
             writer.write(builder.toString());
 
-            for (IMaterial material : MaterialManager.getValues()) {
-                if (includeChildren || getParentId(material).isEmpty()) {
-                    for (PartType partType : PartType.getValues()) {
+            List<PartType> partTypes = new ArrayList<>(PartType.getValues());
+            partTypes.sort((o1, o2) -> Comparator.comparing(o -> ((PartType) o).getName()).compare(o1, o2));
+            for (PartType partType : partTypes) {
+                for (IMaterial material : MaterialManager.getValues()) {
+                    if (includeChildren || getParentId(material).isEmpty()) {
                         if (material.allowedInPart(partType)) {
                             writer.write(makeTsvLine(material, partType) + "\n");
                         }
@@ -94,7 +101,9 @@ public final class SGearMaterialsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            context.getSource().sendFeedback(new StringTextComponent("Wrote to " + output.getAbsolutePath()), true);
+            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).applyTextStyle(TextFormatting.UNDERLINE).applyTextStyle(style ->
+                    style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
+            context.getSource().sendFeedback(new StringTextComponent("Wrote materials info to ").appendSibling(fileNameText), true);
         }
 
         return 1;

@@ -296,9 +296,7 @@ public final class GearHelper {
         PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
             item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
                 PartData part = GearData.getPartOfType(stack, partType);
-                return part != null
-                        ? part.getPart().getDisplayProperties(part, ItemStack.EMPTY, 0).getLiteTexture().getIndex()
-                        : -1;
+                return part != null ? part.getPart().getLiteTexture(part, stack).getIndex() : -1;
             });
         });
     }

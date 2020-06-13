@@ -1,0 +1,22 @@
+{
+    "type": "silentgear:compound_part",
+    "part_type": "silentgear:grip",
+    "part_position": "grip",
+    "crafting_items": {
+        "normal": {
+            "item": "silentgear:grip"
+        }
+    },
+    "name": {
+        "translate": "part.silentgear.grip"
+    },
+    "textures": {
+        "all": {
+            "lite_texture": "high_contrast",
+            "normal_color": "white"
+        }
+    },
+    "availability": {
+        "tier": -1
+    }
+}

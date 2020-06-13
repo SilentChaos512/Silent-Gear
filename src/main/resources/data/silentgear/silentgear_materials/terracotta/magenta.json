@@ -1,0 +1,21 @@
+{
+    "parent": "silentgear:terracotta",
+    "crafting_items": {
+        "main": {
+            "item": "minecraft:magenta_terracotta"
+        }
+    },
+    "name": {
+        "translate": "material.silentgear.terracotta.magenta"
+    },
+    "display": {
+        "main/all": {
+            "texture": "low_contrast",
+            "color": "#95576C"
+        },
+        "rod/all": {
+            "texture": "low_contrast",
+            "color": "#95576C"
+        }
+    }
+}

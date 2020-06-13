@@ -65,7 +65,7 @@
     },
     "crafting_items": {
         "main": {
-            "item": "minecraft:brick"
+            "item": "minecraft:terracotta"
         }
     },
     "name": {
@@ -74,11 +74,11 @@
     "display": {
         "main/all": {
             "texture": "low_contrast",
-            "color": "#C76245"
+            "color": "#985F45"
         },
         "rod/all": {
             "texture": "low_contrast",
-            "color": "#C76245"
+            "color": "#985F45"
         }
     }
 }
