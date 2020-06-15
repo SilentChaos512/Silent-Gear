@@ -70,6 +70,8 @@ public final class TooltipHandler {
     }
 
     private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, IMaterialInstance material) {
+        if (Config.CLIENT.disableNewMaterialTooltips.get()) return;
+
         event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").applyTextStyle(TextFormatting.GOLD));
         if (event.getFlags().isAdvanced()) {
             event.getToolTip().add(new StringTextComponent("Material ID: " + material.getMaterialId()).applyTextStyle(TextFormatting.DARK_GRAY));

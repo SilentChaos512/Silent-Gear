@@ -255,6 +255,7 @@ public class Config {
     public static class Client {
         public final BooleanValue allowEnchantedEffect;
         public final BooleanValue useLiteModels;
+        public final BooleanValue disableNewMaterialTooltips;
 
         Client(ConfigSpecWrapper wrapper) {
             allowEnchantedEffect = wrapper
@@ -266,6 +267,10 @@ public class Config {
                     .builder("gear.useLiteModels")
                     .comment("Use 'lite' gear models. These should be easier on some systems, but do not allow unique textures for different materials.",
                             "Currently, this option has no effect, as the normal model system is not working yet (lite models are used)")
+                    .define(false);
+            disableNewMaterialTooltips = wrapper
+                    .builder("item.gear.materials.disableNewTooltips")
+                    .comment("Disable item tooltips related to the new material system. Will be removed when fully implemented.")
                     .define(false);
         }
     }
