@@ -29,7 +29,7 @@ public final class ItemStats {
 
     // Generic
     public static final ItemStat DURABILITY = new ItemStat(1f, 1f, Integer.MAX_VALUE, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
-    public static final ItemStat ARMOR_DURABILITY = new ItemStat(1f, 1f, Integer.MAX_VALUE / 16, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
+    public static final ItemStat ARMOR_DURABILITY = new ItemStat(1f, 1f, Integer.MAX_VALUE / 16, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().displayAsMultiplier().affectedByGrades(true).synergyApplies());
     public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(1f, 0f, 1000f, TextFormatting.BLUE, new ItemStat.Properties().affectedByGrades(false));
     public static final ItemStat ENCHANTABILITY = new ItemStat(0f, 0f, 10000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
     public static final ItemStat RARITY = new ItemStat(0f, 0f, 10000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).hidden());
@@ -45,8 +45,8 @@ public final class ItemStats {
     public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -4f, 4f, TextFormatting.GREEN, new ItemStat.Properties().affectedByGrades(false));
 
     // Ranged Weapons
-    public static final ItemStat RANGED_DAMAGE = new ItemStat(0f, 0f, 10000f, TextFormatting.AQUA, new ItemStat.Properties().affectedByGrades(true).synergyApplies());
-    public static final ItemStat RANGED_SPEED = new ItemStat(0f, -10f, 10f, TextFormatting.AQUA, new ItemStat.Properties().affectedByGrades(false));
+    public static final ItemStat RANGED_DAMAGE = new ItemStat(0f, 0f, 10000f, TextFormatting.AQUA, new ItemStat.Properties().displayAsMultiplier().affectedByGrades(true).synergyApplies());
+    public static final ItemStat RANGED_SPEED = new ItemStat(0f, -10f, 10f, TextFormatting.AQUA, new ItemStat.Properties().displayAsMultiplier().affectedByGrades(false));
 
     // Armor
     public static final ItemStat ARMOR = new ItemStat(0f, 0f, 40f, TextFormatting.LIGHT_PURPLE, new ItemStat.Properties().affectedByGrades(true).synergyApplies());

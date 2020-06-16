@@ -24,6 +24,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -140,9 +141,9 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
                     if (!worldIn.isRemote) {
                         ArrowItem arrowitem = (ArrowItem) (ammoItem.getItem() instanceof ArrowItem ? ammoItem.getItem() : Items.ARROW);
                         AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoItem, player);
-                        arrowEntity.setDamage(arrowEntity.getDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
+                        arrowEntity.setDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
                         arrowEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
-                        if (f == 1.0F) {
+                        if (MathUtils.floatsEqual(f, 1f)) {
                             arrowEntity.setIsCritical(true);
                         }
 

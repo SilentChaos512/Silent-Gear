@@ -33,6 +33,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
     private final boolean synergyApplies;
     private final boolean affectedByGrades;
     private final boolean displayAsInt;
+    private final boolean displayAsMultiplier;
     private final Function<Float, Float> missingRodFunction;
 
     public ItemStat(float defaultValue, float minValue, float maxValue, TextFormatting nameColor, Properties properties) {
@@ -43,6 +44,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
 
         this.defaultOperation = properties.defaultOp;
         this.displayAsInt = properties.displayAsInt;
+        this.displayAsMultiplier = properties.displayAsMultiplier;
         this.visible = properties.visible;
         this.synergyApplies = properties.synergyApplies;
         this.affectedByGrades = properties.affectedByGrades;
@@ -86,6 +88,10 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
 
     public boolean isDisplayAsInt() {
         return displayAsInt;
+    }
+
+    public boolean isDisplayAsMultiplier() {
+        return displayAsMultiplier;
     }
 
     public TextFormatting getNameColor() {
@@ -228,6 +234,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
     public static class Properties {
         private Operation defaultOp = Operation.AVG;
         private boolean displayAsInt;
+        private boolean displayAsMultiplier;
         private boolean visible = true;
         private boolean synergyApplies = false;
         private boolean affectedByGrades = true;
@@ -240,6 +247,11 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
 
         public Properties displayAsInt() {
             displayAsInt = true;
+            return this;
+        }
+
+        public Properties displayAsMultiplier() {
+            displayAsMultiplier = true;
             return this;
         }
 

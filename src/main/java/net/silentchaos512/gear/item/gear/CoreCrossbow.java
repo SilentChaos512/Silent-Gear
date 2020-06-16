@@ -86,8 +86,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        // FIXME: Vanilla is dumb. Non-vanilla crossbows do not render in first person correctly.
-        return UseAction.NONE;
+        return UseAction.CROSSBOW;
     }
 
     @Override
@@ -282,7 +281,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         if (shooter instanceof PlayerEntity) {
             arrowEntity.setIsCritical(true);
         }
-        arrowEntity.setDamage(arrowEntity.getDamage() + GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
+        arrowEntity.setDamage(GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
 
         arrowEntity.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
         arrowEntity.setShotFromCrossbow(true);

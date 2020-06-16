@@ -128,9 +128,9 @@ public class StatInstance {
                 color = getFormattedColor(this.value, 0f, addColor);
                 return trimNumber(color + String.format(format, this.value < 0 ? "" : "+", this.value, ""));
             case AVG:
-                // v (or vx for armor durability)
+                // v (or vx for multiplier stats like armor durability)
                 String ret = trimNumber(String.format(format, "", this.value, ""));
-                return stat == ItemStats.ARMOR_DURABILITY ? ret + "x" : ret;
+                return stat.isDisplayAsMultiplier() ? ret + "x" : ret;
             case MAX:
                 // ^v
                 return trimNumber(String.format(format, "^", this.value, ""));

@@ -51,6 +51,8 @@ public class CoreSlingshot extends CoreBow {
     public Optional<StatInstance> getStatModifier(ItemStat stat) {
         if (stat == ItemStats.ENCHANTABILITY)
             return Optional.of(StatInstance.makeGearMod(-0.65f));
+        if (stat == ItemStats.RANGED_DAMAGE)
+            return Optional.of(StatInstance.makeGearMod(-0.75f));
         return Optional.empty();
     }
 

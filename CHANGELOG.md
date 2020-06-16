@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Config to disable new material tooltips
+### Changed
+- Ranged damage and speed are now displayed as multipliers [#140]
+- Slingshot ranged damage reduced by 75% [#140]
+- Bow and crossbow damage reduced by 2 (base projectile damage should be equal to ranged damage now) [#140]
+- (API) Any item stat can be set to display as a multiplier, like armor durability
 
 ## [1.7.4] - 2020-06-13
 Requires Silent Lib 4.6.3
