@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Config to disable new material tooltips
+- Recipe to craft compound grips with two materials [#138]
 ### Changed
 - Ranged damage and speed are now displayed as multipliers [#140]
 - Slingshot ranged damage reduced by 75% [#140]
