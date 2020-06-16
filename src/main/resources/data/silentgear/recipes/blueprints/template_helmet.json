@@ -3,14 +3,11 @@
   "group": "silentgear:blueprints_helmet",
   "pattern": [
     "###",
-    "#/#"
+    "# #"
   ],
   "key": {
     "#": {
-      "tag": "minecraft:wooden_slabs"
-    },
-    "/": {
-      "tag": "forge:rods/wooden"
+      "tag": "silentgear:template_boards"
     }
   },
   "result": {

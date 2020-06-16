@@ -3,10 +3,10 @@
   "group": "silentgear:blueprints_grip",
   "ingredients": [
     {
-      "tag": "minecraft:wooden_slabs"
+      "tag": "silentgear:template_boards"
     },
     {
-      "tag": "minecraft:wooden_slabs"
+      "tag": "silentgear:template_boards"
     },
     {
       "type": "silentgear:material",

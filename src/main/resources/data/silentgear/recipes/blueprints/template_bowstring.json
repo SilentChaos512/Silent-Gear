@@ -8,7 +8,7 @@
   ],
   "key": {
     "#": {
-      "tag": "minecraft:wooden_slabs"
+      "tag": "silentgear:template_boards"
     },
     "/": {
       "tag": "forge:string/string"

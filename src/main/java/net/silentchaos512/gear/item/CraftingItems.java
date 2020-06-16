@@ -37,6 +37,7 @@ import java.util.Locale;
 
 public enum CraftingItems implements IItemProvider, IStringSerializable {
     BLUEPRINT_PAPER,
+    TEMPLATE_BOARD,
     UPGRADE_BASE,
     ADVANCED_UPGRADE_BASE,
     CRIMSON_IRON_INGOT,

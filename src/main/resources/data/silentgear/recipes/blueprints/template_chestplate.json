@@ -2,16 +2,13 @@
   "type": "crafting_shaped",
   "group": "silentgear:blueprints_chestplate",
   "pattern": [
-    "#/#",
+    "# #",
     "###",
     "###"
   ],
   "key": {
     "#": {
-      "tag": "minecraft:wooden_slabs"
-    },
-    "/": {
-      "tag": "forge:rods/wooden"
+      "tag": "silentgear:template_boards"
     }
   },
   "result": {

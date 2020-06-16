@@ -1,5 +1,5 @@
 {
-  "type": "silentlib:damage_item",
+  "type": "silentgear:damage_item",
   "damage": 1,
   "ingredients": [
     {

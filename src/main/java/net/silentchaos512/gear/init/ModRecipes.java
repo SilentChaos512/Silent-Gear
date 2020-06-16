@@ -17,6 +17,7 @@ import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
 
 public final class ModRecipes {
+
     private ModRecipes() {}
 
     public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
@@ -28,6 +29,7 @@ public final class ModRecipes {
         register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
         register(ReplaceToolHeadRecipe.NAME, ReplaceToolHeadRecipe.SERIALIZER);
         register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
+        register(SGearDamageItemRecipe.NAME, SGearDamageItemRecipe.SERIALIZER);
         register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
 
         // Ingredient serializers

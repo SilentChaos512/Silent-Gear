@@ -3,14 +3,14 @@
   "damage": 1,
   "ingredients": [
     {
-      "tag": "forge:hammers"
+      "tag": "forge:knives"
     },
     {
-      "tag": "forge:cobblestone"
+      "tag": "minecraft:logs"
     }
   ],
   "result": {
-    "item": "silentgear:pebble",
-    "count": 9
+    "item": "silentgear:template_board",
+    "count": 6
   }
 }

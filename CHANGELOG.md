@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Template boards, which are now used to craft templates. Requires a dagger, or anything tagged `forge:knives`.
+- Rough dagger recipe
 - Config to disable new material tooltips
 - Recipe to craft compound grips with two materials [#138]
 ### Changed
@@ -12,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Slingshot ranged damage reduced by 75% [#140]
 - Bow and crossbow damage reduced by 2 (base projectile damage should be equal to ranged damage now) [#140]
 - (API) Any item stat can be set to display as a multiplier, like armor durability
+### Fixed
+- Gear items being destroyed in certain recipes (pebbles, blaze gold dust, template boards)
 
 ## [1.7.4] - 2020-06-13
 Requires Silent Lib 4.6.3

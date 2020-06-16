@@ -1,0 +1,20 @@
+{
+    "type": "silentgear:shaped_gear_crafting",
+    "group": "silentgear:daggers",
+    "pattern": [
+        "#",
+        "/"
+    ],
+    "key": {
+        "#": {
+            "type": "silentgear:part_type",
+            "part_type": "main"
+        },
+        "/": {
+            "tag": "silentgear:rods/rough"
+        }
+    },
+    "result": {
+        "item": "silentgear:dagger"
+    }
+}
