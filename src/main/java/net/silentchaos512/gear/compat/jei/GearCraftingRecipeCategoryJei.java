@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.Size2i;
 import net.silentchaos512.gear.init.ModItems;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GearCraftingRecipeCategoryJei implements IRecipeCategory<ICraftingRecipe> {
@@ -74,15 +75,30 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<ICraftingR
 
         List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
+        List<List<ItemStack>> shiftedInputs = new ArrayList<>();
+        for (int i = 0; i < inputs.size(); ++i) {
+            shiftedInputs.add(shiftIngredients(inputs.get(i), 5 * i));
+        }
+
         Size2i size = getRecipeSize(recipe);
         if (size != null && size.width > 0 && size.height > 0) {
-            this.craftingGridHelper.setInputs(guiItemStacks, inputs, size.width, size.height);
+            this.craftingGridHelper.setInputs(guiItemStacks, shiftedInputs, size.width, size.height);
         } else {
-            this.craftingGridHelper.setInputs(guiItemStacks, inputs);
+            this.craftingGridHelper.setInputs(guiItemStacks, shiftedInputs);
             recipeLayout.setShapeless();
         }
 
         guiItemStacks.set(0, outputs.get(0));
+    }
+
+    private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {
+        List<ItemStack> ret = new ArrayList<>(list);
+        for (int i = 0; i < amount; ++i) {
+            ItemStack stack = ret.get(ret.size() - 1);
+            ret.remove(ret.size() - 1);
+            ret.add(0, stack);
+        }
+        return ret;
     }
 
     @Override

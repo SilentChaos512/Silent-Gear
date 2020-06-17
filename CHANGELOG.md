@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Config to disable new material tooltips
 - Recipe to craft compound grips with two materials [#138]
 ### Changed
+- Shift ingredients in JEI recipes to hopefully make mixed materials more obvious [#142]
 - Ranged damage and speed are now displayed as multipliers [#140]
 - Slingshot ranged damage reduced by 75% [#140]
 - Bow and crossbow damage reduced by 2 (base projectile damage should be equal to ranged damage now) [#140]
