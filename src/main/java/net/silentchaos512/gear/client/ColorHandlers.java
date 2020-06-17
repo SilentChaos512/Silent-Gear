@@ -2,15 +2,14 @@ package net.silentchaos512.gear.client;
 
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.CustomTippedUpgrade;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.item.CustomTippedUpgrade;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.utils.Color;
 
@@ -39,7 +38,9 @@ public final class ColorHandlers {
                 .forEach(item -> itemColors.register(item.getItemColors(), item));
 
         // Compound part items
-        itemColors.register(CompoundPartItem::getColor, ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof CompoundPartItem).toArray(IItemProvider[]::new));
+        ForgeRegistries.ITEMS.getValues().stream()
+                .filter(item -> item instanceof CompoundPartItem)
+                .forEach(item -> itemColors.register(((CompoundPartItem) item)::getColor, item));
     }
 
     /**

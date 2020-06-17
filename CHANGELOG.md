@@ -3,10 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.7.5] - 2020-06-16
 ### Added
 - Template boards, which are now used to craft templates. Requires a dagger, or anything tagged `forge:knives`.
-- Rough dagger recipe
+- Crude dagger recipe (one main part + rough rod)
+- Compound tip upgrade part and tip upgrade blueprint
 - Config to disable new material tooltips
 - Compound part items display the materials they were crafted with in the tooltip
 - Recipe to craft compound grips with two materials [#138]

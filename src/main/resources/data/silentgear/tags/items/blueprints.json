@@ -25,6 +25,7 @@
     "#silentgear:blueprints/sickle",
     "#silentgear:blueprints/slingshot",
     "#silentgear:blueprints/spear",
-    "#silentgear:blueprints/sword"
+    "#silentgear:blueprints/sword",
+    "#silentgear:blueprints/tip"
   ]
 }

@@ -94,6 +94,7 @@ public final class ModItems {
         register("rod", new CompoundPartItem(SilentGear.getId("rod"), PartType.ROD, new Item.Properties().group(SilentGear.ITEM_GROUP)));
         register("long_rod", new CompoundPartItem(SilentGear.getId("long_rod"), PartType.ROD, new Item.Properties().group(SilentGear.ITEM_GROUP)));
         register("grip", new CompoundPartItem(SilentGear.getId("grip"), PartType.GRIP, new Item.Properties().group(SilentGear.ITEM_GROUP)));
+        register("tip", new CompoundPartItem(SilentGear.getId("tip"), PartType.TIP, 1, new Item.Properties().group(SilentGear.ITEM_GROUP)));
 
         flaxseeds = register("flaxseeds", new BlockNamedItem(ModBlocks.FLAX_PLANT.asBlock(), getBaseProperties()));
         netherBanana = register("nether_banana", new Item(getBaseProperties()
@@ -179,5 +180,6 @@ public final class ModItems {
         register(name + "_rod", new PartBlueprintItem(singleUse, PartType.ROD));
         register(name + "_bowstring", new PartBlueprintItem(singleUse, PartType.BOWSTRING));
         register(name + "_grip", new PartBlueprintItem(singleUse, PartType.GRIP));
+        register(name + "_tip", new PartBlueprintItem(singleUse, PartType.TIP));
     }
 }

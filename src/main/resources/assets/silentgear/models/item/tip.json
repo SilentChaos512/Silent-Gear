@@ -1,0 +1,8 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "silentgear:item/upgrade_base",
+    "layer1": "silentgear:item/custom_tip_upgrade",
+    "layer2": "silentgear:item/custom_tip_upgrade_shine"
+  }
+}

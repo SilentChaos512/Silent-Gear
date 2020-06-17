@@ -30,11 +30,17 @@ public class CompoundPartItem extends Item {
 
     private final ResourceLocation partId;
     private final PartType partType;
+    private final int tintLayer;
 
     public CompoundPartItem(ResourceLocation partId, PartType partType, Properties properties) {
+        this(partId, partType, 0, properties);
+    }
+
+    public CompoundPartItem(ResourceLocation partId, PartType partType, int tintLayer, Properties properties) {
         super(properties);
         this.partId = partId;
         this.partType = partType;
+        this.tintLayer = tintLayer;
     }
 
     public PartType getPartType() {
@@ -88,8 +94,8 @@ public class CompoundPartItem extends Item {
         return stack.getOrCreateTag().getInt(NBT_COLOR);
     }
 
-    public static int getColor(ItemStack stack, int tintIndex) {
-        return getColor(stack);
+    public int getColor(ItemStack stack, int tintIndex) {
+        return tintIndex == this.tintLayer ? getColor(stack) : Color.VALUE_WHITE;
     }
 
     private int calculateBlendedColor(Collection<? extends IMaterialInstance> materials) {
