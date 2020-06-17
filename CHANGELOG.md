@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bow and crossbow damage reduced by 2 (base projectile damage should be equal to ranged damage now) [#140]
 - (API) Any item stat can be set to display as a multiplier, like armor durability
 ### Fixed
+- Random items sometimes being displayed as SGear materials [#141]
 - Gear items being destroyed in certain recipes (pebbles, blaze gold dust, template boards)
 
 ## [1.7.4] - 2020-06-13

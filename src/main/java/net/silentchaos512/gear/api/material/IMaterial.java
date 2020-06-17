@@ -9,6 +9,7 @@ import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.parts.PartTextureType;
 import net.silentchaos512.lib.event.ClientTicks;
 
@@ -101,4 +102,6 @@ public interface IMaterial {
         if (stacks.length == 0) return ItemStack.EMPTY;
         return stacks[(ticks / 20) % stacks.length];
     }
+
+    void updateIngredient(SyncMaterialCraftingItemsPacket msg);
 }

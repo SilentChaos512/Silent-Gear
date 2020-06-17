@@ -23,6 +23,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.parts.PartTextureType;
 
 import javax.annotation.Nullable;
@@ -156,6 +157,14 @@ public final class PartMaterial implements IMaterial {
     @Override
     public boolean isVisible(PartType partType) {
         return this.visible;
+    }
+
+    @Override
+    public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
+        Ingredient ing = msg.getIngredient(this.materialId);
+        if (ing != null) {
+            this.ingredient = ing;
+        }
     }
 
     @Override

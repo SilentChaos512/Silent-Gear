@@ -144,7 +144,7 @@ public class CompoundPartItem extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         getMaterials(stack).stream()
-                .map(mat -> new StringTextComponent("- ").appendSibling(mat.getDisplayName(this.partType).applyTextStyle(TextFormatting.ITALIC)))
+                .map(mat -> new StringTextComponent("- ").appendSibling(mat.getDisplayNameWithGrade(this.partType).applyTextStyle(TextFormatting.ITALIC)))
                 .forEach(tooltip::add);
     }
 }

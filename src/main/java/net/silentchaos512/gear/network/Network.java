@@ -77,6 +77,11 @@ public final class Network {
                 .decoder(FMLPlayMessages.SpawnEntity::decode)
                 .consumer(FMLPlayMessages.SpawnEntity::handle)
                 .add();
+        channel.messageBuilder(SyncMaterialCraftingItemsPacket.class, 8)
+                .decoder(SyncMaterialCraftingItemsPacket::fromBytes)
+                .encoder(SyncMaterialCraftingItemsPacket::toBytes)
+                .consumer(SyncMaterialCraftingItemsPacket::handle)
+                .add();
     }
 
     private Network() {}

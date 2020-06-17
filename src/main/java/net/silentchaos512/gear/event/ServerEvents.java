@@ -11,6 +11,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.SyncGearCraftingItemsPacket;
+import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitManager;
 
@@ -29,7 +30,9 @@ public final class ServerEvents {
 
         ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
 
-        // Send parts crafting item packet to correct for registry changes
+        // Send crafting items packets to correct for registry changes
+        SilentGear.LOGGER.debug("Sending materials craftin item correction packet");
+        Network.channel.sendTo(new SyncMaterialCraftingItemsPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
         SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
         Network.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 
