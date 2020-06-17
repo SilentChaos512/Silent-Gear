@@ -147,7 +147,7 @@ public final class TooltipHandler {
     }
 
     private static void getGradeLine(ItemTooltipEvent event, MaterialGrade grade) {
-        event.getToolTip().add(grade.getDisplayName().applyTextStyle(TextFormatting.AQUA));
+        event.getToolTip().add(new TranslationTextComponent("part.silentgear.gradeOnPart", grade.getDisplayName().applyTextStyle(TextFormatting.AQUA)));
     }
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, IGearPart part) {

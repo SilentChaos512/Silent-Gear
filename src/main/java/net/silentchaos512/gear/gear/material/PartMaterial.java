@@ -150,7 +150,7 @@ public final class PartMaterial implements IMaterial {
 
     @Override
     public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
-        return displayName;
+        return displayName.deepCopy();
     }
 
     @Override

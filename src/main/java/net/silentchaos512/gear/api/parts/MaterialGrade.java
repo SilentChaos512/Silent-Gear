@@ -108,8 +108,7 @@ public enum MaterialGrade {
     }
 
     public ITextComponent getDisplayName() {
-        ITextComponent text = new TranslationTextComponent("stat.silentgear.grade." + name());
-        return new TranslationTextComponent("part.silentgear.gradeOnPart", text);
+        return new TranslationTextComponent("stat.silentgear.grade." + name());
     }
 
     public static class Argument implements ArgumentType<MaterialGrade> {

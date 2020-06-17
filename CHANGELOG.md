@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Template boards, which are now used to craft templates. Requires a dagger, or anything tagged `forge:knives`.
 - Rough dagger recipe
 - Config to disable new material tooltips
+- Compound part items display the materials they were crafted with in the tooltip
 - Recipe to craft compound grips with two materials [#138]
 ### Changed
 - Shift ingredients in JEI recipes to hopefully make mixed materials more obvious [#142]

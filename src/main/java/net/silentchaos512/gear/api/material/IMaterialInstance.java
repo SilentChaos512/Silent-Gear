@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
 
@@ -31,5 +32,10 @@ public interface IMaterialInstance {
 
     default ITextComponent getDisplayName(PartType partType) {
         return getDisplayName(partType, ItemStack.EMPTY);
+    }
+
+    default ITextComponent getDisplayNameWithGrade(PartType partType) {
+        ITextComponent gradeSuffix = TextUtil.translate("misc", "spaceBrackets", getGrade().getDisplayName());
+        return getDisplayName(partType, ItemStack.EMPTY).appendSibling(gradeSuffix);
     }
 }

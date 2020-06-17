@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -7,7 +8,10 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -16,6 +20,7 @@ import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -134,5 +139,12 @@ public class CompoundPartItem extends Item {
             return new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(partType));
         }
         return super.getDisplayName(stack);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        getMaterials(stack).stream()
+                .map(mat -> new StringTextComponent("- ").appendSibling(mat.getDisplayName(this.partType).applyTextStyle(TextFormatting.ITALIC)))
+                .forEach(tooltip::add);
     }
 }
