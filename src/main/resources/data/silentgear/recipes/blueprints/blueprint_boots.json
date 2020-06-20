@@ -2,15 +2,12 @@
   "type": "crafting_shaped",
   "group": "silentgear:blueprints_boots",
   "pattern": [
-    "#/#",
+    "# #",
     "# #"
   ],
   "key": {
     "#": {
       "tag": "forge:paper/blueprint"
-    },
-    "/": {
-      "tag": "forge:rods/wooden"
     }
   },
   "result": {

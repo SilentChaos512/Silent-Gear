@@ -9,6 +9,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
@@ -16,6 +17,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
@@ -86,7 +88,7 @@ public class CompoundPart extends AbstractGearPart {
             return baseStats;
         }
 
-        // Get the rod materials and all the stat modifiers they provide for this stat
+        // Get the materials and all the stat modifiers they provide for this stat
         Collection<MaterialInstance> materials = CompoundPartItem.getMaterials(stack);
         Collection<StatInstance> statMods = materials.stream()
                 .flatMap(m -> m.getStatModifiers(stat, this.partType, gear).stream())
@@ -111,9 +113,36 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public List<PartTraitInstance> getTraits(ItemStack gear, PartData part) {
         List<PartTraitInstance> ret = new ArrayList<>(super.getTraits(gear, part));
-        TraitHelper.getTraits(CompoundPartItem.getMaterials(part.getCraftingItem()), PartType.ROD, gear).forEach((trait, level) ->
+        TraitHelper.getTraits(CompoundPartItem.getMaterials(part.getCraftingItem()), this.partType, gear).forEach((trait, level) ->
                 ret.add(new PartTraitInstance(trait, level, Collections.emptyList())));
         return ret;
+    }
+
+    @Override
+    public PartData randomizeData(int tier) {
+        for (ItemStack stack : getMaterials().getNormal().getMatchingStacks()) {
+            if (stack.getItem() instanceof CompoundPartItem) {
+                int materialCount = (int) Math.sqrt(1 + SilentGear.random.nextInt(10));
+                List<MaterialInstance> materials = getRandomMaterials(materialCount, tier);
+                ItemStack craftingItem = ((CompoundPartItem) stack.getItem()).create(materials);
+                return PartData.of(this, craftingItem);
+            }
+        }
+        return super.randomizeData(tier);
+    }
+
+    private List<MaterialInstance> getRandomMaterials(int count, int tier) {
+        List<IMaterial> matsOfTier = MaterialManager.getValues().stream()
+                .filter(m -> tier < 0 || tier == m.getTier(this.partType))
+                .collect(Collectors.toList());
+        if (!matsOfTier.isEmpty()) {
+            List<MaterialInstance> ret = new ArrayList<>();
+            for (int i = 0; i < count; ++i) {
+                ret.add(MaterialInstance.of(matsOfTier.get(SilentGear.random.nextInt(matsOfTier.size()))));
+            }
+            return ret;
+        }
+        return getRandomMaterials(count, -1);
     }
 
     private static class Serializer extends AbstractGearPart.Serializer<CompoundPart> {

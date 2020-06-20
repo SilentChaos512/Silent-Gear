@@ -178,6 +178,8 @@ public class AttributeTrait extends SimpleTrait {
             for (int i = 0; i < ret.values.length; ++i) {
                 ret.values[i] = buffer.readFloat();
             }
+            ret.operation = buffer.readEnumValue(AttributeModifier.Operation.class);
+            ret.uuid = buffer.readUniqueId();
             return ret;
         }
 
@@ -187,10 +189,8 @@ public class AttributeTrait extends SimpleTrait {
             for (float f : values) {
                 buffer.writeFloat(f);
             }
-        }
-
-        float getValue(int traitLevel) {
-            return values[MathHelper.clamp(traitLevel, 1, values.length) - 1];
+            buffer.writeEnumValue(operation);
+            buffer.writeUniqueId(uuid);
         }
     }
 }
