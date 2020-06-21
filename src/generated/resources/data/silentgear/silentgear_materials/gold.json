@@ -1,0 +1,111 @@
+{
+  "availability": {
+    "tier": 2,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.gold"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#EAEE57"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#EAEE57"
+    },
+    "tip/all": {
+      "texture": "high_contrast",
+      "color": "#EAEE57"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 32.0,
+      "armor_durability": 7.0,
+      "enchantability": 22.0,
+      "harvest_level": 0.0,
+      "harvest_speed": 12.0,
+      "melee_damage": 0.0,
+      "magic_damage": 4.0,
+      "attack_speed": 0.2,
+      "armor": 11.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 8.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": 0.3,
+      "rarity": 30.0,
+      "silentgems:chargeability": 1.2
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.05
+      },
+      "enchantability": {
+        "add": 3.0
+      },
+      "rarity": 20.0
+    },
+    "tip": {
+      "durability": {
+        "add": 16.0
+      },
+      "armor_durability": {
+        "add": 1.0
+      },
+      "harvest_speed": {
+        "add": 6.0
+      },
+      "magic_damage": {
+        "add": 2.0
+      },
+      "ranged_speed": {
+        "add": 0.2
+      },
+      "rarity": {
+        "add": 12.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 1
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 3
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:malleable",
+        "level": 1
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 3
+      }
+    ]
+  }
+}

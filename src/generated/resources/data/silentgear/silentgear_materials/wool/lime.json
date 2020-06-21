@@ -1,0 +1,17 @@
+{
+  "parent": "silentgear:wool",
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:lime_wool"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.wool.lime"
+  },
+  "display": {
+    "grip/all": {
+      "texture": "low_contrast",
+      "color": "#70B919"
+    }
+  }
+}

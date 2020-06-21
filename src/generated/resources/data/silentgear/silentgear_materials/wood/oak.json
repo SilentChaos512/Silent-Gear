@@ -1,0 +1,21 @@
+{
+  "parent": "silentgear:wood",
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:oak_planks"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.wood.oak"
+  },
+  "display": {
+    "main/all": {
+      "texture": "low_contrast",
+      "color": "#B8945F"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#B8945F"
+    }
+  }
+}

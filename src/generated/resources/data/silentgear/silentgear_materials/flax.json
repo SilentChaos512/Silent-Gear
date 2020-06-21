@@ -1,0 +1,45 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:flax_string"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.flax"
+  },
+  "display": {
+    "bowstring/all": {
+      "texture": "low_contrast",
+      "color": "#FFFFFF"
+    }
+  },
+  "stats": {
+    "bowstring": {
+      "durability": {
+        "mul1": 0.05
+      },
+      "ranged_damage": {
+        "mul1": -0.1
+      },
+      "ranged_speed": {
+        "mul1": 0.2
+      },
+      "rarity": {
+        "add": 6.0
+      }
+    }
+  },
+  "traits": {
+    "bowstring": [
+      {
+        "name": "silentgear:synergistic",
+        "level": 2
+      }
+    ]
+  }
+}

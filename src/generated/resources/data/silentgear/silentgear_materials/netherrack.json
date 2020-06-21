@@ -1,0 +1,72 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:netherrack"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.netherrack"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#854242"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#854242"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 198.0,
+      "armor_durability": 8.0,
+      "enchantability": 8.0,
+      "harvest_level": 1.0,
+      "harvest_speed": 5.0,
+      "melee_damage": 0.5,
+      "magic_damage": 0.5,
+      "attack_speed": -0.1,
+      "armor": 8.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 4.0,
+      "ranged_damage": 0.5,
+      "ranged_speed": 0.1,
+      "rarity": 11.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": -0.2
+      },
+      "rarity": 11.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:eroded",
+        "level": 3
+      },
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:eroded",
+        "level": 2
+      },
+      {
+        "name": "silentgear:flexible",
+        "level": 3
+      }
+    ]
+  }
+}

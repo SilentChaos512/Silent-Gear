@@ -1,0 +1,68 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:flint"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.flint"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast",
+      "color": "#969696"
+    },
+    "rod/all": {
+      "texture": "high_contrast",
+      "color": "#969696"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 124.0,
+      "armor_durability": 4.0,
+      "enchantability": 3.0,
+      "harvest_level": 1.0,
+      "harvest_speed": 5.0,
+      "melee_damage": 2.0,
+      "magic_damage": 0.0,
+      "attack_speed": -0.1,
+      "armor": 4.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 0.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": -0.3,
+      "rarity": 6.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": -0.3
+      },
+      "rarity": 2.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:jagged",
+        "level": 3
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:brittle",
+        "level": 3
+      },
+      {
+        "name": "silentgear:jagged",
+        "level": 2
+      }
+    ]
+  }
+}

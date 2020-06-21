@@ -1,0 +1,150 @@
+{
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:gems/diamond"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.diamond"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#33EBCB"
+    },
+    "rod/all": {
+      "texture": "high_contrast",
+      "color": "#33EBCB"
+    },
+    "tip/all": {
+      "texture": "high_contrast",
+      "color": "#33EBCB"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 1561.0,
+      "armor_durability": 33.0,
+      "enchantability": 10.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 8.0,
+      "melee_damage": 3.0,
+      "magic_damage": 1.0,
+      "attack_speed": 0.0,
+      "armor": 20.0,
+      "armor_toughness": 8.0,
+      "magic_armor": 4.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": -0.2,
+      "rarity": 70.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.2
+      },
+      "harvest_speed": {
+        "mul2": 0.2
+      },
+      "rarity": 50.0
+    },
+    "tip": {
+      "durability": {
+        "add": 256.0
+      },
+      "armor_durability": {
+        "add": 9.0
+      },
+      "harvest_level": {
+        "max": 4.0
+      },
+      "harvest_speed": {
+        "add": 2.0
+      },
+      "melee_damage": {
+        "add": 2.0
+      },
+      "magic_damage": {
+        "add": 1.0
+      },
+      "ranged_damage": {
+        "add": 0.5
+      },
+      "rarity": {
+        "add": 20.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:brittle",
+        "level": 2
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "harvest_tool"
+          },
+          {
+            "type": "silentgear:or",
+            "values": [
+              {
+                "type": "silentgear:material_count",
+                "count": 3
+              },
+              {
+                "type": "silentgear:material_ratio",
+                "ratio": 0.5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:brittle",
+        "level": 5,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 4,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "harvest_tool"
+          },
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:brittle",
+        "level": 2
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 2
+      }
+    ]
+  }
+}

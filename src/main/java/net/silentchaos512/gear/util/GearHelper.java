@@ -303,7 +303,7 @@ public final class GearHelper {
 
     @Nullable
     public static GearType getType(ItemStack gear) {
-        if (!(gear.getItem() instanceof ICoreItem)) {
+        if (gear.isEmpty() || !(gear.getItem() instanceof ICoreItem)) {
             return null;
         }
         return ((ICoreItem) gear.getItem()).getGearType();

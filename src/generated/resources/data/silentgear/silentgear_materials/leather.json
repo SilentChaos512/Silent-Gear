@@ -1,0 +1,48 @@
+{
+  "availability": {
+    "tier": 0,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:leather"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.leather"
+  },
+  "display": {
+    "grip/all": {
+      "texture": "low_contrast",
+      "color": "#C65C35"
+    }
+  },
+  "stats": {
+    "grip": {
+      "durability": {
+        "mul1": 0.05
+      },
+      "repair_efficiency": {
+        "mul1": 0.1
+      },
+      "harvest_speed": {
+        "mul1": 0.15
+      },
+      "attack_speed": {
+        "add": 0.15
+      },
+      "rarity": {
+        "add": 5.0
+      }
+    }
+  },
+  "traits": {
+    "grip": [
+      {
+        "name": "silentgear:flexible",
+        "level": 3
+      }
+    ]
+  }
+}

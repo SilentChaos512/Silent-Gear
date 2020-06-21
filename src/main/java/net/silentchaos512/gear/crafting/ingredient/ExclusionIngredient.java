@@ -1,10 +1,16 @@
 package net.silentchaos512.gear.crafting.ingredient;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
@@ -15,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 // TODO: Move to Silent Lib?
@@ -26,6 +33,18 @@ public class ExclusionIngredient extends Ingredient {
         super(Stream.of());
         this.parent = parent;
         this.exclusions.addAll(exclusions);
+    }
+
+    public static ExclusionIngredient of(ResourceLocation tagId, IItemProvider... exclusions) {
+        return of(Ingredient.fromTag(new ItemTags.Wrapper(tagId)), exclusions);
+    }
+
+    public static ExclusionIngredient of(Tag<Item> tag, IItemProvider... exclusions) {
+        return of(Ingredient.fromTag(tag), exclusions);
+    }
+
+    public static ExclusionIngredient of(Ingredient parent, IItemProvider... exclusions) {
+        return new ExclusionIngredient(parent, Arrays.stream(exclusions).map(item -> item.asItem().getRegistryName()).collect(Collectors.toList()));
     }
 
     @Override
@@ -62,6 +81,17 @@ public class ExclusionIngredient extends Ingredient {
 
     private static boolean isItem(ResourceLocation id, ItemStack stack) {
         return id.equals(stack.getItem().getRegistryName());
+    }
+
+    @Override
+    public JsonElement serialize() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", Serializer.NAME.toString());
+        json.add("value", this.parent.serialize());
+        JsonArray array = new JsonArray();
+        this.exclusions.forEach(id -> array.add(id.toString()));
+        json.add("exclusions", array);
+        return json;
     }
 
     public static class Serializer implements IIngredientSerializer<ExclusionIngredient> {

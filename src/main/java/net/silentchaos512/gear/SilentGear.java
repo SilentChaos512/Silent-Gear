@@ -23,7 +23,7 @@ public final class SilentGear {
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 
-    public static final Random random = new Random();
+    public static final Random random = new Random(); // TODO: Rename to RANDOM
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static SilentGear INSTANCE;
@@ -60,6 +60,14 @@ public final class SilentGear {
         if (name.contains(":"))
             return ResourceLocation.tryCreate(name);
         return ResourceLocation.tryCreate(RESOURCE_PREFIX + name);
+    }
+
+    public static String shortenId(@Nullable ResourceLocation id) {
+        if (id == null)
+            return "null";
+        if (MOD_ID.equals(id.getNamespace()))
+            return id.getPath();
+        return id.toString();
     }
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {

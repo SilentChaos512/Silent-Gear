@@ -38,3 +38,4 @@ version.properties
 *.png~
 
 todo_list\.md
+src/generated/resources/.cache/

@@ -1,0 +1,72 @@
+{
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.obsidian"
+  },
+  "display": {
+    "main/all": {
+      "texture": "low_contrast",
+      "color": "#443464"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#443464"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 3072.0,
+      "armor_durability": 37.0,
+      "enchantability": 7.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 6.0,
+      "melee_damage": 3.0,
+      "magic_damage": 2.0,
+      "attack_speed": -0.4,
+      "armor": 20.0,
+      "armor_toughness": 4.0,
+      "magic_armor": 8.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": -0.4,
+      "rarity": 10.0,
+      "silentgems:chargeability": 0.6
+    },
+    "rod": {
+      "harvest_speed": {
+        "mul2": -0.1
+      },
+      "rarity": 5.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:jagged",
+        "level": 3
+      },
+      {
+        "name": "silentgear:crushing",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:brittle",
+        "level": 2
+      },
+      {
+        "name": "silentgear:chipping",
+        "level": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "availability": {
+    "tier": 0,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:netherwood_planks"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.netherwood"
+  },
+  "display": {
+    "main/all": {
+      "texture": "low_contrast",
+      "color": "#D83200"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#D83200"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 72.0,
+      "armor_durability": 12.0,
+      "enchantability": 13.0,
+      "harvest_level": 0.0,
+      "harvest_speed": 2.0,
+      "melee_damage": 0.0,
+      "magic_damage": 0.0,
+      "attack_speed": 0.2,
+      "armor": 8.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 0.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": 0.0,
+      "rarity": 4.0,
+      "silentgems:chargeability": 0.7
+    },
+    "rod": {
+      "durability": [
+        {
+          "max": 70.0
+        },
+        {
+          "add": -50.0
+        }
+      ],
+      "harvest_speed": {
+        "add": 1.0
+      },
+      "melee_damage": {
+        "add": 0.5
+      },
+      "rarity": 3.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:flexible",
+        "level": 3
+      },
+      {
+        "name": "silentgear:jagged",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      }
+    ]
+  }
+}

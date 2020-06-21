@@ -1,0 +1,21 @@
+{
+  "parent": "silentgear:wood",
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:acacia_planks"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.wood.acacia"
+  },
+  "display": {
+    "main/all": {
+      "texture": "low_contrast",
+      "color": "#BA6337"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#BA6337"
+    }
+  }
+}

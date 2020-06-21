@@ -1,0 +1,86 @@
+{
+  "availability": {
+    "tier": 2,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:gems/lapis"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.lapis_lazuli"
+  },
+  "display": {
+    "tip/all": {
+      "texture": "high_contrast",
+      "color": "#224BAF"
+    }
+  },
+  "stats": {
+    "tip": {
+      "enchantability": {
+        "mul2": 0.5
+      },
+      "harvest_speed": {
+        "mul2": -0.1
+      },
+      "magic_damage": {
+        "add": 2.0
+      },
+      "attack_speed": {
+        "add": 0.3
+      },
+      "rarity": {
+        "add": 10.0
+      }
+    }
+  },
+  "traits": {
+    "tip": [
+      {
+        "name": "silentgear:holy",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:or",
+            "values": [
+              {
+                "type": "silentgear:gear_type",
+                "gear_type": "weapon"
+              },
+              {
+                "type": "silentgear:material_ratio",
+                "ratio": 0.75
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "silentgear:lucky",
+        "level": 4,
+        "conditions": [
+          {
+            "type": "silentgear:or",
+            "values": [
+              {
+                "type": "silentgear:gear_type",
+                "gear_type": "tool"
+              },
+              {
+                "type": "silentgear:gear_type",
+                "gear_type": "weapon"
+              },
+              {
+                "type": "silentgear:material_ratio",
+                "ratio": 0.75
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

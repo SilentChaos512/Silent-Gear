@@ -18,10 +18,7 @@ import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.*;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -260,7 +257,7 @@ public abstract class AbstractGearPart implements IGearPart {
             // Stats
             JsonElement elementStats = json.get("stats");
             if (elementStats != null) {
-                Multimap<ItemStat, StatInstance> statMap = StatModifierMap.read(elementStats);
+                Multimap<IItemStat, StatInstance> statMap = StatModifierMap.read(elementStats);
                 // Move the newly loaded modifiers into the stat map, replacing existing ones
                 statMap.keySet().forEach(stat -> part.stats.removeAll(stat));
                 statMap.forEach((stat, mod) -> part.stats.put(stat, mod));

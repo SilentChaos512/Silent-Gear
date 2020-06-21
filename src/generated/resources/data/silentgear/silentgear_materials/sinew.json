@@ -1,0 +1,45 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:sinew_fiber"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.sinew"
+  },
+  "display": {
+    "bowstring/all": {
+      "texture": "low_contrast",
+      "color": "#FFFFFF"
+    }
+  },
+  "stats": {
+    "bowstring": {
+      "durability": {
+        "mul1": 0.25
+      },
+      "enchantability": {
+        "mul1": -0.1
+      },
+      "ranged_damage": {
+        "mul1": 0.2
+      },
+      "rarity": {
+        "add": 8.0
+      }
+    }
+  },
+  "traits": {
+    "bowstring": [
+      {
+        "name": "silentgear:flexible",
+        "level": 3
+      }
+    ]
+  }
+}

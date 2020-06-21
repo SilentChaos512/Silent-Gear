@@ -1,0 +1,139 @@
+{
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/blaze_gold"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.blaze_gold"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#E7A937"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#E7A937"
+    },
+    "tip/all": {
+      "texture": "high_contrast",
+      "color": "#E7A937"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 69.0,
+      "armor_durability": 9.0,
+      "enchantability": 24.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 15.0,
+      "melee_damage": 2.0,
+      "magic_damage": 5.0,
+      "attack_speed": 0.1,
+      "armor": 13.0,
+      "armor_toughness": 1.0,
+      "magic_armor": 10.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": 0.2,
+      "rarity": 45.0,
+      "silentgems:chargeability": 1.2
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.35
+      },
+      "enchantability": {
+        "mul2": 0.55
+      },
+      "harvest_level": {
+        "max": 2.0
+      },
+      "harvest_speed": {
+        "mul2": 0.1
+      },
+      "melee_damage": {
+        "mul2": 0.2
+      },
+      "magic_damage": {
+        "mul2": 0.3
+      },
+      "ranged_damage": {
+        "mul2": 0.2
+      },
+      "rarity": 55.0
+    },
+    "tip": {
+      "durability": {
+        "add": 32.0
+      },
+      "armor_durability": {
+        "add": 3.0
+      },
+      "harvest_level": {
+        "max": 2.0
+      },
+      "harvest_speed": {
+        "add": 4.0
+      },
+      "melee_damage": {
+        "add": 1.0
+      },
+      "magic_damage": {
+        "add": 1.0
+      },
+      "rarity": {
+        "add": 14.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 1
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      },
+      {
+        "name": "silentgear:synergistic",
+        "level": 2
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:soft",
+        "level": 2
+      },
+      {
+        "name": "silentgear:fiery",
+        "level": 4,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "weapon"
+          }
+        ]
+      }
+    ]
+  }
+}

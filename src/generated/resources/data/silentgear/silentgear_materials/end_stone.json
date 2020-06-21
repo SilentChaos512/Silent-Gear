@@ -1,0 +1,75 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:end_stones"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.end_stone"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#FFFFCC"
+    },
+    "rod/all": {
+      "texture": "high_contrast",
+      "color": "#FFFFCC"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 1164.0,
+      "armor_durability": 15.0,
+      "enchantability": 10.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 7.0,
+      "melee_damage": 2.0,
+      "magic_damage": 3.0,
+      "attack_speed": 0.1,
+      "armor": 15.0,
+      "armor_toughness": 1.0,
+      "magic_armor": 6.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": 0.0,
+      "rarity": 32.0,
+      "silentgems:chargeability": 0.9
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.1
+      },
+      "melee_damage": {
+        "add": 1.0
+      },
+      "rarity": 26.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:jagged",
+        "level": 3
+      },
+      {
+        "name": "silentgear:ancient",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:jagged",
+        "level": 2
+      },
+      {
+        "name": "silentgear:ancient",
+        "level": 4
+      }
+    ]
+  }
+}

@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.util;
 
-import com.google.common.collect.Multimap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -122,7 +121,7 @@ public final class GearData {
             boolean hasMissingRod = item instanceof ICoreTool && parts.getRods().isEmpty();
 
             // Get all stat modifiers from all parts and item class modifiers
-            Multimap<ItemStat, StatInstance> stats = getStatModifiers(stack, item, parts, synergy);
+            StatModifierMap stats = getStatModifiers(stack, item, parts, synergy);
 
             // For debugging
             Map<ItemStat, Float> oldStatValues = getCurrentStatsForDebugging(stack);
@@ -130,7 +129,7 @@ public final class GearData {
             // Calculate and write stats
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
             CompoundNBT statsCompound = new CompoundNBT();
-            for (ItemStat stat : stats.keySet()) {
+            for (ItemStat stat : stats.getStats()) {
                 final float initialValue = stat.compute(0f, stats.get(stat));
                 // Some stats will be reduced if tool rod is missing (and required)
                 final float withMissingParts = hasMissingRod ? stat.withMissingRodEffect(initialValue) : initialValue;
@@ -194,13 +193,13 @@ public final class GearData {
         return null;
     }
 
-    private static void printStatsForDebugging(ItemStack stack, Multimap<ItemStat, StatInstance> stats, @Nullable Map<ItemStat, Float> oldStats) {
+    private static void printStatsForDebugging(ItemStack stack, StatModifierMap stats, @Nullable Map<ItemStat, Float> oldStats) {
         // Prints stats that have changed for debugging purposes
         if (oldStats != null && SilentGear.LOGGER.isDebugEnabled()) {
             Map<ItemStat, Float> newStats = getCurrentStatsForDebugging(stack);
             assert newStats != null;
 
-            for (ItemStat stat : stats.keySet()) {
+            for (ItemStat stat : stats.getStats()) {
                 float oldValue = oldStats.get(stat);
                 float newValue = newStats.get(stat);
                 float change = newValue - oldValue;
@@ -294,8 +293,8 @@ public final class GearData {
         return "DEPRECATED";
     }
 
-    public static Multimap<ItemStat, StatInstance> getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
-        Multimap<ItemStat, StatInstance> stats = new StatModifierMap();
+    public static StatModifierMap getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
+        StatModifierMap stats = new StatModifierMap();
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item != null ? item.getExcludedStats(stack) : Collections.emptyList())) {
             // Item class modifiers
             if (item != null) {

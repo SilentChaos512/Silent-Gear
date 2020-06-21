@@ -23,7 +23,7 @@ import java.util.function.Function;
  * @since Experimental
  */
 @ParametersAreNonnullByDefault
-public class ItemStat extends ForgeRegistryEntry<ItemStat> {
+public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat {
     private final float defaultValue;
     private final float minimumValue;
     private final float maximumValue;
@@ -67,6 +67,11 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> {
      */
     @Deprecated
     public ResourceLocation getName() {
+        return getRegistryName();
+    }
+
+    @Override
+    public ResourceLocation getStatId() {
         return getRegistryName();
     }
 

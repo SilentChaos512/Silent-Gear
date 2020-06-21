@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.stats;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.text.TextFormatting;
@@ -14,6 +15,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -173,6 +175,15 @@ public class StatInstance {
     @Override
     public String toString() {
         return String.format("StatInstance{value=%f, op=%s}", this.value, this.op);
+    }
+
+    public JsonElement serialize(IItemStat stat) {
+        if (op == Operation.AVG) {
+            return new JsonPrimitive(this.value);
+        }
+        JsonObject json = new JsonObject();
+        json.addProperty(this.op.name().toLowerCase(Locale.ROOT), this.value);
+        return json;
     }
 
     @Deprecated

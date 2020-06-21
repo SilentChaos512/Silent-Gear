@@ -1,0 +1,117 @@
+{
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/crimson_iron"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.crimson_iron"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#FF6189"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#FF6189"
+    },
+    "tip/all": {
+      "texture": "high_contrast",
+      "color": "#FF6189"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 420.0,
+      "armor_durability": 27.0,
+      "enchantability": 14.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 10.0,
+      "melee_damage": 3.0,
+      "magic_damage": 3.0,
+      "attack_speed": -0.1,
+      "armor": 18.0,
+      "armor_toughness": 2.0,
+      "magic_armor": 6.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": -0.1,
+      "rarity": 35.0,
+      "silentgems:chargeability": 0.7
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.25
+      },
+      "enchantability": [
+        {
+          "add": 1.0
+        },
+        {
+          "mul2": 0.1
+        }
+      ],
+      "melee_damage": {
+        "mul2": 0.1
+      },
+      "rarity": 30.0
+    },
+    "tip": {
+      "durability": {
+        "add": 224.0
+      },
+      "armor_durability": {
+        "add": 8.0
+      },
+      "harvest_level": {
+        "max": 3.0
+      },
+      "harvest_speed": {
+        "add": 2.0
+      },
+      "melee_damage": {
+        "add": 2.0
+      },
+      "rarity": {
+        "add": 10.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:fiery",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "weapon"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "type": "silentgear:exclusion",
+      "value": {
+        "tag": "forge:sandstone"
+      },
+      "exclusions": [
+        "minecraft:red_sandstone",
+        "minecraft:chiseled_red_sandstone",
+        "minecraft:cut_red_sandstone",
+        "minecraft:smooth_red_sandstone"
+      ]
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.sandstone"
+  },
+  "display": {
+    "main/all": {
+      "texture": "low_contrast",
+      "color": "#E3DBB0"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#E3DBB0"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 117.0,
+      "armor_durability": 6.0,
+      "enchantability": 7.0,
+      "harvest_level": 1.0,
+      "harvest_speed": 4.0,
+      "melee_damage": 1.0,
+      "magic_damage": 0.0,
+      "attack_speed": 0.1,
+      "armor": 5.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 0.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": -0.1,
+      "rarity": 7.0,
+      "silentgems:chargeability": 0.7
+    },
+    "rod": {
+      "durability": {
+        "mul2": -0.2
+      },
+      "enchantability": {
+        "mul2": -0.1
+      },
+      "rarity": 7.0
+    }
+  }
+}

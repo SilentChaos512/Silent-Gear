@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
@@ -38,6 +39,7 @@ import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.data.material.MaterialsProvider;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -58,6 +60,7 @@ class SideProxy implements IProxy {
 
     SideProxy() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(SideProxy::gatherData);
         modEventBus.addListener(SideProxy::commonSetup);
         modEventBus.addListener(SideProxy::imcEnqueue);
         modEventBus.addListener(SideProxy::imcProcess);
@@ -85,6 +88,12 @@ class SideProxy implements IProxy {
         ModLootStuff.init();
 
         ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new ArgumentSerializer<>(MaterialGrade.Argument::new));
+    }
+
+    private static void gatherData(GatherDataEvent event) {
+        DataGenerator gen = event.getGenerator();
+
+        gen.addProvider(new MaterialsProvider(gen));
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {

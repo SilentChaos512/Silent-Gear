@@ -1,0 +1,73 @@
+{
+  "availability": {
+    "tier": 2,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:dusts/glowstone"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.glowstone"
+  },
+  "display": {
+    "tip/all": {
+      "texture": "high_contrast",
+      "color": "#D2D200"
+    }
+  },
+  "stats": {
+    "tip": {
+      "harvest_speed": {
+        "mul2": 0.4
+      },
+      "melee_damage": {
+        "add": 2.0
+      },
+      "magic_damage": {
+        "add": 2.0
+      },
+      "ranged_speed": {
+        "mul2": 0.3
+      },
+      "rarity": {
+        "add": 15.0
+      }
+    }
+  },
+  "traits": {
+    "tip": [
+      {
+        "name": "silentgear:refractive",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:or",
+            "values": [
+              {
+                "type": "silentgear:gear_type",
+                "gear_type": "harvest_tool"
+              },
+              {
+                "type": "silentgear:gear_type",
+                "gear_type": "melee_weapon"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 4,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "harvest_tool"
+          }
+        ]
+      }
+    ]
+  }
+}

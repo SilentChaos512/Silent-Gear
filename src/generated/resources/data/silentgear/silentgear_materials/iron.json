@@ -1,0 +1,124 @@
+{
+  "availability": {
+    "tier": 2,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.iron"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#FFFFFF"
+    },
+    "rod/all": {
+      "texture": "low_contrast",
+      "color": "#D8D8D8"
+    },
+    "tip/all": {
+      "texture": "high_contrast",
+      "color": "#FFFFFF"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 250.0,
+      "armor_durability": 15.0,
+      "enchantability": 14.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 6.0,
+      "melee_damage": 2.0,
+      "magic_damage": 1.0,
+      "attack_speed": -0.1,
+      "armor": 15.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 6.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": 0.1,
+      "rarity": 20.0,
+      "silentgems:chargeability": 0.7
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.15
+      },
+      "enchantability": [
+        {
+          "add": -2.0
+        },
+        {
+          "mul2": -0.1
+        }
+      ],
+      "melee_damage": {
+        "mul2": 0.1
+      },
+      "rarity": 20.0
+    },
+    "tip": {
+      "durability": {
+        "add": 128.0
+      },
+      "armor_durability": {
+        "add": 4.0
+      },
+      "harvest_level": {
+        "max": 2.0
+      },
+      "harvest_speed": {
+        "add": 1.0
+      },
+      "melee_damage": {
+        "add": 1.0
+      },
+      "ranged_speed": {
+        "add": 0.2
+      },
+      "rarity": {
+        "add": 8.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:magnetic",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.66
+          }
+        ]
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:magnetic",
+        "level": 3,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      }
+    ]
+  }
+}

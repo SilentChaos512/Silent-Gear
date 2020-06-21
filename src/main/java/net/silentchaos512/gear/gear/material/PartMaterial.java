@@ -412,7 +412,7 @@ public final class PartMaterial implements IMaterial {
                 buffer.writeResourceLocation(partType.getName());
                 buffer.writeByte(map.size());
                 map.forEach((stat, mod) -> {
-                    buffer.writeResourceLocation(Objects.requireNonNull(stat.getRegistryName()));
+                    buffer.writeResourceLocation(Objects.requireNonNull(stat.getStatId()));
                     mod.write(buffer);
                 });
             });

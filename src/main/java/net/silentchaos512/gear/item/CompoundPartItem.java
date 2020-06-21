@@ -75,6 +75,7 @@ public class CompoundPartItem extends Item {
                 .filter(nbt -> nbt instanceof CompoundNBT)
                 .map(nbt -> (CompoundNBT) nbt)
                 .map(MaterialInstance::read)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

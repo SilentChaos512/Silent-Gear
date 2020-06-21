@@ -1,0 +1,93 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/aluminum",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 2,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/aluminum"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.aluminum"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#BFD4DE"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#BFD4DE"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 365.0,
+      "armor_durability": 15.0,
+      "enchantability": 14.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 8.0,
+      "melee_damage": 2.0,
+      "magic_damage": 2.0,
+      "attack_speed": 0.2,
+      "armor": 13.0,
+      "armor_toughness": 0.5,
+      "magic_armor": 3.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": 0.2,
+      "rarity": 25.0
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.2
+      },
+      "ranged_damage": {
+        "mul2": 0.1
+      },
+      "rarity": 30.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 2,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      },
+      {
+        "name": "silentgear:synergistic",
+        "level": 1
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:synergistic",
+        "level": 2
+      }
+    ]
+  }
+}
