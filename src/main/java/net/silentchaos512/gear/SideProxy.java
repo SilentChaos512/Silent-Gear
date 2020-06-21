@@ -39,6 +39,8 @@ import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.data.ModBlockTagsProvider;
+import net.silentchaos512.gear.data.ModItemTagsProvider;
 import net.silentchaos512.gear.data.material.MaterialsProvider;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.*;
@@ -94,6 +96,8 @@ class SideProxy implements IProxy {
         DataGenerator gen = event.getGenerator();
 
         gen.addProvider(new MaterialsProvider(gen));
+        gen.addProvider(new ModBlockTagsProvider(gen));
+        gen.addProvider(new ModItemTagsProvider(gen));
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {

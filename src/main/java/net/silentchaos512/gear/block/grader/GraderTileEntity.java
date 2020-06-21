@@ -1,16 +1,12 @@
 package net.silentchaos512.gear.block.grader;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
@@ -20,6 +16,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -27,18 +24,10 @@ import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.stream.IntStream;
 
 public class GraderTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
     static final int BASE_ANALYZE_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 1 : 5);
-    private static final List<Tag<Item>> CATALYST_TAGS = ImmutableList.of(
-            new ItemTags.Wrapper(SilentGear.getId("grader_catalysts/tier1")),
-            new ItemTags.Wrapper(SilentGear.getId("grader_catalysts/tier2")),
-            new ItemTags.Wrapper(SilentGear.getId("grader_catalysts/tier3")),
-            new ItemTags.Wrapper(SilentGear.getId("grader_catalysts/tier4")),
-            new ItemTags.Wrapper(SilentGear.getId("grader_catalysts/tier5"))
-    );
 
     static final int INPUT_SLOT = 0;
     static final int CATALYST_SLOT = 1;
@@ -162,8 +151,8 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
 
     static int getCatalystTier(ItemStack stack) {
         if (!stack.isEmpty()) {
-            for (int i = CATALYST_TAGS.size() - 1; i >= 0; --i) {
-                if (stack.getItem().isIn(CATALYST_TAGS.get(i))) {
+            for (int i = ModTags.Items.GRADER_CATALYSTS_TIERS.size() - 1; i >= 0; --i) {
+                if (stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {
                     return i + 1;
                 }
             }

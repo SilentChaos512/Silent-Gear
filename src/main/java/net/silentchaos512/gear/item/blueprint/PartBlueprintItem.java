@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -14,10 +15,17 @@ import java.util.List;
 
 public class PartBlueprintItem extends AbstractBlueprintItem {
     private final PartType partType;
+    private final ResourceLocation itemTag;
 
     public PartBlueprintItem(boolean singleUse, PartType partType) {
         super(new Properties().group(SilentGear.ITEM_GROUP), singleUse);
         this.partType = partType;
+        this.itemTag = new ResourceLocation(partType.getName().getNamespace(), "blueprints/" + partType.getName().getPath());
+    }
+
+    @Override
+    public ResourceLocation getItemTag() {
+        return itemTag;
     }
 
     @Override

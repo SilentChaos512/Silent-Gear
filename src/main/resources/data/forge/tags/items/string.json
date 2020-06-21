@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#forge:string/flax",
-    "#forge:string/sinew",
-    "#forge:string/string"
-  ]
-}

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -16,6 +17,7 @@ import java.util.function.Supplier;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final Supplier<ICoreItem> gearItem;
+    private ResourceLocation itemTag;
 
     @Deprecated
     public GearBlueprintItem(boolean singleUse, ICoreItem gearItem) {
@@ -29,6 +31,17 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     public GearBlueprintItem(boolean singleUse, Supplier<ICoreItem> gearItem, Properties properties) {
         super(properties, singleUse);
         this.gearItem = gearItem;
+    }
+
+    @Override
+    public ResourceLocation getItemTag() {
+        if (itemTag == null) {
+            ResourceLocation id = this.gearItem.get().asItem().getRegistryName();
+            if (id != null) {
+                itemTag = new ResourceLocation(id.getNamespace(), "blueprints/" + id.getPath());
+            }
+        }
+        return itemTag != null ? itemTag : SilentGear.getId("invalid");
     }
 
     @Override

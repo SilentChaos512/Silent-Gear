@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:netherrack",
+    "#forge:dirt",
+    "minecraft:farmland"
+  ]
+}

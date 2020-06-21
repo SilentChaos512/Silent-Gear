@@ -62,9 +62,9 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     // Rods
     ROUGH_ROD,
     STONE_ROD,
-    IRON_ROD,
-    NETHERWOOD_STICK,
-    // Tip Upgrades
+    IRON_ROD, // TODO: Remove
+    NETHERWOOD_STICK, // TODO: Remove?
+    // Tip Upgrades // TODO: Remove all
     IRON_TIPPED_UPGRADE,
     GOLD_TIPPED_UPGRADE,
     DIAMOND_TIPPED_UPGRADE,
@@ -73,9 +73,7 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     GLOWSTONE_COATED_UPGRADE,
     LAPIS_COATED_UPGRADE,
     QUARTZ_TIPPED_UPGRADE,
-    // Grips
-//    LEATHER_WRAPPINGS,
-    // Bowstrings
+    // Bowstrings // TODO: Remove all
     PLAIN_BOWSTRING,
     FLAX_BOWSTRING,
     SINEW_BOWSTRING,
