@@ -11,7 +11,8 @@
       "tag": "silentgear:template_boards"
     },
     "/": {
-      "tag": "forge:string/string"
+      "type": "silentgear:material",
+      "part_type": "bowstring"
     }
   },
   "result": {

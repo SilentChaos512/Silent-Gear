@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "silentgear:crimson_iron_ore"
-  },
-  "result": "silentgear:crimson_iron_ingot",
-  "experience": 1.0,
-  "cookingtime": 100
-}

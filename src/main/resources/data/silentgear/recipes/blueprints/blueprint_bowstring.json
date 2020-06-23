@@ -11,7 +11,8 @@
       "tag": "forge:paper/blueprint"
     },
     "/": {
-      "tag": "forge:string/string"
+      "type": "silentgear:material",
+      "part_type": "bowstring"
     }
   },
   "result": {

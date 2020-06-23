@@ -20,7 +20,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "tag": "silentgear:bowstrings/sinew"
+            "item": "silentgear:sinew_bowstring"
         },
         "small": {
             "tag": "forge:string/sinew",

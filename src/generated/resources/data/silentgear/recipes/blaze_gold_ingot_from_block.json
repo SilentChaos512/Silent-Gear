@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/blaze_gold"
+    }
+  ],
+  "result": {
+    "item": "silentgear:blaze_gold_ingot",
+    "count": 9
+  }
+}

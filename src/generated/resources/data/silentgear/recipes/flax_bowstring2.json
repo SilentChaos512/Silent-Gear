@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/bowstring"
+    },
+    {
+      "item": "silentgear:flax_string"
+    },
+    {
+      "item": "silentgear:flax_string"
+    },
+    {
+      "item": "silentgear:flax_string"
+    }
+  ],
+  "result": {
+    "item": "silentgear:flax_bowstring"
+  }
+}

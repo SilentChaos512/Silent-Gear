@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "/ /",
+    "#C#",
+    "# #"
+  ],
+  "key": {
+    "/": {
+      "tag": "forge:rods/blaze"
+    },
+    "#": {
+      "tag": "forge:ingots/crimson_iron"
+    },
+    "C": {
+      "item": "minecraft:magma_cream"
+    }
+  },
+  "result": {
+    "item": "silentgear:crimson_steel_ingot"
+  }
+}

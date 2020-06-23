@@ -90,7 +90,7 @@ public enum ModBlocks implements IBlockProvider, IStringSerializable {
     }
 
     private static BlockItem getStoneTorchItem() {
-        return new WallOrFloorItem(STONE_TORCH.asBlock(), WALL_STONE_TORCH.asBlock(), new Item.Properties());
+        return new WallOrFloorItem(STONE_TORCH.asBlock(), WALL_STONE_TORCH.asBlock(), new Item.Properties().group(SilentGear.ITEM_GROUP));
     }
 
     private static FlowerPotBlock makePottedPlant(Supplier<Block> flower) {

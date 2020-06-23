@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "silentgear:tip_upgrades",
+  "ingredients": [
+    {
+      "item": "silentgear:upgrade_base"
+    },
+    {
+      "tag": "forge:gems/diamond"
+    }
+  ],
+  "result": {
+    "item": "silentgear:diamond_tipped_upgrade"
+  }
+}

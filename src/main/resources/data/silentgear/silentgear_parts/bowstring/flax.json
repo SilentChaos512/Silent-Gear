@@ -20,7 +20,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "tag": "silentgear:bowstrings/flax"
+            "item": "silentgear:flax_bowstring"
         },
         "small": {
             "tag": "forge:string/flax",

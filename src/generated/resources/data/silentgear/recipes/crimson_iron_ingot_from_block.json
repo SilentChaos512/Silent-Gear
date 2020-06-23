@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/crimson_iron"
+    }
+  ],
+  "result": {
+    "item": "silentgear:crimson_iron_ingot",
+    "count": 9
+  }
+}

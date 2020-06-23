@@ -1,9 +1,0 @@
-{
-  "type": "smelting",
-  "ingredient": {
-    "item": "silentgear:sinew"
-  },
-  "result": "silentgear:dried_sinew",
-  "experience": 0.35,
-  "cookingtime": 200
-}

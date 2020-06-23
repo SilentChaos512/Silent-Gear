@@ -42,6 +42,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.data.ModBlockTagsProvider;
 import net.silentchaos512.gear.data.ModItemTagsProvider;
 import net.silentchaos512.gear.data.material.MaterialsProvider;
+import net.silentchaos512.gear.data.recipes.ModRecipesProvider;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -98,6 +99,7 @@ class SideProxy implements IProxy {
         gen.addProvider(new MaterialsProvider(gen));
         gen.addProvider(new ModBlockTagsProvider(gen));
         gen.addProvider(new ModItemTagsProvider(gen));
+        gen.addProvider(new ModRecipesProvider(gen));
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {

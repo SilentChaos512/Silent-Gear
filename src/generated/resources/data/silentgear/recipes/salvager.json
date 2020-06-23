@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "/I/",
+    "/#/"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "/": {
+      "tag": "forge:ingots/crimson_iron"
+    },
+    "I": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "#": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "result": {
+    "item": "silentgear:salvager"
+  }
+}

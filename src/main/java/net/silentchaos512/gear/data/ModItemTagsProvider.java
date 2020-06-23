@@ -5,6 +5,7 @@ import com.google.common.collect.MultimapBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
@@ -81,15 +82,13 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 ModTags.Items.RODS_STONE
         );
 
+        builder(ModTags.Items.PAPER, Items.PAPER);
         builder(ModTags.Items.PAPER_BLUEPRINT, CraftingItems.BLUEPRINT_PAPER);
         builder(ModTags.Items.TEMPLATE_BOARDS, CraftingItems.TEMPLATE_BOARD);
 
         builder(ModTags.Items.FRUITS, ModItems.netherBanana);
         builder(Tags.Items.SEEDS, ModItems.flaxseeds);
-        getBuilder(Tags.Items.STRING).add(
-                ModTags.Items.STRING_FLAX,
-                ModTags.Items.STRING_SINEW
-        );
+        builder(Tags.Items.STRING, CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER);
 
         builder(ModTags.Items.AXES, ModItems.axe, ModItems.lumberAxe, ModItems.machete, ModItems.mattock, ModItems.paxel);
         builder(ModTags.Items.BOOTS, ModItems.boots);

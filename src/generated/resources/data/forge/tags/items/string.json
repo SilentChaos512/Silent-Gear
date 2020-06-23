@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#forge:string/flax",
-    "#forge:string/sinew"
+    "silentgear:flax_string",
+    "silentgear:sinew_fiber"
   ]
 }
