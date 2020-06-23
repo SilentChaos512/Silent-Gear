@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/crimson_steel"
+    }
+  ],
+  "result": {
+    "item": "silentgear:crimson_steel_nugget",
+    "count": 9
+  }
+}

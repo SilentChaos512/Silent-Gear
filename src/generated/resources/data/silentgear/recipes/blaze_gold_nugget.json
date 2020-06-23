@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/blaze_gold"
+    }
+  ],
+  "result": {
+    "item": "silentgear:blaze_gold_nugget",
+    "count": 9
+  }
+}

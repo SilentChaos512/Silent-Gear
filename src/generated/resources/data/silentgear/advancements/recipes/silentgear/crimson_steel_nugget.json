@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "silentgear:iron_rod"
+      "silentgear:crimson_steel_nugget"
     ]
   },
   "criteria": {
@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:iron_ingot"
+            "tag": "forge:ingots/crimson_steel"
           }
         ]
       }
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "silentgear:iron_rod"
+        "recipe": "silentgear:crimson_steel_nugget"
       }
     }
   },

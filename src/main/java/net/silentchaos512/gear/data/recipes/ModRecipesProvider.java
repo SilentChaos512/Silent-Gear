@@ -104,7 +104,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(Tags.Items.GEMS_DIAMOND))
                 .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(Items.DIAMOND)
-                .key('#', Tags.Items.GEMS_DIAMOND)
+                .key('#', ModTags.Items.NUGGETS_DIAMOND)
                 .patternLine("###")
                 .patternLine("###")
                 .patternLine("###")
@@ -125,7 +125,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(Tags.Items.GEMS_EMERALD))
                 .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(Items.EMERALD)
-                .key('#', Tags.Items.GEMS_EMERALD)
+                .key('#', ModTags.Items.NUGGETS_EMERALD)
                 .patternLine("###")
                 .patternLine("###")
                 .patternLine("###")
@@ -187,10 +187,10 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer);
         // I
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.IRON_ROD, 4)
-                .key('/', ModTags.Items.RODS_IRON)
+                .key('/', Tags.Items.INGOTS_IRON)
                 .patternLine("/")
                 .patternLine("/")
-                .addCriterion("has_item", hasItem(CraftingItems.IRON_ROD))
+                .addCriterion("has_item", hasItem(Items.IRON_INGOT))
                 .build(consumer);
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.IRON_ROD, 2)
                 .addIngredient(ModTags.Items.BLUEPRINTS_ROD)
@@ -343,7 +343,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(CraftingItems.SINEW))
                 .build(consumer);
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.SPOON_UPGRADE)
-                .addIngredient(CraftingItems.UPGRADE_BASE)
+                .addIngredient(CraftingItems.ADVANCED_UPGRADE_BASE)
                 .addIngredient(Items.DIAMOND_SHOVEL)
                 .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
                 .build(consumer);
@@ -402,7 +402,8 @@ public class ModRecipesProvider extends RecipeProvider {
         if (metal.nugget != null) {
             ShapelessRecipeBuilder.shapelessRecipe(metal.nugget, 9)
                     .addIngredient(metal.ingotTag)
-                    .addCriterion("has_item", hasIngot);
+                    .addCriterion("has_item", hasIngot)
+                    .build(consumer);
             ShapedRecipeBuilder.shapedRecipe(metal.ingot)
                     .key('#', metal.nuggetTag)
                     .patternLine("###")

@@ -92,7 +92,8 @@ public class CompoundPartItem extends Item {
     }
 
     public static int getColor(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(NBT_COLOR);
+        CompoundNBT tag = stack.getOrCreateTag();
+        return tag.contains(NBT_COLOR) ? tag.getInt(NBT_COLOR) : 0xFFFFFF;
     }
 
     public int getColor(ItemStack stack, int tintIndex) {
