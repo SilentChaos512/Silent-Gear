@@ -41,6 +41,7 @@ import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.data.ModBlockTagsProvider;
 import net.silentchaos512.gear.data.ModItemTagsProvider;
+import net.silentchaos512.gear.data.loot.ModLootTables;
 import net.silentchaos512.gear.data.material.MaterialsProvider;
 import net.silentchaos512.gear.data.recipes.ModRecipesProvider;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -99,6 +100,7 @@ class SideProxy implements IProxy {
         gen.addProvider(new MaterialsProvider(gen));
         gen.addProvider(new ModBlockTagsProvider(gen));
         gen.addProvider(new ModItemTagsProvider(gen));
+        gen.addProvider(new ModLootTables(gen));
         gen.addProvider(new ModRecipesProvider(gen));
     }
 

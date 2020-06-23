@@ -36,6 +36,10 @@ public class BlueprintPackageItem extends LootContainerItem {
         super(defaultLootTable, new Properties().group(SilentGear.ITEM_GROUP));
     }
 
+    public ResourceLocation getDefaultLootTable() {
+        return getLootTable(getStack());
+    }
+
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc1").applyTextStyle(TextFormatting.ITALIC));

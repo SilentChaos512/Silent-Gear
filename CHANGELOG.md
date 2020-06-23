@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 More work on moving to data generators! Keep an eye out for missing/incorrect recipes.
 ### Removed
 - Tags for specific types of strings and bowstring. Flax string and sinew fibers are still tagged as `forge:string`.
+### Fixed
+- Color of compound part items with no NBT
 
 ## [1.8.0] - 2020-06-20
 ### Changed
