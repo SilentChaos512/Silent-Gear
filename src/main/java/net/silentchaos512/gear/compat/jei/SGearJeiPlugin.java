@@ -8,13 +8,14 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
@@ -23,6 +24,7 @@ import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
 
@@ -76,7 +78,7 @@ public class SGearJeiPlugin implements IModPlugin {
         );*/
         addInfoPage(reg, CraftingItems.RED_CARD_UPGRADE);
         addInfoPage(reg, CraftingItems.SPOON_UPGRADE);
-        for (ICoreItem item : ModItems.gearClasses.values()) {
+        for (Item item : Registration.getItems(item -> item instanceof ICoreTool)) {
             addInfoPage(reg, item);
         }
 
@@ -111,7 +113,7 @@ public class SGearJeiPlugin implements IModPlugin {
 //                })
 //        );
 
-        reg.registerSubtypeInterpreter(ModItems.customTippedUpgrade, stack -> {
+        reg.registerSubtypeInterpreter(ModItems.CUSTOM_TIPPED_UPGRADE.get(), stack -> {
             ResourceLocation partId = CustomTippedUpgrade.getPartId(stack);
             return partId != null ? partId.toString() : "null";
         });

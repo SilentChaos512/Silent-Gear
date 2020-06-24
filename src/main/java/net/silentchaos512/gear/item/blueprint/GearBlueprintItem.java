@@ -3,42 +3,33 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearType;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
-    private final Supplier<ICoreItem> gearItem;
+    private final GearType gearType;
     private ResourceLocation itemTag;
 
-    @Deprecated
-    public GearBlueprintItem(boolean singleUse, ICoreItem gearItem) {
-        this(singleUse, () -> gearItem);
-    }
-
-    public GearBlueprintItem(boolean singleUse, Supplier<ICoreItem> gearItem) {
-        this(singleUse, gearItem, new Properties().group(SilentGear.ITEM_GROUP));
-    }
-
-    public GearBlueprintItem(boolean singleUse, Supplier<ICoreItem> gearItem, Properties properties) {
+    public GearBlueprintItem(GearType gearType, boolean singleUse, Properties properties) {
         super(properties, singleUse);
-        this.gearItem = gearItem;
+        this.gearType = gearType;
     }
 
     @Override
     public ResourceLocation getItemTag() {
         if (itemTag == null) {
-            ResourceLocation id = this.gearItem.get().asItem().getRegistryName();
+            ResourceLocation id = this.getRegistryName();
             if (id != null) {
-                itemTag = new ResourceLocation(id.getNamespace(), "blueprints/" + id.getPath());
+                itemTag = new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName());
             }
         }
         return itemTag != null ? itemTag : SilentGear.getId("invalid");
@@ -46,15 +37,19 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
 
     @Override
     protected ITextComponent getCraftedName(ItemStack stack) {
-        return new TranslationTextComponent(this.gearItem.get().asItem().getTranslationKey());
+        ResourceLocation id = this.getRegistryName();
+        if (id == null) {
+            return new StringTextComponent("ERROR");
+        }
+        return new TranslationTextComponent(Util.makeTranslationKey("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-        String itemClass = this.gearItem.get().getGearType().getName();
+        String itemClass = this.gearType.getName();
 
         // Flavor text
-        if (this.gearItem instanceof ICoreTool) {
+        if (!gearType.matches("armor")) {
             list.add(new TranslationTextComponent("item.silentgear.blueprint." + itemClass + ".desc").applyTextStyle(TextFormatting.ITALIC));
         }
 
@@ -66,14 +61,5 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         } else {
             list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").applyTextStyle(TextFormatting.GREEN));
         }
-
-        // Is mixed material allowed in this GUI?
-/*        if (Minecraft.getInstance().currentScreen instanceof CraftingStationScreen) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.canMix")
-                    .applyTextStyle(TextFormatting.GREEN));
-        } else {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.noMixing")
-                    .applyTextStyle(TextFormatting.RED));
-        }*/
     }
 }

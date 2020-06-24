@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.world.BlockEvent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -18,6 +19,11 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import java.util.Optional;
 
 public class CoreLumberAxe extends CoreAxe {
+    @Override
+    public GearType getGearType() {
+        return GearType.LUMBER_AXE;
+    }
+
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
         if (stat == ItemStats.MELEE_DAMAGE)

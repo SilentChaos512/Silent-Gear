@@ -76,8 +76,8 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer);
         // C
         ShapelessRecipeBuilder.shapelessRecipe(Blocks.COBBLESTONE)
-                .addIngredient(ModItems.pebble, 9)
-                .addCriterion("has_pebble", hasItem(ModItems.pebble))
+                .addIngredient(ModItems.PEBBLE, 9)
+                .addCriterion("has_pebble", hasItem(ModItems.PEBBLE))
                 .build(consumer, SilentGear.getId("cobblestone_from_pebbles"));
         ShapedRecipeBuilder.shapedRecipe(ModBlocks.CRAFTING_STATION)
                 .key('#', ItemTags.PLANKS)
@@ -159,11 +159,11 @@ public class ModRecipesProvider extends RecipeProvider {
                 .key('o', Items.POPPED_CHORUS_FRUIT)
                 .key('/', ModTags.Items.NUGGETS_EMERALD)
                 .key('#', Tags.Items.DUSTS_GLOWSTONE)
-                .key('b', ModItems.netherBanana)
+                .key('b', ModItems.NETHER_BANANA)
                 .patternLine("o/o")
                 .patternLine("#b#")
                 .patternLine("o/o")
-                .addCriterion("has_item", hasItem(ModItems.netherBanana))
+                .addCriterion("has_item", hasItem(ModItems.NETHER_BANANA))
                 .build(consumer);
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.GLOWSTONE_COATED_UPGRADE)
                 .setGroup("silentgear:tip_upgrades")
@@ -177,13 +177,13 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.INGOTS_GOLD)
                 .addCriterion("has_item", hasItem(Tags.Items.INGOTS_GOLD))
                 .build(consumer);
-        ShapedRecipeBuilder.shapedRecipe(ModItems.goldenNetherBanana)
+        ShapedRecipeBuilder.shapedRecipe(ModItems.GOLDEN_NETHER_BANANA)
                 .key('g', Tags.Items.INGOTS_GOLD)
-                .key('b', ModItems.netherBanana)
+                .key('b', ModItems.NETHER_BANANA)
                 .patternLine("ggg")
                 .patternLine("gbg")
                 .patternLine("ggg")
-                .addCriterion("has_item", hasItem(ModItems.netherBanana))
+                .addCriterion("has_item", hasItem(ModItems.NETHER_BANANA))
                 .build(consumer);
         // I
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.IRON_ROD, 4)

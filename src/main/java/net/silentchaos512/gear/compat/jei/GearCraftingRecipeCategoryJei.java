@@ -31,7 +31,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<ICraftingR
     public GearCraftingRecipeCategoryJei(IGuiHelper guiHelper) {
         ResourceLocation location = new ResourceLocation("jei", "textures/gui/gui_vanilla.png");
         this.background = guiHelper.createDrawable(location, 0, 60, 116, 54);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.blueprintPackage));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.BLUEPRINT_PACKAGE));
         this.localizedName = I18n.format("gui.silentgear.category.gearCrafting");
         this.craftingGridHelper = guiHelper.createCraftingGridHelper(1);
     }

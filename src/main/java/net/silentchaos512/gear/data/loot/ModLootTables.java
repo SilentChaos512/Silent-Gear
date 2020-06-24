@@ -19,9 +19,15 @@ public class ModLootTables extends LootTableProvider {
     }
 
     @Override
+    public String getName() {
+        return "Silent Gear - Loot Tables";
+    }
+
+    @Override
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
         return ImmutableList.of(
-                Pair.of(ModBlockLootTables::new, LootParameterSets.BLOCK)
+                Pair.of(ModBlockLootTables::new, LootParameterSets.BLOCK),
+                Pair.of(ModGiftLootTables::new, LootParameterSets.GIFT)
         );
     }
 

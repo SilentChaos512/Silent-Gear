@@ -1,6 +1,5 @@
 package net.silentchaos512.gear;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
@@ -8,7 +7,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
@@ -69,13 +67,13 @@ class SideProxy implements IProxy {
         modEventBus.addListener(SideProxy::imcEnqueue);
         modEventBus.addListener(SideProxy::imcProcess);
 
+        Registration.register();
+
         modEventBus.addListener(ItemStats::createRegistry);
-        modEventBus.addGenericListener(Block.class, ModBlocks::registerAll);
         modEventBus.addGenericListener(ContainerType.class, ModContainers::registerAll);
         modEventBus.addGenericListener(EntityType.class, ModEntities::registerTypes);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootStuff::registerGlobalModifiers);
-        modEventBus.addGenericListener(Item.class, ModItems::registerAll);
         modEventBus.addGenericListener(IRecipeSerializer.class, ModRecipes::registerRecipeSerializers);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
         modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
@@ -111,11 +109,11 @@ class SideProxy implements IProxy {
 
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.GENERAL.spawnWithStarterBlueprints.get())
-                return Collections.singleton(ModItems.blueprintPackage.getStack());
+                return Collections.singleton(ModItems.BLUEPRINT_PACKAGE.get().getStack());
             return Collections.emptyList();
         });
 
-        LibHooks.registerCompostable(0.3f, ModItems.flaxseeds);
+        LibHooks.registerCompostable(0.3f, ModItems.FLAXSEEDS);
         LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
 
         NerfedGear.init();

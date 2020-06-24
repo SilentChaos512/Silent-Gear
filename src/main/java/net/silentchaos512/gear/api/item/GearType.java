@@ -21,17 +21,18 @@ public final class GearType {
 
     // Parent of everything except armor
     public static final GearType TOOL = getOrCreate("tool");
-    public static final GearType WEAPON = getOrCreate("weapon");
+    public static final GearType WEAPON = getOrCreate("weapon", TOOL);
     // Harvest tools
     public static final GearType HARVEST_TOOL = getOrCreate("harvest_tool", TOOL);
     public static final GearType AXE = getOrCreate("axe", HARVEST_TOOL);
-    public static final GearType EXCAVATOR = getOrCreate("excavator", HARVEST_TOOL);
-    public static final GearType HAMMER = getOrCreate("hammer", HARVEST_TOOL);
+    public static final GearType PICKAXE = getOrCreate("pickaxe", HARVEST_TOOL);
+    public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL);
+    public static final GearType EXCAVATOR = getOrCreate("excavator", SHOVEL);
+    public static final GearType HAMMER = getOrCreate("hammer", PICKAXE);
+    public static final GearType LUMBER_AXE = getOrCreate("lumber_axe", AXE);
     public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL);
     public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL);
-    public static final GearType PICKAXE = getOrCreate("pickaxe", HARVEST_TOOL);
     public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL);
-    public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL);
     public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL);
     // Melee weapons (swords)
     public static final GearType MELEE_WEAPON = getOrCreate("melee_weapon", WEAPON);

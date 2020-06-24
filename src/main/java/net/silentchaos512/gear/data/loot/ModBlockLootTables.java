@@ -42,7 +42,7 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.asBlock());
         registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.asBlock());
         ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.asBlock()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
-        this.registerLootTable(ModBlocks.FLAX_PLANT.asBlock(), flax(ModItems.flaxseeds, flaxBuilder));
+        this.registerLootTable(ModBlocks.FLAX_PLANT.asBlock(), flax(ModItems.FLAXSEEDS, flaxBuilder));
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.asBlock());
         registerLootTable(ModBlocks.NETHERWOOD_LEAVES.asBlock(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_LOG.asBlock());
@@ -54,7 +54,7 @@ public class ModBlockLootTables extends BlockLootTables {
         registerFlowerPot(ModBlocks.POTTED_NETHERWOOD_SAPLING.asBlock());
         registerDropSelfLootTable(ModBlocks.SALVAGER.asBlock());
         registerDropSelfLootTable(ModBlocks.STONE_TORCH.asBlock());
-        registerDropping(ModBlocks.WILD_FLAX_PLANT.asBlock(), ModItems.flaxseeds);
+        registerDropping(ModBlocks.WILD_FLAX_PLANT.asBlock(), ModItems.FLAXSEEDS);
     }
 
     @Nonnull
@@ -70,7 +70,7 @@ public class ModBlockLootTables extends BlockLootTables {
                 .addLootPool(LootPool.builder()
                         .rolls(ConstantRange.of(1))
                         .acceptCondition(NOT_SILK_TOUCH_OR_SHEARS)
-                        .addEntry(withSurvivesExplosion(block, ItemLootEntry.builder(ModItems.netherBanana))
+                        .addEntry(withSurvivesExplosion(block, ItemLootEntry.builder(ModItems.NETHER_BANANA))
                                 .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
     }
 

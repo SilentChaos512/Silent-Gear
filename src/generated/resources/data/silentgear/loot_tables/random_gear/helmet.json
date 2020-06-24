@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "silentgear:select_tier",
+              "tier": 1
+            }
+          ],
+          "name": "silentgear:helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "silentgear:select_tier",
+              "tier": 2
+            }
+          ],
+          "name": "silentgear:helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "silentgear:select_tier",
+              "tier": 3
+            }
+          ],
+          "name": "silentgear:helmet"
+        }
+      ]
+    }
+  ]
+}

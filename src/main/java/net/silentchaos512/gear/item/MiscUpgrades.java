@@ -39,7 +39,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public enum MiscUpgrades implements IItemProvider {
-    SPOON(item -> item == ModItems.pickaxe),
+    SPOON(item -> item == ModItems.PICKAXE),
     RED_CARD(Objects::nonNull);
 
     private final Lazy<Item> item;

@@ -1,9 +1,6 @@
 package net.silentchaos512.gear.loot.function;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.world.storage.loot.LootContext;
@@ -46,6 +43,14 @@ public final class SetPartsFunction extends LootFunction {
     public static class Serializer extends LootFunction.Serializer<SetPartsFunction> {
         public Serializer() {
             super(SilentGear.getId("set_parts"), SetPartsFunction.class);
+        }
+
+        @Override
+        public void serialize(JsonObject json, SetPartsFunction function, JsonSerializationContext context) {
+            super.serialize(json, function, context);
+            JsonArray array = new JsonArray();
+            function.parts.forEach(part -> array.add(part.serialize()));
+            json.add("parts", array);
         }
 
         @Override

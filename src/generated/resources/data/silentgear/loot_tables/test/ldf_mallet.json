@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "silentgear:set_parts",
+              "parts": [
+                {
+                  "part": "silentgear:main/diamond",
+                  "grade": "S"
+                },
+                {
+                  "part": "silentgear:main/diamond",
+                  "grade": "S"
+                },
+                {
+                  "part": "silentgear:main/emerald",
+                  "grade": "S"
+                },
+                {
+                  "part": "silentgear:rod/blaze"
+                },
+                {
+                  "part": "silentgear:tip/redstone"
+                }
+              ]
+            }
+          ],
+          "name": "silentgear:hammer"
+        }
+      ]
+    }
+  ]
+}

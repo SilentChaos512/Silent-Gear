@@ -25,7 +25,7 @@ public class CustomTippedUpgrade extends Item {
     }
 
     public static ItemStack getStack(ResourceLocation partId) {
-        ItemStack stack = new ItemStack(ModItems.customTippedUpgrade);
+        ItemStack stack = new ItemStack(ModItems.CUSTOM_TIPPED_UPGRADE.get());
         stack.getOrCreateTag().putString("PartID", partId.toString());
         return stack;
     }

@@ -32,7 +32,7 @@ public class SlingshotProjectile extends AbstractArrowEntity {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(ModItems.pebble);
+        return new ItemStack(ModItems.PEBBLE);
     }
 
     public ItemStack getItem() {

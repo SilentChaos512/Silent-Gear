@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.parts;
 
+import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -50,5 +51,15 @@ public interface IPartData {
     }
 
     default void onAddToGear(ItemStack gear) {
+    }
+
+    default JsonObject serialize() {
+        // FIXME: Need to account for compound material parts
+        JsonObject json = new JsonObject();
+        json.addProperty("part", getPartId().toString());
+        if (getGrade() != MaterialGrade.NONE) {
+            json.addProperty("grade", getGrade().name());
+        }
+        return json;
     }
 }

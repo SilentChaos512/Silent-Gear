@@ -69,7 +69,7 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
     public boolean isValidFor(ICoreItem gearItem) {
         // TODO: Temp fix. Should define this in JSON...
         if (this.getId().equals(PartConst.MISC_SPOON))
-            return gearItem == ModItems.pickaxe;
+            return gearItem == ModItems.PICKAXE;
         return IUpgradePart.super.isValidFor(gearItem);
     }
 }

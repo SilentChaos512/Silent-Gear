@@ -1,0 +1,75 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:blueprint_rod"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:blueprint_pickaxe"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:blueprint_shovel"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:blueprint_axe"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 11,
+          "name": "silentgear:blueprint_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "silentgear:blueprint_katana"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 7,
+          "name": "silentgear:blueprint_machete"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "name": "silentgear:blueprint_spear"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:blueprint_shield"
+        }
+      ]
+    }
+  ]
+}

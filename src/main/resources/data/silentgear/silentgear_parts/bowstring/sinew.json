@@ -21,10 +21,6 @@
     "crafting_items": {
         "normal": {
             "item": "silentgear:sinew_bowstring"
-        },
-        "small": {
-            "tag": "forge:string/sinew",
-            "size": 3
         }
     },
     "name": {

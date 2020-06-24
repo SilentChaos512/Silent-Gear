@@ -45,6 +45,10 @@ public final class SelectGearTierLootFunction extends LootFunction {
         return GearGenerator.create((ICoreItem) stack.getItem(), this.tier);
     }
 
+    public static LootFunction.Builder<?> builder(int tier) {
+        return builder(conditions -> new SelectGearTierLootFunction(conditions, tier));
+    }
+
     public static class Serializer extends LootFunction.Serializer<SelectGearTierLootFunction> {
         public Serializer() {
             super(SilentGear.getId("select_tier"), SelectGearTierLootFunction.class);

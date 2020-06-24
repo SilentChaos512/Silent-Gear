@@ -83,8 +83,7 @@ public final class TraitSerializers {
 
     public static ITrait deserialize(ResourceLocation id, JsonObject json) {
         String typeStr = JSONUtils.getString(json, "type");
-        if (!typeStr.contains(":")) typeStr = SilentGear.RESOURCE_PREFIX + typeStr;
-        ResourceLocation type = new ResourceLocation(typeStr);
+        ResourceLocation type = SilentGear.getIdWithDefaultNamespace(typeStr);
         log(() -> "deserialize " + id + " (type " + type + ")");
 
         ITraitSerializer<?> serializer = REGISTRY.get(type);

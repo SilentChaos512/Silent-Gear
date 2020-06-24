@@ -28,8 +28,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.lib.util.Lazy;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -81,14 +82,14 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
     SPOON_UPGRADE,
     RED_CARD_UPGRADE;
 
-    private final Lazy<Item> item;
-
-    CraftingItems() {
-        this.item = Lazy.of(ItemInternal::new);
-    }
+    @SuppressWarnings("NonFinalFieldInEnum")
+    private RegistryObject<ItemInternal> item = null;
 
     @Override
     public Item asItem() {
+        if (this.item == null) {
+            throw new NullPointerException("CraftingItems accessed too early!");
+        }
         return this.item.get();
     }
 
@@ -97,7 +98,13 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
         return name().toLowerCase(Locale.ROOT);
     }
 
-    private final class ItemInternal extends Item {
+    public static void register(DeferredRegister<Item> items) {
+        for (CraftingItems item : values()) {
+            item.item = items.register(item.getName(), ItemInternal::new);
+        }
+    }
+
+    private static final class ItemInternal extends Item {
         ItemInternal() {
             super(new Properties().group(SilentGear.ITEM_GROUP));
         }

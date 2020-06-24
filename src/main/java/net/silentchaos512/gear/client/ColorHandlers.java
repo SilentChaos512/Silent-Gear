@@ -29,7 +29,7 @@ public final class ColorHandlers {
             return;
         }
 
-        itemColors.register(CustomTippedUpgrade::getItemColor, ModItems.customTippedUpgrade);
+        itemColors.register(CustomTippedUpgrade::getItemColor, ModItems.CUSTOM_TIPPED_UPGRADE);
 
         // Tools, armor, shields, etc.
         ForgeRegistries.ITEMS.getValues().stream()

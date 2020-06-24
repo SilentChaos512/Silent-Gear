@@ -15,10 +15,6 @@
     "crafting_items": {
         "normal": {
             "tag": "silentgear:plain_bowstring"
-        },
-        "small": {
-            "tag": "forge:string/string",
-            "size": 3
         }
     },
     "name": {

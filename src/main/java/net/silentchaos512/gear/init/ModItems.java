@@ -1,185 +1,166 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.gear.*;
+import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.TimeUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.function.Supplier;
 
+@SuppressWarnings({"unused", "OverlyCoupledClass"})
 public final class ModItems {
-    public static final Map<ResourceLocation, ICoreTool> toolClasses = new LinkedHashMap<>();
-    public static final Map<ResourceLocation, ICoreArmor> armorClasses = new LinkedHashMap<>();
-    public static final Map<ResourceLocation, ICoreItem> gearClasses = new LinkedHashMap<>();
-    public static final List<GearBlueprintItem> blueprints = new ArrayList<>();
-    static final Map<String, BlockItem> blocksToRegister = new LinkedHashMap<>();
+    //region Blocks
+    // TODO
+    //endregion
 
-    public static BlueprintPackageItem blueprintPackage;
-    public static CustomTippedUpgrade customTippedUpgrade = new CustomTippedUpgrade();
+    public static final ItemRegistryObject<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
+            new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
 
-    public static BlockNamedItem flaxseeds;
-    public static Item netherBanana;
-    public static Item goldenNetherBanana;
-    public static Item pebble;
+    // Blueprints
+    public static final ItemRegistryObject<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartType.ROD, false);
+    public static final ItemRegistryObject<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartType.TIP, false);
+    public static final ItemRegistryObject<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartType.GRIP, false);
+    public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_BLUEPRINT = registerPartBlueprint(PartType.BOWSTRING, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearType.SWORD, false);
+    public static final ItemRegistryObject<GearBlueprintItem> DAGGER_BLUEPRINT = registerGearBlueprint(GearType.DAGGER, false);
+    public static final ItemRegistryObject<GearBlueprintItem> KATANA_BLUEPRINT = registerGearBlueprint(GearType.KATANA, false);
+    public static final ItemRegistryObject<GearBlueprintItem> MACHETE_BLUEPRINT = registerGearBlueprint(GearType.MACHETE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SPEAR_BLUEPRINT = registerGearBlueprint(GearType.SPEAR, false);
+    public static final ItemRegistryObject<GearBlueprintItem> PICKAXE_BLUEPRINT = registerGearBlueprint(GearType.PICKAXE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SHOVEL_BLUEPRINT = registerGearBlueprint(GearType.SHOVEL, false);
+    public static final ItemRegistryObject<GearBlueprintItem> AXE_BLUEPRINT = registerGearBlueprint(GearType.AXE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> PAXEL_BLUEPRINT = registerGearBlueprint(GearType.PAXEL, false);
+    public static final ItemRegistryObject<GearBlueprintItem> HAMMER_BLUEPRINT = registerGearBlueprint(GearType.HAMMER, false);
+    public static final ItemRegistryObject<GearBlueprintItem> EXCAVATOR_BLUEPRINT = registerGearBlueprint(GearType.EXCAVATOR, false);
+    public static final ItemRegistryObject<GearBlueprintItem> LUMBER_AXE_BLUEPRINT = registerGearBlueprint(GearType.LUMBER_AXE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> MATTOCK_BLUEPRINT = registerGearBlueprint(GearType.MATTOCK, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SICKLE_BLUEPRINT = registerGearBlueprint(GearType.SICKLE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SHEARS_BLUEPRINT = registerGearBlueprint(GearType.SHEARS, false);
+    public static final ItemRegistryObject<GearBlueprintItem> BOW_BLUEPRINT = registerGearBlueprint(GearType.BOW, false);
+    public static final ItemRegistryObject<GearBlueprintItem> CROSSBOW_BLUEPRINT = registerGearBlueprint(GearType.CROSSBOW, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SLINGSHOT_BLUEPRINT = registerGearBlueprint(GearType.SLINGSHOT, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SHIELD_BLUEPRINT = registerGearBlueprint(GearType.SHIELD, false);
+    public static final ItemRegistryObject<GearBlueprintItem> HELMET_BLUEPRINT = registerGearBlueprint(GearType.HELMET, false);
+    public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_BLUEPRINT = registerGearBlueprint(GearType.CHESTPLATE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_BLUEPRINT = registerGearBlueprint(GearType.LEGGINGS, false);
+    public static final ItemRegistryObject<GearBlueprintItem> BOOTS_BLUEPRINT = registerGearBlueprint(GearType.BOOTS, false);
+    // Templates
+    public static final ItemRegistryObject<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartType.ROD, true);
+    public static final ItemRegistryObject<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartType.TIP, true);
+    public static final ItemRegistryObject<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartType.GRIP, true);
+    public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_TEMPLATE = registerPartBlueprint(PartType.BOWSTRING, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearType.SWORD, true);
+    public static final ItemRegistryObject<GearBlueprintItem> DAGGER_TEMPLATE = registerGearBlueprint(GearType.DAGGER, true);
+    public static final ItemRegistryObject<GearBlueprintItem> KATANA_TEMPLATE = registerGearBlueprint(GearType.KATANA, true);
+    public static final ItemRegistryObject<GearBlueprintItem> MACHETE_TEMPLATE = registerGearBlueprint(GearType.MACHETE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SPEAR_TEMPLATE = registerGearBlueprint(GearType.SPEAR, true);
+    public static final ItemRegistryObject<GearBlueprintItem> PICKAXE_TEMPLATE = registerGearBlueprint(GearType.PICKAXE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SHOVEL_TEMPLATE = registerGearBlueprint(GearType.SHOVEL, true);
+    public static final ItemRegistryObject<GearBlueprintItem> AXE_TEMPLATE = registerGearBlueprint(GearType.AXE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> PAXEL_TEMPLATE = registerGearBlueprint(GearType.PAXEL, true);
+    public static final ItemRegistryObject<GearBlueprintItem> HAMMER_TEMPLATE = registerGearBlueprint(GearType.HAMMER, true);
+    public static final ItemRegistryObject<GearBlueprintItem> EXCAVATOR_TEMPLATE = registerGearBlueprint(GearType.EXCAVATOR, true);
+    public static final ItemRegistryObject<GearBlueprintItem> LUMBER_AXE_TEMPLATE = registerGearBlueprint(GearType.LUMBER_AXE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> MATTOCK_TEMPLATE = registerGearBlueprint(GearType.MATTOCK, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SICKLE_TEMPLATE = registerGearBlueprint(GearType.SICKLE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SHEARS_TEMPLATE = registerGearBlueprint(GearType.SHEARS, true);
+    public static final ItemRegistryObject<GearBlueprintItem> BOW_TEMPLATE = registerGearBlueprint(GearType.BOW, true);
+    public static final ItemRegistryObject<GearBlueprintItem> CROSSBOW_TEMPLATE = registerGearBlueprint(GearType.CROSSBOW, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SLINGSHOT_TEMPLATE = registerGearBlueprint(GearType.SLINGSHOT, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SHIELD_TEMPLATE = registerGearBlueprint(GearType.SHIELD, true);
+    public static final ItemRegistryObject<GearBlueprintItem> HELMET_TEMPLATE = registerGearBlueprint(GearType.HELMET, true);
+    public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_TEMPLATE = registerGearBlueprint(GearType.CHESTPLATE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_TEMPLATE = registerGearBlueprint(GearType.LEGGINGS, true);
+    public static final ItemRegistryObject<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearType.BOOTS, true);
 
-    public static CoreSword sword = new CoreSword();
-    public static CoreDagger dagger = new CoreDagger();
-    public static CoreKatana katana = new CoreKatana();
-    public static CoreMachete machete = new CoreMachete();
-    public static CoreSpear spear = new CoreSpear();
-    public static CorePickaxe pickaxe = new CorePickaxe();
-    public static CoreShovel shovel = new CoreShovel();
-    public static CoreAxe axe = new CoreAxe();
-    public static CorePaxel paxel = new CorePaxel();
-    public static CoreHammer hammer = new CoreHammer();
-    public static CoreExcavator excavator = new CoreExcavator();
-    public static CoreLumberAxe lumberAxe = new CoreLumberAxe();
-    public static CoreMattock mattock = new CoreMattock();
-    public static CoreSickle sickle = new CoreSickle();
-    public static CoreShears shears = new CoreShears();
-    public static CoreBow bow = new CoreBow();
-    public static CoreCrossbow crossbow = new CoreCrossbow();
-    public static CoreSlingshot slingshot = new CoreSlingshot();
-    public static CoreShield shield = new CoreShield();
-
-    public static CoreArmor helmet = new CoreArmor(EquipmentSlotType.HEAD);
-    public static CoreArmor chestplate = new CoreArmor(EquipmentSlotType.CHEST);
-    public static CoreArmor leggings = new CoreArmor(EquipmentSlotType.LEGS);
-    public static CoreArmor boots = new CoreArmor(EquipmentSlotType.FEET);
+    // Compound Parts
+    public static final ItemRegistryObject<CompoundPartItem> ROD = register("rod", () ->
+            new CompoundPartItem(SilentGear.getId("rod"), PartType.ROD, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> LONG_ROD = register("long_rod", () ->
+            new CompoundPartItem(SilentGear.getId("long_rod"), PartType.ROD, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> TIP = register("tip", () ->
+            new CompoundPartItem(SilentGear.getId("tip"), PartType.TIP, 1, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> GRIP = register("grip", () ->
+            new CompoundPartItem(SilentGear.getId("grip"), PartType.GRIP, baseProps()));
 
     static {
-        // Seems colors events can fire before items are initialized in some case?
-        // So we need to construct the items right now...
-        initializeGear();
+        CraftingItems.register(Registration.ITEMS);
     }
+
+    public static final ItemRegistryObject<CustomTippedUpgrade> CUSTOM_TIPPED_UPGRADE = register("custom_tipped_upgrade", CustomTippedUpgrade::new);
+    public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
+
+    public static final ItemRegistryObject<BlockNamedItem> FLAXSEEDS = register("flaxseeds", () ->
+            new BlockNamedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
+    public static final ItemRegistryObject<Item> NETHER_BANANA = register("nether_banana", () ->
+            new Item(baseProps()
+                    .food(new Food.Builder().hunger(5).saturation(0.4f).build())));
+    public static final ItemRegistryObject<Item> GOLDEN_NETHER_BANANA = register("golden_nether_banana", () ->
+            new Item(baseProps()
+                    .food(new Food.Builder().hunger(10).saturation(1.0f)
+                            .setAlwaysEdible()
+                            .effect(() -> new EffectInstance(Effects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
+                            .effect(() -> new EffectInstance(Effects.RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
+                            .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
+                            .build())));
+
+    public static final ItemRegistryObject<CoreSword> SWORD = register("sword", () -> new CoreSword());
+    public static final ItemRegistryObject<CoreDagger> DAGGER = register("dagger", () -> new CoreDagger());
+    public static final ItemRegistryObject<CoreKatana> KATANA = register("katana", () -> new CoreKatana());
+    public static final ItemRegistryObject<CoreMachete> MACHETE = register("machete", () -> new CoreMachete());
+    public static final ItemRegistryObject<CoreSpear> SPEAR = register("spear", () -> new CoreSpear());
+    public static final ItemRegistryObject<CorePickaxe> PICKAXE = register("pickaxe", () -> new CorePickaxe());
+    public static final ItemRegistryObject<CoreShovel> SHOVEL = register("shovel", () -> new CoreShovel());
+    public static final ItemRegistryObject<CoreAxe> AXE = register("axe", () -> new CoreAxe());
+    public static final ItemRegistryObject<CorePaxel> PAXEL = register("paxel", () -> new CorePaxel());
+    public static final ItemRegistryObject<CoreHammer> HAMMER = register("hammer", () -> new CoreHammer());
+    public static final ItemRegistryObject<CoreExcavator> EXCAVATOR = register("excavator", () -> new CoreExcavator());
+    public static final ItemRegistryObject<CoreLumberAxe> LUMBER_AXE = register("lumber_axe", () -> new CoreLumberAxe());
+    public static final ItemRegistryObject<CoreMattock> MATTOCK = register("mattock", () -> new CoreMattock());
+    public static final ItemRegistryObject<CoreSickle> SICKLE = register("sickle", () -> new CoreSickle());
+    public static final ItemRegistryObject<CoreShears> SHEARS = register("shears", () -> new CoreShears());
+    public static final ItemRegistryObject<CoreBow> BOW = register("bow", () -> new CoreBow());
+    public static final ItemRegistryObject<CoreCrossbow> CROSSBOW = register("crossbow", () -> new CoreCrossbow());
+    public static final ItemRegistryObject<CoreSlingshot> SLINGSHOT = register("slingshot", () -> new CoreSlingshot());
+    public static final ItemRegistryObject<CoreShield> SHIELD = register("shield", () -> new CoreShield());
+
+    public static final ItemRegistryObject<CoreArmor> HELMET = register("helmet", () -> new CoreArmor(EquipmentSlotType.HEAD));
+    public static final ItemRegistryObject<CoreArmor> CHESTPLATE = register("chestplate", () -> new CoreArmor(EquipmentSlotType.CHEST));
+    public static final ItemRegistryObject<CoreArmor> LEGGINGS = register("leggings", () -> new CoreArmor(EquipmentSlotType.LEGS));
+    public static final ItemRegistryObject<CoreArmor> BOOTS = register("boots", () -> new CoreArmor(EquipmentSlotType.FEET));
 
     private ModItems() {}
 
-    public static void registerAll(RegistryEvent.Register<Item> event) {
-        blocksToRegister.forEach(ModItems::register);
+    static void register() {}
 
-        // Initializes, but does not register gear classes, fills maps
-        initializeGear();
-
-        blueprintPackage = register("blueprint_package", new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
-
-        // Blueprints/templates
-        registerBlueprints("blueprint", false);
-        registerBlueprints("template", true);
-
-        for (CraftingItems item : CraftingItems.values()) {
-            register(item.getName(), item.asItem());
-        }
-
-        register("custom_tipped_upgrade", customTippedUpgrade);
-        register("rod", new CompoundPartItem(SilentGear.getId("rod"), PartType.ROD, new Item.Properties().group(SilentGear.ITEM_GROUP)));
-        register("long_rod", new CompoundPartItem(SilentGear.getId("long_rod"), PartType.ROD, new Item.Properties().group(SilentGear.ITEM_GROUP)));
-        register("grip", new CompoundPartItem(SilentGear.getId("grip"), PartType.GRIP, new Item.Properties().group(SilentGear.ITEM_GROUP)));
-        register("tip", new CompoundPartItem(SilentGear.getId("tip"), PartType.TIP, 1, new Item.Properties().group(SilentGear.ITEM_GROUP)));
-
-        flaxseeds = register("flaxseeds", new BlockNamedItem(ModBlocks.FLAX_PLANT.asBlock(), getBaseProperties()));
-        netherBanana = register("nether_banana", new Item(getBaseProperties()
-                .food(new Food.Builder().hunger(5).saturation(0.4f).build())));
-        goldenNetherBanana = register("golden_nether_banana", new Item(getBaseProperties()
-                .food(new Food.Builder()
-                        .hunger(10)
-                        .saturation(1.0f)
-                        .setAlwaysEdible()
-                        .effect(() -> new EffectInstance(Effects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
-                        .effect(() -> new EffectInstance(Effects.RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
-                        .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
-                        .build())));
-
-        pebble = register("pebble", new SlingshotAmmoItem());
-
-        // Register gear classes
-        gearClasses.forEach((key, item) -> register(key, item.asItem()));
-
-//        for (PartIcons icon : PartIcons.values()) {
-//            register("dummy_icon_" + icon.name().toLowerCase(Locale.ROOT), icon.asItem());
-//        }
-
-//        if (SilentGear.isDevBuild()) {
-//            register("test_item", new TestItem());
-//        }
-    }
-
-    private static Item.Properties getBaseProperties() {
+    static Item.Properties baseProps() {
         return new Item.Properties().group(SilentGear.ITEM_GROUP);
     }
 
-    private static void initializeGear() {
-        // Build gear maps now because blueprints need them
-        toolClasses.put(SilentGear.getId("sword"), sword);
-        toolClasses.put(SilentGear.getId("dagger"), dagger);
-        toolClasses.put(SilentGear.getId("katana"), katana);
-        toolClasses.put(SilentGear.getId("machete"), machete);
-        toolClasses.put(SilentGear.getId("spear"), spear);
-        toolClasses.put(SilentGear.getId("pickaxe"), pickaxe);
-        toolClasses.put(SilentGear.getId("shovel"), shovel);
-        toolClasses.put(SilentGear.getId("axe"), axe);
-        toolClasses.put(SilentGear.getId("paxel"), paxel);
-        toolClasses.put(SilentGear.getId("hammer"), hammer);
-        toolClasses.put(SilentGear.getId("excavator"), excavator);
-        toolClasses.put(SilentGear.getId("lumber_axe"), lumberAxe);
-        toolClasses.put(SilentGear.getId("mattock"), mattock);
-        toolClasses.put(SilentGear.getId("sickle"), sickle);
-        toolClasses.put(SilentGear.getId("shears"), shears);
-        toolClasses.put(SilentGear.getId("bow"), bow);
-        toolClasses.put(SilentGear.getId("crossbow"), crossbow);
-        toolClasses.put(SilentGear.getId("slingshot"), slingshot);
-
-        armorClasses.put(SilentGear.getId("helmet"), helmet);
-        armorClasses.put(SilentGear.getId("chestplate"), chestplate);
-        armorClasses.put(SilentGear.getId("leggings"), leggings);
-        armorClasses.put(SilentGear.getId("boots"), boots);
-
-        gearClasses.put(SilentGear.getId("shield"), shield);
-        gearClasses.putAll(toolClasses);
-        gearClasses.putAll(armorClasses);
+    private static <T extends Item> ItemRegistryObject<T> register(String name, Supplier<T> item) {
+        return new ItemRegistryObject<>(Registration.ITEMS.register(name, item));
     }
 
-    private static <T extends Item> T register(String name, T item) {
-        return register(SilentGear.getId(name), item);
+    private static ItemRegistryObject<GearBlueprintItem> registerGearBlueprint(GearType gearType, boolean singleUse) {
+        // TODO: Flip the name to be geartype_blueprint
+        String name = (singleUse ? "template" : "blueprint") + "_" + gearType.getName();
+        return register(name, () -> new GearBlueprintItem(gearType, singleUse, baseProps()));
     }
 
-    private static <T extends Item> T register(ResourceLocation id, T item) {
-        item.setRegistryName(id);
-        ForgeRegistries.ITEMS.register(item);
-        return item;
-    }
-
-    private static void registerBlueprints(String name, boolean singleUse) {
-        // TODO: Change item ID's from "blueprint_item" to "item_blueprint"
-        gearClasses.forEach((key, item) -> {
-            GearBlueprintItem blueprint = new GearBlueprintItem(singleUse, () -> item);
-            blueprints.add(blueprint);
-            register(new ResourceLocation(key.getNamespace(), name + "_" + key.getPath()), blueprint);
-        });
-
-        // Part blueprints
-        register(name + "_rod", new PartBlueprintItem(singleUse, PartType.ROD));
-        register(name + "_bowstring", new PartBlueprintItem(singleUse, PartType.BOWSTRING));
-        register(name + "_grip", new PartBlueprintItem(singleUse, PartType.GRIP));
-        register(name + "_tip", new PartBlueprintItem(singleUse, PartType.TIP));
+    private static ItemRegistryObject<PartBlueprintItem> registerPartBlueprint(PartType partType, boolean singleUse) {
+        // TODO: Flip the name to be parttype_blueprint
+        String name = (singleUse ? "template" : "blueprint") + "_" + partType.getName().getPath();
+        return register(name, () -> new PartBlueprintItem(partType, singleUse, baseProps()));
     }
 }

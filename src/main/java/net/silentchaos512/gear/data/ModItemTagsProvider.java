@@ -86,26 +86,26 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(ModTags.Items.PAPER_BLUEPRINT, CraftingItems.BLUEPRINT_PAPER);
         builder(ModTags.Items.TEMPLATE_BOARDS, CraftingItems.TEMPLATE_BOARD);
 
-        builder(ModTags.Items.FRUITS, ModItems.netherBanana);
-        builder(Tags.Items.SEEDS, ModItems.flaxseeds);
+        builder(ModTags.Items.FRUITS, ModItems.NETHER_BANANA);
+        builder(Tags.Items.SEEDS, ModItems.FLAXSEEDS);
         builder(Tags.Items.STRING, CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER);
 
-        builder(ModTags.Items.AXES, ModItems.axe, ModItems.lumberAxe, ModItems.machete, ModItems.mattock, ModItems.paxel);
-        builder(ModTags.Items.BOOTS, ModItems.boots);
-        builder(ModTags.Items.BOWS, ModItems.bow);
-        builder(ModTags.Items.CHESTPLATES, ModItems.chestplate);
-        builder(ModTags.Items.CROSSBOWS, ModItems.crossbow);
-        builder(ModTags.Items.HAMMERS, ModItems.hammer);
-        builder(ModTags.Items.HELMETS, ModItems.helmet);
-        builder(ModTags.Items.HOES, ModItems.mattock);
-        builder(ModTags.Items.KNIVES, ModItems.dagger);
-        builder(ModTags.Items.LEGGINGS, ModItems.leggings);
-        builder(ModTags.Items.PICKAXES, ModItems.hammer, ModItems.paxel, ModItems.pickaxe);
-        builder(ModTags.Items.SHEARS, ModItems.shears);
-        builder(ModTags.Items.SHIELDS, ModItems.shield);
-        builder(ModTags.Items.SHOVELS, ModItems.excavator, ModItems.mattock, ModItems.paxel, ModItems.shovel);
-        builder(ModTags.Items.SICKLES, ModItems.sickle);
-        builder(ModTags.Items.SWORDS, ModItems.dagger, ModItems.katana, ModItems.machete, ModItems.sword);
+        builder(ModTags.Items.AXES, ModItems.AXE, ModItems.LUMBER_AXE, ModItems.MACHETE, ModItems.MATTOCK, ModItems.PAXEL);
+        builder(ModTags.Items.BOOTS, ModItems.BOOTS);
+        builder(ModTags.Items.BOWS, ModItems.BOW);
+        builder(ModTags.Items.CHESTPLATES, ModItems.CHESTPLATE);
+        builder(ModTags.Items.CROSSBOWS, ModItems.CROSSBOW);
+        builder(ModTags.Items.HAMMERS, ModItems.HAMMER);
+        builder(ModTags.Items.HELMETS, ModItems.HELMET);
+        builder(ModTags.Items.HOES, ModItems.MATTOCK);
+        builder(ModTags.Items.KNIVES, ModItems.DAGGER);
+        builder(ModTags.Items.LEGGINGS, ModItems.LEGGINGS);
+        builder(ModTags.Items.PICKAXES, ModItems.HAMMER, ModItems.PAXEL, ModItems.PICKAXE);
+        builder(ModTags.Items.SHEARS, ModItems.SHEARS);
+        builder(ModTags.Items.SHIELDS, ModItems.SHIELD);
+        builder(ModTags.Items.SHOVELS, ModItems.EXCAVATOR, ModItems.MATTOCK, ModItems.PAXEL, ModItems.SHOVEL);
+        builder(ModTags.Items.SICKLES, ModItems.SICKLE);
+        builder(ModTags.Items.SWORDS, ModItems.DAGGER, ModItems.KATANA, ModItems.MACHETE, ModItems.SWORD);
 
         // Minecraft
         copy(BlockTags.LEAVES, ItemTags.LEAVES);
