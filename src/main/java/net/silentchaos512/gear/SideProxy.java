@@ -4,13 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.gen.feature.Feature;
@@ -70,14 +67,11 @@ class SideProxy implements IProxy {
         Registration.register();
 
         modEventBus.addListener(ItemStats::createRegistry);
-        modEventBus.addGenericListener(ContainerType.class, ModContainers::registerAll);
-        modEventBus.addGenericListener(EntityType.class, ModEntities::registerTypes);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootStuff::registerGlobalModifiers);
         modEventBus.addGenericListener(IRecipeSerializer.class, ModRecipes::registerRecipeSerializers);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
         modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
-        modEventBus.addGenericListener(TileEntityType.class, ModTileEntities::registerAll);
 
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);

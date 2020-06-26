@@ -13,6 +13,7 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SSetSlotPacket;
 import net.minecraft.util.IWorldPosCallable;
 import net.silentchaos512.gear.init.ModContainers;
@@ -26,13 +27,13 @@ public class CraftingStationContainer extends RecipeBookContainer<CraftingStatio
     private final PlayerEntity player;
     private Slot outputSlot;
 
-    public CraftingStationContainer(int id, PlayerInventory playerInventory) {
+    public CraftingStationContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
         this(id, playerInventory, new CraftingStationTileEntity());
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public CraftingStationContainer(int id, PlayerInventory playerInventory, CraftingStationTileEntity tileEntityIn) {
-        super(ModContainers.CRAFTING_STATION.type(), id);
+        super(ModContainers.CRAFTING_STATION.get(), id);
         this.player = playerInventory.player;
         this.tileEntity = tileEntityIn;
 

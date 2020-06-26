@@ -26,6 +26,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.silentchaos512.gear.init.ModContainers;
@@ -36,13 +37,13 @@ public class SalvagerContainer extends Container {
     private final IInventory inventory;
     private final IIntArray fields;
 
-    public SalvagerContainer(int id, PlayerInventory playerInventory) {
+    public SalvagerContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
         this(id, playerInventory, new Inventory(SalvagerTileEntity.INVENTORY_SIZE), new IntArray(1));
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public SalvagerContainer(int id, PlayerInventory playerInventory, IInventory inventory, IIntArray fields) {
-        super(ModContainers.SALVAGER.type(), id);
+        super(ModContainers.SALVAGER.get(), id);
         this.inventory = inventory;
         this.fields = fields;
 

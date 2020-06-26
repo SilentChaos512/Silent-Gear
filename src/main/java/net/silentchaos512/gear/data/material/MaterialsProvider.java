@@ -839,7 +839,8 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.GRIP, PartTextureType.LOW_CONTRAST, color);
     }
 
-    private static ITraitCondition materialCountOrRatio(int count, float ratio) {
+    @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
+    protected static ITraitCondition materialCountOrRatio(int count, float ratio) {
         return new OrTraitCondition(new MaterialCountTraitCondition(count), new MaterialRatioTraitCondition(ratio));
     }
 

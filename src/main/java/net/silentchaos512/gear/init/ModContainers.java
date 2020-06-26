@@ -1,56 +1,38 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.gear.SilentGear;
+import net.minecraftforge.fml.network.IContainerFactory;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
-import net.silentchaos512.utils.Lazy;
 
-import java.util.Locale;
+public final class ModContainers {
+    public static final RegistryObject<ContainerType<GraderContainer>> MATERIAL_GRADER = register("material_grader", GraderContainer::new);
+    public static final RegistryObject<ContainerType<CraftingStationContainer>> CRAFTING_STATION = register("crafting_station", CraftingStationContainer::new);
+    public static final RegistryObject<ContainerType<SalvagerContainer>> SALVAGER = register("salvager", SalvagerContainer::new);
 
-public enum ModContainers {
-    MATERIAL_GRADER(GraderContainer::new),
-    CRAFTING_STATION(CraftingStationContainer::new),
-    SALVAGER(SalvagerContainer::new);
+    private ModContainers() {}
 
-    private final Lazy<ContainerType<?>> type;
+    static void register() {}
 
-    ModContainers(ContainerType.IFactory<?> factory) {
-        this.type = Lazy.of(() -> new ContainerType<>(factory));
-    }
-
-    public ContainerType<?> type() {
-        return type.get();
-    }
-
-    public static void registerAll(RegistryEvent.Register<ContainerType<?>> event) {
-        for (ModContainers container : values()) {
-            register(container.name().toLowerCase(Locale.ROOT), container.type());
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
-        ScreenManager.registerFactory((ContainerType<? extends GraderContainer>) MATERIAL_GRADER.type(), GraderScreen::new);
-        ScreenManager.registerFactory((ContainerType<? extends CraftingStationContainer>) CRAFTING_STATION.type(), CraftingStationScreen::new);
-        ScreenManager.registerFactory((ContainerType<? extends SalvagerContainer>) SALVAGER.type(), SalvagerScreen::new);
+        ScreenManager.registerFactory(MATERIAL_GRADER.get(), GraderScreen::new);
+        ScreenManager.registerFactory(CRAFTING_STATION.get(), CraftingStationScreen::new);
+        ScreenManager.registerFactory(SALVAGER.get(), SalvagerScreen::new);
     }
 
-    private static void register(String name, ContainerType<?> type) {
-        ResourceLocation id = SilentGear.getId(name);
-        type.setRegistryName(id);
-        ForgeRegistries.CONTAINERS.register(type);
+    private static <T extends Container> RegistryObject<ContainerType<T>> register(String name, IContainerFactory<T> factory) {
+        return Registration.CONTAINERS.register(name, () -> IForgeContainerType.create(factory));
     }
 }

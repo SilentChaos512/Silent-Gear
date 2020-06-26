@@ -1,12 +1,17 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 
 import java.util.Collection;
@@ -14,18 +19,27 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class Registration {
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, SilentGear.MOD_ID);
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, SilentGear.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = create(ForgeRegistries.BLOCKS);
+    public static final DeferredRegister<ContainerType<?>> CONTAINERS = create(ForgeRegistries.CONTAINERS);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = create(ForgeRegistries.ENTITIES);
+    public static final DeferredRegister<Item> ITEMS = create(ForgeRegistries.ITEMS);
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = create(ForgeRegistries.TILE_ENTITIES);
 
     private Registration() {throw new IllegalAccessError("Utility class");}
 
     public static void register() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         BLOCKS.register(modEventBus);
+        CONTAINERS.register(modEventBus);
+        ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
+        TILE_ENTITIES.register(modEventBus);
 
         ModBlocks.register();
+        ModContainers.register();
+        ModEntities.register();
         ModItems.register();
+        ModTileEntities.register();
     }
 
     public static Collection<Item> getItems(Predicate<Item> predicate) {
@@ -33,5 +47,9 @@ public final class Registration {
                 .map(RegistryObject::get)
                 .filter(predicate)
                 .collect(Collectors.toList());
+    }
+
+    private static <T extends IForgeRegistryEntry<T>> DeferredRegister<T> create(IForgeRegistry<T> registry) {
+        return new DeferredRegister<>(registry, SilentGear.MOD_ID);
     }
 }

@@ -14,7 +14,7 @@
     ],
     "crafting_items": {
         "normal": {
-            "tag": "silentgear:plain_bowstring"
+            "item": "silentgear:plain_bowstring"
         }
     },
     "name": {

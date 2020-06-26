@@ -76,7 +76,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
     };
 
     public SalvagerTileEntity() {
-        super(ModTileEntities.SALVAGER.type(), INVENTORY_SIZE);
+        super(ModTileEntities.SALVAGER.get(), INVENTORY_SIZE);
     }
 
     @Override

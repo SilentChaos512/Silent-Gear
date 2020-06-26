@@ -57,7 +57,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     };
 
     public GraderTileEntity() {
-        super(ModTileEntities.MATERIAL_GRADER.type(), INVENTORY_SIZE);
+        super(ModTileEntities.MATERIAL_GRADER.get(), INVENTORY_SIZE);
     }
 
     @Override

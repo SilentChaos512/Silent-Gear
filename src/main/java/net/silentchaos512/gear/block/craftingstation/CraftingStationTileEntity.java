@@ -30,7 +30,7 @@ public class CraftingStationTileEntity extends LockableSidedInventoryTileEntity 
     public static final int SIDE_INVENTORY_START = CRAFTING_GRID_SIZE;
 
     public CraftingStationTileEntity() {
-        super(ModTileEntities.CRAFTING_STATION.type(), CRAFTING_GRID_SIZE + SIDE_INVENTORY_SIZE);
+        super(ModTileEntities.CRAFTING_STATION.get(), CRAFTING_GRID_SIZE + SIDE_INVENTORY_SIZE);
     }
 
     public NonNullList<Pair<ItemStack, IInventory>> getAdjacentInventories() {

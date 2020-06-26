@@ -8,6 +8,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.silentchaos512.gear.init.ModContainers;
@@ -18,13 +19,13 @@ public class GraderContainer extends Container {
     private final IInventory inventory;
     final IIntArray fields;
 
-    public GraderContainer(int id, PlayerInventory playerInventory) {
+    public GraderContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
         this(id, playerInventory, new Inventory(GraderTileEntity.INVENTORY_SIZE), new IntArray(1));
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public GraderContainer(int id, PlayerInventory playerInventory, IInventory inventory, IIntArray fields) {
-        super(ModContainers.MATERIAL_GRADER.type(), id);
+        super(ModContainers.MATERIAL_GRADER.get(), id);
         this.inventory = inventory;
         this.fields = fields;
 
