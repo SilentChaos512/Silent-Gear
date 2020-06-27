@@ -49,6 +49,7 @@ public final class ModTags {
         public static final Tag<Item> PAPER = new ItemTags.Wrapper(forgeId("paper"));
         // TODO: Change to silentgear:blueprint_paper?
         public static final Tag<Item> PAPER_BLUEPRINT = new ItemTags.Wrapper(forgeId("paper/blueprint"));
+        public static final Tag<Item> REPAIR_KITS = new ItemTags.Wrapper(modId("repair_kits"));
         public static final Tag<Item> TEMPLATE_BOARDS = new ItemTags.Wrapper(modId("template_boards"));
 
         // TODO: Remove iron rods, maybe netherwood?

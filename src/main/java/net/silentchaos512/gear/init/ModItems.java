@@ -94,6 +94,14 @@ public final class ModItems {
     public static final ItemRegistryObject<CompoundPartItem> GRIP = register("grip", () ->
             new CompoundPartItem(SilentGear.getId("grip"), PartType.GRIP, baseProps()));
 
+    // Repair Kits
+    public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () ->
+            new RepairKitItem(1000, baseProps()));
+    public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () ->
+            new RepairKitItem(10_000, baseProps()));
+    public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () ->
+            new RepairKitItem(100_000, baseProps()));
+
     static {
         CraftingItems.register(Registration.ITEMS);
     }

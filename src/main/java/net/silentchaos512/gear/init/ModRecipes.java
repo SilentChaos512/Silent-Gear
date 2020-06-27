@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
@@ -10,11 +11,14 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.crafting.ingredient.CustomTippedUpgradeIngredient;
 import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.parts.PartData;
 
 public final class ModRecipes {
 
@@ -26,6 +30,7 @@ public final class ModRecipes {
         register(ShapedGearRecipe.NAME, ShapedGearRecipe.SERIALIZER);
         register(ShapelessGearRecipe.NAME, ShapelessGearRecipe.SERIALIZER);
         register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
+        register(FillRepairKitRecipe.NAME, FillRepairKitRecipe.SERIALIZER);
         register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
         register(ReplaceToolHeadRecipe.NAME, ReplaceToolHeadRecipe.SERIALIZER);
         register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
@@ -59,5 +64,20 @@ public final class ModRecipes {
 
         SilentGear.LOGGER.info("DEV: Unlocking {} recipes in recipe book", recipes.length);
         player.unlockRecipes(recipes);
+    }
+
+    public static boolean isRepairMaterial(ItemStack stack) {
+        MaterialInstance mat = MaterialInstance.from(stack);
+        if (mat != null) {
+            return mat.getRepairValue() > 0;
+        }
+
+        // Old style parts
+        PartData part = PartData.from(stack);
+        if (part != null) {
+            return part.getType() == PartType.MAIN;
+        }
+
+        return false;
     }
 }

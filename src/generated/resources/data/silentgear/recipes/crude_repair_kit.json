@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " / ",
+    "#o#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "silentgear:template_boards"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    },
+    "o": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "silentgear:crude_repair_kit"
+  }
+}

@@ -5,8 +5,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 More work on moving to data generators! Keep an eye out for missing/incorrect recipes.
+### Added
+- Repair kits. These are now required for quick repairs, but they can also (optionally) store the repair materials. [#147]
+    - Note: You cannot get items back after storing them in the repair kit!
+    - Craft a repair kit with materials to fill it
+    - One repair kit can store multiple tiers of materials and will use the lowest first when repairing
+    - The capacity of the repair kit is shared by all tiers
+    - Quick repair recipe is now: gear + repair kit + optional extra materials
 ### Removed
 - Tags for specific types of strings and bowstring. Flax string and sinew fibers are still tagged as `forge:string`.
+### Changed
+- Gear damaing recipes (`silentgear:damage_item`) can now specify a minimum gear tier (`minGearTier`)
 ### Fixed
 - Color of compound part items with no NBT
 

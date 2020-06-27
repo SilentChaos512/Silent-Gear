@@ -1,9 +1,19 @@
 package net.silentchaos512.gear.parts;
 
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.config.Config;
 
 public class RepairContext {
-    public enum Type {QUICK, ANVIL}
+    public enum Type {
+        QUICK,
+        ANVIL;
+
+        public float getEfficiency() {
+            return this == QUICK
+                    ? Config.GENERAL.repairFactorQuick.get().floatValue()
+                    : Config.GENERAL.repairFactorAnvil.get().floatValue();
+        }
+    }
 
     private final Type type;
     private final ItemStack gear;

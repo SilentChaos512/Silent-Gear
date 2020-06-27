@@ -9,6 +9,7 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 
 import javax.annotation.Nonnull;
@@ -89,6 +90,10 @@ public class MaterialInstance implements IMaterialInstance {
         return item;
     }
 
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
+        return getStatModifiers(stat, partType, ItemStack.EMPTY);
+    }
+
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
         Collection<StatInstance> mods = material.getStatModifiers(stat, partType, gear);
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
@@ -97,6 +102,23 @@ public class MaterialInstance implements IMaterialInstance {
             return mods.stream().map(m -> new StatInstance(m.getValue() * bonus, m.getOp())).collect(Collectors.toList());
         }
         return mods;
+    }
+
+    public float getStat(ItemStat stat, PartType partType) {
+        return getStat(stat, partType, ItemStack.EMPTY);
+    }
+
+    public float getStat(ItemStat stat, PartType partType, ItemStack gear) {
+        return stat.compute(stat.getDefaultValue(), getStatModifiers(stat, partType, gear));
+    }
+
+    public int getRepairValue() {
+        if (material.allowedInPart(PartType.MAIN)) {
+            float durability = getStat(ItemStats.DURABILITY, PartType.MAIN);
+            float repairEfficiency = getStat(ItemStats.REPAIR_EFFICIENCY, PartType.MAIN);
+            return Math.round(durability * repairEfficiency) + 1;
+        }
+        return 0;
     }
 
     @Nullable

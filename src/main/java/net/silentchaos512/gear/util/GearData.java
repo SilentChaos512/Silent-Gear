@@ -42,28 +42,20 @@ public final class GearData {
     private static final String NBT_ROOT = "SGear_Data";
     private static final String NBT_ROOT_CONSTRUCTION = "Construction";
     private static final String NBT_ROOT_PROPERTIES = "Properties";
-    @Deprecated
-    private static final String NBT_ROOT_MODEL_KEYS = "ModelKeys";
     private static final String NBT_ROOT_RENDERING = "Rendering";
     private static final String NBT_ROOT_STATISTICS = "Statistics";
 
-    @Deprecated
-    private static final String NBT_ARMOR_COLOR = "ArmorColor";
-    @Deprecated
-    private static final String NBT_BLENDED_HEAD_COLOR = "BlendedHeadColor";
     private static final String NBT_COLORS = "Colors";
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
-    @Deprecated
-    private static final String NBT_RANDOM_GRADING_DONE = "RandomGradingDone";
     private static final String NBT_SYNERGY = "synergy";
     private static final String NBT_TIER = "Tier";
     private static final String NBT_UUID = "SGear_UUID";
 
     private static final String NBT_BROKEN_COUNT = "BrokenCount";
     private static final String NBT_REPAIR_COUNT = "RepairCount";
-    public static final String NBT_STATS = "Stats";
+    private static final String NBT_STATS = "Stats";
 
     private GearData() {
         throw new IllegalAccessError("Utility class");
@@ -253,8 +245,8 @@ public final class GearData {
         List<PartData> mains = parts.getMains();
 
         // Remove deprecated keys
-        nbt.remove(NBT_ARMOR_COLOR);
-        nbt.remove(NBT_BLENDED_HEAD_COLOR);
+        nbt.remove("ArmorColor");
+        nbt.remove("BlendedHeadColor");
 
         // Cache part colors
         CompoundNBT colors = nbt.getCompound(NBT_COLORS);
@@ -279,18 +271,10 @@ public final class GearData {
 
         nbt.put(NBT_COLORS, colors);
 
-        createAndSaveModelKeys(stack, ((ICoreItem) stack.getItem()), parts);
-    }
+        stack.getItem();
 
-    @Deprecated
-    private static void createAndSaveModelKeys(ItemStack stack, ICoreItem item, PartDataList parts) {
         // Remove old model keys
-        stack.getOrCreateChildTag(NBT_ROOT).remove(NBT_ROOT_MODEL_KEYS);
-    }
-
-    @Deprecated
-    public static String getCachedModelKey(ItemStack stack, int animationFrame) {
-        return "DEPRECATED";
+        stack.getOrCreateChildTag(NBT_ROOT).remove("ModelKeys");
     }
 
     public static StatModifierMap getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
@@ -352,7 +336,7 @@ public final class GearData {
         return synergy;
     }
 
-    public static float getStat(ItemStack stack, ItemStat stat) {
+    public static float getStat(ItemStack stack, ItemStat stat) { // TODO: Use IItemStat param?
         CompoundNBT tags = getData(stack, NBT_ROOT_PROPERTIES).getCompound(NBT_STATS);
         String key = Objects.requireNonNull(stat.getRegistryName()).toString();
         return tags.contains(key) ? tags.getFloat(key) : stat.getDefaultValue();
@@ -827,12 +811,12 @@ public final class GearData {
 
     @Deprecated
     public static boolean isRandomGradingDone(ItemStack stack) {
-        return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean(NBT_RANDOM_GRADING_DONE);
+        return getData(stack, NBT_ROOT_CONSTRUCTION).getBoolean("RandomGradingDone");
     }
 
     @Deprecated
     static void setRandomGradingDone(ItemStack stack, boolean value) {
-        getData(stack, NBT_ROOT_CONSTRUCTION).putBoolean(NBT_RANDOM_GRADING_DONE, value);
+        getData(stack, NBT_ROOT_CONSTRUCTION).putBoolean("RandomGradingDone", value);
     }
 
     public static int getBrokenCount(ItemStack stack) {

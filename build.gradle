@@ -10,7 +10,6 @@ buildscript {
 }
 
 plugins {
-    id 'io.franzbecker.gradle-lombok' version '2.0'
     id 'maven'
     id 'maven-publish'
     id "com.jfrog.bintray" version "1.8.5"
@@ -27,11 +26,6 @@ repositories {
     }
     mavenLocal()
     jcenter()
-}
-
-lombok {
-    version = '1.18.4'
-    sha256 = ""
 }
 
 tasks.withType(JavaCompile) {

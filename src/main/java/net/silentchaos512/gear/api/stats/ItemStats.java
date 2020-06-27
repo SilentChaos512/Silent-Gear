@@ -14,6 +14,9 @@ import java.util.*;
 /**
  * Stats used by all equipment types.
  *
+ * TODO: Rename to GearStats?
+ * TODO: Use DeferredRegister
+ *
  * @author SilentChaos512
  * @since Experimental
  */
@@ -30,7 +33,7 @@ public final class ItemStats {
     // Generic
     public static final ItemStat DURABILITY = new ItemStat(1f, 1f, Integer.MAX_VALUE, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
     public static final ItemStat ARMOR_DURABILITY = new ItemStat(1f, 1f, Integer.MAX_VALUE / 16, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().displayAsMultiplier().affectedByGrades(true).synergyApplies());
-    public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(1f, 0f, 1000f, TextFormatting.BLUE, new ItemStat.Properties().affectedByGrades(false));
+    public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(1f, 0f, 1000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsMultiplier().affectedByGrades(false));
     public static final ItemStat ENCHANTABILITY = new ItemStat(0f, 0f, 10000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
     public static final ItemStat RARITY = new ItemStat(0f, 0f, 10000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).hidden());
 

@@ -126,6 +126,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 ModTags.Items.GRADER_CATALYSTS_TIER_4,
                 ModTags.Items.GRADER_CATALYSTS_TIER_5
         );
+        builder(ModTags.Items.REPAIR_KITS, ModItems.CRUDE_REPAIR_KIT);
         // Blueprints
         Multimap<ResourceLocation, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();
         ForgeRegistries.ITEMS.getValues().stream()

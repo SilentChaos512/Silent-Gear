@@ -24,14 +24,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
@@ -48,60 +51,100 @@ public class QuickRepairRecipe extends SpecialRecipe {
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
-        // Need 1 gear and 1+ parts
-        StackList list = StackList.from(inv);
+        // Need 1 gear, 1 repair kit, and optional materials
+        boolean foundGear = false;
+        boolean foundKit = false;
 
-        final ItemStack gear = list.uniqueOfType(ICoreItem.class);
-        if (gear.isEmpty()) return false;
-
-        int partsCount = 0;
-        for (ItemStack stack : list) {
-            if (!(stack.getItem() instanceof ICoreItem)) {
-                PartData part = PartData.from(stack);
-                if (part == null || part.getRepairAmount(gear, RepairContext.Type.QUICK) <= 0) {
+        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                //noinspection ChainOfInstanceofChecks
+                if (stack.getItem() instanceof ICoreItem) {
+                    if (foundGear) {
+                        return false;
+                    }
+                    foundGear = true;
+                } else if (stack.getItem() instanceof RepairKitItem) {
+                    if (foundKit) {
+                        return false;
+                    }
+                    foundKit = true;
+                } else if (!ModRecipes.isRepairMaterial(stack)) {
                     return false;
                 }
-                ++partsCount;
             }
         }
-        return partsCount > 0;
+
+        return foundGear && foundKit;
     }
 
     @Override
     public ItemStack getCraftingResult(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
-        Collection<ItemStack> parts = list.allMatches(s -> PartManager.from(s) != null);
+        ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
+        Collection<ItemStack> mats = list.allMatches(ModRecipes::isRepairMaterial);
 
-        if (gear.isEmpty() || parts.isEmpty()) return ItemStack.EMPTY;
+        // Repair with materials first
+        repairWithLooseMaterials(gear, mats);
 
+        // Then use repair kit, if necessary
+        if (gear.getDamage() > 0) {
+            int value = RepairKitItem.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
+            gear.attemptDamageItem(-Math.round(value), SilentGear.random, null);
+        }
+
+        GearData.incrementRepairCount(gear, 1);
+        GearData.recalculateStats(gear, ForgeHooks.getCraftingPlayer());
+        return gear;
+    }
+
+    private static void repairWithLooseMaterials(ItemStack gear, Collection<ItemStack> mats) {
+        float repairValue = getRepairValueFromMaterials(gear, mats);
+        gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
+    }
+
+    private static float getRepairValueFromMaterials(ItemStack gear, Collection<ItemStack> mats) {
         float repairValue = 0f;
-        int materialCount = 0;
-        for (ItemStack stack : parts) {
+        for (ItemStack stack : mats) {
             PartData data = PartData.from(stack);
             if (data != null) {
                 repairValue += data.getRepairAmount(gear, RepairContext.Type.QUICK);
-                ++materialCount;
             }
         }
-
-        // Makes odd repair values line up better
-        repairValue += 1;
 
         // Repair efficiency instance tool class
         if (gear.getItem() instanceof ICoreItem) {
             float repairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-            // FIXME: temp fix for missing equipment modifiers
             if (repairEfficiency > 0) {
                 repairValue *= repairEfficiency;
             }
         }
+        return repairValue;
+    }
 
-        gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
-//            GearStatistics.incrementStat(gear, "silentgear.repair_count", materialCount);
-        GearData.incrementRepairCount(gear, materialCount);
-        GearData.recalculateStats(gear, null);
-        return gear;
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        StackList stackList = StackList.from(inv);
+        ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
+
+        for (int i = 0; i < list.size(); ++i) {
+            ItemStack stack = inv.getStackInSlot(i);
+
+            if (stack.getItem() instanceof RepairKitItem) {
+                repairWithLooseMaterials(gear, stackList.allMatches(ModRecipes::isRepairMaterial));
+                RepairKitItem item = (RepairKitItem) stack.getItem();
+                int toRepair = item.getDamageToRepair(gear, stack, RepairContext.Type.QUICK);
+                ItemStack copy = stack.copy();
+                item.removeRepairMaterial(gear, copy, RepairContext.Type.QUICK, toRepair);
+                list.set(i, copy);
+            } else if (stack.hasContainerItem()) {
+                list.set(i, stack.getContainerItem());
+            }
+        }
+
+        return list;
     }
 
     @Override

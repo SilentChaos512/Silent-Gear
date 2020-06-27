@@ -47,6 +47,36 @@ public class ModRecipesProvider extends RecipeProvider {
         // Blueprints
         // TODO
 
+        // Repair Kits
+        ShapedRecipeBuilder.shapedRecipe(ModItems.CRUDE_REPAIR_KIT)
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .key('o', Tags.Items.INGOTS_IRON)
+                .patternLine(" / ")
+                .patternLine("#o#")
+                .patternLine("###")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.STURDY_REPAIR_KIT)
+                .key('#', Tags.Items.INGOTS_IRON)
+                .key('/', ModTags.Items.RODS_IRON)
+                .key('o', Tags.Items.GEMS_DIAMOND)
+                .patternLine(" / ")
+                .patternLine("#o#")
+                .patternLine("###")
+                .addCriterion("has_item", hasItem(Tags.Items.INGOTS_IRON))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.CRIMSON_REPAIR_KIT)
+                .key('#', ModTags.Items.INGOTS_CRIMSON_STEEL)
+                .key('/', Tags.Items.RODS_BLAZE)
+                .key('o', ModTags.Items.INGOTS_BLAZE_GOLD)
+                .patternLine(" / ")
+                .patternLine("#o#")
+                .patternLine("###")
+                .addCriterion("has_item", hasItem(ModTags.Items.INGOTS_CRIMSON_STEEL))
+                .build(consumer);
+
+        // TODO: Maybe should organize these better...
         // A
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ADVANCED_UPGRADE_BASE)
                 .key('/', ModTags.Items.NUGGETS_DIAMOND)
