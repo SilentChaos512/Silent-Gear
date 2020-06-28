@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Missing slingshot blueprint/template recipes
+
+## [1.8.1] - 2020-06-27
 More work on moving to data generators! Keep an eye out for missing/incorrect recipes.
 ### Added
 - Repair kits. These are now required for quick repairs, but they can also (optionally) store the repair materials. [#147]

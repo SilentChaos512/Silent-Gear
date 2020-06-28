@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.crafting.ingredient;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
@@ -67,6 +68,14 @@ public final class PartMaterialIngredient extends Ingredient {
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
         return Serializer.INSTANCE;
+    }
+
+    @Override
+    public JsonElement serialize() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", Serializer.NAME.toString());
+        json.addProperty("part_type", this.type.getName().toString());
+        return json;
     }
 
     public static final class Serializer implements IIngredientSerializer<PartMaterialIngredient> {

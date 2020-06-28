@@ -12,6 +12,9 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
@@ -44,8 +47,91 @@ public class ModRecipesProvider extends RecipeProvider {
                 .block(ModBlocks.CRIMSON_STEEL_BLOCK, ModTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL)
                 .nugget(CraftingItems.CRIMSON_STEEL_NUGGET, ModTags.Items.NUGGETS_CRIMSON_STEEL));
 
-        // Blueprints
-        // TODO
+        //region Blueprints and Templates
+        toolBlueprint(consumer, "sword", ModItems.SWORD_BLUEPRINT, ModItems.SWORD_TEMPLATE, "#", "#", "/");
+        toolBlueprint(consumer, "dagger", ModItems.DAGGER_BLUEPRINT, ModItems.DAGGER_TEMPLATE, "#", "/");
+        toolBlueprint(consumer, "katana", ModItems.KATANA_BLUEPRINT, ModItems.KATANA_TEMPLATE, "##", "# ", "/ ");
+        toolBlueprint(consumer, "machete", ModItems.MACHETE_BLUEPRINT, ModItems.MACHETE_TEMPLATE, "  #", " ##", "/  ");
+        toolBlueprint(consumer, "spear", ModItems.SPEAR_BLUEPRINT, ModItems.SPEAR_TEMPLATE, "#  ", " / ", "  /");
+        toolBlueprint(consumer, "pickaxe", ModItems.PICKAXE_BLUEPRINT, ModItems.PICKAXE_TEMPLATE, "###", " / ", " / ");
+        toolBlueprint(consumer, "shovel", ModItems.SHOVEL_BLUEPRINT, ModItems.SHOVEL_TEMPLATE, "#", "/", "/");
+        toolBlueprint(consumer, "axe", ModItems.AXE_BLUEPRINT, ModItems.AXE_TEMPLATE, "##", "#/", " /");
+        toolBlueprint(consumer, "paxel", ModItems.PAXEL_BLUEPRINT, ModItems.PAXEL_TEMPLATE, "###", "#/#", " /#");
+        toolBlueprint(consumer, "hammer", ModItems.HAMMER_BLUEPRINT, ModItems.HAMMER_TEMPLATE, "###", "###", " / ");
+        toolBlueprint(consumer, "excavator", ModItems.EXCAVATOR_BLUEPRINT, ModItems.EXCAVATOR_TEMPLATE, "# #", "###", " / ");
+        toolBlueprint(consumer, "lumber_axe", ModItems.LUMBER_AXE_BLUEPRINT, ModItems.LUMBER_AXE_TEMPLATE, "###", "##/", "  /");
+        toolBlueprint(consumer, "mattock", ModItems.MATTOCK_BLUEPRINT, ModItems.MATTOCK_TEMPLATE, "## ", "#/#", " / ");
+        toolBlueprint(consumer, "sickle", ModItems.SICKLE_BLUEPRINT, ModItems.SICKLE_TEMPLATE, " #", "##", "/ ");
+        toolBlueprint(consumer, "shears", ModItems.SHEARS_BLUEPRINT, ModItems.SHEARS_TEMPLATE, " #", "#/");
+        toolBlueprint(consumer, "bow", ModItems.BOW_BLUEPRINT, ModItems.BOW_TEMPLATE, " #/", "# /", " #/");
+        toolBlueprint(consumer, "crossbow", ModItems.CROSSBOW_BLUEPRINT, ModItems.CROSSBOW_TEMPLATE, "/#/", "###", " / ");
+        toolBlueprint(consumer, "slingshot", ModItems.SLINGSHOT_BLUEPRINT, ModItems.SLINGSHOT_TEMPLATE, "# #", " / ", " / ");
+        toolBlueprint(consumer, "shield", ModItems.SHIELD_BLUEPRINT, ModItems.SHIELD_TEMPLATE, "# #", "///", " # ");
+        armorBlueprint(consumer, "helmet", ModItems.HELMET_BLUEPRINT, ModItems.HELMET_TEMPLATE, "###", "# #");
+        armorBlueprint(consumer, "chestplate", ModItems.CHESTPLATE_BLUEPRINT, ModItems.CHESTPLATE_TEMPLATE, "# #", "###", "###");
+        armorBlueprint(consumer, "leggings", ModItems.LEGGINGS_BLUEPRINT, ModItems.LEGGINGS_TEMPLATE, "###", "# #", "# #");
+        armorBlueprint(consumer, "boots", ModItems.BOOTS_BLUEPRINT, ModItems.BOOTS_TEMPLATE, "# #", "# #");
+        ShapedRecipeBuilder.shapedRecipe(ModItems.BOWSTRING_BLUEPRINT)
+                .setGroup("silentgear:blueprints/bowstring")
+                .key('#', ModTags.Items.PAPER_BLUEPRINT)
+                .key('/', PartMaterialIngredient.of(PartType.BOWSTRING))
+                .patternLine("#/")
+                .patternLine("#/")
+                .patternLine("#/")
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.BOWSTRING_TEMPLATE)
+                .setGroup("silentgear:blueprints/bowstring")
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', PartMaterialIngredient.of(PartType.BOWSTRING))
+                .patternLine("#/")
+                .patternLine("#/")
+                .patternLine("#/")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.GRIP_BLUEPRINT)
+                .setGroup("silentgear:blueprints/grip")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.PAPER_BLUEPRINT), 2)
+                .addIngredient(PartMaterialIngredient.of(PartType.GRIP))
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.GRIP_TEMPLATE)
+                .setGroup("silentgear:blueprints/grip")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.TEMPLATE_BOARDS), 2)
+                .addIngredient(PartMaterialIngredient.of(PartType.GRIP))
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.ROD_BLUEPRINT)
+                .setGroup("silentgear:blueprints/rod")
+                .key('#', ModTags.Items.PAPER_BLUEPRINT)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .patternLine("#/")
+                .patternLine("#/")
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.ROD_TEMPLATE)
+                .setGroup("silentgear:blueprints/rod")
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .patternLine("#/")
+                .patternLine("#/")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.TIP_BLUEPRINT)
+                .setGroup("silentgear:blueprints/tip")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.PAPER_BLUEPRINT), 2)
+                .addIngredient(ModTags.Items.PAPER)
+                .addIngredient(Tags.Items.STONE)
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.TIP_TEMPLATE)
+                .setGroup("silentgear:blueprints/tip")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.TEMPLATE_BOARDS), 2)
+                .addIngredient(ModTags.Items.PAPER)
+                .addIngredient(Tags.Items.STONE)
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+        //endregion
 
         // Repair Kits
         ShapedRecipeBuilder.shapedRecipe(ModItems.CRUDE_REPAIR_KIT)
@@ -402,6 +488,51 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.STONE)
                 .addCriterion("has_item", hasItem(ItemTags.PLANKS))
                 .build(consumer);
+    }
+
+    private void toolBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, String... pattern) {
+        ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shapedRecipe(blueprint)
+                .setGroup("silentgear:blueprints/" + group)
+                .key('#', ModTags.Items.PAPER_BLUEPRINT)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT));
+        for (String line : pattern) {
+            builderBlueprint.patternLine(line);
+        }
+        builderBlueprint.build(consumer);
+
+        ShapedRecipeBuilder builderTemplate = ShapedRecipeBuilder.shapedRecipe(template)
+                .setGroup("silentgear:blueprints/" + group)
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS));
+        for (String line : pattern) {
+            builderTemplate.patternLine(line);
+        }
+        builderTemplate.build(consumer);
+    }
+
+    private void armorBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, String... pattern) {
+        ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shapedRecipe(blueprint)
+                .setGroup("silentgear:blueprints/" + group)
+                .key('#', ModTags.Items.PAPER_BLUEPRINT)
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT));
+        for (String line : pattern) {
+            builderBlueprint.patternLine(line);
+        }
+        builderBlueprint.build(consumer);
+
+        ShapedRecipeBuilder builderTemplate = ShapedRecipeBuilder.shapedRecipe(template)
+                .setGroup("silentgear:blueprints/" + group)
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS));
+        for (String line : pattern) {
+            builderTemplate.patternLine(line);
+        }
+        builderTemplate.build(consumer);
+    }
+
+    private void gear(Consumer<IFinishedRecipe> consumer, GearType gearType, int mainCount, PartType... otherParts) {
     }
 
     private void metals(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
