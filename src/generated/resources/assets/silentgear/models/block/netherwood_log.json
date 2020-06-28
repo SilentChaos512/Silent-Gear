@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "side": "silentgear:block/netherwood_log",
+    "end": "silentgear:block/netherwood_log_top"
+  }
+}

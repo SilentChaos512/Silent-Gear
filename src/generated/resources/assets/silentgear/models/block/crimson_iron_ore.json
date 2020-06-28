@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "silentgear:block/crimson_iron_ore"
+  }
+}

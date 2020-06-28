@@ -22,6 +22,10 @@ public abstract class AbstractBlueprintItem extends Item {
 
     protected abstract ITextComponent getCraftedName(ItemStack stack);
 
+    public boolean isSingleUse() {
+        return this.singleUse;
+    }
+
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         return itemStack.copy();

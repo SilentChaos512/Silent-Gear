@@ -22,6 +22,10 @@ public class PartBlueprintItem extends AbstractBlueprintItem {
         this.itemTag = new ResourceLocation(partType.getName().getNamespace(), "blueprints/" + partType.getName().getPath());
     }
 
+    public PartType getPartType() {
+        return partType;
+    }
+
     @Override
     public ResourceLocation getItemTag() {
         return itemTag;

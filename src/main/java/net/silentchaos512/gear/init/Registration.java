@@ -42,6 +42,24 @@ public final class Registration {
         ModTileEntities.register();
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T extends Block> Collection<T> getBlocks(Class<T> clazz) {
+        return BLOCKS.getEntries().stream()
+                .map(RegistryObject::get)
+                .filter(clazz::isInstance)
+                .map(block -> (T) block)
+                .collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Item> Collection<T> getItems(Class<T> clazz) {
+        return ITEMS.getEntries().stream()
+                .map(RegistryObject::get)
+                .filter(clazz::isInstance)
+                .map(item -> (T) item)
+                .collect(Collectors.toList());
+    }
+
     public static Collection<Item> getItems(Predicate<Item> predicate) {
         return ITEMS.getEntries().stream()
                 .map(RegistryObject::get)

@@ -23,7 +23,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -36,7 +35,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-public enum CraftingItems implements IItemProvider, IStringSerializable {
+public enum CraftingItems implements IItemProvider {
     BLUEPRINT_PAPER,
     TEMPLATE_BOARD,
     UPGRADE_BASE,
@@ -93,7 +92,6 @@ public enum CraftingItems implements IItemProvider, IStringSerializable {
         return this.item.get();
     }
 
-    @Override
     public String getName() {
         return name().toLowerCase(Locale.ROOT);
     }

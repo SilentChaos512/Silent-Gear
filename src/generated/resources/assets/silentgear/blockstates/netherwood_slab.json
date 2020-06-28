@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "silentgear:block/netherwood_slab_top"
+    },
+    "type=bottom": {
+      "model": "silentgear:block/netherwood_slab"
+    },
+    "type=double": {
+      "model": "silentgear:block/netherwood_planks"
+    }
+  }
+}

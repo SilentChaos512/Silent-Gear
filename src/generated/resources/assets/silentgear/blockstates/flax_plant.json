@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "silentgear:block/flax_plant"
+    },
+    "age=1": {
+      "model": "silentgear:block/flax_plant"
+    },
+    "age=2": {
+      "model": "silentgear:block/flax_plant"
+    },
+    "age=3": {
+      "model": "silentgear:block/flax_plant"
+    },
+    "age=4": {
+      "model": "silentgear:block/flax_plant"
+    },
+    "age=5": {
+      "model": "silentgear:block/flax_plant"
+    },
+    "age=6": {
+      "model": "silentgear:block/flax_plant"
+    },
+    "age=7": {
+      "model": "silentgear:block/flax_plant"
+    }
+  }
+}

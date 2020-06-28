@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/template",
-    "layer1": "silentgear:item/blueprint_rod"
-  }
-}

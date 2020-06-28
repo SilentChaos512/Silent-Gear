@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "silentgear:block/wall_stone_torch",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "silentgear:block/wall_stone_torch",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "silentgear:block/wall_stone_torch",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "silentgear:block/wall_stone_torch",
+      "y": 360
+    }
+  }
+}

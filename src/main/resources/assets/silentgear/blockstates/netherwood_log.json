@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "axis=y": { "model": "silentgear:block/netherwood_log" },
-    "axis=z": { "model": "silentgear:block/netherwood_log", "x": 90 },
-    "axis=x": { "model": "silentgear:block/netherwood_log", "x": 90, "y": 90 }
-  }
-}

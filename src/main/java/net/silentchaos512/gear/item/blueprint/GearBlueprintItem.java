@@ -24,6 +24,10 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         this.gearType = gearType;
     }
 
+    public GearType getGearType() {
+        return gearType;
+    }
+
     @Override
     public ResourceLocation getItemTag() {
         if (itemTag == null) {
