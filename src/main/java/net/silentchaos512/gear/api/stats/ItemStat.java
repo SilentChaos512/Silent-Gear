@@ -131,11 +131,6 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
             if (mod.getOp() == StatInstance.Operation.MAX)
                 f0 = Math.max(f0, mod.getValue());
 
-        // Additive
-        for (StatInstance mod : modifiers)
-            if (mod.getOp() == StatInstance.Operation.ADD)
-                f0 += mod.getValue();
-
         // Multiplicative
         float f1 = f0;
         for (StatInstance mod : modifiers)
@@ -146,6 +141,11 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         for (StatInstance mod : modifiers)
             if (mod.getOp() == StatInstance.Operation.MUL2)
                 f1 *= 1.0f + mod.getValue();
+
+        // Additive
+        for (StatInstance mod : modifiers)
+            if (mod.getOp() == StatInstance.Operation.ADD)
+                f1 += mod.getValue();
 
         return clampValue ? clampValue(f1) : f1;
     }

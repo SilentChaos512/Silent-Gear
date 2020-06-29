@@ -104,11 +104,4 @@ public final class ModTags {
     private static ResourceLocation modId(String path) {
         return new ResourceLocation(SilentGear.MOD_ID, path);
     }
-
-    public static void init() {
-        // Mostly here so TagGenerator calls are done at the right time.
-        // TagGenerator should generate JSON files in dev only.
-
-        // REMOVED: no longer needed
-    }
 }
