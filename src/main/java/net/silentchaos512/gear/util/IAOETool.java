@@ -215,8 +215,8 @@ public interface IAOETool {
             boolean isOre1 = ORE_BLOCKS.contains(block1);
             boolean isOre2 = ORE_BLOCKS.contains(block2);
             MatchMode mode = isOre1 && isOre2
-                    ? Config.GENERAL.matchModeOres.get()
-                    : Config.GENERAL.matchModeStandard.get();
+                    ? Config.Server.matchModeOres.get()
+                    : Config.Server.matchModeStandard.get();
 
             if (mode == MatchMode.LOOSE || block1 == block2)
                 return true;

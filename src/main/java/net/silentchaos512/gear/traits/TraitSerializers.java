@@ -116,7 +116,7 @@ public final class TraitSerializers {
     }
 
     private static void log(Supplier<?> msg) {
-        if (Config.GENERAL.extraPartAndTraitLogging.get()) {
+        if (Config.Server.extraPartAndTraitLogging.get()) {
             SilentGear.LOGGER.info(TraitManager.MARKER, msg.get());
         }
     }

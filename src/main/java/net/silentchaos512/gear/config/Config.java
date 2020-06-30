@@ -4,239 +4,209 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
-import net.silentchaos512.utils.config.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Config {
-    private static final ConfigSpecWrapper WRAPPER_CLIENT = ConfigSpecWrapper.create(
-            FMLPaths.CONFIGDIR.get().resolve("silentgear-client.toml"));
-    private static final ConfigSpecWrapper WRAPPER = ConfigSpecWrapper.create(
-            FMLPaths.CONFIGDIR.get().resolve("silentgear-common.toml"));
-
-    public static final Client CLIENT = new Client(WRAPPER_CLIENT);
-    public static final General GENERAL = new General(WRAPPER);
-
-    public static class General {
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public final class Config {
+    public static final class Server {
+        static final ForgeConfigSpec spec;
         // Blueprints
-        public final EnumValue<BlueprintType> blueprintTypes;
-        public final BooleanValue spawnWithStarterBlueprints;
-        // Block placers
-        final ConfigValue<List<? extends String>> placerTools;
-        final ConfigValue<List<? extends String>> placeableItems;
+        public static final ForgeConfigSpec.EnumValue<BlueprintType> blueprintTypes;
+        public static final ForgeConfigSpec.BooleanValue spawnWithStarterBlueprints;
         // Nerfed gear
-        public final BooleanValue nerfedItemsEnabled;
-        public final DoubleValue nerfedItemDurabilityMulti;
-        public final DoubleValue nerfedItemHarvestSpeedMulti;
-        final ConfigValue<List<? extends String>> nerfedItems;
+        public static final ForgeConfigSpec.BooleanValue nerfedItemsEnabled;
+        public static final ForgeConfigSpec.DoubleValue nerfedItemDurabilityMulti;
+        public static final ForgeConfigSpec.DoubleValue nerfedItemHarvestSpeedMulti;
+        static final ForgeConfigSpec.ConfigValue<List<? extends String>> nerfedItems;
         // Sinew
-        public final DoubleValue sinewDropRate;
-        final ConfigValue<List<? extends String>> sinewAnimals;
+        public static final ForgeConfigSpec.DoubleValue sinewDropRate;
+        static final ForgeConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
-        public final EnumValue<IAOETool.MatchMode> matchModeStandard;
-        public final EnumValue<IAOETool.MatchMode> matchModeOres;
-        public final BooleanValue gearBreaksPermanently;
-        public final DoubleValue repairFactorAnvil;
-        public final DoubleValue repairFactorQuick;
-        public final BooleanValue upgradesInAnvilOnly;
-        private final Map<ItemStat, DoubleValue> statMultipliers = new HashMap<>();
+        public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
+        public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
+        public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
+        public static final ForgeConfigSpec.DoubleValue repairFactorAnvil;
+        public static final ForgeConfigSpec.DoubleValue repairFactorQuick;
+        public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
+        private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Salvager
-        public final DoubleValue salvagerMinLossRate;
-        public final DoubleValue salvagerMaxLossRate;
+        public static final ForgeConfigSpec.DoubleValue salvagerMinLossRate;
+        public static final ForgeConfigSpec.DoubleValue salvagerMaxLossRate;
         // Compatibility
-        public final BooleanValue mineAndSlashSupport;
+        public static final ForgeConfigSpec.BooleanValue mineAndSlashSupport;
         // Debug
-        public final BooleanValue extraPartAndTraitLogging;
+        public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
 
-        General(ConfigSpecWrapper wrapper) {
-            wrapper.comment("item.blueprint", "Blueprint and template settings");
+        static {
+            ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-            blueprintTypes = wrapper
-                    .builder("item.blueprint.typesAllowed")
-                    .comment("Allowed blueprint types. Valid values are: BOTH, BLUEPRINT, and TEMPLATE")
-                    .defineEnum(BlueprintType.BOTH);
+            {
+                builder.comment("Blueprint and template settings");
+                builder.push("item.blueprint");
+                blueprintTypes = builder
+                        .comment("Allowed blueprint types. Valid values are: BOTH, BLUEPRINT, and TEMPLATE")
+                        .defineEnum("typesAllowed", BlueprintType.BOTH);
+                spawnWithStarterBlueprints = builder
+                        .comment("When joining a new world, should players be given a blueprint package?",
+                                "The blueprint package gives some blueprints when used (right-click).",
+                                "To change what is given, override the starter_blueprints loot table.")
+                        .define("spawnWithStarterBlueprints", true);
+                builder.pop();
+            }
+            {
+                builder.comment("Settings for nerfed items.",
+                        "You can give items reduced durability to encourage use of Silent Gear tools.",
+                        "Changes require a restart!");
+                builder.push("nerfedItems");
+                nerfedItemsEnabled = builder
+                        .comment("Enable this feature. If false, the other settings in this category are ignored.")
+                        .define("enabled", false);
+                nerfedItemDurabilityMulti = builder
+                        .comment("Multiplies max durability by this value. If the result would be zero, a value of 1 is assigned.")
+                        .defineInRange("durabilityMultiplier", 0.05, 0, 1);
+                nerfedItemHarvestSpeedMulti = builder
+                        .comment("Multiplies harvest speed by this value.")
+                        .defineInRange("harvestSpeedMultiplier", 0.5, 0, 1);
+                nerfedItems = builder
+                        .comment("These items will have reduced durability")
+                        .defineList("items", NerfedGear.DEFAULT_ITEMS, Config::isResourceLocation);
+                builder.pop();
+            }
+            {
+                builder.comment("Settings for sinew drops");
+                builder.push("sinew");
 
-            spawnWithStarterBlueprints = wrapper
-                    .builder("item.blueprint.spawnWithStarterBlueprints")
-                    .comment("When joining a new world, should players be given a blueprint package?",
-                            "The blueprint package gives some blueprints when used (right-click).",
-                            "To change what is given, override the starter_blueprints loot table.")
-                    .define(true);
+                sinewDropRate = builder
+                        .comment("Drop rate of sinew (chance out of 1)")
+                        .defineInRange("dropRate", 0.2, 0, 1);
+                sinewAnimals = builder
+                        .comment("These entities can drop sinew when killed.")
+                        .defineList("dropsFrom",
+                                ImmutableList.of(
+                                        "minecraft:cow",
+                                        "minecraft:pig",
+                                        "minecraft:sheep"
+                                ),
+                                Config::isResourceLocation);
+                builder.pop();
+            }
+            {
+                builder.comment("Settings for gear (tools, weapons, and armor)");
+                builder.push("gear");
 
-            wrapper.comment("item.blockPlacers",
-                    "Silent Gear allows some items to be used to place blocks.",
-                    "You can change which items place blocks and what other items they can activate.");
+                gearBreaksPermanently = builder
+                        .comment("If true, gear breaks permanently, like vanilla tools and armor")
+                        .define("breaksPermanently", false);
 
-            placerTools = wrapper
-                    .builder("item.blockPlacers.placerTools")
-                    .comment("These items are able to place blocks. The player must be sneaking.")
-                    .defineList(
-                            ImmutableList.of(
-                                    "silentgear:axe",
-                                    "silentgear:pickaxe",
-                                    "silentgear:shovel"
-                            ),
-                            Config::isResourceLocation);
-            placeableItems = wrapper
-                    .builder("item.blockPlacers.placeableItems")
-                    .comment("These items can be used by placer tools. The player must be sneaking.",
-                            "Note that some items may not work with this feature.")
-                    .defineList(
-                            ImmutableList.of(
-                                    "danknull:dank_null",
-                                    "torchbandolier:torch_bandolier",
-                                    "xreliquary:sojourner_staff"
-                            ),
-                            Config::isResourceLocation);
+                {
+                    builder.comment("Settings for AOE tools (hammer, excavator)",
+                            "Match modes determine what blocks are considered similar enough to be mined together.",
+                            "LOOSE: Break anything (you probably do not want this)",
+                            "MODERATE: Break anything with the same harvest level",
+                            "STRICT: Break only the exact same block");
+                    builder.push("aoeTool");
+                    matchModeStandard = builder
+                            .comment("Match mode for most blocks")
+                            .defineEnum("matchMode.standard", IAOETool.MatchMode.MODERATE);
+                    matchModeOres = builder
+                            .comment("Match mode for ore blocks (anything in the forge:ores block tag)")
+                            .defineEnum("matchMode.ores", IAOETool.MatchMode.STRICT);
+                    builder.pop();
+                }
+                {
+                    builder.push("repairs");
+                    repairFactorAnvil = builder
+                            .comment("Effectiveness of gear repairs done in an anvil. Set to 0 to disable anvil repairs.")
+                            .defineInRange("anvilEffectiveness", 0.5, 0, 1);
+                    repairFactorQuick = builder
+                            .comment("Effectiveness of quick gear repairs (crafting grid). Set to 0 to disable quick repairs.")
+                            .defineInRange("quickEffectiveness", 0.35, 0, 1);
+                    builder.pop();
+                }
+                {
+                    builder.push("upgrades");
+                    upgradesInAnvilOnly = builder
+                            .comment("If true, upgrade parts may only be applied in an anvil.")
+                            .define("applyInAnvilOnly", false);
+                    builder.pop();
+                }
+                {
+                    builder.comment("Multipliers for stats on all gear. This allows the stats on all items to be increased or decreased",
+                            "without overriding every single file.");
+                    builder.push("statMultipliers");
 
-            wrapper.comment("item.nerfedItems",
-                    "Settings for nerfed items.",
-                    "You can give items reduced durability to encourage use of Silent Gear tools.",
-                    "Changes require a restart!");
+                    // FIXME: Does not work, called too early
+                    ItemStats.REGISTRY.get().getValues().forEach(stat -> {
+                        ResourceLocation name = Objects.requireNonNull(stat.getRegistryName());
+                        String key = name.getNamespace() + "." + name.getPath();
+                        ForgeConfigSpec.DoubleValue config = builder
+                                .defineInRange(key, 1, 0, Double.MAX_VALUE);
+                        statMultipliers.put(stat, config);
+                    });
+                    builder.pop();
+                }
+                builder.pop();
+            }
 
-            nerfedItemsEnabled = wrapper
-                    .builder("item.nerfedItems.enabled")
-                    .comment("Enable this feature. If false, the other settings in this category are ignored.")
-                    .define(false);
-            nerfedItemDurabilityMulti = wrapper
-                    .builder("item.nerfedItems.durabilityMultiplier")
-                    .comment("Multiplies max durability by this value. If the result would be zero, a value of 1 is assigned.")
-                    .defineInRange(0.05, 0, 1);
-            nerfedItemHarvestSpeedMulti = wrapper
-                    .builder("item.nerfedItems.harvestSpeedMultiplier")
-                    .comment("Multiplies harvest speed by this value.")
-                    .defineInRange(0.5, 0, 1);
-            nerfedItems = wrapper
-                    .builder("item.nerfedItems.items")
-                    .comment("These items will have reduced durability")
-                    .defineList(NerfedGear.DEFAULT_ITEMS, Config::isResourceLocation);
+            {
+                builder.comment("Settings for the salvager");
+                builder.push("salvager");
+                salvagerMinLossRate = builder
+                        .comment("Minimum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
+                                "Rate depends on remaining durability.")
+                        .defineInRange("partLossRate.min", 0.0, 0, 1);
+                salvagerMaxLossRate = builder
+                        .comment("Maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
+                                "Rate depends on remaining durability.")
+                        .defineInRange("partLossRate.max", 0.5, 0, 1);
+                builder.pop();
+            }
 
-            wrapper.comment("item.sinew", "Settings for sinew drops");
-
-            sinewDropRate = wrapper
-                    .builder("item.sinew.dropRate")
-                    .comment("Drop rate of sinew (chance out of 1)")
-                    .defineInRange(0.2, 0, 1);
-            sinewAnimals = wrapper
-                    .builder("item.sinew.dropsFrom")
-                    .comment("These entities can drop sinew when killed.")
-                    .defineList(
-                            ImmutableList.of(
-                                    "minecraft:cow",
-                                    "minecraft:pig",
-                                    "minecraft:sheep"
-                            ),
-                            Config::isResourceLocation);
-
-            wrapper.comment("item.gear", "Settings for gear (tools, weapons, and armor)");
-
-            wrapper.comment("item.gear.aoeTools",
-                    "Settings for AOE tools (hammer, excavator)",
-                    "Match modes determine what blocks are considered similar enough to be mined together.",
-                    "LOOSE: Break anything (you probably do not want this)",
-                    "MODERATE: Break anything with the same harvest level",
-                    "STRICT: Break only the exact same block");
-
-            matchModeStandard = wrapper
-                    .builder("item.gear.aoeTools.matchMode.standard")
-                    .comment("Match mode for most blocks")
-                    .defineEnum(IAOETool.MatchMode.MODERATE);
-            matchModeOres = wrapper
-                    .builder("item.gear.aoeTools.matchMode.ores")
-                    .comment("Match mode for ore blocks (anything in the forge:ores block tag)")
-                    .defineEnum(IAOETool.MatchMode.STRICT);
-
-            gearBreaksPermanently = wrapper
-                    .builder("item.gear.breaksPermanently")
-                    .comment("If true, gear breaks permanently, like vanilla tools and armor")
-                    .define(false);
-
-            repairFactorAnvil = wrapper
-                    .builder("item.gear.repairs.anvilEffectiveness")
-                    .comment("Effectiveness of gear repairs done in an anvil. Set to 0 to disable anvil repairs.")
-                    .defineInRange(0.5, 0, 1);
-            repairFactorQuick = wrapper
-                    .builder("item.gear.repairs.quickEffectiveness")
-                    .comment("Effectiveness of quick gear repairs (crafting grid). Set to 0 to disable quick repairs.")
-                    .defineInRange(0.35, 0, 1);
-
-            upgradesInAnvilOnly = wrapper
-                    .builder("item.gear.upgrades.applyInAnvilOnly")
-                    .comment("If true, upgrade parts may only be applied in an anvil.")
-                    .define(false);
-
-            wrapper.comment("item.gear.statMultipliers",
-                    "Multipliers for stats on all gear. This allows the stats on all items to be increased or decreased",
-                    "without overriding every single file.");
-
-            // FIXME: Does not work, called too early
-            ItemStats.REGISTRY.get().getValues().forEach(stat -> {
-                ResourceLocation name = Objects.requireNonNull(stat.getRegistryName());
-                DoubleValue config = wrapper
-                        .builder("item.gear.statMultipliers." + name.getNamespace() + "." + name.getPath())
-                        .defineInRange(1, 0, Double.MAX_VALUE);
-                statMultipliers.put(stat, config);
-            });
-
-            wrapper.comment("salvager", "Settings for the salvager");
-
-            salvagerMinLossRate = wrapper
-                    .builder("salvager.partLossRate.min")
-                    .comment("Minimum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
-                            "Rate depends on remaining durability.")
-                    .defineInRange(0.0, 0, 1);
-            salvagerMaxLossRate = wrapper
-                    .builder("salvager.partLossRate.max")
-                    .comment("Maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
-                            "Rate depends on remaining durability.")
-                    .defineInRange(0.5, 0, 1);
-
-            mineAndSlashSupport = wrapper
-                    .builder("compat.mineAndSlash.enabled")
+            mineAndSlashSupport = builder
                     .comment("Enable compatibility with the Mine and Slash mod, if installed")
-                    .define(true);
+                    .define("compat.mineAndSlash.enabled", true);
 
-            extraPartAndTraitLogging = wrapper
-                    .builder("debug.logging.extraPartAndTraitInfo")
+            extraPartAndTraitLogging = builder
                     .comment("Log additional information related to loading and synchronizing gear parts and traits.",
                             "This might help track down more obscure issues.")
-                    .define(false);
+                    .define("debug.logging.extraPartAndTraitInfo", false);
+
+            spec = builder.build();
         }
 
-        public float getStatWithMultiplier(ItemStat stat, float value) {
+        private Server() {}
+
+        public static float getStatWithMultiplier(ItemStat stat, float value) {
             if (statMultipliers.containsKey(stat))
                 return statMultipliers.get(stat).get().floatValue() * value;
             return value;
         }
 
         @SuppressWarnings("TypeMayBeWeakened")
-        public boolean isNerfedItem(Item item) {
+        public static boolean isNerfedItem(Item item) {
             return nerfedItemsEnabled.get() && isThingInList(item, nerfedItems);
         }
 
-        public boolean isPlacerTool(ItemStack stack) {
-            return isThingInList(stack.getItem(), placerTools);
-        }
-
-        public boolean isPlaceableItem(ItemStack stack) {
-            return isThingInList(stack.getItem(), placeableItems);
-        }
-
-        public boolean isSinewAnimal(LivingEntity entity) {
+        public static boolean isSinewAnimal(LivingEntity entity) {
             return isThingInList(entity.getType(), sinewAnimals);
         }
 
-        private static boolean isThingInList(IForgeRegistryEntry<?> thing, ConfigValue<List<? extends String>> list) {
+        private static boolean isThingInList(IForgeRegistryEntry<?> thing, ForgeConfigSpec.ConfigValue<List<? extends String>> list) {
             ResourceLocation name = thing.getRegistryName();
             for (String str : list.get()) {
                 ResourceLocation fromList = ResourceLocation.tryCreate(str);
@@ -252,36 +222,52 @@ public class Config {
         return o instanceof String && ResourceLocation.tryCreate((String) o) != null;
     }
 
-    public static class Client {
-        public final BooleanValue allowEnchantedEffect;
-        public final BooleanValue useLiteModels;
-        public final BooleanValue disableNewMaterialTooltips;
+    public static final class Client {
+        static final ForgeConfigSpec spec;
 
-        Client(ConfigSpecWrapper wrapper) {
-            allowEnchantedEffect = wrapper
-                    .builder("gear.allowEnchantedEffect")
+        public static final ForgeConfigSpec.BooleanValue allowEnchantedEffect;
+        public static final ForgeConfigSpec.BooleanValue useLiteModels;
+        public static final ForgeConfigSpec.BooleanValue disableNewMaterialTooltips;
+
+        static {
+            ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+
+            allowEnchantedEffect = builder
                     .comment("Allow gear items to have the 'enchanted glow' effect. Set to 'false' to disable the effect.",
                             "The way vanilla handles the effect is bugged, and it is recommended to disable this until custom models are possible again.")
-                    .define(false);
-            useLiteModels = wrapper
-                    .builder("gear.useLiteModels")
+                    .define("gear.allowEnchantedEffect", false);
+            useLiteModels = builder
                     .comment("Use 'lite' gear models. These should be easier on some systems, but do not allow unique textures for different materials.",
                             "Currently, this option has no effect, as the normal model system is not working yet (lite models are used)")
-                    .define(false);
-            disableNewMaterialTooltips = wrapper
-                    .builder("item.gear.materials.disableNewTooltips")
+                    .define("gear.useLiteModels", false);
+            disableNewMaterialTooltips = builder
                     .comment("Disable item tooltips related to the new material system. Will be removed when fully implemented.")
-                    .define(false);
+                    .define("item.gear.materials.disableNewTooltips", false);
+
+            spec = builder.build();
         }
+
+        private Client() {}
     }
 
     private Config() {}
 
     public static void init() {
-        WRAPPER_CLIENT.validate();
-        WRAPPER_CLIENT.validate();
-        WRAPPER.validate();
-        WRAPPER.validate();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Server.spec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.spec);
+    }
+
+    public static void sync() {
+    }
+
+    @SubscribeEvent
+    public static void sync(ModConfig.Loading event) {
+        sync();
+    }
+
+    @SubscribeEvent
+    public static void sync(ModConfig.Reloading event) {
+        sync();
     }
 
     // TODO: Old stuff below, needs to be fixed

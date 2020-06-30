@@ -63,14 +63,14 @@ public final class TooltipHandler {
         }
 
         // Nerfed gear?
-        if (Config.GENERAL.isNerfedItem(stack.getItem())) {
+        if (Config.Server.isNerfedItem(stack.getItem())) {
             List<ITextComponent> toolTip = event.getToolTip();
             toolTip.add(Math.min(1, toolTip.size()), new TranslationTextComponent("misc.silentgear.poorlyMade").applyTextStyle(TextFormatting.RED));
         }
     }
 
     private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, IMaterialInstance material) {
-        if (Config.CLIENT.disableNewMaterialTooltips.get()) return;
+        if (Config.Client.disableNewMaterialTooltips.get()) return;
 
         event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").applyTextStyle(TextFormatting.GOLD));
         if (event.getFlags().isAdvanced()) {

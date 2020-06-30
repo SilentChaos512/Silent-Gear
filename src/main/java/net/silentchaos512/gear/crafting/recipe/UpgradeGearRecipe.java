@@ -49,7 +49,7 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
-        if (Config.GENERAL.upgradesInAnvilOnly.get()) return false;
+        if (Config.Server.upgradesInAnvilOnly.get()) return false;
 
         StackList list = StackList.from(inv);
         // Require 1 and only 1 gear item

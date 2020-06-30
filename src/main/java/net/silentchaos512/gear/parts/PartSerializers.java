@@ -72,7 +72,7 @@ public final class PartSerializers {
     }
 
     private static void log(Supplier<?> msg) {
-        if (Config.GENERAL.extraPartAndTraitLogging.get()) {
+        if (Config.Server.extraPartAndTraitLogging.get()) {
             SilentGear.LOGGER.info(PartManager.MARKER, msg.get());
         }
     }

@@ -53,13 +53,15 @@ class SideProxy implements IProxy {
     @Nullable private static MinecraftServer server;
 
     SideProxy() {
+        Registration.register();
+        Config.init();
+        Network.init();
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGenerators::gatherData);
         modEventBus.addListener(SideProxy::commonSetup);
         modEventBus.addListener(SideProxy::imcEnqueue);
         modEventBus.addListener(SideProxy::imcProcess);
-
-        Registration.register();
 
         modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
@@ -73,9 +75,6 @@ class SideProxy implements IProxy {
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
 
-        Config.init();
-        Network.init();
-
         ModLootStuff.init();
 
         ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new ArgumentSerializer<>(MaterialGrade.Argument::new));
@@ -87,7 +86,7 @@ class SideProxy implements IProxy {
         IAOETool.BreakHandler.buildOreBlocksSet();
 
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
-            if (Config.GENERAL.spawnWithStarterBlueprints.get())
+            if (Config.Server.spawnWithStarterBlueprints.get())
                 return Collections.singleton(ModItems.BLUEPRINT_PACKAGE.get().getStack());
             return Collections.emptyList();
         });
@@ -97,7 +96,7 @@ class SideProxy implements IProxy {
 
         NerfedGear.init();
 
-        if (ModList.get().isLoaded("mmorpg") && Config.GENERAL.mineAndSlashSupport.get()) {
+        if (ModList.get().isLoaded("mmorpg") && Config.Server.mineAndSlashSupport.get()) {
             MineAndSlashCompat.init();
         }
 
