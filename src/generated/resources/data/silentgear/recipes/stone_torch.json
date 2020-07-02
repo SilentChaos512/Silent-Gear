@@ -9,7 +9,7 @@
       "tag": "minecraft:coals"
     },
     "/": {
-      "tag": "forge:rods/wooden"
+      "tag": "forge:rods/stone"
     }
   },
   "result": {

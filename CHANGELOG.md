@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Missing slingshot blueprint/template recipes
 ### Changed
 - Switched over to Forge's config system
+### Fixed
+- Stone torch recipe incorrect [#152]
 
 ## [1.8.1] - 2020-06-27
 More work on moving to data generators! Keep an eye out for missing/incorrect recipes.

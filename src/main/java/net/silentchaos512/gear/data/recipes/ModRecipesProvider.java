@@ -476,7 +476,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer, SilentGear.getId("stone_rod2"));
         ShapedRecipeBuilder.shapedRecipe(ModBlocks.STONE_TORCH, 4)
                 .key('#', ItemTags.COALS)
-                .key('/', Tags.Items.RODS_WOODEN)
+                .key('/', ModTags.Items.RODS_STONE)
                 .patternLine("#")
                 .patternLine("/")
                 .addCriterion("has_item", hasItem(ItemTags.COALS))
