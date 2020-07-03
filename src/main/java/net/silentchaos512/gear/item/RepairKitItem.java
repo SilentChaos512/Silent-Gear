@@ -11,7 +11,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
@@ -52,7 +51,7 @@ public class RepairKitItem extends Item {
         // Old style parts
         PartData part = PartData.from(materialStack);
         if (part != null && part.getType() == PartType.MAIN) {
-            int amount = Math.round(part.getRepairAmount(new ItemStack(ModItems.PICKAXE), RepairContext.Type.QUICK));
+            int amount = Math.round(part.computeStat(ItemStats.DURABILITY) * part.computeStat(ItemStats.REPAIR_EFFICIENCY));
             int tier = part.getTier();
             int current = getStoredRepairValue(repairKit, tier);
             setStoredRepairValue(repairKit, tier, amount + current);
