@@ -24,6 +24,10 @@ import java.util.function.Function;
  */
 @ParametersAreNonnullByDefault
 public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat {
+    public enum DisplayFormat {
+        UNIT, MULTIPLIER, PERCENTAGE
+    }
+
     private final float defaultValue;
     private final float minimumValue;
     private final float maximumValue;
@@ -33,7 +37,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     private final boolean synergyApplies;
     private final boolean affectedByGrades;
     private final boolean displayAsInt;
-    private final boolean displayAsMultiplier;
+    private final DisplayFormat displayFormat;
     private final Function<Float, Float> missingRodFunction;
 
     public ItemStat(float defaultValue, float minValue, float maxValue, TextFormatting nameColor, Properties properties) {
@@ -44,7 +48,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
 
         this.defaultOperation = properties.defaultOp;
         this.displayAsInt = properties.displayAsInt;
-        this.displayAsMultiplier = properties.displayAsMultiplier;
+        this.displayFormat = properties.displayFormat;
         this.visible = properties.visible;
         this.synergyApplies = properties.synergyApplies;
         this.affectedByGrades = properties.affectedByGrades;
@@ -95,8 +99,13 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return displayAsInt;
     }
 
+    public DisplayFormat getDisplayFormat() {
+        return displayFormat;
+    }
+
+    @Deprecated
     public boolean isDisplayAsMultiplier() {
-        return displayAsMultiplier;
+        return displayFormat == DisplayFormat.MULTIPLIER;
     }
 
     public TextFormatting getNameColor() {
@@ -239,7 +248,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     public static class Properties {
         private Operation defaultOp = Operation.AVG;
         private boolean displayAsInt;
-        private boolean displayAsMultiplier;
+        private DisplayFormat displayFormat = DisplayFormat.UNIT;
         private boolean visible = true;
         private boolean synergyApplies = false;
         private boolean affectedByGrades = true;
@@ -255,8 +264,17 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
             return this;
         }
 
+        public Properties displayFormat(DisplayFormat format) {
+            displayFormat = format;
+            return this;
+        }
+
+        /**
+         * @deprecated Use {@link #displayFormat(DisplayFormat)} instead
+         */
+        @Deprecated
         public Properties displayAsMultiplier() {
-            displayAsMultiplier = true;
+            this.displayFormat = DisplayFormat.MULTIPLIER;
             return this;
         }
 

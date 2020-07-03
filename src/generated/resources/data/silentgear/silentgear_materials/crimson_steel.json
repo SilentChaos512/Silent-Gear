@@ -78,6 +78,10 @@
         "level": 5
       },
       {
+        "name": "silentgear:hard",
+        "level": 3
+      },
+      {
         "name": "silentgear:flame_ward",
         "level": 1,
         "conditions": [

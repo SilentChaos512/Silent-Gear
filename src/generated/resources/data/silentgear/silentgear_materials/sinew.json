@@ -13,12 +13,24 @@
     "translate": "material.silentgear.sinew"
   },
   "display": {
+    "binding/all": {
+      "texture": "low_contrast",
+      "color": "#FFFFFF"
+    },
     "bowstring/all": {
       "texture": "low_contrast",
       "color": "#FFFFFF"
     }
   },
   "stats": {
+    "binding": {
+      "durability": {
+        "mul1": 0.05
+      },
+      "repair_efficiency": {
+        "mul1": -0.05
+      }
+    },
     "bowstring": {
       "durability": {
         "mul1": 0.25
@@ -35,6 +47,12 @@
     }
   },
   "traits": {
+    "binding": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      }
+    ],
     "bowstring": [
       {
         "name": "silentgear:flexible",

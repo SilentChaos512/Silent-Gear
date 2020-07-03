@@ -130,9 +130,12 @@ public class StatInstance {
                 color = getFormattedColor(this.value, 0f, addColor);
                 return trimNumber(color + String.format(format, this.value < 0 ? "" : "+", this.value, ""));
             case AVG:
+                if (stat.getDisplayFormat() == ItemStat.DisplayFormat.PERCENTAGE) {
+                    return Math.round((1f + this.value) * 100) + "%";
+                }
                 // v (or vx for multiplier stats like armor durability)
                 String ret = trimNumber(String.format(format, "", this.value, ""));
-                return stat.isDisplayAsMultiplier() ? ret + "x" : ret;
+                return stat.getDisplayFormat() == ItemStat.DisplayFormat.MULTIPLIER ? ret + "x" : ret;
             case MAX:
                 // ^v
                 return trimNumber(String.format(format, "^", this.value, ""));

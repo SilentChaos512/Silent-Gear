@@ -2,7 +2,7 @@
   "conditions": [
     {
       "value": {
-        "tag": "forge:ingots/aluminum",
+        "tag": "forge:ingots/bronze",
         "type": "forge:tag_empty"
       },
       "type": "forge:not"
@@ -15,48 +15,48 @@
   },
   "crafting_items": {
     "main": {
-      "tag": "forge:ingots/aluminum"
+      "tag": "forge:ingots/bronze"
     }
   },
   "name": {
-    "translate": "material.silentgear.aluminum"
+    "translate": "material.silentgear.bronze"
   },
   "display": {
     "main/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#D96121"
     },
     "rod/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#D96121"
     }
   },
   "stats": {
     "main": {
-      "durability": 365.0,
-      "armor_durability": 15.0,
-      "enchantability": 14.0,
+      "durability": 480.0,
+      "armor_durability": 18.0,
+      "enchantability": 12.0,
       "harvest_level": 2.0,
-      "harvest_speed": 8.0,
-      "melee_damage": 2.0,
-      "magic_damage": 2.0,
+      "harvest_speed": 6.0,
+      "melee_damage": 2.5,
+      "magic_damage": 1.0,
       "attack_speed": 0.2,
-      "armor": 14.0,
-      "armor_toughness": 0.5,
-      "magic_armor": 3.0,
+      "armor": 17.0,
+      "armor_toughness": 1.0,
+      "magic_armor": 6.0,
       "ranged_damage": 2.0,
-      "ranged_speed": 0.2,
-      "rarity": 25.0,
-      "silentgems:chargeability": 0.9
+      "ranged_speed": -0.2,
+      "rarity": 35.0,
+      "silentgems:chargeability": 1.2
     },
     "rod": {
       "durability": {
-        "mul2": 0.2
+        "mul2": 0.15
       },
-      "ranged_damage": {
-        "mul2": 0.1
+      "melee_damage": {
+        "mul2": 0.05
       },
-      "rarity": 30.0
+      "rarity": 35.0
     }
   },
   "traits": {
@@ -66,28 +66,24 @@
         "level": 3
       },
       {
-        "name": "silentgear:soft",
-        "level": 2,
+        "name": "silentgear:adamant",
+        "level": 1,
         "conditions": [
           {
+            "type": "silentgear:gear_type",
+            "gear_type": "armor"
+          },
+          {
             "type": "silentgear:material_ratio",
-            "ratio": 0.5
+            "ratio": 0.35
           }
         ]
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 1
       }
     ],
     "rod": [
       {
         "name": "silentgear:malleable",
         "level": 3
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 2
       }
     ]
   }

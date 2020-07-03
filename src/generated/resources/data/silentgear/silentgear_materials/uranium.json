@@ -1,0 +1,76 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/uranium",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/uranium"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.uranium"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#21FF0F"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#21FF0F"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 800.0,
+      "armor_durability": 20.0,
+      "enchantability": 17.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 6.0,
+      "melee_damage": 2.0,
+      "magic_damage": 2.0,
+      "attack_speed": 0.1,
+      "armor": 13.0,
+      "armor_toughness": 1.0,
+      "magic_armor": 3.0,
+      "ranged_damage": 0.5,
+      "ranged_speed": 0.1,
+      "rarity": 50.0,
+      "silentgems:chargeability": 1.5
+    },
+    "rod": {
+      "harvest_speed": {
+        "mul2": 0.1
+      },
+      "ranged_speed": {
+        "mul2": 0.1
+      },
+      "rarity": 40.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      }
+    ]
+  }
+}

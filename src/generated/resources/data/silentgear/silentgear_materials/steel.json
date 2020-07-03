@@ -1,0 +1,73 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/steel",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 2,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.steel"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#929292"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#929292"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 500.0,
+      "armor_durability": 20.0,
+      "enchantability": 11.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 6.0,
+      "melee_damage": 4.0,
+      "magic_damage": 1.0,
+      "attack_speed": -0.2,
+      "armor": 20.0,
+      "armor_toughness": 2.0,
+      "magic_armor": 6.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": -0.2,
+      "rarity": 40.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.25
+      },
+      "rarity": 40.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 5
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 5
+      }
+    ]
+  }
+}

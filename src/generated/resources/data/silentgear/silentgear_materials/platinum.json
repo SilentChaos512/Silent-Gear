@@ -1,0 +1,84 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/platinum",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/platinum"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.platinum"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#B3B3FF"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#B3B3FF"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 900.0,
+      "armor_durability": 21.0,
+      "enchantability": 14.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 12.0,
+      "melee_damage": 4.0,
+      "magic_damage": 4.0,
+      "attack_speed": 0.0,
+      "armor": 18.0,
+      "armor_toughness": 2.0,
+      "magic_armor": 12.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": 0.0,
+      "rarity": 80.0,
+      "silentgems:chargeability": 1.2
+    },
+    "rod": {
+      "durability": {
+        "mul2": -0.1
+      },
+      "repair_efficiency": {
+        "mul2": 0.1
+      },
+      "rarity": 70.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 4
+      }
+    ]
+  }
+}

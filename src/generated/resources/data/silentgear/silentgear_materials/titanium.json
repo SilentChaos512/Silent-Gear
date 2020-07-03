@@ -1,0 +1,89 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/titanium",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 4,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/titanium"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.titanium"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#2E4CE6"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#2E4CE6"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 1600.0,
+      "armor_durability": 37.0,
+      "enchantability": 12.0,
+      "harvest_level": 4.0,
+      "harvest_speed": 8.0,
+      "melee_damage": 6.0,
+      "magic_damage": 1.0,
+      "attack_speed": 0.0,
+      "armor": 24.0,
+      "armor_toughness": 4.0,
+      "magic_armor": 4.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": -0.2,
+      "rarity": 80.0,
+      "silentgems:chargeability": 1.0
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.1
+      },
+      "melee_damage": [
+        {
+          "mul2": 0.2
+        },
+        {
+          "add": 2.0
+        }
+      ],
+      "rarity": 80.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      },
+      {
+        "name": "silentgear:hard",
+        "level": 4
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      },
+      {
+        "name": "silentgear:hard",
+        "level": 4
+      }
+    ]
+  }
+}

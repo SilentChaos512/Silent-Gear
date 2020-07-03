@@ -2,7 +2,7 @@
   "conditions": [
     {
       "value": {
-        "tag": "forge:ingots/aluminum",
+        "tag": "forge:ingots/brass",
         "type": "forge:tag_empty"
       },
       "type": "forge:not"
@@ -15,78 +15,70 @@
   },
   "crafting_items": {
     "main": {
-      "tag": "forge:ingots/aluminum"
+      "tag": "forge:ingots/brass"
     }
   },
   "name": {
-    "translate": "material.silentgear.aluminum"
+    "translate": "material.silentgear.brass"
   },
   "display": {
     "main/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#F2D458"
     },
     "rod/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#F2D458"
     }
   },
   "stats": {
     "main": {
-      "durability": 365.0,
-      "armor_durability": 15.0,
-      "enchantability": 14.0,
+      "durability": 240.0,
+      "armor_durability": 8.0,
+      "enchantability": 13.0,
       "harvest_level": 2.0,
-      "harvest_speed": 8.0,
-      "melee_damage": 2.0,
-      "magic_damage": 2.0,
-      "attack_speed": 0.2,
+      "harvest_speed": 7.0,
+      "melee_damage": 1.5,
+      "magic_damage": 1.5,
+      "attack_speed": 0.1,
       "armor": 14.0,
-      "armor_toughness": 0.5,
-      "magic_armor": 3.0,
+      "armor_toughness": 1.0,
+      "magic_armor": 6.0,
       "ranged_damage": 2.0,
       "ranged_speed": 0.2,
       "rarity": 25.0,
-      "silentgems:chargeability": 0.9
+      "silentgems:chargeability": 1.2
     },
     "rod": {
       "durability": {
-        "mul2": 0.2
+        "mul2": 0.05
       },
-      "ranged_damage": {
-        "mul2": 0.1
+      "harvest_speed": {
+        "mul2": 0.05
       },
-      "rarity": 30.0
+      "rarity": 25.0
     }
   },
   "traits": {
     "main": [
       {
         "name": "silentgear:malleable",
-        "level": 3
+        "level": 2
       },
       {
-        "name": "silentgear:soft",
-        "level": 2,
+        "name": "silentgear:silky",
+        "level": 1,
         "conditions": [
           {
             "type": "silentgear:material_ratio",
-            "ratio": 0.5
+            "ratio": 0.66
           }
         ]
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 1
       }
     ],
     "rod": [
       {
         "name": "silentgear:malleable",
-        "level": 3
-      },
-      {
-        "name": "silentgear:synergistic",
         "level": 2
       }
     ]

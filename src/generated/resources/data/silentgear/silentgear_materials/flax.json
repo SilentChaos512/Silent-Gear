@@ -13,12 +13,29 @@
     "translate": "material.silentgear.flax"
   },
   "display": {
+    "binding/all": {
+      "texture": "low_contrast",
+      "color": "#FFFFFF"
+    },
     "bowstring/all": {
       "texture": "low_contrast",
       "color": "#FFFFFF"
     }
   },
   "stats": {
+    "binding": {
+      "durability": [
+        {
+          "mul1": -0.05
+        },
+        {
+          "add": 10.0
+        }
+      ],
+      "harvest_speed": {
+        "mul1": 0.05
+      }
+    },
     "bowstring": {
       "durability": {
         "mul1": 0.05
@@ -35,6 +52,12 @@
     }
   },
   "traits": {
+    "binding": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      }
+    ],
     "bowstring": [
       {
         "name": "silentgear:synergistic",

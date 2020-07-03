@@ -2,61 +2,61 @@
   "conditions": [
     {
       "value": {
-        "tag": "forge:ingots/aluminum",
+        "tag": "forge:ingots/lumium",
         "type": "forge:tag_empty"
       },
       "type": "forge:not"
     }
   ],
   "availability": {
-    "tier": 2,
+    "tier": 3,
     "visible": true,
     "gear_blacklist": []
   },
   "crafting_items": {
     "main": {
-      "tag": "forge:ingots/aluminum"
+      "tag": "forge:ingots/lumium"
     }
   },
   "name": {
-    "translate": "material.silentgear.aluminum"
+    "translate": "material.silentgear.lumium"
   },
   "display": {
     "main/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#468C75"
     },
     "rod/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#468C75"
     }
   },
   "stats": {
     "main": {
-      "durability": 365.0,
-      "armor_durability": 15.0,
+      "durability": 920.0,
+      "armor_durability": 20.0,
       "enchantability": 14.0,
-      "harvest_level": 2.0,
-      "harvest_speed": 8.0,
-      "melee_damage": 2.0,
-      "magic_damage": 2.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 15.0,
+      "melee_damage": 4.0,
+      "magic_damage": 3.0,
       "attack_speed": 0.2,
-      "armor": 14.0,
-      "armor_toughness": 0.5,
+      "armor": 18.0,
+      "armor_toughness": 3.0,
       "magic_armor": 3.0,
       "ranged_damage": 2.0,
-      "ranged_speed": 0.2,
-      "rarity": 25.0,
-      "silentgems:chargeability": 0.9
+      "ranged_speed": 0.0,
+      "rarity": 75.0,
+      "silentgems:chargeability": 1.3
     },
     "rod": {
-      "durability": {
+      "harvest_speed": {
         "mul2": 0.2
       },
       "ranged_damage": {
         "mul2": 0.1
       },
-      "rarity": 30.0
+      "rarity": 75.0
     }
   },
   "traits": {
@@ -66,18 +66,18 @@
         "level": 3
       },
       {
-        "name": "silentgear:soft",
-        "level": 2,
+        "name": "silentgear:refractive",
+        "level": 1,
         "conditions": [
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.5
+          },
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "tool"
           }
         ]
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 1
       }
     ],
     "rod": [
@@ -86,8 +86,18 @@
         "level": 3
       },
       {
-        "name": "silentgear:synergistic",
-        "level": 2
+        "name": "silentgear:refractive",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          },
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "tool"
+          }
+        ]
       }
     ]
   }

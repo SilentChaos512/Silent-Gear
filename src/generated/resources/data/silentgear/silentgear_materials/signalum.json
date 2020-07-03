@@ -1,0 +1,84 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/signalum",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 4,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/signalum"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.signalum"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#468C75"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#468C75"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 800.0,
+      "armor_durability": 25.0,
+      "enchantability": 16.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 13.0,
+      "melee_damage": 3.0,
+      "magic_damage": 4.0,
+      "attack_speed": 0.0,
+      "armor": 16.0,
+      "armor_toughness": 2.0,
+      "magic_armor": 4.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": 0.2,
+      "rarity": 50.0,
+      "silentgems:chargeability": 1.2
+    },
+    "rod": {
+      "harvest_speed": {
+        "mul2": 0.3
+      },
+      "repair_efficiency": {
+        "mul2": -0.1
+      },
+      "rarity": 50.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 4
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 4
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 2
+      }
+    ]
+  }
+}

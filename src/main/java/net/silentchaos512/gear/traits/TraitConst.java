@@ -21,6 +21,7 @@ public class TraitConst {
     public static final ResourceLocation FLAME_WARD = SilentGear.getId("flame_ward");
     public static final ResourceLocation FLAMMABLE = SilentGear.getId("flammable");
     public static final ResourceLocation FLEXIBLE = SilentGear.getId("flexible");
+    public static final ResourceLocation HARD = SilentGear.getId("hard");
     public static final ResourceLocation HOLY = SilentGear.getId("holy");
     public static final ResourceLocation INDESTRUCTIBLE = SilentGear.getId("indestructible");
     public static final ResourceLocation JABBERWOCKY = SilentGear.getId("jabberwocky");

@@ -532,6 +532,9 @@ public class ModRecipesProvider extends RecipeProvider {
         builderTemplate.build(consumer);
     }
 
+    private void damagingItem(Consumer<IFinishedRecipe> consumer, ShapelessRecipeBuilder builder) {
+    }
+
     private void gear(Consumer<IFinishedRecipe> consumer, GearType gearType, int mainCount, PartType... otherParts) {
     }
 

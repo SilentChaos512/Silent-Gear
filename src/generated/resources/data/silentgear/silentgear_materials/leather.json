@@ -13,12 +13,26 @@
     "translate": "material.silentgear.leather"
   },
   "display": {
+    "main/all": {
+      "texture": "low_contrast",
+      "color": "#C65C35"
+    },
     "grip/all": {
       "texture": "low_contrast",
       "color": "#C65C35"
     }
   },
   "stats": {
+    "main": {
+      "durability": 0.0,
+      "armor_durability": 5.0,
+      "enchantability": 15.0,
+      "armor": 6.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 8.0,
+      "rarity": 11.0,
+      "silentgems:chargeability": 0.8
+    },
     "grip": {
       "durability": {
         "mul1": 0.05

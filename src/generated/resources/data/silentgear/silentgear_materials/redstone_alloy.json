@@ -2,7 +2,7 @@
   "conditions": [
     {
       "value": {
-        "tag": "forge:ingots/aluminum",
+        "tag": "forge:ingots/redstone_alloy",
         "type": "forge:tag_empty"
       },
       "type": "forge:not"
@@ -15,48 +15,45 @@
   },
   "crafting_items": {
     "main": {
-      "tag": "forge:ingots/aluminum"
+      "tag": "forge:ingots/redstone_alloy"
     }
   },
   "name": {
-    "translate": "material.silentgear.aluminum"
+    "translate": "material.silentgear.redstone_alloy"
   },
   "display": {
     "main/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#E60006"
     },
     "rod/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#BFD4DE"
+      "color": "#E60006"
     }
   },
   "stats": {
     "main": {
-      "durability": 365.0,
-      "armor_durability": 15.0,
-      "enchantability": 14.0,
+      "durability": 840.0,
+      "armor_durability": 20.0,
+      "enchantability": 18.0,
       "harvest_level": 2.0,
-      "harvest_speed": 8.0,
+      "harvest_speed": 11.0,
       "melee_damage": 2.0,
-      "magic_damage": 2.0,
+      "magic_damage": 4.0,
       "attack_speed": 0.2,
-      "armor": 14.0,
-      "armor_toughness": 0.5,
-      "magic_armor": 3.0,
-      "ranged_damage": 2.0,
+      "armor": 17.0,
+      "armor_toughness": 1.0,
+      "magic_armor": 10.0,
+      "ranged_damage": 1.0,
       "ranged_speed": 0.2,
-      "rarity": 25.0,
+      "rarity": 45.0,
       "silentgems:chargeability": 0.9
     },
     "rod": {
-      "durability": {
+      "harvest_speed": {
         "mul2": 0.2
       },
-      "ranged_damage": {
-        "mul2": 0.1
-      },
-      "rarity": 30.0
+      "rarity": 45.0
     }
   },
   "traits": {
@@ -66,28 +63,14 @@
         "level": 3
       },
       {
-        "name": "silentgear:soft",
-        "level": 2,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 1
+        "name": "silentgear:eroded",
+        "level": 3
       }
     ],
     "rod": [
       {
         "name": "silentgear:malleable",
         "level": 3
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 2
       }
     ]
   }

@@ -87,6 +87,10 @@
       {
         "name": "silentgear:malleable",
         "level": 3
+      },
+      {
+        "name": "silentgear:hard",
+        "level": 2
       }
     ],
     "rod": [

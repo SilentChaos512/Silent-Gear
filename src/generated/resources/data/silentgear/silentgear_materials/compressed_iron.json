@@ -1,0 +1,91 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/compressed_iron",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/compressed_iron"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.compressed_iron"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#A6A6A6"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#A6A6A6"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 1024.0,
+      "armor_durability": 24.0,
+      "enchantability": 12.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 9.0,
+      "melee_damage": 4.0,
+      "magic_damage": 1.0,
+      "attack_speed": -0.2,
+      "armor": 20.0,
+      "armor_toughness": 2.0,
+      "magic_armor": 8.0,
+      "ranged_damage": 3.0,
+      "ranged_speed": 0.0,
+      "rarity": 40.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.25
+      },
+      "rarity": 40.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      },
+      {
+        "name": "silentgear:hard",
+        "level": 3
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      },
+      {
+        "name": "silentgear:magnetic",
+        "level": 4,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "tool"
+          },
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      }
+    ]
+  }
+}

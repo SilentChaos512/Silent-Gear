@@ -1,0 +1,81 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/tin",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/tin"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.tin"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#89A5B4"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#89A5B4"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 192.0,
+      "armor_durability": 13.0,
+      "enchantability": 12.0,
+      "harvest_level": 1.0,
+      "harvest_speed": 5.0,
+      "melee_damage": 1.5,
+      "magic_damage": 1.0,
+      "attack_speed": 0.0,
+      "armor": 12.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 1.0,
+      "ranged_damage": 0.5,
+      "ranged_speed": 0.0,
+      "rarity": 15.0,
+      "silentgems:chargeability": 1.1
+    },
+    "rod": {
+      "attack_speed": {
+        "add": 0.2
+      },
+      "rarity": 15.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 1
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 1
+      }
+    ]
+  }
+}

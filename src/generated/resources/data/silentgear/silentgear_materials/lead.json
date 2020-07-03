@@ -1,0 +1,99 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/lead",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 2,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/lead"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.lead"
+  },
+  "display": {
+    "main/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#C2CBB8"
+    },
+    "rod/all": {
+      "texture": "high_contrast_with_highlight",
+      "color": "#C2CBB8"
+    }
+  },
+  "stats": {
+    "main": {
+      "durability": 260.0,
+      "armor_durability": 14.0,
+      "enchantability": 15.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 4.0,
+      "melee_damage": 2.0,
+      "magic_damage": 2.0,
+      "attack_speed": -0.4,
+      "armor": 13.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 3.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": -0.3,
+      "rarity": 40.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.1
+      },
+      "harvest_speed": {
+        "mul2": -0.1
+      },
+      "rarity": 40.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      },
+      {
+        "name": "silentgear:aquatic",
+        "level": 2,
+        "conditions": [
+          {
+            "type": "silentgear:or",
+            "values": [
+              {
+                "type": "silentgear:material_count",
+                "count": 3
+              },
+              {
+                "type": "silentgear:material_ratio",
+                "ratio": 0.35
+              }
+            ]
+          },
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "armor"
+          }
+        ]
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:soft",
+        "level": 4
+      }
+    ]
+  }
+}
