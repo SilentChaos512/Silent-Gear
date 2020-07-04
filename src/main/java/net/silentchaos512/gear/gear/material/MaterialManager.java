@@ -20,8 +20,11 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.network.SyncMaterialsPacket;
+import net.silentchaos512.gear.parts.PartConst;
+import net.silentchaos512.gear.parts.PartManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -64,9 +67,9 @@ public class MaterialManager implements IResourceManagerReloadListener {
                     if (json == null) {
                         SilentGear.LOGGER.error(MARKER, "Could not load material {} as it's null or empty", name);
                     } else if (!CraftingHelper.processConditions(json, "conditions")) {
-                        SilentGear.LOGGER.info("Skipping loading material {} as its conditions were not met", name);
+                        SilentGear.LOGGER.info(MARKER, "Skipping loading material {} as its conditions were not met", name);
                     } else {
-                        IMaterial material = PartMaterial.Serializer.deserialize(name, packName, json);
+                        IMaterial material = MaterialSerializers.deserialize(name, packName, json);
                         MAP.put(material.getId(), material);
                     }
                 } catch (IllegalArgumentException | JsonParseException ex) {
@@ -77,7 +80,49 @@ public class MaterialManager implements IResourceManagerReloadListener {
                     ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 }
             }
+
+            createAdapterMaterials();
         }
+    }
+
+    private static void createAdapterMaterials() {
+        // Create adapter materials for temporary compatibility with older data packs
+        // Remove in 1.16!
+
+        SilentGear.LOGGER.info(MARKER, "Trying to create adapter materials...");
+
+        for (IGearPart part : PartManager.getValues()) {
+            if (isBuiltInPart(part)) {
+                SilentGear.LOGGER.debug(MARKER, "Not creating adapter for '{}': built-in part", part.getId());
+            } else {
+                String[] pathParts = part.getId().getPath().split("/");
+
+                if (pathParts.length != 2) {
+                    SilentGear.LOGGER.debug(MARKER, "Not considering '{}' for conversion, non-standard name format", part.getId());
+                } else if (MAP.containsKey(SilentGear.getId(pathParts[1]))) {
+                    SilentGear.LOGGER.debug(MARKER, "Not creating adapter for '{}': has like-named material already", part.getId());
+                } else {
+                    PartType partType = PartType.get(SilentGear.getId(pathParts[0]));
+                    ResourceLocation materialId = new ResourceLocation(part.getId().getNamespace(), pathParts[1]);
+
+                    if (partType != null) {
+                        IMaterial material = MAP.computeIfAbsent(materialId, SimplePartAdapterMaterial::new);
+
+                        if (material instanceof SimplePartAdapterMaterial) {
+                            ((SimplePartAdapterMaterial) material).addPart(part);
+                            SilentGear.LOGGER.info(MARKER, "Added part '{}' to adapter material '{}'", part.getId(), materialId);
+                        } else {
+                            SilentGear.LOGGER.debug(MARKER, "Not creating adapter for '{}': material already defined", materialId);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isBuiltInPart(IGearPart part) {
+        IGearPart example = PartManager.get(PartConst.MAIN_EXAMPLE);
+        return example == null || part.getPackName().equals(example.getPackName());
     }
 
     public static Collection<IMaterial> getValues() {

@@ -16,6 +16,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialSerializer;
 import net.silentchaos512.gear.api.material.MaterialDisplay;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -60,6 +61,11 @@ public final class PartMaterial implements IMaterial {
     @Override
     public ResourceLocation getId() {
         return this.materialId;
+    }
+
+    @Override
+    public IMaterialSerializer<?> getSerializer() {
+        return MaterialSerializers.STANDARD;
     }
 
     @Nullable
@@ -176,14 +182,13 @@ public final class PartMaterial implements IMaterial {
                 '}';
     }
 
-    public static final class Serializer {
+    public static final class Serializer implements IMaterialSerializer<PartMaterial> {
         static final int PACK_NAME_MAX_LENGTH = 32;
-
-        private Serializer() {throw new IllegalAccessError("Utility class");}
 
         //region deserialize
 
-        public static PartMaterial deserialize(ResourceLocation id, String packName, JsonObject json) {
+        @Override
+        public PartMaterial deserialize(ResourceLocation id, String packName, JsonObject json) {
             PartMaterial ret = new PartMaterial(id, packName);
 
             if (json.has("parent")) {
@@ -324,8 +329,9 @@ public final class PartMaterial implements IMaterial {
 
         // region read/write
 
-        public static PartMaterial read(PacketBuffer buffer) {
-            PartMaterial material = new PartMaterial(buffer.readResourceLocation(), buffer.readString(PACK_NAME_MAX_LENGTH));
+        @Override
+        public PartMaterial read(ResourceLocation id, PacketBuffer buffer) {
+            PartMaterial material = new PartMaterial(id, buffer.readString(PACK_NAME_MAX_LENGTH));
 
             if (buffer.readBoolean())
                 material.parent = buffer.readResourceLocation();
@@ -358,8 +364,8 @@ public final class PartMaterial implements IMaterial {
             return material;
         }
 
-        public static void write(PacketBuffer buffer, PartMaterial material) {
-            buffer.writeResourceLocation(material.materialId);
+        @Override
+        public void write(PacketBuffer buffer, PartMaterial material) {
             buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
 
             buffer.writeBoolean(material.parent != null);
@@ -387,6 +393,11 @@ public final class PartMaterial implements IMaterial {
             // Stats and traits
             writeStats(buffer, material);
             writeTraits(buffer, material);
+        }
+
+        @Override
+        public ResourceLocation getName() {
+            return SilentGear.getId("standard");
         }
 
         private static void readStats(PacketBuffer buffer, PartMaterial material) {

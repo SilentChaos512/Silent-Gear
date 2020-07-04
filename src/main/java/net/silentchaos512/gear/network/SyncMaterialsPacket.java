@@ -4,7 +4,7 @@ import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.material.PartMaterial;
+import net.silentchaos512.gear.gear.material.MaterialSerializers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,13 +23,13 @@ public class SyncMaterialsPacket extends LoginPacket {
     }
 
     public static SyncMaterialsPacket fromBytes(PacketBuffer buf) {
-        SilentGear.LOGGER.debug("Gear parts packet: {} bytes", buf.readableBytes());
+        SilentGear.LOGGER.debug("Materials packet: {} bytes", buf.readableBytes());
         SyncMaterialsPacket packet = new SyncMaterialsPacket();
         packet.materials = new ArrayList<>();
         int count = buf.readVarInt();
 
         for (int i = 0; i < count; ++i) {
-            packet.materials.add(PartMaterial.Serializer.read(buf));
+            packet.materials.add(MaterialSerializers.read(buf));
         }
 
         return packet;
@@ -37,7 +37,7 @@ public class SyncMaterialsPacket extends LoginPacket {
 
     public void toBytes(PacketBuffer buf) {
         buf.writeVarInt(this.materials.size());
-        this.materials.forEach(mat -> PartMaterial.Serializer.write(buf, (PartMaterial) mat));
+        this.materials.forEach(mat -> MaterialSerializers.write(mat, buf));
     }
 
     public List<IMaterial> getMaterials() {

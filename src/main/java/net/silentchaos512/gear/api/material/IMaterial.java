@@ -26,6 +26,8 @@ public interface IMaterial {
 
     ResourceLocation getId();
 
+    IMaterialSerializer<?> getSerializer();
+
     int getTier(PartType partType);
 
     // FIXME: PartType param should not be used?

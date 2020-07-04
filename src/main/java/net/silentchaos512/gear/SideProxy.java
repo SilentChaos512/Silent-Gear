@@ -111,8 +111,8 @@ class SideProxy implements IProxy {
         IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
 
         resourceManager.addReloadListener(TraitManager.INSTANCE);
-        resourceManager.addReloadListener(MaterialManager.INSTANCE);
         resourceManager.addReloadListener(PartManager.INSTANCE);
+        resourceManager.addReloadListener(MaterialManager.INSTANCE);
 
         if (ModList.get().isLoaded("gamestages")) {
             resourceManager.addReloadListener(GameStagesCompat.INSTANCE);

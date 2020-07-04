@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Compound binding part
+- Automatic material adapters. The mod will try to create materials from the parts in older data packs and mods. This will be removed in version 2.0 (Minecraft 1.16.x).
+- (API) Material serializers can now be registered. Shouldn't be needed in most cases.
 
 ## [1.8.2] - 2020-07-02
 ### Added
