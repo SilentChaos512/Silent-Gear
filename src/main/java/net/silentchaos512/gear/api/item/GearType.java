@@ -148,4 +148,12 @@ public final class GearType {
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gearType.silentgear." + this.name);
     }
+
+    @Override
+    public String toString() {
+        return "GearType{" +
+                "name='" + name + '\'' +
+                ", parent=" + parent +
+                '}';
+    }
 }

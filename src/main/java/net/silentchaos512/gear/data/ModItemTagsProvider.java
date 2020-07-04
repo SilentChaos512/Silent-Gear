@@ -132,8 +132,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof AbstractBlueprintItem)
                 .map(item -> (AbstractBlueprintItem) item)
-                .sorted(Comparator.comparing(AbstractBlueprintItem::getItemTag))
-                .forEach(item -> blueprints.put(item.getItemTag(), item));
+                .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().getId()))
+                .forEach(item -> blueprints.put(item.getItemTag().getId(), item));
         Tag.Builder<Item> blueprintsBuilder = getBuilder(ModTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
             ItemTags.Wrapper tag = new ItemTags.Wrapper(tagId);

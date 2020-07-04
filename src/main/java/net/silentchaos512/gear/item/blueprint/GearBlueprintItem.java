@@ -1,7 +1,10 @@
 package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
@@ -9,7 +12,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 
 import javax.annotation.Nullable;
@@ -17,7 +19,7 @@ import java.util.List;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
-    private ResourceLocation itemTag;
+    private Tag<Item> itemTag;
 
     public GearBlueprintItem(GearType gearType, boolean singleUse, Properties properties) {
         super(properties, singleUse);
@@ -29,14 +31,14 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public ResourceLocation getItemTag() {
+    public Tag<Item> getItemTag() {
         if (itemTag == null) {
             ResourceLocation id = this.getRegistryName();
             if (id != null) {
-                itemTag = new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName());
+                itemTag = new ItemTags.Wrapper(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()));
             }
         }
-        return itemTag != null ? itemTag : SilentGear.getId("invalid");
+        return itemTag;
     }
 
     @Override

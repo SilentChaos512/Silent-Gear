@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -28,17 +27,15 @@ public class CompoundPartItem extends Item {
     private static final String NBT_COLOR = "Color";
     private static final String NBT_MATERIALS = "Materials";
 
-    private final ResourceLocation partId;
     private final PartType partType;
     private final int tintLayer;
 
-    public CompoundPartItem(ResourceLocation partId, PartType partType, Properties properties) {
-        this(partId, partType, 0, properties);
+    public CompoundPartItem(PartType partType, Properties properties) {
+        this(partType, 0, properties);
     }
 
-    public CompoundPartItem(ResourceLocation partId, PartType partType, int tintLayer, Properties properties) {
+    public CompoundPartItem(PartType partType, int tintLayer, Properties properties) {
         super(properties);
-        this.partId = partId;
         this.partType = partType;
         this.tintLayer = tintLayer;
     }
@@ -111,8 +108,7 @@ public class CompoundPartItem extends Item {
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;
-            // Add earlier colors multiple times, to give them greater weight
-            int colorWeight = (materials.size() - i);
+            int colorWeight = getColorWeight(i, materials.size());
             for (int j = 0; j < colorWeight; ++j) {
                 maxColorSum += Math.max(r, Math.max(g, b));
                 componentSums[0] += r;
@@ -138,6 +134,10 @@ public class CompoundPartItem extends Item {
         }
 
         return Color.VALUE_WHITE;
+    }
+
+    protected int getColorWeight(int index, int totalCount) {
+        return totalCount - index;
     }
 
     @Override

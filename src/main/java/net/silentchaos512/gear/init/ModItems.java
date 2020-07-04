@@ -27,10 +27,12 @@ public final class ModItems {
     public static final ItemRegistryObject<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
             new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
 
+    //region Blueprints and templates
     // Blueprints
     public static final ItemRegistryObject<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartType.ROD, false);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartType.TIP, false);
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartType.GRIP, false);
+    public static final ItemRegistryObject<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartType.BINDING, false);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_BLUEPRINT = registerPartBlueprint(PartType.BOWSTRING, false);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearType.SWORD, false);
     public static final ItemRegistryObject<GearBlueprintItem> DAGGER_BLUEPRINT = registerGearBlueprint(GearType.DAGGER, false);
@@ -59,6 +61,7 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartType.ROD, true);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartType.TIP, true);
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartType.GRIP, true);
+    public static final ItemRegistryObject<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartType.BINDING, true);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_TEMPLATE = registerPartBlueprint(PartType.BOWSTRING, true);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearType.SWORD, true);
     public static final ItemRegistryObject<GearBlueprintItem> DAGGER_TEMPLATE = registerGearBlueprint(GearType.DAGGER, true);
@@ -83,16 +86,19 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_TEMPLATE = registerGearBlueprint(GearType.CHESTPLATE, true);
     public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_TEMPLATE = registerGearBlueprint(GearType.LEGGINGS, true);
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearType.BOOTS, true);
+    //endregion
 
     // Compound Parts
     public static final ItemRegistryObject<CompoundPartItem> ROD = register("rod", () ->
-            new CompoundPartItem(SilentGear.getId("rod"), PartType.ROD, baseProps()));
+            new CompoundPartItem(PartType.ROD, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> LONG_ROD = register("long_rod", () ->
-            new CompoundPartItem(SilentGear.getId("long_rod"), PartType.ROD, baseProps()));
+            new CompoundPartItem(PartType.ROD, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> TIP = register("tip", () ->
-            new CompoundPartItem(SilentGear.getId("tip"), PartType.TIP, 1, baseProps()));
+            new CompoundPartItem(PartType.TIP, 1, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> GRIP = register("grip", () ->
-            new CompoundPartItem(SilentGear.getId("grip"), PartType.GRIP, baseProps()));
+            new CompoundPartItem(PartType.GRIP, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> BINDING = register("binding", () ->
+            new CompoundPartItem(PartType.BINDING, baseProps()));
 
     // Repair Kits
     public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () ->

@@ -82,6 +82,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(ModItems.CRIMSON_REPAIR_KIT, itemGenerated);
 
         // Compound parts
+        builder(ModItems.BINDING, itemGenerated);
         builder(ModItems.GRIP, itemGenerated);
         builder(ModItems.ROD, itemGenerated);
         builder(ModItems.LONG_ROD, itemGenerated);

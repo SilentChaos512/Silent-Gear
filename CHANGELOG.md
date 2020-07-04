@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Compound binding part
+
 ## [1.8.2] - 2020-07-02
 ### Added
 - Missing slingshot blueprint/template recipes

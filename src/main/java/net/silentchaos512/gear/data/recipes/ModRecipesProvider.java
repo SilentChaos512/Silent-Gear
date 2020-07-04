@@ -71,6 +71,18 @@ public class ModRecipesProvider extends RecipeProvider {
         armorBlueprint(consumer, "chestplate", ModItems.CHESTPLATE_BLUEPRINT, ModItems.CHESTPLATE_TEMPLATE, "# #", "###", "###");
         armorBlueprint(consumer, "leggings", ModItems.LEGGINGS_BLUEPRINT, ModItems.LEGGINGS_TEMPLATE, "###", "# #", "# #");
         armorBlueprint(consumer, "boots", ModItems.BOOTS_BLUEPRINT, ModItems.BOOTS_TEMPLATE, "# #", "# #");
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.BINDING_BLUEPRINT)
+                .setGroup("silentgear:blueprints/binding")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.PAPER_BLUEPRINT), 1)
+                .addIngredient(PartMaterialIngredient.of(PartType.BINDING), 2)
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.BINDING_TEMPLATE)
+                .setGroup("silentgear:blueprints/binding")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.TEMPLATE_BOARDS), 1)
+                .addIngredient(PartMaterialIngredient.of(PartType.BINDING), 2)
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(ModItems.BOWSTRING_BLUEPRINT)
                 .setGroup("silentgear:blueprints/bowstring")
                 .key('#', ModTags.Items.PAPER_BLUEPRINT)

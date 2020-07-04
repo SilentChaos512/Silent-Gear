@@ -1,0 +1,20 @@
+{
+    "type": "silentgear:compound_part",
+    "ingredients": [
+        {
+            "tag": "silentgear:blueprints/binding"
+        },
+        {
+            "type": "silentgear:material",
+            "part_type": "binding"
+        },
+        {
+            "type": "silentgear:material",
+            "part_type": "binding"
+        }
+    ],
+    "result": {
+        "item": "silentgear:binding",
+        "count": 2
+    }
+}

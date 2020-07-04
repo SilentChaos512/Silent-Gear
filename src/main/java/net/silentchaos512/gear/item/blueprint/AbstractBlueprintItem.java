@@ -4,8 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.config.Config;
@@ -18,7 +18,7 @@ public abstract class AbstractBlueprintItem extends Item {
         this.singleUse = singleUse;
     }
 
-    public abstract ResourceLocation getItemTag();
+    public abstract Tag<Item> getItemTag();
 
     protected abstract ITextComponent getCraftedName(ItemStack stack);
 
