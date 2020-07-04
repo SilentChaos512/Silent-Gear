@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.client;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -12,6 +14,7 @@ import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.utils.Color;
 
 import java.util.HashMap;
@@ -30,7 +33,7 @@ public final class ColorHandlers {
             return;
         }
 
-        itemColors.register(CustomTippedUpgrade::getItemColor, ModItems.CUSTOM_TIPPED_UPGRADE);
+        register(itemColors, CustomTippedUpgrade::getItemColor, ModItems.CUSTOM_TIPPED_UPGRADE);
 
         // Tools, armor, shields, etc.
         ForgeRegistries.ITEMS.getValues().stream()
@@ -41,6 +44,14 @@ public final class ColorHandlers {
         // Compound part items and tool heads
         Registration.getItems(CompoundPartItem.class).forEach(item ->
                 itemColors.register(item::getColor, item));
+    }
+
+    private static void register(ItemColors colors, IItemColor itemColor, ItemRegistryObject<? extends Item> item) {
+        if (item.getRegistryObject().isPresent()) {
+            colors.register(itemColor, item.get());
+        } else {
+            SilentGear.LOGGER.error("Failed to add color handler for {}: item not present", item.getRegistryObject().getId());
+        }
     }
 
     /**
