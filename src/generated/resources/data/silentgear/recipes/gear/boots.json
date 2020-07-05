@@ -1,0 +1,31 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/boots"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "armor"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "armor"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "armor"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "armor"
+    }
+  ],
+  "result": {
+    "item": "silentgear:boots"
+  }
+}

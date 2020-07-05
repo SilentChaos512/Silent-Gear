@@ -9,6 +9,7 @@ import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -20,13 +21,13 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
+public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("compound_part");
     public static final Serializer<ShapelessCompoundPartRecipe> SERIALIZER = Serializer.basic(ShapelessCompoundPartRecipe::new);
 
     private final CompoundPartItem item;
 
-    private ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
+    protected ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
         ItemStack output = recipe.getRecipeOutput();
@@ -34,6 +35,10 @@ public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
             throw new JsonParseException("result is not a compound part item: " + output);
         }
         this.item = (CompoundPartItem) output.getItem();
+    }
+
+    protected GearType getGearType() {
+        return GearType.TOOL;
     }
 
     @Override
@@ -45,7 +50,8 @@ public final class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public boolean matches(CraftingInventory inv, World worldIn) {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
-        return getMaterials(inv).stream().allMatch(mat -> mat.getMaterial().isCraftingAllowed(item.getPartType()));
+        return getMaterials(inv).stream().allMatch(mat ->
+                mat.getMaterial().isCraftingAllowed(item.getPartType(), this.getGearType()));
     }
 
     @Override

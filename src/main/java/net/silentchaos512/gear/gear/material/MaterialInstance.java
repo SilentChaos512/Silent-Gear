@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MaterialInstance implements IMaterialInstance {
+public final class MaterialInstance implements IMaterialInstance {
     private static final Map<ResourceLocation, MaterialInstance> QUICK_CACHE = new HashMap<>();
 
     private final IMaterial material;
@@ -41,7 +41,8 @@ public class MaterialInstance implements IMaterialInstance {
     private MaterialInstance(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
         this.material = material;
         this.grade = grade;
-        this.item = craftingItem;
+        this.item = craftingItem.copy();
+        this.item.setCount(1);
     }
 
     public static MaterialInstance of(IMaterial material) {
@@ -53,7 +54,7 @@ public class MaterialInstance implements IMaterialInstance {
     }
 
     public static MaterialInstance of(IMaterial material, ItemStack craftingItem) {
-        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem), craftingItem);
+        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem));
     }
 
     public static MaterialInstance of(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
@@ -130,15 +131,6 @@ public class MaterialInstance implements IMaterialInstance {
         MaterialGrade grade = MaterialGrade.fromString(nbt.getString("Grade"));
         ItemStack stack = ItemStack.read(nbt.getCompound("Item"));
         return of(material, grade, stack);
-    }
-
-    @Nullable
-    public static MaterialInstance readFast(CompoundNBT nbt) {
-        ResourceLocation id = ResourceLocation.tryCreate(nbt.getString("ID"));
-        IMaterial material = MaterialManager.get(id);
-        if (material == null) return null;
-
-        return of(material);
     }
 
     @Override

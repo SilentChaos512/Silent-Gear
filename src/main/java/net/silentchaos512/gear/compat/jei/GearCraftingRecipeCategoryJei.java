@@ -93,6 +93,9 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<ICraftingR
 
     private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {
         List<ItemStack> ret = new ArrayList<>(list);
+        if (ret.isEmpty()) {
+            return ret;
+        }
         for (int i = 0; i < amount; ++i) {
             ItemStack stack = ret.get(ret.size() - 1);
             ret.remove(ret.size() - 1);

@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/shovel"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    }
+  ],
+  "result": {
+    "item": "silentgear:shovel_head"
+  }
+}

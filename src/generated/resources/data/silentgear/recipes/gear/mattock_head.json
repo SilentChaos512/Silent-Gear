@@ -1,0 +1,27 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/mattock"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    }
+  ],
+  "result": {
+    "item": "silentgear:mattock_head"
+  }
+}

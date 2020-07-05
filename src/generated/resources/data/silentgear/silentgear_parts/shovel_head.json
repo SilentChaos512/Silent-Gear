@@ -1,0 +1,13 @@
+{
+  "type": "silentgear:compound_part",
+  "part_type": "silentgear:main",
+  "part_position": "HEAD",
+  "crafting_items": {
+    "normal": {
+      "item": "silentgear:shovel_head"
+    }
+  },
+  "name": {
+    "translate": "part.silentgear.shovel_head"
+  }
+}

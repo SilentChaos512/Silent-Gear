@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -65,7 +66,12 @@ public interface IMaterial {
         return true;
     }
 
+    @Deprecated
     default boolean isCraftingAllowed(PartType partType) {
+        return isCraftingAllowed(partType, GearType.TOOL);
+    }
+
+    default boolean isCraftingAllowed(PartType partType, GearType gearType) {
         // TODO: Something to distinguish armor, in order to check correct durability stat?
         return true;
     }

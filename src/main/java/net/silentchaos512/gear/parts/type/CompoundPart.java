@@ -10,10 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.parts.IPartPosition;
-import net.silentchaos512.gear.api.parts.IPartSerializer;
-import net.silentchaos512.gear.api.parts.PartTraitInstance;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -27,10 +24,7 @@ import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -75,8 +69,21 @@ public class CompoundPart extends AbstractGearPart {
 
     @Override
     public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
-        //noinspection ConstantConditions
-        return part != null ? part.getCraftingItem().getDisplayName() : super.getDisplayName(part, gear);
+        if (part != null) {
+            return part.getCraftingItem().getDisplayName();
+        }
+        return super.getDisplayName(null, gear);
+    }
+
+    @Override
+    public ITextComponent getMaterialName(@Nullable PartData part, ItemStack gear) {
+        if (part != null) {
+            MaterialInstance material = CompoundPartItem.getPrimaryMaterial(part.getCraftingItem());
+            if (material != null) {
+                return material.getDisplayName(partType, gear);
+            }
+        }
+        return super.getMaterialName(null, gear);
     }
 
     @Override
@@ -145,14 +152,14 @@ public class CompoundPart extends AbstractGearPart {
         return getRandomMaterials(count, -1);
     }
 
-    private static class Serializer extends AbstractGearPart.Serializer<CompoundPart> {
+    public static class Serializer extends AbstractGearPart.Serializer<CompoundPart> {
         Serializer(ResourceLocation serializerId, Function<ResourceLocation, CompoundPart> function) {
             super(serializerId, function);
         }
 
         @Override
         public CompoundPart read(ResourceLocation id, JsonObject json) {
-            CompoundPart part = super.read(id, json);
+            CompoundPart part = super.read(id, json, false);
             part.partType = PartType.get(new ResourceLocation(JSONUtils.getString(json, "part_type")));
             // FIXME
             part.partPosition = EnumUtils.byName(JSONUtils.getString(json, "part_position"), PartPositions.ANY);

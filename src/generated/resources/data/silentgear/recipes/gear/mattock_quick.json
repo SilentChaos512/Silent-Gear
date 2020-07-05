@@ -1,0 +1,31 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/mattock"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:rod"
+    }
+  ],
+  "result": {
+    "item": "silentgear:mattock"
+  }
+}

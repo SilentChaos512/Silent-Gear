@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.parts;
 
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -167,8 +168,20 @@ public final class PartData implements IPartData {
         return part.getTraits(gear, this);
     }
 
+    public boolean isCraftingAllowed(@Nullable GearType gearType) {
+        return isCraftingAllowed(gearType, null);
+    }
+
+    public boolean isCraftingAllowed(@Nullable GearType gearType, @Nullable CraftingInventory inventory) {
+        return part.isCraftingAllowed(this, gearType, inventory);
+    }
+
     public ITextComponent getDisplayName(ItemStack gear) {
         return part.getDisplayName(this, gear);
+    }
+
+    public ITextComponent getMaterialName(ItemStack gear) {
+        return part.getMaterialName(this, gear);
     }
 
     public float getRepairAmount(ItemStack gear, RepairContext.Type type) {

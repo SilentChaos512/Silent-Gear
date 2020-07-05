@@ -88,6 +88,48 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearType.BOOTS, true);
     //endregion
 
+    //region Compound Parts and Tool Heads
+    // Tool Heads
+    public static final ItemRegistryObject<ToolHeadItem> SWORD_BLADE = register("sword_blade", () ->
+            new ToolHeadItem(GearType.SWORD, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> DAGGER_BLADE = register("dagger_blade", () ->
+            new ToolHeadItem(GearType.DAGGER, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> KATANA_BLADE = register("katana_blade", () ->
+            new ToolHeadItem(GearType.KATANA, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> MACHETE_BLADE = register("machete_blade", () ->
+            new ToolHeadItem(GearType.MACHETE, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> SPEAR_TIP = register("spear_tip", () ->
+            new ToolHeadItem(GearType.SPEAR, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> PICKAXE_HEAD = register("pickaxe_head", () ->
+            new ToolHeadItem(GearType.PICKAXE, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> SHOVEL_HEAD = register("shovel_head", () ->
+            new ToolHeadItem(GearType.SHOVEL, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> AXE_HEAD = register("axe_head", () ->
+            new ToolHeadItem(GearType.AXE, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> PAXEL_HEAD = register("paxel_head", () ->
+            new ToolHeadItem(GearType.PAXEL, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> HAMMER_HEAD = register("hammer_head", () ->
+            new ToolHeadItem(GearType.HAMMER, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> EXCAVATOR_HEAD = register("excavator_head", () ->
+            new ToolHeadItem(GearType.EXCAVATOR, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> LUMBER_AXE_HEAD = register("lumber_axe_head", () ->
+            new ToolHeadItem(GearType.LUMBER_AXE, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> MATTOCK_HEAD = register("mattock_head", () ->
+            new ToolHeadItem(GearType.MATTOCK, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> SICKLE_BLADE = register("sickle_blade", () ->
+            new ToolHeadItem(GearType.SICKLE, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> SHEARS_BLADES = register("shears_blades", () ->
+            new ToolHeadItem(GearType.SHEARS, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> BOW_LIMBS = register("bow_limbs", () ->
+            new ToolHeadItem(GearType.BOW, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> CROSSBOW_LIMBS = register("crossbow_limbs", () ->
+            new ToolHeadItem(GearType.CROSSBOW, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> SLINGSHOT_LIMBS = register("slingshot_limbs", () ->
+            new ToolHeadItem(GearType.SLINGSHOT, toolHeadProps()));
+    public static final ItemRegistryObject<ToolHeadItem> SHIELD_PLATE = register("shield_plate", () ->
+            new ToolHeadItem(GearType.SHIELD, new Item.Properties().maxStackSize(1)));
+    public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = register("armor_body", () ->
+            new ToolHeadItem(GearType.ARMOR, new Item.Properties().maxStackSize(1)));
     // Compound Parts
     public static final ItemRegistryObject<CompoundPartItem> ROD = register("rod", () ->
             new CompoundPartItem(PartType.ROD, baseProps()));
@@ -99,6 +141,7 @@ public final class ModItems {
             new CompoundPartItem(PartType.GRIP, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> BINDING = register("binding", () ->
             new CompoundPartItem(PartType.BINDING, baseProps()));
+    //endregion
 
     // Repair Kits
     public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () ->
@@ -158,8 +201,12 @@ public final class ModItems {
 
     static void register() {}
 
-    static Item.Properties baseProps() {
+    private static Item.Properties baseProps() {
         return new Item.Properties().group(SilentGear.ITEM_GROUP);
+    }
+
+    private static Item.Properties toolHeadProps() {
+        return baseProps().maxStackSize(1);
     }
 
     private static <T extends Item> ItemRegistryObject<T> register(String name, Supplier<T> item) {

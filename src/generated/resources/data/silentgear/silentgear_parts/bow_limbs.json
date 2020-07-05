@@ -1,0 +1,13 @@
+{
+  "type": "silentgear:compound_part",
+  "part_type": "silentgear:main",
+  "part_position": "HEAD",
+  "crafting_items": {
+    "normal": {
+      "item": "silentgear:bow_limbs"
+    }
+  },
+  "name": {
+    "translate": "part.silentgear.bow_limbs"
+  }
+}

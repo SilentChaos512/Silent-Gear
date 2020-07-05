@@ -1,0 +1,20 @@
+{
+  "type": "silentgear:shaped_gear_crafting",
+  "pattern": [
+    "#",
+    "/",
+    "/"
+  ],
+  "key": {
+    "#": {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    "/": {
+      "tag": "silentgear:rods/rough"
+    }
+  },
+  "result": {
+    "item": "silentgear:shovel"
+  }
+}

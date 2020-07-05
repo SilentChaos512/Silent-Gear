@@ -11,6 +11,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -42,6 +43,10 @@ public class CompoundPartItem extends Item {
 
     public PartType getPartType() {
         return partType;
+    }
+
+    public GearType getGearType() {
+        return GearType.TOOL;
     }
 
     public ItemStack createFromItems(Collection<ItemStack> materials) {

@@ -491,7 +491,7 @@ public final class GearHelper {
         PartData part = GearData.getPrimaryPart(gear);
         if (part == null) return new TranslationTextComponent(gear.getTranslationKey());
 
-        ITextComponent partName = part.getDisplayName(gear);
+        ITextComponent partName = part.getMaterialName(gear);
         ITextComponent gearName = new TranslationTextComponent(gear.getTranslationKey() + ".nameProper", partName);
         ITextComponent result = gearName;
 

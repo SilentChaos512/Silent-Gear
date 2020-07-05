@@ -35,10 +35,12 @@ import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
@@ -126,8 +128,16 @@ class SideProxy implements IProxy {
     private static void serverStarted(FMLServerStartedEvent event) {
         server = event.getServer();
         SilentGear.LOGGER.info(TraitManager.MARKER, "Traits loaded: {}", TraitManager.getValues().size());
-        SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
         SilentGear.LOGGER.info(PartManager.MARKER, "Parts loaded: {}", PartManager.getValues().size());
+        SilentGear.LOGGER.info(PartManager.MARKER, "- Compound: {}", PartManager.getValues().stream()
+                .filter(part -> part instanceof CompoundPart).count());
+        SilentGear.LOGGER.info(PartManager.MARKER, "- Simple/Legacy: {}", PartManager.getValues().stream()
+                .filter(part -> !(part instanceof CompoundPart)).count());
+        SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
+        SilentGear.LOGGER.info(MaterialManager.MARKER, "- Standard: {}", MaterialManager.getValues().stream()
+                .filter(mat -> mat.getSerializer() == MaterialSerializers.STANDARD).count());
+        SilentGear.LOGGER.info(MaterialManager.MARKER, "- Adapter: {}", MaterialManager.getValues().stream()
+                .filter(mat -> mat.getSerializer() == MaterialSerializers.SIMPLE_ADAPTER).count());
     }
 
     private static void serverStopping(FMLServerStoppingEvent event) {

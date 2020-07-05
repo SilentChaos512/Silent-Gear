@@ -529,7 +529,7 @@ public final class GearData {
         INBT nbt = tagList.get(index);
         if (nbt instanceof EndNBT) return null;
 
-        PartData data = PartData.readFast((CompoundNBT) nbt);
+        PartData data = PartData.read((CompoundNBT) nbt);
         return data != null && data.getType() == PartType.MAIN ? data : null;
     }
 

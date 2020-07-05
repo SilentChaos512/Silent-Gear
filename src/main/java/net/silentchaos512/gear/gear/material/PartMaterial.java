@@ -122,8 +122,15 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public boolean isCraftingAllowed(PartType partType) {
-        return stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(partType));
+    public boolean isCraftingAllowed(PartType partType, GearType gearType) {
+        if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(partType, gearType))) {
+            if (partType != PartType.MAIN) {
+                return true;
+            }
+            ItemStat stat = gearType == GearType.ARMOR ? ItemStats.ARMOR_DURABILITY : ItemStats.DURABILITY;
+            return !getStatModifiers(stat, partType).isEmpty() && getStatUnclamped(stat, partType) > 0;
+        }
+        return false;
     }
 
     @Override

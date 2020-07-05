@@ -11,10 +11,12 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.fml.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.lib.util.NameUtils;
@@ -80,6 +82,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(ModItems.CRUDE_REPAIR_KIT, itemGenerated);
         builder(ModItems.STURDY_REPAIR_KIT, itemGenerated);
         builder(ModItems.CRIMSON_REPAIR_KIT, itemGenerated);
+
+        // Tool Heads
+        Registration.getItems(ToolHeadItem.class).forEach(item -> {
+            String texture = item.getGearType().matches(GearType.ARMOR)
+                    ? "item/dummy_icon_main"
+                    : "item/" + item.getGearType().getName() + "/head_generic_hc";
+            getBuilder(NameUtils.from(item).getPath())
+                    .parent(itemGenerated)
+                    .texture("layer0", texture);
+        });
 
         // Compound parts
         builder(ModItems.BINDING, itemGenerated);

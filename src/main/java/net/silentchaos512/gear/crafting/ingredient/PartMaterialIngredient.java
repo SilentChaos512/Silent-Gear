@@ -11,35 +11,43 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public final class PartMaterialIngredient extends Ingredient {
-    private final PartType type;
+    private final PartType partType;
+    private final GearType gearType;
 
-    private PartMaterialIngredient(PartType type) {
+    private PartMaterialIngredient(PartType partType, GearType gearType) {
         super(Stream.of());
-        this.type = type;
+        this.partType = partType;
+        this.gearType = gearType;
     }
 
-    public static PartMaterialIngredient of(PartType type) {
-        return new PartMaterialIngredient(type);
+    public static PartMaterialIngredient of(PartType partType, GearType gearType) {
+        return new PartMaterialIngredient(partType, gearType);
     }
 
     public PartType getPartType() {
-        return type;
+        return partType;
+    }
+
+    public GearType getGearType() {
+        return gearType;
     }
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         IMaterial material = MaterialManager.from(stack);
-        return material != null && material.isCraftingAllowed(type);
+        return material != null && material.isCraftingAllowed(partType, gearType);
     }
 
     @Override
@@ -47,8 +55,8 @@ public final class PartMaterialIngredient extends Ingredient {
         Collection<IMaterial> materials = MaterialManager.getValues();
         if (!materials.isEmpty()) {
             return materials.stream()
-                    .filter(mat -> mat.isCraftingAllowed(this.type))
-                    .flatMap(mat -> Stream.of(mat.getIngredient(this.type).getMatchingStacks()))
+                    .filter(mat -> mat.isCraftingAllowed(this.partType, gearType))
+                    .flatMap(mat -> Stream.of(mat.getIngredient(this.partType).getMatchingStacks()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
         }
@@ -74,7 +82,10 @@ public final class PartMaterialIngredient extends Ingredient {
     public JsonElement serialize() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.NAME.toString());
-        json.addProperty("part_type", this.type.getName().toString());
+        json.addProperty("part_type", this.partType.getName().toString());
+        if (this.gearType != GearType.TOOL) {
+            json.addProperty("gear_type", this.gearType.getName());
+        }
         return json;
     }
 
@@ -87,30 +98,44 @@ public final class PartMaterialIngredient extends Ingredient {
         @Override
         public PartMaterialIngredient parse(PacketBuffer buffer) {
             ResourceLocation typeName = buffer.readResourceLocation();
-            PartType type = PartType.get(typeName);
-            if (type == null) throw new JsonParseException("Unknown part type: " + typeName);
-            return new PartMaterialIngredient(type);
+            PartType partType = PartType.get(typeName);
+            if (partType == null) {
+                throw new JsonParseException("Unknown part type: " + typeName);
+            }
+
+            GearType gearType = GearType.get(buffer.readString());
+            if (gearType == null) {
+                throw new JsonParseException("Unknown gear type: " + typeName);
+            }
+
+            return new PartMaterialIngredient(partType, gearType);
         }
 
         @Override
         public PartMaterialIngredient parse(JsonObject json) {
             String typeName = JSONUtils.getString(json, "part_type", "");
-            if (typeName.isEmpty())
+            if (typeName.isEmpty()) {
                 throw new JsonSyntaxException("'part_type' is missing");
+            }
 
-            ResourceLocation id = typeName.contains(":")
-                    ? new ResourceLocation(typeName)
-                    : SilentGear.getId(typeName);
-            PartType type = PartType.get(id);
-            if (type == null)
+            PartType type = PartType.get(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(typeName)));
+            if (type == null) {
                 throw new JsonSyntaxException("part_type " + typeName + " does not exist");
+            }
 
-            return new PartMaterialIngredient(type);
+            String gearTypeName = JSONUtils.getString(json, "gear_type", "tool");
+            GearType gearType = GearType.get(gearTypeName);
+            if (gearType == null) {
+                throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
+            }
+
+            return new PartMaterialIngredient(type, gearType);
         }
 
         @Override
         public void write(PacketBuffer buffer, PartMaterialIngredient ingredient) {
-            buffer.writeResourceLocation(ingredient.type.getName());
+            buffer.writeResourceLocation(ingredient.partType.getName());
+            buffer.writeString(ingredient.gearType.getName());
         }
     }
 }

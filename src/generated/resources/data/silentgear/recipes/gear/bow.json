@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "item": "silentgear:bow_limbs"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:rod"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:bowstring"
+    }
+  ],
+  "result": {
+    "item": "silentgear:bow"
+  }
+}

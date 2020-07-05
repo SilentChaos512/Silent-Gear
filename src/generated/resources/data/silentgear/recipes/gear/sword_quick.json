@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/sword"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:rod"
+    }
+  ],
+  "result": {
+    "item": "silentgear:sword"
+  }
+}
