@@ -10,7 +10,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.IPartPosition;
+import net.silentchaos512.gear.api.parts.IPartSerializer;
+import net.silentchaos512.gear.api.parts.PartTraitInstance;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -20,11 +23,15 @@ import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -89,21 +96,35 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
         // Get any base modifiers for this part (should be none, normally?)
-        Collection<StatInstance> baseStats = new ArrayList<>(this.stats.get(stat));
+        List<StatInstance> baseStats = new ArrayList<>(this.stats.get(stat));
         ItemStack stack = part.getCraftingItem();
         if (!(stack.getItem() instanceof CompoundPartItem)) {
             return baseStats;
         }
 
         // Get the materials and all the stat modifiers they provide for this stat
-        Collection<MaterialInstance> materials = CompoundPartItem.getMaterials(stack);
+        List<MaterialInstance> materials = CompoundPartItem.getMaterials(stack);
         Collection<StatInstance> statMods = materials.stream()
                 .flatMap(m -> m.getStatModifiers(stat, this.partType, gear).stream())
                 .collect(Collectors.toList());
 
+        if (statMods.isEmpty()) {
+            // No modifiers for this stat, so doing anything else is pointless
+            return statMods;
+        }
+
+        // Synergy
+        if (stat.doesSynergyApply()) {
+            float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(gear, part));
+            statMods.add(new StatInstance(synergy - 1, StatInstance.Operation.MUL2));
+        }
+
+        GetStatModifierEvent event = new GetStatModifierEvent(part, stat, baseStats);
+        MinecraftForge.EVENT_BUS.post(event);
+
         // Average together all modifiers of the same op. This makes things like rods with varying
         // numbers of materials more "sane".
-        List<StatInstance> ret = new ArrayList<>(baseStats);
+        List<StatInstance> ret = new ArrayList<>(event.getModifiers());
         for (StatInstance.Operation op : StatInstance.Operation.values()) {
             Collection<StatInstance> modsForOp = statMods.stream().filter(s -> s.getOp() == op).collect(Collectors.toList());
             if (!modsForOp.isEmpty()) {
@@ -112,9 +133,7 @@ public class CompoundPart extends AbstractGearPart {
             }
         }
 
-        GetStatModifierEvent event = new GetStatModifierEvent(part, stat, ret);
-        MinecraftForge.EVENT_BUS.post(event);
-        return event.getModifiers();
+        return ret;
     }
 
     @Override

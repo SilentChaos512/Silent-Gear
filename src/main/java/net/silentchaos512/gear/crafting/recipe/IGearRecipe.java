@@ -16,7 +16,7 @@ interface IGearRecipe {
     ICoreItem getOutputItem();
 
     default Collection<PartData> getParts(IInventory inv) {
-        Collection<MaterialInstance> materials = new ArrayList<>();
+        List<MaterialInstance> materials = new ArrayList<>();
         List<PartData> parts = new ArrayList<>();
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {

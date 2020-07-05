@@ -634,5 +634,6 @@
   "misc.silentgear.poorlyMade": "This item is poorly made and will not last long",
   "misc.silentgear.tier": "Tier %d",
   "misc.silentgear.ungradedParts": "*Contains ungraded parts!",
-  "misc.silentgear.spaceBrackets": " (%s)"
+  "misc.silentgear.spaceBrackets": " (%s)",
+  "misc.silentgear.synergy": "Synergy: %s"
 }

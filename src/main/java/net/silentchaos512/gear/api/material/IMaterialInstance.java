@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -19,6 +20,14 @@ public interface IMaterialInstance {
     MaterialGrade getGrade();
 
     ItemStack getItem();
+
+    int getTier(PartType partType);
+
+    default float getStat(ItemStat stat, PartType partType) {
+        return getStat(stat, partType, ItemStack.EMPTY);
+    }
+
+    float getStat(ItemStat stat, PartType partType, ItemStack gear);
 
     CompoundNBT write(CompoundNBT nbt);
 

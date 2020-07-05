@@ -9,6 +9,7 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -46,6 +47,18 @@ public class LazyMaterialInstance implements IMaterialInstance {
     public ItemStack getItem() {
         IMaterial material = getMaterial();
         return material != null ? MaterialInstance.of(material).getItem() : ItemStack.EMPTY;
+    }
+
+    @Override
+    public int getTier(PartType partType) {
+        IMaterial material = getMaterial();
+        return material != null ? material.getTier(partType) : 0;
+    }
+
+    @Override
+    public float getStat(ItemStat stat, PartType partType, ItemStack gear) {
+        IMaterial material = getMaterial();
+        return material != null ? material.getStat(stat, partType) : 0;
     }
 
     @Override

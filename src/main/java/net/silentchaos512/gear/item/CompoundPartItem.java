@@ -16,6 +16,8 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -58,7 +60,7 @@ public class CompoundPartItem extends Item {
                 .collect(Collectors.toList()));
     }
 
-    public ItemStack create(Collection<? extends IMaterialInstance> materials) {
+    public ItemStack create(List<? extends IMaterialInstance> materials) {
         ListNBT materialListNbt = new ListNBT();
         materials.forEach(m -> materialListNbt.add(m.write(new CompoundNBT())));
 
@@ -71,7 +73,7 @@ public class CompoundPartItem extends Item {
         return result;
     }
 
-    public static Collection<MaterialInstance> getMaterials(ItemStack stack) {
+    public static List<MaterialInstance> getMaterials(ItemStack stack) {
         ListNBT materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, 10);
         return materialListNbt.stream()
                 .filter(nbt -> nbt instanceof CompoundNBT)
@@ -156,6 +158,11 @@ public class CompoundPartItem extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        PartData part = PartData.from(stack);
+        if (part != null) {
+            float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
+            tooltip.add(SynergyUtils.getDisplayText(synergy));
+        }
         getMaterials(stack).stream()
                 .map(mat -> new StringTextComponent("- ").appendSibling(mat.getDisplayNameWithGrade(this.partType).applyTextStyle(TextFormatting.ITALIC)))
                 .forEach(tooltip::add);

@@ -91,6 +91,11 @@ public final class MaterialInstance implements IMaterialInstance {
         return item;
     }
 
+    @Override
+    public int getTier(PartType partType) {
+        return material.getTier(partType);
+    }
+
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
         return getStatModifiers(stat, partType, ItemStack.EMPTY);
     }
@@ -105,10 +110,7 @@ public final class MaterialInstance implements IMaterialInstance {
         return mods;
     }
 
-    public float getStat(ItemStat stat, PartType partType) {
-        return getStat(stat, partType, ItemStack.EMPTY);
-    }
-
+    @Override
     public float getStat(ItemStat stat, PartType partType, ItemStack gear) {
         return stat.compute(stat.getDefaultValue(), getStatModifiers(stat, partType, gear));
     }

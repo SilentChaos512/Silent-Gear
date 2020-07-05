@@ -16,8 +16,8 @@ import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -61,7 +61,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
         return result;
     }
 
-    private static Collection<MaterialInstance> getMaterials(IInventory inv) {
+    private static List<MaterialInstance> getMaterials(IInventory inv) {
         return StackList.from(inv).stream()
                 .map(stack -> stack.copy().split(1))
                 .map(MaterialInstance::from)
@@ -72,7 +72,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         // Create an example item, so we're not just showing a broken item
-        ItemStack result = item.create(Collections.singleton(new LazyMaterialInstance(SilentGear.getId("example"))));
+        ItemStack result = item.create(Collections.singletonList(new LazyMaterialInstance(SilentGear.getId("example"))));
         result.setCount(getBaseRecipe().getRecipeOutput().getCount());
 //        GearData.setExampleTag(result, true);
         return result;
