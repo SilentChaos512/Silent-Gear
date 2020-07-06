@@ -25,7 +25,7 @@ public class SynergyUtils {
 
     public static float getSynergy(PartType partType, List<? extends IMaterialInstance> materials, List<PartTraitInstance> traits) {
         if (materials.isEmpty()) {
-            throw new IllegalArgumentException("Materials list is empty!");
+            return 1;
         }
 
         // First, we add a bonus for the number of unique materials

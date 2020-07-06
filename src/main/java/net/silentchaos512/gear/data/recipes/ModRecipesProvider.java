@@ -174,8 +174,8 @@ public class ModRecipesProvider extends RecipeProvider {
         ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.SHIELD)
                 .addIngredient(ModItems.SHIELD_BLUEPRINT.get().getItemTag())
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 2)
-                .addIngredient(PartMaterialIngredient.of(PartType.ROD, GearType.TOOL))
-                .build(consumer, SilentGear.getId("gear_shield"));
+                .addIngredient(GearPartIngredient.of(PartType.ROD))
+                .build(consumer, SilentGear.getId("gear/shield"));
 
         ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.HELMET)
                 .addIngredient(ModItems.HELMET_BLUEPRINT.get().getItemTag())

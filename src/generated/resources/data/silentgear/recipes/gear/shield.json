@@ -15,7 +15,7 @@
       "gear_type": "armor"
     },
     {
-      "type": "silentgear:material",
+      "type": "silentgear:part_type",
       "part_type": "silentgear:rod"
     }
   ],
