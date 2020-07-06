@@ -1,10 +1,11 @@
 package net.silentchaos512.gear.data.recipes;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonObject;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
@@ -16,16 +17,21 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
+import net.silentchaos512.gear.crafting.recipe.ConversionRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.data.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.ExtendedShapelessRecipeBuilder;
+import net.silentchaos512.lib.util.NameUtils;
 
+import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class ModRecipesProvider extends RecipeProvider {
@@ -232,6 +238,16 @@ public class ModRecipesProvider extends RecipeProvider {
                 .key('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
                 .key('/', ModTags.Items.RODS_ROUGH)
                 .build(consumer, SilentGear.getId("gear/rough/axe"));
+
+        // Coonversion recipes
+        toolConversion(consumer, ModItems.SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
+        toolConversion(consumer, ModItems.PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
+        toolConversion(consumer, ModItems.SHOVEL, Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
+        toolConversion(consumer, ModItems.AXE, Items.DIAMOND_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
+        armorConversion(consumer, ModItems.HELMET, Items.DIAMOND_HELMET, Items.GOLDEN_HELMET, Items.IRON_HELMET, Items.LEATHER_HELMET);
+        armorConversion(consumer, ModItems.CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
+        armorConversion(consumer, ModItems.LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
+        armorConversion(consumer, ModItems.BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
         //endregion
 
         // Repair Kits
@@ -673,6 +689,55 @@ public class ModRecipesProvider extends RecipeProvider {
             builderTemplate.patternLine(line);
         }
         builderTemplate.build(consumer);
+    }
+
+    private static final Map<IItemTier, ResourceLocation> TOOL_MATERIALS = ImmutableMap.<IItemTier, ResourceLocation>builder()
+            .put(ItemTier.DIAMOND, SilentGear.getId("diamond"))
+            .put(ItemTier.GOLD, SilentGear.getId("gold"))
+            .put(ItemTier.IRON, SilentGear.getId("iron"))
+            .put(ItemTier.STONE, SilentGear.getId("stone"))
+            .put(ItemTier.WOOD, SilentGear.getId("wood"))
+            .build();
+    private static final Map<IArmorMaterial,  ResourceLocation> ARMOR_MATERIALS = ImmutableMap.<IArmorMaterial, ResourceLocation>builder()
+            .put(ArmorMaterial.DIAMOND, SilentGear.getId("diamond"))
+            .put(ArmorMaterial.GOLD, SilentGear.getId("gold"))
+            .put(ArmorMaterial.IRON, SilentGear.getId("iron"))
+            .put(ArmorMaterial.LEATHER, SilentGear.getId("leather"))
+            .build();
+
+    private static void toolConversion(Consumer<IFinishedRecipe> consumer, IItemProvider result, Item... toolItems) {
+        for (Item input : toolItems) {
+            assert input instanceof TieredItem;
+            ExtendedShapelessRecipeBuilder.builder(ConversionRecipe.SERIALIZER, result)
+                    .addIngredient(input)
+                    .addExtraData(json -> {
+                        ResourceLocation material = TOOL_MATERIALS.getOrDefault(((TieredItem) input).getTier(), SilentGear.getId("emerald"));
+                        json.getAsJsonObject("result").add("materials", buildMaterials(material, SilentGear.getId("wood")));
+                    })
+                    .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.from(input).getPath()));
+        }
+    }
+
+    private static void armorConversion(Consumer<IFinishedRecipe> consumer, IItemProvider result, Item... armorItems) {
+        for (Item input : armorItems) {
+            assert input instanceof ArmorItem;
+            ExtendedShapelessRecipeBuilder.builder(ConversionRecipe.SERIALIZER, result)
+                    .addIngredient(input)
+                    .addExtraData(json -> {
+                        ResourceLocation material = ARMOR_MATERIALS.getOrDefault(((ArmorItem) input).getArmorMaterial(), SilentGear.getId("emerald"));
+                        json.getAsJsonObject("result").add("materials", buildMaterials(material, null));
+                    })
+                    .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.from(input).getPath()));
+        }
+    }
+
+    private static JsonObject buildMaterials(ResourceLocation main, @Nullable ResourceLocation rod) {
+        JsonObject json = new JsonObject();
+        json.add("main", LazyMaterialInstance.of(main).serialize());
+        if (rod != null) {
+            json.add("rod", LazyMaterialInstance.of(rod).serialize());
+        }
+        return json;
     }
 
     private void damagingItem(Consumer<IFinishedRecipe> consumer, ShapelessRecipeBuilder builder) {

@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond_axe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:axe",
+    "materials": {
+      "main": {
+        "material": "silentgear:diamond"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}

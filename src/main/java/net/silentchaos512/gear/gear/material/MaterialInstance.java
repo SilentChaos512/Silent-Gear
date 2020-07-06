@@ -2,6 +2,7 @@ package net.silentchaos512.gear.gear.material;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -151,5 +152,11 @@ public final class MaterialInstance implements IMaterialInstance {
     @Override
     public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
         return material.getDisplayName(partType, gear);
+    }
+
+    @Override
+    public void write(PacketBuffer buffer) {
+        buffer.writeResourceLocation(this.material.getId());
+        buffer.writeEnumValue(this.grade);
     }
 }

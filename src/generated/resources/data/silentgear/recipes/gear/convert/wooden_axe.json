@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:wooden_axe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:axe",
+    "materials": {
+      "main": {
+        "material": "silentgear:wood"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}

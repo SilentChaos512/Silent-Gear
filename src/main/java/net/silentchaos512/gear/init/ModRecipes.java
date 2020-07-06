@@ -35,6 +35,7 @@ public final class ModRecipes {
         register(ReplaceToolHeadRecipe.NAME, ReplaceToolHeadRecipe.SERIALIZER);
         register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
         register(SGearDamageItemRecipe.NAME, SGearDamageItemRecipe.SERIALIZER);
+        register(SilentGear.getId("conversion"), ConversionRecipe.SERIALIZER);
         register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
 
         // Ingredient serializers

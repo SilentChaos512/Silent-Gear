@@ -2,15 +2,17 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.Registration;
-import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.parts.PartData;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 interface IGearRecipe {
     ICoreItem getOutputItem();
@@ -36,20 +38,21 @@ interface IGearRecipe {
 
         if (!materials.isEmpty()) {
             // Construct a tool head
-            ToolHeadItem toolHeadItem = Registration.getItems(ToolHeadItem.class).stream()
-                    .filter(item -> this.getOutputItem().getGearType().matches(item.getGearType()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (toolHeadItem != null) {
-                ItemStack toolHead = toolHeadItem.create(materials);
-                PartData toolHeadPart = PartData.from(toolHead);
-                if (toolHeadPart != null) {
-                    parts.add(0, toolHeadPart);
-                }
-            }
+            createToolHead(this.getOutputItem().getGearType(), materials).ifPresent(part ->
+                    parts.add(0, part));
         }
 
         return parts;
+    }
+
+    static Optional<PartData> createToolHead(GearType gearType, List<? extends IMaterialInstance> materials) {
+        return createCompoundPart(gearType, PartType.MAIN, materials);
+    }
+
+    static Optional<PartData> createCompoundPart(GearType gearType, PartType partType, List<? extends IMaterialInstance> materials) {
+        return partType.getCompoundPartItem(gearType).map(item -> {
+            ItemStack stack = item.create(materials);
+            return PartData.from(stack);
+        });
     }
 }

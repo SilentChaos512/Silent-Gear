@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond_pickaxe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:pickaxe",
+    "materials": {
+      "main": {
+        "material": "silentgear:diamond"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}
