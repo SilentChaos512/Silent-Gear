@@ -1,11 +1,14 @@
 package net.silentchaos512.gear.api.material;
 
+import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -19,6 +22,14 @@ public interface IMaterialInstance {
     MaterialGrade getGrade();
 
     ItemStack getItem();
+
+    int getTier(PartType partType);
+
+    default float getStat(ItemStat stat, PartType partType) {
+        return getStat(stat, partType, ItemStack.EMPTY);
+    }
+
+    float getStat(ItemStat stat, PartType partType, ItemStack gear);
 
     CompoundNBT write(CompoundNBT nbt);
 
@@ -38,4 +49,16 @@ public interface IMaterialInstance {
         ITextComponent gradeSuffix = TextUtil.translate("misc", "spaceBrackets", getGrade().getDisplayName());
         return getDisplayName(partType, ItemStack.EMPTY).appendSibling(gradeSuffix);
     }
+
+    default JsonObject serialize() {
+        JsonObject json = new JsonObject();
+        json.addProperty("material", getMaterialId().toString());
+        MaterialGrade grade = getGrade();
+        if (grade != MaterialGrade.NONE) {
+            json.addProperty("grade", grade.name());
+        }
+        return json;
+    }
+
+    void write(PacketBuffer buffer);
 }

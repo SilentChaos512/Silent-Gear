@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/pickaxe"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    }
+  ],
+  "result": {
+    "item": "silentgear:pickaxe_head"
+  }
+}

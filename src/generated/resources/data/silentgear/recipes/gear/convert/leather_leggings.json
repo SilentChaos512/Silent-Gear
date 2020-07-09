@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:leather_leggings"
+    }
+  ],
+  "result": {
+    "item": "silentgear:leggings",
+    "materials": {
+      "main": {
+        "material": "silentgear:leather"
+      }
+    }
+  }
+}

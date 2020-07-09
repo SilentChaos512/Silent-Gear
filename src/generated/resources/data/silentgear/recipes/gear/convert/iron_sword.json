@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_sword"
+    }
+  ],
+  "result": {
+    "item": "silentgear:sword",
+    "materials": {
+      "main": {
+        "material": "silentgear:iron"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}

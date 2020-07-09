@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -58,13 +59,13 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Override
-    default boolean requiresPartOfType(PartType type) {
-        return type == PartType.MAIN || type == PartType.ROD;
+    default boolean supportsPartOfType(PartType type) {
+        return requiresPartOfType(type) || type == PartType.BINDING || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
     }
 
     @Override
-    default boolean supportsPartOfType(PartType type) {
-        return requiresPartOfType(type) || type == PartType.BINDING || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
+    default Collection<PartType> getRequiredParts() {
+        return ImmutableList.of(PartType.MAIN, PartType.ROD);
     }
 
     /**

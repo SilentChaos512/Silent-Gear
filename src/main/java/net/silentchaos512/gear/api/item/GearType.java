@@ -129,6 +129,10 @@ public final class GearType {
         return matches(type, true);
     }
 
+    public boolean matches(GearType type) {
+        return matches(type.name, true);
+    }
+
     /**
      * Check if this type's name matches the given string, or if its parent type does. The type
      * "all" will match anything if {@code includeAll} is true.
@@ -143,6 +147,10 @@ public final class GearType {
             return matches(type.split("/")[1], includeAll);
         }
         return (includeAll && "all".equals(type)) || name.equals(type) || (parent != null && parent.matches(type, includeAll));
+    }
+
+    public boolean matches(GearType type, boolean includeAll) {
+        return matches(type.name, includeAll);
     }
 
     public ITextComponent getDisplayName() {

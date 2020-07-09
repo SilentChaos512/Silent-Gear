@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/machete"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    }
+  ],
+  "result": {
+    "item": "silentgear:machete_blade"
+  }
+}

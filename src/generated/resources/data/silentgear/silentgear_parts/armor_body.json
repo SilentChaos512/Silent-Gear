@@ -1,0 +1,13 @@
+{
+  "type": "silentgear:compound_part",
+  "part_type": "silentgear:main",
+  "part_position": "ARMOR",
+  "crafting_items": {
+    "normal": {
+      "item": "silentgear:armor_body"
+    }
+  },
+  "name": {
+    "translate": "part.silentgear.armor_body"
+  }
+}

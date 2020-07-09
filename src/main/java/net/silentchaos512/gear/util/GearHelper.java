@@ -34,7 +34,8 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
+import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.parts.*;
 import net.silentchaos512.gear.traits.TraitConst;
@@ -491,7 +492,7 @@ public final class GearHelper {
         PartData part = GearData.getPrimaryPart(gear);
         if (part == null) return new TranslationTextComponent(gear.getTranslationKey());
 
-        ITextComponent partName = part.getDisplayName(gear);
+        ITextComponent partName = part.getMaterialName(gear);
         ITextComponent gearName = new TranslationTextComponent(gear.getTranslationKey() + ".nameProper", partName);
         ITextComponent result = gearName;
 
@@ -520,18 +521,16 @@ public final class GearHelper {
         return event.getPrefixes();
     }
 
-    public static Collection<IPartData> getExamplePartsFromRecipe(Iterable<Ingredient> ingredients) {
+    public static Collection<IPartData> getExamplePartsFromRecipe(GearType gearType, Iterable<Ingredient> ingredients) {
         Collection<IPartData> list = new ArrayList<>();
 
         for (Ingredient ingredient : ingredients) {
-            if (ingredient instanceof GearPartIngredient) {
-                PartType type = ((GearPartIngredient) ingredient).getPartType();
-                if (type == PartType.MAIN)
-                    list.add(new LazyPartData(PartConst.MAIN_EXAMPLE));
-                else if (type == PartType.ROD)
-                    list.add(new LazyPartData(PartConst.ROD_EXAMPLE));
-                else if (type == PartType.BOWSTRING)
-                    list.add(new LazyPartData(PartConst.BOWSTRING_EXAMPLE));
+            if (ingredient instanceof IPartIngredient) {
+                PartType type = ((IPartIngredient) ingredient).getPartType();
+                type.getCompoundPartItem(gearType).ifPresent(item -> {
+                    ItemStack stack = item.create(Collections.singletonList(LazyMaterialInstance.of(Const.EXAMPLE)));
+                    list.add(LazyPartData.of(type.getCompoundPartId(gearType), stack));
+                });
             } else {
                 // This isn't perfect, since parts may not be loaded at this time...
                 ItemStack[] matchingStacks = ingredient.getMatchingStacks();

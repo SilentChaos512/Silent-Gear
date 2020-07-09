@@ -69,7 +69,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public int getTier() {
+    public int getTier(PartData part) {
         return tier;
     }
 
@@ -117,7 +117,8 @@ public abstract class AbstractGearPart implements IGearPart {
     @Override
     public float getRepairAmount(RepairContext context) {
         PartData material = context.getMaterial();
-        if (material.getType() != PartType.MAIN || !(context.getGear().getItem() instanceof ICoreItem)) return 0;
+        if (material.getType() != PartType.MAIN || !(context.getGear().getItem() instanceof ICoreItem))
+            return 0;
 
         // Material tier must be equal to or higher than gear's primary
         if (material.getTier() < GearData.getTier(context.getGear())) return 0;
@@ -252,6 +253,11 @@ public abstract class AbstractGearPart implements IGearPart {
 
         @Override
         public T read(ResourceLocation id, JsonObject json) {
+            return read(id, json, true);
+        }
+
+        @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
+        protected T read(ResourceLocation id, JsonObject json, boolean failOnMissingElement) {
             T part = function.apply(id);
 
             // Stats
@@ -283,7 +289,7 @@ public abstract class AbstractGearPart implements IGearPart {
             JsonElement craftingItems = json.get("crafting_items");
             if (craftingItems != null && craftingItems.isJsonObject()) {
                 part.materials = PartMaterial.deserialize(id, craftingItems.getAsJsonObject());
-            } else {
+            } else if (failOnMissingElement) {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
             }
 
@@ -320,7 +326,7 @@ public abstract class AbstractGearPart implements IGearPart {
                         part.display.put(key, PartDisplay.from(jsonObject, defaultProps));
                     }
                 }
-            } else {
+            } else if (failOnMissingElement) {
                 throw new JsonSyntaxException("Expected 'textures' to be an object");
             }
 
@@ -336,7 +342,7 @@ public abstract class AbstractGearPart implements IGearPart {
                     part.blacklistedGearTypes.clear();
                     blacklist.forEach(e -> part.blacklistedGearTypes.add(e.getAsString()));
                 }
-            } else {
+            } else if (failOnMissingElement) {
                 throw new JsonSyntaxException("Expected 'availability' to be an object");
             }
 

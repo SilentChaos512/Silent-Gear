@@ -2,7 +2,6 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.ShapedRecipe;
@@ -11,17 +10,11 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapedRecipe;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-public final class ShapedGearRecipe extends ExtendedShapedRecipe {
+public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGearRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("shaped_gear_crafting");
     public static final ExtendedShapedRecipe.Serializer<ShapedGearRecipe> SERIALIZER = Serializer.basic(ShapedGearRecipe::new);
 
@@ -47,7 +40,7 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
-        return getParts(inv).stream().allMatch(part -> part.getPart().isCraftingAllowed(gearType, inv));
+        return getParts(inv).stream().allMatch(part -> part.isCraftingAllowed(gearType, inv));
     }
 
     @Override
@@ -55,17 +48,15 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe {
         return item.construct(getParts(inv));
     }
 
-    private static Collection<PartData> getParts(IInventory inv) {
-        return StackList.from(inv).stream()
-                .map(PartData::from)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    @Override
+    public ICoreItem getOutputItem() {
+        return item;
     }
 
     @Override
     public ItemStack getRecipeOutput() {
         // Create an example item, so we're not just showing a broken item
-        ItemStack result = item.construct(GearHelper.getExamplePartsFromRecipe(getIngredients()));
+        ItemStack result = item.construct(GearHelper.getExamplePartsFromRecipe(this.item.getGearType(), getIngredients()));
         GearData.setExampleTag(result, true);
         return result;
     }

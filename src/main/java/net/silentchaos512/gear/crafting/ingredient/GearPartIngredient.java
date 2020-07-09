@@ -32,12 +32,13 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.type.CompoundPart;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-public final class GearPartIngredient extends Ingredient {
+public final class GearPartIngredient extends Ingredient implements IPartIngredient {
     private final PartType type;
 
     private GearPartIngredient(PartType type) {
@@ -50,6 +51,7 @@ public final class GearPartIngredient extends Ingredient {
         return new GearPartIngredient(type);
     }
 
+    @Override
     public PartType getPartType() {
         return type;
     }
@@ -58,6 +60,10 @@ public final class GearPartIngredient extends Ingredient {
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         IGearPart part = PartManager.from(stack);
+        if (part instanceof CompoundPart && part.getType() == PartType.MAIN) {
+            // FIXME: Temp workaround for tool heads...
+            return false;
+        }
         return part != null && part.getType().equals(type);
     }
 

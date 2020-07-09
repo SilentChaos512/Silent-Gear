@@ -22,14 +22,34 @@ import java.util.stream.Collectors;
 public class LazyPartData implements IPartData {
     private final ResourceLocation partId;
     private final MaterialGrade grade;
+    private final ItemStack craftingItem;
 
     public LazyPartData(ResourceLocation partId) {
-        this(partId, MaterialGrade.NONE);
+        this(partId, ItemStack.EMPTY);
     }
 
     public LazyPartData(ResourceLocation partId, MaterialGrade grade) {
+        this(partId, grade, ItemStack.EMPTY);
+    }
+
+    public LazyPartData(ResourceLocation partId, MaterialGrade grade, ItemStack craftingItem) {
         this.partId = partId;
         this.grade = grade;
+        this.craftingItem = craftingItem;
+    }
+
+    public LazyPartData(ResourceLocation partId, ItemStack craftingItem) {
+        this.partId = partId;
+        this.grade = MaterialGrade.NONE;
+        this.craftingItem = craftingItem;
+    }
+
+    public static LazyPartData of(ResourceLocation partId) {
+        return new LazyPartData(partId);
+    }
+
+    public static LazyPartData of(ResourceLocation partId, ItemStack craftingItem) {
+        return new LazyPartData(partId, craftingItem);
     }
 
     @Override
@@ -50,10 +70,13 @@ public class LazyPartData implements IPartData {
 
     @Override
     public ItemStack getCraftingItem() {
-        IGearPart part = getPart();
-        if (part != null)
-            return PartData.of(part).getCraftingItem();
-        return ItemStack.EMPTY;
+        if (this.craftingItem.isEmpty()) {
+            IGearPart part = getPart();
+            if (part != null) {
+                return PartData.of(part).getCraftingItem();
+            }
+        }
+        return this.craftingItem;
     }
 
     @Override
@@ -61,6 +84,9 @@ public class LazyPartData implements IPartData {
         tags.putString("ID", partId.toString());
         if (this.grade != MaterialGrade.NONE) {
             tags.putString("Grade", this.grade.name());
+        }
+        if (!this.craftingItem.isEmpty()) {
+            tags.put("Item", this.craftingItem.write(new CompoundNBT()));
         }
         return tags;
     }

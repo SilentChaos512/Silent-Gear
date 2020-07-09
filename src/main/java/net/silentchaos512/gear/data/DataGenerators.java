@@ -7,6 +7,7 @@ import net.silentchaos512.gear.data.client.ModBlockStateProvider;
 import net.silentchaos512.gear.data.client.ModItemModelProvider;
 import net.silentchaos512.gear.data.loot.ModLootTables;
 import net.silentchaos512.gear.data.material.MaterialsProvider;
+import net.silentchaos512.gear.data.part.PartsProvider;
 import net.silentchaos512.gear.data.recipes.ModRecipesProvider;
 
 public final class DataGenerators {
@@ -17,6 +18,8 @@ public final class DataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         gen.addProvider(new MaterialsProvider(gen));
+        gen.addProvider(new PartsProvider(gen));
+
         gen.addProvider(new ModBlockTagsProvider(gen));
         gen.addProvider(new ModItemTagsProvider(gen));
         gen.addProvider(new ModLootTables(gen));

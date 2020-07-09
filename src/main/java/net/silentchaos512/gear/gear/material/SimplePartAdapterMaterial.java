@@ -62,6 +62,12 @@ public class SimplePartAdapterMaterial implements IMaterial {
         return MaterialSerializers.SIMPLE_ADAPTER;
     }
 
+    @Nullable
+    @Override
+    public IMaterial getParent() {
+        return null;
+    }
+
     @Override
     public int getTier(PartType partType) {
         return getPart(partType)

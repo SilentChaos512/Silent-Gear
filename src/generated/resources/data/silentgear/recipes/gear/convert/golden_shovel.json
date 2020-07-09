@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:golden_shovel"
+    }
+  ],
+  "result": {
+    "item": "silentgear:shovel",
+    "materials": {
+      "main": {
+        "material": "silentgear:gold"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}

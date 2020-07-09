@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -23,7 +22,11 @@ import java.util.List;
 public interface IGearPart {
     ResourceLocation getId();
 
-    int getTier();
+    int getTier(PartData part);
+
+    default int getTier() {
+        return getTier(PartData.of(this));
+    }
 
     PartType getType();
 
@@ -70,8 +73,8 @@ public interface IGearPart {
         return stat.compute(0, getStatModifiers(stat, part));
     }
 
-    default float computeUnclampedStatValue(ItemStat stat) {
-        return stat.compute(0, false, getStatModifiers(stat, PartData.of(this)));
+    default float computeUnclampedStatValue(ItemStat stat, PartData part) {
+        return stat.compute(0, false, getStatModifiers(stat, part));
     }
 
     /**
@@ -88,27 +91,37 @@ public interface IGearPart {
         return normalLossRate;
     }
 
+    @Deprecated
+    default boolean isCraftingAllowed(@Nullable GearType gearType) {
+        return isCraftingAllowed(PartData.of(this), gearType);
+    }
+
     /**
      * Determine if the part can be used to craft an item of the given type.
      *
      * @param gearType The gear type (or null if not available)
      * @return True if crafting is allowed or {@code gearType} is {@code null}, false otherwise
      */
-    default boolean isCraftingAllowed(@Nullable GearType gearType) {
+    default boolean isCraftingAllowed(PartData part, @Nullable GearType gearType) {
         if (gearType != null && this.getType() == PartType.MAIN) {
             if (gearType.matches("armor"))
-                return computeUnclampedStatValue(ItemStats.ARMOR_DURABILITY) > 0;
+                return computeUnclampedStatValue(ItemStats.ARMOR_DURABILITY, part) > 0;
             else
-                return computeUnclampedStatValue(ItemStats.DURABILITY) > 0;
+                return computeUnclampedStatValue(ItemStats.DURABILITY, part) > 0;
         }
         return true;
     }
 
-    default boolean isCraftingAllowed(@Nullable GearType gearType, CraftingInventory inventory) {
+    @Deprecated
+    default boolean isCraftingAllowed(@Nullable GearType gearType, @Nullable CraftingInventory inventory) {
+        return isCraftingAllowed(PartData.of(this), gearType, inventory);
+    }
+
+    default boolean isCraftingAllowed(PartData part, @Nullable GearType gearType, @Nullable CraftingInventory inventory) {
 /*        if (!GameStagesCompatProxy.canCraft(gearType, inventory) || !GameStagesCompatProxy.canCraft(this, inventory)) {
             return false;
         }*/
-        return isCraftingAllowed(gearType);
+        return isCraftingAllowed(part, gearType);
     }
 
     /**
@@ -139,6 +152,10 @@ public interface IGearPart {
 
     ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
 
+    default ITextComponent getMaterialName(@Nullable PartData part, ItemStack gear) {
+        return getDisplayName(part, gear);
+    }
+
     @Nullable
     default ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
         return null;
@@ -164,23 +181,11 @@ public interface IGearPart {
      * Creates a {@link PartData} instance with possibly randomized data. This can be overridden to
      * apply custom data to randomized parts (see {@link net.silentchaos512.gear.util.GearGenerator}).
      *
-     * @return Part data instance
-     * @deprecated Use {@link #randomizeData(int)} instead
-     */
-    @Deprecated
-    default PartData randomizeData() {
-        return randomizeData(SilentGear.random.nextInt(4));
-    }
-
-    /**
-     * Creates a {@link PartData} instance with possibly randomized data. This can be overridden to
-     * apply custom data to randomized parts (see {@link net.silentchaos512.gear.util.GearGenerator}).
-     *
      * @param tier The target tier for random materials. If there are no materials of that tier,
      *             materials of another tier should be selected.
      * @return Part data instance
      */
-    default PartData randomizeData(int tier) {
+    default PartData randomizeData(GearType gearType, int tier) {
         return PartData.of(this);
     }
 

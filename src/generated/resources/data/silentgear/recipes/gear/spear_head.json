@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/spear"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    }
+  ],
+  "result": {
+    "item": "silentgear:spear_tip"
+  }
+}

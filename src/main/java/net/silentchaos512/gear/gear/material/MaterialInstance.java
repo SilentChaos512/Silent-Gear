@@ -2,6 +2,7 @@ package net.silentchaos512.gear.gear.material;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MaterialInstance implements IMaterialInstance {
+public final class MaterialInstance implements IMaterialInstance {
     private static final Map<ResourceLocation, MaterialInstance> QUICK_CACHE = new HashMap<>();
 
     private final IMaterial material;
@@ -41,7 +42,8 @@ public class MaterialInstance implements IMaterialInstance {
     private MaterialInstance(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
         this.material = material;
         this.grade = grade;
-        this.item = craftingItem;
+        this.item = craftingItem.copy();
+        this.item.setCount(1);
     }
 
     public static MaterialInstance of(IMaterial material) {
@@ -53,7 +55,7 @@ public class MaterialInstance implements IMaterialInstance {
     }
 
     public static MaterialInstance of(IMaterial material, ItemStack craftingItem) {
-        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem), craftingItem);
+        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem));
     }
 
     public static MaterialInstance of(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
@@ -90,6 +92,11 @@ public class MaterialInstance implements IMaterialInstance {
         return item;
     }
 
+    @Override
+    public int getTier(PartType partType) {
+        return material.getTier(partType);
+    }
+
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
         return getStatModifiers(stat, partType, ItemStack.EMPTY);
     }
@@ -104,10 +111,7 @@ public class MaterialInstance implements IMaterialInstance {
         return mods;
     }
 
-    public float getStat(ItemStat stat, PartType partType) {
-        return getStat(stat, partType, ItemStack.EMPTY);
-    }
-
+    @Override
     public float getStat(ItemStat stat, PartType partType, ItemStack gear) {
         return stat.compute(stat.getDefaultValue(), getStatModifiers(stat, partType, gear));
     }
@@ -132,15 +136,6 @@ public class MaterialInstance implements IMaterialInstance {
         return of(material, grade, stack);
     }
 
-    @Nullable
-    public static MaterialInstance readFast(CompoundNBT nbt) {
-        ResourceLocation id = ResourceLocation.tryCreate(nbt.getString("ID"));
-        IMaterial material = MaterialManager.get(id);
-        if (material == null) return null;
-
-        return of(material);
-    }
-
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
         nbt.putString("ID", material.getId().toString());
@@ -157,5 +152,11 @@ public class MaterialInstance implements IMaterialInstance {
     @Override
     public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
         return material.getDisplayName(partType, gear);
+    }
+
+    @Override
+    public void write(PacketBuffer buffer) {
+        buffer.writeResourceLocation(this.material.getId());
+        buffer.writeEnumValue(this.grade);
     }
 }

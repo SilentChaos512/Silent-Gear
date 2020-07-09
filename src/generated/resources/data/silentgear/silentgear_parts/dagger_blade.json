@@ -1,0 +1,13 @@
+{
+  "type": "silentgear:compound_part",
+  "part_type": "silentgear:main",
+  "part_position": "HEAD",
+  "crafting_items": {
+    "normal": {
+      "item": "silentgear:dagger_blade"
+    }
+  },
+  "name": {
+    "translate": "part.silentgear.dagger_blade"
+  }
+}

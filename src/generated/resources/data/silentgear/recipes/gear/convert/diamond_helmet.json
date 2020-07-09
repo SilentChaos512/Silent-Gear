@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond_helmet"
+    }
+  ],
+  "result": {
+    "item": "silentgear:helmet",
+    "materials": {
+      "main": {
+        "material": "silentgear:diamond"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_leggings"
+    }
+  ],
+  "result": {
+    "item": "silentgear:leggings",
+    "materials": {
+      "main": {
+        "material": "silentgear:iron"
+      }
+    }
+  }
+}

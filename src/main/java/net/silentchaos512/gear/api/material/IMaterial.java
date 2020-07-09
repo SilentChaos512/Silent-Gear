@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -27,6 +27,9 @@ public interface IMaterial {
     ResourceLocation getId();
 
     IMaterialSerializer<?> getSerializer();
+
+    @Nullable
+    IMaterial getParent();
 
     int getTier(PartType partType);
 
@@ -57,15 +60,7 @@ public interface IMaterial {
         return stat.compute(0, false, getStatModifiers(stat, partType));
     }
 
-    @Deprecated
-    default boolean isCraftingAllowed(ICoreItem item, PartType partType) {
-        if (partType == PartType.MAIN) {
-            return getStatUnclamped(item.getDurabilityStat(), partType) > 0;
-        }
-        return true;
-    }
-
-    default boolean isCraftingAllowed(PartType partType) {
+    default boolean isCraftingAllowed(PartType partType, GearType gearType) {
         // TODO: Something to distinguish armor, in order to check correct durability stat?
         return true;
     }

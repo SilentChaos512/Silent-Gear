@@ -4,10 +4,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+Very big internal changes. We are in the process of fully integrating the new material system with the mod! Old data packs should continue working where possible, but I recommend updating.
 ### Added
+- Tool heads (compound main parts). The crafting process is mostly the same as before, but the new tool heads are separate items which are crafted with the new material system.
 - Compound binding part
-- Automatic material adapters. The mod will try to create materials from the parts in older data packs and mods. This will be removed in version 2.0 (Minecraft 1.16.x).
+- Automatic material adapters. The mod will try to create materials from the parts in older data packs and mods. This will be removed in version 2.0 (Minecraft 1.16.x). The log will contain details on what it decides to do with each part, and why adapters are not created.
 - (API) Material serializers can now be registered. Shouldn't be needed in most cases.
+### Changed
+- Gear generator (commands, loot tables) now create items entirely of compound parts.
+- Log now lists the number of compound parts vs simple/legacy parts, in addition to the total
+- Log now lists the number of adapter materials, as well as the total.
 
 ## [1.8.2] - 2020-07-02
 ### Added
