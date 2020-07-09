@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.9.0] - 2020-07-09
 Very big internal changes. We are in the process of fully integrating the new material system with the mod! Old data packs should continue working where possible, but I recommend updating.
 ### Added
 - Tool heads (compound main parts). The crafting process is mostly the same as before, but the new tool heads are separate items which are crafted with the new material system.
@@ -14,6 +14,8 @@ Very big internal changes. We are in the process of fully integrating the new ma
 - Gear generator (commands, loot tables) now create items entirely of compound parts.
 - Log now lists the number of compound parts vs simple/legacy parts, in addition to the total
 - Log now lists the number of adapter materials, as well as the total.
+### Fixed
+- Possible prevent a ColorHandler crash, cause unknown. Some item colors will break if this occurrs. [#162]
 
 ## [1.8.2] - 2020-07-02
 ### Added
