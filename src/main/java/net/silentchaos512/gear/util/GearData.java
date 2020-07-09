@@ -313,7 +313,7 @@ public final class GearData {
         int maxTier = 0;
         for (PartData data : uniqueParts) {
             maxRarity = Math.max(maxRarity, data.computeStat(ItemStats.RARITY));
-            maxTier = Math.max(maxTier, data.getPart().getTier());
+            maxTier = Math.max(maxTier, data.getTier());
         }
         for (PartData data : uniqueParts) {
             if (maxRarity > 0) {
@@ -321,7 +321,7 @@ public final class GearData {
                 synergy -= 0.005 * Math.abs(primaryRarity - rarity);
             }
             if (maxTier > 0) {
-                int tier = data.getPart().getTier();
+                int tier = data.getTier();
                 synergy -= 0.16f * Math.abs(maxTier - tier);
             }
         }
@@ -359,7 +359,7 @@ public final class GearData {
 
         CompoundNBT tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
-        PartDataList list = PartDataList.empty();
+        PartDataList list = PartDataList.of();
         Map<PartType, Integer> partCounts = new HashMap<>();
 
         for (INBT nbt : tagList) {

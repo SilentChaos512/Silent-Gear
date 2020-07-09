@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-public final class GearPartIngredient extends Ingredient {
+public final class GearPartIngredient extends Ingredient implements IPartIngredient {
     private final PartType type;
 
     private GearPartIngredient(PartType type) {
@@ -51,6 +51,7 @@ public final class GearPartIngredient extends Ingredient {
         return new GearPartIngredient(type);
     }
 
+    @Override
     public PartType getPartType() {
         return type;
     }

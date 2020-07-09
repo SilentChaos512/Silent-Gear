@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -23,7 +22,11 @@ import java.util.List;
 public interface IGearPart {
     ResourceLocation getId();
 
-    int getTier();
+    int getTier(PartData part);
+
+    default int getTier() {
+        return getTier(PartData.of(this));
+    }
 
     PartType getType();
 
@@ -178,23 +181,11 @@ public interface IGearPart {
      * Creates a {@link PartData} instance with possibly randomized data. This can be overridden to
      * apply custom data to randomized parts (see {@link net.silentchaos512.gear.util.GearGenerator}).
      *
-     * @return Part data instance
-     * @deprecated Use {@link #randomizeData(int)} instead
-     */
-    @Deprecated
-    default PartData randomizeData() {
-        return randomizeData(SilentGear.random.nextInt(4));
-    }
-
-    /**
-     * Creates a {@link PartData} instance with possibly randomized data. This can be overridden to
-     * apply custom data to randomized parts (see {@link net.silentchaos512.gear.util.GearGenerator}).
-     *
      * @param tier The target tier for random materials. If there are no materials of that tier,
      *             materials of another tier should be selected.
      * @return Part data instance
      */
-    default PartData randomizeData(int tier) {
+    default PartData randomizeData(GearType gearType, int tier) {
         return PartData.of(this);
     }
 

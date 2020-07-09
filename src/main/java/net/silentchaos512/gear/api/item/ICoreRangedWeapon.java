@@ -1,11 +1,13 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface ICoreRangedWeapon extends ICoreTool {
@@ -23,13 +25,13 @@ public interface ICoreRangedWeapon extends ICoreTool {
     }
 
     @Override
-    default boolean requiresPartOfType(PartType type) {
-        return type == PartType.MAIN || type == PartType.ROD || type == PartType.BOWSTRING;
+    default boolean supportsPartOfType(PartType type) {
+        return requiresPartOfType(type) || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
     }
 
     @Override
-    default boolean supportsPartOfType(PartType type) {
-        return requiresPartOfType(type) || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
+    default Collection<PartType> getRequiredParts() {
+        return ImmutableList.of(PartType.MAIN, PartType.ROD, PartType.BOWSTRING);
     }
 
     @Override

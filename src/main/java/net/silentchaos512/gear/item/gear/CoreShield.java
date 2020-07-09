@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
@@ -29,6 +30,7 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -76,8 +78,8 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
-    public boolean requiresPartOfType(PartType type) {
-        return type == PartType.ROD || ICoreItem.super.requiresPartOfType(type);
+    public Collection<PartType> getRequiredParts() {
+        return ImmutableList.of(PartType.MAIN, PartType.ROD);
     }
 
     @Override

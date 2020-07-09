@@ -142,7 +142,7 @@ public final class PartData implements IPartData {
 
     @Override
     public int getTier() {
-        return part.getTier();
+        return part.getTier(this);
     }
 
     @Nonnull

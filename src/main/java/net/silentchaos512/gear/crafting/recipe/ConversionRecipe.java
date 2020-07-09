@@ -124,7 +124,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     private Collection<? extends IPartData> getParts() {
-        PartDataList ret = PartDataList.empty();
+        PartDataList ret = PartDataList.of();
         //noinspection OverlyLongLambda
         this.resultMaterials.forEach((partType, list) -> {
             partType.getCompoundPartItem(item.getGearType()).ifPresent(partItem -> {

@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
 public class MaterialManager implements IResourceManagerReloadListener {
@@ -125,9 +126,23 @@ public class MaterialManager implements IResourceManagerReloadListener {
         return example == null || part.getPackName().equals(example.getPackName());
     }
 
-    public static Collection<IMaterial> getValues() {
+    public static List<IMaterial> getValues() {
+        return getValues(true);
+    }
+
+    public static List<IMaterial> getValues(boolean includeChildren) {
         synchronized (MAP) {
-            return MAP.values();
+            return MAP.values().stream()
+                    .filter(m -> includeChildren || m.getParent() == null)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    public static List<IMaterial> getChildren(IMaterial material) {
+        synchronized (MAP) {
+            return MAP.values().stream()
+                    .filter(m -> m.getParent() == material)
+                    .collect(Collectors.toList());
         }
     }
 

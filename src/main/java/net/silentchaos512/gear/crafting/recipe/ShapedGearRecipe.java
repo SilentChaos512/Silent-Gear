@@ -56,7 +56,7 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGea
     @Override
     public ItemStack getRecipeOutput() {
         // Create an example item, so we're not just showing a broken item
-        ItemStack result = item.construct(GearHelper.getExamplePartsFromRecipe(getIngredients()));
+        ItemStack result = item.construct(GearHelper.getExamplePartsFromRecipe(this.item.getGearType(), getIngredients()));
         GearData.setExampleTag(result, true);
         return result;
     }

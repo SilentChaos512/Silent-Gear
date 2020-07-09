@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -10,8 +11,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.traits.SynergyTrait;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SynergyUtils {
@@ -41,7 +41,7 @@ public class SynergyUtils {
                 .mapToInt(m -> m.getTier(partType))
                 .max().orElse(0);
 
-        for (IMaterialInstance material : materials) {
+        for (IMaterialInstance material : getUniques(materials)) {
             if (maxRarity > 0) {
                 float rarity = material.getStat(ItemStats.RARITY, partType);
                 synergy -= 0.005 * Math.abs(primaryRarity - rarity);
@@ -60,6 +60,14 @@ public class SynergyUtils {
         }
 
         return (float) MathHelper.clamp(synergy, MIN_VALUE, MAX_VALUE);
+    }
+
+    private static Collection<IMaterialInstance> getUniques(Collection<? extends IMaterialInstance> materials) {
+        Map<ResourceLocation, IMaterialInstance> ret = new LinkedHashMap<>();
+        for (IMaterialInstance material : materials) {
+            ret.put(material.getMaterialId(), material);
+        }
+        return ret.values();
     }
 
     public static ITextComponent getDisplayText(float synergy) {

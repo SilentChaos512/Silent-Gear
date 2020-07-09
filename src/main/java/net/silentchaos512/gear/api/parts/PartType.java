@@ -32,6 +32,7 @@ import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.*;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -163,6 +164,12 @@ public final class PartType {
             return null;
         }
         return PartManager.get(fallbackPart);
+    }
+
+    public ResourceLocation getCompoundPartId(GearType gearType) {
+        return getCompoundPartItem(gearType)
+                .map(NameUtils::from)
+                .orElseGet(() -> SilentGear.getId("invalid"));
     }
 
     public Optional<? extends CompoundPartItem> getCompoundPartItem(GearType gearType) {

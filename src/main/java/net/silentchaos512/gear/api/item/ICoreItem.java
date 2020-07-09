@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,11 +56,15 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     default boolean requiresPartOfType(PartType type) {
-        return type == PartType.MAIN;
+        return getRequiredParts().contains(type);
     }
 
     default boolean supportsPartOfType(PartType type) {
         return requiresPartOfType(type) || type == PartType.BINDING || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
+    }
+
+    default Collection<PartType> getRequiredParts() {
+        return ImmutableList.of(PartType.MAIN);
     }
 
     //endregion

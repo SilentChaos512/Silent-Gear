@@ -96,7 +96,7 @@ public final class TooltipHandler {
         IGearPart part = partData.getPart();
 
         // Type, tier
-        event.getToolTip().add(part.getType().getDisplayName(part.getTier()).applyTextStyle(TextFormatting.GREEN));
+        event.getToolTip().add(part.getType().getDisplayName(partData.getTier()).applyTextStyle(TextFormatting.GREEN));
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
             event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getId()).applyTextStyle(TextFormatting.DARK_GRAY));

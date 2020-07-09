@@ -69,7 +69,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public int getTier() {
+    public int getTier(PartData part) {
         return tier;
     }
 

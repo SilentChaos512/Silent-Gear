@@ -5,7 +5,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -28,6 +27,9 @@ public interface IMaterial {
     ResourceLocation getId();
 
     IMaterialSerializer<?> getSerializer();
+
+    @Nullable
+    IMaterial getParent();
 
     int getTier(PartType partType);
 
@@ -56,19 +58,6 @@ public interface IMaterial {
 
     default float getStatUnclamped(ItemStat stat, PartType partType) {
         return stat.compute(0, false, getStatModifiers(stat, partType));
-    }
-
-    @Deprecated
-    default boolean isCraftingAllowed(ICoreItem item, PartType partType) {
-        if (partType == PartType.MAIN) {
-            return getStatUnclamped(item.getDurabilityStat(), partType) > 0;
-        }
-        return true;
-    }
-
-    @Deprecated
-    default boolean isCraftingAllowed(PartType partType) {
-        return isCraftingAllowed(partType, GearType.TOOL);
     }
 
     default boolean isCraftingAllowed(PartType partType, GearType gearType) {

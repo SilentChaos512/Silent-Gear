@@ -51,11 +51,12 @@ public class RepairKitItem extends Item {
         // Old style parts
         PartData part = PartData.from(materialStack);
         if (part != null && part.getType() == PartType.MAIN) {
-            int amount = Math.round(part.computeStat(ItemStats.DURABILITY) * part.computeStat(ItemStats.REPAIR_EFFICIENCY));
+            float repairEfficiency = part.computeStat(ItemStats.REPAIR_EFFICIENCY);
+            int amount = Math.round(part.computeStat(ItemStats.DURABILITY) * (repairEfficiency > 0 ? repairEfficiency : 1));
             int tier = part.getTier();
             int current = getStoredRepairValue(repairKit, tier);
-            setStoredRepairValue(repairKit, tier, amount + current);
-            return true;
+            setStoredRepairValue(repairKit, tier, amount + current + 1);
+            return amount > 0;
         }
 
         return false;

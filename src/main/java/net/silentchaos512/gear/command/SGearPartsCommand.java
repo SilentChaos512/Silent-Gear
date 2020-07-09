@@ -211,7 +211,7 @@ public final class SGearPartsCommand {
         appendTsv(builder, part.getDisplayName(partData, ItemStack.EMPTY).getString());
         appendTsv(builder, part.getId().toString());
         appendTsv(builder, part.getType().getName());
-        appendTsv(builder, part.getTier());
+        appendTsv(builder, partData.getTier());
 
         // Stats
         for (ItemStat stat : ItemStats.allStatsOrdered()) {

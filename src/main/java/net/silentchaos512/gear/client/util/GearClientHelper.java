@@ -21,8 +21,11 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -212,8 +215,15 @@ public final class GearClientHelper {
     public static void tooltipListParts(ItemStack gear, List<ITextComponent> tooltip, Collection<PartData> parts) {
         for (PartData part : parts) {
             if (part.getPart().isVisible()) {
-                ITextComponent text = new StringTextComponent("- ").appendSibling(part.getDisplayName(gear));
-                tooltip.add(text);
+                tooltip.add(new StringTextComponent("- ").appendSibling(part.getDisplayName(gear)));
+
+                // List materials for compound parts
+                if (part.getPart() instanceof CompoundPart) {
+                    List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getCraftingItem());
+                    for (MaterialInstance material : materials) {
+                        tooltip.add(new StringTextComponent("  - ").appendSibling(material.getDisplayNameWithGrade(part.getType())));
+                    }
+                }
             }
         }
     }

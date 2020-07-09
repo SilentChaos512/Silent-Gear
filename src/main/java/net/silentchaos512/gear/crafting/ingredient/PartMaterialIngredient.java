@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public final class PartMaterialIngredient extends Ingredient {
+public final class PartMaterialIngredient extends Ingredient implements IPartIngredient {
     private final PartType partType;
     private final GearType gearType;
 
@@ -35,6 +35,7 @@ public final class PartMaterialIngredient extends Ingredient {
         return new PartMaterialIngredient(partType, gearType);
     }
 
+    @Override
     public PartType getPartType() {
         return partType;
     }

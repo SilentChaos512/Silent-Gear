@@ -1,0 +1,14 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "corail_woodcutter"
+    }
+  ],
+  "type": "corail_woodcutter:woodcutting",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "result": "silentgear:template_board",
+  "count": 8
+}

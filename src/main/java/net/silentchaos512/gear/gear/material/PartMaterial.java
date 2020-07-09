@@ -47,6 +47,7 @@ public final class PartMaterial implements IMaterial {
     @Nullable private ITextComponent namePrefix = null;
     // Keys are part_type/gear_type
     private final Map<String, MaterialDisplay> display = new HashMap<>();
+    private final List<String> blacklistedGearTypes = new ArrayList<>();
 
     private PartMaterial(ResourceLocation id, String packName) {
         this.materialId = id;
@@ -68,6 +69,7 @@ public final class PartMaterial implements IMaterial {
         return MaterialSerializers.STANDARD;
     }
 
+    @Override
     @Nullable
     public IMaterial getParent() {
         if (parent != null) {
@@ -123,12 +125,25 @@ public final class PartMaterial implements IMaterial {
 
     @Override
     public boolean isCraftingAllowed(PartType partType, GearType gearType) {
+        if (isGearTypeBlacklisted(gearType)) {
+            return false;
+        }
+
         if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(partType, gearType))) {
-            if (partType != PartType.MAIN) {
+            if (partType == PartType.MAIN) {
+                ItemStat stat = gearType == GearType.ARMOR ? ItemStats.ARMOR_DURABILITY : ItemStats.DURABILITY;
+                return !getStatModifiers(stat, partType).isEmpty() && getStatUnclamped(stat, partType) > 0;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isGearTypeBlacklisted(GearType gearType) {
+        for (String s : this.blacklistedGearTypes) {
+            if (gearType.matches(s)) {
                 return true;
             }
-            ItemStat stat = gearType == GearType.ARMOR ? ItemStats.ARMOR_DURABILITY : ItemStats.DURABILITY;
-            return !getStatModifiers(stat, partType).isEmpty() && getStatUnclamped(stat, partType) > 0;
         }
         return false;
     }
@@ -300,12 +315,11 @@ public final class PartMaterial implements IMaterial {
                 ret.tier = JSONUtils.getInt(obj, "tier", ret.tier);
                 ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
 
-                // FIXME
-//                JsonArray blacklist = getGearBlacklist(obj);
-//                if (blacklist != null) {
-//                    ret.blacklistedGearTypes.clear();
-//                    blacklist.forEach(e -> ret.blacklistedGearTypes.add(e.getAsString()));
-//                }
+                JsonArray blacklist = JSONUtils.getJsonArray(obj, "gear_blacklist", null);
+                if (blacklist != null) {
+                    ret.blacklistedGearTypes.clear();
+                    blacklist.forEach(e -> ret.blacklistedGearTypes.add(e.getAsString()));
+                }
             } else if (ret.parent == null) {
                 throw new JsonSyntaxException("Expected 'availability' to be an object");
             }
@@ -321,15 +335,6 @@ public final class PartMaterial implements IMaterial {
 
             // Deserialize use vanilla serializer
             return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
-        }
-
-        @Nullable
-        private static JsonArray getGearBlacklist(JsonObject json) {
-            if (json.has("gear_blacklist"))
-                return JSONUtils.getJsonArray(json, "gear_blacklist");
-            else if (json.has("tool_blacklist"))
-                return JSONUtils.getJsonArray(json, "tool_blacklist");
-            return null;
         }
 
         // endregion
@@ -350,11 +355,11 @@ public final class PartMaterial implements IMaterial {
             material.tier = buffer.readByte();
             material.visible = buffer.readBoolean();
 
-//            material.blacklistedGearTypes.clear();
-//            int blacklistSize = buffer.readByte();
-//            for (int i = 0; i < blacklistSize; ++i) {
-//                material.blacklistedGearTypes.add(buffer.readString());
-//            }
+            material.blacklistedGearTypes.clear();
+            int blacklistSize = buffer.readByte();
+            for (int i = 0; i < blacklistSize; ++i) {
+                material.blacklistedGearTypes.add(buffer.readString());
+            }
 
             // Textures
             int displayCount = buffer.readVarInt();
@@ -387,8 +392,8 @@ public final class PartMaterial implements IMaterial {
             buffer.writeByte(material.tier);
             buffer.writeBoolean(material.visible);
 
-//            buffer.writeByte(material.blacklistedGearTypes.size());
-//            material.blacklistedGearTypes.forEach(buffer::writeString);
+            buffer.writeByte(material.blacklistedGearTypes.size());
+            material.blacklistedGearTypes.forEach(buffer::writeString);
 
             // Textures
             buffer.writeVarInt(material.display.size());
