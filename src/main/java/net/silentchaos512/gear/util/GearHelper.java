@@ -464,7 +464,7 @@ public final class GearHelper {
 
         Collection<ItemStack> list = new ArrayList<>();
         // Create a few samples of each tool type, because rendering performance is a problem on many machines.
-        for (int i = 3; i <= Math.max(3, PartManager.getHighestMainPartTier()); ++i) {
+        for (int i = 1; i <= Math.max(3, PartManager.getHighestMainPartTier()); ++i) {
             ItemStack stack = createSampleItem(item, i);
             if (!stack.isEmpty()) {
                 list.add(stack);

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Most Netherwood textures updated [#88]
 - Blaze gold's color to be more orange
 ### Fixed
+- Wild flax plants being harvestable by right-click to harvest mods [#159, #82]
 - Missing localizations [#144]
 
 ## [1.9.0] - 2020-07-09

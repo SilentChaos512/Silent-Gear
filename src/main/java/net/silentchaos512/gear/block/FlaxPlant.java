@@ -1,45 +1,16 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.PlantType;
-import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.init.ModItems;
 
 public class FlaxPlant extends CropsBlock {
-    private final boolean wild;
 
-    public FlaxPlant(boolean wild) {
-        super(Properties.create(Material.PLANTS)
-                .hardnessAndResistance(0)
-                .doesNotBlockMovement()
-                .tickRandomly()
-                .sound(SoundType.CROP)
-        );
-        this.wild = wild;
-    }
-
-    @Override
-    public Item asItem() {
-        return super.asItem();
-    }
-
-    public BlockState getMaturePlant() {
-        return withAge(getMaxAge());
-    }
-
-    @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        if (wild) {
-            return state.isIn(Tags.Blocks.DIRT);
-        }
-        return super.isValidGround(state, worldIn, pos);
+    public FlaxPlant(Properties builder) {
+        super(builder);
     }
 
     @Override

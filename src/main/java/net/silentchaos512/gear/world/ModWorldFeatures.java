@@ -15,7 +15,6 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
 import net.silentchaos512.gear.world.placement.NetherFloorWithExtra;
@@ -65,7 +64,7 @@ public final class ModWorldFeatures {
     private static void addWildFlax(Biome biome) {
         SilentGear.LOGGER.info("Add wild flax to {}", biome.getRegistryName());
         biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                (new PlantFeature(((FlaxPlant) ModBlocks.WILD_FLAX_PLANT.asBlock()).getMaturePlant(), 32, 4))
+                (new PlantFeature(ModBlocks.WILD_FLAX_PLANT.asBlockState(), 32, 4))
                         .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
                         .withPlacement(Placement.COUNT_HEIGHTMAP_32.configure(new FrequencyConfig(1)))
         );
