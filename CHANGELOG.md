@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Most Netherwood textures updated [#88]
 - Blaze gold's color to be more orange
+### Fixed
+- Missing localizations [#144]
 
 ## [1.9.0] - 2020-07-09
 Very big internal changes. We are in the process of fully integrating the new material system with the mod! Old data packs should continue working where possible, but I recommend updating.
