@@ -1,0 +1,24 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "minecraft:leaves"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.leaves"
+  },
+  "display": {
+    "fletching/all": {
+      "texture": "low_contrast",
+      "color": "#4A8F28"
+    }
+  },
+  "stats": {
+    "fletching": {}
+  }
+}

@@ -113,6 +113,18 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("#/")
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.FLETCHING_BLUEPRINT)
+                .setGroup("silentgear:blueprints/fletching")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.PAPER_BLUEPRINT), 2)
+                .addIngredient(Tags.Items.FEATHERS)
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.FLETCHING_TEMPLATE)
+                .setGroup("silentgear:blueprints/fletching")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.TEMPLATE_BOARDS), 2)
+                .addIngredient(Tags.Items.FEATHERS)
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
         ShapelessRecipeBuilder.shapelessRecipe(ModItems.GRIP_BLUEPRINT)
                 .setGroup("silentgear:blueprints/grip")
                 .addIngredient(Ingredient.fromTag(ModTags.Items.PAPER_BLUEPRINT), 2)
@@ -155,6 +167,58 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.STONE)
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
+        //endregion
+
+        //region Compound Parts
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.ROD, 4)
+                .addIngredient(ModItems.ROD_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.ROD), 2)
+                .build(consumer, SilentGear.getId("part/rod"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.LONG_ROD, 2)
+                .addIngredient(ModItems.ROD_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.ROD), 3)
+                .build(consumer, SilentGear.getId("part/long_rod"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.BINDING, 1)
+                .addIngredient(ModItems.BINDING_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.BINDING))
+                .build(consumer, SilentGear.getId("part/binding"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.BINDING, 2)
+                .addIngredient(ModItems.BINDING_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.BINDING), 2)
+                .build(consumer, SilentGear.getId("part/binding2"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.BOWSTRING, 1)
+                .addIngredient(ModItems.BOWSTRING_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.BOWSTRING), 3)
+                .build(consumer, SilentGear.getId("part/bowstring"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.FLETCHING, 1)
+                .addIngredient(ModItems.FLETCHING_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.FLETCHING), 1)
+                .build(consumer, SilentGear.getId("part/fletching"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.GRIP, 1)
+                .addIngredient(ModItems.GRIP_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.GRIP))
+                .build(consumer, SilentGear.getId("part/grip"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.GRIP, 2)
+                .addIngredient(ModItems.GRIP_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.GRIP), 2)
+                .build(consumer, SilentGear.getId("part/grip2"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.TIP, 1)
+                .addIngredient(ModItems.TIP_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.TIP))
+                .build(consumer, SilentGear.getId("part/tip"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.TIP, 2)
+                .addIngredient(ModItems.TIP_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.TIP), 2)
+                .build(consumer, SilentGear.getId("part/tip2"));
         //endregion
 
         //region Gear items
@@ -279,6 +343,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(ModTags.Items.INGOTS_CRIMSON_STEEL))
                 .build(consumer);
 
+        //region Sort me, plz
         // TODO: Maybe should organize these better...
         // A
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ADVANCED_UPGRADE_BASE)
@@ -605,6 +670,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.STONE)
                 .addCriterion("has_item", hasItem(ItemTags.PLANKS))
                 .build(consumer);
+        //endregion
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")

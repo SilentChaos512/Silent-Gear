@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Compound bowstring part
+- Compound fletching part (will be used for arrows, not implemented)
 - Missing netherwood blocks (stripped log, fence, trapdoor, and door) [#88]
 ### Changed
 - Most Netherwood textures updated [#88]

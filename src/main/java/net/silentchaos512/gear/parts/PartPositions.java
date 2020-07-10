@@ -34,6 +34,7 @@ public enum PartPositions implements IPartPosition {
     HIGHLIGHT("", "highlight", true),
     TIP("tip", "tip", true),
     BOWSTRING("bowstring", "bowstring", true),
+    FLETCHING("fletching", "fletching", true),
     BINDING("binding", "binding", true);
 
     public static final Map<PartPositions, PartType> LITE_MODEL_LAYERS = ImmutableMap.<PartPositions, PartType>builder()

@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/bowstring"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:bowstring"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:bowstring"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:bowstring"
+    }
+  ],
+  "result": {
+    "item": "silentgear:bowstring"
+  }
+}

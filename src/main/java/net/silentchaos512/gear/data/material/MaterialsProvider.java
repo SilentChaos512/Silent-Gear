@@ -356,6 +356,11 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST, 0x969696)
                 .display(PartType.ROD, PartTextureType.HIGH_CONTRAST, 0x969696)
         );//endregion
+        // region Feather
+        ret.add(new MaterialBuilder(SilentGear.getId("feather"), 1, Tags.Items.FEATHERS)
+                .noStats(PartType.FLETCHING)
+                .display(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+        );//endregion
         //region Flax
         ret.add(new MaterialBuilder(SilentGear.getId("flax"), 1, CraftingItems.FLAX_STRING)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
@@ -489,6 +494,11 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.GRIP, ItemStats.RARITY, 5, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, TraitConst.FLEXIBLE, 3)
                 .display(PartTextureType.LOW_CONTRAST, 0xC65C35)
+        );//endregion
+        // region Leaves
+        ret.add(new MaterialBuilder(SilentGear.getId("leaves"), 1, ItemTags.LEAVES)
+                .noStats(PartType.FLETCHING)
+                .display(PartTextureType.LOW_CONTRAST, 0x4A8F28)
         );//endregion
         //region Netherrack
         ret.add(new MaterialBuilder(SilentGear.getId("netherrack"), 1, Tags.Items.NETHERRACK)

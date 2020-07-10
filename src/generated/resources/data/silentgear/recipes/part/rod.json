@@ -1,0 +1,20 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprints/rod"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:rod"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:rod"
+    }
+  ],
+  "result": {
+    "item": "silentgear:rod",
+    "count": 4
+  }
+}

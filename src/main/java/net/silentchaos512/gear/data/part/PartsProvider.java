@@ -44,6 +44,7 @@ public class PartsProvider implements IDataProvider {
         Collection<PartBuilder> ret = new ArrayList<>();
 
         ret.add(part("binding", PartType.BINDING, PartPositions.BINDING, ModItems.BINDING));
+        ret.add(part("fletching", PartType.FLETCHING, PartPositions.FLETCHING, ModItems.FLETCHING));
         ret.add(part("grip", PartType.GRIP, PartPositions.GRIP, ModItems.GRIP));
         ret.add(part("long_rod", PartType.ROD, PartPositions.ROD, ModItems.LONG_ROD));
         ret.add(part("rod", PartType.ROD, PartPositions.ROD, ModItems.ROD));

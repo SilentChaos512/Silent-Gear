@@ -30,6 +30,7 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartType.GRIP, false);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartType.BINDING, false);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_BLUEPRINT = registerPartBlueprint(PartType.BOWSTRING, false);
+    public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartType.FLETCHING, false);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearType.SWORD, false);
     public static final ItemRegistryObject<GearBlueprintItem> DAGGER_BLUEPRINT = registerGearBlueprint(GearType.DAGGER, false);
     public static final ItemRegistryObject<GearBlueprintItem> KATANA_BLUEPRINT = registerGearBlueprint(GearType.KATANA, false);
@@ -59,6 +60,7 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartType.GRIP, true);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartType.BINDING, true);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_TEMPLATE = registerPartBlueprint(PartType.BOWSTRING, true);
+    public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartType.FLETCHING, true);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearType.SWORD, true);
     public static final ItemRegistryObject<GearBlueprintItem> DAGGER_TEMPLATE = registerGearBlueprint(GearType.DAGGER, true);
     public static final ItemRegistryObject<GearBlueprintItem> KATANA_TEMPLATE = registerGearBlueprint(GearType.KATANA, true);
@@ -86,57 +88,61 @@ public final class ModItems {
 
     //region Compound Parts and Tool Heads
     // Tool Heads
-    public static final ItemRegistryObject<ToolHeadItem> SWORD_BLADE = register("sword_blade", () ->
+    public static final ItemRegistryObject<ToolHeadItem> SWORD_BLADE = registerCompoundPart("sword_blade", () ->
             new ToolHeadItem(GearType.SWORD, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> DAGGER_BLADE = register("dagger_blade", () ->
+    public static final ItemRegistryObject<ToolHeadItem> DAGGER_BLADE = registerCompoundPart("dagger_blade", () ->
             new ToolHeadItem(GearType.DAGGER, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> KATANA_BLADE = register("katana_blade", () ->
+    public static final ItemRegistryObject<ToolHeadItem> KATANA_BLADE = registerCompoundPart("katana_blade", () ->
             new ToolHeadItem(GearType.KATANA, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> MACHETE_BLADE = register("machete_blade", () ->
+    public static final ItemRegistryObject<ToolHeadItem> MACHETE_BLADE = registerCompoundPart("machete_blade", () ->
             new ToolHeadItem(GearType.MACHETE, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> SPEAR_TIP = register("spear_tip", () ->
+    public static final ItemRegistryObject<ToolHeadItem> SPEAR_TIP = registerCompoundPart("spear_tip", () ->
             new ToolHeadItem(GearType.SPEAR, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> PICKAXE_HEAD = register("pickaxe_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> PICKAXE_HEAD = registerCompoundPart("pickaxe_head", () ->
             new ToolHeadItem(GearType.PICKAXE, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> SHOVEL_HEAD = register("shovel_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> SHOVEL_HEAD = registerCompoundPart("shovel_head", () ->
             new ToolHeadItem(GearType.SHOVEL, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> AXE_HEAD = register("axe_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> AXE_HEAD = registerCompoundPart("axe_head", () ->
             new ToolHeadItem(GearType.AXE, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> PAXEL_HEAD = register("paxel_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> PAXEL_HEAD = registerCompoundPart("paxel_head", () ->
             new ToolHeadItem(GearType.PAXEL, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> HAMMER_HEAD = register("hammer_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> HAMMER_HEAD = registerCompoundPart("hammer_head", () ->
             new ToolHeadItem(GearType.HAMMER, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> EXCAVATOR_HEAD = register("excavator_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> EXCAVATOR_HEAD = registerCompoundPart("excavator_head", () ->
             new ToolHeadItem(GearType.EXCAVATOR, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> LUMBER_AXE_HEAD = register("lumber_axe_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> LUMBER_AXE_HEAD = registerCompoundPart("lumber_axe_head", () ->
             new ToolHeadItem(GearType.LUMBER_AXE, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> MATTOCK_HEAD = register("mattock_head", () ->
+    public static final ItemRegistryObject<ToolHeadItem> MATTOCK_HEAD = registerCompoundPart("mattock_head", () ->
             new ToolHeadItem(GearType.MATTOCK, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> SICKLE_BLADE = register("sickle_blade", () ->
+    public static final ItemRegistryObject<ToolHeadItem> SICKLE_BLADE = registerCompoundPart("sickle_blade", () ->
             new ToolHeadItem(GearType.SICKLE, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> SHEARS_BLADES = register("shears_blades", () ->
+    public static final ItemRegistryObject<ToolHeadItem> SHEARS_BLADES = registerCompoundPart("shears_blades", () ->
             new ToolHeadItem(GearType.SHEARS, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> BOW_LIMBS = register("bow_limbs", () ->
+    public static final ItemRegistryObject<ToolHeadItem> BOW_LIMBS = registerCompoundPart("bow_limbs", () ->
             new ToolHeadItem(GearType.BOW, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> CROSSBOW_LIMBS = register("crossbow_limbs", () ->
+    public static final ItemRegistryObject<ToolHeadItem> CROSSBOW_LIMBS = registerCompoundPart("crossbow_limbs", () ->
             new ToolHeadItem(GearType.CROSSBOW, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> SLINGSHOT_LIMBS = register("slingshot_limbs", () ->
+    public static final ItemRegistryObject<ToolHeadItem> SLINGSHOT_LIMBS = registerCompoundPart("slingshot_limbs", () ->
             new ToolHeadItem(GearType.SLINGSHOT, toolHeadProps()));
-    public static final ItemRegistryObject<ToolHeadItem> SHIELD_PLATE = register("shield_plate", () ->
+    public static final ItemRegistryObject<ToolHeadItem> SHIELD_PLATE = registerCompoundPart("shield_plate", () ->
             new ToolHeadItem(GearType.SHIELD, new Item.Properties().maxStackSize(1)));
-    public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = register("armor_body", () ->
+    public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
             new ToolHeadItem(GearType.ARMOR, new Item.Properties().maxStackSize(1)));
     // Compound Parts
-    public static final ItemRegistryObject<CompoundPartItem> ROD = register("rod", () ->
+    public static final ItemRegistryObject<CompoundPartItem> ROD = registerCompoundPart("rod", () ->
             new CompoundPartItem(PartType.ROD, baseProps()));
-    public static final ItemRegistryObject<CompoundPartItem> LONG_ROD = register("long_rod", () ->
+    public static final ItemRegistryObject<CompoundPartItem> LONG_ROD = registerCompoundPart("long_rod", () ->
             new CompoundPartItem(PartType.ROD, baseProps()));
-    public static final ItemRegistryObject<CompoundPartItem> TIP = register("tip", () ->
+    public static final ItemRegistryObject<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
             new CompoundPartItem(PartType.TIP, 1, baseProps()));
-    public static final ItemRegistryObject<CompoundPartItem> GRIP = register("grip", () ->
+    public static final ItemRegistryObject<CompoundPartItem> GRIP = registerCompoundPart("grip", () ->
             new CompoundPartItem(PartType.GRIP, baseProps()));
-    public static final ItemRegistryObject<CompoundPartItem> BINDING = register("binding", () ->
+    public static final ItemRegistryObject<CompoundPartItem> BINDING = registerCompoundPart("binding", () ->
             new CompoundPartItem(PartType.BINDING, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> BOWSTRING = registerCompoundPart("bowstring", () ->
+            new CompoundPartItem(PartType.BOWSTRING, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> FLETCHING = registerCompoundPart("fletching", () ->
+            new CompoundPartItem(PartType.FLETCHING, baseProps()));
     //endregion
 
     // Repair Kits
@@ -207,6 +213,10 @@ public final class ModItems {
 
     private static <T extends Item> ItemRegistryObject<T> register(String name, Supplier<T> item) {
         return new ItemRegistryObject<>(Registration.ITEMS.register(name, item));
+    }
+
+    private static <T extends CompoundPartItem> ItemRegistryObject<T> registerCompoundPart(String name, Supplier<T> item) {
+        return register(name, item);
     }
 
     private static ItemRegistryObject<GearBlueprintItem> registerGearBlueprint(GearType gearType, boolean singleUse) {

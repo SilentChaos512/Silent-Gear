@@ -31,6 +31,10 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         this.gearType = gearType;
     }
 
+    public static PartMaterialIngredient of(PartType partType) {
+        return of(partType, GearType.TOOL);
+    }
+
     public static PartMaterialIngredient of(PartType partType, GearType gearType) {
         return new PartMaterialIngredient(partType, gearType);
     }

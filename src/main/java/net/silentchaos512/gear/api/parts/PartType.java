@@ -21,7 +21,6 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -32,6 +31,7 @@ import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.*;
+import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -48,17 +48,22 @@ public final class PartType {
     public static final PartType BINDING = create(
             SilentGear.getId("binding"),
             createSerializer("binding", BindingPart::new),
-            () -> ModItems.BINDING.getRegistryObject()
+            () -> ModItems.BINDING
     );
     public static final PartType BOWSTRING = create(
             SilentGear.getId("bowstring"),
             createSerializer("bowstring", BowstringPart::new),
             PartConst.FALLBACK_BOWSTRING
     );
+    public static final PartType FLETCHING = create(
+            SilentGear.getId("fletching"),
+            createSerializer("fletching", FletchingPart::new),
+            () -> ModItems.FLETCHING
+    );
     public static final PartType GRIP = create(
             SilentGear.getId("grip"),
             createSerializer("grip", GripPart::new),
-            () -> ModItems.GRIP.getRegistryObject()
+            () -> ModItems.GRIP
     );
     @Deprecated
     public static final PartType HIGHLIGHT = create(
@@ -78,12 +83,12 @@ public final class PartType {
             SilentGear.getId("rod"),
             createSerializer("rod", RodPart::new),
             PartConst.FALLBACK_ROD,
-            () -> ModItems.ROD.getRegistryObject()
+            () -> ModItems.ROD
     );
     public static final PartType TIP = create(
             SilentGear.getId("tip"),
             createSerializer("tip", TipPart::new),
-            () -> ModItems.TIP.getRegistryObject()
+            () -> ModItems.TIP
     );
 
     @Deprecated
@@ -99,11 +104,11 @@ public final class PartType {
         return create(name, serializer, fallbackPart, null);
     }
 
-    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable Supplier<RegistryObject<CompoundPartItem>> compoundPartItem) {
+    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable Supplier<ItemRegistryObject<CompoundPartItem>> compoundPartItem) {
         return create(name, serializer, null, compoundPartItem);
     }
 
-    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<RegistryObject<CompoundPartItem>> compoundPartItem) {
+    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<ItemRegistryObject<CompoundPartItem>> compoundPartItem) {
         if (VALUES.containsKey(name))
             throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", name));
 
@@ -132,9 +137,9 @@ public final class PartType {
     private final int maxPerItem;
     private final IPartSerializer<? extends IGearPart> serializer;
     @Nullable private final ResourceLocation fallbackPart;
-    @Nullable private final Supplier<RegistryObject<CompoundPartItem>> compoundPartItem;
+    @Nullable private final Supplier<ItemRegistryObject<CompoundPartItem>> compoundPartItem;
 
-    private PartType(ResourceLocation name, int maxPerItem, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<RegistryObject<CompoundPartItem>> compoundPartItem) {
+    private PartType(ResourceLocation name, int maxPerItem, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<ItemRegistryObject<CompoundPartItem>> compoundPartItem) {
         this.name = name;
         this.maxPerItem = maxPerItem;
         this.serializer = serializer;

@@ -1,0 +1,24 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:feathers"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.feather"
+  },
+  "display": {
+    "fletching/all": {
+      "texture": "low_contrast",
+      "color": "#FFFFFF"
+    }
+  },
+  "stats": {
+    "fletching": {}
+  }
+}

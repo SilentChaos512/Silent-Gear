@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "silentgear:blueprints/fletching",
+  "ingredients": [
+    {
+      "tag": "forge:paper/blueprint"
+    },
+    {
+      "tag": "forge:paper/blueprint"
+    },
+    {
+      "tag": "forge:feathers"
+    }
+  ],
+  "result": {
+    "item": "silentgear:blueprint_fletching"
+  }
+}
