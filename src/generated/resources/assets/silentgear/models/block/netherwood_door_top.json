@@ -1,0 +1,7 @@
+{
+  "parent": "block/door_top",
+  "textures": {
+    "bottom": "silentgear:block/netherwood_door_bottom",
+    "top": "silentgear:block/netherwood_door_top"
+  }
+}

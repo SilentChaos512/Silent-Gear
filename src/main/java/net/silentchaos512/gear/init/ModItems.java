@@ -20,10 +20,6 @@ import java.util.function.Supplier;
 
 @SuppressWarnings({"unused", "OverlyCoupledClass"})
 public final class ModItems {
-    //region Blocks
-    // TODO
-    //endregion
-
     public static final ItemRegistryObject<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
             new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
 

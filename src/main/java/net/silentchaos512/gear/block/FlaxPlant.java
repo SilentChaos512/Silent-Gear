@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -22,6 +23,11 @@ public class FlaxPlant extends CropsBlock {
                 .sound(SoundType.CROP)
         );
         this.wild = wild;
+    }
+
+    @Override
+    public Item asItem() {
+        return super.asItem();
     }
 
     public BlockState getMaturePlant() {

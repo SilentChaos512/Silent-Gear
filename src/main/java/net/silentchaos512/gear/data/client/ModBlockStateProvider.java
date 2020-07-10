@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.data.client;
 
+import net.minecraft.block.FenceBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
@@ -9,6 +10,7 @@ import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
 
@@ -33,10 +35,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.NETHERWOOD_PLANKS.get());
         simpleBlock(ModBlocks.NETHERWOOD_LEAVES.get());
         axisBlock(ModBlocks.NETHERWOOD_LOG.get(), modLoc("block/netherwood_log"), modLoc("block/netherwood_log_top"));
+        axisBlock(ModBlocks.STRIPPED_NETHERWOOD_LOG.get(), modLoc("block/stripped_netherwood_log"), modLoc("block/stripped_netherwood_log_top"));
         simpleBlock(ModBlocks.NETHERWOOD_SAPLING.get(), models().cross("netherwood_sapling", modLoc("block/netherwood_sapling")));
         ResourceLocation planks = modLoc("block/netherwood_planks");
         slabBlock(ModBlocks.NETHERWOOD_SLAB.get(), planks, planks);
         stairsBlock(ModBlocks.NETHERWOOD_STAIRS.get(), planks);
+        fenceBlock(ModBlocks.NETHERWOOD_FENCE.get(), planks);
+        doorBlock(ModBlocks.NETHERWOOD_DOOR.get(), modLoc("block/netherwood_door_bottom"), modLoc("block/netherwood_door_top"));
+        trapdoorBlock(ModBlocks.NETHERWOOD_TRAPDOOR.get(), modLoc("block/netherwood_trapdoor"), true);
 
         simpleBlock(ModBlocks.PHANTOM_LIGHT.get(), models().cubeAll("phantom_light", modLoc("item/blank")));
         simpleBlock(ModBlocks.POTTED_NETHERWOOD_SAPLING.get(), models()
@@ -52,7 +58,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.FLAX_PLANT.get()).forAllStates(state -> {
             int i = cropAgeToIndex(state.get(FlaxPlant.AGE));
             return ConfiguredModel.builder()
-                    .modelFile(models().crop("flax_plant", modLoc("block/flax_plant" + i)))
+                    .modelFile(models().crop("flax_plant" + i, modLoc("block/flax_plant" + i)))
                     .build();
         });
         simpleBlock(ModBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", SilentGear.getId("block/flax_plant3")));
@@ -66,5 +72,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         if (age > 1)
             return 1;
         return 0;
+    }
+
+    @Override
+    public void fenceBlock(FenceBlock block, ResourceLocation texture) {
+        super.fenceBlock(block, texture);
+        models().withExistingParent(NameUtils.from(block).getPath() + "_inventory", mcLoc("block/fence_inventory"))
+                .texture("texture", texture);
     }
 }

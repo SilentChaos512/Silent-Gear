@@ -112,6 +112,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(BlockTags.LOGS, ItemTags.LOGS);
         copy(BlockTags.PLANKS, ItemTags.PLANKS);
         copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
+        copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
+        copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
+        copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
+        copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
+        copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
 
         // Silent Gear
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_1).add(Tags.Items.DUSTS_GLOWSTONE);

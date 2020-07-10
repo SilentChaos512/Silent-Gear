@@ -44,6 +44,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(BlockTags.LOGS, ModBlocks.NETHERWOOD_LOG);
         builder(BlockTags.PLANKS, ModBlocks.NETHERWOOD_PLANKS);
         builder(BlockTags.SAPLINGS, ModBlocks.NETHERWOOD_SAPLING);
+        builder(BlockTags.WOODEN_DOORS, ModBlocks.NETHERWOOD_DOOR);
+        builder(BlockTags.WOODEN_FENCES, ModBlocks.NETHERWOOD_FENCE);
+        builder(BlockTags.WOODEN_SLABS, ModBlocks.NETHERWOOD_SLAB);
+        builder(BlockTags.WOODEN_STAIRS, ModBlocks.NETHERWOOD_STAIRS);
+        builder(BlockTags.WOODEN_TRAPDOORS, ModBlocks.NETHERWOOD_TRAPDOOR);
 
         // Silent Gear
         getBuilder(ModTags.Blocks.NETHERWOOD_SOIL).add(Tags.Blocks.NETHERRACK, Tags.Blocks.DIRT).add(Blocks.FARMLAND);

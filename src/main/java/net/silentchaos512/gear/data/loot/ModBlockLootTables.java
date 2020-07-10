@@ -6,9 +6,11 @@ import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.CropsBlock;
+import net.minecraft.block.DoorBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
+import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
@@ -36,25 +38,30 @@ public class ModBlockLootTables extends BlockLootTables {
 
     @Override
     protected void addTables() {
-        registerDropSelfLootTable(ModBlocks.BLAZE_GOLD_BLOCK.asBlock());
-        registerDropSelfLootTable(ModBlocks.CRAFTING_STATION.asBlock());
-        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_BLOCK.asBlock());
-        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.asBlock());
-        registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.asBlock());
-        ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.asBlock()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
-        this.registerLootTable(ModBlocks.FLAX_PLANT.asBlock(), flax(ModItems.FLAXSEEDS, flaxBuilder));
-        registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.asBlock());
-        registerLootTable(ModBlocks.NETHERWOOD_LEAVES.asBlock(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_LOG.asBlock());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_PLANKS.asBlock());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_SAPLING.asBlock());
-        registerLootTable(ModBlocks.NETHERWOOD_SLAB.asBlock(), BlockLootTables::droppingSlab);
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_STAIRS.asBlock());
-        registerLootTable(ModBlocks.PHANTOM_LIGHT.asBlock(), func_218482_a());
-        registerFlowerPot(ModBlocks.POTTED_NETHERWOOD_SAPLING.asBlock());
-        registerDropSelfLootTable(ModBlocks.SALVAGER.asBlock());
-        registerDropSelfLootTable(ModBlocks.STONE_TORCH.asBlock());
-        registerDropping(ModBlocks.WILD_FLAX_PLANT.asBlock(), ModItems.FLAXSEEDS);
+        registerDropSelfLootTable(ModBlocks.BLAZE_GOLD_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.CRAFTING_STATION.get());
+        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.get());
+        registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.get());
+        ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
+        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(ModItems.FLAXSEEDS, flaxBuilder));
+        registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE.get());
+        registerLootTable(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_LOG.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_PLANKS.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_SAPLING.get());
+        registerLootTable(ModBlocks.NETHERWOOD_DOOR.get(), block ->
+                droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_TRAPDOOR.get());
+        registerLootTable(ModBlocks.NETHERWOOD_SLAB.get(), BlockLootTables::droppingSlab);
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_STAIRS.get());
+        registerLootTable(ModBlocks.PHANTOM_LIGHT.get(), func_218482_a());
+        registerFlowerPot(ModBlocks.POTTED_NETHERWOOD_SAPLING.get());
+        registerDropSelfLootTable(ModBlocks.SALVAGER.get());
+        registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
+        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+        registerDropping(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAXSEEDS);
     }
 
     @Nonnull
