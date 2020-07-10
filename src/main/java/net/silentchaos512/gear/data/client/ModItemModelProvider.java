@@ -94,6 +94,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         // Compound parts
         builder(ModItems.BINDING, itemGenerated);
+        builder(ModItems.BOWSTRING, itemGenerated);
         builder(ModItems.FLETCHING, itemGenerated);
         builder(ModItems.GRIP, itemGenerated);
         builder(ModItems.ROD, itemGenerated);

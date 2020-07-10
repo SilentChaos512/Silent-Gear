@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#/#",
+    "#/#"
+  ],
+  "key": {
+    "#": {
+      "item": "silentgear:netherwood_planks"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "silentgear:netherwood_fence",
+    "count": 3
+  }
+}

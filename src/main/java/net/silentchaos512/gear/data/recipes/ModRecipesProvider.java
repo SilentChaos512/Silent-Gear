@@ -531,6 +531,26 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(ModTags.Items.INGOTS_BLAZE_GOLD))
                 .build(consumer);
         // N
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.NETHERWOOD_DOOR, 3)
+                .key('#', ModBlocks.NETHERWOOD_PLANKS)
+                .patternLine("##")
+                .patternLine("##")
+                .patternLine("##")
+                .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_PLANKS))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.NETHERWOOD_TRAPDOOR, 2)
+                .key('#', ModBlocks.NETHERWOOD_PLANKS)
+                .patternLine("###")
+                .patternLine("###")
+                .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_PLANKS))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.NETHERWOOD_FENCE, 3)
+                .key('#', ModBlocks.NETHERWOOD_PLANKS)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .patternLine("#/#")
+                .patternLine("#/#")
+                .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_PLANKS))
+                .build(consumer);
         ShapelessRecipeBuilder.shapelessRecipe(ModBlocks.NETHERWOOD_PLANKS, 4)
                 .addIngredient(ModBlocks.NETHERWOOD_LOG)
                 .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_LOG))
