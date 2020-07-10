@@ -29,6 +29,24 @@
                   "part": "silentgear:tip/redstone"
                 }
               ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "text": "Loliberty Defense Force Mallet"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "replace": false,
+              "lore": [
+                {
+                  "text": "Standard Issue"
+                },
+                {
+                  "text": "Protectors of Free Speech"
+                }
+              ]
             }
           ],
           "name": "silentgear:hammer"

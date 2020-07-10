@@ -122,9 +122,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.SYNERGISTIC, 2)
                 .trait(PartType.TIP, TraitConst.SOFT, 2)
                 .trait(PartType.TIP, TraitConst.FIERY, 4, new GearTypeTraitCondition(GearType.WEAPON))
-                .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE7A937)
-                .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xE7A937)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xE7A937)
+                .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE55437)
+                .display(PartType.ROD, PartTextureType.HIGH_CONTRAST, 0xE55437)
+                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xE55437)
         );//endregion
         //region Crimson Iron
         ret.add(new MaterialBuilder(SilentGear.getId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)

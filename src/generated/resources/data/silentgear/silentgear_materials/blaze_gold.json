@@ -15,15 +15,15 @@
   "display": {
     "main/all": {
       "texture": "high_contrast_with_highlight",
-      "color": "#E7A937"
+      "color": "#E55437"
     },
     "rod/all": {
-      "texture": "low_contrast",
-      "color": "#E7A937"
+      "texture": "high_contrast",
+      "color": "#E55437"
     },
     "tip/all": {
       "texture": "high_contrast",
-      "color": "#E7A937"
+      "color": "#E55437"
     }
   },
   "stats": {

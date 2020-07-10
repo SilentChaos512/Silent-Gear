@@ -4,9 +4,16 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.data.loot.GiftLootTables;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.storage.loot.ItemLootEntry;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.world.storage.loot.functions.SetLore;
+import net.minecraft.world.storage.loot.functions.SetName;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -17,6 +24,9 @@ import net.silentchaos512.gear.loot.function.SetPartsFunction;
 import net.silentchaos512.gear.parts.LazyPartData;
 import net.silentchaos512.lib.util.NameUtils;
 
+import javax.annotation.Nonnull;
+import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ModGiftLootTables extends GiftLootTables {
@@ -66,10 +76,25 @@ public class ModGiftLootTables extends GiftLootTables {
                                         new LazyPartData(SilentGear.getId("main/emerald"), MaterialGrade.S),
                                         new LazyPartData(SilentGear.getId("rod/blaze")),
                                         new LazyPartData(SilentGear.getId("tip/redstone")))))
-//                                .acceptFunction(() -> new SetName())
-                                // set name and lore
-                        )
-                )
-        );
+                                .acceptFunction(() -> setName(new StringTextComponent("Loliberty Defense Force Mallet")))
+                                .acceptFunction(() -> setLore(ImmutableList.of(
+                                        new StringTextComponent("Standard Issue"),
+                                        new StringTextComponent("Protectors of Free Speech")))))));
+    }
+
+    @Nonnull
+    private static SetName setName(ITextComponent text) {
+        Constructor<SetName> constructor = ObfuscationReflectionHelper.findConstructor(SetName.class, ILootCondition[].class, ITextComponent.class, LootContext.EntityTarget.class);
+        constructor.setAccessible(true);
+        try {
+            return constructor.newInstance(new ILootCondition[0], text, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private static SetLore setLore(List<ITextComponent> lore) {
+        return new SetLore(new ILootCondition[0], false, lore, null);
     }
 }
