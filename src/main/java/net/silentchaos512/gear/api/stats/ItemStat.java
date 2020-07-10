@@ -269,9 +269,6 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
             return this;
         }
 
-        /**
-         * @deprecated Use {@link #displayFormat(DisplayFormat)} instead
-         */
         @Deprecated
         public Properties displayAsMultiplier() {
             this.displayFormat = DisplayFormat.MULTIPLIER;

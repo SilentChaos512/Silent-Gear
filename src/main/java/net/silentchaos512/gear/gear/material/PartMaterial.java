@@ -125,7 +125,7 @@ public final class PartMaterial implements IMaterial {
 
     @Override
     public boolean isCraftingAllowed(PartType partType, GearType gearType) {
-        if (isGearTypeBlacklisted(gearType)) {
+        if (isGearTypeBlacklisted(gearType) || !allowedInPart(partType)) {
             return false;
         }
 

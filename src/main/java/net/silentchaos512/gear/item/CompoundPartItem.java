@@ -22,6 +22,7 @@ import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -58,6 +59,10 @@ public class CompoundPartItem extends Item {
                 .filter(Objects::nonNull)
                 .map(MaterialInstance::of)
                 .collect(Collectors.toList()));
+    }
+
+    public ItemStack create(IMaterialInstance material) {
+        return create(Collections.singletonList(material));
     }
 
     public ItemStack create(List<? extends IMaterialInstance> materials) {
