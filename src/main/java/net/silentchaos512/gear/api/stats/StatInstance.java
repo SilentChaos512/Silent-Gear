@@ -168,7 +168,11 @@ public class StatInstance {
     }
 
     public boolean shouldList(IGearPart part, ItemStat stat, boolean advanced) {
-        return advanced || value != 0 || (part.getType() == PartType.MAIN && stat == ItemStats.HARVEST_LEVEL);
+        return shouldList(part.getType(), stat, advanced);
+    }
+
+    public boolean shouldList(PartType partType, ItemStat stat, boolean advanced) {
+        return advanced || value != 0 || (partType == PartType.MAIN && stat == ItemStats.HARVEST_LEVEL);
     }
 
     public int getPreferredDecimalPlaces(ItemStat stat, int max) {

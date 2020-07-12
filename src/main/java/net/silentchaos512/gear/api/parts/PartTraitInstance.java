@@ -10,6 +10,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
@@ -52,6 +54,14 @@ public class PartTraitInstance {
         // FIXME
 //        return conditions.stream().allMatch(c -> c.matches(gear, materials, this.trait));
         return true;
+    }
+
+    public ITextComponent getDisplayName() {
+        ITextComponent text = this.trait.getDisplayName(this.level);
+        if (!conditions.isEmpty()) {
+            text.appendSibling(new StringTextComponent("*"));
+        }
+        return text;
     }
 
     public static PartTraitInstance deserialize(JsonObject json) {

@@ -82,6 +82,11 @@ public class SimplePartAdapterMaterial implements IMaterial {
     }
 
     @Override
+    public Set<PartType> getPartTypes() {
+        return parts.keySet();
+    }
+
+    @Override
     public boolean allowedInPart(PartType partType) {
         return getPart(partType).isPresent();
     }

@@ -156,7 +156,7 @@ public final class PartType {
     }
 
     public ITextComponent getDisplayName(int tier) {
-        return new TranslationTextComponent("part." + name.getNamespace() + ".type." + name.getPath(), tier);
+        return new TranslationTextComponent("part." + name.getNamespace() + ".type." + name.getPath());
     }
 
     public IPartSerializer<? extends IGearPart> getSerializer() {

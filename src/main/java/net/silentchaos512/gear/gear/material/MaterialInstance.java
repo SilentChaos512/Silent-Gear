@@ -97,6 +97,10 @@ public final class MaterialInstance implements IMaterialInstance {
         return material.getTier(partType);
     }
 
+    public Collection<PartType> getPartTypes() {
+        return material.getPartTypes();
+    }
+
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
         return getStatModifiers(stat, partType, ItemStack.EMPTY);
     }

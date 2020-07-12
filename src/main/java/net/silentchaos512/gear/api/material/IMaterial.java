@@ -15,6 +15,8 @@ import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * A material used for crafting gear parts. Provides stats and traits for different part types.
@@ -31,10 +33,16 @@ public interface IMaterial {
     @Nullable
     IMaterial getParent();
 
+    default Optional<IMaterial> getParentOptional() {
+        return Optional.ofNullable(getParent());
+    }
+
     int getTier(PartType partType);
 
     // FIXME: PartType param should not be used?
     Ingredient getIngredient(PartType partType);
+
+    Set<PartType> getPartTypes();
 
     boolean allowedInPart(PartType partType);
 

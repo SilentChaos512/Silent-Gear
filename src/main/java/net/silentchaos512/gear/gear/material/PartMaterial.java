@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.gear.material;
 
+import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -40,8 +41,8 @@ public final class PartMaterial implements IMaterial {
     private boolean visible = true;
     private int tier = -1;
 
-    private Map<PartType, StatModifierMap> stats = new HashMap<>();
-    private Map<PartType, List<PartTraitInstance>> traits = new HashMap<>();
+    private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
+    private final Map<PartType, List<PartTraitInstance>> traits = new LinkedHashMap<>();
 
     private ITextComponent displayName;
     @Nullable private ITextComponent namePrefix = null;
@@ -89,6 +90,13 @@ public final class PartMaterial implements IMaterial {
     @Override
     public Ingredient getIngredient(PartType partType) {
         return this.ingredient;
+    }
+
+    @Override
+    public Set<PartType> getPartTypes() {
+        // Grab the part types from this part and its parent(s)
+        return Sets.union(stats.keySet(), getParentOptional()
+                .<Set<PartType>>map(m -> new LinkedHashSet<>(m.getPartTypes())).orElse(Collections.emptySet()));
     }
 
     @Override

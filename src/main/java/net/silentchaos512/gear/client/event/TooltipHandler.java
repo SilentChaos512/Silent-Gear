@@ -8,10 +8,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -24,6 +24,7 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.event.ClientTicks;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public final class TooltipHandler {
         MaterialInstance material = MaterialInstance.from(stack);
         if (material != null) {
             onMaterialTooltip(event, stack, material);
-//            return;
+            return;
         }
 
         IGearPart part = !stack.isEmpty() ? PartManager.from(stack) : null;
@@ -69,27 +70,51 @@ public final class TooltipHandler {
         }
     }
 
-    private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, IMaterialInstance material) {
-        if (Config.Client.disableNewMaterialTooltips.get()) return;
+    private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, MaterialInstance material) {
+        boolean keyHeld = KeyTracker.isDisplayStatsDown();
 
-        event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").applyTextStyle(TextFormatting.GOLD));
+        if (keyHeld) {
+            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").applyTextStyle(TextFormatting.GOLD));
+        } else {
+            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").applyTextStyle(TextFormatting.GOLD)
+                    .appendSibling(new StringTextComponent(" [" + KeyTracker.DISPLAY_STATS.getLocalizedName() + "]").applyTextStyle(TextFormatting.GRAY)));
+        }
+
         if (event.getFlags().isAdvanced()) {
             event.getToolTip().add(new StringTextComponent("Material ID: " + material.getMaterialId()).applyTextStyle(TextFormatting.DARK_GRAY));
         }
-        if (KeyTracker.isControlDown()) {
+
+        if (keyHeld) {
             getGradeLine(event, material.getGrade());
-/*            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats")
-                    .applyTextStyle(TextFormatting.GOLD)
-                    .appendSibling(new StringTextComponent(" (Silent Gear)")
-                            .applyTextStyle(TextFormatting.RESET)
-                            .applyTextStyle(TextFormatting.ITALIC)));
-            getPartStatLines(event, stack, part);*/
+
+            List<PartType> partTypes = new ArrayList<>(material.getPartTypes());
+            if (!partTypes.isEmpty()) {
+                int index = KeyTracker.getMaterialCycleCount() % partTypes.size();
+                PartType partType = partTypes.get(index);
+                event.getToolTip().add(buildPartTypeHeader(partTypes, partType));
+
+                getMaterialTraitLines(event, partType, material);
+
+                event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats").applyTextStyle(TextFormatting.GOLD));
+                getMaterialStatLines(event, partType, material);
+            }
         } else {
             if (material.getGrade() != MaterialGrade.NONE) {
                 getGradeLine(event, material.getGrade());
             }
-//            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").applyTextStyle(TextFormatting.GOLD));
         }
+    }
+
+    private static ITextComponent buildPartTypeHeader(Collection<PartType> types, PartType selectedType) {
+        ITextComponent ret = new StringTextComponent("| ").applyTextStyle(TextFormatting.GRAY);
+        for (PartType type : types) {
+            ITextComponent text = type.getDisplayName(-1);
+            text.applyTextStyle(type == selectedType ? TextFormatting.WHITE : TextFormatting.DARK_GRAY);
+            ret.appendSibling(text).appendText(" | ");
+        }
+
+        ITextComponent keyHint = new StringTextComponent("[" + KeyTracker.CYCLE_MATERIAL_INFO.getLocalizedName() + "]");
+        return ret.appendSibling(keyHint.applyTextStyle(TextFormatting.AQUA));
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData partData) {
@@ -150,30 +175,39 @@ public final class TooltipHandler {
         event.getToolTip().add(new TranslationTextComponent("part.silentgear.gradeOnPart", grade.getDisplayName().applyTextStyle(TextFormatting.AQUA)));
     }
 
+    private static void getMaterialTraitLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
+        material.getMaterial().getTraits(partType).forEach(t -> event.getToolTip().add(t.getDisplayName()));
+    }
+
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, IGearPart part) {
         PartData partData = PartData.of(part, stack);
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
+            getStatTooltipLine(event, part.getType(), stat, modifiers);
+        }
+    }
 
-            if (!modifiers.isEmpty()) {
-                StatInstance inst = stat.computeForDisplay(0, modifiers);
-                if (inst.shouldList(part, stat, event.getFlags().isAdvanced())) {
-                    boolean isZero = inst.getValue() == 0;
-                    TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.getNameColor();
-                    TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                    ITextComponent nameStr = stat.getDisplayName().applyTextStyle(nameColor);
-                    int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
+    private static void getMaterialStatLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
+        for (ItemStat stat : ItemStats.allStatsOrdered()) {
+            Collection<StatInstance> modifiers = material.getStatModifiers(stat, partType);
+            getStatTooltipLine(event, partType, stat, modifiers);
+        }
+    }
 
-//                    String statStr = statColor + inst.formattedString(decimalPlaces, false);
-//                    if (stat == ItemStats.ARMOR_DURABILITY)
-//                        statStr += "x";
-//                    if (modifiers.size() > 1)
-//                        statStr += "*";
-                    ITextComponent statListText = StatModifierMap.formatText(modifiers, stat, decimalPlaces).applyTextStyle(statColor);
+    private static void getStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, Collection<StatInstance> modifiers) {
+        if (!modifiers.isEmpty()) {
+            StatInstance inst = stat.computeForDisplay(0, modifiers);
+            if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
+                boolean isZero = inst.getValue() == 0;
+                TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.getNameColor();
+                TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
+                ITextComponent nameStr = stat.getDisplayName().applyTextStyle(nameColor);
+                int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
 
-                    event.getToolTip().add(new StringTextComponent("- ")
-                            .appendSibling(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statListText.getFormattedText())));
-                }
+                ITextComponent statListText = StatModifierMap.formatText(modifiers, stat, decimalPlaces).applyTextStyle(statColor);
+
+                event.getToolTip().add(new StringTextComponent("- ").applyTextStyle(TextFormatting.GRAY)
+                        .appendSibling(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statListText.getFormattedText())));
             }
         }
     }

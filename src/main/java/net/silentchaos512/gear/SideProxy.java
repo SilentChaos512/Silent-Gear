@@ -28,6 +28,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
+import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
@@ -175,6 +176,7 @@ class SideProxy implements IProxy {
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {
+            KeyTracker.register(event);
             ModBlocks.registerRenderTypes(event);
             ModEntities.registerRenderers(event);
             ModTileEntities.registerRenderers(event);
