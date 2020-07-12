@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
@@ -25,6 +26,7 @@ import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.data.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.ExtendedShapelessRecipeBuilder;
@@ -691,6 +693,54 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(ItemTags.PLANKS))
                 .build(consumer);
         //endregion
+
+        //region Salvaging
+
+        Registration.getItems(item -> item instanceof ICoreItem).forEach(item ->
+                gearSalvage(consumer, (ICoreItem) item));
+
+        vanillaSalvage(consumer, Items.DIAMOND_SWORD, Items.DIAMOND, 2, 1);
+        vanillaSalvage(consumer, Items.DIAMOND_PICKAXE, Items.DIAMOND, 3, 2);
+        vanillaSalvage(consumer, Items.DIAMOND_SHOVEL, Items.DIAMOND, 1, 2);
+        vanillaSalvage(consumer, Items.DIAMOND_AXE, Items.DIAMOND, 3, 2);
+        vanillaSalvage(consumer, Items.DIAMOND_HOE, Items.DIAMOND, 2, 2);
+        vanillaSalvage(consumer, Items.DIAMOND_HELMET, Items.DIAMOND, 5, 0);
+        vanillaSalvage(consumer, Items.DIAMOND_CHESTPLATE, Items.DIAMOND, 8, 0);
+        vanillaSalvage(consumer, Items.DIAMOND_LEGGINGS, Items.DIAMOND, 7, 0);
+        vanillaSalvage(consumer, Items.DIAMOND_BOOTS, Items.DIAMOND, 4, 0);
+
+        vanillaSalvage(consumer, Items.GOLDEN_SWORD, Items.GOLD_INGOT, 2, 1);
+        vanillaSalvage(consumer, Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 2);
+        vanillaSalvage(consumer, Items.GOLDEN_SHOVEL, Items.GOLD_INGOT, 1, 2);
+        vanillaSalvage(consumer, Items.GOLDEN_AXE, Items.GOLD_INGOT, 3, 2);
+        vanillaSalvage(consumer, Items.GOLDEN_HOE, Items.GOLD_INGOT, 2, 2);
+        vanillaSalvage(consumer, Items.GOLDEN_HELMET, Items.GOLD_INGOT, 5, 0);
+        vanillaSalvage(consumer, Items.GOLDEN_CHESTPLATE, Items.GOLD_INGOT, 8, 0);
+        vanillaSalvage(consumer, Items.GOLDEN_LEGGINGS, Items.GOLD_INGOT, 7, 0);
+        vanillaSalvage(consumer, Items.GOLDEN_BOOTS, Items.GOLD_INGOT, 4, 0);
+
+        vanillaSalvage(consumer, Items.IRON_SWORD, Items.IRON_INGOT, 2, 1);
+        vanillaSalvage(consumer, Items.IRON_PICKAXE, Items.IRON_INGOT, 3, 2);
+        vanillaSalvage(consumer, Items.IRON_SHOVEL, Items.IRON_INGOT, 1, 2);
+        vanillaSalvage(consumer, Items.IRON_AXE, Items.IRON_INGOT, 3, 2);
+        vanillaSalvage(consumer, Items.IRON_HOE, Items.IRON_INGOT, 2, 2);
+        vanillaSalvage(consumer, Items.IRON_HELMET, Items.IRON_INGOT, 5, 0);
+        vanillaSalvage(consumer, Items.IRON_CHESTPLATE, Items.IRON_INGOT, 8, 0);
+        vanillaSalvage(consumer, Items.IRON_LEGGINGS, Items.IRON_INGOT, 7, 0);
+        vanillaSalvage(consumer, Items.IRON_BOOTS, Items.IRON_INGOT, 4, 0);
+
+        vanillaSalvage(consumer, Items.LEATHER_HELMET, Items.LEATHER, 5, 0);
+        vanillaSalvage(consumer, Items.LEATHER_CHESTPLATE, Items.LEATHER, 8, 0);
+        vanillaSalvage(consumer, Items.LEATHER_LEGGINGS, Items.LEATHER, 7, 0);
+        vanillaSalvage(consumer, Items.LEATHER_BOOTS, Items.LEATHER, 4, 0);
+
+        vanillaSalvage(consumer, Items.STONE_SWORD, Items.COBBLESTONE, 2, 1);
+        vanillaSalvage(consumer, Items.STONE_PICKAXE, Items.COBBLESTONE, 3, 2);
+        vanillaSalvage(consumer, Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 2);
+        vanillaSalvage(consumer, Items.STONE_AXE, Items.COBBLESTONE, 3, 2);
+        vanillaSalvage(consumer, Items.STONE_HOE, Items.COBBLESTONE, 2, 2);
+
+        //endregion
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
@@ -815,6 +865,20 @@ public class ModRecipesProvider extends RecipeProvider {
                     })
                     .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.from(input).getPath()));
         }
+    }
+
+    private static void gearSalvage(Consumer<IFinishedRecipe> consumer, ICoreItem item) {
+        SalvagingRecipeBuilder.gearBuilder(item)
+                .build(consumer, SilentGear.getId("salvaging/gear/" + NameUtils.fromItem(item).getPath()));
+    }
+
+    private static void vanillaSalvage(Consumer<IFinishedRecipe> consumer, IItemProvider gear, IItemProvider main, int mainCount, int rodCount) {
+        SalvagingRecipeBuilder builder = SalvagingRecipeBuilder.builder(gear).addResult(main, mainCount);
+        if (rodCount > 0) {
+            builder.addResult(Items.STICK, rodCount);
+        }
+        ResourceLocation inputId = NameUtils.from(gear.asItem());
+        builder.build(consumer, SilentGear.getId("salvaging/" + inputId.getPath()));
     }
 
     private static JsonObject buildMaterials(ResourceLocation main, @Nullable ResourceLocation rod) {

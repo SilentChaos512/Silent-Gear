@@ -1,0 +1,6 @@
+{
+  "type": "silentgear:salvaging/gear",
+  "ingredient": {
+    "item": "silentgear:machete"
+  }
+}

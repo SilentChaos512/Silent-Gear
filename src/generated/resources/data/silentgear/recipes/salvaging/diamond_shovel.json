@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:diamond_shovel"
+  },
+  "results": [
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:stick",
+      "count": 2
+    }
+  ]
+}

@@ -3,9 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.9.2] - 2020-07-12
 ### Added
 - Tooltips for new materials, overrides old part tooltips when material is registered. Keys can be rebound, defaults to control to show info and C to cycle part types.
+- Salvager recipes, can add new recipes with data packs
+### Changed
+- Updated salvager to handle new gear items correctly. It can also salvage compound parts now.
 ### Fixed
 - Compound bowstring not working (part file was missing)
 

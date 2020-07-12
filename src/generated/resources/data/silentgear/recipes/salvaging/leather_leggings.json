@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:leather_leggings"
+  },
+  "results": [
+    {
+      "item": "minecraft:leather",
+      "count": 7
+    }
+  ]
+}

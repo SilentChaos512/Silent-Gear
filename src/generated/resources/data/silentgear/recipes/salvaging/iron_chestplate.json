@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:iron_chestplate"
+  },
+  "results": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 8
+    }
+  ]
+}

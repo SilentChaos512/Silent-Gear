@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:diamond_sword"
+  },
+  "results": [
+    {
+      "item": "minecraft:diamond",
+      "count": 2
+    },
+    {
+      "item": "minecraft:stick"
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -17,10 +18,18 @@ import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
+import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
+import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
+import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.util.Const;
 
 public final class ModRecipes {
+    public static final IRecipeType<SalvagingRecipe> SALVAGING_TYPE = IRecipeType.register(Const.SALVAGING.toString());
+    public static final IRecipeSerializer<SalvagingRecipe> SALVAGING_SERIALIZER = new SalvagingRecipe.Serializer();
+    public static final IRecipeSerializer<GearSalvagingRecipe> SALVAGING_GEAR_SERIALIZER = new GearSalvagingRecipe.Serializer();
+    public static final IRecipeSerializer<CompoundPartSalvagingRecipe> SALVAGING_COMPOUND_PART_SERIALIZER = new CompoundPartSalvagingRecipe.Serializer();
 
     private ModRecipes() {}
 
@@ -37,6 +46,9 @@ public final class ModRecipes {
         register(SGearDamageItemRecipe.NAME, SGearDamageItemRecipe.SERIALIZER);
         register(SilentGear.getId("conversion"), ConversionRecipe.SERIALIZER);
         register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
+        register(Const.SALVAGING, SALVAGING_SERIALIZER);
+        register(Const.SALVAGING_GEAR, SALVAGING_GEAR_SERIALIZER);
+        register(Const.SALVAGING_COMPOUND_PART, SALVAGING_COMPOUND_PART_SERIALIZER);
 
         // Ingredient serializers
         CraftingHelper.register(CustomTippedUpgradeIngredient.Serializer.NAME, CustomTippedUpgradeIngredient.Serializer.INSTANCE);

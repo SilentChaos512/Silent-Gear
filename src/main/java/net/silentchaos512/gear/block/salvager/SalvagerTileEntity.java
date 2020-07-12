@@ -19,7 +19,6 @@
 package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
@@ -36,6 +35,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
@@ -79,6 +80,12 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         super(ModTileEntities.SALVAGER.get(), INVENTORY_SIZE);
     }
 
+    @Nullable
+    private SalvagingRecipe getRecipe() {
+        if (world == null) return null;
+        return world.getRecipeManager().getRecipe(ModRecipes.SALVAGING_TYPE, this, world).orElse(null);
+    }
+
     @Override
     public int getSizeInventory() {
         return INVENTORY_SIZE;
@@ -88,17 +95,15 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
     public void tick() {
         if (world == null || world.isRemote) return;
 
-        boolean requiresClientSync = false;
-
-        ItemStack input = getInputStack();
-        if (!input.isEmpty()) {
+        ItemStack input = getStackInSlot(0);
+        SalvagingRecipe recipe = getRecipe();
+        if (recipe != null) {
             if (progress < BASE_WORK_TIME) {
                 ++progress;
-                requiresClientSync = true;
             }
 
             if (progress >= BASE_WORK_TIME && areAllOutputSlotsFree()) {
-                for (ItemStack stack : getSalvagedPartsWithChance(input)) {
+                for (ItemStack stack : getSalvagedPartsWithChance(recipe, input)) {
                     int slot = getFreeOutputSlot();
                     if (slot > 0) {
                         setInventorySlotContents(slot, stack);
@@ -109,13 +114,12 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
 
                 progress = 0;
                 input.shrink(1);
-                requiresClientSync = true;
+                if (input.isEmpty()) {
+                    setInventorySlotContents(0, ItemStack.EMPTY);
+                }
             }
-        }
-
-        if (requiresClientSync) {
-            BlockState state = world.getBlockState(pos);
-            world.notifyBlockUpdate(pos, state, state, 3);
+        } else {
+            progress = 0;
         }
     }
 
@@ -123,12 +127,12 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         return stack.getItem() instanceof ICoreItem || VanillaGearSalvage.isVanillaGear(stack);
     }
 
-    private Collection<ItemStack> getSalvagedPartsWithChance(ItemStack stack) {
+    private Collection<ItemStack> getSalvagedPartsWithChance(SalvagingRecipe recipe, ItemStack stack) {
         double lossRate = getLossRate(stack);
         SilentGear.LOGGER.debug("Loss rate for '{}': {}", stack, lossRate);
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
 
-        for (ItemStack part : getSalvageableParts(stack)) {
+        for (ItemStack part : recipe.getPossibleResults(this)) {
             ItemStack copy = part.copy();
             int count = copy.getCount();
             PartData partData = PartData.from(part);
@@ -151,23 +155,12 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
 
     private static double getLossRate(ItemStack stack) {
         int maxDamage = stack.getMaxDamage();
-        Double min = Config.Server.salvagerMinLossRate.get();
+        double min = Config.Server.salvagerMinLossRate.get();
         if (maxDamage == 0) {
             return min;
         }
         double ratio = (double) stack.getDamage() / maxDamage;
         return min + ratio * (Config.Server.salvagerMaxLossRate.get() - min);
-    }
-
-    private Collection<ItemStack> getSalvageableParts(ItemStack stack) {
-        if (stack.getItem() instanceof ICoreItem) {
-            return getSalvageFromGearItem(stack);
-        } else if (VanillaGearSalvage.isVanillaGear(stack)) {
-            return getSalvageFromVanillaItem(stack);
-        } else {
-            // TODO: Other item types? Custom handlers?
-            return ImmutableList.of();
-        }
     }
 
     private static Collection<ItemStack> getSalvageFromGearItem(ItemStack stack) {
@@ -204,16 +197,6 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         return builder.build();
     }
 
-    private ItemStack getInputStack() {
-        for (int slot : SLOTS_INPUT) {
-            ItemStack stack = getStackInSlot(slot);
-            if (canSalvage(stack)) {
-                return stack;
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
     private int getFreeOutputSlot() {
         for (int slot : SLOTS_OUTPUT) {
             if (getStackInSlot(slot).isEmpty()) {
@@ -230,11 +213,6 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
             }
         }
         return true;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return getInputStack().isEmpty();
     }
 
     @Override
