@@ -348,6 +348,7 @@
   "itemGroup.silentgear": "Silent Gear",
   "jei.silentgear.axe.desc": "A standard axe",
   "jei.silentgear.blueprint.desc": "Blueprints and templates are used to craft tool heads and armor. Blueprints can be reused infinitely, templates are single-use. When used in the crafting station, you can mix materials. Otherwise, the materials must all be the same. Check the tooltip of the blueprint/template for details on crafting the final item.",
+  "jei.silentgear.category.salvaging": "Salvaging",
   "jei.silentgear.crafting_station.desc": "An improved crafting table which has a small internal inventory and a window which shows the tooltip of the item being crafted. Allows material mixing when crafting tool heads or armor.",
   "jei.silentgear.dagger.desc": "Basically a very light sword. Low damage and shorter reach, but very high attack speed. It also reduces the target's invulnerability time when hit.",
   "jei.silentgear.excavator.desc": "Mines soil in a 3x3 area.",

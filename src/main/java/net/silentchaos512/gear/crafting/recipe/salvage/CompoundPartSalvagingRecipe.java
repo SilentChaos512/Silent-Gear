@@ -4,12 +4,14 @@ import com.google.gson.JsonObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
 
 import javax.annotation.Nullable;
@@ -37,13 +39,13 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
-        return inv.getStackInSlot(0).getItem() instanceof CompoundPartItem;
+    public Ingredient getIngredient() {
+        return Ingredient.fromItems(Registration.getItems(CompoundPartItem.class).toArray(new CompoundPartItem[0]));
     }
 
     @Override
-    public boolean isDynamic() {
-        return true;
+    public boolean matches(IInventory inv, World worldIn) {
+        return inv.getStackInSlot(0).getItem() instanceof CompoundPartItem;
     }
 
     @Override

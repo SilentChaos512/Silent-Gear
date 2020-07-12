@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -19,14 +20,17 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
+import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
+import net.silentchaos512.gear.util.Const;
 
 import java.util.Collection;
 import java.util.List;
@@ -55,15 +59,23 @@ public class SGearJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration reg) {
         IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
         reg.addRecipeCategories(new GearCraftingRecipeCategoryJei(guiHelper));
+        reg.addRecipeCategories(new SalvagingRecipeCategoryJei(guiHelper));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration reg) {
         initFailed = true;
 
-        reg.addRecipes(Minecraft.getInstance().world.getRecipeManager().getRecipes().stream()
+        assert Minecraft.getInstance().world != null;
+        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+
+        reg.addRecipes(recipeManager.getRecipes().stream()
                 .filter(SGearJeiPlugin::isGearCraftingRecipe)
                 .collect(Collectors.toList()), GEAR_CRAFTING);
+
+        reg.addRecipes(recipeManager.getRecipes().stream()
+                .filter(r -> r.getType() == ModRecipes.SALVAGING_TYPE)
+                .collect(Collectors.toList()), Const.SALVAGING);
 
         // Info pages
         addInfoPage(reg, ModBlocks.CRAFTING_STATION);
@@ -95,11 +107,13 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.CRAFTING_STATION), VanillaRecipeCategoryUid.CRAFTING);
         reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING);
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.CRAFTING_STATION), GEAR_CRAFTING);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.SALVAGER), Const.SALVAGING);
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration reg) {
         reg.addRecipeClickArea(CraftingStationScreen.class, 88, 32, 28, 23, VanillaRecipeCategoryUid.CRAFTING);
+        reg.addRecipeClickArea(SalvagerScreen.class, 30, 30, 28, 23, Const.SALVAGING);
     }
 
     @Override

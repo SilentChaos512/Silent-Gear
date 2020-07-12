@@ -740,6 +740,16 @@ public class ModRecipesProvider extends RecipeProvider {
         vanillaSalvage(consumer, Items.STONE_AXE, Items.COBBLESTONE, 3, 2);
         vanillaSalvage(consumer, Items.STONE_HOE, Items.COBBLESTONE, 2, 2);
 
+        SalvagingRecipeBuilder.builder(Items.CLOCK)
+                .addResult(Items.GOLD_INGOT, 4)
+                .addResult(Items.REDSTONE)
+                .build(consumer, SilentGear.getId("salvaging/clock"));
+
+        SalvagingRecipeBuilder.builder(Items.COMPASS)
+                .addResult(Items.IRON_INGOT, 4)
+                .addResult(Items.REDSTONE)
+                .build(consumer, SilentGear.getId("salvaging/compass"));
+
         //endregion
     }
 

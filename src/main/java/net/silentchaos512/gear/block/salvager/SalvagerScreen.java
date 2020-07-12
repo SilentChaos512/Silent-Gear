@@ -18,7 +18,6 @@
 
 package net.silentchaos512.gear.block.salvager;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,7 +27,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 
 public class SalvagerScreen extends ContainerScreen<SalvagerContainer> {
-    private static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/salvager.png");
+    public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/salvager.png");
 
     public SalvagerScreen(SalvagerContainer container, PlayerInventory playerInventory, ITextComponent title) {
         super(container, playerInventory, title);

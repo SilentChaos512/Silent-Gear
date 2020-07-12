@@ -55,7 +55,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
     private static final int[] SLOTS_OUTPUT = IntStream.rangeClosed(1, 18).toArray();
     private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, 18).toArray();
-    static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
+    public static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
 
     @SyncVariable(name = "progress") int progress = 0;
 
