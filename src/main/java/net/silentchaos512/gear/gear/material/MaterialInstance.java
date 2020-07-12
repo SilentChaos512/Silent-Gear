@@ -32,7 +32,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     private MaterialInstance(IMaterial material, MaterialGrade grade) {
-        this(material, MaterialGrade.NONE, material.getDisplayItem(PartType.MAIN, 0));
+        this(material, grade, material.getDisplayItem(PartType.MAIN, 0));
     }
 
     private MaterialInstance(IMaterial material, ItemStack craftingItem) {
