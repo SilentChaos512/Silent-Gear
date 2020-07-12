@@ -22,6 +22,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import java.util.ArrayList;
@@ -92,6 +93,7 @@ public final class TooltipHandler {
                 int index = KeyTracker.getMaterialCycleCount() % partTypes.size();
                 PartType partType = partTypes.get(index);
                 event.getToolTip().add(buildPartTypeHeader(partTypes, partType));
+                event.getToolTip().add(TextUtil.misc("tier", material.getTier(partType)));
 
                 getMaterialTraitLines(event, partType, material);
 

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Tooltips for new materials, overrides old part tooltips when material is registered. Keys can be rebound, defaults to control to show info and C to cycle part types.
+### Fixed
+- Compound bowstring not working (part file was missing)
 
 ## [1.9.1] - 2020-07-10
 ### Added

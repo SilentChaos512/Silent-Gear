@@ -1,0 +1,13 @@
+{
+  "type": "silentgear:compound_part",
+  "part_type": "silentgear:bowstring",
+  "part_position": "BOWSTRING",
+  "crafting_items": {
+    "normal": {
+      "item": "silentgear:bowstring"
+    }
+  },
+  "name": {
+    "translate": "part.silentgear.bowstring"
+  }
+}

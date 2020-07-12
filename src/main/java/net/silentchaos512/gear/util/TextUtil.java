@@ -13,4 +13,8 @@ public final class TextUtil {
     public static ITextComponent translate(String prefix, String suffix, Object... args) {
         return new TranslationTextComponent(prefix + ".silentgear." + suffix, args);
     }
+
+    public static ITextComponent misc(String key, Object... args) {
+        return translate("misc", key, args);
+    }
 }
