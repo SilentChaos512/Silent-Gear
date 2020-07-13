@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Crafting a repair kit with a stick will empty it completely (materials cannot be returned)
 - JEI support for salvager
 ### Fixed
 - Crash on server startup (KeyTracker and KeyBinding)

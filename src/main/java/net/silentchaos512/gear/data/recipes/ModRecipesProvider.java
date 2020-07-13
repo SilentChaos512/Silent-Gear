@@ -28,6 +28,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.lib.data.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.ExtendedShapelessRecipeBuilder;
 import net.silentchaos512.lib.util.NameUtils;
@@ -326,6 +327,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("###")
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(ModItems.STURDY_REPAIR_KIT)
                 .key('#', Tags.Items.INGOTS_IRON)
                 .key('/', ModTags.Items.RODS_IRON)
@@ -335,6 +337,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("###")
                 .addCriterion("has_item", hasItem(Tags.Items.INGOTS_IRON))
                 .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(ModItems.CRIMSON_REPAIR_KIT)
                 .key('#', ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .key('/', Tags.Items.RODS_BLAZE)
@@ -344,6 +347,14 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("###")
                 .addCriterion("has_item", hasItem(ModTags.Items.INGOTS_CRIMSON_STEEL))
                 .build(consumer);
+
+        for (RepairKitItem item : Registration.getItems(RepairKitItem.class)) {
+            // Empty repair kit recipes
+            ExtendedShapelessRecipeBuilder.vanillaBuilder(item)
+                    .addIngredient(item)
+                    .addIngredient(Tags.Items.RODS_WOODEN)
+                    .build(consumer, SilentGear.getId(NameUtils.from(item).getPath() + "_empty"));
+        }
 
         //region Sort me, plz
         // TODO: Maybe should organize these better...
