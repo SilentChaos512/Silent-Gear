@@ -1,0 +1,48 @@
+{
+  "parent": "silentgear:blaze_gold",
+  "display": {
+    "icon": {
+      "item": "silentgear:material_grader"
+    },
+    "title": {
+      "translate": "advancements.silentgear.material_grader.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.material_grader.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_grader": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:material_grader"
+          }
+        ]
+      }
+    },
+    "get_catalyst": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "silentgear:grader_catalysts/tier1"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_grader"
+    ],
+    [
+      "get_catalyst"
+    ]
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "parent": "silentgear:nether",
+  "display": {
+    "icon": {
+      "item": "silentgear:crimson_iron_ingot"
+    },
+    "title": {
+      "translate": "advancements.silentgear.crimson_iron.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.crimson_iron.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:crimson_iron_ore"
+          }
+        ]
+      }
+    },
+    "get_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:crimson_iron_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_ore"
+    ],
+    [
+      "get_ingot"
+    ]
+  ]
+}

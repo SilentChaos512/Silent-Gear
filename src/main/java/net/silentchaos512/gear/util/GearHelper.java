@@ -54,6 +54,8 @@ import java.util.function.Function;
  * Also see {@link GearData}, which focuses on getting/updating item data and NBT.
  */
 public final class GearHelper {
+    public static final ResourceLocation DAMAGE_FACTOR_CHANGE = SilentGear.getId("damage_factor_change");
+
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
@@ -226,7 +228,7 @@ public final class GearHelper {
     private static void onDamageFactorChange(ServerPlayerEntity player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
             player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
-            LibTriggers.GENERIC_INT.trigger(player, new ResourceLocation(SilentGear.MOD_ID, "damage_factor_change"), 1);
+            LibTriggers.GENERIC_INT.trigger(player, DAMAGE_FACTOR_CHANGE, 1);
         }
     }
 

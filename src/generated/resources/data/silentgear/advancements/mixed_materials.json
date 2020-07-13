@@ -1,0 +1,32 @@
+{
+  "parent": "silentgear:blueprint_paper",
+  "display": {
+    "icon": {
+      "item": "minecraft:emerald"
+    },
+    "title": {
+      "translate": "advancements.silentgear.mixed_materials.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.mixed_materials.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "mixed_materials": {
+      "trigger": "silentlib:generic_int",
+      "conditions": {
+        "type": "silentgear:unique_main_parts",
+        "value": 2
+      }
+    }
+  },
+  "requirements": [
+    [
+      "mixed_materials"
+    ]
+  ]
+}

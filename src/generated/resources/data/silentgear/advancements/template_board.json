@@ -1,0 +1,35 @@
+{
+  "parent": "silentgear:dagger",
+  "display": {
+    "icon": {
+      "item": "silentgear:template_board"
+    },
+    "title": {
+      "translate": "advancements.silentgear.template_board.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.template_board.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:template_board"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "silentgear:upgrade_base",
+  "display": {
+    "icon": {
+      "item": "silentgear:tip"
+    },
+    "title": {
+      "translate": "advancements.silentgear.tip_upgrade.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.tip_upgrade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:tip"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ]
+}

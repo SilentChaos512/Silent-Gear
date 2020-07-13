@@ -1,0 +1,35 @@
+{
+  "parent": "silentgear:grader_catalyst_2",
+  "display": {
+    "icon": {
+      "item": "silentgear:glittery_dust"
+    },
+    "title": {
+      "translate": "advancements.silentgear.grader_catalyst_3.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.grader_catalyst_3.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "silentgear:grader_catalysts/tier3"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ]
+}

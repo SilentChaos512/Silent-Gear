@@ -1,0 +1,32 @@
+{
+  "parent": "silentgear:dagger",
+  "display": {
+    "icon": {
+      "item": "silentgear:rough_rod"
+    },
+    "title": {
+      "translate": "advancements.silentgear.crude_tool.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.crude_tool.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tool_has_rough_rod": {
+      "trigger": "silentlib:generic_int",
+      "conditions": {
+        "type": "silentgear:crafted_with_rough_rod",
+        "value": 1
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tool_has_rough_rod"
+    ]
+  ]
+}

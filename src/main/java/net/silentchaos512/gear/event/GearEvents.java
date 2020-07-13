@@ -73,12 +73,15 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.parts.PartConst;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.traits.TraitConst;
-import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.util.EntityHelper;
 
@@ -87,10 +90,11 @@ import java.util.function.Function;
 
 @Mod.EventBusSubscriber
 public final class GearEvents {
-    private static final ResourceLocation APPLY_TIP_UPGRADE = SilentGear.getId("apply_tip_upgrade");
-    private static final ResourceLocation MAX_DURABILITY = SilentGear.getId("max_durability");
-    private static final ResourceLocation REPAIR_FROM_BROKEN = SilentGear.getId("repair_from_broken");
-    private static final ResourceLocation UNIQUE_MAIN_PARTS = SilentGear.getId("unique_main_parts");
+    public static final ResourceLocation APPLY_TIP_UPGRADE = SilentGear.getId("apply_tip_upgrade");
+    public static final ResourceLocation CRAFTED_WITH_ROUGH_ROD = SilentGear.getId("crafted_with_rough_rod");
+    public static final ResourceLocation MAX_DURABILITY = SilentGear.getId("max_durability");
+    public static final ResourceLocation REPAIR_FROM_BROKEN = SilentGear.getId("repair_from_broken");
+    public static final ResourceLocation UNIQUE_MAIN_PARTS = SilentGear.getId("unique_main_parts");
 
     private GearEvents() {}
 
@@ -285,6 +289,11 @@ public final class GearEvents {
             // Try to trigger some advancments
             ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
+            // Crude tool
+            if (GearData.hasPart(result, PartConst.ROUGH_ROD)) {
+                LibTriggers.GENERIC_INT.trigger(player, CRAFTED_WITH_ROUGH_ROD, 1);
+            }
+
             // Repair from broken
             int brokenCount = GearData.getBrokenCount(result);
             int repairCount = GearData.getRepairCount(result);
@@ -303,10 +312,25 @@ public final class GearEvents {
             }
 
             // Mixed materials?
-            int mainCount = parts.getUniqueParts(true).size();
-            SilentGear.LOGGER.debug("mainCount = {}", mainCount);
-            LibTriggers.GENERIC_INT.trigger(player, UNIQUE_MAIN_PARTS, mainCount);
+            LibTriggers.GENERIC_INT.trigger(player, UNIQUE_MAIN_PARTS, getUniqueMainMaterialCount(parts));
         }
+    }
+
+    private static int getUniqueMainMaterialCount(PartDataList parts) {
+        // TODO: Legacy check, remove
+        PartDataList uniqueMains = parts.getUniqueParts(true);
+        if (uniqueMains.size() > 1) {
+            return uniqueMains.size();
+        }
+
+        for (PartData part : parts) {
+            if (part.getPart() instanceof CompoundPart && part.getType() == PartType.MAIN) {
+                List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getCraftingItem());
+                return SynergyUtils.getUniques(materials).size();
+            }
+        }
+
+        return 1;
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

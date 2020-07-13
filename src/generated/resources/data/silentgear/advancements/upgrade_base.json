@@ -1,0 +1,35 @@
+{
+  "parent": "silentgear:template_board",
+  "display": {
+    "icon": {
+      "item": "silentgear:upgrade_base"
+    },
+    "title": {
+      "translate": "advancements.silentgear.upgrade_base.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.upgrade_base.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:upgrade_base"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ]
+}

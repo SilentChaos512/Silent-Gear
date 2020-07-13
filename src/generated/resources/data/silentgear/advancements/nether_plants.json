@@ -1,0 +1,48 @@
+{
+  "parent": "silentgear:nether",
+  "display": {
+    "icon": {
+      "item": "silentgear:nether_banana"
+    },
+    "title": {
+      "translate": "advancements.silentgear.nether_plants.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.nether_plants.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "banana": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:nether_banana"
+          }
+        ]
+      }
+    },
+    "sapling": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:netherwood_sapling"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "banana"
+    ],
+    [
+      "sapling"
+    ]
+  ]
+}

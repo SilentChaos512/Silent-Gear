@@ -20,6 +20,7 @@ public final class DataGenerators {
         gen.addProvider(new MaterialsProvider(gen));
         gen.addProvider(new PartsProvider(gen));
 
+        gen.addProvider(new ModAdvancementProvider(gen));
         gen.addProvider(new ModBlockTagsProvider(gen));
         gen.addProvider(new ModItemTagsProvider(gen));
         gen.addProvider(new ModLootTables(gen));

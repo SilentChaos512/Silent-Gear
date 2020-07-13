@@ -1,0 +1,57 @@
+{
+  "parent": "silentgear:template_board",
+  "display": {
+    "icon": {
+      "item": "silentgear:crude_repair_kit"
+    },
+    "title": {
+      "translate": "advancements.silentgear.repair_kit.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.repair_kit.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crude": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:crude_repair_kit"
+          }
+        ]
+      }
+    },
+    "sturdy": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:sturdy_repair_kit"
+          }
+        ]
+      }
+    },
+    "crimson": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:crimson_repair_kit"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crude",
+      "sturdy",
+      "crimson"
+    ]
+  ]
+}

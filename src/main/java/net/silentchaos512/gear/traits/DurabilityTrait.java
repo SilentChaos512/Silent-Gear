@@ -34,7 +34,7 @@ import net.silentchaos512.utils.MathUtils;
  * not change with level. A negative scale reduces damage taken, positive increases it.
  */
 public final class DurabilityTrait extends SimpleTrait {
-    private static final ResourceLocation TRIGGER_BRITTLE = SilentGear.getId("brittle_proc");
+    public static final ResourceLocation TRIGGER_BRITTLE = SilentGear.getId("brittle_proc");
 
     static final ITraitSerializer<DurabilityTrait> SERIALIZER = new Serializer<>(
             SilentGear.getId("durability_trait"),

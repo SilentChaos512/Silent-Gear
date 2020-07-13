@@ -1,0 +1,48 @@
+{
+  "parent": "silentgear:root",
+  "display": {
+    "icon": {
+      "item": "silentgear:flax_fiber"
+    },
+    "title": {
+      "translate": "advancements.silentgear.overworld_plants.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.overworld_plants.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "seeds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:flaxseeds"
+          }
+        ]
+      }
+    },
+    "fiber": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:flax_fiber"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "seeds"
+    ],
+    [
+      "fiber"
+    ]
+  ]
+}

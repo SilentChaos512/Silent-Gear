@@ -1,0 +1,35 @@
+{
+  "parent": "silentgear:template_board",
+  "display": {
+    "icon": {
+      "item": "silentgear:blueprint_paper"
+    },
+    "title": {
+      "translate": "advancements.silentgear.blueprint_paper.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.blueprint_paper.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:blueprint_paper"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ]
+}

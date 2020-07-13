@@ -1,0 +1,36 @@
+{
+  "parent": "silentgear:root",
+  "display": {
+    "icon": {
+      "item": "silentgear:dagger",
+      "nbt": "{Damage:0}"
+    },
+    "title": {
+      "translate": "advancements.silentgear.dagger.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.dagger.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:dagger"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ]
+}

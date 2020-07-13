@@ -1,0 +1,36 @@
+{
+  "parent": "silentgear:standard_tools",
+  "display": {
+    "icon": {
+      "item": "silentgear:mattock",
+      "nbt": "{Damage:0}"
+    },
+    "title": {
+      "translate": "advancements.silentgear.mattock.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.mattock.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:mattock"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ]
+}

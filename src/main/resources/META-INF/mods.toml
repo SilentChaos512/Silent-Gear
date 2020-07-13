@@ -30,7 +30,7 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="silentlib"
     mandatory=true
-    versionRange="[4.6.4,)"
+    versionRange="[4.6.6,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]

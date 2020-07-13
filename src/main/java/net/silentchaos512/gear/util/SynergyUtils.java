@@ -62,7 +62,7 @@ public class SynergyUtils {
         return (float) MathHelper.clamp(synergy, MIN_VALUE, MAX_VALUE);
     }
 
-    private static Collection<IMaterialInstance> getUniques(Collection<? extends IMaterialInstance> materials) {
+    public static Collection<IMaterialInstance> getUniques(Collection<? extends IMaterialInstance> materials) {
         Map<ResourceLocation, IMaterialInstance> ret = new LinkedHashMap<>();
         for (IMaterialInstance material : materials) {
             ret.put(material.getMaterialId(), material);

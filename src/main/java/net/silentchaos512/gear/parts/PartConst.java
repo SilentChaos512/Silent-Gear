@@ -14,6 +14,7 @@ public final class PartConst {
 
     public static final ResourceLocation HIGHLIGHT = SilentGear.getId("highlight/highlight");
     public static final ResourceLocation MISC_SPOON = SilentGear.getId("misc/spoon");
+    public static final ResourceLocation ROUGH_ROD = SilentGear.getId("rod/rough");
 
     private PartConst() {
         throw new IllegalAccessError("Utility class");

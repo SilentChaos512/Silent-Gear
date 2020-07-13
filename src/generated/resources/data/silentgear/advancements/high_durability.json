@@ -1,0 +1,32 @@
+{
+  "parent": "silentgear:material_grader",
+  "display": {
+    "icon": {
+      "item": "silentgear:emerald_tipped_upgrade"
+    },
+    "title": {
+      "translate": "advancements.silentgear.high_durability.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.high_durability.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "durability": {
+      "trigger": "silentlib:generic_int",
+      "conditions": {
+        "type": "silentgear:max_durability",
+        "value": 16000
+      }
+    }
+  },
+  "requirements": [
+    [
+      "durability"
+    ]
+  ]
+}
