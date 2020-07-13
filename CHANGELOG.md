@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - JEI support for salvager
 ### Fixed
+- Crash on server startup (KeyTracker and KeyBinding)
 - Materials not displaying their grade
 
 ## [1.9.2] - 2020-07-12

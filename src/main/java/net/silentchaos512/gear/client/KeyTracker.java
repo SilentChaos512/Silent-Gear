@@ -3,6 +3,7 @@ package net.silentchaos512.gear.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,7 +15,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public class KeyTracker {
     public static final KeyBinding DISPLAY_STATS = createKeyBinding("displayStats", GLFW.GLFW_KEY_LEFT_CONTROL);
     public static final KeyBinding CYCLE_MATERIAL_INFO = createKeyBinding("cycleMaterialInfo", GLFW.GLFW_KEY_C);
