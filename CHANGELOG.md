@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.9.3] - 2020-07-13
+Requires Silent Lib 4.6.6
 ### Added
 - Crafting a repair kit with a stick will empty it completely (materials cannot be returned)
 - JEI support for salvager
