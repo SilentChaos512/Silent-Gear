@@ -27,6 +27,7 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.SynergyTrait;
 import net.silentchaos512.lib.collection.StackList;
+import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -122,7 +123,7 @@ public final class GearData {
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
             CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.getStats()) {
-                final float initialValue = stat.compute(0f, stats.get(stat));
+                final float initialValue = stat.compute(stat.getDefaultValue(), stats.get(stat));
                 // Some stats will be reduced if tool rod is missing (and required)
                 final float withMissingParts = hasMissingRod ? stat.withMissingRodEffect(initialValue) : initialValue;
                 // Allow traits to modify stat
@@ -336,9 +337,9 @@ public final class GearData {
         return synergy;
     }
 
-    public static float getStat(ItemStack stack, ItemStat stat) { // TODO: Use IItemStat param?
+    public static float getStat(ItemStack stack, ItemStat stat) {
         CompoundNBT tags = getData(stack, NBT_ROOT_PROPERTIES).getCompound(NBT_STATS);
-        String key = Objects.requireNonNull(stat.getRegistryName()).toString();
+        String key = NameUtils.from(stat).toString();
         return tags.contains(key) ? tags.getFloat(key) : stat.getDefaultValue();
     }
 
@@ -371,12 +372,10 @@ public final class GearData {
                     // Add to list if max per item of type is not exceeded
                     // Max is 9 for mains, and typically 1 for others
                     PartType type = part.getType();
-                    if (type != null) {
-                        int count = partCounts.getOrDefault(type, 0);
-                        if (count < type.getMaxPerItem()) {
-                            list.add(part);
-                            partCounts.put(type, count + 1);
-                        }
+                    int count = partCounts.getOrDefault(type, 0);
+                    if (count < type.getMaxPerItem()) {
+                        list.add(part);
+                        partCounts.put(type, count + 1);
                     }
                 }
             }

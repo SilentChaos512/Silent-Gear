@@ -31,15 +31,15 @@ public final class ItemStats {
             .create());
 
     // Generic
-    public static final ItemStat DURABILITY = new ItemStat(1f, 1f, Integer.MAX_VALUE, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
-    public static final ItemStat ARMOR_DURABILITY = new ItemStat(1f, 1f, Integer.MAX_VALUE / 16, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().displayFormat(ItemStat.DisplayFormat.MULTIPLIER).affectedByGrades(true).synergyApplies());
+    public static final ItemStat DURABILITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
+    public static final ItemStat ARMOR_DURABILITY = new ItemStat(0f, 0f, Integer.MAX_VALUE / 16, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().displayFormat(ItemStat.DisplayFormat.MULTIPLIER).affectedByGrades(true).synergyApplies());
     public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(1f, 0f, 1000f, TextFormatting.BLUE, new ItemStat.Properties().displayFormat(ItemStat.DisplayFormat.MULTIPLIER).affectedByGrades(false));
     public static final ItemStat ENCHANTABILITY = new ItemStat(0f, 0f, 10000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).synergyApplies());
     public static final ItemStat RARITY = new ItemStat(0f, 0f, 10000f, TextFormatting.BLUE, new ItemStat.Properties().displayAsInt().affectedByGrades(true).hidden());
 
     // Harvesting Tools
     public static final ItemStat HARVEST_LEVEL = new ItemStat(0f, 0f, 10000f, TextFormatting.YELLOW, new ItemStat.Properties().defaultOp(StatInstance.Operation.MAX).displayAsInt().affectedByGrades(false));
-    public static final ItemStat HARVEST_SPEED = new ItemStat(1f, 0f, 10000f, TextFormatting.YELLOW, new ItemStat.Properties().affectedByGrades(true).synergyApplies().missingRodFunction(f -> Math.max(2, f / 8)));
+    public static final ItemStat HARVEST_SPEED = new ItemStat(0f, 0f, 10000f, TextFormatting.YELLOW, new ItemStat.Properties().affectedByGrades(true).synergyApplies().missingRodFunction(f -> Math.max(2, f / 8)));
     public static final ItemStat REACH_DISTANCE = new ItemStat(0f, -100f, 100f, TextFormatting.YELLOW, new ItemStat.Properties().affectedByGrades(false).missingRodFunction(f -> f - 1.5f));
 
     // Melee Weapons

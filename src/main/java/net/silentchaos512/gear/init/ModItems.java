@@ -89,41 +89,41 @@ public final class ModItems {
     //region Compound Parts and Tool Heads
     // Tool Heads
     public static final ItemRegistryObject<ToolHeadItem> SWORD_BLADE = registerCompoundPart("sword_blade", () ->
-            new ToolHeadItem(GearType.SWORD, toolHeadProps()));
+            new ToolHeadItem(GearType.SWORD, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> DAGGER_BLADE = registerCompoundPart("dagger_blade", () ->
-            new ToolHeadItem(GearType.DAGGER, toolHeadProps()));
+            new ToolHeadItem(GearType.DAGGER, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> KATANA_BLADE = registerCompoundPart("katana_blade", () ->
-            new ToolHeadItem(GearType.KATANA, toolHeadProps()));
+            new ToolHeadItem(GearType.KATANA, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> MACHETE_BLADE = registerCompoundPart("machete_blade", () ->
-            new ToolHeadItem(GearType.MACHETE, toolHeadProps()));
+            new ToolHeadItem(GearType.MACHETE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SPEAR_TIP = registerCompoundPart("spear_tip", () ->
-            new ToolHeadItem(GearType.SPEAR, toolHeadProps()));
+            new ToolHeadItem(GearType.SPEAR, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> PICKAXE_HEAD = registerCompoundPart("pickaxe_head", () ->
-            new ToolHeadItem(GearType.PICKAXE, toolHeadProps()));
+            new ToolHeadItem(GearType.PICKAXE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHOVEL_HEAD = registerCompoundPart("shovel_head", () ->
-            new ToolHeadItem(GearType.SHOVEL, toolHeadProps()));
+            new ToolHeadItem(GearType.SHOVEL, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> AXE_HEAD = registerCompoundPart("axe_head", () ->
-            new ToolHeadItem(GearType.AXE, toolHeadProps()));
+            new ToolHeadItem(GearType.AXE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> PAXEL_HEAD = registerCompoundPart("paxel_head", () ->
-            new ToolHeadItem(GearType.PAXEL, toolHeadProps()));
+            new ToolHeadItem(GearType.PAXEL, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> HAMMER_HEAD = registerCompoundPart("hammer_head", () ->
-            new ToolHeadItem(GearType.HAMMER, toolHeadProps()));
+            new ToolHeadItem(GearType.HAMMER, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> EXCAVATOR_HEAD = registerCompoundPart("excavator_head", () ->
-            new ToolHeadItem(GearType.EXCAVATOR, toolHeadProps()));
+            new ToolHeadItem(GearType.EXCAVATOR, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> LUMBER_AXE_HEAD = registerCompoundPart("lumber_axe_head", () ->
-            new ToolHeadItem(GearType.LUMBER_AXE, toolHeadProps()));
+            new ToolHeadItem(GearType.LUMBER_AXE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> MATTOCK_HEAD = registerCompoundPart("mattock_head", () ->
-            new ToolHeadItem(GearType.MATTOCK, toolHeadProps()));
+            new ToolHeadItem(GearType.MATTOCK, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SICKLE_BLADE = registerCompoundPart("sickle_blade", () ->
-            new ToolHeadItem(GearType.SICKLE, toolHeadProps()));
+            new ToolHeadItem(GearType.SICKLE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHEARS_BLADES = registerCompoundPart("shears_blades", () ->
-            new ToolHeadItem(GearType.SHEARS, toolHeadProps()));
+            new ToolHeadItem(GearType.SHEARS, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> BOW_LIMBS = registerCompoundPart("bow_limbs", () ->
-            new ToolHeadItem(GearType.BOW, toolHeadProps()));
+            new ToolHeadItem(GearType.BOW, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> CROSSBOW_LIMBS = registerCompoundPart("crossbow_limbs", () ->
-            new ToolHeadItem(GearType.CROSSBOW, toolHeadProps()));
+            new ToolHeadItem(GearType.CROSSBOW, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SLINGSHOT_LIMBS = registerCompoundPart("slingshot_limbs", () ->
-            new ToolHeadItem(GearType.SLINGSHOT, toolHeadProps()));
+            new ToolHeadItem(GearType.SLINGSHOT, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHIELD_PLATE = registerCompoundPart("shield_plate", () ->
             new ToolHeadItem(GearType.SHIELD, new Item.Properties().maxStackSize(1)));
     public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
@@ -147,11 +147,11 @@ public final class ModItems {
 
     // Repair Kits
     public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () ->
-            new RepairKitItem(1000, baseProps()));
+            new RepairKitItem(1000, unstackableProps()));
     public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () ->
-            new RepairKitItem(10_000, baseProps()));
+            new RepairKitItem(10_000, unstackableProps()));
     public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () ->
-            new RepairKitItem(100_000, baseProps()));
+            new RepairKitItem(100_000, unstackableProps()));
 
     static {
         CraftingItems.register(Registration.ITEMS);
@@ -207,7 +207,7 @@ public final class ModItems {
         return new Item.Properties().group(SilentGear.ITEM_GROUP);
     }
 
-    private static Item.Properties toolHeadProps() {
+    private static Item.Properties unstackableProps() {
         return baseProps().maxStackSize(1);
     }
 

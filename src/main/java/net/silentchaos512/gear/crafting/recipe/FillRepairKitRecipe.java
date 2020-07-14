@@ -70,6 +70,7 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     public ItemStack getCraftingResult(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class).copy();
+        repairKit.setCount(1);
         RepairKitItem repairKitItem = (RepairKitItem) repairKit.getItem();
 
         for (ItemStack mat : list.allMatches(ModRecipes::isRepairMaterial)) {

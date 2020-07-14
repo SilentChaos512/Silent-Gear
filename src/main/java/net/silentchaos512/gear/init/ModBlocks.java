@@ -10,6 +10,7 @@ import net.minecraft.item.WallOrFloorItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
@@ -23,7 +24,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class ModBlocks {
-    public static final BlockRegistryObject<CrimsonIronOre> CRIMSON_IRON_ORE = register("crimson_iron_ore", CrimsonIronOre::new);
+    public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
+            new OreBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(4, 10).harvestLevel(2).harvestTool(ToolType.PICKAXE)));
     public static final BlockRegistryObject<MetalBlock> CRIMSON_IRON_BLOCK = register("crimson_iron_block", () ->
             new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL)));
     public static final BlockRegistryObject<MetalBlock> CRIMSON_STEEL_BLOCK = register("crimson_steel_block", () ->
