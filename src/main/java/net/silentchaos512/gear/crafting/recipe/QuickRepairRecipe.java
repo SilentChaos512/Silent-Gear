@@ -23,6 +23,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -43,7 +44,7 @@ import java.util.Collection;
 
 public class QuickRepairRecipe extends SpecialRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("quick_repair");
-    public static final Serializer SERIALIZER = new Serializer();
+    public static final SpecialRecipeSerializer<QuickRepairRecipe> SERIALIZER = new SpecialRecipeSerializer<>(QuickRepairRecipe::new);
 
     public QuickRepairRecipe(ResourceLocation idIn) {
         super(idIn);

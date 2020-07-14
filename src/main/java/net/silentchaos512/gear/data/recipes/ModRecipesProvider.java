@@ -7,6 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
@@ -18,10 +19,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
-import net.silentchaos512.gear.crafting.recipe.ConversionRecipe;
-import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
-import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
-import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
+import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
@@ -62,7 +60,22 @@ public class ModRecipesProvider extends RecipeProvider {
                 .block(ModBlocks.CRIMSON_STEEL_BLOCK, ModTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL)
                 .nugget(CraftingItems.CRIMSON_STEEL_NUGGET, ModTags.Items.NUGGETS_CRIMSON_STEEL));
 
-        //region Blueprints and Templates
+        registerSpecialRecipes(consumer);
+        registerCraftingItems(consumer);
+        registerBlueprints(consumer);
+        registerCompoundParts(consumer);
+        registerGear(consumer);
+        registerRepairKits(consumer);
+        registerSalvaging(consumer);
+    }
+
+    private void registerSpecialRecipes(Consumer<IFinishedRecipe> consumer) {
+        special(consumer, FillRepairKitRecipe.NAME, FillRepairKitRecipe.SERIALIZER);
+        special(consumer, GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
+        special(consumer, QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
+    }
+
+    private void registerBlueprints(Consumer<IFinishedRecipe> consumer) {
         toolBlueprint(consumer, "sword", ModItems.SWORD_BLUEPRINT, ModItems.SWORD_TEMPLATE, "#", "#", "/");
         toolBlueprint(consumer, "dagger", ModItems.DAGGER_BLUEPRINT, ModItems.DAGGER_TEMPLATE, "#", "/");
         toolBlueprint(consumer, "katana", ModItems.KATANA_BLUEPRINT, ModItems.KATANA_TEMPLATE, "##", "# ", "/ ");
@@ -170,9 +183,9 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.STONE)
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
-        //endregion
+    }
 
-        //region Compound Parts
+    private void registerCompoundParts(Consumer<IFinishedRecipe> consumer) {
         ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.ROD, 4)
                 .addIngredient(ModItems.ROD_BLUEPRINT.get().getItemTag())
                 .addIngredient(PartMaterialIngredient.of(PartType.ROD), 2)
@@ -222,9 +235,9 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(ModItems.TIP_BLUEPRINT.get().getItemTag())
                 .addIngredient(PartMaterialIngredient.of(PartType.TIP), 2)
                 .build(consumer, SilentGear.getId("part/tip2"));
-        //endregion
+    }
 
-        //region Gear items
+    private void registerGear(Consumer<IFinishedRecipe> consumer) {
         toolRecipes(consumer, "sword", 2, ModItems.SWORD, ModItems.SWORD_BLADE, ModItems.SWORD_BLUEPRINT.get().getItemTag());
         toolRecipes(consumer, "dagger", 1, ModItems.DAGGER, ModItems.DAGGER_BLADE, ModItems.DAGGER_BLUEPRINT.get().getItemTag());
         toolRecipes(consumer, "katana", 3, ModItems.KATANA, ModItems.KATANA_BLADE, ModItems.KATANA_BLUEPRINT.get().getItemTag());
@@ -315,9 +328,9 @@ public class ModRecipesProvider extends RecipeProvider {
         armorConversion(consumer, ModItems.CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
         armorConversion(consumer, ModItems.LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
         armorConversion(consumer, ModItems.BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
-        //endregion
+    }
 
-        // Repair Kits
+    private void registerRepairKits(Consumer<IFinishedRecipe> consumer) {
         ShapedRecipeBuilder.shapedRecipe(ModItems.CRUDE_REPAIR_KIT)
                 .key('#', ModTags.Items.TEMPLATE_BOARDS)
                 .key('/', Tags.Items.RODS_WOODEN)
@@ -355,8 +368,24 @@ public class ModRecipesProvider extends RecipeProvider {
                     .addIngredient(Tags.Items.RODS_WOODEN)
                     .build(consumer, SilentGear.getId(NameUtils.from(item).getPath() + "_empty"));
         }
+    }
 
-        //region Sort me, plz
+    private void registerCraftingItems(Consumer<IFinishedRecipe> consumer) {
+        damageGear(CraftingItems.BLAZE_GOLD_DUST, 1, 1)
+                .addIngredient(ModTags.Items.HAMMERS)
+                .addIngredient(ModTags.Items.INGOTS_BLAZE_GOLD)
+                .build(consumer);
+
+        damageGear(ModItems.PEBBLE, 9, 1)
+                .addIngredient(ModTags.Items.HAMMERS)
+                .addIngredient(Tags.Items.COBBLESTONE)
+                .build(consumer);
+
+        damageGear(CraftingItems.TEMPLATE_BOARD, 6, 1)
+                .addIngredient(ModTags.Items.KNIVES)
+                .addIngredient(ItemTags.LOGS)
+                .build(consumer);
+
         // TODO: Maybe should organize these better...
         // A
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ADVANCED_UPGRADE_BASE)
@@ -703,10 +732,9 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.STONE)
                 .addCriterion("has_item", hasItem(ItemTags.PLANKS))
                 .build(consumer);
-        //endregion
+    }
 
-        //region Salvaging
-
+    private void registerSalvaging(Consumer<IFinishedRecipe> consumer) {
         Registration.getItems(item -> item instanceof ICoreItem).forEach(item ->
                 gearSalvage(consumer, (ICoreItem) item));
 
@@ -760,8 +788,15 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addResult(Items.IRON_INGOT, 4)
                 .addResult(Items.REDSTONE)
                 .build(consumer, SilentGear.getId("salvaging/compass"));
+    }
 
-        //endregion
+    private void special(Consumer<IFinishedRecipe> consumer, ResourceLocation id, SpecialRecipeSerializer<?> serializer) {
+        CustomRecipeBuilder.customRecipe(serializer).build(consumer, id.toString());
+    }
+
+    private ExtendedShapelessRecipeBuilder damageGear(IItemProvider result, int count, int damage) {
+        return ExtendedShapelessRecipeBuilder.builder(SGearDamageItemRecipe.SERIALIZER, result, count)
+                .addExtraData(json -> json.addProperty("damage", damage));
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
@@ -855,7 +890,7 @@ public class ModRecipesProvider extends RecipeProvider {
             .put(ItemTier.STONE, SilentGear.getId("stone"))
             .put(ItemTier.WOOD, SilentGear.getId("wood"))
             .build();
-    private static final Map<IArmorMaterial,  ResourceLocation> ARMOR_MATERIALS = ImmutableMap.<IArmorMaterial, ResourceLocation>builder()
+    private static final Map<IArmorMaterial, ResourceLocation> ARMOR_MATERIALS = ImmutableMap.<IArmorMaterial, ResourceLocation>builder()
             .put(ArmorMaterial.DIAMOND, SilentGear.getId("diamond"))
             .put(ArmorMaterial.GOLD, SilentGear.getId("gold"))
             .put(ArmorMaterial.IRON, SilentGear.getId("iron"))

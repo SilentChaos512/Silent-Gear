@@ -214,6 +214,14 @@ public class CompoundPart extends AbstractGearPart {
         return MaterialInstance.of(children.get(SilentGear.random.nextInt(children.size())));
     }
 
+    @Override
+    public String toString() {
+        return "CompoundPart{" +
+                "id=" + this.getId() +
+                ", partType=" + partType +
+                '}';
+    }
+
     public static class Serializer extends AbstractGearPart.Serializer<CompoundPart> {
         Serializer(ResourceLocation serializerId, Function<ResourceLocation, CompoundPart> function) {
             super(serializerId, function);

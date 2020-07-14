@@ -238,7 +238,8 @@ public abstract class AbstractGearPart implements IGearPart {
     @Override
     public String toString() {
         return "AbstractGearPart{" +
-                this.name +
+                "id=" + this.name +
+                ", partType=" + this.getType() +
                 "}";
     }
 

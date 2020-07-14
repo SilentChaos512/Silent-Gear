@@ -23,6 +23,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -34,7 +35,7 @@ import net.silentchaos512.lib.collection.StackList;
 
 public class FillRepairKitRecipe extends SpecialRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("fill_repair_kit");
-    public static final Serializer SERIALIZER = new Serializer();
+    public static final SpecialRecipeSerializer<FillRepairKitRecipe> SERIALIZER = new SpecialRecipeSerializer<>(FillRepairKitRecipe::new);
 
     public FillRepairKitRecipe(ResourceLocation idIn) {
         super(idIn);

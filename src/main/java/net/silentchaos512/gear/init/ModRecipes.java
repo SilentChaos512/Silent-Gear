@@ -26,6 +26,7 @@ import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.Const;
 
 public final class ModRecipes {
+    // TODO: Use DeferredRegister, collect all constants in dedicated classes
     public static final IRecipeType<SalvagingRecipe> SALVAGING_TYPE = IRecipeType.register(Const.SALVAGING.toString());
     public static final IRecipeSerializer<SalvagingRecipe> SALVAGING_SERIALIZER = new SalvagingRecipe.Serializer();
     public static final IRecipeSerializer<GearSalvagingRecipe> SALVAGING_GEAR_SERIALIZER = new GearSalvagingRecipe.Serializer();
@@ -41,7 +42,6 @@ public final class ModRecipes {
         register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
         register(FillRepairKitRecipe.NAME, FillRepairKitRecipe.SERIALIZER);
         register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
-        register(ReplaceToolHeadRecipe.NAME, ReplaceToolHeadRecipe.SERIALIZER);
         register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
         register(SGearDamageItemRecipe.NAME, SGearDamageItemRecipe.SERIALIZER);
         register(SilentGear.getId("conversion"), ConversionRecipe.SERIALIZER);
