@@ -43,12 +43,12 @@ public class CompoundPart extends AbstractGearPart {
         super(name);
     }
 
-    private static List<MaterialInstance> getMaterials(IPartData part) {
+    public static List<MaterialInstance> getMaterials(IPartData part) {
         return CompoundPartItem.getMaterials(part.getCraftingItem());
     }
 
     @Nullable
-    private static MaterialInstance getPrimaryMaterial(IPartData part) {
+    public static MaterialInstance getPrimaryMaterial(IPartData part) {
         return CompoundPartItem.getPrimaryMaterial(part.getCraftingItem());
     }
 
@@ -107,8 +107,17 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
+    public String getModelKey(PartData part) {
+        String str = "{" + getMaterials(part).stream()
+                .map(m -> SilentGear.shortenId(m.getMaterialId()))
+                .collect(Collectors.joining(",")) +
+                "}";
+        return super.getModelKey(part) + str;
+    }
+
+    @Override
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
-        // Get any base modifiers for this part (should be none, normally?)
+        // Get any base modifiers for this part (could be none)
         List<StatInstance> baseStats = new ArrayList<>(this.stats.get(stat));
 
         // Get the materials and all the stat modifiers they provide for this stat

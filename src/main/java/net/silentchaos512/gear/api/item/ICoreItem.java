@@ -103,10 +103,12 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     default Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
+        // TODO: Move to tool head part JSON?
         return Optional.empty();
     }
 
     default Optional<StatInstance> getStatModifier(ItemStat stat) {
+        // TODO: Move to tool head part JSON?
         return Optional.empty();
     }
 

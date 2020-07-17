@@ -8,8 +8,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
+import net.silentchaos512.gear.api.material.MaterialDisplay;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -31,6 +34,7 @@ import java.util.*;
 public class SimplePartAdapterMaterial implements IMaterial {
     private final ResourceLocation materialId;
     private final Map<PartType, IGearPart> parts = new HashMap<>();
+    private final Map<PartType, IMaterialDisplay> display = new HashMap<>();
 
     public SimplePartAdapterMaterial(ResourceLocation materialId) {
         this.materialId = materialId;
@@ -41,6 +45,8 @@ public class SimplePartAdapterMaterial implements IMaterial {
             throw new IllegalArgumentException("Already have part of type " + part.getType() + " for adapter material " + this.materialId);
         }
         this.parts.put(part.getType(), part);
+        // FIXME: MaterialDisplay for adapter mats
+        this.display.put(part.getType(), MaterialDisplay.DEFAULT);
     }
 
     private Optional<IGearPart> getPart(PartType partType) {
@@ -110,6 +116,11 @@ public class SimplePartAdapterMaterial implements IMaterial {
     }
 
     @Override
+    public boolean isCraftingAllowed(PartType partType, GearType gearType) {
+        return true;
+    }
+
+    @Override
     public int getColor(ItemStack gear, PartType partType) {
         return getPart(partType)
                 .map(p -> PartData.of(p).getColor(gear, 0))
@@ -121,6 +132,11 @@ public class SimplePartAdapterMaterial implements IMaterial {
         return getPart(partType)
                 .map(p -> p.getLiteTexture(PartData.of(p), gear))
                 .orElse(PartTextureType.ABSENT);
+    }
+
+    @Override
+    public IMaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType) {
+        return this.display.getOrDefault(partType, MaterialDisplay.DEFAULT);
     }
 
     @Override

@@ -14,8 +14,13 @@
   },
   "display": {
     "fletching/all": {
-      "texture": "low_contrast",
-      "color": "#4A8F28"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:fletching_generic",
+          "color": "#4A8F28"
+        }
+      ]
     }
   },
   "stats": {

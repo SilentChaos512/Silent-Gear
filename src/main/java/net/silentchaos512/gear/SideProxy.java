@@ -11,6 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -31,6 +32,7 @@ import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
+import net.silentchaos512.gear.client.model.GearModelLoader;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
@@ -170,9 +172,13 @@ class SideProxy implements IProxy {
                 MinecraftForge.EVENT_BUS.register(new DebugOverlay());
             }
 
-            // FIXME: These do not work!
-//            ModelLoaderRegistry.registerLoader(ToolModel.Loader.INSTANCE);
-//            ModelLoaderRegistry.registerLoader(ArmorItemModel.Loader.INSTANCE);
+            // FIXME: Crashes on runData because MC instance is null
+            //noinspection ConstantConditions
+            if (Minecraft.getInstance() != null) {
+                ModelLoaderRegistry.registerLoader(SilentGear.getId("gear_model"), new GearModelLoader());
+            } else {
+                SilentGear.LOGGER.warn("MC instance is null? Must be running data generators! Not registering model loaders...");
+            }
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {

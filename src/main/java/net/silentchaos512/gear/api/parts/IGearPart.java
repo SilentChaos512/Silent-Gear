@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -159,6 +160,10 @@ public interface IGearPart {
     @Nullable
     default ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
         return null;
+    }
+
+    default String getModelKey(PartData part) {
+        return SilentGear.shortenId(this.getId());
     }
 
     // May be removed or changed?

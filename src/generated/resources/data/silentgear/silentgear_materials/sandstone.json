@@ -23,12 +23,22 @@
   },
   "display": {
     "main/all": {
-      "texture": "low_contrast",
-      "color": "#E3DBB0"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:main_generic_lc",
+          "color": "#E3DBB0"
+        }
+      ]
     },
     "rod/all": {
-      "texture": "low_contrast",
-      "color": "#E3DBB0"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:rod_generic_lc",
+          "color": "#E3DBB0"
+        }
+      ]
     }
   },
   "stats": {

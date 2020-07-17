@@ -109,7 +109,13 @@ public class MaterialBuilder {
         if (this.stats.isEmpty()) {
             throw new IllegalStateException("Must build stats map first!");
         }
-        this.stats.keySet().forEach(partType -> display(partType, texture, color));
+        this.stats.keySet().forEach(partType -> {
+            // Remove highlight layer from non-mains
+            PartTextureType targetTexture = texture == PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT && partType != PartType.MAIN
+                    ? PartTextureType.HIGH_CONTRAST
+                    : texture;
+            display(partType, targetTexture, color);
+        });
         return this;
     }
 
@@ -126,7 +132,7 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder display(PartType partType, String gearType, PartTextureType texture, int color, int armorColor) {
-        MaterialDisplay materialDisplay = new MaterialDisplay(texture, color, armorColor);
+        MaterialDisplay materialDisplay = new MaterialDisplay(partType, texture, color, armorColor);
         this.display.put(SilentGear.shortenId(partType.getName()) + "/" + gearType, materialDisplay);
         return this;
     }

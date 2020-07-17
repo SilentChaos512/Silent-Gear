@@ -14,12 +14,22 @@
   },
   "display": {
     "main/all": {
-      "texture": "low_contrast",
-      "color": "#C65C35"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:main_generic_lc",
+          "color": "#C65C35"
+        }
+      ]
     },
     "grip/all": {
-      "texture": "low_contrast",
-      "color": "#C65C35"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:grip_wool",
+          "color": "#C65C35"
+        }
+      ]
     }
   },
   "stats": {

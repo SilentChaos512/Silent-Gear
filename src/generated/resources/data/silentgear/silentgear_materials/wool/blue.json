@@ -10,8 +10,13 @@
   },
   "display": {
     "grip/all": {
-      "texture": "low_contrast",
-      "color": "#35399D"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:grip_wool",
+          "color": "#35399D"
+        }
+      ]
     }
   }
 }

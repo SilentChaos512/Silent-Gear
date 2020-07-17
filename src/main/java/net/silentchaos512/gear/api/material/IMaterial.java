@@ -20,8 +20,6 @@ import java.util.Set;
 
 /**
  * A material used for crafting gear parts. Provides stats and traits for different part types.
- *
- * @since 2.0.0
  */
 public interface IMaterial {
     String getPackName();
@@ -68,14 +66,15 @@ public interface IMaterial {
         return stat.compute(0, false, getStatModifiers(stat, partType));
     }
 
-    default boolean isCraftingAllowed(PartType partType, GearType gearType) {
-        // TODO: Something to distinguish armor, in order to check correct durability stat?
-        return true;
-    }
+    boolean isCraftingAllowed(PartType partType, GearType gearType);
 
+    @Deprecated
     int getColor(ItemStack gear, PartType partType);
 
+    @Deprecated
     PartTextureType getTexture(PartType partType, ItemStack gear);
+
+    IMaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType);
 
     ITextComponent getDisplayName(PartType partType, ItemStack gear);
 

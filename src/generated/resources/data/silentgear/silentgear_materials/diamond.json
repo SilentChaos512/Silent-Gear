@@ -14,16 +14,34 @@
   },
   "display": {
     "main/all": {
-      "texture": "high_contrast_with_highlight",
-      "color": "#33EBCB"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:main_generic_hc",
+          "color": "#33EBCB"
+        },
+        {
+          "texture": "silentgear:_highlight"
+        }
+      ]
     },
     "rod/all": {
-      "texture": "high_contrast",
-      "color": "#33EBCB"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:rod_generic_hc",
+          "color": "#33EBCB"
+        }
+      ]
     },
     "tip/all": {
-      "texture": "high_contrast",
-      "color": "#33EBCB"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:tip_iron",
+          "color": "#33EBCB"
+        }
+      ]
     }
   },
   "stats": {

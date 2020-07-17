@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package net.silentchaos512.gear.client.models;
+package net.silentchaos512.gear.client.model;
 
 import mcp.MethodsReturnNonnullByDefault;
 

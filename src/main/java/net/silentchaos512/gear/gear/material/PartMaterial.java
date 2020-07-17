@@ -17,6 +17,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
 import net.silentchaos512.gear.api.material.MaterialDisplay;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
@@ -109,7 +110,7 @@ public final class PartMaterial implements IMaterial {
         if (oldMaterial instanceof PartMaterial) {
             // Copy trait instances, the client doesn't need to know conditions
             this.traits.clear();
-            ((PartMaterial) oldMaterial).traits.forEach((partType, list) -> this.traits.put(partType, list));
+            ((PartMaterial) oldMaterial).traits.forEach(this.traits::put);
         }
     }
 
@@ -166,7 +167,8 @@ public final class PartMaterial implements IMaterial {
         return getMaterialDisplay(gear, partType).getTexture();
     }
 
-    private MaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType) {
+    @Override
+    public IMaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType) {
         if (!gear.isEmpty()) {
             GearType gearType = ((ICoreItem) gear.getItem()).getGearType();
 
