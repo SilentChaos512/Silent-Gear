@@ -372,7 +372,8 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.SYNERGISTIC, 2)
-                .display(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+                .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xB3804B)
+                .display(PartType.BOWSTRING, PartTextureType.LOW_CONTRAST, 0x845E37)
         );//endregion
         //region Glowstone
         ret.add(new MaterialBuilder(SilentGear.getId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
@@ -668,7 +669,8 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.FLEXIBLE, 3)
-                .display(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+                .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xD8995B)
+                .display(PartType.BOWSTRING, PartTextureType.LOW_CONTRAST, 0x7E6962)
         );//endregion
         //region Stone
         ret.add(new MaterialBuilder(SilentGear.getId("stone"), 1, Tags.Items.COBBLESTONE)
@@ -705,7 +707,8 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.ORGANIC, 2)
-                .display(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+                .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xFFFFFF)
+                .display(PartType.BOWSTRING, PartTextureType.LOW_CONTRAST, 0x444444)
         );//endregion
         //region Terracotta
         ResourceLocation sgTerracotta = SilentGear.getId("terracotta");
