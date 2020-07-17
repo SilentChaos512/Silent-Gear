@@ -1,10 +1,13 @@
 package net.silentchaos512.gear.api.event;
 
 import net.minecraftforge.eventbus.api.Event;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,13 +19,14 @@ import java.util.List;
  */
 public class GetMaterialStatsEvent extends Event {
     private final ItemStat stat;
+    private final PartType partType;
     private final List<StatInstance> modifiers;
-    private final IMaterial material;
+    private final MaterialInstance material;
 
-    public GetMaterialStatsEvent(IMaterial material, ItemStat stat, List<StatInstance> modifiers) {
+    public GetMaterialStatsEvent(MaterialInstance material, ItemStat stat, PartType partType, Collection<StatInstance> modifiers) {
         this.stat = stat;
-        //noinspection AssignmentOrReturnOfFieldWithMutableType
-        this.modifiers = modifiers;
+        this.partType = partType;
+        this.modifiers = new ArrayList<>(modifiers);
         this.material = material;
     }
 
@@ -35,10 +39,16 @@ public class GetMaterialStatsEvent extends Event {
         return stat;
     }
 
+    public PartType getPartType() {
+        return partType;
+    }
+
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     public List<StatInstance> getModifiers() {
         return modifiers;
     }
 
-    ;
+    public MaterialInstance getMaterial() {
+        return material;
+    }
 }

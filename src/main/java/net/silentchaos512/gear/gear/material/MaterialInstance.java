@@ -5,8 +5,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.minecraftforge.common.MinecraftForge;
+import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -55,7 +57,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public static MaterialInstance of(IMaterial material, ItemStack craftingItem) {
-        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem));
+        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem), craftingItem);
     }
 
     public static MaterialInstance of(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
@@ -112,7 +114,9 @@ public final class MaterialInstance implements IMaterialInstance {
             float bonus = 1f + grade.bonusPercent / 100f;
             return mods.stream().map(m -> new StatInstance(m.getValue() * bonus, m.getOp())).collect(Collectors.toList());
         }
-        return mods;
+        GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.getModifiers();
     }
 
     @Override
