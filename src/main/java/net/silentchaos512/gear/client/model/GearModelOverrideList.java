@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -14,6 +15,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.item.gear.CoreCrossbow;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
@@ -23,6 +25,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -60,7 +63,7 @@ public class GearModelOverrideList extends ItemOverrideList {
     @Override
     public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
         int animationFrame = getAnimationFrame(stack, worldIn, entityIn);
-        CacheKey key = getKey(model, stack, entityIn, animationFrame);
+        CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn, animationFrame));
         } catch (ExecutionException e) {
@@ -85,19 +88,46 @@ public class GearModelOverrideList extends ItemOverrideList {
             } else {
                 // Legacy parts (remove later?)
                 layers.addAll(part.getPart().getLiteTexture(part, stack).getLayers(part.getType()).stream()
-                        .map(tex -> {
-                            int c = tex.equals(SilentGear.getId("_highlight")) ? Color.VALUE_WHITE : part.getColor(stack, animationFrame);
-                            return new MaterialLayer(tex, c);
+                        .map(loc -> {
+                            int c = loc.equals(SilentGear.getId("_highlight")) ? Color.VALUE_WHITE : part.getColor(stack, animationFrame);
+                            PartTextures tex = PartTextures.byTextureId(loc);
+                            return tex != null ? tex.getLayer(c) : new MaterialLayer(loc, c);
                         })
                         .collect(Collectors.toList()));
             }
         }
 
+        if (stack.getItem() instanceof CoreCrossbow) {
+            getCrossbowCharge(stack, worldIn, entityIn).ifPresent(layers::add);
+        }
+
         return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
     }
 
-    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable LivingEntity entity, int animationFrame) {
-        return new CacheKey(model, GearData.getModelKey(stack, animationFrame));
+    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+        // TODO: Maybe should add an ICoreItem method to get additional layers?
+        IItemPropertyGetter chargedProperty = stack.getItem().getPropertyGetter(new ResourceLocation("charged"));
+        IItemPropertyGetter fireworkProperty = stack.getItem().getPropertyGetter(new ResourceLocation("firework"));
+
+        if (chargedProperty != null && fireworkProperty != null) {
+            boolean charged = chargedProperty.call(stack, world, entity) > 0;
+            boolean firework = fireworkProperty.call(stack, world, entity) > 0;
+            if (charged) {
+                if (firework) {
+                    return Optional.of(new MaterialLayer(PartTextures.CHARGED_FIREWORK, Color.VALUE_WHITE));
+                }
+                return Optional.of(new MaterialLayer(PartTextures.CHARGED_ARROW, Color.VALUE_WHITE));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int animationFrame) {
+        String chargeSuffix = getCrossbowCharge(stack, world, entity)
+                .map(l -> l.getTextureId().getPath())
+                .orElse("");
+        return new CacheKey(model, GearData.getModelKey(stack, animationFrame) + chargeSuffix);
     }
 
     @Override

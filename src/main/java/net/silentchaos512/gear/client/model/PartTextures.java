@@ -3,39 +3,63 @@ package net.silentchaos512.gear.client.model;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public final class PartTextures {
-    private static final Map<ResourceLocation, GearType> ALL = new HashMap<>();
+public enum PartTextures {
+    HIGHLIGHT("_highlight", GearType.TOOL, true),
+    MAIN_GENERIC_LC("main_generic_lc", GearType.TOOL, true),
+    MAIN_GENERIC_HC("main_generic_hc", GearType.TOOL, true),
+    ROD_GENERIC_LC("rod_generic_lc", GearType.TOOL, true),
+    ROD_GENERIC_HC("rod_generic_hc", GearType.TOOL, true),
+    TIP_IRON("tip_iron", GearType.TOOL, true),
+    BINDING_GENERIC("binding_generic", GearType.TOOL, true),
+    GRIP_WOOL("grip_wool", GearType.TOOL, true),
+    BOWSTRING_STRING("bowstring_string", GearType.RANGED_WEAPON, true),
+    ARROW("arrow", GearType.RANGED_WEAPON, true),
+    CHARGED_ARROW("charged_arrow", GearType.CROSSBOW, false),
+    CHARGED_FIREWORK("charged_firework", GearType.CROSSBOW, false),
+    FLETCHING_GENERIC("fletching_generic", GearType.NONE, true);
 
-    public static final ResourceLocation HIGHLIGHT = get("_highlight", GearType.TOOL);
-    public static final ResourceLocation MAIN_GENERIC_LC = get("main_generic_lc", GearType.TOOL);
-    public static final ResourceLocation MAIN_GENERIC_HC = get("main_generic_hc", GearType.TOOL);
-    public static final ResourceLocation ROD_GENERIC_LC = get("rod_generic_lc", GearType.TOOL);
-    public static final ResourceLocation ROD_GENERIC_HC = get("rod_generic_hc", GearType.TOOL);
-    public static final ResourceLocation TIP_IRON = get("tip_iron", GearType.TOOL);
-    public static final ResourceLocation BINDING_GENERIC = get("binding_generic", GearType.TOOL);
-    public static final ResourceLocation GRIP_WOOL = get("grip_wool", GearType.TOOL);
-    public static final ResourceLocation BOWSTRING_STRING = get("bowstring_string", GearType.RANGED_WEAPON);
-    public static final ResourceLocation ARROW = get("arrow", GearType.RANGED_WEAPON);
-    public static final ResourceLocation FLETCHING_GENERIC = get("fletching_generic", null);
+    private final ResourceLocation texture;
+    private final GearType gearType;
+    private final boolean animated;
 
-    private PartTextures() {}
-
-    private static ResourceLocation get(String path, @Nullable GearType gearType) {
-        ResourceLocation ret = SilentGear.getId(path);
-        if (gearType != null) {
-            ALL.put(ret, gearType);
-        }
-        return ret;
+    PartTextures(String path, GearType gearType, boolean animated) {
+        this.texture = SilentGear.getId(path);
+        this.gearType = gearType;
+        this.animated = animated;
     }
 
-    public static List<ResourceLocation> getTextures(GearType gearType) {
-        return ALL.keySet().stream()
-                .filter(tex -> gearType.matches(ALL.get(tex)))
+    public ResourceLocation getTexture() {
+        return texture;
+    }
+
+    public boolean isAnimated() {
+        return animated;
+    }
+
+    public MaterialLayer getLayer(int color) {
+        return new MaterialLayer(this, color);
+    }
+
+    public static List<PartTextures> getTextures(GearType gearType) {
+        return Arrays.stream(values())
+                .filter(t -> gearType.matches(t.gearType))
                 .collect(Collectors.toList());
+    }
+
+    @Nullable
+    public static PartTextures byTextureId(ResourceLocation tex) {
+        for (PartTextures type : values()) {
+            if (type.texture.equals(tex)) {
+                return type;
+            }
+        }
+        return null;
     }
 }

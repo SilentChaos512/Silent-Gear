@@ -6,21 +6,36 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.utils.Color;
 
 public class MaterialLayer {
     private final ResourceLocation texture;
     private final int color;
+    private final boolean animated;
+
+    public MaterialLayer(PartTextures texture, int color) {
+        this(texture.getTexture(), color, texture.isAnimated());
+    }
 
     public MaterialLayer(ResourceLocation texture, int color) {
+        this(texture, color, true);
+    }
+
+    public MaterialLayer(ResourceLocation texture, int color, boolean animated) {
         this.texture = texture;
         this.color = color;
+        this.animated = animated;
     }
 
     public ResourceLocation getTexture(GearType gearType, int animationFrame) {
         String path = "item/" + gearType.getName() + "/" + this.texture.getPath();
-        String suffix = animationFrame > 0 ? "_" + animationFrame : "";
+        String suffix = animated && animationFrame > 0 ? "_" + animationFrame : "";
         return new ResourceLocation(this.texture.getNamespace(), path + suffix);
+    }
+
+    public ResourceLocation getTextureId() {
+        return texture;
     }
 
     public int getColor() {

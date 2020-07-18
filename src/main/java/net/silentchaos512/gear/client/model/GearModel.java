@@ -94,9 +94,10 @@ public class GearModel implements IModelGeometry<GearModel> {
 
         ret.add(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
 
-        for (ResourceLocation tex : PartTextures.getTextures(this.gearType)) {
-            for (int i = 0; i < item.getAnimationFrames(); ++i) {
-                ret.add(getTexture(tex, i));
+        for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
+            int animationFrames = tex.isAnimated() ? item.getAnimationFrames() : 1;
+            for (int i = 0; i < animationFrames; ++i) {
+                ret.add(getTexture(tex.getTexture(), i));
             }
         }
 
