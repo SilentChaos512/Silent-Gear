@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
@@ -56,25 +57,22 @@ public class GearModelOverrideList extends ItemOverrideList {
     @Nullable
     @Override
     public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
-        CacheKey key = getKey(model, stack, entityIn);
+        int animationFrame = getAnimationFrame(stack, worldIn, entityIn);
+        CacheKey key = getKey(model, stack, entityIn, animationFrame);
         try {
-            return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn));
+            return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn, animationFrame));
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
         return model;
     }
 
-    private IBakedModel getOverrideModel(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
-/*        List<ResourceLocation> parts = ImmutableList.of(
-                model.getTexture("rod_generic_lc").getTextureLocation(),
-                model.getTexture("grip_wool").getTextureLocation(),
-                model.getTexture("head_generic_hc").getTextureLocation(),
-                model.getTexture("binding_generic").getTextureLocation(),
-                model.getTexture("tip_iron").getTextureLocation()
-        );*/
+    private static int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+        return ((ICoreItem) stack.getItem()).getAnimationFrame(stack, world, entity);
+    }
+
+    private IBakedModel getOverrideModel(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
         List<MaterialLayer> layers = new ArrayList<>();
-        SilentGear.LOGGER.debug("getOverrideModel {}", stack.getDisplayName().getFormattedText());
 
         for (PartData part : GearData.getConstructionParts(stack)) {
             // FIXME: What about legacy parts?
@@ -82,18 +80,18 @@ public class GearModelOverrideList extends ItemOverrideList {
                 MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
                 if (mat != null) {
                     for (MaterialLayer layer : mat.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers()) {
-                        SilentGear.LOGGER.debug(layer.getTexture(model.gearType));
+                        SilentGear.LOGGER.debug(layer.getTexture(model.gearType, animationFrame));
                         layers.add(layer);
                     }
                 }
             }
         }
 
-        return model.bake(layers, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
+        return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
     }
 
-    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable LivingEntity entity) {
-        return new CacheKey(model, GearData.getModelKey(stack));
+    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable LivingEntity entity, int animationFrame) {
+        return new CacheKey(model, GearData.getModelKey(stack, animationFrame));
     }
 
     @Override

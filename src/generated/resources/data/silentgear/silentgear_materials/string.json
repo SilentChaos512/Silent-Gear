@@ -32,7 +32,11 @@
       "armor_color": "#FFFFFF",
       "layers": [
         {
-          "texture": "silentgear:bowstring_string"
+          "texture": "silentgear:bowstring_string",
+          "color": "#444444"
+        },
+        {
+          "texture": "silentgear:arrow"
         }
       ]
     }

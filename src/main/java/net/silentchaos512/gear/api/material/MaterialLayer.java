@@ -17,9 +17,10 @@ public class MaterialLayer {
         this.color = color;
     }
 
-    public ResourceLocation getTexture(GearType gearType) {
+    public ResourceLocation getTexture(GearType gearType, int animationFrame) {
         String path = "item/" + gearType.getName() + "/" + this.texture.getPath();
-        return new ResourceLocation(this.texture.getNamespace(), path);
+        String suffix = animationFrame > 0 ? "_" + animationFrame : "";
+        return new ResourceLocation(this.texture.getNamespace(), path + suffix);
     }
 
     public int getColor() {

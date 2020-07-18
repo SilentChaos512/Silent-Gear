@@ -242,8 +242,9 @@ public final class GearData {
         construction.remove(NBT_TIER);
     }
 
-    public static String getModelKey(ItemStack stack) {
-        return getData(stack, NBT_ROOT_RENDERING).getString(NBT_MODEL_KEY);
+    public static String getModelKey(ItemStack stack, int animationFrame) {
+        String key = getData(stack, NBT_ROOT_RENDERING).getString(NBT_MODEL_KEY);
+        return animationFrame > 0 ? key + "_" + animationFrame : key;
     }
 
     private static String calculateModelKey(ItemStack stack, PartDataList parts) {

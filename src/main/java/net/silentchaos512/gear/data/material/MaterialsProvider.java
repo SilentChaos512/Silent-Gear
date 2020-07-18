@@ -14,10 +14,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
+import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
@@ -373,7 +375,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.SYNERGISTIC, 2)
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xB3804B)
-                .display(PartType.BOWSTRING, PartTextureType.LOW_CONTRAST, 0x845E37)
+                .display(PartType.BOWSTRING,
+                        new MaterialLayer(PartTextures.BOWSTRING_STRING, 0x845E37),
+                        new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE))
         );//endregion
         //region Glowstone
         ret.add(new MaterialBuilder(SilentGear.getId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
@@ -670,7 +674,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.FLEXIBLE, 3)
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xD8995B)
-                .display(PartType.BOWSTRING, PartTextureType.LOW_CONTRAST, 0x7E6962)
+                .display(PartType.BOWSTRING,
+                        new MaterialLayer(PartTextures.BOWSTRING_STRING, 0x7E6962),
+                        new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE))
         );//endregion
         //region Stone
         ret.add(new MaterialBuilder(SilentGear.getId("stone"), 1, Tags.Items.COBBLESTONE)
@@ -708,7 +714,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.ORGANIC, 2)
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xFFFFFF)
-                .display(PartType.BOWSTRING, PartTextureType.LOW_CONTRAST, 0x444444)
+                .display(PartType.BOWSTRING,
+                        new MaterialLayer(PartTextures.BOWSTRING_STRING, 0x444444),
+                        new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE))
         );//endregion
         //region Terracotta
         ResourceLocation sgTerracotta = SilentGear.getId("terracotta");

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:item/crossbow/head_generic_hc"
+    "layer0": "silentgear:item/crossbow/main_generic_hc"
   }
 }

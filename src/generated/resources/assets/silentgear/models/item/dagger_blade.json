@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:item/dagger/head_generic_hc"
+    "layer0": "silentgear:item/dagger/main_generic_hc"
   }
 }

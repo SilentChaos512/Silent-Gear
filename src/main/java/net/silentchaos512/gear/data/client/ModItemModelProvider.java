@@ -84,11 +84,10 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         // Tool Heads
         Registration.getItems(ToolHeadItem.class).forEach(item -> {
-            // FIXME: Correct texture name (main_generic_hc), delete duplicates
             // TODO: Add dynamic models to pull correct texture for material
             String texture = item.getGearType().matches(GearType.ARMOR)
                     ? "item/dummy_icon_main"
-                    : "item/" + item.getGearType().getName() + "/head_generic_hc";
+                    : "item/" + item.getGearType().getName() + "/main_generic_hc";
             getBuilder(NameUtils.from(item).getPath())
                     .parent(itemGenerated)
                     .texture("layer0", texture);

@@ -17,6 +17,7 @@ import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialDisplay;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.LazyItemStat;
@@ -133,6 +134,20 @@ public class MaterialBuilder {
 
     public MaterialBuilder display(PartType partType, String gearType, PartTextureType texture, int color, int armorColor) {
         MaterialDisplay materialDisplay = new MaterialDisplay(partType, texture, color, armorColor);
+        this.display.put(SilentGear.shortenId(partType.getName()) + "/" + gearType, materialDisplay);
+        return this;
+    }
+
+    public MaterialBuilder display(PartType partType, MaterialLayer... layers) {
+        return display(partType, "all", Color.VALUE_WHITE, layers);
+    }
+
+    public MaterialBuilder display(PartType partType, int armorColor, MaterialLayer... layers) {
+        return display(partType, "all", armorColor, layers);
+    }
+
+    public MaterialBuilder display(PartType partType, String gearType, int armorColor, MaterialLayer... layers) {
+        MaterialDisplay materialDisplay = new MaterialDisplay(armorColor, layers);
         this.display.put(SilentGear.shortenId(partType.getName()) + "/" + gearType, materialDisplay);
         return this;
     }

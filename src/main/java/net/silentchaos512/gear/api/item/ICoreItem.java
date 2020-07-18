@@ -2,9 +2,11 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.parts.IPartData;
@@ -19,6 +21,7 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -120,8 +123,14 @@ public interface ICoreItem extends IItemProvider, IStatItem {
 
     //region Client-side stuff
 
+    // TODO: Rename to getAnimationFrameCount?
     default int getAnimationFrames() {
         return 1;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    default int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+        return 0;
     }
 
     @OnlyIn(Dist.CLIENT)

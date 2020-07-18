@@ -17,7 +17,8 @@
       "armor_color": "#FFFFFF",
       "layers": [
         {
-          "texture": "silentgear:binding_generic"
+          "texture": "silentgear:binding_generic",
+          "color": "#D8995B"
         }
       ]
     },
@@ -25,7 +26,11 @@
       "armor_color": "#FFFFFF",
       "layers": [
         {
-          "texture": "silentgear:bowstring_string"
+          "texture": "silentgear:bowstring_string",
+          "color": "#7E6962"
+        },
+        {
+          "texture": "silentgear:arrow"
         }
       ]
     }

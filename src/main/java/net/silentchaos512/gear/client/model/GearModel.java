@@ -17,9 +17,12 @@ import net.minecraftforge.client.model.geometry.IModelGeometryPart;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 import net.minecraftforge.client.model.pipeline.TRSRTransformer;
+import net.minecraftforge.fml.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.init.Registration;
 
 import java.util.*;
 import java.util.function.Function;
@@ -27,11 +30,18 @@ import java.util.function.Function;
 public class GearModel implements IModelGeometry<GearModel> {
     private final ItemCameraTransforms cameraTransforms;
     final GearType gearType;
+    private final ICoreItem item;
     private GearModelOverrideList overrideList;
 
     public GearModel(ItemCameraTransforms cameraTransforms, GearType gearType) {
         this.cameraTransforms = cameraTransforms;
         this.gearType = gearType;
+        this.item = Registration.ITEMS.getEntries().stream()
+                .map(RegistryObject::get)
+                .filter(item -> item instanceof ICoreItem && ((ICoreItem) item).getGearType() == this.gearType)
+                .map(item -> (ICoreItem) item)
+                .findFirst()
+                .orElse(null);
     }
 
     public void clearCache() {
@@ -48,6 +58,7 @@ public class GearModel implements IModelGeometry<GearModel> {
 
     @SuppressWarnings("MethodWithTooManyParameters")
     public IBakedModel bake(List<MaterialLayer> layers,
+                            int animationFrame,
                             String transformVariant,
                             IModelConfiguration owner,
                             ModelBakery bakery,
@@ -62,7 +73,7 @@ public class GearModel implements IModelGeometry<GearModel> {
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.gearType)));
+            TextureAtlasSprite texture = spriteGetter.apply(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.gearType, animationFrame)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -83,16 +94,19 @@ public class GearModel implements IModelGeometry<GearModel> {
 
         ret.add(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
 
-        for (ResourceLocation tex : PartTextures.getAllTextures()) {
-            ret.add(getTexture(tex));
+        for (ResourceLocation tex : PartTextures.getTextures(this.gearType)) {
+            for (int i = 0; i < item.getAnimationFrames(); ++i) {
+                ret.add(getTexture(tex, i));
+            }
         }
 
         return ret;
     }
 
-    private Material getTexture(ResourceLocation tex) {
+    private Material getTexture(ResourceLocation tex, int animationFrame) {
         String path = "item/" + gearType.getName() + "/" + tex.getPath();
-        ResourceLocation location = new ResourceLocation(tex.getNamespace(), path);
+        String suffix = animationFrame > 0 ? "_" + animationFrame : "";
+        ResourceLocation location = new ResourceLocation(tex.getNamespace(), path + suffix);
         return new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, location);
     }
 
@@ -162,7 +176,7 @@ public class GearModel implements IModelGeometry<GearModel> {
         float z0 = 7.5f / 16f;
         float z1 = 8.5f / 16f;
 
-        switch(side) {
+        switch (side) {
             case WEST:
                 z0 = 8.5f / 16f;
                 z1 = 7.5f / 16f;
@@ -230,15 +244,15 @@ public class GearModel implements IModelGeometry<GearModel> {
 
     private static void putVertex(IVertexConsumer consumer, Direction side, float x, float y, float z, float u, float v, int color) {
         VertexFormat format = consumer.getVertexFormat();
-        for(int e = 0; e < format.getElements().size(); e++) {
-            switch(format.getElements().get(e).getUsage()) {
+        for (int e = 0; e < format.getElements().size(); e++) {
+            switch (format.getElements().get(e).getUsage()) {
                 case POSITION:
                     consumer.put(e, x, y, z, 1f);
                     break;
                 case COLOR:
                     float r = ((color >> 16) & 0xFF) / 255f; // red
-                    float g = ((color >>  8) & 0xFF) / 255f; // green
-                    float b = ((color >>  0) & 0xFF) / 255f; // blue
+                    float g = ((color >> 8) & 0xFF) / 255f; // green
+                    float b = ((color >> 0) & 0xFF) / 255f; // blue
                     float a = ((color >> 24) & 0xFF) / 255f; // alpha
 
                     // reset alpha to 1 if it's 0 to avoid mistakes & make things cleaner
@@ -253,8 +267,7 @@ public class GearModel implements IModelGeometry<GearModel> {
                     consumer.put(e, offX, offY, offZ, 0f);
                     break;
                 case UV:
-                    if(format.getElements().get(e).getIndex() == 0)
-                    {
+                    if (format.getElements().get(e).getIndex() == 0) {
                         consumer.put(e, u, v, 0f, 1f);
                         break;
                     }

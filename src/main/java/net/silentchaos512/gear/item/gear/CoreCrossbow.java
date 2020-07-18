@@ -437,5 +437,33 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
 
+    @Override
+    public int getAnimationFrames() {
+        return 4;
+    }
+
+    @Override
+    public int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+//        IItemPropertyGetter charged
+
+        IItemPropertyGetter pullingProperty = stack.getItem().getPropertyGetter(new ResourceLocation("pulling"));
+        if (pullingProperty != null) {
+            float pulling = pullingProperty.call(stack, world, entity);
+            if (pulling > 0) {
+                IItemPropertyGetter pullProperty = stack.getItem().getPropertyGetter(new ResourceLocation("pull"));
+                if (pullProperty != null) {
+                    float pull = pullProperty.call(stack, world, entity);
+
+                    if (pull > 1.0f)
+                        return 3;
+                    if (pull > 0.58f)
+                        return 2;
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
     //endregion
 }
