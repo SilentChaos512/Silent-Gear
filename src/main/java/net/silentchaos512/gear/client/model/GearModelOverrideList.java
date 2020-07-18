@@ -17,6 +17,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GearModelOverrideList extends ItemOverrideList {
     private final Cache<CacheKey, IBakedModel> bakedModelCache = CacheBuilder.newBuilder()
@@ -75,15 +77,19 @@ public class GearModelOverrideList extends ItemOverrideList {
         List<MaterialLayer> layers = new ArrayList<>();
 
         for (PartData part : GearData.getConstructionParts(stack)) {
-            // FIXME: What about legacy parts?
             if (part.getPart() instanceof CompoundPart) {
                 MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
                 if (mat != null) {
-                    for (MaterialLayer layer : mat.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers()) {
-                        SilentGear.LOGGER.debug(layer.getTexture(model.gearType, animationFrame));
-                        layers.add(layer);
-                    }
+                    layers.addAll(mat.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers());
                 }
+            } else {
+                // Legacy parts (remove later?)
+                layers.addAll(part.getPart().getLiteTexture(part, stack).getLayers(part.getType()).stream()
+                        .map(tex -> {
+                            int c = tex.equals(SilentGear.getId("_highlight")) ? Color.VALUE_WHITE : part.getColor(stack, animationFrame);
+                            return new MaterialLayer(tex, c);
+                        })
+                        .collect(Collectors.toList()));
             }
         }
 
