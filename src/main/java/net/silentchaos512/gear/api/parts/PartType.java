@@ -46,19 +46,19 @@ public final class PartType {
 
     public static final PartType BINDING = create(Builder.builder(SilentGear.getId("binding"))
             .serializer(createSerializer("binding", BindingPart::new))
-            .compoundPartItem(ModItems.BINDING)
+            .compoundPartItem(() -> ModItems.BINDING.orElseThrow(IllegalStateException::new))
     );
     public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring"))
             .serializer(createSerializer("bowstring", BowstringPart::new))
-            .compoundPartItem(ModItems.BOWSTRING)
+            .compoundPartItem(() -> ModItems.BOWSTRING.orElseThrow(IllegalStateException::new))
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
             .serializer(createSerializer("fletching", FletchingPart::new))
-            .compoundPartItem(ModItems.FLETCHING)
+            .compoundPartItem(() -> ModItems.FLETCHING.orElseThrow(IllegalStateException::new))
     );
     public static final PartType GRIP = create(Builder.builder(SilentGear.getId("grip"))
             .serializer(createSerializer("grip", GripPart::new))
-            .compoundPartItem(ModItems.GRIP)
+            .compoundPartItem(() -> ModItems.GRIP.orElseThrow(IllegalStateException::new))
     );
     @Deprecated
     public static final PartType HIGHLIGHT = create(
@@ -73,11 +73,11 @@ public final class PartType {
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
             .serializer(createSerializer("rod", RodPart::new))
-            .compoundPartItem(ModItems.ROD)
+            .compoundPartItem(() -> ModItems.ROD.orElseThrow(IllegalStateException::new))
     );
     public static final PartType TIP = create(Builder.builder(SilentGear.getId("tip"))
             .serializer(createSerializer("tip", TipPart::new))
-            .compoundPartItem(ModItems.TIP)
+            .compoundPartItem(() -> ModItems.TIP.orElseThrow(IllegalStateException::new))
     );
 
     @Deprecated

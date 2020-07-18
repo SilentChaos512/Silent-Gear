@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Upgrade parts from other mods not working
 - Random bows generating with a random part instead of bowstrings
 - Slingshots failing to fire in creative mode
 
