@@ -164,19 +164,6 @@ public final class PartManager implements IResourceManagerReloadListener {
         return null;
     }
 
-    /**
-     * Try to get a fallback part for the part type. Some types may not have a fallback.
-     *
-     * @param type The part type
-     * @return The fallback part if it exists
-     * @deprecated Use {@link PartType#getFallbackPart()} instead
-     */
-    @Deprecated
-    @Nullable
-    public static IGearPart tryGetFallback(PartType type) {
-        return type.getFallbackPart();
-    }
-
     public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {
         synchronized (MAP) {
             Map<ResourceLocation, IGearPart> oldParts = ImmutableMap.copyOf(MAP);

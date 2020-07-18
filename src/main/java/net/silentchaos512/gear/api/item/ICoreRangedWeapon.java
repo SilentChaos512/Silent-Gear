@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 
 import java.util.Collection;
 import java.util.Set;
@@ -22,11 +22,6 @@ public interface ICoreRangedWeapon extends ICoreTool {
     @Override
     default Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
-    }
-
-    @Override
-    default boolean supportsPartOfType(PartType type) {
-        return requiresPartOfType(type) || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
     }
 
     @Override

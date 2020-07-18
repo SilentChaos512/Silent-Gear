@@ -11,9 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -234,33 +232,5 @@ public final class GearClientHelper {
 
     public static boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !oldStack.equals(newStack);
-    }
-
-    @Deprecated
-    public static Map<String, PartData> getRenderParts(ItemStack stack) {
-        Map<String, PartData> map = new LinkedHashMap<>();
-
-        ICoreTool item = (ICoreTool) stack.getItem();
-        GearType itemClass = item.getGearType();
-        boolean hasGuard = item.hasSwordGuard();
-
-        PartData partHead = item.getPrimaryPart(stack);
-        PartData partGuard = hasGuard ? item.getSecondaryPart(stack) : null;
-        PartData partRod = item.getRodPart(stack);
-        PartData partTip = item.getTipPart(stack);
-        PartData partBowstring = item.getBowstringPart(stack);
-
-        if (partRod != null)
-            map.put("rod", partRod);
-        if (partHead != null)
-            map.put("head", partHead);
-        if (partGuard != null)
-            map.put("guard", partGuard);
-        if (partTip != null)
-            map.put("tip", partTip);
-        if (partBowstring != null)
-            map.put("bowstring", partBowstring);
-
-        return map;
     }
 }

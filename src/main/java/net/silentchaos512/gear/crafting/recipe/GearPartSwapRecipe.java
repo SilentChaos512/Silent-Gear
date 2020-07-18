@@ -46,12 +46,12 @@ public class GearPartSwapRecipe extends SpecialRecipe {
         Collection<PartType> typesFound = new HashSet<>();
 
         for (ItemStack stack : others) {
-            PartData part = PartData.fromStackFast(stack);
+            PartData part = PartData.from(stack);
             if (part == null) return false;
 
             // Only required part types (no mains), and no duplicates
             PartType type = part.getType();
-            if (isLegacyMain(part) || !item.supportsPartOfType(type) || typesFound.contains(type)) {
+            if (isLegacyMain(part) || !item.supportsPart(part) || typesFound.contains(type)) {
                 return false;
             }
             typesFound.add(type);
@@ -59,7 +59,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
         return true;
     }
 
-    private boolean isLegacyMain(IPartData part) {
+    private static boolean isLegacyMain(IPartData part) {
         return part.getType() == PartType.MAIN && !(part.getPart() instanceof CompoundPart);
     }
 

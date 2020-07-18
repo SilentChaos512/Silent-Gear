@@ -48,12 +48,8 @@ public interface ICoreArmor extends ICoreItem {
     }
 
     @Override
-    default PartData[] getRenderParts(ItemStack stack) {
-        return new PartData[]{getPrimaryPart(stack)};
-    }
-
-    @Override
-    default boolean supportsPartOfType(PartType type) {
+    default boolean supportsPart(PartData part) {
+        PartType type = part.getType();
         return type == PartType.MAIN || type == PartType.TIP;
     }
 }

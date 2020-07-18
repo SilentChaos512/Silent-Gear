@@ -75,6 +75,7 @@ public final class PartData implements IPartData {
         return of(part, craftingItem);
     }
 
+    @Deprecated
     @Nullable
     public static PartData fromStackFast(ItemStack craftingItem) {
         return ofNullable(PartManager.from(craftingItem));

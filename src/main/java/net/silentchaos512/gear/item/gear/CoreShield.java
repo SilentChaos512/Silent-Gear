@@ -25,7 +25,6 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -85,11 +84,6 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     @Override
     public IItemColor getItemColors() {
         return ColorHandlers::getShieldColor;
-    }
-
-    @Override
-    public PartData[] getRenderParts(ItemStack stack) {
-        return new PartData[]{GearData.getPrimaryRenderPartFast(stack)};
     }
 
     @Override

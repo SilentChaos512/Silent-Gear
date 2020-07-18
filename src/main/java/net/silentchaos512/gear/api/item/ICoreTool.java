@@ -9,25 +9,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.parts.IPartPosition;
-import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.ColorHandlers;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartPositions;
-import net.silentchaos512.gear.parts.type.BowstringPart;
-import net.silentchaos512.gear.parts.type.GripPart;
-import net.silentchaos512.gear.parts.type.RodPart;
-import net.silentchaos512.gear.parts.type.TipPart;
-import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Set;
 
 public interface ICoreTool extends ICoreItem {
@@ -59,11 +47,6 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Override
-    default boolean supportsPartOfType(PartType type) {
-        return requiresPartOfType(type) || type == PartType.BINDING || type == PartType.GRIP || type == PartType.MISC_UPGRADE || type == PartType.TIP;
-    }
-
-    @Override
     default Collection<PartType> getRequiredParts() {
         return ImmutableList.of(PartType.MAIN, PartType.ROD);
     }
@@ -92,72 +75,8 @@ public interface ICoreTool extends ICoreItem {
         return 2;
     }
 
-    @Deprecated
-    default PartData getSecondaryPart(ItemStack stack) {
-        PartData data = GearData.getSecondaryPart(stack);
-        if (data != null) return data;
-        return Objects.requireNonNull(PartData.ofNullable(PartType.MAIN.getFallbackPart()));
-    }
-
-    @Deprecated
-    @Nullable
-    default PartData getRodPart(ItemStack stack) {
-        for (PartData data : GearData.getConstructionParts(stack))
-            if (data.getPart() instanceof RodPart) return data;
-        return null;
-    }
-
-    @Deprecated
-    @Nullable
-    default PartData getGripPart(ItemStack stack) {
-        for (PartData part : GearData.getConstructionParts(stack))
-            if (part.getPart() instanceof GripPart) return part;
-        return null;
-    }
-
-    @Deprecated
-    @Nullable
-    default PartData getTipPart(ItemStack stack) {
-        for (PartData data : GearData.getConstructionParts(stack))
-            if (data.getPart() instanceof TipPart) return data;
-        return null;
-    }
-
-    @Deprecated
-    @Nullable
-    default PartData getBowstringPart(ItemStack stack) {
-        for (PartData data : GearData.getConstructionParts(stack))
-            if (data.getPart() instanceof BowstringPart) return data;
-        return null;
-    }
-
     @Override
     default IItemColor getItemColors() {
         return ColorHandlers::getToolColor;
-    }
-
-    @Override
-    default PartData[] getRenderParts(ItemStack stack) {
-        PartDataList parts = GearData.getConstructionParts(stack);
-        Collection<PartData> list = new ArrayList<>();
-
-        for (IPartPosition position : IPartPosition.RENDER_LAYERS) {
-            if (position == PartPositions.HEAD) {
-                list.add(getPrimaryPart(stack));
-            } else if (position == PartPositions.GUARD && hasSwordGuard()) {
-                list.add(getSecondaryPart(stack));
-            } else if (position == PartPositions.ROD) {
-                list.add(getRodPart(stack));
-            } else {
-                PartData part = parts.firstInPosition(position);
-                if (part != null) list.add(part);
-            }
-        }
-
-        return list.stream().filter(Objects::nonNull).toArray(PartData[]::new);
-    }
-
-    default boolean hasSwordGuard() {
-        return getGearType() == GearType.SWORD;
     }
 }

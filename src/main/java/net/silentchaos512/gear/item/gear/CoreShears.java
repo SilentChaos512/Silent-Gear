@@ -21,7 +21,6 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -50,11 +49,6 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     @Override
     public Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
-    }
-
-    @Override
-    public PartData[] getRenderParts(ItemStack stack) {
-        return new PartData[0];
     }
 
     @Override
