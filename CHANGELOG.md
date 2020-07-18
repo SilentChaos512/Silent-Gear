@@ -3,10 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Random bows generating with a random part instead of bowstrings
+- Slingshots failing to fire in creative mode
+
 ## [1.9.5] - 2020-07-17
 ### Fixed
 - GetMaterialStatsEvent is now correctly fired (needed for supercharging fix) [Silent's Gems #472]
-- Random bows generating with a random part instead of bowstrings
 
 ## [1.9.4] - 2020-07-14
 ### Fixed
