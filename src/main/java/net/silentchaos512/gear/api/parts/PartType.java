@@ -53,7 +53,8 @@ public final class PartType {
     public static final PartType BOWSTRING = create(
             SilentGear.getId("bowstring"),
             createSerializer("bowstring", BowstringPart::new),
-            PartConst.FALLBACK_BOWSTRING
+            PartConst.FALLBACK_BOWSTRING,
+            () -> ModItems.BOWSTRING
     );
     public static final PartType FLETCHING = create(
             SilentGear.getId("fletching"),
