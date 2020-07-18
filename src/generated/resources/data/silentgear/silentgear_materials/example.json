@@ -12,16 +12,28 @@
   },
   "display": {
     "main/all": {
-      "texture": "low_contrast",
-      "color": "#FFFFFF"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:main_generic_lc"
+        }
+      ]
     },
     "rod/all": {
-      "texture": "low_contrast",
-      "color": "#FFFFFF"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:rod_generic_lc"
+        }
+      ]
     },
     "bowstring/all": {
-      "texture": "low_contrast",
-      "color": "#FFFFFF"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:bowstring_string"
+        }
+      ]
     }
   },
   "stats": {

@@ -5,9 +5,7 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
@@ -36,10 +34,10 @@ public final class ColorHandlers {
         register(itemColors, CustomTippedUpgrade::getItemColor, ModItems.CUSTOM_TIPPED_UPGRADE);
 
         // Tools, armor, shields, etc.
-        ForgeRegistries.ITEMS.getValues().stream()
+/*        ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof ICoreItem)
                 .map(item -> (ICoreItem) item)
-                .forEach(item -> itemColors.register(item.getItemColors(), item));
+                .forEach(item -> itemColors.register(item.getItemColors(), item));*/
 
         // Compound part items and tool heads
         Registration.getItems(CompoundPartItem.class).forEach(item ->

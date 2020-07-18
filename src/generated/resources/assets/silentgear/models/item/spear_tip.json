@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:item/spear/head_generic_hc"
+    "layer0": "silentgear:item/spear/main_generic_hc"
   }
 }

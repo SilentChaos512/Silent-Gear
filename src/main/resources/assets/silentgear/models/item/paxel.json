@@ -1,254 +1,41 @@
 {
-  "__comment__": "Lite gear model",
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "silentgear:item/paxel/rod_generic_lc",
-    "layer1": "silentgear:item/paxel/head_generic_hc",
-    "layer2": "silentgear:item/paxel/_highlight"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1
-      },
-      "model": "silentgear:item/paxel/rod1"
+  "parent": "item/generated",
+  "loader": "silentgear:gear_model",
+  "gear_type": "paxel",
+  "display": {
+    "ground": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 2, 0],
+      "scale":[ 0.5, 0.5, 0.5 ]
     },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2
-      },
-      "model": "silentgear:item/paxel/rod2"
+    "head": {
+      "rotation": [ 0, 180, 0 ],
+      "translation": [ 0, 13, 7],
+      "scale":[ 1, 1, 1]
     },
-    {
-      "predicate": {
-        "silentgear:lite_head": 1
-      },
-      "model": "silentgear:item/paxel/head1"
+    "fixed": {
+      "rotation": [ 0, 180, 0 ],
+      "scale": [ 1, 1, 1 ]
     },
-    {
-      "predicate": {
-        "silentgear:lite_head": 2
-      },
-      "model": "silentgear:item/paxel/head2"
+    "thirdperson_righthand": {
+      "rotation": [ 0, -90, 55 ],
+      "translation": [ 0, 4.0, 0.5 ],
+      "scale": [ 0.85, 0.85, 0.85 ]
     },
-    {
-      "predicate": {
-        "silentgear:lite_head": 3
-      },
-      "model": "silentgear:item/paxel/head3"
+    "thirdperson_lefthand": {
+      "rotation": [ 0, 90, -55 ],
+      "translation": [ 0, 4.0, 0.5 ],
+      "scale": [ 0.85, 0.85, 0.85 ]
     },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_head": 1
-      },
-      "model": "silentgear:item/paxel/rod1_head1"
+    "firstperson_righthand": {
+      "rotation": [ 0, -90, 25 ],
+      "translation": [ 1.13, 3.2, 1.13 ],
+      "scale": [ 0.68, 0.68, 0.68 ]
     },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_head": 1
-      },
-      "model": "silentgear:item/paxel/rod2_head1"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_head": 2
-      },
-      "model": "silentgear:item/paxel/rod1_head2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_head": 2
-      },
-      "model": "silentgear:item/paxel/rod2_head2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_head": 3
-      },
-      "model": "silentgear:item/paxel/rod1_head3"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_head": 3
-      },
-      "model": "silentgear:item/paxel/rod2_head3"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_head": 1,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/head1_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_head": 2,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/head2_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_head": 3,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/head3_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 1
-      },
-      "model": "silentgear:item/paxel/rod1_grip1_head1"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 1
-      },
-      "model": "silentgear:item/paxel/rod2_grip1_head1"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 2
-      },
-      "model": "silentgear:item/paxel/rod1_grip1_head2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 2
-      },
-      "model": "silentgear:item/paxel/rod2_grip1_head2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 3
-      },
-      "model": "silentgear:item/paxel/rod1_grip1_head3"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 3
-      },
-      "model": "silentgear:item/paxel/rod2_grip1_head3"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_head": 1,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod1_head1_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_head": 1,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod2_head1_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_head": 2,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod1_head2_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_head": 2,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod2_head2_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_head": 3,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod1_head3_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_head": 3,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod2_head3_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 1,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod1_grip1_head1_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 1,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod2_grip1_head1_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 2,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod1_grip1_head2_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 2,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod2_grip1_head2_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 1,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 3,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod1_grip1_head3_tip2"
-    },
-    {
-      "predicate": {
-        "silentgear:lite_rod": 2,
-        "silentgear:lite_grip": 1,
-        "silentgear:lite_head": 3,
-        "silentgear:lite_tip": 2
-      },
-      "model": "silentgear:item/paxel/rod2_grip1_head3_tip2"
+    "firstperson_lefthand": {
+      "rotation": [ 0, 90, -25 ],
+      "translation": [ 1.13, 3.2, 1.13 ],
+      "scale": [ 0.68, 0.68, 0.68 ]
     }
-  ]
+  }
 }

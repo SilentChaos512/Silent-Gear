@@ -14,12 +14,25 @@
   },
   "display": {
     "binding/all": {
-      "texture": "low_contrast",
-      "color": "#FFFFFF"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:binding_generic",
+          "color": "#B3804B"
+        }
+      ]
     },
     "bowstring/all": {
-      "texture": "low_contrast",
-      "color": "#FFFFFF"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:bowstring_string",
+          "color": "#845E37"
+        },
+        {
+          "texture": "silentgear:arrow"
+        }
+      ]
     }
   },
   "stats": {

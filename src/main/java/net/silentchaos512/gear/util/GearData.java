@@ -50,6 +50,7 @@ public final class GearData {
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
+    private static final String NBT_MODEL_KEY = "ModelKey";
     private static final String NBT_SYNERGY = "synergy";
     private static final String NBT_TIER = "Tier";
     private static final String NBT_UUID = "SGear_UUID";
@@ -241,6 +242,21 @@ public final class GearData {
         construction.remove(NBT_TIER);
     }
 
+    public static String getModelKey(ItemStack stack, int animationFrame) {
+        String key = getData(stack, NBT_ROOT_RENDERING).getString(NBT_MODEL_KEY);
+        return animationFrame > 0 ? key + "_" + animationFrame : key;
+    }
+
+    private static String calculateModelKey(ItemStack stack, PartDataList parts) {
+        StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + ":");
+
+        for (PartData part : parts) {
+            s.append(part.getModelKey()).append(',');
+        }
+
+        return s.toString();
+    }
+
     private static void updateRenderingInfo(ItemStack stack, PartDataList parts) {
         CompoundNBT nbt = getData(stack, NBT_ROOT_RENDERING);
         List<PartData> mains = parts.getMains();
@@ -272,7 +288,7 @@ public final class GearData {
 
         nbt.put(NBT_COLORS, colors);
 
-        stack.getItem();
+        nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
 
         // Remove old model keys
         stack.getOrCreateChildTag(NBT_ROOT).remove("ModelKeys");

@@ -2,11 +2,16 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -32,6 +37,27 @@ public interface ICoreRangedWeapon extends ICoreTool {
     @Override
     default int getAnimationFrames() {
         return 4;
+    }
+
+    @Override
+    default int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+        IItemPropertyGetter pullingProperty = stack.getItem().getPropertyGetter(new ResourceLocation("pulling"));
+        if (pullingProperty != null) {
+            float pulling = pullingProperty.call(stack, world, entity);
+            if (pulling > 0) {
+                IItemPropertyGetter pullProperty = stack.getItem().getPropertyGetter(new ResourceLocation("pull"));
+                if (pullProperty != null) {
+                    float pull = pullProperty.call(stack, world, entity);
+
+                    if (pull > 0.9f)
+                        return 3;
+                    if (pull > 0.65f)
+                        return 2;
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 
     default float getBaseDrawDelay(ItemStack stack) {

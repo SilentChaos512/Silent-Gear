@@ -19,6 +19,9 @@ public final class GearType {
     private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]");
     private static final Map<String, GearType> VALUES = new HashMap<>();
 
+    // A non-existant gear type which matches nothing
+    public static final GearType NONE = getOrCreate("none");
+
     // Parent of everything except armor
     public static final GearType TOOL = getOrCreate("tool");
     public static final GearType WEAPON = getOrCreate("weapon", TOOL);
@@ -79,6 +82,10 @@ public final class GearType {
         return getOrCreate(name, null);
     }
 
+    public static GearType getOrCreate(String name, @Nullable GearType parent) {
+        return getOrCreate(name, parent, 1);
+    }
+
     /**
      * Gets or creates a new gear type with the given parent. If the gear type already exists, the
      * existing instance is not modified in any way.
@@ -90,18 +97,20 @@ public final class GearType {
      * @return The newly created gear type, or the existing instance if it already exists
      * @throws IllegalArgumentException if the name is invalid
      */
-    public static GearType getOrCreate(String name, @Nullable GearType parent) {
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames) {
         if (VALID_NAME.matcher(name).find())
             throw new IllegalArgumentException("Invalid name: " + name);
-        return VALUES.computeIfAbsent(name, k -> new GearType(name, parent));
+        return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames));
     }
 
     private final String name;
     @Nullable private final GearType parent;
+    private final int animationFrames;
 
-    private GearType(String name, @Nullable GearType parent) {
+    private GearType(String name, @Nullable GearType parent, int animationFrames) {
         this.name = name;
         this.parent = parent;
+        this.animationFrames = animationFrames;
     }
 
     public String getName() {
@@ -116,6 +125,10 @@ public final class GearType {
     @Nullable
     public GearType getParent() {
         return parent;
+    }
+
+    public int getAnimationFrames() {
+        return animationFrames;
     }
 
     /**

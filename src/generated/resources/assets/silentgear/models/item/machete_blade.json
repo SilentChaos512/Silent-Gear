@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "silentgear:item/machete/head_generic_hc"
+    "layer0": "silentgear:item/machete/main_generic_hc"
   }
 }

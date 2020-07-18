@@ -14,8 +14,13 @@
   },
   "display": {
     "tip/all": {
-      "texture": "high_contrast",
-      "color": "#D2D200"
+      "armor_color": "#FFFFFF",
+      "layers": [
+        {
+          "texture": "silentgear:tip_iron",
+          "color": "#D2D200"
+        }
+      ]
     }
   },
   "stats": {

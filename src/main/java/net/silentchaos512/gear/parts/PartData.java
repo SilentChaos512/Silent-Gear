@@ -201,6 +201,10 @@ public final class PartData implements IPartData {
         return part.getBrokenTexture(this, gear, gearClass, position);
     }
 
+    public String getModelKey() {
+        return part.getModelKey(this);
+    }
+
     @Deprecated // May be changed or removed?
     public String getModelIndex(int animationFrame) {
         return part.getModelIndex(this, animationFrame);
