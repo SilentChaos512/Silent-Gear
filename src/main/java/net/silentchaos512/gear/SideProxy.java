@@ -43,7 +43,6 @@ import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.traits.TraitManager;
-import net.silentchaos512.gear.util.IAOETool;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
@@ -85,8 +84,6 @@ class SideProxy implements IProxy {
 
     private static void commonSetup(FMLCommonSetupEvent event) {
         DeferredWorkQueue.runLater(ModWorldFeatures::addFeaturesToBiomes);
-
-        IAOETool.BreakHandler.buildOreBlocksSet();
 
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.Server.spawnWithStarterBlueprints.get())
