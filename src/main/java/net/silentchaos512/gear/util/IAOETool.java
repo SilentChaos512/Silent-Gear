@@ -20,7 +20,6 @@ package net.silentchaos512.gear.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.OreBlock;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,16 +39,13 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public interface IAOETool {
     /**
@@ -186,20 +182,6 @@ public interface IAOETool {
             return false;
         }
 
-        private static final Set<Block> ORE_BLOCKS = new HashSet<>();
-
-        public static void buildOreBlocksSet() {
-            ORE_BLOCKS.clear();
-
-            for (Block block : ForgeRegistries.BLOCKS) {
-                if (block instanceof OreBlock || Tags.Blocks.ORES.contains(block)) {
-                    ORE_BLOCKS.add(block);
-                }
-            }
-
-            SilentGear.LOGGER.info("IAOETool: Rebuilt ore block set, contains {} items", ORE_BLOCKS.size());
-        }
-
         /**
          * Determine if the blocks are similar enough to be considered the same. This depends on the
          * match mode configs. STRICT will only match the same block (ignoring exact state),
@@ -212,8 +194,8 @@ public interface IAOETool {
         static boolean areBlocksSimilar(BlockState state1, BlockState state2) {
             Block block1 = state1.getBlock();
             Block block2 = state2.getBlock();
-            boolean isOre1 = ORE_BLOCKS.contains(block1);
-            boolean isOre2 = ORE_BLOCKS.contains(block2);
+            boolean isOre1 = isOre(state1);
+            boolean isOre2 = isOre(state2);
             MatchMode mode = isOre1 && isOre2
                     ? Config.Server.matchModeOres.get()
                     : Config.Server.matchModeStandard.get();
@@ -228,6 +210,10 @@ public interface IAOETool {
             int level1 = block1.getHarvestLevel(state1);
             int level2 = block2.getHarvestLevel(state2);
             return level1 >= level2 || level2 == 0;
+        }
+
+        private static boolean isOre(BlockState state) {
+            return state.isIn(Tags.Blocks.ORES);
         }
     }
 
