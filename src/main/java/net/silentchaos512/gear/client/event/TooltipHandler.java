@@ -74,8 +74,12 @@ public final class TooltipHandler {
         if (keyHeld) {
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").func_240699_a_(TextFormatting.GOLD));
         } else {
-            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").func_240699_a_(TextFormatting.GOLD)
-                    .func_230529_a_(new StringTextComponent(" [" + KeyTracker.DISPLAY_STATS.func_238171_j_() + "]").func_240699_a_(TextFormatting.GRAY)));
+            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material")
+                    .func_240699_a_(TextFormatting.GOLD)
+                    .func_230529_a_(new StringTextComponent(" [")
+                            .func_230529_a_(KeyTracker.DISPLAY_STATS.func_238171_j_())
+                            .func_230529_a_(new StringTextComponent("]"))
+                            .func_240699_a_(TextFormatting.GRAY)));
         }
 
         if (event.getFlags().isAdvanced()) {
@@ -112,7 +116,9 @@ public final class TooltipHandler {
             ret.func_230529_a_(text).func_240702_b_(" | ");
         }
 
-        IFormattableTextComponent keyHint = new StringTextComponent("[" + KeyTracker.CYCLE_MATERIAL_INFO.func_238171_j_() + "]");
+        IFormattableTextComponent keyHint = new StringTextComponent("[")
+                .func_230529_a_(KeyTracker.CYCLE_MATERIAL_INFO.func_238171_j_())
+                .func_230529_a_(new StringTextComponent("]"));
         return ret.func_230529_a_(keyHint.func_240699_a_(TextFormatting.AQUA));
     }
 
