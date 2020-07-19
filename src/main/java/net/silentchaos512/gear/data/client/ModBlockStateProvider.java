@@ -4,15 +4,15 @@ import net.minecraft.block.FenceBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
+import net.minecraftforge.client.model.generators.*;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
+
+import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
@@ -51,7 +51,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.STONE_TORCH.get(), models().torch("stone_torch", modLoc("block/stone_torch")));
         getVariantBuilder(ModBlocks.WALL_STONE_TORCH.get())
                 .forAllStates(state -> ConfiguredModel.builder()
-                        .modelFile(models().torchWall("wall_stone_torch", modLoc("block/stone_torch")))
+                        .modelFile(wallTorch("wall_stone_torch", modLoc("block/stone_torch")))
                         .rotationY((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 90)
                         .build());
 
@@ -62,6 +62,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .build();
         });
         simpleBlock(ModBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", SilentGear.getId("block/flax_plant3")));
+    }
+
+    public ModelBuilder<BlockModelBuilder> wallTorch(String name, ResourceLocation torch) {
+        return models().singleTexture(name, mcLoc(BLOCK_FOLDER + "/wall_torch"), "torch", torch);
     }
 
     private int cropAgeToIndex(int age) {

@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_chestplate",
-    "silentgear:template_chestplate"
+    "silentgear:chestplate_blueprint",
+    "silentgear:chestplate_template"
   ]
 }

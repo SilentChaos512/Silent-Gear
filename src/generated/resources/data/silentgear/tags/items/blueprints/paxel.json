@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_paxel",
-    "silentgear:template_paxel"
+    "silentgear:paxel_blueprint",
+    "silentgear:paxel_template"
   ]
 }

@@ -90,7 +90,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement overworldPlants = Advancement.Builder.builder()
                     .withParent(root)
                     .withDisplay(CraftingItems.FLAX_FIBER, title("overworld_plants"), description("overworld_plants"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("seeds", getItem(ModItems.FLAXSEEDS))
+                    .withCriterion("seeds", getItem(ModItems.FLAX_SEEDS))
                     .withCriterion("fiber", getItem(CraftingItems.FLAX_FIBER))
                     .withRequirementsStrategy(IRequirementsStrategy.AND)
                     .register(consumer, id("overworld_plants"));

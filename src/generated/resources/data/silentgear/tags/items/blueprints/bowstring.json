@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_bowstring",
-    "silentgear:template_bowstring"
+    "silentgear:bowstring_blueprint",
+    "silentgear:bowstring_template"
   ]
 }

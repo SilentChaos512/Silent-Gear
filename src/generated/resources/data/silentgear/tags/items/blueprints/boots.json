@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_boots",
-    "silentgear:template_boots"
+    "silentgear:boots_blueprint",
+    "silentgear:boots_template"
   ]
 }

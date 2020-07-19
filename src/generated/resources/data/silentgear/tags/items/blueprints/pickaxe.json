@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_pickaxe",
-    "silentgear:template_pickaxe"
+    "silentgear:pickaxe_blueprint",
+    "silentgear:pickaxe_template"
   ]
 }

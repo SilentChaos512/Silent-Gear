@@ -83,6 +83,7 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> KNIVES = forge("knives");
         public static final ITag.INamedTag<Item> LEGGINGS = forge("leggings");
         public static final ITag.INamedTag<Item> PICKAXES = forge("pickaxes");
+        public static final ITag.INamedTag<Item> SAWS = forge("saws");
         public static final ITag.INamedTag<Item> SHEARS = forge("shears");
         public static final ITag.INamedTag<Item> SHIELDS = forge("shields");
         public static final ITag.INamedTag<Item> SHOVELS = forge("shovels");

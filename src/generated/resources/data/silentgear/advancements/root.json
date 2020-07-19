@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "silentgear:blueprint_shovel"
+      "item": "silentgear:shovel_blueprint"
     },
     "title": {
       "translate": "advancements.silentgear.root.title"

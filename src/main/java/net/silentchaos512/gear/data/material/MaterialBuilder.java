@@ -205,7 +205,7 @@ public class MaterialBuilder {
         }
 
         JsonObject craftingItems = new JsonObject();
-        if (this.ingredient.getMatchingStacks().length > 0) {
+        if (this.ingredient != Ingredient.EMPTY) {
             craftingItems.add("main", this.ingredient.serialize());
         }
         json.add("crafting_items", craftingItems);

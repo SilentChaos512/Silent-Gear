@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_helmet",
-    "silentgear:template_helmet"
+    "silentgear:helmet_blueprint",
+    "silentgear:helmet_template"
   ]
 }

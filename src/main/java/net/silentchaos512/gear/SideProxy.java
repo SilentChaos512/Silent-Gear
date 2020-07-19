@@ -91,7 +91,7 @@ class SideProxy implements IProxy {
             return Collections.emptyList();
         });
 
-        LibHooks.registerCompostable(0.3f, ModItems.FLAXSEEDS);
+        LibHooks.registerCompostable(0.3f, ModItems.FLAX_SEEDS);
         LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
 
         NerfedGear.init();

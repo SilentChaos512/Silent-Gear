@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_dagger",
-    "silentgear:template_dagger"
+    "silentgear:dagger_blueprint",
+    "silentgear:dagger_template"
   ]
 }

@@ -4,8 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- (1.16.1) Crafting station
 ### Changed
 - Major overhaul of item models. Unlimited layers, defined in material files. Can "stack" multiple layers in the material file.
+- (1.16.1) Lumber axe renamed to saw
+- (1.16.1) All blueprint items changed their ID to `type_blueprint` (was `blueprint_type`)
 ### Fixed
 - Armor models missing [#170]
 - Gear items not displaying a synergy value (just taking the average of all parts for now, since the value is just for show) [#169]

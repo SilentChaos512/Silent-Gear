@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_fletching",
-    "silentgear:template_fletching"
+    "silentgear:fletching_blueprint",
+    "silentgear:fletching_template"
   ]
 }

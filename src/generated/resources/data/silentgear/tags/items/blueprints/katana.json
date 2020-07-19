@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_katana",
-    "silentgear:template_katana"
+    "silentgear:katana_blueprint",
+    "silentgear:katana_template"
   ]
 }

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:blueprint_rod"
+          "name": "silentgear:rod_blueprint"
         }
       ]
     },
@@ -15,7 +15,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:blueprint_pickaxe"
+          "name": "silentgear:pickaxe_blueprint"
         }
       ]
     },
@@ -24,7 +24,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:blueprint_shovel"
+          "name": "silentgear:shovel_blueprint"
         }
       ]
     },
@@ -33,7 +33,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:blueprint_axe"
+          "name": "silentgear:axe_blueprint"
         }
       ]
     },
@@ -43,22 +43,22 @@
         {
           "type": "minecraft:item",
           "weight": 11,
-          "name": "silentgear:blueprint_sword"
+          "name": "silentgear:sword_blueprint"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "silentgear:blueprint_katana"
+          "name": "silentgear:katana_blueprint"
         },
         {
           "type": "minecraft:item",
           "weight": 7,
-          "name": "silentgear:blueprint_machete"
+          "name": "silentgear:machete_blueprint"
         },
         {
           "type": "minecraft:item",
           "weight": 8,
-          "name": "silentgear:blueprint_spear"
+          "name": "silentgear:spear_blueprint"
         }
       ]
     },
@@ -67,7 +67,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:blueprint_shield"
+          "name": "silentgear:shield_blueprint"
         }
       ]
     }

@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_shovel",
-    "silentgear:template_shovel"
+    "silentgear:shovel_blueprint",
+    "silentgear:shovel_template"
   ]
 }

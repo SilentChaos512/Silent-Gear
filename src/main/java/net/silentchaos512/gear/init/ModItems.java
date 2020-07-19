@@ -160,7 +160,7 @@ public final class ModItems {
     public static final ItemRegistryObject<CustomTippedUpgrade> CUSTOM_TIPPED_UPGRADE = register("custom_tipped_upgrade", CustomTippedUpgrade::new);
     public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
-    public static final ItemRegistryObject<BlockNamedItem> FLAXSEEDS = register("flaxseeds", () ->
+    public static final ItemRegistryObject<BlockNamedItem> FLAX_SEEDS = register("flax_seeds", () ->
             new BlockNamedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
     public static final ItemRegistryObject<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
@@ -220,14 +220,12 @@ public final class ModItems {
     }
 
     private static ItemRegistryObject<GearBlueprintItem> registerGearBlueprint(GearType gearType, boolean singleUse) {
-        // TODO: Flip the name to be geartype_blueprint
-        String name = (singleUse ? "template" : "blueprint") + "_" + gearType.getName();
+        String name = gearType.getName() + "_" + (singleUse ? "template" : "blueprint");
         return register(name, () -> new GearBlueprintItem(gearType, singleUse, baseProps()));
     }
 
     private static ItemRegistryObject<PartBlueprintItem> registerPartBlueprint(PartType partType, boolean singleUse) {
-        // TODO: Flip the name to be parttype_blueprint
-        String name = (singleUse ? "template" : "blueprint") + "_" + partType.getName().getPath();
+        String name = partType.getName().getPath() + "_" + (singleUse ? "template" : "blueprint");
         return register(name, () -> new PartBlueprintItem(partType, singleUse, baseProps()));
     }
 }

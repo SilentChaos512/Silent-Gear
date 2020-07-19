@@ -58,7 +58,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         // Flavor text
         if (!gearType.matches("armor")) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
-            list.add(new TranslationTextComponent(key).applyTextStyle(TextFormatting.ITALIC));
+            list.add(new TranslationTextComponent(key).func_240699_a_(TextFormatting.ITALIC));
         }
 
         // Single use or multiple uses? Or disabled?

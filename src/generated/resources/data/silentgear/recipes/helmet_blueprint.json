@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "silentgear:blueprints/helmet",
+  "pattern": [
+    "###",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:paper/blueprint"
+    }
+  },
+  "result": {
+    "item": "silentgear:helmet_blueprint"
+  }
+}

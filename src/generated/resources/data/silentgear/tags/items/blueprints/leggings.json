@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_leggings",
-    "silentgear:template_leggings"
+    "silentgear:leggings_blueprint",
+    "silentgear:leggings_template"
   ]
 }

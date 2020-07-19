@@ -8,6 +8,7 @@ import net.minecraft.loot.LootFunctionType;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.parts.LazyPartData;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
@@ -43,8 +44,7 @@ public final class SetPartsFunction extends LootFunction {
 
     @Override
     public LootFunctionType func_230425_b_() {
-        // FIXME
-        return null;
+        return ModLootStuff.SET_PARTS;
     }
 
     public static class Serializer extends LootFunction.Serializer<SetPartsFunction> {

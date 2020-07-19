@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "silentgear:blueprints/grip",
+  "ingredients": [
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:grip"
+    }
+  ],
+  "result": {
+    "item": "silentgear:grip_template"
+  }
+}

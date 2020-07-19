@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_shield",
-    "silentgear:template_shield"
+    "silentgear:shield_blueprint",
+    "silentgear:shield_template"
   ]
 }

@@ -108,7 +108,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         // Misc
         builder(ModItems.BLUEPRINT_PACKAGE, itemGenerated);
-        builder(ModItems.FLAXSEEDS, itemGenerated);
+        builder(ModItems.FLAX_SEEDS, itemGenerated);
         builder(ModItems.GOLDEN_NETHER_BANANA, itemGenerated);
         builder(ModItems.NETHER_BANANA, itemGenerated);
         builder(ModItems.PEBBLE, itemGenerated);

@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_axe",
-    "silentgear:template_axe"
+    "silentgear:axe_blueprint",
+    "silentgear:axe_template"
   ]
 }

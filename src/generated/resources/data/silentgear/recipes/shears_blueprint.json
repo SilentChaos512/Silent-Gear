@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "silentgear:blueprints/shears",
+  "pattern": [
+    " #",
+    "#/"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:paper/blueprint"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "silentgear:shears_blueprint"
+  }
+}

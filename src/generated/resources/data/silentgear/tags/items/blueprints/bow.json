@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_bow",
-    "silentgear:template_bow"
+    "silentgear:bow_blueprint",
+    "silentgear:bow_template"
   ]
 }

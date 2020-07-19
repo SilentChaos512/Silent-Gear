@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "silentgear:blueprints/bowstring",
+  "pattern": [
+    "#/",
+    "#/",
+    "#/"
+  ],
+  "key": {
+    "#": {
+      "tag": "silentgear:template_boards"
+    },
+    "/": {
+      "type": "silentgear:material",
+      "part_type": "silentgear:bowstring"
+    }
+  },
+  "result": {
+    "item": "silentgear:bowstring_template"
+  }
+}

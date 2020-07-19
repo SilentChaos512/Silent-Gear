@@ -17,12 +17,12 @@ public final class DataGenerators {
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        gen.addProvider(new MaterialsProvider(gen));
-        gen.addProvider(new PartsProvider(gen));
-
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(gen);
         gen.addProvider(blocks);
         gen.addProvider(new ModItemTagsProvider(gen, blocks));
+
+        gen.addProvider(new MaterialsProvider(gen));
+        gen.addProvider(new PartsProvider(gen));
 
         gen.addProvider(new ModLootTables(gen));
         gen.addProvider(new ModRecipesProvider(gen));

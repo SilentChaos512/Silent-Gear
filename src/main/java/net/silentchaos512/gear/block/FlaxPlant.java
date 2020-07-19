@@ -15,7 +15,7 @@ public class FlaxPlant extends CropsBlock {
 
     @Override
     protected IItemProvider getSeedsItem() {
-        return ModItems.FLAXSEEDS;
+        return ModItems.FLAX_SEEDS;
     }
 
     @Override

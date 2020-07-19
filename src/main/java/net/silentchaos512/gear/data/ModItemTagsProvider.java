@@ -2,10 +2,14 @@ package net.silentchaos512.gear.data;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.TagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -15,16 +19,22 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
-public class ModItemTagsProvider extends ItemTagsProvider {
+public class ModItemTagsProvider extends ForgeItemTagsProvider {
     public ModItemTagsProvider(DataGenerator generatorIn, BlockTagsProvider blocks) {
         super(generatorIn, blocks);
     }
@@ -36,7 +46,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
     @SuppressWarnings("OverlyLongMethod")
     @Override
-    protected void registerTags() {
+    public void registerTags() {
         // Forge
         copy(ModTags.Blocks.ORES_CRIMSON_IRON, ModTags.Items.ORES_CRIMSON_IRON);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
@@ -87,7 +97,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(ModTags.Items.TEMPLATE_BOARDS, CraftingItems.TEMPLATE_BOARD);
 
         builder(ModTags.Items.FRUITS, ModItems.NETHER_BANANA);
-        builder(Tags.Items.SEEDS, ModItems.FLAXSEEDS);
+        builder(Tags.Items.SEEDS, ModItems.FLAX_SEEDS);
         builder(Tags.Items.STRING, CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER);
 
         builder(ModTags.Items.AXES, ModItems.AXE, ModItems.SAW, ModItems.MACHETE, ModItems.MATTOCK, ModItems.PAXEL);
@@ -101,6 +111,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(ModTags.Items.KNIVES, ModItems.DAGGER);
         builder(ModTags.Items.LEGGINGS, ModItems.LEGGINGS);
         builder(ModTags.Items.PICKAXES, ModItems.HAMMER, ModItems.PAXEL, ModItems.PICKAXE);
+        builder(ModTags.Items.SAWS, ModItems.SAW);
         builder(ModTags.Items.SHEARS, ModItems.SHEARS);
         builder(ModTags.Items.SHIELDS, ModItems.SHIELD);
         builder(ModTags.Items.SHOVELS, ModItems.EXCAVATOR, ModItems.MATTOCK, ModItems.PAXEL, ModItems.SHOVEL);
@@ -150,11 +161,44 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         getBuilder(tag).func_240534_a_(Arrays.stream(items).map(IItemProvider::asItem).toArray(Item[]::new));
     }
 
-    protected TagsProvider.Builder<Item> getBuilder(ITag.INamedTag<Item> p_240522_1_) {
-        return super.func_240522_a_(p_240522_1_);
+    protected TagsProvider.Builder<Item> getBuilder(ITag.INamedTag<Item> tag) {
+        return super.func_240522_a_(tag);
     }
 
     protected void copy(ITag.INamedTag<Block> p_240521_1_, ITag.INamedTag<Item> p_240521_2_) {
         super.func_240521_a_(p_240521_1_, p_240521_2_);
+    }
+
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+
+    @Override
+    public void act(DirectoryCache cache) {
+        // Temp fix that removes the broken safety check
+        this.tagToBuilder.clear();
+        this.registerTags();
+        this.tagToBuilder.forEach((p_240524_4_, p_240524_5_) -> {
+            JsonObject jsonobject = p_240524_5_.serialize();
+            Path path = this.makePath(p_240524_4_);
+            if (path == null)
+                return; //Forge: Allow running this data provider without writing it. Recipe provider needs valid tags.
+
+            try {
+                String s = GSON.toJson((JsonElement) jsonobject);
+                String s1 = HASH_FUNCTION.hashUnencodedChars(s).toString();
+                if (!Objects.equals(cache.getPreviousHash(path), s1) || !Files.exists(path)) {
+                    Files.createDirectories(path.getParent());
+
+                    try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
+                        bufferedwriter.write(s);
+                    }
+                }
+
+                cache.recordHash(path, s1);
+            } catch (IOException ioexception) {
+                LOGGER.error("Couldn't save tags to {}", path, ioexception);
+            }
+
+        });
     }
 }

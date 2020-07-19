@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_machete",
-    "silentgear:template_machete"
+    "silentgear:machete_blueprint",
+    "silentgear:machete_template"
   ]
 }

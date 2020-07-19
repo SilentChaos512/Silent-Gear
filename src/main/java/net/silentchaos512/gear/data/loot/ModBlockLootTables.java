@@ -43,7 +43,7 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.get());
         ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
-        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(ModItems.FLAXSEEDS, flaxBuilder));
+        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(ModItems.FLAX_SEEDS, flaxBuilder));
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE.get());
         registerLootTable(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
@@ -60,7 +60,7 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.SALVAGER.get());
         registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
         registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
-        registerDropping(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAXSEEDS);
+        registerDropping(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAX_SEEDS);
     }
 
     @Nonnull

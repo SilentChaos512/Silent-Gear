@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:flaxseeds"
+          "name": "silentgear:flax_seeds"
         }
       ],
       "conditions": [

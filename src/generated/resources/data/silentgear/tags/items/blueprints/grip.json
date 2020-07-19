@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_grip",
-    "silentgear:template_grip"
+    "silentgear:grip_blueprint",
+    "silentgear:grip_template"
   ]
 }

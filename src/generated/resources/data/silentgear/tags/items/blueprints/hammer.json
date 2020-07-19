@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:blueprint_hammer",
-    "silentgear:template_hammer"
+    "silentgear:hammer_blueprint",
+    "silentgear:hammer_template"
   ]
 }
