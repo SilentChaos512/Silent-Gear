@@ -13,6 +13,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -56,7 +57,8 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
 
         // Flavor text
         if (!gearType.matches("armor")) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint." + itemClass + ".desc").applyTextStyle(TextFormatting.ITALIC));
+            String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
+            list.add(new TranslationTextComponent(key).applyTextStyle(TextFormatting.ITALIC));
         }
 
         // Single use or multiple uses? Or disabled?
