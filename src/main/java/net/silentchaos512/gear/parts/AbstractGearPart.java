@@ -110,11 +110,6 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
-        return stat == ItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.ADD;
-    }
-
-    @Override
     public float getRepairAmount(RepairContext context) {
         PartData material = context.getMaterial();
         if (material.getType() != PartType.MAIN || !(context.getGear().getItem() instanceof ICoreItem))
@@ -207,11 +202,6 @@ public abstract class AbstractGearPart implements IGearPart {
     @Deprecated
     public int getModelIndex() {
         return modelIndex;
-    }
-
-    @Override
-    public String getModelIndex(PartData part, int animationFrame) {
-        return this.modelIndex + (animationFrame == 3 ? "_3" : "");
     }
 
     @Override

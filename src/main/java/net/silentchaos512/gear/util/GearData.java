@@ -22,9 +22,12 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.traits.SynergyTrait;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
@@ -320,6 +323,17 @@ public final class GearData {
     }
 
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<ITrait, Integer> traits) {
+        if (parts.stream().allMatch(part -> part.getPart() instanceof CompoundPart)) {
+            // This must be a new gear item
+            // Just average the synergy of component parts
+            float total = 0f;
+            for (PartData part : parts) {
+                total += SynergyUtils.getSynergy(part.getType(), CompoundPart.getMaterials(part), part.getTraits());
+            }
+            return total / parts.size();
+        }
+
+        // Old gear item
         // First, we add a bonus for the number of unique main parts
         double synergy = getBaseSynergy(uniqueParts);
 
@@ -503,8 +517,12 @@ public final class GearData {
     }
 
     @Nullable
-    public static PartData getSecondaryPart(ItemStack stack) {
-        return getPartByIndex(stack, 1);
+    public static MaterialInstance getPrimaryMainMaterial(ItemStack stack) {
+        PartData part = getPrimaryPart(stack);
+        if (part != null && part.getPart() instanceof CompoundPart) {
+            return CompoundPartItem.getPrimaryMaterial(part.getCraftingItem());
+        }
+        return null;
     }
 
     /**

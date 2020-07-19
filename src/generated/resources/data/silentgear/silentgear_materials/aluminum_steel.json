@@ -22,27 +22,30 @@
     "translate": "material.silentgear.aluminum_steel"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_hc",
-          "color": "#98D9DA"
-        },
-        {
-          "texture": "silentgear:_highlight"
-        }
-      ]
-    },
-    "rod/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:rod_generic_hc",
-          "color": "#98D9DA"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#98D9DA"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#98D9DA"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_hc",
+        "color": "#98D9DA"
+      }
+    ]
   },
   "stats": {
     "main": {

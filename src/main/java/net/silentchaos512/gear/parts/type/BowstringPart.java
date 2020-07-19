@@ -49,9 +49,4 @@ public final class BowstringPart extends AbstractGearPart {
     public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position) {
         return null;
     }
-
-    @Override
-    public String getModelIndex(PartData part, int animationFrame) {
-        return this.getModelIndex() + "_" + animationFrame;
-    }
 }

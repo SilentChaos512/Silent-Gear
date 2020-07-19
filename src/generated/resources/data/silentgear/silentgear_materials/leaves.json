@@ -13,15 +13,12 @@
     "translate": "material.silentgear.leaves"
   },
   "display": {
-    "fletching/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:fletching_generic",
-          "color": "#4A8F28"
-        }
-      ]
-    }
+    "fletching/all": [
+      {
+        "texture": "silentgear:fletching_generic",
+        "color": "#4A8F28"
+      }
+    ]
   },
   "stats": {
     "fletching": {}

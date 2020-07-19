@@ -20,23 +20,23 @@
     "translate": "material.silentgear.sandstone.red"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_lc",
-          "color": "#D97B30"
-        }
-      ]
-    },
-    "rod/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:rod_generic_lc",
-          "color": "#D97B30"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#D97B30"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#D97B30"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#D97B30"
+      }
+    ]
   }
 }

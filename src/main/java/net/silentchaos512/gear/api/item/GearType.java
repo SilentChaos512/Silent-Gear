@@ -19,8 +19,9 @@ public final class GearType {
     private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]");
     private static final Map<String, GearType> VALUES = new HashMap<>();
 
-    // A non-existant gear type which matches nothing
+    // A non-existent gear type which matches nothing
     public static final GearType NONE = getOrCreate("none");
+    // TODO: Add ALL type
 
     // Parent of everything except armor
     public static final GearType TOOL = getOrCreate("tool");

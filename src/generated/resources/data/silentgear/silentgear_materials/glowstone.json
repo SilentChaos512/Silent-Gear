@@ -13,15 +13,12 @@
     "translate": "material.silentgear.glowstone"
   },
   "display": {
-    "tip/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:tip_iron",
-          "color": "#D2D200"
-        }
-      ]
-    }
+    "tip/all": [
+      {
+        "texture": "silentgear:tip_iron",
+        "color": "#D2D200"
+      }
+    ]
   },
   "stats": {
     "tip": {

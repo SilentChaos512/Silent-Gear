@@ -13,18 +13,24 @@
     "translate": "block.minecraft.barrier"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_hc",
-          "color": "#FF0000"
-        },
-        {
-          "texture": "silentgear:_highlight"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#FF0000"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#FF0000"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ]
   },
   "stats": {
     "main": {

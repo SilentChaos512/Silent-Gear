@@ -23,6 +23,7 @@ import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.PartTextureType;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.utils.Color;
 import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nullable;
@@ -85,6 +86,15 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public int getColor(PartData part, ItemStack gear, int animationFrame) {
         return CompoundPartItem.getColor(part.getCraftingItem());
+    }
+
+    @Override
+    public int getArmorColor(PartData part, ItemStack gear) {
+        MaterialInstance material = getPrimaryMaterial(part);
+        if (material != null) {
+            return material.getColor(part.getType(), gear);
+        }
+        return Color.VALUE_WHITE;
     }
 
     @Override

@@ -133,7 +133,7 @@ public final class SGearMaterialsCommand {
 
         // Display
         appendTsv(builder, material.getTexture(partType, ItemStack.EMPTY));
-        appendTsv(builder, Color.format(material.getColor(ItemStack.EMPTY, partType) & 0xFFFFFF));
+        appendTsv(builder, Color.format(material.getPrimaryColor(ItemStack.EMPTY, partType) & 0xFFFFFF));
 
         return builder.toString();
     }

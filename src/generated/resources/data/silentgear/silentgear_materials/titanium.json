@@ -22,27 +22,30 @@
     "translate": "material.silentgear.titanium"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_hc",
-          "color": "#2E4CE6"
-        },
-        {
-          "texture": "silentgear:_highlight"
-        }
-      ]
-    },
-    "rod/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:rod_generic_hc",
-          "color": "#2E4CE6"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#2E4CE6"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#2E4CE6"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_hc",
+        "color": "#2E4CE6"
+      }
+    ]
   },
   "stats": {
     "main": {
