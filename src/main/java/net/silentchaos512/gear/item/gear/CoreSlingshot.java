@@ -126,7 +126,7 @@ public class CoreSlingshot extends CoreBow {
                         SlingshotAmmoItem slingshotAmmoItem = (SlingshotAmmoItem) (ammoItem.getItem() instanceof SlingshotAmmoItem ? ammoItem.getItem() : ModItems.PEBBLE.get());
                         AbstractArrowEntity shot = slingshotAmmoItem.createArrow(worldIn, ammoItem, player);
                         shot.setDamage(shot.getDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
-                        shot.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+                        shot.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1.0f)) {
                             shot.setIsCritical(true);
                         }

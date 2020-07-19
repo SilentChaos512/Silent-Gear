@@ -22,12 +22,13 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearGenerator;
 
 public final class SelectGearTierLootFunction extends LootFunction {
@@ -49,13 +50,15 @@ public final class SelectGearTierLootFunction extends LootFunction {
         return builder(conditions -> new SelectGearTierLootFunction(conditions, tier));
     }
 
-    public static class Serializer extends LootFunction.Serializer<SelectGearTierLootFunction> {
-        public Serializer() {
-            super(SilentGear.getId("select_tier"), SelectGearTierLootFunction.class);
-        }
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return ModLootStuff.SELECT_TIER;
+    }
 
+    public static class Serializer extends LootFunction.Serializer<SelectGearTierLootFunction> {
+        // serialize
         @Override
-        public void serialize(JsonObject object, SelectGearTierLootFunction functionClazz, JsonSerializationContext serializationContext) {
+        public void func_230424_a_(JsonObject object, SelectGearTierLootFunction functionClazz, JsonSerializationContext serializationContext) {
             object.addProperty("tier", functionClazz.tier);
         }
 

@@ -59,7 +59,7 @@ public class PartTraitInstance {
     public ITextComponent getDisplayName() {
         ITextComponent text = this.trait.getDisplayName(this.level);
         if (!conditions.isEmpty()) {
-            text.appendSibling(new StringTextComponent("*"));
+            text.copyRaw().func_230529_a_(new StringTextComponent("*"));
         }
         return text;
     }

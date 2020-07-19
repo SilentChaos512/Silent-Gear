@@ -4,11 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -26,14 +25,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class GraderBlock extends Block implements IWaterLoggable {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -63,7 +58,7 @@ public class GraderBlock extends Block implements IWaterLoggable {
 
     @SuppressWarnings("deprecation")
     @Override
-    public IFluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
@@ -98,7 +93,7 @@ public class GraderBlock extends Block implements IWaterLoggable {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        IFluidState fluidState = context.getWorld().getFluidState(context.getPos());
+        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
         return getDefaultState().with(FACING, context.getPlacementHorizontalFacing()).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
     }
 
@@ -113,10 +108,5 @@ public class GraderBlock extends Block implements IWaterLoggable {
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return VOXEL_SHAPE;
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new StringTextComponent("Only works with the new material system!").applyTextStyle(TextFormatting.RED));
     }
 }

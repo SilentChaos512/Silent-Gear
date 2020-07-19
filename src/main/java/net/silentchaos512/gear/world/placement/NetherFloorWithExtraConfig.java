@@ -1,11 +1,19 @@
 package net.silentchaos512.gear.world.placement;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 
 public class NetherFloorWithExtraConfig extends AtSurfaceWithExtraConfig {
+    public static final Codec<NetherFloorWithExtraConfig> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    Codec.INT.fieldOf("count").forGetter(config -> config.count),
+                    Codec.FLOAT.fieldOf("extra_chance").forGetter(config -> config.extraChance),
+                    Codec.INT.fieldOf("extra_count").forGetter(config -> config.extraCount),
+                    Codec.INT.fieldOf("min_height").forGetter(config -> config.minHeight),
+                    Codec.INT.fieldOf("max_height").forGetter(config -> config.maxHeight)
+            ).apply(instance, NetherFloorWithExtraConfig::new));
+
     public final int minHeight;
     public final int maxHeight;
 
@@ -13,25 +21,5 @@ public class NetherFloorWithExtraConfig extends AtSurfaceWithExtraConfig {
         super(count, extraChanceIn, extraCountIn);
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
-    }
-
-    @Override
-    public <T> Dynamic<T> serialize(DynamicOps<T> dynamicOps) {
-        return new Dynamic<>(dynamicOps, dynamicOps.createMap(ImmutableMap.of(
-                dynamicOps.createString("count"), dynamicOps.createInt(this.count),
-                dynamicOps.createString("extra_chance"), dynamicOps.createFloat(this.extraChance),
-                dynamicOps.createString("extra_count"), dynamicOps.createInt(this.extraCount),
-                dynamicOps.createString("min_height"), dynamicOps.createInt(this.minHeight),
-                dynamicOps.createString("max_height"), dynamicOps.createInt(this.maxHeight)
-        )));
-    }
-
-    public static NetherFloorWithExtraConfig deserialize(Dynamic<?> dynamic) {
-        int count = dynamic.get("count").asInt(0);
-        float extraChance = dynamic.get("extra_chance").asFloat(0.0F);
-        int extraCount = dynamic.get("extra_count").asInt(0);
-        int minHeight = dynamic.get("min_height").asInt(0);
-        int maxHeight = dynamic.get("max_height").asInt(128);
-        return new NetherFloorWithExtraConfig(count, extraChance, extraCount, minHeight, maxHeight);
     }
 }

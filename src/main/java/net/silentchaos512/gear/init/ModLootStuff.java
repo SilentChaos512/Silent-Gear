@@ -18,9 +18,10 @@
 
 package net.silentchaos512.gear.init;
 
+import net.minecraft.loot.LootConditionType;
+import net.minecraft.loot.LootFunctionType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.conditions.LootConditionManager;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,13 +33,18 @@ import net.silentchaos512.gear.loot.function.SetPartsFunction;
 import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 
 public final class ModLootStuff {
+    public static final LootConditionType HAS_PART = new LootConditionType(HasPartCondition.SERIALIZER);
+    public static final LootConditionType HAS_TRAIT = new LootConditionType(HasTraitCondition.SERIALIZER);
+    public static final LootFunctionType SELECT_TIER = new LootFunctionType(SelectGearTierLootFunction.SERIALIZER);
+    public static final LootFunctionType SET_PARTS = new LootFunctionType(SetPartsFunction.SERIALIZER);
+
     private ModLootStuff() {}
 
     public static void init() {
-        LootConditionManager.registerCondition(HasPartCondition.SERIALIZER);
-        LootConditionManager.registerCondition(HasTraitCondition.SERIALIZER);
-        LootFunctionManager.registerFunction(SelectGearTierLootFunction.SERIALIZER);
-        LootFunctionManager.registerFunction(SetPartsFunction.SERIALIZER);
+        Registry.register(Registry.field_239704_ba_, SilentGear.getId("has_part"), HAS_PART);
+        Registry.register(Registry.field_239704_ba_, SilentGear.getId("has_trait"), HAS_TRAIT);
+        Registry.register(Registry.field_239694_aZ_, SilentGear.getId("select_tier"), SELECT_TIER);
+        Registry.register(Registry.field_239694_aZ_, SilentGear.getId("set_parts"), SET_PARTS);
     }
 
     public static void registerGlobalModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {

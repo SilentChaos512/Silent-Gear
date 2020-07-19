@@ -42,7 +42,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> PAXEL_BLUEPRINT = registerGearBlueprint(GearType.PAXEL, false);
     public static final ItemRegistryObject<GearBlueprintItem> HAMMER_BLUEPRINT = registerGearBlueprint(GearType.HAMMER, false);
     public static final ItemRegistryObject<GearBlueprintItem> EXCAVATOR_BLUEPRINT = registerGearBlueprint(GearType.EXCAVATOR, false);
-    public static final ItemRegistryObject<GearBlueprintItem> LUMBER_AXE_BLUEPRINT = registerGearBlueprint(GearType.LUMBER_AXE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> SAW_BLUEPRINT = registerGearBlueprint(GearType.SAW, false);
     public static final ItemRegistryObject<GearBlueprintItem> MATTOCK_BLUEPRINT = registerGearBlueprint(GearType.MATTOCK, false);
     public static final ItemRegistryObject<GearBlueprintItem> SICKLE_BLUEPRINT = registerGearBlueprint(GearType.SICKLE, false);
     public static final ItemRegistryObject<GearBlueprintItem> SHEARS_BLUEPRINT = registerGearBlueprint(GearType.SHEARS, false);
@@ -72,7 +72,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> PAXEL_TEMPLATE = registerGearBlueprint(GearType.PAXEL, true);
     public static final ItemRegistryObject<GearBlueprintItem> HAMMER_TEMPLATE = registerGearBlueprint(GearType.HAMMER, true);
     public static final ItemRegistryObject<GearBlueprintItem> EXCAVATOR_TEMPLATE = registerGearBlueprint(GearType.EXCAVATOR, true);
-    public static final ItemRegistryObject<GearBlueprintItem> LUMBER_AXE_TEMPLATE = registerGearBlueprint(GearType.LUMBER_AXE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> SAW_TEMPLATE = registerGearBlueprint(GearType.SAW, true);
     public static final ItemRegistryObject<GearBlueprintItem> MATTOCK_TEMPLATE = registerGearBlueprint(GearType.MATTOCK, true);
     public static final ItemRegistryObject<GearBlueprintItem> SICKLE_TEMPLATE = registerGearBlueprint(GearType.SICKLE, true);
     public static final ItemRegistryObject<GearBlueprintItem> SHEARS_TEMPLATE = registerGearBlueprint(GearType.SHEARS, true);
@@ -110,8 +110,8 @@ public final class ModItems {
             new ToolHeadItem(GearType.HAMMER, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> EXCAVATOR_HEAD = registerCompoundPart("excavator_head", () ->
             new ToolHeadItem(GearType.EXCAVATOR, unstackableProps()));
-    public static final ItemRegistryObject<ToolHeadItem> LUMBER_AXE_HEAD = registerCompoundPart("lumber_axe_head", () ->
-            new ToolHeadItem(GearType.LUMBER_AXE, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> SAW_BLADE = registerCompoundPart("saw_blade", () ->
+            new ToolHeadItem(GearType.SAW, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> MATTOCK_HEAD = registerCompoundPart("mattock_head", () ->
             new ToolHeadItem(GearType.MATTOCK, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SICKLE_BLADE = registerCompoundPart("sickle_blade", () ->
@@ -185,7 +185,7 @@ public final class ModItems {
     public static final ItemRegistryObject<CorePaxel> PAXEL = register("paxel", () -> new CorePaxel());
     public static final ItemRegistryObject<CoreHammer> HAMMER = register("hammer", () -> new CoreHammer());
     public static final ItemRegistryObject<CoreExcavator> EXCAVATOR = register("excavator", () -> new CoreExcavator());
-    public static final ItemRegistryObject<CoreLumberAxe> LUMBER_AXE = register("lumber_axe", () -> new CoreLumberAxe());
+    public static final ItemRegistryObject<CoreSaw> SAW = register("saw", () -> new CoreSaw());
     public static final ItemRegistryObject<CoreMattock> MATTOCK = register("mattock", () -> new CoreMattock());
     public static final ItemRegistryObject<CoreSickle> SICKLE = register("sickle", () -> new CoreSickle());
     public static final ItemRegistryObject<CoreShears> SHEARS = register("shears", () -> new CoreShears());

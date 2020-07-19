@@ -4,12 +4,14 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.ILootSerializer;
+import net.minecraft.loot.LootConditionType;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -40,18 +42,19 @@ public class HasPartCondition extends GearLootCondition {
         return () -> new HasPartCondition(partId, gradeRange);
     }
 
-    public static class Serializer extends AbstractSerializer<HasPartCondition> {
-        protected Serializer() {
-            super(SilentGear.getId("has_part"), HasPartCondition.class);
-        }
+    @Override
+    public LootConditionType func_230419_b_() {
+        return ModLootStuff.HAS_PART;
+    }
 
+    public static class Serializer implements ILootSerializer<HasPartCondition> {
         @Override
-        public void serialize(JsonObject json, HasPartCondition value, JsonSerializationContext context) {
+        public void func_230424_a_(JsonObject json, HasPartCondition value, JsonSerializationContext context) {
             json.addProperty("part", value.partId.toString());
         }
 
         @Override
-        public HasPartCondition deserialize(JsonObject json, JsonDeserializationContext context) {
+        public HasPartCondition func_230423_a_(JsonObject json, JsonDeserializationContext context) {
             ResourceLocation partId = new ResourceLocation(JSONUtils.getString(json, "part"));
             MaterialGrade.Range gradeRange = json.has("grade")
                     ? MaterialGrade.Range.deserialize(json.get("grade"))

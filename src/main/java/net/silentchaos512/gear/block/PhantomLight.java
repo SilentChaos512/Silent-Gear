@@ -41,7 +41,7 @@ public class PhantomLight extends Block {
         super(Properties.create(Material.MISCELLANEOUS)
                 .doesNotBlockMovement()
                 .hardnessAndResistance(0.5f, 6000000.0f)
-                .lightValue(15)
+                .setLightLevel(state -> 15)
         );
     }
 

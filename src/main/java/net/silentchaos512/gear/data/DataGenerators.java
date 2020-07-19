@@ -20,11 +20,13 @@ public final class DataGenerators {
         gen.addProvider(new MaterialsProvider(gen));
         gen.addProvider(new PartsProvider(gen));
 
-        gen.addProvider(new ModAdvancementProvider(gen));
-        gen.addProvider(new ModBlockTagsProvider(gen));
-        gen.addProvider(new ModItemTagsProvider(gen));
+        ModBlockTagsProvider blocks = new ModBlockTagsProvider(gen);
+        gen.addProvider(blocks);
+        gen.addProvider(new ModItemTagsProvider(gen, blocks));
+
         gen.addProvider(new ModLootTables(gen));
         gen.addProvider(new ModRecipesProvider(gen));
+        gen.addProvider(new ModAdvancementProvider(gen));
 
         gen.addProvider(new ModBlockStateProvider(gen, existingFileHelper));
         gen.addProvider(new ModItemModelProvider(gen, existingFileHelper));

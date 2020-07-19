@@ -22,9 +22,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,11 +36,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
 import net.silentchaos512.gear.event.GearEvents;
 import net.silentchaos512.gear.item.gear.CoreCrossbow;
 import net.silentchaos512.gear.traits.TraitConst;
-import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.client.gui.DebugRenderOverlay;
 
@@ -71,10 +69,10 @@ public class DebugOverlay extends DebugRenderOverlay {
 
         // Crossbow debugging
         if (item instanceof CoreCrossbow) {
-            float pull = item.getPropertyGetter(new ResourceLocation("pull")).call(heldItem, mc.world, player);
-            float pulling = item.getPropertyGetter(new ResourceLocation("pulling")).call(heldItem, mc.world, player);
-            float charged = item.getPropertyGetter(new ResourceLocation("charged")).call(heldItem, mc.world, player);
-            float firework = item.getPropertyGetter(new ResourceLocation("firework")).call(heldItem, mc.world, player);
+            float pull = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pull"), mc.world, player);
+            float pulling = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pulling"), mc.world, player);
+            float charged = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("charged"), mc.world, player);
+            float firework = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("firework"), mc.world, player);
             list.add(String.format("pull=%.1f", pull));
             list.add(String.format("pulling=%.1f", pulling));
             list.add(String.format("charged=%.1f", charged));
@@ -105,7 +103,7 @@ public class DebugOverlay extends DebugRenderOverlay {
                     final float destroySpeed = heldItem.getDestroySpeed(state);
                     if (canHarvest) {
                         int level = TraitHelper.getTraitLevel(heldItem, TraitConst.LUSTROUS);
-                        int light = GearEvents.getLightForLustrousTrait(player.world, player.getPosition());
+                        int light = GearEvents.getLightForLustrousTrait(player.world, player.func_233580_cy_());
                         final float newSpeed = destroySpeed + GearEvents.getLustrousSpeedBonus(level, light);
                         list.add(String.format("speed = %.1f", newSpeed));
                     } else {
@@ -118,9 +116,9 @@ public class DebugOverlay extends DebugRenderOverlay {
         return list;
     }
 
-    private static void addAttributeInfo(List<String> list, PlayerEntity player, IAttribute attribute) {
-        IAttributeInstance attribute1 = player.getAttribute(attribute);
-        list.add(String.format("%s=%.1f (%dx mods)", attribute.getName(), attribute1.getValue(), attribute1.func_225505_c_().size()));
+    private static void addAttributeInfo(List<String> list, PlayerEntity player, Attribute attribute) {
+        ModifiableAttributeInstance attribute1 = player.getAttribute(attribute);
+        list.add(String.format("%s=%.1f (%dx mods)", attribute, attribute1.getValue(), attribute1.func_225505_c_().size()));
     }
 
     @Override

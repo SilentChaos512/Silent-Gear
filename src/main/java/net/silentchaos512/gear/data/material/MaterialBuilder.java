@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -48,10 +48,10 @@ public class MaterialBuilder {
     private final Map<String, MaterialDisplay> display = new LinkedHashMap<>();
 
     public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation tag) {
-        this(id, tier, Ingredient.fromTag(new ItemTags.Wrapper(tag)));
+        this(id, tier, Ingredient.fromTag(ItemTags.makeWrapperTag(tag.toString())));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, Tag<Item> tag) {
+    public MaterialBuilder(ResourceLocation id, int tier, ITag<Item> tag) {
         this(id, tier, Ingredient.fromTag(tag));
     }
 

@@ -5,8 +5,9 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -103,12 +104,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        Multimap<String, AttributeModifier> multimap = LinkedHashMultimap.create();
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> multimap = LinkedHashMultimap.create();
         if (slot == this.getEquipmentSlot()) {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
-            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
-            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
+            multimap.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
+            multimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
             return GearHelper.getAttributeModifiers(slot, stack, multimap);
         }
         return multimap;

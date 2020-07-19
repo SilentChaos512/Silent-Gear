@@ -20,21 +20,14 @@ package net.silentchaos512.gear.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.silentchaos512.gear.block.trees.NetherwoodTree;
 import net.silentchaos512.gear.init.ModTags;
 
 public class NetherwoodSapling extends SaplingBlock {
-    public NetherwoodSapling() {
-        super(new NetherwoodTree(), Properties.create(Material.PLANTS)
-                .doesNotBlockMovement()
-                .tickRandomly()
-                .hardnessAndResistance(0)
-                .sound(SoundType.PLANT)
-        );
+    public NetherwoodSapling(Properties properties) {
+        super(new NetherwoodTree(), properties);
     }
 
     @Override

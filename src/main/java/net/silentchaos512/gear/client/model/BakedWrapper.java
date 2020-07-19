@@ -21,7 +21,7 @@ public class BakedWrapper implements IBakedModel {
     public BakedWrapper(GearModel model,
                         IModelConfiguration owner,
                         ModelBakery bakery,
-                        Function<Material, TextureAtlasSprite> spriteGetter,
+                        Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
                         IModelTransform modelTransform,
                         ResourceLocation modelLocation,
                         GearModelOverrideList overrideList) {

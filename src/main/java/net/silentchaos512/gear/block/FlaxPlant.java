@@ -20,6 +20,6 @@ public class FlaxPlant extends CropsBlock {
 
     @Override
     public PlantType getPlantType(IBlockReader world, BlockPos pos) {
-        return PlantType.Crop;
+        return PlantType.CROP;
     }
 }

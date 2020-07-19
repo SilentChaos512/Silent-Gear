@@ -69,12 +69,12 @@ public final class SGearTraitsCommand {
     private static int runMakeWiki(CommandContext<CommandSource> context) {
         List<ResourceLocation> ids = new ArrayList<>(TraitManager.getKeys());
         //noinspection ConstantConditions
-        ids.sort(Comparator.comparing(id -> TraitManager.get(id).getDisplayName(0).getFormattedText()));
+        ids.sort(Comparator.comparing(id -> TraitManager.get(id).getDisplayName(0).getString()));
 
         for (ResourceLocation id : ids) {
             ITrait trait = TraitManager.get(id);
             assert trait != null;
-            context.getSource().sendFeedback(new StringTextComponent("### " + trait.getDisplayName(0).getFormattedText()), true);
+            context.getSource().sendFeedback(new StringTextComponent("### " + trait.getDisplayName(0).getString()), true);
             context.getSource().sendFeedback(new StringTextComponent("- `" + id + "`"), true);
             context.getSource().sendFeedback(new StringTextComponent("- Max Level: " + trait.getMaxLevel()), true);
             context.getSource().sendFeedback(new StringTextComponent("- " + trait.getDescription(1)), true);

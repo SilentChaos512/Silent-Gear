@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -39,13 +40,13 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
         // Max damage doesn't matter, just needs to be greater than zero
         super(GearHelper.getBuilder(null).defaultMaxDamage(100));
         GearHelper.addModelTypeProperty(this);
-        this.addPropertyOverride(new ResourceLocation("pull"), (stack, world, entity) -> {
+/*        this.addPropertyOverride(new ResourceLocation("pull"), (stack, world, entity) -> {
             if (entity == null) {
                 return 0.0F;
             } else {
                 return !(entity.getActiveItemStack().getItem() instanceof CoreBow) ? 0.0F : (float)(stack.getUseDuration() - entity.getItemInUseCount()) / getDrawDelay(stack);
             }
-        });
+        });*/
     }
 
     @Override
@@ -142,7 +143,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
                         ArrowItem arrowitem = (ArrowItem) (ammoItem.getItem() instanceof ArrowItem ? ammoItem.getItem() : Items.ARROW);
                         AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoItem, player);
                         arrowEntity.setDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
-                        arrowEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+                        arrowEntity.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1f)) {
                             arrowEntity.setIsCritical(true);
                         }
@@ -193,7 +194,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack, false);
     }
 

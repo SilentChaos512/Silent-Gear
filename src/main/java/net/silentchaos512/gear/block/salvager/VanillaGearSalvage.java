@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 
+@Deprecated
 final class VanillaGearSalvage {
     private static final Collection<Item> ITEMS = ImmutableList.of(
             Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD,

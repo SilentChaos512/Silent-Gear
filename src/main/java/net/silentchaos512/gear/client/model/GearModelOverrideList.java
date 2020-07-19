@@ -5,15 +5,15 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.gear.CoreCrossbow;
 import net.silentchaos512.gear.parts.PartData;
@@ -40,7 +40,7 @@ public class GearModelOverrideList extends ItemOverrideList {
     private final GearModel model;
     private final IModelConfiguration owner;
     private final ModelBakery bakery;
-    private final Function<Material, TextureAtlasSprite> spriteGetter;
+    private final Function<RenderMaterial, TextureAtlasSprite> spriteGetter;
     private final IModelTransform modelTransform;
     private final ResourceLocation modelLocation;
 
@@ -48,7 +48,7 @@ public class GearModelOverrideList extends ItemOverrideList {
     public GearModelOverrideList(GearModel model,
                                  IModelConfiguration owner,
                                  ModelBakery bakery,
-                                 Function<Material, TextureAtlasSprite> spriteGetter,
+                                 Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
                                  IModelTransform modelTransform,
                                  ResourceLocation modelLocation) {
         this.model = model;
@@ -59,9 +59,10 @@ public class GearModelOverrideList extends ItemOverrideList {
         this.modelLocation = modelLocation;
     }
 
+    // getModelWithOverrides
     @Nullable
     @Override
-    public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
+    public IBakedModel func_239290_a_(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
         int animationFrame = getAnimationFrame(stack, worldIn, entityIn);
         CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
@@ -72,11 +73,11 @@ public class GearModelOverrideList extends ItemOverrideList {
         return model;
     }
 
-    private static int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+    private static int getAnimationFrame(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
         return ((ICoreItem) stack.getItem()).getAnimationFrame(stack, world, entity);
     }
 
-    private IBakedModel getOverrideModel(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
+    private IBakedModel getOverrideModel(ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
         List<MaterialLayer> layers = new ArrayList<>();
 
         for (PartData part : GearData.getConstructionParts(stack)) {
@@ -104,26 +105,22 @@ public class GearModelOverrideList extends ItemOverrideList {
         return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
     }
 
-    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
         // TODO: Maybe should add an ICoreItem method to get additional layers?
-        IItemPropertyGetter chargedProperty = stack.getItem().getPropertyGetter(new ResourceLocation("charged"));
-        IItemPropertyGetter fireworkProperty = stack.getItem().getPropertyGetter(new ResourceLocation("firework"));
+        float charged = ModelPropertiesHelper.getValue(stack, new ResourceLocation("charged"), world, entity);
+        float firework = ModelPropertiesHelper.getValue(stack, new ResourceLocation("firework"), world, entity);
 
-        if (chargedProperty != null && fireworkProperty != null) {
-            boolean charged = chargedProperty.call(stack, world, entity) > 0;
-            boolean firework = fireworkProperty.call(stack, world, entity) > 0;
-            if (charged) {
-                if (firework) {
-                    return Optional.of(new MaterialLayer(PartTextures.CHARGED_FIREWORK, Color.VALUE_WHITE));
-                }
-                return Optional.of(new MaterialLayer(PartTextures.CHARGED_ARROW, Color.VALUE_WHITE));
+        if (charged > 0) {
+            if (firework > 0) {
+                return Optional.of(new MaterialLayer(PartTextures.CHARGED_FIREWORK, Color.VALUE_WHITE));
             }
+            return Optional.of(new MaterialLayer(PartTextures.CHARGED_ARROW, Color.VALUE_WHITE));
         }
 
         return Optional.empty();
     }
 
-    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int animationFrame) {
+    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int animationFrame) {
         String chargeSuffix = getCrossbowCharge(stack, world, entity)
                 .map(l -> l.getTextureId().getPath())
                 .orElse("");

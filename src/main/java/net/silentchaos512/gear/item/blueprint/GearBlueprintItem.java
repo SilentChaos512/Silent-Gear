@@ -3,8 +3,8 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
-    private Tag<Item> itemTag;
+    private ITag.INamedTag<Item> itemTag;
 
     public GearBlueprintItem(GearType gearType, boolean singleUse, Properties properties) {
         super(properties, singleUse);
@@ -31,11 +31,11 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public Tag<Item> getItemTag() {
+    public ITag.INamedTag<Item> getItemTag() {
         if (itemTag == null) {
             ResourceLocation id = this.getRegistryName();
             if (id != null) {
-                itemTag = new ItemTags.Wrapper(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()));
+                itemTag = ItemTags.makeWrapperTag(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()).toString());
             }
         }
         return itemTag;
@@ -56,16 +56,16 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
 
         // Flavor text
         if (!gearType.matches("armor")) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint." + itemClass + ".desc").applyTextStyle(TextFormatting.ITALIC));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint." + itemClass + ".desc").func_240699_a_(TextFormatting.ITALIC));
         }
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").applyTextStyle(TextFormatting.DARK_RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").func_240699_a_(TextFormatting.DARK_RED));
         } else if (this.singleUse) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").applyTextStyle(TextFormatting.RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").func_240699_a_(TextFormatting.RED));
         } else {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").applyTextStyle(TextFormatting.GREEN));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").func_240699_a_(TextFormatting.GREEN));
         }
     }
 }

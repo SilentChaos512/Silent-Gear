@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -47,7 +48,7 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     );
 
     public CoreMattock() {
-        super(ItemTier.DIAMOND, 0, GearHelper.getBuilder(null)
+        super(ItemTier.DIAMOND, 0, 0f, GearHelper.getBuilder(null)
                 .addToolType(ToolType.AXE, 3)
                 .addToolType(ToolType.SHOVEL, 3)
         );
@@ -136,7 +137,7 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 

@@ -1,30 +1,28 @@
 package net.silentchaos512.gear.world.placement;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.placement.Placement;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class NetherFloorWithExtra extends Placement<NetherFloorWithExtraConfig> {
     private static final int TRACE_DEPTH = 32;
 
-    public NetherFloorWithExtra(Function<Dynamic<?>, ? extends NetherFloorWithExtraConfig> p_i51371_1_) {
-        super(p_i51371_1_);
+    public NetherFloorWithExtra(Codec<NetherFloorWithExtraConfig> p_i232086_1_) {
+        super(p_i232086_1_);
     }
 
     @Override
-    public Stream<BlockPos> getPositions(IWorld world, ChunkGenerator<? extends GenerationSettings> chunkGenerator, Random random, NetherFloorWithExtraConfig config, BlockPos pos) {
+    public Stream<BlockPos> getPositions(IWorld world, ChunkGenerator generatorIn, Random random, NetherFloorWithExtraConfig config, BlockPos pos) {
         int count = config.count;
         if (random.nextFloat() < config.extraChance) {
             count += config.extraCount;

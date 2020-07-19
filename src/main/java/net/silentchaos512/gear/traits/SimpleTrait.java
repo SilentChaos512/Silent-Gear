@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemUseContext;
@@ -13,6 +14,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -67,9 +69,9 @@ public class SimpleTrait implements ITrait {
 
     @Override
     public ITextComponent getDisplayName(int level) {
-        ITextComponent text = displayName.deepCopy();
+        IFormattableTextComponent text = displayName.deepCopy();
         if (level > 0 && maxLevel > 1) {
-            text.appendText(" ").appendSibling(new TranslationTextComponent("enchantment.level." + level));
+            text.func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("enchantment.level." + level));
         }
         return text;
     }
@@ -109,7 +111,7 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public void onGetAttributeModifiers(TraitActionContext context, Multimap<String, AttributeModifier> modifiers, EquipmentSlotType slot) {
+    public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot) {
     }
 
     @Override
@@ -219,7 +221,7 @@ public class SimpleTrait implements ITrait {
             }
 
             // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.func_240641_a_(json));
         }
 
         private static ITextComponent readTextComponent(JsonObject json, String name) {

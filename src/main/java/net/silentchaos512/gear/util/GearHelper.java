@@ -6,8 +6,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -19,6 +20,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.SilentGear;
@@ -37,11 +39,13 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.MiscUpgrades;
-import net.silentchaos512.gear.parts.*;
+import net.silentchaos512.gear.parts.LazyPartData;
+import net.silentchaos512.gear.parts.PartConst;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -112,33 +116,35 @@ public final class GearHelper {
         return speed;
     }
 
-    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return getAttributeModifiers(slot, stack, true);
     }
 
-    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, boolean addStandardMainHandMods) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, boolean addStandardMainHandMods) {
         // Need to use this version to prevent stack overflow
-        @SuppressWarnings("deprecation") Multimap<String, AttributeModifier> map = LinkedHashMultimap.create(stack.getItem().getAttributeModifiers(slot));
+        @SuppressWarnings("deprecation") Multimap<Attribute, AttributeModifier> map = LinkedHashMultimap.create(stack.getItem().getAttributeModifiers(slot));
 
         return getAttributeModifiers(slot, stack, map, addStandardMainHandMods);
     }
 
-    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<String, AttributeModifier> map) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map) {
         return getAttributeModifiers(slot, stack, map, true);
     }
 
-    public static Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<String, AttributeModifier> map, boolean addStandardMainHandMods) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map, boolean addStandardMainHandMods) {
         if (addStandardMainHandMods && slot == EquipmentSlotType.MAINHAND) {
             // Melee Damage
-            replaceAttributeModifierInMap(map, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), getMeleeDamageModifier(stack));
+            replaceAttributeModifierInMap(map, Attributes.ATTACK_DAMAGE, getMeleeDamageModifier(stack));
 
             // Melee Speed
-            replaceAttributeModifierInMap(map, SharedMonsterAttributes.ATTACK_SPEED.getName(), getAttackSpeedModifier(stack));
+            replaceAttributeModifierInMap(map, Attributes.ATTACK_SPEED, getAttackSpeedModifier(stack));
 
             // Reach distance
-            float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE);
-            AttributeModifier reachModifier = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
-            map.put(PlayerEntity.REACH_DISTANCE.getName(), reachModifier);
+            ForgeMod.REACH_DISTANCE.ifPresent(attr -> {
+                float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE);
+                AttributeModifier mod = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
+                map.put(attr, mod);
+            });
         }
 
         TraitHelper.getCachedTraits(stack).forEach((trait, level) -> trait.onGetAttributeModifiers(new TraitActionContext(null, level, stack), map, slot));
@@ -146,7 +152,7 @@ public final class GearHelper {
         return map;
     }
 
-    private static void replaceAttributeModifierInMap(Multimap<String, AttributeModifier> map, String key, float value) {
+    private static void replaceAttributeModifierInMap(Multimap<Attribute, AttributeModifier> map, Attribute key, float value) {
         if (map.containsKey(key)) {
             Iterator<AttributeModifier> iter = map.get(key).iterator();
             if (iter.hasNext()) {
@@ -227,7 +233,7 @@ public final class GearHelper {
 
     private static void onDamageFactorChange(ServerPlayerEntity player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
-            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
+            player.world.playSound(null, player.func_233580_cy_(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
             LibTriggers.GENERIC_INT.trigger(player, DAMAGE_FACTOR_CHANGE, 1);
         }
     }
@@ -235,7 +241,7 @@ public final class GearHelper {
     private static void notifyPlayerOfBrokenGear(ItemStack stack, ServerPlayerEntity player) {
         // Notify player. Mostly for armor, but might help new players as well.
         // FIXME: Does not work with armor currently, need to find a way to get player
-        player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()));
+        player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()), Util.DUMMY_UUID);
     }
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
@@ -295,13 +301,14 @@ public final class GearHelper {
         return b;
     }
 
+    @Deprecated
     public static void addModelTypeProperty(@SuppressWarnings("TypeMayBeWeakened") ICoreItem item) {
-        PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
+/*        PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
             item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
                 PartData part = GearData.getPartOfType(stack, partType);
                 return part != null ? part.getPart().getLiteTexture(part, stack).getIndex() : -1;
             });
-        });
+        });*/
     }
 
     @Nullable
@@ -370,8 +377,6 @@ public final class GearHelper {
 
         // TODO: Implement multi-break skill
 
-        selfHarmWithToolHead(stack, entityLiving);
-
         return true;
     }
 
@@ -382,35 +387,7 @@ public final class GearHelper {
             attemptDamage(stack, damage, attacker, EquipmentSlotType.MAINHAND);
         }
 
-        selfHarmWithToolHead(stack, attacker);
-
         return !isBroken;
-    }
-
-    private static void selfHarmWithToolHead(ItemStack stack, LivingEntity user) {
-        // If missing rod, hurt the user
-        if (stack.getItem() instanceof ICoreItem) {
-            ICoreItem item = (ICoreItem) stack.getItem();
-            if (GearData.isMissingRequiredPart(stack, PartType.ROD)) {
-                float damageAmount = item.getStat(stack, ItemStats.MELEE_DAMAGE) / 2;
-                DamageSource source = new DamageSource("silentgear.broken_tool") {
-                    @Nonnull
-                    @Override
-                    public ITextComponent getDeathMessage(LivingEntity entity) {
-                        return new TranslationTextComponent("death.silentgear.broken_tool",
-                                entity.getDisplayName(),
-                                stack.getDisplayName());
-                    }
-                }.setDamageBypassesArmor();
-
-                user.attackEntityFrom(source, damageAmount);
-
-                if (user instanceof PlayerEntity) {
-                    PlayerEntity player = (PlayerEntity) user;
-                    player.sendStatusMessage(new TranslationTextComponent("misc.silentgear.missingRod.attack"), true);
-                }
-            }
-        }
     }
 
     // Formerly onUpdate
@@ -511,7 +488,7 @@ public final class GearHelper {
         // TODO: Probably should cache this somehow...
         for (ITextComponent t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
             // TODO: Spaces are probably inappropriate for some languages?
-            result = t.deepCopy().appendSibling(new StringTextComponent(" ")).appendSibling(result);
+            result = t.deepCopy().func_230529_a_(new StringTextComponent(" ")).func_230529_a_(result);
         }
 
         return result;

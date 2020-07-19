@@ -1,13 +1,10 @@
 package net.silentchaos512.gear.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +21,14 @@ public class TexturedButton extends Button {
     }
 
     public TexturedButton(ResourceLocation resLoc, int x, int y, int texturePosX, int texturePosY, int width, int height, List<String> hoverTextList, IPressable action) {
-        super(x, y, width, height, "", action);
+        super(x, y, width, height, new StringTextComponent(""), action);
         this.texturePosX = texturePosX;
         this.texturePosY = texturePosY;
         this.resLoc = resLoc;
         this.textList.addAll(hoverTextList);
     }
 
-    @Override
+    /*@Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             Minecraft mc = Minecraft.getInstance();
@@ -68,5 +65,5 @@ public class TexturedButton extends Button {
                     -1,
                     mc.fontRenderer);
         }
-    }
+    }*/
 }

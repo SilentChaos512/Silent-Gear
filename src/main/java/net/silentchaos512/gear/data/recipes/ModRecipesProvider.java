@@ -8,8 +8,8 @@ import net.minecraft.data.*;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -87,7 +87,7 @@ public class ModRecipesProvider extends RecipeProvider {
         toolBlueprint(consumer, "paxel", ModItems.PAXEL_BLUEPRINT, ModItems.PAXEL_TEMPLATE, "###", "#/#", " /#");
         toolBlueprint(consumer, "hammer", ModItems.HAMMER_BLUEPRINT, ModItems.HAMMER_TEMPLATE, "###", "###", " / ");
         toolBlueprint(consumer, "excavator", ModItems.EXCAVATOR_BLUEPRINT, ModItems.EXCAVATOR_TEMPLATE, "# #", "###", " / ");
-        toolBlueprint(consumer, "lumber_axe", ModItems.LUMBER_AXE_BLUEPRINT, ModItems.LUMBER_AXE_TEMPLATE, "###", "##/", "  /");
+        toolBlueprint(consumer, "saw", ModItems.SAW_BLUEPRINT, ModItems.SAW_TEMPLATE, "###", "##/", "  /");
         toolBlueprint(consumer, "mattock", ModItems.MATTOCK_BLUEPRINT, ModItems.MATTOCK_TEMPLATE, "## ", "#/#", " / ");
         toolBlueprint(consumer, "sickle", ModItems.SICKLE_BLUEPRINT, ModItems.SICKLE_TEMPLATE, " #", "##", "/ ");
         toolBlueprint(consumer, "shears", ModItems.SHEARS_BLUEPRINT, ModItems.SHEARS_TEMPLATE, " #", "#/");
@@ -249,7 +249,7 @@ public class ModRecipesProvider extends RecipeProvider {
         toolRecipes(consumer, "paxel", 5, ModItems.PAXEL, ModItems.PAXEL_HEAD, ModItems.PAXEL_BLUEPRINT.get().getItemTag());
         toolRecipes(consumer, "hammer", 6, ModItems.HAMMER, ModItems.HAMMER_HEAD, ModItems.HAMMER_BLUEPRINT.get().getItemTag());
         toolRecipes(consumer, "excavator", 5, ModItems.EXCAVATOR, ModItems.EXCAVATOR_HEAD, ModItems.EXCAVATOR_BLUEPRINT.get().getItemTag());
-        toolRecipes(consumer, "lumber_axe", 5, ModItems.LUMBER_AXE, ModItems.LUMBER_AXE_HEAD, ModItems.LUMBER_AXE_BLUEPRINT.get().getItemTag());
+        toolRecipes(consumer, "saw", 5, ModItems.SAW, ModItems.SAW_BLADE, ModItems.SAW_BLUEPRINT.get().getItemTag());
         toolRecipes(consumer, "mattock", 4, ModItems.MATTOCK, ModItems.MATTOCK_HEAD, ModItems.MATTOCK_BLUEPRINT.get().getItemTag());
         toolRecipes(consumer, "sickle", 3, ModItems.SICKLE, ModItems.SICKLE_BLADE, ModItems.SICKLE_BLUEPRINT.get().getItemTag());
         toolRecipes(consumer, "shears", 2, ModItems.SHEARS, ModItems.SHEARS_BLADES, ModItems.SHEARS_BLUEPRINT.get().getItemTag());
@@ -419,16 +419,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(ModItems.PEBBLE, 9)
                 .addCriterion("has_pebble", hasItem(ModItems.PEBBLE))
                 .build(consumer, SilentGear.getId("cobblestone_from_pebbles"));
-        ShapedRecipeBuilder.shapedRecipe(ModBlocks.CRAFTING_STATION)
-                .key('#', ItemTags.PLANKS)
-                .key('C', Tags.Items.CHESTS_WOODEN)
-                .key('T', Blocks.CRAFTING_TABLE)
-                .key('U', CraftingItems.UPGRADE_BASE)
-                .patternLine("#T#")
-                .patternLine("#U#")
-                .patternLine("#C#")
-                .addCriterion("has_item", hasItem(Blocks.CRAFTING_TABLE))
-                .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.CRIMSON_STEEL_INGOT)
                 .key('/', Tags.Items.RODS_BLAZE)
                 .key('#', ModTags.Items.INGOTS_CRIMSON_IRON)
@@ -800,7 +790,7 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    private static void toolRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, Tag<Item> blueprintTag) {
+    private static void toolRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, ITag<Item> blueprintTag) {
         // Tool head
         ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, toolHead)
                 .addIngredient(blueprintTag)
@@ -820,7 +810,7 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    private static void bowRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, Tag<Item> blueprintTag) {
+    private static void bowRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, ITag<Item> blueprintTag) {
         // Tool head
         ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, toolHead)
                 .addIngredient(blueprintTag)
@@ -1004,41 +994,41 @@ public class ModRecipesProvider extends RecipeProvider {
     private static class Metals {
         private final String name;
         private IItemProvider ore;
-        private Tag<Item> oreTag;
+        private ITag<Item> oreTag;
         private IItemProvider block;
-        private Tag<Item> blockTag;
+        private ITag<Item> blockTag;
         private final IItemProvider ingot;
-        private final Tag<Item> ingotTag;
+        private final ITag<Item> ingotTag;
         private IItemProvider nugget;
-        private Tag<Item> nuggetTag;
+        private ITag<Item> nuggetTag;
         private IItemProvider dust;
-        private Tag<Item> dustTag;
+        private ITag<Item> dustTag;
 
-        public Metals(String name, IItemProvider ingot, Tag<Item> ingotTag) {
+        public Metals(String name, IItemProvider ingot, ITag<Item> ingotTag) {
             this.name = name;
             this.ingot = ingot;
             this.ingotTag = ingotTag;
         }
 
-        public Metals ore(IItemProvider item, Tag<Item> tag) {
+        public Metals ore(IItemProvider item, ITag<Item> tag) {
             this.ore = item;
             this.oreTag = tag;
             return this;
         }
 
-        public Metals block(IItemProvider item, Tag<Item> tag) {
+        public Metals block(IItemProvider item, ITag<Item> tag) {
             this.block = item;
             this.blockTag = tag;
             return this;
         }
 
-        public Metals nugget(IItemProvider item, Tag<Item> tag) {
+        public Metals nugget(IItemProvider item, ITag<Item> tag) {
             this.nugget = item;
             this.nuggetTag = tag;
             return this;
         }
 
-        public Metals dust(IItemProvider item, Tag<Item> tag) {
+        public Metals dust(IItemProvider item, ITag<Item> tag) {
             this.dust = item;
             this.dustTag = tag;
             return this;

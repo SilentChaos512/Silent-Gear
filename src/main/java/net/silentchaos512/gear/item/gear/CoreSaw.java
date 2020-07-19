@@ -18,18 +18,18 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 
 import java.util.Optional;
 
-public class CoreLumberAxe extends CoreAxe {
+public class CoreSaw extends CoreAxe {
     @Override
     public GearType getGearType() {
-        return GearType.LUMBER_AXE;
+        return GearType.SAW;
     }
 
     @Override
     public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
         if (stat == ItemStats.MELEE_DAMAGE)
-            return Optional.of(StatInstance.makeBaseMod(6));
+            return Optional.of(StatInstance.makeBaseMod(2));
         if (stat == ItemStats.ATTACK_SPEED)
-            return Optional.of(StatInstance.makeBaseMod(-3.3f));
+            return Optional.of(StatInstance.makeBaseMod(-2.4f));
         if (stat == ItemStats.REPAIR_EFFICIENCY)
             return Optional.of(StatInstance.makeBaseMod(0.5f));
         return Optional.empty();

@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -18,7 +18,7 @@ public abstract class AbstractBlueprintItem extends Item {
         this.singleUse = singleUse;
     }
 
-    public abstract Tag<Item> getItemTag();
+    public abstract ITag.INamedTag<Item> getItemTag();
 
     protected abstract ITextComponent getCraftedName(ItemStack stack);
 

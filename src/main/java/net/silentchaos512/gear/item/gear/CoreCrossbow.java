@@ -3,20 +3,20 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ICrossbowUser;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,7 +24,9 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
@@ -33,6 +35,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -207,10 +210,6 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     }
 
-    private static boolean hasChargedProjectile(ItemStack stack, Item ammoItem) {
-        return getChargedProjectiles(stack).stream().anyMatch(s -> s.getItem() == ammoItem);
-    }
-
     @Override
     public int getUseDuration(ItemStack stack) {
         // For vanilla crossbows, this is getChargeTime + 3
@@ -242,7 +241,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     private static void func_220016_a(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float p_220016_5_, boolean p_220016_6_, float p_220016_7_, float p_220016_8_, float p_220016_9_) {
         if (!world.isRemote) {
             boolean flag = projectile.getItem() == Items.FIREWORK_ROCKET;
-            IProjectile iprojectile;
+            ProjectileEntity iprojectile;
             if (flag) {
                 iprojectile = new FireworkRocketEntity(world, projectile, shooter.getPosX(), shooter.getPosY() + (double)shooter.getEyeHeight() - (double)0.15F, shooter.getPosZ(), true);
             } else {
@@ -256,12 +255,12 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
                 ICrossbowUser icrossbowuser = (ICrossbowUser)shooter;
                 LivingEntity attackTarget = icrossbowuser.getAttackTarget();
                 if (attackTarget != null) {
-                    icrossbowuser.shoot(attackTarget, crossbow, iprojectile, p_220016_9_);
+                    icrossbowuser.func_230284_a_(attackTarget, crossbow, iprojectile, p_220016_9_);
                 }
             } else {
-                Vec3d vec3d1 = shooter.getUpVector(1.0F);
+                Vector3d vec3d1 = shooter.getUpVector(1.0F);
                 Quaternion quaternion = new Quaternion(new Vector3f(vec3d1), p_220016_9_, true);
-                Vec3d vec3d = shooter.getLook(1.0F);
+                Vector3d vec3d = shooter.getLook(1.0F);
                 Vector3f vector3f = new Vector3f(vec3d);
                 vector3f.transform(quaternion);
                 iprojectile.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), p_220016_7_, p_220016_8_);
@@ -270,7 +269,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
             crossbow.damageItem(flag ? 3 : 1, shooter, (p_220017_1_) -> {
                 p_220017_1_.sendBreakAnimation(hand);
             });
-            world.addEntity((Entity)iprojectile);
+            world.addEntity(iprojectile);
             world.playSound(null, shooter.getPosX(), shooter.getPosY(), shooter.getPosZ(), SoundEvents.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, p_220016_5_);
         }
     }
@@ -383,7 +382,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack, false);
     }
 
@@ -443,17 +442,17 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public int getAnimationFrame(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
-        IItemPropertyGetter chargedProperty = stack.getItem().getPropertyGetter(new ResourceLocation("charged"));
+    public int getAnimationFrame(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+        IItemPropertyGetter chargedProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("charged"));
         if (chargedProperty != null && chargedProperty.call(stack, world, entity) > 0) {
             return 3;
         }
 
-        IItemPropertyGetter pullingProperty = stack.getItem().getPropertyGetter(new ResourceLocation("pulling"));
+        IItemPropertyGetter pullingProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pulling"));
         if (pullingProperty != null) {
             float pulling = pullingProperty.call(stack, world, entity);
             if (pulling > 0) {
-                IItemPropertyGetter pullProperty = stack.getItem().getPropertyGetter(new ResourceLocation("pull"));
+                IItemPropertyGetter pullProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pull"));
                 if (pullProperty != null) {
                     float pull = pullProperty.call(stack, world, entity);
 

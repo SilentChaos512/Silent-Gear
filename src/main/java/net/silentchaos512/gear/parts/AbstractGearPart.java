@@ -359,7 +359,7 @@ public abstract class AbstractGearPart implements IGearPart {
             }
 
             // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.func_240641_a_(json));
         }
 
         @Nullable

@@ -5,11 +5,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.ILootSerializer;
+import net.minecraft.loot.LootConditionType;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 
@@ -46,18 +48,19 @@ public class HasTraitCondition extends GearLootCondition {
         return () -> new HasTraitCondition(traitId, minLevel, maxLevel);
     }
 
-    public static class Serializer extends AbstractSerializer<HasTraitCondition> {
-        protected Serializer() {
-            super(SilentGear.getId("has_trait"), HasTraitCondition.class);
-        }
+    @Override
+    public LootConditionType func_230419_b_() {
+        return ModLootStuff.HAS_TRAIT;
+    }
 
+    public static class Serializer implements ILootSerializer<HasTraitCondition> {
         @Override
-        public void serialize(JsonObject json, HasTraitCondition value, JsonSerializationContext context) {
+        public void func_230424_a_(JsonObject json, HasTraitCondition value, JsonSerializationContext context) {
             json.addProperty("trait", value.traitId.toString());
         }
 
         @Override
-        public HasTraitCondition deserialize(JsonObject json, JsonDeserializationContext context) {
+        public HasTraitCondition func_230423_a_(JsonObject json, JsonDeserializationContext context) {
             ResourceLocation traitId = new ResourceLocation(JSONUtils.getString(json, "trait"));
             int minLevel = 1;
             int maxLevel = Integer.MAX_VALUE;

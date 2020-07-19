@@ -9,8 +9,6 @@ import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.network.IContainerFactory;
-import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
-import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
@@ -18,7 +16,6 @@ import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 
 public final class ModContainers {
     public static final RegistryObject<ContainerType<GraderContainer>> MATERIAL_GRADER = register("material_grader", GraderContainer::new);
-    public static final RegistryObject<ContainerType<CraftingStationContainer>> CRAFTING_STATION = register("crafting_station", CraftingStationContainer::new);
     public static final RegistryObject<ContainerType<SalvagerContainer>> SALVAGER = register("salvager", SalvagerContainer::new);
 
     private ModContainers() {}
@@ -28,7 +25,6 @@ public final class ModContainers {
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
         ScreenManager.registerFactory(MATERIAL_GRADER.get(), GraderScreen::new);
-        ScreenManager.registerFactory(CRAFTING_STATION.get(), CraftingStationScreen::new);
         ScreenManager.registerFactory(SALVAGER.get(), SalvagerScreen::new);
     }
 

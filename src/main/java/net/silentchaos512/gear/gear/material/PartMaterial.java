@@ -11,8 +11,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -336,15 +334,7 @@ public final class PartMaterial implements IMaterial {
         }
 
         private static ITextComponent deserializeText(JsonElement json) {
-            // Handle the old style
-            if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
-                boolean translate = JSONUtils.getBoolean(json.getAsJsonObject(), "translate", false);
-                String name = JSONUtils.getString(json.getAsJsonObject(), "name");
-                return translate ? new TranslationTextComponent(name) : new StringTextComponent(name);
-            }
-
-            // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.func_240641_a_(json));
         }
 
         // endregion

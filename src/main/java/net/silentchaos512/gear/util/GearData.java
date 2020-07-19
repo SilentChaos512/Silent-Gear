@@ -103,7 +103,7 @@ public final class GearData {
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
             if (player != null) {
-                SilentGear.LOGGER.debug("Recalculating for {}'s {}", player.getScoreboardName(), stack.getDisplayName().getFormattedText());
+                SilentGear.LOGGER.debug("Recalculating for {}'s {}", player.getScoreboardName(), stack.getDisplayName().getString());
             }
             clearCachedData(stack);
             addOrRemoveHighlightPart(stack, parts);
@@ -198,7 +198,7 @@ public final class GearData {
                 float newValue = newStats.get(stat);
                 float change = newValue - oldValue;
                 SilentGear.LOGGER.debug(" - {}: {} -> {} ({}) - mods: [{}]",
-                        stat.getDisplayName().getFormattedText(),
+                        stat.getDisplayName().getString(),
                         oldValue,
                         newValue,
                         change < 0 ? change : "+" + change,

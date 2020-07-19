@@ -8,8 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -36,10 +36,10 @@ public class ExclusionIngredient extends Ingredient {
     }
 
     public static ExclusionIngredient of(ResourceLocation tagId, IItemProvider... exclusions) {
-        return of(Ingredient.fromTag(new ItemTags.Wrapper(tagId)), exclusions);
+        return of(Ingredient.fromTag(ItemTags.makeWrapperTag(tagId.toString())), exclusions);
     }
 
-    public static ExclusionIngredient of(Tag<Item> tag, IItemProvider... exclusions) {
+    public static ExclusionIngredient of(ITag<Item> tag, IItemProvider... exclusions) {
         return of(Ingredient.fromTag(tag), exclusions);
     }
 

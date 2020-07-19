@@ -18,47 +18,23 @@
 
 package net.silentchaos512.gear.client.gui;
 
-import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.lib.event.ClientTicks;
-import net.silentchaos512.lib.util.TextRenderUtils;
-import net.silentchaos512.utils.Color;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 // TODO: Display part name with item tooltip, or maybe replace item name?
 // TODO: Add some text explaining interface?
 public class GuiItemParts extends Screen {
-    private static final int BUTTON_SPACING = PartButton.SIZE + 4;
+//    private static final int BUTTON_SPACING = PartButton.SIZE + 4;
     private static final int BUTTON_ROW_LENGTH = 12;
     private static final int BUTTON_INITIAL_OFFSET = 5;
 
     private List<IGearPart> partList = new ArrayList<>();
-    private List<PartButton> partButtons = new ArrayList<>();
+//    private List<PartButton> partButtons = new ArrayList<>();
     private IGearPart selectedPart = null;
     private List<Tuple<String, String>> selectedPartInfo = null;
 
@@ -66,7 +42,7 @@ public class GuiItemParts extends Screen {
         super(p_i51108_1_);
     }
 
-    @Override
+    /*@Override
     public void init() {
         if (minecraft == null) return;
 
@@ -271,5 +247,5 @@ public class GuiItemParts extends Screen {
             button.setMessage(pair.getFirst());
             pair.getSecond().onPress(b);
         }
-    }
+    }*/
 }

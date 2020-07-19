@@ -3,13 +3,13 @@ package net.silentchaos512.gear.client.model;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
@@ -51,7 +51,7 @@ public class GearModel implements IModelGeometry<GearModel> {
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
         overrideList = new GearModelOverrideList(this, owner, bakery, spriteGetter, modelTransform, modelLocation);
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
@@ -62,7 +62,7 @@ public class GearModel implements IModelGeometry<GearModel> {
                             String transformVariant,
                             IModelConfiguration owner,
                             ModelBakery bakery,
-                            Function<Material, TextureAtlasSprite> spriteGetter,
+                            Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
                             IModelTransform modelTransform,
                             ItemOverrideList overrideList,
                             ResourceLocation modelLocation) {
@@ -73,13 +73,13 @@ public class GearModel implements IModelGeometry<GearModel> {
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.gearType, animationFrame)));
+            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.gearType, animationFrame)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
         // No layers?
         if (layers.isEmpty()) {
-            TextureAtlasSprite texture = spriteGetter.apply(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
             builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
         }
 
@@ -89,10 +89,10 @@ public class GearModel implements IModelGeometry<GearModel> {
     }
 
     @Override
-    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        Set<Material> ret = new HashSet<>();
+    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        Set<RenderMaterial> ret = new HashSet<>();
 
-        ret.add(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+        ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
 
         for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
             int animationFrames = tex.isAnimated() ? item.getAnimationFrames() : 1;
@@ -104,11 +104,11 @@ public class GearModel implements IModelGeometry<GearModel> {
         return ret;
     }
 
-    private Material getTexture(ResourceLocation tex, int animationFrame) {
+    private RenderMaterial getTexture(ResourceLocation tex, int animationFrame) {
         String path = "item/" + gearType.getName() + "/" + tex.getPath();
         String suffix = animationFrame > 0 ? "_" + animationFrame : "";
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path + suffix);
-        return new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, location);
+        return new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, location);
     }
 
     @Override

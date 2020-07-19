@@ -13,12 +13,12 @@ import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.event.GearEvents;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -47,9 +47,10 @@ public class ModAdvancementProvider implements IDataProvider {
     }
 
     @Override
-    public void act(DirectoryCache cache) throws IOException {
+    public void act(DirectoryCache cache) {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
+        //noinspection OverlyLongLambda
         Consumer<Advancement> consumer = (p_204017_3_) -> {
             if (!set.add(p_204017_3_.getId())) {
                 throw new IllegalStateException("Duplicate advancement " + p_204017_3_.getId());
@@ -78,6 +79,7 @@ public class ModAdvancementProvider implements IDataProvider {
     }
 
     private static class Advancements implements Consumer<Consumer<Advancement>> {
+        @SuppressWarnings({"unused", "OverlyLongMethod"})
         @Override
         public void accept(Consumer<Advancement> consumer) {
             Advancement root = Advancement.Builder.builder()
@@ -176,7 +178,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .withDisplay(ModItems.HAMMER, title("big_job_tools"), description("big_job_tools"), null, FrameType.TASK, true, true, false)
                     .withCriterion("hammer", getItem(ModItems.HAMMER))
                     .withCriterion("excavator", getItem(ModItems.EXCAVATOR))
-                    .withCriterion("lumber_axe", getItem(ModItems.LUMBER_AXE))
+                    .withCriterion("lumber_axe", getItem(ModItems.SAW))
                     .withRequirementsStrategy(IRequirementsStrategy.AND)
                     .register(consumer, id("big_job_tools"));
 
@@ -193,7 +195,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement nether = Advancement.Builder.builder()
                     .withParent(root)
                     .withDisplay(Items.OBSIDIAN, title("nether"), description("nether"), null, FrameType.TASK, false, false, false)
-                    .withCriterion("entered_nether", ChangeDimensionTrigger.Instance.changedDimensionTo(DimensionType.THE_NETHER))
+                    .withCriterion("entered_nether", ChangeDimensionTrigger.Instance.func_233552_a_(World.field_234919_h_))
                     .register(consumer, id("nether"));
 
             Advancement netherPlants = Advancement.Builder.builder()
@@ -262,7 +264,7 @@ public class ModAdvancementProvider implements IDataProvider {
             return InventoryChangeTrigger.Instance.forItems(items);
         }
 
-        private static ICriterionInstance getItem(Tag<Item> tag) {
+        private static ICriterionInstance getItem(ITag<Item> tag) {
             return InventoryChangeTrigger.Instance.forItems(new ItemPredicate(tag, null, MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, EnchantmentPredicate.field_226534_b_, EnchantmentPredicate.field_226534_b_, null, NBTPredicate.ANY));
         }
 

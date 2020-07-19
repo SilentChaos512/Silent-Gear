@@ -189,7 +189,7 @@ public final class SGearPartsCommand {
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
             StringBuilder builder = new StringBuilder("Name\tID\tType\tTier\t");
-            ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getFormattedText()).append("\t"));
+            ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getString()).append("\t"));
             builder.append("Traits\tLite Texture\tNormal Color\tBroken Color\tFallback Color\tArmor Color");
             writer.write(builder.toString());
 
@@ -221,7 +221,7 @@ public final class SGearPartsCommand {
 
         // Traits
         appendTsv(builder, part.getTraits(partData).stream()
-                .map(t -> t.getTrait().getDisplayName(t.getLevel()).getFormattedText())
+                .map(t -> t.getTrait().getDisplayName(t.getLevel()).getString())
                 .collect(Collectors.joining(", ")));
 
         // Display

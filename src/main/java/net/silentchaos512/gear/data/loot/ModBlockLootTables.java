@@ -10,15 +10,15 @@ import net.minecraft.block.DoorBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.BlockStateProperty;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.conditions.MatchTool;
+import net.minecraft.loot.conditions.TableBonus;
+import net.minecraft.loot.functions.ApplyBonus;
+import net.minecraft.loot.functions.SetCount;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.minecraft.world.storage.loot.conditions.MatchTool;
-import net.minecraft.world.storage.loot.conditions.TableBonus;
-import net.minecraft.world.storage.loot.functions.ApplyBonus;
-import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -39,7 +39,6 @@ public class ModBlockLootTables extends BlockLootTables {
     @Override
     protected void addTables() {
         registerDropSelfLootTable(ModBlocks.BLAZE_GOLD_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.CRAFTING_STATION.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.get());

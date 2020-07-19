@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -13,6 +14,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -38,7 +40,7 @@ public class AttributeTrait extends SimpleTrait {
     }
 
     @Override
-    public void onGetAttributeModifiers(TraitActionContext context, Multimap<String, AttributeModifier> map, EquipmentSlotType slot) {
+    public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> map, EquipmentSlotType slot) {
         int traitLevel = context.getTraitLevel();
         for (Map.Entry<String, List<ModifierData>> entry : this.modifiers.entrySet()) {
             String key = entry.getKey();
@@ -48,7 +50,8 @@ public class AttributeTrait extends SimpleTrait {
                 mods.forEach(d -> {
                     String modName = String.format("%s_%s_%d_%s_%s", this.getId().getNamespace(), this.getId().getPath(), traitLevel, d.name, key);
                     float modValue = d.values[MathHelper.clamp(traitLevel - 1, 0, d.values.length - 1)];
-                    map.put(d.name, new AttributeModifier(d.uuid, modName, modValue, d.operation));
+                    d.getAttribute().ifPresent(attr ->
+                            map.put(attr, new AttributeModifier(d.uuid, modName, modValue, d.operation)));
                 });
             }
         }
@@ -191,6 +194,10 @@ public class AttributeTrait extends SimpleTrait {
             }
             buffer.writeEnumValue(operation);
             buffer.writeUniqueId(uuid);
+        }
+
+        public Optional<Attribute> getAttribute() {
+            return Optional.ofNullable(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(this.name)));
         }
     }
 }

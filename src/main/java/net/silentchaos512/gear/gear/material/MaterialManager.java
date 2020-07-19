@@ -186,7 +186,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
             String listStr = String.join(", ", ERROR_LIST);
             return ImmutableList.of(
                     new StringTextComponent("[Silent Gear] The following materials failed to load, check your log file:")
-                            .applyTextStyle(TextFormatting.RED),
+                            .func_240699_a_(TextFormatting.RED),
                     new StringTextComponent(listStr)
             );
         }

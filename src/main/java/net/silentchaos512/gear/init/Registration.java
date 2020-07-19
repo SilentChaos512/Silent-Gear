@@ -68,6 +68,6 @@ public final class Registration {
     }
 
     private static <T extends IForgeRegistryEntry<T>> DeferredRegister<T> create(IForgeRegistry<T> registry) {
-        return new DeferredRegister<>(registry, SilentGear.MOD_ID);
+        return DeferredRegister.create(registry, SilentGear.MOD_ID);
     }
 }

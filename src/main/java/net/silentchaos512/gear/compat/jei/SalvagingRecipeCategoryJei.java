@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.compat.jei;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -39,7 +40,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
         icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.SALVAGER));
         arrow = guiHelper.drawableBuilder(SalvagerScreen.TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-        localizedName = TextUtil.translate("jei", "category.salvaging").getFormattedText();
+        localizedName = TextUtil.translate("jei", "category.salvaging").getString();
     }
 
     @Override
@@ -91,7 +92,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     }
 
     @Override
-    public void draw(SalvagingRecipe recipe, double mouseX, double mouseY) {
-        arrow.draw(32 - GUI_START_X, 34 - GUI_START_Y);
+    public void draw(SalvagingRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+        arrow.draw(matrixStack, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

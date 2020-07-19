@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -13,8 +14,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -53,12 +52,11 @@ public class CoreShears extends ShearsItem implements ICoreTool {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new StringTextComponent("Not fully working, Forge patch needed").applyTextStyle(TextFormatting.RED));
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 

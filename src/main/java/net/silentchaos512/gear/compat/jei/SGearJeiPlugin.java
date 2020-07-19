@@ -2,7 +2,6 @@ package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.*;
@@ -17,9 +16,6 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
-import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
-import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
@@ -77,8 +73,6 @@ public class SGearJeiPlugin implements IModPlugin {
                 .filter(r -> r.getType() == ModRecipes.SALVAGING_TYPE)
                 .collect(Collectors.toList()), Const.SALVAGING);
 
-        // Info pages
-        addInfoPage(reg, ModBlocks.CRAFTING_STATION);
         // FIXME: Fails on servers
 /*        addInfoPage(reg, "tip_upgrade", PartManager.getPartsOfType(PartType.TIP).stream()
                 .flatMap(part -> {
@@ -104,15 +98,12 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.CRAFTING_STATION), VanillaRecipeCategoryUid.CRAFTING);
         reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.CRAFTING_STATION), GEAR_CRAFTING);
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.SALVAGER), Const.SALVAGING);
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration reg) {
-        reg.addRecipeClickArea(CraftingStationScreen.class, 88, 32, 28, 23, VanillaRecipeCategoryUid.CRAFTING);
         reg.addRecipeClickArea(SalvagerScreen.class, 30, 30, 28, 23, Const.SALVAGING);
     }
 
@@ -133,12 +124,6 @@ public class SGearJeiPlugin implements IModPlugin {
         });
 
         initFailed = false;
-    }
-
-    @Override
-    public void registerRecipeTransferHandlers(IRecipeTransferRegistration reg) {
-        reg.addRecipeTransferHandler(CraftingStationContainer.class, VanillaRecipeCategoryUid.CRAFTING,
-                0, 9, 9, 36 + CraftingStationTileEntity.SIDE_INVENTORY_SIZE);
     }
 
     private static void addInfoPage(IRecipeRegistration reg, IItemProvider item) {

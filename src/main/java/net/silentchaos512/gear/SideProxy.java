@@ -5,7 +5,6 @@ import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -14,14 +13,13 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
@@ -75,9 +73,9 @@ class SideProxy implements IProxy {
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
         modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
 
-        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverAboutToStart);
+        MinecraftForge.EVENT_BUS.addListener(ModCommands::registerAll);
+        MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
-        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
 
         ModLootStuff.init();
@@ -112,20 +110,14 @@ class SideProxy implements IProxy {
 
     private static void imcProcess(InterModProcessEvent event) {}
 
-    private static void serverAboutToStart(FMLServerAboutToStartEvent event) {
-        IReloadableResourceManager resourceManager = event.getServer().getResourceManager();
-
-        resourceManager.addReloadListener(TraitManager.INSTANCE);
-        resourceManager.addReloadListener(PartManager.INSTANCE);
-        resourceManager.addReloadListener(MaterialManager.INSTANCE);
+    private static void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(TraitManager.INSTANCE);
+        event.addListener(PartManager.INSTANCE);
+        event.addListener(MaterialManager.INSTANCE);
 
         if (ModList.get().isLoaded("gamestages")) {
-            resourceManager.addReloadListener(GameStagesCompat.INSTANCE);
+            event.addListener(GameStagesCompat.INSTANCE);
         }
-    }
-
-    private static void serverStarting(FMLServerStartingEvent event) {
-        ModCommands.registerAll(event.getServer().getCommandManager().getDispatcher());
     }
 
     private static void serverStarted(FMLServerStartedEvent event) {

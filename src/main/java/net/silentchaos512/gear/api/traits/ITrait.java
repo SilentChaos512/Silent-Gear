@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.traits;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemUseContext;
@@ -82,14 +83,16 @@ public interface ITrait {
         if (!showInTooltip(flag)) return;
 
         // Display name
-        ITextComponent displayName = this.getDisplayName(level).applyTextStyle(TextFormatting.ITALIC);
-        if (isHidden()) displayName.applyTextStyle(TextFormatting.DARK_GRAY);
+        ITextComponent displayName = this.getDisplayName(level);
+        displayName.getStyle().setFormatting(TextFormatting.ITALIC);
+        if (isHidden()) displayName.getStyle().setFormatting(TextFormatting.DARK_GRAY);
         tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)
         if (KeyTracker.isAltDown()) {
-            ITextComponent description = this.getDescription(level).applyTextStyle(TextFormatting.DARK_GRAY);
-            tooltip.add(new StringTextComponent("  ").appendSibling(description));
+            ITextComponent description = this.getDescription(level);
+            description.getStyle().setFormatting(TextFormatting.DARK_GRAY);
+            tooltip.add(new StringTextComponent("  ").func_230529_a_(description));
         }
     }
 
@@ -103,7 +106,7 @@ public interface ITrait {
 
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
-    void onGetAttributeModifiers(TraitActionContext context, Multimap<String, AttributeModifier> modifiers, EquipmentSlotType slot);
+    void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot);
 
     ActionResultType onItemUse(ItemUseContext context, int traitLevel);
 

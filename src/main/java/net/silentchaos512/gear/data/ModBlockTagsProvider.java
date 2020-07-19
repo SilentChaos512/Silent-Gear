@@ -4,8 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.TagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
@@ -27,17 +28,16 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     protected void registerTags() {
         // Forge
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
-        getBuilder(Tags.Blocks.ORES).add(
+        getBuilder(Tags.Blocks.ORES).func_240531_a_(
                 ModTags.Blocks.ORES_CRIMSON_IRON
         );
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, ModBlocks.CRIMSON_STEEL_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModBlocks.BLAZE_GOLD_BLOCK);
-        getBuilder(Tags.Blocks.STORAGE_BLOCKS).add(
-                ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD,
-                ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON,
-                ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL
-        );
+        getBuilder(Tags.Blocks.STORAGE_BLOCKS)
+                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
+                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
+                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL);
 
         // Minecraft
         builder(BlockTags.LEAVES, ModBlocks.NETHERWOOD_LEAVES);
@@ -51,10 +51,17 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(BlockTags.WOODEN_TRAPDOORS, ModBlocks.NETHERWOOD_TRAPDOOR);
 
         // Silent Gear
-        getBuilder(ModTags.Blocks.NETHERWOOD_SOIL).add(Tags.Blocks.NETHERRACK, Tags.Blocks.DIRT).add(Blocks.FARMLAND);
+        getBuilder(ModTags.Blocks.NETHERWOOD_SOIL)
+                .func_240531_a_(Tags.Blocks.NETHERRACK)
+                .func_240531_a_(Tags.Blocks.DIRT)
+                .func_240532_a_(Blocks.FARMLAND);
     }
 
-    private void builder(Tag<Block> tag, IBlockProvider... items) {
-        getBuilder(tag).add(Arrays.stream(items).map(IBlockProvider::asBlock).toArray(Block[]::new));
+    private void builder(ITag.INamedTag<Block> tag, IBlockProvider... items) {
+        getBuilder(tag).func_240534_a_(Arrays.stream(items).map(IBlockProvider::asBlock).toArray(Block[]::new));
+    }
+
+    protected TagsProvider.Builder<Block> getBuilder(ITag.INamedTag<Block> p_240522_1_) {
+        return func_240522_a_(p_240522_1_);
     }
 }

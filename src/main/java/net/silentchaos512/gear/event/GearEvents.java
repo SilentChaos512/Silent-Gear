@@ -25,7 +25,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ChickenEntity;
@@ -36,6 +35,7 @@ import net.minecraft.entity.passive.fish.PufferfishEntity;
 import net.minecraft.entity.passive.fish.SalmonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.DyeColor;
@@ -49,10 +49,11 @@ import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ILightReader;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -142,7 +143,7 @@ public final class GearEvents {
                 if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, TraitConst.FLAMMABLE)) {
                     GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
                     if (GearHelper.isBroken(stack)) {
-                        event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getDisplayName()));
+                        event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getDisplayName()), Util.DUMMY_UUID);
                         event.getEntityLiving().sendBreakAnimation(slot);
                         stack.shrink(1);
                     }
@@ -185,13 +186,13 @@ public final class GearEvents {
 
             if (canHarvest) {
                 int level = TraitHelper.getTraitLevel(tool, TraitConst.LUSTROUS);
-                int light = getLightForLustrousTrait(player.world, player.getPosition());
+                int light = getLightForLustrousTrait(player.world, player.func_233580_cy_());
                 event.setNewSpeed(event.getOriginalSpeed() + getLustrousSpeedBonus(level, light));
             }
         }
     }
 
-    public static int getLightForLustrousTrait(ILightReader world, BlockPos pos) {
+    public static int getLightForLustrousTrait(IBlockDisplayReader world, BlockPos pos) {
         int blockLight = world.getLightFor(LightType.BLOCK, pos);
         int skyLight = world.getLightFor(LightType.SKY, pos);
         // Block light is less effective
@@ -372,12 +373,12 @@ public final class GearEvents {
             int magnetic = TraitHelper.getHighestLevelEitherHand(event.player, TraitConst.MAGNETIC);
             if (magnetic > 0) {
                 final int range = magnetic * 3 + 1;
-                Vec3d target = new Vec3d(event.player.getPosX(), event.player.getPosYHeight(0.5), event.player.getPosZ());
+                Vector3d target = new Vector3d(event.player.getPosX(), event.player.getPosYHeight(0.5), event.player.getPosZ());
 
                 AxisAlignedBB aabb = new AxisAlignedBB(event.player.getPosX() - range, event.player.getPosY() - range, event.player.getPosZ() - range, event.player.getPosX() + range + 1, event.player.getPosY() + range + 1, event.player.getPosZ() + range + 1);
                 for (ItemEntity entity : event.player.world.getEntitiesWithinAABB(ItemEntity.class, aabb, e -> e.getDistanceSq(event.player) < range * range)) {
                     // Accelerate to target point
-                    Vec3d vec = entity.getPositionVector().subtractReverse(target);
+                    Vector3d vec = entity.func_241205_ce_().subtract(target);
                     vec = vec.normalize().scale(0.03);
                     if (entity.getPosY() < target.y) {
                         double xzDistanceSq = (entity.getPosX() - target.x) * (entity.getPosX() - target.x) + (entity.getPosZ() - target.z) * (entity.getPosZ() - target.z);

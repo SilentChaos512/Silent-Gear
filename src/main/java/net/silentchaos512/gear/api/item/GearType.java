@@ -32,7 +32,7 @@ public final class GearType {
     public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL);
     public static final GearType EXCAVATOR = getOrCreate("excavator", SHOVEL);
     public static final GearType HAMMER = getOrCreate("hammer", PICKAXE);
-    public static final GearType LUMBER_AXE = getOrCreate("lumber_axe", AXE);
+    public static final GearType SAW = getOrCreate("saw", AXE);
     public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL);
     public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL);
     public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL);

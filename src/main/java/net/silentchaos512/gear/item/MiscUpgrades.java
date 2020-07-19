@@ -49,7 +49,7 @@ public enum MiscUpgrades implements IItemProvider {
         this.item = Lazy.of(() -> new Item(new Item.Properties().group(SilentGear.ITEM_GROUP)) {
             @Override
             public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-                tooltip.add(new TranslationTextComponent(getTranslationKey() + ".desc").applyTextStyle(TextFormatting.ITALIC));
+                tooltip.add(new TranslationTextComponent(getTranslationKey() + ".desc").func_240699_a_(TextFormatting.ITALIC));
             }
         });
         this.partId = SilentGear.getId("misc/" + name().toLowerCase(Locale.ROOT));

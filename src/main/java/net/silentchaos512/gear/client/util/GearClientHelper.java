@@ -3,10 +3,7 @@ package net.silentchaos512.gear.client.util;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -61,28 +58,28 @@ public final class GearClientHelper {
         ICoreItem item = (ICoreItem) stack.getItem();
 
         if (GearHelper.isBroken(stack)) {
-            tooltip.add(Math.min(1, tooltip.size()), misc("broken").applyTextStyle(TextFormatting.RED));
+            tooltip.add(Math.min(1, tooltip.size()), misc("broken").func_240699_a_(TextFormatting.RED));
         }
 
         if (GearData.isExampleGear(stack)) {
-            tooltip.add(Math.min(1, tooltip.size()), misc("exampleOutput1").applyTextStyle(TextFormatting.YELLOW));
-            tooltip.add(Math.min(2, tooltip.size()), misc("exampleOutput2").applyTextStyle(TextFormatting.YELLOW));
+            tooltip.add(Math.min(1, tooltip.size()), misc("exampleOutput1").func_240699_a_(TextFormatting.YELLOW));
+            tooltip.add(Math.min(2, tooltip.size()), misc("exampleOutput2").func_240699_a_(TextFormatting.YELLOW));
         }
 
         PartDataList constructionParts = GearData.getConstructionParts(stack);
 
         if (constructionParts.getMains().isEmpty()) {
-            tooltip.add(misc("invalidParts").applyTextStyle(TextFormatting.RED));
-            tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.RED));
+            tooltip.add(misc("invalidParts").func_240699_a_(TextFormatting.RED));
+            tooltip.add(misc("lockedStats").func_240699_a_(TextFormatting.RED));
         } else if (GearData.hasLockedStats(stack)) {
-            tooltip.add(misc("lockedStats").applyTextStyle(TextFormatting.YELLOW));
+            tooltip.add(misc("lockedStats").func_240699_a_(TextFormatting.YELLOW));
         } else {
             // TODO: Need to generify this
             if (item.requiresPartOfType(PartType.ROD) && constructionParts.getRods().isEmpty()) {
-                tooltip.add(misc("missingRod").applyTextStyle(TextFormatting.RED));
+                tooltip.add(misc("missingRod").func_240699_a_(TextFormatting.RED));
             }
             if (item.requiresPartOfType(PartType.BOWSTRING) && constructionParts.getPartsOfType(PartType.BOWSTRING).isEmpty()) {
-                tooltip.add(misc("missingBowstring").applyTextStyle(TextFormatting.RED));
+                tooltip.add(misc("missingBowstring").func_240699_a_(TextFormatting.RED));
             }
         }
 
@@ -99,21 +96,21 @@ public final class GearClientHelper {
         addStatsInfo(stack, tooltip, flag, item);
 
         // Tool construction
-        ITextComponent textConstruction = misc("tooltip.construction").applyTextStyle(TextFormatting.GOLD);
+        IFormattableTextComponent textConstruction = misc("tooltip.construction").func_240699_a_(TextFormatting.GOLD);
         if (flag.altDown && flag.showConstruction) {
             tooltip.add(textConstruction);
             Collections.reverse(constructionParts);
             tooltipListParts(stack, tooltip, constructionParts);
         } else if (flag.showConstruction) {
-            textConstruction.appendSibling(new StringTextComponent(" ")
-                    .applyTextStyle(TextFormatting.GRAY)
-                    .appendSibling(misc("tooltip.construction.key")));
+            textConstruction.func_230529_a_(new StringTextComponent(" ")
+                    .func_240699_a_(TextFormatting.GRAY)
+                    .func_230529_a_(misc("tooltip.construction.key")));
             tooltip.add(textConstruction);
         }
     }
 
     public static void addStatsInfo(ItemStack stack, List<ITextComponent> tooltip, GearTooltipFlag flag, ICoreItem item) {
-        ITextComponent textStats = misc("tooltip.stats").applyTextStyle(TextFormatting.GOLD);
+        IFormattableTextComponent textStats = misc("tooltip.stats").func_240699_a_(TextFormatting.GOLD);
         if (flag.ctrlDown && flag.showStats) {
             tooltip.add(textStats);
 
@@ -146,7 +143,7 @@ public final class GearClientHelper {
 
                 StatInstance inst = new StatInstance(statValue, StatInstance.Operation.AVG);
                 TextFormatting nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TextFormatting.DARK_GRAY;
-                ITextComponent textName = new StringTextComponent("- ").appendSibling(stat.getDisplayName().applyTextStyle(nameColor));
+                ITextComponent textName = new StringTextComponent("- ").func_240699_a_(nameColor).func_230529_a_(stat.getDisplayName());
                 ITextComponent textStat = new StringTextComponent(inst.formattedString(stat, stat.isDisplayAsInt() ? 0 : 2, false));
 
                 // Some stat-specific formatting...
@@ -163,7 +160,7 @@ public final class GearClientHelper {
                 tooltip.add(statText("displayFormat", textName, textStat));
             }
         } else if (flag.showStats) {
-            textStats.appendText(" ").appendSibling(misc("tooltip.stats.key").applyTextStyle(TextFormatting.GRAY));
+            textStats.func_240702_b_(" ").func_230529_a_(misc("tooltip.stats.key").func_240699_a_(TextFormatting.GRAY));
             tooltip.add(textStats);
         }
     }
@@ -175,7 +172,7 @@ public final class GearClientHelper {
                 .collect(Collectors.toList());
         int traitIndex = getTraitDisplayIndex(visibleTraits.size(), flag);
         if (traitIndex < 0) {
-            tooltip.add(misc("tooltip.traits").applyTextStyle(TextFormatting.GOLD));
+            tooltip.add(misc("tooltip.traits").func_240699_a_(TextFormatting.GOLD));
         }
         int i = 0;
         for (ITrait trait : visibleTraits) {
@@ -184,12 +181,12 @@ public final class GearClientHelper {
                 trait.addInformation(level, tooltip, flag, text -> {
                     if (traitIndex >= 0) {
                         return misc("tooltip.traits")
-                                .applyTextStyle(TextFormatting.GOLD)
-                                .appendSibling(new StringTextComponent(": ")
-                                        .applyTextStyle(TextFormatting.WHITE)
-                                        .appendSibling(text));
+                                .func_240699_a_(TextFormatting.GOLD)
+                                .func_230529_a_(new StringTextComponent(": ")
+                                        .func_240699_a_(TextFormatting.WHITE)
+                                        .func_230529_a_(text));
                     }
-                    return new StringTextComponent("- ").appendSibling(text);
+                    return new StringTextComponent("- ").func_230529_a_(text);
                 });
             }
             ++i;
@@ -202,24 +199,24 @@ public final class GearClientHelper {
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 
-    private static ITextComponent misc(String key, Object... formatArgs) {
+    private static IFormattableTextComponent misc(String key, Object... formatArgs) {
         return new TranslationTextComponent("misc.silentgear." + key, formatArgs);
     }
 
-    private static ITextComponent statText(String key, Object... formatArgs) {
+    private static IFormattableTextComponent statText(String key, Object... formatArgs) {
         return new TranslationTextComponent("stat.silentgear." + key, formatArgs);
     }
 
     public static void tooltipListParts(ItemStack gear, List<ITextComponent> tooltip, Collection<PartData> parts) {
         for (PartData part : parts) {
             if (part.getPart().isVisible()) {
-                tooltip.add(new StringTextComponent("- ").appendSibling(part.getDisplayName(gear)));
+                tooltip.add(new StringTextComponent("- ").func_230529_a_(part.getDisplayName(gear)));
 
                 // List materials for compound parts
                 if (part.getPart() instanceof CompoundPart) {
                     List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getCraftingItem());
                     for (MaterialInstance material : materials) {
-                        tooltip.add(new StringTextComponent("  - ").appendSibling(material.getDisplayNameWithGrade(part.getType())));
+                        tooltip.add(new StringTextComponent("  - ").func_230529_a_(material.getDisplayNameWithGrade(part.getType())));
                     }
                 }
             }

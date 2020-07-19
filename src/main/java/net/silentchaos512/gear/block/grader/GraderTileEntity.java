@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.grader;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -161,8 +162,8 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    public void read(CompoundNBT tags) {
-        super.read(tags);
+    public void read(BlockState state, CompoundNBT tags) {
+        super.read(state, tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 

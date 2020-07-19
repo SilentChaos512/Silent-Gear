@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.gamestages.data.IStageData;
+//import net.darkhax.gamestage.GameStageHelper;
+//import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resources.IFutureReloadListener;
 import net.minecraft.resources.IResource;
@@ -47,7 +47,7 @@ public class GameStagesCompat implements IResourceManagerReloadListener {
     }
 
     private static boolean hasAnyStage(PlayerEntity player, Collection<String> stages) {
-        if (stages.isEmpty()) {
+        /*if (stages.isEmpty()) {
             return true;
         }
 
@@ -60,7 +60,7 @@ public class GameStagesCompat implements IResourceManagerReloadListener {
             if (data.hasStage(stage)) {
                 return true;
             }
-        }
+        }*/
 
         return false;
     }

@@ -26,7 +26,6 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
@@ -115,9 +114,9 @@ public enum CraftingItems implements IItemProvider {
             }
         }
 
-        @Override
+        /*@Override
         public boolean isBeaconPayment(ItemStack stack) {
             return this.isIn(Tags.Items.INGOTS) || this == GLITTERY_DUST.asItem();
-        }
+        }*/
     }
 }

@@ -47,7 +47,7 @@ public interface IMaterialInstance {
 
     default ITextComponent getDisplayNameWithGrade(PartType partType) {
         ITextComponent gradeSuffix = TextUtil.translate("misc", "spaceBrackets", getGrade().getDisplayName());
-        return getDisplayName(partType, ItemStack.EMPTY).appendSibling(gradeSuffix);
+        return getDisplayName(partType, ItemStack.EMPTY).copyRaw().func_230529_a_(gradeSuffix);
     }
 
     default JsonObject serialize() {

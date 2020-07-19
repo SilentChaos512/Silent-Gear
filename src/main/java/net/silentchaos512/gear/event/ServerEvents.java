@@ -2,6 +2,7 @@ package net.silentchaos512.gear.event;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,8 +37,8 @@ public final class ServerEvents {
         SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
         Network.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 
-        TraitManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
-        MaterialManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
-        PartManager.getErrorMessages(playerMP).forEach(playerMP::sendMessage);
+        TraitManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.DUMMY_UUID));
+        MaterialManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.DUMMY_UUID));
+        PartManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.DUMMY_UUID));
     }
 }

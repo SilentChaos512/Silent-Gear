@@ -83,7 +83,7 @@ public final class SGearMaterialsCommand {
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
             StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\tTier\t");
-            ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getFormattedText()).append("\t"));
+            ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getString()).append("\t"));
             builder.append("Traits\tTexture\tColor\n");
             writer.write(builder.toString());
 
@@ -101,9 +101,9 @@ public final class SGearMaterialsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).applyTextStyle(TextFormatting.UNDERLINE).applyTextStyle(style ->
+            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).func_240699_a_(TextFormatting.UNDERLINE).func_240700_a_(style ->
                     style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            context.getSource().sendFeedback(new StringTextComponent("Wrote materials info to ").appendSibling(fileNameText), true);
+            context.getSource().sendFeedback(new StringTextComponent("Wrote materials info to ").func_230529_a_(fileNameText), true);
         }
 
         return 1;
@@ -128,7 +128,7 @@ public final class SGearMaterialsCommand {
 
         // Traits
         appendTsv(builder, material.getTraits(partType).stream()
-                .map(t -> t.getTrait().getDisplayName(t.getLevel()).getFormattedText())
+                .map(t -> t.getTrait().getDisplayName(t.getLevel()).getString())
                 .collect(Collectors.joining(", ")));
 
         // Display

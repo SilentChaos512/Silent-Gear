@@ -169,7 +169,11 @@ public class CompoundPartItem extends Item {
             tooltip.add(SynergyUtils.getDisplayText(synergy));
         }
         getMaterials(stack).stream()
-                .map(mat -> new StringTextComponent("- ").appendSibling(mat.getDisplayNameWithGrade(this.partType).applyTextStyle(TextFormatting.ITALIC)))
+                .map(mat -> {
+                    ITextComponent gradeText = mat.getDisplayNameWithGrade(this.partType);
+                    gradeText.getStyle().setFormatting(TextFormatting.ITALIC);
+                    return new StringTextComponent("- ").func_230529_a_(gradeText);
+                })
                 .forEach(tooltip::add);
     }
 }
