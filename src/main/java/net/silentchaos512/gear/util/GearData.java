@@ -323,6 +323,17 @@ public final class GearData {
     }
 
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<ITrait, Integer> traits) {
+        if (parts.stream().allMatch(part -> part.getPart() instanceof CompoundPart)) {
+            // This must be a new gear item
+            // Just average the synergy of component parts
+            float total = 0f;
+            for (PartData part : parts) {
+                total += SynergyUtils.getSynergy(part.getType(), CompoundPart.getMaterials(part), part.getTraits());
+            }
+            return total / parts.size();
+        }
+
+        // Old gear item
         // First, we add a bonus for the number of unique main parts
         double synergy = getBaseSynergy(uniqueParts);
 
