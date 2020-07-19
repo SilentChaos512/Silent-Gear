@@ -11,30 +11,26 @@
     "translate": "material.silentgear.example"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_lc"
-        }
-      ]
-    },
-    "rod/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:rod_generic_lc"
-        }
-      ]
-    },
-    "bowstring/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:bowstring_string"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_lc"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc"
+      }
+    ],
+    "bowstring/all": [
+      {
+        "texture": "silentgear:bowstring_string"
+      }
+    ]
   },
   "stats": {
     "main": {

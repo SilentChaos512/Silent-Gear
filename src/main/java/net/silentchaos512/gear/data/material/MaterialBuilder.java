@@ -27,7 +27,6 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.parts.PartTextureType;
-import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -121,33 +120,25 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder display(PartType partType, PartTextureType texture, int color) {
-        return display(partType, "all", texture, color, Color.VALUE_WHITE);
-    }
-
-    public MaterialBuilder display(PartType partType, PartTextureType texture, int color, int armorColor) {
-        return display(partType, "all", texture, color, armorColor);
+        display(partType, "all", texture, color);
+        if (partType == PartType.MAIN) {
+            display(partType, "armor", texture, color);
+        }
+        return this;
     }
 
     public MaterialBuilder display(PartType partType, String gearType, PartTextureType texture, int color) {
-        return display(partType, gearType, texture, color, Color.VALUE_WHITE);
-    }
-
-    public MaterialBuilder display(PartType partType, String gearType, PartTextureType texture, int color, int armorColor) {
-        MaterialDisplay materialDisplay = new MaterialDisplay(partType, texture, color, armorColor);
+        MaterialDisplay materialDisplay = new MaterialDisplay(partType, texture, color);
         this.display.put(SilentGear.shortenId(partType.getName()) + "/" + gearType, materialDisplay);
         return this;
     }
 
     public MaterialBuilder display(PartType partType, MaterialLayer... layers) {
-        return display(partType, "all", Color.VALUE_WHITE, layers);
+        return display(partType, "all", layers);
     }
 
-    public MaterialBuilder display(PartType partType, int armorColor, MaterialLayer... layers) {
-        return display(partType, "all", armorColor, layers);
-    }
-
-    public MaterialBuilder display(PartType partType, String gearType, int armorColor, MaterialLayer... layers) {
-        MaterialDisplay materialDisplay = new MaterialDisplay(armorColor, layers);
+    public MaterialBuilder display(PartType partType, String gearType, MaterialLayer... layers) {
+        MaterialDisplay materialDisplay = new MaterialDisplay(layers);
         this.display.put(SilentGear.shortenId(partType.getName()) + "/" + gearType, materialDisplay);
         return this;
     }

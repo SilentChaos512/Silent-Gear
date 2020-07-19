@@ -4,7 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Major overhaul of item models. Unlimited layers, defined in material files. Can "stack" multiple layers in the material file.
 ### Fixed
+- Armor models missing [#170]
 - Missing blueprint flavor text (shears, slingshot, crossbow)
 - Blueprint flavor text lang key not using correct namespace
 

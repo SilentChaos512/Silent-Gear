@@ -9,14 +9,11 @@
     "translate": "material.silentgear.wool.white"
   },
   "display": {
-    "grip/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:grip_wool",
-          "color": "#E9ECEC"
-        }
-      ]
-    }
+    "grip/all": [
+      {
+        "texture": "silentgear:grip_wool",
+        "color": "#E9ECEC"
+      }
+    ]
   }
 }

@@ -13,24 +13,24 @@
     "translate": "material.silentgear.leather"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_lc",
-          "color": "#C65C35"
-        }
-      ]
-    },
-    "grip/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:grip_wool",
-          "color": "#C65C35"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#C65C35"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#C65C35"
+      }
+    ],
+    "grip/all": [
+      {
+        "texture": "silentgear:grip_wool",
+        "color": "#C65C35"
+      }
+    ]
   },
   "stats": {
     "main": {

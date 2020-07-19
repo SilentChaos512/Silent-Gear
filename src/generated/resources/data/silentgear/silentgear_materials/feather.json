@@ -13,14 +13,11 @@
     "translate": "material.silentgear.feather"
   },
   "display": {
-    "fletching/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:fletching_generic"
-        }
-      ]
-    }
+    "fletching/all": [
+      {
+        "texture": "silentgear:fletching_generic"
+      }
+    ]
   },
   "stats": {
     "fletching": {}

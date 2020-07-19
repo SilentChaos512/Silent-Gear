@@ -193,11 +193,6 @@ public class StatInstance {
         return json;
     }
 
-    @Deprecated
-    public static StatInstance read(IGearPart part, ItemStat stat, JsonElement json) {
-        return read(stat, part.getDefaultStatOperation(stat), json);
-    }
-
     public static StatInstance read(ItemStat stat, JsonElement json) {
         return read(stat, stat.getDefaultOperation(), json);
     }

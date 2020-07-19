@@ -83,7 +83,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     @Override
     public int getColor(PartType partType, ItemStack gear) {
         IMaterial material = getMaterial();
-        return material != null ? material.getColor(gear, partType) : Color.VALUE_WHITE;
+        return material != null ? material.getPrimaryColor(gear, partType) : Color.VALUE_WHITE;
     }
 
     @Override

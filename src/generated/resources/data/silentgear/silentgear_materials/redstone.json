@@ -13,15 +13,12 @@
     "translate": "material.silentgear.redstone"
   },
   "display": {
-    "tip/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:tip_iron",
-          "color": "#BB0000"
-        }
-      ]
-    }
+    "tip/all": [
+      {
+        "texture": "silentgear:tip_iron",
+        "color": "#BB0000"
+      }
+    ]
   },
   "stats": {
     "tip": {

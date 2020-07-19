@@ -121,7 +121,7 @@ public class SimplePartAdapterMaterial implements IMaterial {
     }
 
     @Override
-    public int getColor(ItemStack gear, PartType partType) {
+    public int getPrimaryColor(ItemStack gear, PartType partType) {
         return getPart(partType)
                 .map(p -> PartData.of(p).getColor(gear, 0))
                 .orElse(Color.VALUE_WHITE);

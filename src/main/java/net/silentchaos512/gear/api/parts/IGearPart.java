@@ -61,9 +61,6 @@ public interface IGearPart {
 
     List<PartTraitInstance> getTraits(ItemStack gear, PartData part);
 
-    @Deprecated
-    StatInstance.Operation getDefaultStatOperation(ItemStat stat);
-
     float getRepairAmount(RepairContext context);
 
     default float computeStatValue(ItemStat stat) {
@@ -151,6 +148,10 @@ public interface IGearPart {
 
     int getColor(PartData part, ItemStack gear, int animationFrame);
 
+    default int getArmorColor(PartData part, ItemStack gear) {
+        return part.getPart().getDisplayProperties(part, gear, 0).getArmorColor();
+    }
+
     ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
 
     default ITextComponent getMaterialName(@Nullable PartData part, ItemStack gear) {
@@ -165,10 +166,6 @@ public interface IGearPart {
     default String getModelKey(PartData part) {
         return SilentGear.shortenId(this.getId());
     }
-
-    // May be removed or changed?
-    @Deprecated
-    String getModelIndex(PartData part, int animationFrame);
 
     @OnlyIn(Dist.CLIENT)
     void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag);

@@ -205,11 +205,6 @@ public final class PartData implements IPartData {
         return part.getModelKey(this);
     }
 
-    @Deprecated // May be changed or removed?
-    public String getModelIndex(int animationFrame) {
-        return part.getModelIndex(this, animationFrame);
-    }
-
     public int getColor(ItemStack gear, int animationFrame) {
         return part.getColor(this, gear, animationFrame);
     }
@@ -220,7 +215,7 @@ public final class PartData implements IPartData {
     }
 
     public int getArmorColor(ItemStack gear) {
-        return part.getDisplayProperties(this, gear, 0).getArmorColor();
+        return part.getArmorColor(this, gear);
     }
 
     @Override

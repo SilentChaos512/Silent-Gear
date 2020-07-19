@@ -154,7 +154,7 @@ public final class MaterialInstance implements IMaterialInstance {
 
     @Override
     public int getColor(PartType partType, ItemStack gear) {
-        return material.getColor(gear, partType);
+        return material.getPrimaryColor(gear, partType);
     }
 
     @Override

@@ -13,27 +13,21 @@
     "translate": "material.silentgear.sinew"
   },
   "display": {
-    "binding/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:binding_generic",
-          "color": "#D8995B"
-        }
-      ]
-    },
-    "bowstring/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:bowstring_string",
-          "color": "#7E6962"
-        },
-        {
-          "texture": "silentgear:arrow"
-        }
-      ]
-    }
+    "binding/all": [
+      {
+        "texture": "silentgear:binding_generic",
+        "color": "#D8995B"
+      }
+    ],
+    "bowstring/all": [
+      {
+        "texture": "silentgear:bowstring_string",
+        "color": "#7E6962"
+      },
+      {
+        "texture": "silentgear:arrow"
+      }
+    ]
   },
   "stats": {
     "binding": {

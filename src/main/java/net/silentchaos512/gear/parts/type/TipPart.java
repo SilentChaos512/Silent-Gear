@@ -6,11 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.*;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.parts.AbstractGearPart;
-import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 
@@ -58,10 +54,5 @@ public final class TipPart extends AbstractGearPart implements IUpgradePart {
     @Override
     public IPartSerializer<?> getSerializer() {
         return PartType.TIP.getSerializer();
-    }
-
-    @Override
-    public StatInstance.Operation getDefaultStatOperation(ItemStat stat) {
-        return stat == ItemStats.HARVEST_LEVEL ? StatInstance.Operation.MAX : StatInstance.Operation.ADD;
     }
 }

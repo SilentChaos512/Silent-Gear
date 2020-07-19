@@ -9,23 +9,23 @@
     "translate": "material.silentgear.terracotta.magenta"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_lc",
-          "color": "#95576C"
-        }
-      ]
-    },
-    "rod/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:rod_generic_lc",
-          "color": "#95576C"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#95576C"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#95576C"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#95576C"
+      }
+    ]
   }
 }

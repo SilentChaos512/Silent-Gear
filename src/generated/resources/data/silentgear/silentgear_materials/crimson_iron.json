@@ -13,36 +13,36 @@
     "translate": "material.silentgear.crimson_iron"
   },
   "display": {
-    "main/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:main_generic_hc",
-          "color": "#FF6189"
-        },
-        {
-          "texture": "silentgear:_highlight"
-        }
-      ]
-    },
-    "rod/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:rod_generic_lc",
-          "color": "#FF6189"
-        }
-      ]
-    },
-    "tip/all": {
-      "armor_color": "#FFFFFF",
-      "layers": [
-        {
-          "texture": "silentgear:tip_iron",
-          "color": "#FF6189"
-        }
-      ]
-    }
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#FF6189"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#FF6189"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#FF6189"
+      }
+    ],
+    "tip/all": [
+      {
+        "texture": "silentgear:tip_iron",
+        "color": "#FF6189"
+      }
+    ]
   },
   "stats": {
     "main": {

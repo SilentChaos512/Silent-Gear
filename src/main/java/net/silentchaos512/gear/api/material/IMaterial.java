@@ -68,8 +68,7 @@ public interface IMaterial {
 
     boolean isCraftingAllowed(PartType partType, GearType gearType);
 
-    @Deprecated
-    int getColor(ItemStack gear, PartType partType);
+    int getPrimaryColor(ItemStack gear, PartType partType);
 
     @Deprecated
     PartTextureType getTexture(PartType partType, ItemStack gear);

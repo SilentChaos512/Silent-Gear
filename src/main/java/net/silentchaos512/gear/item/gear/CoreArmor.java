@@ -11,18 +11,22 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -67,7 +71,6 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     //region Stats and attributes
-
 
     @Override
     public ItemStat getDurabilityStat() {
@@ -186,6 +189,23 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         if ("overlay".equals(type))
             return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
 
+        // New material-based armor
+        MaterialInstance material = GearData.getPrimaryMainMaterial(stack);
+        if (material != null) {
+            IMaterialDisplay display = material.getMaterial().getMaterialDisplay(stack, PartType.MAIN);
+            List<MaterialLayer> layers = display.getLayers();
+            if (!layers.isEmpty()) {
+                MaterialLayer materialLayer = layers.get(0);
+                ResourceLocation tex = materialLayer.getTextureId();
+                return tex.getNamespace() + ":textures/models/armor/"
+                        + tex.getPath()
+                        + "_layer_" + layer
+                        + (type != null ? "_" + type : "")
+                        + ".png";
+            }
+        }
+
+        // Fallback to older methods
         PartData part = GearData.getPrimaryRenderPartFast(stack);
         if (part == null) {
             part = PartData.ofNullable(PartType.MAIN.getFallbackPart());

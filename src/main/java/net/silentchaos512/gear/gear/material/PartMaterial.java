@@ -158,8 +158,8 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public int getColor(ItemStack gear, PartType partType) {
-        return getMaterialDisplay(gear, partType).getColor();
+    public int getPrimaryColor(ItemStack gear, PartType partType) {
+        return getMaterialDisplay(gear, partType).getPrimaryColor();
     }
 
     @Override
@@ -307,11 +307,7 @@ public final class PartMaterial implements IMaterial {
                 for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
                     String key = entry.getKey();
                     JsonElement value = entry.getValue();
-
-                    if (value.isJsonObject()) {
-                        JsonObject jsonObject = value.getAsJsonObject();
-                        ret.display.put(key, MaterialDisplay.deserialize(jsonObject, defaultProps));
-                    }
+                    ret.display.put(key, MaterialDisplay.deserialize(value, defaultProps));
                 }
             } else {
                 throw new JsonSyntaxException("Expected 'display' to be an object");
