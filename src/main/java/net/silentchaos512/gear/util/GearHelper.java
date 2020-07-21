@@ -323,13 +323,7 @@ public final class GearHelper {
         if (isBroken(stack) || !stack.getItem().getToolTypes(stack).contains(toolClass))
             return -1;
 
-        final int level = GearData.getStatInt(stack, ItemStats.HARVEST_LEVEL);
-        if (state == null) return level;
-
-        final boolean effectiveOnMaterial = effectiveMaterials == null || effectiveMaterials.contains(state.getMaterial());
-        if (effectiveOnMaterial && state.getBlock().getHarvestLevel(state) <= level)
-            return level;
-        else return -1;
+        return GearData.getStatInt(stack, ItemStats.HARVEST_LEVEL);
     }
 
     public static void setHarvestLevel(ICoreItem item, String toolClass, int level, Set<String> mutableSet) {
