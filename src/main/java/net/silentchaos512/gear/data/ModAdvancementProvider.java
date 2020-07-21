@@ -226,7 +226,7 @@ public class ModAdvancementProvider implements IDataProvider {
 
             Advancement highDurability = Advancement.Builder.builder()
                     .withParent(materialGrader)
-                    .withDisplay(CraftingItems.EMERALD_TIPPED_UPGRADE, title("high_durability"), description("high_durability"), null, FrameType.TASK, true, true, false)
+                    .withDisplay(ModItems.TIP, title("high_durability"), description("high_durability"), null, FrameType.TASK, true, true, false)
                     .withCriterion("durability", genericInt(GearEvents.MAX_DURABILITY, 16_000))
                     .register(consumer, id("high_durability"));
             Advancement graderCatalyst2 = Advancement.Builder.builder()

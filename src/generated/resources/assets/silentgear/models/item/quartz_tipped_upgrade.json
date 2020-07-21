@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/upgrade_base",
-    "layer1": "silentgear:item/upgrade_quartz"
-  }
-}

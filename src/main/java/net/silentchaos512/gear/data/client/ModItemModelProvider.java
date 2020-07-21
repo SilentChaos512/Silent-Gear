@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.data.client;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Items;
@@ -22,7 +21,6 @@ import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
@@ -35,17 +33,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         return "Silent Gear - Item Models";
     }
 
-    private static final Collection<CraftingItems> TIP_UPGRADES = ImmutableList.of(
-            CraftingItems.IRON_TIPPED_UPGRADE,
-            CraftingItems.GOLD_TIPPED_UPGRADE,
-            CraftingItems.DIAMOND_TIPPED_UPGRADE,
-            CraftingItems.EMERALD_TIPPED_UPGRADE,
-            CraftingItems.REDSTONE_COATED_UPGRADE,
-            CraftingItems.GLOWSTONE_COATED_UPGRADE,
-            CraftingItems.LAPIS_COATED_UPGRADE,
-            CraftingItems.QUARTZ_TIPPED_UPGRADE
-    );
-
     @Override
     protected void registerModels() {
         // Blocks
@@ -56,15 +43,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModelFile itemGenerated = getExistingFile(new ResourceLocation("item/generated"));
 
         for (CraftingItems item : CraftingItems.values()) {
-            if (!TIP_UPGRADES.contains(item)) {
                 builder(item, itemGenerated, "item/" + item.getName());
-            } else {
-                String upgradeType = item.getName().substring(0, item.getName().indexOf('_'));
-                getBuilder(item.getName())
-                        .parent(itemGenerated)
-                        .texture("layer0", "item/upgrade_base")
-                        .texture("layer1", "item/upgrade_" + upgradeType);
-            }
         }
 
         // Blueprints and templates

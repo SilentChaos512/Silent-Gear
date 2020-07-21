@@ -112,6 +112,7 @@ public final class MaterialInstance implements IMaterialInstance {
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
             // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
             float bonus = 1f + grade.bonusPercent / 100f;
+            // FIXME: Not firing the event...
             return mods.stream().map(m -> new StatInstance(m.getValue() * bonus, m.getOp())).collect(Collectors.toList());
         }
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);

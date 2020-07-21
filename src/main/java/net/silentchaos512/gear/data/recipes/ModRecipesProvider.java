@@ -440,12 +440,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("###")
                 .addCriterion("has_item", hasItem(Tags.Items.GEMS_DIAMOND))
                 .build(consumer, SilentGear.getId("diamond_from_shards"));
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.DIAMOND_TIPPED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Tags.Items.GEMS_DIAMOND)
-                .addCriterion("has_item", hasItem(Tags.Items.GEMS_DIAMOND))
-                .build(consumer);
         CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(CraftingItems.SINEW), CraftingItems.DRIED_SINEW, 0.35f, 200)
                 .addCriterion("has_item", hasItem(CraftingItems.SINEW))
                 .build(consumer);
@@ -461,25 +455,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("###")
                 .addCriterion("has_item", hasItem(Tags.Items.GEMS_EMERALD))
                 .build(consumer, SilentGear.getId("emerald_from_shards"));
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.EMERALD_TIPPED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Tags.Items.GEMS_EMERALD)
-                .addCriterion("has_item", hasItem(Tags.Items.GEMS_EMERALD))
-                .build(consumer);
         // F
-        ShapedRecipeBuilder.shapedRecipe(CraftingItems.FLAX_BOWSTRING)
-                .key('/', CraftingItems.FLAX_STRING)
-                .patternLine("/")
-                .patternLine("/")
-                .patternLine("/")
-                .addCriterion("has_item", hasItem(CraftingItems.FLAX_FIBER))
-                .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.FLAX_BOWSTRING)
-                .addIngredient(ModTags.Items.BLUEPRINTS_BOWSTRING)
-                .addIngredient(CraftingItems.FLAX_STRING, 3)
-                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_BOWSTRING))
-                .build(consumer, SilentGear.getId("flax_bowstring2"));
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.FLAX_STRING)
                 .addIngredient(CraftingItems.FLAX_FIBER, 2)
                 .addCriterion("has_item", hasItem(CraftingItems.FLAX_FIBER))
@@ -494,18 +470,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("#b#")
                 .patternLine("o/o")
                 .addCriterion("has_item", hasItem(ModItems.NETHER_BANANA))
-                .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.GLOWSTONE_COATED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Ingredient.fromTag(Tags.Items.DUSTS_GLOWSTONE), 4)
-                .addCriterion("has_item", hasItem(Tags.Items.DUSTS_GLOWSTONE))
-                .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.GOLD_TIPPED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Tags.Items.INGOTS_GOLD)
-                .addCriterion("has_item", hasItem(Tags.Items.INGOTS_GOLD))
                 .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(ModItems.GOLDEN_NETHER_BANANA)
                 .key('g', Tags.Items.INGOTS_GOLD)
@@ -527,19 +491,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON), 2)
                 .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_ROD))
                 .build(consumer, SilentGear.getId("iron_rod2"));
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.IRON_TIPPED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Tags.Items.INGOTS_IRON)
-                .addCriterion("has_item", hasItem(Tags.Items.INGOTS_IRON))
-                .build(consumer);
         // L
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.LAPIS_COATED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Ingredient.fromTag(Tags.Items.GEMS_LAPIS), 4)
-                .addCriterion("has_item", hasItem(Tags.Items.GEMS_LAPIS))
-                .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(Items.LEATHER)
                 .key('#', CraftingItems.LEATHER_SCRAP)
                 .patternLine("###")
@@ -622,37 +574,11 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(ModBlocks.NETHERWOOD_PLANKS, 2)
                 .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_LOG))
                 .build(consumer, SilentGear.getId("netherwood_stick2"));
-        // P
-        ShapedRecipeBuilder.shapedRecipe(CraftingItems.PLAIN_BOWSTRING)
-                .key('/', Items.STRING)
-                .patternLine("/")
-                .patternLine("/")
-                .patternLine("/")
-                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_BOWSTRING))
-                .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.PLAIN_BOWSTRING)
-                .addIngredient(ModTags.Items.BLUEPRINTS_BOWSTRING)
-                .addIngredient(Items.STRING, 3)
-                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_BOWSTRING))
-                .build(consumer, SilentGear.getId("plain_bowstring2"));
-        // Q
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.QUARTZ_TIPPED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Ingredient.fromTag(Tags.Items.GEMS_QUARTZ), 4)
-                .addCriterion("has_item", hasItem(Tags.Items.GEMS_QUARTZ))
-                .build(consumer);
         // R
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.RED_CARD_UPGRADE, 4)
                 .addIngredient(CraftingItems.UPGRADE_BASE)
                 .addIngredient(Tags.Items.DYES_RED)
                 .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
-                .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.REDSTONE_COATED_UPGRADE)
-                .setGroup("silentgear:tip_upgrades")
-                .addIngredient(CraftingItems.UPGRADE_BASE)
-                .addIngredient(Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE), 4)
-                .addCriterion("has_item", hasItem(Tags.Items.DUSTS_REDSTONE))
                 .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ROUGH_ROD, 2)
                 .key('/', Tags.Items.RODS_WOODEN)
@@ -676,18 +602,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("/#/")
                 .addCriterion("has_item", hasItem(ModTags.Items.INGOTS_CRIMSON_IRON))
                 .build(consumer);
-        ShapedRecipeBuilder.shapedRecipe(CraftingItems.SINEW_BOWSTRING)
-                .key('/', CraftingItems.SINEW_FIBER)
-                .patternLine("/")
-                .patternLine("/")
-                .patternLine("/")
-                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_BOWSTRING))
-                .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.SINEW_BOWSTRING)
-                .addIngredient(ModTags.Items.BLUEPRINTS_BOWSTRING)
-                .addIngredient(CraftingItems.SINEW_FIBER, 3)
-                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_BOWSTRING))
-                .build(consumer, SilentGear.getId("sinew_bowstring2"));
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.SINEW_FIBER, 3)
                 .addIngredient(CraftingItems.DRIED_SINEW)
                 .addCriterion("has_item", hasItem(CraftingItems.SINEW))

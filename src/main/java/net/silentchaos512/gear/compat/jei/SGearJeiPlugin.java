@@ -21,11 +21,9 @@ import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.CustomTippedUpgrade;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.Collection;
@@ -117,11 +115,6 @@ public class SGearJeiPlugin implements IModPlugin {
 //                    return part != null ? id + "|" + part.getPart().getId() : id;
 //                })
 //        );
-
-        reg.registerSubtypeInterpreter(ModItems.CUSTOM_TIPPED_UPGRADE.get(), stack -> {
-            ResourceLocation partId = CustomTippedUpgrade.getPartId(stack);
-            return partId != null ? partId.toString() : "null";
-        });
 
         initFailed = false;
     }

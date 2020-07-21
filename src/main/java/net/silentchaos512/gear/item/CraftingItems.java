@@ -63,19 +63,6 @@ public enum CraftingItems implements IItemProvider {
     STONE_ROD,
     IRON_ROD, // TODO: Remove
     NETHERWOOD_STICK, // TODO: Remove?
-    // Tip Upgrades // TODO: Remove all
-    IRON_TIPPED_UPGRADE,
-    GOLD_TIPPED_UPGRADE,
-    DIAMOND_TIPPED_UPGRADE,
-    EMERALD_TIPPED_UPGRADE,
-    REDSTONE_COATED_UPGRADE,
-    GLOWSTONE_COATED_UPGRADE,
-    LAPIS_COATED_UPGRADE,
-    QUARTZ_TIPPED_UPGRADE,
-    // Bowstrings // TODO: Remove all
-    PLAIN_BOWSTRING,
-    FLAX_BOWSTRING,
-    SINEW_BOWSTRING,
     // Misc Upgrades
     SPOON_UPGRADE,
     RED_CARD_UPGRADE;

@@ -157,7 +157,6 @@ public final class ModItems {
         CraftingItems.register(Registration.ITEMS);
     }
 
-    public static final ItemRegistryObject<CustomTippedUpgrade> CUSTOM_TIPPED_UPGRADE = register("custom_tipped_upgrade", CustomTippedUpgrade::new);
     public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
     public static final ItemRegistryObject<BlockNamedItem> FLAX_SEEDS = register("flax_seeds", () ->

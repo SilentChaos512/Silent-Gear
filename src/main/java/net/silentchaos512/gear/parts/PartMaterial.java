@@ -13,11 +13,11 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartMaterial;
-import net.silentchaos512.gear.crafting.ingredient.CustomTippedUpgradeIngredient;
 
 /**
  * Represents the items that an {@link IGearPart} can be crafted from.
  */
+@Deprecated
 public class PartMaterial implements IPartMaterial {
     private Ingredient normal = Ingredient.EMPTY;
     private Ingredient small = Ingredient.EMPTY;
@@ -42,9 +42,7 @@ public class PartMaterial implements IPartMaterial {
     public static PartMaterial deserialize(ResourceLocation partId, JsonObject json) {
         PartMaterial material = new PartMaterial();
 
-        if (json.has("custom_tipped_upgrade"))
-            material.normal = CustomTippedUpgradeIngredient.of(partId);
-        else if (json.has("normal"))
+        if (json.has("normal"))
             material.normal = deserialize(partId, json.get("normal"));
         else if (json.has("uncraftable"))
             material.normal = Ingredient.EMPTY;
