@@ -378,7 +378,7 @@ public final class GearEvents {
                 AxisAlignedBB aabb = new AxisAlignedBB(event.player.getPosX() - range, event.player.getPosY() - range, event.player.getPosZ() - range, event.player.getPosX() + range + 1, event.player.getPosY() + range + 1, event.player.getPosZ() + range + 1);
                 for (ItemEntity entity : event.player.world.getEntitiesWithinAABB(ItemEntity.class, aabb, e -> e.getDistanceSq(event.player) < range * range)) {
                     // Accelerate to target point
-                    Vector3d vec = entity.func_241205_ce_().subtract(target);
+                    Vector3d vec = entity.func_230268_c_(event.player).subtractReverse(target);
                     vec = vec.normalize().scale(0.03);
                     if (entity.getPosY() < target.y) {
                         double xzDistanceSq = (entity.getPosX() - target.x) * (entity.getPosX() - target.x) + (entity.getPosZ() - target.z) * (entity.getPosZ() - target.z);
