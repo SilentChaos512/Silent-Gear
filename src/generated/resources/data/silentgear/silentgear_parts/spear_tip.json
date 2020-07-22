@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:main",
   "part_position": "HEAD",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:spear_tip"
-    }
+  "crafting_item": {
+    "item": "silentgear:spear_tip"
   },
   "name": {
     "translate": "part.silentgear.spear_tip"

@@ -1,38 +1,36 @@
 {
-    "type": "silentgear:misc_upgrade",
-    "stats": {
-        "durability": {
-            "mul1": 0.2
-        },
-        "rarity": 10
+  "type": "silentgear:misc_upgrade",
+  "stats": {
+    "durability": {
+      "mul1": 0.2
     },
-    "traits": [
+    "rarity": 10
+  },
+  "traits": [
+    {
+      "name": "silentgear:spoon",
+      "level": 1,
+      "conditions": [
         {
-            "name": "silentgear:spoon",
-            "level": 1,
-            "conditions": [
-                {
-                    "type": "silentgear:gear_type",
-                    "gear_type": "pickaxe"
-                }
-            ]
+          "type": "silentgear:gear_type",
+          "gear_type": "pickaxe"
         }
-    ],
-    "crafting_items": {
-        "normal": {
-            "item": "silentgear:spoon_upgrade"
-        }
-    },
-    "name": {
-        "translate": "part.silentgear.misc.spoon"
-    },
-    "textures": {
-        "all": {
-            "texture_suffix": "",
-            "texture_color": "white"
-        }
-    },
-    "availability": {
-        "gear_blacklist": []
+      ]
     }
+  ],
+  "crafting_item": {
+    "item": "silentgear:spoon_upgrade"
+  },
+  "name": {
+    "translate": "part.silentgear.misc.spoon"
+  },
+  "textures": {
+    "all": {
+      "texture_suffix": "",
+      "texture_color": "white"
+    }
+  },
+  "availability": {
+    "gear_blacklist": []
+  }
 }

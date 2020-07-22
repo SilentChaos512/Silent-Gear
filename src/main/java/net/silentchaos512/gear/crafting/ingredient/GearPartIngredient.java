@@ -74,7 +74,7 @@ public final class GearPartIngredient extends Ingredient implements IPartIngredi
         Collection<IGearPart> parts = PartManager.getPartsOfType(this.type);
         if (!parts.isEmpty()) {
             return parts.stream()
-                    .flatMap(part -> Stream.of(part.getMaterials().getNormal().getMatchingStacks()))
+                    .flatMap(part -> Stream.of(part.getIngredient().getMatchingStacks()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
         }

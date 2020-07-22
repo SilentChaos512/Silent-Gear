@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -40,7 +41,7 @@ public abstract class AbstractGearPart implements IGearPart {
     // TODO: Can we track all data packs that override the file? Maybe a Set?
     String packName = "UNKNOWN PACK";
     // Crafting items
-    PartMaterial materials = new PartMaterial();
+    Ingredient ingredient = Ingredient.EMPTY;
     // Availability
     boolean visible = true;
     int tier = -1;
@@ -74,8 +75,8 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public IPartMaterial getMaterials() {
-        return materials;
+    public Ingredient getIngredient() {
+        return ingredient;
     }
 
     @Override
@@ -92,8 +93,8 @@ public abstract class AbstractGearPart implements IGearPart {
         }
     }
 
-    public void updateCraftingItems(PartMaterial material) {
-        this.materials = material;
+    public void updateCraftingItems(Ingredient ingredient) {
+        this.ingredient = ingredient;
     }
 
     @Override
@@ -277,11 +278,11 @@ public abstract class AbstractGearPart implements IGearPart {
             }
 
             // Crafting Items
-            JsonElement craftingItems = json.get("crafting_items");
-            if (craftingItems != null && craftingItems.isJsonObject()) {
-                part.materials = PartMaterial.deserialize(id, craftingItems.getAsJsonObject());
+            JsonElement craftingItem = json.get("crafting_item");
+            if (craftingItem != null) {
+                part.ingredient = Ingredient.deserialize(craftingItem);
             } else if (failOnMissingElement) {
-                throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
+                throw new JsonSyntaxException("Missing 'crafting_item'");
             }
 
             // Name
@@ -370,7 +371,7 @@ public abstract class AbstractGearPart implements IGearPart {
             part.displayName = buffer.readTextComponent();
             if (buffer.readBoolean())
                 part.namePrefix = buffer.readTextComponent();
-            part.materials = PartMaterial.read(buffer);
+            part.ingredient = Ingredient.read(buffer);
             part.tier = buffer.readByte();
             part.visible = buffer.readBoolean();
 
@@ -402,7 +403,7 @@ public abstract class AbstractGearPart implements IGearPart {
             buffer.writeBoolean(part.namePrefix != null);
             if (part.namePrefix != null)
                 buffer.writeTextComponent(part.namePrefix);
-            part.materials.write(buffer);
+            part.ingredient.write(buffer);
             buffer.writeByte(part.getTier());
             buffer.writeBoolean(part.visible);
 

@@ -156,7 +156,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
         // We can't reliable keep an IItemProvider -> IGearPart map anymore
         for (IGearPart part : getValues()) {
-            if (part.getMaterials().test(stack)) {
+            if (part.getIngredient().test(stack)) {
                 return part;
             }
         }

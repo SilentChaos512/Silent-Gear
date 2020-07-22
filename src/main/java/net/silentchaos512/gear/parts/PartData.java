@@ -22,19 +22,18 @@ public final class PartData implements IPartData {
     public static final String NBT_ID = "ID";
 
     private final IGearPart part;
-    @Deprecated
-    private final MaterialGrade grade;
     private final ItemStack craftingItem;
 
-    private PartData(IGearPart part, MaterialGrade grade) {
-        this(part, grade, part.getMaterials().getDisplayItem(0));
+    private PartData(IGearPart part) {
+        this(part, ItemStack.EMPTY);
     }
 
-    private PartData(IGearPart part, MaterialGrade grade, ItemStack craftingItem) {
+    private PartData(IGearPart part, ItemStack craftingItem) {
         this.part = part;
-        this.grade = grade;
         this.craftingItem = craftingItem.copy();
-        this.craftingItem.setCount(1);
+        if (!this.craftingItem.isEmpty()) {
+            this.craftingItem.setCount(1);
+        }
     }
 
     public static PartData of(IGearPart part) {
@@ -43,23 +42,23 @@ public final class PartData implements IPartData {
             return CACHE_UNGRADED_PARTS.get(name);
         }
 
-        PartData inst = new PartData(part, MaterialGrade.NONE);
+        PartData inst = new PartData(part);
         CACHE_UNGRADED_PARTS.put(name, inst);
         return inst;
     }
 
     public static PartData of(IGearPart part, ItemStack craftingItem) {
-        return new PartData(part, MaterialGrade.NONE, craftingItem);
+        return new PartData(part, craftingItem);
     }
 
     @Deprecated
     public static PartData of(IGearPart part, MaterialGrade grade) {
-        return new PartData(part, grade);
+        return new PartData(part);
     }
 
     @Deprecated
     public static PartData of(IGearPart part, MaterialGrade grade, ItemStack craftingItem) {
-        return new PartData(part, grade, craftingItem);
+        return new PartData(part, craftingItem);
     }
 
     @Nullable
@@ -109,9 +108,6 @@ public final class PartData implements IPartData {
     @Override
     public CompoundNBT write(@Nonnull CompoundNBT tags) {
         tags.putString("ID", part.getId().toString());
-        if (this.grade != MaterialGrade.NONE) {
-            tags.putString("Grade", this.grade.name());
-        }
 
         CompoundNBT itemTag = new CompoundNBT();
         this.craftingItem.write(itemTag);
@@ -128,12 +124,6 @@ public final class PartData implements IPartData {
     @Override
     public IGearPart getPart() {
         return part;
-    }
-
-    @Deprecated
-    @Override
-    public MaterialGrade getGrade() {
-        return grade;
     }
 
     @Override

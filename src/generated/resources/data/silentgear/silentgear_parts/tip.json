@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:tip",
   "part_position": "TIP",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:tip"
-    }
+  "crafting_item": {
+    "item": "silentgear:tip"
   },
   "name": {
     "translate": "part.silentgear.tip"

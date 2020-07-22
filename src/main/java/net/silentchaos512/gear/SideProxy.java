@@ -128,8 +128,6 @@ class SideProxy implements IProxy {
         SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
         SilentGear.LOGGER.info(MaterialManager.MARKER, "- Standard: {}", MaterialManager.getValues().stream()
                 .filter(mat -> mat.getSerializer() == MaterialSerializers.STANDARD).count());
-        SilentGear.LOGGER.info(MaterialManager.MARKER, "- Adapter: {}", MaterialManager.getValues().stream()
-                .filter(mat -> mat.getSerializer() == MaterialSerializers.SIMPLE_ADAPTER).count());
     }
 
     private static void serverStopping(FMLServerStoppingEvent event) {

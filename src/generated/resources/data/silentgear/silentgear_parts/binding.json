@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:binding",
   "part_position": "BINDING",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:binding"
-    }
+  "crafting_item": {
+    "item": "silentgear:binding"
   },
   "name": {
     "translate": "part.silentgear.binding"

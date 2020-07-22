@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.parts;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,7 +34,7 @@ public interface IGearPart {
 
     IPartPosition getPartPosition();
 
-    IPartMaterial getMaterials();
+    Ingredient getIngredient();
 
     IPartSerializer<?> getSerializer();
 

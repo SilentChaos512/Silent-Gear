@@ -60,11 +60,6 @@ public final class PartType {
             .serializer(createSerializer("grip", GripPart::new))
             .compoundPartItem(() -> ModItems.GRIP.orElseThrow(IllegalStateException::new))
     );
-    @Deprecated
-    public static final PartType HIGHLIGHT = create(
-            SilentGear.getId("highlight"),
-            createSerializer("highlight", HighlightPart::new)
-    );
     public static final PartType MAIN = create(Builder.builder(SilentGear.getId("main"))
             .serializer(createSerializer("main", MainPart::new))
     );

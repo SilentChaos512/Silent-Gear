@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:main",
   "part_position": "HEAD",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:mattock_head"
-    }
+  "crafting_item": {
+    "item": "silentgear:mattock_head"
   },
   "name": {
     "translate": "part.silentgear.mattock_head"

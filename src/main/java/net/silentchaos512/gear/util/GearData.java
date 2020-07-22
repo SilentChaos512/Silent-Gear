@@ -24,7 +24,6 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.CompoundPart;
@@ -109,7 +108,6 @@ public final class GearData {
                 SilentGear.LOGGER.debug("Recalculating for {}'s {}", player.getScoreboardName(), stack.getDisplayName().getString());
             }
             clearCachedData(stack);
-            addOrRemoveHighlightPart(stack, parts);
             propertiesCompound.putString("ModVersion", SilentGear.getVersion());
             PartDataList uniqueParts = parts.getUniqueParts(true);
             Map<ITrait, Integer> traits = TraitHelper.getTraits(stack, parts);
@@ -209,32 +207,6 @@ public final class GearData {
                 );
             }
         }
-    }
-
-    @Deprecated
-    private static void addOrRemoveHighlightPart(ItemStack stack, PartDataList parts) {
-        final PartData primary = parts.getPrimaryMain();
-        if (primary == null) return;
-
-        boolean changed = false;
-
-        if (primary.getPart().getDisplayProperties(primary, stack, 0).hasHighlight()) {
-            // Add highlight part if missing
-            if (parts.getParts(p -> p.getType() == PartType.HIGHLIGHT).isEmpty()) {
-                IGearPart highlight = PartManager.get(PartConst.HIGHLIGHT);
-                if (highlight != null) {
-                    parts.add(PartData.of(highlight));
-                    changed = true;
-                } else {
-                    SilentGear.LOGGER.error("GearData#addOrRemoveHighlightPart: highlight part is missing?");
-                }
-            }
-        } else {
-            // Remove unneeded highlight part if present
-            changed = parts.removeIf(p -> p.getType() == PartType.HIGHLIGHT);
-        }
-
-        if (changed) writeConstructionParts(stack, parts);
     }
 
     /**

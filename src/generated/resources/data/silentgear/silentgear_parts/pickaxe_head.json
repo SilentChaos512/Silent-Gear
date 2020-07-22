@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:main",
   "part_position": "HEAD",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:pickaxe_head"
-    }
+  "crafting_item": {
+    "item": "silentgear:pickaxe_head"
   },
   "name": {
     "translate": "part.silentgear.pickaxe_head"

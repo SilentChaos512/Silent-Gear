@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:fletching",
   "part_position": "FLETCHING",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:fletching"
-    }
+  "crafting_item": {
+    "item": "silentgear:fletching"
   },
   "name": {
     "translate": "part.silentgear.fletching"

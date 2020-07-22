@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:main",
   "part_position": "HEAD",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:katana_blade"
-    }
+  "crafting_item": {
+    "item": "silentgear:katana_blade"
   },
   "name": {
     "translate": "part.silentgear.katana_blade"

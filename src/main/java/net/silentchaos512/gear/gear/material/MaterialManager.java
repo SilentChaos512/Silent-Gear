@@ -81,43 +81,6 @@ public class MaterialManager implements IResourceManagerReloadListener {
                     ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 }
             }
-
-            createAdapterMaterials();
-        }
-    }
-
-    private static void createAdapterMaterials() {
-        // Create adapter materials for temporary compatibility with older data packs
-        // Remove in 1.16!
-
-        SilentGear.LOGGER.info(MARKER, "Trying to create adapter materials...");
-
-        for (IGearPart part : PartManager.getValues()) {
-            if (isBuiltInPart(part)) {
-                SilentGear.LOGGER.debug(MARKER, "Not creating adapter for '{}': built-in part", part.getId());
-            } else {
-                String[] pathParts = part.getId().getPath().split("/");
-
-                if (pathParts.length != 2) {
-                    SilentGear.LOGGER.debug(MARKER, "Not considering '{}' for conversion, non-standard name format", part.getId());
-                } else if (MAP.containsKey(SilentGear.getId(pathParts[1]))) {
-                    SilentGear.LOGGER.debug(MARKER, "Not creating adapter for '{}': has like-named material already", part.getId());
-                } else {
-                    PartType partType = PartType.get(SilentGear.getId(pathParts[0]));
-                    ResourceLocation materialId = new ResourceLocation(part.getId().getNamespace(), pathParts[1]);
-
-                    if (partType != null) {
-                        IMaterial material = MAP.computeIfAbsent(materialId, SimplePartAdapterMaterial::new);
-
-                        if (material instanceof SimplePartAdapterMaterial) {
-                            ((SimplePartAdapterMaterial) material).addPart(part);
-                            SilentGear.LOGGER.info(MARKER, "Added part '{}' to adapter material '{}'", part.getId(), materialId);
-                        } else {
-                            SilentGear.LOGGER.debug(MARKER, "Not creating adapter for '{}': material already defined", materialId);
-                        }
-                    }
-                }
-            }
         }
     }
 

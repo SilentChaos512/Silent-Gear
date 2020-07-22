@@ -64,11 +64,6 @@ public class LazyPartData implements IPartData {
     }
 
     @Override
-    public MaterialGrade getGrade() {
-        return grade;
-    }
-
-    @Override
     public ItemStack getCraftingItem() {
         if (this.craftingItem.isEmpty()) {
             IGearPart part = getPart();

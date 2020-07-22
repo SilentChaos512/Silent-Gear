@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:rod",
   "part_position": "ROD",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:long_rod"
-    }
+  "crafting_item": {
+    "item": "silentgear:long_rod"
   },
   "name": {
     "translate": "part.silentgear.long_rod"

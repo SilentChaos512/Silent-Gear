@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:grip",
   "part_position": "GRIP",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:grip"
-    }
+  "crafting_item": {
+    "item": "silentgear:grip"
   },
   "name": {
     "translate": "part.silentgear.grip"

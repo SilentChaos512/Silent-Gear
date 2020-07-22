@@ -174,7 +174,7 @@ public class CompoundPart extends AbstractGearPart {
 
     @Override
     public PartData randomizeData(GearType gearType, int tier) {
-        for (ItemStack stack : getMaterials().getNormal().getMatchingStacks()) {
+        for (ItemStack stack : this.getIngredient().getMatchingStacks()) {
             if (stack.getItem() instanceof CompoundPartItem) {
                 int materialCount = getRandomMaterialCount(partType);
                 List<MaterialInstance> materials = getRandomMaterials(gearType, materialCount, tier);

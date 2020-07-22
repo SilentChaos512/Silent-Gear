@@ -2,10 +2,8 @@
   "type": "silentgear:compound_part",
   "part_type": "silentgear:main",
   "part_position": "HEAD",
-  "crafting_items": {
-    "normal": {
-      "item": "silentgear:shears_blades"
-    }
+  "crafting_item": {
+    "item": "silentgear:shears_blades"
   },
   "name": {
     "translate": "part.silentgear.shears_blades"

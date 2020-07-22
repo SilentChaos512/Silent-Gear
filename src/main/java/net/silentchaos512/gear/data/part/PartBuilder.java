@@ -72,9 +72,7 @@ public class PartBuilder {
             json.add("availability", availability);
         }
 
-        JsonObject craftingItems = new JsonObject();
-        craftingItems.add("normal", this.ingredient.serialize());
-        json.add("crafting_items", craftingItems);
+        json.add("crafting_item", this.ingredient.serialize());
 
         json.add("name", ITextComponent.Serializer.toJsonTree(this.name));
 

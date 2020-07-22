@@ -23,8 +23,6 @@ public interface IPartData {
     @Nullable
     IGearPart getPart();
 
-    MaterialGrade getGrade();
-
     ItemStack getCraftingItem();
 
     CompoundNBT write(CompoundNBT nbt);
@@ -57,9 +55,6 @@ public interface IPartData {
         // FIXME: Need to account for compound material parts
         JsonObject json = new JsonObject();
         json.addProperty("part", getPartId().toString());
-        if (getGrade() != MaterialGrade.NONE) {
-            json.addProperty("grade", getGrade().name());
-        }
         return json;
     }
 }
