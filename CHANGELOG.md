@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Blended colors not working on tools
+
 ## [1.10.1] - 2020-07-21
 - This is a 1.16.1 bugfix update! 1.15.2 will skip this version as nothing needs to change.
 ### Removed
