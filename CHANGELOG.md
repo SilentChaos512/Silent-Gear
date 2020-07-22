@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.1] - 2020-07-21
+- This is a 1.16.1 bugfix update! 1.15.2 will skip this version as nothing needs to change.
+### Removed
+- Unused legacy items (old tip upgrades and bowstrings, etc.)
+### Fixed
+- Magnetic trait crashing on server [#180]
+- Magnetic trait pushing items away instead of pull them [#179]
+- Advancements displaying red X's instead of gear items
+- Tools not returning their actual harvest level
+
 ## [1.10.0] - 2020-07-19
 ### Changed
 - Major overhaul of item models. Unlimited layers, defined in material files. Can "stack" multiple layers in the material file.
