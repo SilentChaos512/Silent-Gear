@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.material;
 
 import net.silentchaos512.gear.parts.PartTextureType;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -9,6 +10,12 @@ import java.util.List;
  */
 public interface IMaterialDisplay {
     List<MaterialLayer> getLayers();
+
+    @Nullable
+    default MaterialLayer getFirstLayer() {
+        List<MaterialLayer> layers = getLayers();
+        return layers.isEmpty() ? null : layers.get(0);
+    }
 
     /**
      * Gets the texture type

@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.TransformationMatrix;
@@ -21,7 +22,10 @@ import net.minecraftforge.fml.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.Registration;
 
 import java.util.*;
@@ -79,13 +83,41 @@ public class GearModel implements IModelGeometry<GearModel> {
 
         // No layers?
         if (layers.isEmpty()) {
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
-            builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
+            IMaterial material = MaterialManager.get(SilentGear.getId("example"));
+            if (material != null) {
+                buildFakeModel(spriteGetter, builder, rotation, material);
+            } else {
+                // Shouldn't happen, but...
+                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+                builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
+            }
         }
 
         TextureAtlasSprite particle = spriteGetter.apply(owner.resolveTexture("particle"));
 
         return new BakedPerspectiveModel(builder.build(), particle, transforms, overrideList, rotation.isIdentity(), owner.isSideLit(), getCameraTransforms(transformVariant));
+    }
+
+    private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
+        // This method will display an example tool for items with no data (ie, for advancements)
+        if (!gearType.matches(GearType.ARMOR)) {
+            MaterialLayer exampleRod = material.getMaterialDisplay(ItemStack.EMPTY, PartType.ROD).getFirstLayer();
+            if (exampleRod != null) {
+                builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleRod.getTexture(gearType, 0))), rotation, exampleRod.getColor()));
+            }
+        }
+
+        MaterialLayer exampleMain = material.getMaterialDisplay(ItemStack.EMPTY, PartType.MAIN).getFirstLayer();
+        if (exampleMain != null) {
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(gearType, 0))), rotation, exampleMain.getColor()));
+        }
+
+        if (gearType.matches(GearType.RANGED_WEAPON)) {
+            MaterialLayer exampleBowstring = material.getMaterialDisplay(ItemStack.EMPTY, PartType.BOWSTRING).getFirstLayer();
+            if (exampleBowstring != null) {
+                builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleBowstring.getTexture(gearType, 0))), rotation, exampleBowstring.getColor()));
+            }
+        }
     }
 
     @Override
