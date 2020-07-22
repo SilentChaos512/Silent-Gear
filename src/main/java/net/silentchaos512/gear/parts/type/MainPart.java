@@ -46,4 +46,9 @@ public final class MainPart extends AbstractGearPart {
     public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position) {
         return new ResourceLocation(SilentGear.MOD_ID, "items/" + gearClass + "/_broken");
     }
+
+    @Override
+    public boolean canAddToGear(ItemStack gear, PartData part) {
+        return true;
+    }
 }

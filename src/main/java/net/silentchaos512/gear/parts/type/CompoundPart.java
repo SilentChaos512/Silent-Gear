@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.parts.type;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -21,6 +22,7 @@ import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
@@ -37,6 +39,7 @@ import java.util.stream.Collectors;
 public class CompoundPart extends AbstractGearPart {
     public static final Serializer SERIALIZER = new Serializer(SilentGear.getId("compound_part"), CompoundPart::new);
 
+    private GearType gearType = GearType.ALL;
     private PartType partType;
     private IPartPosition partPosition;
 
@@ -185,6 +188,12 @@ public class CompoundPart extends AbstractGearPart {
         return super.randomizeData(gearType, tier);
     }
 
+    @Override
+    public boolean canAddToGear(ItemStack gear, PartData part) {
+        GearType type = GearHelper.getType(gear);
+        return type != null && type.matches(this.gearType);
+    }
+
     private static int getRandomMaterialCount(PartType partType) {
         if (partType == PartType.MAIN) {
             int ret = 1;
@@ -249,6 +258,11 @@ public class CompoundPart extends AbstractGearPart {
         @Override
         public CompoundPart read(ResourceLocation id, JsonObject json) {
             CompoundPart part = super.read(id, json, false);
+            String gearTypeStr = JSONUtils.getString(json, "gear_type");
+            part.gearType = GearType.get(gearTypeStr);
+            if (part.gearType == null) {
+                throw new JsonParseException("Unknown gear type: " + gearTypeStr);
+            }
             part.partType = PartType.get(new ResourceLocation(JSONUtils.getString(json, "part_type")));
             // FIXME
             part.partPosition = EnumUtils.byName(JSONUtils.getString(json, "part_position"), PartPositions.ANY);
@@ -258,6 +272,7 @@ public class CompoundPart extends AbstractGearPart {
         @Override
         public CompoundPart read(ResourceLocation id, PacketBuffer buffer) {
             CompoundPart part = super.read(id, buffer);
+            part.gearType = GearType.get(buffer.readString());
             part.partType = PartType.get(buffer.readResourceLocation());
             // FIXME
             part.partPosition = EnumUtils.byName(buffer.readString(), PartPositions.ANY);
@@ -267,6 +282,7 @@ public class CompoundPart extends AbstractGearPart {
         @Override
         public void write(PacketBuffer buffer, CompoundPart part) {
             super.write(buffer, part);
+            buffer.writeString(part.gearType.getName());
             buffer.writeResourceLocation(part.partType.getName());
             // FIXME
             for (PartPositions pos : PartPositions.values()) {

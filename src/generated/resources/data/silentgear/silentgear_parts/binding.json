@@ -1,5 +1,6 @@
 {
   "type": "silentgear:compound_part",
+  "gear_type": "tool",
   "part_type": "silentgear:binding",
   "part_position": "BINDING",
   "crafting_items": {

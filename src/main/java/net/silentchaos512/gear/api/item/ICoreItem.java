@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.parts.IPartData;
-import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -22,7 +21,10 @@ import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Interface for all equipment items, including tools and armor.
@@ -54,9 +56,8 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return getRequiredParts().contains(type);
     }
 
-    default boolean supportsPart(PartData part) {
-        return requiresPartOfType(part.getType())
-                || (part.getPart() instanceof IUpgradePart && ((IUpgradePart) part.getPart()).isValidFor(this));
+    default boolean supportsPart(ItemStack gear, PartData part) {
+        return requiresPartOfType(part.getType()) || part.getPart().canAddToGear(gear, part);
     }
 
     default Collection<PartType> getRequiredParts() {

@@ -64,4 +64,9 @@ public class HighlightPart extends AbstractGearPart {
     public boolean isVisible() {
         return false;
     }
+
+    @Override
+    public boolean canAddToGear(ItemStack gear, PartData part) {
+        return false;
+    }
 }

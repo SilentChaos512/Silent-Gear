@@ -7,6 +7,7 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.type.CompoundPart;
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
 public class PartBuilder {
     final ResourceLocation id;
     private final ResourceLocation serializerType;
+    private final GearType gearType;
     private final PartType partType;
     private final PartPositions position;
     private final int tier = -1;
@@ -25,16 +27,17 @@ public class PartBuilder {
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
 
-    public PartBuilder(ResourceLocation id, PartType partType, PartPositions position, IItemProvider item) {
-        this(id, partType, position, Ingredient.fromItems(item));
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, IItemProvider item) {
+        this(id, gearType, partType, position, Ingredient.fromItems(item));
     }
 
-    public PartBuilder(ResourceLocation id, PartType partType, PartPositions position, Tag<Item> tag) {
-        this(id, partType, position, Ingredient.fromTag(tag));
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, Tag<Item> tag) {
+        this(id, gearType, partType, position, Ingredient.fromTag(tag));
     }
 
-    public PartBuilder(ResourceLocation id, PartType partType, PartPositions position, Ingredient ingredient) {
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, Ingredient ingredient) {
         this.serializerType = CompoundPart.SERIALIZER.getName();
+        this.gearType = gearType;
         this.partType = partType;
         this.position = position;
         this.id = id;
@@ -60,6 +63,7 @@ public class PartBuilder {
         JsonObject json = new JsonObject();
 
         json.addProperty("type", this.serializerType.toString());
+        json.addProperty("gear_type", this.gearType.getName());
         json.addProperty("part_type", this.partType.getName().toString());
         json.addProperty("part_position", this.position.name());
 

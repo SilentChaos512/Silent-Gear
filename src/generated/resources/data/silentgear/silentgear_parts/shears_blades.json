@@ -1,5 +1,6 @@
 {
   "type": "silentgear:compound_part",
+  "gear_type": "shears",
   "part_type": "silentgear:main",
   "part_position": "HEAD",
   "crafting_items": {

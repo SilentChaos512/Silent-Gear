@@ -191,6 +191,15 @@ public interface IGearPart {
         return PartData.of(this);
     }
 
+    boolean canAddToGear(ItemStack gear, PartData part);
+
+    default boolean replacesExistingInPosition(PartData part) {
+        return true;
+    }
+
+    default void onAddToGear(ItemStack gear, PartData part) {
+    }
+
     default void onRemoveFromGear(ItemStack gear, PartData part) {
     }
 }

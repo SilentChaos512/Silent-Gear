@@ -23,8 +23,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.IPartPosition;
+import net.silentchaos512.gear.api.parts.IPartSerializer;
+import net.silentchaos512.gear.api.parts.IUpgradePart;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartConst;
@@ -66,10 +68,10 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
     }
 
     @Override
-    public boolean isValidFor(ICoreItem gearItem) {
+    public boolean canAddToGear(ItemStack gear, PartData part) {
         // TODO: Temp fix. Should define this in JSON...
         if (this.getId().equals(PartConst.MISC_SPOON))
-            return gearItem == ModItems.PICKAXE;
-        return IUpgradePart.super.isValidFor(gearItem);
+            return gear.getItem() == ModItems.PICKAXE.get();
+        return true;
     }
 }

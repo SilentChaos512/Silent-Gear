@@ -10,6 +10,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 
@@ -48,5 +49,11 @@ public final class BowstringPart extends AbstractGearPart {
     @Override
     public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position) {
         return null;
+    }
+
+    @Override
+    public boolean canAddToGear(ItemStack gear, PartData part) {
+        GearType type = GearHelper.getType(gear);
+        return type != null && type.matches(GearType.RANGED_WEAPON);
     }
 }

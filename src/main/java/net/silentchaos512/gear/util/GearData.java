@@ -649,18 +649,16 @@ public final class GearData {
 
         PartDataList parts = getConstructionParts(gear);
 
-        if (part.getPart() instanceof IUpgradePart) {
-            IUpgradePart upgradePart = (IUpgradePart) part.getPart();
-            // Make sure the upgrade is valid for the gear type
-            if (!upgradePart.isValidFor((ICoreItem) gear.getItem()))
-                return;
-            // Only one allowed in this position? Remove existing if needed.
-            if (upgradePart.replacesExisting())
-                parts.removeIf(p -> p.getPart().getPartPosition() == part.getPart().getPartPosition());
-
-            // Allow the part to make additional changes if needed
-            part.onAddToGear(gear);
+        // Make sure the upgrade is valid for the gear type
+        if (!part.getPart().canAddToGear(gear, part))
+            return;
+        // Only one allowed in this position? Remove existing if needed.
+        if (part.getPart().replacesExistingInPosition(part)) {
+            parts.removeIf(p -> p.getPart().getPartPosition() == part.getPart().getPartPosition());
         }
+
+        // Allow the part to make additional changes if needed
+        part.onAddToGear(gear);
 
         // Other upgrades allow no exact duplicates, but any number of total upgrades
         for (PartData partInList : parts) {

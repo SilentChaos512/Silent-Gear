@@ -82,7 +82,7 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
     private static boolean canApplyUpgrade(ItemStack gear, PartData part) {
         ICoreItem gearItem = (ICoreItem) gear.getItem();
         IGearPart gearPart = part.getPart();
-        return !GearData.hasPart(gear, gearPart) && gearPart instanceof IUpgradePart && ((IUpgradePart) gearPart).isValidFor(gearItem);
+        return !GearData.hasPart(gear, gearPart) && part.getPart().canAddToGear(gear, part);
     }
 
     @Override

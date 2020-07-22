@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Part swapping and upgrade parts not working [#178, #172]
 - Blended colors not working on tools
 
 ## [1.10.1] - 2020-07-21

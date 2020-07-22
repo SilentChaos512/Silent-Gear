@@ -1,10 +1,12 @@
 package net.silentchaos512.gear.parts.type;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.AbstractGearPart;
+import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 
 public final class FletchingPart extends AbstractGearPart {
@@ -25,5 +27,11 @@ public final class FletchingPart extends AbstractGearPart {
     @Override
     public IPartSerializer<?> getSerializer() {
         return PartType.FLETCHING.getSerializer();
+    }
+
+    @Override
+    public boolean canAddToGear(ItemStack gear, PartData part) {
+        // TODO
+        return false;
     }
 }
