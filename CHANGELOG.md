@@ -5,7 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Racker trait (moving from Silent's Gems). It places netherrack.
 - `set_damage` command (for testing purposes)
+### Changed
+- Damage on use for refractive trait increased to 4, terminus and racker increased to 3
 ### Fixed
 - Part swapping and upgrade parts not working [#178, #172]
 - Blended colors not working on tools

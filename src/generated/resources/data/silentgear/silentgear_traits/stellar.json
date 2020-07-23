@@ -1,0 +1,34 @@
+{
+  "type": "silentgear:potion_effect_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.stellar"
+  },
+  "description": {
+    "translate": "trait.silentgear.stellar.desc"
+  },
+  "potion_effects": {
+    "armor": [
+      {
+        "full_set": false,
+        "effect": "minecraft:speed",
+        "level": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "full_set": false,
+        "effect": "minecraft:jump_boost",
+        "level": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    ]
+  }
+}

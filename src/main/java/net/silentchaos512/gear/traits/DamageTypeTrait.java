@@ -9,7 +9,7 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 
 public final class DamageTypeTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("damage_type_trait");
-    static final ITraitSerializer<DamageTypeTrait> SERIALIZER = new Serializer<>(
+    public static final ITraitSerializer<DamageTypeTrait> SERIALIZER = new Serializer<>(
             SERIALIZER_ID,
             DamageTypeTrait::new,
             (trait, json) -> {

@@ -19,14 +19,11 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class EnchantmentTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("enchantment_trait");
-    static final ITraitSerializer<EnchantmentTrait> SERIALIZER = new Serializer<>(
+    public static final ITraitSerializer<EnchantmentTrait> SERIALIZER = new Serializer<>(
             SERIALIZER_ID,
             EnchantmentTrait::new,
             EnchantmentTrait::readJson,
@@ -145,6 +142,24 @@ public final class EnchantmentTrait extends SimpleTrait {
     public static class EnchantmentData {
         private ResourceLocation enchantmentId;
         private int[] levels;
+
+        @SuppressWarnings("TypeMayBeWeakened")
+        public static EnchantmentData of(Enchantment enchantment, int... levels) {
+            EnchantmentData ret = new EnchantmentData();
+            ret.enchantmentId = enchantment.getRegistryName();
+            ret.levels = levels.clone();
+            return ret;
+        }
+
+        public JsonObject serialize() {
+            JsonObject json = new JsonObject();
+            json.addProperty("enchantment", this.enchantmentId.toString());
+
+            JsonArray levelsJson = new JsonArray();
+            Arrays.stream(this.levels).forEach(levelsJson::add);
+            json.add("level", levelsJson);
+            return json;
+        }
 
         static EnchantmentData from(JsonObject json) {
             EnchantmentData ret = new EnchantmentData();

@@ -1,0 +1,24 @@
+{
+  "type": "silentgear:stat_modifier_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.chipping"
+  },
+  "description": {
+    "translate": "trait.silentgear.chipping.desc"
+  },
+  "stats": [
+    {
+      "name": "silentgear:armor",
+      "value": -0.075,
+      "factor_damage": true,
+      "factor_value": true
+    },
+    {
+      "name": "silentgear:harvest_speed",
+      "value": 0.25,
+      "factor_damage": true,
+      "factor_value": true
+    }
+  ]
+}

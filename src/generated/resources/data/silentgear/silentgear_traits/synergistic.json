@@ -1,0 +1,17 @@
+{
+  "type": "silentgear:synergy",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.synergistic"
+  },
+  "description": {
+    "translate": "trait.silentgear.synergistic.desc"
+  },
+  "cancels_with": [
+    "silentgear:crude"
+  ],
+  "synergy_multi": 0.04,
+  "applicable_range": {
+    "min": 1.0
+  }
+}

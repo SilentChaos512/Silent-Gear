@@ -9,7 +9,7 @@ import net.silentchaos512.gear.api.traits.ITraitSerializer;
 
 public class SynergyTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("synergy");
-    static final ITraitSerializer<SynergyTrait> SERIALIZER = new Serializer<>(
+    public static final ITraitSerializer<SynergyTrait> SERIALIZER = new Serializer<>(
             SERIALIZER_ID,
             SynergyTrait::new,
             SynergyTrait::deserialize,

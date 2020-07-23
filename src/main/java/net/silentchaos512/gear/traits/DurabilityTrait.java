@@ -36,7 +36,7 @@ import net.silentchaos512.utils.MathUtils;
 public final class DurabilityTrait extends SimpleTrait {
     public static final ResourceLocation TRIGGER_BRITTLE = SilentGear.getId("brittle_proc");
 
-    static final ITraitSerializer<DurabilityTrait> SERIALIZER = new Serializer<>(
+    public static final ITraitSerializer<DurabilityTrait> SERIALIZER = new Serializer<>(
             SilentGear.getId("durability_trait"),
             DurabilityTrait::new,
             (trait, json) -> {

@@ -24,6 +24,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -34,7 +35,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class StatModifierTrait extends SimpleTrait {
-    static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
+    public static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
             SilentGear.getId("stat_modifier_trait"),
             StatModifierTrait::new,
             StatModifierTrait::readJson,
@@ -93,10 +94,18 @@ public final class StatModifierTrait extends SimpleTrait {
         });
     }
 
-    private static class StatMod {
+    public static class StatMod {
         private float multi;
         private boolean factorDamage;
         private boolean factorValue;
+
+        public static StatMod of(float multi, boolean factorDamage, boolean factorValue) {
+            StatMod ret = new StatMod();
+            ret.multi = multi;
+            ret.factorDamage = factorDamage;
+            ret.factorValue = factorValue;
+            return ret;
+        }
 
         private float apply(int level, float value, float damageRatio) {
             float f = multi * level;
@@ -107,6 +116,15 @@ public final class StatModifierTrait extends SimpleTrait {
                 f *= value;
 
             return value + f;
+        }
+
+        public JsonObject serialize(IItemStat stat) {
+            JsonObject json = new JsonObject();
+            json.addProperty("name", stat.getStatId().toString());
+            json.addProperty("value", this.multi);
+            json.addProperty("factor_damage", this.factorDamage);
+            json.addProperty("factor_value", this.factorValue);
+            return json;
         }
 
         private static StatMod fromJson(JsonObject json) {

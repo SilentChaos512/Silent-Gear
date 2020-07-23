@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -23,7 +24,7 @@ import java.util.*;
 
 public class AttributeTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("attribute_trait");
-    static final ITraitSerializer<AttributeTrait> SERIALIZER = new Serializer<>(
+    public static final ITraitSerializer<AttributeTrait> SERIALIZER = new Serializer<>(
             SERIALIZER_ID,
             AttributeTrait::new,
             AttributeTrait::readJson,
@@ -143,6 +144,29 @@ public class AttributeTrait extends SimpleTrait {
         private float[] values;
         private AttributeModifier.Operation operation = AttributeModifier.Operation.ADDITION;
         private UUID uuid;
+
+        public static ModifierData of(IAttribute attribute, AttributeModifier.Operation operation, float... values) {
+            ModifierData ret = new ModifierData();
+            ret.name = attribute.getName();
+            ret.operation = operation;
+            ret.values = values.clone();
+            return ret;
+        }
+
+        public JsonObject serialize() {
+            JsonObject json = new JsonObject();
+
+            json.addProperty("attribute", name);
+            json.addProperty("operation", operation.getId());
+
+            JsonArray array = new JsonArray();
+            for (float f : this.values) {
+                array.add(f);
+            }
+            json.add("value", array);
+
+            return json;
+        }
 
         static ModifierData from(JsonObject json) {
             ModifierData ret = new ModifierData();

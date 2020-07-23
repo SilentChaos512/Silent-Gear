@@ -1,0 +1,20 @@
+{
+  "type": "silentgear:enchantment_trait",
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.silky"
+  },
+  "description": {
+    "translate": "trait.silentgear.silky.desc"
+  },
+  "enchantments": {
+    "harvest_tool": [
+      {
+        "enchantment": "minecraft:silk_touch",
+        "level": [
+          1
+        ]
+      }
+    ]
+  }
+}

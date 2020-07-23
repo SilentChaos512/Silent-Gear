@@ -660,6 +660,8 @@
   "trait.silentgear.multi_break.desc": "TODO, not coded",
   "trait.silentgear.organic": "Organic",
   "trait.silentgear.organic.desc": "Gains enchantability, but loses magic damage as the item is damaged",
+  "trait.silentgear.racker": "Racker",
+  "trait.silentgear.racker.desc": "Places netherrack at the cost of durability",
   "trait.silentgear.refractive": "Refractive",
   "trait.silentgear.refractive.desc": "Place phantom lights when used",
   "trait.silentgear.rustic": "Rustic",

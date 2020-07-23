@@ -1,0 +1,18 @@
+{
+  "type": "silentgear:synergy",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.rustic"
+  },
+  "description": {
+    "translate": "trait.silentgear.rustic.desc"
+  },
+  "cancels_with": [
+    "silentgear:synergistic"
+  ],
+  "synergy_multi": 0.05,
+  "applicable_range": {
+    "min": 0.749,
+    "max": 1.001
+  }
+}
