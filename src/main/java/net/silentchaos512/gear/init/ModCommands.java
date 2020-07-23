@@ -2,7 +2,6 @@ package net.silentchaos512.gear.init;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.command.CommandSource;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.command.*;
 
 public final class ModCommands {
@@ -11,6 +10,7 @@ public final class ModCommands {
     public static void registerAll(CommandDispatcher<CommandSource> dispatcher) {
         LockStatsCommand.register(dispatcher);
         RecalculateStatsCommand.register(dispatcher);
+        SetDamageCommand.register(dispatcher);
         SGearMaterialsCommand.register(dispatcher);
         SGearPartsCommand.register(dispatcher);
         SGearTraitsCommand.register(dispatcher);
