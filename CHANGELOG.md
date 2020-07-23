@@ -3,6 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.2] - 2020-07-23
+### Added
+- Racker trait (moving from Silent's Gems). It places netherrack.
+- Stripped netherwood log added to logs tag [#185]
+- Missing binding and grip textures
+- `set_damage` command (for testing purposes)
+### Changed
+- Damage on use for refractive trait increased to 4, terminus and racker increased to 3
+### Fixed
+- Part swapping and upgrade parts not working [#178, #172]
+- Blended colors not working on tools
+- Trait conditions not working with new materials. Some existing items may lose traits as a result of this fix. You may need to adjust the ratio of materials to get traits like flame ward again. 
+
 ## [1.10.1] - 2020-07-21
 - This is a 1.16.1 bugfix update! 1.15.2 will skip this version as nothing needs to change.
 ### Removed

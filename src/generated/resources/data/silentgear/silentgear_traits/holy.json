@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:damage_type_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.holy"
+  },
+  "description": {
+    "translate": "trait.silentgear.holy.desc"
+  },
+  "damage_type": "holy",
+  "damage_bonus": 2
+}

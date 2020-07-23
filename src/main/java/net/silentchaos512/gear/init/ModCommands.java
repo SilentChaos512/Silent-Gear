@@ -12,6 +12,7 @@ public final class ModCommands {
         CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
         LockStatsCommand.register(dispatcher);
         RecalculateStatsCommand.register(dispatcher);
+        SetDamageCommand.register(dispatcher);
         SGearMaterialsCommand.register(dispatcher);
         SGearPartsCommand.register(dispatcher);
         SGearTraitsCommand.register(dispatcher);

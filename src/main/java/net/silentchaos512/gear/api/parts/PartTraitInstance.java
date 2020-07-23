@@ -46,14 +46,12 @@ public class PartTraitInstance {
         return level;
     }
 
-    public boolean conditionsMatch(ItemStack gear, PartDataList parts) {
+    public boolean conditionsMatch(PartDataList parts, ItemStack gear) {
         return conditions.stream().allMatch(c -> c.matches(gear, parts, this.trait));
     }
 
-    public boolean conditionsMatch(Collection<MaterialInstance> materials, ItemStack gear) {
-        // FIXME
-//        return conditions.stream().allMatch(c -> c.matches(gear, materials, this.trait));
-        return true;
+    public boolean conditionsMatch(Collection<MaterialInstance> materials, PartType partType, ItemStack gear) {
+        return conditions.stream().allMatch(c -> c.matches(gear, partType, materials, this.trait));
     }
 
     public ITextComponent getDisplayName() {

@@ -33,6 +33,7 @@ public class TraitConst {
     public static final ResourceLocation MALLEABLE = SilentGear.getId("malleable");
     public static final ResourceLocation MULTI_BREAK = SilentGear.getId("multi_break");
     public static final ResourceLocation ORGANIC = SilentGear.getId("organic");
+    public static final ResourceLocation RACKER = SilentGear.getId("racker");
     public static final ResourceLocation REFRACTIVE = SilentGear.getId("refractive");
     public static final ResourceLocation RUSTIC = SilentGear.getId("rustic");
     public static final ResourceLocation SILKY = SilentGear.getId("silky");

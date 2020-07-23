@@ -140,15 +140,13 @@ public final class MaterialInstance implements IMaterialInstance {
         IMaterial material = MaterialManager.get(id);
         if (material == null) return null;
 
-        MaterialGrade grade = MaterialGrade.fromString(nbt.getString("Grade"));
         ItemStack stack = ItemStack.read(nbt.getCompound("Item"));
-        return of(material, grade, stack);
+        return of(material, stack);
     }
 
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
         nbt.putString("ID", material.getId().toString());
-        nbt.putString("Grade", grade.name());
         nbt.put("Item", item.write(new CompoundNBT()));
         return nbt;
     }

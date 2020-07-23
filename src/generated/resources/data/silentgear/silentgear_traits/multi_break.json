@@ -1,0 +1,10 @@
+{
+  "type": "silentgear:simple_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.multi_break"
+  },
+  "description": {
+    "translate": "trait.silentgear.multi_break.desc"
+  }
+}

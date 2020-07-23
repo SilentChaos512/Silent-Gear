@@ -37,6 +37,7 @@
         "1.5.2": "https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md",
         "1.5.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md",
         "1.5.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md",
+        "1.10.2": "https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md",
         "1.10.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md"
     },
     "1.14.4": {
@@ -70,8 +71,8 @@
         "1.14.4-recommended": "1.4.6",
         "1.14.3-latest": "1.2.4",
         "1.14.3-recommended": "1.2.4",
-        "1.15.2-latest": "1.10.0",
-        "1.15.2-recommended": "1.10.0",
+        "1.15.2-latest": "1.10.2",
+        "1.15.2-recommended": "1.10.2"
         "1.16.1-latest": "1.10.1",
         "1.16.1-recommended": "1.10.1"
     }

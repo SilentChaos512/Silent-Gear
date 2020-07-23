@@ -84,7 +84,7 @@ public class GearModelOverrideList extends ItemOverrideList {
             if (part.getPart() instanceof CompoundPart) {
                 MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
                 if (mat != null) {
-                    layers.addAll(mat.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers());
+                    addWithBlendedColor(layers, part, mat, stack);
                 }
             } else {
                 // Legacy parts (remove later?)
@@ -105,7 +105,17 @@ public class GearModelOverrideList extends ItemOverrideList {
         return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
     }
 
-    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+    private void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
+        for (MaterialLayer layer : material.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers()) {
+            if (layer.getColor() < 0xFFFFFF) {
+                list.add(new MaterialLayer(layer.getTextureId(), GearData.getColor(stack, part.getType())));
+            } else {
+                list.add(layer);
+            }
+        }
+    }
+
+    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
         // TODO: Maybe should add an ICoreItem method to get additional layers?
         float charged = ModelPropertiesHelper.getValue(stack, new ResourceLocation("charged"), world, entity);
         float firework = ModelPropertiesHelper.getValue(stack, new ResourceLocation("firework"), world, entity);

@@ -1,0 +1,27 @@
+{
+  "type": "silentgear:stat_modifier_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.hard"
+  },
+  "description": {
+    "translate": "trait.silentgear.hard.desc"
+  },
+  "cancels_with": [
+    "silentgear:soft"
+  ],
+  "stats": [
+    {
+      "name": "silentgear:harvest_speed",
+      "value": 0.05,
+      "factor_damage": true,
+      "factor_value": true
+    },
+    {
+      "name": "silentgear:ranged_damage",
+      "value": -0.1,
+      "factor_damage": true,
+      "factor_value": true
+    }
+  ]
+}

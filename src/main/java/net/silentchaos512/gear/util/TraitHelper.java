@@ -217,7 +217,7 @@ public final class TraitHelper {
 
         for (PartData part : parts) {
             for (PartTraitInstance inst : part.getTraits(gear)) {
-                if (inst.conditionsMatch(gear, parts)) {
+                if (inst.conditionsMatch(parts, gear)) {
                     ITrait trait = inst.getTrait();
                     // Count total levels for each trait from all parts
                     result.merge(trait, inst.getLevel(), Integer::sum);
@@ -250,7 +250,7 @@ public final class TraitHelper {
 
         for (MaterialInstance material : materials) {
             for (PartTraitInstance inst : material.getMaterial().getTraits(partType, gear)) {
-                if (inst.conditionsMatch(materials, gear)) {
+                if (inst.conditionsMatch(materials, partType, gear)) {
                     result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countPartsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
                 }

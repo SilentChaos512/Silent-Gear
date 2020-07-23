@@ -1,0 +1,27 @@
+{
+  "type": "silentgear:stat_modifier_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.jagged"
+  },
+  "description": {
+    "translate": "trait.silentgear.jagged.desc"
+  },
+  "cancels_with": [
+    "silentgear:eroded"
+  ],
+  "stats": [
+    {
+      "name": "silentgear:melee_damage",
+      "value": 0.1667,
+      "factor_damage": true,
+      "factor_value": true
+    },
+    {
+      "name": "silentgear:ranged_damage",
+      "value": -0.1667,
+      "factor_damage": true,
+      "factor_value": true
+    }
+  ]
+}

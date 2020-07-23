@@ -7,10 +7,14 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.GearHelper;
+
+import java.util.Collection;
 
 public class GearTypeTraitCondition implements ITraitCondition {
     public static final Serializer SERIALIZER = new Serializer();
@@ -33,6 +37,12 @@ public class GearTypeTraitCondition implements ITraitCondition {
 
     @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
+        GearType type = GearHelper.getType(gear);
+        return type != null && type.matches(this.gearType);
+    }
+
+    @Override
+    public boolean matches(ItemStack gear, PartType partType, Collection<MaterialInstance> materials, ITrait trait) {
         GearType type = GearHelper.getType(gear);
         return type != null && type.matches(this.gearType);
     }

@@ -43,24 +43,24 @@ public class PartsProvider implements IDataProvider {
     protected Collection<PartBuilder> getParts() {
         Collection<PartBuilder> ret = new ArrayList<>();
 
-        ret.add(part("binding", PartType.BINDING, PartPositions.BINDING, ModItems.BINDING));
-        ret.add(part("bowstring", PartType.BOWSTRING, PartPositions.BOWSTRING, ModItems.BOWSTRING));
-        ret.add(part("fletching", PartType.FLETCHING, PartPositions.FLETCHING, ModItems.FLETCHING));
-        ret.add(part("grip", PartType.GRIP, PartPositions.GRIP, ModItems.GRIP));
-        ret.add(part("long_rod", PartType.ROD, PartPositions.ROD, ModItems.LONG_ROD));
-        ret.add(part("rod", PartType.ROD, PartPositions.ROD, ModItems.ROD));
-        ret.add(part("tip", PartType.TIP, PartPositions.TIP, ModItems.TIP));
+        ret.add(part("binding", GearType.TOOL, PartType.BINDING, PartPositions.BINDING, ModItems.BINDING));
+        ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.BOWSTRING, PartPositions.BOWSTRING, ModItems.BOWSTRING));
+        ret.add(part("fletching", GearType.NONE, PartType.FLETCHING, PartPositions.FLETCHING, ModItems.FLETCHING));
+        ret.add(part("grip", GearType.TOOL, PartType.GRIP, PartPositions.GRIP, ModItems.GRIP));
+        ret.add(part("long_rod", GearType.TOOL, PartType.ROD, PartPositions.ROD, ModItems.LONG_ROD));
+        ret.add(part("rod", GearType.TOOL, PartType.ROD, PartPositions.ROD, ModItems.ROD));
+        ret.add(part("tip", GearType.TOOL, PartType.TIP, PartPositions.TIP, ModItems.TIP));
 
         Registration.getItems(ToolHeadItem.class).forEach(item -> {
             PartPositions position = item.getGearType() == GearType.ARMOR ? PartPositions.ARMOR : PartPositions.HEAD;
-            ret.add(part(NameUtils.fromItem(item).getPath(), item.getPartType(), position, item));
+            ret.add(part(NameUtils.fromItem(item).getPath(), item.getGearType(), item.getPartType(), position, item));
         });
 
         return ret;
     }
 
-    private PartBuilder part(String name, PartType partType, PartPositions position, IItemProvider item) {
-        return new PartBuilder(SilentGear.getId(name), partType, position, item)
+    private PartBuilder part(String name, GearType gearType, PartType partType, PartPositions position, IItemProvider item) {
+        return new PartBuilder(SilentGear.getId(name), gearType, partType, position, item)
                 .name(new TranslationTextComponent("part.silentgear." + name));
     }
 

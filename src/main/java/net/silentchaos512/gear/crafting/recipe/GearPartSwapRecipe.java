@@ -51,7 +51,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
 
             // Only required part types (no mains), and no duplicates
             PartType type = part.getType();
-            if (isLegacyMain(part) || !item.supportsPart(part) || typesFound.contains(type)) {
+            if (isLegacyMain(part) || !item.supportsPart(gear, part) || typesFound.contains(type)) {
                 return false;
             }
             typesFound.add(type);

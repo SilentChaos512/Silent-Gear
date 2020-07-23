@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:block_placer",
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.refractive"
+  },
+  "description": {
+    "translate": "trait.silentgear.refractive.desc"
+  },
+  "block": "silentgear:phantom_light",
+  "damage_on_use": 5,
+  "sound": "minecraft:entity.item.pickup",
+  "sound_volume": 0.75,
+  "sound_pitch": 0.5
+}

@@ -25,7 +25,7 @@ import net.silentchaos512.lib.util.TimeUtils;
 import java.util.*;
 
 public final class PotionEffectTrait extends SimpleTrait {
-    static final ITraitSerializer<PotionEffectTrait> SERIALIZER = new Serializer<>(
+    public static final ITraitSerializer<PotionEffectTrait> SERIALIZER = new Serializer<>(
             SilentGear.getId("potion_effect_trait"),
             PotionEffectTrait::new,
             PotionEffectTrait::readJson,
@@ -134,13 +134,34 @@ public final class PotionEffectTrait extends SimpleTrait {
         private int duration;
         private int[] levels;
 
+        @SuppressWarnings("TypeMayBeWeakened")
+        public static PotionData of(boolean requiresFullSet, Effect effect, int... levels) {
+            PotionData ret = new PotionData();
+            ret.requiresFullSet = requiresFullSet;
+            ret.effectId = Objects.requireNonNull(effect.getRegistryName());
+            ret.duration = TimeUtils.ticksFromSeconds(getDefaultDuration(ret.effectId));
+            ret.levels = levels.clone();
+            return ret;
+        }
+
+        public JsonObject serialize() {
+            JsonObject json = new JsonObject();
+            json.addProperty("full_set", this.requiresFullSet);
+            json.addProperty("effect", this.effectId.toString());
+
+            JsonArray levelsArray = new JsonArray();
+            Arrays.stream(this.levels).forEach(levelsArray::add);
+            json.add("level", levelsArray);
+            return json;
+        }
+
         static PotionData from(JsonObject json) {
             PotionData ret = new PotionData();
             ret.requiresFullSet = JSONUtils.getBoolean(json, "full_set", false);
             // Effect ID, get actual potion only when needed
             ret.effectId = new ResourceLocation(JSONUtils.getString(json, "effect", "unknown"));
             // Effects duration in seconds.
-            float durationInSeconds = JSONUtils.getFloat(json, "duration", getDefaultDuration(ret));
+            float durationInSeconds = JSONUtils.getFloat(json, "duration", getDefaultDuration(ret.effectId));
             ret.duration = TimeUtils.ticksFromSeconds(durationInSeconds);
 
             // Level int or array
@@ -181,9 +202,9 @@ public final class PotionEffectTrait extends SimpleTrait {
             buffer.writeVarIntArray(levels);
         }
 
-        private static float getDefaultDuration(PotionData ret) {
+        private static float getDefaultDuration(ResourceLocation effectId) {
             // Duration in seconds. The .5 should prevent flickering.
-            return "night_vision".equals(ret.effectId.getPath()) ? 15.5f : 1.5f;
+            return new ResourceLocation("night_vision").equals(effectId) ? 15.5f : 1.5f;
         }
 
         Optional<EffectInstance> getEffect(int pieceCount, boolean hasFullSet) {

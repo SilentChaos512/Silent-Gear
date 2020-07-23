@@ -53,7 +53,7 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
 
         // Minecraft
         builder(BlockTags.LEAVES, ModBlocks.NETHERWOOD_LEAVES);
-        builder(BlockTags.LOGS, ModBlocks.NETHERWOOD_LOG);
+        builder(BlockTags.LOGS, ModBlocks.NETHERWOOD_LOG, ModBlocks.STRIPPED_NETHERWOOD_LOG);
         builder(BlockTags.PLANKS, ModBlocks.NETHERWOOD_PLANKS);
         builder(BlockTags.SAPLINGS, ModBlocks.NETHERWOOD_SAPLING);
         builder(BlockTags.WOODEN_DOORS, ModBlocks.NETHERWOOD_DOOR);

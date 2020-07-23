@@ -1,0 +1,10 @@
+{
+  "type": "silentgear:simple_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.chilled"
+  },
+  "description": {
+    "translate": "trait.silentgear.chilled.desc"
+  }
+}

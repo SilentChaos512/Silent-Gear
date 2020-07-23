@@ -210,9 +210,7 @@ public final class PartData implements IPartData {
 
     @Override
     public void onAddToGear(ItemStack gear) {
-        if (this.part instanceof IUpgradePart) {
-            ((IUpgradePart) this.part).onAddToGear(gear, this.craftingItem);
-        }
+        this.part.onAddToGear(gear, this);
     }
 
     public void onRemoveFromGear(ItemStack gear) {

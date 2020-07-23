@@ -10,7 +10,6 @@ import net.minecraft.util.IItemProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.parts.IPartData;
-import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -57,9 +56,8 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return getRequiredParts().contains(type);
     }
 
-    default boolean supportsPart(PartData part) {
-        return requiresPartOfType(part.getType())
-                || (part.getPart() instanceof IUpgradePart && ((IUpgradePart) part.getPart()).isValidFor(this));
+    default boolean supportsPart(ItemStack gear, PartData part) {
+        return requiresPartOfType(part.getType()) || part.getPart().canAddToGear(gear, part);
     }
 
     default Collection<PartType> getRequiredParts() {

@@ -42,6 +42,11 @@ public final class TipPart extends AbstractGearPart implements IUpgradePart {
     }
 
     @Override
+    public boolean canAddToGear(ItemStack gear, PartData part) {
+        return true;
+    }
+
+    @Override
     public boolean replacesExisting() {
         return true;
     }
