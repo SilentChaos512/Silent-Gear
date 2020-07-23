@@ -115,7 +115,7 @@ public class GearModelOverrideList extends ItemOverrideList {
         }
     }
 
-    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
         // TODO: Maybe should add an ICoreItem method to get additional layers?
         float charged = ModelPropertiesHelper.getValue(stack, new ResourceLocation("charged"), world, entity);
         float firework = ModelPropertiesHelper.getValue(stack, new ResourceLocation("firework"), world, entity);

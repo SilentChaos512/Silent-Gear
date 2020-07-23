@@ -9,7 +9,7 @@
   },
   "block": "minecraft:netherrack",
   "damage_on_use": 3,
-  "sound": "minecraft:block.stone.place",
+  "sound": "minecraft:block.netherrack.place",
   "sound_volume": 1.0,
   "sound_pitch": 1.0
 }

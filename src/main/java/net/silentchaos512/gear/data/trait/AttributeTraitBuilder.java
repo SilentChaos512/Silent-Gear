@@ -2,8 +2,8 @@ package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
@@ -21,13 +21,13 @@ public class AttributeTraitBuilder extends TraitBuilder {
         super(traitId, maxLevel, AttributeTrait.SERIALIZER);
     }
 
-    public AttributeTraitBuilder addModifier(GearType gearType, EquipmentSlotType slot, IAttribute attribute, AttributeModifier.Operation operation, float... values) {
+    public AttributeTraitBuilder addModifier(GearType gearType, EquipmentSlotType slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
         this.modifiers.computeIfAbsent(makeKey(gearType, slot), str -> new ArrayList<>())
                 .add(AttributeTrait.ModifierData.of(attribute, operation, values));
         return this;
     }
 
-    public AttributeTraitBuilder addModifiersEitherHand(GearType gearType, IAttribute attribute, AttributeModifier.Operation operation, float... values) {
+    public AttributeTraitBuilder addModifiersEitherHand(GearType gearType, Attribute attribute, AttributeModifier.Operation operation, float... values) {
         addModifier(gearType, EquipmentSlotType.MAINHAND, attribute, operation, values);
         addModifier(gearType, EquipmentSlotType.OFFHAND, attribute, operation, values);
         return this;

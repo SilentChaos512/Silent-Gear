@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -143,14 +142,15 @@ public class AttributeTrait extends SimpleTrait {
     }
 
     public static class ModifierData {
-        private String name;
+        private ResourceLocation name;
         private float[] values;
         private AttributeModifier.Operation operation = AttributeModifier.Operation.ADDITION;
         private UUID uuid;
 
-        public static ModifierData of(IAttribute attribute, AttributeModifier.Operation operation, float... values) {
+        @SuppressWarnings("TypeMayBeWeakened")
+        public static ModifierData of(Attribute attribute, AttributeModifier.Operation operation, float... values) {
             ModifierData ret = new ModifierData();
-            ret.name = attribute.getName();
+            ret.name = attribute.getRegistryName();
             ret.operation = operation;
             ret.values = values.clone();
             return ret;
@@ -159,7 +159,7 @@ public class AttributeTrait extends SimpleTrait {
         public JsonObject serialize() {
             JsonObject json = new JsonObject();
 
-            json.addProperty("attribute", name);
+            json.addProperty("attribute", name.toString());
             json.addProperty("operation", operation.getId());
 
             JsonArray array = new JsonArray();
@@ -178,7 +178,7 @@ public class AttributeTrait extends SimpleTrait {
             if (!json.has("attribute")) {
                 throw new JsonParseException("attribute element not found, should be string");
             }
-            ret.name = JSONUtils.getString(json, "attribute");
+            ret.name = new ResourceLocation(JSONUtils.getString(json, "attribute"));
 
             JsonElement element = json.get("value");
             if (element.isJsonPrimitive()) {
@@ -200,7 +200,7 @@ public class AttributeTrait extends SimpleTrait {
 
         static ModifierData read(PacketBuffer buffer) {
             ModifierData ret = new ModifierData();
-            ret.name = buffer.readString();
+            ret.name = buffer.readResourceLocation();
             ret.values = new float[(int) buffer.readByte()];
             for (int i = 0; i < ret.values.length; ++i) {
                 ret.values[i] = buffer.readFloat();
@@ -211,7 +211,7 @@ public class AttributeTrait extends SimpleTrait {
         }
 
         void write(PacketBuffer buffer) {
-            buffer.writeString(name);
+            buffer.writeResourceLocation(name);
             buffer.writeByte(values.length);
             for (float f : values) {
                 buffer.writeFloat(f);
@@ -221,7 +221,7 @@ public class AttributeTrait extends SimpleTrait {
         }
 
         public Optional<Attribute> getAttribute() {
-            return Optional.ofNullable(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(this.name)));
+            return Optional.ofNullable(ForgeRegistries.ATTRIBUTES.getValue(this.name));
         }
     }
 }

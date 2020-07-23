@@ -7,8 +7,8 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 import net.silentchaos512.gear.api.item.GearType;
@@ -87,14 +87,14 @@ public class TraitsProvider implements IDataProvider {
 
         ret.add(new AttributeTraitBuilder(TraitConst.CURSED, 7)
                 .addModifiersEitherHand(GearType.ALL,
-                        SharedMonsterAttributes.LUCK,
+                        Attributes.LUCK,
                         AttributeModifier.Operation.ADDITION,
                         -0.5f, -1f, -1.5f, -2f, -3f, -4f, -5f)
                 .cancelsWith(TraitConst.LUCKY)
         );
         ret.add(new AttributeTraitBuilder(TraitConst.LUCKY, 7)
                 .addModifiersEitherHand(GearType.ALL,
-                        SharedMonsterAttributes.LUCK,
+                        Attributes.LUCK,
                         AttributeModifier.Operation.ADDITION,
                         0.5f, 1f, 1.5f, 2f, 3f, 4f, 5f)
                 .cancelsWith(TraitConst.CURSED)
