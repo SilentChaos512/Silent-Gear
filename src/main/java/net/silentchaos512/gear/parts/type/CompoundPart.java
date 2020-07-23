@@ -170,8 +170,15 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public List<PartTraitInstance> getTraits(ItemStack gear, PartData part) {
         List<PartTraitInstance> ret = new ArrayList<>(super.getTraits(gear, part));
-        TraitHelper.getTraits(getMaterials(part), this.partType, gear).forEach((trait, level) ->
-                ret.add(new PartTraitInstance(trait, level, Collections.emptyList())));
+        List<MaterialInstance> materials = getMaterials(part);
+
+        TraitHelper.getTraits(materials, this.partType, gear).forEach((trait, level) -> {
+            PartTraitInstance inst = new PartTraitInstance(trait, level, Collections.emptyList());
+            if (inst.conditionsMatch(materials, this.partType, gear)) {
+                ret.add(inst);
+            }
+        });
+
         return ret;
     }
 

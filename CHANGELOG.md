@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Part swapping and upgrade parts not working [#178, #172]
 - Blended colors not working on tools
+- Trait conditions not working with new materials. Some existing items may lose traits as a result of this fix. You may need to adjust the ratio of materials to get traits like flame ward again. 
 
 ## [1.10.1] - 2020-07-21
 - This is a 1.16.1 bugfix update! 1.15.2 will skip this version as nothing needs to change.

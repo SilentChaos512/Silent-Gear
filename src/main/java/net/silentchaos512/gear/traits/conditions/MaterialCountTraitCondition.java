@@ -6,9 +6,13 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+
+import java.util.Collection;
 
 public class MaterialCountTraitCondition implements ITraitCondition {
     public static final Serializer SERIALIZER = new Serializer();
@@ -27,9 +31,17 @@ public class MaterialCountTraitCondition implements ITraitCondition {
 
     @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
-        // FIXME: Make it work with the new material system
         int count = parts.getPartsWithTrait(trait);
-        return count >= requiredCount;
+        return count >= this.requiredCount;
+    }
+
+    @Override
+    public boolean matches(ItemStack gear, PartType partType, Collection<MaterialInstance> materials, ITrait trait) {
+        int count = (int) materials.stream()
+                .filter(mat -> mat.getMaterial().getTraits(partType, gear).stream()
+                        .anyMatch(inst -> inst.getTrait() == trait))
+                .count();
+        return count >= this.requiredCount;
     }
 
     public static class Serializer implements ITraitConditionSerializer<MaterialCountTraitCondition> {

@@ -6,9 +6,13 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+
+import java.util.Collection;
 
 public class MaterialRatioTraitCondition implements ITraitCondition {
     public static final Serializer SERIALIZER = new Serializer();
@@ -27,8 +31,17 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
 
     @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
-        // FIXME: Make it work with the new material system
         float ratio = (float) parts.getPartsWithTrait(trait) / parts.getMains().size();
+        return ratio >= this.requiredRatio;
+    }
+
+    @Override
+    public boolean matches(ItemStack gear, PartType partType, Collection<MaterialInstance> materials, ITrait trait) {
+        int count = (int) materials.stream()
+                .filter(mat -> mat.getMaterial().getTraits(partType, gear).stream()
+                        .anyMatch(inst -> inst.getTrait() == trait))
+                .count();
+        float ratio = (float) count / materials.size();
         return ratio >= this.requiredRatio;
     }
 
