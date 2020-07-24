@@ -27,6 +27,7 @@ import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
 import net.silentchaos512.utils.EnumUtils;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -109,6 +110,17 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
+    public ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
+        if (part != null) {
+            MaterialInstance material = getPrimaryMaterial(part);
+            if (material != null) {
+                return material.getMaterial().getDisplayNamePrefix(gear, partType);
+            }
+        }
+        return super.getDisplayNamePrefix(part, gear);
+    }
+
+    @Override
     public ITextComponent getMaterialName(@Nullable PartData part, ItemStack gear) {
         if (part != null) {
             MaterialInstance material = getPrimaryMaterial(part);
@@ -130,37 +142,45 @@ public class CompoundPart extends AbstractGearPart {
 
     @Override
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
-        // Get any base modifiers for this part (could be none)
-        List<StatInstance> baseStats = new ArrayList<>(this.stats.get(stat));
-
         // Get the materials and all the stat modifiers they provide for this stat
         List<MaterialInstance> materials = getMaterials(part);
-        Collection<StatInstance> statMods = materials.stream()
+        List<StatInstance> statMods = materials.stream()
                 .flatMap(m -> m.getStatModifiers(stat, this.partType, gear).stream())
                 .collect(Collectors.toList());
+
+        // Get any base modifiers for this part (could be none)
+        statMods.addAll(this.stats.get(stat));
 
         if (statMods.isEmpty()) {
             // No modifiers for this stat, so doing anything else is pointless
             return statMods;
         }
 
-        // Synergy
-        if (stat.doesSynergyApply()) {
-            float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(gear, part));
-            statMods.add(new StatInstance(synergy - 1, StatInstance.Operation.MUL2));
-        }
-
-        GetStatModifierEvent event = new GetStatModifierEvent(part, stat, baseStats);
+        GetStatModifierEvent event = new GetStatModifierEvent(part, stat, statMods);
         MinecraftForge.EVENT_BUS.post(event);
 
         // Average together all modifiers of the same op. This makes things like rods with varying
         // numbers of materials more "sane".
         List<StatInstance> ret = new ArrayList<>(event.getModifiers());
         for (StatInstance.Operation op : StatInstance.Operation.values()) {
-            Collection<StatInstance> modsForOp = statMods.stream().filter(s -> s.getOp() == op).collect(Collectors.toList());
-            if (!modsForOp.isEmpty()) {
+            Collection<StatInstance> modsForOp = ret.stream().filter(s -> s.getOp() == op).collect(Collectors.toList());
+            if (modsForOp.size() > 1) {
                 StatInstance mod = StatInstance.getWeightedAverageMod(modsForOp, op);
+                ret.removeIf(inst -> inst.getOp() == op);
                 ret.add(mod);
+            }
+        }
+
+        // Synergy
+        if (stat.doesSynergyApply()) {
+            float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(gear, part));
+            if (!MathUtils.floatsEqual(synergy, 1.0f)) {
+                for (int i = 0; i < ret.size(); ++i) {
+                    StatInstance oldMod = ret.get(i);
+                    StatInstance newMod = new StatInstance(synergy * oldMod.getValue(), oldMod.getOp());
+                    ret.remove(i);
+                    ret.add(i, newMod);
+                }
             }
         }
 
