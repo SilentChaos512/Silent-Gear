@@ -215,9 +215,7 @@ public interface IMaterial {
     }
 
     @Nullable
-    default ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
-        return null;
-    }
+    ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
 
     default boolean isVisible(PartType partType) {
         return true;

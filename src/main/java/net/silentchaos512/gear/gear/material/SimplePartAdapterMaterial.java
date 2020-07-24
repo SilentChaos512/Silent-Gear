@@ -146,6 +146,12 @@ public class SimplePartAdapterMaterial implements IMaterial {
                 .orElse(new StringTextComponent("INVALID"));
     }
 
+    @Nullable
+    @Override
+    public ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
+        return null;
+    }
+
     @Override
     public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
     }

@@ -192,6 +192,12 @@ public final class PartMaterial implements IMaterial {
         return displayName.deepCopy();
     }
 
+    @Nullable
+    @Override
+    public ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
+        return namePrefix != null ? namePrefix.deepCopy() : null;
+    }
+
     @Override
     public boolean isVisible(PartType partType) {
         return this.visible;
