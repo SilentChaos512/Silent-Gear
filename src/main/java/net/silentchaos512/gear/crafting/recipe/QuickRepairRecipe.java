@@ -91,7 +91,8 @@ public class QuickRepairRecipe extends SpecialRecipe {
 
         // Then use repair kit, if necessary
         if (gear.getDamage() > 0) {
-            int value = RepairKitItem.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
+            RepairKitItem item = (RepairKitItem) repairKit.getItem();
+            int value = item.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
             gear.attemptDamageItem(-Math.round(value), SilentGear.random, null);
         }
 

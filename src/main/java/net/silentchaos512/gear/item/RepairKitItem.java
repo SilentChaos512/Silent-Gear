@@ -19,16 +19,19 @@ import net.silentchaos512.gear.util.TextUtil;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class RepairKitItem extends Item {
     private static final String NBT_REPAIR_VALUES = "RepairValues";
 
     private final int maxValue;
+    private final Supplier<Double> efficiency;
 
-    public RepairKitItem(int maxValue, Properties properties) {
+    public RepairKitItem(int maxValue, Supplier<Double> efficiency, Properties properties) {
         super(properties);
         this.maxValue = maxValue;
+        this.efficiency = efficiency;
     }
 
     public boolean addMaterial(ItemStack repairKit, ItemStack materialStack) {
@@ -60,6 +63,10 @@ public class RepairKitItem extends Item {
         }
 
         return false;
+    }
+
+    private float getRepairEfficiency(RepairContext.Type repairType) {
+        return efficiency.get().floatValue() + repairType.getBonusEfficiency();
     }
 
     private static int getStoredRepairValue(ItemStack stack, int tier) {
@@ -103,19 +110,19 @@ public class RepairKitItem extends Item {
         }
     }
 
-    public static int getDamageToRepair(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
+    public int getDamageToRepair(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
         int storedValue = getAvailableRepairValue(repairKit, GearData.getTier(gear));
         float gearMulti = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-        int maxRepair = Math.round(storedValue * gearMulti * repairType.getEfficiency());
+        int maxRepair = Math.round(storedValue * gearMulti * this.getRepairEfficiency(repairType));
         int ret = Math.min(maxRepair, gear.getDamage());
         SilentGear.LOGGER.debug("RepairKitItem#getDamageToRepair: {} * {} * {} = {} -> {}",
-                storedValue, gearMulti, repairType.getEfficiency(), maxRepair, ret);
+                storedValue, gearMulti, this.getRepairEfficiency(repairType), maxRepair, ret);
         return ret;
     }
 
     public void removeRepairMaterial(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType, int damageRepaired) {
         float gearMulti = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-        int valueUsed = Math.round(damageRepaired / gearMulti / repairType.getEfficiency());
+        int valueUsed = Math.round(damageRepaired / gearMulti / this.getRepairEfficiency(repairType));
 
         int gearTier = GearData.getTier(gear);
         for (int tier : getStoredTiers(repairKit)) {
@@ -137,7 +144,10 @@ public class RepairKitItem extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(TextUtil.translate("item", "repair_kit.repairEfficiency",
+                (int) (this.getRepairEfficiency(RepairContext.Type.QUICK) * 100)));
         tooltip.add(TextUtil.translate("item", "repair_kit.repairValue", format(getTotalRepairValue(stack)), format(this.maxValue)));
+
         for (int tier : getStoredTiers(stack)) {
             int value = getStoredRepairValue(stack, tier);
             if (value >= 0) {

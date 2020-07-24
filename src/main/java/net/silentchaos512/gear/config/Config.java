@@ -42,6 +42,9 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
         public static final ForgeConfigSpec.DoubleValue repairFactorAnvil;
         public static final ForgeConfigSpec.DoubleValue repairFactorQuick;
+        public static final ForgeConfigSpec.DoubleValue repairKitEfficiencyCrude;
+        public static final ForgeConfigSpec.DoubleValue repairKitEfficiencySturdy;
+        public static final ForgeConfigSpec.DoubleValue repairKitEfficiencyCrimson;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Salvager
@@ -134,8 +137,17 @@ public final class Config {
                             .comment("Effectiveness of gear repairs done in an anvil. Set to 0 to disable anvil repairs.")
                             .defineInRange("anvilEffectiveness", 0.5, 0, 1);
                     repairFactorQuick = builder
-                            .comment("Effectiveness of quick gear repairs (crafting grid). Set to 0 to disable quick repairs.")
+                            .comment("DEPRECATED! Effectiveness of quick gear repairs (crafting grid). Set to 0 to disable quick repairs.")
                             .defineInRange("quickEffectiveness", 0.35, 0, 1);
+
+                    builder.comment("Repair kit efficiency values. A repair kit will repair this percentage of the repair value used.",
+                            "Setting to zero would render the repair kit unusable.");
+                    builder.push("repairKit");
+                    repairKitEfficiencyCrude = builder.defineInRange("crude", 0.35f, 0f, 1f);
+                    repairKitEfficiencySturdy = builder.defineInRange("sturdy", 0.4f, 0f, 1f);
+                    repairKitEfficiencyCrimson = builder.defineInRange("crimson", 0.45f, 0f, 1f);
+                    builder.pop();
+
                     builder.pop();
                 }
                 {

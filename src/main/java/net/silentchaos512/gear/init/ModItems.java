@@ -9,6 +9,7 @@ import net.minecraft.potion.Effects;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
@@ -147,11 +148,11 @@ public final class ModItems {
 
     // Repair Kits
     public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () ->
-            new RepairKitItem(1000, unstackableProps()));
+            new RepairKitItem(1000, Config.Common.repairKitEfficiencyCrude::get, unstackableProps()));
     public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () ->
-            new RepairKitItem(10_000, unstackableProps()));
+            new RepairKitItem(10_000, Config.Common.repairKitEfficiencySturdy::get, unstackableProps()));
     public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () ->
-            new RepairKitItem(100_000, unstackableProps()));
+            new RepairKitItem(100_000, Config.Common.repairKitEfficiencyCrimson::get, unstackableProps()));
 
     static {
         CraftingItems.register(Registration.ITEMS);

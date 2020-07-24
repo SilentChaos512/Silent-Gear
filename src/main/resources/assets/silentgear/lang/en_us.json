@@ -306,6 +306,7 @@
   "item.silentgear.red_card_upgrade": "Red Card",
   "item.silentgear.red_card_upgrade.desc": "Allows the item to break permanently",
   "item.silentgear.redstone_coated_upgrade": "Redstone-Coated Upgrade",
+  "item.silentgear.repair_kit.repairEfficiency": "Repair Efficiency: %d%%",
   "item.silentgear.repair_kit.repairValue": "Repair Value: %s / %s",
   "item.silentgear.repair_kit.repairValue.tier": "- Tier %d: %s",
   "item.silentgear.rod": "Compound Tool Rod",
