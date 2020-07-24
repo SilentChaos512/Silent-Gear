@@ -86,6 +86,32 @@ public class MaterialsProvider implements IDataProvider {
                 .name(new TranslationTextComponent(Items.BARRIER.getTranslationKey()))
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
         );//endregion
+        //region Blackstone
+        ret.add(new MaterialBuilder(SilentGear.getId("blackstone"), 1, Items.BLACKSTONE)
+                .stat(PartType.MAIN, ItemStats.DURABILITY, 151)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
+                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 4)
+                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
+                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
+                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
+                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ARMOR, 5)
+                .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 0)
+                .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 0)
+                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
+                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
+                .stat(PartType.MAIN, ItemStats.RARITY, 8)
+                .stat(PartType.MAIN, chargeability, 0.6f)
+                .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 4)
+                .trait(PartType.ROD, TraitConst.BRITTLE, 2)
+                .trait(PartType.ROD, TraitConst.JAGGED, 2)
+                .trait(PartType.ROD, TraitConst.HARD, 1)
+                .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, 0x3C3947)
+                .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x3C3947)
+        );//endregion
         //region Blaze Gold
         ret.add(new MaterialBuilder(SilentGear.getId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 69)
@@ -767,7 +793,7 @@ public class MaterialsProvider implements IDataProvider {
         //region Wood
         ResourceLocation sgWood = SilentGear.getId("wood");
         ret.add(new MaterialBuilder(sgWood, 0, ExclusionIngredient.of(ItemTags.PLANKS,
-                Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS))
+                Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 59)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
@@ -797,6 +823,8 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(wood(sgWood, "jungle", Items.JUNGLE_PLANKS, 0xB88764));
         ret.add(wood(sgWood, "oak", Items.OAK_PLANKS, 0xB8945F));
         ret.add(wood(sgWood, "spruce", Items.SPRUCE_PLANKS, 0x82613A));
+        ret.add(wood(sgWood, "crimson", Items.CRIMSON_PLANKS, 0x7E3A56));
+        ret.add(wood(sgWood, "warped", Items.WARPED_PLANKS, 0x398382));
         //endregion
         //region Wool
         ResourceLocation sgWool = SilentGear.getId("wool");

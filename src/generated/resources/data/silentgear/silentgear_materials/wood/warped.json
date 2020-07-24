@@ -1,0 +1,31 @@
+{
+  "parent": "silentgear:wood",
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:warped_planks"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.wood.warped"
+  },
+  "display": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#398382"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#398382"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#398382"
+      }
+    ]
+  }
+}

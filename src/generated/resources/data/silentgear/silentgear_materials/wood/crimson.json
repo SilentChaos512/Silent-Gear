@@ -1,0 +1,31 @@
+{
+  "parent": "silentgear:wood",
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:crimson_planks"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.wood.crimson"
+  },
+  "display": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#7E3A56"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#7E3A56"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#7E3A56"
+      }
+    ]
+  }
+}

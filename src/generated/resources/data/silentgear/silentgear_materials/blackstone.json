@@ -1,0 +1,79 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:blackstone"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.blackstone"
+  },
+  "display": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#3C3947"
+      }
+    ],
+    "main/armor": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#3C3947"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#3C3947"
+      }
+    ]
+  },
+  "stats": {
+    "main": {
+      "durability": 151.0,
+      "armor_durability": 4.0,
+      "enchantability": 4.0,
+      "harvest_level": 1.0,
+      "harvest_speed": 4.0,
+      "melee_damage": 1.0,
+      "magic_damage": 0.0,
+      "attack_speed": 0.0,
+      "armor": 5.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 0.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": -0.2,
+      "rarity": 8.0,
+      "silentgems:chargeability": 0.6
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.1
+      },
+      "harvest_speed": {
+        "mul2": -0.1
+      },
+      "rarity": 4.0
+    }
+  },
+  "traits": {
+    "rod": [
+      {
+        "name": "silentgear:brittle",
+        "level": 2
+      },
+      {
+        "name": "silentgear:jagged",
+        "level": 2
+      },
+      {
+        "name": "silentgear:hard",
+        "level": 1
+      }
+    ]
+  }
+}

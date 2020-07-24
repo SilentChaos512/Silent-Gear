@@ -17,7 +17,9 @@
         "minecraft:jungle_planks",
         "minecraft:oak_planks",
         "minecraft:spruce_planks",
-        "silentgear:netherwood_planks"
+        "silentgear:netherwood_planks",
+        "minecraft:crimson_planks",
+        "minecraft:warped_planks"
       ]
     }
   },
