@@ -10,8 +10,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.Registration;
-import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.item.gear.CoreShield;
@@ -42,10 +40,6 @@ public final class ColorHandlers {
                 .filter(item -> item instanceof CoreArmor || item instanceof CoreShield)
                 .map(item -> (ICoreItem) item)
                 .forEach(item -> itemColors.register(item.getItemColors(), item));
-
-        // Compound part items and tool heads
-        Registration.getItems(CompoundPartItem.class).forEach(item ->
-                itemColors.register(item::getColor, item));
     }
 
     private static void register(ItemColors colors, IItemColor itemColor, ItemRegistryObject<? extends Item> item) {
@@ -66,13 +60,13 @@ public final class ColorHandlers {
     public static int getToolColor(ItemStack stack, int tintIndex) {
         switch (tintIndex) {
             case 0:
-                return GearData.getColor(stack, PartType.ROD);
+                return GearData.getBlendedColor(stack, PartType.ROD);
             case 1:
-                return GearData.getColor(stack, PartType.GRIP);
+                return GearData.getBlendedColor(stack, PartType.GRIP);
             case 2:
-                return GearData.getColor(stack, PartType.MAIN);
+                return GearData.getBlendedColor(stack, PartType.MAIN);
             case 3:
-                return GearData.getColor(stack, PartType.TIP);
+                return GearData.getBlendedColor(stack, PartType.TIP);
             default:
                 return Color.VALUE_WHITE;
         }
@@ -93,9 +87,9 @@ public final class ColorHandlers {
     public static int getArmorColor(ItemStack stack, int tintIndex) {
         switch (tintIndex) {
             case 0:
-                return GearData.getColor(stack, PartType.MAIN);
+                return GearData.getBlendedColor(stack, PartType.MAIN);
             case 1:
-                return GearData.getColor(stack, PartType.TIP);
+                return GearData.getBlendedColor(stack, PartType.TIP);
             default:
                 return Color.VALUE_WHITE;
         }
@@ -116,9 +110,9 @@ public final class ColorHandlers {
     public static int getShieldColor(ItemStack stack, int tintIndex) {
         switch (tintIndex) {
             case 0:
-                return GearData.getColor(stack, PartType.ROD);
+                return GearData.getBlendedColor(stack, PartType.ROD);
             case 1:
-                return GearData.getColor(stack, PartType.MAIN);
+                return GearData.getBlendedColor(stack, PartType.MAIN);
             default:
                 return Color.VALUE_WHITE;
         }

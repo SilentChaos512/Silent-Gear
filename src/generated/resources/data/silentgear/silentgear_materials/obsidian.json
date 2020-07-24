@@ -12,26 +12,6 @@
   "name": {
     "translate": "material.silentgear.obsidian"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#443464"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#443464"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#443464"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 3072.0,

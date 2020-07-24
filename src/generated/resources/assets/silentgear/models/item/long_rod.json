@@ -1,6 +1,5 @@
 {
   "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/long_rod"
-  }
+  "gear_type": "tool",
+  "part_type": "silentgear:rod"
 }

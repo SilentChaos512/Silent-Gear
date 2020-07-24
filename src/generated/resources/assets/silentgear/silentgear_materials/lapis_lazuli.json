@@ -1,0 +1,20 @@
+{
+  "tip/all": [
+    {
+      "texture": "silentgear:tip_iron",
+      "color": "#224BAF"
+    }
+  ],
+  "tip/part": [
+    {
+      "texture": "silentgear:tip_base"
+    },
+    {
+      "texture": "silentgear:tip",
+      "color": "#224BAF"
+    },
+    {
+      "texture": "silentgear:tip_shine"
+    }
+  ]
+}

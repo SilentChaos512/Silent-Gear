@@ -10,7 +10,6 @@ import net.silentchaos512.gear.api.item.GearType;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 public class GearModelLoader implements IModelLoader<GearModel> {
     private static final Collection<GearModel> MODELS = new ArrayList<>();
@@ -26,7 +25,10 @@ public class GearModelLoader implements IModelLoader<GearModel> {
 
     @Override
     public GearModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-        ItemCameraTransforms cameraTransforms = Objects.requireNonNull(deserializationContext.deserialize(modelContents.get("display"), ItemCameraTransforms.class));
+        ItemCameraTransforms cameraTransforms = deserializationContext.deserialize(modelContents.get("display"), ItemCameraTransforms.class);
+        if (cameraTransforms == null) {
+            cameraTransforms = ItemCameraTransforms.DEFAULT;
+        }
         String gearTypeStr = JSONUtils.getString(modelContents, "gear_type");
         GearType gearType = GearType.get(gearTypeStr);
         if (gearType == null) {

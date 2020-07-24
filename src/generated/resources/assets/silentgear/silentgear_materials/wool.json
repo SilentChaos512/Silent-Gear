@@ -1,0 +1,12 @@
+{
+  "grip/all": [
+    {
+      "texture": "silentgear:grip_wool"
+    }
+  ],
+  "grip/part": [
+    {
+      "texture": "silentgear:grip"
+    }
+  ]
+}

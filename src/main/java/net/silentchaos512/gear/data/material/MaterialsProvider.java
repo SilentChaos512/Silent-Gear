@@ -1559,6 +1559,24 @@ public class MaterialsProvider implements IDataProvider {
             } catch (IOException ex) {
                 LOGGER.error("Could not save materials to {}", outputFolder, ex);
             }
+
+            // Model data
+            try {
+                String jsonStr = GSON.toJson(builder.serializeModel());
+                String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                Path path = outputFolder.resolve(String.format("assets/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
+                if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
+                    Files.createDirectories(path.getParent());
+
+                    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+                        writer.write(jsonStr);
+                    }
+                }
+
+                cache.recordHash(path, hashStr);
+            } catch (IOException ex) {
+                LOGGER.error("Could not save material models to {}", outputFolder, ex);
+            }
         }
     }
 }

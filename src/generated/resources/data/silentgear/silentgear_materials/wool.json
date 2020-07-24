@@ -33,13 +33,6 @@
   "name": {
     "translate": "material.silentgear.wool"
   },
-  "display": {
-    "grip/all": [
-      {
-        "texture": "silentgear:grip_wool"
-      }
-    ]
-  },
   "stats": {
     "grip": {
       "repair_efficiency": {

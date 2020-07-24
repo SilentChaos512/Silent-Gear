@@ -1,9 +1,0 @@
-{
-  "__comment__": "Lite gear model",
-  "parent": "silentgear:item/dagger",
-  "textures": {
-    "layer0": "silentgear:item/dagger/rod_generic_lc",
-    "layer1": "silentgear:item/blank",
-    "layer2": "silentgear:item/dagger/head_generic_lc"
-  }
-}

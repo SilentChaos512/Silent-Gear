@@ -1,6 +1,5 @@
 {
   "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/mattock/main_generic_hc"
-  }
+  "gear_type": "mattock",
+  "part_type": "silentgear:main"
 }

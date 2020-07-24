@@ -10,28 +10,6 @@
   "name": {
     "translate": "material.silentgear.example"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_lc"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc"
-      }
-    ],
-    "bowstring/all": [
-      {
-        "texture": "silentgear:bowstring_string"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 100.0,

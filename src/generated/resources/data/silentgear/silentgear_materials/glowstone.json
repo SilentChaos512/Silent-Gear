@@ -12,14 +12,6 @@
   "name": {
     "translate": "material.silentgear.glowstone"
   },
-  "display": {
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_iron",
-        "color": "#D2D200"
-      }
-    ]
-  },
   "stats": {
     "tip": {
       "harvest_speed": {

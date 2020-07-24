@@ -12,13 +12,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.gear.CoreCrossbow;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -104,12 +108,28 @@ public class GearModelOverrideList extends ItemOverrideList {
         return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
     }
 
-    private void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
-        for (MaterialLayer layer : material.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers()) {
-            if (layer.getColor() < 0xFFFFFF) {
-                list.add(new MaterialLayer(layer.getTextureId(), GearData.getColor(stack, part.getType())));
-            } else {
-                list.add(layer);
+    @SuppressWarnings("TypeMayBeWeakened")
+    private static void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
+        IMaterialDisplay model = MaterialDisplayManager.get(material.getMaterial());
+
+        if (model != null) {
+            GearType gearType = Objects.requireNonNull(GearHelper.getType(stack));
+            for (MaterialLayer layer : model.getLayers(gearType, part.getType())) {
+                if (layer.getColor() < 0xFFFFFF) {
+                    int blendedColor = part.getColor(stack, 0);
+                    list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
+                } else {
+                    list.add(layer);
+                }
+            }
+        } else {
+            // fallback to old method
+            for (MaterialLayer layer : material.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers()) {
+                if (layer.getColor() < 0xFFFFFF) {
+                    list.add(new MaterialLayer(layer.getTextureId(), GearData.getBlendedColor(stack, part.getType())));
+                } else {
+                    list.add(layer);
+                }
             }
         }
     }
@@ -145,7 +165,9 @@ public class GearModelOverrideList extends ItemOverrideList {
         return super.getOverrides();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
+        SilentGear.LOGGER.debug("Clearing model cache for {}", this.model.gearType);
         bakedModelCache.invalidateAll();
     }
 

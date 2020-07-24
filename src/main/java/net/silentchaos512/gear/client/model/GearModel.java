@@ -23,13 +23,17 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.Registration;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class GearModel implements IModelGeometry<GearModel> {
     private final ItemCameraTransforms cameraTransforms;
@@ -37,7 +41,7 @@ public class GearModel implements IModelGeometry<GearModel> {
     private final ICoreItem item;
     private GearModelOverrideList overrideList;
 
-    public GearModel(ItemCameraTransforms cameraTransforms, GearType gearType) {
+    GearModel(ItemCameraTransforms cameraTransforms, GearType gearType) {
         this.cameraTransforms = cameraTransforms;
         this.gearType = gearType;
         this.item = Registration.ITEMS.getEntries().stream()
@@ -48,6 +52,7 @@ public class GearModel implements IModelGeometry<GearModel> {
                 .orElse(null);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
         if (overrideList != null) {
             overrideList.clearCache();
@@ -60,7 +65,7 @@ public class GearModel implements IModelGeometry<GearModel> {
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
 
-    @SuppressWarnings("MethodWithTooManyParameters")
+    @SuppressWarnings({"MethodWithTooManyParameters", "WeakerAccess"})
     public IBakedModel bake(List<MaterialLayer> layers,
                             int animationFrame,
                             String transformVariant,
@@ -126,6 +131,7 @@ public class GearModel implements IModelGeometry<GearModel> {
 
         ret.add(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
 
+        // Generic built-in textures
         for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
             int animationFrames = tex.isAnimated() ? item.getAnimationFrames() : 1;
             for (int i = 0; i < animationFrames; ++i) {
@@ -133,14 +139,37 @@ public class GearModel implements IModelGeometry<GearModel> {
             }
         }
 
+        // Custom textures
+        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getValues()) {
+            for (PartType partType : PartType.getValues()) {
+                materialDisplay.getLayers(gearType, partType).forEach(layer -> {
+                    ret.addAll(this.getTexturesForAllFrames(layer, item.getAnimationFrames()));
+                });
+            }
+        }
+
         return ret;
+    }
+
+    private Collection<Material> getTexturesForAllFrames(MaterialLayer layer, int animationFrameCount) {
+        return IntStream.rangeClosed(0, animationFrameCount)
+                .mapToObj(frame -> getTexture(layer, frame))
+                .collect(Collectors.toList());
+    }
+
+    private Material getTexture(MaterialLayer layer, int animationFrame) {
+        return getMaterial(layer.getTexture(this.gearType, animationFrame));
     }
 
     private Material getTexture(ResourceLocation tex, int animationFrame) {
         String path = "item/" + gearType.getName() + "/" + tex.getPath();
         String suffix = animationFrame > 0 ? "_" + animationFrame : "";
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path + suffix);
-        return new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, location);
+        return getMaterial(location);
+    }
+
+    private static Material getMaterial(ResourceLocation tex) {
+        return new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, tex);
     }
 
     @Override
@@ -153,12 +182,13 @@ public class GearModel implements IModelGeometry<GearModel> {
         return Optional.empty();
     }
 
-    protected ItemCameraTransforms getCameraTransforms(String transformVariant) {
+    private ItemCameraTransforms getCameraTransforms(String transformVariant) {
         return cameraTransforms;
     }
 
     //region Quad builders (credit to Tetra, https://github.com/mickelus/tetra/blob/master/src/main/java/se/mickelus/tetra/client/model/ModularItemModel.java)
 
+    @SuppressWarnings("WeakerAccess")
     public static List<BakedQuad> getQuadsForSprite(int tintIndex, TextureAtlasSprite sprite, TransformationMatrix transform, int color) {
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
@@ -194,9 +224,8 @@ public class GearModel implements IModelGeometry<GearModel> {
         return builder.build();
     }
 
+    @SuppressWarnings({"MethodWithTooManyParameters", "OverlyLongMethod"})
     private static BakedQuad buildSideQuad(TransformationMatrix transform, Direction side, int tintIndex, int color, TextureAtlasSprite sprite, int u, int v, int size) {
-        final float eps = 1e-2f;
-
         int width = sprite.getWidth();
         int height = sprite.getHeight();
 
@@ -232,6 +261,7 @@ public class GearModel implements IModelGeometry<GearModel> {
                 throw new IllegalArgumentException("can't handle z-oriented side");
         }
 
+        final float eps = 1e-2f;
         float dx = side.getDirectionVec().getX() * eps / width;
         float dy = side.getDirectionVec().getY() * eps / height;
 
@@ -254,6 +284,7 @@ public class GearModel implements IModelGeometry<GearModel> {
         return side.getAxis() == Direction.Axis.Y ? side.getOpposite() : side;
     }
 
+    @SuppressWarnings("MethodWithTooManyParameters")
     private static BakedQuad buildQuad(TransformationMatrix transform, Direction side, TextureAtlasSprite sprite, int tintIndex, int color,
                                        float x0, float y0, float z0, float u0, float v0,
                                        float x1, float y1, float z1, float u1, float v1,
@@ -275,6 +306,7 @@ public class GearModel implements IModelGeometry<GearModel> {
         return builder.build();
     }
 
+    @SuppressWarnings("MethodWithTooManyParameters")
     private static void putVertex(IVertexConsumer consumer, Direction side, float x, float y, float z, float u, float v, int color) {
         VertexFormat format = consumer.getVertexFormat();
         for (int e = 0; e < format.getElements().size(); e++) {
@@ -283,13 +315,13 @@ public class GearModel implements IModelGeometry<GearModel> {
                     consumer.put(e, x, y, z, 1f);
                     break;
                 case COLOR:
-                    float r = ((color >> 16) & 0xFF) / 255f; // red
-                    float g = ((color >> 8) & 0xFF) / 255f; // green
-                    float b = ((color >> 0) & 0xFF) / 255f; // blue
                     float a = ((color >> 24) & 0xFF) / 255f; // alpha
-
                     // reset alpha to 1 if it's 0 to avoid mistakes & make things cleaner
                     a = a == 0 ? 1 : a;
+
+                    float r = ((color >> 16) & 0xFF) / 255f; // red
+                    float g = ((color >> 8) & 0xFF) / 255f; // green
+                    float b = ((color) & 0xFF) / 255f; // blue
 
                     consumer.put(e, r, g, b, a);
                     break;

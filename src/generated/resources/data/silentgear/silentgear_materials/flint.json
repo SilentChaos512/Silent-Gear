@@ -12,26 +12,6 @@
   "name": {
     "translate": "material.silentgear.flint"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#969696"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#969696"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#969696"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 124.0,

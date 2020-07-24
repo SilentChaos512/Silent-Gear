@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -192,7 +192,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         // New material-based armor
         MaterialInstance material = GearData.getPrimaryMainMaterial(stack);
         if (material != null) {
-            IMaterialDisplay display = material.getMaterial().getMaterialDisplay(stack, PartType.MAIN);
+            IMaterialLayerList display = material.getMaterial().getMaterialDisplay(stack, PartType.MAIN);
             List<MaterialLayer> layers = display.getLayers();
             if (!layers.isEmpty()) {
                 MaterialLayer materialLayer = layers.get(0);

@@ -1,0 +1,32 @@
+{
+  "main/all": [
+    {
+      "texture": "silentgear:main_generic_lc"
+    }
+  ],
+  "main/armor": [
+    {
+      "texture": "silentgear:main_generic_lc"
+    }
+  ],
+  "rod/all": [
+    {
+      "texture": "silentgear:rod_generic_lc"
+    }
+  ],
+  "rod/part": [
+    {
+      "texture": "silentgear:rod"
+    }
+  ],
+  "bowstring/all": [
+    {
+      "texture": "silentgear:bowstring_string"
+    }
+  ],
+  "bowstring/part": [
+    {
+      "texture": "silentgear:bowstring"
+    }
+  ]
+}

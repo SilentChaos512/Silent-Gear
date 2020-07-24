@@ -10,9 +10,9 @@ import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
-import net.silentchaos512.gear.api.material.MaterialDisplay;
+import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -34,7 +34,7 @@ import java.util.*;
 public class SimplePartAdapterMaterial implements IMaterial {
     private final ResourceLocation materialId;
     private final Map<PartType, IGearPart> parts = new HashMap<>();
-    private final Map<PartType, IMaterialDisplay> display = new HashMap<>();
+    private final Map<PartType, IMaterialLayerList> display = new HashMap<>();
 
     public SimplePartAdapterMaterial(ResourceLocation materialId) {
         this.materialId = materialId;
@@ -46,7 +46,7 @@ public class SimplePartAdapterMaterial implements IMaterial {
         }
         this.parts.put(part.getType(), part);
         // FIXME: MaterialDisplay for adapter mats
-        this.display.put(part.getType(), MaterialDisplay.DEFAULT);
+        this.display.put(part.getType(), MaterialLayerList.DEFAULT);
     }
 
     private Optional<IGearPart> getPart(PartType partType) {
@@ -135,8 +135,8 @@ public class SimplePartAdapterMaterial implements IMaterial {
     }
 
     @Override
-    public IMaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType) {
-        return this.display.getOrDefault(partType, MaterialDisplay.DEFAULT);
+    public IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType) {
+        return this.display.getOrDefault(partType, MaterialLayerList.DEFAULT);
     }
 
     @Override

@@ -23,9 +23,11 @@ public final class GearType {
     public static final GearType NONE = getOrCreate("none");
     // A gear type which matches everything
     public static final GearType ALL = getOrCreate("all");
+    // Yeah, I know...
+    public static final GearType PART = getOrCreate("part");
 
     // Parent of everything except armor
-    public static final GearType TOOL = getOrCreate("tool");
+    public static final GearType TOOL = getOrCreate("tool", ALL);
     public static final GearType WEAPON = getOrCreate("weapon", TOOL);
     // Harvest tools
     public static final GearType HARVEST_TOOL = getOrCreate("harvest_tool", TOOL);
@@ -54,7 +56,7 @@ public final class GearType {
     // Other
     public static final GearType SHIELD = getOrCreate("shield", TOOL);
     // Armor
-    public static final GearType ARMOR = getOrCreate("armor");
+    public static final GearType ARMOR = getOrCreate("armor", ALL);
     public static final GearType BOOTS = getOrCreate("boots", ARMOR);
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
     public static final GearType HELMET = getOrCreate("helmet", ARMOR);

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.parts.type;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -89,7 +90,11 @@ public class CompoundPart extends AbstractGearPart {
 
     @Override
     public int getColor(PartData part, ItemStack gear, int animationFrame) {
-        return CompoundPartItem.getColor(part.getCraftingItem());
+        Item item = part.getCraftingItem().getItem();
+        if (!(item instanceof CompoundPartItem)) {
+            return Color.VALUE_WHITE;
+        }
+        return ((CompoundPartItem) item).getColor(part.getCraftingItem());
     }
 
     @Override

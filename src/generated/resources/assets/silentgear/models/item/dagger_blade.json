@@ -1,6 +1,5 @@
 {
   "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/dagger/main_generic_hc"
-  }
+  "gear_type": "dagger",
+  "part_type": "silentgear:main"
 }

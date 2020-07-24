@@ -3,6 +3,7 @@ package net.silentchaos512.gear.data;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.silentchaos512.gear.data.client.CompoundModelsProvider;
 import net.silentchaos512.gear.data.client.ModBlockStateProvider;
 import net.silentchaos512.gear.data.client.ModItemModelProvider;
 import net.silentchaos512.gear.data.loot.ModLootTables;
@@ -30,5 +31,6 @@ public final class DataGenerators {
 
         gen.addProvider(new ModBlockStateProvider(gen, existingFileHelper));
         gen.addProvider(new ModItemModelProvider(gen, existingFileHelper));
+        gen.addProvider(new CompoundModelsProvider(gen, existingFileHelper));
     }
 }

@@ -1,6 +1,5 @@
 {
   "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/shield/main_generic_hc"
-  }
+  "gear_type": "shield",
+  "part_type": "silentgear:main"
 }

@@ -1,6 +1,5 @@
 {
   "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/sickle/main_generic_hc"
-  }
+  "gear_type": "sickle",
+  "part_type": "silentgear:main"
 }

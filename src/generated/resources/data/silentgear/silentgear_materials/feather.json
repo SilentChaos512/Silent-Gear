@@ -12,13 +12,6 @@
   "name": {
     "translate": "material.silentgear.feather"
   },
-  "display": {
-    "fletching/all": [
-      {
-        "texture": "silentgear:fletching_generic"
-      }
-    ]
-  },
   "stats": {
     "fletching": {}
   }

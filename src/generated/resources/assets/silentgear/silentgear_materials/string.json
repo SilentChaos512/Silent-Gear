@@ -1,0 +1,21 @@
+{
+  "binding/all": [
+    {
+      "texture": "silentgear:binding_generic"
+    }
+  ],
+  "binding/part": [
+    {
+      "texture": "silentgear:binding"
+    }
+  ],
+  "bowstring/all": [
+    {
+      "texture": "silentgear:bowstring_string",
+      "color": "#444444"
+    },
+    {
+      "texture": "silentgear:arrow"
+    }
+  ]
+}

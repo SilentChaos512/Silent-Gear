@@ -12,26 +12,6 @@
   "name": {
     "translate": "material.silentgear.terracotta"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#985F45"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#985F45"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#985F45"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 165.0,
