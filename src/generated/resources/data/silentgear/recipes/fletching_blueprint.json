@@ -3,10 +3,10 @@
   "group": "silentgear:blueprints/fletching",
   "ingredients": [
     {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     {
       "tag": "forge:feathers"

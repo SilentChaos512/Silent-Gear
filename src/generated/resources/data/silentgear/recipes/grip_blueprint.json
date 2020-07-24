@@ -3,10 +3,10 @@
   "group": "silentgear:blueprints/grip",
   "ingredients": [
     {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     {
       "type": "silentgear:material",

@@ -7,7 +7,7 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     "/": {
       "tag": "forge:rods/wooden"

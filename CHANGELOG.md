@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.10.2] - 2020-07-23
 ### Added
+- (1.16.1) Blackstone and crimson/warped wood materials
 - Racker trait (moving from Silent's Gems). It places netherrack.
 - Stripped netherwood log added to logs tag [#185]
 - Missing binding and grip textures

@@ -3,7 +3,7 @@
   "group": "silentgear:blueprints/binding",
   "ingredients": [
     {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     {
       "type": "silentgear:material",

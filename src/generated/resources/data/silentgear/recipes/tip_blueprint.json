@@ -3,10 +3,10 @@
   "group": "silentgear:blueprints/tip",
   "ingredients": [
     {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     {
-      "tag": "forge:paper/blueprint"
+      "tag": "silentgear:blueprint_paper"
     },
     {
       "tag": "forge:paper"

@@ -55,8 +55,7 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> NUGGETS_EMERALD = forge("nuggets/emerald");
 
         public static final ITag.INamedTag<Item> PAPER = forge("paper");
-        // TODO: Change to silentgear:blueprint_paper?
-        public static final ITag.INamedTag<Item> PAPER_BLUEPRINT = forge("paper/blueprint");
+        public static final ITag.INamedTag<Item> PAPER_BLUEPRINT = mod("blueprint_paper");
         public static final ITag.INamedTag<Item> REPAIR_KITS = mod("repair_kits");
         public static final ITag.INamedTag<Item> TEMPLATE_BOARDS = mod("template_boards");
 
@@ -65,10 +64,6 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> RODS_NETHERWOOD = mod("rods/netherwood");
         public static final ITag.INamedTag<Item> RODS_STONE = forge("rods/stone");
         public static final ITag.INamedTag<Item> RODS_ROUGH = mod("rods/rough");
-
-        // TODO: Remove the string sub-tags
-        public static final ITag.INamedTag<Item> STRING_FLAX = forge("string/flax");
-        public static final ITag.INamedTag<Item> STRING_SINEW = forge("string/sinew");
 
         public static final ITag.INamedTag<Item> FRUITS = forge("fruits");
 
@@ -99,9 +94,6 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> GRADER_CATALYSTS_TIER_4 = mod("grader_catalysts/tier4");
         public static final ITag.INamedTag<Item> GRADER_CATALYSTS_TIER_5 = mod("grader_catalysts/tier5");
         public static final List<ITag.INamedTag<Item>> GRADER_CATALYSTS_TIERS = ImmutableList.of(GRADER_CATALYSTS_TIER_1, GRADER_CATALYSTS_TIER_2, GRADER_CATALYSTS_TIER_3, GRADER_CATALYSTS_TIER_4, GRADER_CATALYSTS_TIER_5);
-
-        public static final ITag.INamedTag<Item> BLUEPRINTS_BOWSTRING = mod("blueprints/bowstring");
-        public static final ITag.INamedTag<Item> BLUEPRINTS_ROD = mod("blueprints/rod");
 
         private Items() {}
 

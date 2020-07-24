@@ -486,11 +486,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("/")
                 .addCriterion("has_item", hasItem(Items.IRON_INGOT))
                 .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.IRON_ROD, 2)
-                .addIngredient(ModTags.Items.BLUEPRINTS_ROD)
-                .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON), 2)
-                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_ROD))
-                .build(consumer, SilentGear.getId("iron_rod2"));
         // L
         ShapedRecipeBuilder.shapedRecipe(Items.LEATHER)
                 .key('#', CraftingItems.LEATHER_SCRAP)
@@ -569,11 +564,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("# ")
                 .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_LOG))
                 .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.NETHERWOOD_STICK, 4)
-                .addIngredient(ModTags.Items.BLUEPRINTS_ROD)
-                .addIngredient(ModBlocks.NETHERWOOD_PLANKS, 2)
-                .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_LOG))
-                .build(consumer, SilentGear.getId("netherwood_stick2"));
         // R
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.RED_CARD_UPGRADE, 4)
                 .addIngredient(CraftingItems.UPGRADE_BASE)
@@ -587,9 +577,9 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(Items.STICK))
                 .build(consumer);
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.ROUGH_ROD, 2)
-                .addIngredient(ModTags.Items.BLUEPRINTS_ROD)
+                .addIngredient(ModItems.ROD_BLUEPRINT.get().getItemTag())
                 .addIngredient(Ingredient.fromTag(Tags.Items.RODS_WOODEN), 2)
-                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINTS_ROD))
+                .addCriterion("has_item", hasItem(ModItems.ROD_BLUEPRINT.get().getItemTag()))
                 .build(consumer, SilentGear.getId("rough_rod2"));
         // S
         ShapedRecipeBuilder.shapedRecipe(ModBlocks.SALVAGER)
@@ -617,11 +607,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("#")
                 .addCriterion("has_item", hasItem(Tags.Items.COBBLESTONE))
                 .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.STONE_ROD, 4)
-                .addIngredient(ModTags.Items.BLUEPRINTS_ROD)
-                .addIngredient(Ingredient.fromTag(Tags.Items.COBBLESTONE), 2)
-                .addCriterion("has_item", hasItem(Tags.Items.COBBLESTONE))
-                .build(consumer, SilentGear.getId("stone_rod2"));
         ShapedRecipeBuilder.shapedRecipe(ModBlocks.STONE_TORCH, 4)
                 .key('#', ItemTags.COALS)
                 .key('/', ModTags.Items.RODS_STONE)
