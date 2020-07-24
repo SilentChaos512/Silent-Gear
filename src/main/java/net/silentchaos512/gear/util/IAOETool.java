@@ -197,8 +197,8 @@ public interface IAOETool {
             boolean isOre1 = isOre(state1);
             boolean isOre2 = isOre(state2);
             MatchMode mode = isOre1 && isOre2
-                    ? Config.Server.matchModeOres.get()
-                    : Config.Server.matchModeStandard.get();
+                    ? Config.Common.matchModeOres.get()
+                    : Config.Common.matchModeStandard.get();
 
             if (mode == MatchMode.LOOSE || block1 == block2)
                 return true;

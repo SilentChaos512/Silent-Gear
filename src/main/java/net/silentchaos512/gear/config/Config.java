@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class Config {
-    public static final class Server {
+    public static final class Common {
         static final ForgeConfigSpec spec;
         // Blueprints
         public static final ForgeConfigSpec.EnumValue<BlueprintType> blueprintTypes;
@@ -189,7 +189,7 @@ public final class Config {
             spec = builder.build();
         }
 
-        private Server() {}
+        private Common() {}
 
         public static float getStatWithMultiplier(ItemStat stat, float value) {
             if (statMultipliers.containsKey(stat))
@@ -253,7 +253,7 @@ public final class Config {
     private Config() {}
 
     public static void init() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Server.spec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Common.spec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.spec);
     }
 

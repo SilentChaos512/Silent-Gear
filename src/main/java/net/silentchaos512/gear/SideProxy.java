@@ -88,7 +88,7 @@ class SideProxy implements IProxy {
         DeferredWorkQueue.runLater(ModWorldFeatures::addFeaturesToBiomes);
 
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
-            if (Config.Server.spawnWithStarterBlueprints.get())
+            if (Config.Common.spawnWithStarterBlueprints.get())
                 return Collections.singleton(ModItems.BLUEPRINT_PACKAGE.get().getStack());
             return Collections.emptyList();
         });
@@ -98,7 +98,7 @@ class SideProxy implements IProxy {
 
         NerfedGear.init();
 
-        if (ModList.get().isLoaded("mmorpg") && Config.Server.mineAndSlashSupport.get()) {
+        if (ModList.get().isLoaded("mmorpg") && Config.Common.mineAndSlashSupport.get()) {
             MineAndSlashCompat.init();
         }
 

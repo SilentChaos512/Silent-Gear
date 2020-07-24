@@ -37,7 +37,7 @@ public abstract class AbstractBlueprintItem extends Item {
     }
 
     boolean isDisabled() {
-        BlueprintType config = Config.Server.blueprintTypes.get();
+        BlueprintType config = Config.Common.blueprintTypes.get();
         return this.singleUse && !config.allowTemplate()
                 || !this.singleUse && !config.allowBlueprint();
     }

@@ -10,8 +10,8 @@ public class RepairContext {
 
         public float getEfficiency() {
             return this == QUICK
-                    ? Config.Server.repairFactorQuick.get().floatValue()
-                    : Config.Server.repairFactorAnvil.get().floatValue();
+                    ? Config.Common.repairFactorQuick.get().floatValue()
+                    : Config.Common.repairFactorAnvil.get().floatValue();
         }
     }
 

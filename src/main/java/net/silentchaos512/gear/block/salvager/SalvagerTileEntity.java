@@ -155,12 +155,12 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
 
     private static double getLossRate(ItemStack stack) {
         int maxDamage = stack.getMaxDamage();
-        double min = Config.Server.salvagerMinLossRate.get();
+        double min = Config.Common.salvagerMinLossRate.get();
         if (maxDamage == 0) {
             return min;
         }
         double ratio = (double) stack.getDamage() / maxDamage;
-        return min + ratio * (Config.Server.salvagerMaxLossRate.get() - min);
+        return min + ratio * (Config.Common.salvagerMaxLossRate.get() - min);
     }
 
     private static Collection<ItemStack> getSalvageFromGearItem(ItemStack stack) {
