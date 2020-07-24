@@ -15,11 +15,13 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
+import net.silentchaos512.gear.crafting.ingredient.GearTypeIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
+import net.silentchaos512.gear.crafting.recipe.smithing.CoatingSmithingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.Const;
@@ -30,6 +32,7 @@ public final class ModRecipes {
     public static final IRecipeSerializer<SalvagingRecipe> SALVAGING_SERIALIZER = new SalvagingRecipe.Serializer();
     public static final IRecipeSerializer<GearSalvagingRecipe> SALVAGING_GEAR_SERIALIZER = new GearSalvagingRecipe.Serializer();
     public static final IRecipeSerializer<CompoundPartSalvagingRecipe> SALVAGING_COMPOUND_PART_SERIALIZER = new CompoundPartSalvagingRecipe.Serializer();
+    public static final IRecipeSerializer<CoatingSmithingRecipe> COATING_SMITHING = new CoatingSmithingRecipe.Serializer();
 
     private ModRecipes() {}
 
@@ -45,6 +48,7 @@ public final class ModRecipes {
         register(SGearDamageItemRecipe.NAME, SGearDamageItemRecipe.SERIALIZER);
         register(SilentGear.getId("conversion"), ConversionRecipe.SERIALIZER);
         register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
+        register(Const.SMITHING_COATING, COATING_SMITHING);
         register(Const.SALVAGING, SALVAGING_SERIALIZER);
         register(Const.SALVAGING_GEAR, SALVAGING_GEAR_SERIALIZER);
         register(Const.SALVAGING_COMPOUND_PART, SALVAGING_COMPOUND_PART_SERIALIZER);
@@ -52,6 +56,7 @@ public final class ModRecipes {
         // Ingredient serializers
         CraftingHelper.register(ExclusionIngredient.Serializer.NAME, ExclusionIngredient.Serializer.INSTANCE);
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(GearTypeIngredient.Serializer.NAME, GearTypeIngredient.Serializer.INSTANCE);
         CraftingHelper.register(PartMaterialIngredient.Serializer.NAME, PartMaterialIngredient.Serializer.INSTANCE);
 
         if (SilentGear.isDevBuild()) {

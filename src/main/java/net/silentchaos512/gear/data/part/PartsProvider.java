@@ -45,6 +45,7 @@ public class PartsProvider implements IDataProvider {
 
         ret.add(part("binding", GearType.TOOL, PartType.BINDING, PartPositions.BINDING, ModItems.BINDING));
         ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.BOWSTRING, PartPositions.BOWSTRING, ModItems.BOWSTRING));
+        ret.add(part("coating", GearType.ALL, PartType.COATING, PartPositions.COATING, ModItems.COATING));
         ret.add(part("fletching", GearType.NONE, PartType.FLETCHING, PartPositions.FLETCHING, ModItems.FLETCHING));
         ret.add(part("grip", GearType.TOOL, PartType.GRIP, PartPositions.GRIP, ModItems.GRIP));
         ret.add(part("long_rod", GearType.TOOL, PartType.ROD, PartPositions.ROD, ModItems.LONG_ROD));

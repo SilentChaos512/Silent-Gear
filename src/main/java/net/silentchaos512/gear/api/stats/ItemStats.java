@@ -54,6 +54,7 @@ public final class ItemStats {
     // Armor
     public static final ItemStat ARMOR = new ItemStat(0f, 0f, 40f, TextFormatting.LIGHT_PURPLE, new ItemStat.Properties().affectedByGrades(true).synergyApplies());
     public static final ItemStat ARMOR_TOUGHNESS = new ItemStat(0f, 0f, 40f, TextFormatting.LIGHT_PURPLE, new ItemStat.Properties().affectedByGrades(true).synergyApplies());
+    public static final ItemStat KNOCKBACK_RESISTANCE = new ItemStat(0f, 0f, 100f, TextFormatting.LIGHT_PURPLE, new ItemStat.Properties().affectedByGrades(true).synergyApplies());
     public static final ItemStat MAGIC_ARMOR = new ItemStat(0f, 0f, 40f, TextFormatting.LIGHT_PURPLE, new ItemStat.Properties().affectedByGrades(true).synergyApplies());
 
     private ItemStats() {
@@ -107,6 +108,7 @@ public final class ItemStats {
         register(event.getRegistry(), RANGED_SPEED, "ranged_speed");
         register(event.getRegistry(), ARMOR, "armor");
         register(event.getRegistry(), ARMOR_TOUGHNESS, "armor_toughness");
+        register(event.getRegistry(), KNOCKBACK_RESISTANCE, "knockback_resistance");
         register(event.getRegistry(), MAGIC_ARMOR, "magic_armor");
     }
 

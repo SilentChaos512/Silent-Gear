@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.10.2] - 2020-07-23
 ### Added
+- (1.16.1) Coating part type
+- (1.16.1) Netherite coating. Combine any item with a netherite ingot in a smithing table. Gear item does not need to be diamond, it can be made of anything.
 - (1.16.1) Blackstone and crimson/warped wood materials
 - Racker trait (moving from Silent's Gems). It places netherrack.
 - Stripped netherwood log added to logs tag [#185]
@@ -13,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Damage on use for refractive trait increased to 4, terminus and racker increased to 3
 ### Fixed
+- (1.16.1) A bug causing stat calculations of compound parts to be wrong (fix pending for 1.15.2)
 - Part swapping and upgrade parts not working [#178, #172]
 - Blended colors not working on tools
 - Trait conditions not working with new materials. Some existing items may lose traits as a result of this fix. You may need to adjust the ratio of materials to get traits like flame ward again. 

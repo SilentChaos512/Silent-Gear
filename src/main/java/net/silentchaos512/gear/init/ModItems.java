@@ -27,6 +27,7 @@ public final class ModItems {
     // Blueprints
     public static final ItemRegistryObject<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartType.ROD, false);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartType.TIP, false);
+    public static final ItemRegistryObject<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartType.COATING, false);
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartType.GRIP, false);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartType.BINDING, false);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_BLUEPRINT = registerPartBlueprint(PartType.BOWSTRING, false);
@@ -57,6 +58,7 @@ public final class ModItems {
     // Templates
     public static final ItemRegistryObject<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartType.ROD, true);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartType.TIP, true);
+    public static final ItemRegistryObject<PartBlueprintItem> COATING_TEMPLATE = registerPartBlueprint(PartType.COATING, true);
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartType.GRIP, true);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartType.BINDING, true);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_TEMPLATE = registerPartBlueprint(PartType.BOWSTRING, true);
@@ -135,6 +137,8 @@ public final class ModItems {
             new CompoundPartItem(PartType.ROD, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
             new CompoundPartItem(PartType.TIP, 1, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> COATING = registerCompoundPart("coating", () ->
+            new CompoundPartItem(PartType.COATING, new Item.Properties()));
     public static final ItemRegistryObject<CompoundPartItem> GRIP = registerCompoundPart("grip", () ->
             new CompoundPartItem(PartType.GRIP, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> BINDING = registerCompoundPart("binding", () ->

@@ -1,0 +1,10 @@
+{
+  "type": "silentgear:smithing/coating",
+  "gear": {
+    "item": "silentgear:axe"
+  },
+  "addition": {
+    "type": "silentgear:material",
+    "part_type": "silentgear:coating"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "silentgear:blueprints/coating",
+  "ingredients": [
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "forge:gems/diamond"
+    },
+    {
+      "tag": "forge:gems/emerald"
+    }
+  ],
+  "result": {
+    "item": "silentgear:coating_template"
+  }
+}

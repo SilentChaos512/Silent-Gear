@@ -12,4 +12,5 @@ public class Const {
     public static final ResourceLocation SALVAGING = SilentGear.getId("salvaging");
     public static final ResourceLocation SALVAGING_COMPOUND_PART = SilentGear.getId("salvaging/compound_part");
     public static final ResourceLocation SALVAGING_GEAR = SilentGear.getId("salvaging/gear");
+    public static final ResourceLocation SMITHING_COATING = SilentGear.getId("smithing/coating");
 }

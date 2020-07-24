@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "silentgear:item/coating_material",
+    "layer1": "silentgear:item/coating_jar"
+  }
+}

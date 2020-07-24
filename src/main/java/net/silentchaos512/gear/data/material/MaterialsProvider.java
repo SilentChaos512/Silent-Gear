@@ -30,6 +30,7 @@ import net.silentchaos512.gear.traits.conditions.GearTypeTraitCondition;
 import net.silentchaos512.gear.traits.conditions.MaterialCountTraitCondition;
 import net.silentchaos512.gear.traits.conditions.MaterialRatioTraitCondition;
 import net.silentchaos512.gear.traits.conditions.OrTraitCondition;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -556,6 +557,21 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.FLEXIBLE, 3)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x854242)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x854242)
+        );//endregion
+        //region Netherite
+        ret.add(new MaterialBuilder(SilentGear.getId("netherite"), 4, Items.NETHERITE_INGOT)
+                .namePrefix(TextUtil.translate("material", "netherite"))
+                .stat(PartType.COATING, ItemStats.DURABILITY, 0.3f, StatInstance.Operation.MUL2)
+                .stat(PartType.COATING, ItemStats.DURABILITY, 2, StatInstance.Operation.ADD)
+                .stat(PartType.COATING, ItemStats.HARVEST_SPEED, 0.125f, StatInstance.Operation.MUL2)
+                .stat(PartType.COATING, ItemStats.HARVEST_LEVEL, 4, StatInstance.Operation.MAX)
+                .stat(PartType.COATING, ItemStats.MELEE_DAMAGE, 1f / 3f, StatInstance.Operation.MUL2)
+                .stat(PartType.COATING, ItemStats.MAGIC_DAMAGE, 1f / 3f, StatInstance.Operation.MUL2)
+                .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 0.1f, StatInstance.Operation.ADD)
+                .stat(PartType.COATING, ItemStats.ENCHANTABILITY, 5, StatInstance.Operation.ADD)
+                .display(PartType.COATING,
+                        new MaterialLayer(PartTextures.MAIN_GENERIC_HC, 0x867B86),
+                        new MaterialLayer(PartTextures.HIGHLIGHT, Color.VALUE_WHITE))
         );//endregion
         //region Netherwood
         ret.add(new MaterialBuilder(SilentGear.getId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)

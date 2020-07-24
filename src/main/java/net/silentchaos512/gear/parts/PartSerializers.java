@@ -21,7 +21,10 @@ public final class PartSerializers {
 
     static {
         for (PartType type : PartType.getValues()) {
-            register(type.getSerializer());
+            IPartSerializer<? extends IGearPart> serializer = type.getSerializer();
+            if (serializer != null) {
+                register(serializer);
+            }
         }
         register(CompoundPart.SERIALIZER);
     }

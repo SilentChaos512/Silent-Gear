@@ -66,6 +66,7 @@ public class ModRecipesProvider extends RecipeProvider {
         registerCompoundParts(consumer);
         registerGear(consumer);
         registerRepairKits(consumer);
+        registerSmithing(consumer);
         registerSalvaging(consumer);
     }
 
@@ -183,6 +184,20 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.STONE)
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.COATING_BLUEPRINT)
+                .setGroup("silentgear:blueprints/coating")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.PAPER_BLUEPRINT), 4)
+                .addIngredient(Tags.Items.GEMS_DIAMOND)
+                .addIngredient(Tags.Items.GEMS_EMERALD)
+                .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.COATING_TEMPLATE)
+                .setGroup("silentgear:blueprints/coating")
+                .addIngredient(Ingredient.fromTag(ModTags.Items.TEMPLATE_BOARDS), 4)
+                .addIngredient(Tags.Items.GEMS_DIAMOND)
+                .addIngredient(Tags.Items.GEMS_EMERALD)
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
     }
 
     private void registerCompoundParts(Consumer<IFinishedRecipe> consumer) {
@@ -235,6 +250,17 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(ModItems.TIP_BLUEPRINT.get().getItemTag())
                 .addIngredient(PartMaterialIngredient.of(PartType.TIP), 2)
                 .build(consumer, SilentGear.getId("part/tip2"));
+
+        // TODO: Uncomment when working
+        /*ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.COATING, 1)
+                .addIngredient(ModItems.COATING_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.COATING))
+                .build(consumer, SilentGear.getId("part/coating"));
+
+        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.COATING, 2)
+                .addIngredient(ModItems.COATING_BLUEPRINT.get().getItemTag())
+                .addIngredient(PartMaterialIngredient.of(PartType.COATING), 2)
+                .build(consumer, SilentGear.getId("part/coating2"));*/
     }
 
     private void registerGear(Consumer<IFinishedRecipe> consumer) {
@@ -621,6 +647,12 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(Tags.Items.STONE)
                 .addCriterion("has_item", hasItem(ItemTags.PLANKS))
                 .build(consumer);
+    }
+
+    private void registerSmithing(Consumer<IFinishedRecipe> consumer) {
+        Registration.getItems(item -> item instanceof ICoreItem).forEach(item -> {
+            GearSmithingRecipeBuilder.coating(item).build(consumer);
+        });
     }
 
     private void registerSalvaging(Consumer<IFinishedRecipe> consumer) {

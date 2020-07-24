@@ -1,0 +1,59 @@
+{
+  "availability": {
+    "tier": 4,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.netherite"
+  },
+  "name_prefix": {
+    "translate": "material.silentgear.netherite"
+  },
+  "display": {
+    "coating/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#867B86"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ]
+  },
+  "stats": {
+    "coating": {
+      "durability": [
+        {
+          "mul2": 0.3
+        },
+        {
+          "add": 2.0
+        }
+      ],
+      "harvest_speed": {
+        "mul2": 0.125
+      },
+      "harvest_level": {
+        "max": 4.0
+      },
+      "melee_damage": {
+        "mul2": 0.33333334
+      },
+      "magic_damage": {
+        "mul2": 0.33333334
+      },
+      "knockback_resistance": {
+        "add": 0.1
+      },
+      "enchantability": {
+        "add": 5.0
+      }
+    }
+  }
+}

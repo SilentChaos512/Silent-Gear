@@ -1,0 +1,10 @@
+{
+  "type": "silentgear:smithing/coating",
+  "gear": {
+    "item": "silentgear:paxel"
+  },
+  "addition": {
+    "type": "silentgear:material",
+    "part_type": "silentgear:coating"
+  }
+}

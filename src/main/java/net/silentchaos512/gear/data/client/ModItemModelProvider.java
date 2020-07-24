@@ -84,6 +84,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/upgrade_base")
                 .texture("layer1", "item/custom_tip_upgrade")
                 .texture("layer2", "item/custom_tip_upgrade_shine");
+        getBuilder("coating")
+                .parent(itemGenerated)
+                .texture("layer0", "item/coating_material")
+                .texture("layer1", "item/coating_jar");
 
         // Misc
         builder(ModItems.BLUEPRINT_PACKAGE, itemGenerated);

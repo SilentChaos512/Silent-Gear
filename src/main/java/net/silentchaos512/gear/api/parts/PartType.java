@@ -52,6 +52,9 @@ public final class PartType {
             .serializer(createSerializer("bowstring", BowstringPart::new))
             .compoundPartItem(() -> ModItems.BOWSTRING.orElseThrow(IllegalStateException::new))
     );
+    public static final PartType COATING = create(Builder.builder(SilentGear.getId("coating"))
+            .compoundPartItem(() -> ModItems.COATING.orElseThrow(IllegalStateException::new))
+    );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
             .serializer(createSerializer("fletching", FletchingPart::new))
             .compoundPartItem(() -> ModItems.FLETCHING.orElseThrow(IllegalStateException::new))
@@ -122,11 +125,11 @@ public final class PartType {
 
     private final ResourceLocation name;
     private final int maxPerItem;
-    private final IPartSerializer<? extends IGearPart> serializer;
+    @Nullable private final IPartSerializer<? extends IGearPart> serializer;
     @Nullable private final ResourceLocation fallbackPart;
     @Nullable private final Supplier<CompoundPartItem> compoundPartItem;
 
-    private PartType(ResourceLocation name, int maxPerItem, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<CompoundPartItem> compoundPartItem) {
+    private PartType(ResourceLocation name, int maxPerItem, @Nullable IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<CompoundPartItem> compoundPartItem) {
         this.name = name;
         this.maxPerItem = maxPerItem;
         this.serializer = serializer;
@@ -146,6 +149,8 @@ public final class PartType {
         return new TranslationTextComponent("part." + name.getNamespace() + ".type." + name.getPath());
     }
 
+    @Deprecated
+    @Nullable
     public IPartSerializer<? extends IGearPart> getSerializer() {
         return serializer;
     }
