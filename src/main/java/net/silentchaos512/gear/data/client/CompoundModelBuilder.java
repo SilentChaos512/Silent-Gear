@@ -37,6 +37,7 @@ public class CompoundModelBuilder extends ItemModelBuilder {
     @Override
     public JsonObject toJson() {
         JsonObject json = super.toJson();
+        json.addProperty("loader", this.loader.toString());
         if (gearType != null) {
             json.addProperty("gear_type", this.gearType.getName());
         }

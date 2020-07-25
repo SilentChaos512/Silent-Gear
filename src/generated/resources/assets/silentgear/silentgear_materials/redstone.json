@@ -1,7 +1,7 @@
 {
   "tip/all": [
     {
-      "texture": "silentgear:tip_iron",
+      "texture": "silentgear:tip_smooth",
       "color": "#BB0000"
     }
   ],

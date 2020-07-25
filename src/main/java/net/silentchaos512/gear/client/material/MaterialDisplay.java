@@ -2,6 +2,7 @@ package net.silentchaos512.gear.client.material;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialLayerList;
@@ -13,11 +14,14 @@ import java.util.Map;
 
 public final class MaterialDisplay implements IMaterialDisplay {
     private final Map<PartGearKey, MaterialLayerList> map = new LinkedHashMap<>();
+    private final ResourceLocation modelId;
 
-    private MaterialDisplay() {}
+    private MaterialDisplay(ResourceLocation modelId) {
+        this.modelId = modelId;
+    }
 
     public static MaterialDisplay of(Map<PartGearKey, MaterialLayerList> display) {
-        MaterialDisplay model = new MaterialDisplay();
+        MaterialDisplay model = new MaterialDisplay(new ResourceLocation("null"));
         model.map.putAll(display);
         return model;
     }
@@ -51,13 +55,20 @@ public final class MaterialDisplay implements IMaterialDisplay {
         return json;
     }
 
-    public static MaterialDisplay deserialize(JsonObject json) {
-        MaterialDisplay ret = new MaterialDisplay();
+    public static MaterialDisplay deserialize(ResourceLocation modelId, JsonObject json) {
+        MaterialDisplay ret = new MaterialDisplay(modelId);
         json.entrySet().forEach(entry -> {
             PartGearKey key = PartGearKey.read(entry.getKey());
             JsonElement value = entry.getValue();
             ret.map.put(key, MaterialLayerList.deserialize(value, MaterialLayerList.DEFAULT));
         });
         return ret;
+    }
+
+    @Override
+    public String toString() {
+        return "MaterialDisplay{" +
+                "modelId=" + modelId +
+                '}';
     }
 }

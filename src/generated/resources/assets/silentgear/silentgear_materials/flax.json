@@ -19,5 +19,11 @@
     {
       "texture": "silentgear:arrow"
     }
+  ],
+  "bowstring/part": [
+    {
+      "texture": "silentgear:bowstring",
+      "color": "#845E37"
+    }
   ]
 }

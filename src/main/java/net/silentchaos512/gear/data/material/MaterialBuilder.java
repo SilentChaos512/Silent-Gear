@@ -28,6 +28,7 @@ import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.material.PartGearKey;
+import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.parts.PartTextureType;
 import net.silentchaos512.utils.Color;
 
@@ -108,17 +109,45 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder display(PartTextureType texture, int color) {
+    public MaterialBuilder displayAll(PartTextureType texture, int color) {
         if (this.stats.isEmpty()) {
             throw new IllegalStateException("Must build stats map first!");
         }
-        this.stats.keySet().forEach(partType -> {
-            // Remove highlight layer from non-mains
+        for (PartType partType : this.stats.keySet()) {// Remove highlight layer from non-mains
             PartTextureType targetTexture = texture == PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT && partType != PartType.MAIN
                     ? PartTextureType.HIGH_CONTRAST
                     : texture;
-            display(partType, targetTexture, color);
-        });
+
+            if (partType == PartType.BOWSTRING)
+                displayBowstring(color);
+            else if (partType == PartType.TIP)
+                displayTip(targetTexture.getLayers(partType).get(0), color);
+            else
+                display(partType, targetTexture, color);
+        }
+        return this;
+    }
+
+    public MaterialBuilder displayBowstring(int color) {
+        display(PartType.BOWSTRING,
+                new MaterialLayer(PartTextures.BOWSTRING_STRING, color),
+                new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE)
+        );
+        display(PartType.BOWSTRING, GearType.PART,
+                new MaterialLayer(SilentGear.getId("bowstring"), color)
+        );
+        return this;
+    }
+
+    public MaterialBuilder displayTip(PartTextures texture, int color) {
+        display(PartType.TIP, GearType.ALL,
+                new MaterialLayer(texture, color)
+        );
+        display(PartType.TIP, GearType.PART,
+                new MaterialLayer(SilentGear.getId("tip_base"), Color.VALUE_WHITE),
+                new MaterialLayer(SilentGear.getId("tip"), color),
+                new MaterialLayer(SilentGear.getId("tip_shine"), Color.VALUE_WHITE)
+        );
         return this;
     }
 
@@ -129,13 +158,7 @@ public class MaterialBuilder {
         }
 
         // Compound part models
-        if (partType == PartType.TIP) {
-            display(partType, GearType.PART,
-                    new MaterialLayer(SilentGear.getId("tip_base"), Color.VALUE_WHITE),
-                    new MaterialLayer(SilentGear.getId("tip"), color),
-                    new MaterialLayer(SilentGear.getId("tip_shine"), Color.VALUE_WHITE)
-            );
-        } else if (partType != PartType.MAIN) {
+        if (partType != PartType.MAIN) {
             display(partType, GearType.PART, new MaterialLayer(partType.getName(), color));
         }
 

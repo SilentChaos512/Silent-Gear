@@ -30,5 +30,6 @@ public interface IMaterialLayerList extends Iterable<MaterialLayer> {
      *
      * @return The item color
      */
+    @Deprecated
     int getPrimaryColor();
 }

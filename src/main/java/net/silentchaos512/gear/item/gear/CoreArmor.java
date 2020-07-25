@@ -18,18 +18,20 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.material.IMaterialLayerList;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -182,7 +184,8 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         // 3. You got lucky. The tiniest change can break everything for no apparent reason.
 
         // Empty texture if broken
-        if (GearHelper.isBroken(stack)) return SilentGear.MOD_ID + ":textures/models/armor/empty.png";
+        if (GearHelper.isBroken(stack))
+            return SilentGear.MOD_ID + ":textures/models/armor/empty.png";
 
         int layer = slot == EquipmentSlotType.LEGS ? 2 : 1;
         // Overlay - default to a blank texture
@@ -192,16 +195,17 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         // New material-based armor
         MaterialInstance material = GearData.getPrimaryMainMaterial(stack);
         if (material != null) {
-            IMaterialLayerList display = material.getMaterial().getMaterialDisplay(stack, PartType.MAIN);
-            List<MaterialLayer> layers = display.getLayers();
-            if (!layers.isEmpty()) {
-                MaterialLayer materialLayer = layers.get(0);
-                ResourceLocation tex = materialLayer.getTextureId();
-                return tex.getNamespace() + ":textures/models/armor/"
-                        + tex.getPath()
-                        + "_layer_" + layer
-                        + (type != null ? "_" + type : "")
-                        + ".png";
+            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
+            if (materialModel != null) {
+                MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, PartType.MAIN).getFirstLayer();
+                if (materialLayer != null) {
+                    ResourceLocation tex = materialLayer.getTextureId();
+                    return tex.getNamespace() + ":textures/models/armor/"
+                            + tex.getPath()
+                            + "_layer_" + layer
+                            + (type != null ? "_" + type : "")
+                            + ".png";
+                }
             }
         }
 
@@ -230,7 +234,17 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public int getColor(ItemStack stack) {
-        return GearData.getArmorColor(stack);
+        MaterialInstance material = GearData.getPrimaryMainMaterial(stack);
+        if (material != null) {
+            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
+            if (materialModel != null) {
+                MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, PartType.MAIN).getFirstLayer();
+                if (materialLayer != null) {
+                    return materialLayer.getColor();
+                }
+            }
+        }
+        return Color.VALUE_WHITE;
     }
 
     @Override

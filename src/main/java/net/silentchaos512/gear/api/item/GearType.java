@@ -1,5 +1,8 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -105,6 +108,15 @@ public final class GearType {
         if (VALID_NAME.matcher(name).find())
             throw new IllegalArgumentException("Invalid name: " + name);
         return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames));
+    }
+
+    public static GearType fromJson(JsonObject json, String key) {
+        String str = JSONUtils.getString(json, key);
+        GearType type = get(str);
+        if (type == null) {
+            throw new JsonSyntaxException("Unknown gear type: " + str);
+        }
+        return type;
     }
 
     private final String name;

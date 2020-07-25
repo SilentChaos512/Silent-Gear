@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.parts.PartTextureType;
 import net.silentchaos512.utils.Color;
 
@@ -24,6 +25,7 @@ public class MaterialLayerList implements IMaterialLayerList {
 
     public MaterialLayerList(PartType partType, PartTextureType texture, int color) {
         this(texture.getLayers(partType).stream()
+                .map(PartTextures::getTexture)
                 .map(tex -> {
                     int c = tex.equals(SilentGear.getId("_highlight")) ? Color.VALUE_WHITE : color;
                     return new MaterialLayer(tex, c);
@@ -100,7 +102,7 @@ public class MaterialLayerList implements IMaterialLayerList {
 
     @Override
     public String toString() {
-        return "MaterialDisplay{" +
+        return "MaterialLayerList{" +
                 "layers=" + layers +
                 '}';
     }

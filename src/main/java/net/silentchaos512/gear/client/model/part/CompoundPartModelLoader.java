@@ -1,21 +1,21 @@
-package net.silentchaos512.gear.client.model;
+package net.silentchaos512.gear.client.model.part;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
 import net.minecraftforge.client.model.IModelLoader;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.parts.PartType;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class GearModelLoader implements IModelLoader<GearModel> {
-    private static final Collection<GearModel> MODELS = new ArrayList<>();
+public class CompoundPartModelLoader implements IModelLoader<CompoundPartModel> {
+    private static final Collection<CompoundPartModel> MODELS = new ArrayList<>();
 
     public static void clearCaches() {
-        MODELS.forEach(GearModel::clearCache);
+        MODELS.forEach(CompoundPartModel::clearCache);
     }
 
     @Override
@@ -24,18 +24,15 @@ public class GearModelLoader implements IModelLoader<GearModel> {
     }
 
     @Override
-    public GearModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+    public CompoundPartModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
         ItemCameraTransforms cameraTransforms = deserializationContext.deserialize(modelContents.get("display"), ItemCameraTransforms.class);
         if (cameraTransforms == null) {
             cameraTransforms = ItemCameraTransforms.DEFAULT;
         }
-        String gearTypeStr = JSONUtils.getString(modelContents, "gear_type");
-        GearType gearType = GearType.get(gearTypeStr);
-        if (gearType == null) {
-            throw new NullPointerException("Unknown gear type: " + gearTypeStr);
-        }
+        GearType gearType = GearType.fromJson(modelContents, "gear_type");
+        PartType partType = PartType.fromJson(modelContents, "part_type");
 
-        GearModel model = new GearModel(cameraTransforms, gearType);
+        CompoundPartModel model = new CompoundPartModel(cameraTransforms, gearType, partType);
         MODELS.add(model);
         return model;
     }

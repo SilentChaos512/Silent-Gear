@@ -13,7 +13,8 @@ import net.minecraftforge.resource.VanillaResourceType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
-import net.silentchaos512.gear.client.model.GearModelLoader;
+import net.silentchaos512.gear.client.model.gear.GearModelLoader;
+import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.util.IEarlySelectiveReloadListener;
 import org.apache.commons.io.IOUtils;
 
@@ -45,6 +46,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                 MAP.clear();
                 ERROR_LIST.clear();
 
+                CompoundPartModelLoader.clearCaches();
                 GearModelLoader.clearCaches();
 
                 String packName = "ERROR";
@@ -59,7 +61,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                         if (json == null) {
                             SilentGear.LOGGER.error("Could not load material model {} as it's null or empty", name);
                         } else {
-                            IMaterialDisplay model = MaterialDisplay.deserialize(json);
+                            IMaterialDisplay model = MaterialDisplay.deserialize(name, json);
                             MAP.put(name, model);
                         }
                     } catch (IllegalArgumentException | JsonParseException ex) {

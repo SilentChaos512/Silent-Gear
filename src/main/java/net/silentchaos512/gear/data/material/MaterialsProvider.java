@@ -14,7 +14,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -63,7 +62,7 @@ public class MaterialsProvider implements IDataProvider {
         Collection<MaterialBuilder> ret = new ArrayList<>();
 
         //region Base Materials
-        //region Barrier
+        // Barrier
         ret.add(new MaterialBuilder(SilentGear.getId("barrier"), 5, Items.BARRIER)
                 .visible(false)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1337)
@@ -85,8 +84,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.HOLY, 5)
                 .name(new TranslationTextComponent(Items.BARRIER.getTranslationKey()))
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
-        );//endregion
-        //region Blaze Gold
+        );
+        // Blaze Gold
         ret.add(new MaterialBuilder(SilentGear.getId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 69)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
@@ -126,9 +125,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.FIERY, 4, new GearTypeTraitCondition(GearType.WEAPON))
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE48534)
                 .display(PartType.ROD, PartTextureType.HIGH_CONTRAST, 0xE48534)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xE48534)
-        );//endregion
-        //region Crimson Iron
+                .displayTip(PartTextures.TIP_SMOOTH, 0xE48534)
+        );
+        // Crimson Iron
         ret.add(new MaterialBuilder(SilentGear.getId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 420)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 27)
@@ -162,9 +161,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.FIERY, 1, new GearTypeTraitCondition(GearType.WEAPON))
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF6189)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xFF6189)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xFF6189)
-        );//endregion
-        //region Crimson Steel
+                .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
+        );
+        // Crimson Steel
         ret.add(new MaterialBuilder(SilentGear.getId("crimson_steel"), 3, ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 2400)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 42)
@@ -199,9 +198,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.MAGMATIC, 1, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC143C)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xDC143C)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xDC143C)
-        );//endregion
-        //region Diamond
+                .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
+        );
+        // Diamond
         ret.add(new MaterialBuilder(SilentGear.getId("diamond"), 3, Tags.Items.GEMS_DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1561)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 33)
@@ -243,9 +242,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.LUSTROUS, 2)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
                 .display(PartType.ROD, PartTextureType.HIGH_CONTRAST, 0x33EBCB)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0x33EBCB)
-        );//endregion
-        //region Emerald
+                .displayTip(PartTextures.TIP_SHARP, 0x33EBCB)
+        );
+        // Emerald
         ret.add(new MaterialBuilder(SilentGear.getId("emerald"), 3, Tags.Items.GEMS_EMERALD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1080)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 24)
@@ -281,9 +280,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.SYNERGISTIC, 2)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
                 .display(PartType.ROD, PartTextureType.HIGH_CONTRAST, 0x00B038)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0x00B038)
-        );//endregion
-        //region End Stone
+                .displayTip(PartTextures.TIP_SHARP, 0x00B038)
+        );
+        // End Stone
         ret.add(new MaterialBuilder(SilentGear.getId("end_stone"), 1, Tags.Items.END_STONES)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1164)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
@@ -309,8 +308,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.ANCIENT, 4)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFFFFCC)
                 .display(PartType.ROD, PartTextureType.HIGH_CONTRAST, 0xFFFFCC)
-        );//endregion
-        //region Example
+        );
+        // Example
         ret.add(new MaterialBuilder(SilentGear.getId("example"), 0, Ingredient.EMPTY)
                 .visible(false)
                 .blacklistGearType("all")
@@ -330,10 +329,33 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.RARITY, 0)
                 .stat(PartType.MAIN, chargeability, 1f)
                 .noStats(PartType.ROD)
+                .noStats(PartType.TIP)
+                .noStats(PartType.GRIP)
+                .noStats(PartType.BINDING)
                 .noStats(PartType.BOWSTRING)
-                .display(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
-        );//endregion
-        //region End Stone
+                .noStats(PartType.FLETCHING)
+                .displayAll(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+        );
+        // Feather
+        ret.add(new MaterialBuilder(SilentGear.getId("feather"), 1, Tags.Items.FEATHERS)
+                .noStats(PartType.FLETCHING)
+                .displayAll(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+        );
+        // Flax
+        ret.add(new MaterialBuilder(SilentGear.getId("flax"), 1, CraftingItems.FLAX_STRING)
+                .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
+                .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, 0.05f, StatInstance.Operation.MUL1)
+                .trait(PartType.BINDING, TraitConst.FLEXIBLE, 2)
+                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, -0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
+                .trait(PartType.BOWSTRING, TraitConst.SYNERGISTIC, 2)
+                .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xB3804B)
+                .displayBowstring(0x845E37)
+        );
+        // Flint
         ret.add(new MaterialBuilder(SilentGear.getId("flint"), 1, Items.FLINT)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 124)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
@@ -357,29 +379,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.JAGGED, 2)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST, 0x969696)
                 .display(PartType.ROD, PartTextureType.HIGH_CONTRAST, 0x969696)
-        );//endregion
-        // region Feather
-        ret.add(new MaterialBuilder(SilentGear.getId("feather"), 1, Tags.Items.FEATHERS)
-                .noStats(PartType.FLETCHING)
-                .display(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
-        );//endregion
-        //region Flax
-        ret.add(new MaterialBuilder(SilentGear.getId("flax"), 1, CraftingItems.FLAX_STRING)
-                .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
-                .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
-                .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, 0.05f, StatInstance.Operation.MUL1)
-                .trait(PartType.BINDING, TraitConst.FLEXIBLE, 2)
-                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, -0.1f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
-                .trait(PartType.BOWSTRING, TraitConst.SYNERGISTIC, 2)
-                .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xB3804B)
-                .display(PartType.BOWSTRING,
-                        new MaterialLayer(PartTextures.BOWSTRING_STRING, 0x845E37),
-                        new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE))
-        );//endregion
-        //region Glowstone
+        );
+        // Glowstone
         ret.add(new MaterialBuilder(SilentGear.getId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.4f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -390,9 +391,9 @@ public class MaterialsProvider implements IDataProvider {
                         new GearTypeTraitCondition(GearType.HARVEST_TOOL), new GearTypeTraitCondition(GearType.MELEE_WEAPON)
                 ))
                 .trait(PartType.TIP, TraitConst.LUSTROUS, 4, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xD2D200)
-        );//endregion
-        //region Gold
+                .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
+        );
+        // Gold
         ret.add(new MaterialBuilder(SilentGear.getId("gold"), 2, Tags.Items.INGOTS_GOLD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 32)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 7)
@@ -425,9 +426,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.SOFT, 3)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xEAEE57)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xEAEE57)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xEAEE57)
-        );//endregion
-        //region Iron
+                .displayTip(PartTextures.TIP_SMOOTH, 0xEAEE57)
+        );
+        // Iron
         ret.add(new MaterialBuilder(SilentGear.getId("iron"), 2, Tags.Items.INGOTS_IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 250)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
@@ -462,9 +463,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.MALLEABLE, 2)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, Color.VALUE_WHITE)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xD8D8D8)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, Color.VALUE_WHITE)
-        );//endregion
-        //region Lapis Lazuli
+                .displayTip(PartTextures.TIP_SHARP, Color.VALUE_WHITE)
+        );
+        // Lapis Lazuli
         ret.add(new MaterialBuilder(SilentGear.getId("lapis_lazuli"), 2, Tags.Items.GEMS_LAPIS)
                 .stat(PartType.TIP, ItemStats.ENCHANTABILITY, 0.5f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
@@ -480,9 +481,9 @@ public class MaterialsProvider implements IDataProvider {
                         new GearTypeTraitCondition(GearType.WEAPON),
                         new MaterialRatioTraitCondition(0.75f)
                 ))
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0x224BAF)
-        );//endregion
-        //region Leather
+                .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
+        );
+        // Leather
         ret.add(new MaterialBuilder(SilentGear.getId("leather"), 0, Tags.Items.LEATHER)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
@@ -498,14 +499,14 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.15f, StatInstance.Operation.ADD)
                 .stat(PartType.GRIP, ItemStats.RARITY, 5, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, TraitConst.FLEXIBLE, 3)
-                .display(PartTextureType.LOW_CONTRAST, 0xC65C35)
-        );//endregion
-        // region Leaves
+                .displayAll(PartTextureType.LOW_CONTRAST, 0xC65C35)
+        );
+        // Leaves
         ret.add(new MaterialBuilder(SilentGear.getId("leaves"), 1, ItemTags.LEAVES)
                 .noStats(PartType.FLETCHING)
-                .display(PartTextureType.LOW_CONTRAST, 0x4A8F28)
-        );//endregion
-        //region Netherrack
+                .displayAll(PartTextureType.LOW_CONTRAST, 0x4A8F28)
+        );
+        // Netherrack
         ret.add(new MaterialBuilder(SilentGear.getId("netherrack"), 1, Tags.Items.NETHERRACK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 198)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
@@ -530,8 +531,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.FLEXIBLE, 3)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x854242)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x854242)
-        );//endregion
-        //region Netherwood
+        );
+        // Netherwood
         ret.add(new MaterialBuilder(SilentGear.getId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 72)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 12)
@@ -559,8 +560,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.FLEXIBLE, 2)
                 .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, 0xD83200)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xD83200)
-        );//endregion
-        //region Obsidian
+        );
+        // Obsidian
         ret.add(new MaterialBuilder(SilentGear.getId("obsidian"), 3, Tags.Items.OBSIDIAN)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 3072)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
@@ -586,8 +587,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.CHIPPING, 3)
                 .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, 0x443464)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x443464)
-        );//endregion
-        //region Quartz
+        );
+        // Quartz
         ret.add(new MaterialBuilder(SilentGear.getId("quartz"), 2, Tags.Items.GEMS_QUARTZ)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
@@ -622,18 +623,18 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, TraitConst.JAGGED, 3)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xD4CABA)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xD4CABA)
-        );//endregion
-        //region Redstone
+                .displayTip(PartTextures.TIP_SHARP, 0xD4CABA)
+        );
+        // Redstone
         ret.add(new MaterialBuilder(SilentGear.getId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.5f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
-                .display(PartType.TIP, PartTextureType.HIGH_CONTRAST, 0xBB0000)
-        );//endregion
-        //region Sandstone
+                .displayTip(PartTextures.TIP_SMOOTH, 0xBB0000)
+        );
+        // Sandstone
         ResourceLocation sgSandstone = SilentGear.getId("sandstone");
         ret.add(new MaterialBuilder(sgSandstone, 1, ExclusionIngredient.of(Tags.Items.SANDSTONE,
                 Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
@@ -655,15 +656,16 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 7)
-                .display(PartTextureType.LOW_CONTRAST, 0xE3DBB0)
+                .displayAll(PartTextureType.LOW_CONTRAST, 0xE3DBB0)
         );
+        // Red sandstone
         ret.add(new MaterialBuilder(SilentGear.getId("sandstone/red"), -1, Ingredient.fromItems(
                 Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
                 .parent(sgSandstone)
                 .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, 0xD97B30)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xD97B30)
-        );//endregion
-        //region Sinew
+        );
+        // Sinew
         ret.add(new MaterialBuilder(SilentGear.getId("sinew"), 1, CraftingItems.SINEW_FIBER)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, -0.05f, StatInstance.Operation.MUL1)
@@ -674,11 +676,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.FLEXIBLE, 3)
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xD8995B)
-                .display(PartType.BOWSTRING,
-                        new MaterialLayer(PartTextures.BOWSTRING_STRING, 0x7E6962),
-                        new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE))
-        );//endregion
-        //region Stone
+                .displayBowstring(0x7E6962)
+        );
+        // Stone
         ret.add(new MaterialBuilder(SilentGear.getId("stone"), 1, Tags.Items.COBBLESTONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 131)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
@@ -703,8 +703,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.CRUSHING, 2)
                 .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, 0x9A9A9A)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x9A9A9A)
-        );//endregion
-        //region String
+        );
+        // String
         ret.add(new MaterialBuilder(SilentGear.getId("string"), 0, ExclusionIngredient.of(Tags.Items.STRING,
                 CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
@@ -714,11 +714,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, TraitConst.ORGANIC, 2)
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xFFFFFF)
-                .display(PartType.BOWSTRING,
-                        new MaterialLayer(PartTextures.BOWSTRING_STRING, 0x444444),
-                        new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE))
-        );//endregion
-        //region Terracotta
+                .displayBowstring(0x444444)
+        );
+        // Terracotta
         ResourceLocation sgTerracotta = SilentGear.getId("terracotta");
         ret.add(new MaterialBuilder(sgTerracotta, 1, Items.TERRACOTTA)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 165)
@@ -745,7 +743,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.BRITTLE, 2)
                 .trait(PartType.ROD, TraitConst.CRUSHING, 1)
                 .trait(PartType.ROD, TraitConst.RUSTIC, 2)
-                .display(PartTextureType.LOW_CONTRAST, 0x985F45)
+                .displayAll(PartTextureType.LOW_CONTRAST, 0x985F45)
         );
         ret.add(terracotta(sgTerracotta, "black", Items.BLACK_TERRACOTTA, 0x251610));
         ret.add(terracotta(sgTerracotta, "blue", Items.BLUE_TERRACOTTA, 0x4A3B5B));
@@ -763,8 +761,8 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(terracotta(sgTerracotta, "red", Items.RED_TERRACOTTA, 0x8E3C2E));
         ret.add(terracotta(sgTerracotta, "white", Items.WHITE_TERRACOTTA, 0xD1B1A1));
         ret.add(terracotta(sgTerracotta, "yellow", Items.YELLOW_TERRACOTTA, 0xB98423));
-        //endregion
-        //region Wood
+
+        // Wood
         ResourceLocation sgWood = SilentGear.getId("wood");
         ret.add(new MaterialBuilder(sgWood, 0, ExclusionIngredient.of(ItemTags.PLANKS,
                 Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS))
@@ -789,7 +787,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.FLEXIBLE, 2)
                 .trait(PartType.MAIN, TraitConst.JAGGED, 1)
                 .trait(PartType.ROD, TraitConst.FLEXIBLE, 1)
-                .display(PartTextureType.LOW_CONTRAST, 0x896727)
+                .displayAll(PartTextureType.LOW_CONTRAST, 0x896727)
         );
         ret.add(wood(sgWood, "acacia", Items.ACACIA_PLANKS, 0xBA6337));
         ret.add(wood(sgWood, "birch", Items.BIRCH_PLANKS, 0xD7C185));
@@ -797,8 +795,8 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(wood(sgWood, "jungle", Items.JUNGLE_PLANKS, 0xB88764));
         ret.add(wood(sgWood, "oak", Items.OAK_PLANKS, 0xB8945F));
         ret.add(wood(sgWood, "spruce", Items.SPRUCE_PLANKS, 0x82613A));
-        //endregion
-        //region Wool
+
+        // Wool
         ResourceLocation sgWool = SilentGear.getId("wool");
         ret.add(new MaterialBuilder(sgWool, 0, ExclusionIngredient.of(ItemTags.WOOL,
                 Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.CYAN_WOOL, Items.GRAY_WOOL, Items.GREEN_WOOL, Items.LIGHT_BLUE_WOOL, Items.LIGHT_GRAY_WOOL, Items.LIME_WOOL, Items.MAGENTA_WOOL, Items.ORANGE_WOOL, Items.PINK_WOOL, Items.PURPLE_WOOL, Items.RED_WOOL, Items.WHITE_WOOL, Items.YELLOW_WOOL))
@@ -807,7 +805,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.GRIP, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, TraitConst.SYNERGISTIC, 1)
-                .display(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayAll(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
         );
         ret.add(wool(sgWool, "black", Items.BLACK_WOOL, 0x141519));
         ret.add(wool(sgWool, "blue", Items.BLUE_WOOL, 0x35399D));
@@ -826,10 +824,9 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(wool(sgWool, "white", Items.WHITE_WOOL, 0xE9ECEC));
         ret.add(wool(sgWool, "yellow", Items.YELLOW_WOOL, 0xF8C627));
         //endregion
-        //endregion
 
         //region Extra Mod Metals
-        //region Aluminum
+        // Aluminum
         ret.add(extraMetal("aluminum", 2, forgeId("ingots/aluminum"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 365)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
@@ -854,9 +851,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.SYNERGISTIC, 1)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 3)
                 .trait(PartType.ROD, TraitConst.SYNERGISTIC, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xBFD4DE)
-        );//endregion
-        //region Aluminum Steel
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xBFD4DE)
+        );
+        // Aluminum Steel
         ret.add(extraMetal("aluminum_steel", 3, forgeId("ingots/aluminum_steel"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 660)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
@@ -880,9 +877,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.SYNERGISTIC, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 3)
                 .trait(PartType.ROD, TraitConst.SYNERGISTIC, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x98D9DA)
-        );//endregion
-        //region Bismuth
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x98D9DA)
+        );
+        // Bismuth
         ret.add(extraMetal("bismuth", 2, forgeId("ingots/bismuth"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
@@ -905,9 +902,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 2)
                 .trait(PartType.MAIN, TraitConst.LUSTROUS, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD1C2D5)
-        );//endregion
-        //region Bismuth Brass
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD1C2D5)
+        );
+        // Bismuth Brass
         ret.add(extraMetal("bismuth_brass", 2, forgeId("ingots/bismuth_brass"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 580)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
@@ -930,9 +927,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 2)
                 .trait(PartType.MAIN, TraitConst.LUSTROUS, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE9C1B4)
-        );//endregion
-        //region Bismuth Brass
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE9C1B4)
+        );
+        // Bismuth Brass
         ret.add(extraMetal("bismuth_steel", 3, forgeId("ingots/bismuth_steel"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1050)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 25)
@@ -955,9 +952,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 3)
                 .trait(PartType.MAIN, TraitConst.LUSTROUS, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC9FE7)
-        );//endregion
-        //region Brass
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC9FE7)
+        );
+        // Brass
         ret.add(extraMetal("brass", 2, forgeId("ingots/brass"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 240)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
@@ -980,9 +977,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 2)
                 .trait(PartType.MAIN, TraitConst.SILKY, 1, new MaterialRatioTraitCondition(0.66f))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xF2D458)
-        );//endregion
-        //region Bronze
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xF2D458)
+        );
+        // Bronze
         ret.add(extraMetal("bronze", 2, forgeId("ingots/bronze"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 480)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
@@ -1007,9 +1004,9 @@ public class MaterialsProvider implements IDataProvider {
                         new GearTypeTraitCondition(GearType.ARMOR),
                         new MaterialRatioTraitCondition(0.35f))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD96121)
-        );//endregion
-        //region Compressed Iron
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD96121)
+        );
+        // Compressed Iron
         ret.add(extraMetal("compressed_iron", 3, forgeId("ingots/compressed_iron"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1024)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 24)
@@ -1034,9 +1031,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.MAGNETIC, 4,
                         new GearTypeTraitCondition(GearType.TOOL),
                         new MaterialRatioTraitCondition(0.5f))
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA6A6A6)
-        );//endregion
-        //region Copper
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA6A6A6)
+        );
+        // Copper
         ret.add(extraMetal("copper", 1, forgeId("ingots/copper"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 128)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
@@ -1059,9 +1056,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 2)
                 .trait(PartType.MAIN, TraitConst.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, TraitConst.SOFT, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
-        );//endregion
-        //region Electrum
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
+        );
+        // Electrum
         ret.add(extraMetal("electrum", 2, forgeId("ingots/electrum"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 96)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
@@ -1084,9 +1081,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 2)
                 .trait(PartType.MAIN, TraitConst.SOFT, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, TraitConst.LUSTROUS, 3, new MaterialRatioTraitCondition(0.5f))
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD6E037)
-        );//endregion
-        //region Enderium
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD6E037)
+        );
+        // Enderium
         ret.add(extraMetal("enderium", 4, forgeId("ingots/enderium"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1200)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 34)
@@ -1108,9 +1105,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 60)
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 3)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
-        );//endregion
-        //region Invar
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
+        );
+        // Invar
         ret.add(extraMetal("invar", 2, forgeId("ingots/invar"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 640)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
@@ -1135,9 +1132,9 @@ public class MaterialsProvider implements IDataProvider {
                         materialCountOrRatio(3, 0.35f),
                         new GearTypeTraitCondition(GearType.ARMOR))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC2CBB8)
-        );//endregion
-        //region Lead
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC2CBB8)
+        );
+        // Lead
         ret.add(extraMetal("lead", 2, forgeId("ingots/lead"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 260)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 14)
@@ -1162,9 +1159,9 @@ public class MaterialsProvider implements IDataProvider {
                         materialCountOrRatio(3, 0.35f),
                         new GearTypeTraitCondition(GearType.ARMOR))
                 .trait(PartType.ROD, TraitConst.SOFT, 4)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC2CBB8)
-        );//endregion
-        //region Lumium
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC2CBB8)
+        );
+        // Lumium
         ret.add(extraMetal("lumium", 3, forgeId("ingots/lumium"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 920)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
@@ -1192,9 +1189,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.REFRACTIVE, 1,
                         new MaterialRatioTraitCondition(0.5f),
                         new GearTypeTraitCondition(GearType.TOOL))
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
-        );//endregion
-        //region Nickel
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
+        );
+        // Nickel
         ret.add(extraMetal("nickel", 2, forgeId("ingots/nickel"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 380)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 17)
@@ -1219,9 +1216,9 @@ public class MaterialsProvider implements IDataProvider {
                         materialCountOrRatio(3, 0.35f),
                         new GearTypeTraitCondition(GearType.ARMOR))
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xEFE87B)
-        );//endregion
-        //region Osmium
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xEFE87B)
+        );
+        // Osmium
         ret.add(extraMetal("osmium", 2, forgeId("ingots/osmium"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 14)
@@ -1243,9 +1240,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 30)
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 2)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x92A6B8)
-        );//endregion
-        //region Platinum
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x92A6B8)
+        );
+        // Platinum
         ret.add(extraMetal("platinum", 3, forgeId("ingots/platinum"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 900)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 21)
@@ -1269,9 +1266,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.SOFT, 2)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
                 .trait(PartType.ROD, TraitConst.SOFT, 4)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB3B3FF)
-        );//endregion
-        //region Redstone Alloy
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB3B3FF)
+        );
+        // Redstone Alloy
         ret.add(extraMetal("redstone_alloy", 2, forgeId("ingots/redstone_alloy"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 840)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
@@ -1293,9 +1290,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 3)
                 .trait(PartType.MAIN, TraitConst.ERODED, 3)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE60006)
-        );//endregion
-        //region Refined Iron
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE60006)
+        );
+        // Refined Iron
         ret.add(extraMetal("refined_iron", 2, forgeId("ingots/refined_iron"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 512)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
@@ -1321,9 +1318,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, TraitConst.MAGNETIC, 3,
                         new GearTypeTraitCondition(GearType.TOOL),
                         new MaterialRatioTraitCondition(0.35f))
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD7D7D7)
-        );//endregion
-        //region Signalum
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD7D7D7)
+        );
+        // Signalum
         ret.add(extraMetal("signalum", 4, forgeId("ingots/signalum"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 800)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 25)
@@ -1347,9 +1344,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.LUSTROUS, 4)
                 .trait(PartType.ROD, TraitConst.FLEXIBLE, 4)
                 .trait(PartType.ROD, TraitConst.LUSTROUS, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
-        );//endregion
-        //region Silver
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
+        );
+        // Silver
         ret.add(extraMetal("silver", 2, forgeId("ingots/silver"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 64)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
@@ -1373,9 +1370,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.SOFT, 1)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 1)
                 .trait(PartType.ROD, TraitConst.SOFT, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xCBCCEA)
-        );//endregion
-        //region Steel
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xCBCCEA)
+        );
+        // Steel
         ret.add(extraMetal("steel", 2, forgeId("ingots/steel"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
@@ -1396,9 +1393,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 40)
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 5)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 5)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x929292)
-        );//endregion
-        //region Tin
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x929292)
+        );
+        // Tin
         ret.add(extraMetal("tin", 1, forgeId("ingots/tin"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 192)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
@@ -1421,9 +1418,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.SOFT, 2)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
                 .trait(PartType.ROD, TraitConst.SOFT, 1)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x89A5B4)
-        );//endregion
-        //region Titanium
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x89A5B4)
+        );
+        // Titanium
         ret.add(extraMetal("titanium", 4, forgeId("ingots/titanium"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1600)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
@@ -1448,9 +1445,9 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.HARD, 4)
                 .trait(PartType.ROD, TraitConst.FLEXIBLE, 2)
                 .trait(PartType.ROD, TraitConst.HARD, 4)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x2E4CE6)
-        );//endregion
-        //region Uranium
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x2E4CE6)
+        );
+        // Uranium
         ret.add(extraMetal("uranium", 3, forgeId("ingots/uranium"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 800)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
@@ -1472,9 +1469,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 40)
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 2)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x21FF0F)
-        );//endregion
-        //region Zinc
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x21FF0F)
+        );
+        // Zinc
         ret.add(extraMetal("zinc", 1, forgeId("ingots/zinc"))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 192)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
@@ -1498,8 +1495,8 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, TraitConst.SOFT, 2)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 2)
                 .trait(PartType.ROD, TraitConst.SOFT, 3)
-                .display(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC9D3CE)
-        );//endregion
+                .displayAll(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC9D3CE)
+        );
         //endregion
 
         return ret;

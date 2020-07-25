@@ -146,7 +146,10 @@ public interface IGearPart {
     @Nullable
     ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position);
 
+    @Deprecated
     int getColor(PartData part, ItemStack gear, int animationFrame);
+
+    int getColor(PartData part, ItemStack gear, int layer, int animationFrame);
 
     default int getArmorColor(PartData part, ItemStack gear) {
         return part.getPart().getDisplayProperties(part, gear, 0).getArmorColor();

@@ -29,6 +29,10 @@
       "silentgems:chargeability": 1.0
     },
     "rod": {},
-    "bowstring": {}
+    "tip": {},
+    "grip": {},
+    "binding": {},
+    "bowstring": {},
+    "fletching": {}
   }
 }

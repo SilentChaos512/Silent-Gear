@@ -168,4 +168,10 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
         return true;
     }
+
+    @Override
+    public boolean hasTexturesFor(PartType partType) {
+        // FIXME: Shields not compatible with new model system
+        return false;
+    }
 }

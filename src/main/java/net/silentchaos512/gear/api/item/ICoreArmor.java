@@ -52,4 +52,9 @@ public interface ICoreArmor extends ICoreItem {
         PartType type = part.getType();
         return type == PartType.MAIN || type == PartType.TIP;
     }
+
+    @Override
+    default boolean hasTexturesFor(PartType partType) {
+        return partType == PartType.MAIN;
+    }
 }

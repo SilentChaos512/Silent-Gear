@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.client.model;
+package net.silentchaos512.gear.client.model.gear;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.gear.CoreCrossbow;
 import net.silentchaos512.gear.parts.PartData;
@@ -92,6 +93,7 @@ public class GearModelOverrideList extends ItemOverrideList {
             } else {
                 // Legacy parts (remove later?)
                 layers.addAll(part.getPart().getLiteTexture(part, stack).getLayers(part.getType()).stream()
+                        .map(PartTextures::getTexture)
                         .map(loc -> {
                             int c = loc.equals(SilentGear.getId("_highlight")) ? Color.VALUE_WHITE : part.getColor(stack, animationFrame);
                             PartTextures tex = PartTextures.byTextureId(loc);
@@ -114,9 +116,11 @@ public class GearModelOverrideList extends ItemOverrideList {
 
         if (model != null) {
             GearType gearType = Objects.requireNonNull(GearHelper.getType(stack));
-            for (MaterialLayer layer : model.getLayers(gearType, part.getType())) {
-                if (layer.getColor() < 0xFFFFFF) {
-                    int blendedColor = part.getColor(stack, 0);
+            List<MaterialLayer> layers = model.getLayers(gearType, part.getType()).getLayers();
+            for (int i = 0; i < layers.size(); i++) {
+                MaterialLayer layer = layers.get(i);
+                if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
+                    int blendedColor = part.getColor(stack, i, 0);
                     list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
                 } else {
                     list.add(layer);

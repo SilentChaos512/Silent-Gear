@@ -19,14 +19,63 @@
       "texture": "silentgear:rod"
     }
   ],
+  "tip/all": [
+    {
+      "texture": "silentgear:tip_sharp"
+    }
+  ],
+  "tip/part": [
+    {
+      "texture": "silentgear:tip_base"
+    },
+    {
+      "texture": "silentgear:tip"
+    },
+    {
+      "texture": "silentgear:tip_shine"
+    }
+  ],
+  "grip/all": [
+    {
+      "texture": "silentgear:grip_wool"
+    }
+  ],
+  "grip/part": [
+    {
+      "texture": "silentgear:grip"
+    }
+  ],
+  "binding/all": [
+    {
+      "texture": "silentgear:binding_generic"
+    }
+  ],
+  "binding/part": [
+    {
+      "texture": "silentgear:binding"
+    }
+  ],
   "bowstring/all": [
     {
       "texture": "silentgear:bowstring_string"
+    },
+    {
+      "texture": "silentgear:arrow"
     }
   ],
   "bowstring/part": [
     {
       "texture": "silentgear:bowstring"
+    }
+  ],
+  "fletching/all": [
+    {
+      "texture": "silentgear:fletching_generic"
+    }
+  ],
+  "fletching/part": [
+    {
+      "texture": "silentgear:fletching"
     }
   ]
 }

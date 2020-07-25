@@ -11,6 +11,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -19,6 +20,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.SynergyUtils;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -48,7 +50,7 @@ public class CompoundPartItem extends Item {
     }
 
     public GearType getGearType() {
-        return GearType.TOOL;
+        return GearType.PART;
     }
 
     public ItemStack createFromItems(Collection<ItemStack> materials) {
@@ -98,8 +100,18 @@ public class CompoundPartItem extends Item {
         return null;
     }
 
-    public int getColor(ItemStack stack) {
-        return ColorUtils.getBlendedColor(this, getMaterials(stack));
+    public static String getModelKey(ItemStack stack) {
+        StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + ":");
+
+        for (MaterialInstance material : getMaterials(stack)) {
+            s.append(SilentGear.shortenId(material.getMaterialId()));
+        }
+
+        return s.toString();
+    }
+
+    public int getColor(ItemStack stack, int layer) {
+        return ColorUtils.getBlendedColor(this, getMaterials(stack), layer);
     }
 
     public int getColorWeight(int index, int totalCount) {

@@ -12,10 +12,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -94,7 +96,17 @@ public class CompoundPart extends AbstractGearPart {
         if (!(item instanceof CompoundPartItem)) {
             return Color.VALUE_WHITE;
         }
-        return ((CompoundPartItem) item).getColor(part.getCraftingItem());
+        return ((CompoundPartItem) item).getColor(part.getCraftingItem(), 0);
+    }
+
+    @Override
+    public int getColor(PartData part, ItemStack gear, int layer, int animationFrame) {
+        List<MaterialInstance> materials = getMaterials(part);
+        if (gear.getItem() instanceof ICoreItem) {
+            return ColorUtils.getBlendedColor((ICoreItem) gear.getItem(), part.getType(), materials, layer);
+        } else {
+            return ColorUtils.getBlendedColor((CompoundPartItem) gear.getItem(), materials, layer);
+        }
     }
 
     @Override

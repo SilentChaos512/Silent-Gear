@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.client.model;
 
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -16,7 +17,8 @@ public enum PartTextures {
     MAIN_GENERIC_HC("main_generic_hc", PartType.MAIN, GearType.TOOL, true),
     ROD_GENERIC_LC("rod_generic_lc", PartType.ROD, GearType.TOOL, true),
     ROD_GENERIC_HC("rod_generic_hc", PartType.ROD, GearType.TOOL, true),
-    TIP_IRON("tip_iron", PartType.TIP, GearType.TOOL, true),
+    TIP_SHARP("tip_sharp", PartType.TIP, GearType.TOOL, true),
+    TIP_SMOOTH("tip_smooth", PartType.TIP, GearType.TOOL, true),
     BINDING_GENERIC("binding_generic", PartType.BINDING, GearType.TOOL, true),
     GRIP_WOOL("grip_wool", PartType.GRIP, GearType.TOOL, true),
     BOWSTRING_STRING("bowstring_string", PartType.BOWSTRING, GearType.RANGED_WEAPON, true),
@@ -31,7 +33,7 @@ public enum PartTextures {
     private final boolean animated;
 
     PartTextures(String path, PartType partType, GearType gearType, boolean animated) {
-        this.texture = new ResourceLocation(path);
+        this.texture = SilentGear.getId(path);
         this.partType = partType;
         this.gearType = gearType;
         this.animated = animated;
