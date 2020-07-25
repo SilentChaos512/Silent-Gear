@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -13,8 +14,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -52,8 +51,15 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     }
 
     @Override
+    public int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
+        if (state.getMaterial() == Material.LEAVES) {
+            return 1;
+        }
+        return ICoreTool.super.getDamageOnBlockBreak(gear, world, state, pos);
+    }
+
+    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new StringTextComponent("Not fully working, Forge patch needed").applyTextStyle(TextFormatting.RED));
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 

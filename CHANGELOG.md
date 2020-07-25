@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Repair kits now have different "efficiency" levels, giving more incentive to upgrade. Values are configurable.
 ### Changed
 - 'server' config is now 'common' and will appear in the config folder, like most configs do
+### Fixed
+- Shears not losing durability on leaves [#188]
 
 ## [1.10.2] - 2020-07-23
 ### Added
