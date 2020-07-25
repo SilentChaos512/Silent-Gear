@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -7,152 +8,155 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TextUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class RepairKitItem extends Item {
-    private static final String NBT_REPAIR_VALUES = "RepairValues";
+    private static final String NBT_STORAGE = "Storage";
 
-    private final int maxValue;
+    private final Supplier<Integer> capacity;
     private final Supplier<Double> efficiency;
 
-    public RepairKitItem(int maxValue, Supplier<Double> efficiency, Properties properties) {
+    public RepairKitItem(Supplier<Integer> capacity, Supplier<Double> efficiency, Properties properties) {
         super(properties);
-        this.maxValue = maxValue;
+        this.capacity = capacity;
         this.efficiency = efficiency;
     }
 
     public boolean addMaterial(ItemStack repairKit, ItemStack materialStack) {
-        int totalValue = getTotalRepairValue(repairKit);
-        if (totalValue >= this.maxValue) {
+        float storedAmount = getStoredMaterialAmount(repairKit);
+        if (storedAmount > getKitCapacity() - 1) {
             // Repair kit is full
             return false;
         }
-        int remainingSpace = this.maxValue - totalValue;
 
         MaterialInstance mat = MaterialInstance.from(materialStack);
         if (mat != null) {
-            int amount = Math.min(remainingSpace, mat.getRepairValue());
-            int tier = mat.getMaterial().getTier(PartType.MAIN);
-            int current = getStoredRepairValue(repairKit, tier);
-            setStoredRepairValue(repairKit, tier, current + amount);
-            return amount > 0;
-        }
-
-        // Old style parts
-        PartData part = PartData.from(materialStack);
-        if (part != null && part.getType() == PartType.MAIN) {
-            float repairEfficiency = part.computeStat(ItemStats.REPAIR_EFFICIENCY);
-            int amount = Math.round(part.computeStat(ItemStats.DURABILITY) * (repairEfficiency > 0 ? repairEfficiency : 1));
-            int tier = part.getTier();
-            int current = getStoredRepairValue(repairKit, tier);
-            setStoredRepairValue(repairKit, tier, amount + current + 1);
-            return amount > 0;
+            String key = getShorthandKey(mat);
+            CompoundNBT storageTag = repairKit.getOrCreateChildTag(NBT_STORAGE);
+            float current = storageTag.getFloat(key);
+            storageTag.putFloat(key, current + 1);
+            return true;
         }
 
         return false;
+    }
+
+    private int getKitCapacity() {
+        return this.capacity.get();
     }
 
     private float getRepairEfficiency(RepairContext.Type repairType) {
         return efficiency.get().floatValue() + repairType.getBonusEfficiency();
     }
 
-    private static int getStoredRepairValue(ItemStack stack, int tier) {
-        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_REPAIR_VALUES);
-        return nbt.getInt(String.valueOf(tier));
+    private static float getStoredAmount(ItemStack stack, MaterialInstance material) {
+        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_STORAGE);
+        return nbt.getFloat(getShorthandKey(material));
     }
 
-    private static int getAvailableRepairValue(ItemStack stack, int minTier) {
-        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_REPAIR_VALUES);
-        return nbt.keySet().stream()
-                .filter(key -> safeParse(key) >= minTier)
-                .mapToInt(nbt::getInt)
-                .sum();
+    private static float getStoredMaterialAmount(ItemStack repairKit) {
+        return (float) getStoredMaterials(repairKit).values().stream().mapToDouble(f -> f).sum();
     }
 
-    private static int getTotalRepairValue(ItemStack stack) {
-        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_REPAIR_VALUES);
-        return nbt.keySet().stream()
-                .mapToInt(nbt::getInt)
-                .sum();
-    }
-
-    private static Collection<Integer> getStoredTiers(ItemStack stack) {
-        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_REPAIR_VALUES);
-        return nbt.keySet().stream()
-                .map(RepairKitItem::safeParse)
-                .filter(i -> i >= 0)
-                .sorted(Integer::compareTo)
+    private static Map<MaterialInstance, Float> getStoredMaterials(ItemStack stack) {
+        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_STORAGE);
+        List<MaterialInstance> list = nbt.keySet().stream()
+                .map(MaterialInstance::readShorthand)
+                .filter(Objects::nonNull)
+                .sorted(Comparator.<MaterialInstance, Integer>comparing(mat1 -> mat1.getTier(PartType.MAIN))
+                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN).getFormattedText()))
                 .collect(Collectors.toList());
-    }
 
-    private void setStoredRepairValue(ItemStack stack, int tier, int value) {
-        int clamped = MathHelper.clamp(value, 0, this.maxValue);
-        String key = String.valueOf(tier);
-        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_REPAIR_VALUES);
-
-        if (clamped < 0) {
-            nbt.remove(key);
-        } else {
-            nbt.putInt(key, clamped);
-        }
-    }
-
-    public int getDamageToRepair(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
-        int storedValue = getAvailableRepairValue(repairKit, GearData.getTier(gear));
-        float gearMulti = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-        int maxRepair = Math.round(storedValue * gearMulti * this.getRepairEfficiency(repairType));
-        int ret = Math.min(maxRepair, gear.getDamage());
-        SilentGear.LOGGER.debug("RepairKitItem#getDamageToRepair: {} * {} * {} = {} -> {}",
-                storedValue, gearMulti, this.getRepairEfficiency(repairType), maxRepair, ret);
+        Map<MaterialInstance, Float> ret = new LinkedHashMap<>();
+        list.forEach(mat -> {
+            float value = nbt.getFloat(getShorthandKey(mat));
+            ret.put(mat, value);
+        });
         return ret;
     }
 
-    public void removeRepairMaterial(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType, int damageRepaired) {
-        float gearMulti = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-        int valueUsed = Math.round(damageRepaired / gearMulti / this.getRepairEfficiency(repairType));
+    @Nonnull
+    private static String getShorthandKey(MaterialInstance mat) {
+        return MaterialInstance.writeShorthand(mat);
+    }
 
-        int gearTier = GearData.getTier(gear);
-        for (int tier : getStoredTiers(repairKit)) {
-            if (tier >= gearTier) {
-                int current = getStoredRepairValue(repairKit, tier);
-                setStoredRepairValue(repairKit, tier, current - valueUsed);
-                valueUsed -= current - getStoredRepairValue(repairKit, tier);
+    private Pair<Map<MaterialInstance, Float>, Integer> getMaterialsToRepair(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
+        // Materials should be sorted by tier (ascending)
+        Map<MaterialInstance, Float> stored = getStoredMaterials(repairKit);
+        Map<MaterialInstance, Float> used = new HashMap<>();
+        float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
+        float kitEfficiency = this.getRepairEfficiency(repairType);
+        int damageLeft = gear.getDamage();
 
-                if (valueUsed <= 0) {
-                    break;
-                }
+        for (Map.Entry<MaterialInstance, Float> entry : stored.entrySet()) {
+            MaterialInstance mat = entry.getKey();
+            float amount = entry.getValue();
+
+            int repairValue = mat.getRepairValue(gear);
+            float totalRepairValue = repairValue * amount;
+            int maxRepair = Math.round(totalRepairValue * gearRepairEfficiency * kitEfficiency);
+            int toRepair = Math.min(maxRepair, damageLeft);
+            damageLeft -= toRepair;
+            float repairValueUsed = toRepair / gearRepairEfficiency / kitEfficiency;
+            float amountUsed = repairValueUsed / repairValue;
+            used.put(mat, amountUsed);
+
+            if (damageLeft <= 0) {
+                break;
             }
+        }
 
-            if (getStoredRepairValue(repairKit, tier) <= 0) {
-                repairKit.getOrCreateChildTag(NBT_REPAIR_VALUES).remove(String.valueOf(tier));
+        return Pair.of(used, gear.getDamage() - damageLeft);
+    }
+
+    public Map<MaterialInstance, Float> getRepairMaterials(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
+        return getMaterialsToRepair(gear, repairKit, repairType).getFirst();
+    }
+
+    public int getDamageToRepair(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
+        return getMaterialsToRepair(gear, repairKit, repairType).getSecond();
+    }
+
+    public void removeRepairMaterials(ItemStack repairKit, Map<MaterialInstance, Float> toRemove) {
+        CompoundNBT nbt = repairKit.getOrCreateChildTag(NBT_STORAGE);
+        for (Map.Entry<MaterialInstance, Float> entry : toRemove.entrySet()) {
+            MaterialInstance mat = entry.getKey();
+            Float amount = entry.getValue();
+
+            String key = getShorthandKey(mat);
+            float newValue = nbt.getFloat(key) - amount;
+
+            if (newValue <= 0) {
+                nbt.remove(key);
+            } else {
+                nbt.putFloat(key, newValue);
             }
         }
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextUtil.translate("item", "repair_kit.repairEfficiency",
+        tooltip.add(TextUtil.translate("item", "repair_kit.efficiency",
                 (int) (this.getRepairEfficiency(RepairContext.Type.QUICK) * 100)));
-        tooltip.add(TextUtil.translate("item", "repair_kit.repairValue", format(getTotalRepairValue(stack)), format(this.maxValue)));
+        tooltip.add(TextUtil.translate("item", "repair_kit.capacity",
+                format(getStoredMaterialAmount(stack)),
+                getKitCapacity()));
 
-        for (int tier : getStoredTiers(stack)) {
-            int value = getStoredRepairValue(stack, tier);
-            if (value >= 0) {
-                tooltip.add(TextUtil.translate("item", "repair_kit.repairValue.tier", tier, format(value)));
-            }
+        for (Map.Entry<MaterialInstance, Float> entry : getStoredMaterials(stack).entrySet()) {
+            tooltip.add(TextUtil.translate("item", "repair_kit.material",
+                    entry.getKey().getDisplayNameWithGrade(PartType.MAIN),
+                    format(entry.getValue())));
         }
     }
 
@@ -163,7 +167,7 @@ public class RepairKitItem extends Item {
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        return 1.0 - (float) getTotalRepairValue(stack) / this.maxValue;
+        return 1.0 - getStoredMaterialAmount(stack) / getKitCapacity();
     }
 
     @Override
@@ -171,15 +175,7 @@ public class RepairKitItem extends Item {
         return MathHelper.hsvToRGB(Math.max(0.0F, (float) (1.0F - getDurabilityForDisplay(stack))) / 3f + 0.5f, 1f, 1f);
     }
 
-    private static int safeParse(String key) {
-        try {
-            return Integer.parseInt(key);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
-    }
-
-    private static String format(int k) {
-        return String.format("%,d", k);
+    private static String format(float f) {
+        return String.format("%.1f", f);
     }
 }

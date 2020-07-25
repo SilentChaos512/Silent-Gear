@@ -147,12 +147,18 @@ public final class ModItems {
     //endregion
 
     // Repair Kits
-    public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () ->
-            new RepairKitItem(1000, Config.Common.repairKitEfficiencyCrude::get, unstackableProps()));
-    public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () ->
-            new RepairKitItem(10_000, Config.Common.repairKitEfficiencySturdy::get, unstackableProps()));
-    public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () ->
-            new RepairKitItem(100_000, Config.Common.repairKitEfficiencyCrimson::get, unstackableProps()));
+    public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitCrudeCapacity::get,
+            Config.Common.repairKitCrudeEfficiency::get,
+            unstackableProps()));
+    public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitSturdyCapacity::get,
+            Config.Common.repairKitSturdyEfficiency::get,
+            unstackableProps()));
+    public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitCrimsonCapacity::get,
+            Config.Common.repairKitCrimsonEfficiency::get,
+            unstackableProps()));
 
     static {
         CraftingItems.register(Registration.ITEMS);
