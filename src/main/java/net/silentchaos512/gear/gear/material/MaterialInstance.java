@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
@@ -164,9 +165,9 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public ITextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
-        ITextComponent text = getDisplayName(partType, gear);
+        IFormattableTextComponent text = getDisplayName(partType, gear).copyRaw();
         if (this.grade != MaterialGrade.NONE) {
-            text.appendText(" (").appendSibling(this.grade.getDisplayName()).appendText(")");
+            text.func_240702_b_(" (").func_230529_a_(this.grade.getDisplayName()).func_240702_b_(")");
         }
         return text;
     }

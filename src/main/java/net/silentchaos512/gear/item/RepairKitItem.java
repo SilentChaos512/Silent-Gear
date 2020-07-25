@@ -75,7 +75,7 @@ public class RepairKitItem extends Item {
                 .map(MaterialInstance::readShorthand)
                 .filter(Objects::nonNull)
                 .sorted(Comparator.<MaterialInstance, Integer>comparing(mat1 -> mat1.getTier(PartType.MAIN))
-                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN).getFormattedText()))
+                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN).copyRaw().getString()))
                 .collect(Collectors.toList());
 
         Map<MaterialInstance, Float> ret = new LinkedHashMap<>();
