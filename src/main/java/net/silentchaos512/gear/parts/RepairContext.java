@@ -1,17 +1,14 @@
 package net.silentchaos512.gear.parts;
 
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.config.Config;
 
 public class RepairContext {
     public enum Type {
         QUICK,
         ANVIL;
 
-        public float getEfficiency() {
-            return this == QUICK
-                    ? Config.Server.repairFactorQuick.get().floatValue()
-                    : Config.Server.repairFactorAnvil.get().floatValue();
+        public float getBonusEfficiency() {
+            return this == ANVIL ? 0.1f : 0f;
         }
     }
 

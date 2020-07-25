@@ -33,6 +33,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.parts.PartData;
@@ -40,7 +41,9 @@ import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class QuickRepairRecipe extends SpecialRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("quick_repair");
@@ -53,30 +56,36 @@ public class QuickRepairRecipe extends SpecialRecipe {
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
         // Need 1 gear, 1 repair kit, and optional materials
-        boolean foundGear = false;
+        ItemStack gear = ItemStack.EMPTY;
         boolean foundKit = false;
+        List<ItemStack> materials = new ArrayList<>();
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 //noinspection ChainOfInstanceofChecks
                 if (stack.getItem() instanceof ICoreItem) {
-                    if (foundGear) {
+                    if (!gear.isEmpty()) {
                         return false;
                     }
-                    foundGear = true;
+                    gear = stack;
                 } else if (stack.getItem() instanceof RepairKitItem) {
                     if (foundKit) {
                         return false;
                     }
                     foundKit = true;
-                } else if (!ModRecipes.isRepairMaterial(stack)) {
+                } else if (MaterialManager.from(stack) != null) {
+                    materials.add(stack);
+                } else {
                     return false;
                 }
             }
         }
 
-        return foundGear && foundKit;
+        final ItemStack gearFinal = gear;
+        return !gear.isEmpty() && foundKit && materials.stream().allMatch(stack -> {
+            return ModRecipes.isRepairMaterial(gearFinal, stack);
+        });
     }
 
     @Override
@@ -84,14 +93,15 @@ public class QuickRepairRecipe extends SpecialRecipe {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
-        Collection<ItemStack> mats = list.allMatches(ModRecipes::isRepairMaterial);
+        Collection<ItemStack> mats = list.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat));
 
         // Repair with materials first
         repairWithLooseMaterials(gear, mats);
 
         // Then use repair kit, if necessary
         if (gear.getDamage() > 0) {
-            int value = RepairKitItem.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
+            RepairKitItem item = (RepairKitItem) repairKit.getItem();
+            int value = item.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
             gear.attemptDamageItem(-Math.round(value), SilentGear.random, null);
         }
 
@@ -134,11 +144,10 @@ public class QuickRepairRecipe extends SpecialRecipe {
             ItemStack stack = inv.getStackInSlot(i);
 
             if (stack.getItem() instanceof RepairKitItem) {
-                repairWithLooseMaterials(gear, stackList.allMatches(ModRecipes::isRepairMaterial));
+                repairWithLooseMaterials(gear, stackList.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat)));
                 RepairKitItem item = (RepairKitItem) stack.getItem();
-                int toRepair = item.getDamageToRepair(gear, stack, RepairContext.Type.QUICK);
                 ItemStack copy = stack.copy();
-                item.removeRepairMaterial(gear, copy, RepairContext.Type.QUICK, toRepair);
+                item.removeRepairMaterials(copy, item.getRepairMaterials(gear, copy, RepairContext.Type.QUICK));
                 list.set(i, copy);
             } else if (stack.hasContainerItem()) {
                 list.set(i, stack.getContainerItem());

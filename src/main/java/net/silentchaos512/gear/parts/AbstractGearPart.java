@@ -128,9 +128,9 @@ public abstract class AbstractGearPart implements IGearPart {
 
         switch (context.getRepairType()) {
             case QUICK:
-                return Config.Server.repairFactorQuick.get().floatValue() * multiplier * durability;
+                return Config.Common.repairFactorQuick.get().floatValue() * multiplier * durability;
             case ANVIL:
-                return Config.Server.repairFactorAnvil.get().floatValue() * multiplier * durability;
+                return Config.Common.repairFactorAnvil.get().floatValue() * multiplier * durability;
             default:
                 throw new IllegalArgumentException("Unknown RepairContext: " + context);
         }

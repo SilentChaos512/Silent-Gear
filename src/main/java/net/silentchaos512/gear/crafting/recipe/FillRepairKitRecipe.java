@@ -29,7 +29,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.lib.collection.StackList;
 
@@ -55,7 +58,7 @@ public class FillRepairKitRecipe extends SpecialRecipe {
                         return false;
                     }
                     kitFound = true;
-                } else if (ModRecipes.isRepairMaterial(stack)) {
+                } else if (isRepairMaterial(stack)) {
                     ++matsFound;
                 } else {
                     return false;
@@ -73,7 +76,7 @@ public class FillRepairKitRecipe extends SpecialRecipe {
         repairKit.setCount(1);
         RepairKitItem repairKitItem = (RepairKitItem) repairKit.getItem();
 
-        for (ItemStack mat : list.allMatches(ModRecipes::isRepairMaterial)) {
+        for (ItemStack mat : list.allMatches(FillRepairKitRecipe::isRepairMaterial)) {
             if (!repairKitItem.addMaterial(repairKit, mat)) {
                 // Repair kit is too full to accept more materials
                 return ItemStack.EMPTY;
@@ -81,6 +84,17 @@ public class FillRepairKitRecipe extends SpecialRecipe {
         }
 
         return repairKit;
+    }
+
+    private static boolean isRepairMaterial(ItemStack stack) {
+        IMaterial material = MaterialManager.from(stack);
+        return material != null && isRepairMaterial(material);
+    }
+
+    private static boolean isRepairMaterial(IMaterial material) {
+        float durability = material.getStat(ItemStats.DURABILITY, PartType.MAIN);
+        float armorDurability = material.getStat(ItemStats.ARMOR_DURABILITY, PartType.MAIN);
+        return material.allowedInPart(PartType.MAIN) && (durability > 0 || armorDurability > 0);
     }
 
     @Override

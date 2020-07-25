@@ -38,6 +38,7 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.parts.LazyPartData;
 import net.silentchaos512.gear.parts.PartConst;
@@ -66,6 +67,13 @@ public final class GearHelper {
     private static final int DAMAGE_FACTOR_LEVELS = 10;
 
     private GearHelper() {}
+
+    public static Optional<ICoreItem> getItem(ItemStack gear) {
+        if (gear.getItem() instanceof ICoreItem) {
+            return Optional.of((ICoreItem) gear.getItem());
+        }
+        return Optional.empty();
+    }
 
     /**
      * Check if the item is a Silent Gear tool, weapon, or armor item.
@@ -167,14 +175,18 @@ public final class GearHelper {
 
     //region Damage and repair
 
-    public static boolean getIsRepairable(ItemStack stack, ItemStack material) {
-        PartData data = GearData.getPrimaryPart(stack);
-        PartData dataMaterial = PartData.from(material);
-        return data != null && dataMaterial != null && data.getTier() <= dataMaterial.getTier();
+    public static boolean getIsRepairable(ItemStack stack, ItemStack materialItem) {
+        MaterialInstance material = MaterialInstance.from(materialItem);
+        return material != null && getIsRepairable(stack, material);
+    }
+
+    public static boolean getIsRepairable(ItemStack gear, MaterialInstance material) {
+        PartData part = GearData.getPrimaryPart(gear);
+        return part != null && material.getTier(PartType.MAIN) >= part.getTier() && material.getRepairValue(gear) > 0;
     }
 
     public static ItemStat getDurabilityStat(ItemStack gear) {
-        return gear.getItem() instanceof ICoreItem ? ((ICoreItem) gear.getItem()).getDurabilityStat() : ItemStats.DURABILITY;
+        return getItem(gear).map(ICoreItem::getDurabilityStat).orElse(ItemStats.DURABILITY);
     }
 
     public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, Hand hand) {
@@ -262,7 +274,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.Server.gearBreaksPermanently.get() || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPartId());
+        return Config.Common.gearBreaksPermanently.get() || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPartId());
     }
 
     public static boolean isBroken(ItemStack stack) {

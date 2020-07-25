@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class Config {
-    public static final class Server {
+    public static final class Common {
         static final ForgeConfigSpec spec;
         // Blueprints
         public static final ForgeConfigSpec.EnumValue<BlueprintType> blueprintTypes;
@@ -42,6 +42,12 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
         public static final ForgeConfigSpec.DoubleValue repairFactorAnvil;
         public static final ForgeConfigSpec.DoubleValue repairFactorQuick;
+        public static final ForgeConfigSpec.IntValue repairKitCrudeCapacity;
+        public static final ForgeConfigSpec.IntValue repairKitSturdyCapacity;
+        public static final ForgeConfigSpec.IntValue repairKitCrimsonCapacity;
+        public static final ForgeConfigSpec.DoubleValue repairKitCrudeEfficiency;
+        public static final ForgeConfigSpec.DoubleValue repairKitSturdyEfficiency;
+        public static final ForgeConfigSpec.DoubleValue repairKitCrimsonEfficiency;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Salvager
@@ -56,16 +62,47 @@ public final class Config {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
             {
-                builder.comment("Blueprint and template settings");
-                builder.push("item.blueprint");
-                blueprintTypes = builder
-                        .comment("Allowed blueprint types. Valid values are: BOTH, BLUEPRINT, and TEMPLATE")
-                        .defineEnum("typesAllowed", BlueprintType.BOTH);
-                spawnWithStarterBlueprints = builder
-                        .comment("When joining a new world, should players be given a blueprint package?",
-                                "The blueprint package gives some blueprints when used (right-click).",
-                                "To change what is given, override the starter_blueprints loot table.")
-                        .define("spawnWithStarterBlueprints", true);
+                builder.push("item");
+
+                {
+                    builder.comment("Blueprint and template settings");
+                    builder.push("blueprint");
+                    blueprintTypes = builder
+                            .comment("Allowed blueprint types. Valid values are: BOTH, BLUEPRINT, and TEMPLATE")
+                            .defineEnum("typesAllowed", BlueprintType.BOTH);
+                    spawnWithStarterBlueprints = builder
+                            .comment("When joining a new world, should players be given a blueprint package?",
+                                    "The blueprint package gives some blueprints when used (right-click).",
+                                    "To change what is given, override the starter_blueprints loot table.")
+                            .define("spawnWithStarterBlueprints", true);
+                    builder.pop();
+                }
+                {
+                    builder.comment("Repair kit configs.");
+                    builder.push("repairKits");
+
+                    {
+                        builder.comment("Capacity is the number of materials that can be stored (all types combined)",
+                                "Setting to zero would make the repair kit unusable.");
+                        builder.push("capacity");
+                        repairKitCrudeCapacity = builder.defineInRange("crude", 10, 0, Integer.MAX_VALUE);
+                        repairKitSturdyCapacity = builder.defineInRange("sturdy", 20, 0, Integer.MAX_VALUE);
+                        repairKitCrimsonCapacity = builder.defineInRange("crimson", 30, 0, Integer.MAX_VALUE);
+                        builder.pop();
+                    }
+                    {
+                        builder.comment("Efficiency is the percentage of the repair value used. Higher values mean less materials used.",
+                                "Setting to zero would make the repair kit unusable.");
+                        builder.push("efficiency");
+                        repairKitCrudeEfficiency = builder.defineInRange("crude", 0.35f, 0f, 10f);
+                        repairKitSturdyEfficiency = builder.defineInRange("sturdy", 0.4f, 0f, 10f);
+                        repairKitCrimsonEfficiency = builder.defineInRange("crimson", 0.45f, 0f, 10f);
+                        builder.pop();
+                    }
+
+                    builder.pop();
+                }
+
                 builder.pop();
             }
             {
@@ -134,8 +171,9 @@ public final class Config {
                             .comment("Effectiveness of gear repairs done in an anvil. Set to 0 to disable anvil repairs.")
                             .defineInRange("anvilEffectiveness", 0.5, 0, 1);
                     repairFactorQuick = builder
-                            .comment("Effectiveness of quick gear repairs (crafting grid). Set to 0 to disable quick repairs.")
+                            .comment("DEPRECATED! Effectiveness of quick gear repairs (crafting grid). Set to 0 to disable quick repairs.")
                             .defineInRange("quickEffectiveness", 0.35, 0, 1);
+
                     builder.pop();
                 }
                 {
@@ -189,7 +227,7 @@ public final class Config {
             spec = builder.build();
         }
 
-        private Server() {}
+        private Common() {}
 
         public static float getStatWithMultiplier(ItemStat stat, float value) {
             if (statMultipliers.containsKey(stat))
@@ -253,7 +291,7 @@ public final class Config {
     private Config() {}
 
     public static void init() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Server.spec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Common.spec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.spec);
     }
 

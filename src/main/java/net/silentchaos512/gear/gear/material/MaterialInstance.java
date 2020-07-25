@@ -6,6 +6,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -14,6 +15,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -125,9 +127,9 @@ public final class MaterialInstance implements IMaterialInstance {
         return stat.compute(stat.getDefaultValue(), getStatModifiers(stat, partType, gear));
     }
 
-    public int getRepairValue() {
+    public int getRepairValue(ItemStack gear) {
         if (material.allowedInPart(PartType.MAIN)) {
-            float durability = getStat(ItemStats.DURABILITY, PartType.MAIN);
+            float durability = getStat(GearHelper.getDurabilityStat(gear), PartType.MAIN);
             float repairEfficiency = getStat(ItemStats.REPAIR_EFFICIENCY, PartType.MAIN);
             return Math.round(durability * repairEfficiency) + 1;
         }
@@ -161,9 +163,47 @@ public final class MaterialInstance implements IMaterialInstance {
         return material.getDisplayName(partType, gear);
     }
 
+    public ITextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
+        ITextComponent text = getDisplayName(partType, gear);
+        if (this.grade != MaterialGrade.NONE) {
+            text.appendText(" (").appendSibling(this.grade.getDisplayName()).appendText(")");
+        }
+        return text;
+    }
+
     @Override
     public void write(PacketBuffer buffer) {
         buffer.writeResourceLocation(this.material.getId());
         buffer.writeEnumValue(this.grade);
+    }
+
+    @Nullable
+    public static MaterialInstance readShorthand(String str) {
+        if (str.contains("#")) {
+            String[] parts = str.split("#");
+            ResourceLocation id = SilentGear.getIdWithDefaultNamespace(parts[0]);
+            IMaterial material = MaterialManager.get(id);
+            if (material != null) {
+                MaterialGrade grade = MaterialGrade.fromString(parts[1]);
+                return new MaterialInstance(material, grade);
+            }
+
+            return null;
+        }
+
+        ResourceLocation id = SilentGear.getIdWithDefaultNamespace(str);
+        IMaterial material = MaterialManager.get(id);
+        if (material != null) {
+            return new MaterialInstance(material);
+        }
+
+        return null;
+    }
+
+    public static String writeShorthand(MaterialInstance material) {
+        if (material.grade != MaterialGrade.NONE) {
+            return material.getMaterialId() + "#" + material.grade;
+        }
+        return material.getMaterialId().toString();
     }
 }

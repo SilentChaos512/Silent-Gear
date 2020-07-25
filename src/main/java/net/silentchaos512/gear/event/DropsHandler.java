@@ -21,8 +21,8 @@ public final class DropsHandler {
         if (entity == null) return;
 
         // Sinew drops
-        if (Config.Server.isSinewAnimal(entity)) {
-            double chance = Config.Server.sinewDropRate.get() * (1 + 0.2 * event.getLootingLevel());
+        if (Config.Common.isSinewAnimal(entity)) {
+            double chance = Config.Common.sinewDropRate.get() * (1 + 0.2 * event.getLootingLevel());
             if (MathUtils.tryPercentage(SilentGear.random, chance)) {
                 ItemStack stack = new ItemStack(CraftingItems.SINEW);
                 event.getDrops().add(LootUtils.createDroppedItem(stack, entity));

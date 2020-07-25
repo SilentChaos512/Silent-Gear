@@ -136,7 +136,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     public void setDamage(ItemStack stack, int damage) {
         if (GearHelper.isUnbreakable(stack))
             return;
-        if (!Config.Server.gearBreaksPermanently.get())
+        if (!Config.Common.gearBreaksPermanently.get())
             damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
         super.setDamage(stack, damage);
     }
@@ -146,7 +146,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         int value;
         if (GearHelper.isUnbreakable(stack)) {
             value = 0;
-        } else if (!Config.Server.gearBreaksPermanently.get()) {
+        } else if (!Config.Common.gearBreaksPermanently.get()) {
             value = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
         } else {
             value = super.damageItem(stack, amount, entity, onBroken);

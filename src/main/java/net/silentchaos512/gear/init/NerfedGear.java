@@ -43,7 +43,7 @@ public final class NerfedGear {
                 SilentGear.LOGGER.debug("Try nerf durability of {}", item.getRegistryName());
                 try {
                     int maxDamage = (int) itemDamageField.get(item);
-                    int newMax = MathHelper.clamp((int) (maxDamage * Config.Server.nerfedItemDurabilityMulti.get()), 1, maxDamage);
+                    int newMax = MathHelper.clamp((int) (maxDamage * Config.Common.nerfedItemDurabilityMulti.get()), 1, maxDamage);
                     itemDamageField.set(item, newMax);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -53,14 +53,14 @@ public final class NerfedGear {
     }
 
     private static boolean isNerfedItem(Item item) {
-        return item.isDamageable() && Config.Server.isNerfedItem(item);
+        return item.isDamageable() && Config.Common.isNerfedItem(item);
     }
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
         ItemStack heldItem = event.getPlayer().getHeldItemMainhand();
         if (isNerfedItem(heldItem.getItem())) {
-            float newSpeed = event.getNewSpeed() * Config.Server.nerfedItemHarvestSpeedMulti.get().floatValue();
+            float newSpeed = event.getNewSpeed() * Config.Common.nerfedItemHarvestSpeedMulti.get().floatValue();
             event.setNewSpeed(Math.max(newSpeed, 1));
         }
     }

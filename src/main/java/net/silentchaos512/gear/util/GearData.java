@@ -133,7 +133,7 @@ public final class GearData {
                     TraitActionContext context = new TraitActionContext(player, level, stack);
                     return trait.onGetStat(context, stat, val, damageRatio);
                 });
-                final float value = Config.Server.getStatWithMultiplier(stat, withTraits);
+                final float value = Config.Common.getStatWithMultiplier(stat, withTraits);
                 // SilentGear.log.debug(stat, value);
                 ResourceLocation statId = Objects.requireNonNull(stat.getRegistryName());
                 propertiesCompound.remove(statId.getPath()); // Remove old keys

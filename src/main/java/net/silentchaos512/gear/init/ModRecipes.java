@@ -23,7 +23,6 @@ import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.smithing.CoatingSmithingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.Const;
 
 public final class ModRecipes {
@@ -82,16 +81,10 @@ public final class ModRecipes {
         player.unlockRecipes(recipes);
     }
 
-    public static boolean isRepairMaterial(ItemStack stack) {
-        MaterialInstance mat = MaterialInstance.from(stack);
+    public static boolean isRepairMaterial(ItemStack gear, ItemStack materialItem) {
+        MaterialInstance mat = MaterialInstance.from(materialItem);
         if (mat != null) {
-            return mat.getRepairValue() > 0;
-        }
-
-        // Old style parts
-        PartData part = PartData.from(stack);
-        if (part != null) {
-            return part.getType() == PartType.MAIN;
+            return mat.getRepairValue(gear) > 0;
         }
 
         return false;
