@@ -133,4 +133,14 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     public Rarity getRarity(ItemStack stack) {
         return Rarity.UNCOMMON;
     }
+
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack) {
+        return itemStack.copy();
+    }
+
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+        return true;
+    }
 }
