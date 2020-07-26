@@ -68,7 +68,7 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public ITextComponent getDisplayName(int level) {
+    public IFormattableTextComponent getDisplayName(int level) {
         IFormattableTextComponent text = displayName.deepCopy();
         if (level > 0 && maxLevel > 1) {
             text.func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("enchantment.level." + level));
@@ -77,7 +77,7 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public ITextComponent getDescription(int level) {
+    public IFormattableTextComponent getDescription(int level) {
         return description.deepCopy();
     }
 

@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -37,9 +38,9 @@ public interface ITrait {
         return level;
     }
 
-    ITextComponent getDisplayName(int level);
+    IFormattableTextComponent getDisplayName(int level);
 
-    ITextComponent getDescription(int level);
+    IFormattableTextComponent getDescription(int level);
 
     default boolean isHidden() {
         return false;

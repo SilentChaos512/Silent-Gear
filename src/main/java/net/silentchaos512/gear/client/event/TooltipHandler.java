@@ -116,10 +116,10 @@ public final class TooltipHandler {
             ret.func_230529_a_(text).func_240702_b_(" | ");
         }
 
-        IFormattableTextComponent keyHint = new StringTextComponent("[")
-                .func_230529_a_(KeyTracker.CYCLE_MATERIAL_INFO.func_238171_j_())
-                .func_230529_a_(new StringTextComponent("]"));
-        return ret.func_230529_a_(keyHint.func_240699_a_(TextFormatting.AQUA));
+        ITextComponent keyHint = TextUtil.misc("tooltip.material.keyHint",
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), net.silentchaos512.utils.Color.MINTCREAM),
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), net.silentchaos512.utils.Color.MINTCREAM));
+        return ret.func_230529_a_(keyHint);
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData partData) {
@@ -144,7 +144,7 @@ public final class TooltipHandler {
         int i = 0;
         for (PartTraitInstance inst : traits) {
             if (traitIndex < 0 || traitIndex == i) {
-                inst.getTrait().addInformation(inst.getLevel(), event.getToolTip(), event.getFlags());
+                inst.addInformation(event.getToolTip(), event.getFlags());
             }
             ++i;
         }

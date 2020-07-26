@@ -26,26 +26,6 @@
   "name": {
     "translate": "material.silentgear.wood"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#896727"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#896727"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#896727"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 59.0,

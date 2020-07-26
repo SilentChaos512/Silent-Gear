@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -48,6 +49,14 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     @Override
     public Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
+    }
+
+    @Override
+    public int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
+        if (state.getMaterial() == Material.LEAVES) {
+            return 1;
+        }
+        return ICoreTool.super.getDamageOnBlockBreak(gear, world, state, pos);
     }
 
     @Override

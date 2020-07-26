@@ -1,0 +1,20 @@
+{
+  "coating/all": [
+    {
+      "texture": "silentgear:main_generic_hc",
+      "color": "#867B86"
+    },
+    {
+      "texture": "silentgear:_highlight"
+    }
+  ],
+  "coating/part": [
+    {
+      "texture": "silentgear:coating_material",
+      "color": "#867B86"
+    },
+    {
+      "texture": "silentgear:coating_jar"
+    }
+  ]
+}

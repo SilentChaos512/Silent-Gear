@@ -12,38 +12,6 @@
   "name": {
     "translate": "material.silentgear.quartz"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#D4CABA"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#D4CABA"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#D4CABA"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_iron",
-        "color": "#D4CABA"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 330.0,

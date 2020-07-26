@@ -13,10 +13,13 @@ import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
+import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainer;
+import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerScreen;
 
 public final class ModContainers {
     public static final RegistryObject<ContainerType<GraderContainer>> MATERIAL_GRADER = register("material_grader", GraderContainer::new);
     public static final RegistryObject<ContainerType<SalvagerContainer>> SALVAGER = register("salvager", SalvagerContainer::new);
+    public static final RegistryObject<ContainerType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book", BlueprintBookContainer::new);
 
     private ModContainers() {}
 
@@ -26,6 +29,7 @@ public final class ModContainers {
     public static void registerScreens(FMLClientSetupEvent event) {
         ScreenManager.registerFactory(MATERIAL_GRADER.get(), GraderScreen::new);
         ScreenManager.registerFactory(SALVAGER.get(), SalvagerScreen::new);
+        ScreenManager.registerFactory(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
     }
 
     private static <T extends Container> RegistryObject<ContainerType<T>> register(String name, IContainerFactory<T> factory) {

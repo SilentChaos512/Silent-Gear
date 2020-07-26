@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/pickaxe"
+      "type": "silentgear:blueprint",
+      "gear_type": "pickaxe"
     },
     {
       "type": "silentgear:material",

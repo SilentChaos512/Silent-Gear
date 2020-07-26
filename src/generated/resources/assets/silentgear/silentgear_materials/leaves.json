@@ -1,0 +1,14 @@
+{
+  "fletching/all": [
+    {
+      "texture": "silentgear:fletching_generic",
+      "color": "#4A8F28"
+    }
+  ],
+  "fletching/part": [
+    {
+      "texture": "silentgear:fletching",
+      "color": "#4A8F28"
+    }
+  ]
+}

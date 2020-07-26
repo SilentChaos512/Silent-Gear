@@ -15,9 +15,9 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
-import net.silentchaos512.gear.api.material.MaterialDisplay;
+import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -46,7 +46,7 @@ public final class PartMaterial implements IMaterial {
     private ITextComponent displayName;
     @Nullable private ITextComponent namePrefix = null;
     // Keys are part_type/gear_type
-    private final Map<String, MaterialDisplay> display = new HashMap<>();
+    private final Map<String, MaterialLayerList> display = new HashMap<>();
     private final List<String> blacklistedGearTypes = new ArrayList<>();
 
     private PartMaterial(ResourceLocation id, String packName) {
@@ -165,8 +165,9 @@ public final class PartMaterial implements IMaterial {
         return getMaterialDisplay(gear, partType).getTexture();
     }
 
+    @Deprecated
     @Override
-    public IMaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType) {
+    public IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType) {
         if (!gear.isEmpty()) {
             GearType gearType = ((ICoreItem) gear.getItem()).getGearType();
 
@@ -182,7 +183,7 @@ public final class PartMaterial implements IMaterial {
                 }
             }
         }
-        return display.getOrDefault(partType.getName().getPath() + "/all", display.getOrDefault(partType.getName() + "/all", MaterialDisplay.DEFAULT));
+        return display.getOrDefault(partType.getName().getPath() + "/all", display.getOrDefault(partType.getName() + "/all", MaterialLayerList.DEFAULT));
     }
 
     @Override
@@ -298,11 +299,12 @@ public final class PartMaterial implements IMaterial {
             }
         }
 
+        @Deprecated
         private static void deserializeDisplayProps(JsonObject json, PartMaterial ret) {
             JsonElement elementDisplay = json.get("display");
             if (elementDisplay != null && elementDisplay.isJsonObject()) {
                 JsonObject obj = elementDisplay.getAsJsonObject();
-                MaterialDisplay defaultProps = ret.display.getOrDefault("all", MaterialDisplay.DEFAULT);
+                MaterialLayerList defaultProps = ret.display.getOrDefault("all", MaterialLayerList.DEFAULT);
 
                 if (!ret.display.containsKey("all")) {
                     ret.display.put("all", defaultProps);
@@ -311,10 +313,8 @@ public final class PartMaterial implements IMaterial {
                 for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
                     String key = entry.getKey();
                     JsonElement value = entry.getValue();
-                    ret.display.put(key, MaterialDisplay.deserialize(value, defaultProps));
+                    ret.display.put(key, MaterialLayerList.deserialize(value, defaultProps));
                 }
-            } else {
-                throw new JsonSyntaxException("Expected 'display' to be an object");
             }
         }
 
@@ -367,7 +367,7 @@ public final class PartMaterial implements IMaterial {
             int displayCount = buffer.readVarInt();
             for (int i = 0; i < displayCount; ++i) {
                 String key = buffer.readString(255);
-                MaterialDisplay display = MaterialDisplay.read(buffer);
+                MaterialLayerList display = MaterialLayerList.read(buffer);
                 material.display.put(key, display);
             }
 

@@ -21,32 +21,6 @@
   "name": {
     "translate": "material.silentgear.silver"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#CBCCEA"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#CBCCEA"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#CBCCEA"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 64.0,

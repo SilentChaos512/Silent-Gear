@@ -12,38 +12,6 @@
   "name": {
     "translate": "material.silentgear.crimson_steel"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#DC143C"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#DC143C"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#DC143C"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_iron",
-        "color": "#DC143C"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 2400.0,

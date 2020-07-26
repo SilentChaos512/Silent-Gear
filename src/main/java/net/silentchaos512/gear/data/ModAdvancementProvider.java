@@ -125,11 +125,14 @@ public class ModAdvancementProvider implements IDataProvider {
                     .withRequirementsStrategy(IRequirementsStrategy.OR)
                     .register(consumer, id("repair_kit"));
 
+            Advancement crimsonRepairKit = simpleGetItem(consumer, ModItems.CRIMSON_REPAIR_KIT, repairKit);
             Advancement repairFromBroken = Advancement.Builder.builder()
                     .withParent(repairKit)
                     .withDisplay(Items.FLINT, title("repair_from_broken"), description("repair_from_broken"), null, FrameType.TASK, true, true, false)
                     .withCriterion("repair", genericInt(GearEvents.REPAIR_FROM_BROKEN, 1))
                     .register(consumer, id("repair_from_broken"));
+
+            Advancement blueprintBook = simpleGetItem(consumer, ModItems.BLUEPRINT_BOOK, blueprintPaper);
 
             Advancement tipUpgrade = simpleGetItem(consumer, ModItems.TIP, upgradeBase, "tip_upgrade");
 

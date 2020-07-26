@@ -154,6 +154,7 @@ public final class MaterialInstance implements IMaterialInstance {
         return nbt;
     }
 
+    @Deprecated
     @Override
     public int getColor(PartType partType, ItemStack gear) {
         return material.getPrimaryColor(gear, partType);

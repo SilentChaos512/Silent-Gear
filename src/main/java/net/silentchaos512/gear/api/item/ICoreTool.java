@@ -79,4 +79,9 @@ public interface ICoreTool extends ICoreItem {
     default IItemColor getItemColors() {
         return ColorHandlers::getToolColor;
     }
+
+    @Override
+    default boolean hasTexturesFor(PartType partType) {
+        return partType != PartType.BOWSTRING && partType != PartType.FLETCHING;
+    }
 }

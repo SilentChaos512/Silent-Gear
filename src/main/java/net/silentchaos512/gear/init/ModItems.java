@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.*;
+import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.gear.*;
@@ -25,6 +26,8 @@ public final class ModItems {
             new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
 
     //region Blueprints and templates
+    public static final ItemRegistryObject<BlueprintBookItem> BLUEPRINT_BOOK = register("blueprint_book", () ->
+            new BlueprintBookItem(unstackableProps()));
     // Blueprints
     public static final ItemRegistryObject<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartType.ROD, false);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartType.TIP, false);
@@ -139,7 +142,7 @@ public final class ModItems {
     public static final ItemRegistryObject<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
             new CompoundPartItem(PartType.TIP, 1, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> COATING = registerCompoundPart("coating", () ->
-            new CompoundPartItem(PartType.COATING, new Item.Properties()));
+            new CompoundPartItem(PartType.COATING, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> GRIP = registerCompoundPart("grip", () ->
             new CompoundPartItem(PartType.GRIP, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> BINDING = registerCompoundPart("binding", () ->

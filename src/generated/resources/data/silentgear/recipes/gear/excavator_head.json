@@ -2,7 +2,8 @@
   "type": "silentgear:compound_part",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/excavator"
+      "type": "silentgear:blueprint",
+      "gear_type": "excavator"
     },
     {
       "type": "silentgear:material",

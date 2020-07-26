@@ -1,7 +1,0 @@
-{
-  "__comment__": "Lite gear model",
-  "parent": "silentgear:item/bow",
-  "textures": {
-    "layer0": "silentgear:item/bow/rod_generic_lc"
-  }
-}

@@ -206,7 +206,8 @@ public interface IMaterial {
      * @param partType The part type
      * @return Material display properties
      */
-    IMaterialDisplay getMaterialDisplay(ItemStack gear, PartType partType);
+    @Deprecated
+    IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType);
 
     ITextComponent getDisplayName(PartType partType, ItemStack gear);
 

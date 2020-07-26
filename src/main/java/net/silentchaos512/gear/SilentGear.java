@@ -9,6 +9,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.util.ModResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,8 +52,11 @@ public final class SilentGear {
         return "NONE".equals(getVersion()) || !FMLLoader.isProduction();
     }
 
-    public static ResourceLocation getId(String path) {
-        return new ResourceLocation(MOD_ID, path);
+    public static ModResourceLocation getId(String path) {
+        if (path.contains(":")) {
+            throw new IllegalArgumentException("path contains namespace");
+        }
+        return new ModResourceLocation(path);
     }
 
     @Nullable

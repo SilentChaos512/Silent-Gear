@@ -12,23 +12,6 @@
   "name": {
     "translate": "material.silentgear.flax"
   },
-  "display": {
-    "binding/all": [
-      {
-        "texture": "silentgear:binding_generic",
-        "color": "#B3804B"
-      }
-    ],
-    "bowstring/all": [
-      {
-        "texture": "silentgear:bowstring_string",
-        "color": "#845E37"
-      },
-      {
-        "texture": "silentgear:arrow"
-      }
-    ]
-  },
   "stats": {
     "binding": {
       "durability": [

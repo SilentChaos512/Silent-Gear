@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "side": "silentgear:block/stripped_netherwood_log",
+    "end": "silentgear:block/stripped_netherwood_log_top"
+  }
+}

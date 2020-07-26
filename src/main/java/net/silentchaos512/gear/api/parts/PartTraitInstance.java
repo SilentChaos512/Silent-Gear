@@ -5,16 +5,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.*;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.traits.TraitManager;
 
@@ -54,12 +55,29 @@ public class PartTraitInstance {
         return conditions.stream().allMatch(c -> c.matches(gear, partType, materials, this.trait));
     }
 
-    public ITextComponent getDisplayName() {
-        ITextComponent text = this.trait.getDisplayName(this.level);
+    public IFormattableTextComponent getDisplayName() {
+        IFormattableTextComponent text = this.trait.getDisplayName(this.level).deepCopy();
         if (!conditions.isEmpty()) {
-            text.copyRaw().func_230529_a_(new StringTextComponent("*"));
+            text.func_240702_b_("*");
         }
         return text;
+    }
+
+    public void addInformation(List<ITextComponent> tooltip, ITooltipFlag flag) {
+        if (!this.trait.showInTooltip(flag)) return;
+
+        // Display name
+        IFormattableTextComponent displayName = this.getDisplayName().func_240699_a_(TextFormatting.ITALIC);
+        // TODO: fix the jank
+        if (trait.isHidden()) displayName.func_230530_a_(displayName.getStyle().setColor(Color.func_240743_a_(net.silentchaos512.utils.Color.DARKGRAY.getColor())));
+        tooltip.add(displayName);
+
+        // Description (usually not shown)
+        if (KeyTracker.isAltDown()) {
+            // TODO: fix the jank
+            ITextComponent description = this.trait.getDescription(level).func_230530_a_(displayName.getStyle().setColor(Color.func_240743_a_(net.silentchaos512.utils.Color.DARKGRAY.getColor())));
+            tooltip.add(new StringTextComponent("  ").func_230529_a_(description));
+        }
     }
 
     public static PartTraitInstance deserialize(JsonObject json) {

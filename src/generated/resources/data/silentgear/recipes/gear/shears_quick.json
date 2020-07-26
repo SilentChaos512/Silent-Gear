@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/shears"
+      "type": "silentgear:blueprint",
+      "gear_type": "shears"
     },
     {
       "type": "silentgear:material",

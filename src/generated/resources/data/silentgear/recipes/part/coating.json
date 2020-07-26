@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "part_type": "silentgear:coating"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:coating"
+    }
+  ],
+  "result": {
+    "item": "silentgear:coating"
+  }
+}

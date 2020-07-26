@@ -73,7 +73,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         });
 
         // Compound parts
-        builder(ModItems.BINDING, itemGenerated);
+        /*builder(ModItems.BINDING, itemGenerated);
         builder(ModItems.BOWSTRING, itemGenerated);
         builder(ModItems.FLETCHING, itemGenerated);
         builder(ModItems.GRIP, itemGenerated);
@@ -83,11 +83,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .parent(itemGenerated)
                 .texture("layer0", "item/upgrade_base")
                 .texture("layer1", "item/custom_tip_upgrade")
-                .texture("layer2", "item/custom_tip_upgrade_shine");
-        getBuilder("coating")
-                .parent(itemGenerated)
-                .texture("layer0", "item/coating_material")
-                .texture("layer1", "item/coating_jar");
+                .texture("layer2", "item/custom_tip_upgrade_shine");*/
 
         // Misc
         builder(ModItems.BLUEPRINT_PACKAGE, itemGenerated);

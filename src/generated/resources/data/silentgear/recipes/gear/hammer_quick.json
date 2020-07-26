@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/hammer"
+      "type": "silentgear:blueprint",
+      "gear_type": "hammer"
     },
     {
       "type": "silentgear:material",

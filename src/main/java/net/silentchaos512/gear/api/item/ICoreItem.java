@@ -132,5 +132,9 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return (stack, tintIndex) -> Color.VALUE_WHITE;
     }
 
+    default boolean hasTexturesFor(PartType partType) {
+        return true;
+    }
+
     //endregion
 }

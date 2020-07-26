@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/saw"
+      "type": "silentgear:blueprint",
+      "gear_type": "saw"
     },
     {
       "type": "silentgear:material",

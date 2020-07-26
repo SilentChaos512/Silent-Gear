@@ -3,6 +3,7 @@ package net.silentchaos512.gear.network;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.silentchaos512.gear.SilentGear;
@@ -81,6 +82,16 @@ public final class Network {
                 .decoder(SyncMaterialCraftingItemsPacket::fromBytes)
                 .encoder(SyncMaterialCraftingItemsPacket::toBytes)
                 .consumer(SyncMaterialCraftingItemsPacket::handle)
+                .add();
+        channel.messageBuilder(KeyPressOnItemPacket.class, 9, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(KeyPressOnItemPacket::decode)
+                .encoder(KeyPressOnItemPacket::encode)
+                .consumer(KeyPressOnItemPacket::handle)
+                .add();
+        channel.messageBuilder(SelectBlueprintFromBookPacket.class, 10, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SelectBlueprintFromBookPacket::decode)
+                .encoder(SelectBlueprintFromBookPacket::encode)
+                .consumer(SelectBlueprintFromBookPacket::handle)
                 .add();
     }
 

@@ -1,5 +1,5 @@
 {
-  "parent": "block/door_top_rh",
+  "parent": "minecraft:block/door_top_rh",
   "textures": {
     "bottom": "silentgear:block/netherwood_door_bottom",
     "top": "silentgear:block/netherwood_door_top"

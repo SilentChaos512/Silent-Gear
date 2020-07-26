@@ -15,17 +15,6 @@
   "name_prefix": {
     "translate": "material.silentgear.netherite"
   },
-  "display": {
-    "coating/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#867B86"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ]
-  },
   "stats": {
     "coating": {
       "durability": [

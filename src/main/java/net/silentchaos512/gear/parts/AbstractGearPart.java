@@ -190,6 +190,11 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
+    public int getColor(PartData part, ItemStack gear, int layer, int animationFrame) {
+        return getColor(part, gear, animationFrame);
+    }
+
+    @Override
     public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
         if (displayName == null) return new StringTextComponent("<error: missing name>");
         return displayName.deepCopy();

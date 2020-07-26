@@ -12,32 +12,6 @@
   "name": {
     "translate": "material.silentgear.end_stone"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#FFFFCC"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#FFFFCC"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#FFFFCC"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 1164.0,

@@ -2,7 +2,8 @@
   "type": "silentgear:compound_part",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/slingshot"
+      "type": "silentgear:blueprint",
+      "gear_type": "slingshot"
     },
     {
       "type": "silentgear:material",

@@ -42,6 +42,10 @@ public class MaterialLayer {
         return color;
     }
 
+    public boolean isAnimated() {
+        return animated;
+    }
+
     public static MaterialLayer deserialize(JsonElement json) {
         if (json.isJsonObject()) {
             JsonObject jo = json.getAsJsonObject();
@@ -72,5 +76,13 @@ public class MaterialLayer {
     public void write(PacketBuffer buffer) {
         buffer.writeResourceLocation(this.texture);
         buffer.writeVarInt(this.color);
+    }
+
+    @Override
+    public String toString() {
+        return "MaterialLayer{" +
+                "texture=" + texture +
+                ", color=" + Color.format(color) +
+                '}';
     }
 }

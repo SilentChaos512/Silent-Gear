@@ -18,6 +18,9 @@
 
 package net.silentchaos512.gear.api.parts;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -30,6 +33,7 @@ import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.*;
+import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -121,6 +125,15 @@ public final class PartType {
 
     public static Collection<PartType> getValues() {
         return VALUES.values();
+    }
+
+    public static PartType fromJson(JsonObject json, String key) {
+        String str = JSONUtils.getString(json, key);
+        PartType type = get(new ModResourceLocation(str));
+        if (type == null) {
+            throw new JsonSyntaxException("Unknown part type: " + str);
+        }
+        return type;
     }
 
     private final ResourceLocation name;

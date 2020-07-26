@@ -1,5 +1,5 @@
 {
-  "parent": "block/stairs",
+  "parent": "minecraft:block/stairs",
   "textures": {
     "side": "silentgear:block/netherwood_planks",
     "bottom": "silentgear:block/netherwood_planks",

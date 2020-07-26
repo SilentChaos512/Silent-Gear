@@ -69,8 +69,10 @@ public interface IMaterialInstance {
 
     CompoundNBT write(CompoundNBT nbt);
 
+    @Deprecated
     int getColor(PartType partType, ItemStack gear);
 
+    @Deprecated
     default int getColor(PartType partType) {
         return getColor(partType, ItemStack.EMPTY);
     }
