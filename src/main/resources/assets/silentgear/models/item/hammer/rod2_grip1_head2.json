@@ -1,9 +1,0 @@
-{
-  "__comment__": "Lite gear model",
-  "parent": "silentgear:item/hammer",
-  "textures": {
-    "layer0": "silentgear:item/hammer/rod_generic_hc",
-    "layer1": "silentgear:item/hammer/grip_wool",
-    "layer2": "silentgear:item/hammer/head_generic_hc"
-  }
-}

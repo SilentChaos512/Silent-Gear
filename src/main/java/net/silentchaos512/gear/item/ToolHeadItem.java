@@ -17,7 +17,7 @@ public class ToolHeadItem extends CompoundPartItem {
     }
 
     @Override
-    protected int getColorWeight(int index, int totalCount) {
+    public int getColorWeight(int index, int totalCount) {
         int diff = super.getColorWeight(index, totalCount);
         return diff * diff;
     }

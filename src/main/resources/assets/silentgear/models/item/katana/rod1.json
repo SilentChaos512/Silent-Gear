@@ -1,7 +1,0 @@
-{
-  "__comment__": "Lite gear model",
-  "parent": "silentgear:item/katana",
-  "textures": {
-    "layer0": "silentgear:item/katana/rod_generic_lc"
-  }
-}

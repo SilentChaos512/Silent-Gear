@@ -1,9 +1,0 @@
-{
-  "__comment__": "Lite gear model",
-  "parent": "silentgear:item/pickaxe",
-  "textures": {
-    "layer0": "silentgear:item/pickaxe/rod_generic_hc",
-    "layer1": "silentgear:item/blank",
-    "layer2": "silentgear:item/pickaxe/head_generic_lc"
-  }
-}

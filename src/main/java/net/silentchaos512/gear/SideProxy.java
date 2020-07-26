@@ -6,6 +6,7 @@ import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -32,7 +33,9 @@ import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
-import net.silentchaos512.gear.client.model.GearModelLoader;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.gear.GearModelLoader;
+import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
@@ -172,7 +175,13 @@ class SideProxy implements IProxy {
             // FIXME: Crashes on runData because MC instance is null
             //noinspection ConstantConditions
             if (Minecraft.getInstance() != null) {
+                ModelLoaderRegistry.registerLoader(SilentGear.getId("compound_part_model"), new CompoundPartModelLoader());
                 ModelLoaderRegistry.registerLoader(SilentGear.getId("gear_model"), new GearModelLoader());
+
+                IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+                if (resourceManager instanceof IReloadableResourceManager) {
+                    ((IReloadableResourceManager) resourceManager).addReloadListener(MaterialDisplayManager.INSTANCE);
+                }
             } else {
                 SilentGear.LOGGER.warn("MC instance is null? Must be running data generators! Not registering model loaders...");
             }

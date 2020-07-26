@@ -12,38 +12,6 @@
   "name": {
     "translate": "material.silentgear.gold"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#EAEE57"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#EAEE57"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#EAEE57"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_iron",
-        "color": "#EAEE57"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 32.0,

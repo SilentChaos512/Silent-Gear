@@ -1,0 +1,26 @@
+{
+  "main/all": [
+    {
+      "texture": "silentgear:main_generic_lc",
+      "color": "#C65C35"
+    }
+  ],
+  "main/armor": [
+    {
+      "texture": "silentgear:main_generic_lc",
+      "color": "#C65C35"
+    }
+  ],
+  "grip/all": [
+    {
+      "texture": "silentgear:grip_wool",
+      "color": "#C65C35"
+    }
+  ],
+  "grip/part": [
+    {
+      "texture": "silentgear:grip",
+      "color": "#C65C35"
+    }
+  ]
+}

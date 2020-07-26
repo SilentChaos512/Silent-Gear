@@ -21,32 +21,6 @@
   "name": {
     "translate": "material.silentgear.bismuth_brass"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#E9C1B4"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#E9C1B4"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#E9C1B4"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 580.0,

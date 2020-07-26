@@ -1,7 +1,0 @@
-{
-  "__comment__": "Lite gear model",
-  "parent": "silentgear:item/crossbow",
-  "textures": {
-    "layer0": "silentgear:item/crossbow/rod_generic_hc"
-  }
-}

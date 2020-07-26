@@ -21,32 +21,6 @@
   "name": {
     "translate": "material.silentgear.compressed_iron"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#A6A6A6"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#A6A6A6"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#A6A6A6"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 1024.0,

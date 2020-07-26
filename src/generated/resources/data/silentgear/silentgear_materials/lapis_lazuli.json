@@ -12,14 +12,6 @@
   "name": {
     "translate": "material.silentgear.lapis_lazuli"
   },
-  "display": {
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_iron",
-        "color": "#224BAF"
-      }
-    ]
-  },
   "stats": {
     "tip": {
       "enchantability": {

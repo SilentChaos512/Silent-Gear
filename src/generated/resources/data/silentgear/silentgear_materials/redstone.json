@@ -12,14 +12,6 @@
   "name": {
     "translate": "material.silentgear.redstone"
   },
-  "display": {
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_iron",
-        "color": "#BB0000"
-      }
-    ]
-  },
   "stats": {
     "tip": {
       "harvest_speed": {

@@ -69,4 +69,9 @@ public interface ICoreRangedWeapon extends ICoreTool {
         if (speed <= 0) speed = 1f;
         return getBaseDrawDelay(stack) / speed;
     }
+
+    @Override
+    default boolean hasTexturesFor(PartType partType) {
+        return partType != PartType.FLETCHING;
+    }
 }

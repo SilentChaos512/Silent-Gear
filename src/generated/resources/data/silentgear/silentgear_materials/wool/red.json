@@ -7,13 +7,5 @@
   },
   "name": {
     "translate": "material.silentgear.wool.red"
-  },
-  "display": {
-    "grip/all": [
-      {
-        "texture": "silentgear:grip_wool",
-        "color": "#A12722"
-      }
-    ]
   }
 }

@@ -11,14 +11,16 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.SynergyUtils;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -28,7 +30,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CompoundPartItem extends Item {
-    private static final String NBT_COLOR = "Color";
     private static final String NBT_MATERIALS = "Materials";
 
     private final PartType partType;
@@ -49,7 +50,7 @@ public class CompoundPartItem extends Item {
     }
 
     public GearType getGearType() {
-        return GearType.TOOL;
+        return GearType.PART;
     }
 
     public ItemStack createFromItems(Collection<ItemStack> materials) {
@@ -71,7 +72,6 @@ public class CompoundPartItem extends Item {
 
         CompoundNBT tag = new CompoundNBT();
         tag.put(NBT_MATERIALS, materialListNbt);
-        tag.putInt(NBT_COLOR, calculateBlendedColor(materials));
 
         ItemStack result = new ItemStack(this);
         result.setTag(tag);
@@ -100,55 +100,21 @@ public class CompoundPartItem extends Item {
         return null;
     }
 
-    public static int getColor(ItemStack stack) {
-        CompoundNBT tag = stack.getOrCreateTag();
-        return tag.contains(NBT_COLOR) ? tag.getInt(NBT_COLOR) : 0xFFFFFF;
-    }
+    public static String getModelKey(ItemStack stack) {
+        StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + ":");
 
-    public int getColor(ItemStack stack, int tintIndex) {
-        return tintIndex == this.tintLayer ? getColor(stack) : Color.VALUE_WHITE;
-    }
-
-    private int calculateBlendedColor(Collection<? extends IMaterialInstance> materials) {
-        int[] componentSums = new int[3];
-        int maxColorSum = 0;
-        int colorCount = 0;
-
-        int i = 0;
-        for (IMaterialInstance mat : materials) {
-            int color = mat.getColor(partType);
-            int r = (color >> 16) & 0xFF;
-            int g = (color >> 8) & 0xFF;
-            int b = color & 0xFF;
-            int colorWeight = getColorWeight(i, materials.size());
-            for (int j = 0; j < colorWeight; ++j) {
-                maxColorSum += Math.max(r, Math.max(g, b));
-                componentSums[0] += r;
-                componentSums[1] += g;
-                componentSums[2] += b;
-                ++colorCount;
-            }
-            ++i;
+        for (MaterialInstance material : getMaterials(stack)) {
+            s.append(SilentGear.shortenId(material.getMaterialId()));
         }
 
-        if (colorCount > 0) {
-            int r = componentSums[0] / colorCount;
-            int g = componentSums[1] / colorCount;
-            int b = componentSums[2] / colorCount;
-            float maxAverage = (float) maxColorSum / (float) colorCount;
-            float max = (float) Math.max(r, Math.max(g, b));
-            r = (int) ((float) r * maxAverage / max);
-            g = (int) ((float) g * maxAverage / max);
-            b = (int) ((float) b * maxAverage / max);
-            int finalColor = (r << 8) + g;
-            finalColor = (finalColor << 8) + b;
-            return finalColor;
-        }
-
-        return Color.VALUE_WHITE;
+        return s.toString();
     }
 
-    protected int getColorWeight(int index, int totalCount) {
+    public int getColor(ItemStack stack, int layer) {
+        return ColorUtils.getBlendedColor(this, getMaterials(stack), layer);
+    }
+
+    public int getColorWeight(int index, int totalCount) {
         return totalCount - index;
     }
 

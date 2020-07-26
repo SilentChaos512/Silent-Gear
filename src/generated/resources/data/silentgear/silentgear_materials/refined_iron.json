@@ -21,32 +21,6 @@
   "name": {
     "translate": "material.silentgear.refined_iron"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#D7D7D7"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#D7D7D7"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#D7D7D7"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 512.0,

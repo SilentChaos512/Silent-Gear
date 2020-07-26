@@ -18,13 +18,13 @@ public class BakedWrapper implements IBakedModel {
     private final ItemOverrideList overrideList;
 
     @SuppressWarnings("ConstructorWithTooManyParameters")
-    public BakedWrapper(GearModel model,
+    public BakedWrapper(LayeredModel<?> model,
                         IModelConfiguration owner,
                         ModelBakery bakery,
                         Function<Material, TextureAtlasSprite> spriteGetter,
                         IModelTransform modelTransform,
                         ResourceLocation modelLocation,
-                        GearModelOverrideList overrideList) {
+                        ItemOverrideList overrideList) {
         this.particleTexture = spriteGetter.apply(owner.resolveTexture("particle"));
         this.overrideList = overrideList;
     }

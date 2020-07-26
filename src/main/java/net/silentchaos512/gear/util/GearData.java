@@ -49,7 +49,6 @@ public final class GearData {
     private static final String NBT_ROOT_RENDERING = "Rendering";
     private static final String NBT_ROOT_STATISTICS = "Statistics";
 
-    private static final String NBT_COLORS = "Colors";
     private static final String NBT_CONSTRUCTION_PARTS = "Parts";
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
@@ -268,28 +267,12 @@ public final class GearData {
         nbt.remove("ArmorColor");
         nbt.remove("BlendedHeadColor");
 
-        // Cache part colors
-        CompoundNBT colors = nbt.getCompound(NBT_COLORS);
-        for (PartType partType : PartType.getValues()) {
-            List<PartData> list = parts.getPartsOfType(partType);
-            String key = partType.getName().getPath();
-            colors.remove(key);
-            if (!list.isEmpty()) {
-                int color = getBlendedColor(stack, list) & 0xFFFFFF;
-                if (color < 0xFFFFFF) {
-                    colors.putInt(key, color);
-                }
-            }
-        }
-
         // Cache armor color
         if (stack.getItem() instanceof ICoreArmor) {
-            colors.putInt("armor", getPrimaryColor(stack, mains));
+            nbt.putInt("ArmorColor", getPrimaryColor(stack, mains));
         } else {
-            colors.remove("armor");
+            nbt.remove("ArmorColor");
         }
-
-        nbt.put(NBT_COLORS, colors);
 
         nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
 
@@ -441,18 +424,21 @@ public final class GearData {
         return data.getInt(NBT_TIER);
     }
 
-    public static int getColor(ItemStack stack, PartType partType) {
-        CompoundNBT colors = getData(stack, NBT_ROOT_RENDERING).getCompound(NBT_COLORS);
-        String key = partType.getName().getPath();
-        return colors.contains(key) ? colors.getInt(key) : Color.VALUE_WHITE;
+    public static int getBlendedColor(ItemStack stack, PartType partType) {
+        List<PartData> list = getConstructionParts(stack).getPartsOfType(partType);
+        if (!list.isEmpty()) {
+            return getBlendedColor(stack, list) & 0xFFFFFF;
+        }
+        return Color.VALUE_WHITE;
     }
 
     public static int getHeadColor(ItemStack stack, boolean colorBlending) {
-        return getColor(stack, PartType.MAIN);
+        return getBlendedColor(stack, PartType.MAIN);
     }
 
     public static int getArmorColor(ItemStack stack) {
-        return getData(stack, NBT_ROOT_RENDERING).getCompound(NBT_COLORS).getInt("armor");
+        // FIXME
+        return getData(stack, NBT_ROOT_RENDERING).getInt("ArmorColor");
     }
 
     private static int getPrimaryColor(ItemStack gear, List<PartData> parts) {

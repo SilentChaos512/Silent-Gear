@@ -12,26 +12,6 @@
   "name": {
     "translate": "material.silentgear.stone"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#9A9A9A"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#9A9A9A"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#9A9A9A"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 131.0,

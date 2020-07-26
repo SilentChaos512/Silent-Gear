@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/machete/main_generic_hc"
-  }
+  "loader": "silentgear:compound_part_model",
+  "gear_type": "machete",
+  "part_type": "silentgear:main"
 }

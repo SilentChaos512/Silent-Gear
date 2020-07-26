@@ -7,25 +7,5 @@
   },
   "name": {
     "translate": "material.silentgear.terracotta.pink"
-  },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#A04D4E"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#A04D4E"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#A04D4E"
-      }
-    ]
   }
 }

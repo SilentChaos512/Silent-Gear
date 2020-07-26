@@ -12,14 +12,6 @@
   "name": {
     "translate": "material.silentgear.leaves"
   },
-  "display": {
-    "fletching/all": [
-      {
-        "texture": "silentgear:fletching_generic",
-        "color": "#4A8F28"
-      }
-    ]
-  },
   "stats": {
     "fletching": {}
   }

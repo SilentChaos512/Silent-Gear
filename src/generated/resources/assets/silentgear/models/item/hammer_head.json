@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
-  "textures": {
-    "layer0": "silentgear:item/hammer/main_generic_hc"
-  }
+  "loader": "silentgear:compound_part_model",
+  "gear_type": "hammer",
+  "part_type": "silentgear:main"
 }

@@ -16,8 +16,8 @@ import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.MaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.LazyItemStat;
@@ -26,7 +26,11 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.client.material.MaterialDisplay;
+import net.silentchaos512.gear.client.material.PartGearKey;
+import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -44,7 +48,7 @@ public class MaterialBuilder {
 
     private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
     private final Map<PartType, List<ITraitInstance>> traits = new LinkedHashMap<>();
-    private final Map<String, MaterialDisplay> display = new LinkedHashMap<>();
+    private final Map<PartGearKey, MaterialLayerList> display = new LinkedHashMap<>();
 
     public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation tag) {
         this(id, tier, Ingredient.fromTag(new ItemTags.Wrapper(tag)));
@@ -105,41 +109,76 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder display(PartTextureType texture, int color) {
+    public MaterialBuilder displayAll(PartTextureType texture, int color) {
         if (this.stats.isEmpty()) {
             throw new IllegalStateException("Must build stats map first!");
         }
-        this.stats.keySet().forEach(partType -> {
-            // Remove highlight layer from non-mains
+        for (PartType partType : this.stats.keySet()) {// Remove highlight layer from non-mains
             PartTextureType targetTexture = texture == PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT && partType != PartType.MAIN
                     ? PartTextureType.HIGH_CONTRAST
                     : texture;
-            display(partType, targetTexture, color);
-        });
+
+            if (partType == PartType.BOWSTRING)
+                displayBowstring(color);
+            else if (partType == PartType.TIP)
+                displayTip(targetTexture.getLayers(partType).get(0), color);
+            else
+                display(partType, targetTexture, color);
+        }
+        return this;
+    }
+
+    public MaterialBuilder displayBowstring(int color) {
+        display(PartType.BOWSTRING,
+                new MaterialLayer(PartTextures.BOWSTRING_STRING, color),
+                new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE)
+        );
+        display(PartType.BOWSTRING, GearType.PART,
+                new MaterialLayer(SilentGear.getId("bowstring"), color)
+        );
+        return this;
+    }
+
+    public MaterialBuilder displayTip(PartTextures texture, int color) {
+        display(PartType.TIP, GearType.ALL,
+                new MaterialLayer(texture, color)
+        );
+        display(PartType.TIP, GearType.PART,
+                new MaterialLayer(SilentGear.getId("tip_base"), Color.VALUE_WHITE),
+                new MaterialLayer(SilentGear.getId("tip"), color),
+                new MaterialLayer(SilentGear.getId("tip_shine"), Color.VALUE_WHITE)
+        );
         return this;
     }
 
     public MaterialBuilder display(PartType partType, PartTextureType texture, int color) {
-        display(partType, "all", texture, color);
+        display(partType, GearType.ALL, texture, color);
         if (partType == PartType.MAIN) {
-            display(partType, "armor", texture, color);
+            display(partType, GearType.ARMOR, texture, color);
         }
+
+        // Compound part models
+        if (partType != PartType.MAIN) {
+            display(partType, GearType.PART, new MaterialLayer(partType.getName(), color));
+        }
+
+
         return this;
     }
 
-    public MaterialBuilder display(PartType partType, String gearType, PartTextureType texture, int color) {
-        MaterialDisplay materialDisplay = new MaterialDisplay(partType, texture, color);
-        this.display.put(SilentGear.shortenId(partType.getName()) + "/" + gearType, materialDisplay);
+    public MaterialBuilder display(PartType partType, GearType gearType, PartTextureType texture, int color) {
+        MaterialLayerList materialLayerList = new MaterialLayerList(partType, texture, color);
+        this.display.put(PartGearKey.of(gearType, partType), materialLayerList);
         return this;
     }
 
     public MaterialBuilder display(PartType partType, MaterialLayer... layers) {
-        return display(partType, "all", layers);
+        return display(partType, GearType.ALL, layers);
     }
 
-    public MaterialBuilder display(PartType partType, String gearType, MaterialLayer... layers) {
-        MaterialDisplay materialDisplay = new MaterialDisplay(layers);
-        this.display.put(SilentGear.shortenId(partType.getName()) + "/" + gearType, materialDisplay);
+    public MaterialBuilder display(PartType partType, GearType gearType, MaterialLayer... layers) {
+        MaterialLayerList materialLayerList = new MaterialLayerList(layers);
+        this.display.put(PartGearKey.of(gearType, partType), materialLayerList);
         return this;
     }
 
@@ -173,6 +212,11 @@ public class MaterialBuilder {
         List<ITraitInstance> list = traits.computeIfAbsent(partType, pt -> new ArrayList<>());
         list.add(inst);
         return this;
+    }
+
+    public JsonObject serializeModel() {
+        MaterialDisplay model = MaterialDisplay.of(this.display);
+        return model.serialize();
     }
 
     public JsonObject serialize() {
@@ -218,11 +262,11 @@ public class MaterialBuilder {
             json.add("name_prefix", ITextComponent.Serializer.toJsonTree(this.namePrefix));
         }
 
-        if (!this.display.isEmpty()) {
+        /*if (!this.display.isEmpty()) {
             JsonObject displayObj = new JsonObject();
-            this.display.forEach((key, materialDisplay) -> displayObj.add(key, materialDisplay.serialize()));
+            this.display.forEach((key, materialLayerList) -> displayObj.add(key, materialLayerList.serializeTypes()));
             json.add("display", displayObj);
-        }
+        }*/
 
         if (!this.stats.isEmpty()) {
             JsonObject statsJson = new JsonObject();

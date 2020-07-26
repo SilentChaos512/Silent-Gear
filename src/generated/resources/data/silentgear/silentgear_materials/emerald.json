@@ -12,38 +12,6 @@
   "name": {
     "translate": "material.silentgear.emerald"
   },
-  "display": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#00B038"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#00B038"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#00B038"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_iron",
-        "color": "#00B038"
-      }
-    ]
-  },
   "stats": {
     "main": {
       "durability": 1080.0,

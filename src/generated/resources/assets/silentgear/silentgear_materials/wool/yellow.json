@@ -1,0 +1,14 @@
+{
+  "grip/all": [
+    {
+      "texture": "silentgear:grip_wool",
+      "color": "#F8C627"
+    }
+  ],
+  "grip/part": [
+    {
+      "texture": "silentgear:grip",
+      "color": "#F8C627"
+    }
+  ]
+}
