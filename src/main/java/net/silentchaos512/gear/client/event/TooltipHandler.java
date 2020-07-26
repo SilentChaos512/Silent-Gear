@@ -117,8 +117,8 @@ public final class TooltipHandler {
         }
 
         ITextComponent keyHint = TextUtil.misc("tooltip.material.keyHint",
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), net.silentchaos512.utils.Color.MINTCREAM),
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), net.silentchaos512.utils.Color.MINTCREAM));
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), net.silentchaos512.utils.Color.AQUAMARINE),
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), net.silentchaos512.utils.Color.AQUAMARINE));
         return ret.func_230529_a_(keyHint);
     }
 

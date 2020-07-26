@@ -10,6 +10,7 @@ import net.minecraft.item.Rarity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -118,13 +119,13 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         ItemStack selected = getSelectedItem(stack);
         if (!selected.isEmpty()) {
-            tooltip.add(TextUtil.withColor(TextUtil.translate("item", "blueprint_book.selected"), Color.MINTCREAM)
-                    .func_230529_a_(selected.getDisplayName()));
+            tooltip.add(TextUtil.withColor(TextUtil.translate("item", "blueprint_book.selected"), Color.SKYBLUE)
+                    .func_230529_a_(selected.getDisplayName().deepCopy().func_240699_a_(TextFormatting.GRAY)));
         }
 
         tooltip.add(TextUtil.translate("item", "blueprint_book.keyHint",
-                KeyTracker.CYCLE_BACK.func_238171_j_(),
-                KeyTracker.CYCLE_NEXT.func_238171_j_()));
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
     }
 
     @Override

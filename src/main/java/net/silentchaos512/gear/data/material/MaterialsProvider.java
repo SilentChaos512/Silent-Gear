@@ -358,6 +358,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, chargeability, 1f)
                 .noStats(PartType.ROD)
                 .noStats(PartType.TIP)
+                .noStats(PartType.COATING)
                 .noStats(PartType.GRIP)
                 .noStats(PartType.BINDING)
                 .noStats(PartType.BOWSTRING)

@@ -186,7 +186,7 @@
   "item.silentgear.blueprint.spear.desc": "Long Stabbing Stick",
   "item.silentgear.blueprint.sword.desc": "The classic",
   "item.silentgear.blueprint_book": "Blueprint Book",
-  "item.silentgear.blueprint_book.keyHint": "Cycle with [%s] and [%s]",
+  "item.silentgear.blueprint_book.keyHint": "Cycle with %s and %s",
   "item.silentgear.blueprint_book.selected": "Selected: %s",
   "item.silentgear.blueprint_package": "Blueprint Package",
   "item.silentgear.blueprint_package.desc1": "Contains some blueprints for gear crafting",
