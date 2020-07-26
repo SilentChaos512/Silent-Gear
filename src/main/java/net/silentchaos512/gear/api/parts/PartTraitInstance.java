@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -12,9 +13,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.traits.TraitManager;
 
@@ -60,6 +63,21 @@ public class PartTraitInstance {
             text.appendSibling(new StringTextComponent("*"));
         }
         return text;
+    }
+
+    public void addInformation(List<ITextComponent> tooltip, ITooltipFlag flag) {
+        if (!this.trait.showInTooltip(flag)) return;
+
+        // Display name
+        ITextComponent displayName = this.getDisplayName().applyTextStyle(TextFormatting.ITALIC);
+        if (trait.isHidden()) displayName.applyTextStyle(TextFormatting.DARK_GRAY);
+        tooltip.add(displayName);
+
+        // Description (usually not shown)
+        if (KeyTracker.isAltDown()) {
+            ITextComponent description = this.trait.getDescription(level).applyTextStyle(TextFormatting.DARK_GRAY);
+            tooltip.add(new StringTextComponent("  ").appendSibling(description));
+        }
     }
 
     public static PartTraitInstance deserialize(JsonObject json) {

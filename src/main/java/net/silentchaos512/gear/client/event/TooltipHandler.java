@@ -139,7 +139,7 @@ public final class TooltipHandler {
         int i = 0;
         for (PartTraitInstance inst : traits) {
             if (traitIndex < 0 || traitIndex == i) {
-                inst.getTrait().addInformation(inst.getLevel(), event.getToolTip(), event.getFlags());
+                inst.addInformation(event.getToolTip(), event.getFlags());
             }
             ++i;
         }
