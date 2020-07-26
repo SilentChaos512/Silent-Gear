@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.11.0] - 2020-07-26
 Major overhaul of model system (again)
+(hotfix) Fixed blueprint book being consumed when crafting
 ### Added
 - Blueprint book. Yeah, I finally figured it out. Stores blueprints, but not templates. Use Z or C to cycle stored blueprints, or open the book and Ctrl+click the blueprint you want. The cycle keys will work whenever your mouse cursor is over the book. It will even update the crafting result when cycling.
 - Repair kits now store materials instead of "repair value". Any repair value in existing kits will be lost. The number of materials that can be stored is configurable. Repairs can use partial materials, so there is still no waste.
