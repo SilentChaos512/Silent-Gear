@@ -23,6 +23,7 @@ public final class GearType {
     public static final GearType NONE = getOrCreate("none");
     // A gear type which matches everything
     public static final GearType ALL = getOrCreate("all");
+    public static final GearType PART = getOrCreate("part");
 
     // Parent of everything except armor
     public static final GearType TOOL = getOrCreate("tool");

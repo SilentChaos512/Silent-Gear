@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "tag": "forge:ingots/gold"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    }
+  ],
+  "result": {
+    "item": "silentgear:blueprint_book"
+  }
+}

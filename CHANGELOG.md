@@ -5,9 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Blueprint book. Yeah, I finally figured it out. Stores blueprints, but not templates. Use Z or C to cycle stored blueprints, or open the book and Ctrl+click the blueprint you want. The cycle keys will work whenever your mouse cursor is over the book. It will even update the crafting result when cycling.
+- Repair kits now store materials instead of "repair value". Any repair value in existing kits will be lost. The number of materials that can be stored is configurable. Repairs can use partial materials, so there is still no waste.
 - Repair kits now have different "efficiency" levels, giving more incentive to upgrade. Values are configurable.
 ### Changed
 - 'server' config is now 'common' and will appear in the config folder, like most configs do
+- Cycle material info key binding changed to "Cycle Next". The "Cycle Back" key will also work with material tooltips. These are the same keys that blueprint books use.
 ### Fixed
 - Shears not losing durability on leaves [#188]
 - Parts not showing some conditional traits [#186]

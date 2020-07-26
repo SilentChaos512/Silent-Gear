@@ -10,7 +10,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.config.Config;
 
-public abstract class AbstractBlueprintItem extends Item {
+public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     final boolean singleUse;
 
     AbstractBlueprintItem(Properties properties, boolean singleUse) {

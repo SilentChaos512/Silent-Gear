@@ -2,7 +2,8 @@
   "type": "silentgear:compound_part",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/fletching"
+      "type": "silentgear:blueprint",
+      "part_type": "silentgear:fletching"
     },
     {
       "type": "silentgear:material",

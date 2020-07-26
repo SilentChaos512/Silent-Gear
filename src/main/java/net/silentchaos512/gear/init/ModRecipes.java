@@ -12,10 +12,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.crafting.ingredient.CustomTippedUpgradeIngredient;
-import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
-import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
-import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
+import net.silentchaos512.gear.crafting.ingredient.*;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
@@ -49,6 +46,7 @@ public final class ModRecipes {
         register(Const.SALVAGING_COMPOUND_PART, SALVAGING_COMPOUND_PART_SERIALIZER);
 
         // Ingredient serializers
+        CraftingHelper.register(BlueprintIngredient.Serializer.NAME, BlueprintIngredient.Serializer.INSTANCE);
         CraftingHelper.register(CustomTippedUpgradeIngredient.Serializer.NAME, CustomTippedUpgradeIngredient.Serializer.INSTANCE);
         CraftingHelper.register(ExclusionIngredient.Serializer.NAME, ExclusionIngredient.Serializer.INSTANCE);
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);

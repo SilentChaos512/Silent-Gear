@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/lumber_axe"
+      "type": "silentgear:blueprint",
+      "gear_type": "lumber_axe"
     },
     {
       "type": "silentgear:material",

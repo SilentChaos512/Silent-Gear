@@ -2,7 +2,8 @@
   "type": "silentgear:compound_part",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/binding"
+      "type": "silentgear:blueprint",
+      "part_type": "silentgear:binding"
     },
     {
       "type": "silentgear:material",

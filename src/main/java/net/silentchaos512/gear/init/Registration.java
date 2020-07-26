@@ -52,7 +52,7 @@ public final class Registration {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Item> Collection<T> getItems(Class<T> clazz) {
+    public static <T> Collection<T> getItems(Class<T> clazz) {
         return ITEMS.getEntries().stream()
                 .map(RegistryObject::get)
                 .filter(clazz::isInstance)

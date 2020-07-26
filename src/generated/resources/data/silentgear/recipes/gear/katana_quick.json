@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/katana"
+      "type": "silentgear:blueprint",
+      "gear_type": "katana"
     },
     {
       "type": "silentgear:material",

@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/sickle"
+      "type": "silentgear:blueprint",
+      "gear_type": "sickle"
     },
     {
       "type": "silentgear:material",

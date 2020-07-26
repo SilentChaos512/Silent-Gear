@@ -115,8 +115,10 @@ public final class TooltipHandler {
             ret.appendSibling(text).appendText(" | ");
         }
 
-        ITextComponent keyHint = new StringTextComponent("[" + KeyTracker.CYCLE_MATERIAL_INFO.getLocalizedName() + "]");
-        return ret.appendSibling(keyHint.applyTextStyle(TextFormatting.AQUA));
+        ITextComponent keyHint = TextUtil.misc("tooltip.material.keyHint",
+                TextUtil.keyBinding(KeyTracker.CYCLE_BACK).applyTextStyle(TextFormatting.AQUA),
+                TextUtil.keyBinding(KeyTracker.CYCLE_NEXT).applyTextStyle(TextFormatting.AQUA));
+        return ret.appendSibling(keyHint);
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData partData) {

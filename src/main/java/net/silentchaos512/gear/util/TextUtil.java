@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -16,5 +17,9 @@ public final class TextUtil {
 
     public static ITextComponent misc(String key, Object... args) {
         return translate("misc", key, args);
+    }
+
+    public static ITextComponent keyBinding(KeyBinding keyBinding) {
+        return misc("key", keyBinding.getLocalizedName());
     }
 }

@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/sword"
+      "type": "silentgear:blueprint",
+      "gear_type": "sword"
     },
     {
       "type": "silentgear:material",

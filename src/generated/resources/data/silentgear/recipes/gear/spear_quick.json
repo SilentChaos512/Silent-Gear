@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/spear"
+      "type": "silentgear:blueprint",
+      "gear_type": "spear"
     },
     {
       "type": "silentgear:material",

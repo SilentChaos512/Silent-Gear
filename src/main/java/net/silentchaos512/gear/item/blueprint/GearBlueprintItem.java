@@ -13,6 +13,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -27,7 +28,17 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         this.gearType = gearType;
     }
 
+    @Override
+    public PartType getPartType(ItemStack stack) {
+        return PartType.MAIN;
+    }
+
     public GearType getGearType() {
+        return gearType;
+    }
+
+    @Override
+    public GearType getGearType(ItemStack stack) {
         return gearType;
     }
 
