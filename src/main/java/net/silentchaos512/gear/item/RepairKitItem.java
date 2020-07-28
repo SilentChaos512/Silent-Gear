@@ -99,21 +99,25 @@ public class RepairKitItem extends Item {
         float kitEfficiency = this.getRepairEfficiency(repairType);
         int damageLeft = gear.getDamage();
 
-        for (Map.Entry<MaterialInstance, Float> entry : stored.entrySet()) {
-            MaterialInstance mat = entry.getKey();
-            float amount = entry.getValue();
+        if (gearRepairEfficiency > 0f && kitEfficiency > 0f) {
+            for (Map.Entry<MaterialInstance, Float> entry : stored.entrySet()) {
+                MaterialInstance mat = entry.getKey();
+                float amount = entry.getValue();
 
-            int repairValue = mat.getRepairValue(gear);
-            float totalRepairValue = repairValue * amount;
-            int maxRepair = Math.round(totalRepairValue * gearRepairEfficiency * kitEfficiency);
-            int toRepair = Math.min(maxRepair, damageLeft);
-            damageLeft -= toRepair;
-            float repairValueUsed = toRepair / gearRepairEfficiency / kitEfficiency;
-            float amountUsed = repairValueUsed / repairValue;
-            used.put(mat, amountUsed);
+                int repairValue = mat.getRepairValue(gear);
+                if (repairValue > 0) {
+                    float totalRepairValue = repairValue * amount;
+                    int maxRepair = Math.round(totalRepairValue * gearRepairEfficiency * kitEfficiency);
+                    int toRepair = Math.min(maxRepair, damageLeft);
+                    damageLeft -= toRepair;
+                    float repairValueUsed = toRepair / gearRepairEfficiency / kitEfficiency;
+                    float amountUsed = repairValueUsed / repairValue;
+                    used.put(mat, amountUsed);
 
-            if (damageLeft <= 0) {
-                break;
+                    if (damageLeft <= 0) {
+                        break;
+                    }
+                }
             }
         }
 
@@ -137,7 +141,7 @@ public class RepairKitItem extends Item {
             String key = getShorthandKey(mat);
             float newValue = nbt.getFloat(key) - amount;
 
-            if (newValue <= 0) {
+            if (newValue < 0.01f) {
                 nbt.remove(key);
             } else {
                 nbt.putFloat(key, newValue);
@@ -176,6 +180,6 @@ public class RepairKitItem extends Item {
     }
 
     private static String format(float f) {
-        return String.format("%.1f", f);
+        return String.format("%.2f", f);
     }
 }

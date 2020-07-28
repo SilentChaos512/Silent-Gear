@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Granite, diorite, and andesite materials (same stats as stone by default) [#193]
+### Changed
+- Repair kit will now discard materials if less than 0.01 units remain (no longer shows 0.0 units)
 ### Fixed
 - Armor and shield blueprints not working from the blueprint book
+- Repair kits repairing items with lower tier materials
 
 ## [2.0.0] - 2020-07-26
 Major overhaul of model system (again)
