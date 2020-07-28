@@ -90,7 +90,7 @@ public final class TooltipHandler {
 
             List<PartType> partTypes = new ArrayList<>(material.getPartTypes());
             if (!partTypes.isEmpty()) {
-                int index = KeyTracker.getMaterialCycleCount() % partTypes.size();
+                int index = KeyTracker.getMaterialCycleIndex(partTypes.size());
                 PartType partType = partTypes.get(index);
                 event.getToolTip().add(buildPartTypeHeader(partTypes, partType));
                 event.getToolTip().add(TextUtil.misc("tier", material.getTier(partType)));
