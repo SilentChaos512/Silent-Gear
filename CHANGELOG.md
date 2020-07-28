@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Granite, diorite, and andesite materials (same stats as stone by default) [#193]
+
 ## [2.0.0] - 2020-07-26
 Major overhaul of model system (again)
 (hotfix) Fixed blueprint book being consumed when crafting
