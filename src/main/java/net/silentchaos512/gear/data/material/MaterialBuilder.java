@@ -115,7 +115,8 @@ public class MaterialBuilder {
         if (this.stats.isEmpty()) {
             throw new IllegalStateException("Must build stats map first!");
         }
-        for (PartType partType : this.stats.keySet()) {// Remove highlight layer from non-mains
+        for (PartType partType : this.stats.keySet()) {
+            // Remove highlight layer from non-mains
             PartTextureType targetTexture = texture == PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT && partType != PartType.MAIN
                     ? PartTextureType.HIGH_CONTRAST
                     : texture;
@@ -124,6 +125,8 @@ public class MaterialBuilder {
                 displayBowstring(color);
             else if (partType == PartType.TIP)
                 displayTip(targetTexture.getLayers(partType).get(0), color);
+            else if (partType == PartType.COATING)
+                displayCoating(targetTexture, color);
             else
                 display(partType, targetTexture, color);
         }

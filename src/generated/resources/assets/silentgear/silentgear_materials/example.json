@@ -35,6 +35,19 @@
       "texture": "silentgear:tip_shine"
     }
   ],
+  "coating/all": [
+    {
+      "texture": "silentgear:main_generic_lc"
+    }
+  ],
+  "coating/part": [
+    {
+      "texture": "silentgear:coating_material"
+    },
+    {
+      "texture": "silentgear:coating_jar"
+    }
+  ],
   "grip/all": [
     {
       "texture": "silentgear:grip_wool"
