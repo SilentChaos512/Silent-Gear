@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/boots"
+      "type": "silentgear:blueprint",
+      "gear_type": "boots"
     },
     {
       "type": "silentgear:material",

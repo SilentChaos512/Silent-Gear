@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/helmet"
+      "type": "silentgear:blueprint",
+      "gear_type": "helmet"
     },
     {
       "type": "silentgear:material",

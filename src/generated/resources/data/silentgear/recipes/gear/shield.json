@@ -2,7 +2,8 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "tag": "silentgear:blueprints/shield"
+      "type": "silentgear:blueprint",
+      "gear_type": "shield"
     },
     {
       "type": "silentgear:material",
