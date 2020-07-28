@@ -41,7 +41,7 @@ public class BlockPlacerTrait extends SimpleTrait {
             // Try place block, damage tool if successful
             ItemStack fakeBlockStack = new ItemStack(block);
             ActionResultType result = fakeBlockStack.onItemUse(new FakeItemUseContext(context, fakeBlockStack));
-            if (result == ActionResultType.SUCCESS) {
+            if (result.isSuccessOrConsume()) {
                 if (damageOnUse > 0) {
                     GearHelper.attemptDamage(stack, damageOnUse, context.getPlayer(), context.getHand());
                 }
