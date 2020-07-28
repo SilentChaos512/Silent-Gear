@@ -148,8 +148,20 @@ public final class MaterialInstance implements IMaterialInstance {
         IMaterial material = MaterialManager.get(id);
         if (material == null) return null;
 
-        ItemStack stack = ItemStack.read(nbt.getCompound("Item"));
+        ItemStack stack = readOrGetDefaultItem(material, nbt);
         return of(material, stack);
+    }
+
+    private static ItemStack readOrGetDefaultItem(IMaterial material, CompoundNBT nbt) {
+        ItemStack stack = ItemStack.read(nbt.getCompound("Item"));
+        if (stack.isEmpty()) {
+            // Item is missing from NBT, so pick something from the ingredient
+            ItemStack[] array = material.getIngredient(PartType.MAIN).getMatchingStacks();
+            if (array.length > 0) {
+                return array[0].copy();
+            }
+        }
+        return stack;
     }
 
     @Override

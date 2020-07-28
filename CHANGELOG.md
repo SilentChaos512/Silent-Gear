@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Repair kit will now discard materials if less than 0.01 units remain (no longer shows 0.0 units)
 ### Fixed
+- Temp fix for salvager dupe bug. Compound parts other than tool heads can no longer be broken down into materials for now. [#191]
 - Armor and shield blueprints not working from the blueprint book
 - Repair kits repairing items with lower tier materials
 - Block placer traits not consuming durability or playing sound effects
