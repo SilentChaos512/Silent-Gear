@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Granite, diorite, and andesite materials (same stats as stone by default) [#193]
+### Fixed
+- Armor and shield blueprints not working from the blueprint book
 
 ## [2.0.0] - 2020-07-26
 Major overhaul of model system (again)

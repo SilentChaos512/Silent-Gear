@@ -293,28 +293,28 @@ public class ModRecipesProvider extends RecipeProvider {
         bowRecipes(consumer, "slingshot", 2, ModItems.SLINGSHOT, ModItems.SLINGSHOT_LIMBS, ModItems.SLINGSHOT_BLUEPRINT.get());
 
         ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.SHIELD)
-                .addIngredient(ModItems.SHIELD_BLUEPRINT.get().getItemTag())
+                .addIngredient(BlueprintIngredient.of(ModItems.SHIELD_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 2)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .build(consumer, SilentGear.getId("gear/shield"));
 
         ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.HELMET)
-                .addIngredient(ModItems.HELMET_BLUEPRINT.get().getItemTag())
+                .addIngredient(BlueprintIngredient.of(ModItems.HELMET_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 5)
                 .build(consumer, SilentGear.getId("gear/helmet"));
 
         ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.CHESTPLATE)
-                .addIngredient(ModItems.CHESTPLATE_BLUEPRINT.get().getItemTag())
+                .addIngredient(BlueprintIngredient.of(ModItems.CHESTPLATE_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 8)
                 .build(consumer, SilentGear.getId("gear/chestplate"));
 
         ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.LEGGINGS)
-                .addIngredient(ModItems.LEGGINGS_BLUEPRINT.get().getItemTag())
+                .addIngredient(BlueprintIngredient.of(ModItems.LEGGINGS_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 7)
                 .build(consumer, SilentGear.getId("gear/leggings"));
 
         ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.BOOTS)
-                .addIngredient(ModItems.BOOTS_BLUEPRINT.get().getItemTag())
+                .addIngredient(BlueprintIngredient.of(ModItems.BOOTS_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 4)
                 .build(consumer, SilentGear.getId("gear/boots"));
 
