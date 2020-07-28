@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
@@ -126,8 +127,12 @@ public final class MaterialInstance implements IMaterialInstance {
         return stat.compute(stat.getDefaultValue(), getStatModifiers(stat, partType, gear));
     }
 
+    public boolean canRepair(ItemStack gear) {
+        return material.allowedInPart(PartType.MAIN) && GearData.getTier(gear) <= this.getTier(PartType.MAIN);
+    }
+
     public int getRepairValue(ItemStack gear) {
-        if (material.allowedInPart(PartType.MAIN)) {
+        if (this.canRepair(gear)) {
             float durability = getStat(GearHelper.getDurabilityStat(gear), PartType.MAIN);
             float repairEfficiency = getStat(ItemStats.REPAIR_EFFICIENCY, PartType.MAIN);
             return Math.round(durability * repairEfficiency) + 1;
