@@ -9,10 +9,12 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.parts.PartData;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -45,7 +47,12 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        return inv.getStackInSlot(0).getItem() instanceof CompoundPartItem;
+        if (!(inv.getStackInSlot(0).getItem() instanceof CompoundPartItem))
+            return false;
+
+        // FIXME: How to allow salvaging for other parts? Issue #191
+        PartData part = PartData.from(inv.getStackInSlot(0));
+        return part != null && part.getType() == PartType.MAIN;
     }
 
     @Override
