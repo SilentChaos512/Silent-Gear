@@ -14,6 +14,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -55,7 +56,7 @@ public class MaterialsProvider implements IDataProvider {
         return "Silent Gear - Materials";
     }
 
-    @SuppressWarnings("MethodMayBeStatic")
+    @SuppressWarnings({"MethodMayBeStatic", "OverlyLongMethod"})
     protected Collection<MaterialBuilder> getMaterials() {
         ResourceLocation chargeability = new ResourceLocation("silentgems", "chargeability");
 
@@ -678,8 +679,10 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xD8995B)
                 .displayBowstring(0x7E6962)
         );
+
         // Stone
-        ret.add(new MaterialBuilder(SilentGear.getId("stone"), 1, Tags.Items.COBBLESTONE)
+        ResourceLocation stone = SilentGear.getId("stone");
+        ret.add(new MaterialBuilder(stone, 1, Tags.Items.COBBLESTONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 131)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 5)
@@ -704,6 +707,22 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, 0x9A9A9A)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x9A9A9A)
         );
+        ret.add(new MaterialBuilder(SilentGear.getId("stone/andesite"), -1, Items.ANDESITE)
+                .parent(stone)
+                .display(PartType.MAIN, new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x8A8A8E))
+                .display(PartType.ROD, new MaterialLayer(PartTextures.ROD_GENERIC_LC, 0x8A8A8E))
+        );
+        ret.add(new MaterialBuilder(SilentGear.getId("stone/diorite"), -1, Items.DIORITE)
+                .parent(stone)
+                .display(PartType.MAIN, new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0xFFFFFF))
+                .display(PartType.ROD, new MaterialLayer(PartTextures.ROD_GENERIC_LC, 0xFFFFFF))
+        );
+        ret.add(new MaterialBuilder(SilentGear.getId("stone/granite"), -1, Items.GRANITE)
+                .parent(stone)
+                .display(PartType.MAIN, new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x9F6B58))
+                .display(PartType.ROD, new MaterialLayer(PartTextures.ROD_GENERIC_LC, 0x9F6B58))
+        );
+
         // String
         ret.add(new MaterialBuilder(SilentGear.getId("string"), 0, ExclusionIngredient.of(Tags.Items.STRING,
                 CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))

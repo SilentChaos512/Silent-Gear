@@ -1,0 +1,12 @@
+{
+  "main/all": [
+    {
+      "texture": "silentgear:main_generic_lc"
+    }
+  ],
+  "rod/all": [
+    {
+      "texture": "silentgear:rod_generic_lc"
+    }
+  ]
+}
