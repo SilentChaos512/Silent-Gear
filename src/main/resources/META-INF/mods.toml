@@ -1,5 +1,6 @@
 modLoader="javafml"
 loaderVersion="[32,)"
+license="MIT"
 issueTrackerURL="https://github.com/SilentChaos512/Silent-Gear/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/silent-gear"
 logoFile="logo.png"

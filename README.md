@@ -1,12 +1,13 @@
 # Silent-Gear
 
-Modular tool/armor mod for Minecraft. Crafting is handled with blueprints, which eliminate all recipe conflicts. Materials can be added with JSON files (probably with data packs in 1.13+, config folder in 1.12.2). The requirements for crafting tools can also be changed through JSON files, even allowing parts not normally required to craft the tool. See the wiki for detailed information.
+Modular tool/armor mod for Minecraft. Crafting is handled with blueprints, which eliminate all recipe conflicts. Materials and parts can be added with JSON files via data packs. Gear crafting recipes (number of required materials, required parts, etc.) can also be changed with data packs.
 
-This is based on the tool/armor system from Silent's Gems, but has various changes and improvements. This is not a clone, it will entirely replace the tool/armor system from Silent's Gems in 1.13+, but both systems can still be used in 1.12.2.
+This is based on and completely replaced the tool/armor system from Silent's Gems, but has various changes and improvements.
 
-Interaction with Silent's Gems is currently limited, but regular-tier gems can already be used with Silent Gear. Silent's Gems will be adding additional content to Silent Gear in the future, including a block that enhances any main material (replaces supercharged gems) and unique part types.
+Add-on mods can add new part types, gear types, and trait types, as well as anything a data pack can do. 
 
 ## Links and Downloads
+
 - [CurseForge](https://minecraft.curseforge.com/projects/silent-gear) (downloads and more information)
 - [Wiki](https://github.com/SilentChaos512/Silent-Gear/wiki) (advanced information)
 - [GitHub repository](https://github.com/SilentChaos512/Silent-Gear) (source code)
@@ -14,4 +15,29 @@ Interaction with Silent's Gems is currently limited, but regular-tier gems can a
 - [Discord Server](https://discord.gg/gh84eWK) (easiest way to get quick questions answered, do not use to report bugs)
 
 ### Note on Downloads
+
 **I only upload builds to Minecraft CurseForge.** If you downloaded the mod from somewhere other than Curse/CurseForge or the Twitch launcher (or as part of a modpack in some cases), I cannot make any guarantees about the file or its contents, as it was uploaded without my permission.
+
+## Making an Add-on
+
+I currently upload to Bintray. If you want to use Silent Gear in your add-on, add Silent Gear, Silent Lib and silent-utils to your dependencies:
+
+```groovy
+repositories {
+    maven {
+        url "https://dl.bintray.com/silentchaos512/silent-gear/"
+    }
+    maven {
+        url "https://dl.bintray.com/silentchaos512/silent-lib"
+    }
+    maven {
+        url "https://dl.bintray.com/silentchaos512/silent-utils"
+    }
+}
+
+dependencies {
+    compile("net.silentchaos512:silent-gear-{mc-version}:{version}")
+    compile("net.silentchaos512:silent-lib-{mc-version}:{version}")
+    compile("net.silentchaos512:silent-utils:{version}")
+}
+```
