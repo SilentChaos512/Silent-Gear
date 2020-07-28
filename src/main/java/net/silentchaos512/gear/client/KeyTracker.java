@@ -48,8 +48,9 @@ public class KeyTracker {
         );
     }
 
-    public static int getMaterialCycleCount() {
-        return materialCycleCount;
+    public static int getMaterialCycleIndex(int total) {
+        int i = materialCycleCount % total;
+        return i < 0 ? i + total : i;
     }
 
     @SubscribeEvent
