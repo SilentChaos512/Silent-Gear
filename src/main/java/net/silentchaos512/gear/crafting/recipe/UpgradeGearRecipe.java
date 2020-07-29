@@ -58,7 +58,7 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
 
         // Require at least 1 upgrade part
         Collection<ItemStack> upgrades = list.allMatches(stack -> {
-            PartData part = PartData.fromStackFast(stack);
+            PartData part = PartData.from(stack);
             return part != null && part.getPart() instanceof IUpgradePart;
         });
         if (upgrades.isEmpty()) return false;
@@ -68,7 +68,7 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
         Set<IPartPosition> positions = new HashSet<>();
         ItemStack test = gear.copy();
         for (ItemStack upgrade : upgrades) {
-            PartData part = PartData.fromStackFast(upgrade);
+            PartData part = PartData.from(upgrade);
             if (part == null || positions.contains(part.getPartPosition()) || !canApplyUpgrade(test, part))
                 return false;
             if (part.getPartPosition() != PartPositions.ANY)
@@ -92,7 +92,7 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
         if (gear.isEmpty()) return ItemStack.EMPTY;
 
         Collection<ItemStack> upgrades = list.allMatches(stack -> {
-            PartData part = PartData.fromStackFast(stack);
+            PartData part = PartData.from(stack);
             return part != null && part.getPart() instanceof IUpgradePart;
         });
 

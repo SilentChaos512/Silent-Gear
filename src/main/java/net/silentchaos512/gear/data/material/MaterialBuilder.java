@@ -40,6 +40,7 @@ public class MaterialBuilder {
     final ResourceLocation id;
     private final int tier;
     private final Ingredient ingredient;
+    private final Map<PartType, Ingredient> partSubstitutes = new LinkedHashMap<>();
     private boolean visible = true;
     private Collection<String> gearBlacklist = new ArrayList<>();
     private final Collection<ICondition> loadConditions = new ArrayList<>();
@@ -84,6 +85,19 @@ public class MaterialBuilder {
 
     public MaterialBuilder parent(ResourceLocation parent) {
         this.parent = parent;
+        return this;
+    }
+
+    public MaterialBuilder partSubstitute(PartType partType, IItemProvider item) {
+        return partSubstitute(partType, Ingredient.fromItems(item));
+    }
+
+    public MaterialBuilder partSubstitute(PartType partType, ITag<Item> tag) {
+        return partSubstitute(partType, Ingredient.fromTag(tag));
+    }
+
+    public MaterialBuilder partSubstitute(PartType partType, Ingredient ingredient) {
+        this.partSubstitutes.put(partType, ingredient);
         return this;
     }
 
@@ -271,6 +285,11 @@ public class MaterialBuilder {
         JsonObject craftingItems = new JsonObject();
         if (this.ingredient != Ingredient.EMPTY) {
             craftingItems.add("main", this.ingredient.serialize());
+        }
+        if (!this.partSubstitutes.isEmpty()) {
+            JsonObject subs = new JsonObject();
+            this.partSubstitutes.forEach((type, ing) -> subs.add(SilentGear.shortenId(type.getName()), ing.serialize()));
+            craftingItems.add("subs", subs);
         }
         json.add("crafting_items", craftingItems);
 

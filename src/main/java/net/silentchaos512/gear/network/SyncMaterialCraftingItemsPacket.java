@@ -3,38 +3,50 @@ package net.silentchaos512.gear.network;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class SyncMaterialCraftingItemsPacket {
-    private final Map<ResourceLocation, Ingredient> craftingItems = new HashMap<>();
+    private final Map<ResourceLocation, Ingredient> craftingItems;
+    private final Map<ResourceLocation, Map<PartType, Ingredient>> partSubs;
 
     public SyncMaterialCraftingItemsPacket() {
-        this(Util.make(() -> {
-            Map<ResourceLocation, Ingredient> map = new HashMap<>();
-            MaterialManager.getValues().forEach(m -> map.put(m.getId(), m.getIngredient(PartType.MAIN)));
-            return map;
-        }));
+        this(Collections.emptyList());
     }
 
-    public SyncMaterialCraftingItemsPacket(Map<ResourceLocation, Ingredient> craftingItems) {
-        this.craftingItems.putAll(craftingItems);
+    public SyncMaterialCraftingItemsPacket(Collection<IMaterial> materials) {
+        this.craftingItems = new HashMap<>();
+        materials.forEach(mat -> this.craftingItems.put(mat.getId(), mat.getIngredient()));
+
+        this.partSubs = new HashMap<>();
+        MaterialManager.getValues().forEach(mat -> {
+            PartType.getValues().forEach(type -> {
+                mat.getPartSubstitute(type).ifPresent(ing -> {
+                    this.partSubs.computeIfAbsent(mat.getId(), id -> new HashMap<>()).put(type, ing);
+                });
+            });
+        });
     }
 
-    @Nullable
-    public Ingredient getIngredient(ResourceLocation materialId) {
-        return craftingItems.get(materialId);
+    public boolean isValid() {
+        return !craftingItems.isEmpty();
     }
 
-    public static SyncMaterialCraftingItemsPacket fromBytes(PacketBuffer buffer) {
+    public Optional<Ingredient> getIngredient(ResourceLocation materialId) {
+        return Optional.ofNullable(craftingItems.get(materialId));
+    }
+
+    public Map<PartType, Ingredient> getPartSubstitutes(ResourceLocation materialId) {
+        return partSubs.getOrDefault(materialId, Collections.emptyMap());
+    }
+
+    public static SyncMaterialCraftingItemsPacket decode(PacketBuffer buffer) {
         SyncMaterialCraftingItemsPacket packet = new SyncMaterialCraftingItemsPacket();
         int count = buffer.readVarInt();
 
@@ -42,15 +54,42 @@ public class SyncMaterialCraftingItemsPacket {
             packet.craftingItems.put(buffer.readResourceLocation(), Ingredient.read(buffer));
         }
 
+        int subCount = buffer.readVarInt();
+        for (int i = 0; i < subCount; ++i) {
+            Map<PartType, Ingredient> map = new HashMap<>();
+            ResourceLocation id = buffer.readResourceLocation();
+            int mapCount = buffer.readByte();
+
+            for (int j = 0; j < mapCount; ++j) {
+                PartType type = PartType.get(buffer.readResourceLocation());
+                Ingredient ingredient = Ingredient.read(buffer);
+                map.put(type, ingredient);
+            }
+
+            packet.partSubs.put(id, map);
+        }
+
         return packet;
     }
 
-    public void toBytes(PacketBuffer buffer) {
+    public void encode(PacketBuffer buffer) {
         buffer.writeVarInt(this.craftingItems.size());
         this.craftingItems.forEach((id, ingredient) -> {
             buffer.writeResourceLocation(id);
             ingredient.write(buffer);
         });
+
+        buffer.writeVarInt(this.partSubs.size());
+        for (ResourceLocation id : this.partSubs.keySet()) {
+            Map<PartType, Ingredient> map = this.partSubs.get(id);
+            buffer.writeResourceLocation(id);
+            buffer.writeByte(map.size());
+
+            map.forEach((type, ingredient) -> {
+                buffer.writeResourceLocation(type.getName());
+                ingredient.write(buffer);
+            });
+        }
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {

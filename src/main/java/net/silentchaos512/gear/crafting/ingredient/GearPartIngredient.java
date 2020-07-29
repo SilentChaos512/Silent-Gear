@@ -31,8 +31,8 @@ import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.CompoundPart;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -59,11 +59,7 @@ public final class GearPartIngredient extends Ingredient implements IPartIngredi
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        IGearPart part = PartManager.from(stack);
-        if (part instanceof CompoundPart && part.getType() == PartType.MAIN) {
-            // FIXME: Temp workaround for tool heads...
-            return false;
-        }
+        PartData part = PartData.from(stack);
         return part != null && part.getType().equals(type);
     }
 

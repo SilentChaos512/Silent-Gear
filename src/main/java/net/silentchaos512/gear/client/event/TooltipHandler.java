@@ -5,7 +5,6 @@ import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -18,7 +17,6 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 
@@ -55,9 +53,9 @@ public final class TooltipHandler {
             return;
         }
 
-        IGearPart part = !stack.isEmpty() ? PartManager.from(stack) : null;
+        PartData part = PartData.from(stack);
         if (part != null /*&& !part.isBlacklisted(stack)*/) {
-            onPartTooltip(event, stack, PartData.of(part, stack));
+            onPartTooltip(event, stack, part);
             return;
         }
 
@@ -122,21 +120,20 @@ public final class TooltipHandler {
         return ret.func_230529_a_(keyHint);
     }
 
-    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData partData) {
-        IGearPart part = partData.getPart();
+    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData part) {
 
         // Type, tier
-        ITextComponent typeName = part.getType().getDisplayName(partData.getTier());
+        ITextComponent typeName = part.getType().getDisplayName(part.getTier());
         typeName.getStyle().setColor(Color.func_240743_a_(0x7FFFD4));
         event.getToolTip().add(typeName);
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
-            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getId()).func_240699_a_(TextFormatting.DARK_GRAY));
-            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.getPackName()).func_240699_a_(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getPartId()).func_240699_a_(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.getPart().getPackName()).func_240699_a_(TextFormatting.DARK_GRAY));
         }
 
         // Traits
-        List<PartTraitInstance> traits = partData.getTraits().stream()
+        List<PartTraitInstance> traits = part.getTraits().stream()
                 .filter(inst -> inst.getTrait().showInTooltip(event.getFlags()))
                 .collect(Collectors.toList());
         int numTraits = traits.size();
@@ -161,8 +158,8 @@ public final class TooltipHandler {
         }
 
         // Gear type blacklist?
-        if (part instanceof AbstractGearPart) {
-            List<GearType> blacklist = ((AbstractGearPart) part).getBlacklistedGearTypes();
+        if (part.getPart() instanceof AbstractGearPart) {
+            List<GearType> blacklist = ((AbstractGearPart) part.getPart()).getBlacklistedGearTypes();
             if (!blacklist.isEmpty()) {
                 int index = (ClientTicks.ticksInGame() / 20) % blacklist.size();
                 GearType gearType = blacklist.get(index);
@@ -188,10 +185,9 @@ public final class TooltipHandler {
         material.getMaterial().getTraits(partType).forEach(t -> event.getToolTip().add(t.getDisplayName()));
     }
 
-    private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, IGearPart part) {
-        PartData partData = PartData.of(part, stack);
+    private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> modifiers = part.getStatModifiers(stat, partData);
+            Collection<StatInstance> modifiers = part.getStatModifiers(ItemStack.EMPTY, stat);
             getStatTooltipLine(event, part.getType(), stat, modifiers);
         }
     }

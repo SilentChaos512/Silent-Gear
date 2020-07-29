@@ -76,10 +76,18 @@ public interface IMaterial {
     /**
      * Gets the ingredient to match for crafting. Currently, part type is never used.
      *
-     * @param partType The part type
      * @return The ingredient to match
      */
-    Ingredient getIngredient(PartType partType);
+    Ingredient getIngredient();
+
+    @Deprecated
+    default Ingredient getIngredient(PartType partType) {
+        return getIngredient();
+    }
+
+    Optional<Ingredient> getPartSubstitute(PartType partType);
+
+    boolean hasPartSubstitutes();
 
     /**
      * Gets the part types this material supports. In general, a material will support a part type
@@ -191,7 +199,7 @@ public interface IMaterial {
      * Gets the color of the materials primary (bottom) render layer/texture. The primary color is
      * usually the only one which is not white.
      *
-     * @param gear The gear item
+     * @param gear     The gear item
      * @param partType The part type
      * @return The color of the primary render layer
      */
@@ -202,7 +210,8 @@ public interface IMaterial {
 
     /**
      * Gets the rendering properties of the material, including textures and colors.
-     * @param gear The gear item
+     *
+     * @param gear     The gear item
      * @param partType The part type
      * @return Material display properties
      */
@@ -233,7 +242,7 @@ public interface IMaterial {
      * @return An item matching the normal ingredient, or {@link ItemStack#EMPTY} if there are none
      */
     default ItemStack getDisplayItem(PartType type, int ticks) {
-        ItemStack[] stacks = getIngredient(type).getMatchingStacks();
+        ItemStack[] stacks = getIngredient().getMatchingStacks();
         if (stacks.length == 0) return ItemStack.EMPTY;
         return stacks[(ticks / 20) % stacks.length];
     }

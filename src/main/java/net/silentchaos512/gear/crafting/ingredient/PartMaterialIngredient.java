@@ -61,7 +61,7 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         if (!materials.isEmpty()) {
             return materials.stream()
                     .filter(mat -> mat.isCraftingAllowed(this.partType, gearType))
-                    .flatMap(mat -> Stream.of(mat.getIngredient(this.partType).getMatchingStacks()))
+                    .flatMap(mat -> Stream.of(mat.getIngredient().getMatchingStacks()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
         }

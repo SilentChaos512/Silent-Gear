@@ -2,20 +2,22 @@ package net.silentchaos512.gear.parts;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.item.CompoundPartItem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class PartData implements IPartData {
     private static final Map<ResourceLocation, PartData> CACHE_UNGRADED_PARTS = new HashMap<>();
@@ -70,8 +72,33 @@ public final class PartData implements IPartData {
     @Nullable
     public static PartData from(ItemStack craftingItem) {
         IGearPart part = PartManager.from(craftingItem);
-        if (part == null) return null;
+        if (part == null) {
+            return fromMaterialSubstitute(craftingItem);
+        }
         return of(part, craftingItem);
+    }
+
+    @Nullable
+    private static PartData fromMaterialSubstitute(ItemStack stack) {
+        for (IMaterial material : MaterialManager.getValues()) {
+            if (material.hasPartSubstitutes()) {
+                for (PartType partType : PartType.getValues()) {
+                    Optional<Ingredient> ingredient = material.getPartSubstitute(partType);
+
+                    if (ingredient.isPresent() && ingredient.get().test(stack)) {
+                        Optional<? extends CompoundPartItem> item = partType.getCompoundPartItem(GearType.PART);
+
+                        if (item.isPresent()) {
+                            // TODO: Item will likely not salvage correctly
+                            ItemStack result = item.get().create(MaterialInstance.of(material));
+                            return PartData.from(result);
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     @Deprecated

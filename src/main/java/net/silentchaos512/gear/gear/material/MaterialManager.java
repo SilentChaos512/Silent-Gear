@@ -21,7 +21,6 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.network.SyncMaterialsPacket;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartManager;
@@ -123,7 +122,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
         if (stack.isEmpty()) return null;
 
         for (IMaterial material : getValues()) {
-            if (material.getIngredient(PartType.MAIN).test(stack)) {
+            if (material.getIngredient().test(stack)) {
                 return material;
             }
         }

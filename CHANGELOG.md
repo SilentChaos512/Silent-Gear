@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2] - 2020-07-29
+1.16.1-only bug fix
+### Added
+- Part substitute items for materials. This allows items to be specified as parts made of their respective material. [#194]
+- Rod substitutes for iron, stone, wood, netherwood, and rough wood [#194]
+### Fixed
+- Rough tool recipes not working [#194]
+
 ## [2.0.1] - 2020-07-28
 ### Added
 - Granite, diorite, and andesite materials (same stats as stone by default) [#193]

@@ -21,6 +21,17 @@
         "minecraft:crimson_planks",
         "minecraft:warped_planks"
       ]
+    },
+    "subs": {
+      "rod": {
+        "type": "silentgear:exclusion",
+        "value": {
+          "tag": "forge:rods/wooden"
+        },
+        "exclusions": [
+          "silentgear:netherwood_stick"
+        ]
+      }
     }
   },
   "name": {

@@ -7,6 +7,11 @@
   "crafting_items": {
     "main": {
       "tag": "forge:ingots/iron"
+    },
+    "subs": {
+      "rod": {
+        "tag": "forge:rods/iron"
+      }
     }
   },
   "name": {

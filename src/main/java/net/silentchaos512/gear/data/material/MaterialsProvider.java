@@ -460,6 +460,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Iron
         ret.add(new MaterialBuilder(SilentGear.getId("iron"), 2, Tags.Items.INGOTS_IRON)
+                .partSubstitute(PartType.ROD, ModTags.Items.RODS_IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 250)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 14)
@@ -577,6 +578,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Netherwood
         ret.add(new MaterialBuilder(SilentGear.getId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
+                .partSubstitute(PartType.ROD, ModTags.Items.RODS_NETHERWOOD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 72)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 12)
                 .stat(PartType.MAIN, ItemStats.REPAIR_EFFICIENCY, 0.5f)
@@ -679,8 +681,9 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Sandstone
         ResourceLocation sgSandstone = SilentGear.getId("sandstone");
-        ret.add(new MaterialBuilder(sgSandstone, 1, ExclusionIngredient.of(Tags.Items.SANDSTONE,
-                Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
+        ret.add(new MaterialBuilder(sgSandstone, 1,
+                ExclusionIngredient.of(Tags.Items.SANDSTONE,
+                        Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 117)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 6)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 7)
@@ -725,6 +728,7 @@ public class MaterialsProvider implements IDataProvider {
         // Stone
         ResourceLocation stone = SilentGear.getId("stone");
         ret.add(new MaterialBuilder(stone, 1, Tags.Items.COBBLESTONE)
+                .partSubstitute(PartType.ROD, ModTags.Items.RODS_STONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 131)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 5)
@@ -766,8 +770,9 @@ public class MaterialsProvider implements IDataProvider {
         );
 
         // String
-        ret.add(new MaterialBuilder(SilentGear.getId("string"), 0, ExclusionIngredient.of(Tags.Items.STRING,
-                CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))
+        ret.add(new MaterialBuilder(SilentGear.getId("string"), 0,
+                ExclusionIngredient.of(Tags.Items.STRING,
+                        CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, TraitConst.FLEXIBLE, 2)
@@ -825,8 +830,12 @@ public class MaterialsProvider implements IDataProvider {
 
         // Wood
         ResourceLocation sgWood = SilentGear.getId("wood");
-        ret.add(new MaterialBuilder(sgWood, 0, ExclusionIngredient.of(ItemTags.PLANKS,
-                Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS))
+        ret.add(new MaterialBuilder(sgWood, 0,
+                ExclusionIngredient.of(ItemTags.PLANKS,
+                        Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS))
+                .partSubstitute(PartType.ROD,
+                        ExclusionIngredient.of(Tags.Items.RODS_WOODEN,
+                                CraftingItems.NETHERWOOD_STICK))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 59)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
@@ -858,6 +867,17 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(wood(sgWood, "spruce", Items.SPRUCE_PLANKS, 0x82613A));
         ret.add(wood(sgWood, "crimson", Items.CRIMSON_PLANKS, 0x7E3A56));
         ret.add(wood(sgWood, "warped", Items.WARPED_PLANKS, 0x398382));
+
+        // Rough wood
+        ret.add(new MaterialBuilder(SilentGear.getId("wood/rough"), 0, Ingredient.EMPTY)
+                .namePrefix(TextUtil.misc("crude"))
+                .partSubstitute(PartType.ROD, ModTags.Items.RODS_ROUGH)
+                .stat(PartType.ROD, ItemStats.DURABILITY, -0.25f, StatInstance.Operation.MUL1)
+                .stat(PartType.ROD, ItemStats.RARITY, -5, StatInstance.Operation.ADD)
+                .trait(PartType.ROD, TraitConst.CRUDE, 3)
+                .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x6B4909)
+        );
+
         // Wool
         ResourceLocation sgWool = SilentGear.getId("wool");
         ret.add(new MaterialBuilder(sgWool, 0, ExclusionIngredient.of(ItemTags.WOOL,

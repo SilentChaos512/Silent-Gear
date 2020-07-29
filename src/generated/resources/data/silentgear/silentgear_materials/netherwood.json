@@ -7,6 +7,11 @@
   "crafting_items": {
     "main": {
       "item": "silentgear:netherwood_planks"
+    },
+    "subs": {
+      "rod": {
+        "tag": "silentgear:rods/netherwood"
+      }
     }
   },
   "name": {

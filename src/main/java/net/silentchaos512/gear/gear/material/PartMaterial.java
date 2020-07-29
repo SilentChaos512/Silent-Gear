@@ -26,6 +26,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.util.ModResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -37,6 +38,7 @@ public final class PartMaterial implements IMaterial {
     @Nullable private ResourceLocation parent;
     private final String packName;
     private Ingredient ingredient = Ingredient.EMPTY;
+    private final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
     private boolean visible = true;
     private int tier = -1;
 
@@ -87,8 +89,18 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Ingredient getIngredient(PartType partType) {
+    public Ingredient getIngredient() {
         return this.ingredient;
+    }
+
+    @Override
+    public Optional<Ingredient> getPartSubstitute(PartType partType) {
+        return Optional.ofNullable(this.partSubstitutes.get(partType));
+    }
+
+    @Override
+    public boolean hasPartSubstitutes() {
+        return !this.partSubstitutes.isEmpty();
     }
 
     @Override
@@ -204,9 +216,10 @@ public final class PartMaterial implements IMaterial {
 
     @Override
     public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
-        Ingredient ing = msg.getIngredient(this.materialId);
-        if (ing != null) {
-            this.ingredient = ing;
+        if (msg.isValid()) {
+            msg.getIngredient(this.materialId).ifPresent(ing -> this.ingredient = ing);
+            this.partSubstitutes.clear();
+            msg.getPartSubstitutes(this.materialId).forEach(this.partSubstitutes::put);
         }
     }
 
@@ -277,7 +290,19 @@ public final class PartMaterial implements IMaterial {
                 if (main != null) {
                     ret.ingredient = Ingredient.deserialize(main);
                 }
-                // TODO: Rod substitutes?
+
+                JsonElement subs = craftingItems.getAsJsonObject().get("subs");
+                if (subs != null && subs.isJsonObject()) {
+                    // Part substitutes
+                    JsonObject jo = subs.getAsJsonObject();
+                    Map<PartType, Ingredient> map = new HashMap<>();
+                    jo.entrySet().forEach(entry -> {
+                        PartType partType = PartType.get(new ModResourceLocation(entry.getKey()));
+                        Ingredient ingredient = Ingredient.deserialize(entry.getValue());
+                        map.put(partType, ingredient);
+                    });
+                    ret.partSubstitutes.putAll(map);
+                }
             } else {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
             }
@@ -353,9 +378,17 @@ public final class PartMaterial implements IMaterial {
             material.displayName = buffer.readTextComponent();
             if (buffer.readBoolean())
                 material.namePrefix = buffer.readTextComponent();
-            material.ingredient = Ingredient.read(buffer);
+
             material.tier = buffer.readByte();
             material.visible = buffer.readBoolean();
+            material.ingredient = Ingredient.read(buffer);
+
+            int subCount = buffer.readByte();
+            for (int i = 0; i < subCount; ++i) {
+                PartType partType = PartType.get(buffer.readResourceLocation());
+                Ingredient ingredient = Ingredient.read(buffer);
+                material.partSubstitutes.put(partType, ingredient);
+            }
 
             material.blacklistedGearTypes.clear();
             int blacklistSize = buffer.readByte();
@@ -390,9 +423,16 @@ public final class PartMaterial implements IMaterial {
             buffer.writeBoolean(material.namePrefix != null);
             if (material.namePrefix != null)
                 buffer.writeTextComponent(material.namePrefix);
-            material.ingredient.write(buffer);
+
             buffer.writeByte(material.tier);
             buffer.writeBoolean(material.visible);
+            material.ingredient.write(buffer);
+
+            buffer.writeByte(material.partSubstitutes.size());
+            material.partSubstitutes.forEach((type, ing) -> {
+                buffer.writeResourceLocation(type.getName());
+                ing.write(buffer);
+            });
 
             buffer.writeByte(material.blacklistedGearTypes.size());
             material.blacklistedGearTypes.forEach(buffer::writeString);

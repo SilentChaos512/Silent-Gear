@@ -79,8 +79,8 @@ public final class Network {
                 .consumer(FMLPlayMessages.SpawnEntity::handle)
                 .add();
         channel.messageBuilder(SyncMaterialCraftingItemsPacket.class, 8)
-                .decoder(SyncMaterialCraftingItemsPacket::fromBytes)
-                .encoder(SyncMaterialCraftingItemsPacket::toBytes)
+                .decoder(SyncMaterialCraftingItemsPacket::decode)
+                .encoder(SyncMaterialCraftingItemsPacket::encode)
                 .consumer(SyncMaterialCraftingItemsPacket::handle)
                 .add();
         channel.messageBuilder(KeyPressOnItemPacket.class, 9, NetworkDirection.PLAY_TO_SERVER)

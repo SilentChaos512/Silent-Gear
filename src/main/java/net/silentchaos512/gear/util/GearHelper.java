@@ -520,7 +520,7 @@ public final class GearHelper {
                 // This isn't perfect, since parts may not be loaded at this time...
                 ItemStack[] matchingStacks = ingredient.getMatchingStacks();
                 if (matchingStacks.length > 0) {
-                    PartData part = PartData.fromStackFast(matchingStacks[0]);
+                    PartData part = PartData.from(matchingStacks[0]);
                     if (part != null)
                         list.add(part);
                 }
