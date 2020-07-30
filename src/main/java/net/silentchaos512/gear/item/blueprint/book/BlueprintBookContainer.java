@@ -115,7 +115,7 @@ public class BlueprintBookContainer extends Container {
     @Override
     public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
-        ((IContainerItem) item.getItem()).saveInventory(item, itemHandler, playerIn);
+        ((IContainerItem) item.getItem()).saveInventory(item, itemHandler);
     }
 
     public boolean canTake(int slotId, Slot slot, int button, PlayerEntity player, ClickType clickType) {
