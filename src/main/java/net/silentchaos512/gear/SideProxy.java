@@ -35,6 +35,7 @@ import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
+import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
@@ -184,6 +185,7 @@ class SideProxy implements IProxy {
             ModEntities.registerRenderers(event);
             ModTileEntities.registerRenderers(event);
             ModContainers.registerScreens(event);
+            ModItemModelProperties.register(event);
         }
 
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {

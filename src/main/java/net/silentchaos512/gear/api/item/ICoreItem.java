@@ -117,6 +117,23 @@ public interface ICoreItem extends IItemProvider, IStatItem {
 
     //region Client-side stuff
 
+    /**
+     * Gets an ordered list of parts to render. Other part types will still be rendered, but after all type in the list.
+     *
+     * @return An ordered list of part types to render first
+     */
+    default Collection<PartType> getRenderParts() {
+        return ImmutableList.of(
+                PartType.ROD,
+                PartType.MAIN,
+                PartType.COATING,
+                PartType.BINDING,
+                PartType.GRIP,
+                PartType.BOWSTRING,
+                PartType.TIP
+        );
+    }
+
     // TODO: Rename to getAnimationFrameCount?
     default int getAnimationFrames() {
         return 1;
