@@ -7,8 +7,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.silentchaos512.gear.init.ModItems;
 
-public class ModItemModelProperties {
+public final class ModItemModelProperties {
+    private ModItemModelProperties() {}
+
+    @SuppressWarnings("OverlyComplexMethod")
     public static void register(FMLClientSetupEvent event) {
+        // These are mostly just copies from vanilla decomp code, so excuse the formatting and naming...
         ItemModelsProperties.func_239418_a_(ModItems.BOW.get(), new ResourceLocation("pull"), (p_239429_0_, p_239429_1_, p_239429_2_) -> {
             if (p_239429_2_ == null) {
                 return 0.0F;
@@ -46,6 +50,10 @@ public class ModItemModelProperties {
         });
         ItemModelsProperties.func_239418_a_(ModItems.CROSSBOW.get(), new ResourceLocation("firework"), (p_239424_0_, p_239424_1_, p_239424_2_) -> {
             return p_239424_2_ != null && CrossbowItem.isCharged(p_239424_0_) && CrossbowItem.hasChargedProjectile(p_239424_0_, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
+        });
+
+        ItemModelsProperties.func_239418_a_(ModItems.SHIELD.get(), new ResourceLocation("blocking"), (p_239421_0_, p_239421_1_, p_239421_2_) -> {
+            return p_239421_2_ != null && p_239421_2_.isHandActive() && p_239421_2_.getActiveItemStack() == p_239421_0_ ? 1.0F : 0.0F;
         });
     }
 }
