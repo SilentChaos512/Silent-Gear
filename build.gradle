@@ -116,6 +116,9 @@ repositories {
         url "https://dl.bintray.com/silentchaos512/silent-lib"
     }
     maven {
+        url "https://dl.bintray.com/silentchaos512/silent-utils"
+    }
+    maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"

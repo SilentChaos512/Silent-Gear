@@ -17,6 +17,8 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -85,30 +87,39 @@ public class GearModelOverrideList extends ItemOverrideList {
     private IBakedModel getOverrideModel(ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
         List<MaterialLayer> layers = new ArrayList<>();
 
-        for (PartData part : GearData.getConstructionParts(stack)) {
+        for (PartData part : getPartsInRenderOrder(stack)) {
             if (part.getPart() instanceof CompoundPart) {
                 MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
                 if (mat != null) {
                     addWithBlendedColor(layers, part, mat, stack);
                 }
-            } else {
-                // Legacy parts (remove later?)
-                layers.addAll(part.getPart().getLiteTexture(part, stack).getLayers(part.getType()).stream()
-                        .map(PartTextures::getTexture)
-                        .map(loc -> {
-                            int c = loc.equals(SilentGear.getId("_highlight")) ? Color.VALUE_WHITE : part.getColor(stack, animationFrame);
-                            PartTextures tex = PartTextures.byTextureId(loc);
-                            return tex != null ? tex.getLayer(c) : new MaterialLayer(loc, c);
-                        })
-                        .collect(Collectors.toList()));
             }
         }
 
+        // TODO: Make this not a special case...
         if (stack.getItem() instanceof CoreCrossbow) {
             getCrossbowCharge(stack, worldIn, entityIn).ifPresent(layers::add);
         }
 
         return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
+    }
+
+    private static PartDataList getPartsInRenderOrder(ItemStack stack) {
+        PartDataList unsorted = GearData.getConstructionParts(stack);
+        PartDataList ret = PartDataList.of();
+        ICoreItem item = (ICoreItem) stack.getItem();
+
+        for (PartType partType : item.getRenderParts()) {
+            ret.addAll(unsorted.getPartsOfType(partType));
+        }
+
+        for (PartData part : unsorted) {
+            if (!ret.contains(part)) {
+                ret.add(part);
+            }
+        }
+
+        return ret;
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
