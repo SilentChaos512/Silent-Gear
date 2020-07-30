@@ -46,6 +46,7 @@ public class ModBlockLootTables extends BlockLootTables {
         this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(ModItems.FLAX_SEEDS, flaxBuilder));
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE_GATE.get());
         registerLootTable(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_LOG.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_PLANKS.get());

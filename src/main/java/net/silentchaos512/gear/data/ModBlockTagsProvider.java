@@ -38,6 +38,15 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
 
     @Override
     public void registerTags() {
+        // Silent Gear
+        getBuilder(ModTags.Blocks.NETHERWOOD_LOGS)
+                .func_240532_a_(ModBlocks.NETHERWOOD_LOG.get())
+                .func_240532_a_(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+        getBuilder(ModTags.Blocks.NETHERWOOD_SOIL)
+                .func_240531_a_(Tags.Blocks.NETHERRACK)
+                .func_240531_a_(Tags.Blocks.DIRT)
+                .func_240532_a_(Blocks.FARMLAND);
+
         // Forge
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
         getBuilder(Tags.Blocks.ORES).func_240531_a_(
@@ -53,7 +62,7 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
 
         // Minecraft
         builder(BlockTags.LEAVES, ModBlocks.NETHERWOOD_LEAVES);
-        builder(BlockTags.LOGS, ModBlocks.NETHERWOOD_LOG, ModBlocks.STRIPPED_NETHERWOOD_LOG);
+        getBuilder(BlockTags.LOGS).func_240531_a_(ModTags.Blocks.NETHERWOOD_LOGS);
         builder(BlockTags.PLANKS, ModBlocks.NETHERWOOD_PLANKS);
         builder(BlockTags.SAPLINGS, ModBlocks.NETHERWOOD_SAPLING);
         builder(BlockTags.WOODEN_DOORS, ModBlocks.NETHERWOOD_DOOR);
@@ -61,12 +70,6 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
         builder(BlockTags.WOODEN_SLABS, ModBlocks.NETHERWOOD_SLAB);
         builder(BlockTags.WOODEN_STAIRS, ModBlocks.NETHERWOOD_STAIRS);
         builder(BlockTags.WOODEN_TRAPDOORS, ModBlocks.NETHERWOOD_TRAPDOOR);
-
-        // Silent Gear
-        getBuilder(ModTags.Blocks.NETHERWOOD_SOIL)
-                .func_240531_a_(Tags.Blocks.NETHERRACK)
-                .func_240531_a_(Tags.Blocks.DIRT)
-                .func_240532_a_(Blocks.FARMLAND);
     }
 
     private void builder(ITag.INamedTag<Block> tag, IBlockProvider... items) {

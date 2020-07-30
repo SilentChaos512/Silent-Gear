@@ -7,8 +7,8 @@
   ],
   "type": "woodcutter:woodcutting",
   "ingredient": {
-    "tag": "minecraft:logs"
+    "item": "silentgear:netherwood_planks"
   },
-  "result": "silentgear:template_board",
-  "count": 8
+  "result": "silentgear:netherwood_fence_gate",
+  "count": 1
 }

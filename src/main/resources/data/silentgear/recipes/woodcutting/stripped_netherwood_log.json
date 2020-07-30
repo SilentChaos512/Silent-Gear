@@ -7,8 +7,8 @@
   ],
   "type": "woodcutter:woodcutting",
   "ingredient": {
-    "tag": "minecraft:logs"
+    "tag": "silentgear:netherwood_logs"
   },
-  "result": "silentgear:template_board",
-  "count": 8
+  "result": "silentgear:stripped_netherwood_log",
+  "count": 1
 }

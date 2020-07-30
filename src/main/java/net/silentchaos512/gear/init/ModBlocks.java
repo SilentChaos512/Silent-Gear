@@ -97,6 +97,10 @@ public final class ModBlocks {
             new FenceBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
                     .hardnessAndResistance(2f, 3f)
                     .sound(SoundType.WOOD)));
+    public static final BlockRegistryObject<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->
+            new FenceGateBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+                    .hardnessAndResistance(2f, 3f)
+                    .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<DoorBlock> NETHERWOOD_DOOR = register("netherwood_door", () ->
             new DoorBlock(AbstractBlock.Properties.create(Material.WOOD)
                     .hardnessAndResistance(3f)

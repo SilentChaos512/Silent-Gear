@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/blueprint_book_cover",
+    "layer1": "silentgear:item/blueprint_book_pages",
+    "layer2": "silentgear:item/blueprint_book_deco"
+  }
+}

@@ -46,6 +46,12 @@ public class ModItemModelProvider extends ItemModelProvider {
                 builder(item, itemGenerated, "item/" + item.getName());
         }
 
+        getBuilder(NameUtils.fromItem(ModItems.BLUEPRINT_BOOK).getPath())
+                .parent(itemGenerated)
+                .texture("layer0", "item/blueprint_book_cover")
+                .texture("layer1", "item/blueprint_book_pages")
+                .texture("layer2", "item/blueprint_book_deco");
+
         // Blueprints and templates
         Registration.getItems(PartBlueprintItem.class).forEach(item -> getBuilder(NameUtils.from(item).getPath())
                 .parent(itemGenerated)
@@ -99,17 +105,17 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
 
         SilentGear.LOGGER.debug("blockItemModel: {}, {}", block, block.asItem());
-        if (block == ModBlocks.PHANTOM_LIGHT.get()) {
+        if (block == ModBlocks.PHANTOM_LIGHT.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "item/phantom_light");
-        } else if (block == ModBlocks.NETHERWOOD_SAPLING.get() || block == ModBlocks.STONE_TORCH.get()) {
+        else if (block == ModBlocks.NETHERWOOD_SAPLING.get() || block == ModBlocks.STONE_TORCH.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "block/" + NameUtils.from(block).getPath());
-        } else if (block == ModBlocks.NETHERWOOD_FENCE.get()) {
+        else if (block == ModBlocks.NETHERWOOD_FENCE.get())
             withExistingParent("netherwood_fence", modLoc("block/netherwood_fence_inventory"));
-        } else if (block == ModBlocks.NETHERWOOD_DOOR.get()) {
+        else if (block == ModBlocks.NETHERWOOD_DOOR.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "item/netherwood_door");
-        } else if (block == ModBlocks.NETHERWOOD_TRAPDOOR.get()) {
+        else if (block == ModBlocks.NETHERWOOD_TRAPDOOR.get())
             withExistingParent("netherwood_trapdoor", modLoc("block/netherwood_trapdoor_bottom"));
-        } else if (block.asItem() != Items.AIR) {
+        else if (block.asItem() != Items.AIR) {
             String name = NameUtils.from(block).getPath();
             withExistingParent(name, modLoc("block/" + name));
         }

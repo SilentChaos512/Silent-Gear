@@ -565,6 +565,13 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("#/#")
                 .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_PLANKS))
                 .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.NETHERWOOD_FENCE_GATE, 1)
+                .key('#', ModBlocks.NETHERWOOD_PLANKS)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .patternLine("/#/")
+                .patternLine("/#/")
+                .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_PLANKS))
+                .build(consumer);
         ShapelessRecipeBuilder.shapelessRecipe(ModBlocks.NETHERWOOD_PLANKS, 4)
                 .addIngredient(ModBlocks.NETHERWOOD_LOG)
                 .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_LOG))

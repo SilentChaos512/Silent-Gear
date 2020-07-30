@@ -41,6 +41,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         slabBlock(ModBlocks.NETHERWOOD_SLAB.get(), planks, planks);
         stairsBlock(ModBlocks.NETHERWOOD_STAIRS.get(), planks);
         fenceBlock(ModBlocks.NETHERWOOD_FENCE.get(), planks);
+        fenceGateBlock(ModBlocks.NETHERWOOD_FENCE_GATE.get(), planks);
         doorBlock(ModBlocks.NETHERWOOD_DOOR.get(), modLoc("block/netherwood_door_bottom"), modLoc("block/netherwood_door_top"));
         trapdoorBlock(ModBlocks.NETHERWOOD_TRAPDOOR.get(), modLoc("block/netherwood_trapdoor"), true);
 
