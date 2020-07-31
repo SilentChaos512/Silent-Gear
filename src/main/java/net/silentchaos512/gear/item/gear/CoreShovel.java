@@ -45,7 +45,6 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
 
     public CoreShovel() {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.SHOVEL));
-        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

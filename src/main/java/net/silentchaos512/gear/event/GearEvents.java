@@ -78,7 +78,6 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.traits.TraitConst;
@@ -291,7 +290,7 @@ public final class GearEvents {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
             // Crude tool
-            if (GearData.hasPart(result, PartConst.ROUGH_ROD)) {
+            if (GearData.hasPart(result, PartType.ROD, p -> p.containsMaterial(Const.ROUGH_WOOD_MATERIAL))) {
                 LibTriggers.GENERIC_INT.trigger(player, CRAFTED_WITH_ROUGH_ROD, 1);
             }
 

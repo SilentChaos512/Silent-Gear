@@ -48,7 +48,6 @@ public class CoreAxe extends AxeItem implements ICoreTool {
 
     public CoreAxe() {
         super(ItemTier.DIAMOND, 5, -3.2f, GearHelper.getBuilder(ToolType.AXE));
-        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

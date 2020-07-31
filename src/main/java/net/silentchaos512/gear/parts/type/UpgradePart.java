@@ -22,7 +22,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IPartSerializer;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
@@ -33,7 +32,6 @@ import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartPositions;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class UpgradePart extends AbstractGearPart implements IUpgradePart {
@@ -56,12 +54,6 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
         return PartType.MISC_UPGRADE.getSerializer();
     }
 
-    @Nullable
-    @Override
-    public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
-        return null;
-    }
-
     @Override
     public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(1, part.getDisplayName(gear));
@@ -70,7 +62,7 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
     @Override
     public boolean canAddToGear(ItemStack gear, PartData part) {
         // TODO: Temp fix. Should define this in JSON...
-        if (this.getId().equals(PartConst.MISC_SPOON))
+        if (this.getId().equals(PartConst.MISC_SPOON.getId()))
             return gear.getItem() == ModItems.PICKAXE.get();
         return true;
     }

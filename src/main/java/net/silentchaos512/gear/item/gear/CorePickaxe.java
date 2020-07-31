@@ -65,7 +65,6 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     public CorePickaxe(Set<Material> extraMaterials) {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.PICKAXE));
         this.extraMaterials = extraMaterials;
-        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

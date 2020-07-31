@@ -2,7 +2,6 @@ package net.silentchaos512.gear.parts.type;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -91,21 +90,12 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public int getColor(PartData part, ItemStack gear, int animationFrame) {
-        Item item = part.getCraftingItem().getItem();
-        if (!(item instanceof CompoundPartItem)) {
-            return Color.VALUE_WHITE;
-        }
-        return ((CompoundPartItem) item).getColor(part.getCraftingItem(), 0);
-    }
-
-    @Override
     public int getColor(PartData part, ItemStack gear, int layer, int animationFrame) {
         List<MaterialInstance> materials = getMaterials(part);
         if (gear.getItem() instanceof ICoreItem) {
             return ColorUtils.getBlendedColor((ICoreItem) gear.getItem(), part.getType(), materials, layer);
         } else {
-            return ColorUtils.getBlendedColor((CompoundPartItem) gear.getItem(), materials, layer);
+            return ColorUtils.getBlendedColor((CompoundPartItem) part.getCraftingItem().getItem(), materials, layer);
         }
     }
 
@@ -113,7 +103,7 @@ public class CompoundPart extends AbstractGearPart {
     public int getArmorColor(PartData part, ItemStack gear) {
         MaterialInstance material = getPrimaryMaterial(part);
         if (material != null) {
-            return material.getColor(part.getType(), gear);
+            return material.getPrimaryColor(GearType.ARMOR, PartType.MAIN);
         }
         return Color.VALUE_WHITE;
     }

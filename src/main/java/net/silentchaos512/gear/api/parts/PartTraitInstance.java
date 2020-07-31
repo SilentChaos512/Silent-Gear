@@ -14,10 +14,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
-import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.traits.TraitSerializers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -96,7 +96,7 @@ public class PartTraitInstance {
         if (json.has("conditions")) {
             JsonArray array = json.getAsJsonArray("conditions");
             for (JsonElement j : array) {
-                conditions.add(ITraitConditionSerializer.getCondition(j.getAsJsonObject()));
+                conditions.add(TraitSerializers.deserializeCondition(j.getAsJsonObject()));
             }
         }
 

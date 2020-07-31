@@ -34,6 +34,7 @@ import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -429,7 +430,7 @@ public final class GearData {
         int partCount = parts.size();
         for (int i = 0; i < partCount; ++i) {
             PartData part = parts.get(i);
-            int color = part.getPart().getColor(part, gear, 0);
+            int color = part.getPart().getColor(part, gear, 0, 0);
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;
@@ -629,6 +630,10 @@ public final class GearData {
         writeConstructionParts(gear, parts);
     }
 
+    public static boolean hasPart(ItemStack gear, PartType partType, Predicate<PartData> predicate) {
+        return getConstructionParts(gear).stream().anyMatch(predicate);
+    }
+
     /**
      * Determine if the gear has the specified part. This scans the construction NBT directly for
      * speed, no part data list is created. Compares part registry names only.
@@ -654,6 +659,7 @@ public final class GearData {
      * @return True if the item has the part in its construction, false if it does not or the part
      * does not exist.
      */
+    @Deprecated
     public static boolean hasPart(ItemStack gear, ResourceLocation partId, MaterialGrade.Range gradeRange) {
         IGearPart part = PartManager.get(partId);
         if (part == null) return false;

@@ -90,11 +90,6 @@ public interface IGearPart {
         return normalLossRate;
     }
 
-    @Deprecated
-    default boolean isCraftingAllowed(@Nullable GearType gearType) {
-        return isCraftingAllowed(PartData.of(this), gearType);
-    }
-
     /**
      * Determine if the part can be used to craft an item of the given type.
      *
@@ -109,11 +104,6 @@ public interface IGearPart {
                 return computeUnclampedStatValue(ItemStats.DURABILITY, part) > 0;
         }
         return true;
-    }
-
-    @Deprecated
-    default boolean isCraftingAllowed(@Nullable GearType gearType, @Nullable CraftingInventory inventory) {
-        return isCraftingAllowed(PartData.of(this), gearType, inventory);
     }
 
     default boolean isCraftingAllowed(PartData part, @Nullable GearType gearType, @Nullable CraftingInventory inventory) {
@@ -138,17 +128,6 @@ public interface IGearPart {
     default PartTextureType getLiteTexture(PartData part, ItemStack gear) {
         return getDisplayProperties(part, gear, 0).getLiteTexture();
     }
-
-    @Deprecated
-    @Nullable
-    ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame);
-
-    @Deprecated
-    @Nullable
-    ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position);
-
-    @Deprecated
-    int getColor(PartData part, ItemStack gear, int animationFrame);
 
     int getColor(PartData part, ItemStack gear, int layer, int animationFrame);
 

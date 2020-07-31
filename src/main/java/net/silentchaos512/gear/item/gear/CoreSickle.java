@@ -72,7 +72,6 @@ public class CoreSickle extends ToolItem implements ICoreTool {
 
     public CoreSickle() {
         super(0, 0, ItemTier.DIAMOND, ImmutableSet.of(), GearHelper.getBuilder(TOOL_TYPE));
-        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -56,9 +57,6 @@ public abstract class AbstractGearPart implements IGearPart {
     @Nullable ITextComponent namePrefix = null;
     // Textures, colors, etc.
     final Map<String, PartDisplay> display = new HashMap<>();
-    // Model index: re-evaluate
-    int modelIndex;
-    private static int lastModelIndex;
 
     public AbstractGearPart(ResourceLocation location) {
         this.name = location;
@@ -137,9 +135,9 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public boolean isCraftingAllowed(@Nullable GearType gearType) {
+    public boolean isCraftingAllowed(PartData part, @Nullable GearType gearType, @Nullable CraftingInventory inventory) {
         if (gearType == null) return true;
-        return blacklistedGearTypes.stream().noneMatch(gearType::matches) && IGearPart.super.isCraftingAllowed(gearType);
+        return blacklistedGearTypes.stream().noneMatch(gearType::matches) && IGearPart.super.isCraftingAllowed(part, gearType, inventory);
     }
 
     @Override
@@ -163,35 +161,15 @@ public abstract class AbstractGearPart implements IGearPart {
         return display.getOrDefault("all", PartDisplay.DEFAULT);
     }
 
-    @Nullable
     @Override
-    public ResourceLocation getTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
-        IPartDisplay props = getDisplayProperties(part, gear, animationFrame);
-        String path = "item/" + gearClass + "/" + position.getTexturePrefix() + "_" + props.getTextureSuffix();
-        return new ResourceLocation(props.getTextureDomain(), path);
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getBrokenTexture(PartData part, ItemStack gear, GearType gearClass, IPartPosition position) {
-        return getTexture(part, gear, gearClass, position, 0);
-    }
-
-    @Override
-    public int getColor(PartData part, ItemStack gear, int animationFrame) {
+    public int getColor(PartData part, ItemStack gear, int layer, int animationFrame) {
         IPartDisplay props = getDisplayProperties(part, gear, animationFrame);
         if (!gear.isEmpty()) {
             if (GearHelper.isBroken(gear))
                 return props.getBrokenColor();
-            if (GearHelper.shouldUseFallbackColor(gear, part))
-                return props.getFallbackColor();
+            return props.getFallbackColor();
         }
         return props.getNormalColor();
-    }
-
-    @Override
-    public int getColor(PartData part, ItemStack gear, int layer, int animationFrame) {
-        return getColor(part, gear, animationFrame);
     }
 
     @Override
@@ -205,17 +183,14 @@ public abstract class AbstractGearPart implements IGearPart {
         return namePrefix != null ? namePrefix.deepCopy() : null;
     }
 
-    @Deprecated
-    public int getModelIndex() {
-        return modelIndex;
-    }
-
+    @SuppressWarnings("NoopMethodInAbstractClass")
     @Override
-    public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) { }
+    public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) {}
 
     /**
      * List of blacklisted {@link GearType}s, mostly used for part tooltips. To know whether of not
-     * a part may be used in crafting, use {@link #isCraftingAllowed(GearType)} instead.
+     * a part may be used in crafting, use {@link #isCraftingAllowed(PartData, GearType,
+     * CraftingInventory)} instead.
      *
      * @return The List of GearTypes the part may not be used to craft (may be empty)
      */

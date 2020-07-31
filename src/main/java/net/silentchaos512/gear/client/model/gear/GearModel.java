@@ -24,8 +24,8 @@ import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.util.Const;
 
 import java.util.*;
 import java.util.function.Function;
@@ -62,7 +62,7 @@ public class GearModel extends LayeredModel<GearModel> {
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
 
-    @SuppressWarnings({"MethodWithTooManyParameters", "WeakerAccess"})
+    @SuppressWarnings("MethodWithTooManyParameters")
     public IBakedModel bake(List<MaterialLayer> layers,
                             int animationFrame,
                             String transformVariant,
@@ -85,11 +85,11 @@ public class GearModel extends LayeredModel<GearModel> {
 
         // No layers?
         if (layers.isEmpty()) {
-            IMaterial material = MaterialManager.get(SilentGear.getId("example"));
-            if (material != null) {
-                buildFakeModel(spriteGetter, builder, rotation, material);
+            if (Const.EXAMPLE_MATERIAL.isPresent()) {
+                buildFakeModel(spriteGetter, builder, rotation, Const.EXAMPLE_MATERIAL.get());
             } else {
                 // Shouldn't happen, but...
+                SilentGear.LOGGER.error("Example material is missing?");
                 TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
                 builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
             }

@@ -39,7 +39,6 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.item.MiscUpgrades;
 import net.silentchaos512.gear.parts.LazyPartData;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
@@ -274,7 +273,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.Common.gearBreaksPermanently.get() || GearData.hasPart(stack, MiscUpgrades.RED_CARD.getPartId());
+        return Config.Common.gearBreaksPermanently.get() || GearData.hasPart(stack, PartConst.RED_CARD.getId());
     }
 
     public static boolean isBroken(ItemStack stack) {
@@ -311,16 +310,6 @@ public final class GearHelper {
         Item.Properties b = new Item.Properties().maxStackSize(1).group(SilentGear.ITEM_GROUP);
         if (toolType != null) b.addToolType(toolType, 3);
         return b;
-    }
-
-    @Deprecated
-    public static void addModelTypeProperty(@SuppressWarnings("TypeMayBeWeakened") ICoreItem item) {
-/*        PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
-            item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
-                PartData part = GearData.getPartOfType(stack, partType);
-                return part != null ? part.getPart().getLiteTexture(part, stack).getIndex() : -1;
-            });
-        });*/
     }
 
     @Nullable
@@ -417,11 +406,6 @@ public final class GearHelper {
         return ret;
     }
 
-    public static boolean shouldUseFallbackColor(ItemStack stack, PartData part) {
-        // TODO
-        return true;
-    }
-
     public static Rarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, ItemStats.RARITY);
         if (stack.isEnchanted())
@@ -513,7 +497,7 @@ public final class GearHelper {
             if (ingredient instanceof IPartIngredient) {
                 PartType type = ((IPartIngredient) ingredient).getPartType();
                 type.getCompoundPartItem(gearType).ifPresent(item -> {
-                    ItemStack stack = item.create(Collections.singletonList(LazyMaterialInstance.of(Const.EXAMPLE)));
+                    ItemStack stack = item.create(Collections.singletonList(LazyMaterialInstance.of(Const.EXAMPLE_MATERIAL)));
                     list.add(LazyPartData.of(type.getCompoundPartId(gearType), stack));
                 });
             } else {

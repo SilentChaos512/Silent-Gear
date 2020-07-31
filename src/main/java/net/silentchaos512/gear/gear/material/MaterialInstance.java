@@ -9,15 +9,20 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -116,8 +121,7 @@ public final class MaterialInstance implements IMaterialInstance {
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
             // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
             float bonus = 1f + grade.bonusPercent / 100f;
-            // FIXME: Not firing the event...
-            return mods.stream().map(m -> new StatInstance(m.getValue() * bonus, m.getOp())).collect(Collectors.toList());
+            mods = mods.stream().map(m -> new StatInstance(m.getValue() * bonus, m.getOp())).collect(Collectors.toList());
         }
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
         MinecraftForge.EVENT_BUS.post(event);
@@ -175,6 +179,17 @@ public final class MaterialInstance implements IMaterialInstance {
     @Override
     public int getColor(PartType partType, ItemStack gear) {
         return material.getPrimaryColor(gear, partType);
+    }
+
+    public int getPrimaryColor(GearType gearType, PartType partType) {
+        IMaterialDisplay model = MaterialDisplayManager.get(this.material);
+        if (model != null) {
+            MaterialLayer layer = model.getLayers(gearType, partType).getFirstLayer();
+            if (layer != null) {
+                return layer.getColor();
+            }
+        }
+        return Color.VALUE_WHITE;
     }
 
     @Override

@@ -38,7 +38,6 @@ public class CoreShears extends ShearsItem implements ICoreTool {
 
     public CoreShears() {
         super(GearHelper.getBuilder(null).maxDamage(100));
-        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

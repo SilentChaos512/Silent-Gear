@@ -14,6 +14,8 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.parts.type.CompoundPart;
+import net.silentchaos512.gear.util.DataResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -194,6 +196,17 @@ public final class PartData implements IPartData {
         return part.isCraftingAllowed(this, gearType, inventory);
     }
 
+    public boolean containsMaterial(DataResource<IMaterial> material) {
+        if (this.part instanceof CompoundPart) {
+            Optional<MaterialInstance> mat = material.map(MaterialInstance::of);
+            if (mat.isPresent()) {
+                return CompoundPart.getMaterials(this).contains(mat.get());
+            }
+        }
+
+        return false;
+    }
+
     public ITextComponent getDisplayName(ItemStack gear) {
         return part.getDisplayName(this, gear);
     }
@@ -206,34 +219,12 @@ public final class PartData implements IPartData {
         return part.getRepairAmount(new RepairContext(type, gear, this));
     }
 
-    @Deprecated
-    @Nullable
-    public ResourceLocation getTexture(ItemStack gear, GearType gearClass, IPartPosition position, int animationFrame) {
-        return part.getTexture(this, gear, gearClass, position, animationFrame);
-    }
-
-    @Deprecated
-    @Nullable
-    public ResourceLocation getBrokenTexture(ItemStack gear, GearType gearClass, IPartPosition position) {
-        return part.getBrokenTexture(this, gear, gearClass, position);
-    }
-
     public String getModelKey() {
         return part.getModelKey(this);
     }
 
-    @Deprecated
-    public int getColor(ItemStack gear, int animationFrame) {
-        return part.getColor(this, gear, animationFrame);
-    }
-
     public int getColor(ItemStack gear, int layer, int animationFrame) {
         return part.getColor(this, gear, layer, animationFrame);
-    }
-
-    @Deprecated
-    public int getFallbackColor(ItemStack gear, int animationFrame) {
-        return part.getDisplayProperties(this, gear, animationFrame).getFallbackColor();
     }
 
     public int getArmorColor(ItemStack gear) {

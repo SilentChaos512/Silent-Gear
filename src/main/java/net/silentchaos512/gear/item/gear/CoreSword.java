@@ -35,7 +35,6 @@ public class CoreSword extends SwordItem implements ICoreWeapon {
 
     CoreSword(@Nullable ToolType type) {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(type));
-        GearHelper.addModelTypeProperty(this);
     }
 
     @Override

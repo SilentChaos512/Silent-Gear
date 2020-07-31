@@ -39,7 +39,6 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     public CoreBow() {
         // Max damage doesn't matter, just needs to be greater than zero
         super(GearHelper.getBuilder(null).defaultMaxDamage(100));
-        GearHelper.addModelTypeProperty(this);
 /*        this.addPropertyOverride(new ResourceLocation("pull"), (stack, world, entity) -> {
             if (entity == null) {
                 return 0.0F;

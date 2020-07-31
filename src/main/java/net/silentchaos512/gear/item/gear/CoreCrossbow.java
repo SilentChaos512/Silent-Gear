@@ -53,7 +53,6 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     public CoreCrossbow() {
         super(GearHelper.getBuilder(null).defaultMaxDamage(100));
-        GearHelper.addModelTypeProperty(this);
     }
 
     @Override
