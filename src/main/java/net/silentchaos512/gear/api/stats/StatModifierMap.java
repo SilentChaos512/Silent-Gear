@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     private final Multimap<IItemStat, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
-    public static ITextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
+    public static IFormattableTextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
         if (mods.size() == 1) {
             StatInstance inst = mods.iterator().next();
             int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);

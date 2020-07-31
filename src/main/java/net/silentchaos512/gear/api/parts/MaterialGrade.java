@@ -30,7 +30,7 @@ import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.utils.EnumUtils;
 
@@ -107,7 +107,7 @@ public enum MaterialGrade {
         }
     }
 
-    public ITextComponent getDisplayName() {
+    public IFormattableTextComponent getDisplayName() {
         return new TranslationTextComponent("stat.silentgear.grade." + name());
     }
 

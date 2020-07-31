@@ -22,7 +22,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -158,7 +158,7 @@ public final class PartType {
         return maxPerItem;
     }
 
-    public ITextComponent getDisplayName(int tier) {
+    public IFormattableTextComponent getDisplayName(int tier) {
         return new TranslationTextComponent("part." + name.getNamespace() + ".type." + name.getPath());
     }
 

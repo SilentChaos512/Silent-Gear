@@ -3,11 +3,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.3] - 2020-07-30
 ### Added
 - Fully-loaded blueprint book with all blueprints in creative menu
+- Netherwood fence gate block (totally missed that somehow)
+- Recipes for the Woodcutter mod
+- Russian translation (KhottyManatee55) [#197]
 ### Changed
 - Doubled the inventory size of the blueprint book
+- Make filling repair kit more obvious (hopefully)
+- Long traits list on gear and trait descriptions on now shown when pressing Shift (can be rebound)
+- Display gear construction key can be rebound
+### Fixed
+- Part textures sometime rendering in the wrong order (bowstrings, saw blade) [#196]
+- Tooltip colors! Also improved some tooltips for gear.
+- (Maybe) Occasional crash in ColorUtils, exact cause unknown
 
 ## [2.0.2] - 2020-07-29
 1.16.1-only bug fix

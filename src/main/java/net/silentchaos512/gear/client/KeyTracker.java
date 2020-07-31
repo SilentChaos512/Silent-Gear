@@ -24,6 +24,8 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public class KeyTracker {
     public static final KeyBinding DISPLAY_STATS = createKeyBinding("displayStats", GLFW.GLFW_KEY_LEFT_CONTROL);
+    public static final KeyBinding DISPLAY_TRAITS = createKeyBinding("displayTraits", GLFW.GLFW_KEY_LEFT_SHIFT);
+    public static final KeyBinding DISPLAY_CONSTRUCTION = createKeyBinding("displayConstruction", GLFW.GLFW_KEY_LEFT_ALT);
     public static final KeyBinding OPEN_ITEM = createKeyBinding("openItem", GLFW.GLFW_KEY_X);
     public static final KeyBinding CYCLE_BACK = createKeyBinding("cycle.back", GLFW.GLFW_KEY_Z);
     public static final KeyBinding CYCLE_NEXT = createKeyBinding("cycle.next", GLFW.GLFW_KEY_C);
@@ -34,6 +36,8 @@ public class KeyTracker {
         ClientRegistry.registerKeyBinding(CYCLE_BACK);
         ClientRegistry.registerKeyBinding(CYCLE_NEXT);
         ClientRegistry.registerKeyBinding(DISPLAY_STATS);
+        ClientRegistry.registerKeyBinding(DISPLAY_TRAITS);
+        ClientRegistry.registerKeyBinding(DISPLAY_CONSTRUCTION);
         ClientRegistry.registerKeyBinding(OPEN_ITEM);
     }
 
@@ -114,6 +118,20 @@ public class KeyTracker {
             return isControlDown();
         }
         return DISPLAY_STATS.isKeyDown();
+    }
+
+    public static boolean isDisplayConstructionDown() {
+        if (DISPLAY_CONSTRUCTION.getKey().getKeyCode() == GLFW.GLFW_KEY_LEFT_ALT) {
+            return isAltDown();
+        }
+        return DISPLAY_CONSTRUCTION.isKeyDown();
+    }
+
+    public static boolean isDisplayTraitsDown() {
+        if (DISPLAY_TRAITS.getKey().getKeyCode() == GLFW.GLFW_KEY_LEFT_SHIFT) {
+            return isShiftDown();
+        }
+        return DISPLAY_TRAITS.isKeyDown();
     }
 
     public static boolean isShiftDown() {

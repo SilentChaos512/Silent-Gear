@@ -3,7 +3,7 @@ package net.silentchaos512.gear.api.material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
@@ -218,14 +218,14 @@ public interface IMaterial {
     @Deprecated
     IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType);
 
-    ITextComponent getDisplayName(PartType partType, ItemStack gear);
+    IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear);
 
-    default ITextComponent getDisplayName(PartType partType) {
+    default IFormattableTextComponent getDisplayName(PartType partType) {
         return getDisplayName(partType, ItemStack.EMPTY);
     }
 
     @Nullable
-    ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
+    IFormattableTextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
 
     default boolean isVisible(PartType partType) {
         return true;

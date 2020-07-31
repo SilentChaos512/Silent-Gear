@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -87,7 +87,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+    public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
         IMaterial material = getMaterial();
         return material != null ? material.getDisplayName(partType, gear) : new StringTextComponent("INVALID");
     }

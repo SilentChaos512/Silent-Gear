@@ -2,6 +2,7 @@ package net.silentchaos512.gear.util;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.utils.Color;
 
@@ -25,9 +26,11 @@ public final class TextUtil {
     }
 
     public static IFormattableTextComponent withColor(IFormattableTextComponent text, Color color) {
-        return text.func_230530_a_(
-                text.getStyle()
-                        .setColor(
-                                net.minecraft.util.text.Color.func_240743_a_(color.getColor() & 0xFFFFFF)));
+        return text.func_230530_a_(text.getStyle().setColor(net.minecraft.util.text.Color.func_240743_a_(color.getColor() & 0xFFFFFF)));
+    }
+
+    public static IFormattableTextComponent withColor(IFormattableTextComponent text, TextFormatting color) {
+        int colorCode = color.getColor() != null ? color.getColor() : Color.VALUE_WHITE;
+        return text.func_230530_a_(text.getStyle().setColor(net.minecraft.util.text.Color.func_240743_a_(colorCode & 0xFFFFFF)));
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -77,15 +77,15 @@ public interface IMaterialInstance {
         return getColor(partType, ItemStack.EMPTY);
     }
 
-    ITextComponent getDisplayName(PartType partType, ItemStack gear);
+    IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear);
 
-    default ITextComponent getDisplayName(PartType partType) {
+    default IFormattableTextComponent getDisplayName(PartType partType) {
         return getDisplayName(partType, ItemStack.EMPTY);
     }
 
-    default ITextComponent getDisplayNameWithGrade(PartType partType) {
-        ITextComponent gradeSuffix = TextUtil.translate("misc", "spaceBrackets", getGrade().getDisplayName());
-        return getDisplayName(partType, ItemStack.EMPTY).copyRaw().func_230529_a_(gradeSuffix);
+    default IFormattableTextComponent getDisplayNameWithGrade(PartType partType) {
+        IFormattableTextComponent gradeSuffix = TextUtil.translate("misc", "spaceBrackets", getGrade().getDisplayName());
+        return getDisplayName(partType, ItemStack.EMPTY).func_230529_a_(gradeSuffix);
     }
 
     default JsonObject serialize() {

@@ -17,6 +17,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
 import java.util.function.Function;
@@ -84,16 +85,14 @@ public interface ITrait {
         if (!showInTooltip(flag)) return;
 
         // Display name
-        ITextComponent displayName = this.getDisplayName(level);
+        ITextComponent displayName = TextUtil.withColor(this.getDisplayName(level), isHidden() ? TextFormatting.DARK_GRAY : TextFormatting.GRAY);
         displayName.getStyle().setFormatting(TextFormatting.ITALIC);
-        if (isHidden()) displayName.getStyle().setFormatting(TextFormatting.DARK_GRAY);
         tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)
-        if (KeyTracker.isAltDown()) {
-            ITextComponent description = this.getDescription(level);
-            description.getStyle().setFormatting(TextFormatting.DARK_GRAY);
-            tooltip.add(new StringTextComponent("  ").func_230529_a_(description));
+        if (KeyTracker.isDisplayTraitsDown()) {
+            ITextComponent description = TextUtil.withColor(this.getDescription(level), TextFormatting.DARK_GRAY);
+            tooltip.add(new StringTextComponent("    ").func_230529_a_(description));
         }
     }
 

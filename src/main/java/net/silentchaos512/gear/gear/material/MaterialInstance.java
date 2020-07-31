@@ -178,7 +178,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+    public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
         return material.getDisplayName(partType, gear);
     }
 

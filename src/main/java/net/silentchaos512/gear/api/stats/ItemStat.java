@@ -2,13 +2,11 @@ package net.silentchaos512.gear.api.stats;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
@@ -32,7 +30,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     private final float minimumValue;
     private final float maximumValue;
     private final Operation defaultOperation;
-    private final TextFormatting nameColor;
+    private final Color nameColor;
     private final boolean visible;
     private final boolean synergyApplies;
     private final boolean affectedByGrades;
@@ -41,6 +39,10 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     private final Function<Float, Float> missingRodFunction;
 
     public ItemStat(float defaultValue, float minValue, float maxValue, TextFormatting nameColor, Properties properties) {
+        this(defaultValue, minValue, maxValue, new Color(nameColor.getColor() != null ? nameColor.getColor() : Color.VALUE_WHITE), properties);
+    }
+
+    public ItemStat(float defaultValue, float minValue, float maxValue, Color nameColor, Properties properties) {
         this.defaultValue = defaultValue;
         this.minimumValue = minValue;
         this.maximumValue = maxValue;
@@ -108,7 +110,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return displayFormat == DisplayFormat.MULTIPLIER;
     }
 
-    public TextFormatting getNameColor() {
+    public Color getNameColor() {
         return nameColor;
     }
 
@@ -237,7 +239,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", getRegistryName(), defaultValue, minimumValue, maximumValue);
     }
 
-    public ITextComponent getDisplayName() {
+    public IFormattableTextComponent getDisplayName() {
         ResourceLocation name = getRegistryName();
         if (name == null)
             return new StringTextComponent("Unregistered stat: " + this);

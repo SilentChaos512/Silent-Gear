@@ -13,16 +13,19 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.AbstractGearPart;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
+import net.silentchaos512.utils.Color;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class TooltipHandler {
@@ -31,6 +34,13 @@ public final class TooltipHandler {
     // Display a single trait and cycling through the list. Main problem with this is it affects
     // JEI's tooltip cache. When disabled, you can search for parts with certain traits.
     private static final boolean TRAIT_DISPLAY_CYCLE = false;
+
+    static {
+        assert TextFormatting.DARK_GRAY.getColor() != null;
+        assert TextFormatting.GRAY.getColor() != null;
+    }
+    public static final Color MC_DARK_GRAY = new Color(TextFormatting.DARK_GRAY.getColor());
+    public static final Color MC_GRAY = new Color(TextFormatting.GRAY.getColor());
 
     private TooltipHandler() {}
 
@@ -70,14 +80,11 @@ public final class TooltipHandler {
         boolean keyHeld = KeyTracker.isDisplayStatsDown();
 
         if (keyHeld) {
-            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material").func_240699_a_(TextFormatting.GOLD));
+            event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD));
         } else {
-            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.material")
-                    .func_240699_a_(TextFormatting.GOLD)
-                    .func_230529_a_(new StringTextComponent(" [")
-                            .func_230529_a_(KeyTracker.DISPLAY_STATS.func_238171_j_())
-                            .func_230529_a_(new StringTextComponent("]"))
-                            .func_240699_a_(TextFormatting.GRAY)));
+            event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD)
+                    .func_230529_a_(new StringTextComponent(" ")
+                            .func_230529_a_(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY))));
         }
 
         if (event.getFlags().isAdvanced()) {
@@ -109,23 +116,21 @@ public final class TooltipHandler {
     private static ITextComponent buildPartTypeHeader(Collection<PartType> types, PartType selectedType) {
         IFormattableTextComponent ret = new StringTextComponent("| ").func_240699_a_(TextFormatting.GRAY);
         for (PartType type : types) {
-            ITextComponent text = type.getDisplayName(-1);
-            text.getStyle().setFormatting(type == selectedType ? TextFormatting.WHITE : TextFormatting.DARK_GRAY);
+            Color color = type == selectedType ? Color.AQUAMARINE : MC_DARK_GRAY;
+            ITextComponent text = TextUtil.withColor(type.getDisplayName(-1), color);
             ret.func_230529_a_(text).func_240702_b_(" | ");
         }
 
         ITextComponent keyHint = TextUtil.misc("tooltip.material.keyHint",
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), net.silentchaos512.utils.Color.AQUAMARINE),
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), net.silentchaos512.utils.Color.AQUAMARINE));
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
+                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE));
         return ret.func_230529_a_(keyHint);
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData part) {
 
         // Type, tier
-        ITextComponent typeName = part.getType().getDisplayName(part.getTier());
-        typeName.getStyle().setColor(Color.func_240743_a_(0x7FFFD4));
-        event.getToolTip().add(typeName);
+        event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(part.getTier()), Color.AQUAMARINE));
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
             event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getPartId()).func_240699_a_(TextFormatting.DARK_GRAY));
@@ -176,8 +181,7 @@ public final class TooltipHandler {
     }
 
     private static void getGradeLine(ItemTooltipEvent event, MaterialGrade grade) {
-        ITextComponent text = grade.getDisplayName();
-        text.getStyle().setColor(Color.func_240743_a_(0x00BFFF));
+        ITextComponent text = TextUtil.withColor(grade.getDisplayName(), Color.DEEPSKYBLUE);
         event.getToolTip().add(new TranslationTextComponent("part.silentgear.gradeOnPart", text));
     }
 
@@ -186,36 +190,39 @@ public final class TooltipHandler {
     }
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
+        TextListBuilder builder = new TextListBuilder();
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(ItemStack.EMPTY, stat);
-            getStatTooltipLine(event, part.getType(), stat, modifiers);
+            getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
         }
+        event.getToolTip().addAll(builder.build());
     }
 
     private static void getMaterialStatLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
+        TextListBuilder builder = new TextListBuilder();
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
             Collection<StatInstance> modifiers = material.getStatModifiers(stat, partType);
-            getStatTooltipLine(event, partType, stat, modifiers);
+            getStatTooltipLine(event, partType, stat, modifiers).ifPresent(builder::add);
         }
+        event.getToolTip().addAll(builder.build());
     }
 
-    private static void getStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, Collection<StatInstance> modifiers) {
+    private static Optional<IFormattableTextComponent> getStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, Collection<StatInstance> modifiers) {
         if (!modifiers.isEmpty()) {
             StatInstance inst = stat.computeForDisplay(0, modifiers);
             if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
                 boolean isZero = inst.getValue() == 0;
-                TextFormatting nameColor = isZero ? TextFormatting.DARK_GRAY : stat.getNameColor();
-                TextFormatting statColor = isZero ? TextFormatting.DARK_GRAY : TextFormatting.WHITE;
-                ITextComponent nameStr = stat.getDisplayName();
-                nameStr.getStyle().setFormatting(nameColor);
+                Color nameColor = isZero ? MC_DARK_GRAY : stat.getNameColor();
+                Color statColor = isZero ? MC_DARK_GRAY : Color.WHITE;
+
+                IFormattableTextComponent nameStr = TextUtil.withColor(stat.getDisplayName(), nameColor);
                 int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
+                IFormattableTextComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), statColor);
 
-                ITextComponent statListText = StatModifierMap.formatText(modifiers, stat, decimalPlaces);
-                statListText.getStyle().setFormatting(statColor);
-
-                event.getToolTip().add(new StringTextComponent("- ").func_240699_a_(TextFormatting.GRAY)
-                        .func_230529_a_(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statListText.getString())));
+                return Optional.of(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statListText));
             }
         }
+
+        return Optional.empty();
     }
 }

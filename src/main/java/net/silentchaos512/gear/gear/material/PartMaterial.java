@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -199,13 +200,13 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+    public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
         return displayName.deepCopy();
     }
 
     @Nullable
     @Override
-    public ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
+    public IFormattableTextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
         return namePrefix != null ? namePrefix.deepCopy() : null;
     }
 
