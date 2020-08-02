@@ -3,12 +3,14 @@ package net.silentchaos512.gear.client.util;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.utils.Color;
 
 import java.util.Collection;
+import java.util.List;
 
 public final class ColorUtils {
     private ColorUtils() {}
@@ -66,19 +68,22 @@ public final class ColorUtils {
         for (IMaterialInstance mat : materials) {
             IMaterialDisplay model = MaterialDisplayManager.get(mat.getMaterialId());
             if (model != null) {
-                int color = model.getLayers(item.getGearType(), item.getPartType()).getLayers().get(layer).getColor();
-                int r = (color >> 16) & 0xFF;
-                int g = (color >> 8) & 0xFF;
-                int b = color & 0xFF;
-                int colorWeight = item.getColorWeight(i, materials.size());
-                for (int j = 0; j < colorWeight; ++j) {
-                    maxColorSum += Math.max(r, Math.max(g, b));
-                    componentSums[0] += r;
-                    componentSums[1] += g;
-                    componentSums[2] += b;
-                    ++colorCount;
+                List<MaterialLayer> layers = model.getLayers(item.getGearType(), item.getPartType()).getLayers();
+                if (layers.size() > layer) {
+                    int color = layers.get(layer).getColor();
+                    int r = (color >> 16) & 0xFF;
+                    int g = (color >> 8) & 0xFF;
+                    int b = color & 0xFF;
+                    int colorWeight = item.getColorWeight(i, materials.size());
+                    for (int j = 0; j < colorWeight; ++j) {
+                        maxColorSum += Math.max(r, Math.max(g, b));
+                        componentSums[0] += r;
+                        componentSums[1] += g;
+                        componentSums[2] += b;
+                        ++colorCount;
+                    }
+                    ++i;
                 }
-                ++i;
             }
         }
 
