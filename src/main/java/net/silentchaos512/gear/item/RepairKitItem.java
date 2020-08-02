@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -157,7 +158,15 @@ public class RepairKitItem extends Item {
                 format(getStoredMaterialAmount(stack)),
                 getKitCapacity()));
 
-        for (Map.Entry<MaterialInstance, Float> entry : getStoredMaterials(stack).entrySet()) {
+        Map<MaterialInstance, Float> storedMaterials = getStoredMaterials(stack);
+        if (storedMaterials.isEmpty()) {
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").applyTextStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").applyTextStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").applyTextStyle(TextFormatting.ITALIC));
+            return;
+        }
+
+        for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
             tooltip.add(TextUtil.translate("item", "repair_kit.material",
                     entry.getKey().getDisplayNameWithGrade(PartType.MAIN),
                     format(entry.getValue())));

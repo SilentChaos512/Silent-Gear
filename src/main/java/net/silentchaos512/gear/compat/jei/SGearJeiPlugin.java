@@ -10,17 +10,18 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.item.crafting.*;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
+import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
@@ -30,9 +31,12 @@ import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
+import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -69,6 +73,20 @@ public class SGearJeiPlugin implements IModPlugin {
         assert Minecraft.getInstance().world != null;
         RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
 
+        // Repair kit hint
+        for (RepairKitItem item : Registration.getItems(RepairKitItem.class)) {
+            String itemName = NameUtils.fromItem(item).getPath();
+            reg.addRecipes(Collections.singleton(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
+                            new ItemStack(item),
+                            NonNullList.from(Ingredient.EMPTY,
+                                    Ingredient.fromItems(item),
+                                    PartMaterialIngredient.of(PartType.MAIN),
+                                    PartMaterialIngredient.of(PartType.MAIN),
+                                    PartMaterialIngredient.of(PartType.MAIN)
+                            ))),
+                    VanillaRecipeCategoryUid.CRAFTING);
+        }
+
         reg.addRecipes(recipeManager.getRecipes().stream()
                 .filter(SGearJeiPlugin::isGearCraftingRecipe)
                 .collect(Collectors.toList()), GEAR_CRAFTING);
@@ -79,15 +97,6 @@ public class SGearJeiPlugin implements IModPlugin {
 
         // Info pages
         addInfoPage(reg, ModBlocks.CRAFTING_STATION);
-        // FIXME: Fails on servers
-/*        addInfoPage(reg, "tip_upgrade", PartManager.getPartsOfType(PartType.TIP).stream()
-                .flatMap(part -> {
-                    Ingredient ingredient = part.getMaterials().getIngredient();
-                    return ingredient != null ? Arrays.stream(ingredient.getMatchingStacks()) : Stream.of();
-                })
-                .map(ItemStack::getItem)
-                .collect(Collectors.toList())
-        );*/
         addInfoPage(reg, CraftingItems.RED_CARD_UPGRADE);
         addInfoPage(reg, CraftingItems.SPOON_UPGRADE);
         for (Item item : Registration.getItems(item -> item instanceof ICoreTool)) {
