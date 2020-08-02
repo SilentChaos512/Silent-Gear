@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -12,11 +12,14 @@ public interface IContainerItem {
 
     default IItemHandler getInventory(ItemStack stack) {
         ItemStackHandler stackHandler = new ItemStackHandler(getInventorySize(stack));
-        stackHandler.deserializeNBT(stack.getOrCreateChildTag("Inventory"));
+        CompoundNBT nbt = stack.getOrCreateChildTag("Inventory");
+        // Allow older blueprint books to update to new size
+        nbt.remove("Size");
+        stackHandler.deserializeNBT(nbt);
         return stackHandler;
     }
 
-    default void saveInventory(ItemStack stack, IItemHandler itemHandler, PlayerEntity player) {
+    default void saveInventory(ItemStack stack, IItemHandler itemHandler) {
         if (itemHandler instanceof ItemStackHandler) {
             stack.getOrCreateTag().put("Inventory", ((ItemStackHandler) itemHandler).serializeNBT());
         }

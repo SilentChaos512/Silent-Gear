@@ -5,11 +5,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -18,6 +21,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
@@ -26,6 +30,7 @@ import net.silentchaos512.gear.network.KeyPressOnItemPacket;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlueprintBookItem extends Item implements IBlueprint, IContainerItem, ICycleItem {
@@ -67,7 +72,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
 
     @Override
     public int getInventorySize(ItemStack stack) {
-        return 3 * 9;
+        return 6 * 9;
     }
 
     @Override
@@ -112,6 +117,24 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
             openContainer((ServerPlayerEntity) playerIn, stack);
         }
         return ActionResult.resultSuccess(stack);
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (isInGroup(group)) {
+            super.fillItemGroup(group, items);
+
+            // Create a book with all blueprints
+            ItemStack filled = new ItemStack(this);
+            IItemHandler inventory = this.getInventory(filled);
+            List<Item> blueprints = new ArrayList<>(Registration.getItems(item -> this.canStore(new ItemStack(item))));
+            for (int i = 0; i < blueprints.size() && i < getInventorySize(filled); i++) {
+                inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
+            }
+            this.saveInventory(filled, inventory);
+            filled.setDisplayName(new StringTextComponent("Fully-Loaded Blueprint Book"));
+            items.add(filled);
+        }
     }
 
     @Override
