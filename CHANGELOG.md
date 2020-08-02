@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.2] - 2020-08-02
+### Added
+- Fully-loaded blueprint book to creative menu, contains all registered blueprints
+- Some hints on how repair kits work
+### Changed
+- Doubled the size of the blueprint book
+### Fixed
+- Random crash in ColorUtils [#198]
+
 ## [1.11.1] - 2020-07-28
 ### Added
 - Granite, diorite, and andesite materials (same stats as stone by default) [#193]
