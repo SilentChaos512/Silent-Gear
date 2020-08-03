@@ -30,8 +30,10 @@ import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
@@ -175,6 +177,11 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
+    }
+
+    @Override
+    public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
+        return TraitHelper.hasTrait(stack, TraitConst.BRILLIANT);
     }
 
     //endregion

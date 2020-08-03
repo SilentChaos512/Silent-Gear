@@ -8,6 +8,7 @@ public class TraitConst {
     public static final ResourceLocation ADAMANT = SilentGear.getId("adamant");
     public static final ResourceLocation ANCIENT = SilentGear.getId("ancient");
     public static final ResourceLocation AQUATIC = SilentGear.getId("aquatic");
+    public static final ResourceLocation BRILLIANT = SilentGear.getId("brilliant");
     public static final ResourceLocation BRITTLE = SilentGear.getId("brittle");
     public static final ResourceLocation BULKY = SilentGear.getId("bulky");
     public static final ResourceLocation CHILLED = SilentGear.getId("chilled");

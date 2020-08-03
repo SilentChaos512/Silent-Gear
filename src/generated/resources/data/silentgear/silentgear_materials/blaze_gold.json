@@ -81,6 +81,15 @@
   "traits": {
     "main": [
       {
+        "name": "silentgear:brilliant",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:primary_material"
+          }
+        ]
+      },
+      {
         "name": "silentgear:malleable",
         "level": 3
       },

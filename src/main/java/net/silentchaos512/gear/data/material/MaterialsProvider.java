@@ -26,10 +26,7 @@ import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.parts.PartTextureType;
 import net.silentchaos512.gear.traits.TraitConst;
-import net.silentchaos512.gear.traits.conditions.GearTypeTraitCondition;
-import net.silentchaos512.gear.traits.conditions.MaterialCountTraitCondition;
-import net.silentchaos512.gear.traits.conditions.MaterialRatioTraitCondition;
-import net.silentchaos512.gear.traits.conditions.OrTraitCondition;
+import net.silentchaos512.gear.traits.conditions.*;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
@@ -146,6 +143,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 14, StatInstance.Operation.ADD)
+                .trait(PartType.MAIN, TraitConst.BRILLIANT, 1, new PrimaryMaterialTraitCondition())
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 3)
                 .trait(PartType.MAIN, TraitConst.SOFT, 1)
                 .trait(PartType.ROD, TraitConst.FLEXIBLE, 2, new MaterialRatioTraitCondition(0.5f))
@@ -449,6 +447,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 30, StatInstance.Operation.ADD)
+                .trait(PartType.MAIN, TraitConst.BRILLIANT, 1, new PrimaryMaterialTraitCondition())
                 .trait(PartType.MAIN, TraitConst.MALLEABLE, 1)
                 .trait(PartType.MAIN, TraitConst.SOFT, 3)
                 .trait(PartType.ROD, TraitConst.MALLEABLE, 1, new MaterialRatioTraitCondition(0.5f))
