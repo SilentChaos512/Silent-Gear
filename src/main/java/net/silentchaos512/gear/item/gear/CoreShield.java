@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class CoreShield extends ShieldItem implements ICoreItem {
     private static final float DURABILITY_MULTI = 337f / 15f;
@@ -128,6 +129,11 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     @Override
     public int getMaxDamage(ItemStack stack) {
         return Math.round(DURABILITY_MULTI * GearData.getStat(stack, ItemStats.ARMOR_DURABILITY));
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override

@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class CoreMattock extends HoeItem implements ICoreTool {
     private static final Set<ToolType> TOOL_CLASSES = ImmutableSet.of(ToolType.AXE, ToolType.SHOVEL);
@@ -179,6 +180,11 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     @Override
     public int getMaxDamage(ItemStack stack) {
         return GearData.getStatInt(stack, ItemStats.DURABILITY);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override

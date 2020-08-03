@@ -27,6 +27,7 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class CoreShears extends ShearsItem implements ICoreTool {
     public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
@@ -99,6 +100,11 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     @Override
     public int getMaxDamage(ItemStack stack) {
         return GearData.getStatInt(stack, ItemStats.DURABILITY);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override

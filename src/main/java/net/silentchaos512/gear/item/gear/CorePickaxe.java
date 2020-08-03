@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class CorePickaxe extends PickaxeItem implements ICoreTool {
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
@@ -160,6 +161,11 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     @Override
     public int getMaxDamage(ItemStack stack) {
         return GearData.getStatInt(stack, ItemStats.DURABILITY);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override

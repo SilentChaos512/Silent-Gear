@@ -16,6 +16,7 @@ import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -49,6 +50,7 @@ import net.silentchaos512.lib.advancements.LibTriggers;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -298,6 +300,22 @@ public final class GearHelper {
         if (GearHelper.isBroken(stack)) {
             GearData.recalculateStats(stack, null);
         }
+    }
+
+    public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        int value;
+        if (GearHelper.isUnbreakable(stack)) {
+            value = 0;
+        } else if (!Config.Common.gearBreaksPermanently.get()) {
+            value = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
+            if (stack.getDamage() + value >= stack.getMaxDamage() - 1) {
+                onBroken.accept(entity);
+            }
+        } else {
+            value = amount;
+        }
+        GearHelper.damageParts(stack, value);
+        return value;
     }
 
     public static void damageParts(ItemStack stack, int amount) {

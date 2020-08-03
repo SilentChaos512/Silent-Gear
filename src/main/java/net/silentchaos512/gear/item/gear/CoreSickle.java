@@ -37,6 +37,7 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class CoreSickle extends ToolItem implements ICoreTool {
     public static final ToolType TOOL_TYPE = ToolType.get("sickle");
@@ -305,6 +306,11 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     @Override
     public int getMaxDamage(ItemStack stack) {
         return GearData.getStatInt(stack, ItemStats.DURABILITY);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
