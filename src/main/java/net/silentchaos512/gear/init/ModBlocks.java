@@ -27,6 +27,7 @@ public final class ModBlocks {
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
             new OreBlock(AbstractBlock.Properties.create(Material.ROCK)
                     .hardnessAndResistance(4, 10)
+                    .setRequiresTool()
                     .harvestLevel(2)
                     .harvestTool(ToolType.PICKAXE)
                     .sound(SoundType.field_235598_T_)));
