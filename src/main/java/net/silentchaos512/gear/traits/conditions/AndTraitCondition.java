@@ -17,7 +17,6 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.traits.TraitSerializers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class AndTraitCondition implements ITraitCondition {
@@ -57,7 +56,7 @@ public class AndTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, Collection<MaterialInstance> materials, ITrait trait) {
+    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         for (ITraitCondition child : this.children) {
             if (!child.matches(gear, partType, materials, trait)) {
                 return false;

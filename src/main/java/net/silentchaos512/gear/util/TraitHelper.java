@@ -241,7 +241,7 @@ public final class TraitHelper {
         return result;
     }
 
-    public static Map<ITrait, Integer> getTraits(Collection<MaterialInstance> materials, PartType partType, ItemStack gear) {
+    public static Map<ITrait, Integer> getTraits(List<MaterialInstance> materials, PartType partType, ItemStack gear) {
         if (materials.isEmpty())
             return Collections.emptyMap();
 

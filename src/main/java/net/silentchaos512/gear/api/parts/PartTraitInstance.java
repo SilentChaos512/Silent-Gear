@@ -51,7 +51,7 @@ public class PartTraitInstance {
         return conditions.stream().allMatch(c -> c.matches(gear, parts, this.trait));
     }
 
-    public boolean conditionsMatch(Collection<MaterialInstance> materials, PartType partType, ItemStack gear) {
+    public boolean conditionsMatch(List<MaterialInstance> materials, PartType partType, ItemStack gear) {
         return conditions.stream().allMatch(c -> c.matches(gear, partType, materials, this.trait));
     }
 

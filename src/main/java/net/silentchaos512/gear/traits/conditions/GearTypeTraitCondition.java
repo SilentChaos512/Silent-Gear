@@ -14,7 +14,7 @@ import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.GearHelper;
 
-import java.util.Collection;
+import java.util.List;
 
 public class GearTypeTraitCondition implements ITraitCondition {
     public static final Serializer SERIALIZER = new Serializer();
@@ -42,7 +42,7 @@ public class GearTypeTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, Collection<MaterialInstance> materials, ITrait trait) {
+    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         GearType type = GearHelper.getType(gear);
         return type == null || type.matches(this.gearType);
     }

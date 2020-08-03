@@ -12,7 +12,7 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 
-import java.util.Collection;
+import java.util.List;
 
 public class MaterialRatioTraitCondition implements ITraitCondition {
     public static final Serializer SERIALIZER = new Serializer();
@@ -36,7 +36,7 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, Collection<MaterialInstance> materials, ITrait trait) {
+    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         int count = (int) materials.stream()
                 .filter(mat -> mat.getMaterial().getTraits(partType, gear).stream()
                         .anyMatch(inst -> inst.getTrait() == trait))

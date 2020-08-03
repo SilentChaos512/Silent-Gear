@@ -6,12 +6,12 @@ import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface ITraitCondition {
     ResourceLocation getId();
 
     boolean matches(ItemStack gear, PartDataList parts, ITrait trait);
 
-    boolean matches(ItemStack gear, PartType partType, Collection<MaterialInstance> materials, ITrait trait);
+    boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait);
 }
