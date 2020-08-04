@@ -10,6 +10,8 @@ public final class PartConst {
     public static final ResourceLocation MAIN_EXAMPLE = SilentGear.getId("main/example");
     public static final ResourceLocation ROD_EXAMPLE = SilentGear.getId("rod/example");
 
+    public static final DataResource<IGearPart> ARMOR_BODY = DataResource.part("armor_body");
+
     public static final DataResource<IGearPart> MISC_SPOON = DataResource.part("misc/spoon");
     public static final DataResource<IGearPart> RED_CARD = DataResource.part("misc/red_card");
 

@@ -12,6 +12,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
@@ -25,7 +26,10 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.parts.LazyPartData;
 import net.silentchaos512.gear.traits.DurabilityTrait;
+import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.advancements.GenericIntTrigger;
 import net.silentchaos512.lib.util.NameUtils;
@@ -34,6 +38,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -266,6 +271,15 @@ public class ModAdvancementProvider implements IDataProvider {
                     .withDisplay(CraftingItems.AZURE_ELECTRUM_INGOT, title("azure_electrum"), description("azure_electrum"), null, FrameType.TASK, true, true, false)
                     .withCriterion("get_ingot", getItem(CraftingItems.AZURE_ELECTRUM_INGOT))
                     .register(consumer, id("azure_electrum"));
+
+            ItemStack azureSilverBoots = new ItemStack(ModItems.BOOTS);
+            // FIXME Can't actually build compound parts lazily right now
+            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.AZURE_SILVER_MATERIAL.getId())));
+            Advancement moonwalker = Advancement.Builder.builder()
+                    .withParent(azureSilver)
+                    .withDisplay(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, FrameType.TASK, true, true, false)
+                    .withCriterion("fall_with_moonwalker_boots", genericInt(GearEvents.FALL_WITH_MOONWALKER, 1))
+                    .register(consumer, id("moonwalker"));
 
             //endregion
         }
