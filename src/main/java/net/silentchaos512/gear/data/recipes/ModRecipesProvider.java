@@ -409,6 +409,16 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(ModTags.Items.INGOTS_CRIMSON_STEEL))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(ModItems.AZURE_REPAIR_KIT)
+                .key('#', ModTags.Items.INGOTS_AZURE_ELECTRUM)
+                .key('/', Items.END_ROD)
+                .key('o', Tags.Items.GEMS_EMERALD)
+                .patternLine(" / ")
+                .patternLine("#o#")
+                .patternLine("###")
+                .addCriterion("has_item", hasItem(ModTags.Items.INGOTS_AZURE_ELECTRUM))
+                .build(consumer);
+
         for (RepairKitItem item : Registration.getItems(RepairKitItem.class)) {
             // Empty repair kit recipes
             ExtendedShapelessRecipeBuilder.vanillaBuilder(item)

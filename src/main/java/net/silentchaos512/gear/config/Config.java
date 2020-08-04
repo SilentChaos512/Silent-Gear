@@ -45,9 +45,11 @@ public final class Config {
         public static final ForgeConfigSpec.IntValue repairKitCrudeCapacity;
         public static final ForgeConfigSpec.IntValue repairKitSturdyCapacity;
         public static final ForgeConfigSpec.IntValue repairKitCrimsonCapacity;
+        public static final ForgeConfigSpec.IntValue repairKitAzureCapacity;
         public static final ForgeConfigSpec.DoubleValue repairKitCrudeEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitSturdyEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitCrimsonEfficiency;
+        public static final ForgeConfigSpec.DoubleValue repairKitAzureEfficiency;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Salvager
@@ -85,9 +87,10 @@ public final class Config {
                         builder.comment("Capacity is the number of materials that can be stored (all types combined)",
                                 "Setting to zero would make the repair kit unusable.");
                         builder.push("capacity");
-                        repairKitCrudeCapacity = builder.defineInRange("crude", 10, 0, Integer.MAX_VALUE);
-                        repairKitSturdyCapacity = builder.defineInRange("sturdy", 20, 0, Integer.MAX_VALUE);
-                        repairKitCrimsonCapacity = builder.defineInRange("crimson", 30, 0, Integer.MAX_VALUE);
+                        repairKitCrudeCapacity = builder.defineInRange("crude", 16, 0, Integer.MAX_VALUE);
+                        repairKitSturdyCapacity = builder.defineInRange("sturdy", 32, 0, Integer.MAX_VALUE);
+                        repairKitCrimsonCapacity = builder.defineInRange("crimson", 48, 0, Integer.MAX_VALUE);
+                        repairKitAzureCapacity = builder.defineInRange("azure", 64, 0, Integer.MAX_VALUE);
                         builder.pop();
                     }
                     {
@@ -97,6 +100,7 @@ public final class Config {
                         repairKitCrudeEfficiency = builder.defineInRange("crude", 0.35f, 0f, 10f);
                         repairKitSturdyEfficiency = builder.defineInRange("sturdy", 0.4f, 0f, 10f);
                         repairKitCrimsonEfficiency = builder.defineInRange("crimson", 0.45f, 0f, 10f);
+                        repairKitAzureEfficiency = builder.defineInRange("azure", 0.5f, 0f, 10f);
                         builder.pop();
                     }
 
