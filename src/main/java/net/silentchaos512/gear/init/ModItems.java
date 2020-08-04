@@ -187,11 +187,11 @@ public final class ModItems {
                             .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
                             .build())));
 
-    public static final ItemRegistryObject<CoreSword> SWORD = register("sword", () -> new CoreSword());
-    public static final ItemRegistryObject<CoreDagger> DAGGER = register("dagger", () -> new CoreDagger());
-    public static final ItemRegistryObject<CoreKatana> KATANA = register("katana", () -> new CoreKatana());
-    public static final ItemRegistryObject<CoreMachete> MACHETE = register("machete", () -> new CoreMachete());
-    public static final ItemRegistryObject<CoreSpear> SPEAR = register("spear", () -> new CoreSpear());
+    public static final ItemRegistryObject<CoreSword> SWORD = register("sword", () -> new CoreSword(GearType.SWORD));
+    public static final ItemRegistryObject<CoreDagger> DAGGER = register("dagger", () -> new CoreDagger(GearType.DAGGER));
+    public static final ItemRegistryObject<CoreSword> KATANA = register("katana", () -> new CoreSword(GearType.KATANA));
+    public static final ItemRegistryObject<CoreMachete> MACHETE = register("machete", () -> new CoreMachete(GearType.MACHETE));
+    public static final ItemRegistryObject<CoreSword> SPEAR = register("spear", () -> new CoreSword(GearType.SPEAR));
     public static final ItemRegistryObject<CorePickaxe> PICKAXE = register("pickaxe", () -> new CorePickaxe());
     public static final ItemRegistryObject<CoreShovel> SHOVEL = register("shovel", () -> new CoreShovel());
     public static final ItemRegistryObject<CoreAxe> AXE = register("axe", () -> new CoreAxe());

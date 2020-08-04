@@ -8,5 +8,14 @@
   },
   "name": {
     "translate": "part.silentgear.sickle_blade"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 1.0
+    },
+    "attack_speed": {
+      "add": -1.8
+    },
+    "repair_efficiency": 1.0
   }
 }

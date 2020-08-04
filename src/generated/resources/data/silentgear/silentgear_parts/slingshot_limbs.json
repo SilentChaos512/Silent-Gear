@@ -8,5 +8,22 @@
   },
   "name": {
     "translate": "part.silentgear.slingshot_limbs"
+  },
+  "stats": {
+    "ranged_damage": [
+      {
+        "add": 0.0
+      },
+      {
+        "mul1": -0.75
+      }
+    ],
+    "ranged_speed": {
+      "add": 1.5
+    },
+    "repair_efficiency": 2.0,
+    "enchantability": {
+      "mul1": -0.65
+    }
   }
 }

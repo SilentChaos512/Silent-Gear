@@ -8,5 +8,23 @@
   },
   "name": {
     "translate": "part.silentgear.excavator_head"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 2.0
+    },
+    "attack_speed": {
+      "add": -3.0
+    },
+    "repair_efficiency": 1.5,
+    "durability": {
+      "mul1": 1.0
+    },
+    "enchantability": {
+      "mul1": -0.5
+    },
+    "harvest_speed": {
+      "mul1": -0.5
+    }
   }
 }

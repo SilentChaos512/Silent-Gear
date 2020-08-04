@@ -8,5 +8,17 @@
   },
   "name": {
     "translate": "part.silentgear.bow_limbs"
+  },
+  "stats": {
+    "ranged_damage": {
+      "add": 2.0
+    },
+    "ranged_speed": {
+      "add": 1.0
+    },
+    "repair_efficiency": 1.0,
+    "enchantability": {
+      "mul1": -0.45
+    }
   }
 }

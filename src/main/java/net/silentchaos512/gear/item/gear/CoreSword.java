@@ -17,41 +17,30 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreWeapon;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class CoreSword extends SwordItem implements ICoreWeapon {
-    public CoreSword() {
-        this(null);
+    private final GearType gearType;
+
+    public CoreSword(GearType gearType) {
+        this(gearType, null);
     }
 
-    CoreSword(@Nullable ToolType type) {
+    CoreSword(GearType gearType, @Nullable ToolType type) {
         super(ItemTier.DIAMOND, 0, 0, GearHelper.getBuilder(type));
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.SWORD;
-    }
-
-    @Override
-    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == ItemStats.MELEE_DAMAGE)
-            return Optional.of(StatInstance.makeBaseMod(3));
-        if (stat == ItemStats.ATTACK_SPEED)
-            return Optional.of(StatInstance.makeBaseMod(-2.4f));
-        if (stat == ItemStats.REPAIR_EFFICIENCY)
-            return Optional.of(StatInstance.makeBaseMod(1));
-        return Optional.empty();
+        return this.gearType;
     }
 
     //region Standard tool overrides

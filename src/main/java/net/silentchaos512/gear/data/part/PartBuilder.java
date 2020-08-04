@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.data.part;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
@@ -9,12 +10,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.IItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.traits.ITraitCondition;
+import net.silentchaos512.gear.api.traits.ITraitInstance;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.parts.PartPositions;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-// Might need to be expanded, just aiming for barebones solution right now
 public class PartBuilder {
     final ResourceLocation id;
     private final ResourceLocation serializerType;
@@ -26,6 +34,9 @@ public class PartBuilder {
     private boolean visible = true;
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
+
+    private final StatModifierMap stats = new StatModifierMap();
+    private final List<ITraitInstance> traits = new ArrayList<>();
 
     public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, IItemProvider item) {
         this(id, gearType, partType, position, Ingredient.fromItems(item));
@@ -59,6 +70,22 @@ public class PartBuilder {
         return this;
     }
 
+    public PartBuilder stat(IItemStat stat, float value) {
+        return stat(stat, value, StatInstance.Operation.AVG);
+    }
+
+    public PartBuilder stat(IItemStat stat, float value, StatInstance.Operation operation) {
+        StatInstance mod = new StatInstance(value, operation);
+        this.stats.put(stat, mod);
+        return this;
+    }
+
+    private PartBuilder trait(ResourceLocation traitId, int level, ITraitCondition... conditions) {
+        ITraitInstance inst = TraitInstance.lazy(traitId, level, conditions);
+        this.traits.add(inst);
+        return this;
+    }
+
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
 
@@ -82,6 +109,16 @@ public class PartBuilder {
 
         if (this.namePrefix != null) {
             json.add("name_prefix", ITextComponent.Serializer.toJsonTree(this.namePrefix));
+        }
+
+        if (!this.stats.isEmpty()) {
+            json.add("stats", this.stats.serialize());
+        }
+
+        if (!this.traits.isEmpty()) {
+            JsonArray array = new JsonArray();
+            this.traits.forEach(t -> array.add(t.serialize()));
+            json.add("traits", array);
         }
 
         return json;

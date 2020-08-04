@@ -8,5 +8,23 @@
   },
   "name": {
     "translate": "part.silentgear.hammer_head"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 4.0
+    },
+    "attack_speed": {
+      "add": -3.2
+    },
+    "repair_efficiency": 0.75,
+    "durability": {
+      "mul1": 1.0
+    },
+    "enchantability": {
+      "mul1": -0.5
+    },
+    "harvest_speed": {
+      "mul1": -0.5
+    }
   }
 }

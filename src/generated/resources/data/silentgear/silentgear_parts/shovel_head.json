@@ -8,5 +8,14 @@
   },
   "name": {
     "translate": "part.silentgear.shovel_head"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 1.5
+    },
+    "attack_speed": {
+      "add": -3.0
+    },
+    "repair_efficiency": 2.0
   }
 }

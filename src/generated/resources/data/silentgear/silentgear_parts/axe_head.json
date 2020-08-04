@@ -8,5 +8,14 @@
   },
   "name": {
     "translate": "part.silentgear.axe_head"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 5.0
+    },
+    "attack_speed": {
+      "add": -3.0
+    },
+    "repair_efficiency": 1.0
   }
 }

@@ -20,9 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -30,7 +28,6 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -54,17 +51,6 @@ public class CoreAxe extends AxeItem implements ICoreTool {
     @Override
     public GearType getGearType() {
         return GearType.AXE;
-    }
-
-    @Override
-    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == ItemStats.MELEE_DAMAGE)
-            return Optional.of(StatInstance.makeBaseMod(5));
-        if (stat == ItemStats.ATTACK_SPEED)
-            return Optional.of(StatInstance.makeBaseMod(-3));
-        if (stat == ItemStats.REPAIR_EFFICIENCY)
-            return Optional.of(StatInstance.makeBaseMod(1));
-        return Optional.empty();
     }
 
     //region Harvest tool overrides

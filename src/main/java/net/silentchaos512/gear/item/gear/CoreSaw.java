@@ -12,38 +12,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.world.BlockEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-
-import java.util.Optional;
 
 public class CoreSaw extends CoreAxe {
     @Override
     public GearType getGearType() {
         return GearType.SAW;
-    }
-
-    @Override
-    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == ItemStats.MELEE_DAMAGE)
-            return Optional.of(StatInstance.makeBaseMod(2));
-        if (stat == ItemStats.ATTACK_SPEED)
-            return Optional.of(StatInstance.makeBaseMod(-2.4f));
-        if (stat == ItemStats.REPAIR_EFFICIENCY)
-            return Optional.of(StatInstance.makeBaseMod(0.5f));
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<StatInstance> getStatModifier(ItemStat stat) {
-        if (stat == ItemStats.DURABILITY)
-            return Optional.of(StatInstance.makeGearMod(1.0f));
-        if (stat == ItemStats.ENCHANTABILITY)
-            return Optional.of(StatInstance.makeGearMod(-0.5f));
-        if (stat == ItemStats.HARVEST_SPEED)
-            return Optional.of(StatInstance.makeGearMod(-0.75f));
-        return Optional.empty();
     }
 
     @Override

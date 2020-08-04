@@ -28,15 +28,16 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class CoreSickle extends ToolItem implements ICoreTool {
@@ -78,17 +79,6 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     @Override
     public GearType getGearType() {
         return GearType.SICKLE;
-    }
-
-    @Override
-    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == ItemStats.MELEE_DAMAGE)
-            return Optional.of(StatInstance.makeBaseMod(1));
-        if (stat == ItemStats.ATTACK_SPEED)
-            return Optional.of(StatInstance.makeBaseMod(-1.8f));
-        if (stat == ItemStats.REPAIR_EFFICIENCY)
-            return Optional.of(StatInstance.makeBaseMod(1));
-        return Optional.empty();
     }
 
     //region Sickle harvesting

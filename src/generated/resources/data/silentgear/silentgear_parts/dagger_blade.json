@@ -8,5 +8,19 @@
   },
   "name": {
     "translate": "part.silentgear.dagger_blade"
+  },
+  "stats": {
+    "melee_damage": [
+      {
+        "add": 2.0
+      },
+      {
+        "mul1": -0.5
+      }
+    ],
+    "attack_speed": {
+      "add": -1.2
+    },
+    "repair_efficiency": 2.0
   }
 }

@@ -8,5 +8,20 @@
   },
   "name": {
     "translate": "part.silentgear.machete_blade"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 4.0
+    },
+    "attack_speed": {
+      "add": -2.6
+    },
+    "repair_efficiency": 1.0,
+    "durability": {
+      "mul1": 0.2
+    },
+    "enchantability": {
+      "mul1": -0.1
+    }
   }
 }

@@ -10,6 +10,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.ToolHeadItem;
@@ -54,7 +56,8 @@ public class PartsProvider implements IDataProvider {
 
         Registration.getItems(ToolHeadItem.class).forEach(item -> {
             PartPositions position = item.getGearType() == GearType.ARMOR ? PartPositions.ARMOR : PartPositions.HEAD;
-            ret.add(part(NameUtils.fromItem(item).getPath(), item.getGearType(), item.getPartType(), position, item));
+            PartBuilder builder = part(NameUtils.fromItem(item).getPath(), item.getGearType(), item.getPartType(), position, item);
+            ret.add(addHeadStats(builder));
         });
 
         return ret;
@@ -63,6 +66,139 @@ public class PartsProvider implements IDataProvider {
     private PartBuilder part(String name, GearType gearType, PartType partType, PartPositions position, IItemProvider item) {
         return new PartBuilder(SilentGear.getId(name), gearType, partType, position, item)
                 .name(new TranslationTextComponent("part.silentgear." + name));
+    }
+
+    private static PartBuilder addHeadStats(PartBuilder builder) {
+        // Tools
+        if (isToolHead(builder, ModItems.AXE_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 5, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -3, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1);
+        if (isToolHead(builder, ModItems.EXCAVATOR_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -3f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
+                    .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.HAMMER_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -3.2f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f)
+                    .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.MATTOCK_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1f)
+                    .stat(ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.25f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.PAXEL_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -3.0f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.9f)
+                    .stat(ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.3f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.HARVEST_SPEED, -0.2f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.PICKAXE_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.8f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
+        if (isToolHead(builder, ModItems.SAW_BLADE))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.4f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f)
+                    .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.HARVEST_SPEED, -0.75f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.SHOVEL_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 1.5f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -3.0f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 2f);
+        if (isToolHead(builder, ModItems.SICKLE_BLADE))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -1.8f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
+
+        // Melee weapons
+        if (isToolHead(builder, ModItems.DAGGER_BLADE))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -1.2f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 2)
+                    .stat(ItemStats.MELEE_DAMAGE, -0.5f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.KATANA_BLADE))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.2f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f)
+                    .stat(ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.MACHETE_BLADE))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1f)
+                    .stat(ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.1f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.SPEAR_TIP))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.7f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f)
+                    .stat(ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.SWORD_BLADE))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.4f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
+
+        // Ranged weapons
+        if (isToolHead(builder, ModItems.BOW_LIMBS))
+            return builder
+                    .stat(ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
+                    .stat(ItemStats.RANGED_SPEED, 1, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.45f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.CROSSBOW_LIMBS))
+            return builder
+                    .stat(ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
+                    .stat(ItemStats.RANGED_SPEED, 1, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.45f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.SLINGSHOT_LIMBS))
+            return builder
+                    .stat(ItemStats.RANGED_DAMAGE, 0, StatInstance.Operation.ADD)
+                    .stat(ItemStats.RANGED_SPEED, 1.5f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 2)
+                    .stat(ItemStats.ENCHANTABILITY, -0.65f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.RANGED_DAMAGE, -0.75f, StatInstance.Operation.MUL1);
+
+        // Oddballs
+        if (isToolHead(builder, ModItems.ARMOR_BODY))
+            return builder;
+        if (isToolHead(builder, ModItems.SHEARS_BLADES))
+            return builder;
+        if (isToolHead(builder, ModItems.SHIELD_PLATE))
+            return builder;
+
+        throw new IllegalArgumentException("Stats for " + builder.id + " are missing!");
+    }
+
+    private static boolean isToolHead(PartBuilder builder, IItemProvider item) {
+        if (!(item.asItem() instanceof ToolHeadItem))
+            throw new IllegalArgumentException("Item " + NameUtils.fromItem(item) + " is not a tool head!");
+        return builder.id.equals(NameUtils.fromItem(item));
     }
 
     @Override

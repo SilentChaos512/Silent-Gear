@@ -98,10 +98,12 @@ public class StatInstance {
         return op;
     }
 
+    @Deprecated
     public static StatInstance makeBaseMod(float value) {
         return new StatInstance("_base_mod", value, Operation.ADD);
     }
 
+    @Deprecated
     public static StatInstance makeGearMod(float multi) {
         return new StatInstance("_gear_mod", multi, Operation.MUL1);
     }

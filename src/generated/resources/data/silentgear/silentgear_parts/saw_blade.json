@@ -8,5 +8,23 @@
   },
   "name": {
     "translate": "part.silentgear.saw_blade"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 2.0
+    },
+    "attack_speed": {
+      "add": -2.4
+    },
+    "repair_efficiency": 0.75,
+    "durability": {
+      "mul1": 1.0
+    },
+    "enchantability": {
+      "mul1": -0.5
+    },
+    "harvest_speed": {
+      "mul1": -0.75
+    }
   }
 }

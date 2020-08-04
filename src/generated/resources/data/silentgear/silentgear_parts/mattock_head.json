@@ -8,5 +8,23 @@
   },
   "name": {
     "translate": "part.silentgear.mattock_head"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 1.0
+    },
+    "attack_speed": {
+      "add": -2.6
+    },
+    "repair_efficiency": 1.0,
+    "durability": {
+      "mul1": 0.25
+    },
+    "enchantability": {
+      "mul1": -0.25
+    },
+    "harvest_speed": {
+      "mul1": -0.25
+    }
   }
 }

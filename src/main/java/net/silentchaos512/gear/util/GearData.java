@@ -256,11 +256,6 @@ public final class GearData {
     public static StatModifierMap getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
         StatModifierMap stats = new StatModifierMap();
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item != null ? item.getExcludedStats(stack) : Collections.emptyList())) {
-            // Item class modifiers
-            if (item != null) {
-                item.getBaseStatModifier(stat).ifPresent(mod -> stats.put(stat, mod));
-                item.getStatModifier(stat).ifPresent(mod -> stats.put(stat, mod));
-            }
             // Part modifiers
             parts.forEach(part -> part.getStatModifiers(stack, stat).forEach(mod -> stats.put(stat, mod.copy())));
             // Synergy bonus?

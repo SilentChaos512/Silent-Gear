@@ -8,5 +8,17 @@
   },
   "name": {
     "translate": "part.silentgear.katana_blade"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 2.0
+    },
+    "attack_speed": {
+      "add": -2.2
+    },
+    "repair_efficiency": 0.75,
+    "durability": {
+      "mul1": -0.2
+    }
   }
 }

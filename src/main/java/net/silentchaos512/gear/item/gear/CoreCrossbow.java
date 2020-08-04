@@ -31,9 +31,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
 import net.silentchaos512.gear.util.GearData;
@@ -41,7 +39,6 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
 
@@ -59,24 +56,6 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     @Override
     public GearType getGearType() {
         return GearType.CROSSBOW;
-    }
-
-    @Override
-    public Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        if (stat == ItemStats.RANGED_DAMAGE)
-            return Optional.of(StatInstance.makeBaseMod(2));
-        if (stat == ItemStats.RANGED_SPEED)
-            return Optional.of(StatInstance.makeBaseMod(1));
-        if (stat == ItemStats.REPAIR_EFFICIENCY)
-            return Optional.of(StatInstance.makeBaseMod(1));
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<StatInstance> getStatModifier(ItemStat stat) {
-        if (stat == ItemStats.ENCHANTABILITY)
-            return Optional.of(StatInstance.makeGearMod(-0.45f));
-        return Optional.empty();
     }
 
     //region Crossbow stuff

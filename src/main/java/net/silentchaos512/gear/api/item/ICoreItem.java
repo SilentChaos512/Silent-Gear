@@ -99,11 +99,13 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return Collections.emptySet();
     }
 
+    @Deprecated
     default Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
         // TODO: Move to tool head part JSON?
         return Optional.empty();
     }
 
+    @Deprecated
     default Optional<StatInstance> getStatModifier(ItemStat stat) {
         // TODO: Move to tool head part JSON?
         return Optional.empty();
