@@ -211,30 +211,19 @@ public final class TraitHelper {
         if (parts.isEmpty())
             return ImmutableMap.of();
 
-        final int totalMains = parts.getMains().size();
         Map<ITrait, Integer> result = new LinkedHashMap<>();
-        Map<ITrait, Integer> countPartsWithTrait = new HashMap<>();
 
         for (PartData part : parts) {
             for (PartTraitInstance inst : part.getTraits(gear)) {
                 if (inst.conditionsMatch(parts, gear)) {
                     ITrait trait = inst.getTrait();
-                    // Count total levels for each trait from all parts
-                    result.merge(trait, inst.getLevel(), Integer::sum);
-                    // Count number of parts with each trait
-                    countPartsWithTrait.merge(trait, 1, Integer::sum);
+                    // Get the highest value in any part
+                    result.merge(trait, inst.getLevel(), Integer::max);
                 }
             }
         }
 
         ITrait[] keys = result.keySet().toArray(new ITrait[0]);
-
-        for (ITrait trait : keys) {
-            final int partsWithTrait = countPartsWithTrait.get(trait);
-            final float divisor = Math.max(totalMains / 2f, partsWithTrait);
-            final int value = Math.round(result.get(trait) / divisor);
-            result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
-        }
 
         cancelTraits(result, keys);
         MinecraftForge.EVENT_BUS.post(new GetTraitsEvent(gear, parts, result));
@@ -246,13 +235,13 @@ public final class TraitHelper {
             return Collections.emptyMap();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
-        Map<ITrait, Integer> countPartsWithTrait = new HashMap<>();
+        Map<ITrait, Integer> countMatsWithTrait = new HashMap<>();
 
         for (MaterialInstance material : materials) {
             for (PartTraitInstance inst : material.getMaterial().getTraits(partType, gear)) {
                 if (inst.conditionsMatch(materials, partType, gear)) {
                     result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
-                    countPartsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
+                    countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
                 }
             }
         }
@@ -260,8 +249,8 @@ public final class TraitHelper {
         ITrait[] keys = result.keySet().toArray(new ITrait[0]);
 
         for (ITrait trait : keys) {
-            final int partsWithTrait = countPartsWithTrait.get(trait);
-            final float divisor = Math.max(materials.size() / 2f, partsWithTrait);
+            final int matsWithTrait = countMatsWithTrait.get(trait);
+            final float divisor = Math.max(materials.size() / 2f, matsWithTrait);
             final int value = Math.round(result.get(trait) / divisor);
             result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
         }
