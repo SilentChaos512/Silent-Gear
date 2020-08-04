@@ -33,10 +33,7 @@ import net.silentchaos512.utils.EnumUtils;
 import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -182,7 +179,7 @@ public class CompoundPart extends AbstractGearPart {
         for (StatInstance.Operation op : StatInstance.Operation.values()) {
             Collection<StatInstance> modsForOp = ret.stream().filter(s -> s.getOp() == op).collect(Collectors.toList());
             if (modsForOp.size() > 1) {
-                StatInstance mod = StatInstance.getWeightedAverageMod(modsForOp, op);
+                StatInstance mod = compressModifiers(modsForOp, op);
                 ret.removeIf(inst -> inst.getOp() == op);
                 ret.add(mod);
             }
@@ -202,6 +199,18 @@ public class CompoundPart extends AbstractGearPart {
         }
 
         return ret;
+    }
+
+    private static StatInstance compressModifiers(Collection<StatInstance> mods, StatInstance.Operation operation) {
+        // We do NOT want to average together max modifiers...
+        if (operation == StatInstance.Operation.MAX) {
+            return mods.stream()
+                    .max((o1, o2) -> Float.compare(o1.getValue(), o2.getValue()))
+                    .orElse(new StatInstance(0, operation))
+                    .copy();
+        }
+
+        return StatInstance.getWeightedAverageMod(mods, operation);
     }
 
     @Override
