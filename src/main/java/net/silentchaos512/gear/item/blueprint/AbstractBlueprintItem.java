@@ -28,7 +28,9 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
 
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-        return itemStack.copy();
+        ItemStack copy = itemStack.copy();
+        copy.setCount(1);
+        return copy;
     }
 
     @Override
