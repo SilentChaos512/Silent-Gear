@@ -10,6 +10,7 @@ import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.trunkplacer.ForkyTrunkPlacer;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -19,6 +20,9 @@ import net.silentchaos512.gear.world.placement.NetherFloorWithExtraConfig;
 import net.silentchaos512.lib.world.feature.PlantFeature;
 
 public final class ModWorldFeatures {
+    private static final OreFeatureConfig.FillerBlockType END_STONE_FILLER_BLOCK_TYPE = OreFeatureConfig.FillerBlockType.create(
+            "END_STONE", "end_stone", state -> state.isIn(Tags.Blocks.END_STONES));
+
     public static final Placement<NetherFloorWithExtraConfig> NETHER_FLOOR_WITH_EXTRA = new NetherFloorWithExtra(NetherFloorWithExtraConfig.CODEC);
 
     public static final BaseTreeFeatureConfig NETHERWOOD_TREE_CONFIG = (new BaseTreeFeatureConfig.Builder(
@@ -48,6 +52,10 @@ public final class ModWorldFeatures {
             if (biome.getCategory() == Biome.Category.NETHER) {
                 addNetherwoodTrees(biome);
                 addCrimsonIronOre(biome);
+            }
+
+            if (biome.getCategory() == Biome.Category.THEEND) {
+                addAzureSilverOre(biome);
             }
         }
     }
@@ -83,6 +91,14 @@ public final class ModWorldFeatures {
         biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHERRACK, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 6))
                 .withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(24, 24, 0, 120)))
+        );
+    }
+
+    private static void addAzureSilverOre(Biome biome) {
+        SilentGear.LOGGER.info("Add azure silver ore to {}", biome.getRegistryName());
+        biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+                .withConfiguration(new OreFeatureConfig(END_STONE_FILLER_BLOCK_TYPE, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
+                .withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(15, 16, 0, 92)))
         );
     }
 }

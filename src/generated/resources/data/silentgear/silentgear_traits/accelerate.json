@@ -1,0 +1,30 @@
+{
+  "type": "silentgear:stat_modifier_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.accelerate"
+  },
+  "description": {
+    "translate": "trait.silentgear.accelerate.desc"
+  },
+  "stats": [
+    {
+      "name": "silentgear:harvest_speed",
+      "value": 2.0,
+      "factor_damage": true,
+      "factor_value": false
+    },
+    {
+      "name": "silentgear:attack_speed",
+      "value": 0.01,
+      "factor_damage": true,
+      "factor_value": false
+    },
+    {
+      "name": "silentgear:ranged_speed",
+      "value": 0.01,
+      "factor_damage": true,
+      "factor_value": false
+    }
+  ]
+}

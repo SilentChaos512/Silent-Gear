@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "tag": "forge:dusts/crimson_steel"
+  },
+  "result": "silentgear:crimson_steel_ingot",
+  "experience": 0.5,
+  "cookingtime": 200
+}

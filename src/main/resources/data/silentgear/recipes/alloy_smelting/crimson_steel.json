@@ -1,35 +1,38 @@
 {
-    "conditions": [
-        {
-            "type": "forge:mod_loaded",
-            "modid": "silents_mechanisms"
-        }
-    ],
-    "type": "silents_mechanisms:alloy_smelting",
-    "process_time": 200,
-    "ingredients": [
-        {
-            "values": [
-                {
-                    "tag": "forge:dusts/crimson_iron"
-                },
-                {
-                    "tag": "forge:ingots/crimson_iron"
-                }
-            ],
-            "count": 3
-        },
-        {
-            "item": "minecraft:magma_cream",
-            "count": 1
-        },
-        {
-            "tag": "forge:rods/blaze",
-            "count": 1
-        }
-    ],
-    "result": {
-        "item": "silentgear:crimson_steel_ingot",
-        "count": 1
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "silents_mechanisms"
     }
+  ],
+  "type": "silents_mechanisms:alloy_smelting",
+  "process_time": 800,
+  "ingredients": [
+    {
+      "values": [
+        {
+          "tag": "forge:dusts/crimson_iron"
+        },
+        {
+          "tag": "silents_mechanisms:chunks/crimson_iron"
+        },
+        {
+          "tag": "forge:ingots/crimson_iron"
+        }
+      ],
+      "count": 3
+    },
+    {
+      "item": "minecraft:magma_cream",
+      "count": 1
+    },
+    {
+      "tag": "forge:rods/blaze",
+      "count": 1
+    }
+  ],
+  "result": {
+    "item": "silentgear:crimson_steel_ingot",
+    "count": 1
+  }
 }

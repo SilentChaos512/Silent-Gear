@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:ingots/azure_silver"
+    }
+  },
+  "result": {
+    "item": "silentgear:azure_silver_block"
+  }
+}

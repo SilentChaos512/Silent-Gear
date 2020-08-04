@@ -19,10 +19,13 @@ public final class ModTags {
         public static final ITag.INamedTag<Block> NETHERWOOD_SOIL = mod("netherwood_soil");
 
         public static final ITag.INamedTag<Block> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
+        public static final ITag.INamedTag<Block> ORES_AZURE_SILVER = forge("ores/azure_silver");
 
         public static final ITag.INamedTag<Block> STORAGE_BLOCKS_BLAZE_GOLD = forge("storage_blocks/blaze_gold");
         public static final ITag.INamedTag<Block> STORAGE_BLOCKS_CRIMSON_IRON = forge("storage_blocks/crimson_iron");
         public static final ITag.INamedTag<Block> STORAGE_BLOCKS_CRIMSON_STEEL = forge("storage_blocks/crimson_steel");
+        public static final ITag.INamedTag<Block> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
+        public static final ITag.INamedTag<Block> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
 
         private Blocks() {}
 
@@ -38,21 +41,34 @@ public final class ModTags {
     public static final class Items {
         public static final ITag.INamedTag<Item> NETHERWOOD_LOGS = mod("netherwood_logs");
         public static final ITag.INamedTag<Item> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
+        public static final ITag.INamedTag<Item> ORES_AZURE_SILVER = forge("ores/azure_silver");
+
+        public static final ITag.INamedTag<Item> CHUNKS_CRIMSON_IRON = silentsMechanisms("chunks/crimson_iron");
+        public static final ITag.INamedTag<Item> CHUNKS_AZURE_SILVER = silentsMechanisms("chunks/azure_silver");
 
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_BLAZE_GOLD = forge("storage_blocks/blaze_gold");
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_CRIMSON_IRON = forge("storage_blocks/crimson_iron");
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_CRIMSON_STEEL = forge("storage_blocks/crimson_steel");
+        public static final ITag.INamedTag<Item> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
+        public static final ITag.INamedTag<Item> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
 
         public static final ITag.INamedTag<Item> DUSTS_BLAZE_GOLD = forge("dusts/blaze_gold");
         public static final ITag.INamedTag<Item> DUSTS_CRIMSON_IRON = forge("dusts/crimson_iron");
+        public static final ITag.INamedTag<Item> DUSTS_CRIMSON_STEEL = forge("dusts/crimson_steel");
+        public static final ITag.INamedTag<Item> DUSTS_AZURE_SILVER = forge("dusts/azure_silver");
+        public static final ITag.INamedTag<Item> DUSTS_AZURE_ELECTRUM = forge("dusts/azure_electrum");
 
         public static final ITag.INamedTag<Item> INGOTS_BLAZE_GOLD = forge("ingots/blaze_gold");
         public static final ITag.INamedTag<Item> INGOTS_CRIMSON_IRON = forge("ingots/crimson_iron");
         public static final ITag.INamedTag<Item> INGOTS_CRIMSON_STEEL = forge("ingots/crimson_steel");
+        public static final ITag.INamedTag<Item> INGOTS_AZURE_SILVER = forge("ingots/azure_silver");
+        public static final ITag.INamedTag<Item> INGOTS_AZURE_ELECTRUM = forge("ingots/azure_electrum");
 
         public static final ITag.INamedTag<Item> NUGGETS_BLAZE_GOLD = forge("nuggets/blaze_gold");
         public static final ITag.INamedTag<Item> NUGGETS_CRIMSON_IRON = forge("nuggets/crimson_iron");
         public static final ITag.INamedTag<Item> NUGGETS_CRIMSON_STEEL = forge("nuggets/crimson_steel");
+        public static final ITag.INamedTag<Item> NUGGETS_AZURE_SILVER = forge("nuggets/azure_silver");
+        public static final ITag.INamedTag<Item> NUGGETS_AZURE_ELECTRUM = forge("nuggets/azure_electrum");
         public static final ITag.INamedTag<Item> NUGGETS_DIAMOND = forge("nuggets/diamond");
         public static final ITag.INamedTag<Item> NUGGETS_EMERALD = forge("nuggets/emerald");
 
@@ -61,7 +77,6 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> REPAIR_KITS = mod("repair_kits");
         public static final ITag.INamedTag<Item> TEMPLATE_BOARDS = mod("template_boards");
 
-        // TODO: Remove iron rods, maybe netherwood?
         public static final ITag.INamedTag<Item> RODS_IRON = forge("rods/iron");
         public static final ITag.INamedTag<Item> RODS_NETHERWOOD = mod("rods/netherwood");
         public static final ITag.INamedTag<Item> RODS_STONE = forge("rods/stone");
@@ -105,6 +120,10 @@ public final class ModTags {
 
         private static ITag.INamedTag<Item> mod(String path) {
             return ItemTags.makeWrapperTag(SilentGear.getId(path).toString());
+        }
+
+        private static ITag.INamedTag<Item> silentsMechanisms(String path) {
+            return ItemTags.makeWrapperTag(new ResourceLocation("silents_mechanisms", path).toString());
         }
     }
 }

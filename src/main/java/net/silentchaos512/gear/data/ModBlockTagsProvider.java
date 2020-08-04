@@ -49,16 +49,21 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
 
         // Forge
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
-        getBuilder(Tags.Blocks.ORES).func_240531_a_(
-                ModTags.Blocks.ORES_CRIMSON_IRON
-        );
+        builder(ModTags.Blocks.ORES_AZURE_SILVER, ModBlocks.AZURE_SILVER_ORE);
+        getBuilder(Tags.Blocks.ORES)
+                .func_240531_a_(ModTags.Blocks.ORES_CRIMSON_IRON)
+                .func_240531_a_(ModTags.Blocks.ORES_AZURE_SILVER);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, ModBlocks.CRIMSON_STEEL_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModBlocks.BLAZE_GOLD_BLOCK);
+        builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, ModBlocks.AZURE_SILVER_BLOCK);
+        builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, ModBlocks.AZURE_ELECTRUM_BLOCK);
         getBuilder(Tags.Blocks.STORAGE_BLOCKS)
                 .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
                 .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
-                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL);
+                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL)
+                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER)
+                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM);
 
         // Minecraft
         builder(BlockTags.LEAVES, ModBlocks.NETHERWOOD_LEAVES);

@@ -1,0 +1,97 @@
+{
+  "availability": {
+    "tier": 4,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/azure_electrum"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.azure_electrum"
+  },
+  "stats": {
+    "main": {
+      "durability": 1259.0,
+      "armor_durability": 61.0,
+      "enchantability": 37.0,
+      "harvest_level": 5.0,
+      "harvest_speed": 29.0,
+      "melee_damage": 7.0,
+      "magic_damage": 11.0,
+      "attack_speed": 0.0,
+      "armor": 19.0,
+      "armor_toughness": 4.0,
+      "magic_armor": 19.0,
+      "ranged_damage": 3.0,
+      "ranged_speed": 0.0,
+      "rarity": 109.0,
+      "silentgems:chargeability": 1.5
+    },
+    "rod": {
+      "durability": {
+        "mul2": -0.2
+      },
+      "harvest_speed": {
+        "add": 5.0
+      },
+      "rarity": 67.0
+    },
+    "tip": {
+      "durability": {
+        "add": 401.0
+      },
+      "armor_durability": {
+        "add": 11.0
+      },
+      "harvest_speed": {
+        "add": 5.0
+      },
+      "magic_damage": {
+        "add": 3.0
+      },
+      "attack_speed": {
+        "add": 0.3
+      },
+      "rarity": {
+        "add": 41.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 5
+      },
+      {
+        "name": "silentgear:accelerate",
+        "level": 3
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      },
+      {
+        "name": "silentgear:accelerate",
+        "level": 5,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.66
+          }
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      }
+    ]
+  }
+}

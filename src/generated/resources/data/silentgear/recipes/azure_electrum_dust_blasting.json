@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "forge:dusts/azure_electrum"
+  },
+  "result": "silentgear:azure_electrum_ingot",
+  "experience": 0.5,
+  "cookingtime": 100
+}

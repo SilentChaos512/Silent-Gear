@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "silents_mechanisms"
+    }
+  ],
+  "type": "silents_mechanisms:alloy_smelting",
+  "process_time": 800,
+  "ingredients": [
+    {
+      "values": [
+        {
+          "tag": "forge:dusts/azure_silver"
+        },
+        {
+          "tag": "silents_mechanisms:chunks/azure_silver"
+        },
+        {
+          "tag": "forge:ingots/azure_silver"
+        }
+      ],
+      "count": 3
+    },
+    {
+      "tag": "forge:ender_pearls",
+      "count": 1
+    },
+    {
+      "values": [
+        {
+          "tag": "forge:dusts/gold"
+        },
+        {
+          "tag": "silents_mechanisms:chunks/gold"
+        },
+        {
+          "tag": "forge:ingots/gold"
+        }
+      ],
+      "count": 1
+    }
+  ],
+  "result": {
+    "item": "silentgear:azure_electrum_ingot",
+    "count": 1
+  }
+}

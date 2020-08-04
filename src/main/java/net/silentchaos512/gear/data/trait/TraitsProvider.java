@@ -130,6 +130,11 @@ public class TraitsProvider implements IDataProvider {
 
         // Stat mod
 
+        ret.add(new StatModifierTraitBuilder(TraitConst.ACCELERATE, 5)
+                .addStatMod(ItemStats.HARVEST_SPEED, 2f, true, false)
+                .addStatMod(ItemStats.ATTACK_SPEED, 0.01f, true, false)
+                .addStatMod(ItemStats.RANGED_SPEED, 0.01f, true, false)
+        );
         ret.add(new StatModifierTraitBuilder(TraitConst.BULKY, 5)
                 .addStatMod(ItemStats.ATTACK_SPEED, -0.075f, true, false)
         );

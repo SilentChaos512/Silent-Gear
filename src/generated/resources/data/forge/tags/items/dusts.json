@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "#forge:dusts/blaze_gold",
-    "#forge:dusts/crimson_iron"
+    "#forge:dusts/crimson_iron",
+    "#forge:dusts/crimson_steel",
+    "#forge:dusts/azure_silver",
+    "#forge:dusts/azure_electrum"
   ]
 }

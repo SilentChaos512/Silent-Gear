@@ -1,8 +1,13 @@
 {
   "type": "minecraft:blasting",
-  "ingredient": {
-    "tag": "forge:dusts/crimson_iron"
-  },
+  "ingredient": [
+    {
+      "tag": "silents_mechanisms:chunks/crimson_iron"
+    },
+    {
+      "tag": "forge:dusts/crimson_iron"
+    }
+  ],
   "result": "silentgear:crimson_iron_ingot",
   "experience": 1.0,
   "cookingtime": 100

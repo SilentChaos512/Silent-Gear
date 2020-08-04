@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "/ /",
+    "#o#",
+    "# #"
+  ],
+  "key": {
+    "/": {
+      "tag": "forge:ingots/gold"
+    },
+    "#": {
+      "tag": "forge:ingots/azure_silver"
+    },
+    "o": {
+      "tag": "forge:ender_pearls"
+    }
+  },
+  "result": {
+    "item": "silentgear:azure_electrum_ingot"
+  }
+}
