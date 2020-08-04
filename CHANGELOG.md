@@ -3,6 +3,22 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.5] - 2020-08-04
+### Added
+- Azure silver and azure electrum. Azure silver ore is found in The End. Azure electrum is a craftable alloy.
+- Accelerate trait. Increases harvest speed, attack speed, and ranged speed by fixed amounts as gear is damaged
+- Moonwalker trait. Reduces gravity, but only works on boots
+- Azure repair kit
+- Magic armor stat now actually works
+### Changed
+- Trait calculations for gear items. They now take the highest level of any trait from any part. Compound parts still follow the old logic. [#93]
+- Gear type stat modifiers have been moved to the tool head part JSON files. This allows them to be customized with data packs.
+- Default capacity of repair kits to 16, 32, 48, and 64
+### Fixed
+- Stacked blueprint dupe [#199]
+- Harvest levels incorrect on tool heads with mixed materials
+- Armor not giving a "has broken" message
+
 ## [2.0.4] - 2020-08-03
 ### Added
 - Brilliant trait, makes piglins non-aggressive on armor. Requires the primary material to have the trait.

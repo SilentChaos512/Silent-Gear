@@ -155,10 +155,13 @@ dependencies {
         runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
     }
 
-    // runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
-    //     exclude module: "cc-tweaked-${project.mc_version}"
-    //     exclude module: "silent-gear-${project.mc_version}"
-    // }
+     runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
+         exclude module: "cc-tweaked-${project.mc_version}"
+         exclude module: "forge"
+         exclude module: "jei-${project.mc_version}"
+         exclude module: "silent-gear-${project.mc_version}"
+         exclude module: "silent-lib-${project.mc_version}"
+     }
 //    runtimeOnly 'net.silentchaos512:wit:1.+'
 
     // Curios
