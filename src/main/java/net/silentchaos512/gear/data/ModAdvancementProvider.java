@@ -130,6 +130,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .register(consumer, id("repair_kit"));
 
             Advancement crimsonRepairKit = simpleGetItem(consumer, ModItems.CRIMSON_REPAIR_KIT, repairKit);
+            Advancement azureRepairKit = simpleGetItem(consumer, ModItems.AZURE_REPAIR_KIT, crimsonRepairKit);
             Advancement repairFromBroken = Advancement.Builder.builder()
                     .withParent(repairKit)
                     .withDisplay(Items.FLINT, title("repair_from_broken"), description("repair_from_broken"), null, FrameType.TASK, true, true, false)

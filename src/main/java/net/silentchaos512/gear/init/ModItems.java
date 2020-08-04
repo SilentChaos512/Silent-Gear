@@ -162,6 +162,10 @@ public final class ModItems {
             Config.Common.repairKitCrimsonCapacity::get,
             Config.Common.repairKitCrimsonEfficiency::get,
             unstackableProps()));
+    public static final ItemRegistryObject<Item> AZURE_REPAIR_KIT = register("azure_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitAzureCapacity::get,
+            Config.Common.repairKitAzureEfficiency::get,
+            unstackableProps()));
 
     static {
         CraftingItems.register(Registration.ITEMS);
