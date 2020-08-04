@@ -75,6 +75,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.traits.TraitConst;
@@ -162,6 +163,43 @@ public final class GearEvents {
             float durability = GearData.getStat(stack, GearHelper.getDurabilityStat(stack));
             event.setBurnTime((int) (durability * BURN_TICKS_PER_DURABILITY));
         }
+    }
+
+    //endregion
+
+    //region Magic armor
+
+    @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event) {
+        if (event.getSource().isMagicDamage()) {
+            float magicArmor = getTotalMagicArmor(event.getEntityLiving());
+            float scale = 1f - getReducedMagicDamageScale(magicArmor);
+            //SilentGear.LOGGER.debug("magic damage: {} x {} -> {}", event.getAmount(), scale, event.getAmount() * scale);
+
+            if (event.getEntityLiving() instanceof PlayerEntity) {
+                // Damage player's armor
+                ((PlayerEntity) event.getEntityLiving()).inventory.func_234563_a_(event.getSource(), event.getAmount());
+            }
+
+            event.setAmount(event.getAmount() * scale);
+        }
+    }
+
+    private static float getTotalMagicArmor(LivingEntity entity) {
+        float total = 0f;
+        for (ItemStack stack : entity.getArmorInventoryList()) {
+            if (stack.getItem() instanceof CoreArmor) {
+                total += ((CoreArmor) stack.getItem()).getArmorMagicProtection(stack);
+            }
+        }
+        return total;
+    }
+
+    private static float getReducedMagicDamageScale(float magicArmor) {
+        // Scale linearly up to 60% for magic armor < 20. Above 20, scale half as fast (40 = 90%)
+        if (magicArmor > 20)
+            return 0.6f + 0.015f * (magicArmor - 20);
+        return 0.03f * magicArmor;
     }
 
     //endregion
