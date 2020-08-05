@@ -431,11 +431,13 @@ public final class GearEvents {
 
         if (!stack.isEmpty()) {
             int moonwalker = TraitHelper.getTraitLevel(stack, TraitConst.MOONWALKER);
-            float gravity = 1 + moonwalker * TraitConst.MOONWALKER_GRAVITY_MOD;
-            event.setDistance(event.getDistance() * gravity);
+            if (moonwalker > 0) {
+                float gravity = 1 + moonwalker * TraitConst.MOONWALKER_GRAVITY_MOD;
+                event.setDistance(event.getDistance() * gravity);
 
-            if (event.getEntityLiving() instanceof ServerPlayerEntity) {
-                LibTriggers.GENERIC_INT.trigger((ServerPlayerEntity) event.getEntityLiving(), FALL_WITH_MOONWALKER, 1);
+                if (event.getEntityLiving() instanceof ServerPlayerEntity) {
+                    LibTriggers.GENERIC_INT.trigger((ServerPlayerEntity) event.getEntityLiving(), FALL_WITH_MOONWALKER, 1);
+                }
             }
         }
     }
