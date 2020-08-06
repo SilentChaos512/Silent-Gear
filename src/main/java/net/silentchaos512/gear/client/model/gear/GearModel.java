@@ -85,8 +85,8 @@ public class GearModel extends LayeredModel<GearModel> {
 
         // No layers?
         if (layers.isEmpty()) {
-            if (Const.EXAMPLE_MATERIAL.isPresent()) {
-                buildFakeModel(spriteGetter, builder, rotation, Const.EXAMPLE_MATERIAL.get());
+            if (Const.Materials.EXAMPLE.isPresent()) {
+                buildFakeModel(spriteGetter, builder, rotation, Const.Materials.EXAMPLE.get());
             } else {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");

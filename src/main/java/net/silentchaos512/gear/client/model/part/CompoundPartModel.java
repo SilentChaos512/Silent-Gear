@@ -39,7 +39,6 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         this.partType = partType;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
         if (overrideList != null) {
             overrideList.clearCache();
@@ -52,7 +51,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
 
-    @SuppressWarnings({"MethodWithTooManyParameters", "WeakerAccess"})
+    @SuppressWarnings("MethodWithTooManyParameters")
     public IBakedModel bake(List<MaterialLayer> layers,
                             String transformVariant,
                             IModelConfiguration owner,
@@ -74,8 +73,8 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
 
         // No layers?
         if (layers.isEmpty()) {
-            if (Const.EXAMPLE_MATERIAL.isPresent()) {
-                buildFakeModel(spriteGetter, builder, rotation, Const.EXAMPLE_MATERIAL.get());
+            if (Const.Materials.EXAMPLE.isPresent()) {
+                buildFakeModel(spriteGetter, builder, rotation, Const.Materials.EXAMPLE.get());
             } else {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");
@@ -103,6 +102,10 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     @Override
     public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
         Set<RenderMaterial> ret = new HashSet<>();
+        if (this.gearType == GearType.ARMOR || this.gearType == GearType.SHIELD) {
+            // Unobtainable part items, no need for textures
+            return ret;
+        }
 
         ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
 

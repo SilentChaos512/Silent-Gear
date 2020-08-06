@@ -326,7 +326,7 @@ public final class GearEvents {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
             // Crude tool
-            if (GearData.hasPart(result, PartType.ROD, p -> p.containsMaterial(Const.ROUGH_WOOD_MATERIAL))) {
+            if (GearData.hasPart(result, PartType.ROD, p -> p.containsMaterial(Const.Materials.WOOD_ROUGH))) {
                 LibTriggers.GENERIC_INT.trigger(player, CRAFTED_WITH_ROUGH_ROD, 1);
             }
 

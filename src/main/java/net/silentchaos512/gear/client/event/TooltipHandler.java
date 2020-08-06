@@ -99,7 +99,7 @@ public final class TooltipHandler {
                 int index = KeyTracker.getMaterialCycleIndex(partTypes.size());
                 PartType partType = partTypes.get(index);
                 event.getToolTip().add(buildPartTypeHeader(partTypes, partType));
-                event.getToolTip().add(TextUtil.misc("tier", material.getTier(partType)));
+                event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tier", material.getTier(partType)), Color.DEEPSKYBLUE));
 
                 getMaterialTraitLines(event, partType, material);
 

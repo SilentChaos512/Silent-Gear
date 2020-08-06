@@ -2,7 +2,8 @@
   "parent": "silentgear:material_grader",
   "display": {
     "icon": {
-      "item": "silentgear:tip"
+      "item": "silentgear:tip",
+      "nbt": "{Materials:[{ID:\"silentgear:emerald\"}]}"
     },
     "title": {
       "translate": "advancements.silentgear.high_durability.title"
