@@ -3,7 +3,11 @@ package net.silentchaos512.gear.traits;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 
-public class TraitConst {
+/**
+ * @deprecated Use {@link net.silentchaos512.gear.util.Const.Traits} instead
+ */
+@Deprecated
+public final class TraitConst {
     // Traits needed somewhere in the code
     public static final ResourceLocation ACCELERATE = SilentGear.getId("accelerate");
     public static final ResourceLocation ADAMANT = SilentGear.getId("adamant");
@@ -51,4 +55,6 @@ public class TraitConst {
     public static final float MOONWALKER_GRAVITY_MOD = -0.15f;
     @Deprecated
     public static final float SYNERGY_BOOST_MULTI = 0.04f;
+
+    private TraitConst() {}
 }

@@ -2,7 +2,9 @@ package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonObject;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.traits.SynergyTrait;
+import net.silentchaos512.gear.util.DataResource;
 
 import java.util.Optional;
 
@@ -10,6 +12,10 @@ public class SynergyTraitBuilder extends TraitBuilder {
     private final float synergyMulti;
     private float rangeMin = 0f;
     private float rangeMax = Float.MAX_VALUE;
+
+    public SynergyTraitBuilder(DataResource<ITrait> trait, int maxLevel, float synergyMulti) {
+        this(trait.getId(), maxLevel, synergyMulti);
+    }
 
     public SynergyTraitBuilder(ResourceLocation traitId, int maxLevel, float synergyMulti) {
         super(traitId, maxLevel, SynergyTrait.SERIALIZER);

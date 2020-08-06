@@ -7,7 +7,9 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.traits.AttributeTrait;
+import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -16,6 +18,10 @@ import java.util.Map;
 
 public class AttributeTraitBuilder extends TraitBuilder {
     private final Map<String, List<AttributeTrait.ModifierData>> modifiers = new LinkedHashMap<>();
+
+    public AttributeTraitBuilder(DataResource<ITrait> trait, int maxLevel) {
+        this(trait.getId(), maxLevel);
+    }
 
     public AttributeTraitBuilder(ResourceLocation traitId, int maxLevel) {
         super(traitId, maxLevel, AttributeTrait.SERIALIZER);

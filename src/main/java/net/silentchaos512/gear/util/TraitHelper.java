@@ -95,6 +95,19 @@ public final class TraitHelper {
      * @param trait The trait to look for
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */
+    public static int getTraitLevel(ItemStack gear, DataResource<ITrait> trait) {
+        return getTraitLevel(gear, trait.getId());
+    }
+
+    /**
+     * Gets the level of the trait on the gear, or zero if it does not have the trait. Similar to
+     * {@link #activateTraits(ItemStack, float, TraitFunction)}, this pulls the traits straight from
+     * NBT to minimize object creation.
+     *
+     * @param gear  The {@link net.silentchaos512.gear.api.item.ICoreItem}
+     * @param trait The trait to look for
+     * @return The level of the trait on the gear, or zero if it does not have the trait
+     */
     public static int getTraitLevel(ItemStack gear, ITrait trait) {
         return getTraitLevel(gear, trait.getId());
     }
@@ -123,6 +136,10 @@ public final class TraitHelper {
         }
 
         return 0;
+    }
+
+    public static boolean hasTrait(ItemStack gear, DataResource<ITrait> trait) {
+        return hasTrait(gear, trait.getId());
     }
 
     /**
@@ -165,10 +182,18 @@ public final class TraitHelper {
         return false;
     }
 
+    public static int getHighestLevelEitherHand(PlayerEntity player, DataResource<ITrait> trait) {
+        return getHighestLevelEitherHand(player, trait.getId());
+    }
+
     public static int getHighestLevelEitherHand(PlayerEntity player, ResourceLocation traitId) {
         ItemStack main = player.getHeldItemMainhand();
         ItemStack off = player.getHeldItemOffhand();
         return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
+    }
+
+    public static boolean hasTraitEitherHand(PlayerEntity player, DataResource<ITrait> trait) {
+        return hasTraitEitherHand(player, trait.getId());
     }
 
     public static boolean hasTraitEitherHand(PlayerEntity player, ResourceLocation traitId) {

@@ -44,7 +44,6 @@ import net.silentchaos512.gear.parts.LazyPartData;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
 import javax.annotation.Nullable;
@@ -302,7 +301,7 @@ public final class GearHelper {
     }
 
     public static boolean isUnbreakable(ItemStack stack) {
-        return TraitHelper.getTraitLevel(stack, TraitConst.INDESTRUCTIBLE) > 0;
+        return TraitHelper.getTraitLevel(stack, Const.Traits.INDESTRUCTIBLE) > 0;
     }
 
     public static void setDamage(ItemStack stack, int damage, BiConsumer<ItemStack, Integer> superFunction) {

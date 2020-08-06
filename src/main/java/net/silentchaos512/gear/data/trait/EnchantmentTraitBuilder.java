@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.traits.EnchantmentTrait;
+import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,6 +16,10 @@ import java.util.Map;
 
 public class EnchantmentTraitBuilder extends TraitBuilder {
     private final Map<GearType, List<EnchantmentTrait.EnchantmentData>> enchantments = new LinkedHashMap<>();
+
+    public EnchantmentTraitBuilder(DataResource<ITrait> trait, int maxLevel) {
+        this(trait.getId(), maxLevel);
+    }
 
     public EnchantmentTraitBuilder(ResourceLocation traitId, int maxLevel) {
         super(traitId, maxLevel, EnchantmentTrait.SERIALIZER);
