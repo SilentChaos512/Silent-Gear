@@ -190,6 +190,10 @@ public final class GearHelper {
         return getItem(gear).map(ICoreItem::getDurabilityStat).orElse(ItemStats.DURABILITY);
     }
 
+    public static float getRepairModifier(ItemStack gear) {
+        return getItem(gear).map(item -> item.getRepairModifier(gear)).orElse(1f);
+    }
+
     public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, Hand hand) {
         attemptDamage(stack, amount, entity, hand == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
     }

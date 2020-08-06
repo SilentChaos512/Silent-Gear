@@ -141,7 +141,8 @@ public final class MaterialInstance implements IMaterialInstance {
         if (this.canRepair(gear)) {
             float durability = getStat(GearHelper.getDurabilityStat(gear), PartType.MAIN);
             float repairEfficiency = getStat(ItemStats.REPAIR_EFFICIENCY, PartType.MAIN);
-            return Math.round(durability * repairEfficiency) + 1;
+            float itemRepairModifier = GearHelper.getRepairModifier(gear);
+            return Math.round(durability * repairEfficiency * itemRepairModifier) + 1;
         }
         return 0;
     }

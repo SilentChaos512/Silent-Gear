@@ -125,7 +125,7 @@ public final class GearData {
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
             CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.getStats()) {
-                final float initialValue = stat.compute(stat.getDefaultValue(), stats.get(stat));
+                final float initialValue = stat.compute(0, stats.get(stat));
                 // Some stats will be reduced if tool rod is missing (and required)
                 final float withMissingParts = hasMissingRod ? stat.withMissingRodEffect(initialValue) : initialValue;
                 // Allow traits to modify stat

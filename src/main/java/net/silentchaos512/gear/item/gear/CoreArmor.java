@@ -82,6 +82,11 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         return ItemStats.ARMOR_DURABILITY;
     }
 
+    @Override
+    public float getRepairModifier(ItemStack stack) {
+        return MAX_DAMAGE_ARRAY[this.getEquipmentSlot().getIndex()];
+    }
+
     public double getArmorProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
         return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.ARMOR);

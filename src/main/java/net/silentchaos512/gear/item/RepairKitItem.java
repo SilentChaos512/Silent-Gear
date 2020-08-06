@@ -57,7 +57,7 @@ public class RepairKitItem extends Item {
         return this.capacity.get();
     }
 
-    private float getRepairEfficiency(RepairContext.Type repairType) {
+    public float getRepairEfficiency(RepairContext.Type repairType) {
         return efficiency.get().floatValue() + repairType.getBonusEfficiency();
     }
 

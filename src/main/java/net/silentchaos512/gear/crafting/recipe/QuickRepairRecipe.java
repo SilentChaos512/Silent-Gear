@@ -33,10 +33,10 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
-import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
@@ -44,6 +44,7 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class QuickRepairRecipe extends SpecialRecipe {
     public static final ResourceLocation NAME = SilentGear.getId("quick_repair");
@@ -96,7 +97,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
         Collection<ItemStack> mats = list.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat));
 
         // Repair with materials first
-        repairWithLooseMaterials(gear, mats);
+        repairWithLooseMaterials(gear, repairKit, mats);
 
         // Then use repair kit, if necessary
         if (gear.getDamage() > 0) {
@@ -110,19 +111,19 @@ public class QuickRepairRecipe extends SpecialRecipe {
         return gear;
     }
 
-    private static void repairWithLooseMaterials(ItemStack gear, Collection<ItemStack> mats) {
+    private static void repairWithLooseMaterials(ItemStack gear, ItemStack repairKit, Collection<ItemStack> mats) {
         float repairValue = getRepairValueFromMaterials(gear, mats);
-        gear.attemptDamageItem(-Math.round(repairValue), SilentGear.random, null);
+        float kitEfficiency = ((RepairKitItem) repairKit.getItem()).getRepairEfficiency(RepairContext.Type.QUICK);
+        float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
+        gear.attemptDamageItem(-Math.round(repairValue * kitEfficiency * gearRepairEfficiency), SilentGear.random, null);
     }
 
     private static float getRepairValueFromMaterials(ItemStack gear, Collection<ItemStack> mats) {
-        float repairValue = 0f;
-        for (ItemStack stack : mats) {
-            PartData data = PartData.from(stack);
-            if (data != null) {
-                repairValue += data.getRepairAmount(gear, RepairContext.Type.QUICK);
-            }
-        }
+        float repairValue = (float) mats.stream()
+                .map(MaterialInstance::from)
+                .filter(Objects::nonNull)
+                .mapToDouble(mat -> mat.getRepairValue(gear))
+                .sum();
 
         // Repair efficiency instance tool class
         if (gear.getItem() instanceof ICoreItem) {
@@ -139,12 +140,13 @@ public class QuickRepairRecipe extends SpecialRecipe {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         StackList stackList = StackList.from(inv);
         ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
+        ItemStack repairKit = stackList.uniqueMatch(s -> s.getItem() instanceof RepairKitItem);
 
         for (int i = 0; i < list.size(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
 
             if (stack.getItem() instanceof RepairKitItem) {
-                repairWithLooseMaterials(gear, stackList.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat)));
+                repairWithLooseMaterials(gear, repairKit, stackList.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat)));
                 RepairKitItem item = (RepairKitItem) stack.getItem();
                 ItemStack copy = stack.copy();
                 item.removeRepairMaterials(copy, item.getRepairMaterials(gear, copy, RepairContext.Type.QUICK));

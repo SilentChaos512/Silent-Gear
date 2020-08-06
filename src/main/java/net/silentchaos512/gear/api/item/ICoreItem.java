@@ -115,6 +115,10 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return ItemStats.DURABILITY;
     }
 
+    default float getRepairModifier(ItemStack stack) {
+        return 1f;
+    }
+
     //endregion
 
     //region Client-side stuff
