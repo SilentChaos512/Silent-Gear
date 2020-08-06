@@ -264,7 +264,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
         );
         // Crimson Steel
-        ret.add(new MaterialBuilder(SilentGear.getId("crimson_steel"), 3, ModTags.Items.INGOTS_CRIMSON_STEEL)
+        ret.add(new MaterialBuilder(SilentGear.getId("crimson_steel"), 4, ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 2400)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 42)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 19)
