@@ -14,13 +14,14 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.SelectBlueprintFromBookPacket;
+import net.silentchaos512.utils.Color;
 
 public class BlueprintBookContainerScreen extends ContainerScreen<BlueprintBookContainer> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
 
     private final PlayerInventory playerInventory;
     private final int inventoryRows;
-    private int selected = 0;
+    private int selected;
 
     public BlueprintBookContainerScreen(BlueprintBookContainer container, PlayerInventory playerInventory, ITextComponent title) {
         super(container, playerInventory, title);
@@ -29,6 +30,7 @@ public class BlueprintBookContainerScreen extends ContainerScreen<BlueprintBookC
         IContainerItem item = (IContainerItem) stack.getItem();
         this.inventoryRows = item.getInventoryRows(stack);
         this.ySize = 114 + this.inventoryRows * 18;
+        this.selected = BlueprintBookItem.getSelectedSlot(container.item);
     }
 
     @Override
@@ -75,10 +77,8 @@ public class BlueprintBookContainerScreen extends ContainerScreen<BlueprintBookC
         blit(matrixStack, i, j, 0, 0, this.xSize, this.inventoryRows * 18 + 17);
         blit(matrixStack, i, j + this.inventoryRows * 18 + 17, 0, 126, this.xSize, 96);
 
-        // FIXME: I hate rendering...
-        int left = i + 16 * (this.selected % 9);
-        int top = j + 16 * (this.selected / 9);
-        int color = 0xFFFFAA;
-//        GuiUtils.drawGradientRect(matrixStack, -10, left, top, left + 16, top + 16, color, color);
+        int left = guiLeft + 8 + 18 * (this.selected % 9);
+        int top = guiTop + 18 + 18 * (this.selected / 9);
+        fill(matrixStack, left, top, left + 16, top + 16, Color.SEAGREEN.getColor());
     }
 }
