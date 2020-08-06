@@ -208,7 +208,7 @@ public final class TraitHelper {
      * @return A Map of Traits to their levels
      */
     public static Map<ITrait, Integer> getTraits(ItemStack gear, PartDataList parts) {
-        if (parts.isEmpty())
+        if (parts.isEmpty() || GearHelper.isBroken(gear))
             return ImmutableMap.of();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
