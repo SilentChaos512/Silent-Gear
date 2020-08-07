@@ -25,7 +25,7 @@ public final class ColorUtils {
         for (IMaterialInstance mat : materials) {
             IMaterialDisplay model = MaterialDisplayManager.get(mat.getMaterialId());
             if (model != null) {
-                int color = model.getLayers(item.getGearType(), partType).getLayers().get(layer).getColor();
+                int color = model.getLayerColor(item.getGearType(), partType, layer);
                 int r = (color >> 16) & 0xFF;
                 int g = (color >> 8) & 0xFF;
                 int b = color & 0xFF;
