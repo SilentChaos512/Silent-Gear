@@ -11,12 +11,10 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartData;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
@@ -51,16 +49,12 @@ public class GearPartSwapRecipe extends SpecialRecipe {
 
             // Only required part types (no mains), and no duplicates
             PartType type = part.getType();
-            if (isLegacyMain(part) || !item.supportsPart(gear, part) || typesFound.contains(type)) {
+            if (!item.supportsPart(gear, part) || typesFound.contains(type)) {
                 return false;
             }
             typesFound.add(type);
         }
         return true;
-    }
-
-    private static boolean isLegacyMain(IPartData part) {
-        return part.getType() == PartType.MAIN && !(part.getPart() instanceof CompoundPart);
     }
 
     @Override
