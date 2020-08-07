@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -90,7 +91,11 @@ public class CompoundPartItem extends Item {
     }
 
     public static String getModelKey(ItemStack stack) {
-        StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + ":");
+        StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + "#");
+
+        if (!stack.hasTag()) {
+            return s.append(Const.Materials.EXAMPLE.getId()).toString();
+        }
 
         for (MaterialInstance material : getMaterials(stack)) {
             s.append(SilentGear.shortenId(material.getMaterialId()));
