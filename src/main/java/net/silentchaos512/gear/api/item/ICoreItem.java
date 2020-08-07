@@ -57,7 +57,8 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     default boolean supportsPart(ItemStack gear, PartData part) {
-        return requiresPartOfType(part.getType()) || part.getPart().canAddToGear(gear, part);
+        boolean canAdd = part.getPart().canAddToGear(gear, part);
+        return (requiresPartOfType(part.getType()) && canAdd) || canAdd;
     }
 
     default Collection<PartType> getRequiredParts() {
