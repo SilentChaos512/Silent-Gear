@@ -27,6 +27,7 @@ public class ModLootTables extends LootTableProvider {
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
         return ImmutableList.of(
                 Pair.of(ModBlockLootTables::new, LootParameterSets.BLOCK),
+                Pair.of(ModChestLootTables::new, LootParameterSets.CHEST),
                 Pair.of(ModGiftLootTables::new, LootParameterSets.GIFT)
         );
     }

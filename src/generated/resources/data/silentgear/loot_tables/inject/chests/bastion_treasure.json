@@ -1,0 +1,91 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "silentgear:blaze_gold_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "silentgear:crimson_steel_dust"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 35,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "silentgear:crimson_iron_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 35,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 5.0,
+                "max": 10.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "silentgear:blaze_gold_nugget"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "name": "silentgear:blaze_gold_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:crimson_steel_ingot"
+        }
+      ]
+    }
+  ]
+}
