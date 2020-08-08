@@ -9,8 +9,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -30,11 +28,9 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
         ItemStack input = inv.getStackInSlot(0);
         List<ItemStack> ret = new ArrayList<>();
 
-        if (input.getItem() instanceof CompoundPartItem) {
-            CompoundPartItem.getMaterials(input).stream()
-                    .map(MaterialInstance::getItem)
-                    .filter(s -> !s.isEmpty())
-                    .forEach(ret::add);
+        PartData part = PartData.from(input);
+        if (part != null) {
+            ret.addAll(salvage(part));
         }
 
         return ret;
@@ -50,9 +46,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
         if (!(inv.getStackInSlot(0).getItem() instanceof CompoundPartItem))
             return false;
 
-        // FIXME: How to allow salvaging for other parts? Issue #191
-        PartData part = PartData.from(inv.getStackInSlot(0));
-        return part != null && part.getType() == PartType.MAIN;
+        return PartData.from(inv.getStackInSlot(0)) != null;
     }
 
     @Override

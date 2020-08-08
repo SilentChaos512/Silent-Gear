@@ -138,6 +138,7 @@ public class MaterialsProvider implements IDataProvider {
         // Barrier
         ret.add(new MaterialBuilder(SilentGear.getId("barrier"), 5, Items.BARRIER)
                 .visible(false)
+                .canSalvage(false)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1337)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 84)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 5)
@@ -412,6 +413,7 @@ public class MaterialsProvider implements IDataProvider {
         // Example
         ret.add(new MaterialBuilder(SilentGear.getId("example"), 0, Ingredient.EMPTY)
                 .visible(false)
+                .canSalvage(false)
                 .blacklistGearType("all")
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 100)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 6)
@@ -441,6 +443,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(SilentGear.getId("feather"), 1, Tags.Items.FEATHERS)
                 .noStats(PartType.FLETCHING)
                 .displayAll(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Flax
         ret.add(new MaterialBuilder(SilentGear.getId("flax"), 1, CraftingItems.FLAX_STRING)
@@ -455,6 +458,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.BOWSTRING, Const.Traits.SYNERGISTIC, 2)
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xB3804B)
                 .displayBowstring(0x845E37)
+                .displayFragment(PartTextures.CLOTH, 0x845E37)
         );
         // Flint
         ret.add(new MaterialBuilder(SilentGear.getId("flint"), 1, Items.FLINT)
@@ -603,11 +607,13 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.GRIP, ItemStats.RARITY, 5, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, Const.Traits.FLEXIBLE, 3)
                 .displayAll(PartTextureType.LOW_CONTRAST, 0xC65C35)
+                .displayFragment(PartTextures.CLOTH, 0xC65C35)
         );
         // Leaves
         ret.add(new MaterialBuilder(SilentGear.getId("leaves"), 1, ItemTags.LEAVES)
                 .noStats(PartType.FLETCHING)
                 .displayAll(PartTextureType.LOW_CONTRAST, 0x4A8F28)
+                .displayFragment(PartTextures.CLOTH, 0x4A8F28)
         );
         // Netherrack
         ret.add(new MaterialBuilder(SilentGear.getId("netherrack"), 1, Tags.Items.NETHERRACK)
@@ -677,6 +683,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
                 .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, 0xD83200)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0xD83200)
+                .displayFragment(PartTextures.WOOD, 0xD83200)
         );
         // Obsidian
         ret.add(new MaterialBuilder(SilentGear.getId("obsidian"), 3, Tags.Items.OBSIDIAN)
@@ -795,6 +802,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.BOWSTRING, Const.Traits.FLEXIBLE, 3)
                 .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xD8995B)
                 .displayBowstring(0x7E6962)
+                .displayFragment(PartTextures.CLOTH, 0x7E6962)
         );
 
         // Stone
@@ -851,8 +859,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.BOWSTRING, Const.Traits.ORGANIC, 2)
-                .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, 0xFFFFFF)
-                .displayBowstring(0x444444)
+                .display(PartType.BINDING, PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayBowstring(Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Terracotta
         ResourceLocation sgTerracotta = SilentGear.getId("terracotta");
@@ -930,6 +939,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 1)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
                 .displayAll(PartTextureType.LOW_CONTRAST, 0x896727)
+                .displayFragment(PartTextures.WOOD, 0X896727)
         );
         ret.add(wood(sgWood, "acacia", Items.ACACIA_PLANKS, 0xBA6337));
         ret.add(wood(sgWood, "birch", Items.BIRCH_PLANKS, 0xD7C185));
@@ -948,6 +958,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, -5, StatInstance.Operation.ADD)
                 .trait(PartType.ROD, Const.Traits.CRUDE, 3)
                 .display(PartType.ROD, PartTextureType.LOW_CONTRAST, 0x6B4909)
+                .displayFragment(PartTextures.WOOD, 0x6B4909)
         );
 
         // Wool
@@ -960,6 +971,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.GRIP, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, Const.Traits.SYNERGISTIC, 1)
                 .displayAll(PartTextureType.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         ret.add(wool(sgWool, "black", Items.BLACK_WOOL, 0x141519));
         ret.add(wool(sgWool, "blue", Items.BLUE_WOOL, 0x35399D));
@@ -1672,13 +1684,15 @@ public class MaterialsProvider implements IDataProvider {
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
                 .display(PartType.MAIN, PartTextureType.LOW_CONTRAST, color)
-                .display(PartType.ROD, PartTextureType.LOW_CONTRAST, color);
+                .display(PartType.ROD, PartTextureType.LOW_CONTRAST, color)
+                .displayFragment(PartTextures.WOOD, color);
     }
 
     private static MaterialBuilder wool(ResourceLocation parent, String suffix, IItemProvider item, int color) {
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
-                .display(PartType.GRIP, PartTextureType.LOW_CONTRAST, color);
+                .display(PartType.GRIP, PartTextureType.LOW_CONTRAST, color)
+                .displayFragment(PartTextures.CLOTH, color);
     }
 
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})

@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item;
 
+import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.PartType;
 
@@ -14,6 +15,11 @@ public class ToolHeadItem extends CompoundPartItem {
     @Override
     public GearType getGearType() {
         return gearType;
+    }
+
+    @Override
+    public int getCraftedCount(ItemStack stack) {
+        return 1;
     }
 
     @Override

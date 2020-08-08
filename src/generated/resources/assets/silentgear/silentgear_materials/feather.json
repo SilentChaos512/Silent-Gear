@@ -8,5 +8,10 @@
     {
       "texture": "silentgear:fletching"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth"
+    }
   ]
 }

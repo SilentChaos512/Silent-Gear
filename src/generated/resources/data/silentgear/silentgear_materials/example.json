@@ -4,7 +4,8 @@
     "visible": false,
     "gear_blacklist": [
       "all"
-    ]
+    ],
+    "can_salvage": false
   },
   "crafting_items": {},
   "name": {

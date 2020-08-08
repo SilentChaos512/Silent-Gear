@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.SynergyUtils;
@@ -29,19 +30,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CompoundPartItem extends Item {
+    private static final String NBT_CRAFTED_COUNT = "CraftedCount";
     private static final String NBT_MATERIALS = "Materials";
 
     private final PartType partType;
-    private final int tintLayer;
 
     public CompoundPartItem(PartType partType, Properties properties) {
-        this(partType, 0, properties);
-    }
-
-    public CompoundPartItem(PartType partType, int tintLayer, Properties properties) {
         super(properties);
         this.partType = partType;
-        this.tintLayer = tintLayer;
     }
 
     public PartType getPartType() {
@@ -50,6 +46,25 @@ public class CompoundPartItem extends Item {
 
     public GearType getGearType() {
         return GearType.PART;
+    }
+
+    public int getCraftedCount(ItemStack stack) {
+        if (stack.getOrCreateTag().contains(NBT_CRAFTED_COUNT)) {
+            return stack.getOrCreateTag().getInt(NBT_CRAFTED_COUNT);
+        }
+
+        // Crafted count not stored... Base the value on the default recipes.
+        if (this == ModItems.BINDING.get()) return getMaterials(stack).size();
+        if (this == ModItems.BOWSTRING.get()) return 1;
+        if (this == ModItems.COATING.get()) return getMaterials(stack).size();
+        if (this == ModItems.FLETCHING.get()) return getMaterials(stack).size();
+        if (this == ModItems.GRIP.get()) return getMaterials(stack).size();
+        if (this == ModItems.LONG_ROD.get()) return 2;
+        if (this == ModItems.ROD.get()) return 4;
+        if (this == ModItems.TIP.get()) return getMaterials(stack).size();
+
+        SilentGear.LOGGER.error("Unknown part with no crafted count: {}", stack);
+        return 1;
     }
 
     public ItemStack create(IMaterialInstance material) {

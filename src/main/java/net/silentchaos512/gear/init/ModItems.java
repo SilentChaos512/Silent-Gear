@@ -140,7 +140,7 @@ public final class ModItems {
     public static final ItemRegistryObject<CompoundPartItem> LONG_ROD = registerCompoundPart("long_rod", () ->
             new CompoundPartItem(PartType.ROD, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
-            new CompoundPartItem(PartType.TIP, 1, baseProps()));
+            new CompoundPartItem(PartType.TIP, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> COATING = registerCompoundPart("coating", () ->
             new CompoundPartItem(PartType.COATING, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> GRIP = registerCompoundPart("grip", () ->
@@ -174,6 +174,8 @@ public final class ModItems {
     static {
         CraftingItems.register(Registration.ITEMS);
     }
+
+    public static final ItemRegistryObject<FragmentItem> FRAGMENT = register("fragment", () -> new FragmentItem(baseProps()));
 
     public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
