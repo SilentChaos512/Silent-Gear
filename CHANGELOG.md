@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.7] - 2020-08-09
+### Added
+- Fragments. These are partial material items which may be returned by the salvager [#191]
+- Prospector hammer. Works like a pickaxe, works in any recipe requiring a hammer. Using on the side of a block (not the top or bottom) will search a small area in that direction for ores. The blocks the prospector hammer searches for can be set in the `silentgear:prospector_hammer_targets` block tag (not an item tag). The tag contains just the `forge:ores` tag by default.
+- Some nether chests can now contain netherwood saplings and Nether metal ingots/nuggets
+### Fixed
+- Quick gear recipes creating the wrong tool head for some tools
+
 ## [2.0.6] - 2020-08-07
 ### Added
 - Highlight selected slot of blueprint book
