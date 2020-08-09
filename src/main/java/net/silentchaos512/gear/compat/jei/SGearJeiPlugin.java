@@ -16,6 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
@@ -23,9 +24,11 @@ import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
@@ -125,6 +128,11 @@ public class SGearJeiPlugin implements IModPlugin {
 //                    return part != null ? id + "|" + part.getPart().getId() : id;
 //                })
 //        );
+
+        reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), stack -> {
+            IMaterial material = FragmentItem.getMaterial(stack);
+            return material != null ? material.getId().toString() : "";
+        });
 
         initFailed = false;
     }

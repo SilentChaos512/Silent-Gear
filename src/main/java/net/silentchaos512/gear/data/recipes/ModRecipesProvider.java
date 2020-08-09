@@ -22,10 +22,7 @@ import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModTags;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
@@ -89,6 +86,7 @@ public class ModRecipesProvider extends RecipeProvider {
         special(consumer, FillRepairKitRecipe.NAME, FillRepairKitRecipe.SERIALIZER);
         special(consumer, GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
         special(consumer, QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
+        special(consumer, NameUtils.from(ModRecipes.COMBINE_FRAGMENTS), ModRecipes.COMBINE_FRAGMENTS);
     }
 
     private void registerBlueprints(Consumer<IFinishedRecipe> consumer) {

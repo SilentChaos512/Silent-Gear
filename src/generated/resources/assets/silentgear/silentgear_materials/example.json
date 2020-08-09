@@ -4,6 +4,11 @@
       "texture": "silentgear:main_generic_lc"
     }
   ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:metal"
+    }
+  ],
   "main/armor": [
     {
       "texture": "silentgear:main_generic_lc"

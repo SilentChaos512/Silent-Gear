@@ -41,6 +41,7 @@ import java.util.*;
 public class MaterialBuilder {
     final ResourceLocation id;
     private final int tier;
+    private boolean canSalvage = true;
     private final Ingredient ingredient;
     private final Map<PartType, Ingredient> partSubstitutes = new LinkedHashMap<>();
     private boolean visible = true;
@@ -87,6 +88,11 @@ public class MaterialBuilder {
 
     public MaterialBuilder parent(ResourceLocation parent) {
         this.parent = parent;
+        return this;
+    }
+
+    public MaterialBuilder canSalvage(boolean value) {
+        this.canSalvage = value;
         return this;
     }
 
@@ -185,6 +191,11 @@ public class MaterialBuilder {
         return this;
     }
 
+    public MaterialBuilder displayFragment(PartTextures texture, int color) {
+        display(PartType.MAIN, GearType.FRAGMENT, new MaterialLayer(texture, color));
+        return this;
+    }
+
     public MaterialBuilder display(PartType partType, PartTextureType texture, int color) {
         display(partType, GearType.ALL, texture, color);
         if (partType == PartType.MAIN) {
@@ -214,6 +225,10 @@ public class MaterialBuilder {
 
     public MaterialBuilder display(PartType partType, GearType gearType, MaterialLayerList layers) {
         this.display.put(PartGearKey.of(gearType, partType), layers);
+        if (partType == PartType.MAIN && !this.display.containsKey(PartGearKey.of(GearType.FRAGMENT, partType))) {
+            // Generate fragment model info if missing
+            displayFragment(PartTextures.METAL, layers.getPrimaryColor());
+        }
         return this;
     }
 
@@ -286,6 +301,7 @@ public class MaterialBuilder {
                 array.add(gearType);
             }
             availability.add("gear_blacklist", array);
+            availability.addProperty("can_salvage", this.canSalvage);
         }
         if (!availability.entrySet().isEmpty()) {
             json.add("availability", availability);

@@ -5,6 +5,12 @@
       "color": "#8A8A8E"
     }
   ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:metal",
+      "color": "#8A8A8E"
+    }
+  ],
   "rod/all": [
     {
       "texture": "silentgear:rod_generic_lc",

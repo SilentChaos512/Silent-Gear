@@ -11,8 +11,7 @@
   ],
   "bowstring/all": [
     {
-      "texture": "silentgear:bowstring_string",
-      "color": "#444444"
+      "texture": "silentgear:bowstring_string"
     },
     {
       "texture": "silentgear:arrow"
@@ -20,8 +19,12 @@
   ],
   "bowstring/part": [
     {
-      "texture": "silentgear:bowstring",
-      "color": "#444444"
+      "texture": "silentgear:bowstring"
+    }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth"
     }
   ]
 }

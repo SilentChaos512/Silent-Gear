@@ -15,15 +15,15 @@ import java.util.Objects;
 
 public final class Network {
     private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
-    private static final int VERSION = 3;
+    private static final String VERSION = "sgear-net3";
 
     public static SimpleChannel channel;
 
     static {
         channel = NetworkRegistry.ChannelBuilder.named(NAME)
-                .clientAcceptedVersions(s -> Objects.equals(s, String.valueOf(VERSION)))
-                .serverAcceptedVersions(s -> Objects.equals(s, String.valueOf(VERSION)))
-                .networkProtocolVersion(() -> String.valueOf(VERSION))
+                .clientAcceptedVersions(s -> Objects.equals(s, VERSION))
+                .serverAcceptedVersions(s -> Objects.equals(s, VERSION))
+                .networkProtocolVersion(() -> VERSION)
                 .simpleChannel();
 
         channel.messageBuilder(SyncTraitsPacket.class, 1)

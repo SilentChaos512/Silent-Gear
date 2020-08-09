@@ -9,8 +9,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.init.Registration;
-import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.item.gear.CoreShield;
 import net.silentchaos512.gear.util.GearData;
@@ -32,6 +32,8 @@ public final class ColorHandlers {
             SilentGear.LOGGER.error("ItemColors is null?", new IllegalStateException("wat?"));
             return;
         }
+
+        register(itemColors, FragmentItem::getItemColor, ModItems.FRAGMENT);
 
         // Tools, armor, shields, etc.
         ForgeRegistries.ITEMS.getValues().stream()

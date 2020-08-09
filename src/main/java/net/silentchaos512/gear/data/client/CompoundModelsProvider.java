@@ -6,9 +6,13 @@ import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -29,6 +33,8 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
 
         Registration.getItems(CompoundPartItem.class).forEach(item ->
                 partBuilder(item).parent(itemGenerated));
+
+        fragmentBuilder(ModItems.FRAGMENT.get()).parent(itemGenerated);
 
         // FIXME
 //        gearBuilder(ModItems.SWORD.get()).parent(itemHandheld);
@@ -68,5 +74,12 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
                 .setLoader(Const.COMPOUND_PART_MODEL_LOADER)
                 .setGearType(item.getGearType())
                 .setPartType(item.getPartType());
+    }
+
+    private CompoundModelBuilder fragmentBuilder(FragmentItem item) {
+        return ((CompoundModelBuilder) getBuilder(NameUtils.from(item).getPath()))
+                .setLoader(Const.FRAGMENT_MODEL_LOADER)
+                .setGearType(GearType.FRAGMENT)
+                .setPartType(PartType.MAIN);
     }
 }

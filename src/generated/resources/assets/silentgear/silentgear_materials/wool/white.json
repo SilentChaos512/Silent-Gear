@@ -10,5 +10,11 @@
       "texture": "silentgear:grip",
       "color": "#E9ECEC"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth",
+      "color": "#E9ECEC"
+    }
   ]
 }

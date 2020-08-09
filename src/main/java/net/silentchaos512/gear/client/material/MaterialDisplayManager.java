@@ -13,6 +13,7 @@ import net.minecraftforge.resource.VanillaResourceType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.util.IEarlySelectiveReloadListener;
@@ -47,6 +48,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                 ERROR_LIST.clear();
 
                 CompoundPartModelLoader.clearCaches();
+                FragmentModelLoader.clearCaches();
                 GearModelLoader.clearCaches();
 
                 String packName = "ERROR";

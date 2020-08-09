@@ -9,12 +9,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
-import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nullable;
@@ -33,16 +29,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
         PartDataList parts = GearData.getConstructionParts(input);
         for (PartData part : parts) {
-            // FIXME: How to allow salvaging for other parts? Issue #191
-            if (part.getPart() instanceof CompoundPart && part.getType() == PartType.MAIN) {
-                List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getCraftingItem());
-                materials.stream()
-                        .map(MaterialInstance::getItem)
-                        .filter(s -> !s.isEmpty())
-                        .forEach(ret::add);
-            } else {
-                ret.add(part.getCraftingItem());
-            }
+            ret.addAll(salvage(part));
         }
 
         return ret;

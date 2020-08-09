@@ -5,6 +5,12 @@
       "color": "#D7C185"
     }
   ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:wood",
+      "color": "#D7C185"
+    }
+  ],
   "main/armor": [
     {
       "texture": "silentgear:main_generic_lc",
