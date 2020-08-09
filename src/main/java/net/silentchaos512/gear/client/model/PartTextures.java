@@ -28,6 +28,7 @@ public enum PartTextures {
     FLETCHING_GENERIC("fletching_generic", PartType.MISC_UPGRADE, GearType.NONE, true),
     // Fragments
     CLOTH("cloth", PartType.MAIN, GearType.FRAGMENT, false),
+    DUST("dust", PartType.MAIN, GearType.FRAGMENT, false),
     METAL("metal", PartType.MAIN, GearType.FRAGMENT, false),
     WOOD("wood", PartType.MAIN, GearType.FRAGMENT, false);
 

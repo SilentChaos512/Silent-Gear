@@ -16,5 +16,11 @@
     {
       "texture": "silentgear:coating_jar"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:dust",
+      "color": "#867B86"
+    }
   ]
 }

@@ -497,6 +497,7 @@ public class MaterialsProvider implements IDataProvider {
                 ))
                 .trait(PartType.TIP, Const.Traits.LUSTROUS, 4, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
                 .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
+                .displayFragment(PartTextures.DUST, 0xD2D200)
         );
         // Gold
         ret.add(new MaterialBuilder(SilentGear.getId("gold"), 2, Tags.Items.INGOTS_GOLD)
@@ -589,6 +590,7 @@ public class MaterialsProvider implements IDataProvider {
                         new MaterialRatioTraitCondition(0.75f)
                 ))
                 .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
+                .displayFragment(PartTextures.METAL, 0x224BAF)
         );
         // Leather
         ret.add(new MaterialBuilder(SilentGear.getId("leather"), 0, Tags.Items.LEATHER)
@@ -653,6 +655,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 0.1f, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.ENCHANTABILITY, 5, StatInstance.Operation.ADD)
                 .displayCoating(PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x867B86)
+                .displayFragment(PartTextures.DUST, 0x867B86)
         );
         // Netherwood
         ret.add(new MaterialBuilder(SilentGear.getId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
@@ -757,6 +760,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .displayTip(PartTextures.TIP_SMOOTH, 0xBB0000)
+                .displayFragment(PartTextures.DUST, 0xBB0000)
         );
         // Sandstone
         ResourceLocation sgSandstone = SilentGear.getId("sandstone");
