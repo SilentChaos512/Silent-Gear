@@ -2,17 +2,18 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.ProspectingResultPacket;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,10 +33,22 @@ public class CoreProspectorHammer extends CorePickaxe {
             return GearHelper.onItemUse(context);
         }
 
-        if (context.getWorld().isRemote) {
+        if (context.getWorld().isRemote || !(player instanceof ServerPlayerEntity)) {
             return ActionResultType.SUCCESS;
         }
 
+        Set<BlockState> matches = getTargetedBlocks(context, range, face);
+
+        // List the ores found in chat, if any
+        Network.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayerEntity) player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+
+        GearHelper.attemptDamage(context.getItem(), 2, player, context.getHand());
+        player.getCooldownTracker().setCooldown(this, 20);
+
+        return ActionResultType.SUCCESS;
+    }
+
+    public Set<BlockState> getTargetedBlocks(ItemUseContext context, int range, Direction face) {
         Set<BlockState> matches = new HashSet<>();
 
         Direction direction = face.getOpposite();
@@ -55,16 +68,6 @@ public class CoreProspectorHammer extends CorePickaxe {
             }
         }
 
-        // List the ores found in chat, if any
-        ITextComponent text = matches.stream()
-                .map(state -> state.getBlock().getTranslatedName())
-                .reduce((t1, t2) -> t1.func_240702_b_(", ").func_230529_a_(t2))
-                .orElseGet(() -> TextUtil.translate("item", "prospector_hammer.no_finds"));
-        player.sendMessage(!matches.isEmpty() ? TextUtil.translate("item", "prospector_hammer.finds", text) : text, Util.DUMMY_UUID);
-
-        GearHelper.attemptDamage(context.getItem(), 2, player, context.getHand());
-        player.getCooldownTracker().setCooldown(this, 20);
-
-        return ActionResultType.SUCCESS;
+        return matches;
     }
 }
