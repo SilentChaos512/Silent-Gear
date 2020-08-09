@@ -1,0 +1,24 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "prospector_hammer"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:rod"
+    }
+  ],
+  "result": {
+    "item": "silentgear:prospector_hammer"
+  }
+}

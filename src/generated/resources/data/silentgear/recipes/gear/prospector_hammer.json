@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "item": "silentgear:prospector_hammer_head"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:rod"
+    }
+  ],
+  "result": {
+    "item": "silentgear:prospector_hammer"
+  }
+}

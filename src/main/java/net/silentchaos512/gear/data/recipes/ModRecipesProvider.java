@@ -105,6 +105,8 @@ public class ModRecipesProvider extends RecipeProvider {
         toolBlueprint(consumer, "excavator", ModItems.EXCAVATOR_BLUEPRINT, ModItems.EXCAVATOR_TEMPLATE, "# #", "###", " / ");
         toolBlueprint(consumer, "saw", ModItems.SAW_BLUEPRINT, ModItems.SAW_TEMPLATE, "###", "##/", "  /");
         toolBlueprint(consumer, "mattock", ModItems.MATTOCK_BLUEPRINT, ModItems.MATTOCK_TEMPLATE, "## ", "#/#", " / ");
+        toolBlueprint(consumer, "prospector_hammer", ModItems.PROSPECTOR_HAMMER_BLUEPRINT, ModItems.PROSPECTOR_HAMMER_TEMPLATE,
+                Ingredient.fromTag(Tags.Items.INGOTS_IRON), "##", " /", " @");
         toolBlueprint(consumer, "sickle", ModItems.SICKLE_BLUEPRINT, ModItems.SICKLE_TEMPLATE, " #", "##", "/ ");
         toolBlueprint(consumer, "shears", ModItems.SHEARS_BLUEPRINT, ModItems.SHEARS_TEMPLATE, " #", "#/");
         toolBlueprint(consumer, "bow", ModItems.BOW_BLUEPRINT, ModItems.BOW_TEMPLATE, " #/", "# /", " #/");
@@ -298,6 +300,7 @@ public class ModRecipesProvider extends RecipeProvider {
         toolRecipes(consumer, "hammer", 6, ModItems.HAMMER, ModItems.HAMMER_HEAD, ModItems.HAMMER_BLUEPRINT.get());
         toolRecipes(consumer, "excavator", 5, ModItems.EXCAVATOR, ModItems.EXCAVATOR_HEAD, ModItems.EXCAVATOR_BLUEPRINT.get());
         toolRecipes(consumer, "mattock", 4, ModItems.MATTOCK, ModItems.MATTOCK_HEAD, ModItems.MATTOCK_BLUEPRINT.get());
+        toolRecipes(consumer, "prospector_hammer", 2, ModItems.PROSPECTOR_HAMMER, ModItems.PROSPECTOR_HAMMER_HEAD, ModItems.PROSPECTOR_HAMMER_BLUEPRINT.get());
         toolRecipes(consumer, "saw", 5, ModItems.SAW, ModItems.SAW_BLADE, ModItems.SAW_BLUEPRINT.get());
         toolRecipes(consumer, "sickle", 3, ModItems.SICKLE, ModItems.SICKLE_BLADE, ModItems.SICKLE_BLUEPRINT.get());
         toolRecipes(consumer, "shears", 2, ModItems.SHEARS, ModItems.SHEARS_BLADES, ModItems.SHEARS_BLUEPRINT.get());
@@ -812,24 +815,33 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     private void toolBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, String... pattern) {
+        toolBlueprint(consumer, group, blueprint, template, Ingredient.EMPTY, pattern);
+    }
+
+    private void toolBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, Ingredient extra, String... pattern) {
         ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shapedRecipe(blueprint)
                 .setGroup("silentgear:blueprints/" + group)
                 .key('#', ModTags.Items.PAPER_BLUEPRINT)
                 .key('/', Tags.Items.RODS_WOODEN)
                 .addCriterion("has_item", hasItem(ModTags.Items.PAPER_BLUEPRINT));
-        for (String line : pattern) {
-            builderBlueprint.patternLine(line);
-        }
-        builderBlueprint.build(consumer);
 
         ShapedRecipeBuilder builderTemplate = ShapedRecipeBuilder.shapedRecipe(template)
                 .setGroup("silentgear:blueprints/" + group)
                 .key('#', ModTags.Items.TEMPLATE_BOARDS)
                 .key('/', Tags.Items.RODS_WOODEN)
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS));
+
+        if (extra != Ingredient.EMPTY) {
+            builderBlueprint.key('@', extra);
+            builderTemplate.key('@', extra);
+        }
+
         for (String line : pattern) {
+            builderBlueprint.patternLine(line);
             builderTemplate.patternLine(line);
         }
+
+        builderBlueprint.build(consumer);
         builderTemplate.build(consumer);
     }
 

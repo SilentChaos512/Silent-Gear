@@ -99,6 +99,14 @@ public class PartsProvider implements IDataProvider {
                     .stat(ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTABILITY, -0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
+        if (isToolHead(builder, ModItems.PROSPECTOR_HAMMER_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
+                    .stat(ItemStats.DURABILITY, -0.25f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTABILITY, -0.25f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
         if (isToolHead(builder, ModItems.PAXEL_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)

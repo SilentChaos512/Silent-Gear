@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:hammer"
+    "silentgear:hammer",
+    "silentgear:prospector_hammer"
   ]
 }

@@ -1,0 +1,30 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "prospector_hammer",
+  "part_type": "silentgear:main",
+  "part_position": "HEAD",
+  "crafting_item": {
+    "item": "silentgear:prospector_hammer_head"
+  },
+  "name": {
+    "translate": "part.silentgear.prospector_hammer_head"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 2.0
+    },
+    "attack_speed": {
+      "add": -2.6
+    },
+    "repair_efficiency": 1.5,
+    "durability": {
+      "mul1": -0.25
+    },
+    "enchantability": {
+      "mul1": -0.25
+    },
+    "harvest_speed": {
+      "mul1": -0.25
+    }
+  }
+}

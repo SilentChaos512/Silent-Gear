@@ -44,6 +44,7 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
 //        gearBuilder(ModItems.EXCAVATOR.get()).parent(itemHandheld);
 //        gearBuilder(ModItems.LUMBER_AXE.get()).parent(itemHandheld);
 //        gearBuilder(ModItems.MATTOCK.get()).parent(itemHandheld);
+//        gearBuilder(ModItems.PROSPECTOR_HAMMER.get()).parent(itemHandheld);
 //        gearBuilder(ModItems.SICKLE.get()).parent(itemHandheld);
 //        gearBuilder(ModItems.SHEARS.get()).parent(itemHandheld);
 //        gearBuilder(ModItems.BOW.get()).parent(getExistingFile(mcLoc("item/bow")));

@@ -42,6 +42,7 @@ public final class GearType {
     public static final GearType SAW = getOrCreate("saw", AXE);
     public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL);
     public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL);
+    public static final GearType PROSPECTOR_HAMMER = getOrCreate("prospector_hammer", PICKAXE);
     public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL);
     public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL);
     // Melee weapons (swords)

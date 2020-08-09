@@ -1,0 +1,20 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "prospector_hammer"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    }
+  ],
+  "result": {
+    "item": "silentgear:prospector_hammer_head"
+  }
+}
