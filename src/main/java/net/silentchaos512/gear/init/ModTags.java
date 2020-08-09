@@ -17,6 +17,7 @@ public final class ModTags {
     public static final class Blocks {
         public static final ITag.INamedTag<Block> NETHERWOOD_LOGS = mod("netherwood_logs");
         public static final ITag.INamedTag<Block> NETHERWOOD_SOIL = mod("netherwood_soil");
+        public static final ITag.INamedTag<Block> PROSPECTOR_HAMMER_TARGETS = mod("prospector_hammer_targets");
 
         public static final ITag.INamedTag<Block> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
         public static final ITag.INamedTag<Block> ORES_AZURE_SILVER = forge("ores/azure_silver");

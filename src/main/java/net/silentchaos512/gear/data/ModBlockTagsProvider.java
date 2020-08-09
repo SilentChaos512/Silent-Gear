@@ -46,6 +46,8 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
                 .func_240531_a_(Tags.Blocks.NETHERRACK)
                 .func_240531_a_(Tags.Blocks.DIRT)
                 .func_240532_a_(Blocks.FARMLAND);
+        getBuilder(ModTags.Blocks.PROSPECTOR_HAMMER_TARGETS)
+                .func_240531_a_(Tags.Blocks.ORES);
 
         // Forge
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);

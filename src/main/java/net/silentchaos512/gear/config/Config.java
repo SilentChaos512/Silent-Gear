@@ -40,6 +40,7 @@ public final class Config {
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
         public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
+        public static final ForgeConfigSpec.IntValue prospectorHammerRange;
         public static final ForgeConfigSpec.DoubleValue repairFactorAnvil;
         public static final ForgeConfigSpec.DoubleValue repairFactorQuick;
         public static final ForgeConfigSpec.IntValue repairKitCrudeCapacity;
@@ -154,6 +155,13 @@ public final class Config {
                         .comment("If true, gear breaks permanently, like vanilla tools and armor")
                         .define("breaksPermanently", false);
 
+                {
+                    builder.push("prospector_hammer");
+                    prospectorHammerRange = builder
+                            .comment("The range in blocks the prospector hammer will search for blocks of interest")
+                            .defineInRange("range", 16, 0, 64);
+                    builder.pop();
+                }
                 {
                     builder.comment("Settings for AOE tools (hammer, excavator)",
                             "Match modes determine what blocks are considered similar enough to be mined together.",
