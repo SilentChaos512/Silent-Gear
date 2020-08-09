@@ -32,7 +32,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
                 ItemStack result = gear.copy();
 
                 PartType.COATING.getCompoundPartItem(gearType).ifPresent(cpi -> {
-                    ItemStack partItem = cpi.create(material);
+                    ItemStack partItem = cpi.create(material, 1);
                     GearData.addPart(result, PartData.from(partItem));
                 });
 

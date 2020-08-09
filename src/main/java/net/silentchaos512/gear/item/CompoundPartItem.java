@@ -68,17 +68,28 @@ public class CompoundPartItem extends Item {
     }
 
     public ItemStack create(IMaterialInstance material) {
-        return create(Collections.singletonList(material));
+        return create(material, -1);
     }
 
     public ItemStack create(List<? extends IMaterialInstance> materials) {
+        return create(materials, -1);
+    }
+
+    public ItemStack create(IMaterialInstance material, int craftedCount) {
+        return create(Collections.singletonList(material), craftedCount);
+    }
+
+    public ItemStack create(List<? extends IMaterialInstance> materials, int craftedCount) {
         ListNBT materialListNbt = new ListNBT();
         materials.forEach(m -> materialListNbt.add(m.write(new CompoundNBT())));
 
         CompoundNBT tag = new CompoundNBT();
         tag.put(NBT_MATERIALS, materialListNbt);
+        if (craftedCount > 0) {
+            tag.putInt(NBT_CRAFTED_COUNT, craftedCount);
+        }
 
-        ItemStack result = new ItemStack(this);
+        ItemStack result = new ItemStack(this, craftedCount > 0 ? craftedCount : 1);
         result.setTag(tag);
         return result;
     }

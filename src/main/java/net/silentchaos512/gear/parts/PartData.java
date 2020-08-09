@@ -91,7 +91,6 @@ public final class PartData implements IPartData {
                         Optional<? extends CompoundPartItem> item = partType.getCompoundPartItem(GearType.PART);
 
                         if (item.isPresent()) {
-                            // TODO: Item will likely not salvage correctly
                             ItemStack result = item.get().create(MaterialInstance.of(material));
                             return PartData.from(result);
                         }
