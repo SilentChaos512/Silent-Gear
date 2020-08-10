@@ -3,6 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.9] - 2020-08-10
+### Added
+- Salvager recipes for vanilla bows and crossbows
+- Colors to material names in tooltips
+### Fixed
+- Armor crafting not working
+- Diamond tip upgrade having the wrong harvest level
+
+## [2.0.8] - 2020-08-09
+### Fixed
+- Prospector hammer crashing servers
+
 ## [2.0.7] - 2020-08-09
 ### Added
 - Fragments. These are partial material items which may be returned by the salvager [#191]
