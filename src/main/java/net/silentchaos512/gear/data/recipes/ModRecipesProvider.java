@@ -820,6 +820,15 @@ public class ModRecipesProvider extends RecipeProvider {
         vanillaSalvage(consumer, Items.STONE_AXE, Items.COBBLESTONE, 3, 2);
         vanillaSalvage(consumer, Items.STONE_HOE, Items.COBBLESTONE, 2, 2);
 
+        vanillaSalvage(consumer, Items.BOW, Items.STRING, 3, 3);
+
+        SalvagingRecipeBuilder.builder(Items.CROSSBOW)
+                .addResult(Items.STICK, 3)
+                .addResult(Items.STRING, 2)
+                .addResult(Items.IRON_INGOT)
+                .addResult(Items.TRIPWIRE_HOOK)
+                .build(consumer, SilentGear.getId("salvaging/crossbow"));
+
         SalvagingRecipeBuilder.builder(Items.CLOCK)
                 .addResult(Items.GOLD_INGOT, 4)
                 .addResult(Items.REDSTONE)
