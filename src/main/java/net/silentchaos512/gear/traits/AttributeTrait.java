@@ -80,7 +80,7 @@ public class AttributeTrait extends SimpleTrait {
         }
 
         GearType gearType = GearHelper.getType(gear);
-        return gearType != null && gearType.matches(parts[0]) && slotType == slot;
+        return gearType.matches(parts[0]) && slotType == slot;
     }
 
     private static void readJson(AttributeTrait trait, JsonObject json) {

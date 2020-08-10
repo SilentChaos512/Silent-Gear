@@ -230,7 +230,8 @@ public final class GearClientHelper {
                 if (part.getPart() instanceof CompoundPart) {
                     builder.indent();
                     for (MaterialInstance material : CompoundPartItem.getMaterials(part.getCraftingItem())) {
-                        builder.add(TextUtil.withColor(material.getDisplayName(part.getType()), TextFormatting.GRAY));
+                        int nameColor = material.getMaterial().getNameColor(part.getType(), gear);
+                        builder.add(TextUtil.withColor(material.getDisplayName(part.getType()), nameColor));
                     }
                     builder.unindent();
                 }

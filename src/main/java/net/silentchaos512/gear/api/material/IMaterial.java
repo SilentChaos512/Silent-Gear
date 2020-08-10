@@ -230,6 +230,8 @@ public interface IMaterial {
     @Nullable
     IFormattableTextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
 
+    int getNameColor(PartType partType, ItemStack gear);
+
     default boolean isVisible(PartType partType) {
         return true;
     }

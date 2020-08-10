@@ -38,13 +38,13 @@ public class GearTypeTraitCondition implements ITraitCondition {
     @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
         GearType type = GearHelper.getType(gear);
-        return type != null && type.matches(this.gearType);
+        return type.matches(this.gearType);
     }
 
     @Override
     public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         GearType type = GearHelper.getType(gear);
-        return type == null || type.matches(this.gearType);
+        return type.matches(this.gearType);
     }
 
     public static class Serializer implements ITraitConditionSerializer<GearTypeTraitCondition> {

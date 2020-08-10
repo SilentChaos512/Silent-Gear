@@ -41,11 +41,6 @@ public final class EnchantmentTrait extends SimpleTrait {
     public void onGearCrafted(TraitActionContext context) {
         ItemStack gear = context.getGear();
         GearType gearType = GearHelper.getType(gear);
-        if (gearType == null) {
-            SilentGear.LOGGER.error("Unknown gear type for item {}", gear);
-            SilentGear.LOGGER.catching(new IllegalArgumentException());
-            return;
-        }
 
         int traitLevel = context.getTraitLevel();
         enchantments.forEach((type, list) -> {

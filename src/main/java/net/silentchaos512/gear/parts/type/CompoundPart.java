@@ -234,7 +234,7 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public boolean canAddToGear(ItemStack gear, PartData part) {
         GearType type = GearHelper.getType(gear);
-        return type != null && type.matches(this.gearType);
+        return type.matches(this.gearType);
     }
 
     private static int getRandomMaterialCount(PartType partType) {

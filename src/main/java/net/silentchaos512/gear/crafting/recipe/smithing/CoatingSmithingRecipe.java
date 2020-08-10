@@ -28,7 +28,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
         MaterialInstance material = MaterialInstance.from(upgradeItem);
         if (material != null) {
             GearType gearType = GearHelper.getType(gear);
-            if (gearType != null) {
+            if (gearType.matches(GearType.ALL)) {
                 ItemStack result = gear.copy();
 
                 PartType.COATING.getCompoundPartItem(gearType).ifPresent(cpi -> {
