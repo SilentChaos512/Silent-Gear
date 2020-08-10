@@ -178,6 +178,9 @@ public final class PartType {
 
     public Optional<? extends CompoundPartItem> getCompoundPartItem(GearType gearType) {
         if (this == MAIN) {
+            if (gearType.matches(GearType.ARMOR)) {
+                return Optional.of(ModItems.ARMOR_BODY.get());
+            }
             return ForgeRegistries.ITEMS.getValues().stream()
                     .filter(item -> item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType())
                     .map(item -> (ToolHeadItem) item)
