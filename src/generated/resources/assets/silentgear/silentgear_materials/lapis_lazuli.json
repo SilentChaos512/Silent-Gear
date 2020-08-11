@@ -16,5 +16,11 @@
     {
       "texture": "silentgear:tip_shine"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:metal",
+      "color": "#224BAF"
+    }
   ]
 }

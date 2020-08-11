@@ -469,6 +469,7 @@ public class MaterialsProvider implements IDataProvider {
                 ))
                 .trait(PartType.TIP, Const.Traits.LUSTROUS, 4, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
                 .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
+                .displayFragment(PartTextures.DUST, 0xD2D200)
         );
         // Gold
         ret.add(new MaterialBuilder(SilentGear.getId("gold"), 2, Tags.Items.INGOTS_GOLD)
@@ -559,6 +560,7 @@ public class MaterialsProvider implements IDataProvider {
                         new MaterialRatioTraitCondition(0.75f)
                 ))
                 .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
+                .displayFragment(PartTextures.METAL, 0x224BAF)
         );
         // Leather
         ret.add(new MaterialBuilder(SilentGear.getId("leather"), 0, Tags.Items.LEATHER)
@@ -713,6 +715,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .displayTip(PartTextures.TIP_SMOOTH, 0xBB0000)
+                .displayFragment(PartTextures.DUST, 0xBB0000)
         );
         // Sandstone
         ResourceLocation sgSandstone = SilentGear.getId("sandstone");
