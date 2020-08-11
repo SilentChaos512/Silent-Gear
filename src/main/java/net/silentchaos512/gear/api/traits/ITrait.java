@@ -92,7 +92,7 @@ public interface ITrait {
         // Description (usually not shown)
         if (KeyTracker.isDisplayTraitsDown()) {
             ITextComponent description = TextUtil.withColor(this.getDescription(level), TextFormatting.DARK_GRAY);
-            tooltip.add(new StringTextComponent("    ").func_230529_a_(description));
+            tooltip.add(new StringTextComponent("    ").append(description));
         }
     }
 

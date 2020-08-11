@@ -48,7 +48,7 @@ public class ProspectingResultPacket {
         if (player != null) {
             ITextComponent text = this.blocksFound.stream()
                     .map(state -> state.getBlock().getTranslatedName())
-                    .reduce((t1, t2) -> t1.func_240702_b_(", ").func_230529_a_(t2))
+                    .reduce((t1, t2) -> t1.appendString(", ").append(t2))
                     .orElseGet(() -> TextUtil.translate("item", "prospector_hammer.no_finds"));
             player.sendMessage(!this.blocksFound.isEmpty() ? TextUtil.translate("item", "prospector_hammer.finds", text) : text, Util.DUMMY_UUID);
         }

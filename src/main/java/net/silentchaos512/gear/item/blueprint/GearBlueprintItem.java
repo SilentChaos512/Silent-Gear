@@ -69,16 +69,16 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         // Flavor text
         if (!gearType.matches("armor")) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
-            list.add(new TranslationTextComponent(key).func_240699_a_(TextFormatting.ITALIC));
+            list.add(new TranslationTextComponent(key).mergeStyle(TextFormatting.ITALIC));
         }
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").func_240699_a_(TextFormatting.DARK_RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").mergeStyle(TextFormatting.DARK_RED));
         } else if (this.singleUse) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").func_240699_a_(TextFormatting.RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").mergeStyle(TextFormatting.RED));
         } else {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").func_240699_a_(TextFormatting.GREEN));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").mergeStyle(TextFormatting.GREEN));
         }
     }
 }

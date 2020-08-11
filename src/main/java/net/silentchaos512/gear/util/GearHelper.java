@@ -261,7 +261,7 @@ public final class GearHelper {
 
     private static void onDamageFactorChange(ServerPlayerEntity player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
-            player.world.playSound(null, player.func_233580_cy_(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
+            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
             LibTriggers.GENERIC_INT.trigger(player, DAMAGE_FACTOR_CHANGE, 1);
         }
     }
@@ -509,7 +509,7 @@ public final class GearHelper {
         // TODO: Probably should cache this somehow...
         for (ITextComponent t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
             // TODO: Spaces are probably inappropriate for some languages?
-            result = t.deepCopy().func_230529_a_(new StringTextComponent(" ")).func_230529_a_(result);
+            result = t.deepCopy().append(new StringTextComponent(" ")).append(result);
         }
 
         return result;

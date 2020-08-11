@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 
 public final class ModBlocks {
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
-            getOre(2, SoundType.field_235598_T_));
+            getOre(2, SoundType.NETHER_GOLD));
     public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
             getOre(4, SoundType.STONE));
 
@@ -70,31 +70,31 @@ public final class ModBlocks {
                     .lootFrom(STONE_TORCH.get()),
                     ParticleTypes.FLAME));
     public static final BlockRegistryObject<RotatedPillarBlock> NETHERWOOD_LOG = register("netherwood_log", () ->
-            new RotatedPillarBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new RotatedPillarBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(2f)
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<RotatedPillarBlock> STRIPPED_NETHERWOOD_LOG = register("stripped_netherwood_log", () ->
-            new RotatedPillarBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new RotatedPillarBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(2f)
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<Block> NETHERWOOD_PLANKS = register("netherwood_planks", () ->
-            new Block(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new Block(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(2f, 3f)
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<SlabBlock> NETHERWOOD_SLAB = register("netherwood_slab", () ->
-            new SlabBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new SlabBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(2f, 3f)
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<StairsBlock> NETHERWOOD_STAIRS = register("netherwood_stairs", () ->
-            new StairsBlock(NETHERWOOD_PLANKS::asBlockState, AbstractBlock.Properties.create(Material.field_237214_y_)
+            new StairsBlock(NETHERWOOD_PLANKS::asBlockState, AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(2f, 3f)
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<FenceBlock> NETHERWOOD_FENCE = register("netherwood_fence", () ->
-            new FenceBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new FenceBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(2f, 3f)
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->
-            new FenceGateBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new FenceGateBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(2f, 3f)
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<DoorBlock> NETHERWOOD_DOOR = register("netherwood_door", () ->
@@ -103,12 +103,12 @@ public final class ModBlocks {
                     .notSolid()
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
-            new TrapDoorBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new TrapDoorBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(3f)
                     .notSolid()
                     .sound(SoundType.WOOD)));
     public static final BlockRegistryObject<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
-            new LeavesBlock(AbstractBlock.Properties.create(Material.field_237214_y_)
+            new LeavesBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
                     .hardnessAndResistance(0.2f)
                     .tickRandomly()
                     .notSolid()

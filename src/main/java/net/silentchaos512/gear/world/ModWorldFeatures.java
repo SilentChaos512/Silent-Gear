@@ -31,7 +31,7 @@ public final class ModWorldFeatures {
             new AcaciaFoliagePlacer(2, 0, 0, 0),
             new ForkyTrunkPlacer(5, 2, 2),
             new TwoLayerFeature(1, 0, 2))
-            .func_236700_a_()
+            .setIgnoreVines()
             .build());
 
     private ModWorldFeatures() {}

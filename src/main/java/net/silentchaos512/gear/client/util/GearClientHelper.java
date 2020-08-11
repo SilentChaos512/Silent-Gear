@@ -80,10 +80,10 @@ public final class GearClientHelper {
         } else {
             // TODO: Need to generify this
             if (item.requiresPartOfType(PartType.ROD) && constructionParts.getRods().isEmpty()) {
-                tooltip.add(misc("missingRod").func_240699_a_(TextFormatting.RED));
+                tooltip.add(misc("missingRod").mergeStyle(TextFormatting.RED));
             }
             if (item.requiresPartOfType(PartType.BOWSTRING) && constructionParts.getPartsOfType(PartType.BOWSTRING).isEmpty()) {
-                tooltip.add(misc("missingBowstring").func_240699_a_(TextFormatting.RED));
+                tooltip.add(misc("missingBowstring").mergeStyle(TextFormatting.RED));
             }
         }
 
@@ -106,8 +106,8 @@ public final class GearClientHelper {
             Collections.reverse(constructionParts);
             tooltipListParts(stack, tooltip, constructionParts);
         } else if (flag.showConstruction) {
-            textConstruction.func_230529_a_(new StringTextComponent(" ")
-                    .func_230529_a_(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), TextFormatting.GRAY)));
+            textConstruction.append(new StringTextComponent(" ")
+                    .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), TextFormatting.GRAY)));
             tooltip.add(textConstruction);
         }
     }
@@ -172,8 +172,8 @@ public final class GearClientHelper {
 
             tooltip.addAll(builder.build());
         } else if (flag.showStats) {
-            textStats.func_240702_b_(" ")
-                    .func_230529_a_(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY));
+            textStats.appendString(" ")
+                    .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY));
             tooltip.add(textStats);
         }
     }
@@ -195,10 +195,10 @@ public final class GearClientHelper {
                 trait.addInformation(level, tooltip, flag, text -> {
                     if (traitIndex >= 0) {
                         return textTraits
-                                .func_230529_a_(TextUtil.withColor(new StringTextComponent(": "), TextFormatting.GRAY)
-                                        .func_230529_a_(text));
+                                .append(TextUtil.withColor(new StringTextComponent(": "), TextFormatting.GRAY)
+                                        .append(text));
                     }
-                    return new StringTextComponent(TextListBuilder.BULLETS[0] + " ").func_230529_a_(text);
+                    return new StringTextComponent(TextListBuilder.BULLETS[0] + " ").append(text);
                 });
             }
             ++i;

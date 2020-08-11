@@ -201,7 +201,7 @@ public final class MaterialInstance implements IMaterialInstance {
     public ITextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
         IFormattableTextComponent text = getDisplayName(partType, gear).copyRaw();
         if (this.grade != MaterialGrade.NONE) {
-            text.func_240702_b_(" (").func_230529_a_(this.grade.getDisplayName()).func_240702_b_(")");
+            text.appendString(" (").append(this.grade.getDisplayName()).appendString(")");
         }
         return text;
     }

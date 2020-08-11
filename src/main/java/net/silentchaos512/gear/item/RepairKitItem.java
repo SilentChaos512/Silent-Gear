@@ -160,9 +160,9 @@ public class RepairKitItem extends Item {
 
         Map<MaterialInstance, Float> storedMaterials = getStoredMaterials(stack);
         if (storedMaterials.isEmpty()) {
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").func_240699_a_(TextFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").func_240699_a_(TextFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").func_240699_a_(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").mergeStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").mergeStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").mergeStyle(TextFormatting.ITALIC));
             return;
         }
 

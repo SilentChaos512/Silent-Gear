@@ -179,7 +179,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
         }
         INGREDIENT_CONFLICT_LIST.forEach(line -> {
             IFormattableTextComponent text = TextUtil.withColor(new StringTextComponent(line), TextFormatting.YELLOW);
-            ret.add(new StringTextComponent("[Silent Gear] ").func_230529_a_(text));
+            ret.add(new StringTextComponent("[Silent Gear] ").append(text));
         });
         return ret;
     }

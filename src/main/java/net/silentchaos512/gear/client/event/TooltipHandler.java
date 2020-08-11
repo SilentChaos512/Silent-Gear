@@ -72,7 +72,7 @@ public final class TooltipHandler {
         // Nerfed gear?
         if (Config.Common.isNerfedItem(stack.getItem())) {
             List<ITextComponent> toolTip = event.getToolTip();
-            toolTip.add(Math.min(1, toolTip.size()), new TranslationTextComponent("misc.silentgear.poorlyMade").func_240699_a_(TextFormatting.RED));
+            toolTip.add(Math.min(1, toolTip.size()), new TranslationTextComponent("misc.silentgear.poorlyMade").mergeStyle(TextFormatting.RED));
         }
     }
 
@@ -83,12 +83,12 @@ public final class TooltipHandler {
             event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD));
         } else {
             event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD)
-                    .func_230529_a_(new StringTextComponent(" ")
-                            .func_230529_a_(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY))));
+                    .append(new StringTextComponent(" ")
+                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY))));
         }
 
         if (event.getFlags().isAdvanced()) {
-            event.getToolTip().add(new StringTextComponent("Material ID: " + material.getMaterialId()).func_240699_a_(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("Material ID: " + material.getMaterialId()).mergeStyle(TextFormatting.DARK_GRAY));
         }
 
         if (keyHeld) {
@@ -103,7 +103,7 @@ public final class TooltipHandler {
 
                 getMaterialTraitLines(event, partType, material);
 
-                event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats").func_240699_a_(TextFormatting.GOLD));
+                event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats").mergeStyle(TextFormatting.GOLD));
                 getMaterialStatLines(event, partType, material);
             }
         } else {
@@ -114,17 +114,17 @@ public final class TooltipHandler {
     }
 
     private static ITextComponent buildPartTypeHeader(Collection<PartType> types, PartType selectedType) {
-        IFormattableTextComponent ret = new StringTextComponent("| ").func_240699_a_(TextFormatting.GRAY);
+        IFormattableTextComponent ret = new StringTextComponent("| ").mergeStyle(TextFormatting.GRAY);
         for (PartType type : types) {
             Color color = type == selectedType ? Color.AQUAMARINE : MC_DARK_GRAY;
             ITextComponent text = TextUtil.withColor(type.getDisplayName(-1), color);
-            ret.func_230529_a_(text).func_240702_b_(" | ");
+            ret.append(text).appendString(" | ");
         }
 
         ITextComponent keyHint = TextUtil.misc("tooltip.material.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE));
-        return ret.func_230529_a_(keyHint);
+        return ret.append(keyHint);
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData part) {
@@ -133,8 +133,8 @@ public final class TooltipHandler {
         event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(part.getTier()), Color.AQUAMARINE));
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
-            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getPartId()).func_240699_a_(TextFormatting.DARK_GRAY));
-            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.getPart().getPackName()).func_240699_a_(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getPartId()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.getPart().getPackName()).mergeStyle(TextFormatting.DARK_GRAY));
         }
 
         // Traits
@@ -153,13 +153,13 @@ public final class TooltipHandler {
 
         if (KeyTracker.isControlDown()) {
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats")
-                    .func_240699_a_(TextFormatting.GOLD)
-                    .func_230529_a_(new StringTextComponent(" (Silent Gear)")
-                            .func_240699_a_(TextFormatting.RESET)
-                            .func_240699_a_(TextFormatting.ITALIC)));
+                    .mergeStyle(TextFormatting.GOLD)
+                    .append(new StringTextComponent(" (Silent Gear)")
+                            .mergeStyle(TextFormatting.RESET)
+                            .mergeStyle(TextFormatting.ITALIC)));
             getPartStatLines(event, stack, part);
         } else {
-            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").func_240699_a_(TextFormatting.GOLD));
+            event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.ctrlForStats").mergeStyle(TextFormatting.GOLD));
         }
 
         // Gear type blacklist?
@@ -169,7 +169,7 @@ public final class TooltipHandler {
                 int index = (ClientTicks.ticksInGame() / 20) % blacklist.size();
                 GearType gearType = blacklist.get(index);
                 ITextComponent blacklistedType = gearType.getDisplayName();
-                event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.blacklist", blacklistedType).func_240699_a_(TextFormatting.RED));
+                event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.blacklist", blacklistedType).mergeStyle(TextFormatting.RED));
             }
         }
     }

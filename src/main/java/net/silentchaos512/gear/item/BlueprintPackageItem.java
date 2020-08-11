@@ -42,8 +42,8 @@ public class BlueprintPackageItem extends LootContainerItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc1").func_240699_a_(TextFormatting.ITALIC));
-        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc2").func_240699_a_(TextFormatting.ITALIC));
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc1").mergeStyle(TextFormatting.ITALIC));
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc2").mergeStyle(TextFormatting.ITALIC));
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 }

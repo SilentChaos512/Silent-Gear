@@ -306,7 +306,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         if (p_220015_1_ instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)p_220015_1_;
             if (!p_220015_0_.isRemote) {
-                CriteriaTriggers.SHOT_CROSSBOW.func_215111_a(serverplayerentity, p_220015_2_);
+                CriteriaTriggers.SHOT_CROSSBOW.test(serverplayerentity, p_220015_2_);
             }
 
             serverplayerentity.addStat(Stats.ITEM_USED.get(p_220015_2_.getItem()));

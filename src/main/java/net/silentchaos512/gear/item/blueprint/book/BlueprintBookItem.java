@@ -143,7 +143,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         ItemStack selected = getSelectedItem(stack);
         if (!selected.isEmpty()) {
             tooltip.add(TextUtil.withColor(TextUtil.translate("item", "blueprint_book.selected"), Color.SKYBLUE)
-                    .func_230529_a_(selected.getDisplayName().deepCopy().func_240699_a_(TextFormatting.GRAY)));
+                    .append(selected.getDisplayName().deepCopy().mergeStyle(TextFormatting.GRAY)));
         }
 
         tooltip.add(TextUtil.translate("item", "blueprint_book.keyHint",

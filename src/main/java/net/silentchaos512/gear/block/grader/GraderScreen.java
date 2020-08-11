@@ -34,16 +34,14 @@ public class GraderScreen extends ContainerScreen<GraderContainer> {
         return list;
     }*/
 
-    // drawGuiContainerForegroundLayer
     @Override
-    protected void func_230451_b_(MatrixStack matrix, int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
         ITextComponent text = ModBlocks.MATERIAL_GRADER.asBlock().getTranslatedName();
-        font.drawString(matrix, text.getString(), 28, 6, 0x404040);
+        font.drawString(matrixStack, text.getString(), 28, 6, 0x404040);
     }
 
-    // drawGuiContainerBackgroundLayer
     @Override
-    protected void func_230450_a_(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
         RenderSystem.color4f(1, 1, 1, 1);
@@ -51,9 +49,9 @@ public class GraderScreen extends ContainerScreen<GraderContainer> {
 
         int posX = (this.width - this.xSize) / 2;
         int posY = (this.height - this.ySize) / 2;
-        blit(matrix, posX, posY, 0, 0, this.xSize, this.ySize);
+        blit(matrixStack, posX, posY, 0, 0, this.xSize, this.ySize);
 
         // Progress arrow
-        blit(matrix, posX + 49, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
+        blit(matrixStack, posX + 49, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
     }
 }

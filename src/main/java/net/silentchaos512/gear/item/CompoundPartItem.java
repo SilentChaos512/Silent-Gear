@@ -158,7 +158,7 @@ public class CompoundPartItem extends Item {
                 .map(mat -> {
                     ITextComponent gradeText = mat.getDisplayNameWithGrade(this.partType);
                     gradeText.getStyle().setFormatting(TextFormatting.ITALIC);
-                    return new StringTextComponent("- ").func_230529_a_(gradeText);
+                    return new StringTextComponent("- ").append(gradeText);
                 })
                 .forEach(tooltip::add);
     }

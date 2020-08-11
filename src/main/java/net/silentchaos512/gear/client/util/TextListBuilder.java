@@ -26,7 +26,7 @@ public class TextListBuilder {
     }
 
     public TextListBuilder add(ITextComponent text) {
-        this.list.add(indentWithBullet().func_230529_a_(text));
+        this.list.add(indentWithBullet().append(text));
         return this;
     }
 

@@ -103,7 +103,7 @@ public class DebugOverlay extends DebugRenderOverlay {
                     final float destroySpeed = heldItem.getDestroySpeed(state);
                     if (canHarvest) {
                         int level = TraitHelper.getTraitLevel(heldItem, Const.Traits.LUSTROUS);
-                        int light = GearEvents.getLightForLustrousTrait(player.world, player.func_233580_cy_());
+                        int light = GearEvents.getLightForLustrousTrait(player.world, player.getPosition());
                         final float newSpeed = destroySpeed + GearEvents.getLustrousSpeedBonus(level, light);
                         list.add(String.format("speed = %.1f", newSpeed));
                     } else {
@@ -118,7 +118,7 @@ public class DebugOverlay extends DebugRenderOverlay {
 
     private static void addAttributeInfo(List<String> list, PlayerEntity player, Attribute attribute) {
         ModifiableAttributeInstance attribute1 = player.getAttribute(attribute);
-        list.add(String.format("%s=%.1f (%dx mods)", attribute, attribute1.getValue(), attribute1.func_225505_c_().size()));
+        list.add(String.format("%s=%.1f (%dx mods)", attribute, attribute1.getValue(), attribute1.getModifierListCopy().size()));
     }
 
     @Override

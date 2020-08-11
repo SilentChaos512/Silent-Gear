@@ -205,7 +205,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement nether = Advancement.Builder.builder()
                     .withParent(root)
                     .withDisplay(Items.OBSIDIAN, title("nether"), description("nether"), null, FrameType.TASK, false, false, false)
-                    .withCriterion("entered_nether", ChangeDimensionTrigger.Instance.func_233552_a_(World.field_234919_h_))
+                    .withCriterion("entered_nether", ChangeDimensionTrigger.Instance.toWorld(World.field_234919_h_))
                     .register(consumer, id("nether"));
 
             Advancement netherPlants = Advancement.Builder.builder()
@@ -258,7 +258,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement theEnd = Advancement.Builder.builder()
                     .withParent(nether)
                     .withDisplay(Items.END_STONE, title("the_end"), description("the_end"), null, FrameType.TASK, false, false, false)
-                    .withCriterion("entered_the_end", ChangeDimensionTrigger.Instance.func_233552_a_(World.field_234920_i_))
+                    .withCriterion("entered_the_end", ChangeDimensionTrigger.Instance.toWorld(World.field_234920_i_))
                     .register(consumer, id("the_end"));
 
             Advancement azureSilver = Advancement.Builder.builder()
@@ -310,7 +310,7 @@ public class ModAdvancementProvider implements IDataProvider {
         }
 
         private static ICriterionInstance getItem(ITag<Item> tag) {
-            return InventoryChangeTrigger.Instance.forItems(new ItemPredicate(tag, null, MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, EnchantmentPredicate.field_226534_b_, EnchantmentPredicate.field_226534_b_, null, NBTPredicate.ANY));
+            return InventoryChangeTrigger.Instance.forItems(new ItemPredicate(tag, null, MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, EnchantmentPredicate.enchantments, EnchantmentPredicate.enchantments, null, NBTPredicate.ANY));
         }
 
         private static ICriterionInstance genericInt(ResourceLocation id, int value) {

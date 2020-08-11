@@ -101,9 +101,9 @@ public final class SGearMaterialsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).func_240699_a_(TextFormatting.UNDERLINE).func_240700_a_(style ->
+            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).mergeStyle(TextFormatting.UNDERLINE).modifyStyle(style ->
                     style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            context.getSource().sendFeedback(new StringTextComponent("Wrote materials info to ").func_230529_a_(fileNameText), true);
+            context.getSource().sendFeedback(new StringTextComponent("Wrote materials info to ").append(fileNameText), true);
         }
 
         return 1;

@@ -71,7 +71,7 @@ public class SimpleTrait implements ITrait {
     public IFormattableTextComponent getDisplayName(int level) {
         IFormattableTextComponent text = displayName.deepCopy();
         if (level > 0 && maxLevel > 1) {
-            text.func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("enchantment.level." + level));
+            text.appendString(" ").append(new TranslationTextComponent("enchantment.level." + level));
         }
         return text;
     }

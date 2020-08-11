@@ -40,37 +40,37 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
     public void registerTags() {
         // Silent Gear
         getBuilder(ModTags.Blocks.NETHERWOOD_LOGS)
-                .func_240532_a_(ModBlocks.NETHERWOOD_LOG.get())
-                .func_240532_a_(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+                .add(ModBlocks.NETHERWOOD_LOG.get())
+                .add(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
         getBuilder(ModTags.Blocks.NETHERWOOD_SOIL)
-                .func_240531_a_(Tags.Blocks.NETHERRACK)
-                .func_240531_a_(Tags.Blocks.DIRT)
-                .func_240532_a_(Blocks.FARMLAND);
+                .addTag(Tags.Blocks.NETHERRACK)
+                .addTag(Tags.Blocks.DIRT)
+                .add(Blocks.FARMLAND);
         getBuilder(ModTags.Blocks.PROSPECTOR_HAMMER_TARGETS)
-                .func_240532_a_(Blocks.ANCIENT_DEBRIS)
-                .func_240531_a_(Tags.Blocks.ORES);
+                .add(Blocks.ANCIENT_DEBRIS)
+                .addTag(Tags.Blocks.ORES);
 
         // Forge
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
         builder(ModTags.Blocks.ORES_AZURE_SILVER, ModBlocks.AZURE_SILVER_ORE);
         getBuilder(Tags.Blocks.ORES)
-                .func_240531_a_(ModTags.Blocks.ORES_CRIMSON_IRON)
-                .func_240531_a_(ModTags.Blocks.ORES_AZURE_SILVER);
+                .addTag(ModTags.Blocks.ORES_CRIMSON_IRON)
+                .addTag(ModTags.Blocks.ORES_AZURE_SILVER);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, ModBlocks.CRIMSON_STEEL_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModBlocks.BLAZE_GOLD_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, ModBlocks.AZURE_SILVER_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, ModBlocks.AZURE_ELECTRUM_BLOCK);
         getBuilder(Tags.Blocks.STORAGE_BLOCKS)
-                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
-                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
-                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL)
-                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER)
-                .func_240531_a_(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM);
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM);
 
         // Minecraft
         builder(BlockTags.LEAVES, ModBlocks.NETHERWOOD_LEAVES);
-        getBuilder(BlockTags.LOGS).func_240531_a_(ModTags.Blocks.NETHERWOOD_LOGS);
+        getBuilder(BlockTags.LOGS).addTag(ModTags.Blocks.NETHERWOOD_LOGS);
         builder(BlockTags.PLANKS, ModBlocks.NETHERWOOD_PLANKS);
         builder(BlockTags.SAPLINGS, ModBlocks.NETHERWOOD_SAPLING);
         builder(BlockTags.WOODEN_DOORS, ModBlocks.NETHERWOOD_DOOR);
@@ -81,11 +81,11 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
     }
 
     private void builder(ITag.INamedTag<Block> tag, IBlockProvider... items) {
-        getBuilder(tag).func_240534_a_(Arrays.stream(items).map(IBlockProvider::asBlock).toArray(Block[]::new));
+        getBuilder(tag).add(Arrays.stream(items).map(IBlockProvider::asBlock).toArray(Block[]::new));
     }
 
     protected TagsProvider.Builder<Block> getBuilder(ITag.INamedTag<Block> tag) {
-        return func_240522_a_(tag);
+        return getOrCreateBuilder(tag);
     }
 
     private static final Logger LOGGER = LogManager.getLogger();

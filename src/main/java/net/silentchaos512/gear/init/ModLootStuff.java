@@ -41,10 +41,10 @@ public final class ModLootStuff {
     private ModLootStuff() {}
 
     public static void init() {
-        Registry.register(Registry.field_239704_ba_, SilentGear.getId("has_part"), HAS_PART);
-        Registry.register(Registry.field_239704_ba_, SilentGear.getId("has_trait"), HAS_TRAIT);
-        Registry.register(Registry.field_239694_aZ_, SilentGear.getId("select_tier"), SELECT_TIER);
-        Registry.register(Registry.field_239694_aZ_, SilentGear.getId("set_parts"), SET_PARTS);
+        Registry.register(Registry.LOOT_CONDITION_TYPE, SilentGear.getId("has_part"), HAS_PART);
+        Registry.register(Registry.LOOT_CONDITION_TYPE, SilentGear.getId("has_trait"), HAS_TRAIT);
+        Registry.register(Registry.LOOT_FUNCTION_TYPE, SilentGear.getId("select_tier"), SELECT_TIER);
+        Registry.register(Registry.LOOT_FUNCTION_TYPE, SilentGear.getId("set_parts"), SET_PARTS);
     }
 
     public static void registerGlobalModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {

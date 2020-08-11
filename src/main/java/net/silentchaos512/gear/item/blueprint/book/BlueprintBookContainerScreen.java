@@ -59,16 +59,14 @@ public class BlueprintBookContainerScreen extends ContainerScreen<BlueprintBookC
         this.func_230459_a_(matrixStack, mouseX, mouseY);
     }
 
-
-
     @Override
-    protected void func_230451_b_(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
         this.font.drawString(matrixStack, this.getTitle().getString(), 8, 6, 4210752);
         this.font.drawString(matrixStack, playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
     }
 
     @Override
-    protected void func_230450_a_(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
         RenderSystem.color4f(1, 1, 1, 1);
         minecraft.getTextureManager().bindTexture(TEXTURE);

@@ -18,6 +18,7 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.traits.TraitManager;
 import net.silentchaos512.gear.traits.TraitSerializers;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,7 +59,7 @@ public class PartTraitInstance {
     public IFormattableTextComponent getDisplayName() {
         IFormattableTextComponent text = this.trait.getDisplayName(this.level).deepCopy();
         if (!conditions.isEmpty()) {
-            text.func_240702_b_("*");
+            text.appendString("*");
         }
         return text;
     }
@@ -67,16 +68,13 @@ public class PartTraitInstance {
         if (!this.trait.showInTooltip(flag)) return;
 
         // Display name
-        IFormattableTextComponent displayName = this.getDisplayName().func_240699_a_(TextFormatting.ITALIC);
-        // TODO: fix the jank
-        if (trait.isHidden()) displayName.func_230530_a_(displayName.getStyle().setColor(Color.func_240743_a_(net.silentchaos512.utils.Color.DARKGRAY.getColor())));
-        tooltip.add(displayName);
+        IFormattableTextComponent displayName = this.getDisplayName().mergeStyle(TextFormatting.ITALIC);
+        tooltip.add(trait.isHidden() ? TextUtil.withColor(displayName, TextFormatting.DARK_GRAY) : displayName);
 
         // Description (usually not shown)
         if (KeyTracker.isAltDown()) {
-            // TODO: fix the jank
-            ITextComponent description = this.trait.getDescription(level).func_230530_a_(displayName.getStyle().setColor(Color.func_240743_a_(net.silentchaos512.utils.Color.DARKGRAY.getColor())));
-            tooltip.add(new StringTextComponent("  ").func_230529_a_(description));
+            ITextComponent description = TextUtil.withColor(this.trait.getDescription(level), TextFormatting.DARK_GRAY);
+            tooltip.add(new StringTextComponent("    ").append(description));
         }
     }
 

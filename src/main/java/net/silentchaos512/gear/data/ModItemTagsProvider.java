@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
@@ -32,7 +31,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
 
 public class ModItemTagsProvider extends ForgeItemTagsProvider {
     public ModItemTagsProvider(DataGenerator generatorIn, BlockTagsProvider blocks) {
@@ -68,11 +69,11 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.DUSTS_AZURE_SILVER, CraftingItems.AZURE_SILVER_DUST);
         builder(ModTags.Items.DUSTS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_DUST);
         getBuilder(Tags.Items.DUSTS)
-                .func_240531_a_(ModTags.Items.DUSTS_BLAZE_GOLD)
-                .func_240531_a_(ModTags.Items.DUSTS_CRIMSON_IRON)
-                .func_240531_a_(ModTags.Items.DUSTS_CRIMSON_STEEL)
-                .func_240531_a_(ModTags.Items.DUSTS_AZURE_SILVER)
-                .func_240531_a_(ModTags.Items.DUSTS_AZURE_ELECTRUM);
+                .addTag(ModTags.Items.DUSTS_BLAZE_GOLD)
+                .addTag(ModTags.Items.DUSTS_CRIMSON_IRON)
+                .addTag(ModTags.Items.DUSTS_CRIMSON_STEEL)
+                .addTag(ModTags.Items.DUSTS_AZURE_SILVER)
+                .addTag(ModTags.Items.DUSTS_AZURE_ELECTRUM);
 
         builder(ModTags.Items.INGOTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_INGOT);
         builder(ModTags.Items.INGOTS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_INGOT);
@@ -80,11 +81,11 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.INGOTS_AZURE_SILVER, CraftingItems.AZURE_SILVER_INGOT);
         builder(ModTags.Items.INGOTS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_INGOT);
         getBuilder(Tags.Items.INGOTS)
-                .func_240531_a_(ModTags.Items.INGOTS_BLAZE_GOLD)
-                .func_240531_a_(ModTags.Items.INGOTS_CRIMSON_IRON)
-                .func_240531_a_(ModTags.Items.INGOTS_CRIMSON_STEEL)
-                .func_240531_a_(ModTags.Items.INGOTS_AZURE_SILVER)
-                .func_240531_a_(ModTags.Items.INGOTS_AZURE_ELECTRUM);
+                .addTag(ModTags.Items.INGOTS_BLAZE_GOLD)
+                .addTag(ModTags.Items.INGOTS_CRIMSON_IRON)
+                .addTag(ModTags.Items.INGOTS_CRIMSON_STEEL)
+                .addTag(ModTags.Items.INGOTS_AZURE_SILVER)
+                .addTag(ModTags.Items.INGOTS_AZURE_ELECTRUM);
 
         builder(ModTags.Items.NUGGETS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_NUGGET);
         builder(ModTags.Items.NUGGETS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_NUGGET);
@@ -94,13 +95,13 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.NUGGETS_DIAMOND, CraftingItems.DIAMOND_SHARD);
         builder(ModTags.Items.NUGGETS_EMERALD, CraftingItems.EMERALD_SHARD);
         getBuilder(Tags.Items.NUGGETS)
-                .func_240531_a_(ModTags.Items.NUGGETS_BLAZE_GOLD)
-                .func_240531_a_(ModTags.Items.NUGGETS_CRIMSON_IRON)
-                .func_240531_a_(ModTags.Items.NUGGETS_CRIMSON_STEEL)
-                .func_240531_a_(ModTags.Items.NUGGETS_AZURE_SILVER)
-                .func_240531_a_(ModTags.Items.NUGGETS_AZURE_ELECTRUM)
-                .func_240531_a_(ModTags.Items.NUGGETS_DIAMOND)
-                .func_240531_a_(ModTags.Items.NUGGETS_EMERALD);
+                .addTag(ModTags.Items.NUGGETS_BLAZE_GOLD)
+                .addTag(ModTags.Items.NUGGETS_CRIMSON_IRON)
+                .addTag(ModTags.Items.NUGGETS_CRIMSON_STEEL)
+                .addTag(ModTags.Items.NUGGETS_AZURE_SILVER)
+                .addTag(ModTags.Items.NUGGETS_AZURE_ELECTRUM)
+                .addTag(ModTags.Items.NUGGETS_DIAMOND)
+                .addTag(ModTags.Items.NUGGETS_EMERALD);
 
         builder(ModTags.Items.RODS_IRON, CraftingItems.IRON_ROD);
         builder(ModTags.Items.RODS_NETHERWOOD, CraftingItems.NETHERWOOD_STICK);
@@ -108,10 +109,10 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.RODS_STONE, CraftingItems.STONE_ROD);
         builder(Tags.Items.RODS_WOODEN, CraftingItems.NETHERWOOD_STICK);
         getBuilder(Tags.Items.RODS)
-                .func_240531_a_(ModTags.Items.RODS_IRON)
-                .func_240531_a_(ModTags.Items.RODS_NETHERWOOD)
-                .func_240531_a_(ModTags.Items.RODS_ROUGH)
-                .func_240531_a_(ModTags.Items.RODS_STONE);
+                .addTag(ModTags.Items.RODS_IRON)
+                .addTag(ModTags.Items.RODS_NETHERWOOD)
+                .addTag(ModTags.Items.RODS_ROUGH)
+                .addTag(ModTags.Items.RODS_STONE);
 
         builder(ModTags.Items.PAPER, Items.PAPER);
         builder(ModTags.Items.PAPER_BLUEPRINT, CraftingItems.BLUEPRINT_PAPER);
@@ -152,17 +153,17 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
 
         // Silent Gear
         copy(ModTags.Blocks.NETHERWOOD_LOGS, ModTags.Items.NETHERWOOD_LOGS);
-        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_1).func_240531_a_(Tags.Items.DUSTS_GLOWSTONE);
-        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_2).func_240532_a_(CraftingItems.BLAZING_DUST.asItem());
-        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_3).func_240532_a_(CraftingItems.GLITTERY_DUST.asItem());
+        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_1).addTag(Tags.Items.DUSTS_GLOWSTONE);
+        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
+        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_4);
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_5);
         getBuilder(ModTags.Items.GRADER_CATALYSTS)
-                .func_240531_a_(ModTags.Items.GRADER_CATALYSTS_TIER_1)
-                .func_240531_a_(ModTags.Items.GRADER_CATALYSTS_TIER_2)
-                .func_240531_a_(ModTags.Items.GRADER_CATALYSTS_TIER_3)
-                .func_240531_a_(ModTags.Items.GRADER_CATALYSTS_TIER_4)
-                .func_240531_a_(ModTags.Items.GRADER_CATALYSTS_TIER_5);
+                .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_1)
+                .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_2)
+                .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_3)
+                .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_4)
+                .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_5);
         builder(ModTags.Items.REPAIR_KITS, ModItems.CRUDE_REPAIR_KIT);
         // Blueprints
         Multimap<ResourceLocation, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();
@@ -174,21 +175,17 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         TagsProvider.Builder<Item> blueprintsBuilder = getBuilder(ModTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
             ITag.INamedTag<Item> tag = ItemTags.makeWrapperTag(tagId.toString());
-            getBuilder(tag).func_240534_a_(blueprints.get(tagId).toArray(new Item[0]));
-            blueprintsBuilder.func_240531_a_(tag);
+            getBuilder(tag).add(blueprints.get(tagId).toArray(new Item[0]));
+            blueprintsBuilder.addTag(tag);
         });
     }
 
     private void builder(ITag.INamedTag<Item> tag, IItemProvider... items) {
-        getBuilder(tag).func_240534_a_(Arrays.stream(items).map(IItemProvider::asItem).toArray(Item[]::new));
+        getBuilder(tag).add(Arrays.stream(items).map(IItemProvider::asItem).toArray(Item[]::new));
     }
 
     protected TagsProvider.Builder<Item> getBuilder(ITag.INamedTag<Item> tag) {
-        return super.func_240522_a_(tag);
-    }
-
-    protected void copy(ITag.INamedTag<Block> p_240521_1_, ITag.INamedTag<Item> p_240521_2_) {
-        super.func_240521_a_(p_240521_1_, p_240521_2_);
+        return getOrCreateBuilder(tag);
     }
 
     private static final Logger LOGGER = LogManager.getLogger();

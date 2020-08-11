@@ -220,7 +220,7 @@ public final class GearEvents {
 
             if (canHarvest) {
                 int level = TraitHelper.getTraitLevel(tool, Const.Traits.LUSTROUS);
-                int light = getLightForLustrousTrait(player.world, player.func_233580_cy_());
+                int light = getLightForLustrousTrait(player.world, player.getPosition());
                 event.setNewSpeed(event.getOriginalSpeed() + getLustrousSpeedBonus(level, light));
             }
         }

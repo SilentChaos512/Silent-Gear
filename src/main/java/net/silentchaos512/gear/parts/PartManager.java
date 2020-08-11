@@ -182,7 +182,7 @@ public final class PartManager implements IResourceManagerReloadListener {
             String listStr = String.join(", ", ERROR_LIST);
             return ImmutableList.of(
                     new StringTextComponent("[Silent Gear] The following gear parts failed to load, check your log file:")
-                            .func_240699_a_(TextFormatting.RED),
+                            .mergeStyle(TextFormatting.RED),
                     new StringTextComponent(listStr)
             );
         }
