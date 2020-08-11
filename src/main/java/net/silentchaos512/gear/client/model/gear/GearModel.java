@@ -24,8 +24,8 @@ import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.util.Const;
 
 import java.util.*;
 import java.util.function.Function;

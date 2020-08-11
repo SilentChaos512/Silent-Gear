@@ -22,7 +22,7 @@ import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
-import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.util.Const;
 
 import java.util.*;
 import java.util.function.Function;
@@ -99,8 +99,8 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        Set<RenderMaterial> ret = new HashSet<>();
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        Set<Material> ret = new HashSet<>();
         if (this.gearType == GearType.ARMOR || this.gearType == GearType.SHIELD) {
             // Unobtainable part items, no need for textures
             return ret;

@@ -23,6 +23,7 @@ import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.LazyItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -30,6 +31,7 @@ import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -205,6 +207,13 @@ public class MaterialBuilder {
 
     public MaterialBuilder stat(PartType partType, ResourceLocation statId, float value, StatInstance.Operation operation) {
         return stat(partType, LazyItemStat.of(statId), value, operation);
+    }
+
+    public MaterialBuilder trait(PartType partType, DataResource<ITrait> trait, int level, ITraitCondition... conditions) {
+        ITraitInstance inst = TraitInstance.of(trait, level, conditions);
+        List<ITraitInstance> list = traits.computeIfAbsent(partType, pt -> new ArrayList<>());
+        list.add(inst);
+        return this;
     }
 
     public MaterialBuilder trait(PartType partType, ResourceLocation traitId, int level, ITraitCondition... conditions) {

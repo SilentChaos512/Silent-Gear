@@ -1,0 +1,32 @@
+{
+  "availability": {
+    "tier": 0,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {},
+  "name": {
+    "translate": "material.silentgear.wood.rough"
+  },
+  "name_prefix": {
+    "translate": "misc.silentgear.crude"
+  },
+  "stats": {
+    "rod": {
+      "durability": {
+        "mul1": -0.25
+      },
+      "rarity": {
+        "add": -5.0
+      }
+    }
+  },
+  "traits": {
+    "rod": [
+      {
+        "name": "silentgear:crude",
+        "level": 3
+      }
+    ]
+  }
+}

@@ -80,7 +80,7 @@ public class LazyPartData implements IPartData {
 
     @Override
     public MaterialGrade getGrade() {
-        return grade;
+        return MaterialGrade.NONE;
     }
 
     @Override

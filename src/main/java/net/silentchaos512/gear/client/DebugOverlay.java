@@ -40,8 +40,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.event.GearEvents;
 import net.silentchaos512.gear.item.gear.CoreCrossbow;
-import net.silentchaos512.gear.traits.TraitConst;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.client.gui.DebugRenderOverlay;
 
@@ -104,7 +103,7 @@ public class DebugOverlay extends DebugRenderOverlay {
 
                     final float destroySpeed = heldItem.getDestroySpeed(state);
                     if (canHarvest) {
-                        int level = TraitHelper.getTraitLevel(heldItem, TraitConst.LUSTROUS);
+                        int level = TraitHelper.getTraitLevel(heldItem, Const.Traits.LUSTROUS);
                         int light = GearEvents.getLightForLustrousTrait(player.world, player.getPosition());
                         final float newSpeed = destroySpeed + GearEvents.getLustrousSpeedBonus(level, light);
                         list.add(String.format("speed = %.1f", newSpeed));

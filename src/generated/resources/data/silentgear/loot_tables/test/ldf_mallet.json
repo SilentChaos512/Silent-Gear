@@ -11,16 +11,13 @@
               "function": "silentgear:set_parts",
               "parts": [
                 {
-                  "part": "silentgear:main/diamond",
-                  "grade": "S"
+                  "part": "silentgear:main/diamond"
                 },
                 {
-                  "part": "silentgear:main/diamond",
-                  "grade": "S"
+                  "part": "silentgear:main/diamond"
                 },
                 {
-                  "part": "silentgear:main/emerald",
-                  "grade": "S"
+                  "part": "silentgear:main/emerald"
                 },
                 {
                   "part": "silentgear:rod/blaze"

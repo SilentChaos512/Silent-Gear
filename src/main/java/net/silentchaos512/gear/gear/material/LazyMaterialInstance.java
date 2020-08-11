@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.utils.Color;
 import net.silentchaos512.utils.EnumUtils;
 
@@ -37,6 +38,10 @@ public class LazyMaterialInstance implements IMaterialInstance {
 
     public static LazyMaterialInstance of(ResourceLocation materialId, MaterialGrade grade) {
         return new LazyMaterialInstance(materialId, grade);
+    }
+
+    public static LazyMaterialInstance of(DataResource<IMaterial> material) {
+        return of(material.getId());
     }
 
     @Override

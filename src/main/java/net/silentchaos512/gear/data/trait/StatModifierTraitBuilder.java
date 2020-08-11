@@ -4,13 +4,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.stats.IItemStat;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.traits.StatModifierTrait;
+import net.silentchaos512.gear.util.DataResource;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class StatModifierTraitBuilder extends TraitBuilder {
     private final Map<IItemStat, StatModifierTrait.StatMod> mods = new LinkedHashMap<>();
+
+    public StatModifierTraitBuilder(DataResource<ITrait> trait, int maxLevel) {
+        this(trait.getId(), maxLevel);
+    }
 
     public StatModifierTraitBuilder(ResourceLocation traitId, int maxLevel) {
         super(traitId, maxLevel, StatModifierTrait.SERIALIZER);

@@ -39,8 +39,10 @@ import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.MiscUpgrades;
-import net.silentchaos512.gear.parts.*;
-import net.silentchaos512.gear.traits.TraitConst;
+import net.silentchaos512.gear.parts.LazyPartData;
+import net.silentchaos512.gear.parts.PartConst;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
 import javax.annotation.Nonnull;
@@ -297,7 +299,7 @@ public final class GearHelper {
     }
 
     public static boolean isUnbreakable(ItemStack stack) {
-        return TraitHelper.getTraitLevel(stack, TraitConst.INDESTRUCTIBLE) > 0;
+        return TraitHelper.getTraitLevel(stack, Const.Traits.INDESTRUCTIBLE) > 0;
     }
 
     public static void setDamage(ItemStack stack, int damage, BiConsumer<ItemStack, Integer> superFunction) {
@@ -341,12 +343,6 @@ public final class GearHelper {
     }
 
     public static void addModelTypeProperty(@SuppressWarnings("TypeMayBeWeakened") ICoreItem item) {
-        PartPositions.LITE_MODEL_LAYERS.forEach((position, partType) -> {
-            item.asItem().addPropertyOverride(SilentGear.getId("lite_" + position.getTexturePrefix()), (stack, world, entity) -> {
-                PartData part = GearData.getPartOfType(stack, partType);
-                return part != null ? part.getPart().getLiteTexture(part, stack).getIndex() : -1;
-            });
-        });
     }
 
     @Nullable

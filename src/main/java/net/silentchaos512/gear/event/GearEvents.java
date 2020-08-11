@@ -78,7 +78,6 @@ import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.parts.PartConst;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.parts.type.CompoundPart;
-import net.silentchaos512.gear.traits.TraitConst;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.util.EntityHelper;
@@ -138,7 +137,7 @@ public final class GearEvents {
         if (event.getEntity() instanceof PlayerEntity && isFireDamage(event.getSource())) {
             for (EquipmentSlotType slot : EquipmentSlotType.values()) {
                 ItemStack stack = event.getEntityLiving().getItemStackFromSlot(slot);
-                if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, TraitConst.FLAMMABLE)) {
+                if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
                     GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
                     if (GearHelper.isBroken(stack)) {
                         event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getDisplayName()));
@@ -159,7 +158,7 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onFurnaceFuelBurnTimeEvent(FurnaceFuelBurnTimeEvent event) {
         ItemStack stack = event.getItemStack();
-        if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, TraitConst.FLAMMABLE)) {
+        if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
             float durability = GearData.getStat(stack, GearHelper.getDurabilityStat(stack));
             event.setBurnTime((int) (durability * BURN_TICKS_PER_DURABILITY));
         }
@@ -220,7 +219,7 @@ public final class GearEvents {
             final boolean canHarvest = toolLevel >= blockLevel;
 
             if (canHarvest) {
-                int level = TraitHelper.getTraitLevel(tool, TraitConst.LUSTROUS);
+                int level = TraitHelper.getTraitLevel(tool, Const.Traits.LUSTROUS);
                 int light = getLightForLustrousTrait(player.world, player.getPosition());
                 event.setNewSpeed(event.getOriginalSpeed() + getLustrousSpeedBonus(level, light));
             }
@@ -251,7 +250,7 @@ public final class GearEvents {
         ItemStack tool = harvester.getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
-        int magmaticLevel = TraitHelper.getTraitLevel(tool, TraitConst.MAGMATIC);
+        int magmaticLevel = TraitHelper.getTraitLevel(tool, Const.Traits.MAGMATIC);
         if (magmaticLevel == 0) return;
 
         for (int i = 0; i < event.getDrops().size(); ++i) {
@@ -279,10 +278,10 @@ public final class GearEvents {
         ItemStack tool = event.getAttackingPlayer().getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
-        int ancientLevel = TraitHelper.getTraitLevel(tool, TraitConst.ANCIENT);
+        int ancientLevel = TraitHelper.getTraitLevel(tool, Const.Traits.ANCIENT);
         if (ancientLevel == 0) return;
 
-        int bonusXp = (int) (event.getOriginalExperience() * TraitConst.ANCIENT_XP_BOOST * ancientLevel);
+        int bonusXp = (int) (event.getOriginalExperience() * Const.Traits.ANCIENT_XP_BOOST * ancientLevel);
         event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
     }
 
@@ -303,13 +302,13 @@ public final class GearEvents {
         ItemStack tool = event.getPlayer().getHeldItemMainhand();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
-        int ancientLevel = TraitHelper.getTraitLevel(tool, TraitConst.ANCIENT);
+        int ancientLevel = TraitHelper.getTraitLevel(tool, Const.Traits.ANCIENT);
         if (ancientLevel > 0) {
-            int bonusXp = (int) (event.getExpToDrop() * TraitConst.ANCIENT_XP_BOOST * ancientLevel);
+            int bonusXp = (int) (event.getExpToDrop() * Const.Traits.ANCIENT_XP_BOOST * ancientLevel);
             event.setExpToDrop(event.getExpToDrop() + bonusXp);
         }
 
-        if (TraitHelper.hasTrait(tool, TraitConst.JABBERWOCKY) && event.getState().isIn(Tags.Blocks.ORES_DIAMOND) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool) == 0) {
+        if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().isIn(Tags.Blocks.ORES_DIAMOND) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool) == 0) {
             Entity entity = JABBERWOCKY_MOBS.get(SilentGear.random.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getPlayer().getEntityWorld());
             entity.setPositionAndUpdate(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
             EntityHelper.safeSpawn(entity);
@@ -374,7 +373,7 @@ public final class GearEvents {
         Entity killer = event.getSource().getTrueSource();
         if (killer instanceof PlayerEntity && !killer.world.isRemote) {
             PlayerEntity player = (PlayerEntity) killer;
-            if (TraitHelper.hasTraitEitherHand(player, TraitConst.CONFETTI)) {
+            if (TraitHelper.hasTraitEitherHand(player, Const.Traits.CONFETTI)) {
                 for (int i = 0; i < 3; ++i) {
                     FireworkRocketEntity rocket = new FireworkRocketEntity(player.world, event.getEntity().getPosX(), event.getEntity().getPosYEye(), event.getEntity().getPosZ(), createRandomFirework());
                     EntityHelper.safeSpawn(rocket);
@@ -405,7 +404,7 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!event.player.world.isRemote) {
-            int magnetic = TraitHelper.getHighestLevelEitherHand(event.player, TraitConst.MAGNETIC);
+            int magnetic = TraitHelper.getHighestLevelEitherHand(event.player, Const.Traits.MAGNETIC);
             if (magnetic > 0) {
                 final int range = magnetic * 3 + 1;
                 Vec3d target = new Vec3d(event.player.getPosX(), event.player.getPosYHeight(0.5), event.player.getPosZ());
@@ -430,9 +429,9 @@ public final class GearEvents {
         ItemStack stack = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET);
 
         if (!stack.isEmpty()) {
-            int moonwalker = TraitHelper.getTraitLevel(stack, TraitConst.MOONWALKER);
+            int moonwalker = TraitHelper.getTraitLevel(stack, Const.Traits.MOONWALKER);
             if (moonwalker > 0) {
-                float gravity = 1 + moonwalker * TraitConst.MOONWALKER_GRAVITY_MOD;
+                float gravity = 1 + moonwalker * Const.Traits.MOONWALKER_GRAVITY_MOD;
                 event.setDistance(event.getDistance() * gravity);
 
                 if (event.getEntityLiving() instanceof ServerPlayerEntity) {

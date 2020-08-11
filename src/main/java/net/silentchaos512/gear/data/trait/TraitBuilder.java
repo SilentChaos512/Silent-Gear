@@ -6,8 +6,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.traits.SimpleTrait;
+import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +28,10 @@ public class TraitBuilder {
 
     private Consumer<JsonObject> extraData = json -> {};
 
+    public TraitBuilder(DataResource<ITrait> trait, int maxLevel, ITraitSerializer<?> serializer) {
+        this(trait.getId(), maxLevel, serializer);
+    }
+
     public TraitBuilder(ResourceLocation traitId, int maxLevel, ITraitSerializer<?> serializer) {
         this.traitId = traitId;
         this.type = serializer.getName();
@@ -33,6 +39,10 @@ public class TraitBuilder {
 
         this.name = new TranslationTextComponent(Util.makeTranslationKey("trait", traitId));
         this.description = new TranslationTextComponent(Util.makeTranslationKey("trait", traitId) + ".desc");
+    }
+
+    public static TraitBuilder simple(DataResource<ITrait> trait, int maxLevel) {
+        return simple(trait.getId(), maxLevel);
     }
 
     public static TraitBuilder simple(ResourceLocation traitId, int maxLevel) {
@@ -49,9 +59,17 @@ public class TraitBuilder {
         return this;
     }
 
+    public TraitBuilder cancelsWith(DataResource<ITrait> trait) {
+        return cancelsWith(trait.getId());
+    }
+
     public TraitBuilder cancelsWith(ResourceLocation trait) {
         this.cancelsList.add(trait);
         return this;
+    }
+
+    public TraitBuilder overridesTrait(DataResource<ITrait> trait) {
+        return overridesTrait(trait.getId());
     }
 
     public TraitBuilder overridesTrait(ResourceLocation trait) {
