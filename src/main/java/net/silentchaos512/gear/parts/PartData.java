@@ -2,6 +2,7 @@ package net.silentchaos512.gear.parts;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -11,6 +12,8 @@ import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.util.DataResource;
 

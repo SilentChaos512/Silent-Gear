@@ -161,6 +161,16 @@ public class SimplePartAdapterMaterial implements IMaterial {
     public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
     }
 
+    @Override
+    public Optional<Ingredient> getPartSubstitute(PartType partType) {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean hasPartSubstitutes() {
+        return false;
+    }
+
     public static class Serializer implements IMaterialSerializer<SimplePartAdapterMaterial> {
         @Override
         public SimplePartAdapterMaterial deserialize(ResourceLocation id, String packName, JsonObject json) {

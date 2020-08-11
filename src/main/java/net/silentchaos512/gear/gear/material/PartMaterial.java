@@ -95,10 +95,12 @@ public final class PartMaterial implements IMaterial {
         return this.ingredient;
     }
 
+    @Override
     public Optional<Ingredient> getPartSubstitute(PartType partType) {
         return Optional.ofNullable(this.partSubstitutes.get(partType));
     }
 
+    @Override
     public boolean hasPartSubstitutes() {
         return !this.partSubstitutes.isEmpty();
     }

@@ -246,4 +246,8 @@ public interface IMaterial {
     }
 
     void updateIngredient(SyncMaterialCraftingItemsPacket msg);
+
+    Optional<Ingredient> getPartSubstitute(PartType partType);
+
+    boolean hasPartSubstitutes();
 }

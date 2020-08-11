@@ -3,6 +3,30 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.3] - 2020-08-11
+- Merged most recent changes from 1.16.x branch, versions 2.0.5 through 2.0.9
+### Added
+- Azure silver and azure electrum. Azure silver is found in The End. Azure electrum is an alloy.
+- New traits: Accelerate and Moonwalker
+- Azure repair kit
+- Fragments. Eight can be crafted into a full material item. Sometimes returned by the salvager if returning a full item wouldn't make sense.
+- Magic armor stat now protects from magic damage (potions)
+- Some loot to Nether chests
+- Vanilla bow and crossbow salvaging recipes
+### Changed
+- Tweaked how trait levels are calculated [#93]
+- Updated armor textures
+- Updated grip and binding textures, removed unused head textures
+- Gear now loses traits when broken (restored when repaired)
+### Fixed
+- Items breaking in some cases [#214]
+- Gear model crash [#206]
+- Tools accepting heads of other tool types [#205]
+- Blueprint dupe [#199]
+- Quick gear recipes sometimes making the wrong tool head
+- Armor having terrible repair efficiency
+- Tools with mixed materials having the wrong harvest level
+
 ## [1.11.2] - 2020-08-02
 ### Added
 - Fully-loaded blueprint book to creative menu, contains all registered blueprints
