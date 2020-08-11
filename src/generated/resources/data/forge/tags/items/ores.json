@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#forge:ores/crimson_iron"
+    "#forge:ores/crimson_iron",
+    "#forge:ores/azure_silver"
   ]
 }

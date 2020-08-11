@@ -244,6 +244,29 @@ public class ModAdvancementProvider implements IDataProvider {
                     .register(consumer, id("grader_catalyst_3"));
 
             //endregion
+
+            //region The End
+
+            Advancement theEnd = Advancement.Builder.builder()
+                    .withParent(nether)
+                    .withDisplay(Items.END_STONE, title("the_end"), description("the_end"), null, FrameType.TASK, false, false, false)
+                    .withCriterion("entered_the_end", ChangeDimensionTrigger.Instance.changedDimensionTo(DimensionType.THE_END))
+                    .register(consumer, id("the_end"));
+
+            Advancement azureSilver = Advancement.Builder.builder()
+                    .withParent(theEnd)
+                    .withDisplay(CraftingItems.AZURE_SILVER_INGOT, title("azure_silver"), description("azure_silver"), null, FrameType.TASK, true, true, false)
+                    .withCriterion("get_ore", getItem(ModBlocks.AZURE_SILVER_ORE))
+                    .withCriterion("get_ingot", getItem(CraftingItems.AZURE_SILVER_INGOT))
+                    .register(consumer, id("azure_silver"));
+
+            Advancement azureElectrum = Advancement.Builder.builder()
+                    .withParent(azureSilver)
+                    .withDisplay(CraftingItems.AZURE_ELECTRUM_INGOT, title("azure_electrum"), description("azure_electrum"), null, FrameType.TASK, true, true, false)
+                    .withCriterion("get_ingot", getItem(CraftingItems.AZURE_ELECTRUM_INGOT))
+                    .register(consumer, id("azure_electrum"));
+
+            //endregion
         }
 
         private static Advancement simpleGetItem(Consumer<Advancement> consumer, IItemProvider item, Advancement parent) {

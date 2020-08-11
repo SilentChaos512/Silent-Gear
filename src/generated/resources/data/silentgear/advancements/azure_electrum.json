@@ -1,0 +1,35 @@
+{
+  "parent": "silentgear:azure_silver",
+  "display": {
+    "icon": {
+      "item": "silentgear:azure_electrum_ingot"
+    },
+    "title": {
+      "translate": "advancements.silentgear.azure_electrum.title"
+    },
+    "description": {
+      "translate": "advancements.silentgear.azure_electrum.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:azure_electrum_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_ingot"
+    ]
+  ]
+}

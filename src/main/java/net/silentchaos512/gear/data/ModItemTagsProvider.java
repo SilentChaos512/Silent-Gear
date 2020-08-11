@@ -35,40 +35,58 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void registerTags() {
         // Forge
         copy(ModTags.Blocks.ORES_CRIMSON_IRON, ModTags.Items.ORES_CRIMSON_IRON);
+        copy(ModTags.Blocks.ORES_AZURE_SILVER, ModTags.Items.ORES_AZURE_SILVER);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
+
         copy(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModTags.Items.STORAGE_BLOCKS_BLAZE_GOLD);
         copy(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModTags.Items.STORAGE_BLOCKS_CRIMSON_IRON);
         copy(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, ModTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, ModTags.Items.STORAGE_BLOCKS_AZURE_SILVER);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, ModTags.Items.STORAGE_BLOCKS_AZURE_ELECTRUM);
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
+
+        builder(ModTags.Items.CHUNKS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_CHUNKS);
+        builder(ModTags.Items.CHUNKS_AZURE_SILVER, CraftingItems.AZURE_SILVER_CHUNKS);
 
         builder(ModTags.Items.DUSTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_DUST);
         builder(ModTags.Items.DUSTS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_DUST);
-        getBuilder(Tags.Items.DUSTS).add(
-                ModTags.Items.DUSTS_BLAZE_GOLD,
-                ModTags.Items.DUSTS_CRIMSON_IRON
-        );
+        builder(ModTags.Items.DUSTS_CRIMSON_STEEL, CraftingItems.CRIMSON_STEEL_DUST);
+        builder(ModTags.Items.DUSTS_AZURE_SILVER, CraftingItems.AZURE_SILVER_DUST);
+        builder(ModTags.Items.DUSTS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_DUST);
+        getBuilder(Tags.Items.DUSTS)
+                .add(ModTags.Items.DUSTS_BLAZE_GOLD)
+                .add(ModTags.Items.DUSTS_CRIMSON_IRON)
+                .add(ModTags.Items.DUSTS_CRIMSON_STEEL)
+                .add(ModTags.Items.DUSTS_AZURE_SILVER)
+                .add(ModTags.Items.DUSTS_AZURE_ELECTRUM);
 
         builder(ModTags.Items.INGOTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_INGOT);
         builder(ModTags.Items.INGOTS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_INGOT);
         builder(ModTags.Items.INGOTS_CRIMSON_STEEL, CraftingItems.CRIMSON_STEEL_INGOT);
-        getBuilder(Tags.Items.INGOTS).add(
-                ModTags.Items.INGOTS_BLAZE_GOLD,
-                ModTags.Items.INGOTS_CRIMSON_IRON,
-                ModTags.Items.INGOTS_CRIMSON_STEEL
-        );
+        builder(ModTags.Items.INGOTS_AZURE_SILVER, CraftingItems.AZURE_SILVER_INGOT);
+        builder(ModTags.Items.INGOTS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_INGOT);
+        getBuilder(Tags.Items.INGOTS)
+                .add(ModTags.Items.INGOTS_BLAZE_GOLD)
+                .add(ModTags.Items.INGOTS_CRIMSON_IRON)
+                .add(ModTags.Items.INGOTS_CRIMSON_STEEL)
+                .add(ModTags.Items.INGOTS_AZURE_SILVER)
+                .add(ModTags.Items.INGOTS_AZURE_ELECTRUM);
 
         builder(ModTags.Items.NUGGETS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_NUGGET);
         builder(ModTags.Items.NUGGETS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_NUGGET);
         builder(ModTags.Items.NUGGETS_CRIMSON_STEEL, CraftingItems.CRIMSON_STEEL_NUGGET);
+        builder(ModTags.Items.NUGGETS_AZURE_SILVER, CraftingItems.AZURE_SILVER_NUGGET);
+        builder(ModTags.Items.NUGGETS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_NUGGET);
         builder(ModTags.Items.NUGGETS_DIAMOND, CraftingItems.DIAMOND_SHARD);
         builder(ModTags.Items.NUGGETS_EMERALD, CraftingItems.EMERALD_SHARD);
-        getBuilder(Tags.Items.NUGGETS).add(
-                ModTags.Items.NUGGETS_BLAZE_GOLD,
-                ModTags.Items.NUGGETS_CRIMSON_IRON,
-                ModTags.Items.NUGGETS_CRIMSON_STEEL,
-                ModTags.Items.NUGGETS_DIAMOND,
-                ModTags.Items.NUGGETS_EMERALD
-        );
+        getBuilder(Tags.Items.NUGGETS)
+                .add(ModTags.Items.NUGGETS_BLAZE_GOLD)
+                .add(ModTags.Items.NUGGETS_CRIMSON_IRON)
+                .add(ModTags.Items.NUGGETS_CRIMSON_STEEL)
+                .add(ModTags.Items.NUGGETS_AZURE_SILVER)
+                .add(ModTags.Items.NUGGETS_AZURE_ELECTRUM)
+                .add(ModTags.Items.NUGGETS_DIAMOND)
+                .add(ModTags.Items.NUGGETS_EMERALD);
 
         builder(ModTags.Items.RODS_IRON, CraftingItems.IRON_ROD);
         builder(ModTags.Items.RODS_NETHERWOOD, CraftingItems.NETHERWOOD_STICK);

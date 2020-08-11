@@ -5,6 +5,7 @@ import net.silentchaos512.gear.SilentGear;
 
 public class TraitConst {
     // Traits needed somewhere in the code
+    public static final ResourceLocation ACCELERATE = SilentGear.getId("accelerate");
     public static final ResourceLocation ADAMANT = SilentGear.getId("adamant");
     public static final ResourceLocation ANCIENT = SilentGear.getId("ancient");
     public static final ResourceLocation AQUATIC = SilentGear.getId("aquatic");

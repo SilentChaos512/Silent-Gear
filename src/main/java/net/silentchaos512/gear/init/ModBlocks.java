@@ -25,13 +25,16 @@ import java.util.function.Supplier;
 
 public final class ModBlocks {
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
-            new OreBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(4, 10).harvestLevel(2).harvestTool(ToolType.PICKAXE)));
-    public static final BlockRegistryObject<MetalBlock> CRIMSON_IRON_BLOCK = register("crimson_iron_block", () ->
-            new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL)));
-    public static final BlockRegistryObject<MetalBlock> CRIMSON_STEEL_BLOCK = register("crimson_steel_block", () ->
-            new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL)));
-    public static final BlockRegistryObject<MetalBlock> BLAZE_GOLD_BLOCK = register("blaze_gold_block", () ->
-            new MetalBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0f, 6.0f).sound(SoundType.METAL)));
+            getOre(2, SoundType.STONE));
+    public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
+            getOre(4, SoundType.STONE));
+
+    public static final BlockRegistryObject<MetalBlock> CRIMSON_IRON_BLOCK = register("crimson_iron_block", ModBlocks::getMetalBlock);
+    public static final BlockRegistryObject<MetalBlock> CRIMSON_STEEL_BLOCK = register("crimson_steel_block", ModBlocks::getMetalBlock);
+    public static final BlockRegistryObject<MetalBlock> BLAZE_GOLD_BLOCK = register("blaze_gold_block", ModBlocks::getMetalBlock);
+    public static final BlockRegistryObject<MetalBlock> AZURE_SILVER_BLOCK = register("azure_silver_block", ModBlocks::getMetalBlock);
+    public static final BlockRegistryObject<MetalBlock> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block", ModBlocks::getMetalBlock);
+
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 30)));
     public static final BlockRegistryObject<CraftingStationBlock> CRAFTING_STATION = register("crafting_station", CraftingStationBlock::new);
@@ -74,6 +77,20 @@ public final class ModBlocks {
         RenderTypeLookup.setRenderLayer(STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.getCutout());
+    }
+
+    private static OreBlock getOre(int harvestLevel, SoundType soundType) {
+        return new OreBlock(Block.Properties.create(Material.ROCK)
+                .hardnessAndResistance(4, 10)
+                .harvestLevel(harvestLevel)
+                .harvestTool(ToolType.PICKAXE)
+                .sound(soundType));
+    }
+
+    private static MetalBlock getMetalBlock() {
+        return new MetalBlock(Block.Properties.create(Material.IRON)
+                .hardnessAndResistance(3.0f, 6.0f)
+                .sound(SoundType.METAL));
     }
 
     private static <T extends Block> BlockRegistryObject<T> registerNoItem(String name, Supplier<T> block) {

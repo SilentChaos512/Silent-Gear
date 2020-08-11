@@ -28,9 +28,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         simpleBlock(ModBlocks.CRIMSON_IRON_ORE.get());
+        simpleBlock(ModBlocks.AZURE_SILVER_ORE.get());
         simpleBlock(ModBlocks.CRIMSON_IRON_BLOCK.get());
         simpleBlock(ModBlocks.CRIMSON_STEEL_BLOCK.get());
         simpleBlock(ModBlocks.BLAZE_GOLD_BLOCK.get());
+        simpleBlock(ModBlocks.AZURE_SILVER_BLOCK.get());
+        simpleBlock(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
 
         simpleBlock(ModBlocks.NETHERWOOD_PLANKS.get());
         simpleBlock(ModBlocks.NETHERWOOD_LEAVES.get());

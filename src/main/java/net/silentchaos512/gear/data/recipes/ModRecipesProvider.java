@@ -36,6 +36,7 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class ModRecipesProvider extends RecipeProvider {
     public ModRecipesProvider(DataGenerator generatorIn) {
@@ -49,18 +50,30 @@ public class ModRecipesProvider extends RecipeProvider {
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        metals(consumer, 1.0f, new Metals("blaze_gold", CraftingItems.BLAZE_GOLD_INGOT, ModTags.Items.INGOTS_BLAZE_GOLD)
+        metals(consumer, 0.5f, new Metals("blaze_gold", CraftingItems.BLAZE_GOLD_INGOT, ModTags.Items.INGOTS_BLAZE_GOLD)
                 .block(ModBlocks.BLAZE_GOLD_BLOCK, ModTags.Items.STORAGE_BLOCKS_BLAZE_GOLD)
                 .dust(CraftingItems.BLAZE_GOLD_DUST, ModTags.Items.DUSTS_BLAZE_GOLD)
                 .nugget(CraftingItems.BLAZE_GOLD_NUGGET, ModTags.Items.NUGGETS_BLAZE_GOLD));
         metals(consumer, 1.0f, new Metals("crimson_iron", CraftingItems.CRIMSON_IRON_INGOT, ModTags.Items.INGOTS_CRIMSON_IRON)
                 .block(ModBlocks.CRIMSON_IRON_BLOCK, ModTags.Items.STORAGE_BLOCKS_CRIMSON_IRON)
                 .dust(CraftingItems.CRIMSON_IRON_DUST, ModTags.Items.DUSTS_CRIMSON_IRON)
+                .chunks(ModTags.Items.CHUNKS_CRIMSON_IRON)
                 .ore(ModBlocks.CRIMSON_IRON_ORE, ModTags.Items.ORES_CRIMSON_IRON)
                 .nugget(CraftingItems.CRIMSON_IRON_NUGGET, ModTags.Items.NUGGETS_CRIMSON_IRON));
-        metals(consumer, 1.0f, new Metals("crimson_steel", CraftingItems.CRIMSON_STEEL_INGOT, ModTags.Items.INGOTS_CRIMSON_STEEL)
+        metals(consumer, 0.5f, new Metals("crimson_steel", CraftingItems.CRIMSON_STEEL_INGOT, ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .block(ModBlocks.CRIMSON_STEEL_BLOCK, ModTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL)
+                .dust(CraftingItems.CRIMSON_STEEL_DUST, ModTags.Items.DUSTS_CRIMSON_STEEL)
                 .nugget(CraftingItems.CRIMSON_STEEL_NUGGET, ModTags.Items.NUGGETS_CRIMSON_STEEL));
+        metals(consumer, 1.5f, new Metals("azure_silver", CraftingItems.AZURE_SILVER_INGOT, ModTags.Items.INGOTS_AZURE_SILVER)
+                .block(ModBlocks.AZURE_SILVER_BLOCK, ModTags.Items.STORAGE_BLOCKS_AZURE_SILVER)
+                .dust(CraftingItems.AZURE_SILVER_DUST, ModTags.Items.DUSTS_AZURE_SILVER)
+                .chunks(ModTags.Items.CHUNKS_AZURE_SILVER)
+                .ore(ModBlocks.AZURE_SILVER_ORE, ModTags.Items.ORES_AZURE_SILVER)
+                .nugget(CraftingItems.AZURE_SILVER_NUGGET, ModTags.Items.NUGGETS_AZURE_SILVER));
+        metals(consumer, 0.5f, new Metals("azure_electrum", CraftingItems.AZURE_ELECTRUM_INGOT, ModTags.Items.INGOTS_AZURE_ELECTRUM)
+                .block(ModBlocks.AZURE_ELECTRUM_BLOCK, ModTags.Items.STORAGE_BLOCKS_AZURE_ELECTRUM)
+                .dust(CraftingItems.AZURE_ELECTRUM_DUST, ModTags.Items.DUSTS_AZURE_ELECTRUM)
+                .nugget(CraftingItems.AZURE_ELECTRUM_NUGGET, ModTags.Items.NUGGETS_AZURE_ELECTRUM));
 
         registerSpecialRecipes(consumer);
         registerCraftingItems(consumer);
@@ -394,6 +407,16 @@ public class ModRecipesProvider extends RecipeProvider {
         damageGear(CraftingItems.TEMPLATE_BOARD, 6, 1)
                 .addIngredient(ModTags.Items.KNIVES)
                 .addIngredient(ItemTags.LOGS)
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(CraftingItems.AZURE_ELECTRUM_INGOT)
+                .key('/', Tags.Items.INGOTS_GOLD)
+                .key('#', ModTags.Items.INGOTS_AZURE_SILVER)
+                .key('o', Tags.Items.ENDER_PEARLS)
+                .patternLine("/ /")
+                .patternLine("#o#")
+                .patternLine("# #")
+                .addCriterion("has_item", hasItem(CraftingItems.AZURE_SILVER_INGOT))
                 .build(consumer);
 
         // TODO: Maybe should organize these better...
@@ -1001,10 +1024,13 @@ public class ModRecipesProvider extends RecipeProvider {
                     .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_from_nuggets"));
         }
         if (metal.dustTag != null) {
-            CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(metal.dustTag), metal.ingot, smeltingXp, 100)
+            Ingredient dustOrChunks = metal.chunksTag != null
+                    ? Ingredient.fromItemListStream(Stream.of(new Ingredient.TagList(metal.chunksTag), new Ingredient.TagList(metal.dustTag)))
+                    : Ingredient.fromTag(metal.dustTag);
+            CookingRecipeBuilder.blastingRecipe(dustOrChunks, metal.ingot, smeltingXp, 100)
                     .addCriterion("has_item", hasIngot)
                     .build(consumer, SilentGear.getId(metal.name + "_dust_blasting"));
-            CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(metal.dustTag), metal.ingot, smeltingXp, 200)
+            CookingRecipeBuilder.smeltingRecipe(dustOrChunks, metal.ingot, smeltingXp, 200)
                     .addCriterion("has_item", hasIngot)
                     .build(consumer, SilentGear.getId(metal.name + "_dust_smelting"));
         }
@@ -1023,6 +1049,7 @@ public class ModRecipesProvider extends RecipeProvider {
         private Tag<Item> nuggetTag;
         private IItemProvider dust;
         private Tag<Item> dustTag;
+        private Tag<Item> chunksTag;
 
         public Metals(String name, IItemProvider ingot, Tag<Item> ingotTag) {
             this.name = name;
@@ -1051,6 +1078,11 @@ public class ModRecipesProvider extends RecipeProvider {
         public Metals dust(IItemProvider item, Tag<Item> tag) {
             this.dust = item;
             this.dustTag = tag;
+            return this;
+        }
+
+        public Metals chunks(Tag<Item> tag) {
+            this.chunksTag = tag;
             return this;
         }
     }

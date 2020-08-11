@@ -17,34 +17,56 @@ public final class ModTags {
     public static final class Blocks {
         public static final Tag<Block> NETHERWOOD_SOIL = new BlockTags.Wrapper(modId("netherwood_soil"));
 
-        public static final Tag<Block> ORES_CRIMSON_IRON = new BlockTags.Wrapper(forgeId("ores/crimson_iron"));
+        public static final Tag<Block> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
 
-        public static final Tag<Block> STORAGE_BLOCKS_BLAZE_GOLD = new BlockTags.Wrapper(forgeId("storage_blocks/blaze_gold"));
-        public static final Tag<Block> STORAGE_BLOCKS_CRIMSON_IRON = new BlockTags.Wrapper(forgeId("storage_blocks/crimson_iron"));
-        public static final Tag<Block> STORAGE_BLOCKS_CRIMSON_STEEL = new BlockTags.Wrapper(forgeId("storage_blocks/crimson_steel"));
+        public static final Tag<Block> ORES_AZURE_SILVER = forge("ores/azure_silver");
+
+        public static final Tag<Block> STORAGE_BLOCKS_BLAZE_GOLD = forge("storage_blocks/blaze_gold");
+        public static final Tag<Block> STORAGE_BLOCKS_CRIMSON_IRON = forge("storage_blocks/crimson_iron");
+        public static final Tag<Block> STORAGE_BLOCKS_CRIMSON_STEEL = forge("storage_blocks/crimson_steel");
+        public static final Tag<Block> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
+        public static final Tag<Block> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
 
         private Blocks() {}
+
+        private static Tag<Block> forge(String path) {
+            return new BlockTags.Wrapper(new ResourceLocation("forge", path));
+        }
     }
 
     public static final class Items {
-        public static final Tag<Item> ORES_CRIMSON_IRON = new ItemTags.Wrapper(forgeId("ores/crimson_iron"));
+        public static final Tag<Item> NETHERWOOD_LOGS = mod("netherwood_logs");
+        public static final Tag<Item> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
+        public static final Tag<Item> ORES_AZURE_SILVER = forge("ores/azure_silver");
 
-        public static final Tag<Item> STORAGE_BLOCKS_BLAZE_GOLD = new ItemTags.Wrapper(forgeId("storage_blocks/blaze_gold"));
-        public static final Tag<Item> STORAGE_BLOCKS_CRIMSON_IRON = new ItemTags.Wrapper(forgeId("storage_blocks/crimson_iron"));
-        public static final Tag<Item> STORAGE_BLOCKS_CRIMSON_STEEL = new ItemTags.Wrapper(forgeId("storage_blocks/crimson_steel"));
+        public static final Tag<Item> CHUNKS_CRIMSON_IRON = silentsMechanisms("chunks/crimson_iron");
+        public static final Tag<Item> CHUNKS_AZURE_SILVER = silentsMechanisms("chunks/azure_silver");
 
-        public static final Tag<Item> DUSTS_BLAZE_GOLD = new ItemTags.Wrapper(forgeId("dusts/blaze_gold"));
-        public static final Tag<Item> DUSTS_CRIMSON_IRON = new ItemTags.Wrapper(forgeId("dusts/crimson_iron"));
+        public static final Tag<Item> STORAGE_BLOCKS_BLAZE_GOLD = forge("storage_blocks/blaze_gold");
+        public static final Tag<Item> STORAGE_BLOCKS_CRIMSON_IRON = forge("storage_blocks/crimson_iron");
+        public static final Tag<Item> STORAGE_BLOCKS_CRIMSON_STEEL = forge("storage_blocks/crimson_steel");
+        public static final Tag<Item> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
+        public static final Tag<Item> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
 
-        public static final Tag<Item> INGOTS_BLAZE_GOLD = new ItemTags.Wrapper(forgeId("ingots/blaze_gold"));
-        public static final Tag<Item> INGOTS_CRIMSON_IRON = new ItemTags.Wrapper(forgeId("ingots/crimson_iron"));
-        public static final Tag<Item> INGOTS_CRIMSON_STEEL = new ItemTags.Wrapper(forgeId("ingots/crimson_steel"));
+        public static final Tag<Item> DUSTS_BLAZE_GOLD = forge("dusts/blaze_gold");
+        public static final Tag<Item> DUSTS_CRIMSON_IRON = forge("dusts/crimson_iron");
+        public static final Tag<Item> DUSTS_CRIMSON_STEEL = forge("dusts/crimson_steel");
+        public static final Tag<Item> DUSTS_AZURE_SILVER = forge("dusts/azure_silver");
+        public static final Tag<Item> DUSTS_AZURE_ELECTRUM = forge("dusts/azure_electrum");
 
-        public static final Tag<Item> NUGGETS_BLAZE_GOLD = new ItemTags.Wrapper(forgeId("nuggets/blaze_gold"));
-        public static final Tag<Item> NUGGETS_CRIMSON_IRON = new ItemTags.Wrapper(forgeId("nuggets/crimson_iron"));
-        public static final Tag<Item> NUGGETS_CRIMSON_STEEL = new ItemTags.Wrapper(forgeId("nuggets/crimson_steel"));
-        public static final Tag<Item> NUGGETS_DIAMOND = new ItemTags.Wrapper(forgeId("nuggets/diamond"));
-        public static final Tag<Item> NUGGETS_EMERALD = new ItemTags.Wrapper(forgeId("nuggets/emerald"));
+        public static final Tag<Item> INGOTS_BLAZE_GOLD = forge("ingots/blaze_gold");
+        public static final Tag<Item> INGOTS_CRIMSON_IRON = forge("ingots/crimson_iron");
+        public static final Tag<Item> INGOTS_CRIMSON_STEEL = forge("ingots/crimson_steel");
+        public static final Tag<Item> INGOTS_AZURE_SILVER = forge("ingots/azure_silver");
+        public static final Tag<Item> INGOTS_AZURE_ELECTRUM = forge("ingots/azure_electrum");
+
+        public static final Tag<Item> NUGGETS_BLAZE_GOLD = forge("nuggets/blaze_gold");
+        public static final Tag<Item> NUGGETS_CRIMSON_IRON = forge("nuggets/crimson_iron");
+        public static final Tag<Item> NUGGETS_CRIMSON_STEEL = forge("nuggets/crimson_steel");
+        public static final Tag<Item> NUGGETS_AZURE_SILVER = forge("nuggets/azure_silver");
+        public static final Tag<Item> NUGGETS_AZURE_ELECTRUM = forge("nuggets/azure_electrum");
+        public static final Tag<Item> NUGGETS_DIAMOND = forge("nuggets/diamond");
+        public static final Tag<Item> NUGGETS_EMERALD = forge("nuggets/emerald");
 
         public static final Tag<Item> PAPER = new ItemTags.Wrapper(forgeId("paper"));
         // TODO: Change to silentgear:blueprint_paper?
@@ -52,11 +74,10 @@ public final class ModTags {
         public static final Tag<Item> REPAIR_KITS = new ItemTags.Wrapper(modId("repair_kits"));
         public static final Tag<Item> TEMPLATE_BOARDS = new ItemTags.Wrapper(modId("template_boards"));
 
-        // TODO: Remove iron rods, maybe netherwood?
-        public static final Tag<Item> RODS_IRON = new ItemTags.Wrapper(forgeId("rods/iron"));
-        public static final Tag<Item> RODS_NETHERWOOD = new ItemTags.Wrapper(modId("rods/netherwood"));
-        public static final Tag<Item> RODS_STONE = new ItemTags.Wrapper(forgeId("rods/stone"));
-        public static final Tag<Item> RODS_ROUGH = new ItemTags.Wrapper(modId("rods/rough"));
+        public static final Tag<Item> RODS_IRON = forge("rods/iron");
+        public static final Tag<Item> RODS_NETHERWOOD = mod("rods/netherwood");
+        public static final Tag<Item> RODS_STONE = forge("rods/stone");
+        public static final Tag<Item> RODS_ROUGH = mod("rods/rough");
 
         // TODO: Remove the string sub-tags
         public static final Tag<Item> STRING_FLAX = new ItemTags.Wrapper(forgeId("string/flax"));
@@ -95,13 +116,25 @@ public final class ModTags {
         public static final Tag<Item> BLUEPRINTS_ROD = new ItemTags.Wrapper(modId("blueprints/rod"));
 
         private Items() {}
-    }
 
-    private static ResourceLocation forgeId(String path) {
-        return new ResourceLocation("forge", path);
+        private static Tag<Item> mod(String path) {
+            return new ItemTags.Wrapper(SilentGear.getId(path));
+        }
+
+        private static Tag<Item> forge(String path) {
+            return new ItemTags.Wrapper(new ResourceLocation("forge", path));
+        }
+
+        private static Tag<Item> silentsMechanisms(String path) {
+            return new ItemTags.Wrapper(new ResourceLocation("silents_mechanisms", path));
+        }
+
+        private static ResourceLocation forgeId(String path) {
+            return new ResourceLocation("forge", path);
+        }
     }
 
     private static ResourceLocation modId(String path) {
-        return new ResourceLocation(SilentGear.MOD_ID, path);
+        return SilentGear.getId(path);
     }
 }

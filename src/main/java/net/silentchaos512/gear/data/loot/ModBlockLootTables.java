@@ -38,11 +38,14 @@ public class ModBlockLootTables extends BlockLootTables {
 
     @Override
     protected void addTables() {
+        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.get());
+        registerDropSelfLootTable(ModBlocks.AZURE_SILVER_ORE.get());
         registerDropSelfLootTable(ModBlocks.BLAZE_GOLD_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.CRAFTING_STATION.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.AZURE_SILVER_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
         ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
         this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(ModItems.FLAXSEEDS, flaxBuilder));
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());

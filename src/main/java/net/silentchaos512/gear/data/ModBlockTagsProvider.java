@@ -27,17 +27,21 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     protected void registerTags() {
         // Forge
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
-        getBuilder(Tags.Blocks.ORES).add(
-                ModTags.Blocks.ORES_CRIMSON_IRON
-        );
+        builder(ModTags.Blocks.ORES_AZURE_SILVER, ModBlocks.AZURE_SILVER_ORE);
+        getBuilder(Tags.Blocks.ORES)
+                .add(ModTags.Blocks.ORES_CRIMSON_IRON)
+                .add(ModTags.Blocks.ORES_AZURE_SILVER);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, ModBlocks.CRIMSON_STEEL_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModBlocks.BLAZE_GOLD_BLOCK);
-        getBuilder(Tags.Blocks.STORAGE_BLOCKS).add(
-                ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD,
-                ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON,
-                ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL
-        );
+        builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, ModBlocks.AZURE_SILVER_BLOCK);
+        builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, ModBlocks.AZURE_ELECTRUM_BLOCK);
+        getBuilder(Tags.Blocks.STORAGE_BLOCKS)
+                .add(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
+                .add(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
+                .add(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL)
+                .add(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER)
+                .add(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM);
 
         // Minecraft
         builder(BlockTags.LEAVES, ModBlocks.NETHERWOOD_LEAVES);

@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "silents_mechanisms"
+    }
+  ],
+  "type": "silents_mechanisms:crushing",
+  "process_time": 300,
+  "ingredient": {
+    "item": "silentgear:azure_silver_chunks"
+  },
+  "results": [
+    {
+      "item": "silentgear:azure_silver_dust",
+      "count": 1
+    },
+    {
+      "item": "silentgear:azure_silver_dust",
+      "count": 1,
+      "chance": 0.1
+    }
+  ]
+}

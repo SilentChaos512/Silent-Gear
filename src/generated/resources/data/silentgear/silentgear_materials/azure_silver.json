@@ -1,0 +1,91 @@
+{
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": []
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/azure_silver"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.azure_silver"
+  },
+  "stats": {
+    "main": {
+      "durability": 197.0,
+      "armor_durability": 17.0,
+      "enchantability": 29.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 19.0,
+      "melee_damage": 5.0,
+      "magic_damage": 7.0,
+      "attack_speed": 0.0,
+      "armor": 13.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 13.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": 0.0,
+      "rarity": 83.0,
+      "silentgems:chargeability": 1.4
+    },
+    "rod": {
+      "durability": {
+        "mul2": -0.2
+      },
+      "harvest_speed": {
+        "add": 3.0
+      },
+      "rarity": 47.0
+    },
+    "tip": {
+      "durability": {
+        "add": 83.0
+      },
+      "armor_durability": {
+        "add": 3.0
+      },
+      "harvest_speed": {
+        "add": 3.0
+      },
+      "magic_damage": {
+        "add": 2.0
+      },
+      "attack_speed": {
+        "add": 0.2
+      },
+      "rarity": {
+        "add": 31.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 1
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 2
+      }
+    ]
+  }
+}
