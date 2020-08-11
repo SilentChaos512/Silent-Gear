@@ -10,10 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.item.ShieldItem;
+import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -172,7 +169,12 @@ public class CoreShield extends ShieldItem implements ICoreItem {
 
     @Override
     public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-        return true;
+        return !GearHelper.isBroken(stack);
+    }
+
+    @Override
+    public UseAction getUseAction(ItemStack stack) {
+        return GearHelper.isBroken(stack) ? UseAction.NONE : super.getUseAction(stack);
     }
 
     @Override
