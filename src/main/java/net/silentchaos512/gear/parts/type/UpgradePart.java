@@ -70,7 +70,7 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
     @Override
     public boolean canAddToGear(ItemStack gear, PartData part) {
         // TODO: Temp fix. Should define this in JSON...
-        if (this.getId().equals(PartConst.MISC_SPOON))
+        if (this.getId().equals(PartConst.MISC_SPOON.getId()))
             return gear.getItem() == ModItems.PICKAXE.get();
         return true;
     }

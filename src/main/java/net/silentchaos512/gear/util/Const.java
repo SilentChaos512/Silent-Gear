@@ -2,12 +2,13 @@ package net.silentchaos512.gear.util;
 
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.material.IMaterial;
 
-public class Const {
-    /**
-     * Example material ID
-     */
-    public static final ResourceLocation EXAMPLE = SilentGear.getId("example");
+public final class Const {
+    // Example material. We don't need references to most mats, but this one acts as a placeholder in some cases
+    public static final DataResource<IMaterial> EXAMPLE_MATERIAL = DataResource.material("example");
+    public static final DataResource<IMaterial> ROUGH_WOOD_MATERIAL = DataResource.material("wood/rough");
+    public static final DataResource<IMaterial> AZURE_SILVER_MATERIAL = DataResource.material("azure_silver");
 
     public static final ResourceLocation SALVAGING = SilentGear.getId("salvaging");
     public static final ResourceLocation SALVAGING_COMPOUND_PART = SilentGear.getId("salvaging/compound_part");

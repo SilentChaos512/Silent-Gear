@@ -7,8 +7,10 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 import net.silentchaos512.gear.api.item.GearType;
@@ -99,6 +101,19 @@ public class TraitsProvider implements IDataProvider {
                         0.5f, 1f, 1.5f, 2f, 3f, 4f, 5f)
                 .cancelsWith(TraitConst.CURSED)
         );
+        {
+            int maxLevel = 5;
+            float[] values = new float[maxLevel];
+            for (int i = 0; i < maxLevel; ++i) {
+                values[i] = TraitConst.MOONWALKER_GRAVITY_MOD * (i + 1);
+            }
+            ret.add(new AttributeTraitBuilder(TraitConst.MOONWALKER, maxLevel)
+                    .addModifier(GearType.BOOTS, EquipmentSlotType.FEET,
+                            LivingEntity.ENTITY_GRAVITY,
+                            AttributeModifier.Operation.MULTIPLY_BASE,
+                            values)
+            );
+        }
 
         // Enchantment
 

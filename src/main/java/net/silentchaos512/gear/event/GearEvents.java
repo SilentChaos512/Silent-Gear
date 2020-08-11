@@ -59,10 +59,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -95,6 +92,7 @@ public final class GearEvents {
     public static final ResourceLocation MAX_DURABILITY = SilentGear.getId("max_durability");
     public static final ResourceLocation REPAIR_FROM_BROKEN = SilentGear.getId("repair_from_broken");
     public static final ResourceLocation UNIQUE_MAIN_PARTS = SilentGear.getId("unique_main_parts");
+    public static final ResourceLocation FALL_WITH_MOONWALKER = SilentGear.getId("fall_with_moonwalker");
 
     private GearEvents() {}
 
@@ -385,6 +383,21 @@ public final class GearEvents {
                     }
                     entity.addVelocity(vec.x, vec.y, vec.z);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingFall(LivingFallEvent event) {
+        ItemStack stack = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET);
+
+        if (!stack.isEmpty()) {
+            int moonwalker = TraitHelper.getTraitLevel(stack, TraitConst.MOONWALKER);
+            float gravity = 1 + moonwalker * TraitConst.MOONWALKER_GRAVITY_MOD;
+            event.setDistance(event.getDistance() * gravity);
+
+            if (event.getEntityLiving() instanceof ServerPlayerEntity) {
+                LibTriggers.GENERIC_INT.trigger((ServerPlayerEntity) event.getEntityLiving(), FALL_WITH_MOONWALKER, 1);
             }
         }
     }

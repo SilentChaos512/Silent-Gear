@@ -1,0 +1,25 @@
+{
+  "type": "silentgear:attribute_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.moonwalker"
+  },
+  "description": {
+    "translate": "trait.silentgear.moonwalker.desc"
+  },
+  "attribute_modifiers": {
+    "boots/feet": [
+      {
+        "attribute": "forge.entity_gravity",
+        "operation": 1,
+        "value": [
+          -0.15,
+          -0.3,
+          -0.45000002,
+          -0.6,
+          -0.75
+        ]
+      }
+    ]
+  }
+}
