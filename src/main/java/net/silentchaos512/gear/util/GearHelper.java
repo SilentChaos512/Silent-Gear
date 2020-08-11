@@ -214,15 +214,10 @@ public final class GearHelper {
         handleBrokenItem(stack, player, slot);
     }
 
-    private static void handleBrokenItem(ItemStack stack, @Nullable ServerPlayerEntity player, EquipmentSlotType slot) {
+    private static void handleBrokenItem(ItemStack stack, @Nullable PlayerEntity player, EquipmentSlotType slot) {
         if (isBroken(stack)) {
             // The item "broke" (can still be repaired)
-            GearData.incrementBrokenCount(stack);
-            GearData.recalculateStats(stack, player);
-            if (player != null) {
-                player.sendBreakAnimation(slot); // entity.renderBrokenItemStack(stack);
-                notifyPlayerOfBrokenGear(stack, player);
-            }
+            onBroken(stack, player, slot);
         } else if (canBreakPermanently(stack) && stack.getDamage() > stack.getMaxDamage()) {
             // Item is gone forever, rest in pieces
             if (player != null) {
@@ -232,10 +227,27 @@ public final class GearHelper {
         }
     }
 
+    /**
+     * Called when an item is newly broken after being damaged. This should be called in most cases.
+     * Do not call unless the break animation is not working!
+     *
+     * @param stack  The gear item
+     * @param player The player
+     * @param slot   The item/armor slot
+     */
+    public static void onBroken(ItemStack stack, @Nullable PlayerEntity player, EquipmentSlotType slot) {
+        GearData.incrementBrokenCount(stack);
+        GearData.recalculateStats(stack, player);
+        if (player != null) {
+            player.sendBreakAnimation(slot);
+            notifyPlayerOfBrokenGear(stack, player);
+        }
+    }
+
     public static ActionResultType useAndCheckBroken(ItemUseContext context, Function<ItemUseContext, ActionResultType> useFunction) {
         ActionResultType result = useFunction.apply(context);
         if (context.getPlayer() instanceof ServerPlayerEntity)
-            handleBrokenItem(context.getItem(), (ServerPlayerEntity) context.getPlayer(), context.getHand() == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
+            handleBrokenItem(context.getItem(), context.getPlayer(), context.getHand() == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
         return result;
     }
 
@@ -246,9 +258,8 @@ public final class GearHelper {
         }
     }
 
-    private static void notifyPlayerOfBrokenGear(ItemStack stack, ServerPlayerEntity player) {
+    private static void notifyPlayerOfBrokenGear(ItemStack stack, PlayerEntity player) {
         // Notify player. Mostly for armor, but might help new players as well.
-        // FIXME: Does not work with armor currently, need to find a way to get player
         player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()));
     }
 
@@ -303,7 +314,7 @@ public final class GearHelper {
             value = 0;
         } else if (!Config.Common.gearBreaksPermanently.get()) {
             value = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
-            if (stack.getDamage() + value >= stack.getMaxDamage() - 1) {
+            if (!isBroken(stack) && stack.getDamage() + value >= stack.getMaxDamage() - 1) {
                 onBroken.accept(entity);
             }
         } else {

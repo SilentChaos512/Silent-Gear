@@ -137,7 +137,12 @@ public final class GearClientHelper {
                         // Armor value varies by type
                         totalArmor = statValue;
                         statValue = (float) ((CoreArmor) item).getArmorProtection(stack);
-                    } else if (stat == ItemStats.ARMOR_TOUGHNESS) {
+                    } else if (stat == ItemStats.MAGIC_ARMOR) {
+                        // Same as armor
+                        totalArmor = statValue;
+                        statValue = (float) ((CoreArmor) item).getArmorMagicProtection(stack);
+                    }
+                    else if (stat == ItemStats.ARMOR_TOUGHNESS) {
                         // Toughness split equally to each piece
                         totalArmor = statValue;
                         statValue /= 4;
@@ -154,7 +159,7 @@ public final class GearClientHelper {
                     int durabilityLeft = stack.getMaxDamage() - stack.getDamage();
                     int durabilityMax = stack.getMaxDamage();
                     textStat = statText("durabilityFormat", durabilityLeft, durabilityMax);
-                } else if (stat == ItemStats.ARMOR || stat == ItemStats.ARMOR_TOUGHNESS) {
+                } else if (stat == ItemStats.ARMOR || stat == ItemStats.MAGIC_ARMOR || stat == ItemStats.ARMOR_TOUGHNESS) {
                     String str1 = String.format("%.1f", statValue);
                     String str2 = String.format("%.1f", totalArmor);
                     textStat = statText("armorFormat", str1, str2);

@@ -89,6 +89,11 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         return GearData.getStat(stack, ItemStats.ARMOR_TOUGHNESS) / 4;
     }
 
+    public double getArmorMagicProtection(ItemStack stack) {
+        if (GearHelper.isBroken(stack)) return 0;
+        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.MAGIC_ARMOR);
+    }
+
     private static double getGenericArmorProtection(ItemStack stack) {
         Item item = stack.getItem();
         if (item instanceof CoreArmor)
@@ -140,16 +145,10 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        int value;
-        if (GearHelper.isUnbreakable(stack)) {
-            value = 0;
-        } else if (!Config.Common.gearBreaksPermanently.get()) {
-            value = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
-        } else {
-            value = super.damageItem(stack, amount, entity, onBroken);
-        }
-        GearHelper.damageParts(stack, value);
-        return value;
+        return GearHelper.damageItem(stack, amount, entity, t -> {
+            GearHelper.onBroken(stack, t instanceof PlayerEntity ? (PlayerEntity) t : null, this.getEquipmentSlot());
+            onBroken.accept(t);
+        });
     }
 
     @Override
