@@ -25,5 +25,11 @@
       "texture": "silentgear:bowstring",
       "color": "#7E6962"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth",
+      "color": "#7E6962"
+    }
   ]
 }

@@ -81,6 +81,12 @@ public interface IMaterial {
      */
     Ingredient getIngredient(PartType partType);
 
+    default Ingredient getIngredient() {
+        return getIngredient(PartType.MAIN);
+    }
+
+    boolean canSalvage();
+
     /**
      * Gets the part types this material supports. In general, a material will support a part type
      * if the type is present in the stats JSON object (even if the value is empty).
@@ -195,6 +201,7 @@ public interface IMaterial {
      * @param partType The part type
      * @return The color of the primary render layer
      */
+    @Deprecated
     int getPrimaryColor(ItemStack gear, PartType partType);
 
     @Deprecated

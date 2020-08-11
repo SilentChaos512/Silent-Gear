@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "loader": "silentgear:fragment_model",
+  "gear_type": "fragment",
+  "part_type": "silentgear:main"
+}

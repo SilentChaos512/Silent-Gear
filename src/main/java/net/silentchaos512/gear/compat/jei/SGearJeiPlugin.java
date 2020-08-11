@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationScreen;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationTileEntity;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
@@ -31,6 +32,7 @@ import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
@@ -139,6 +141,11 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.registerSubtypeInterpreter(ModItems.CUSTOM_TIPPED_UPGRADE.get(), stack -> {
             ResourceLocation partId = CustomTippedUpgrade.getPartId(stack);
             return partId != null ? partId.toString() : "null";
+        });
+
+        reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), stack -> {
+            IMaterial material = FragmentItem.getMaterial(stack);
+            return material != null ? material.getId().toString() : "";
         });
 
         initFailed = false;

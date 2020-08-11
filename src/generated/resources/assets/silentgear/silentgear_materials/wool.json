@@ -8,5 +8,10 @@
     {
       "texture": "silentgear:grip"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth"
+    }
   ]
 }

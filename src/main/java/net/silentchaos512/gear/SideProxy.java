@@ -34,6 +34,7 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
@@ -48,6 +49,7 @@ import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.parts.type.CompoundPart;
 import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
@@ -175,8 +177,9 @@ class SideProxy implements IProxy {
             // FIXME: Crashes on runData because MC instance is null
             //noinspection ConstantConditions
             if (Minecraft.getInstance() != null) {
-                ModelLoaderRegistry.registerLoader(SilentGear.getId("compound_part_model"), new CompoundPartModelLoader());
-                ModelLoaderRegistry.registerLoader(SilentGear.getId("gear_model"), new GearModelLoader());
+                ModelLoaderRegistry.registerLoader(Const.COMPOUND_PART_MODEL_LOADER, new CompoundPartModelLoader());
+                ModelLoaderRegistry.registerLoader(Const.FRAGMENT_MODEL_LOADER, new FragmentModelLoader());
+                ModelLoaderRegistry.registerLoader(Const.GEAR_MODEL_LOADER, new GearModelLoader());
 
                 IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
                 if (resourceManager instanceof IReloadableResourceManager) {

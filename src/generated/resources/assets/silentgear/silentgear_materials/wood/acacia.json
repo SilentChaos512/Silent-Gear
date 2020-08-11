@@ -22,5 +22,11 @@
       "texture": "silentgear:rod",
       "color": "#BA6337"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:wood",
+      "color": "#BA6337"
+    }
   ]
 }

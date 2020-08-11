@@ -1,15 +1,18 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.TableLootEntry;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTables;
+import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class LootInjector {
@@ -17,10 +20,6 @@ public final class LootInjector {
         private static final Map<ResourceLocation, ResourceLocation> MAP = new HashMap<>();
 
         public static final ResourceLocation CHESTS_NETHER_BRIDGE = inject(LootTables.CHESTS_NETHER_BRIDGE);
-        public static final ResourceLocation CHESTS_BASTION_TREASURE = inject(LootTables.field_237380_L_);
-        public static final ResourceLocation CHESTS_BASTION_OTHER = inject(LootTables.field_237381_M_);
-        public static final ResourceLocation CHESTS_BASTION_BRIDGE = inject(LootTables.field_237382_N_);
-        public static final ResourceLocation CHESTS_RUINED_PORTAL = inject(LootTables.field_237384_P_);
 
         private Tables() {}
 

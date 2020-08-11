@@ -4,6 +4,11 @@
       "texture": "silentgear:main_generic_lc"
     }
   ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:metal"
+    }
+  ],
   "rod/all": [
     {
       "texture": "silentgear:rod_generic_lc"

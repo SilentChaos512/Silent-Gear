@@ -88,6 +88,11 @@ public class SimplePartAdapterMaterial implements IMaterial {
     }
 
     @Override
+    public boolean canSalvage() {
+        return true;
+    }
+
+    @Override
     public Set<PartType> getPartTypes() {
         return parts.keySet();
     }

@@ -41,6 +41,7 @@ public final class PartMaterial implements IMaterial {
     private Ingredient ingredient = Ingredient.EMPTY;
     private boolean visible = true;
     private int tier = -1;
+    private boolean canSalvage = true;
 
     private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
     private final Map<PartType, List<PartTraitInstance>> traits = new LinkedHashMap<>();
@@ -50,6 +51,7 @@ public final class PartMaterial implements IMaterial {
     // Keys are part_type/gear_type
     private final Map<String, MaterialLayerList> display = new HashMap<>();
     private final List<String> blacklistedGearTypes = new ArrayList<>();
+    private Map<PartType, Ingredient> partSubstitutes;
 
     private PartMaterial(ResourceLocation id, String packName) {
         this.materialId = id;
@@ -91,6 +93,19 @@ public final class PartMaterial implements IMaterial {
     @Override
     public Ingredient getIngredient(PartType partType) {
         return this.ingredient;
+    }
+
+    public Optional<Ingredient> getPartSubstitute(PartType partType) {
+        return Optional.ofNullable(this.partSubstitutes.get(partType));
+    }
+
+    public boolean hasPartSubstitutes() {
+        return !this.partSubstitutes.isEmpty();
+    }
+
+    @Override
+    public boolean canSalvage() {
+        return this.canSalvage;
     }
 
     @Override
@@ -326,6 +341,7 @@ public final class PartMaterial implements IMaterial {
                 JsonObject obj = elementAvailability.getAsJsonObject();
                 ret.tier = JSONUtils.getInt(obj, "tier", ret.tier);
                 ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
+                ret.canSalvage = JSONUtils.getBoolean(obj, "can_salvage", ret.canSalvage);
 
                 JsonArray blacklist = JSONUtils.getJsonArray(obj, "gear_blacklist", null);
                 if (blacklist != null) {
@@ -366,6 +382,8 @@ public final class PartMaterial implements IMaterial {
             material.ingredient = Ingredient.read(buffer);
             material.tier = buffer.readByte();
             material.visible = buffer.readBoolean();
+            material.canSalvage = buffer.readBoolean();
+            material.ingredient = Ingredient.read(buffer);
 
             material.blacklistedGearTypes.clear();
             int blacklistSize = buffer.readByte();
@@ -403,6 +421,8 @@ public final class PartMaterial implements IMaterial {
             material.ingredient.write(buffer);
             buffer.writeByte(material.tier);
             buffer.writeBoolean(material.visible);
+            buffer.writeBoolean(material.canSalvage);
+            material.ingredient.write(buffer);
 
             buffer.writeByte(material.blacklistedGearTypes.size());
             material.blacklistedGearTypes.forEach(buffer::writeString);

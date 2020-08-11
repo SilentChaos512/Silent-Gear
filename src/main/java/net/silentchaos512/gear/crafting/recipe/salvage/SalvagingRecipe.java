@@ -15,11 +15,17 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.parts.type.CompoundPart;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SalvagingRecipe implements IRecipe<IInventory> {
     private final ResourceLocation recipeId;
@@ -75,6 +81,55 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
     @Override
     public IRecipeType<?> getType() {
         return ModRecipes.SALVAGING_TYPE;
+    }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
+    /**
+     * Salvages parts into their respective material items, or fragments if appropriate. This does
+     * not necessarily give back the original item used for the material, but an item that matches
+     * it.
+     *
+     * @param part The part
+     * @return The list of items to return
+     */
+    public static List<ItemStack> salvage(PartData part) {
+        if (part.getPart() instanceof CompoundPart && part.getCraftingItem().getItem() instanceof CompoundPartItem) {
+            int craftedCount = ((CompoundPartItem) part.getCraftingItem().getItem()).getCraftedCount(part.getCraftingItem());
+            if (craftedCount < 1) {
+                SilentGear.LOGGER.warn("Compound part's crafted count is less than 1? {}", part.getCraftingItem());
+                return Collections.singletonList(part.getCraftingItem());
+            }
+
+            List<MaterialInstance> materials = CompoundPart.getMaterials(part);
+            Map<IMaterial, Integer> fragments = new LinkedHashMap<>();
+
+            for (MaterialInstance material : materials) {
+                int fragmentCount = 8 / craftedCount;
+                fragments.merge(material.getMaterial(), fragmentCount, Integer::sum);
+            }
+
+            List<ItemStack> ret = new ArrayList<>();
+            for (Map.Entry<IMaterial, Integer> entry : fragments.entrySet()) {
+                IMaterial material = entry.getKey();
+                int count = entry.getValue();
+                int fulls = count / 8;
+                int frags = count % 8;
+                if (fulls > 0) {
+                    ItemStack[] stacks = material.getIngredient().getMatchingStacks();
+                    if (stacks.length > 0)
+                        ret.add(new ItemStack(stacks[0].getItem(), fulls));
+                }
+                if (frags > 0) {
+                    ret.add(ModItems.FRAGMENT.get().create(material, frags));
+                }
+            }
+            return ret;
+        }
+        return Collections.singletonList(part.getCraftingItem());
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SalvagingRecipe> {

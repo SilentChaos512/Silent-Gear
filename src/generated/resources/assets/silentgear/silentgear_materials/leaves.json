@@ -10,5 +10,11 @@
       "texture": "silentgear:fletching",
       "color": "#4A8F28"
     }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth",
+      "color": "#4A8F28"
+    }
   ]
 }

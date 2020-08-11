@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.data.loot.ChestLootTables;
-import net.minecraft.loot.*;
-import net.minecraft.loot.functions.SetCount;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.*;
+import net.minecraft.world.storage.loot.functions.SetCount;
 import net.silentchaos512.gear.init.LootInjector;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
@@ -15,10 +15,6 @@ public class ModChestLootTables extends ChestLootTables {
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         consumer.accept(LootInjector.Tables.CHESTS_NETHER_BRIDGE, addNetherMetalsAndFlora());
-        consumer.accept(LootInjector.Tables.CHESTS_BASTION_TREASURE, addNetherMetalsWithExtra());
-        consumer.accept(LootInjector.Tables.CHESTS_BASTION_OTHER, addNetherFlora(LootTable.builder()));
-        consumer.accept(LootInjector.Tables.CHESTS_BASTION_BRIDGE, addNetherMetalsAndFlora());
-        consumer.accept(LootInjector.Tables.CHESTS_RUINED_PORTAL, addNetherMetalsAndFlora());
     }
 
     private static LootTable.Builder addNetherMetalsAndFlora() {

@@ -28,6 +28,7 @@ public final class GearType {
     public static final GearType ALL = getOrCreate("all");
     // Yeah, I know...
     public static final GearType PART = getOrCreate("part");
+    public static final GearType FRAGMENT = getOrCreate("fragment");
 
     // Parent of everything except armor
     public static final GearType TOOL = getOrCreate("tool", ALL);

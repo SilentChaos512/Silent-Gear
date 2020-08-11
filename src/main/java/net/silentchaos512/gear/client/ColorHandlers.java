@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CustomTippedUpgrade;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.item.gear.CoreShield;
 import net.silentchaos512.gear.util.GearData;
@@ -32,6 +33,8 @@ public final class ColorHandlers {
             SilentGear.LOGGER.error("ItemColors is null?", new IllegalStateException("wat?"));
             return;
         }
+
+        register(itemColors, FragmentItem::getItemColor, ModItems.FRAGMENT);
 
         register(itemColors, CustomTippedUpgrade::getItemColor, ModItems.CUSTOM_TIPPED_UPGRADE);
 
