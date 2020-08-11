@@ -56,9 +56,8 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public ItemStack getCraftingResult(CraftingInventory inv) {
-        ItemStack result = item.create(getMaterials(inv));
-        result.setCount(getBaseRecipe().getRecipeOutput().getCount());
-        return result;
+        int craftedCount = getBaseRecipe().getRecipeOutput().getCount();
+        return item.create(getMaterials(inv), craftedCount);
     }
 
     private static List<MaterialInstance> getMaterials(IInventory inv) {
@@ -72,10 +71,8 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         // Create an example item, so we're not just showing a broken item
-        ItemStack result = item.create(Collections.singletonList(new LazyMaterialInstance(SilentGear.getId("example"))));
-        result.setCount(getBaseRecipe().getRecipeOutput().getCount());
-//        GearData.setExampleTag(result, true);
-        return result;
+        int craftedCount = getBaseRecipe().getRecipeOutput().getCount();
+        return item.create(Collections.singletonList(new LazyMaterialInstance(SilentGear.getId("example"))), craftedCount);
     }
 
     @Override

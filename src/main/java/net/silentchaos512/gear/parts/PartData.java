@@ -76,6 +76,28 @@ public final class PartData implements IPartData {
         return of(part, craftingItem);
     }
 
+    @Nullable
+    private static PartData fromMaterialSubstitute(ItemStack stack) {
+        for (IMaterial material : MaterialManager.getValues()) {
+            if (material.hasPartSubstitutes()) {
+                for (PartType partType : PartType.getValues()) {
+                    Optional<Ingredient> ingredient = material.getPartSubstitute(partType);
+
+                    if (ingredient.isPresent() && ingredient.get().test(stack)) {
+                        Optional<? extends CompoundPartItem> item = partType.getCompoundPartItem(GearType.PART);
+
+                        if (item.isPresent()) {
+                            ItemStack result = item.get().create(MaterialInstance.of(material));
+                            return PartData.from(result);
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     @Deprecated
     @Nullable
     public static PartData fromStackFast(ItemStack craftingItem) {
