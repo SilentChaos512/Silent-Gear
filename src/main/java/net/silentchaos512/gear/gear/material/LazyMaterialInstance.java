@@ -76,7 +76,9 @@ public class LazyMaterialInstance implements IMaterialInstance {
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
         nbt.putString("ID", materialId.toString());
-        nbt.putString("Grade", grade.name());
+        if (grade != MaterialGrade.NONE) {
+            nbt.putString("Grade", grade.name());
+        }
         return nbt;
     }
 

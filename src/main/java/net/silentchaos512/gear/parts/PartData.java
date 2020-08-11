@@ -6,16 +6,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.parts.type.CompoundPart;
+import net.silentchaos512.gear.util.DataResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class PartData implements IPartData {
     private static final Map<ResourceLocation, PartData> CACHE_UNGRADED_PARTS = new HashMap<>();
@@ -175,6 +176,17 @@ public final class PartData implements IPartData {
 
     public boolean isCraftingAllowed(@Nullable GearType gearType, @Nullable CraftingInventory inventory) {
         return part.isCraftingAllowed(this, gearType, inventory);
+    }
+
+    public boolean containsMaterial(DataResource<IMaterial> material) {
+        if (this.part instanceof CompoundPart) {
+            Optional<MaterialInstance> mat = material.map(MaterialInstance::of);
+            if (mat.isPresent()) {
+                return CompoundPart.getMaterials(this).contains(mat.get());
+            }
+        }
+
+        return false;
     }
 
     public ITextComponent getDisplayName(ItemStack gear) {

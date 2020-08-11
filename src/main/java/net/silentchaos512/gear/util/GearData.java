@@ -35,6 +35,7 @@ import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -655,6 +656,10 @@ public final class GearData {
 
         parts.add(part);
         writeConstructionParts(gear, parts);
+    }
+
+    public static boolean hasPart(ItemStack gear, PartType partType, Predicate<PartData> predicate) {
+        return getConstructionParts(gear).stream().anyMatch(predicate);
     }
 
     /**

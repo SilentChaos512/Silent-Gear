@@ -22,6 +22,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.event.GearEvents;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
@@ -139,7 +140,7 @@ public class ModAdvancementProvider implements IDataProvider {
 
             Advancement blueprintBook = simpleGetItem(consumer, ModItems.BLUEPRINT_BOOK, blueprintPaper);
 
-            Advancement tipUpgrade = simpleGetItem(consumer, ModItems.TIP, upgradeBase, "tip_upgrade");
+            Advancement tipUpgrade = simpleGetItem(consumer, ModItems.TIP, ModItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), upgradeBase, "tip_upgrade");
 
             //region Gear
 
@@ -234,7 +235,7 @@ public class ModAdvancementProvider implements IDataProvider {
 
             Advancement highDurability = Advancement.Builder.builder()
                     .withParent(materialGrader)
-                    .withDisplay(CraftingItems.EMERALD_TIPPED_UPGRADE, title("high_durability"), description("high_durability"), null, FrameType.TASK, true, true, false)
+                    .withDisplay(ModItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, FrameType.TASK, true, true, false)
                     .withCriterion("durability", genericInt(GearEvents.MAX_DURABILITY, 16_000))
                     .register(consumer, id("high_durability"));
             Advancement graderCatalyst2 = Advancement.Builder.builder()
@@ -273,8 +274,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .register(consumer, id("azure_electrum"));
 
             ItemStack azureSilverBoots = new ItemStack(ModItems.BOOTS);
-            // FIXME Can't actually build compound parts lazily right now
-            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.AZURE_SILVER_MATERIAL.getId())));
+            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, ModItems.ARMOR_BODY.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
             Advancement moonwalker = Advancement.Builder.builder()
                     .withParent(azureSilver)
                     .withDisplay(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, FrameType.TASK, true, true, false)
@@ -289,9 +289,13 @@ public class ModAdvancementProvider implements IDataProvider {
         }
 
         private static Advancement simpleGetItem(Consumer<Advancement> consumer, IItemProvider item, Advancement parent, String key) {
+            return simpleGetItem(consumer, item, new ItemStack(item), parent, key);
+        }
+
+        private static Advancement simpleGetItem(Consumer<Advancement> consumer, IItemProvider item, ItemStack icon, Advancement parent, String key) {
             return Advancement.Builder.builder()
                     .withParent(parent)
-                    .withDisplay(item, title(key), description(key), null, FrameType.TASK, true, true, false)
+                    .withDisplay(icon, title(key), description(key), null, FrameType.TASK, true, true, false)
                     .withCriterion("get_item", getItem(item))
                     .register(consumer, id(key));
         }

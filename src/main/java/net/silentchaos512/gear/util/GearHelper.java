@@ -575,7 +575,7 @@ public final class GearHelper {
             if (ingredient instanceof IPartIngredient) {
                 PartType type = ((IPartIngredient) ingredient).getPartType();
                 type.getCompoundPartItem(gearType).ifPresent(item -> {
-                    ItemStack stack = item.create(Collections.singletonList(LazyMaterialInstance.of(Const.EXAMPLE_MATERIAL.getId())));
+                    ItemStack stack = item.create(Collections.singletonList(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
                     list.add(LazyPartData.of(type.getCompoundPartId(gearType), stack));
                 });
             } else {

@@ -17,13 +17,11 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -51,15 +49,6 @@ public class CompoundPartItem extends Item {
 
     public GearType getGearType() {
         return GearType.PART;
-    }
-
-    public ItemStack createFromItems(Collection<ItemStack> materials) {
-        // TODO: Ignores invalid items, is that the best thing to do?
-        return create(materials.stream()
-                .map(MaterialManager::from)
-                .filter(Objects::nonNull)
-                .map(MaterialInstance::of)
-                .collect(Collectors.toList()));
     }
 
     public ItemStack create(IMaterialInstance material) {

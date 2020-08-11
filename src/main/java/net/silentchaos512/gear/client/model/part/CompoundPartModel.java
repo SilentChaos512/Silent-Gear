@@ -39,7 +39,6 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         this.partType = partType;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
         if (overrideList != null) {
             overrideList.clearCache();
@@ -52,7 +51,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
 
-    @SuppressWarnings({"MethodWithTooManyParameters", "WeakerAccess"})
+    @SuppressWarnings("MethodWithTooManyParameters")
     public IBakedModel bake(List<MaterialLayer> layers,
                             String transformVariant,
                             IModelConfiguration owner,
@@ -74,9 +73,8 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
 
         // No layers?
         if (layers.isEmpty()) {
-            IMaterial material = MaterialManager.get(SilentGear.getId("example"));
-            if (material != null) {
-                buildFakeModel(spriteGetter, builder, rotation, material);
+            if (Const.Materials.EXAMPLE.isPresent()) {
+                buildFakeModel(spriteGetter, builder, rotation, Const.Materials.EXAMPLE.get());
             } else {
                 // Shouldn't happen, but...
                 TextureAtlasSprite texture = spriteGetter.apply(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
@@ -101,8 +99,12 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     }
 
     @Override
-    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        Set<Material> ret = new HashSet<>();
+    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        Set<RenderMaterial> ret = new HashSet<>();
+        if (this.gearType == GearType.ARMOR || this.gearType == GearType.SHIELD) {
+            // Unobtainable part items, no need for textures
+            return ret;
+        }
 
         ret.add(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
 

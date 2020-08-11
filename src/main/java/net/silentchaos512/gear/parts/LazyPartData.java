@@ -9,9 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.IPartData;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.util.DataResource;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,26 +25,25 @@ import java.util.stream.Collectors;
  */
 public class LazyPartData implements IPartData {
     private final ResourceLocation partId;
-    private final MaterialGrade grade;
     private final ItemStack craftingItem;
 
     public LazyPartData(ResourceLocation partId) {
         this(partId, ItemStack.EMPTY);
     }
 
+    @Deprecated
     public LazyPartData(ResourceLocation partId, MaterialGrade grade) {
         this(partId, grade, ItemStack.EMPTY);
     }
 
+    @Deprecated
     public LazyPartData(ResourceLocation partId, MaterialGrade grade, ItemStack craftingItem) {
         this.partId = partId;
-        this.grade = grade;
         this.craftingItem = craftingItem;
     }
 
     public LazyPartData(ResourceLocation partId, ItemStack craftingItem) {
         this.partId = partId;
-        this.grade = MaterialGrade.NONE;
         this.craftingItem = craftingItem;
     }
 
@@ -50,6 +53,18 @@ public class LazyPartData implements IPartData {
 
     public static LazyPartData of(ResourceLocation partId, ItemStack craftingItem) {
         return new LazyPartData(partId, craftingItem);
+    }
+
+    public static LazyPartData of(DataResource<IGearPart> part, ItemStack craftingItem) {
+        return new LazyPartData(part.getId(), craftingItem);
+    }
+
+    public static LazyPartData of(DataResource<IGearPart> part, CompoundPartItem partItem, List<LazyMaterialInstance> materials) {
+        return new LazyPartData(part.getId(), partItem.create(materials));
+    }
+
+    public static LazyPartData of(DataResource<IGearPart> part, CompoundPartItem partItem, LazyMaterialInstance material) {
+        return of(part, partItem, Collections.singletonList(material));
     }
 
     @Override
@@ -82,9 +97,6 @@ public class LazyPartData implements IPartData {
     @Override
     public CompoundNBT write(CompoundNBT tags) {
         tags.putString("ID", partId.toString());
-        if (this.grade != MaterialGrade.NONE) {
-            tags.putString("Grade", this.grade.name());
-        }
         if (!this.craftingItem.isEmpty()) {
             tags.put("Item", this.craftingItem.write(new CompoundNBT()));
         }

@@ -2,7 +2,8 @@
   "parent": "silentgear:upgrade_base",
   "display": {
     "icon": {
-      "item": "silentgear:tip"
+      "item": "silentgear:tip",
+      "nbt": "{Materials:[{ID:\"silentgear:example\"}]}"
     },
     "title": {
       "translate": "advancements.silentgear.tip_upgrade.title"

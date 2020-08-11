@@ -85,9 +85,8 @@ public class GearModel extends LayeredModel<GearModel> {
 
         // No layers?
         if (layers.isEmpty()) {
-            IMaterial material = MaterialManager.get(SilentGear.getId("example"));
-            if (material != null) {
-                buildFakeModel(spriteGetter, builder, rotation, material);
+            if (Const.Materials.EXAMPLE.isPresent()) {
+                buildFakeModel(spriteGetter, builder, rotation, Const.Materials.EXAMPLE.get());
             } else {
                 // Shouldn't happen, but...
                 TextureAtlasSprite texture = spriteGetter.apply(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
