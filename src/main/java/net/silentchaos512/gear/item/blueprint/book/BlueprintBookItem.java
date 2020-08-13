@@ -11,6 +11,7 @@ import net.minecraft.item.Rarity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -36,17 +37,22 @@ import java.util.List;
 
 public class BlueprintBookItem extends Item implements IBlueprint, IContainerItem, ICycleItem {
     private static final String NBT_SELECTED = "Selected";
+    public static final int INVENTORY_SIZE = 6 * 9;
 
     public BlueprintBookItem(Properties properties) {
         super(properties);
     }
 
+    private static int clampSelectedSlot(int slot) {
+        return MathHelper.clamp(slot, 0, INVENTORY_SIZE - 1);
+    }
+
     public static int getSelectedSlot(ItemStack book) {
-        return book.getOrCreateTag().getInt(NBT_SELECTED);
+        return clampSelectedSlot(book.getOrCreateTag().getInt(NBT_SELECTED));
     }
 
     public static void setSelectedSlot(ItemStack book, int slot) {
-        book.getOrCreateTag().putInt(NBT_SELECTED, slot);
+        book.getOrCreateTag().putInt(NBT_SELECTED, clampSelectedSlot(slot));
     }
 
     private ItemStack getSelectedItem(ItemStack book) {
@@ -73,7 +79,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
 
     @Override
     public int getInventorySize(ItemStack stack) {
-        return 6 * 9;
+        return INVENTORY_SIZE;
     }
 
     @Override
