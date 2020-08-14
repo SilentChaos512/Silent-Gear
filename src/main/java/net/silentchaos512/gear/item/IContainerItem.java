@@ -5,13 +5,20 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 public interface IContainerItem {
     int getInventorySize(ItemStack stack);
 
     boolean canStore(ItemStack stack);
 
     default IItemHandler getInventory(ItemStack stack) {
-        ItemStackHandler stackHandler = new ItemStackHandler(getInventorySize(stack));
+        ItemStackHandler stackHandler = new ItemStackHandler(getInventorySize(stack)) {
+            @Override
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                return canStore(stack);
+            }
+        };
         CompoundNBT nbt = stack.getOrCreateChildTag("Inventory");
         // Allow older blueprint books to update to new size
         nbt.remove("Size");
