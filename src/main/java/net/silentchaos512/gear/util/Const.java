@@ -58,10 +58,12 @@ public final class Const {
         public static final DataResource<ITrait> FLAMMABLE = DataResource.trait("flammable");
         public static final DataResource<ITrait> FLEXIBLE = DataResource.trait("flexible");
         public static final DataResource<ITrait> HARD = DataResource.trait("hard");
+        public static final DataResource<ITrait> HEAVY = DataResource.trait("heavy");
         public static final DataResource<ITrait> HOLY = DataResource.trait("holy");
         public static final DataResource<ITrait> INDESTRUCTIBLE = DataResource.trait("indestructible");
         public static final DataResource<ITrait> JABBERWOCKY = DataResource.trait("jabberwocky");
         public static final DataResource<ITrait> JAGGED = DataResource.trait("jagged");
+        public static final DataResource<ITrait> LIGHT = DataResource.trait("light");
         public static final DataResource<ITrait> LUCKY = DataResource.trait("lucky");
         public static final DataResource<ITrait> LUSTROUS = DataResource.trait("lustrous");
         public static final DataResource<ITrait> MAGMATIC = DataResource.trait("magmatic");

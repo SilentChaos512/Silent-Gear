@@ -89,9 +89,15 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.3f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 41, StatInstance.Operation.ADD)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
-                .trait(PartType.MAIN, Const.Traits.ACCELERATE, 3)
+                .trait(PartType.MAIN, Const.Traits.ACCELERATE, 3,
+                        new MaterialRatioTraitCondition(0.35f),
+                        new GearTypeTraitCondition(GearType.TOOL))
+                .trait(PartType.MAIN, Const.Traits.LIGHT, 4,
+                        new MaterialRatioTraitCondition(0.5f),
+                        new GearTypeTraitCondition(GearType.ARMOR))
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
-                .trait(PartType.ROD, Const.Traits.ACCELERATE, 5, new MaterialRatioTraitCondition(0.66f))
+                .trait(PartType.ROD, Const.Traits.ACCELERATE, 5,
+                        new MaterialRatioTraitCondition(0.66f))
                 .trait(PartType.TIP, Const.Traits.MALLEABLE, 3)
                 //.trait(PartType.TIP, Const.Traits.ACCELERATE, 2)
                 .display(PartType.MAIN, PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x4575E3)

@@ -1,0 +1,67 @@
+{
+  "type": "silentgear:attribute_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.light"
+  },
+  "description": {
+    "translate": "trait.silentgear.light.desc"
+  },
+  "cancels_with": [
+    "silentgear:heavy"
+  ],
+  "attribute_modifiers": {
+    "armor/head": [
+      {
+        "attribute": "minecraft:generic.movement_speed",
+        "operation": 1,
+        "value": [
+          0.01,
+          0.02,
+          0.03,
+          0.04,
+          0.05
+        ]
+      }
+    ],
+    "armor/chest": [
+      {
+        "attribute": "minecraft:generic.movement_speed",
+        "operation": 1,
+        "value": [
+          0.01,
+          0.02,
+          0.03,
+          0.04,
+          0.05
+        ]
+      }
+    ],
+    "armor/legs": [
+      {
+        "attribute": "minecraft:generic.movement_speed",
+        "operation": 1,
+        "value": [
+          0.01,
+          0.02,
+          0.03,
+          0.04,
+          0.05
+        ]
+      }
+    ],
+    "armor/feet": [
+      {
+        "attribute": "minecraft:generic.movement_speed",
+        "operation": 1,
+        "value": [
+          0.01,
+          0.02,
+          0.03,
+          0.04,
+          0.05
+        ]
+      }
+    ]
+  }
+}

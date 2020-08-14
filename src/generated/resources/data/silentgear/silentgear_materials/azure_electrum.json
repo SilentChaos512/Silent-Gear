@@ -69,7 +69,31 @@
       },
       {
         "name": "silentgear:accelerate",
-        "level": 3
+        "level": 3,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.35
+          },
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "tool"
+          }
+        ]
+      },
+      {
+        "name": "silentgear:light",
+        "level": 4,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          },
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "armor"
+          }
+        ]
       }
     ],
     "rod": [

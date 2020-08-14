@@ -33,6 +33,14 @@ public class AttributeTraitBuilder extends TraitBuilder {
         return this;
     }
 
+    public AttributeTraitBuilder addArmorModifier(Attribute attribute, AttributeModifier.Operation operation, float... values) {
+        addModifier(GearType.ARMOR, EquipmentSlotType.HEAD, attribute, operation, values);
+        addModifier(GearType.ARMOR, EquipmentSlotType.CHEST, attribute, operation, values);
+        addModifier(GearType.ARMOR, EquipmentSlotType.LEGS, attribute, operation, values);
+        addModifier(GearType.ARMOR, EquipmentSlotType.FEET, attribute, operation, values);
+        return this;
+    }
+
     public AttributeTraitBuilder addModifiersEitherHand(GearType gearType, Attribute attribute, AttributeModifier.Operation operation, float... values) {
         addModifier(gearType, EquipmentSlotType.MAINHAND, attribute, operation, values);
         addModifier(gearType, EquipmentSlotType.OFFHAND, attribute, operation, values);

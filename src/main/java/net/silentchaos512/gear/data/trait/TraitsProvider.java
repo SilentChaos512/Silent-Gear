@@ -102,6 +102,20 @@ public class TraitsProvider implements IDataProvider {
                         0.5f, 1f, 1.5f, 2f, 3f, 4f, 5f)
                 .cancelsWith(Const.Traits.CURSED)
         );
+        ret.add(new AttributeTraitBuilder(Const.Traits.HEAVY, 5)
+                .addArmorModifier(
+                        Attributes.MOVEMENT_SPEED,
+                        AttributeModifier.Operation.MULTIPLY_BASE,
+                        -0.01f, -0.02f, -0.03f, -0.04f, -0.05f)
+                .cancelsWith(Const.Traits.LIGHT)
+        );
+        ret.add(new AttributeTraitBuilder(Const.Traits.LIGHT, 5)
+                .addArmorModifier(
+                        Attributes.MOVEMENT_SPEED,
+                        AttributeModifier.Operation.MULTIPLY_BASE,
+                        0.01f, 0.02f, 0.03f, 0.04f, 0.05f)
+                .cancelsWith(Const.Traits.HEAVY)
+        );
         {
             int maxLevel = 5;
             float[] values = new float[maxLevel];
