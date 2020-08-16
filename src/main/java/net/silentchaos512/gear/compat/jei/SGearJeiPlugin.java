@@ -18,6 +18,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
@@ -60,6 +61,7 @@ public class SGearJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration reg) {
         IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
         reg.addRecipeCategories(new GearCraftingRecipeCategoryJei(guiHelper));
+        reg.addRecipeCategories(new MaterialGraderRecipeCategory(guiHelper));
         reg.addRecipeCategories(new SalvagingRecipeCategoryJei(guiHelper));
     }
 
@@ -88,6 +90,10 @@ public class SGearJeiPlugin implements IModPlugin {
                 .filter(SGearJeiPlugin::isGearCraftingRecipe)
                 .collect(Collectors.toList()), GEAR_CRAFTING);
 
+        // Grading
+        reg.addRecipes(Collections.singleton(new MaterialGraderRecipeCategory.GraderRecipe()), Const.GRADING);
+
+        // Salvaging
         reg.addRecipes(recipeManager.getRecipes().stream()
                 .filter(r -> r.getType() == ModRecipes.SALVAGING_TYPE)
                 .collect(Collectors.toList()), Const.SALVAGING);
@@ -109,11 +115,13 @@ public class SGearJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
         reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.MATERIAL_GRADER), Const.GRADING);
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.SALVAGER), Const.SALVAGING);
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration reg) {
+        reg.addRecipeClickArea(GraderScreen.class, 48, 30, 28, 23, Const.GRADING);
         reg.addRecipeClickArea(SalvagerScreen.class, 30, 30, 28, 23, Const.SALVAGING);
     }
 

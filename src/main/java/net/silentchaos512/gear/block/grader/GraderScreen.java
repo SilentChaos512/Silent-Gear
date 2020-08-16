@@ -10,7 +10,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 
 public class GraderScreen extends ContainerScreen<GraderContainer> {
-    private static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/grader.png");
+    public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/grader.png");
 
     public GraderScreen(GraderContainer container, PlayerInventory playerInventory, ITextComponent title) {
         super(container, playerInventory, title);

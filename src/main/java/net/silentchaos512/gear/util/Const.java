@@ -7,11 +7,12 @@ import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 
 public final class Const {
+    public static final ResourceLocation COMBINE_FRAGMENTS = SilentGear.getId("combine_fragments");
+    public static final ResourceLocation GRADING = SilentGear.getId("grading");
     public static final ResourceLocation SALVAGING = SilentGear.getId("salvaging");
     public static final ResourceLocation SALVAGING_COMPOUND_PART = SilentGear.getId("salvaging/compound_part");
     public static final ResourceLocation SALVAGING_GEAR = SilentGear.getId("salvaging/gear");
     public static final ResourceLocation SMITHING_COATING = SilentGear.getId("smithing/coating");
-    public static final ResourceLocation COMBINE_FRAGMENTS = SilentGear.getId("combine_fragments");
 
     public static final ResourceLocation GEAR_MODEL_LOADER = SilentGear.getId("gear_model");
     public static final ResourceLocation COMPOUND_PART_MODEL_LOADER = SilentGear.getId("compound_part_model");
