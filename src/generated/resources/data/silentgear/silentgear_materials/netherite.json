@@ -26,6 +26,9 @@
           "add": 2.0
         }
       ],
+      "armor_durability": {
+        "mul2": 0.121212125
+      },
       "harvest_speed": {
         "mul2": 0.125
       },
@@ -38,8 +41,11 @@
       "magic_damage": {
         "mul2": 0.33333334
       },
+      "armor_toughness": {
+        "add": 4.0
+      },
       "knockback_resistance": {
-        "add": 0.1
+        "add": 1.0
       },
       "enchantability": {
         "add": 5.0

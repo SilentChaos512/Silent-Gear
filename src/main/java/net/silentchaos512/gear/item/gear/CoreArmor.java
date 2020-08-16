@@ -44,7 +44,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     // Just copied from ArmorItem, access transformers are too flaky
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     // sum = 1, starts with boots
-    private static final float[] ABSORPTION_RATIO_BY_SLOT = {0.175f, 0.3f, 0.4f, 0.125f};
+    private static final float[] ABSORPTION_RATIO_BY_SLOT = {3f / 20f, 6f / 20f, 85 / 20f, 3f / 20f};
     // Same values as in ArmorItem.
     private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
 
@@ -125,7 +125,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
             multimap.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
             multimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
-            float knockbackResistance = GearData.getStat(stack, ItemStats.KNOCKBACK_RESISTANCE);
+            float knockbackResistance = GearData.getStat(stack, ItemStats.KNOCKBACK_RESISTANCE) / 10f;
             if (knockbackResistance > 0) {
                 multimap.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", knockbackResistance, AttributeModifier.Operation.ADDITION));
             }
