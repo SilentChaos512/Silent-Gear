@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- JEI support for material grader, which shows available catalysts [#211]
+- `sgear_stats info` command, which lists modifiers for each stat on the gear item in the player's hand
+- Config to disable stat logging
+### Changed
+- Limit stats displayed on compound parts to only relevant stats [#213]
+- Armor protection ratios to match vanilla diamond and netherite
+- Knockback resistance stat now scaled to the vanilla display value, rather than the modifier value (0.1 -> 1)
+### Fixed
+- Netherite missing armor durability and armor toughness [#210]
+- AOE tools (hammer, etc.) not rendering outline on each block to be broken
+- Fragment colors
+
 ## [2.0.9] - 2020-08-10
 ### Added
 - Salvager recipes for vanilla bows and crossbows

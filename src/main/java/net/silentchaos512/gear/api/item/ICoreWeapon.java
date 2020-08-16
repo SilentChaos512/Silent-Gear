@@ -11,6 +11,7 @@ import java.util.Set;
 public interface ICoreWeapon extends ICoreTool {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
+            ItemStats.REPAIR_EFFICIENCY,
             ItemStats.ENCHANTABILITY,
             ItemStats.MELEE_DAMAGE,
             ItemStats.MAGIC_DAMAGE,

@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 public class CoreShears extends ShearsItem implements ICoreTool {
     public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
+            ItemStats.REPAIR_EFFICIENCY,
             ItemStats.ENCHANTABILITY,
             ItemStats.HARVEST_SPEED
     );

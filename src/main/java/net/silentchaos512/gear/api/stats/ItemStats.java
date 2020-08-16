@@ -40,7 +40,7 @@ public final class ItemStats {
             .synergyApplies()
     );
     public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(1f, 0f, 1000f, Color.STEELBLUE, new ItemStat.Properties()
-            .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
+            .displayFormat(ItemStat.DisplayFormat.PERCENTAGE)
             .affectedByGrades(false)
     );
     public static final ItemStat ENCHANTABILITY = new ItemStat(0f, 0f, 10000f, Color.STEELBLUE, new ItemStat.Properties()

@@ -157,7 +157,7 @@ public class StatInstance {
         Color color = getFormattedColor(this.value, 0f, addColor);
         String text;
         if (stat.getDisplayFormat() == ItemStat.DisplayFormat.PERCENTAGE) {
-            text = Math.round((1f + this.value) * 100) + "%";
+            text = Math.round(this.value * 100) + "%";
         } else {
             // v (or vx for multiplier stats like armor durability)
             String format = "%s" + ("%." + decimalPlaces + "f") + "%s";
