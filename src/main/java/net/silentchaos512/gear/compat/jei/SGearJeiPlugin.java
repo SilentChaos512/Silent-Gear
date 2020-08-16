@@ -43,7 +43,6 @@ import java.util.stream.Stream;
 @JeiPlugin
 public class SGearJeiPlugin implements IModPlugin {
     private static final ResourceLocation PLUGIN_UID = SilentGear.getId("plugin/main");
-    static final ResourceLocation GUI_TEXTURE = SilentGear.getId("textures/gui/recipe_display.png");
     static final ResourceLocation GEAR_CRAFTING = SilentGear.getId("category/gear_crafting");
 
     private static boolean initFailed = false;
@@ -121,13 +120,6 @@ public class SGearJeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration reg) {
         initFailed = true;
-
-//        ModItems.gearClasses.forEach((id, item) ->
-//                reg.registerSubtypeInterpreter(item.asItem(), stack -> {
-//                    PartData part = GearData.getPrimaryPart(stack);
-//                    return part != null ? id + "|" + part.getPart().getId() : id;
-//                })
-//        );
 
         reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), stack -> {
             IMaterial material = FragmentItem.getMaterial(stack);

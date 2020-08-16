@@ -11,7 +11,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -22,10 +21,10 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.CompoundPart;
-import net.silentchaos512.gear.traits.SynergyTrait;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.trait.SynergyTrait;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
@@ -231,13 +230,6 @@ public final class GearData {
         nbt.remove("ArmorColor");
         nbt.remove("BlendedHeadColor");
 
-        // Cache armor color
-        if (stack.getItem() instanceof ICoreArmor) {
-            nbt.putInt("ArmorColor", getPrimaryColor(stack, mains));
-        } else {
-            nbt.remove("ArmorColor");
-        }
-
         nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
 
         // Remove old model keys
@@ -388,23 +380,6 @@ public final class GearData {
         List<PartData> list = getConstructionParts(stack).getPartsOfType(partType);
         if (!list.isEmpty()) {
             return getBlendedColor(stack, list) & 0xFFFFFF;
-        }
-        return Color.VALUE_WHITE;
-    }
-
-    public static int getHeadColor(ItemStack stack, boolean colorBlending) {
-        return getBlendedColor(stack, PartType.MAIN);
-    }
-
-    public static int getArmorColor(ItemStack stack) {
-        // FIXME
-        return getData(stack, NBT_ROOT_RENDERING).getInt("ArmorColor");
-    }
-
-    private static int getPrimaryColor(ItemStack gear, List<PartData> parts) {
-        if (!parts.isEmpty()) {
-            PartData part = parts.get(0);
-            return part.getArmorColor(gear);
         }
         return Color.VALUE_WHITE;
     }

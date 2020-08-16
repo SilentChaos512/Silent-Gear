@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.RepairContext;
+import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TextUtil;
 

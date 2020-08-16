@@ -8,7 +8,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.AttributeTrait;
+import net.silentchaos512.gear.gear.trait.AttributeTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;

@@ -6,18 +6,18 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.AbstractGearPart;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.AbstractGearPart;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
@@ -138,13 +138,13 @@ public final class TooltipHandler {
         }
 
         // Traits
-        List<PartTraitInstance> traits = part.getTraits().stream()
+        List<TraitInstance> traits = part.getTraits().stream()
                 .filter(inst -> inst.getTrait().showInTooltip(event.getFlags()))
                 .collect(Collectors.toList());
         int numTraits = traits.size();
         int traitIndex = getTraitDisplayIndex(numTraits);
         int i = 0;
-        for (PartTraitInstance inst : traits) {
+        for (TraitInstance inst : traits) {
             if (traitIndex < 0 || traitIndex == i) {
                 inst.addInformation(event.getToolTip(), event.getFlags());
             }

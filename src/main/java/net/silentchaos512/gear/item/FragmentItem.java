@@ -8,13 +8,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 
@@ -61,16 +57,5 @@ public class FragmentItem extends Item {
                 items.add(create(material, 1));
             }
         }
-    }
-
-    public static int getItemColor(ItemStack stack, int tintIndex) {
-        IMaterial material = FragmentItem.getMaterial(stack);
-        if (material != null) {
-            IMaterialDisplay model = MaterialDisplayManager.get(material);
-            if (model != null) {
-                return model.getLayerColor(GearType.ALL, PartType.MAIN, 0);
-            }
-        }
-        return Color.VALUE_WHITE;
     }
 }

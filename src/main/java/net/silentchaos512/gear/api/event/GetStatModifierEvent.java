@@ -3,7 +3,7 @@ package net.silentchaos512.gear.api.event;
 import net.minecraftforge.eventbus.api.Event;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import java.util.List;
 

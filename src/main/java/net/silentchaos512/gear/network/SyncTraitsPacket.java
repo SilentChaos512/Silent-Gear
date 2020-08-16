@@ -2,8 +2,8 @@ package net.silentchaos512.gear.network;
 
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.TraitManager;
-import net.silentchaos512.gear.traits.TraitSerializers;
+import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.gear.gear.trait.TraitSerializers;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -18,17 +18,19 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.ShowPartsScreenPacket;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -190,7 +192,7 @@ public final class SGearPartsCommand {
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
             StringBuilder builder = new StringBuilder("Name\tID\tType\tTier\t");
             ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getString()).append("\t"));
-            builder.append("Traits\tLite Texture\tNormal Color\tBroken Color\tFallback Color\tArmor Color");
+            builder.append("Traits");
             writer.write(builder.toString());
 
             for (IGearPart part : PartManager.getValues()) {
@@ -223,14 +225,6 @@ public final class SGearPartsCommand {
         appendTsv(builder, part.getTraits(partData).stream()
                 .map(t -> t.getTrait().getDisplayName(t.getLevel()).getString())
                 .collect(Collectors.joining(", ")));
-
-        // Display
-        IPartDisplay display = part.getDisplayProperties(partData, ItemStack.EMPTY, 0);
-        appendTsv(builder, display.getLiteTexture());
-        appendTsv(builder, Color.format(display.getNormalColor() & 0xFFFFFF));
-        appendTsv(builder, Color.format(display.getBrokenColor() & 0xFFFFFF));
-        appendTsv(builder, Color.format(display.getFallbackColor() & 0xFFFFFF));
-        appendTsv(builder, Color.format(display.getArmorColor() & 0xFFFFFF));
 
         return builder.toString();
     }

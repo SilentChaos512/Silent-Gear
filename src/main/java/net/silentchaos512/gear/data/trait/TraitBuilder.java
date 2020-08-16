@@ -8,7 +8,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
-import net.silentchaos512.gear.traits.SimpleTrait;
+import net.silentchaos512.gear.gear.trait.SimpleTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;

@@ -7,8 +7,8 @@ import net.minecraft.util.Util;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.parts.AbstractGearPart;
-import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.gear.part.AbstractGearPart;
+import net.silentchaos512.gear.gear.part.PartManager;
 
 import java.util.HashMap;
 import java.util.Map;

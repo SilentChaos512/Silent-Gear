@@ -20,6 +20,7 @@ package net.silentchaos512.gear.api.parts;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -27,21 +28,23 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.ToolHeadItem;
-import net.silentchaos512.gear.parts.AbstractGearPart;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.*;
+import net.silentchaos512.gear.gear.part.AbstractGearPart;
+import net.silentchaos512.gear.gear.part.LazyPartData;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.part.UpgradePart;
+import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -190,6 +193,18 @@ public final class PartType {
             return Optional.empty();
         }
         return Optional.of(compoundPartItem.get());
+    }
+
+    public Optional<? extends IPartData> makeCompoundPart(GearType gearType, DataResource<IMaterial> material) {
+        return makeCompoundPart(gearType, Collections.singletonList(LazyMaterialInstance.of(material)));
+    }
+
+    public Optional<? extends IPartData> makeCompoundPart(GearType gearType, List<IMaterialInstance> materials) {
+        return getCompoundPartItem(gearType)
+                .map(item -> {
+                    ItemStack stack = item.create(materials);
+                    return LazyPartData.of(this.getCompoundPartId(gearType), stack);
+                });
     }
 
     @Override

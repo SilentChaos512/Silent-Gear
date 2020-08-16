@@ -5,12 +5,12 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
-import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
@@ -148,7 +148,7 @@ public interface IMaterial {
      * @param gear     The gear item
      * @return The traits for the part type
      */
-    Collection<PartTraitInstance> getTraits(PartType partType, ItemStack gear);
+    Collection<TraitInstance> getTraits(PartType partType, ItemStack gear);
 
     /**
      * Gets the traits for the given part type. This returns all traits for the given type. Trait
@@ -158,7 +158,7 @@ public interface IMaterial {
      * @param partType The part type
      * @return The traits for the part type
      */
-    default Collection<PartTraitInstance> getTraits(PartType partType) {
+    default Collection<TraitInstance> getTraits(PartType partType) {
         return getTraits(partType, ItemStack.EMPTY);
     }
 
@@ -209,7 +209,7 @@ public interface IMaterial {
     int getPrimaryColor(ItemStack gear, PartType partType);
 
     @Deprecated
-    PartTextureType getTexture(PartType partType, ItemStack gear);
+    PartTextureSet getTexture(PartType partType, ItemStack gear);
 
     /**
      * Gets the rendering properties of the material, including textures and colors.

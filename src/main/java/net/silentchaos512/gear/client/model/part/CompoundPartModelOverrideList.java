@@ -17,7 +17,7 @@ import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

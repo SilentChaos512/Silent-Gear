@@ -6,8 +6,8 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

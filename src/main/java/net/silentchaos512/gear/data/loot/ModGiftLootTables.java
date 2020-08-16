@@ -21,7 +21,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
-import net.silentchaos512.gear.parts.LazyPartData;
+import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;

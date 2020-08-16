@@ -15,7 +15,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
@@ -100,15 +100,15 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return Collections.emptySet();
     }
 
+    // deprecated - modifiers moved to tool head part JSONs
     @Deprecated
     default Optional<StatInstance> getBaseStatModifier(ItemStat stat) {
-        // TODO: Move to tool head part JSON?
         return Optional.empty();
     }
 
+    // deprecated - modifiers moved to tool head part JSONs
     @Deprecated
     default Optional<StatInstance> getStatModifier(ItemStat stat) {
-        // TODO: Move to tool head part JSON?
         return Optional.empty();
     }
 
@@ -141,7 +141,6 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         );
     }
 
-    // TODO: Rename to getAnimationFrameCount?
     default int getAnimationFrames() {
         return 1;
     }
@@ -151,6 +150,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
         return 0;
     }
 
+    @Deprecated
     @OnlyIn(Dist.CLIENT)
     default IItemColor getItemColors() {
         return (stack, tintIndex) -> Color.VALUE_WHITE;

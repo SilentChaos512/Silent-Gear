@@ -41,7 +41,9 @@ public final class ModBlocks {
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(5, 30)));
-    public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", SalvagerBlock::new);
+    public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", () ->
+            new SalvagerBlock(AbstractBlock.Properties.create(Material.IRON)
+                    .hardnessAndResistance(4, 20)));
     public static final BlockRegistryObject<FlaxPlant> FLAX_PLANT = registerNoItem("flax_plant", () ->
             new FlaxPlant(AbstractBlock.Properties.create(Material.PLANTS)
                     .hardnessAndResistance(0)

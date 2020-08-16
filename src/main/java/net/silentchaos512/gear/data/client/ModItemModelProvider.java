@@ -10,12 +10,10 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.fml.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.lib.util.NameUtils;
@@ -67,30 +65,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(ModItems.STURDY_REPAIR_KIT, itemGenerated);
         builder(ModItems.CRIMSON_REPAIR_KIT, itemGenerated);
         builder(ModItems.AZURE_REPAIR_KIT, itemGenerated);
-
-        // Tool Heads
-        Registration.getItems(ToolHeadItem.class).forEach(item -> {
-            // TODO: Add dynamic models to pull correct texture for material
-            String texture = item.getGearType().matches(GearType.ARMOR)
-                    ? "item/dummy_icon_main"
-                    : "item/" + item.getGearType().getName() + "/main_generic_hc";
-            getBuilder(NameUtils.from(item).getPath())
-                    .parent(itemGenerated)
-                    .texture("layer0", texture);
-        });
-
-        // Compound parts
-        /*builder(ModItems.BINDING, itemGenerated);
-        builder(ModItems.BOWSTRING, itemGenerated);
-        builder(ModItems.FLETCHING, itemGenerated);
-        builder(ModItems.GRIP, itemGenerated);
-        builder(ModItems.ROD, itemGenerated);
-        builder(ModItems.LONG_ROD, itemGenerated);
-        getBuilder("tip")
-                .parent(itemGenerated)
-                .texture("layer0", "item/upgrade_base")
-                .texture("layer1", "item/custom_tip_upgrade")
-                .texture("layer2", "item/custom_tip_upgrade_shine");*/
 
         // Misc
         builder(ModItems.BLUEPRINT_PACKAGE, itemGenerated);

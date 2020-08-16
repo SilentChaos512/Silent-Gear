@@ -76,8 +76,8 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.type.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.util.EntityHelper;
@@ -309,7 +309,7 @@ public final class GearEvents {
         }
 
         if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().isIn(Tags.Blocks.ORES_DIAMOND) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool) == 0) {
-            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.random.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getPlayer().getEntityWorld());
+            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getPlayer().getEntityWorld());
             entity.setPositionAndUpdate(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
             EntityHelper.safeSpawn(entity);
         }
@@ -352,12 +352,6 @@ public final class GearEvents {
     }
 
     private static int getUniqueMainMaterialCount(PartDataList parts) {
-        // TODO: Legacy check, remove
-        PartDataList uniqueMains = parts.getUniqueParts(true);
-        if (uniqueMains.size() > 1) {
-            return uniqueMains.size();
-        }
-
         for (PartData part : parts) {
             if (part.getPart() instanceof CompoundPart && part.getType() == PartType.MAIN) {
                 List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getCraftingItem());
@@ -385,12 +379,12 @@ public final class GearEvents {
     private static ItemStack createRandomFirework() {
         ItemStack ret = new ItemStack(Items.FIREWORK_ROCKET);
         CompoundNBT nbt = ret.getOrCreateChildTag("Fireworks");
-        nbt.putByte("Flight", (byte) (SilentGear.random.nextInt(3) + 1));
+        nbt.putByte("Flight", (byte) (SilentGear.RANDOM.nextInt(3) + 1));
         CompoundNBT explosion = new CompoundNBT();
-        explosion.putByte("Type", (byte) SilentGear.random.nextInt(FireworkRocketItem.Shape.values().length));
+        explosion.putByte("Type", (byte) SilentGear.RANDOM.nextInt(FireworkRocketItem.Shape.values().length));
         ListNBT colors = new ListNBT();
-        for (int i = 0; i < SilentGear.random.nextInt(4) + 1; ++i) {
-            DyeColor dye = DyeColor.values()[SilentGear.random.nextInt(DyeColor.values().length)];
+        for (int i = 0; i < SilentGear.RANDOM.nextInt(4) + 1; ++i) {
+            DyeColor dye = DyeColor.values()[SilentGear.RANDOM.nextInt(DyeColor.values().length)];
             SilentGear.LOGGER.debug(dye);
             colors.add(IntNBT.valueOf(dye.getFireworkColor()));
         }

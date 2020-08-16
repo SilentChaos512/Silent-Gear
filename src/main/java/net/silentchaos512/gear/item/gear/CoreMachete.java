@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 public class CoreMachete extends CoreSword {
-    private static final int BREAK_RANGE = 2; // TODO: Config?
+    private static final int BREAK_RANGE = 2;
     private static final Set<Material> EFFECTIVE_MATERIALS = Sets.union(
             CoreSickle.EFFECTIVE_MATERIALS,
             ImmutableSet.of(Material.BAMBOO)
@@ -73,7 +73,7 @@ public class CoreMachete extends CoreSword {
         float speed = GearHelper.getDestroySpeed(stack, state, CoreAxe.EXTRA_EFFECTIVE_MATERIALS);
         // Slower on materials normally harvested with axes
         if (CoreAxe.BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
-            return speed * 0.4f; // TODO: Add config!
+            return speed * 0.4f;
         return speed;
     }
 }

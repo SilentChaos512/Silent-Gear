@@ -13,8 +13,8 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.SyncGearCraftingItemsPacket;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 
 /**
  * Handles chat error messages. Previously handled sending parts and traits to the client, but this

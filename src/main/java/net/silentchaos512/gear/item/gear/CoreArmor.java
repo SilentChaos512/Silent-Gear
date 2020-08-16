@@ -21,7 +21,6 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
-import net.silentchaos512.gear.api.parts.IPartDisplay;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -29,7 +28,6 @@ import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.PartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -225,22 +223,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             }
         }
 
-        // Fallback to older methods
-        PartData part = GearData.getPrimaryRenderPartFast(stack);
-        if (part == null) {
-            part = PartData.ofNullable(PartType.MAIN.getFallbackPart());
-        }
-        if (part == null) {
-            return "silentgear:textures/models/armor/generic_hc_layer_" + layer + (type != null ? "_" + type : "") + ".png";
-        }
-
-        // Actual armor texture
-        IPartDisplay props = part.getPart().getDisplayProperties(part, stack, 0);
-        return props.getTextureDomain() + ":textures/models/armor/"
-                + props.getArmorTexturePrefix()
-                + "_layer_" + layer
-                + (type != null ? "_" + type : "")
-                + ".png";
+        return "silentgear:textures/models/armor/generic_hc_layer_" + layer + (type != null ? "_" + type : "") + ".png";
     }
 
     @Override

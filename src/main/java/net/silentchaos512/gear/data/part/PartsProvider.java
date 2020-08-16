@@ -15,7 +15,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.ToolHeadItem;
-import net.silentchaos512.gear.parts.PartPositions;
+import net.silentchaos512.gear.gear.part.PartPositions;
 import net.silentchaos512.lib.util.NameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

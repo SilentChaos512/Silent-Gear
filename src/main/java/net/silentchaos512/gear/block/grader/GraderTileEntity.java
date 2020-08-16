@@ -99,7 +99,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     private void tryGradeItem(ItemStack input, int catalystTier, IMaterialInstance material) {
-        MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.random, catalystTier);
+        MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.RANDOM, catalystTier);
         if (targetGrade.ordinal() > material.getGrade().ordinal()) {
             // Assign grade, move to output slot
             ItemStack stack = input.split(1);

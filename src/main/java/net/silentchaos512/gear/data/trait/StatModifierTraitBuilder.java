@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.StatModifierTrait;
+import net.silentchaos512.gear.gear.trait.StatModifierTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.LinkedHashMap;
