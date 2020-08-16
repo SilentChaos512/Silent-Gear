@@ -243,7 +243,7 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder stat(PartType partType, IItemStat stat, float value, StatInstance.Operation operation) {
-        StatInstance mod = new StatInstance(value, operation);
+        StatInstance mod = StatInstance.of(value, operation);
         StatModifierMap map = stats.computeIfAbsent(partType, pt -> new StatModifierMap());
         map.put(stat, mod);
         return this;

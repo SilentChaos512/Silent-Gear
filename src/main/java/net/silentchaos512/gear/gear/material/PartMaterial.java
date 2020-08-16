@@ -281,7 +281,7 @@ public final class PartMaterial implements IMaterial {
                     ResourceLocation partTypeName = SilentGear.getIdWithDefaultNamespace(entry.getKey());
                     if (partTypeName != null) {
                         PartType partType = PartType.get(partTypeName);
-                        StatModifierMap statMods = StatModifierMap.read(entry.getValue());
+                        StatModifierMap statMods = StatModifierMap.deserialize(entry.getValue());
                         ret.stats.put(partType, statMods);
                     }
                 }

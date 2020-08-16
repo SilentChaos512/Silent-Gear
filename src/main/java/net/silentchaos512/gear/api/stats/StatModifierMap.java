@@ -15,7 +15,9 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.IGearPart;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -25,19 +27,23 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     private final Multimap<IItemStat, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
     public static IFormattableTextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
+        return formatText(mods, stat, maxDecimalPlaces, false);
+    }
+
+    public static IFormattableTextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces, boolean addModColors) {
         if (mods.size() == 1) {
             StatInstance inst = mods.iterator().next();
             int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
-            return new StringTextComponent(inst.formattedString(stat, decimalPlaces, false));
+            return inst.getFormattedText(stat, decimalPlaces, addModColors);
         }
 
-        StringBuilder result = new StringBuilder();
-        mods.forEach(inst -> {
-            if (result.length() > 0)
-                result.append(", ");
-            result.append(inst.formattedString(stat, inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces), false));
+        IFormattableTextComponent result = new StringTextComponent("");
+        mods.stream().sorted(Comparator.comparing(inst -> inst.getOp().ordinal())).forEach(inst -> {
+            if (!result.getSiblings().isEmpty())
+                result.appendString(", ");
+            result.append(inst.getFormattedText(stat, inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces), addModColors));
         });
-        return new StringTextComponent(result.toString());
+        return result;
     }
 
     public Set<ItemStat> getStats() {
@@ -57,32 +63,32 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     }
 
     @Override
-    public boolean containsKey(Object key) {
+    public boolean containsKey(@Nullable Object key) {
         return this.map.containsKey(key);
     }
 
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(@Nullable Object value) {
         return this.map.containsValue(value);
     }
 
     @Override
-    public boolean containsEntry(Object key, Object value) {
+    public boolean containsEntry(@Nullable Object key, @Nullable Object value) {
         return this.map.containsEntry(key, value);
     }
 
     @Override
-    public boolean put(IItemStat key, StatInstance value) {
+    public boolean put(@Nullable IItemStat key, @Nullable StatInstance value) {
         return this.map.put(key, value);
     }
 
     @Override
-    public boolean remove(Object key, Object value) {
+    public boolean remove(@Nullable Object key, @Nullable Object value) {
         return this.map.remove(key, value);
     }
 
     @Override
-    public boolean putAll(IItemStat key, @Nonnull Iterable<? extends StatInstance> values) {
+    public boolean putAll(@Nullable IItemStat key, @Nonnull Iterable<? extends StatInstance> values) {
         return this.map.putAll(key, values);
     }
 
@@ -92,12 +98,12 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     }
 
     @Override
-    public Collection<StatInstance> replaceValues(IItemStat key, @Nonnull Iterable<? extends StatInstance> values) {
+    public Collection<StatInstance> replaceValues(@Nullable IItemStat key, @Nonnull Iterable<? extends StatInstance> values) {
         return this.map.replaceValues(key, values);
     }
 
     @Override
-    public Collection<StatInstance> removeAll(Object key) {
+    public Collection<StatInstance> removeAll(@Nullable Object key) {
         return this.map.removeAll(key);
     }
 
@@ -107,7 +113,7 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     }
 
     @Override
-    public Collection<StatInstance> get(IItemStat key) {
+    public Collection<StatInstance> get(@Nullable IItemStat key) {
         return this.map.get(key);
     }
 
@@ -153,11 +159,11 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     }
 
     @Deprecated
-    public static StatModifierMap read(IGearPart part, JsonElement json) {
-        return read(json);
+    public static StatModifierMap deserialize(IGearPart part, JsonElement json) {
+        return deserialize(json);
     }
 
-    public static StatModifierMap read(JsonElement json) {
+    public static StatModifierMap deserialize(JsonElement json) {
         StatModifierMap map = new StatModifierMap();
         if (json.isJsonObject()) {
             for (Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {

@@ -6,10 +6,13 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.utils.EnumUtils;
+import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.utils.Color;
+import net.silentchaos512.utils.MathUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;
@@ -27,7 +30,7 @@ import java.util.regex.Pattern;
  */
 public class StatInstance {
     public enum Operation {
-        AVG, ADD, MUL1, MUL2, MAX;
+        AVG, MAX, MUL1, MUL2, ADD;
 
         public static Operation byName(String str) {
             for (Operation op : values())
@@ -45,39 +48,42 @@ public class StatInstance {
         }
     }
 
-    public static final StatInstance ZERO = new StatInstance(0f, Operation.ADD);
-
     private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
     private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
 
-    private final float value;
-    private final Operation op;
+    final float value;
+    final Operation op;
 
+    // deprecated: Use "of" static factory method
     @Deprecated
-    public StatInstance(String id, float value, Operation op) {
-        this.value = value;
-        this.op = op;
-    }
-
     public StatInstance(float value, Operation op) {
         this.value = value;
         this.op = op;
     }
 
-    public StatInstance copy() {
-        return new StatInstance(this.value, this.op);
+    public static StatInstance of(float value) {
+        return of(value, Operation.AVG);
     }
 
-    /**
-     * Get the ID of the stat modifier. ID's are used to filter duplicate modifiers in {@link
-     * StatModifierMap} and for debugging purposes.
-     *
-     * @return The modifier ID
-     * @deprecated Will remove in 1.16
-     */
-    @Deprecated
-    public String getId() {
-        return "DEPRECATED";
+    public static StatInstance of(float value, Operation op) {
+        return new StatInstance(value, op);
+    }
+
+    public static StatInstance of(float value, String source) {
+        return of(value, Operation.AVG, source);
+    }
+
+    public static StatInstance of(float value, Operation op, String source) {
+        return new StatInstanceWithSource(value, op, source);
+    }
+
+    public StatInstance copySetValue(float newValue) {
+        return of(newValue, this.op);
+    }
+
+    // TODO: Is this method needed?
+    public StatInstance copy() {
+        return new StatInstance(this.value, this.op);
     }
 
     /**
@@ -98,62 +104,88 @@ public class StatInstance {
         return op;
     }
 
+    public String getSource() {
+        return "N/A";
+    }
+
     @Deprecated
     public static StatInstance makeBaseMod(float value) {
-        return new StatInstance("_base_mod", value, Operation.ADD);
+        return new StatInstance(value, Operation.ADD);
     }
 
     @Deprecated
     public static StatInstance makeGearMod(float multi) {
-        return new StatInstance("_gear_mod", multi, Operation.MUL1);
+        return new StatInstance(multi, Operation.MUL1);
     }
 
     public static StatInstance getWeightedAverageMod(Collection<StatInstance> modifiers, Operation op) {
         return new StatInstance(ItemStat.getWeightedAverage(modifiers, op), op);
     }
 
-    @Deprecated
-    public StatInstance copyAppendId(String append) {
-        return copyWithNewId(this.getId() + append);
-    }
-
-    @Deprecated
-    public StatInstance copyWithNewId(String newId) {
-        return new StatInstance(newId, this.value, this.op);
-    }
-
-    public String formattedString(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
-        String format = "%s" + ("%." + decimalPlaces + "f") + "%s";
-        TextFormatting color;
-
+    public IFormattableTextComponent getFormattedText(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         switch (this.op) {
             case ADD:
                 // +/-v
-                color = getFormattedColor(this.value, 0f, addColor);
-                return trimNumber(color + String.format(format, this.value < 0 ? "" : "+", this.value, ""));
+                return formatAdd(stat, decimalPlaces, addColor);
             case AVG:
-                if (stat.getDisplayFormat() == ItemStat.DisplayFormat.PERCENTAGE) {
-                    return Math.round((1f + this.value) * 100) + "%";
-                }
-                // v (or vx for multiplier stats like armor durability)
-                String ret = trimNumber(String.format(format, "", this.value, ""));
-                return stat.getDisplayFormat() == ItemStat.DisplayFormat.MULTIPLIER ? ret + "x" : ret;
+                // v or vx
+                return formatAvg(stat, decimalPlaces, addColor);
             case MAX:
                 // ^v
-                return trimNumber(String.format(format, "^", this.value, ""));
+                return formatMax(stat, decimalPlaces, addColor);
             case MUL1:
                 // +/-v%
-                int percent = Math.round(100 * this.value);
-                color = getFormattedColor(percent, 0f, addColor);
-                return trimNumber(color + String.format("%s%d%%", percent < 0 ? "" : "+", percent));
+                return formatMul1(stat, decimalPlaces, addColor);
             case MUL2:
                 // vx
-                float val = 1f + this.value;
-                color = getFormattedColor(val, 1f, addColor);
-                return trimNumber(color + String.format(format, "x", val, ""));
+                return formatMul2(stat, decimalPlaces, addColor);
             default:
                 throw new NotImplementedException("Unknown operation: " + op);
         }
+    }
+
+    //region Private formatted text methods
+
+    private IFormattableTextComponent formatAdd(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+        String format = "%s" + ("%." + decimalPlaces + "f");
+        Color color = getFormattedColor(this.value, 0f, addColor);
+        String text = trimNumber(String.format(format, this.value < 0 ? "" : "+", this.value));
+        return TextUtil.withColor(new StringTextComponent(text), color);
+    }
+
+    private IFormattableTextComponent formatAvg(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+        Color color = getFormattedColor(this.value, 0f, addColor);
+        String text;
+        if (stat.getDisplayFormat() == ItemStat.DisplayFormat.PERCENTAGE) {
+            text = Math.round((1f + this.value) * 100) + "%";
+        } else {
+            // v (or vx for multiplier stats like armor durability)
+            String format = "%s" + ("%." + decimalPlaces + "f") + "%s";
+            String ret = trimNumber(String.format(format, "", this.value, ""));
+            text = stat.getDisplayFormat() == ItemStat.DisplayFormat.MULTIPLIER ? ret + "x" : ret;
+        }
+        return TextUtil.withColor(new StringTextComponent(text), color);
+    }
+
+    private IFormattableTextComponent formatMax(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+        String format = "%s" + ("%." + decimalPlaces + "f");
+        String text = trimNumber(String.format(format, "^", this.value));
+        return TextUtil.withColor(new StringTextComponent(text), Color.WHITE);
+    }
+
+    private IFormattableTextComponent formatMul1(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+        int percent = Math.round(100 * this.value);
+        Color color = getFormattedColor(percent, 0f, addColor);
+        String text = trimNumber(String.format("%s%d%%", percent < 0 ? "" : "+", percent));
+        return TextUtil.withColor(new StringTextComponent(text), color);
+    }
+
+    private IFormattableTextComponent formatMul2(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+        String format = "%s" + ("%." + decimalPlaces + "f");
+        float val = 1f + this.value;
+        Color color = getFormattedColor(val, 1f, addColor);
+        String text = trimNumber(String.format(format, "x", val));
+        return TextUtil.withColor(new StringTextComponent(text), color);
     }
 
     private static String trimNumber(CharSequence str) {
@@ -164,10 +196,12 @@ public class StatInstance {
         return trimToInt;
     }
 
-    private TextFormatting getFormattedColor(float val, float whiteVal, boolean addColor) {
-        if (!addColor) return TextFormatting.WHITE;
-        return val < whiteVal ? TextFormatting.RED : val == whiteVal ? TextFormatting.WHITE : TextFormatting.GREEN;
+    private static Color getFormattedColor(float val, float whiteVal, boolean addColor) {
+        if (!addColor) return Color.WHITE;
+        return val < whiteVal ? Color.INDIANRED : MathUtils.floatsEqual(val, whiteVal) ? Color.WHITE : Color.LIGHTGREEN;
     }
+
+    //endregion
 
     public boolean shouldList(IGearPart part, ItemStat stat, boolean advanced) {
         return shouldList(part.getType(), stat, advanced);
@@ -238,21 +272,14 @@ public class StatInstance {
         return result;
     }
 
-    @Deprecated
-    public static StatInstance read(String id, PacketBuffer buffer) {
-        float value = buffer.readFloat();
-        Operation op = EnumUtils.byOrdinal(buffer.readByte(), Operation.AVG);
-        return new StatInstance(id, value, op);
-    }
-
     public static StatInstance read(PacketBuffer buffer) {
         float value = buffer.readFloat();
-        Operation op = EnumUtils.byOrdinal(buffer.readByte(), Operation.AVG);
+        Operation op = buffer.readEnumValue(Operation.class);
         return new StatInstance(value, op);
     }
 
     public void write(PacketBuffer buffer) {
         buffer.writeFloat(this.value);
-        buffer.writeByte(this.op.ordinal());
+        buffer.writeEnumValue(this.op);
     }
 }

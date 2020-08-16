@@ -5,7 +5,11 @@ import net.minecraft.util.ResourceLocation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LazyItemStat implements IItemStat {
+/**
+ * A stat which may not exist. Useful for supporting stats added by other mods, mainly for data
+ * generators.
+ */
+public final class LazyItemStat implements IItemStat {
     private static final Map<ResourceLocation, LazyItemStat> CACHE = new HashMap<>();
 
     private final ResourceLocation id;

@@ -75,7 +75,7 @@ public class PartBuilder {
     }
 
     public PartBuilder stat(IItemStat stat, float value, StatInstance.Operation operation) {
-        StatInstance mod = new StatInstance(value, operation);
+        StatInstance mod = StatInstance.of(value, operation);
         this.stats.put(stat, mod);
         return this;
     }

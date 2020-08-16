@@ -181,7 +181,7 @@ public class CompoundPart extends AbstractGearPart {
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 for (int i = 0; i < ret.size(); ++i) {
                     StatInstance oldMod = ret.get(i);
-                    StatInstance newMod = new StatInstance(synergy * oldMod.getValue(), oldMod.getOp());
+                    StatInstance newMod = oldMod.copySetValue(synergy * oldMod.getValue());
                     ret.remove(i);
                     ret.add(i, newMod);
                 }
@@ -196,7 +196,7 @@ public class CompoundPart extends AbstractGearPart {
         if (operation == StatInstance.Operation.MAX) {
             return mods.stream()
                     .max((o1, o2) -> Float.compare(o1.getValue(), o2.getValue()))
-                    .orElse(new StatInstance(0, operation))
+                    .orElse(StatInstance.of(0, operation))
                     .copy();
         }
 

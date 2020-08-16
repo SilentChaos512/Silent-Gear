@@ -33,7 +33,8 @@ public interface ICoreTool extends ICoreItem {
             ItemStats.ARMOR_DURABILITY,
             ItemStats.ARMOR,
             ItemStats.ARMOR_TOUGHNESS,
-            ItemStats.MAGIC_ARMOR
+            ItemStats.MAGIC_ARMOR,
+            ItemStats.KNOCKBACK_RESISTANCE
     );
 
     @Override

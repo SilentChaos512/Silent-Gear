@@ -119,10 +119,6 @@ public final class GearClientHelper {
 
             tooltip.add(TextUtil.withColor(misc("tier", GearData.getTier(stack)), Color.DEEPSKYBLUE));
 
-            float synergyDisplayValue = GearData.getSynergyDisplayValue(stack);
-            Color color = synergyDisplayValue < 1 ? Color.FIREBRICK : synergyDisplayValue > 1 ? Color.GREEN : TooltipHandler.MC_GRAY;
-            tooltip.add(misc("synergy", TextUtil.withColor(new StringTextComponent(String.valueOf(Math.round(100 * synergyDisplayValue))), color)));
-
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = item.getRelevantStats(stack);
             Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStats.allStatsOrdered() : relevantStats;
@@ -151,10 +147,10 @@ public final class GearClientHelper {
                     }
                 }
 
-                StatInstance inst = new StatInstance(statValue, StatInstance.Operation.AVG);
+                StatInstance inst = StatInstance.of(statValue);
                 Color nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TooltipHandler.MC_DARK_GRAY;
                 ITextComponent textName = TextUtil.withColor(stat.getDisplayName(), nameColor);
-                ITextComponent textStat = new StringTextComponent(inst.formattedString(stat, stat.isDisplayAsInt() ? 0 : 2, false));
+                ITextComponent textStat = inst.getFormattedText(stat, stat.isDisplayAsInt() ? 0 : 2, false);
 
                 // Some stat-specific formatting...
                 if (stat == ItemStats.DURABILITY) {
