@@ -18,9 +18,12 @@
 
 package net.silentchaos512.gear.util;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -31,6 +34,10 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
@@ -231,7 +238,7 @@ public interface IAOETool {
 
             RayTraceResult rt = event.getTarget();
 
-            if (/*event.getSubID() == 0 &&*/ rt.getType() == RayTraceResult.Type.BLOCK) {
+            if (rt.getType() == RayTraceResult.Type.BLOCK) {
                 ItemStack stack = player.getHeldItemMainhand();
 
                 if (stack.getItem() instanceof IAOETool) {
@@ -239,11 +246,29 @@ public interface IAOETool {
                     IAOETool item = (IAOETool) stack.getItem();
 
                     for (BlockPos pos : item.getExtraBlocks(world, (BlockRayTraceResult) rt, player, stack)) {
-                        // FIXME
-//                        event.getContext().drawSelectionBox(info, new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos, false), 0);
+                        IVertexBuilder vertexBuilder = event.getBuffers().getBuffer(RenderType.getLines());
+                        Vector3d vec = event.getInfo().getProjectedView();
+                        BlockState blockState = world.getBlockState(pos);
+                        drawSelectionBox(event.getMatrix(), world, vertexBuilder, event.getInfo().getRenderViewEntity(), vec.x, vec.y, vec.z, pos, blockState);
                     }
                 }
             }
+        }
+
+        // Copied from WorldRenderer
+        @SuppressWarnings("MethodWithTooManyParameters")
+        private static void drawSelectionBox(MatrixStack matrixStackIn, World world, IVertexBuilder bufferIn, Entity entityIn, double xIn, double yIn, double zIn, BlockPos blockPosIn, BlockState blockStateIn) {
+            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, ISelectionContext.forEntity(entityIn)), (double)blockPosIn.getX() - xIn, (double)blockPosIn.getY() - yIn, (double)blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
+        }
+
+        // Copied from WorldRenderer
+        @SuppressWarnings("MethodWithTooManyParameters")
+        private static void drawShape(MatrixStack matrixStackIn, IVertexBuilder bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
+            Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
+            shapeIn.forEachEdge((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
+                bufferIn.pos(matrix4f, (float)(p_230013_12_ + xIn), (float)(p_230013_14_ + yIn), (float)(p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
+                bufferIn.pos(matrix4f, (float)(p_230013_18_ + xIn), (float)(p_230013_20_ + yIn), (float)(p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
+            });
         }
     }
 }
