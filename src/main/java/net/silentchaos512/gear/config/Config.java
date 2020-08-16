@@ -61,6 +61,7 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue mineAndSlashSupport;
         // Debug
         public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
+        public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -236,6 +237,10 @@ public final class Config {
                     .comment("Log additional information related to loading and synchronizing gear parts and traits.",
                             "This might help track down more obscure issues.")
                     .define("debug.logging.extraPartAndTraitInfo", false);
+
+            statsDebugLogging = builder
+                    .comment("Log stat calculations in the debug.log every time gear stats are recalculated")
+                    .define("debug.logging.stats", true);
 
             spec = builder.build();
         }

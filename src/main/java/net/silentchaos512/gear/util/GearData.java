@@ -165,12 +165,10 @@ public final class GearData {
         properties.put("Stats", statsTag);
     }
 
-    private static final boolean STAT_DEBUGGING = true;
-
     @Nullable
     private static Map<ItemStat, Float> getCurrentStatsForDebugging(ItemStack stack) {
         // Get current stats from the item, this is used for logging stat changes
-        if (STAT_DEBUGGING) { // TODO: Add config
+        if (Config.Common.statsDebugLogging.get()) {
             Map<ItemStat, Float> map = new HashMap<>();
             ItemStats.allStatsOrdered().forEach(stat -> map.put(stat, getStat(stack, stat)));
             return map;
