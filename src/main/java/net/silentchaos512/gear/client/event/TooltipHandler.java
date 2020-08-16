@@ -128,7 +128,6 @@ public final class TooltipHandler {
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData part) {
-
         // Type, tier
         event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(part.getTier()), Color.AQUAMARINE));
 
@@ -191,7 +190,7 @@ public final class TooltipHandler {
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
         TextListBuilder builder = new TextListBuilder();
-        for (ItemStat stat : ItemStats.allStatsOrdered()) {
+        for (ItemStat stat : part.getGearType().getRelevantStats()) {
             Collection<StatInstance> modifiers = part.getStatModifiers(ItemStack.EMPTY, stat);
             getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
         }

@@ -2,13 +2,16 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.init.Registration;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -21,6 +24,7 @@ import java.util.regex.Pattern;
 public final class GearType {
     private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]");
     private static final Map<String, GearType> VALUES = new HashMap<>();
+    private static final Map<GearType, ICoreItem> ITEMS = new HashMap<>();
 
     // A non-existent gear type which matches nothing
     public static final GearType NONE = getOrCreate("none");
@@ -186,6 +190,39 @@ public final class GearType {
 
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gearType.silentgear." + this.name);
+    }
+
+    public Optional<ICoreItem> getItem() {
+        return Optional.ofNullable(ITEMS.computeIfAbsent(this, gearType -> {
+            return Registration.getItems(ICoreItem.class).stream()
+                    .filter(item -> item.getGearType() == gearType)
+                    .findAny().orElse(null);
+        }));
+    }
+
+    public Collection<ItemStat> getRelevantStats() {
+        return getItem()
+                .map(item -> (Collection<ItemStat>) item.getRelevantStats(ItemStack.EMPTY))
+                .orElse(ItemStats.allStatsOrdered());
+    }
+
+    public Set<ItemStat> getExcludedStats() {
+        return getItem()
+                .map(item -> item.getExcludedStats(ItemStack.EMPTY))
+                .orElse(Collections.emptySet());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GearType gearType = (GearType) o;
+        return name.equals(gearType.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override

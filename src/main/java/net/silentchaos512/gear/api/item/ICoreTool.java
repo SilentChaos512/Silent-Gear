@@ -18,13 +18,12 @@ import java.util.Set;
 
 public interface ICoreTool extends ICoreItem {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
+            ItemStats.DURABILITY,
+            ItemStats.ENCHANTABILITY,
             ItemStats.HARVEST_LEVEL,
             ItemStats.HARVEST_SPEED,
             ItemStats.MELEE_DAMAGE,
-            ItemStats.ATTACK_SPEED,
-            ItemStats.DURABILITY,
-            ItemStats.ENCHANTABILITY,
-            ItemStats.RARITY
+            ItemStats.ATTACK_SPEED
     );
 
     Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(

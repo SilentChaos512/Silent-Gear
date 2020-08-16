@@ -32,6 +32,10 @@ public interface IGearPart {
 
     PartType getType();
 
+    default GearType getGearType() {
+        return GearType.ALL;
+    }
+
     IPartPosition getPartPosition();
 
     Ingredient getIngredient();

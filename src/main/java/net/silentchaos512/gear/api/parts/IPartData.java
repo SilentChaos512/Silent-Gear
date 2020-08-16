@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -39,6 +40,11 @@ public interface IPartData {
     default PartType getType() {
         IGearPart part = getPart();
         return part != null ? part.getType() : null;
+    }
+
+    default GearType getGearType() {
+        IGearPart part = getPart();
+        return part != null ? part.getGearType() : GearType.ALL;
     }
 
     @Nullable

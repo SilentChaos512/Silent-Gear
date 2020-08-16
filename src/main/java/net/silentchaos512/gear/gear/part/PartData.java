@@ -170,6 +170,11 @@ public final class PartData implements IPartData {
         return part.getType();
     }
 
+    @Override
+    public GearType getGearType() {
+        return part.getGearType();
+    }
+
     public float computeStat(ItemStat stat) {
         return part.computeStatValue(stat, this);
     }

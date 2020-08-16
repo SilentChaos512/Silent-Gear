@@ -33,14 +33,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CompoundPart extends AbstractGearPart {
-    public static final Serializer SERIALIZER = new Serializer(SilentGear.getId("compound_part"), CompoundPart::new);
-
     private GearType gearType = GearType.ALL;
     private PartType partType;
     private IPartPosition partPosition;
 
     public CompoundPart(ResourceLocation name) {
         super(name);
+    }
+
+    @Override
+    public GearType getGearType() {
+        return gearType;
     }
 
     public static List<MaterialInstance> getMaterials(IPartData part) {
@@ -70,7 +73,7 @@ public class CompoundPart extends AbstractGearPart {
 
     @Override
     public IPartSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return PartSerializers.COMPOUND_PART;
     }
 
     @Override

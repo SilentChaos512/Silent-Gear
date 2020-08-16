@@ -33,7 +33,6 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.ENCHANTABILITY,
-            ItemStats.RARITY,
             ItemStats.HARVEST_SPEED
     );
 

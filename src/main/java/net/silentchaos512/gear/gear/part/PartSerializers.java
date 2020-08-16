@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public final class PartSerializers {
+    public static final CompoundPart.Serializer COMPOUND_PART = new CompoundPart.Serializer(SilentGear.getId("compound_part"), CompoundPart::new);
+
     private static final Map<ResourceLocation, IPartSerializer<?>> REGISTRY = new HashMap<>();
 
     static {
@@ -25,7 +27,7 @@ public final class PartSerializers {
                 register(serializer);
             }
         }
-        register(CompoundPart.SERIALIZER);
+        register(COMPOUND_PART);
     }
 
     private PartSerializers() {}

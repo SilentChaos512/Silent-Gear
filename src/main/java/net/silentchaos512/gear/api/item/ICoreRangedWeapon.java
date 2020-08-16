@@ -18,11 +18,10 @@ import java.util.Set;
 
 public interface ICoreRangedWeapon extends ICoreTool {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            ItemStats.RANGED_DAMAGE,
-            ItemStats.RANGED_SPEED,
             ItemStats.DURABILITY,
             ItemStats.ENCHANTABILITY,
-            ItemStats.RARITY
+            ItemStats.RANGED_DAMAGE,
+            ItemStats.RANGED_SPEED
     );
 
     @Override

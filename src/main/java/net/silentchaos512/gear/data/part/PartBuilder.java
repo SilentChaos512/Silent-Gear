@@ -17,7 +17,7 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.part.PartPositions;
-import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartSerializers;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class PartBuilder {
     }
 
     public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, Ingredient ingredient) {
-        this.serializerType = CompoundPart.SERIALIZER.getName();
+        this.serializerType = PartSerializers.COMPOUND_PART.getName();
         this.gearType = gearType;
         this.partType = partType;
         this.position = position;
