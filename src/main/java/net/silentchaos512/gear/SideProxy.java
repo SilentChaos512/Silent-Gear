@@ -46,9 +46,9 @@ import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.Network;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.CompoundPart;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
@@ -166,7 +166,6 @@ class SideProxy implements IProxy {
                 MinecraftForge.EVENT_BUS.register(new DebugOverlay());
             }
 
-            // FIXME: Crashes on runData because MC instance is null
             //noinspection ConstantConditions
             if (Minecraft.getInstance() != null) {
                 ModelLoaderRegistry.registerLoader(Const.COMPOUND_PART_MODEL_LOADER, new CompoundPartModelLoader());

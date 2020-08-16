@@ -21,8 +21,8 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.type.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.CompoundPart;
 
 import javax.annotation.Nullable;
 import java.util.*;

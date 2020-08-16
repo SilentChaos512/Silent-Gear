@@ -43,7 +43,6 @@ import java.util.function.Consumer;
 public class CoreSickle extends ToolItem implements ICoreTool {
     public static final ToolType TOOL_TYPE = ToolType.get("sickle");
 
-    // TODO: Durability use config
     private static final int DURABILITY_USAGE = 3;
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
@@ -149,7 +148,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
 
         if (harvestCount > 0) {
             GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player, context.getHand());
-            player.addExhaustion(0.02f); // TODO: Config?
+            player.addExhaustion(0.02f);
             return ActionResultType.SUCCESS;
         }
 

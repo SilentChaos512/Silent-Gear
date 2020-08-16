@@ -6,7 +6,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.PotionEffectTrait;
+import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package net.silentchaos512.gear.api.event;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -21,7 +21,6 @@ package net.silentchaos512.gear.block.salvager;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -40,10 +39,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class SalvagerBlock extends ContainerBlock {
-    public SalvagerBlock() {
-        super(Properties.create(Material.IRON)
-                .hardnessAndResistance(4, 20)
-        );
+    public SalvagerBlock(Properties builder) {
+        super(builder);
     }
 
     @Nullable
@@ -69,6 +66,7 @@ public class SalvagerBlock extends ContainerBlock {
         tooltip.add(new TranslationTextComponent("block.silentgear.salvager.desc"));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;

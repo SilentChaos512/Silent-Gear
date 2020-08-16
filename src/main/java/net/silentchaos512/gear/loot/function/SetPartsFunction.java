@@ -9,8 +9,8 @@ import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModLootStuff;
-import net.silentchaos512.gear.parts.LazyPartData;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.LazyPartData;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.GearData;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public final class SetPartsFunction extends LootFunction {
             List<LazyPartData> parts = new ArrayList<>();
             JsonArray partsArray = Objects.requireNonNull(JSONUtils.getJsonArray(json, "parts", new JsonArray()));
             for (JsonElement jsonElement : partsArray) {
-                parts.add(LazyPartData.readJson(jsonElement));
+                parts.add(LazyPartData.deserialize(jsonElement));
             }
             return new SetPartsFunction(conditionsIn, parts);
         }

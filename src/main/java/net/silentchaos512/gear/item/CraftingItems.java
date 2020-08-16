@@ -69,8 +69,8 @@ public enum CraftingItems implements IItemProvider {
     // Rods
     ROUGH_ROD,
     STONE_ROD,
-    IRON_ROD, // TODO: Remove
-    NETHERWOOD_STICK, // TODO: Remove?
+    IRON_ROD,
+    NETHERWOOD_STICK,
     // Misc Upgrades
     SPOON_UPGRADE,
     RED_CARD_UPGRADE;

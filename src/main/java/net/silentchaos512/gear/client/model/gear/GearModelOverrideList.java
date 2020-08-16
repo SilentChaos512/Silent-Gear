@@ -23,8 +23,8 @@ import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.gear.CoreCrossbow;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.type.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
@@ -37,7 +37,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class GearModelOverrideList extends ItemOverrideList {
     private final Cache<CacheKey, IBakedModel> bakedModelCache = CacheBuilder.newBuilder()

@@ -17,15 +17,15 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.*;
-import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
-import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.utils.Color;
@@ -46,7 +46,7 @@ public final class PartMaterial implements IMaterial {
     private boolean canSalvage = true;
 
     private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
-    private final Map<PartType, List<PartTraitInstance>> traits = new LinkedHashMap<>();
+    private final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
 
     private ITextComponent displayName;
     @Nullable private ITextComponent namePrefix = null;
@@ -142,8 +142,8 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public List<PartTraitInstance> getTraits(PartType partType, ItemStack gear) {
-        List<PartTraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
+    public List<TraitInstance> getTraits(PartType partType, ItemStack gear) {
+        List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
         if (getParent() != null) {
             ret.addAll(getParent().getTraits(partType, gear));
         }
@@ -181,7 +181,7 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public PartTextureType getTexture(PartType partType, ItemStack gear) {
+    public PartTextureSet getTexture(PartType partType, ItemStack gear) {
         return getMaterialDisplay(gear, partType).getTexture();
     }
 
@@ -281,7 +281,7 @@ public final class PartMaterial implements IMaterial {
                     ResourceLocation partTypeName = SilentGear.getIdWithDefaultNamespace(entry.getKey());
                     if (partTypeName != null) {
                         PartType partType = PartType.get(partTypeName);
-                        StatModifierMap statMods = StatModifierMap.read(entry.getValue());
+                        StatModifierMap statMods = StatModifierMap.deserialize(entry.getValue());
                         ret.stats.put(partType, statMods);
                     }
                 }
@@ -294,8 +294,8 @@ public final class PartMaterial implements IMaterial {
                 for (Map.Entry<String, JsonElement> entry : elementTraits.getAsJsonObject().entrySet()) {
                     PartType partType = PartType.get(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(entry.getKey())));
                     if (partType != null) {
-                        List<PartTraitInstance> list = new ArrayList<>();
-                        entry.getValue().getAsJsonArray().forEach(e -> list.add(PartTraitInstance.deserialize(e.getAsJsonObject())));
+                        List<TraitInstance> list = new ArrayList<>();
+                        entry.getValue().getAsJsonArray().forEach(e -> list.add(TraitInstance.deserialize(e.getAsJsonObject())));
                         ret.traits.put(partType, list);
                     }
                 }
@@ -511,9 +511,9 @@ public final class PartMaterial implements IMaterial {
             for (int i = 0; i < typeCount; ++i) {
                 PartType partType = PartType.get(buffer.readResourceLocation());
                 int traitCount = buffer.readByte();
-                List<PartTraitInstance> list = new ArrayList<>();
+                List<TraitInstance> list = new ArrayList<>();
                 for (int j = 0; j < traitCount; ++j) {
-                    PartTraitInstance trait = PartTraitInstance.read(buffer);
+                    TraitInstance trait = TraitInstance.read(buffer);
                     list.add(trait);
                 }
                 material.traits.put(partType, list);

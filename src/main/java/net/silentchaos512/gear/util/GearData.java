@@ -11,23 +11,20 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.parts.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.type.CompoundPart;
-import net.silentchaos512.gear.traits.SynergyTrait;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.trait.SynergyTrait;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
@@ -35,7 +32,6 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Includes many methods for getting values from the NBT of gear items. Please make sure all
@@ -109,14 +105,10 @@ public final class GearData {
             }
             clearCachedData(stack);
             propertiesCompound.putString("ModVersion", SilentGear.getVersion());
-            PartDataList uniqueParts = parts.getUniqueParts(true);
             Map<ITrait, Integer> traits = TraitHelper.getTraits(stack, parts);
 
-            double synergy = calculateSynergyValue(parts, uniqueParts, traits);
-            boolean hasMissingRod = item instanceof ICoreTool && parts.getRods().isEmpty();
-
             // Get all stat modifiers from all parts and item class modifiers
-            StatModifierMap stats = getStatModifiers(stack, item, parts, synergy);
+            StatModifierMap stats = getStatModifiers(stack, item, parts);
 
             // For debugging
             Map<ItemStat, Float> oldStatValues = getCurrentStatsForDebugging(stack);
@@ -126,10 +118,8 @@ public final class GearData {
             CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.getStats()) {
                 final float initialValue = stat.compute(0, stats.get(stat));
-                // Some stats will be reduced if tool rod is missing (and required)
-                final float withMissingParts = hasMissingRod ? stat.withMissingRodEffect(initialValue) : initialValue;
                 // Allow traits to modify stat
-                final float withTraits = TraitHelper.activateTraits(stack, withMissingParts, (trait, level, val) -> {
+                final float withTraits = TraitHelper.activateTraits(stack, initialValue, (trait, level, val) -> {
                     TraitActionContext context = new TraitActionContext(player, level, stack);
                     return trait.onGetStat(context, stat, val, damageRatio);
                 });
@@ -150,7 +140,7 @@ public final class GearData {
             traits.forEach((trait, level) -> traitList.add(trait.write(level)));
             propertiesCompound.put("Traits", traitList);
 
-            propertiesCompound.putFloat(NBT_SYNERGY, (float) synergy);
+            propertiesCompound.remove(NBT_SYNERGY);
         } else {
             SilentGear.LOGGER.debug("Not recalculating stats for {}'s {}", player, stack);
             fixStatsCompound(propertiesCompound);
@@ -203,7 +193,7 @@ public final class GearData {
                         oldValue,
                         newValue,
                         change < 0 ? change : "+" + change,
-                        stats.get(stat).stream().map(m -> m.formattedString(stat, 5, false)).collect(Collectors.joining(", "))
+                        StatModifierMap.formatText(stats.values(), stat, 5)
                 );
             }
         }
@@ -240,27 +230,21 @@ public final class GearData {
         nbt.remove("ArmorColor");
         nbt.remove("BlendedHeadColor");
 
-        // Cache armor color
-        if (stack.getItem() instanceof ICoreArmor) {
-            nbt.putInt("ArmorColor", getPrimaryColor(stack, mains));
-        } else {
-            nbt.remove("ArmorColor");
-        }
-
         nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
 
         // Remove old model keys
         stack.getOrCreateChildTag(NBT_ROOT).remove("ModelKeys");
     }
 
+    @Deprecated
     public static StatModifierMap getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
+        return getStatModifiers(stack, item, parts);
+    }
+
+    public static StatModifierMap getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts) {
         StatModifierMap stats = new StatModifierMap();
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item != null ? item.getExcludedStats(stack) : Collections.emptyList())) {
-            // Part modifiers
             parts.forEach(part -> part.getStatModifiers(stack, stat).forEach(mod -> stats.put(stat, mod.copy())));
-            // Synergy bonus?
-            if (stat.doesSynergyApply())
-                stats.put(stat, new StatInstance((float) synergy - 1, StatInstance.Operation.MUL2));
         }
         return stats;
     }
@@ -396,23 +380,6 @@ public final class GearData {
         List<PartData> list = getConstructionParts(stack).getPartsOfType(partType);
         if (!list.isEmpty()) {
             return getBlendedColor(stack, list) & 0xFFFFFF;
-        }
-        return Color.VALUE_WHITE;
-    }
-
-    public static int getHeadColor(ItemStack stack, boolean colorBlending) {
-        return getBlendedColor(stack, PartType.MAIN);
-    }
-
-    public static int getArmorColor(ItemStack stack) {
-        // FIXME
-        return getData(stack, NBT_ROOT_RENDERING).getInt("ArmorColor");
-    }
-
-    private static int getPrimaryColor(ItemStack gear, List<PartData> parts) {
-        if (!parts.isEmpty()) {
-            PartData part = parts.get(0);
-            return part.getArmorColor(gear);
         }
         return Color.VALUE_WHITE;
     }

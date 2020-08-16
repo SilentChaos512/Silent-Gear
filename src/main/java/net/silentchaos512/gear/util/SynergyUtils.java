@@ -6,15 +6,18 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.traits.SynergyTrait;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.gear.trait.SynergyTrait;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SynergyUtils {
+public final class SynergyUtils {
     /**
      * Scale of the base synergy curve. Higher values make the curve level off more slowly and
      * produces higher base synergy values.
@@ -23,7 +26,9 @@ public class SynergyUtils {
     private static final double MIN_VALUE = 0.1;
     public static final double MAX_VALUE = 2.0;
 
-    public static float getSynergy(PartType partType, List<? extends IMaterialInstance> materials, List<PartTraitInstance> traits) {
+    private SynergyUtils() {}
+
+    public static float getSynergy(PartType partType, List<? extends IMaterialInstance> materials, List<TraitInstance> traits) {
         if (materials.isEmpty()) {
             return 1;
         }
@@ -53,7 +58,7 @@ public class SynergyUtils {
         }
 
         // Synergy traits
-        for (PartTraitInstance trait : traits) {
+        for (TraitInstance trait : traits) {
             if (trait.getTrait() instanceof SynergyTrait) {
                 synergy = ((SynergyTrait) trait.getTrait()).apply(synergy, trait.getLevel());
             }

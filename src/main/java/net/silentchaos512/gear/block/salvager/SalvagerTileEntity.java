@@ -21,25 +21,19 @@ package net.silentchaos512.gear.block.salvager;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.ModTileEntities;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.TimeUtils;
@@ -123,10 +117,6 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         }
     }
 
-    private boolean canSalvage(ItemStack stack) {
-        return stack.getItem() instanceof ICoreItem || VanillaGearSalvage.isVanillaGear(stack);
-    }
-
     private Collection<ItemStack> getSalvagedPartsWithChance(SalvagingRecipe recipe, ItemStack stack) {
         double lossRate = getLossRate(stack);
         SilentGear.LOGGER.debug("Loss rate for '{}': {}", stack, lossRate);
@@ -141,7 +131,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
                     : lossRate;
 
             for (int i = 0; i < count; ++i) {
-                if (MathUtils.tryPercentage(SilentGear.random, partLossRate)) {
+                if (MathUtils.tryPercentage(SilentGear.RANDOM, partLossRate)) {
                     copy.shrink(1);
                 }
             }
@@ -161,40 +151,6 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         }
         double ratio = (double) stack.getDamage() / maxDamage;
         return min + ratio * (Config.Common.salvagerMaxLossRate.get() - min);
-    }
-
-    private static Collection<ItemStack> getSalvageFromGearItem(ItemStack stack) {
-        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
-
-        for (PartData part : GearData.getConstructionParts(stack)) {
-            if (part.getType() == PartType.ROD) {
-                ItemStack rod = part.getCraftingItem().copy();
-                rod.setCount(1);
-                builder.add(rod);
-            } else {
-                builder.add(part.getCraftingItem().copy());
-            }
-        }
-
-        return builder.build();
-    }
-
-    private static Collection<ItemStack> getSalvageFromVanillaItem(ItemStack stack) {
-        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
-
-        IItemProvider headItem = VanillaGearSalvage.getHeadItem(stack);
-        int headCount = VanillaGearSalvage.getHeadCount(stack);
-        if (headItem != null && headCount > 0) {
-            builder.add(new ItemStack(headItem, headCount));
-        }
-
-        Item rodItem = Items.STICK;
-        int rodCount = VanillaGearSalvage.getRodCount(stack);
-        if (rodCount > 0) {
-            builder.add(new ItemStack(rodItem, rodCount));
-        }
-
-        return builder.build();
     }
 
     private int getFreeOutputSlot() {
@@ -244,9 +200,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         if (!current.isEmpty() && !current.isItemEqual(stack))
             return false;
 
-        if (isInputSlot(index))
-            return canSalvage(stack);
-        return super.isItemValidForSlot(index, stack);
+        return isInputSlot(index) || super.isItemValidForSlot(index, stack);
     }
 
     @Override

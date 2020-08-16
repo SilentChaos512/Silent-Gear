@@ -1,13 +1,11 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.client.ColorHandlers;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import java.util.Set;
 
@@ -40,11 +38,6 @@ public interface ICoreArmor extends ICoreItem {
     @Override
     default Set<ItemStat> getExcludedStats(ItemStack stack) {
         return EXCLUDED_STATS;
-    }
-
-    @Override
-    default IItemColor getItemColors() {
-        return ColorHandlers::getArmorColor;
     }
 
     @Override

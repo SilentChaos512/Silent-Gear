@@ -13,8 +13,8 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.RepairContext;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 
 import java.util.Map;
@@ -63,7 +63,7 @@ public final class RepairHandler {
         }
 
         if (amount > 0) {
-            result.attemptDamageItem(-Math.round(amount * materialCount), SilentGear.random, null);
+            result.attemptDamageItem(-Math.round(amount * materialCount), SilentGear.RANDOM, null);
             GearData.recalculateStats(result, null);
             event.setOutput(result);
             event.setCost(materialCount);

@@ -38,12 +38,9 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.LazyPartData;
-import net.silentchaos512.gear.parts.PartConst;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.lib.advancements.LibTriggers;
 
 import javax.annotation.Nullable;
@@ -210,7 +207,7 @@ public final class GearHelper {
         final int preDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently(stack))
             amount = Math.min(maxDamage - stack.getDamage(), amount);
-        stack.attemptDamageItem(amount, SilentGear.random, player);
+        stack.attemptDamageItem(amount, SilentGear.RANDOM, player);
 
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
@@ -289,7 +286,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.Common.gearBreaksPermanently.get() || GearData.hasPart(stack, PartConst.RED_CARD.getId());
+        return Config.Common.gearBreaksPermanently.get() || GearData.hasPart(stack, Const.Parts.RED_CARD.getId());
     }
 
     public static boolean isBroken(ItemStack stack) {
@@ -464,7 +461,7 @@ public final class GearHelper {
 
         Collection<ItemStack> list = new ArrayList<>();
         // Create a few samples of each tool type, because rendering performance is a problem on many machines.
-        for (int i = 1; i <= Math.max(3, PartManager.getHighestMainPartTier()); ++i) {
+        for (int i = 3; i <= Math.max(4, PartManager.getHighestMainPartTier()); ++i) {
             ItemStack stack = createSampleItem(item, i);
             if (!stack.isEmpty()) {
                 list.add(stack);
@@ -477,11 +474,9 @@ public final class GearHelper {
         ItemStack result = GearGenerator.create(item, tier);
         if (result.isEmpty()) {
             Collection<IPartData> parts = new ArrayList<>();
-            parts.add(new LazyPartData(PartConst.MAIN_EXAMPLE));
-            if (item.requiresPartOfType(PartType.ROD))
-                parts.add(new LazyPartData(PartConst.ROD_EXAMPLE));
-            if (item.requiresPartOfType(PartType.BOWSTRING))
-                parts.add(new LazyPartData(PartConst.BOWSTRING_EXAMPLE));
+            for (PartType partType : item.getRequiredParts()) {
+                partType.makeCompoundPart(item.getGearType(), Const.Materials.EXAMPLE).ifPresent(parts::add);
+            }
             result = item.construct(parts);
         }
         GearData.setExampleTag(result, true);
@@ -527,10 +522,7 @@ public final class GearHelper {
         for (Ingredient ingredient : ingredients) {
             if (ingredient instanceof IPartIngredient) {
                 PartType type = ((IPartIngredient) ingredient).getPartType();
-                type.getCompoundPartItem(gearType).ifPresent(item -> {
-                    ItemStack stack = item.create(Collections.singletonList(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
-                    list.add(LazyPartData.of(type.getCompoundPartId(gearType), stack));
-                });
+                type.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(list::add);
             } else {
                 // This isn't perfect, since parts may not be loaded at this time...
                 ItemStack[] matchingStacks = ingredient.getMatchingStacks();

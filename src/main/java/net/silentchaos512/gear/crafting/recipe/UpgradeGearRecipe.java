@@ -35,9 +35,9 @@ import net.silentchaos512.gear.api.parts.IPartPosition;
 import net.silentchaos512.gear.api.parts.IUpgradePart;
 import net.silentchaos512.gear.api.parts.PartDataList;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.parts.PartPositions;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.part.PartPositions;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 

@@ -13,9 +13,9 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.parts.PartTextureType;
-import net.silentchaos512.gear.parts.RepairContext;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.RepairContext;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -56,11 +56,11 @@ public interface IGearPart {
 
     Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part);
 
-    default List<PartTraitInstance> getTraits(PartData part) {
+    default List<TraitInstance> getTraits(PartData part) {
         return getTraits(ItemStack.EMPTY, part);
     }
 
-    List<PartTraitInstance> getTraits(ItemStack gear, PartData part);
+    List<TraitInstance> getTraits(ItemStack gear, PartData part);
 
     float getRepairAmount(RepairContext context);
 
@@ -123,17 +123,7 @@ public interface IGearPart {
     default void onGearDamaged(PartData part, ItemStack gear, int amount) {
     }
 
-    IPartDisplay getDisplayProperties(PartData part, ItemStack gear, int animationFrame);
-
-    default PartTextureType getLiteTexture(PartData part, ItemStack gear) {
-        return getDisplayProperties(part, gear, 0).getLiteTexture();
-    }
-
     int getColor(PartData part, ItemStack gear, int layer, int animationFrame);
-
-    default int getArmorColor(PartData part, ItemStack gear) {
-        return part.getPart().getDisplayProperties(part, gear, 0).getArmorColor();
-    }
 
     ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
 

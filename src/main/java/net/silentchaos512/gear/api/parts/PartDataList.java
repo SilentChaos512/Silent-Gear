@@ -21,7 +21,7 @@ package net.silentchaos512.gear.api.parts;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -56,6 +56,7 @@ public final class PartDataList implements List<PartData> {
         return ret;
     }
 
+    @Deprecated
     public PartDataList getUniqueParts(boolean mainsOnly) {
         PartDataList result = PartDataList.of();
         for (PartData data : (mainsOnly ? getMains() : this.list)) {

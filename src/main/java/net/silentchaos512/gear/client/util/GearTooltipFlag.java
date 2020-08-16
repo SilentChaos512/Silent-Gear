@@ -3,7 +3,6 @@ package net.silentchaos512.gear.client.util;
 import net.minecraft.client.util.ITooltipFlag;
 import net.silentchaos512.gear.client.KeyTracker;
 
-// TODO: Add flag to indicate crafting station is being used (allow extra info only in cs)
 public class GearTooltipFlag implements ITooltipFlag {
     public final boolean ctrlDown;
     public final boolean altDown;

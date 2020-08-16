@@ -5,11 +5,13 @@ import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.traits.TraitSerializers;
+import net.silentchaos512.gear.gear.trait.TraitSerializers;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.List;
 
 public interface ITraitInstance {
     ResourceLocation getTraitId();
@@ -22,14 +24,13 @@ public interface ITraitInstance {
     Collection<ITraitCondition> getConditions();
 
     default boolean conditionsMatch(PartDataList parts, ItemStack gear) {
-        // FIXME: Shouldn't be using trait reference?
         ITrait trait = getTrait();
         return trait == null || getConditions().stream().allMatch(c -> c.matches(gear, parts, trait));
     }
 
-    default boolean conditionsMatch(Collection<MaterialInstance> materials, ItemStack gear) {
-        // FIXME
-        return true;
+    default boolean conditionsMatch(List<MaterialInstance> materials, PartType partType, ItemStack gear) {
+        ITrait trait = getTrait();
+        return trait == null || getConditions().stream().allMatch(c -> c.matches(gear, partType, materials, trait));
     }
 
     default JsonObject serialize() {

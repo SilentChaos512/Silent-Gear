@@ -37,7 +37,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
-import net.silentchaos512.gear.parts.RepairContext;
+import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
@@ -103,7 +103,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
         if (gear.getDamage() > 0) {
             RepairKitItem item = (RepairKitItem) repairKit.getItem();
             int value = item.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
-            gear.attemptDamageItem(-Math.round(value), SilentGear.random, null);
+            gear.attemptDamageItem(-Math.round(value), SilentGear.RANDOM, null);
         }
 
         GearData.incrementRepairCount(gear, 1);
@@ -115,7 +115,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
         float repairValue = getRepairValueFromMaterials(gear, mats);
         float kitEfficiency = ((RepairKitItem) repairKit.getItem()).getRepairEfficiency(RepairContext.Type.QUICK);
         float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-        gear.attemptDamageItem(-Math.round(repairValue * kitEfficiency * gearRepairEfficiency), SilentGear.random, null);
+        gear.attemptDamageItem(-Math.round(repairValue * kitEfficiency * gearRepairEfficiency), SilentGear.RANDOM, null);
     }
 
     private static float getRepairValueFromMaterials(ItemStack gear, Collection<ItemStack> mats) {

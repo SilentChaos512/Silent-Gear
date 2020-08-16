@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.config;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -18,8 +17,10 @@ import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAOETool;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class Config {
@@ -318,25 +319,5 @@ public final class Config {
     @SubscribeEvent
     public static void sync(ModConfig.Reloading event) {
         sync();
-    }
-
-    // TODO: Old stuff below, needs to be fixed
-
-    private static String[] getDefaultNerfedGear() {
-        Set<String> toolTypes = ImmutableSet.of("pickaxe", "shovel", "axe", "sword");
-        Set<String> toolMaterials = ImmutableSet.of("wooden", "stone", "iron", "golden", "diamond");
-        List<String> items = toolTypes.stream()
-                .flatMap(type -> toolMaterials.stream()
-                        .map(material -> "minecraft:" + material + "_" + type))
-                .collect(Collectors.toList());
-
-        Set<String> armorTypes = ImmutableSet.of("helmet", "chestplate", "leggings", "boots");
-        Set<String> armorMaterials = ImmutableSet.of("leather", "chainmail", "iron", "diamond", "golden");
-        items.addAll(armorTypes.stream()
-                .flatMap(type -> armorMaterials.stream()
-                        .map(material -> "minecraft:" + material + "_" + type))
-                .collect(Collectors.toList()));
-
-        return items.toArray(new String[0]);
     }
 }

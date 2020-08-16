@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +11,6 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.client.ColorHandlers;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -33,7 +31,8 @@ public interface ICoreTool extends ICoreItem {
             ItemStats.ARMOR_DURABILITY,
             ItemStats.ARMOR,
             ItemStats.ARMOR_TOUGHNESS,
-            ItemStats.MAGIC_ARMOR
+            ItemStats.MAGIC_ARMOR,
+            ItemStats.KNOCKBACK_RESISTANCE
     );
 
     @Override
@@ -73,11 +72,6 @@ public interface ICoreTool extends ICoreItem {
      */
     default int getDamageOnHitEntity(ItemStack gear, LivingEntity target, LivingEntity attacker) {
         return 2;
-    }
-
-    @Override
-    default IItemColor getItemColors() {
-        return ColorHandlers::getToolColor;
     }
 
     @Override

@@ -4,6 +4,9 @@ import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.gear.part.LazyPartData;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -11,7 +14,7 @@ import java.util.List;
 
 /**
  * Represents an instance of an {@link IGearPart}. In most cases, {@link
- * net.silentchaos512.gear.parts.PartData} should be used. {@link net.silentchaos512.gear.parts.LazyPartData}
+ * PartData} should be used. {@link LazyPartData}
  * can be useful in cases where a part might not exist yet, but you have something that needs a
  * part, such as a recipe or loot table.
  *
@@ -44,7 +47,7 @@ public interface IPartData {
         return part != null ? part.getPartPosition() : null;
     }
 
-    default List<PartTraitInstance> getTraits() {
+    default List<TraitInstance> getTraits() {
         return Collections.emptyList();
     }
 
@@ -52,9 +55,13 @@ public interface IPartData {
     }
 
     default JsonObject serialize() {
-        // FIXME: Need to account for compound material parts
         JsonObject json = new JsonObject();
         json.addProperty("part", getPartId().toString());
+
+        ItemStack stack = getCraftingItem();
+        if (!stack.isEmpty()) {
+        }
+
         return json;
     }
 }

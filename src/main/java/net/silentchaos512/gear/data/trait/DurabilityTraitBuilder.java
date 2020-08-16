@@ -3,7 +3,7 @@ package net.silentchaos512.gear.data.trait;
 import com.google.gson.JsonObject;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.DurabilityTrait;
+import net.silentchaos512.gear.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 public class DurabilityTraitBuilder extends TraitBuilder {

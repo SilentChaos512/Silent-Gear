@@ -18,7 +18,7 @@ import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.lib.util.NameUtils;

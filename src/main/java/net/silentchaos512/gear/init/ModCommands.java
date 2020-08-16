@@ -15,6 +15,7 @@ public final class ModCommands {
         SetDamageCommand.register(dispatcher);
         SGearMaterialsCommand.register(dispatcher);
         SGearPartsCommand.register(dispatcher);
+        SGearStatsCommand.register(dispatcher);
         SGearTraitsCommand.register(dispatcher);
         RandomGearCommand.register(dispatcher);
     }

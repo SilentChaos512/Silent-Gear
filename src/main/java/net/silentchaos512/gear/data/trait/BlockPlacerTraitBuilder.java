@@ -5,7 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.BlockPlacerTrait;
+import net.silentchaos512.gear.gear.trait.BlockPlacerTrait;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.lib.util.NameUtils;
 

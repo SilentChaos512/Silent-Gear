@@ -8,14 +8,14 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.parts.PartManager;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 
 import java.util.Objects;
 
 public final class Network {
     private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
-    private static final String VERSION = "sgear-net4";
+    private static final String VERSION = "sgear-net5";
 
     public static SimpleChannel channel;
 

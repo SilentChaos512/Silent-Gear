@@ -26,8 +26,6 @@ import net.silentchaos512.gear.api.parts.IGearPart;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Display part name with item tooltip, or maybe replace item name?
-// TODO: Add some text explaining interface?
 public class GuiItemParts extends Screen {
 //    private static final int BUTTON_SPACING = PartButton.SIZE + 4;
     private static final int BUTTON_ROW_LENGTH = 12;

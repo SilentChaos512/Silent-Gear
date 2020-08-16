@@ -21,7 +21,6 @@ public abstract class LayeredModel<T extends IModelGeometry<T>> implements IMode
         int uMax = sprite.getWidth();
         int vMax = sprite.getHeight();
 
-        // todo: figure out why this doesn't work when considering fully transparent rows
         for (int v = 0; v < vMax; v++) {
             builder.add(buildSideQuad(transform, Direction.UP, tintIndex, color, sprite, 0, v, uMax));
             builder.add(buildSideQuad(transform, Direction.DOWN, tintIndex, color, sprite, 0, v + 1, uMax));

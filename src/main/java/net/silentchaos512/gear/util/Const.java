@@ -31,11 +31,11 @@ public final class Const {
     }
 
     public static final class Parts {
-
         public static final DataResource<IGearPart> ARMOR_BODY = DataResource.part("armor_body");
+        public static final DataResource<IGearPart> MISC_SPOON = DataResource.part("misc/spoon");
+        public static final DataResource<IGearPart> RED_CARD = DataResource.part("misc/red_card");
 
         private Parts() {}
-
     }
 
     public static final class Traits {

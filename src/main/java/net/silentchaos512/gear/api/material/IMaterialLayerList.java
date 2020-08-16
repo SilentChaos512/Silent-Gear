@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.api.material;
 
-import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.gear.part.PartTextureSet;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -23,7 +23,7 @@ public interface IMaterialLayerList extends Iterable<MaterialLayer> {
      * @return The texture type
      */
     @Deprecated
-    PartTextureType getTexture();
+    PartTextureSet getTexture();
 
     /**
      * Gets the color of the first layer

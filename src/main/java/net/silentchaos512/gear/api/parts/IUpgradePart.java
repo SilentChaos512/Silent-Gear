@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.parts;
 
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.gear.part.PartData;
 
 /**
  * Represents an upgrade part, which is applied to gear after it has been crafted.
@@ -32,7 +33,7 @@ public interface IUpgradePart {
 
     /**
      * Called when the upgrade part has been added to a gear item. This could be used to attach
-     * additional data to the tool, since {@link net.silentchaos512.gear.parts.PartData} is not
+     * additional data to the tool, since {@link PartData} is not
      * always reliable for tracking extra data.
      *
      * @param gear The gear item

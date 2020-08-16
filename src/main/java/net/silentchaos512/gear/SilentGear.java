@@ -24,7 +24,7 @@ public final class SilentGear {
 
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 
-    public static final Random random = new Random(); // TODO: Rename to RANDOM
+    public static final Random RANDOM = new Random();
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static SilentGear INSTANCE;

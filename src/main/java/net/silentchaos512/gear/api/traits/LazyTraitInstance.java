@@ -2,7 +2,7 @@ package net.silentchaos512.gear.api.traits;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 
 import javax.annotation.Nullable;
 

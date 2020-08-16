@@ -7,7 +7,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.PartData;
+import net.silentchaos512.gear.gear.part.PartData;
 
 import java.util.ArrayList;
 import java.util.Collection;

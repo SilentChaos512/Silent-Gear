@@ -2,25 +2,22 @@ package net.silentchaos512.gear.api.stats;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.parts.MaterialGrade;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.utils.Color;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
  * A stat that any ICoreItem can use. See {@link ItemStats} for stats that can be used.
- * <p>
- * TODO: Rename to GearStat in 2.0
- *
- * @author SilentChaos512
- * @since Experimental
  */
-@ParametersAreNonnullByDefault
 public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat {
     public enum DisplayFormat {
         UNIT, MULTIPLIER, PERCENTAGE
@@ -67,18 +64,9 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         ItemStats.STATS_IN_ORDER.add(this);
     }
 
-    /**
-     * @return The stat name
-     * @deprecated Use {@link #getRegistryName()} instead
-     */
-    @Deprecated
-    public ResourceLocation getName() {
-        return getRegistryName();
-    }
-
     @Override
     public ResourceLocation getStatId() {
-        return getRegistryName();
+        return Objects.requireNonNull(getRegistryName());
     }
 
     public float getDefaultValue() {
@@ -202,7 +190,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
 
     public StatInstance computeForDisplay(float baseValue, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
-            return new StatInstance(baseValue, Operation.AVG);
+            return StatInstance.of(baseValue);
 
         int add = 1;
         for (StatInstance inst : modifiers) {
@@ -215,7 +203,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
 
         float value = compute(baseValue + add, false, modifiers) - add;
         Operation op = modifiers.iterator().next().getOp();
-        return new StatInstance(value, op);
+        return StatInstance.of(value, op);
     }
 
     public boolean isVisible() {
@@ -230,13 +218,14 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return affectedByGrades;
     }
 
+    @Deprecated
     public float withMissingRodEffect(float statValue) {
         if (missingRodFunction == null) return statValue;
         return missingRodFunction.apply(statValue);
     }
 
     public String toString() {
-        return String.format("ItemStat{%s, default=%.2f, min=%.2f, max=%.2f}", getRegistryName(), defaultValue, minimumValue, maximumValue);
+        return String.format("ItemStat{%s}", getRegistryName());
     }
 
     public IFormattableTextComponent getDisplayName() {
@@ -292,6 +281,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
             return this;
         }
 
+        @Deprecated
         public Properties missingRodFunction(Function<Float, Float> function) {
             missingRodFunction = function;
             return this;

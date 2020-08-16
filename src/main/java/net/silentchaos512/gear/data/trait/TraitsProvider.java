@@ -16,7 +16,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.traits.DamageTypeTrait;
+import net.silentchaos512.gear.gear.trait.DamageTypeTrait;
 import net.silentchaos512.gear.util.Const;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

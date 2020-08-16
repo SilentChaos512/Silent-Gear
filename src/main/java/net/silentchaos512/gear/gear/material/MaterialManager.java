@@ -19,10 +19,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.parts.IGearPart;
 import net.silentchaos512.gear.network.SyncMaterialsPacket;
-import net.silentchaos512.gear.parts.PartConst;
-import net.silentchaos512.gear.parts.PartManager;
 import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
@@ -107,11 +104,6 @@ public class MaterialManager implements IResourceManagerReloadListener {
                 INGREDIENT_CONFLICT_LIST.add("Conflicting crafting items for: " + collect);
             }
         }
-    }
-
-    private static boolean isBuiltInPart(IGearPart part) {
-        IGearPart example = PartManager.get(PartConst.MAIN_EXAMPLE);
-        return example == null || part.getPackName().equals(example.getPackName());
     }
 
     public static List<IMaterial> getValues() {

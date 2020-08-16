@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;

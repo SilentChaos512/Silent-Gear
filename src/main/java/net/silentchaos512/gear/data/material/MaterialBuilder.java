@@ -30,7 +30,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
-import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.utils.Color;
 
@@ -133,14 +133,14 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder displayAll(PartTextureType texture, int color) {
+    public MaterialBuilder displayAll(PartTextureSet texture, int color) {
         if (this.stats.isEmpty()) {
             throw new IllegalStateException("Must build stats map first!");
         }
         for (PartType partType : this.stats.keySet()) {
             // Remove highlight layer from non-mains
-            PartTextureType targetTexture = texture == PartTextureType.HIGH_CONTRAST_WITH_HIGHLIGHT && partType != PartType.MAIN
-                    ? PartTextureType.HIGH_CONTRAST
+            PartTextureSet targetTexture = texture == PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT && partType != PartType.MAIN
+                    ? PartTextureSet.HIGH_CONTRAST
                     : texture;
 
             if (partType == PartType.BOWSTRING)
@@ -166,7 +166,7 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder displayCoating(PartTextureType textures, int color) {
+    public MaterialBuilder displayCoating(PartTextureSet textures, int color) {
         display(PartType.COATING, GearType.ALL, new MaterialLayerList(PartType.MAIN, textures, color));
         display(PartType.COATING, GearType.PART,
                 new MaterialLayer(SilentGear.getId("coating_material"), color),
@@ -175,7 +175,7 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder displayMain(PartTextureType textures, int color) {
+    public MaterialBuilder displayMain(PartTextureSet textures, int color) {
         return display(PartType.MAIN, GearType.ALL, new MaterialLayerList(PartType.MAIN, textures, color));
     }
 
@@ -196,7 +196,7 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder display(PartType partType, PartTextureType texture, int color) {
+    public MaterialBuilder display(PartType partType, PartTextureSet texture, int color) {
         display(partType, GearType.ALL, texture, color);
         if (partType == PartType.MAIN) {
             display(partType, GearType.ARMOR, texture, color);
@@ -210,7 +210,7 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder display(PartType partType, GearType gearType, PartTextureType texture, int color) {
+    public MaterialBuilder display(PartType partType, GearType gearType, PartTextureSet texture, int color) {
         MaterialLayerList materialLayerList = new MaterialLayerList(partType, texture, color);
         return display(partType, gearType, materialLayerList);
     }
@@ -243,7 +243,7 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder stat(PartType partType, IItemStat stat, float value, StatInstance.Operation operation) {
-        StatInstance mod = new StatInstance(value, operation);
+        StatInstance mod = StatInstance.of(value, operation);
         StatModifierMap map = stats.computeIfAbsent(partType, pt -> new StatModifierMap());
         map.put(stat, mod);
         return this;

@@ -16,8 +16,8 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.parts.PartPositions;
-import net.silentchaos512.gear.parts.type.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartPositions;
+import net.silentchaos512.gear.gear.part.CompoundPart;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class PartBuilder {
     }
 
     public PartBuilder stat(IItemStat stat, float value, StatInstance.Operation operation) {
-        StatInstance mod = new StatInstance(value, operation);
+        StatInstance mod = StatInstance.of(value, operation);
         this.stats.put(stat, mod);
         return this;
     }

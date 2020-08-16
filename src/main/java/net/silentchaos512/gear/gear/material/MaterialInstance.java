@@ -121,7 +121,7 @@ public final class MaterialInstance implements IMaterialInstance {
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
             // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
             float bonus = 1f + grade.bonusPercent / 100f;
-            mods = mods.stream().map(m -> new StatInstance(m.getValue() * bonus, m.getOp())).collect(Collectors.toList());
+            mods = mods.stream().map(m -> m.copySetValue(m.getValue() * bonus)).collect(Collectors.toList());
         }
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
         MinecraftForge.EVENT_BUS.post(event);

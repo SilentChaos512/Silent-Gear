@@ -3,7 +3,7 @@ package net.silentchaos512.gear.data.trait;
 import com.google.gson.JsonObject;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.traits.SynergyTrait;
+import net.silentchaos512.gear.gear.trait.SynergyTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.Optional;

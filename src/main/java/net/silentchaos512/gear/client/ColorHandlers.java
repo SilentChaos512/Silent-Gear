@@ -9,8 +9,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartType;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.item.gear.CoreShield;
 import net.silentchaos512.gear.util.GearData;
@@ -33,8 +31,6 @@ public final class ColorHandlers {
             return;
         }
 
-        register(itemColors, FragmentItem::getItemColor, ModItems.FRAGMENT);
-
         // Tools, armor, shields, etc.
         ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof CoreArmor || item instanceof CoreShield)
@@ -48,56 +44,6 @@ public final class ColorHandlers {
         } else {
             SilentGear.LOGGER.error("Failed to add color handler for {}: item not present", item.getRegistryObject().getId());
         }
-    }
-
-    /**
-     * Standard colors for most tools, melee weapons, and ranged weapons
-     *
-     * @param stack     The item
-     * @param tintIndex The tint index
-     * @return The color of the layer
-     */
-    public static int getToolColor(ItemStack stack, int tintIndex) {
-        switch (tintIndex) {
-            case 0:
-                return GearData.getBlendedColor(stack, PartType.ROD);
-            case 1:
-                return GearData.getBlendedColor(stack, PartType.GRIP);
-            case 2:
-                return GearData.getBlendedColor(stack, PartType.MAIN);
-            case 3:
-                return GearData.getBlendedColor(stack, PartType.TIP);
-            default:
-                return Color.VALUE_WHITE;
-        }
-    }
-
-    @Deprecated
-    public static int getToolLiteColor(ItemStack stack, int tintIndex) {
-        return getToolColor(stack, tintIndex);
-    }
-
-    /**
-     * Standard colors for armor items
-     *
-     * @param stack     The item
-     * @param tintIndex The tint index
-     * @return The color of the layer
-     */
-    public static int getArmorColor(ItemStack stack, int tintIndex) {
-        switch (tintIndex) {
-            case 0:
-                return GearData.getBlendedColor(stack, PartType.MAIN);
-            case 1:
-                return GearData.getBlendedColor(stack, PartType.TIP);
-            default:
-                return Color.VALUE_WHITE;
-        }
-    }
-
-    @Deprecated
-    public static int getArmorLiteColor(ItemStack stack, int tintIndex) {
-        return getArmorColor(stack, tintIndex);
     }
 
     /**

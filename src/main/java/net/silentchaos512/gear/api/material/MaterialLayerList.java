@@ -7,7 +7,7 @@ import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.model.PartTextures;
-import net.silentchaos512.gear.parts.PartTextureType;
+import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.utils.Color;
 
 import java.util.*;
@@ -17,13 +17,13 @@ public class MaterialLayerList implements IMaterialLayerList {
     public static final MaterialLayerList DEFAULT = new MaterialLayerList();
 
     private final List<MaterialLayer> layers;
-    private PartTextureType oldTextureType = PartTextureType.ABSENT;
+    private PartTextureSet oldTextureType = PartTextureSet.ABSENT;
 
     public MaterialLayerList() {
-        this(PartType.MAIN, PartTextureType.ABSENT, Color.VALUE_WHITE);
+        this(PartType.MAIN, PartTextureSet.ABSENT, Color.VALUE_WHITE);
     }
 
-    public MaterialLayerList(PartType partType, PartTextureType texture, int color) {
+    public MaterialLayerList(PartType partType, PartTextureSet texture, int color) {
         this(texture.getLayers(partType).stream()
                 .map(PartTextures::getTexture)
                 .map(tex -> {
@@ -49,7 +49,7 @@ public class MaterialLayerList implements IMaterialLayerList {
 
     @Deprecated
     @Override
-    public PartTextureType getTexture() {
+    public PartTextureSet getTexture() {
         return oldTextureType;
     }
 

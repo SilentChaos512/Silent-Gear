@@ -31,14 +31,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartTraitInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.parts.PartData;
-import net.silentchaos512.gear.traits.TraitManager;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -239,7 +239,7 @@ public final class TraitHelper {
         Map<ITrait, Integer> result = new LinkedHashMap<>();
 
         for (PartData part : parts) {
-            for (PartTraitInstance inst : part.getTraits(gear)) {
+            for (TraitInstance inst : part.getTraits(gear)) {
                 if (inst.conditionsMatch(parts, gear)) {
                     ITrait trait = inst.getTrait();
                     // Get the highest value in any part
@@ -263,7 +263,7 @@ public final class TraitHelper {
         Map<ITrait, Integer> countMatsWithTrait = new HashMap<>();
 
         for (MaterialInstance material : materials) {
-            for (PartTraitInstance inst : material.getMaterial().getTraits(partType, gear)) {
+            for (TraitInstance inst : material.getMaterial().getTraits(partType, gear)) {
                 if (inst.conditionsMatch(materials, partType, gear)) {
                     result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
