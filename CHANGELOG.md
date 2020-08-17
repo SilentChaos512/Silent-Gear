@@ -3,9 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.1.0] - 2020-08-17
+- Lots of refactoring done. I tried my best not to break anything, but keep an eye out for new bugs.
 ### Added
+- Repair value stat, a multiplier for durability restored by materials during repairs
 - JEI support for material grader, which shows available catalysts [#211]
+- New traits, heavy and light
 - `sgear_stats info` command, which lists modifiers for each stat on the gear item in the player's hand
 - Config to disable stat logging
 ### Changed
@@ -13,8 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Armor protection ratios to match vanilla diamond and netherite
 - Knockback resistance stat now scaled to the vanilla display value, rather than the modifier value (0.1 -> 1)
 ### Fixed
+- Blueprint book issue with Quark [#219]
 - Possible crash with blueprint book [#218]
 - Netherite missing armor durability and armor toughness [#210]
+- Anvil repairs not working
 - AOE tools (hammer, etc.) not rendering outline on each block to be broken
 - Fragment colors
 
