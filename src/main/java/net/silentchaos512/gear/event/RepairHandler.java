@@ -5,14 +5,16 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.container.RepairContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IUpgradePart;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.GearData;
@@ -27,20 +29,21 @@ public final class RepairHandler {
     @SubscribeEvent
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
         if (event.getLeft().getItem() instanceof ICoreItem) {
+            MaterialInstance material = MaterialInstance.from(event.getRight());
             PartData part = PartData.from(event.getRight());
 
-            if (part != null) {
-                if (part.getPart() instanceof IUpgradePart) {
-                    handleUpgradeApplication(event, part);
-                } else if (part.getType() == PartType.MAIN) {
-                    handleGearRepair(event, part);
-                }
+            if (material != null) {
+                handleGearRepair(event, material);
+            } else if (part != null && part.getPart() instanceof IUpgradePart) {
+                handleUpgradeApplication(event, part);
             }
         }
     }
 
     private static void handleUpgradeApplication(AnvilUpdateEvent event, PartData part) {
         ItemStack result = event.getLeft().copy();
+        applyName(event, result);
+
         GearData.addUpgradePart(result, part);
         GearData.recalculateStats(result, null);
 
@@ -49,10 +52,14 @@ public final class RepairHandler {
         event.setCost(3);
     }
 
-    private static void handleGearRepair(AnvilUpdateEvent event, PartData part) {
+    private static void handleGearRepair(AnvilUpdateEvent event, MaterialInstance material) {
         ItemStack result = event.getLeft().copy();
-        float amount = part.getRepairAmount(result, RepairContext.Type.ANVIL);
-        amount *= GearData.getStat(result, ItemStats.REPAIR_EFFICIENCY);
+        applyName(event, result);
+
+        float repairValue = material.getRepairValue(result, RepairContext.Type.ANVIL);
+        float gearRepairEfficiency = GearData.getStat(result, ItemStats.REPAIR_EFFICIENCY);
+        float anvilEfficiency = Config.Common.repairFactorAnvil.get().floatValue();
+        float amount = repairValue * gearRepairEfficiency * anvilEfficiency;
 
         // How many of materials to use?
         int materialCount = 1;
@@ -68,6 +75,12 @@ public final class RepairHandler {
             event.setOutput(result);
             event.setCost(materialCount);
             event.setMaterialCost(materialCount);
+        }
+    }
+
+    private static void applyName(AnvilUpdateEvent event, ItemStack stack) {
+        if (!event.getName().isEmpty()) {
+            stack.setDisplayName(new StringTextComponent(event.getName()));
         }
     }
 

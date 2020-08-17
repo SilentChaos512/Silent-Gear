@@ -21,6 +21,7 @@ public interface ICoreArmor extends ICoreItem {
     );
 
     Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
+            ItemStats.REPAIR_VALUE,
             ItemStats.HARVEST_LEVEL,
             ItemStats.HARVEST_SPEED,
             ItemStats.REACH_DISTANCE,

@@ -600,6 +600,7 @@
   "stat.silentgear.rarity": "Rarity",
   "stat.silentgear.reach_distance": "Reach Distance",
   "stat.silentgear.repair_efficiency": "Repair Efficiency",
+  "stat.silentgear.repair_value": "Repair Value",
   "trait.silentgear.accelerate": "Accelerate",
   "trait.silentgear.accelerate.desc": "Gains harvest speed, attack speed, and ranged speed as damaged",
   "trait.silentgear.adamant": "Adamant",

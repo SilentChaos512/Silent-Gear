@@ -29,6 +29,7 @@ public interface ICoreTool extends ICoreItem {
 
     Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
             ItemStats.ARMOR_DURABILITY,
+            ItemStats.REPAIR_VALUE,
             ItemStats.ARMOR,
             ItemStats.ARMOR_TOUGHNESS,
             ItemStats.MAGIC_ARMOR,

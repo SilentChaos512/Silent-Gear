@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
@@ -138,11 +139,16 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public int getRepairValue(ItemStack gear) {
+        return this.getRepairValue(gear, RepairContext.Type.QUICK);
+    }
+
+    public int getRepairValue(ItemStack gear, RepairContext.Type type) {
         if (this.canRepair(gear)) {
             float durability = getStat(GearHelper.getDurabilityStat(gear), PartType.MAIN);
-            float repairEfficiency = getStat(ItemStats.REPAIR_EFFICIENCY, PartType.MAIN);
+            float repairValueMulti = getStat(ItemStats.REPAIR_VALUE, PartType.MAIN);
             float itemRepairModifier = GearHelper.getRepairModifier(gear);
-            return Math.round(durability * repairEfficiency * itemRepairModifier) + 1;
+            float typeBonus = 1f + type.getBonusEfficiency();
+            return Math.round(durability * repairValueMulti * itemRepairModifier * typeBonus) + 1;
         }
         return 0;
     }

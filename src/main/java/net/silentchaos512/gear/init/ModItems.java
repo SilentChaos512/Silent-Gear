@@ -4,6 +4,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
+import net.minecraft.item.Rarity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.silentchaos512.gear.SilentGear;
@@ -161,19 +162,19 @@ public final class ModItems {
     public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () -> new RepairKitItem(
             Config.Common.repairKitCrudeCapacity::get,
             Config.Common.repairKitCrudeEfficiency::get,
-            unstackableProps()));
+            unstackableProps().rarity(Rarity.COMMON)));
     public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () -> new RepairKitItem(
             Config.Common.repairKitSturdyCapacity::get,
             Config.Common.repairKitSturdyEfficiency::get,
-            unstackableProps()));
+            unstackableProps().rarity(Rarity.UNCOMMON)));
     public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () -> new RepairKitItem(
             Config.Common.repairKitCrimsonCapacity::get,
             Config.Common.repairKitCrimsonEfficiency::get,
-            unstackableProps()));
+            unstackableProps().rarity(Rarity.RARE)));
     public static final ItemRegistryObject<Item> AZURE_REPAIR_KIT = register("azure_repair_kit", () -> new RepairKitItem(
             Config.Common.repairKitAzureCapacity::get,
             Config.Common.repairKitAzureEfficiency::get,
-            unstackableProps()));
+            unstackableProps().rarity(Rarity.EPIC)));
 
     static {
         CraftingItems.register(Registration.ITEMS);
