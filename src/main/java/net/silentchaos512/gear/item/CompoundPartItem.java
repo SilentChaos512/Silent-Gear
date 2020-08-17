@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -16,12 +14,15 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.SynergyUtils;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -140,9 +141,12 @@ public class CompoundPartItem extends Item {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
+        PartData part = PartData.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
-        if (material != null) {
-            return new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(partType));
+        if (part != null && material != null) {
+            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(partType));
+            int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
+            return TextUtil.withColor(nameText, nameColor);
         }
         return super.getDisplayName(stack);
     }
@@ -153,13 +157,13 @@ public class CompoundPartItem extends Item {
         if (part != null) {
             float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
             tooltip.add(SynergyUtils.getDisplayText(synergy));
+
+            TextListBuilder statsBuilder = new TextListBuilder();
+            getMaterials(stack).forEach(material -> {
+                int nameColor = material.getMaterial().getNameColor(part.getType(), this.getGearType());
+                statsBuilder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
+            });
+            tooltip.addAll(statsBuilder.build());
         }
-        getMaterials(stack).stream()
-                .map(mat -> {
-                    ITextComponent gradeText = mat.getDisplayNameWithGrade(this.partType);
-                    gradeText.getStyle().setFormatting(TextFormatting.ITALIC);
-                    return new StringTextComponent("- ").append(gradeText);
-                })
-                .forEach(tooltip::add);
     }
 }

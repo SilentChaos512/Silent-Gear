@@ -540,7 +540,7 @@
   "misc.silentgear.notifyOnBreak": "Your %s has broken. You should fix that.",
   "misc.silentgear.poorlyMade": "This item is poorly made and will not last long",
   "misc.silentgear.spaceBrackets": " (%s)",
-  "misc.silentgear.synergy": "Synergy: %s%%",
+  "misc.silentgear.synergy": "Synergy: %s",
   "misc.silentgear.tier": "Tier %d",
   "misc.silentgear.tooltip.altForConstruction": "Construction §8<Press Alt>",
   "misc.silentgear.tooltip.blacklist": "Blacklist: %s",

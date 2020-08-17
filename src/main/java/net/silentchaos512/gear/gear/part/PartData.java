@@ -227,6 +227,10 @@ public final class PartData implements IPartData {
         return part.getModelKey(this);
     }
 
+    public int getColor(ItemStack gear) {
+        return getColor(gear, 0, 0);
+    }
+
     public int getColor(ItemStack gear, int layer, int animationFrame) {
         return part.getColor(this, gear, layer, animationFrame);
     }

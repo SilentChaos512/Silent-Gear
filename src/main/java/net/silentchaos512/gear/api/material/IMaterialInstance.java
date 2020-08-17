@@ -84,8 +84,12 @@ public interface IMaterialInstance {
     }
 
     default IFormattableTextComponent getDisplayNameWithGrade(PartType partType) {
-        IFormattableTextComponent gradeSuffix = TextUtil.translate("misc", "spaceBrackets", getGrade().getDisplayName());
-        return getDisplayName(partType, ItemStack.EMPTY).append(gradeSuffix);
+        IFormattableTextComponent displayName = getDisplayName(partType, ItemStack.EMPTY);
+        MaterialGrade grade = getGrade();
+        if (grade != MaterialGrade.NONE) {
+            displayName.append(TextUtil.translate("misc", "spaceBrackets", grade.getDisplayName()));
+        }
+        return displayName;
     }
 
     default JsonObject serialize() {

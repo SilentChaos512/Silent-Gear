@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Armor protection ratios to match vanilla diamond and netherite
 - Knockback resistance stat now scaled to the vanilla display value, rather than the modifier value (0.1 -> 1)
 ### Fixed
+- Possible crash with blueprint book [#218]
 - Netherite missing armor durability and armor toughness [#210]
 - AOE tools (hammer, etc.) not rendering outline on each block to be broken
 - Fragment colors

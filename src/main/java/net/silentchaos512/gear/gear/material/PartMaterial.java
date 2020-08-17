@@ -24,9 +24,8 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
-import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.utils.Color;
 
@@ -218,8 +217,7 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public int getNameColor(PartType partType, ItemStack gear) {
-        GearType gearType = GearHelper.getType(gear);
+    public int getNameColor(PartType partType, GearType gearType) {
         IMaterialDisplay model = MaterialDisplayManager.get(this);
         if (model != null) {
             int color = model.getLayerColor(gearType, partType, 0);

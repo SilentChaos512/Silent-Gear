@@ -9,7 +9,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -18,10 +17,10 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
@@ -77,14 +76,6 @@ public final class GearClientHelper {
             tooltip.add(TextUtil.withColor(misc("lockedStats"), Color.FIREBRICK));
         } else if (GearData.hasLockedStats(stack)) {
             tooltip.add(TextUtil.withColor(misc("lockedStats"), Color.YELLOW));
-        } else {
-            // TODO: Need to generify this
-            if (item.requiresPartOfType(PartType.ROD) && constructionParts.getRods().isEmpty()) {
-                tooltip.add(misc("missingRod").mergeStyle(TextFormatting.RED));
-            }
-            if (item.requiresPartOfType(PartType.BOWSTRING) && constructionParts.getPartsOfType(PartType.BOWSTRING).isEmpty()) {
-                tooltip.add(misc("missingBowstring").mergeStyle(TextFormatting.RED));
-            }
         }
 
         // Let parts add information if they need to
@@ -100,22 +91,20 @@ public final class GearClientHelper {
         addStatsInfo(stack, tooltip, flag, item);
 
         // Tool construction
-        IFormattableTextComponent textConstruction = TextUtil.withColor(misc("tooltip.construction"), Color.GOLD);
         if (KeyTracker.isDisplayConstructionDown() && flag.showConstruction) {
-            tooltip.add(textConstruction);
+            tooltip.add(TextUtil.withColor(misc("tooltip.construction"), Color.GOLD));
             Collections.reverse(constructionParts);
             tooltipListParts(stack, tooltip, constructionParts);
         } else if (flag.showConstruction) {
-            textConstruction.append(new StringTextComponent(" ")
-                    .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), TextFormatting.GRAY)));
-            tooltip.add(textConstruction);
+            tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.construction"), Color.GOLD)
+                    .append(new StringTextComponent(" ")
+                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), TextFormatting.GRAY))));
         }
     }
 
     public static void addStatsInfo(ItemStack stack, List<ITextComponent> tooltip, GearTooltipFlag flag, ICoreItem item) {
-        IFormattableTextComponent textStats = TextUtil.withColor(misc("tooltip.stats"), Color.GOLD);
         if (KeyTracker.isDisplayStatsDown() && flag.showStats) {
-            tooltip.add(textStats);
+            tooltip.add(TextUtil.withColor(misc("tooltip.stats"), Color.GOLD));
 
             tooltip.add(TextUtil.withColor(misc("tier", GearData.getTier(stack)), Color.DEEPSKYBLUE));
 
@@ -168,9 +157,9 @@ public final class GearClientHelper {
 
             tooltip.addAll(builder.build());
         } else if (flag.showStats) {
-            textStats.appendString(" ")
-                    .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY));
-            tooltip.add(textStats);
+            tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.stats"), Color.GOLD)
+                    .append(new StringTextComponent(" ")
+                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY))));
         }
     }
 
@@ -220,14 +209,15 @@ public final class GearClientHelper {
 
         for (PartData part : parts) {
             if (part.getPart().isVisible()) {
-                builder.add(TextUtil.withColor(part.getDisplayName(gear).deepCopy(), Color.LAVENDER));
+                int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
+                builder.add(TextUtil.withColor(part.getDisplayName(gear).deepCopy(), partNameColor));
 
                 // List materials for compound parts
                 if (part.getPart() instanceof CompoundPart) {
                     builder.indent();
                     for (MaterialInstance material : CompoundPartItem.getMaterials(part.getCraftingItem())) {
                         int nameColor = material.getMaterial().getNameColor(part.getType(), gear);
-                        builder.add(TextUtil.withColor(material.getDisplayName(part.getType()), nameColor));
+                        builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
                     }
                     builder.unindent();
                 }

@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
@@ -230,7 +231,11 @@ public interface IMaterial {
     @Nullable
     IFormattableTextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
 
-    int getNameColor(PartType partType, ItemStack gear);
+    default int getNameColor(PartType partType, ItemStack gear) {
+        return getNameColor(partType, GearHelper.getType(gear));
+    }
+
+    int getNameColor(PartType partType, GearType gearType);
 
     default boolean isVisible(PartType partType) {
         return true;
