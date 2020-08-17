@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.client.model.IModelLoader;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 
 import java.util.ArrayList;
 import java.util.Collection;

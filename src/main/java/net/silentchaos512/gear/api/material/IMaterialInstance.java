@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.util.TextUtil;
 

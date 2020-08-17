@@ -4,7 +4,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public final class PartGearKey {
         }
 
         GearType gearType = GearType.get(parts[1]);
-        if (gearType == null) {
+        if (gearType.isInvalid()) {
             throw new JsonParseException("Unknown gear type: " + parts[1]);
         }
 

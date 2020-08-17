@@ -10,7 +10,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;

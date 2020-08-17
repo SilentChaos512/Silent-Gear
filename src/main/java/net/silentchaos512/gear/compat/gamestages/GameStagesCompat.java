@@ -15,7 +15,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.part.IGearPart;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

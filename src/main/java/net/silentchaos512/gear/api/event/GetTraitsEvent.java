@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.event;
 
 import net.minecraft.item.ItemStack;
-import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.traits.ITrait;
 
 import java.util.Map;

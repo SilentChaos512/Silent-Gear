@@ -21,7 +21,7 @@ package net.silentchaos512.gear.client.gui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.part.IGearPart;
 
 import java.util.ArrayList;
 import java.util.List;

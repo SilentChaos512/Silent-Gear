@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.api.parts;
+package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -181,7 +181,7 @@ public final class PartType {
 
     public Optional<? extends CompoundPartItem> getCompoundPartItem(GearType gearType) {
         if (this == MAIN) {
-            if (gearType.matches(GearType.ARMOR)) {
+            if (gearType.isArmor()) {
                 return Optional.of(ModItems.ARMOR_BODY.get());
             }
             return ForgeRegistries.ITEMS.getValues().stream()

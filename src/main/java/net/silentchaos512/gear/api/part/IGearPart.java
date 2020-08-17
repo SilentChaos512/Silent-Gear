@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.api.parts;
+package net.silentchaos512.gear.api.part;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.CraftingInventory;
@@ -54,16 +54,16 @@ public interface IGearPart {
     default void retainData(@Nullable IGearPart oldPart) {}
 
     default Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part) {
-        return getStatModifiers(ItemStack.EMPTY, stat, part);
+        return getStatModifiers(stat, part, ItemStack.EMPTY);
     }
 
-    Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part);
+    Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear);
 
     default List<TraitInstance> getTraits(PartData part) {
-        return getTraits(ItemStack.EMPTY, part);
+        return getTraits(part, ItemStack.EMPTY);
     }
 
-    List<TraitInstance> getTraits(ItemStack gear, PartData part);
+    List<TraitInstance> getTraits(PartData part, ItemStack gear);
 
     float getRepairAmount(RepairContext context);
 
@@ -83,13 +83,13 @@ public interface IGearPart {
      * Get the chance the part will be lost when salvaging. Returning zero will ensure the part is
      * returned, regardless of how damaged the gear is.
      *
-     * @param gear           The gear item
      * @param part           The part
+     * @param gear           The gear item
      * @param normalLossRate The default loss rate, which is based on config settings and how
      *                       damaged the item is
      * @return Chance of losing the part when salvaging (defaults to {@code normalLossRate})
      */
-    default double getSalvageLossRate(ItemStack gear, PartData part, double normalLossRate) {
+    default double getSalvageLossRate(PartData part, ItemStack gear, double normalLossRate) {
         return normalLossRate;
     }
 
@@ -99,9 +99,9 @@ public interface IGearPart {
      * @param gearType The gear type (or null if not available)
      * @return True if crafting is allowed or {@code gearType} is {@code null}, false otherwise
      */
-    default boolean isCraftingAllowed(PartData part, @Nullable GearType gearType) {
-        if (gearType != null && this.getType() == PartType.MAIN) {
-            if (gearType.matches("armor"))
+    default boolean isCraftingAllowed(PartData part, GearType gearType) {
+        if (gearType.isGear() && this.getType() == PartType.MAIN) {
+            if (gearType.isArmor())
                 return computeUnclampedStatValue(ItemStats.ARMOR_DURABILITY, part) > 0;
             else
                 return computeUnclampedStatValue(ItemStats.DURABILITY, part) > 0;
@@ -109,7 +109,7 @@ public interface IGearPart {
         return true;
     }
 
-    default boolean isCraftingAllowed(PartData part, @Nullable GearType gearType, @Nullable CraftingInventory inventory) {
+    default boolean isCraftingAllowed(PartData part, GearType gearType, @Nullable CraftingInventory inventory) {
 /*        if (!GameStagesCompatProxy.canCraft(gearType, inventory) || !GameStagesCompatProxy.canCraft(this, inventory)) {
             return false;
         }*/

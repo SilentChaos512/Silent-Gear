@@ -8,7 +8,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;

@@ -2,7 +2,7 @@ package net.silentchaos512.gear.network;
 
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 

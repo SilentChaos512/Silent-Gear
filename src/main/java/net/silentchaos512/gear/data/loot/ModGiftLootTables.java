@@ -16,7 +16,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;

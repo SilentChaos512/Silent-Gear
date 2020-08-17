@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.IContainerItem;

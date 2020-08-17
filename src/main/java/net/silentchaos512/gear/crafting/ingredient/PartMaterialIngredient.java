@@ -13,7 +13,7 @@ import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
@@ -109,7 +109,7 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
             }
 
             GearType gearType = GearType.get(buffer.readString());
-            if (gearType == null) {
+            if (gearType.isInvalid()) {
                 throw new JsonParseException("Unknown gear type: " + typeName);
             }
 
@@ -130,7 +130,7 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
 
             String gearTypeName = JSONUtils.getString(json, "gear_type", "tool");
             GearType gearType = GearType.get(gearTypeName);
-            if (gearType == null) {
+            if (gearType.isInvalid()) {
                 throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
             }
 

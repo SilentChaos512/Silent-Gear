@@ -13,7 +13,7 @@ import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.part.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -126,7 +126,7 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear) {
         // Get the materials and all the stat modifiers they provide for this stat
         List<MaterialInstance> materials = getMaterials(part);
         List<StatInstance> statMods = materials.stream()
@@ -158,7 +158,7 @@ public class CompoundPart extends AbstractGearPart {
 
         // Synergy
         if (stat.doesSynergyApply()) {
-            float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(gear, part));
+            float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(part, gear));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 for (int i = 0; i < ret.size(); ++i) {
                     StatInstance oldMod = ret.get(i);
@@ -185,8 +185,8 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public List<TraitInstance> getTraits(ItemStack gear, PartData part) {
-        List<TraitInstance> ret = new ArrayList<>(super.getTraits(gear, part));
+    public List<TraitInstance> getTraits(PartData part, ItemStack gear) {
+        List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, gear));
         List<MaterialInstance> materials = getMaterials(part);
 
         TraitHelper.getTraits(materials, this.partType, gear).forEach((trait, level) -> {
@@ -284,7 +284,7 @@ public class CompoundPart extends AbstractGearPart {
             CompoundPart part = super.read(id, json, false);
             String gearTypeStr = JSONUtils.getString(json, "gear_type");
             part.gearType = GearType.get(gearTypeStr);
-            if (part.gearType == null) {
+            if (!part.gearType.isGear()) {
                 throw new JsonParseException("Unknown gear type: " + gearTypeStr);
             }
             part.partType = PartType.get(new ResourceLocation(JSONUtils.getString(json, "part_type")));

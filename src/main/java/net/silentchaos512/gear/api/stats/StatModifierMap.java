@@ -12,7 +12,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.part.IGearPart;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

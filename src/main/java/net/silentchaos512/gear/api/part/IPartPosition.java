@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.silentchaos512.gear.api.parts;
+package net.silentchaos512.gear.api.part;
 
 import java.util.ArrayList;
 import java.util.List;

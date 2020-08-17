@@ -2,7 +2,7 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.model.PartTextures;
 
 import java.util.Collections;

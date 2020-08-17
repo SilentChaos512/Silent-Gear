@@ -68,7 +68,7 @@ public final class GearTypeIngredient extends Ingredient {
         public GearTypeIngredient parse(PacketBuffer buffer) {
             String typeName = buffer.readString();
             GearType type = GearType.get(typeName);
-            if (type == null) throw new JsonParseException("Unknown gear type: " + typeName);
+            if (type.isInvalid()) throw new JsonParseException("Unknown gear type: " + typeName);
             return new GearTypeIngredient(type);
         }
 
@@ -79,7 +79,7 @@ public final class GearTypeIngredient extends Ingredient {
                 throw new JsonSyntaxException("'gear_type' is missing");
 
             GearType type = GearType.get(typeName);
-            if (type == null)
+            if (type.isInvalid())
                 throw new JsonSyntaxException("gear_type " + typeName + " does not exist");
 
             return new GearTypeIngredient(type);

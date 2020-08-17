@@ -15,7 +15,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.parts.MaterialGrade;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.ModTileEntities;

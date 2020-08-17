@@ -7,7 +7,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

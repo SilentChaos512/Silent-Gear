@@ -8,7 +8,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.api.parts.PartDataList;
+import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.GearData;

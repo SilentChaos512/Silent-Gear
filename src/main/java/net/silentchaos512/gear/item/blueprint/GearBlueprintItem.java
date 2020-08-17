@@ -13,7 +13,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -67,7 +67,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         String itemClass = this.gearType.getName();
 
         // Flavor text
-        if (!gearType.matches("armor")) {
+        if (!gearType.isArmor()) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
             list.add(new TranslationTextComponent(key).mergeStyle(TextFormatting.ITALIC));
         }

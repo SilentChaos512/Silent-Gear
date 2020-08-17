@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.api.parts;
+package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;

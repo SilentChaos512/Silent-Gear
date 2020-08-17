@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -28,7 +28,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
         MaterialInstance material = MaterialInstance.from(upgradeItem);
         if (material != null) {
             GearType gearType = GearHelper.getType(gear);
-            if (gearType.matches(GearType.ALL)) {
+            if (gearType.isGear()) {
                 ItemStack result = gear.copy();
 
                 PartType.COATING.getCompoundPartItem(gearType).ifPresent(cpi -> {

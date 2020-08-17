@@ -3,7 +3,7 @@ package net.silentchaos512.gear.util;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 
 public final class Const {

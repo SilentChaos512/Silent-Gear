@@ -18,7 +18,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.LazyItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;

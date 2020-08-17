@@ -6,9 +6,9 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartSerializer;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.IPartSerializer;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 
 import java.util.HashMap;

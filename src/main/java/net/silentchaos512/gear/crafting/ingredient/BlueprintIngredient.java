@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
 
@@ -99,7 +99,7 @@ public class BlueprintIngredient extends Ingredient {
             }
 
             GearType gearType = GearType.get(buffer.readString());
-            if (gearType == null) {
+            if (gearType.isInvalid()) {
                 throw new JsonParseException("Unknown gear type: " + typeName);
             }
 
@@ -116,7 +116,7 @@ public class BlueprintIngredient extends Ingredient {
 
             String gearTypeName = JSONUtils.getString(json, "gear_type", "part");
             GearType gearType = GearType.get(gearTypeName);
-            if (gearType == null) {
+            if (gearType.isInvalid()) {
                 throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
             }
 

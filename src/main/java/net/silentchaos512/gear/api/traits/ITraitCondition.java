@@ -2,8 +2,8 @@ package net.silentchaos512.gear.api.traits;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 
 import java.util.List;

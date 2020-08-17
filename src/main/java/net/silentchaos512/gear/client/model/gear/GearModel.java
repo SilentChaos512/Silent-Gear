@@ -18,7 +18,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
@@ -104,7 +104,7 @@ public class GearModel extends LayeredModel<GearModel> {
         // This method will display an example tool for items with no data (ie, for advancements)
         IMaterialDisplay model = MaterialDisplayManager.get(material);
         if (model != null) {
-            if (!gearType.matches(GearType.ARMOR)) {
+            if (!gearType.isArmor()) {
                 MaterialLayer exampleRod = model.getLayers(this.gearType, PartType.ROD).getFirstLayer();
                 if (exampleRod != null) {
                     builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleRod.getTexture(gearType, 0))), rotation, exampleRod.getColor()));

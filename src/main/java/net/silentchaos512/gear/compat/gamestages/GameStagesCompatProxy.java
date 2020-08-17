@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.IGearPart;
+import net.silentchaos512.gear.api.part.IGearPart;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -34,7 +34,7 @@ public final class GameStagesCompatProxy {
         return canCraft(part, getPlayerUsingInventory(inv));
     }
 
-    public static boolean canCraft(@Nullable GearType gearType, CraftingInventory inv) {
+    public static boolean canCraft(GearType gearType, CraftingInventory inv) {
         if (!ModList.get().isLoaded("gamestages")) return true;
 
         if (FMLEnvironment.dist == Dist.CLIENT) {

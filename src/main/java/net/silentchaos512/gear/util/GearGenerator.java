@@ -23,9 +23,9 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.PartDataList;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 

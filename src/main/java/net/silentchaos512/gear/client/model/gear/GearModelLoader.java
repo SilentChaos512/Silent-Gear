@@ -31,7 +31,7 @@ public class GearModelLoader implements IModelLoader<GearModel> {
         }
         String gearTypeStr = JSONUtils.getString(modelContents, "gear_type");
         GearType gearType = GearType.get(gearTypeStr);
-        if (gearType == null) {
+        if (gearType.isInvalid()) {
             throw new NullPointerException("Unknown gear type: " + gearTypeStr);
         }
 

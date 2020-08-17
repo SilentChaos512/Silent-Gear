@@ -127,7 +127,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
             int count = copy.getCount();
             PartData partData = PartData.from(part);
             double partLossRate = partData != null
-                    ? partData.getPart().getSalvageLossRate(stack, partData, lossRate)
+                    ? partData.getPart().getSalvageLossRate(partData, stack, lossRate)
                     : lossRate;
 
             for (int i = 0; i < count; ++i) {

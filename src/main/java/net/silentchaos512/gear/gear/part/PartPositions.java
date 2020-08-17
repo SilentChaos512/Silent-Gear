@@ -18,7 +18,7 @@
 
 package net.silentchaos512.gear.gear.part;
 
-import net.silentchaos512.gear.api.parts.IPartPosition;
+import net.silentchaos512.gear.api.part.IPartPosition;
 
 // FIXME: Allow mods to register new part positions
 public enum PartPositions implements IPartPosition {

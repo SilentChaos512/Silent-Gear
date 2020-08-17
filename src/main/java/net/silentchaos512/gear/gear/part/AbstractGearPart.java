@@ -19,9 +19,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.IGearPart;
-import net.silentchaos512.gear.api.parts.IPartSerializer;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.IPartSerializer;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.config.Config;
@@ -85,7 +85,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat, PartData part) {
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
         GetStatModifierEvent event = new GetStatModifierEvent(part, stat, mods);
         MinecraftForge.EVENT_BUS.post(event);
@@ -93,7 +93,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public List<TraitInstance> getTraits(ItemStack gear, PartData part) {
+    public List<TraitInstance> getTraits(PartData part, ItemStack gear) {
         return Collections.unmodifiableList(traits);
     }
 
@@ -109,7 +109,7 @@ public abstract class AbstractGearPart implements IGearPart {
         // Base repair values on the appropriate durability stat
         ICoreItem gearItem = (ICoreItem) context.getGear().getItem();
         ItemStat durabilityStat = gearItem.getDurabilityStat();
-        Collection<StatInstance> mods = getStatModifiers(context.getGear(), durabilityStat, material);
+        Collection<StatInstance> mods = getStatModifiers(durabilityStat, material, context.getGear());
         float durability = durabilityStat.compute(0f, mods);
         float multiplier = durabilityStat == ItemStats.ARMOR_DURABILITY ? 12f : 1f;
 
@@ -124,8 +124,8 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public boolean isCraftingAllowed(PartData part, @Nullable GearType gearType, @Nullable CraftingInventory inventory) {
-        if (gearType == null) return true;
+    public boolean isCraftingAllowed(PartData part, GearType gearType, @Nullable CraftingInventory inventory) {
+        if (!gearType.matches(GearType.ALL)) return true;
         return blacklistedGearTypes.stream().noneMatch(gearType::matches) && IGearPart.super.isCraftingAllowed(part, gearType, inventory);
     }
 
@@ -154,7 +154,7 @@ public abstract class AbstractGearPart implements IGearPart {
     public List<GearType> getBlacklistedGearTypes() {
         return blacklistedGearTypes.stream()
                 .map(GearType::get)
-                .filter(Objects::nonNull)
+                .filter(GearType::isGear)
                 .collect(Collectors.toList());
     }
 

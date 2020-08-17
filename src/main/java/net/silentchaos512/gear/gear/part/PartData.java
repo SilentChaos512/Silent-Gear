@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.parts.*;
+import net.silentchaos512.gear.api.part.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -180,7 +180,7 @@ public final class PartData implements IPartData {
     }
 
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat) {
-        return part.getStatModifiers(gear, stat, this);
+        return part.getStatModifiers(stat, this, gear);
     }
 
     @Override
@@ -189,14 +189,14 @@ public final class PartData implements IPartData {
     }
 
     public List<TraitInstance> getTraits(ItemStack gear) {
-        return part.getTraits(gear, this);
+        return part.getTraits(this, gear);
     }
 
-    public boolean isCraftingAllowed(@Nullable GearType gearType) {
+    public boolean isCraftingAllowed(GearType gearType) {
         return isCraftingAllowed(gearType, null);
     }
 
-    public boolean isCraftingAllowed(@Nullable GearType gearType, @Nullable CraftingInventory inventory) {
+    public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInventory inventory) {
         return part.isCraftingAllowed(this, gearType, inventory);
     }
 

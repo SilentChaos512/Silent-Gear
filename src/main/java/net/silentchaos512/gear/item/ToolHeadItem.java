@@ -2,7 +2,7 @@ package net.silentchaos512.gear.item;
 
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 
 public class ToolHeadItem extends CompoundPartItem {
     private final GearType gearType;

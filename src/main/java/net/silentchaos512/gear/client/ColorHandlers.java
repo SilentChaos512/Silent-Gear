@@ -8,7 +8,7 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.item.gear.CoreShield;
 import net.silentchaos512.gear.util.GearData;

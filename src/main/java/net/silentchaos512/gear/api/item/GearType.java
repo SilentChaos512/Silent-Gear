@@ -77,9 +77,8 @@ public final class GearType {
      * @param name The gear type name
      * @return The gear type, or null if it does not exist
      */
-    @Nullable
     public static GearType get(String name) {
-        return VALUES.get(name);
+        return VALUES.getOrDefault(name, NONE);
     }
 
     /**
@@ -119,7 +118,7 @@ public final class GearType {
     public static GearType fromJson(JsonObject json, String key) {
         String str = JSONUtils.getString(json, key);
         GearType type = get(str);
-        if (type == null) {
+        if (type.isInvalid()) {
             throw new JsonSyntaxException("Unknown gear type: " + str);
         }
         return type;
@@ -186,6 +185,18 @@ public final class GearType {
 
     public boolean matches(GearType type, boolean includeAll) {
         return matches(type.name, includeAll);
+    }
+
+    public boolean isGear() {
+        return matches(GearType.ALL);
+    }
+
+    public boolean isArmor() {
+        return matches(GearType.ARMOR);
+    }
+
+    public boolean isInvalid() {
+        return this == NONE;
     }
 
     public ITextComponent getDisplayName() {

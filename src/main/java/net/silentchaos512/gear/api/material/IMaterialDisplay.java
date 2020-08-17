@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.material;
 
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.utils.Color;
 
 import java.util.List;

@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.parts.PartType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.utils.Color;
