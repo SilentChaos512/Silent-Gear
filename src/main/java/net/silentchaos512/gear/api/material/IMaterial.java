@@ -110,12 +110,11 @@ public interface IMaterial {
     boolean allowedInPart(PartType partType);
 
     /**
-     * Used to retain data on integrated server which is not sent on connect. Mainly used to retain
-     * trait conditions, which the client does not need to know about.
+     * Used to retain data on integrated server which is not sent on connect.
      *
      * @param oldMaterial The material object being overwritten
      */
-    void retainData(@Nullable IMaterial oldMaterial);
+    default void retainData(@Nullable IMaterial oldMaterial) {}
 
     /**
      * Gets the stat modifiers this material gives for the given stat and part type. Collection may

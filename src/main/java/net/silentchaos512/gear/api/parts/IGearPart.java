@@ -47,12 +47,11 @@ public interface IGearPart {
     }
 
     /**
-     * Used to copy data that is only needed on the server. This prevents certain things like trait
-     * conditions from being lost when synchronizing parts in singleplayer.
+     * Used to retain data on integrated server which is not sent on connect.
      *
      * @param oldPart The old part instance
      */
-    void retainData(@Nullable IGearPart oldPart);
+    default void retainData(@Nullable IGearPart oldPart) {}
 
     default Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part) {
         return getStatModifiers(ItemStack.EMPTY, stat, part);

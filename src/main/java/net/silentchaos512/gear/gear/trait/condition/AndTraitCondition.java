@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -46,6 +47,11 @@ public class AndTraitCondition implements ITraitCondition {
     }
 
     @Override
+    public ITraitConditionSerializer<?> getSerializer() {
+        return SERIALIZER;
+    }
+
+    @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
         for (ITraitCondition child : this.children) {
             if (!child.matches(gear, parts, trait)) {
@@ -66,7 +72,6 @@ public class AndTraitCondition implements ITraitCondition {
     }
 
     public static class Serializer implements ITraitConditionSerializer<AndTraitCondition> {
-
         @Override
         public ResourceLocation getId() {
             return AndTraitCondition.NAME;
@@ -91,6 +96,24 @@ public class AndTraitCondition implements ITraitCondition {
                 values.add(TraitSerializers.serializeCondition(c));
             }
             json.add("values", values);
+        }
+
+        @Override
+        public AndTraitCondition read(PacketBuffer buffer) {
+            List<ITraitCondition> children = new ArrayList<>();
+            int count = buffer.readByte();
+            for (int i = 0; i < count; ++i) {
+                children.add(TraitSerializers.readCondition(buffer));
+            }
+            return new AndTraitCondition(children.toArray(new ITraitCondition[0]));
+        }
+
+        @Override
+        public void write(AndTraitCondition condition, PacketBuffer buffer) {
+            buffer.writeByte(condition.children.length);
+            for (ITraitCondition child : condition.children) {
+                TraitSerializers.writeCondition(child, buffer);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.parts.PartDataList;
@@ -23,6 +24,11 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
     }
 
     @Override
+    public ITraitConditionSerializer<?> getSerializer() {
+        return SERIALIZER;
+    }
+
+    @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
         return false;
     }
@@ -33,7 +39,6 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
     }
 
     public static class Serializer implements ITraitConditionSerializer<PrimaryMaterialTraitCondition> {
-
         @Override
         public ResourceLocation getId() {
             return PrimaryMaterialTraitCondition.NAME;
@@ -46,6 +51,17 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
 
         @Override
         public void serialize(PrimaryMaterialTraitCondition value, JsonObject json) {
+            // NO-OP
+        }
+
+        @Override
+        public PrimaryMaterialTraitCondition read(PacketBuffer buffer) {
+            return new PrimaryMaterialTraitCondition();
+        }
+
+        @Override
+        public void write(PrimaryMaterialTraitCondition condition, PacketBuffer buffer) {
+            // NO-OP
         }
     }
 }

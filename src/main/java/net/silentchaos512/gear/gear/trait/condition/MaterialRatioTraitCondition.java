@@ -2,6 +2,7 @@ package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -30,6 +31,11 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
     }
 
     @Override
+    public ITraitConditionSerializer<?> getSerializer() {
+        return SERIALIZER;
+    }
+
+    @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
         float ratio = (float) parts.getPartsWithTrait(trait) / parts.getMains().size();
         return ratio >= this.requiredRatio;
@@ -46,7 +52,6 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
     }
 
     public static class Serializer implements ITraitConditionSerializer<MaterialRatioTraitCondition> {
-
         @Override
         public ResourceLocation getId() {
             return MaterialRatioTraitCondition.NAME;
@@ -60,6 +65,17 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
         @Override
         public void serialize(MaterialRatioTraitCondition value, JsonObject json) {
             json.addProperty("ratio", value.requiredRatio);
+        }
+
+        @Override
+        public MaterialRatioTraitCondition read(PacketBuffer buffer) {
+            float ratio = buffer.readFloat();
+            return new MaterialRatioTraitCondition(ratio);
+        }
+
+        @Override
+        public void write(MaterialRatioTraitCondition condition, PacketBuffer buffer) {
+            buffer.writeFloat(condition.requiredRatio);
         }
     }
 }

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TraitInstance implements ITraitInstance {
+public final class TraitInstance implements ITraitInstance {
     private final ITrait trait;
     private final int level;
     private final ImmutableList<ITraitCondition> conditions;
@@ -133,11 +133,19 @@ public class TraitInstance implements ITraitInstance {
             throw new IllegalStateException("Unknown trait: " + traitId);
         }
         int level = buffer.readByte();
-        return of(trait, level);
+
+        ITraitCondition[] conditions = new ITraitCondition[buffer.readByte()];
+        for (int i = 0; i < conditions.length; ++i) {
+            conditions[i] = TraitSerializers.readCondition(buffer);
+        }
+
+        return of(trait, level, conditions);
     }
 
     public void write(PacketBuffer buffer) {
         buffer.writeResourceLocation(this.getTraitId());
         buffer.writeByte(this.level);
+        buffer.writeByte(this.conditions.size());
+        this.conditions.forEach(condition -> TraitSerializers.writeCondition(condition, buffer));
     }
 }

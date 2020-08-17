@@ -80,15 +80,6 @@ public abstract class AbstractGearPart implements IGearPart {
         return packName;
     }
 
-    @Override
-    public void retainData(@Nullable IGearPart oldPart) {
-        if (oldPart instanceof AbstractGearPart) {
-            // Copy trait instances, the client doesn't need to know conditions
-            this.traits.clear();
-            this.traits.addAll(((AbstractGearPart) oldPart).traits);
-        }
-    }
-
     public void updateCraftingItems(Ingredient ingredient) {
         this.ingredient = ingredient;
     }

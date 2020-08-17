@@ -2,6 +2,7 @@ package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -30,6 +31,11 @@ public class MaterialCountTraitCondition implements ITraitCondition {
     }
 
     @Override
+    public ITraitConditionSerializer<?> getSerializer() {
+        return SERIALIZER;
+    }
+
+    @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
         int count = parts.getPartsWithTrait(trait);
         return count >= this.requiredCount;
@@ -45,7 +51,6 @@ public class MaterialCountTraitCondition implements ITraitCondition {
     }
 
     public static class Serializer implements ITraitConditionSerializer<MaterialCountTraitCondition> {
-
         @Override
         public ResourceLocation getId() {
             return MaterialCountTraitCondition.NAME;
@@ -59,6 +64,17 @@ public class MaterialCountTraitCondition implements ITraitCondition {
         @Override
         public void serialize(MaterialCountTraitCondition value, JsonObject json) {
             json.addProperty("count", value.requiredCount);
+        }
+
+        @Override
+        public MaterialCountTraitCondition read(PacketBuffer buffer) {
+            int count = buffer.readByte();
+            return new MaterialCountTraitCondition(count);
+        }
+
+        @Override
+        public void write(MaterialCountTraitCondition condition, PacketBuffer buffer) {
+            buffer.writeByte(condition.requiredCount);
         }
     }
 }

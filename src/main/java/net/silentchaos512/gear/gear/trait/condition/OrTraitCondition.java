@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -43,6 +44,11 @@ public class OrTraitCondition implements ITraitCondition {
     @Override
     public ResourceLocation getId() {
         return NAME;
+    }
+
+    @Override
+    public ITraitConditionSerializer<?> getSerializer() {
+        return SERIALIZER;
     }
 
     @Override
@@ -91,6 +97,24 @@ public class OrTraitCondition implements ITraitCondition {
                 values.add(TraitSerializers.serializeCondition(c));
             }
             json.add("values", values);
+        }
+
+        @Override
+        public OrTraitCondition read(PacketBuffer buffer) {
+            List<ITraitCondition> children = new ArrayList<>();
+            int count = buffer.readByte();
+            for (int i = 0; i < count; ++i) {
+                children.add(TraitSerializers.readCondition(buffer));
+            }
+            return new OrTraitCondition(children.toArray(new ITraitCondition[0]));
+        }
+
+        @Override
+        public void write(OrTraitCondition condition, PacketBuffer buffer) {
+            buffer.writeByte(condition.children.length);
+            for (ITraitCondition child : condition.children) {
+                TraitSerializers.writeCondition(child, buffer);
+            }
         }
     }
 }

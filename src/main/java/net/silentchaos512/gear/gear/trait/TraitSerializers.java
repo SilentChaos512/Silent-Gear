@@ -73,13 +73,29 @@ public final class TraitSerializers {
         return serializer.deserialize(json);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends ITraitCondition> JsonObject serializeCondition(T condition) {
-        @SuppressWarnings("unchecked")
         ITraitConditionSerializer<T> serializer = (ITraitConditionSerializer<T>) CONDITIONS.get(condition.getId());
         if (serializer == null) {
             throw new JsonSyntaxException("Unknown trait condition type: " + condition.getId());
         }
         return serializer.serialize(condition);
+    }
+
+    public static ITraitCondition readCondition(PacketBuffer buffer) {
+        ResourceLocation type = buffer.readResourceLocation();
+        ITraitConditionSerializer<?> serializer = CONDITIONS.get(type);
+        if (serializer == null) {
+            throw new IllegalArgumentException("Unknown trait condition type: " + type);
+        }
+        return serializer.read(buffer);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends ITraitCondition> void writeCondition(T condition, PacketBuffer buffer) {
+        ITraitConditionSerializer<T> serializer = (ITraitConditionSerializer<T>) condition.getSerializer();
+        buffer.writeResourceLocation(serializer.getId());
+        serializer.write(condition, buffer);
     }
 
     public static ITrait deserialize(ResourceLocation id, JsonObject json) {

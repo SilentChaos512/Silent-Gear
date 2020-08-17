@@ -123,15 +123,6 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public void retainData(@Nullable IMaterial oldMaterial) {
-        if (oldMaterial instanceof PartMaterial) {
-            // Copy trait instances, the client doesn't need to know conditions
-            this.traits.clear();
-            ((PartMaterial) oldMaterial).traits.forEach(this.traits::put);
-        }
-    }
-
-    @Override
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
         Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(stat));
         if (getParent() != null) {
@@ -511,8 +502,7 @@ public final class PartMaterial implements IMaterial {
                 int traitCount = buffer.readByte();
                 List<TraitInstance> list = new ArrayList<>();
                 for (int j = 0; j < traitCount; ++j) {
-                    TraitInstance trait = TraitInstance.read(buffer);
-                    list.add(trait);
+                    list.add(TraitInstance.read(buffer));
                 }
                 material.traits.put(partType, list);
             }

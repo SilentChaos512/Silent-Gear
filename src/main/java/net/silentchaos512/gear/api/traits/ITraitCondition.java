@@ -11,6 +11,8 @@ import java.util.List;
 public interface ITraitCondition {
     ResourceLocation getId();
 
+    ITraitConditionSerializer<?> getSerializer();
+
     boolean matches(ItemStack gear, PartDataList parts, ITrait trait);
 
     boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait);
