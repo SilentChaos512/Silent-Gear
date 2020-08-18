@@ -9,6 +9,7 @@
   },
   "block": "minecraft:netherrack",
   "damage_on_use": 3,
+  "cooldown": 0,
   "sound": "minecraft:block.netherrack.place",
   "sound_volume": 1.0,
   "sound_pitch": 1.0

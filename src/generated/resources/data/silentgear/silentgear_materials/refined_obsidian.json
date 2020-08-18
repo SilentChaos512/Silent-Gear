@@ -1,0 +1,84 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/refined_obsidian",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 4,
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/refined_obsidian"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.refined_obsidian"
+  },
+  "stats": {
+    "main": {
+      "durability": 2500.0,
+      "armor_durability": 50.0,
+      "repair_value": 0.7,
+      "enchantability": 40.0,
+      "harvest_level": 3.0,
+      "harvest_speed": 20.0,
+      "melee_damage": 10.0,
+      "magic_damage": 4.0,
+      "attack_speed": 0.3,
+      "armor": 30.0,
+      "armor_toughness": 4.0,
+      "magic_armor": 15.0,
+      "ranged_damage": 4.0,
+      "ranged_speed": 0.2,
+      "rarity": 70.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": 0.25
+      },
+      "rarity": 70.0
+    },
+    "tip": {
+      "durability": {
+        "add": 600.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      },
+      {
+        "name": "silentgear:hard",
+        "level": 4
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 4
+      },
+      {
+        "name": "silentgear:hard",
+        "level": 3
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:vulcan",
+        "level": 1
+      }
+    ]
+  }
+}

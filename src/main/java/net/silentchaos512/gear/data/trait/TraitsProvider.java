@@ -206,6 +206,9 @@ public class TraitsProvider implements IDataProvider {
                 .sound(SoundEvents.ENTITY_ITEM_PICKUP, 0.75f, 0.5f)
         );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3));
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.VULCAN, 1, Blocks.OBSIDIAN, 20)
+                .cooldown(100)
+        );
 
         // Misfits
 

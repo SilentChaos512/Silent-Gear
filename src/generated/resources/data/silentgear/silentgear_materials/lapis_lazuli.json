@@ -14,6 +14,23 @@
     "translate": "material.silentgear.lapis_lazuli"
   },
   "stats": {
+    "main": {
+      "durability": 200.0,
+      "armor_durability": 13.0,
+      "enchantability": 17.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 5.0,
+      "melee_damage": 2.0,
+      "magic_damage": 3.0,
+      "attack_speed": 0.0,
+      "armor": 15.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 10.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": -0.1,
+      "rarity": 30.0,
+      "silentgems:chargeability": 1.3
+    },
     "tip": {
       "enchantability": {
         "mul2": 0.5

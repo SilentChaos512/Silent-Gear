@@ -23,6 +23,7 @@ public class BlockPlacerTrait extends SimpleTrait {
 
     private Block block;
     private int damageOnUse;
+    private int cooldown;
     private SoundEvent sound = SoundEvents.ENTITY_ITEM_PICKUP;
     private float soundVolume = 1.0f;
     private float soundPitch = 1.0f;
@@ -49,6 +50,9 @@ public class BlockPlacerTrait extends SimpleTrait {
                     float pitch = (float) (soundPitch * (1 + 0.05 * SilentGear.RANDOM.nextGaussian()));
                     world.playSound(null, pos, sound, SoundCategory.BLOCKS, soundVolume, pitch);
                 }
+                if (this.cooldown > 0 && context.getPlayer() != null) {
+                    context.getPlayer().getCooldownTracker().setCooldown(stack.getItem(), this.cooldown);
+                }
             }
             return result;
         }
@@ -63,6 +67,7 @@ public class BlockPlacerTrait extends SimpleTrait {
     private static void readJson(BlockPlacerTrait trait, JsonObject json) {
         trait.block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getString(json, "block")));
         trait.damageOnUse = JSONUtils.getInt(json, "damage_on_use");
+        trait.cooldown = JSONUtils.getInt(json, "cooldown", 0);
         trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getString(json, "sound")));
         trait.soundVolume = JSONUtils.getFloat(json, "sound_volume");
         trait.soundPitch = JSONUtils.getFloat(json, "sound_pitch");
@@ -71,6 +76,7 @@ public class BlockPlacerTrait extends SimpleTrait {
     private static void read(BlockPlacerTrait trait, PacketBuffer buffer) {
         trait.block = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
         trait.damageOnUse = buffer.readVarInt();
+        trait.cooldown = buffer.readVarInt();
         trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(buffer.readResourceLocation());
         trait.soundVolume = buffer.readFloat();
         trait.soundPitch = buffer.readFloat();
@@ -79,6 +85,7 @@ public class BlockPlacerTrait extends SimpleTrait {
     private static void write(BlockPlacerTrait trait, PacketBuffer buffer) {
         buffer.writeResourceLocation(Objects.requireNonNull(trait.block.getRegistryName()));
         buffer.writeVarInt(trait.damageOnUse);
+        buffer.writeVarInt(trait.cooldown);
         buffer.writeResourceLocation(Objects.requireNonNull(trait.sound.getRegistryName()));
         buffer.writeFloat(trait.soundVolume);
         buffer.writeFloat(trait.soundPitch);

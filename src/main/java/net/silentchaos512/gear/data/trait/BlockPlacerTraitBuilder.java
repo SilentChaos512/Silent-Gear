@@ -12,6 +12,7 @@ import net.silentchaos512.lib.util.NameUtils;
 public class BlockPlacerTraitBuilder extends TraitBuilder {
     private final Block block;
     private final int damageOnUse;
+    private int cooldown;
     private SoundEvent sound;
     private float soundVolume = 1f;
     private float soundPitch = 1f;
@@ -26,6 +27,11 @@ public class BlockPlacerTraitBuilder extends TraitBuilder {
         this.damageOnUse = damageOnUse;
         //noinspection deprecation
         this.sound = this.block.getSoundType(this.block.getDefaultState()).getPlaceSound();
+    }
+
+    public BlockPlacerTraitBuilder cooldown(int timeInTicks) {
+        this.cooldown = timeInTicks;
+        return this;
     }
 
     public BlockPlacerTraitBuilder sound(SoundEvent sound, float volume, float pitch) {
@@ -48,6 +54,7 @@ public class BlockPlacerTraitBuilder extends TraitBuilder {
 
         json.addProperty("block", NameUtils.from(this.block).toString());
         json.addProperty("damage_on_use", this.damageOnUse);
+        json.addProperty("cooldown", this.cooldown);
         json.addProperty("sound", NameUtils.from(this.sound).toString());
         json.addProperty("sound_volume", this.soundVolume);
         json.addProperty("sound_pitch", this.soundPitch);

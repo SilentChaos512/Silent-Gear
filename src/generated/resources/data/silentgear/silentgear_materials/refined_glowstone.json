@@ -1,0 +1,97 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/refined_glowstone",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "availability": {
+    "tier": 3,
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:ingots/refined_glowstone"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.refined_glowstone"
+  },
+  "stats": {
+    "main": {
+      "durability": 300.0,
+      "armor_durability": 18.0,
+      "repair_value": 1.15,
+      "enchantability": 18.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 14.0,
+      "melee_damage": 5.0,
+      "magic_damage": 3.0,
+      "attack_speed": 0.0,
+      "armor": 19.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 8.0,
+      "ranged_damage": 3.0,
+      "ranged_speed": 0.0,
+      "rarity": 45.0,
+      "silentgems:chargeability": 0.8
+    },
+    "rod": {
+      "durability": {
+        "mul2": -0.1
+      },
+      "harvest_speed": {
+        "mul2": 0.2
+      },
+      "rarity": 45.0
+    },
+    "tip": {
+      "harvest_speed": {
+        "add": 5.0
+      }
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 2
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 4
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:malleable",
+        "level": 4
+      },
+      {
+        "name": "silentgear:lustrous",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "tool"
+          },
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.75
+          }
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:refractive",
+        "level": 1
+      }
+    ]
+  }
+}

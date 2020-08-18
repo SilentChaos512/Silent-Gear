@@ -25,19 +25,19 @@
   "stats": {
     "main": {
       "durability": 500.0,
-      "armor_durability": 14.0,
-      "enchantability": 10.0,
+      "armor_durability": 30.0,
+      "enchantability": 12.0,
       "harvest_level": 2.0,
-      "harvest_speed": 7.0,
+      "harvest_speed": 10.0,
       "melee_damage": 4.0,
       "magic_damage": 2.0,
       "attack_speed": 0.1,
       "armor": 17.0,
       "armor_toughness": 0.0,
-      "magic_armor": 5.0,
+      "magic_armor": 4.0,
       "ranged_damage": 1.0,
       "ranged_speed": 0.0,
-      "rarity": 30.0,
+      "rarity": 35.0,
       "silentgems:chargeability": 1.1
     },
     "rod": {
@@ -47,7 +47,7 @@
       "repair_efficiency": {
         "mul2": 0.1
       },
-      "rarity": 30.0
+      "rarity": 35.0
     }
   },
   "traits": {

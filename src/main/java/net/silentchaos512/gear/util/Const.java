@@ -82,6 +82,7 @@ public final class Const {
         public static final DataResource<ITrait> STELLAR = DataResource.trait("stellar");
         public static final DataResource<ITrait> SYNERGISTIC = DataResource.trait("synergistic");
         public static final DataResource<ITrait> TERMINUS = DataResource.trait("terminus");
+        public static final DataResource<ITrait> VULCAN = DataResource.trait("vulcan");
 
         // Misc constants
         public static final float ANCIENT_XP_BOOST = 0.25f;
