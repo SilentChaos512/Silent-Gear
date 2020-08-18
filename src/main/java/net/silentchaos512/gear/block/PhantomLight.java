@@ -21,9 +21,15 @@ package net.silentchaos512.gear.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -32,9 +38,11 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class PhantomLight extends Block {
+public class PhantomLight extends Block implements IWaterLoggable {
+    private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(5, 5, 5, 11, 11, 11);
 
     public PhantomLight() {
@@ -43,6 +51,25 @@ public class PhantomLight extends Block {
                 .hardnessAndResistance(0.5f, 6000000.0f)
                 .setLightLevel(state -> 15)
         );
+        setDefaultState(getDefaultState().with(WATERLOGGED, false));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(WATERLOGGED);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
+        return getDefaultState().with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
     }
 
     @SuppressWarnings("deprecation")
