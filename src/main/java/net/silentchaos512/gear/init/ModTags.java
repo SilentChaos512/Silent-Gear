@@ -74,7 +74,7 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> NUGGETS_EMERALD = forge("nuggets/emerald");
 
         public static final ITag.INamedTag<Item> PAPER = forge("paper");
-        public static final ITag.INamedTag<Item> PAPER_BLUEPRINT = mod("blueprint_paper");
+        public static final ITag.INamedTag<Item> BLUEPRINT_PAPER = mod("blueprint_paper");
         public static final ITag.INamedTag<Item> REPAIR_KITS = mod("repair_kits");
         public static final ITag.INamedTag<Item> TEMPLATE_BOARDS = mod("template_boards");
 

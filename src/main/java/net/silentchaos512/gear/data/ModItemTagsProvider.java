@@ -115,7 +115,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
                 .addTag(ModTags.Items.RODS_STONE);
 
         builder(ModTags.Items.PAPER, Items.PAPER);
-        builder(ModTags.Items.PAPER_BLUEPRINT, CraftingItems.BLUEPRINT_PAPER);
+        builder(ModTags.Items.BLUEPRINT_PAPER, CraftingItems.BLUEPRINT_PAPER);
         builder(ModTags.Items.TEMPLATE_BOARDS, CraftingItems.TEMPLATE_BOARD);
 
         builder(ModTags.Items.FRUITS, ModItems.NETHER_BANANA);
