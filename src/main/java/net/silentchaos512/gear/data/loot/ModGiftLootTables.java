@@ -16,12 +16,11 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
-import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
@@ -67,13 +66,14 @@ public class ModGiftLootTables extends GiftLootTables {
                                     .acceptFunction(SelectGearTierLootFunction.builder(3)))));
         }
 
+        // FIXME
         p_accept_1_.accept(SilentGear.getId("test/ldf_mallet"), LootTable.builder()
                 .addLootPool(LootPool.builder()
                         .addEntry(ItemLootEntry.builder(ModItems.HAMMER)
                                 .acceptFunction(SetPartsFunction.builder(ImmutableList.of(
-                                        new LazyPartData(SilentGear.getId("main/diamond"), MaterialGrade.S),
-                                        new LazyPartData(SilentGear.getId("main/diamond"), MaterialGrade.S),
-                                        new LazyPartData(SilentGear.getId("main/emerald"), MaterialGrade.S),
+                                        new LazyPartData(SilentGear.getId("main/diamond")),
+                                        new LazyPartData(SilentGear.getId("main/diamond")),
+                                        new LazyPartData(SilentGear.getId("main/emerald")),
                                         new LazyPartData(SilentGear.getId("rod/blaze")),
                                         new LazyPartData(SilentGear.getId("tip/redstone")))))
                                 .acceptFunction(() -> setName(new StringTextComponent("Loliberty Defense Force Mallet")))

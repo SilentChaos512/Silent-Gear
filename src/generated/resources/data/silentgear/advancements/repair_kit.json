@@ -45,13 +45,24 @@
           }
         ]
       }
+    },
+    "azure": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:azure_repair_kit"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "crude",
       "sturdy",
-      "crimson"
+      "crimson",
+      "azure"
     ]
   ]
 }

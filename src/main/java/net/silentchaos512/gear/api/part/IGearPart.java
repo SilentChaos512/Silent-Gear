@@ -14,11 +14,13 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.RepairContext;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public interface IGearPart {
@@ -64,6 +66,10 @@ public interface IGearPart {
     }
 
     List<TraitInstance> getTraits(PartData part, ItemStack gear);
+
+    default List<MaterialInstance> getMaterials(PartData part) {
+        return Collections.emptyList();
+    }
 
     float getRepairAmount(RepairContext context);
 

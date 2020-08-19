@@ -1,5 +1,5 @@
 {
-  "parent": "silentgear:dagger",
+  "parent": "silentgear:root",
   "display": {
     "icon": {
       "item": "silentgear:rough_rod"

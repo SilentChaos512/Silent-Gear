@@ -6,9 +6,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
-import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.DataResource;
@@ -30,17 +31,6 @@ public class LazyPartData implements IPartData {
 
     public LazyPartData(ResourceLocation partId) {
         this(partId, ItemStack.EMPTY);
-    }
-
-    @Deprecated
-    public LazyPartData(ResourceLocation partId, MaterialGrade grade) {
-        this(partId, grade, ItemStack.EMPTY);
-    }
-
-    @Deprecated
-    public LazyPartData(ResourceLocation partId, MaterialGrade grade, ItemStack craftingItem) {
-        this.partId = partId;
-        this.craftingItem = craftingItem;
     }
 
     public LazyPartData(ResourceLocation partId, ItemStack craftingItem) {
@@ -66,6 +56,10 @@ public class LazyPartData implements IPartData {
 
     public static LazyPartData of(DataResource<IGearPart> part, CompoundPartItem partItem, LazyMaterialInstance material) {
         return of(part, partItem, Collections.singletonList(material));
+    }
+
+    public static LazyPartData of(DataResource<IGearPart> part, CompoundPartItem partItem, DataResource<IMaterial> material) {
+        return of(part, partItem, LazyMaterialInstance.of(material));
     }
 
     @Override
@@ -99,6 +93,11 @@ public class LazyPartData implements IPartData {
         return tags;
     }
 
+    @Override
+    public String getModelKey() {
+        return SilentGear.shortenId(this.partId);
+    }
+
     public boolean isValid() {
         return getPart() != null;
     }
@@ -111,9 +110,7 @@ public class LazyPartData implements IPartData {
 
         JsonObject jsonObject = json.getAsJsonObject();
         String key = JSONUtils.getString(jsonObject, "part");
-        String gradeStr = JSONUtils.getString(jsonObject, "grade", MaterialGrade.NONE.name());
-        MaterialGrade grade = MaterialGrade.fromString(gradeStr);
-        return new LazyPartData(new ResourceLocation(key), grade);
+        return new LazyPartData(new ResourceLocation(key));
     }
 
     public static List<PartData> createPartList(Collection<LazyPartData> parts) {

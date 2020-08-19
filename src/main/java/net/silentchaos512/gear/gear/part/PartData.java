@@ -192,23 +192,28 @@ public final class PartData implements IPartData {
         return part.getTraits(this, gear);
     }
 
+    public List<MaterialInstance> getMaterials() {
+        return this.part.getMaterials(this);
+    }
+
+    public boolean containsMaterial(DataResource<IMaterial> materialIn) {
+        if (materialIn.isPresent()) {
+            for (MaterialInstance mat : this.getMaterials()) {
+                if (mat.getMaterial().equals(materialIn.get())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public boolean isCraftingAllowed(GearType gearType) {
         return isCraftingAllowed(gearType, null);
     }
 
     public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInventory inventory) {
         return part.isCraftingAllowed(this, gearType, inventory);
-    }
-
-    public boolean containsMaterial(DataResource<IMaterial> material) {
-        if (this.part instanceof CompoundPart) {
-            Optional<MaterialInstance> mat = material.map(MaterialInstance::of);
-            if (mat.isPresent()) {
-                return CompoundPart.getMaterials(this).contains(mat.get());
-            }
-        }
-
-        return false;
     }
 
     public ITextComponent getDisplayName(ItemStack gear) {
@@ -223,6 +228,7 @@ public final class PartData implements IPartData {
         return part.getRepairAmount(new RepairContext(type, gear, this));
     }
 
+    @Override
     public String getModelKey() {
         return part.getModelKey(this);
     }

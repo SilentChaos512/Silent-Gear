@@ -21,11 +21,16 @@ public final class Const {
     private Const() {}
 
     public static final class Materials {
+        public static final DataResource<IMaterial> AZURE_ELECTRUM = DataResource.material("azure_electrum");
         public static final DataResource<IMaterial> AZURE_SILVER = DataResource.material("azure_silver");
+        public static final DataResource<IMaterial> BLAZE_GOLD = DataResource.material("blaze_gold");
+        public static final DataResource<IMaterial> CRIMSON_STEEL = DataResource.material("crimson_steel");
         public static final DataResource<IMaterial> EMERALD = DataResource.material("emerald");
         public static final DataResource<IMaterial> EXAMPLE = DataResource.material("example");
+        public static final DataResource<IMaterial> STRING = DataResource.material("string");
 
         public static final DataResource<IMaterial> WOOD_ROUGH = DataResource.material("wood/rough");
+        public static final DataResource<IMaterial> WOOL_BLACK = DataResource.material("wool/black");
 
         private Materials() {}
 
@@ -33,8 +38,13 @@ public final class Const {
 
     public static final class Parts {
         public static final DataResource<IGearPart> ARMOR_BODY = DataResource.part("armor_body");
+        public static final DataResource<IGearPart> BINDING = DataResource.part("binding");
+        public static final DataResource<IGearPart> GRIP = DataResource.part("grip");
         public static final DataResource<IGearPart> MISC_SPOON = DataResource.part("misc/spoon");
+        public static final DataResource<IGearPart> PICKAXE_HEAD = DataResource.part("pickaxe_head");
         public static final DataResource<IGearPart> RED_CARD = DataResource.part("misc/red_card");
+        public static final DataResource<IGearPart> ROD = DataResource.part("rod");
+        public static final DataResource<IGearPart> TIP = DataResource.part("tip");
 
         private Parts() {}
     }

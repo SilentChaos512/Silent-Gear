@@ -57,6 +57,8 @@ public interface IPartData {
         return Collections.emptyList();
     }
 
+    String getModelKey();
+
     default void onAddToGear(ItemStack gear) {
     }
 

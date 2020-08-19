@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.data;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,12 +24,12 @@ import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.event.GearEvents;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.part.LazyPartData;
+import net.silentchaos512.gear.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -88,8 +89,16 @@ public class ModAdvancementProvider implements IDataProvider {
         @SuppressWarnings({"unused", "OverlyLongMethod"})
         @Override
         public void accept(Consumer<Advancement> consumer) {
+            ItemStack rootIcon = new ItemStack(ModItems.PICKAXE);
+            GearData.writeConstructionParts(rootIcon, ImmutableList.of(
+                    LazyPartData.of(Const.Parts.PICKAXE_HEAD, ModItems.PICKAXE_HEAD.get(), Const.Materials.CRIMSON_STEEL),
+                    LazyPartData.of(Const.Parts.ROD, ModItems.ROD.get(), Const.Materials.BLAZE_GOLD),
+                    LazyPartData.of(Const.Parts.TIP, ModItems.TIP.get(), Const.Materials.AZURE_ELECTRUM),
+                    LazyPartData.of(Const.Parts.GRIP, ModItems.GRIP.get(), Const.Materials.WOOL_BLACK),
+                    LazyPartData.of(Const.Parts.BINDING, ModItems.BINDING.get(), Const.Materials.STRING)
+            ));
             Advancement root = Advancement.Builder.builder()
-                    .withDisplay(ModItems.SHOVEL_BLUEPRINT, title("root"), description("root"), new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/adventure.png"), FrameType.TASK, false, false, false)
+                    .withDisplay(rootIcon, title("root"), description("root"), new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/adventure.png"), FrameType.TASK, false, false, false)
                     .withCriterion("get_item", getItem(Items.CRAFTING_TABLE))
                     .register(consumer, id("root"));
 
@@ -111,14 +120,13 @@ public class ModAdvancementProvider implements IDataProvider {
                     .withCriterion("kachink", genericInt(DurabilityTrait.TRIGGER_BRITTLE, 1))
                     .register(consumer, id("kachink2"));
 
-            Advancement dagger = simpleGetItem(consumer, ModItems.DAGGER, root);
-
-            Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, dagger);
             Advancement crudeTool = Advancement.Builder.builder()
-                    .withParent(dagger)
+                    .withParent(root)
                     .withDisplay(CraftingItems.ROUGH_ROD, title("crude_tool"), description("crude_tool"), null, FrameType.TASK, true, true, false)
                     .withCriterion("tool_has_rough_rod", genericInt(GearEvents.CRAFTED_WITH_ROUGH_ROD, 1))
                     .register(consumer, id("crude_tool"));
+            Advancement dagger = simpleGetItem(consumer, ModItems.DAGGER, crudeTool);
+            Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, dagger);
 
             Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
             Advancement upgradeBase = simpleGetItem(consumer, CraftingItems.UPGRADE_BASE, templateBoard);
@@ -128,6 +136,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .withCriterion("crude", getItem(ModItems.CRUDE_REPAIR_KIT))
                     .withCriterion("sturdy", getItem(ModItems.STURDY_REPAIR_KIT))
                     .withCriterion("crimson", getItem(ModItems.CRIMSON_REPAIR_KIT))
+                    .withCriterion("azure", getItem(ModItems.AZURE_REPAIR_KIT))
                     .withRequirementsStrategy(IRequirementsStrategy.OR)
                     .register(consumer, id("repair_kit"));
 

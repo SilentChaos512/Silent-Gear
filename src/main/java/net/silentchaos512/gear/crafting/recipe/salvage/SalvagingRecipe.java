@@ -104,7 +104,7 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
                 return Collections.singletonList(part.getCraftingItem());
             }
 
-            List<MaterialInstance> materials = CompoundPart.getMaterials(part);
+            List<MaterialInstance> materials = part.getMaterials();
             Map<IMaterial, Integer> fragments = new LinkedHashMap<>();
 
             for (MaterialInstance material : materials) {

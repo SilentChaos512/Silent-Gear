@@ -46,10 +46,6 @@ public class CompoundPart extends AbstractGearPart {
         return gearType;
     }
 
-    public static List<MaterialInstance> getMaterials(IPartData part) {
-        return CompoundPartItem.getMaterials(part.getCraftingItem());
-    }
-
     @Nullable
     public static MaterialInstance getPrimaryMaterial(IPartData part) {
         return CompoundPartItem.getPrimaryMaterial(part.getCraftingItem());
@@ -197,6 +193,11 @@ public class CompoundPart extends AbstractGearPart {
         });
 
         return ret;
+    }
+
+    @Override
+    public List<MaterialInstance> getMaterials(PartData part) {
+        return CompoundPartItem.getMaterials(part.getCraftingItem());
     }
 
     @Override

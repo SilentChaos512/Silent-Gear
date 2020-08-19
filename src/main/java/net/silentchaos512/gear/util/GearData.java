@@ -206,23 +206,23 @@ public final class GearData {
     }
 
     public static String getModelKey(ItemStack stack, int animationFrame) {
-        String key = getData(stack, NBT_ROOT_RENDERING).getString(NBT_MODEL_KEY);
+        String fromNbt = getData(stack, NBT_ROOT_RENDERING).getString(NBT_MODEL_KEY);
+        String key = fromNbt.isEmpty() ? stack.getOrCreateTag().toString() : fromNbt;
         return animationFrame > 0 ? key + "_" + animationFrame : key;
     }
 
-    private static String calculateModelKey(ItemStack stack, PartDataList parts) {
+    private static String calculateModelKey(ItemStack stack, Collection<? extends IPartData> parts) {
         StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + ":");
 
-        for (PartData part : parts) {
+        for (IPartData part : parts) {
             s.append(part.getModelKey()).append(',');
         }
 
         return s.toString();
     }
 
-    private static void updateRenderingInfo(ItemStack stack, PartDataList parts) {
+    private static void updateRenderingInfo(ItemStack stack, Collection<? extends IPartData> parts) {
         CompoundNBT nbt = getData(stack, NBT_ROOT_RENDERING);
-        List<PartData> mains = parts.getMains();
 
         // Remove deprecated keys
         nbt.remove("ArmorColor");
@@ -261,7 +261,7 @@ public final class GearData {
             // Just average the synergy of component parts
             float total = 0f;
             for (PartData part : parts) {
-                total += SynergyUtils.getSynergy(part.getType(), CompoundPart.getMaterials(part), part.getTraits());
+                total += SynergyUtils.getSynergy(part.getType(), part.getMaterials(), part.getTraits());
             }
             return total / parts.size();
         }

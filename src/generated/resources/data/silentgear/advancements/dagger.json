@@ -1,5 +1,5 @@
 {
-  "parent": "silentgear:root",
+  "parent": "silentgear:crude_tool",
   "display": {
     "icon": {
       "item": "silentgear:dagger",
