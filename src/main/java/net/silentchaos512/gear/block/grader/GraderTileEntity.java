@@ -23,6 +23,7 @@ import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TimeUtils;
+import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
@@ -37,23 +38,39 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
     private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, INVENTORY_SIZE).toArray();
 
-    @SyncVariable(name = "progress") private int progress = 0;
+    @SyncVariable(name = "progress")
+    private int progress = 0;
+    private MaterialGrade lastGradeAttempt = MaterialGrade.NONE;
     private boolean requireClientSync = false;
 
     private final IIntArray fields = new IIntArray() {
         @Override
         public int get(int index) {
-            return GraderTileEntity.this.progress;
+            switch (index) {
+                case 0:
+                    return progress;
+                case 1:
+                    return lastGradeAttempt.ordinal();
+                default:
+                    return 0;
+            }
         }
 
         @Override
         public void set(int index, int value) {
-            GraderTileEntity.this.progress = value;
+            switch (index) {
+                case 0:
+                    progress = value;
+                    break;
+                case 1:
+                    lastGradeAttempt = EnumUtils.byOrdinal(value, MaterialGrade.NONE);
+                    break;
+            }
         }
 
         @Override
         public int size() {
-            return 1;
+            return 2;
         }
     };
 
@@ -100,19 +117,14 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
 
     private void tryGradeItem(ItemStack input, int catalystTier, IMaterialInstance material) {
         MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.RANDOM, catalystTier);
+        this.lastGradeAttempt = targetGrade;
+
         if (targetGrade.ordinal() > material.getGrade().ordinal()) {
             // Assign grade, move to output slot
             ItemStack stack = input.split(1);
             targetGrade.setGradeOnStack(stack);
 
             InventoryUtils.mergeItem(this, 2, 2 + SLOTS_OUTPUT.length, stack);
-//                    if (input.getCount() <= 0) {
-//                        for (int slot : SLOTS_INPUT) {
-//                            if (getStackInSlot(slot).isEmpty()) {
-//                                setInventorySlotContents(slot, ItemStack.EMPTY);
-//                            }
-//                        }
-//                    }
         }
     }
 
