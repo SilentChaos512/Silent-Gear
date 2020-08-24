@@ -162,7 +162,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
         return material != null && material.getGrade() != MaterialGrade.SSS;
     }
 
-    static int getCatalystTier(ItemStack stack) {
+    public static int getCatalystTier(ItemStack stack) {
         if (!stack.isEmpty()) {
             for (int i = ModTags.Items.GRADER_CATALYSTS_TIERS.size() - 1; i >= 0; --i) {
                 if (stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {

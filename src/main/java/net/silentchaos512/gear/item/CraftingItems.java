@@ -58,6 +58,7 @@ public enum CraftingItems implements IItemProvider {
     AZURE_ELECTRUM_DUST,
     DIAMOND_SHARD,
     EMERALD_SHARD,
+    GLOWING_DUST,
     BLAZING_DUST,
     GLITTERY_DUST,
     LEATHER_SCRAP,
