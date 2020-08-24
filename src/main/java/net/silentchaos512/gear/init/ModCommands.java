@@ -10,13 +10,11 @@ public final class ModCommands {
 
     public static void registerAll(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
-        LockStatsCommand.register(dispatcher);
-        RecalculateStatsCommand.register(dispatcher);
         SetDamageCommand.register(dispatcher);
-        SGearMaterialsCommand.register(dispatcher);
-        SGearPartsCommand.register(dispatcher);
-        SGearStatsCommand.register(dispatcher);
-        SGearTraitsCommand.register(dispatcher);
+        MaterialsCommand.register(dispatcher);
+        PartsCommand.register(dispatcher);
+        StatsCommand.register(dispatcher);
+        TraitsCommand.register(dispatcher);
         RandomGearCommand.register(dispatcher);
     }
 }

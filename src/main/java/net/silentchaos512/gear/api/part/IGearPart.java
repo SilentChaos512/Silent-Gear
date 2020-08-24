@@ -65,7 +65,10 @@ public interface IGearPart {
 
     List<TraitInstance> getTraits(PartData part, ItemStack gear);
 
-    float getRepairAmount(RepairContext context);
+    @Deprecated
+    default float getRepairAmount(RepairContext context){
+        return 0f;
+    }
 
     default float computeStatValue(ItemStat stat) {
         return computeStatValue(stat, PartData.of(this));

@@ -98,32 +98,6 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public float getRepairAmount(RepairContext context) {
-        PartData material = context.getMaterial();
-        if (material.getType() != PartType.MAIN || !(context.getGear().getItem() instanceof ICoreItem))
-            return 0;
-
-        // Material tier must be equal to or higher than gear's primary
-        if (material.getTier() < GearData.getTier(context.getGear())) return 0;
-
-        // Base repair values on the appropriate durability stat
-        ICoreItem gearItem = (ICoreItem) context.getGear().getItem();
-        ItemStat durabilityStat = gearItem.getDurabilityStat();
-        Collection<StatInstance> mods = getStatModifiers(durabilityStat, material, context.getGear());
-        float durability = durabilityStat.compute(0f, mods);
-        float multiplier = durabilityStat == ItemStats.ARMOR_DURABILITY ? 12f : 1f;
-
-        switch (context.getRepairType()) {
-            case QUICK:
-                return Config.Common.repairFactorQuick.get().floatValue() * multiplier * durability;
-            case ANVIL:
-                return Config.Common.repairFactorAnvil.get().floatValue() * multiplier * durability;
-            default:
-                throw new IllegalArgumentException("Unknown RepairContext: " + context);
-        }
-    }
-
-    @Override
     public boolean isCraftingAllowed(PartData part, GearType gearType, @Nullable CraftingInventory inventory) {
         if (!gearType.matches(GearType.ALL)) return true;
         return blacklistedGearTypes.stream().noneMatch(gearType::matches) && IGearPart.super.isCraftingAllowed(part, gearType, inventory);

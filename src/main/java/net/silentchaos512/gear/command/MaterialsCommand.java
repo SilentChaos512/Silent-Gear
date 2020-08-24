@@ -33,13 +33,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class SGearMaterialsCommand {
+public final class MaterialsCommand {
     private static final SuggestionProvider<CommandSource> MATERIAL_ID_SUGGESTIONS = (ctx, builder) ->
             ISuggestionProvider.func_212476_a(MaterialManager.getValues().stream().map(IMaterial::getId), builder);
 
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
-    private SGearMaterialsCommand() {
+    private MaterialsCommand() {
     }
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
@@ -48,7 +48,7 @@ public final class SGearMaterialsCommand {
         // List
         builder.then(Commands.literal("list")
                 .executes(
-                        SGearMaterialsCommand::runList
+                        MaterialsCommand::runList
                 )
         );
         // Dump to CSV

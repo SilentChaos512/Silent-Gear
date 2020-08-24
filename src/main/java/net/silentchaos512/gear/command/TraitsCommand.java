@@ -19,14 +19,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class SGearTraitsCommand {
+public final class TraitsCommand {
     private static final SuggestionProvider<CommandSource> TRAIT_ID_SUGGESTIONS = (ctx, builder) ->
             ISuggestionProvider.func_212476_a(TraitManager.getValues().stream().map(ITrait::getId), builder);
 
-    private SGearTraitsCommand() {}
+    private TraitsCommand() {}
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sgear_traits")
+        dispatcher.register(Commands.literal("sgear_traits")
                 .then(Commands.literal("describe")
                         .then(Commands.argument("traitID", ResourceLocationArgument.resourceLocation())
                                 .suggests(TRAIT_ID_SUGGESTIONS)
@@ -34,10 +34,8 @@ public final class SGearTraitsCommand {
                         )
                 )
                 .then(Commands.literal("list")
-                        .executes(SGearTraitsCommand::runList)
-                );
-
-        dispatcher.register(builder);
+                        .executes(TraitsCommand::runList)
+                ));
     }
 
     private static int runDescribe(CommandContext<CommandSource> context, ResourceLocation traitId) {
