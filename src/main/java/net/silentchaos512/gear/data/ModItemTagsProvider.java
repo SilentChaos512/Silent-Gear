@@ -153,7 +153,9 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
 
         // Silent Gear
         copy(ModTags.Blocks.NETHERWOOD_LOGS, ModTags.Items.NETHERWOOD_LOGS);
-        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_1).addTag(Tags.Items.DUSTS_GLOWSTONE);
+        getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_1)
+                .add(CraftingItems.GLOWING_DUST.asItem())
+                .addTag(Tags.Items.DUSTS_GLOWSTONE);
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_4);

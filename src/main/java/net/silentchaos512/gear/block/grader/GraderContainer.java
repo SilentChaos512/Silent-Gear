@@ -11,16 +11,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.init.ModContainers;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
+import net.silentchaos512.utils.EnumUtils;
 
 public class GraderContainer extends Container {
     private final IInventory inventory;
     final IIntArray fields;
 
     public GraderContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
-        this(id, playerInventory, new Inventory(GraderTileEntity.INVENTORY_SIZE), new IntArray(1));
+        this(id, playerInventory, new Inventory(GraderTileEntity.INVENTORY_SIZE), new IntArray(2));
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
@@ -56,6 +58,10 @@ public class GraderContainer extends Container {
     public int getProgressArrowScale() {
         int progress = fields.get(0);
         return progress != 0 ? progress * 24 / GraderTileEntity.BASE_ANALYZE_TIME : 0;
+    }
+
+    public MaterialGrade getLastGradeAttempt() {
+        return EnumUtils.byOrdinal(fields.get(1), MaterialGrade.NONE);
     }
 
     @Override

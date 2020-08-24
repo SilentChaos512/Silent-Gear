@@ -224,6 +224,7 @@ public final class PartData implements IPartData {
         return part.getMaterialName(this, gear);
     }
 
+    @Deprecated
     public float getRepairAmount(ItemStack gear, RepairContext.Type type) {
         return part.getRepairAmount(new RepairContext(type, gear, this));
     }

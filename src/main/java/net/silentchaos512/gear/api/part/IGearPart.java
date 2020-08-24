@@ -67,11 +67,14 @@ public interface IGearPart {
 
     List<TraitInstance> getTraits(PartData part, ItemStack gear);
 
+    @Deprecated
+    default float getRepairAmount(RepairContext context){
+        return 0f;
+    }
     default List<MaterialInstance> getMaterials(PartData part) {
         return Collections.emptyList();
     }
 
-    float getRepairAmount(RepairContext context);
 
     default float computeStatValue(ItemStat stat) {
         return computeStatValue(stat, PartData.of(this));

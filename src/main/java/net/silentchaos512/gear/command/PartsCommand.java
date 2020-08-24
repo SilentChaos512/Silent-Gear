@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -9,37 +8,30 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.ResourceLocationArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.network.Network;
-import net.silentchaos512.gear.network.ShowPartsScreenPacket;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.util.GearData;
 
-import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class SGearPartsCommand {
+public final class PartsCommand {
     private static final SuggestionProvider<CommandSource> partIdSuggestions = (ctx, builder) ->
             ISuggestionProvider.func_212476_a(PartManager.getValues().stream().map(IGearPart::getId), builder);
     private static final SuggestionProvider<CommandSource> partInGearSuggestions = (ctx, builder) -> {
@@ -49,119 +41,26 @@ public final class SGearPartsCommand {
     };
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
-    private SGearPartsCommand() {
+    private PartsCommand() {
     }
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sgear_parts");
 
-        // Add
-        builder.then(Commands.literal("add")
-                .requires(source -> source.hasPermissionLevel(2))
-                .then(Commands.argument("partID", ResourceLocationArgument.resourceLocation())
-                        .suggests(partIdSuggestions)
-                        .then(Commands.argument("grade", new MaterialGrade.Argument())
-                                .executes(ctx ->
-                                        runAdd(ctx, getPartGrade(ctx))
-                                )
-                        ).executes(ctx ->
-                                runAdd(ctx, MaterialGrade.NONE)
-                        )
-                )
-        );
-        // Remove
-        builder.then(Commands.literal("remove")
-                .requires(source -> source.hasPermissionLevel(2))
-                .then(Commands.argument("partID", ResourceLocationArgument.resourceLocation())
-                        .suggests(partInGearSuggestions)
-                        .executes(
-                                SGearPartsCommand::runRemoveById
-                        )
-                )
-                .then(Commands.argument("partIndex", IntegerArgumentType.integer())
-                        .executes(
-                                SGearPartsCommand::runRemoveByIndex
-                        )
-                )
-        );
         // List
         builder.then(Commands.literal("list")
                 .executes(
-                        SGearPartsCommand::runList
+                        PartsCommand::runList
                 )
         );
-        // Dump to CSV
+        // Dump to TSV
         builder.then(Commands.literal("dump")
                 .executes(
-                        SGearPartsCommand::runDumpCsv
+                        PartsCommand::runDump
                 )
-        );
-        // Show GUI
-        builder.then(Commands.literal("show_gui")
-                .executes(context -> {
-                    ServerPlayerEntity playerMP = context.getSource().asPlayer();
-                    Network.channel.sendTo(new ShowPartsScreenPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-                    return 1;
-                })
         );
 
         dispatcher.register(builder);
-    }
-
-    private static int runAdd(CommandContext<CommandSource> ctx, MaterialGrade grade) throws CommandSyntaxException {
-        IGearPart part = getPart(ctx);
-        if (part == null) return 0;
-        ItemStack gear = getGear(ctx);
-        if (gear.isEmpty()) return 0;
-
-        GearData.addPart(gear, PartData.of(part));
-        GearData.recalculateStats(gear, ctx.getSource().asPlayer());
-        return 1;
-    }
-
-    private static int runRemoveById(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        ItemStack gear = getGear(ctx);
-        if (gear.isEmpty()) return 0;
-        IGearPart part = getPart(ctx);
-        if (part == null) return 0;
-
-        PartDataList partList = GearData.getConstructionParts(gear);
-        boolean removed = false;
-        for (int i = 0; !removed && i < partList.size(); ++i) {
-            PartData data = partList.get(i);
-            if (data.getPart() == part) {
-                partList.remove(data);
-                removed = true;
-            }
-        }
-
-        if (removed) {
-            GearData.writeConstructionParts(gear, partList);
-            GearData.recalculateStats(gear, ctx.getSource().asPlayer());
-            ctx.getSource().sendFeedback(text("remove.success"), true);
-            return 1;
-        } else {
-            ctx.getSource().sendErrorMessage(text("gearDoesNotContainPart"));
-            return 0;
-        }
-    }
-
-    private static int runRemoveByIndex(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        ItemStack gear = getGear(ctx);
-        if (gear.isEmpty()) return 0;
-        PartDataList partList = GearData.getConstructionParts(gear);
-
-        int index = IntegerArgumentType.getInteger(ctx, "partIndex");
-        if (index < 0 || index >= partList.size()) {
-            ctx.getSource().sendErrorMessage(text("indexOutOfBounds"));
-            return 0;
-        }
-
-        partList.remove(index);
-        GearData.writeConstructionParts(gear, partList);
-        GearData.recalculateStats(gear, ctx.getSource().asPlayer());
-        ctx.getSource().sendFeedback(text("remove.success"), true);
-        return 1;
     }
 
     private static int runList(CommandContext<CommandSource> context) {
@@ -179,7 +78,7 @@ public final class SGearPartsCommand {
         return 1;
     }
 
-    private static int runDumpCsv(CommandContext<CommandSource> context) {
+    private static int runDump(CommandContext<CommandSource> context) {
         String fileName = "part_export.tsv";
         String dirPath = "output/silentgear";
         File output = new File(dirPath, fileName);
@@ -231,20 +130,6 @@ public final class SGearPartsCommand {
 
     private static void appendTsv(StringBuilder builder, Object value) {
         builder.append(value).append("\t");
-    }
-
-    @Nullable
-    private static IGearPart getPart(CommandContext<CommandSource> ctx) {
-        ResourceLocation id = ResourceLocationArgument.getResourceLocation(ctx, "partID");
-        IGearPart part = PartManager.get(id);
-        if (part == null) {
-            ctx.getSource().sendErrorMessage(text("partNotFound", id));
-        }
-        return part;
-    }
-
-    private static MaterialGrade getPartGrade(CommandContext<CommandSource> ctx) {
-        return MaterialGrade.Argument.getGrade(ctx, "grade");
     }
 
     private static ItemStack getGear(CommandContext<CommandSource> ctx) throws CommandSyntaxException {

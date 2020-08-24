@@ -1,0 +1,22 @@
+{
+  "type": "silentgear:damage_item",
+  "ingredients": [
+    {
+      "tag": "forge:hammers"
+    },
+    {
+      "tag": "forge:dusts/glowstone"
+    },
+    {
+      "tag": "forge:dusts/glowstone"
+    },
+    {
+      "tag": "forge:gems/quartz"
+    }
+  ],
+  "result": {
+    "item": "silentgear:glowing_dust",
+    "count": 4
+  },
+  "damage": 4
+}

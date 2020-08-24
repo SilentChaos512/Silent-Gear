@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.init.ModBlocks;
 
 public class GraderScreen extends ContainerScreen<GraderContainer> {
@@ -38,6 +39,11 @@ public class GraderScreen extends ContainerScreen<GraderContainer> {
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
         ITextComponent text = ModBlocks.MATERIAL_GRADER.asBlock().getTranslatedName();
         font.drawString(matrixStack, text.getString(), 28, 6, 0x404040);
+
+        MaterialGrade lastAttempt = this.container.getLastGradeAttempt();
+        if (lastAttempt != MaterialGrade.NONE) {
+            font.func_238407_a_(matrixStack, lastAttempt.getDisplayName(), 50, 55, 0xFFFFFF);
+        }
     }
 
     @Override
