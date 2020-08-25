@@ -43,18 +43,15 @@ public class GearTypeTraitCondition implements ITraitCondition {
 
     @Override
     public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
-        GearType type = GearHelper.getType(gear);
-        return type.matches(this.gearType);
+        return gear.isEmpty() || GearHelper.getType(gear).matches(this.gearType);
     }
 
     @Override
     public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
-        GearType type = GearHelper.getType(gear);
-        return type.matches(this.gearType);
+        return gear.isEmpty() || GearHelper.getType(gear).matches(this.gearType);
     }
 
     public static class Serializer implements ITraitConditionSerializer<GearTypeTraitCondition> {
-
         @Override
         public ResourceLocation getId() {
             return GearTypeTraitCondition.NAME;
