@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Glowing dust, which replaces glowstone as the tier 1 grader catalyst
+- Alternative recipes for grip/bowstring blueprints for broken mod packs
+- Add Mekanism materials
+- Add bone material (bone block main, bones as rod sub)
+### Changed
+- Phantom lights can now be waterlogged
+- Grader now shows the last rolled grade (to make the process of re-grading more obvious)
+- The lock stats and recalculate stats commands are now subcommands of `/sgear_stats`
+### Fixed
+- Some conditional traits not showing on part items
+- Some advancement issues
+
 ## [2.1.0] - 2020-08-17
 - Lots of refactoring done. I tried my best not to break anything, but keep an eye out for new bugs.
 ### Added
