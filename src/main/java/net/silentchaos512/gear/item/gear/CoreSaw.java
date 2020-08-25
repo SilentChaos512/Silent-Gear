@@ -22,21 +22,23 @@ public class CoreSaw extends CoreAxe {
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
         World world = player.world;
-        BlockState state = world.getBlockState(pos);
+        if (!world.isRemote) {
+            BlockState state = world.getBlockState(pos);
 
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        if (state.isIn(BlockTags.LOGS)) {
-            if (detectTree(world, x, y, z, state.getBlock())) {
-                // Don't allow in creative mode.
-                if (player.abilities.isCreativeMode) {
-                    return false;
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+            if (state.isIn(BlockTags.LOGS)) {
+                if (detectTree(world, x, y, z, state.getBlock())) {
+                    // Don't allow in creative mode.
+                    if (player.abilities.isCreativeMode) {
+                        return false;
+                    }
+
+                    TreeBreakResult result = new TreeBreakResult();
+                    breakTree(result, world, x, y, z, x, y, z, stack, state, player);
+                    return true;
                 }
-
-                TreeBreakResult result = new TreeBreakResult();
-                breakTree(result, world, x, y, z, x, y, z, stack, state, player);
-                return true;
             }
         }
 
@@ -91,7 +93,6 @@ public class CoreSaw extends CoreAxe {
 
                             // Block break event
                             BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, localPos, localState, player);
-                            // event.setCanceled(cancel);
                             MinecraftForge.EVENT_BUS.post(event);
                             boolean cancel = event.isCanceled();
 
@@ -110,9 +111,7 @@ public class CoreSaw extends CoreAxe {
                                     }
 
                                     world.removeBlock(localPos, false);
-                                    if (!world.isRemote) {
-                                        breakTree(result, world, xPos, yPos, zPos, xStart, yStart, zStart, tool, state, player);
-                                    }
+                                    breakTree(result, world, xPos, yPos, zPos, xStart, yStart, zStart, tool, state, player);
                                 }
                             }
                         }
