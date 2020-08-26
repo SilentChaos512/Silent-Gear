@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -12,6 +13,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
 
@@ -48,6 +50,11 @@ public class MaterialCountTraitCondition implements ITraitCondition {
                         .anyMatch(inst -> inst.getTrait() == trait))
                 .count();
         return count >= this.requiredCount;
+    }
+
+    @Override
+    public IFormattableTextComponent getDisplayText() {
+        return TextUtil.translate("trait.condition", "material_count", this.requiredCount);
     }
 
     public static class Serializer implements ITraitConditionSerializer<MaterialCountTraitCondition> {

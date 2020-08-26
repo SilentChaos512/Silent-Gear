@@ -4,10 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -46,5 +49,13 @@ public interface ITraitInstance {
             json.add("conditions", array);
         }
         return json;
+    }
+
+    default IFormattableTextComponent getConditionsText() {
+        // Basically the same as AndTraitCondition
+        return getConditions().stream()
+                .map(ITraitCondition::getDisplayText)
+                .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "and")).append(t2))
+                .orElseGet(() -> new StringTextComponent(""));
     }
 }

@@ -8,6 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -16,8 +19,10 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class OrTraitCondition implements ITraitCondition {
@@ -69,6 +74,15 @@ public class OrTraitCondition implements ITraitCondition {
             }
         }
         return false;
+    }
+
+    @Override
+    public IFormattableTextComponent getDisplayText() {
+        ITextComponent text = Arrays.stream(this.children)
+                .map(ITraitCondition::getDisplayText)
+                .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "or")).append(t2))
+                .orElseGet(() -> new StringTextComponent(""));
+        return new StringTextComponent("(").append(text).appendString(")");
     }
 
     public static class Serializer implements ITraitConditionSerializer<OrTraitCondition> {

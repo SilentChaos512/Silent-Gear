@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
@@ -14,6 +15,7 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
 
@@ -49,6 +51,11 @@ public class GearTypeTraitCondition implements ITraitCondition {
     @Override
     public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         return gear.isEmpty() || GearHelper.getType(gear).matches(this.gearType);
+    }
+
+    @Override
+    public IFormattableTextComponent getDisplayText() {
+        return TextUtil.translate("trait.condition", "gear_type", this.gearType);
     }
 
     public static class Serializer implements ITraitConditionSerializer<GearTypeTraitCondition> {

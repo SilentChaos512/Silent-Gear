@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -11,6 +12,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
 
@@ -36,6 +38,11 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
     @Override
     public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         return !materials.isEmpty() && materials.get(0).getMaterial().getTraits(partType).stream().anyMatch(t -> t.getTrait() == trait);
+    }
+
+    @Override
+    public IFormattableTextComponent getDisplayText() {
+        return TextUtil.translate("trait.condition", "primary");
     }
 
     public static class Serializer implements ITraitConditionSerializer<PrimaryMaterialTraitCondition> {

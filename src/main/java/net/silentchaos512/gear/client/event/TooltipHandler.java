@@ -196,7 +196,10 @@ public final class TooltipHandler {
     }
 
     private static void getMaterialTraitLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
-        material.getMaterial().getTraits(partType).forEach(t -> event.getToolTip().add(t.getDisplayName()));
+        material.getMaterial().getTraits(partType).forEach(t -> {
+            event.getToolTip().add(t.getDisplayName());
+            //event.getToolTip().add(TextUtil.withColor(t.getConditionsText(), TextFormatting.DARK_GRAY));
+        });
     }
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
