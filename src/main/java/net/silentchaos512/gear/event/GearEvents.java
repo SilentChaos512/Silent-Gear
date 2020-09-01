@@ -221,7 +221,8 @@ public final class GearEvents {
             if (canHarvest) {
                 int level = TraitHelper.getTraitLevel(tool, Const.Traits.LUSTROUS);
                 int light = getLightForLustrousTrait(player.world, player.getPosition());
-                event.setNewSpeed(event.getOriginalSpeed() + getLustrousSpeedBonus(level, light));
+                //use getNewSpeed() instead of getOriginalSpeed() to support other mods that are changing the break speed with this event.
+                event.setNewSpeed(event.getNewSpeed() + getLustrousSpeedBonus(level, light));
             }
         }
     }
