@@ -174,7 +174,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
                 ret += mod.getValue() * weight;
             }
         }
-        return count > 0 ? ret / totalWeight : ret;
+        return count > 0 && totalWeight > 0 ? ret / totalWeight : ret;
     }
 
     private static float getModifierWeight(StatInstance mod, float primaryMod, int count) {
