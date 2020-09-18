@@ -31,18 +31,21 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.api.part.IPartPosition;
 import net.silentchaos512.gear.api.part.IUpgradePart;
 import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.part.PartPositions;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+@Deprecated
 public class UpgradeGearRecipe implements ICraftingRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "upgrade_gear");
     public static final Serializer SERIALIZER = new Serializer();
@@ -65,14 +68,14 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
 
 
         // Test applying the upgrades, make sure there is only one upgrade per position
-        Set<IPartPosition> positions = new HashSet<>();
+        Set<PartType> types = new HashSet<>();
         ItemStack test = gear.copy();
         for (ItemStack upgrade : upgrades) {
             PartData part = PartData.from(upgrade);
-            if (part == null || positions.contains(part.getPartPosition()) || !canApplyUpgrade(test, part))
+            if (part == null || types.contains(part.getType()) || !canApplyUpgrade(test, part))
                 return false;
-            if (part.getPartPosition() != PartPositions.ANY)
-                positions.add(part.getPartPosition());
+            if (part.getType() != PartType.MISC_UPGRADE)
+                types.add(part.getType());
             GearData.addUpgradePart(test, part);
         }
 
@@ -80,7 +83,6 @@ public class UpgradeGearRecipe implements ICraftingRecipe {
     }
 
     private static boolean canApplyUpgrade(ItemStack gear, PartData part) {
-        ICoreItem gearItem = (ICoreItem) gear.getItem();
         IGearPart gearPart = part.getPart();
         return !GearData.hasPart(gear, gearPart) && part.getPart().canAddToGear(gear, part);
     }

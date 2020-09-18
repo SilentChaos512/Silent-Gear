@@ -16,6 +16,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartPositions;
 import net.silentchaos512.gear.gear.part.RepairContext;
 
 import javax.annotation.Nullable;
@@ -38,7 +39,10 @@ public interface IGearPart {
         return GearType.ALL;
     }
 
-    IPartPosition getPartPosition();
+    @Deprecated
+    default IPartPosition getPartPosition() {
+        return PartPositions.ANY;
+    }
 
     Ingredient getIngredient();
 

@@ -18,6 +18,7 @@ import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingReci
 import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.smithing.CoatingSmithingRecipe;
+import net.silentchaos512.gear.crafting.recipe.smithing.UpgradeSmithingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.Const;
 
@@ -29,6 +30,7 @@ public final class ModRecipes {
     public static final IRecipeSerializer<GearSalvagingRecipe> SALVAGING_GEAR_SERIALIZER = new GearSalvagingRecipe.Serializer();
     public static final IRecipeSerializer<CompoundPartSalvagingRecipe> SALVAGING_COMPOUND_PART_SERIALIZER = new CompoundPartSalvagingRecipe.Serializer();
     public static final IRecipeSerializer<CoatingSmithingRecipe> COATING_SMITHING = new CoatingSmithingRecipe.Serializer();
+    public static final IRecipeSerializer<UpgradeSmithingRecipe> UPGRADE_SMITHING = new UpgradeSmithingRecipe.Serializer();
     public static final SpecialRecipeSerializer<CombineFragmentsRecipe> COMBINE_FRAGMENTS = new SpecialRecipeSerializer<>(CombineFragmentsRecipe::new);
 
     private ModRecipes() {}
@@ -41,11 +43,11 @@ public final class ModRecipes {
         register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
         register(FillRepairKitRecipe.NAME, FillRepairKitRecipe.SERIALIZER);
         register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
-        register(UpgradeGearRecipe.NAME, UpgradeGearRecipe.SERIALIZER);
         register(SGearDamageItemRecipe.NAME, SGearDamageItemRecipe.SERIALIZER);
         register(SilentGear.getId("conversion"), ConversionRecipe.SERIALIZER);
         register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
         register(Const.SMITHING_COATING, COATING_SMITHING);
+        register(Const.SMITHING_UPGRADE, UPGRADE_SMITHING);
         register(Const.SALVAGING, SALVAGING_SERIALIZER);
         register(Const.SALVAGING_GEAR, SALVAGING_GEAR_SERIALIZER);
         register(Const.SALVAGING_COMPOUND_PART, SALVAGING_COMPOUND_PART_SERIALIZER);

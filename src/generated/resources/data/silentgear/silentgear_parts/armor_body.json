@@ -2,7 +2,6 @@
   "type": "silentgear:compound_part",
   "gear_type": "armor",
   "part_type": "silentgear:main",
-  "part_position": "ARMOR",
   "crafting_item": {
     "item": "silentgear:armor_body"
   },

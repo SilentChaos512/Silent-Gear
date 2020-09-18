@@ -2,7 +2,6 @@
   "type": "silentgear:compound_part",
   "gear_type": "none",
   "part_type": "silentgear:fletching",
-  "part_position": "FLETCHING",
   "crafting_item": {
     "item": "silentgear:fletching"
   },

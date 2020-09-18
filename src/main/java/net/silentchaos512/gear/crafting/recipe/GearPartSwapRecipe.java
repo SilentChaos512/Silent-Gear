@@ -49,7 +49,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
 
             // Only required part types (no mains), and no duplicates
             PartType type = part.getType();
-            if (!item.supportsPart(gear, part) || typesFound.contains(type)) {
+            if (!item.supportsPart(gear, part) || typesFound.contains(type) || type == PartType.MISC_UPGRADE) {
                 return false;
             }
             typesFound.add(type);

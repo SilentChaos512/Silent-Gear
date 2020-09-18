@@ -21,6 +21,7 @@ package net.silentchaos512.gear.api.part;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public interface IPartPosition {
     List<IPartPosition> RENDER_LAYERS = new ArrayList<>();
 }

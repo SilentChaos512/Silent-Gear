@@ -1,0 +1,10 @@
+{
+  "type": "silentgear:smithing/upgrade",
+  "gear": {
+    "item": "silentgear:slingshot"
+  },
+  "addition": {
+    "type": "silentgear:part_type",
+    "part_type": "silentgear:misc_upgrade"
+  }
+}

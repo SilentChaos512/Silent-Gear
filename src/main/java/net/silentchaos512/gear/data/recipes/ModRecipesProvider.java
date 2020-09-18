@@ -735,6 +735,7 @@ public class ModRecipesProvider extends RecipeProvider {
     private void registerSmithing(Consumer<IFinishedRecipe> consumer) {
         Registration.getItems(item -> item instanceof ICoreItem).forEach(item -> {
             GearSmithingRecipeBuilder.coating(item).build(consumer);
+            GearSmithingRecipeBuilder.upgrade(item, PartType.MISC_UPGRADE).build(consumer);
         });
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.lib.util.NameUtils;
@@ -28,6 +29,10 @@ public class GearSmithingRecipeBuilder {
 
     public static GearSmithingRecipeBuilder coating(IItemProvider gearItem) {
         return new GearSmithingRecipeBuilder(ModRecipes.COATING_SMITHING, gearItem.asItem(), PartMaterialIngredient.of(PartType.COATING));
+    }
+
+    public static GearSmithingRecipeBuilder upgrade(IItemProvider gearItem, PartType partType) {
+        return new GearSmithingRecipeBuilder(ModRecipes.UPGRADE_SMITHING, gearItem.asItem(), GearPartIngredient.of(partType));
     }
 
     public void build(Consumer<IFinishedRecipe> consumer) {

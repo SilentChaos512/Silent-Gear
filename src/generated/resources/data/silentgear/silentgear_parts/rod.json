@@ -2,7 +2,6 @@
   "type": "silentgear:compound_part",
   "gear_type": "tool",
   "part_type": "silentgear:rod",
-  "part_position": "ROD",
   "crafting_item": {
     "item": "silentgear:rod"
   },

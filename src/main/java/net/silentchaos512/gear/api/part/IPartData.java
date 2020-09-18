@@ -47,6 +47,7 @@ public interface IPartData {
         return part != null ? part.getGearType() : GearType.ALL;
     }
 
+    @Deprecated
     @Nullable
     default IPartPosition getPartPosition() {
         IGearPart part = getPart();

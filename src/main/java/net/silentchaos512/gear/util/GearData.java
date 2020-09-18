@@ -324,7 +324,6 @@ public final class GearData {
         CompoundNBT tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = tags.getList(NBT_CONSTRUCTION_PARTS, 10);
         PartDataList list = PartDataList.of();
-        Map<PartType, Integer> partCounts = new HashMap<>();
 
         for (INBT nbt : tagList) {
             if (nbt instanceof CompoundNBT) {
@@ -332,14 +331,7 @@ public final class GearData {
                 PartData part = PartData.read(partCompound);
 
                 if (part != null) {
-                    // Add to list if max per item of type is not exceeded
-                    // Max is 9 for mains, and typically 1 for others
-                    PartType type = part.getType();
-                    int count = partCounts.getOrDefault(type, 0);
-                    if (count < type.getMaxPerItem()) {
-                        list.add(part);
-                        partCounts.put(type, count + 1);
-                    }
+                    list.add(part);
                 }
             }
         }
@@ -571,9 +563,9 @@ public final class GearData {
         // Make sure the upgrade is valid for the gear type
         if (!part.getPart().canAddToGear(gear, part))
             return;
-        // Only one allowed in this position? Remove existing if needed.
+        // Only one allowed of this type? Remove existing if needed.
         if (part.getPart().replacesExistingInPosition(part)) {
-            parts.removeIf(p -> p.getPart().getPartPosition() == part.getPart().getPartPosition());
+            parts.removeIf(p -> p.getType() == part.getType());
         }
 
         // Allow the part to make additional changes if needed

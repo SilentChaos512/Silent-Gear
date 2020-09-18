@@ -2,7 +2,6 @@
   "type": "silentgear:compound_part",
   "gear_type": "ranged_weapon",
   "part_type": "silentgear:bowstring",
-  "part_position": "BOWSTRING",
   "crafting_item": {
     "item": "silentgear:bowstring"
   },

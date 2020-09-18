@@ -18,21 +18,26 @@
 
 package net.silentchaos512.gear.gear.part;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.silentchaos512.gear.api.part.IPartPosition;
+import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.api.part.IUpgradePart;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class UpgradePart extends AbstractGearPart implements IUpgradePart {
+    private GearTypeMatcher gearTypes = GearTypeMatcher.ALL;
+
     public UpgradePart(ResourceLocation registryName) {
         super(registryName);
     }
@@ -43,13 +48,8 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
     }
 
     @Override
-    public IPartPosition getPartPosition() {
-        return PartPositions.ANY;
-    }
-
-    @Override
     public IPartSerializer<?> getSerializer() {
-        return PartType.MISC_UPGRADE.getSerializer();
+        return PartSerializers.UPGRADE_PART;
     }
 
     @Override
@@ -64,9 +64,35 @@ public class UpgradePart extends AbstractGearPart implements IUpgradePart {
 
     @Override
     public boolean canAddToGear(ItemStack gear, PartData part) {
-        // TODO: Temp fix. Should define this in JSON...
-        if (this.getId().equals(Const.Parts.MISC_SPOON.getId()))
-            return gear.getItem() == ModItems.PICKAXE.get();
-        return true;
+        return this.gearTypes.test(GearHelper.getType(gear));
+    }
+
+    public static class Serializer extends AbstractGearPart.Serializer<UpgradePart> {
+        public Serializer(ResourceLocation serializerId, Function<ResourceLocation, UpgradePart> function) {
+            super(serializerId, function);
+        }
+
+        @Override
+        public UpgradePart read(ResourceLocation id, JsonObject json) {
+            UpgradePart part = super.read(id, json, false);
+            JsonElement gearTypesJson = json.get("gear_types");
+            if (gearTypesJson != null && gearTypesJson.isJsonObject()) {
+                part.gearTypes = GearTypeMatcher.deserialize(gearTypesJson.getAsJsonObject());
+            }
+            return part;
+        }
+
+        @Override
+        public UpgradePart read(ResourceLocation id, PacketBuffer buffer) {
+            UpgradePart part = super.read(id, buffer);
+            part.gearTypes = GearTypeMatcher.read(buffer);
+            return part;
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, UpgradePart part) {
+            super.write(buffer, part);
+            part.gearTypes.write(buffer);
+        }
     }
 }

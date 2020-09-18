@@ -1,0 +1,60 @@
+{
+  "availability": {
+    "tier": 1,
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:bone_block"
+    },
+    "subs": {
+      "rod": {
+        "item": "minecraft:bone"
+      }
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.bone"
+  },
+  "stats": {
+    "main": {
+      "durability": 108.0,
+      "armor_durability": 4.0,
+      "enchantability": 5.0,
+      "harvest_level": 1.0,
+      "harvest_speed": 4.0,
+      "melee_damage": 2.0,
+      "magic_damage": 1.0,
+      "attack_speed": 0.1,
+      "armor": 5.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 1.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": 0.0,
+      "rarity": 8.0,
+      "silentgems:chargeability": 0.9
+    },
+    "rod": {
+      "melee_damage": {
+        "mul2": 0.2
+      },
+      "rarity": 8.0
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:chipping",
+        "level": 2
+      }
+    ],
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      }
+    ]
+  }
+}

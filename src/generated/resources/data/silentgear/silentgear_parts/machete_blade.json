@@ -2,7 +2,6 @@
   "type": "silentgear:compound_part",
   "gear_type": "machete",
   "part_type": "silentgear:main",
-  "part_position": "HEAD",
   "crafting_item": {
     "item": "silentgear:machete_blade"
   },

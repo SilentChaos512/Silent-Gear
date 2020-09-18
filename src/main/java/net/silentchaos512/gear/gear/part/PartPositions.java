@@ -20,7 +20,7 @@ package net.silentchaos512.gear.gear.part;
 
 import net.silentchaos512.gear.api.part.IPartPosition;
 
-// FIXME: Allow mods to register new part positions
+@Deprecated
 public enum PartPositions implements IPartPosition {
     ANY("head", "any", false),
     ARMOR("main", "main", false),

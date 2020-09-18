@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 
 public final class PartSerializers {
     public static final CompoundPart.Serializer COMPOUND_PART = new CompoundPart.Serializer(SilentGear.getId("compound_part"), CompoundPart::new);
+    public static final UpgradePart.Serializer UPGRADE_PART = new UpgradePart.Serializer(SilentGear.getId("misc_upgrade"), UpgradePart::new);
 
     private static final Map<ResourceLocation, IPartSerializer<?>> REGISTRY = new HashMap<>();
 
@@ -28,6 +29,7 @@ public final class PartSerializers {
             }
         }
         register(COMPOUND_PART);
+        register(UPGRADE_PART);
     }
 
     private PartSerializers() {}

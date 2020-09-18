@@ -2,7 +2,6 @@
   "type": "silentgear:compound_part",
   "gear_type": "all",
   "part_type": "silentgear:coating",
-  "part_position": "COATING",
   "crafting_item": {
     "item": "silentgear:coating"
   },

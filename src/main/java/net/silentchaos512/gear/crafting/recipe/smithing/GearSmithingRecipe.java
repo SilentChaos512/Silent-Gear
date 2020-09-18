@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public abstract class GearSmithingRecipe extends SmithingRecipe {
     protected final Ingredient addition;
-    protected  final ItemStack gearItem;
+    protected final ItemStack gearItem;
 
     public GearSmithingRecipe(ResourceLocation recipeIdIn, ItemStack gearItem, Ingredient additionIn) {
         super(recipeIdIn, Ingredient.fromItems(gearItem.getItem()), additionIn, gearItem);

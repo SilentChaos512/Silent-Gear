@@ -9,15 +9,18 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.GearTypeMatcher;
+import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.gear.part.PartPositions;
 import net.silentchaos512.gear.gear.part.PartSerializers;
+import net.silentchaos512.gear.util.DataResource;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -25,34 +28,37 @@ import java.util.List;
 
 public class PartBuilder {
     final ResourceLocation id;
-    private final ResourceLocation serializerType;
+    private IPartSerializer<?> serializerType = PartSerializers.COMPOUND_PART;
     private final GearType gearType;
     private final PartType partType;
-    private final PartPositions position;
     private final int tier = -1;
     private final Ingredient ingredient;
     private boolean visible = true;
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
+    @Nullable private GearTypeMatcher upgradeGearTypes;
 
     private final StatModifierMap stats = new StatModifierMap();
     private final List<ITraitInstance> traits = new ArrayList<>();
 
-    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, IItemProvider item) {
-        this(id, gearType, partType, position, Ingredient.fromItems(item));
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, IItemProvider item) {
+        this(id, gearType, partType, Ingredient.fromItems(item));
     }
 
-    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, Tag<Item> tag) {
-        this(id, gearType, partType, position, Ingredient.fromTag(tag));
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, Tag<Item> tag) {
+        this(id, gearType, partType, Ingredient.fromTag(tag));
     }
 
-    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, PartPositions position, Ingredient ingredient) {
-        this.serializerType = PartSerializers.COMPOUND_PART.getName();
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, Ingredient ingredient) {
         this.gearType = gearType;
         this.partType = partType;
-        this.position = position;
         this.id = id;
         this.ingredient = ingredient;
+    }
+
+    public PartBuilder serializerType(IPartSerializer<?> serializer) {
+        this.serializerType = serializer;
+        return this;
     }
 
     public PartBuilder visible(boolean visible) {
@@ -80,19 +86,23 @@ public class PartBuilder {
         return this;
     }
 
-    private PartBuilder trait(ResourceLocation traitId, int level, ITraitCondition... conditions) {
-        ITraitInstance inst = TraitInstance.lazy(traitId, level, conditions);
+    public PartBuilder trait(DataResource<ITrait> trait, int level, ITraitCondition... conditions) {
+        ITraitInstance inst = TraitInstance.of(trait, level, conditions);
         this.traits.add(inst);
+        return this;
+    }
+
+    public PartBuilder upgradeGearTypes(GearTypeMatcher matcher) {
+        this.upgradeGearTypes = matcher;
         return this;
     }
 
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
 
-        json.addProperty("type", this.serializerType.toString());
+        json.addProperty("type", this.serializerType.getName().toString());
         json.addProperty("gear_type", this.gearType.getName());
         json.addProperty("part_type", this.partType.getName().toString());
-        json.addProperty("part_position", this.position.name());
 
         JsonObject availability = new JsonObject();
         if (this.tier >= 0) {
@@ -101,6 +111,10 @@ public class PartBuilder {
         }
         if (!availability.entrySet().isEmpty()) {
             json.add("availability", availability);
+        }
+
+        if (this.upgradeGearTypes != null) {
+            json.add("gear_types", this.upgradeGearTypes.serialize());
         }
 
         json.add("crafting_item", this.ingredient.serialize());

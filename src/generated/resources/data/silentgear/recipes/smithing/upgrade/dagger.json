@@ -1,0 +1,10 @@
+{
+  "type": "silentgear:smithing/upgrade",
+  "gear": {
+    "item": "silentgear:dagger"
+  },
+  "addition": {
+    "type": "silentgear:part_type",
+    "part_type": "silentgear:misc_upgrade"
+  }
+}

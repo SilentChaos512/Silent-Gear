@@ -9,13 +9,16 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.ToolHeadItem;
-import net.silentchaos512.gear.gear.part.PartPositions;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,27 +48,42 @@ public class PartsProvider implements IDataProvider {
     protected Collection<PartBuilder> getParts() {
         Collection<PartBuilder> ret = new ArrayList<>();
 
-        ret.add(part("binding", GearType.TOOL, PartType.BINDING, PartPositions.BINDING, ModItems.BINDING));
-        ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.BOWSTRING, PartPositions.BOWSTRING, ModItems.BOWSTRING));
-        ret.add(part("coating", GearType.ALL, PartType.COATING, PartPositions.COATING, ModItems.COATING));
-        ret.add(part("fletching", GearType.NONE, PartType.FLETCHING, PartPositions.FLETCHING, ModItems.FLETCHING));
-        ret.add(part("grip", GearType.TOOL, PartType.GRIP, PartPositions.GRIP, ModItems.GRIP));
-        ret.add(part("long_rod", GearType.TOOL, PartType.ROD, PartPositions.ROD, ModItems.LONG_ROD));
-        ret.add(part("rod", GearType.TOOL, PartType.ROD, PartPositions.ROD, ModItems.ROD));
-        ret.add(part("tip", GearType.TOOL, PartType.TIP, PartPositions.TIP, ModItems.TIP));
+        ret.add(part("binding", GearType.TOOL, PartType.BINDING, ModItems.BINDING));
+        ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.BOWSTRING, ModItems.BOWSTRING));
+        ret.add(part("coating", GearType.ALL, PartType.COATING, ModItems.COATING));
+        ret.add(part("fletching", GearType.NONE, PartType.FLETCHING, ModItems.FLETCHING));
+        ret.add(part("grip", GearType.TOOL, PartType.GRIP, ModItems.GRIP));
+        ret.add(part("long_rod", GearType.TOOL, PartType.ROD, ModItems.LONG_ROD));
+        ret.add(part("rod", GearType.TOOL, PartType.ROD, ModItems.ROD));
+        ret.add(part("tip", GearType.TOOL, PartType.TIP, ModItems.TIP));
 
         Registration.getItems(ToolHeadItem.class).forEach(item -> {
-            PartPositions position = item.getGearType() == GearType.ARMOR ? PartPositions.ARMOR : PartPositions.HEAD;
-            PartBuilder builder = part(NameUtils.fromItem(item).getPath(), item.getGearType(), item.getPartType(), position, item);
+            PartBuilder builder = part(NameUtils.fromItem(item).getPath(), item.getGearType(), item.getPartType(), item);
             ret.add(addHeadStats(builder));
         });
+
+        ret.add(upgradePart("misc/spoon", CraftingItems.SPOON_UPGRADE)
+                .upgradeGearTypes(new GearTypeMatcher(false, GearType.PICKAXE))
+                .stat(ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
+                .stat(ItemStats.RARITY, 10, StatInstance.Operation.ADD)
+                .trait(Const.Traits.SPOON, 1)
+        );
+        ret.add(upgradePart("misc/red_card", CraftingItems.RED_CARD_UPGRADE)
+                .upgradeGearTypes(GearTypeMatcher.ALL)
+                .stat(ItemStats.RARITY, -5, StatInstance.Operation.ADD)
+        );
 
         return ret;
     }
 
-    private PartBuilder part(String name, GearType gearType, PartType partType, PartPositions position, IItemProvider item) {
-        return new PartBuilder(SilentGear.getId(name), gearType, partType, position, item)
-                .name(new TranslationTextComponent("part.silentgear." + name));
+    private static PartBuilder part(String name, GearType gearType, PartType partType, IItemProvider item) {
+        return new PartBuilder(SilentGear.getId(name), gearType, partType, item)
+                .name(new TranslationTextComponent("part.silentgear." + name.replace('/', '.')));
+    }
+
+    private static PartBuilder upgradePart(String name, IItemProvider item) {
+        return part(name, GearType.ALL, PartType.MISC_UPGRADE, item)
+                .serializerType(PartSerializers.UPGRADE_PART);
     }
 
     private static PartBuilder addHeadStats(PartBuilder builder) {

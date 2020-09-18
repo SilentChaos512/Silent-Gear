@@ -2,7 +2,6 @@
   "type": "silentgear:compound_part",
   "gear_type": "tool",
   "part_type": "silentgear:tip",
-  "part_position": "TIP",
   "crafting_item": {
     "item": "silentgear:tip"
   },

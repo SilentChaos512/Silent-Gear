@@ -68,14 +68,6 @@ public final class PartDataList implements List<PartData> {
     }
 
     @Nullable
-    public PartData firstInPosition(IPartPosition position) {
-        for (PartData part : this.list)
-            if (part.getPart().getPartPosition() == position)
-                return part;
-        return null;
-    }
-
-    @Nullable
     public PartData getPrimaryMain() {
         for (PartData data : this.list)
             if (data.getType() == PartType.MAIN)

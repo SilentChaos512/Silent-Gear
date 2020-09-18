@@ -13,7 +13,9 @@ import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.part.*;
+import net.silentchaos512.gear.api.part.IPartData;
+import net.silentchaos512.gear.api.part.IPartSerializer;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -24,18 +26,19 @@ import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
-import net.silentchaos512.utils.EnumUtils;
 import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CompoundPart extends AbstractGearPart {
     private GearType gearType = GearType.ALL;
     private PartType partType;
-    private IPartPosition partPosition;
 
     public CompoundPart(ResourceLocation name) {
         super(name);
@@ -60,11 +63,6 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public PartType getType() {
         return this.partType;
-    }
-
-    @Override
-    public IPartPosition getPartPosition() {
-        return this.partPosition;
     }
 
     @Override
@@ -289,8 +287,6 @@ public class CompoundPart extends AbstractGearPart {
                 throw new JsonParseException("Unknown gear type: " + gearTypeStr);
             }
             part.partType = PartType.get(new ResourceLocation(JSONUtils.getString(json, "part_type")));
-            // FIXME
-            part.partPosition = EnumUtils.byName(JSONUtils.getString(json, "part_position"), PartPositions.ANY);
             return part;
         }
 
@@ -299,8 +295,6 @@ public class CompoundPart extends AbstractGearPart {
             CompoundPart part = super.read(id, buffer);
             part.gearType = GearType.get(buffer.readString());
             part.partType = PartType.get(buffer.readResourceLocation());
-            // FIXME
-            part.partPosition = EnumUtils.byName(buffer.readString(), PartPositions.ANY);
             return part;
         }
 
@@ -309,13 +303,6 @@ public class CompoundPart extends AbstractGearPart {
             super.write(buffer, part);
             buffer.writeString(part.gearType.getName());
             buffer.writeResourceLocation(part.partType.getName());
-            // FIXME
-            for (PartPositions pos : PartPositions.values()) {
-                if (pos == part.partPosition) {
-                    buffer.writeString(pos.name());
-                    break;
-                }
-            }
         }
     }
 }

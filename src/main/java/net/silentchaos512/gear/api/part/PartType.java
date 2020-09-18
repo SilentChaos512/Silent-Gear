@@ -31,13 +31,12 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.part.UpgradePart;
+import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
@@ -69,7 +68,6 @@ public final class PartType {
     public static final PartType MAIN = create(Builder.builder(SilentGear.getId("main"))
     );
     public static final PartType MISC_UPGRADE = create(Builder.builder(SilentGear.getId("misc_upgrade"))
-            .serializer(createSerializer("misc_upgrade", UpgradePart::new))
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
             .compoundPartItem(() -> ModItems.ROD.orElseThrow(IllegalStateException::new))
@@ -150,6 +148,7 @@ public final class PartType {
         return name;
     }
 
+    @Deprecated
     public int getMaxPerItem() {
         return maxPerItem;
     }
