@@ -1,22 +1,25 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/silent-gear",
-    "changelog": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
+    "changelog": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+    "1.16.3": {
+        "2.2.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md"
+    },
     "1.16.1": {
-        "2.1.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.1.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.9": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.8": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.7": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.6": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.5": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.4": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.3": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.2": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "2.0.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "1.10.2": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "1.10.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md",
-        "1.10.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.X/CHANGELOG.md"
+        "2.1.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.1.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.9": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.8": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.7": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.6": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.5": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.4": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.3": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.2": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "2.0.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "1.10.2": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "1.10.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
+        "1.10.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md"
     },
     "1.15.2": {
         "1.9.6": "https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md",
@@ -89,6 +92,8 @@
         "1.15.2-latest": "1.10.3",
         "1.15.2-recommended": "1.10.3",
         "1.16.1-latest": "2.1.1",
-        "1.16.1-recommended": "2.1.1"
+        "1.16.1-recommended": "2.1.1",
+        "1.16.3-latest": "2.2.0",
+        "1.16.3-recommended": "2.2.0"
     }
 }
