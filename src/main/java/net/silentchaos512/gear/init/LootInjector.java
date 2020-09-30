@@ -17,10 +17,10 @@ public final class LootInjector {
         private static final Map<ResourceLocation, ResourceLocation> MAP = new HashMap<>();
 
         public static final ResourceLocation CHESTS_NETHER_BRIDGE = inject(LootTables.CHESTS_NETHER_BRIDGE);
-        public static final ResourceLocation CHESTS_BASTION_TREASURE = inject(LootTables.field_237380_L_);
-        public static final ResourceLocation CHESTS_BASTION_OTHER = inject(LootTables.field_237381_M_);
-        public static final ResourceLocation CHESTS_BASTION_BRIDGE = inject(LootTables.field_237382_N_);
-        public static final ResourceLocation CHESTS_RUINED_PORTAL = inject(LootTables.field_237384_P_);
+        public static final ResourceLocation CHESTS_BASTION_TREASURE = inject(LootTables.BASTION_TREASURE);
+        public static final ResourceLocation CHESTS_BASTION_OTHER = inject(LootTables.BASTION_OTHER);
+        public static final ResourceLocation CHESTS_BASTION_BRIDGE = inject(LootTables.BASTION_BRIDGE);
+        public static final ResourceLocation CHESTS_RUINED_PORTAL = inject(LootTables.RUINED_PORTAL);
 
         private Tables() {}
 

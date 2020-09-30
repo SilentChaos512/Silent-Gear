@@ -26,7 +26,7 @@ public final class TextUtil {
     }
 
     public static IFormattableTextComponent withColor(IFormattableTextComponent text, int color) {
-        return text.mergeStyle(text.getStyle().setColor(net.minecraft.util.text.Color.func_240743_a_(color & 0xFFFFFF)));
+        return text.mergeStyle(text.getStyle().setColor(net.minecraft.util.text.Color.fromInt(color & 0xFFFFFF)));
     }
 
     public static IFormattableTextComponent withColor(IFormattableTextComponent text, Color color) {

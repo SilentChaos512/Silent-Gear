@@ -12,6 +12,6 @@ import java.util.Random;
 public class NetherwoodTree extends Tree {
     @Nullable
     protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getTreeFeature(Random randomIn, boolean p_225546_2_) {
-        return Feature.field_236291_c_.withConfiguration(ModWorldFeatures.NETHERWOOD_TREE_CONFIG);
+        return Feature.TREE.withConfiguration(ModWorldFeatures.NETHERWOOD_TREE_CONFIG.get());
     }
 }

@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+Port to 1.16.3, should be compatible with 1.16.2 as well
+### Changed
+- Increase crimson iron and azure silver ore vein size from 6 to 8
+### Fixed
+- Break speed events not handled correctly (cech12) [#225]
+- Possible divide by zero crash (12emin34) [#223]
+
 ## [2.1.1] - 2020-08-26
 ### Added
 - Glowing dust, which replaces glowstone dust as the tier 1 grader catalyst

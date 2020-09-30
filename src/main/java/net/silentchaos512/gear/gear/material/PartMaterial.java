@@ -370,7 +370,7 @@ public final class PartMaterial implements IMaterial {
         }
 
         private static ITextComponent deserializeText(JsonElement json) {
-            return Objects.requireNonNull(ITextComponent.Serializer.func_240641_a_(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(json));
         }
 
         // endregion

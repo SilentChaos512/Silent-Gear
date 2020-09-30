@@ -43,15 +43,14 @@ public final class SetPartsFunction extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
+    public LootFunctionType getFunctionType() {
         return ModLootStuff.SET_PARTS;
     }
 
     public static class Serializer extends LootFunction.Serializer<SetPartsFunction> {
-        // serialize
         @Override
-        public void func_230424_a_(JsonObject json, SetPartsFunction function, JsonSerializationContext context) {
-            super.func_230424_a_(json, function, context);
+        public void serialize(JsonObject json, SetPartsFunction function, JsonSerializationContext context) {
+            super.serialize(json, function, context);
             JsonArray array = new JsonArray();
             function.parts.forEach(part -> array.add(part.serialize()));
             json.add("parts", array);

@@ -51,14 +51,13 @@ public final class SelectGearTierLootFunction extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
+    public LootFunctionType getFunctionType() {
         return ModLootStuff.SELECT_TIER;
     }
 
     public static class Serializer extends LootFunction.Serializer<SelectGearTierLootFunction> {
-        // serialize
         @Override
-        public void func_230424_a_(JsonObject object, SelectGearTierLootFunction functionClazz, JsonSerializationContext serializationContext) {
+        public void serialize(JsonObject object, SelectGearTierLootFunction functionClazz, JsonSerializationContext serializationContext) {
             object.addProperty("tier", functionClazz.tier);
         }
 

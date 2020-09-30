@@ -37,13 +37,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
@@ -56,7 +53,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
@@ -74,15 +70,18 @@ import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.util.EntityHelper;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Mod.EventBusSubscriber
@@ -239,38 +238,6 @@ public final class GearEvents {
     }
 
     // endregion
-
-    @Deprecated
-    @SubscribeEvent
-    public static void onBlockDrops(BlockEvent.HarvestDropsEvent event) {
-        PlayerEntity harvester = event.getHarvester();
-        if (harvester == null || event.isSilkTouching()) return;
-
-        if (!(harvester instanceof ServerPlayerEntity)) return;
-
-        ItemStack tool = harvester.getHeldItemMainhand();
-        if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
-
-        int magmaticLevel = TraitHelper.getTraitLevel(tool, Const.Traits.MAGMATIC);
-        if (magmaticLevel == 0) return;
-
-        for (int i = 0; i < event.getDrops().size(); ++i) {
-            ItemStack stack = event.getDrops().get(i);
-            ServerWorld world = ((ServerPlayerEntity) harvester).getServerWorld();
-
-            // Magmatic smelting
-            Optional<FurnaceRecipe> recipe = world.getRecipeManager().getRecipe(IRecipeType.SMELTING, new Inventory(stack), world);
-            if (recipe.isPresent()) {
-                ItemStack smelted = recipe.get().getRecipeOutput();
-                if (!smelted.isEmpty()) {
-                    ItemStack copy = smelted.copy();
-                    copy.setCount(stack.getCount());
-                    event.getDrops().remove(i);
-                    event.getDrops().add(i, copy);
-                }
-            }
-        }
-    }
 
     @SubscribeEvent
     public static void onXpDrop(LivingExperienceDropEvent event) {

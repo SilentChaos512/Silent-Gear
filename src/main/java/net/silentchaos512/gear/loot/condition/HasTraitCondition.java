@@ -55,12 +55,12 @@ public class HasTraitCondition extends GearLootCondition {
 
     public static class Serializer implements ILootSerializer<HasTraitCondition> {
         @Override
-        public void func_230424_a_(JsonObject json, HasTraitCondition value, JsonSerializationContext context) {
+        public void serialize(JsonObject json, HasTraitCondition value, JsonSerializationContext context) {
             json.addProperty("trait", value.traitId.toString());
         }
 
         @Override
-        public HasTraitCondition func_230423_a_(JsonObject json, JsonDeserializationContext context) {
+        public HasTraitCondition deserialize(JsonObject json, JsonDeserializationContext context) {
             ResourceLocation traitId = new ResourceLocation(JSONUtils.getString(json, "trait"));
             int minLevel = 1;
             int maxLevel = Integer.MAX_VALUE;

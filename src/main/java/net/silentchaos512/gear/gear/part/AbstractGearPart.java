@@ -18,14 +18,13 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartSerializer;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.*;
+import net.silentchaos512.gear.api.stats.IItemStat;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -238,7 +237,7 @@ public abstract class AbstractGearPart implements IGearPart {
             }
 
             // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.func_240641_a_(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(json));
         }
 
         @Nullable

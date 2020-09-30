@@ -25,7 +25,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -95,7 +94,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
             // Fully grown crop
             NonNullList<ItemStack> drops = NonNullList.create();
             drops.addAll(Block.getDrops(state, world, pos, null, player, sickle));
-            ForgeEventFactory.fireBlockHarvesting(drops, world, pos, state, fortune, 1, false, player);
+            //ForgeEventFactory.fireBlockHarvesting(drops, world, pos, state, fortune, 1, false, player);
 
             // Spawn drops in world, remove first seed
             boolean foundSeed = false;
@@ -210,13 +209,13 @@ public class CoreSickle extends ToolItem implements ICoreTool {
             return true;
         }
 
-        if (!world.isRemote) {
+        if (!world.isRemote && world instanceof ServerWorld) {
             block.onBlockHarvested(world, pos, state, playerMP);
 
             if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
                 block.onPlayerDestroy(world, pos, state);
                 block.harvestBlock(world, player, pos, state, null, sickle);
-                block.dropXpOnBlockBreak(world, pos, xpDropped);
+                block.dropXpOnBlockBreak((ServerWorld) world, pos, xpDropped);
             }
 
             playerMP.connection.sendPacket(new SChangeBlockPacket(world, pos));

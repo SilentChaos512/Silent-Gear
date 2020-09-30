@@ -12,6 +12,7 @@ import net.minecraft.data.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeBlockTagsProvider;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
@@ -27,8 +28,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
-    public ModBlockTagsProvider(DataGenerator generatorIn) {
-        super(generatorIn);
+    public ModBlockTagsProvider(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
+        super(generatorIn, existingFileHelper);
     }
 
     @Override

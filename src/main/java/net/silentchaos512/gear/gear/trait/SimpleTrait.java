@@ -221,7 +221,7 @@ public class SimpleTrait implements ITrait {
             }
 
             // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.func_240641_a_(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(json));
         }
 
         private static ITextComponent readTextComponent(JsonObject json, String name) {

@@ -18,6 +18,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.init.ModItems;
@@ -36,8 +37,8 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class ModItemTagsProvider extends ForgeItemTagsProvider {
-    public ModItemTagsProvider(DataGenerator generatorIn, BlockTagsProvider blocks) {
-        super(generatorIn, blocks);
+    public ModItemTagsProvider(DataGenerator generatorIn, BlockTagsProvider blocks, ExistingFileHelper existingFileHelper) {
+        super(generatorIn, blocks, existingFileHelper);
     }
 
     @Override

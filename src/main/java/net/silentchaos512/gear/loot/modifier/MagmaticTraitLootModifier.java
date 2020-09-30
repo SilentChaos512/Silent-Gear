@@ -46,5 +46,10 @@ public class MagmaticTraitLootModifier extends LootModifier {
         public MagmaticTraitLootModifier read(ResourceLocation name, JsonObject json, ILootCondition[] conditionsIn) {
             return new MagmaticTraitLootModifier(conditionsIn);
         }
+
+        @Override
+        public JsonObject write(MagmaticTraitLootModifier instance) {
+            return new JsonObject();
+        }
     }
 }

@@ -21,7 +21,7 @@ public class GraderScreen extends ContainerScreen<GraderContainer> {
     public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.renderHoveredTooltip(matrix, mouseX, mouseY);
     }
 
 /*    @Override
@@ -42,7 +42,7 @@ public class GraderScreen extends ContainerScreen<GraderContainer> {
 
         MaterialGrade lastAttempt = this.container.getLastGradeAttempt();
         if (lastAttempt != MaterialGrade.NONE) {
-            font.func_238407_a_(matrixStack, lastAttempt.getDisplayName(), 50, 55, 0xFFFFFF);
+            font.func_238407_a_(matrixStack, lastAttempt.getDisplayName().func_241878_f(), 50, 55, 0xFFFFFF);
         }
     }
 

@@ -48,12 +48,12 @@ public class HasPartCondition extends GearLootCondition {
 
     public static class Serializer implements ILootSerializer<HasPartCondition> {
         @Override
-        public void func_230424_a_(JsonObject json, HasPartCondition value, JsonSerializationContext context) {
+        public void serialize(JsonObject json, HasPartCondition value, JsonSerializationContext context) {
             json.addProperty("part", value.partId.toString());
         }
 
         @Override
-        public HasPartCondition func_230423_a_(JsonObject json, JsonDeserializationContext context) {
+        public HasPartCondition deserialize(JsonObject json, JsonDeserializationContext context) {
             ResourceLocation partId = new ResourceLocation(JSONUtils.getString(json, "part"));
             MaterialGrade.Range gradeRange = json.has("grade")
                     ? MaterialGrade.Range.deserialize(json.get("grade"))

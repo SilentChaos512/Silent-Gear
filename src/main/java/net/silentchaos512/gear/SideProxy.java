@@ -18,7 +18,6 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
@@ -43,12 +42,12 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.Network;
-import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.part.CompoundPart;
-import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.ModWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
@@ -90,8 +89,6 @@ class SideProxy implements IProxy {
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(ModWorldFeatures::addFeaturesToBiomes);
-
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.Common.spawnWithStarterBlueprints.get())
                 return Collections.singleton(ModItems.BLUEPRINT_PACKAGE.get().getStack());

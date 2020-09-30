@@ -214,7 +214,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement nether = Advancement.Builder.builder()
                     .withParent(root)
                     .withDisplay(Items.OBSIDIAN, title("nether"), description("nether"), null, FrameType.TASK, false, false, false)
-                    .withCriterion("entered_nether", ChangeDimensionTrigger.Instance.toWorld(World.field_234919_h_))
+                    .withCriterion("entered_nether", ChangeDimensionTrigger.Instance.toWorld(World.THE_NETHER))
                     .register(consumer, id("nether"));
 
             Advancement netherPlants = Advancement.Builder.builder()
@@ -267,7 +267,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement theEnd = Advancement.Builder.builder()
                     .withParent(nether)
                     .withDisplay(Items.END_STONE, title("the_end"), description("the_end"), null, FrameType.TASK, false, false, false)
-                    .withCriterion("entered_the_end", ChangeDimensionTrigger.Instance.toWorld(World.field_234920_i_))
+                    .withCriterion("entered_the_end", ChangeDimensionTrigger.Instance.toWorld(World.THE_END))
                     .register(consumer, id("the_end"));
 
             Advancement azureSilver = Advancement.Builder.builder()

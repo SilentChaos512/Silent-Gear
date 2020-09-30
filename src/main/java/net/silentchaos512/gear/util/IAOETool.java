@@ -39,6 +39,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.common.ForgeHooks;
@@ -82,7 +83,7 @@ public interface IAOETool {
         BlockPos pos = rt.getPos();
         BlockState state = world.getBlockState(pos);
 
-        if (isEffectiveOnBlock(stack, world, pos, state)) {
+        if (isEffectiveOnBlock(stack, world, pos, state, player)) {
             switch (rt.getFace().getAxis()) {
                 case Y:
                     attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH), stack, positions);
@@ -120,9 +121,8 @@ public interface IAOETool {
         return positions;
     }
 
-    default boolean isEffectiveOnBlock(ItemStack stack, World world, BlockPos pos, BlockState state) {
-        // The Forge.canToolHarvestBlock method seems to be very unreliable...
-        return stack.getItem().canHarvestBlock(stack, state) || ForgeHooks.canToolHarvestBlock(world, pos, stack);
+    default boolean isEffectiveOnBlock(ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return stack.getItem().canHarvestBlock(stack, state) || ForgeHooks.canHarvestBlock(state, player, world, pos);
     }
 
     default void attemptAddExtraBlock(World world, BlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
@@ -150,14 +150,14 @@ public interface IAOETool {
 
         public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, PlayerEntity player) {
             World world = player.getEntityWorld();
-            if (world.isRemote || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAOETool))
+            if (world.isRemote || !(world instanceof ServerWorld) || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAOETool))
                 return false;
 
             IAOETool item = (IAOETool) tool.getItem();
             RayTraceResult rt = item.rayTraceBlocks(world, player);
             BlockState stateOriginal = world.getBlockState(pos);
 
-            if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal)) {
+            if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal, player)) {
                 BlockRayTraceResult brt = (BlockRayTraceResult) rt;
                 Direction side = brt.getFace();
                 List<BlockPos> extraBlocks = item.getExtraBlocks(world, brt, player, tool);
@@ -178,7 +178,7 @@ public interface IAOETool {
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState())) {
                             state.getBlock().onPlayerDestroy(world, pos2, state);
                             state.getBlock().harvestBlock(world, player, pos2, state, tileEntity, tool);
-                            state.getBlock().dropXpOnBlockBreak(world, pos2, xp);
+                            state.getBlock().dropXpOnBlockBreak((ServerWorld) world, pos2, xp);
                         }
                     }
 
