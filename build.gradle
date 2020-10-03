@@ -264,7 +264,6 @@ curseforge {
             changelog = file(project.cf_changelog_filename)
             releaseType = project.cf_release_type
             addGameVersion(project.mc_version)
-            addGameVersion("1.16.2")
             mainArtifact(jar) {
 //                displayName = "$project.description $display_version"
                 relations {
