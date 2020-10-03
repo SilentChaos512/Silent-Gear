@@ -19,7 +19,6 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
@@ -59,9 +58,10 @@ public final class TooltipHandler {
 
         ItemStack stack = event.getItemStack();
 
-        if (stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS)) {
+        // FIXME: https://github.com/SilentChaos512/Silent-Gear/issues/224
+        /*if (stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS)) {
             onGraderCatalystTooltip(event);
-        }
+        }*/
 
         MaterialInstance material = MaterialInstance.from(stack);
         if (material != null) {
