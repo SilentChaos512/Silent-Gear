@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.client.event;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.TagRegistryManager;
 import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +20,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
@@ -58,10 +60,9 @@ public final class TooltipHandler {
 
         ItemStack stack = event.getItemStack();
 
-        // FIXME: https://github.com/SilentChaos512/Silent-Gear/issues/224
-        /*if (stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS)) {
+        if (isGraderCatalystWithHackyWorkaround(stack)) {
             onGraderCatalystTooltip(event);
-        }*/
+        }
 
         MaterialInstance material = MaterialInstance.from(stack);
         if (material != null) {
@@ -80,6 +81,17 @@ public final class TooltipHandler {
             List<ITextComponent> toolTip = event.getToolTip();
             toolTip.add(Math.min(1, toolTip.size()), new TranslationTextComponent("misc.silentgear.poorlyMade").mergeStyle(TextFormatting.RED));
         }
+    }
+
+    private static boolean isGraderCatalystWithHackyWorkaround(ItemStack stack) {
+        // Workaround for https://github.com/SilentChaos512/Silent-Gear/issues/224 and related issues...
+        // This crash only happens on the client in some cases
+        try {
+            return stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS);
+        } catch (IllegalStateException ex) {
+            TagRegistryManager.fetchTags();
+        }
+        return stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS);
     }
 
     private static void onGraderCatalystTooltip(ItemTooltipEvent event) {
