@@ -65,6 +65,12 @@ public final class PartData implements IPartData {
         return new PartData(part, craftingItem);
     }
 
+    public static IPartData of(DataResource<IGearPart> part, ItemStack craftingItem) {
+        if (part.isPresent())
+            return of(part.get(), craftingItem);
+        return LazyPartData.of(part, craftingItem);
+    }
+
     @Nullable
     public static PartData ofNullable(@Nullable IGearPart part) {
         if (part == null) return null;

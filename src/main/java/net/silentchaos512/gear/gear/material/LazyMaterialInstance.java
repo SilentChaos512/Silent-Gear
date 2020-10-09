@@ -40,6 +40,10 @@ public class LazyMaterialInstance implements IMaterialInstance {
         return new LazyMaterialInstance(materialId);
     }
 
+    public static LazyMaterialInstance of(DataResource<IMaterial> material, MaterialGrade grade) {
+        return new LazyMaterialInstance(material.getId(), grade);
+    }
+
     public static LazyMaterialInstance of(ResourceLocation materialId, MaterialGrade grade) {
         return new LazyMaterialInstance(materialId, grade);
     }

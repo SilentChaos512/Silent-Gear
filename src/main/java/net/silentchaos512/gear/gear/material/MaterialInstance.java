@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
+import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
@@ -72,6 +73,12 @@ public final class MaterialInstance implements IMaterialInstance {
 
     public static MaterialInstance of(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
         return new MaterialInstance(material, grade, craftingItem);
+    }
+
+    public static IMaterialInstance of(DataResource<IMaterial> material, ItemStack craftingItem) {
+        if (material.isPresent())
+            return of(material.get(), craftingItem);
+        return LazyMaterialInstance.of(material, MaterialGrade.fromStack(craftingItem));
     }
 
     @Nullable
