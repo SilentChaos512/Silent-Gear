@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2020-10-10
+### Added
+- Harvest level hints for levels 0-4. This can be changed or added to by changing the lang file with a resource pack (keys are "misc.silentgear.harvestLevel.<level>") [#228]
+### Changed
+- Spreadsheet columns reordered (traits before tier now), removed deprecated rendering info columns
+- (API) Some IMaterial methods now have an IMaterialInstance parameter. The old signatures were removed, possibly breaking compatibility with some mods.
+### Fixed
+- Various server issues caused by "tag not bound" bug [#224, #232, #234]
+- pack.mcmeta using wrong format number
+
 ## [2.2.0] - 2020-09-30
 Port to 1.16.3
 ### Changed
