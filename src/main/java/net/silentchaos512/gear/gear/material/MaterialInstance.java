@@ -125,7 +125,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
-        Collection<StatInstance> mods = material.getStatModifiers(stat, partType, gear);
+        Collection<StatInstance> mods = material.getStatModifiers(this, stat, partType, gear);
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
             // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
             float bonus = 1f + grade.bonusPercent / 100f;

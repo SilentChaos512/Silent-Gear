@@ -123,10 +123,10 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
+    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear) {
         Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(stat));
         if (getParent() != null) {
-            ret.addAll(getParent().getStatModifiers(stat, partType, gear));
+            ret.addAll(getParent().getStatModifiers(material, stat, partType, gear));
         }
         return ret;
     }
@@ -141,15 +141,15 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public boolean isCraftingAllowed(PartType partType, GearType gearType) {
+    public boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType) {
         if (isGearTypeBlacklisted(gearType) || !allowedInPart(partType)) {
             return false;
         }
 
-        if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(partType, gearType))) {
+        if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType))) {
             if (partType == PartType.MAIN) {
                 ItemStat stat = gearType == GearType.ARMOR ? ItemStats.ARMOR_DURABILITY : ItemStats.DURABILITY;
-                return !getStatModifiers(stat, partType).isEmpty() && getStatUnclamped(stat, partType) > 0;
+                return !getStatModifiers(material, stat, partType).isEmpty() && getStatUnclamped(material, stat, partType) > 0;
             }
             return true;
         }

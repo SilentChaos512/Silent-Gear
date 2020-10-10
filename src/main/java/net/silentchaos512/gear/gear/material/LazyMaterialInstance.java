@@ -79,7 +79,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     @Override
     public float getStat(ItemStat stat, PartType partType, ItemStack gear) {
         IMaterial material = getMaterial();
-        return material != null ? material.getStat(stat, partType) : 0;
+        return material != null ? material.getStat(this, stat, partType) : 0;
     }
 
     @Override

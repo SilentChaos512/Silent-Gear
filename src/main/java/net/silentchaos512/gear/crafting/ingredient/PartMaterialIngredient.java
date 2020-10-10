@@ -14,6 +14,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
@@ -51,8 +52,8 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        IMaterial material = MaterialManager.from(stack);
-        return material != null && material.isCraftingAllowed(partType, gearType);
+        MaterialInstance material = MaterialInstance.from(stack);
+        return material != null && material.getMaterial().isCraftingAllowed(material, partType, gearType);
     }
 
     @Override
@@ -60,7 +61,7 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         Collection<IMaterial> materials = MaterialManager.getValues();
         if (!materials.isEmpty()) {
             return materials.stream()
-                    .filter(mat -> mat.isCraftingAllowed(this.partType, gearType))
+                    .filter(mat -> mat.isCraftingAllowed(MaterialInstance.of(mat), this.partType, gearType))
                     .flatMap(mat -> Stream.of(mat.getIngredient().getMatchingStacks()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);

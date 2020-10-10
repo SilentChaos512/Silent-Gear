@@ -235,7 +235,7 @@ public class CompoundPart extends AbstractGearPart {
         // Excludes children, will select a random child material (if appropriate) below
         List<IMaterial> matsOfTier = MaterialManager.getValues(tier == 0).stream()
                 .filter(m -> tier < 0 || tier == m.getTier(this.partType))
-                .filter(m -> m.allowedInPart(this.partType) && m.isCraftingAllowed(this.partType, gearType))
+                .filter(m -> m.allowedInPart(this.partType) && m.isCraftingAllowed(MaterialInstance.of(m), this.partType, gearType))
                 .collect(Collectors.toList());
 
         if (!matsOfTier.isEmpty()) {

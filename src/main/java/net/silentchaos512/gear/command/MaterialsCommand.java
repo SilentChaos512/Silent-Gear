@@ -20,9 +20,8 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.material.PartMaterial;
-import net.silentchaos512.utils.Color;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -82,10 +81,9 @@ public final class MaterialsCommand {
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\tTier\t");
+            StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\tTraits\tTier\t");
             ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getString()).append("\t"));
-            builder.append("Traits\tTexture\tColor\n");
-            writer.write(builder.toString());
+            writer.write(builder + "\n");
 
             List<PartType> partTypes = new ArrayList<>(PartType.getValues());
             partTypes.sort((o1, o2) -> Comparator.comparing(o -> ((PartType) o).getName()).compare(o1, o2));
@@ -118,32 +116,27 @@ public final class MaterialsCommand {
         appendTsv(builder, partType.getName().toString());
         appendTsv(builder, material.getId().toString());
         appendTsv(builder, getParentId(material));
-        appendTsv(builder, tier);
-
-        // Stats
-        for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> statModifiers = material.getStatModifiers(stat, partType);
-            appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
-        }
 
         // Traits
         appendTsv(builder, material.getTraits(partType).stream()
                 .map(t -> t.getTrait().getDisplayName(t.getLevel()).getString())
                 .collect(Collectors.joining(", ")));
 
-        // Display
-        appendTsv(builder, material.getTexture(partType, ItemStack.EMPTY));
-        appendTsv(builder, Color.format(material.getPrimaryColor(ItemStack.EMPTY, partType) & 0xFFFFFF));
+        appendTsv(builder, tier);
+
+        // Stats
+        for (ItemStat stat : ItemStats.allStatsOrdered()) {
+            Collection<StatInstance> statModifiers = MaterialInstance.of(material).getStatModifiers(stat, partType);
+            appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
+        }
 
         return builder.toString();
     }
 
     private static String getParentId(IMaterial material) {
-        if (material instanceof PartMaterial) {
-            IMaterial parent = ((PartMaterial) material).getParent();
-            if (parent != null) {
-                return parent.getId().toString();
-            }
+        IMaterial parent = material.getParent();
+        if (parent != null) {
+            return parent.getId().toString();
         }
         return "";
     }

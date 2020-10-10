@@ -9,8 +9,8 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
+import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 
@@ -81,11 +81,6 @@ public interface IMaterial {
      */
     Ingredient getIngredient();
 
-    @Deprecated
-    default Ingredient getIngredient(PartType partType) {
-        return getIngredient();
-    }
-
     Optional<Ingredient> getPartSubstitute(PartType partType);
 
     boolean hasPartSubstitutes();
@@ -120,24 +115,25 @@ public interface IMaterial {
      * Gets the stat modifiers this material gives for the given stat and part type. Collection may
      * be empty.
      *
+     * @param material The material instance (includes crafting item)
      * @param stat     The stat
      * @param partType The part type
-     * @param gear     The gear item
+     * @param gear     The gear item (may be empty)
      * @return A collection of stat modifiers
      */
-    Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear);
+    Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear);
 
     /**
      * Gets the stat modifiers this material gives for the given stat and part type. Collection may
-     * be empty. Use {@link #getStatModifiers(ItemStat, PartType, ItemStack)} instead when
-     * possible.
+     * be empty. {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} instead
+     * when possible.
      *
      * @param stat     The stat
      * @param partType The part type
      * @return A collection of stat modifiers
      */
-    default Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
-        return getStatModifiers(stat, partType, ItemStack.EMPTY);
+    default Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType) {
+        return getStatModifiers(material, stat, partType, ItemStack.EMPTY);
     }
 
     /**
@@ -164,38 +160,40 @@ public interface IMaterial {
 
     /**
      * Calculate a stat value for the material. This has limited usefulness, {@link
-     * #getStatModifiers(ItemStat, PartType, ItemStack)} should be used in most cases.
+     * #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most cases.
      *
      * @param stat     The stat
      * @param partType The part type
      * @return The calculated stat
      */
-    default float getStat(ItemStat stat, PartType partType) {
-        return stat.compute(0, getStatModifiers(stat, partType));
+    default float getStat(IMaterialInstance material, ItemStat stat, PartType partType) {
+        return stat.compute(0, getStatModifiers(material, stat, partType));
     }
 
     /**
      * Calculate a stat value for the material. The stat value is not clamped. This has limited
-     * usefulness, {@link #getStatModifiers(ItemStat, PartType, ItemStack)} should be used in most
+     * usefulness, {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most
      * cases.
      *
      * @param stat     The stat
      * @param partType The part type
      * @return The calculated stat
      */
-    default float getStatUnclamped(ItemStat stat, PartType partType) {
-        return stat.compute(0, false, getStatModifiers(stat, partType));
+    default float getStatUnclamped(IMaterialInstance material, ItemStat stat, PartType partType) {
+        return stat.compute(0, false, getStatModifiers(material, stat, partType));
     }
 
     /**
      * Determine if the material can be used to craft parts of a given type and for a given gear
      * type.
      *
+     *
+     * @param material The material
      * @param partType The part type
      * @param gearType The gear type
      * @return True if and only if crafting should be allowed
      */
-    boolean isCraftingAllowed(PartType partType, GearType gearType);
+    boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType);
 
     /**
      * Gets the color of the materials primary (bottom) render layer/texture. The primary color is
