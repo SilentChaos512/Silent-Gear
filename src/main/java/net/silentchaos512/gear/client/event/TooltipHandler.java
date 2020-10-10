@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.client.event;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.TagRegistryManager;
 import net.minecraft.util.text.*;
@@ -244,10 +245,23 @@ public final class TooltipHandler {
                 int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
                 IFormattableTextComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), statColor);
 
-                return Optional.of(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, statListText));
+                // Harvest level hints
+                IFormattableTextComponent textWithAdditions = stat == ItemStats.HARVEST_LEVEL && modifiers.size() == 1
+                        ? harvestLevelWithHint(statListText, inst.getValue())
+                        : statListText;
+
+                return Optional.of(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, textWithAdditions));
             }
         }
 
         return Optional.empty();
+    }
+
+    public static IFormattableTextComponent harvestLevelWithHint(IFormattableTextComponent statValueText, float statValue) {
+        String key = "misc.silentgear.harvestLevel." + Math.round(statValue);
+        if (I18n.hasKey(key)) {
+            return statValueText.append(TextUtil.misc("spaceBrackets", new TranslationTextComponent(key)));
+        }
+        return statValueText;
     }
 }
