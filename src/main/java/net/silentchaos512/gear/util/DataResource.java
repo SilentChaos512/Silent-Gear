@@ -20,7 +20,7 @@ public final class DataResource<T> {
     private final ResourceLocation objectId;
     private final Function<ResourceLocation, T> getter;
 
-    private DataResource(ResourceLocation id, Function<ResourceLocation, T> getter) {
+    public DataResource(ResourceLocation id, Function<ResourceLocation, T> getter) {
         this.objectId = id;
         this.getter = getter;
     }
@@ -45,7 +45,7 @@ public final class DataResource<T> {
         return trait(SilentGear.getId(modPath));
     }
 
-    private static DataResource<ITrait> trait(ResourceLocation id) {
+    public static DataResource<ITrait> trait(ResourceLocation id) {
         return new DataResource<>(id, TraitManager::get);
     }
 
