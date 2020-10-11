@@ -221,8 +221,6 @@ public abstract class AbstractGearPart implements IGearPart {
                     part.blacklistedGearTypes.clear();
                     blacklist.forEach(e -> part.blacklistedGearTypes.add(e.getAsString()));
                 }
-            } else if (failOnMissingElement) {
-                throw new JsonSyntaxException("Expected 'availability' to be an object");
             }
 
             return part;
