@@ -128,6 +128,7 @@ public interface IMaterial {
      * be empty. {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} instead
      * when possible.
      *
+     * @param material The material
      * @param stat     The stat
      * @param partType The part type
      * @return A collection of stat modifiers
@@ -162,6 +163,7 @@ public interface IMaterial {
      * Calculate a stat value for the material. This has limited usefulness, {@link
      * #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most cases.
      *
+     * @param material The material
      * @param stat     The stat
      * @param partType The part type
      * @return The calculated stat
@@ -175,6 +177,7 @@ public interface IMaterial {
      * usefulness, {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most
      * cases.
      *
+     * @param material The material
      * @param stat     The stat
      * @param partType The part type
      * @return The calculated stat

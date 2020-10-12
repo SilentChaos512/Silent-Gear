@@ -16,12 +16,13 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.collection.StackList;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class GearPartSwapRecipe extends SpecialRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "swap_gear_part");
@@ -41,18 +42,18 @@ public class GearPartSwapRecipe extends SpecialRecipe {
         Collection<ItemStack> others = list.allMatches(stack -> !(stack.getItem() instanceof ICoreItem));
         if (others.isEmpty()) return false;
 
-        Collection<PartType> typesFound = new HashSet<>();
+        Map<PartType, Integer> typeCounts = new HashMap<>();
 
         for (ItemStack stack : others) {
             PartData part = PartData.from(stack);
             if (part == null) return false;
 
-            // Only required part types (no mains), and no duplicates
+            // Only required part types, and no duplicates
             PartType type = part.getType();
-            if (!item.supportsPart(gear, part) || typesFound.contains(type) || type == PartType.MISC_UPGRADE) {
+            if (!item.supportsPart(gear, part) || typeCounts.getOrDefault(type, 0) >= type.getMaxPerItem(item.getGearType())) {
                 return false;
             }
-            typesFound.add(type);
+            typeCounts.merge(type, 1, Integer::sum);
         }
         return true;
     }
@@ -73,11 +74,14 @@ public class GearPartSwapRecipe extends SpecialRecipe {
             PartData part = PartData.from(stack);
             if (part == null) return ItemStack.EMPTY;
 
-            // Remove old part of type, replace
+            // Remove old part of type (if over limit), then add replacement
             PartType type = part.getType();
-            Collection<PartData> toRemove = parts.stream().filter(p -> p.getType() == type).collect(Collectors.toList());
-            parts.removeAll(toRemove);
-            toRemove.forEach(p -> p.onRemoveFromGear(result));
+            List<PartData> partsOfType = parts.getPartsOfType(type);
+            if (partsOfType.size() >= type.getMaxPerItem(GearHelper.getType(result))) {
+                PartData oldPart = partsOfType.get(0);
+                parts.remove(oldPart);
+                oldPart.onRemoveFromGear(result);
+            }
             parts.add(part);
             part.onAddToGear(result);
         }
@@ -90,9 +94,9 @@ public class GearPartSwapRecipe extends SpecialRecipe {
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
-        StackList stackList = StackList.from(inv);
-        ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
+        ItemStack gear = StackList.from(inv).uniqueMatch(s -> s.getItem() instanceof ICoreItem);
         PartDataList oldParts = GearData.getConstructionParts(gear);
+        Map<PartType, Integer> removedCount = new HashMap<>();
 
         for (int i = 0; i < list.size(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
@@ -100,13 +104,19 @@ public class GearPartSwapRecipe extends SpecialRecipe {
             if (stack.getItem() instanceof ICoreItem) {
                 list.set(i, ItemStack.EMPTY);
             } else {
-                IGearPart part = PartManager.from(stack);
-                if (part != null) {
-                    List<PartData> partsOfType = oldParts.getPartsOfType(part.getType());
-                    if (!partsOfType.isEmpty()) {
-                        PartData partData = partsOfType.get(0);
-                        partData.onRemoveFromGear(gear);
-                        list.set(i, partData.getCraftingItem());
+                IGearPart newPart = PartManager.from(stack);
+                if (newPart != null) {
+                    PartType type = newPart.getType();
+                    List<PartData> partsOfType = oldParts.getPartsOfType(type);
+
+                    if (partsOfType.size() >= type.getMaxPerItem(GearHelper.getType(gear))) {
+                        int index = removedCount.getOrDefault(type, 0);
+                        if (index < partsOfType.size()) {
+                            PartData oldPart = partsOfType.get(index);
+                            oldPart.onRemoveFromGear(gear);
+                            list.set(i, oldPart.getCraftingItem());
+                            removedCount.merge(type, 1, Integer::sum);
+                        }
                     } else {
                         list.set(i, ItemStack.EMPTY);
                     }

@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.1] - 2020-10-12
+### Removed
+- (API) Most PartType.create overloads removed, leaving only the Builder variant
+### Changed
+- (API) PartTypes can now specify the maximum number allowed in an item based on GearType
+- (API) PartTypes can now return a CompoundPartItem based on the GearType
+
 ## [2.3.0] - 2020-10-10
 ### Added
 - Harvest level hints for levels 0-4. This can be changed or added to by changing the lang file with a resource pack (keys are "misc.silentgear.harvestLevel.<level>") [#228]

@@ -31,15 +31,12 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
-import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.ModResourceLocation;
-import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -66,8 +63,10 @@ public final class PartType {
             .compoundPartItem(() -> ModItems.GRIP.orElseThrow(IllegalStateException::new))
     );
     public static final PartType MAIN = create(Builder.builder(SilentGear.getId("main"))
+            .compoundPartItem(PartType::getToolHeadItem)
     );
     public static final PartType MISC_UPGRADE = create(Builder.builder(SilentGear.getId("misc_upgrade"))
+            .maxPerItem(Integer.MAX_VALUE)
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
             .compoundPartItem(() -> ModItems.ROD.orElseThrow(IllegalStateException::new))
@@ -76,38 +75,18 @@ public final class PartType {
             .compoundPartItem(() -> ModItems.TIP.orElseThrow(IllegalStateException::new))
     );
 
-    @Deprecated
-    public static PartType create(ResourceLocation name, String debugSymbol, IPartSerializer<? extends IGearPart> serializer) {
-        return create(name, serializer);
-    }
-
-    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer) {
-        return create(name, serializer, null, null);
-    }
-
-    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart) {
-        return create(name, serializer, fallbackPart, null);
-    }
-
-    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable Supplier<ItemRegistryObject<CompoundPartItem>> compoundPartItem) {
-        return create(name, serializer, null, compoundPartItem);
-    }
-
-    public static PartType create(ResourceLocation name, IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<ItemRegistryObject<CompoundPartItem>> compoundPartItem) {
-        if (VALUES.containsKey(name))
-            throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", name));
-
-        int maxPerItem = name.equals(SilentGear.getId("main")) ? 9 : 1;
-        PartType type = new PartType(name, maxPerItem, serializer, fallbackPart, () -> compoundPartItem != null ? compoundPartItem.get().get() : null);
-        VALUES.put(name, type);
-        return type;
-    }
-
+    /**
+     * Call during mod construction to create a new part type.
+     *
+     * @param builder Type builder
+     * @return The new PartType
+     * @throws IllegalArgumentException if a type with the same name already exists
+     */
     public static PartType create(Builder builder) {
         if (VALUES.containsKey(builder.name))
             throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", builder.name));
 
-        PartType type = new PartType(builder.name, 1, builder.serializer, null, builder.compoundPartItem);
+        PartType type = new PartType(builder.name, builder.maxPerItem, builder.compoundPartItem);
         VALUES.put(builder.name, type);
         return type;
     }
@@ -131,16 +110,14 @@ public final class PartType {
     }
 
     private final ResourceLocation name;
-    private final int maxPerItem;
-    @Nullable private final IPartSerializer<? extends IGearPart> serializer;
-    @Nullable private final ResourceLocation fallbackPart;
-    @Nullable private final Supplier<CompoundPartItem> compoundPartItem;
+    private final Function<GearType, Integer> maxPerItem;
+    @Nullable private final Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
 
-    private PartType(ResourceLocation name, int maxPerItem, @Nullable IPartSerializer<? extends IGearPart> serializer, @Nullable ResourceLocation fallbackPart, @Nullable Supplier<CompoundPartItem> compoundPartItem) {
+    private PartType(ResourceLocation name,
+                     Function<GearType, Integer> maxPerItem,
+                     @Nullable Function<GearType, Optional<CompoundPartItem>> compoundPartItem) {
         this.name = name;
         this.maxPerItem = maxPerItem;
-        this.serializer = serializer;
-        this.fallbackPart = fallbackPart;
         this.compoundPartItem = compoundPartItem;
     }
 
@@ -148,30 +125,15 @@ public final class PartType {
         return name;
     }
 
-    @Deprecated
-    public int getMaxPerItem() {
-        return maxPerItem;
+    public int getMaxPerItem(GearType gearType) {
+        return maxPerItem.apply(gearType);
     }
 
     public IFormattableTextComponent getDisplayName(int tier) {
         return new TranslationTextComponent("part." + name.getNamespace() + ".type." + name.getPath());
     }
 
-    @Deprecated
-    @Nullable
-    public IPartSerializer<? extends IGearPart> getSerializer() {
-        return serializer;
-    }
-
-    @Deprecated
-    @Nullable
-    public IGearPart getFallbackPart() {
-        if (fallbackPart == null) {
-            return null;
-        }
-        return PartManager.get(fallbackPart);
-    }
-
+    @SuppressWarnings("WeakerAccess")
     public ResourceLocation getCompoundPartId(GearType gearType) {
         return getCompoundPartItem(gearType)
                 .map(NameUtils::from)
@@ -179,25 +141,17 @@ public final class PartType {
     }
 
     public Optional<? extends CompoundPartItem> getCompoundPartItem(GearType gearType) {
-        if (this == MAIN) {
-            if (gearType.isArmor()) {
-                return Optional.of(ModItems.ARMOR_BODY.get());
-            }
-            return ForgeRegistries.ITEMS.getValues().stream()
-                    .filter(item -> item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType())
-                    .map(item -> (ToolHeadItem) item)
-                    .findFirst();
-        }
         if (compoundPartItem == null) {
             return Optional.empty();
         }
-        return Optional.of(compoundPartItem.get());
+        return compoundPartItem.apply(gearType);
     }
 
     public Optional<? extends IPartData> makeCompoundPart(GearType gearType, DataResource<IMaterial> material) {
         return makeCompoundPart(gearType, Collections.singletonList(LazyMaterialInstance.of(material)));
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Optional<? extends IPartData> makeCompoundPart(GearType gearType, List<IMaterialInstance> materials) {
         return getCompoundPartItem(gearType)
                 .map(item -> {
@@ -212,14 +166,21 @@ public final class PartType {
                 "name='" + name + "'}";
     }
 
-    private static <T extends AbstractGearPart> IPartSerializer<T> createSerializer(String id, Function<ResourceLocation, T> function) {
-        return new AbstractGearPart.Serializer<>(new ResourceLocation(SilentGear.MOD_ID, id), function);
+    private static Optional<CompoundPartItem> getToolHeadItem(GearType gearType) {
+        if (gearType.isArmor()) {
+            return Optional.of(ModItems.ARMOR_BODY.get());
+        }
+        return ForgeRegistries.ITEMS.getValues().stream()
+                .filter(item -> item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType())
+                .map(item -> (CompoundPartItem) item)
+                .findFirst();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static final class Builder {
         private final ResourceLocation name;
-        private IPartSerializer<? extends IGearPart> serializer;
-        @Nullable private Supplier<CompoundPartItem> compoundPartItem;
+        @Nullable private Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
+        private Function<GearType, Integer> maxPerItem = gt -> 1;
 
         private Builder(ResourceLocation name) {
             this.name = name;
@@ -229,13 +190,21 @@ public final class PartType {
             return new Builder(name);
         }
 
-        public Builder serializer(IPartSerializer<? extends IGearPart> serializer) {
-            this.serializer = serializer;
+        public Builder compoundPartItem(Supplier<CompoundPartItem> item) {
+            return compoundPartItem(gt -> Optional.ofNullable(item.get()));
+        }
+
+        public Builder compoundPartItem(Function<GearType, Optional<CompoundPartItem>> itemGetter) {
+            this.compoundPartItem = itemGetter;
             return this;
         }
 
-        public Builder compoundPartItem(Supplier<CompoundPartItem> item) {
-            this.compoundPartItem = item;
+        public Builder maxPerItem(int value) {
+            return maxPerItem(gt -> value);
+        }
+
+        public Builder maxPerItem(Function<GearType, Integer> function) {
+            this.maxPerItem = function;
             return this;
         }
     }

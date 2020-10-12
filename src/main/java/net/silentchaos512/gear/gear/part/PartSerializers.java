@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartSerializer;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 
 import java.util.HashMap;
@@ -22,12 +21,6 @@ public final class PartSerializers {
     private static final Map<ResourceLocation, IPartSerializer<?>> REGISTRY = new HashMap<>();
 
     static {
-        for (PartType type : PartType.getValues()) {
-            IPartSerializer<? extends IGearPart> serializer = type.getSerializer();
-            if (serializer != null) {
-                register(serializer);
-            }
-        }
         register(COMPOUND_PART);
         register(UPGRADE_PART);
     }

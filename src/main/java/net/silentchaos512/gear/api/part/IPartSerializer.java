@@ -4,17 +4,13 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
-import net.silentchaos512.gear.gear.part.PartSerializers;
 
 /**
  * Used for loading parts from JSON, and for encoding/decoding the information sent from the server
  * to clients. Very similar to {@link net.minecraft.item.crafting.IRecipeSerializer}.
  * <p>
- * In most cases, {@link AbstractGearPart.Serializer} should be used.
- * But if you do need something more specific, implement this.
- * <p>
- * Registering a PartType should also register a serializer. If not, {@link
- * PartSerializers#register(IPartSerializer)} can be called directly.
+ * In most cases, {@link AbstractGearPart.Serializer} should be used. But if you do need something
+ * more specific, implement this.
  *
  * @param <T> The part class
  */
