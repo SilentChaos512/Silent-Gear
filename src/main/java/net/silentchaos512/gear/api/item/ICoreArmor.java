@@ -45,7 +45,7 @@ public interface ICoreArmor extends ICoreItem {
     @Override
     default boolean supportsPart(ItemStack gear, PartData part) {
         PartType type = part.getType();
-        return type == PartType.MAIN || type == PartType.TIP;
+        return type == PartType.MAIN || type == PartType.TIP || ICoreItem.super.supportsPart(gear, part);
     }
 
     @Override
