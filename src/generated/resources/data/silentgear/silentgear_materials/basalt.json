@@ -7,67 +7,59 @@
   },
   "crafting_items": {
     "main": {
-      "item": "minecraft:blackstone"
+      "item": "minecraft:basalt"
     }
   },
   "name": {
-    "translate": "material.silentgear.blackstone"
+    "translate": "material.silentgear.basalt"
   },
   "stats": {
     "main": {
-      "durability": 151.0,
-      "armor_durability": 5.0,
-      "enchantability": 4.0,
+      "durability": 137.0,
+      "armor_durability": 4.0,
+      "enchantability": 6.0,
       "harvest_level": 1.0,
       "harvest_speed": 4.0,
       "melee_damage": 1.0,
       "magic_damage": 0.0,
       "attack_speed": 0.0,
-      "armor": 5.0,
+      "armor": 6.0,
       "armor_toughness": 0.0,
       "magic_armor": 0.0,
       "ranged_damage": 0.0,
-      "ranged_speed": -0.2,
-      "rarity": 9.0,
-      "silentgems:chargeability": 0.6
+      "ranged_speed": -0.1,
+      "rarity": 7.0,
+      "silentgems:chargeability": 0.7
     },
     "rod": {
-      "durability": {
+      "harvest_speed": {
         "mul2": 0.1
       },
-      "harvest_speed": {
+      "melee_damage": {
         "mul2": -0.1
       },
-      "rarity": 9.0
+      "rarity": 7.0
     }
   },
   "traits": {
     "main": [
       {
         "name": "silentgear:brittle",
-        "level": 1
-      },
-      {
-        "name": "silentgear:jagged",
         "level": 2
       },
       {
-        "name": "silentgear:hard",
-        "level": 2
+        "name": "silentgear:chipping",
+        "level": 3
       }
     ],
     "rod": [
       {
         "name": "silentgear:brittle",
-        "level": 2
+        "level": 3
       },
       {
-        "name": "silentgear:jagged",
+        "name": "silentgear:chipping",
         "level": 2
-      },
-      {
-        "name": "silentgear:hard",
-        "level": 1
       }
     ]
   }

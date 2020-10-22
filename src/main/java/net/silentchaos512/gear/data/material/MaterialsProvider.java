@@ -168,10 +168,40 @@ public class MaterialsProvider implements IDataProvider {
                 .name(new TranslationTextComponent(Items.BARRIER.getTranslationKey()))
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
         );
+        // Basalt
+        ret.add(new MaterialBuilder(SilentGear.getId("basalt"), 1, Items.BASALT)
+                .stat(PartType.MAIN, ItemStats.DURABILITY, 137)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
+                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 6)
+                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
+                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
+                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
+                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ARMOR, 6)
+                .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 0)
+                .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 0)
+                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
+                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
+                .stat(PartType.MAIN, ItemStats.RARITY, 7)
+                .stat(PartType.MAIN, chargeability, 0.7f)
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, -0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 7)
+                .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
+                .trait(PartType.MAIN, Const.Traits.CHIPPING, 3)
+                .trait(PartType.ROD, Const.Traits.BRITTLE, 3)
+                .trait(PartType.ROD, Const.Traits.CHIPPING, 2)
+                .display(PartType.MAIN,
+                        new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x4F4B4F),
+                        new MaterialLayer(PartTextures.HIGHLIGHT, 0x3A3B48))
+                .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
+        );
         // Blackstone
         ret.add(new MaterialBuilder(SilentGear.getId("blackstone"), 1, Items.BLACKSTONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 151)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 4)
                 .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
@@ -183,15 +213,23 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 8)
+                .stat(PartType.MAIN, ItemStats.RARITY, 9)
                 .stat(PartType.MAIN, chargeability, 0.6f)
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 4)
+                .stat(PartType.ROD, ItemStats.RARITY, 9)
+                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
+                .trait(PartType.MAIN, Const.Traits.HARD, 2)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
                 .trait(PartType.ROD, Const.Traits.HARD, 1)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x3C3947)
+                .display(PartType.MAIN,
+                        // TODO: highlight does not work as intended here. Maybe a new texture with
+                        //  no transparent pixels scattered over the tool head would work?
+                        new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x3C3947),
+                        new MaterialLayer(PartTextures.HIGHLIGHT, 0x1F121B))
+                .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x3C3947)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x3C3947)
         );
         // Blaze Gold
@@ -673,8 +711,8 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Netherrack
         ret.add(new MaterialBuilder(SilentGear.getId("netherrack"), 1, Tags.Items.NETHERRACK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 198)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
+                .stat(PartType.MAIN, ItemStats.DURABILITY, 142)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.8f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 8)
                 .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
@@ -695,7 +733,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 2)
                 .trait(PartType.ROD, Const.Traits.ERODED, 2)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x854242)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x854242)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x854242)
         );
         // Netherite

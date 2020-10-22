@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Basalt material
+### Changed
+- Small tweaks to blackstone and netherrack
+### Fixed
+- Wrong textures used for netherrack mains
+- Missing bone material translation
+
 ## [2.3.1] - 2020-10-12
 ### Removed
 - (API) Most PartType.create overloads removed, leaving only the Builder variant

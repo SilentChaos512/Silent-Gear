@@ -3,6 +3,10 @@
     {
       "texture": "silentgear:main_generic_lc",
       "color": "#3C3947"
+    },
+    {
+      "texture": "silentgear:_highlight",
+      "color": "#1F121B"
     }
   ],
   "main/fragment": [
