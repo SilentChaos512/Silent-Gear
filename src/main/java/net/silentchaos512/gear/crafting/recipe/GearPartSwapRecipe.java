@@ -19,10 +19,7 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.collection.StackList;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GearPartSwapRecipe extends SpecialRecipe {
     public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "swap_gear_part");
@@ -74,19 +71,24 @@ public class GearPartSwapRecipe extends SpecialRecipe {
             PartData part = PartData.from(stack);
             if (part == null) return ItemStack.EMPTY;
 
-            // Remove old part of type (if over limit), then add replacement
             PartType type = part.getType();
-            List<PartData> partsOfType = parts.getPartsOfType(type);
-            if (partsOfType.size() >= type.getMaxPerItem(GearHelper.getType(result))) {
+            List<PartData> partsOfType = new ArrayList<>(parts.getPartsOfType(type));
+            int maxPerItem = type.getMaxPerItem(GearHelper.getType(result));
+
+            // Remove old part of type (if over limit), then add replacement
+            if (partsOfType.size() >= maxPerItem) {
                 PartData oldPart = partsOfType.get(0);
+                partsOfType.remove(oldPart);
                 parts.remove(oldPart);
                 oldPart.onRemoveFromGear(result);
             }
+
             parts.add(part);
             part.onAddToGear(result);
         }
 
         GearData.writeConstructionParts(result, parts);
+        GearData.removeExcessParts(result);
         GearData.recalculateStats(result, null);
         return result;
     }

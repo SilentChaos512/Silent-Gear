@@ -94,7 +94,7 @@ public final class GearClientHelper {
         if (KeyTracker.isDisplayConstructionDown() && flag.showConstruction) {
             tooltip.add(TextUtil.withColor(misc("tooltip.construction"), Color.GOLD));
             Collections.reverse(constructionParts);
-            tooltipListParts(stack, tooltip, constructionParts);
+            tooltipListParts(stack, tooltip, constructionParts, flag);
         } else if (flag.showConstruction) {
             tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.construction"), Color.GOLD)
                     .append(new StringTextComponent(" ")
@@ -206,13 +206,16 @@ public final class GearClientHelper {
         return new TranslationTextComponent("stat.silentgear." + key, formatArgs);
     }
 
-    public static void tooltipListParts(ItemStack gear, List<ITextComponent> tooltip, Collection<PartData> parts) {
+    public static void tooltipListParts(ItemStack gear, List<ITextComponent> tooltip, Collection<PartData> parts, GearTooltipFlag flag) {
         TextListBuilder builder = new TextListBuilder();
 
         for (PartData part : parts) {
             if (part.getPart().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
-                builder.add(TextUtil.withColor(part.getDisplayName(gear).deepCopy(), partNameColor));
+                IFormattableTextComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).deepCopy(), partNameColor);
+                builder.add(flag.isAdvanced()
+                        ? partNameText.append(TextUtil.misc("spaceBrackets", part.getType().getName()).mergeStyle(TextFormatting.DARK_GRAY))
+                        : partNameText);
 
                 // List materials for compound parts
                 if (part.getPart() instanceof CompoundPart) {

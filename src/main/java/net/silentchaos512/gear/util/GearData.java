@@ -664,6 +664,24 @@ public final class GearData {
         return false;
     }
 
+    public static Optional<PartData> addOrReplacePart(ItemStack gear, PartData part) {
+        PartType partType = part.getType();
+        PartDataList parts = getConstructionParts(gear);
+        List<PartData> partsOfType = parts.getPartsOfType(partType);
+        PartData removedPart = null;
+
+        if (!partsOfType.isEmpty() && partsOfType.size() >= partType.getMaxPerItem(GearHelper.getType(gear))) {
+            removedPart = partsOfType.get(0);
+            parts.remove(removedPart);
+            removedPart.onRemoveFromGear(gear);
+        }
+
+        parts.add(part);
+        writeConstructionParts(gear, parts);
+
+        return Optional.ofNullable(removedPart);
+    }
+
     public static void addPart(ItemStack gear, PartData part) {
         PartDataList parts = getConstructionParts(gear);
         parts.add(part);
@@ -679,6 +697,35 @@ public final class GearData {
             part.onRemoveFromGear(gear);
         }
         return removed;
+    }
+
+    public static void removeExcessParts(ItemStack gear) {
+        for (PartType type : PartType.getValues()) {
+            removeExcessParts(gear, type);
+        }
+    }
+
+    public static void removeExcessParts(ItemStack gear, PartType partType) {
+        // Mostly just to correct #242
+        PartDataList parts = getConstructionParts(gear);
+        List<PartData> partsOfType = new ArrayList<>(parts.getPartsOfType(partType));
+        int maxCount = partType.getMaxPerItem(GearHelper.getType(gear));
+        int removed = 0;
+
+        while (partsOfType.size() > maxCount) {
+            PartData toRemove = partsOfType.get(0);
+            partsOfType.remove(toRemove);
+            parts.remove(toRemove);
+            toRemove.onRemoveFromGear(gear);
+            ++removed;
+            SilentGear.LOGGER.debug("Removed excess part '{}' from '{}'",
+                    toRemove.getDisplayName(gear).getString(),
+                    gear.getDisplayName().getString());
+        }
+
+        if (removed > 0) {
+            writeConstructionParts(gear, parts);
+        }
     }
 
     public static void writeConstructionParts(ItemStack stack, Collection<? extends IPartData> parts) {

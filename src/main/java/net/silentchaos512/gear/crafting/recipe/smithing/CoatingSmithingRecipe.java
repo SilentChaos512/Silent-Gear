@@ -13,10 +13,12 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+
+import java.util.Objects;
 
 public class CoatingSmithingRecipe extends GearSmithingRecipe {
     public CoatingSmithingRecipe(ResourceLocation recipeIdIn, ItemStack gearItem, Ingredient additionIn) {
@@ -33,11 +35,13 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
 
                 PartType.COATING.getCompoundPartItem(gearType).ifPresent(cpi -> {
                     ItemStack partItem = cpi.create(material, 1);
-                    GearData.addPart(result, PartData.from(partItem));
+                    // Unfortunately this deletes the old part; can't get a player here
+                    GearData.addOrReplacePart(result, Objects.requireNonNull(PartData.from(partItem)));
                 });
 
                 result.setDamage(0);
-                GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
+                GearData.removeExcessParts(result, PartType.COATING);
+                GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer()); // Crafting player is always null?
                 return result;
             }
         }
