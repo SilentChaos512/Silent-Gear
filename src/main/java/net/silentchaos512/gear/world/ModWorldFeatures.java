@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.world;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
@@ -37,10 +39,57 @@ public final class ModWorldFeatures {
 
     public static final Lazy<NetherwoodTreeFeature> NETHERWOOD_TREE_FEATURE = Lazy.of(() -> new NetherwoodTreeFeature(BaseTreeFeatureConfig.CODEC));
 
+    @SuppressWarnings("WeakerAccess")
+    public static final class Configured {
+        public static final ConfiguredFeature<?, ?> CRIMSON_IRON_ORE_VEINS = Feature.ORE
+                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241883_b, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
+                .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(24, 0, 120)))
+                .func_242731_b(24);
+
+        public static final ConfiguredFeature<?, ?> AZURE_SILVER_ORE_VEINS = Feature.ORE
+                .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
+                .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(16, 0, 92)))
+                .func_242731_b(15);
+
+        public static final ConfiguredFeature<?, ?> WILD_FLAX_PATCHES = Feature.FLOWER
+                .withConfiguration(new BlockClusterFeatureConfig.Builder(
+                        new SimpleBlockStateProvider(ModBlocks.WILD_FLAX_PLANT.asBlockState()),
+                        SimpleBlockPlacer.PLACER
+                ).tries(64).build())
+                .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
+                .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
+                .func_242731_b(1);
+
+        public static final ConfiguredFeature<?, ?> NETHERWOOD_TREES = Feature.RANDOM_SELECTOR
+                .withConfiguration(new MultipleRandomFeatureConfig(
+                        ImmutableList.of(
+                                NETHERWOOD_TREE_FEATURE.get()
+                                        .withConfiguration(NETHERWOOD_TREE_CONFIG.get())
+                                        .withChance(0.8F)
+                        ),
+                        NETHERWOOD_TREE_FEATURE.get()
+                                .withConfiguration(NETHERWOOD_TREE_CONFIG.get())
+                ))
+                .withPlacement(Placement.field_242897_C.configure(new FeatureSpreadConfig(8)))
+                .func_242733_d(128)
+                .func_242729_a(2);
+
+        private Configured() {}
+    }
+
     private ModWorldFeatures() {}
 
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
+
+        registerConfiguredFeature("crimson_iron_ore_veins", Configured.CRIMSON_IRON_ORE_VEINS);
+        registerConfiguredFeature("azure_silver_ore_veins", Configured.AZURE_SILVER_ORE_VEINS);
+        registerConfiguredFeature("wild_flax_patches", Configured.WILD_FLAX_PATCHES);
+        registerConfiguredFeature("netherwood_trees", Configured.NETHERWOOD_TREES);
+    }
+
+    private static void registerConfiguredFeature(String name, ConfiguredFeature<?, ?> configuredFeature) {
+        Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, SilentGear.getId(name), configuredFeature);
     }
 
     public static void registerPlacements(RegistryEvent.Register<Placement<?>> event) {
@@ -64,50 +113,22 @@ public final class ModWorldFeatures {
 
     private static void addWildFlax(BiomeLoadingEvent biome) {
         SilentGear.LOGGER.info("Add wild flax to {}", biome.getName());
-        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.FLOWER
-                .withConfiguration(new BlockClusterFeatureConfig.Builder(
-                        new SimpleBlockStateProvider(ModBlocks.WILD_FLAX_PLANT.asBlockState()),
-                        SimpleBlockPlacer.PLACER
-                ).tries(64).build())
-                .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
-                .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
-                .func_242731_b(1));
+        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES);
     }
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
         SilentGear.LOGGER.info("Add netherwood trees to {}", biome.getName());
-        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR
-                .withConfiguration(new MultipleRandomFeatureConfig(
-                        ImmutableList.of(
-                                NETHERWOOD_TREE_FEATURE.get()
-                                        .withConfiguration(NETHERWOOD_TREE_CONFIG.get())
-                                        .withChance(0.8F)
-                        ),
-                        NETHERWOOD_TREE_FEATURE.get()
-                                .withConfiguration(NETHERWOOD_TREE_CONFIG.get())
-                ))
-                .withPlacement(Placement.field_242897_C.configure(new FeatureSpreadConfig(8)))
-                .func_242733_d(128)
-                .func_242729_a(2)
-        );
+        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES);
     }
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {
         SilentGear.LOGGER.info("Add crimson iron ore to {}", biome.getName());
         // FIXME: There are biomes with less netherrack now, right? Might need to tweak vein counts for those.
-        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
-                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241883_b, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(24, 0, 120)))
-                .func_242731_b(24)
-        );
+        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS);
     }
 
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
         SilentGear.LOGGER.info("Add azure silver ore to {}", biome.getName());
-        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
-                .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
-                .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(16, 0, 92)))
-                .func_242731_b(15)
-        );
+        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.AZURE_SILVER_ORE_VEINS);
     }
 }
