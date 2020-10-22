@@ -44,11 +44,13 @@ public final class ModWorldFeatures {
         public static final ConfiguredFeature<?, ?> CRIMSON_IRON_ORE_VEINS = Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241883_b, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
                 .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(24, 0, 120)))
+                .func_242728_a()
                 .func_242731_b(24);
 
         public static final ConfiguredFeature<?, ?> AZURE_SILVER_ORE_VEINS = Feature.ORE
                 .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
                 .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(16, 0, 92)))
+                .func_242728_a()
                 .func_242731_b(15);
 
         public static final ConfiguredFeature<?, ?> WILD_FLAX_PATCHES = Feature.FLOWER
@@ -112,23 +114,20 @@ public final class ModWorldFeatures {
     }
 
     private static void addWildFlax(BiomeLoadingEvent biome) {
-        SilentGear.LOGGER.info("Add wild flax to {}", biome.getName());
+        SilentGear.LOGGER.debug("Add wild flax to {}", biome.getName());
         biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES);
     }
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
-        SilentGear.LOGGER.info("Add netherwood trees to {}", biome.getName());
         biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES);
     }
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {
-        SilentGear.LOGGER.info("Add crimson iron ore to {}", biome.getName());
         // FIXME: There are biomes with less netherrack now, right? Might need to tweak vein counts for those.
         biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS);
     }
 
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
-        SilentGear.LOGGER.info("Add azure silver ore to {}", biome.getName());
         biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.AZURE_SILVER_ORE_VEINS);
     }
 }
