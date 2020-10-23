@@ -17,14 +17,15 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.item.gear.CoreCrossbow;
-import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.item.gear.CoreCrossbow;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
@@ -87,6 +88,8 @@ public class GearModelOverrideList extends ItemOverrideList {
         List<MaterialLayer> layers = new ArrayList<>();
 
         for (PartData part : getPartsInRenderOrder(stack)) {
+            addSimplePartLayers(layers, part, stack);
+
             if (part.getPart() instanceof CompoundPart) {
                 MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
                 if (mat != null) {
@@ -124,27 +127,30 @@ public class GearModelOverrideList extends ItemOverrideList {
     @SuppressWarnings("TypeMayBeWeakened")
     private static void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
         IMaterialDisplay model = MaterialDisplayManager.get(material.getMaterial());
-
         if (model != null) {
-            GearType gearType = Objects.requireNonNull(GearHelper.getType(stack));
+            GearType gearType = GearHelper.getType(stack);
             List<MaterialLayer> layers = model.getLayers(gearType, part.getType()).getLayers();
-            for (int i = 0; i < layers.size(); i++) {
-                MaterialLayer layer = layers.get(i);
-                if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
-                    int blendedColor = part.getColor(stack, i, 0);
-                    list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
-                } else {
-                    list.add(layer);
-                }
-            }
-        } else {
-            // fallback to old method
-            for (MaterialLayer layer : material.getMaterial().getMaterialDisplay(stack, part.getType()).getLayers()) {
-                if (layer.getColor() < 0xFFFFFF) {
-                    list.add(new MaterialLayer(layer.getTextureId(), GearData.getBlendedColor(stack, part.getType())));
-                } else {
-                    list.add(layer);
-                }
+            addColorBlendedLayers(list, part, stack, layers);
+        }
+    }
+
+    private static void addSimplePartLayers(List<MaterialLayer> list, PartData part, ItemStack stack) {
+        IPartDisplay model = MaterialDisplayManager.get(part.getPart());
+        if (model != null) {
+            GearType gearType = GearHelper.getType(stack);
+            List<MaterialLayer> layers = model.getLayers(gearType).getLayers();
+            addColorBlendedLayers(list, part, stack, layers);
+        }
+    }
+
+    private static void addColorBlendedLayers(List<MaterialLayer> list, PartData part, ItemStack stack, List<MaterialLayer> layers) {
+        for (int i = 0; i < layers.size(); i++) {
+            MaterialLayer layer = layers.get(i);
+            if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
+                int blendedColor = part.getColor(stack, i, 0);
+                list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
+            } else {
+                list.add(layer);
             }
         }
     }

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.data.part;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
@@ -10,6 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -20,6 +22,7 @@ import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.ToolHeadItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
+import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -67,6 +70,7 @@ public class PartsProvider implements IDataProvider {
                 .stat(ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(Const.Traits.SPOON, 1)
+                .display(GearType.ALL, new MaterialLayer(SilentGear.getId("spoon"), Color.VALUE_WHITE))
         );
         ret.add(upgradePart("misc/red_card", CraftingItems.RED_CARD_UPGRADE)
                 .upgradeGearTypes(GearTypeMatcher.ALL)
@@ -248,6 +252,27 @@ public class PartsProvider implements IDataProvider {
                 cache.recordHash(path, hashStr);
             } catch (IOException ex) {
                 LOGGER.error("Could not save parts to {}", outputFolder, ex);
+            }
+
+            // Model data
+            try {
+                JsonObject modelJson = builder.serializeModel();
+                if (!modelJson.entrySet().isEmpty()) {
+                    String jsonStr = GSON.toJson(modelJson);
+                    String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                    // TODO: change path?
+                    Path path = outputFolder.resolve(String.format("assets/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
+                    if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
+                        Files.createDirectories(path.getParent());
+
+                        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+                            writer.write(jsonStr);
+                        }
+                    }
+                    cache.recordHash(path, hashStr);
+                }
+            } catch (IOException ex) {
+                LOGGER.error("Could not save part models to {}", outputFolder, ex);
             }
         }
     }

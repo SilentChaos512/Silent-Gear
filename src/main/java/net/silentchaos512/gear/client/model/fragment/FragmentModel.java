@@ -106,7 +106,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
         ret.add(getTexture(PartTextures.WOOD.getTexture()));
 
         // Custom textures
-        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getValues()) {
+        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
             for (MaterialLayer layer : materialDisplay.getLayers(GearType.FRAGMENT, PartType.MAIN)) {
                 ret.add(getTexture(layer));
             }

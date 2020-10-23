@@ -11,7 +11,7 @@ import net.silentchaos512.utils.Color;
 
 public class MaterialLayer {
     private final ResourceLocation texture;
-    private final int color;
+    private final int color; // TODO: Replace with a color provider?
     private final boolean animated;
 
     public MaterialLayer(PartTextures texture, int color) {

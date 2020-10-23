@@ -137,7 +137,8 @@ public interface ICoreItem extends IItemProvider, IStatItem {
                 PartType.BINDING,
                 PartType.GRIP,
                 PartType.BOWSTRING,
-                PartType.TIP
+                PartType.TIP,
+                PartType.MISC_UPGRADE
         );
     }
 

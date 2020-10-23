@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Simple parts can now add layers to gear models (it works, but needs some improvements still)
 - Gear mod kit, which can remove some types of parts from gear items
 - Very crude repair kit, for those who struggle to find iron
 

@@ -115,7 +115,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         }
 
         // Custom textures
-        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getValues()) {
+        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
             for (MaterialLayer layer : materialDisplay.getLayers(this.gearType, this.partType)) {
                 ret.add(getTexture(layer));
             }

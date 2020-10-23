@@ -10,7 +10,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
+import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.part.IPartSerializer;
+import net.silentchaos512.gear.api.part.PartDisplay;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -24,19 +27,20 @@ import net.silentchaos512.gear.util.DataResource;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PartBuilder {
     final ResourceLocation id;
     private IPartSerializer<?> serializerType = PartSerializers.COMPOUND_PART;
     private final GearType gearType;
     private final PartType partType;
-    private final int tier = -1;
     private final Ingredient ingredient;
-    private boolean visible = true;
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
     @Nullable private GearTypeMatcher upgradeGearTypes;
+    private final Map<GearType, MaterialLayerList> display = new LinkedHashMap<>();
 
     private final StatModifierMap stats = new StatModifierMap();
     private final List<ITraitInstance> traits = new ArrayList<>();
@@ -62,7 +66,6 @@ public class PartBuilder {
     }
 
     public PartBuilder visible(boolean visible) {
-        this.visible = visible;
         return this;
     }
 
@@ -97,6 +100,19 @@ public class PartBuilder {
         return this;
     }
 
+    public PartBuilder display(GearType gearType, MaterialLayer... layers) {
+        return display(gearType, new MaterialLayerList(layers));
+    }
+
+    public PartBuilder display(GearType gearType, MaterialLayerList layers) {
+        this.display.put(gearType, layers);
+        return this;
+    }
+
+    public JsonObject serializeModel() {
+        return PartDisplay.of(this.display).serialize();
+    }
+
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
 
@@ -105,10 +121,6 @@ public class PartBuilder {
         json.addProperty("part_type", this.partType.getName().toString());
 
         JsonObject availability = new JsonObject();
-        if (this.tier >= 0) {
-            availability.addProperty("tier", this.tier);
-            availability.addProperty("visible", this.visible);
-        }
         if (!availability.entrySet().isEmpty()) {
             json.add("availability", availability);
         }

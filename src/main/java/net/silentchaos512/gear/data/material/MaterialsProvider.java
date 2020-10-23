@@ -1906,6 +1906,7 @@ public class MaterialsProvider implements IDataProvider {
             try {
                 String jsonStr = GSON.toJson(builder.serializeModel());
                 String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                // TODO: change path?
                 Path path = outputFolder.resolve(String.format("assets/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
                 if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
                     Files.createDirectories(path.getParent());
