@@ -28,6 +28,10 @@ public final class ModItems {
     public static final ItemRegistryObject<Item> MOD_KIT = register("mod_kit", () -> new ModKitItem(
             unstackableProps().rarity(Rarity.UNCOMMON)));
     // Repair Kits
+    public static final ItemRegistryObject<Item> VERY_CRUDE_REPAIR_KIT = register("very_crude_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitVeryCrudeCapacity::get,
+            Config.Common.repairKitVeryCrudeEfficiency::get,
+            unstackableProps().rarity(Rarity.COMMON)));
     public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () -> new RepairKitItem(
             Config.Common.repairKitCrudeCapacity::get,
             Config.Common.repairKitCrudeEfficiency::get,

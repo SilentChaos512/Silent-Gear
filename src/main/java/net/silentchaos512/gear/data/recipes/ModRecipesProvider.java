@@ -417,6 +417,17 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("##/")
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(ModItems.VERY_CRUDE_REPAIR_KIT)
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .key('o', Tags.Items.STONE)
+                .patternLine(" / ")
+                .patternLine("#o#")
+                .patternLine("###")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(ModItems.CRUDE_REPAIR_KIT)
                 .key('#', ModTags.Items.TEMPLATE_BOARDS)
                 .key('/', Tags.Items.RODS_WOODEN)

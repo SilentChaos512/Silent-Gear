@@ -25,11 +25,15 @@ import java.util.stream.Stream;
 public final class PartMaterialIngredient extends Ingredient implements IPartIngredient {
     private final PartType partType;
     private final GearType gearType;
+    private final int minTier;
+    private final int maxTier;
 
-    private PartMaterialIngredient(PartType partType, GearType gearType) {
+    private PartMaterialIngredient(PartType partType, GearType gearType, int minTier, int maxTier) {
         super(Stream.of());
         this.partType = partType;
         this.gearType = gearType;
+        this.minTier = minTier;
+        this.maxTier = maxTier;
     }
 
     public static PartMaterialIngredient of(PartType partType) {
@@ -37,7 +41,11 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
     }
 
     public static PartMaterialIngredient of(PartType partType, GearType gearType) {
-        return new PartMaterialIngredient(partType, gearType);
+        return new PartMaterialIngredient(partType, gearType, 0, Integer.MAX_VALUE);
+    }
+
+    public static PartMaterialIngredient of(PartType partType, GearType gearType, int minTier, int maxTier) {
+        return new PartMaterialIngredient(partType, gearType, minTier, maxTier);
     }
 
     @Override
@@ -53,7 +61,16 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         MaterialInstance material = MaterialInstance.from(stack);
-        return material != null && material.getMaterial().isCraftingAllowed(material, partType, gearType);
+        if (material == null) return false;
+
+        int tier = material.getTier(this.partType);
+        return material.getMaterial().isCraftingAllowed(material, partType, gearType)
+                && tierMatches(tier);
+    }
+
+    private boolean tierMatches(int tier) {
+        return tier >= this.minTier
+                && tier <= this.maxTier;
     }
 
     @Override
@@ -62,6 +79,7 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         if (!materials.isEmpty()) {
             return materials.stream()
                     .filter(mat -> mat.isCraftingAllowed(MaterialInstance.of(mat), this.partType, gearType))
+                    .filter(mat -> tierMatches(mat.getTier(this.partType)))
                     .flatMap(mat -> Stream.of(mat.getIngredient().getMatchingStacks()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
@@ -92,6 +110,12 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         if (this.gearType != GearType.TOOL) {
             json.addProperty("gear_type", this.gearType.getName());
         }
+        if (this.minTier > 0) {
+            json.addProperty("min_tier", this.minTier);
+        }
+        if (this.maxTier < Integer.MAX_VALUE) {
+            json.addProperty("max_tier", this.maxTier);
+        }
         return json;
     }
 
@@ -114,7 +138,10 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
                 throw new JsonParseException("Unknown gear type: " + typeName);
             }
 
-            return new PartMaterialIngredient(partType, gearType);
+            int minTier = buffer.readVarInt();
+            int maxTier = buffer.readVarInt();
+
+            return new PartMaterialIngredient(partType, gearType, minTier, maxTier);
         }
 
         @Override
@@ -135,13 +162,18 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
                 throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
             }
 
-            return new PartMaterialIngredient(type, gearType);
+            int minTier = JSONUtils.getInt(json, "min_tier", 0);
+            int maxTier = JSONUtils.getInt(json, "max_tier", Integer.MAX_VALUE);
+
+            return new PartMaterialIngredient(type, gearType, minTier, maxTier);
         }
 
         @Override
         public void write(PacketBuffer buffer, PartMaterialIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.partType.getName());
             buffer.writeString(ingredient.gearType.getName());
+            buffer.writeVarInt(ingredient.minTier);
+            buffer.writeVarInt(ingredient.maxTier);
         }
     }
 }

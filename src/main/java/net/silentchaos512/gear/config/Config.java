@@ -44,10 +44,12 @@ public final class Config {
         public static final ForgeConfigSpec.IntValue prospectorHammerRange;
         public static final ForgeConfigSpec.DoubleValue repairFactorAnvil;
         public static final ForgeConfigSpec.DoubleValue repairFactorQuick;
+        public static final ForgeConfigSpec.IntValue repairKitVeryCrudeCapacity;
         public static final ForgeConfigSpec.IntValue repairKitCrudeCapacity;
         public static final ForgeConfigSpec.IntValue repairKitSturdyCapacity;
         public static final ForgeConfigSpec.IntValue repairKitCrimsonCapacity;
         public static final ForgeConfigSpec.IntValue repairKitAzureCapacity;
+        public static final ForgeConfigSpec.DoubleValue repairKitVeryCrudeEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitCrudeEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitSturdyEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitCrimsonEfficiency;
@@ -90,6 +92,7 @@ public final class Config {
                         builder.comment("Capacity is the number of materials that can be stored (all types combined)",
                                 "Setting to zero would make the repair kit unusable.");
                         builder.push("capacity");
+                        repairKitVeryCrudeCapacity = builder.defineInRange("very_crude", 8, 0, Integer.MAX_VALUE);
                         repairKitCrudeCapacity = builder.defineInRange("crude", 16, 0, Integer.MAX_VALUE);
                         repairKitSturdyCapacity = builder.defineInRange("sturdy", 32, 0, Integer.MAX_VALUE);
                         repairKitCrimsonCapacity = builder.defineInRange("crimson", 48, 0, Integer.MAX_VALUE);
@@ -100,6 +103,7 @@ public final class Config {
                         builder.comment("Efficiency is the percentage of the repair value used. Higher values mean less materials used.",
                                 "Setting to zero would make the repair kit unusable.");
                         builder.push("efficiency");
+                        repairKitVeryCrudeEfficiency = builder.defineInRange("very_crude", 0.3f, 0f, 10f);
                         repairKitCrudeEfficiency = builder.defineInRange("crude", 0.35f, 0f, 10f);
                         repairKitSturdyEfficiency = builder.defineInRange("sturdy", 0.4f, 0f, 10f);
                         repairKitCrimsonEfficiency = builder.defineInRange("crimson", 0.45f, 0f, 10f);

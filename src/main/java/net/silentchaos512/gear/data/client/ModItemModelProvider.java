@@ -63,6 +63,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(ModItems.MOD_KIT, itemGenerated);
 
         // Repair kits
+        builder(ModItems.VERY_CRUDE_REPAIR_KIT, itemGenerated);
         builder(ModItems.CRUDE_REPAIR_KIT, itemGenerated);
         builder(ModItems.STURDY_REPAIR_KIT, itemGenerated);
         builder(ModItems.CRIMSON_REPAIR_KIT, itemGenerated);
