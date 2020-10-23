@@ -77,16 +77,17 @@ public class ModRecipesProvider extends RecipeProvider {
         registerBlueprints(consumer);
         registerCompoundParts(consumer);
         registerGear(consumer);
-        registerRepairKits(consumer);
+        registerModifierKits(consumer);
         registerSmithing(consumer);
         registerSalvaging(consumer);
     }
 
     private void registerSpecialRecipes(Consumer<IFinishedRecipe> consumer) {
-        special(consumer, FillRepairKitRecipe.NAME, FillRepairKitRecipe.SERIALIZER);
-        special(consumer, GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
-        special(consumer, QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
-        special(consumer, NameUtils.from(ModRecipes.COMBINE_FRAGMENTS), ModRecipes.COMBINE_FRAGMENTS);
+        special(consumer, FillRepairKitRecipe.SERIALIZER);
+        special(consumer, GearPartSwapRecipe.SERIALIZER);
+        special(consumer, QuickRepairRecipe.SERIALIZER);
+        special(consumer, ModRecipes.COMBINE_FRAGMENTS);
+        special(consumer, ModRecipes.MOD_KIT_REMOVE_PART);
     }
 
     private void registerBlueprints(Consumer<IFinishedRecipe> consumer) {
@@ -407,7 +408,15 @@ public class ModRecipesProvider extends RecipeProvider {
         armorConversion(consumer, ModItems.BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
     }
 
-    private void registerRepairKits(Consumer<IFinishedRecipe> consumer) {
+    private void registerModifierKits(Consumer<IFinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shapedRecipe(ModItems.MOD_KIT)
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', Tags.Items.RODS_WOODEN)
+                .key('o', Tags.Items.INGOTS_IRON)
+                .patternLine("##o")
+                .patternLine("##/")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(ModItems.CRUDE_REPAIR_KIT)
                 .key('#', ModTags.Items.TEMPLATE_BOARDS)
                 .key('/', Tags.Items.RODS_WOODEN)
@@ -804,8 +813,8 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer, SilentGear.getId("salvaging/compass"));
     }
 
-    private void special(Consumer<IFinishedRecipe> consumer, ResourceLocation id, SpecialRecipeSerializer<?> serializer) {
-        CustomRecipeBuilder.customRecipe(serializer).build(consumer, id.toString());
+    private void special(Consumer<IFinishedRecipe> consumer, SpecialRecipeSerializer<?> serializer) {
+        CustomRecipeBuilder.customRecipe(serializer).build(consumer, NameUtils.from(serializer).toString());
     }
 
     private ExtendedShapelessRecipeBuilder damageGear(IItemProvider result, int count, int damage) {

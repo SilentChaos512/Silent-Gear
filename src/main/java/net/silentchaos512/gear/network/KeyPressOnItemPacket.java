@@ -56,6 +56,12 @@ public class KeyPressOnItemPacket {
     }
 
     public enum Type {
-        CYCLE_BACK, CYCLE_NEXT, OPEN_ITEM
+        CYCLE_BACK(-1), CYCLE_NEXT(1), OPEN_ITEM(0);
+
+        public final int direction;
+
+        Type(int direction) {
+            this.direction = direction;
+        }
     }
 }

@@ -86,6 +86,7 @@ public class PartsProvider implements IDataProvider {
                 .serializerType(PartSerializers.UPGRADE_PART);
     }
 
+    @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     private static PartBuilder addHeadStats(PartBuilder builder) {
         // Tools
         if (isToolHead(builder, ModItems.AXE_HEAD))

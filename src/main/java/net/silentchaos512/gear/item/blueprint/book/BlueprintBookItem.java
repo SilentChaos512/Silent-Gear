@@ -7,7 +7,6 @@ import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
@@ -100,7 +99,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         int current = getSelectedSlot(stack);
         IItemHandler inventory = getInventory(stack);
         for (int i = 1; i <= inventory.getSlots(); ++i) {
-            int index = current + (direction == KeyPressOnItemPacket.Type.CYCLE_BACK ? -i : i);
+            int index = current + (i * direction.direction);
             if (index < 0) index += inventory.getSlots();
             if (index >= inventory.getSlots()) index -= inventory.getSlots();
 
@@ -155,11 +154,6 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         tooltip.add(TextUtil.translate("item", "blueprint_book.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return Rarity.UNCOMMON;
     }
 
     @Override

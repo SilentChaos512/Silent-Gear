@@ -47,25 +47,32 @@ import java.util.function.Supplier;
 public final class PartType {
     private static final Map<ResourceLocation, PartType> VALUES = new HashMap<>();
 
+    public static final PartType NONE = create(Builder.builder(SilentGear.getId("none")));
+
     public static final PartType BINDING = create(Builder.builder(SilentGear.getId("binding"))
             .compoundPartItem(() -> ModItems.BINDING.orElseThrow(IllegalStateException::new))
+            .isRemovable(true)
     );
     public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring"))
             .compoundPartItem(() -> ModItems.BOWSTRING.orElseThrow(IllegalStateException::new))
     );
     public static final PartType COATING = create(Builder.builder(SilentGear.getId("coating"))
             .compoundPartItem(() -> ModItems.COATING.orElseThrow(IllegalStateException::new))
+            .isRemovable(true)
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
             .compoundPartItem(() -> ModItems.FLETCHING.orElseThrow(IllegalStateException::new))
     );
     public static final PartType GRIP = create(Builder.builder(SilentGear.getId("grip"))
             .compoundPartItem(() -> ModItems.GRIP.orElseThrow(IllegalStateException::new))
+            .isRemovable(true)
     );
     public static final PartType MAIN = create(Builder.builder(SilentGear.getId("main"))
             .compoundPartItem(PartType::getToolHeadItem)
     );
     public static final PartType MISC_UPGRADE = create(Builder.builder(SilentGear.getId("misc_upgrade"))
+            .isRemovable(true)
+            .isUpgrade(true)
             .maxPerItem(Integer.MAX_VALUE)
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
@@ -73,6 +80,7 @@ public final class PartType {
     );
     public static final PartType TIP = create(Builder.builder(SilentGear.getId("tip"))
             .compoundPartItem(() -> ModItems.TIP.orElseThrow(IllegalStateException::new))
+            .isRemovable(true)
     );
 
     /**
@@ -86,7 +94,7 @@ public final class PartType {
         if (VALUES.containsKey(builder.name))
             throw new IllegalArgumentException(String.format("Already have PartType \"%s\"", builder.name));
 
-        PartType type = new PartType(builder.name, builder.maxPerItem, builder.compoundPartItem);
+        PartType type = new PartType(builder);
         VALUES.put(builder.name, type);
         return type;
     }
@@ -94,6 +102,11 @@ public final class PartType {
     @Nullable
     public static PartType get(ResourceLocation name) {
         return VALUES.get(name);
+    }
+
+    public static PartType getNonNull(ResourceLocation name) {
+        PartType type = get(name);
+        return type != null ? type : NONE;
     }
 
     public static Collection<PartType> getValues() {
@@ -110,19 +123,29 @@ public final class PartType {
     }
 
     private final ResourceLocation name;
+    private final boolean isRemovable;
+    private final boolean isUpgrade;
     private final Function<GearType, Integer> maxPerItem;
     @Nullable private final Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
 
-    private PartType(ResourceLocation name,
-                     Function<GearType, Integer> maxPerItem,
-                     @Nullable Function<GearType, Optional<CompoundPartItem>> compoundPartItem) {
-        this.name = name;
-        this.maxPerItem = maxPerItem;
-        this.compoundPartItem = compoundPartItem;
+    private PartType(Builder builder) {
+        this.name = builder.name;
+        this.isRemovable = builder.isRemovable;
+        this.isUpgrade = builder.isUpgrade;
+        this.maxPerItem = builder.maxPerItem;
+        this.compoundPartItem = builder.compoundPartItem;
     }
 
     public ResourceLocation getName() {
         return name;
+    }
+
+    public boolean isRemovable() {
+        return isRemovable;
+    }
+
+    public boolean isUpgrade() {
+        return isUpgrade;
     }
 
     public int getMaxPerItem(GearType gearType) {
@@ -179,6 +202,8 @@ public final class PartType {
     @SuppressWarnings("WeakerAccess")
     public static final class Builder {
         private final ResourceLocation name;
+        private boolean isRemovable = false;
+        private boolean isUpgrade = false;
         @Nullable private Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
         private Function<GearType, Integer> maxPerItem = gt -> 1;
 
@@ -188,6 +213,16 @@ public final class PartType {
 
         public static Builder builder(ResourceLocation name) {
             return new Builder(name);
+        }
+
+        public Builder isRemovable(boolean value) {
+            this.isRemovable = value;
+            return this;
+        }
+
+        public Builder isUpgrade(boolean value) {
+            this.isUpgrade = value;
+            return this;
         }
 
         public Builder compoundPartItem(Supplier<CompoundPartItem> item) {

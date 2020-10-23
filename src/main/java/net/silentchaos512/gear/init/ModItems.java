@@ -12,9 +12,9 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.item.*;
-import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
+import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.TimeUtils;
@@ -25,10 +25,29 @@ import java.util.function.Supplier;
 public final class ModItems {
     public static final ItemRegistryObject<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
             new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
+    public static final ItemRegistryObject<Item> MOD_KIT = register("mod_kit", () -> new ModKitItem(
+            unstackableProps().rarity(Rarity.UNCOMMON)));
+    // Repair Kits
+    public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitCrudeCapacity::get,
+            Config.Common.repairKitCrudeEfficiency::get,
+            unstackableProps().rarity(Rarity.COMMON)));
+    public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitSturdyCapacity::get,
+            Config.Common.repairKitSturdyEfficiency::get,
+            unstackableProps().rarity(Rarity.UNCOMMON)));
+    public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitCrimsonCapacity::get,
+            Config.Common.repairKitCrimsonEfficiency::get,
+            unstackableProps().rarity(Rarity.RARE)));
+    public static final ItemRegistryObject<Item> AZURE_REPAIR_KIT = register("azure_repair_kit", () -> new RepairKitItem(
+            Config.Common.repairKitAzureCapacity::get,
+            Config.Common.repairKitAzureEfficiency::get,
+            unstackableProps().rarity(Rarity.EPIC)));
 
     //region Blueprints and templates
     public static final ItemRegistryObject<BlueprintBookItem> BLUEPRINT_BOOK = register("blueprint_book", () ->
-            new BlueprintBookItem(unstackableProps()));
+            new BlueprintBookItem(unstackableProps().rarity(Rarity.UNCOMMON)));
     // Blueprints
     public static final ItemRegistryObject<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartType.ROD, false);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartType.TIP, false);
@@ -157,24 +176,6 @@ public final class ModItems {
     public static final ItemRegistryObject<CompoundPartItem> FLETCHING = registerCompoundPart("fletching", () ->
             new CompoundPartItem(PartType.FLETCHING, baseProps()));
     //endregion
-
-    // Repair Kits
-    public static final ItemRegistryObject<Item> CRUDE_REPAIR_KIT = register("crude_repair_kit", () -> new RepairKitItem(
-            Config.Common.repairKitCrudeCapacity::get,
-            Config.Common.repairKitCrudeEfficiency::get,
-            unstackableProps().rarity(Rarity.COMMON)));
-    public static final ItemRegistryObject<Item> STURDY_REPAIR_KIT = register("sturdy_repair_kit", () -> new RepairKitItem(
-            Config.Common.repairKitSturdyCapacity::get,
-            Config.Common.repairKitSturdyEfficiency::get,
-            unstackableProps().rarity(Rarity.UNCOMMON)));
-    public static final ItemRegistryObject<Item> CRIMSON_REPAIR_KIT = register("crimson_repair_kit", () -> new RepairKitItem(
-            Config.Common.repairKitCrimsonCapacity::get,
-            Config.Common.repairKitCrimsonEfficiency::get,
-            unstackableProps().rarity(Rarity.RARE)));
-    public static final ItemRegistryObject<Item> AZURE_REPAIR_KIT = register("azure_repair_kit", () -> new RepairKitItem(
-            Config.Common.repairKitAzureCapacity::get,
-            Config.Common.repairKitAzureEfficiency::get,
-            unstackableProps().rarity(Rarity.EPIC)));
 
     static {
         CraftingItems.register(Registration.ITEMS);

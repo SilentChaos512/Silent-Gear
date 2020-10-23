@@ -32,6 +32,7 @@ public final class ModRecipes {
     public static final IRecipeSerializer<CoatingSmithingRecipe> COATING_SMITHING = new CoatingSmithingRecipe.Serializer();
     public static final IRecipeSerializer<UpgradeSmithingRecipe> UPGRADE_SMITHING = new UpgradeSmithingRecipe.Serializer();
     public static final SpecialRecipeSerializer<CombineFragmentsRecipe> COMBINE_FRAGMENTS = new SpecialRecipeSerializer<>(CombineFragmentsRecipe::new);
+    public static final SpecialRecipeSerializer<ModKitRemovePartRecipe> MOD_KIT_REMOVE_PART = new SpecialRecipeSerializer<>(ModKitRemovePartRecipe::new);
 
     private ModRecipes() {}
 
@@ -52,6 +53,7 @@ public final class ModRecipes {
         register(Const.SALVAGING_GEAR, SALVAGING_GEAR_SERIALIZER);
         register(Const.SALVAGING_COMPOUND_PART, SALVAGING_COMPOUND_PART_SERIALIZER);
         register(Const.COMBINE_FRAGMENTS, COMBINE_FRAGMENTS);
+        register(Const.MOD_KIT_REMOVE_PART, MOD_KIT_REMOVE_PART);
 
         // Ingredient serializers
         CraftingHelper.register(BlueprintIngredient.Serializer.NAME, BlueprintIngredient.Serializer.INSTANCE);

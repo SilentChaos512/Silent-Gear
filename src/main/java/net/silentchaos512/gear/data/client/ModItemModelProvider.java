@@ -60,6 +60,8 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
                 .texture("layer1", "item/blueprint_" + item.getGearType().getName()));
 
+        builder(ModItems.MOD_KIT, itemGenerated);
+
         // Repair kits
         builder(ModItems.CRUDE_REPAIR_KIT, itemGenerated);
         builder(ModItems.STURDY_REPAIR_KIT, itemGenerated);

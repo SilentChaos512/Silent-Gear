@@ -689,14 +689,19 @@ public final class GearData {
         part.onAddToGear(gear);
     }
 
-    public static boolean removePart(ItemStack gear, PartData part) {
+    public static boolean removeFirstPartOfType(ItemStack gear, PartType type) {
         PartDataList parts = getConstructionParts(gear);
-        boolean removed = parts.remove(part);
-        if (removed) {
+        List<PartData> partsOfType = new ArrayList<>(parts.getPartsOfType(type));
+
+        if (!partsOfType.isEmpty()) {
+            PartData removed = partsOfType.remove(0);
+            parts.remove(removed);
             writeConstructionParts(gear, parts);
-            part.onRemoveFromGear(gear);
+            removed.onRemoveFromGear(gear);
+            return true;
         }
-        return removed;
+
+        return false;
     }
 
     public static void removeExcessParts(ItemStack gear) {
