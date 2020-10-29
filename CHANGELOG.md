@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simple parts can now add layers to gear models (it works, but needs some improvements still)
 - Gear mod kit, which can remove some types of parts from gear items
 - Very crude repair kit, for those who struggle to find iron
+- Prismarine coating material
 - Texture for spoon upgrade part
+- Flax flowers, dropped by flax plants (non-wild), can be crafted into blue dye
 
 ## [2.3.2] - 2020-10-22
 ### Added

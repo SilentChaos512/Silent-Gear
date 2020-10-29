@@ -811,6 +811,18 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x443464)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x443464)
         );
+        // Prismarine
+        ret.add(new MaterialBuilder(SilentGear.getId("prismarine"), 3, Tags.Items.GEMS_PRISMARINE)
+                .namePrefix(TextUtil.translate("material", "prismarine"))
+                .stat(PartType.COATING, ItemStats.DURABILITY, 0.075f, StatInstance.Operation.MUL2)
+                .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, 0.125f, StatInstance.Operation.MUL2)
+                .stat(PartType.COATING, ItemStats.ARMOR_TOUGHNESS, 1, StatInstance.Operation.ADD)
+                .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 0.25f, StatInstance.Operation.ADD)
+                .trait(PartType.COATING, Const.Traits.AQUATIC, 5, new MaterialRatioTraitCondition(0.67f))
+                .trait(PartType.COATING, Const.Traits.AQUATIC, 3, new NotTraitCondition(new MaterialRatioTraitCondition(0.67f)))
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
+                .displayFragment(PartTextures.DUST, 0x91C5B7)
+        );
         // Quartz
         ret.add(new MaterialBuilder(SilentGear.getId("quartz"), 2, Tags.Items.GEMS_QUARTZ)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
