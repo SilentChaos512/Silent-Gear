@@ -6,12 +6,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
@@ -22,12 +22,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
-    public static final ResourceLocation NAME = SilentGear.getId("compound_part");
-    public static final Serializer<ShapelessCompoundPartRecipe> SERIALIZER = Serializer.basic(ShapelessCompoundPartRecipe::new);
-
     private final CompoundPartItem item;
 
-    protected ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
+    public ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
         ItemStack output = recipe.getRecipeOutput();
@@ -43,7 +40,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.COMPOUND_PART.get();
     }
 
     @Override

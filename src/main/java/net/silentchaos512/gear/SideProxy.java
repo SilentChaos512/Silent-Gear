@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.server.MinecraftServer;
@@ -74,7 +73,6 @@ class SideProxy implements IProxy {
         modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootStuff::registerGlobalModifiers);
-        modEventBus.addGenericListener(IRecipeSerializer.class, ModRecipes::registerRecipeSerializers);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
         modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
 

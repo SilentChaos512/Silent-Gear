@@ -23,22 +23,19 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.collection.StackList;
 
 public class FillRepairKitRecipe extends SpecialRecipe {
-    public static final ResourceLocation NAME = SilentGear.getId("fill_repair_kit");
-    public static final SpecialRecipeSerializer<FillRepairKitRecipe> SERIALIZER = new SpecialRecipeSerializer<>(FillRepairKitRecipe::new);
-
     public FillRepairKitRecipe(ResourceLocation idIn) {
         super(idIn);
     }
@@ -103,12 +100,12 @@ public class FillRepairKitRecipe extends SpecialRecipe {
 
     @Override
     public ResourceLocation getId() {
-        return NAME;
+        return Const.FILL_REPAIR_KIT;
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.FILL_REPAIR_KIT.get();
     }
 
     public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FillRepairKitRecipe> {

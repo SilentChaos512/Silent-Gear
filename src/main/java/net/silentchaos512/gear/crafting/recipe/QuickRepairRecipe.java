@@ -23,7 +23,6 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -38,6 +37,7 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.gear.part.RepairContext;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
@@ -47,9 +47,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class QuickRepairRecipe extends SpecialRecipe {
-    public static final ResourceLocation NAME = SilentGear.getId("quick_repair");
-    public static final SpecialRecipeSerializer<QuickRepairRecipe> SERIALIZER = new SpecialRecipeSerializer<>(QuickRepairRecipe::new);
-
     public QuickRepairRecipe(ResourceLocation idIn) {
         super(idIn);
     }
@@ -166,12 +163,12 @@ public class QuickRepairRecipe extends SpecialRecipe {
 
     @Override
     public ResourceLocation getId() {
-        return NAME;
+        return Const.QUICK_REPAIR;
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.QUICK_REPAIR.get();
     }
 
     public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<QuickRepairRecipe> {

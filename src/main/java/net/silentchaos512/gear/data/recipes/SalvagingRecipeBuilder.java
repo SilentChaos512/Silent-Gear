@@ -38,11 +38,11 @@ public final class SalvagingRecipeBuilder {
     }
 
     public static SalvagingRecipeBuilder builder(Ingredient ingredient) {
-        return new SalvagingRecipeBuilder(ingredient, ModRecipes.SALVAGING_SERIALIZER);
+        return new SalvagingRecipeBuilder(ingredient, ModRecipes.SALVAGING.get());
     }
 
     public static SalvagingRecipeBuilder gearBuilder(ICoreItem item) {
-        return new SalvagingRecipeBuilder(Ingredient.fromItems(item), ModRecipes.SALVAGING_GEAR_SERIALIZER);
+        return new SalvagingRecipeBuilder(Ingredient.fromItems(item), ModRecipes.SALVAGING_GEAR.get());
     }
 
     public SalvagingRecipeBuilder addResult(IItemProvider item) {
@@ -55,7 +55,7 @@ public final class SalvagingRecipeBuilder {
     }
 
     public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-        if (this.serializer == ModRecipes.SALVAGING_SERIALIZER && this.results.isEmpty()) {
+        if (this.serializer == ModRecipes.SALVAGING.get() && this.results.isEmpty()) {
             throw new IllegalStateException("Empty results for standard salvaging recipe");
         }
         consumer.accept(new Result(id, this));

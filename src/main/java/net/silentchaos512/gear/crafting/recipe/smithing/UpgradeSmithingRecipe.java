@@ -38,7 +38,7 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipes.UPGRADE_SMITHING;
+        return ModRecipes.SMITHING_UPGRADE.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<UpgradeSmithingRecipe> {

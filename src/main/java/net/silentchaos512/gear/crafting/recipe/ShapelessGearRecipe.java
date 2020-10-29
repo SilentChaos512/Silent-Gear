@@ -5,22 +5,18 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
 public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implements IGearRecipe {
-    public static final ResourceLocation NAME = SilentGear.getId("gear_crafting");
-    public static final Serializer<ShapelessGearRecipe> SERIALIZER = Serializer.basic(ShapelessGearRecipe::new);
-
     private final ICoreItem item;
 
-    private ShapelessGearRecipe(ShapelessRecipe recipe) {
+    public ShapelessGearRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
         ItemStack output = recipe.getRecipeOutput();
@@ -32,7 +28,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.SHAPELESS_GEAR.get();
     }
 
     @Override

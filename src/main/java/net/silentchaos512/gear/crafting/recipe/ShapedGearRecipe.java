@@ -5,22 +5,18 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapedRecipe;
 
 public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGearRecipe {
-    public static final ResourceLocation NAME = SilentGear.getId("shaped_gear_crafting");
-    public static final ExtendedShapedRecipe.Serializer<ShapedGearRecipe> SERIALIZER = Serializer.basic(ShapedGearRecipe::new);
-
     private final ICoreItem item;
 
-    private ShapedGearRecipe(ShapedRecipe recipe) {
+    public ShapedGearRecipe(ShapedRecipe recipe) {
         super(recipe);
 
         ItemStack output = recipe.getRecipeOutput();
@@ -32,7 +28,7 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGea
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.SHAPED_GEAR.get();
     }
 
     @Override

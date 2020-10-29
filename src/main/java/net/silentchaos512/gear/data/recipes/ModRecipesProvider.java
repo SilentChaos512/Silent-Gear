@@ -20,7 +20,6 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.crafting.ingredient.BlueprintIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
-import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -83,11 +82,11 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     private void registerSpecialRecipes(Consumer<IFinishedRecipe> consumer) {
-        special(consumer, FillRepairKitRecipe.SERIALIZER);
-        special(consumer, GearPartSwapRecipe.SERIALIZER);
-        special(consumer, QuickRepairRecipe.SERIALIZER);
-        special(consumer, ModRecipes.COMBINE_FRAGMENTS);
-        special(consumer, ModRecipes.MOD_KIT_REMOVE_PART);
+        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.FILL_REPAIR_KIT.get());
+        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.SWAP_GEAR_PART.get());
+        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.QUICK_REPAIR.get());
+        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.COMBINE_FRAGMENTS.get());
+        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.MOD_KIT_REMOVE_PART.get());
     }
 
     private void registerBlueprints(Consumer<IFinishedRecipe> consumer) {
@@ -253,62 +252,62 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     private void registerCompoundParts(Consumer<IFinishedRecipe> consumer) {
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.ROD, 4)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ROD, 4)
                 .addIngredient(BlueprintIngredient.of(ModItems.ROD_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.ROD), 2)
                 .build(consumer, SilentGear.getId("part/rod"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.LONG_ROD, 2)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.LONG_ROD, 2)
                 .addIngredient(BlueprintIngredient.of(ModItems.ROD_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.ROD), 3)
                 .build(consumer, SilentGear.getId("part/long_rod"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.BINDING, 1)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.BINDING, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.BINDING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.BINDING))
                 .build(consumer, SilentGear.getId("part/binding"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.BINDING, 2)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.BINDING, 2)
                 .addIngredient(BlueprintIngredient.of(ModItems.BINDING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.BINDING), 2)
                 .build(consumer, SilentGear.getId("part/binding2"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.BOWSTRING, 1)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.BOWSTRING, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.BOWSTRING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.BOWSTRING), 3)
                 .build(consumer, SilentGear.getId("part/bowstring"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.FLETCHING, 1)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.FLETCHING, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.FLETCHING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.FLETCHING), 1)
                 .build(consumer, SilentGear.getId("part/fletching"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.GRIP, 1)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.GRIP, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.GRIP_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.GRIP))
                 .build(consumer, SilentGear.getId("part/grip"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.GRIP, 2)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.GRIP, 2)
                 .addIngredient(BlueprintIngredient.of(ModItems.GRIP_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.GRIP), 2)
                 .build(consumer, SilentGear.getId("part/grip2"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.TIP, 1)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.TIP, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.TIP_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.TIP))
                 .build(consumer, SilentGear.getId("part/tip"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.TIP, 2)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.TIP, 2)
                 .addIngredient(BlueprintIngredient.of(ModItems.TIP_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.TIP), 2)
                 .build(consumer, SilentGear.getId("part/tip2"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.COATING, 1)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.COATING, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.COATING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.COATING))
                 .build(consumer, SilentGear.getId("part/coating"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, ModItems.COATING, 2)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.COATING, 2)
                 .addIngredient(BlueprintIngredient.of(ModItems.COATING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.COATING), 2)
                 .build(consumer, SilentGear.getId("part/coating2"));
@@ -335,61 +334,61 @@ public class ModRecipesProvider extends RecipeProvider {
         bowRecipes(consumer, "crossbow", 3, ModItems.CROSSBOW, ModItems.CROSSBOW_LIMBS, ModItems.CROSSBOW_BLUEPRINT.get());
         bowRecipes(consumer, "slingshot", 2, ModItems.SLINGSHOT, ModItems.SLINGSHOT_LIMBS, ModItems.SLINGSHOT_BLUEPRINT.get());
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.SHIELD)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.SHIELD)
                 .addIngredient(BlueprintIngredient.of(ModItems.SHIELD_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 2)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .build(consumer, SilentGear.getId("gear/shield"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.HELMET)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.HELMET)
                 .addIngredient(BlueprintIngredient.of(ModItems.HELMET_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 5)
                 .build(consumer, SilentGear.getId("gear/helmet"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.CHESTPLATE)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.CHESTPLATE)
                 .addIngredient(BlueprintIngredient.of(ModItems.CHESTPLATE_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 8)
                 .build(consumer, SilentGear.getId("gear/chestplate"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.LEGGINGS)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.LEGGINGS)
                 .addIngredient(BlueprintIngredient.of(ModItems.LEGGINGS_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 7)
                 .build(consumer, SilentGear.getId("gear/leggings"));
 
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, ModItems.BOOTS)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.BOOTS)
                 .addIngredient(BlueprintIngredient.of(ModItems.BOOTS_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 4)
                 .build(consumer, SilentGear.getId("gear/boots"));
 
         // Rough recipes
-        ExtendedShapedRecipeBuilder.builder(ShapedGearRecipe.SERIALIZER, ModItems.SWORD)
+        ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.SWORD)
                 .patternLine("#")
                 .patternLine("#")
                 .patternLine("/")
                 .key('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
                 .key('/', ModTags.Items.RODS_ROUGH)
                 .build(consumer, SilentGear.getId("gear/rough/sword"));
-        ExtendedShapedRecipeBuilder.builder(ShapedGearRecipe.SERIALIZER, ModItems.DAGGER)
+        ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.DAGGER)
                 .patternLine("#")
                 .patternLine("/")
                 .key('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
                 .key('/', ModTags.Items.RODS_ROUGH)
                 .build(consumer, SilentGear.getId("gear/rough/dagger"));
-        ExtendedShapedRecipeBuilder.builder(ShapedGearRecipe.SERIALIZER, ModItems.PICKAXE)
+        ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.PICKAXE)
                 .patternLine("###")
                 .patternLine(" / ")
                 .patternLine(" / ")
                 .key('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
                 .key('/', ModTags.Items.RODS_ROUGH)
                 .build(consumer, SilentGear.getId("gear/rough/pickaxe"));
-        ExtendedShapedRecipeBuilder.builder(ShapedGearRecipe.SERIALIZER, ModItems.SHOVEL)
+        ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.SHOVEL)
                 .patternLine("#")
                 .patternLine("/")
                 .patternLine("/")
                 .key('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
                 .key('/', ModTags.Items.RODS_ROUGH)
                 .build(consumer, SilentGear.getId("gear/rough/shovel"));
-        ExtendedShapedRecipeBuilder.builder(ShapedGearRecipe.SERIALIZER, ModItems.AXE)
+        ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.AXE)
                 .patternLine("##")
                 .patternLine("#/")
                 .patternLine(" /")
@@ -829,24 +828,24 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     private ExtendedShapelessRecipeBuilder damageGear(IItemProvider result, int count, int damage) {
-        return ExtendedShapelessRecipeBuilder.builder(SGearDamageItemRecipe.SERIALIZER, result, count)
+        return ExtendedShapelessRecipeBuilder.builder(ModRecipes.DAMAGE_ITEM.get(), result, count)
                 .addExtraData(json -> json.addProperty("damage", damage));
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
     private static void toolRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, GearBlueprintItem blueprintItem) {
         // Tool head
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, toolHead)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), toolHead)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .build(consumer, SilentGear.getId("gear/" + name + "_head"));
         // Tool from head and rod
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, tool)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(toolHead)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .build(consumer, SilentGear.getId("gear/" + name));
         // Quick tool (mains and rods, skipping head)
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, tool)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
@@ -856,18 +855,18 @@ public class ModRecipesProvider extends RecipeProvider {
     @SuppressWarnings("MethodWithTooManyParameters")
     private static void bowRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, GearBlueprintItem blueprintItem) {
         // Tool head
-        ExtendedShapelessRecipeBuilder.builder(ShapelessCompoundPartRecipe.SERIALIZER, toolHead)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), toolHead)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .build(consumer, SilentGear.getId("gear/" + name + "_limbs"));
         // Bow from limbs, rod, and bowstring
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, tool)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(toolHead)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .addIngredient(GearPartIngredient.of(PartType.BOWSTRING))
                 .build(consumer, SilentGear.getId("gear/" + name));
         // Quick tool (mains, rod, and bowstring, skipping limbs)
-        ExtendedShapelessRecipeBuilder.builder(ShapelessGearRecipe.SERIALIZER, tool)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
@@ -943,7 +942,7 @@ public class ModRecipesProvider extends RecipeProvider {
     private static void toolConversion(Consumer<IFinishedRecipe> consumer, IItemProvider result, Item... toolItems) {
         for (Item input : toolItems) {
             assert input instanceof TieredItem;
-            ExtendedShapelessRecipeBuilder.builder(ConversionRecipe.SERIALIZER, result)
+            ExtendedShapelessRecipeBuilder.builder(ModRecipes.CONVERSION.get(), result)
                     .addIngredient(input)
                     .addExtraData(json -> {
                         ResourceLocation material = TOOL_MATERIALS.getOrDefault(((TieredItem) input).getTier(), SilentGear.getId("emerald"));
@@ -956,7 +955,7 @@ public class ModRecipesProvider extends RecipeProvider {
     private static void armorConversion(Consumer<IFinishedRecipe> consumer, IItemProvider result, Item... armorItems) {
         for (Item input : armorItems) {
             assert input instanceof ArmorItem;
-            ExtendedShapelessRecipeBuilder.builder(ConversionRecipe.SERIALIZER, result)
+            ExtendedShapelessRecipeBuilder.builder(ModRecipes.CONVERSION.get(), result)
                     .addIngredient(input)
                     .addExtraData(json -> {
                         ResourceLocation material = ARMOR_MATERIALS.getOrDefault(((ArmorItem) input).getArmorMaterial(), SilentGear.getId("emerald"));

@@ -7,20 +7,28 @@ import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 
 public final class Const {
+    // Model loaders
+    public static final ResourceLocation COMPOUND_PART_MODEL_LOADER = SilentGear.getId("compound_part_model");
+    public static final ResourceLocation FRAGMENT_MODEL_LOADER = SilentGear.getId("fragment_model");
+    public static final ResourceLocation GEAR_MODEL_LOADER = SilentGear.getId("gear_model");
+
     // Recipe types and categories
     public static final ResourceLocation COMBINE_FRAGMENTS = SilentGear.getId("combine_fragments");
+    public static final ResourceLocation COMPOUND_PART = SilentGear.getId("compound_part");
+    public static final ResourceLocation DAMAGE_ITEM = SilentGear.getId("damage_item");
+    public static final ResourceLocation FILL_REPAIR_KIT = SilentGear.getId("fill_repair_kit");
     public static final ResourceLocation GRADING = SilentGear.getId("grading");
     public static final ResourceLocation MOD_KIT_REMOVE_PART = SilentGear.getId("mod_kit_remove_part");
+    public static final ResourceLocation QUICK_REPAIR = SilentGear.getId("quick_repair");
     public static final ResourceLocation SALVAGING = SilentGear.getId("salvaging");
     public static final ResourceLocation SALVAGING_COMPOUND_PART = SilentGear.getId("salvaging/compound_part");
     public static final ResourceLocation SALVAGING_GEAR = SilentGear.getId("salvaging/gear");
+    public static final ResourceLocation SHAPED_GEAR_CRAFTING = SilentGear.getId("shaped_gear_crafting");
+    public static final ResourceLocation SHAPELESS_GEAR_CRAFTING = SilentGear.getId("gear_crafting");
     public static final ResourceLocation SMITHING_COATING = SilentGear.getId("smithing/coating");
     public static final ResourceLocation SMITHING_UPGRADE = SilentGear.getId("smithing/upgrade");
+    public static final ResourceLocation SWAP_GEAR_PART = SilentGear.getId("swap_gear_part");
 
-    // Model loaders
-    public static final ResourceLocation GEAR_MODEL_LOADER = SilentGear.getId("gear_model");
-    public static final ResourceLocation COMPOUND_PART_MODEL_LOADER = SilentGear.getId("compound_part_model");
-    public static final ResourceLocation FRAGMENT_MODEL_LOADER = SilentGear.getId("fragment_model");
 
     private Const() {}
 

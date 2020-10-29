@@ -28,11 +28,11 @@ public class GearSmithingRecipeBuilder {
     }
 
     public static GearSmithingRecipeBuilder coating(IItemProvider gearItem) {
-        return new GearSmithingRecipeBuilder(ModRecipes.COATING_SMITHING, gearItem.asItem(), PartMaterialIngredient.of(PartType.COATING));
+        return new GearSmithingRecipeBuilder(ModRecipes.SMITHING_COATING.get(), gearItem.asItem(), PartMaterialIngredient.of(PartType.COATING));
     }
 
     public static GearSmithingRecipeBuilder upgrade(IItemProvider gearItem, PartType partType) {
-        return new GearSmithingRecipeBuilder(ModRecipes.UPGRADE_SMITHING, gearItem.asItem(), GearPartIngredient.of(partType));
+        return new GearSmithingRecipeBuilder(ModRecipes.SMITHING_UPGRADE.get(), gearItem.asItem(), GearPartIngredient.of(partType));
     }
 
     public void build(Consumer<IFinishedRecipe> consumer) {

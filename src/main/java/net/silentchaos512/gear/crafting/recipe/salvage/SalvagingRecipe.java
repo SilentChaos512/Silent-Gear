@@ -75,7 +75,7 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipes.SALVAGING_SERIALIZER;
+        return ModRecipes.SALVAGING.get();
     }
 
     @Override

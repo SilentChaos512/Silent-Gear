@@ -51,7 +51,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipes.SALVAGING_COMPOUND_PART_SERIALIZER;
+        return ModRecipes.SALVAGING_COMPOUND_PART.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CompoundPartSalvagingRecipe> {

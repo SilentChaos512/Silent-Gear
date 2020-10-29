@@ -11,7 +11,6 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.crafting.recipe.DamageItemRecipe;
@@ -19,9 +18,6 @@ import net.silentchaos512.lib.crafting.recipe.DamageItemRecipe;
 import javax.annotation.Nullable;
 
 public class SGearDamageItemRecipe extends DamageItemRecipe {
-    public static final ResourceLocation NAME = SilentGear.getId("damage_item");
-    public static final IRecipeSerializer<SGearDamageItemRecipe> SERIALIZER = new Serializer();
-
     private final int minGearTear;
 
     public SGearDamageItemRecipe(ShapelessRecipe recipe, int minGearTear) {
@@ -44,7 +40,7 @@ public class SGearDamageItemRecipe extends DamageItemRecipe {
         return true;
     }
 
-    private static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SGearDamageItemRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SGearDamageItemRecipe> {
         @Override
         public SGearDamageItemRecipe read(ResourceLocation recipeId, JsonObject json) {
             int tier = JSONUtils.getInt(json, "minGearTier", 0);

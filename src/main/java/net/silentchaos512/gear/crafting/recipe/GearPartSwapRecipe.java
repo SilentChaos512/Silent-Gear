@@ -4,17 +4,16 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.collection.StackList;
@@ -22,9 +21,6 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.*;
 
 public class GearPartSwapRecipe extends SpecialRecipe {
-    public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "swap_gear_part");
-    public static final SpecialRecipeSerializer<GearPartSwapRecipe> SERIALIZER = new SpecialRecipeSerializer<>(GearPartSwapRecipe::new);
-
     public GearPartSwapRecipe(ResourceLocation idIn) {
         super(idIn);
     }
@@ -136,6 +132,6 @@ public class GearPartSwapRecipe extends SpecialRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.SWAP_GEAR_PART.get();
     }
 }

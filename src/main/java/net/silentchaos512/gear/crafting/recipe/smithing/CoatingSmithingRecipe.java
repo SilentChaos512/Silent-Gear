@@ -50,7 +50,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipes.COATING_SMITHING;
+        return ModRecipes.SMITHING_COATING.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CoatingSmithingRecipe> {

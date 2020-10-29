@@ -21,9 +21,6 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
-import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
-import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
-import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -109,7 +106,7 @@ public class SGearJeiPlugin implements IModPlugin {
 
     private static boolean isGearCraftingRecipe(IRecipe<?> recipe) {
         IRecipeSerializer<?> serializer = recipe.getSerializer();
-        return serializer == ShapedGearRecipe.SERIALIZER || serializer == ShapelessGearRecipe.SERIALIZER || serializer == ShapelessCompoundPartRecipe.SERIALIZER;
+        return serializer == ModRecipes.SHAPED_GEAR.get() || serializer == ModRecipes.SHAPELESS_GEAR.get() || serializer == ModRecipes.COMPOUND_PART.get();
     }
 
     @Override

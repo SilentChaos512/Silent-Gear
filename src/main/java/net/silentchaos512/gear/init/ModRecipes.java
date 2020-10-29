@@ -1,16 +1,12 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.*;
 import net.silentchaos512.gear.crafting.recipe.*;
@@ -21,68 +17,51 @@ import net.silentchaos512.gear.crafting.recipe.smithing.CoatingSmithingRecipe;
 import net.silentchaos512.gear.crafting.recipe.smithing.UpgradeSmithingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.lib.crafting.recipe.ExtendedShapedRecipe;
+import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
+
+import java.util.function.Supplier;
 
 public final class ModRecipes {
-    // TODO: Use DeferredRegister, collect all constants in dedicated classes
     public static final IRecipeType<SalvagingRecipe> SALVAGING_TYPE = IRecipeType.register(Const.SALVAGING.toString());
 
-    public static final IRecipeSerializer<SalvagingRecipe> SALVAGING_SERIALIZER = new SalvagingRecipe.Serializer();
-    public static final IRecipeSerializer<GearSalvagingRecipe> SALVAGING_GEAR_SERIALIZER = new GearSalvagingRecipe.Serializer();
-    public static final IRecipeSerializer<CompoundPartSalvagingRecipe> SALVAGING_COMPOUND_PART_SERIALIZER = new CompoundPartSalvagingRecipe.Serializer();
-    public static final IRecipeSerializer<CoatingSmithingRecipe> COATING_SMITHING = new CoatingSmithingRecipe.Serializer();
-    public static final IRecipeSerializer<UpgradeSmithingRecipe> UPGRADE_SMITHING = new UpgradeSmithingRecipe.Serializer();
-    public static final SpecialRecipeSerializer<CombineFragmentsRecipe> COMBINE_FRAGMENTS = new SpecialRecipeSerializer<>(CombineFragmentsRecipe::new);
-    public static final SpecialRecipeSerializer<ModKitRemovePartRecipe> MOD_KIT_REMOVE_PART = new SpecialRecipeSerializer<>(ModKitRemovePartRecipe::new);
+    public static final RegistryObject<IRecipeSerializer<?>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () -> new SpecialRecipeSerializer<>(CombineFragmentsRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> COMPOUND_PART = register(Const.COMPOUND_PART, () -> ExtendedShapelessRecipe.Serializer.basic(ShapelessCompoundPartRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> CONVERSION = register("conversion", ConversionRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> DAMAGE_ITEM = register(Const.DAMAGE_ITEM, SGearDamageItemRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT, () -> new SpecialRecipeSerializer<>(FillRepairKitRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () -> new SpecialRecipeSerializer<>(ModKitRemovePartRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> QUICK_REPAIR = register(Const.QUICK_REPAIR, () -> new SpecialRecipeSerializer<>(QuickRepairRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> SALVAGING = register(Const.SALVAGING, SalvagingRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> SALVAGING_GEAR = register(Const.SALVAGING_GEAR, GearSalvagingRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> SALVAGING_COMPOUND_PART = register(Const.SALVAGING_COMPOUND_PART, CompoundPartSalvagingRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> SHAPED_GEAR = register(Const.SHAPED_GEAR_CRAFTING, () -> ExtendedShapedRecipe.Serializer.basic(ShapedGearRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> SHAPELESS_GEAR = register(Const.SHAPELESS_GEAR_CRAFTING, () -> ExtendedShapelessRecipe.Serializer.basic(ShapelessGearRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> SMITHING_COATING = register(Const.SMITHING_COATING, CoatingSmithingRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> SMITHING_UPGRADE = register(Const.SMITHING_UPGRADE, UpgradeSmithingRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> SWAP_GEAR_PART = register(Const.SWAP_GEAR_PART, () -> new SpecialRecipeSerializer<>(GearPartSwapRecipe::new));
+
+    // This overrides the vanilla crafting grid repair recipe, to prevent it from destroying gear items
+    @SuppressWarnings("unused")
+    public static final RegistryObject<IRecipeSerializer<?>> REPAIR_ITEM_OVERRIDE = register("crafting_special_repairitem", () -> new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
 
     private ModRecipes() {}
 
-    public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-        // Recipe serializers
-        register(ShapelessCompoundPartRecipe.NAME, ShapelessCompoundPartRecipe.SERIALIZER);
-        register(ShapedGearRecipe.NAME, ShapedGearRecipe.SERIALIZER);
-        register(ShapelessGearRecipe.NAME, ShapelessGearRecipe.SERIALIZER);
-        register(GearPartSwapRecipe.NAME, GearPartSwapRecipe.SERIALIZER);
-        register(FillRepairKitRecipe.NAME, FillRepairKitRecipe.SERIALIZER);
-        register(QuickRepairRecipe.NAME, QuickRepairRecipe.SERIALIZER);
-        register(SGearDamageItemRecipe.NAME, SGearDamageItemRecipe.SERIALIZER);
-        register(SilentGear.getId("conversion"), ConversionRecipe.SERIALIZER);
-        register(SilentGear.getId("crafting_special_repairitem"), new SpecialRecipeSerializer<>(RepairItemRecipeFix::new));
-        register(Const.SMITHING_COATING, COATING_SMITHING);
-        register(Const.SMITHING_UPGRADE, UPGRADE_SMITHING);
-        register(Const.SALVAGING, SALVAGING_SERIALIZER);
-        register(Const.SALVAGING_GEAR, SALVAGING_GEAR_SERIALIZER);
-        register(Const.SALVAGING_COMPOUND_PART, SALVAGING_COMPOUND_PART_SERIALIZER);
-        register(Const.COMBINE_FRAGMENTS, COMBINE_FRAGMENTS);
-        register(Const.MOD_KIT_REMOVE_PART, MOD_KIT_REMOVE_PART);
-
+    static void register() {
         // Ingredient serializers
         CraftingHelper.register(BlueprintIngredient.Serializer.NAME, BlueprintIngredient.Serializer.INSTANCE);
         CraftingHelper.register(ExclusionIngredient.Serializer.NAME, ExclusionIngredient.Serializer.INSTANCE);
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
         CraftingHelper.register(GearTypeIngredient.Serializer.NAME, GearTypeIngredient.Serializer.INSTANCE);
         CraftingHelper.register(PartMaterialIngredient.Serializer.NAME, PartMaterialIngredient.Serializer.INSTANCE);
-
-        if (SilentGear.isDevBuild()) {
-//            MinecraftForge.EVENT_BUS.addListener(ModRecipes::onPlayerJoinServer);
-        }
     }
 
-    private static void register(ResourceLocation id, IRecipeSerializer<?> serializer) {
-        ForgeRegistries.RECIPE_SERIALIZERS.register(serializer.setRegistryName(id));
+    private static RegistryObject<IRecipeSerializer<?>> register(String name, Supplier<IRecipeSerializer<?>> serializer) {
+        return register(SilentGear.getId(name), serializer);
     }
 
-    private static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {
-        PlayerEntity player = event.getPlayer();
-        if (player.world.isRemote || player.world.getServer() == null) return;
-
-        ResourceLocation[] recipes = player.world.getServer().getRecipeManager().getRecipes()
-                .stream()
-                .map(IRecipe::getId)
-                .filter(name -> name.getNamespace().equals(SilentGear.MOD_ID))
-                .toArray(ResourceLocation[]::new);
-
-        SilentGear.LOGGER.info("DEV: Unlocking {} recipes in recipe book", recipes.length);
-        player.unlockRecipes(recipes);
+    private static RegistryObject<IRecipeSerializer<?>> register(ResourceLocation id, Supplier<IRecipeSerializer<?>> serializer) {
+        return Registration.RECIPE_SERIALIZERS.register(id.getPath(), serializer);
     }
 
     public static boolean isRepairMaterial(ItemStack gear, ItemStack materialItem) {

@@ -20,18 +20,12 @@ import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
 import java.util.*;
 
 public final class ConversionRecipe extends ExtendedShapelessRecipe {
-    public static final Serializer<ConversionRecipe> SERIALIZER = new Serializer<>(
-            ConversionRecipe::new,
-            ConversionRecipe::deserializeMaterials,
-            ConversionRecipe::readMaterials,
-            ConversionRecipe::writeMaterials
-    );
-
     private final Map<PartType, List<IMaterialInstance>> resultMaterials = new LinkedHashMap<>();
     private final ICoreItem item;
 
@@ -88,7 +82,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.CONVERSION.get();
     }
 
     @Override
@@ -140,5 +134,14 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     @Override
     public boolean isDynamic() {
         return true;
+    }
+
+    public static class Serializer extends ExtendedShapelessRecipe.Serializer<ConversionRecipe> {
+        public Serializer() {
+            super(ConversionRecipe::new,
+                    ConversionRecipe::deserializeMaterials,
+                    ConversionRecipe::readMaterials,
+                    ConversionRecipe::writeMaterials);
+        }
     }
 }

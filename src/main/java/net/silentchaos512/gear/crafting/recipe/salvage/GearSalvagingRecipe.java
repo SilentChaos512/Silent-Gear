@@ -37,7 +37,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipes.SALVAGING_GEAR_SERIALIZER;
+        return ModRecipes.SALVAGING_GEAR.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GearSalvagingRecipe> {

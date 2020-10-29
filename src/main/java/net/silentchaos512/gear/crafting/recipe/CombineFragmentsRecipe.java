@@ -22,7 +22,7 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipes.COMBINE_FRAGMENTS;
+        return ModRecipes.COMBINE_FRAGMENTS.get();
     }
 
     @Override

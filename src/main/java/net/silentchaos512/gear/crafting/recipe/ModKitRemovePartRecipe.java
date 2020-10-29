@@ -92,6 +92,6 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipes.MOD_KIT_REMOVE_PART;
+        return ModRecipes.MOD_KIT_REMOVE_PART.get();
     }
 }
