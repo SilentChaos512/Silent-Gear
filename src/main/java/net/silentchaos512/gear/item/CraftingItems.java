@@ -67,6 +67,7 @@ public enum CraftingItems implements IItemProvider {
     SINEW_FIBER,
     FLAX_FIBER,
     FLAX_STRING,
+    FLAX_FLOWERS,
     // Rods
     ROUGH_ROD,
     STONE_ROD,

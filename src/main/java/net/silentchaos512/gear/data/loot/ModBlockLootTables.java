@@ -46,7 +46,7 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.AZURE_SILVER_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
         ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
-        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(ModItems.FLAX_SEEDS, flaxBuilder));
+        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(flaxBuilder));
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE_GATE.get());
@@ -84,7 +84,7 @@ public class ModBlockLootTables extends BlockLootTables {
                                 .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
     }
 
-    private static LootTable.Builder flax(IItemProvider seedItem, ILootCondition.IBuilder builder) {
+    private static LootTable.Builder flax(ILootCondition.IBuilder builder) {
         return withExplosionDecay(ModBlocks.FLAX_PLANT, LootTable.builder()
                 .addLootPool(LootPool.builder()
                         .acceptCondition(builder)
@@ -92,8 +92,13 @@ public class ModBlockLootTables extends BlockLootTables {
                                 .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
                 .addLootPool(LootPool.builder()
                         .acceptCondition(builder)
-                        .addEntry(ItemLootEntry.builder(seedItem)
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3)))));
+                        .addEntry(ItemLootEntry.builder(ModItems.FLAX_SEEDS)
+                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
+                .addLootPool(LootPool.builder()
+                        .acceptCondition(builder)
+                        .addEntry(ItemLootEntry.builder(CraftingItems.FLAX_FLOWERS)
+                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5f, 1))))
+        );
     }
 
     @Override

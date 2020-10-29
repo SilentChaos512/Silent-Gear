@@ -507,6 +507,11 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(CraftingItems.AZURE_SILVER_INGOT))
                 .build(consumer);
 
+        ShapelessRecipeBuilder.shapelessRecipe(Items.BLUE_DYE)
+                .addIngredient(CraftingItems.FLAX_FLOWERS, 4)
+                .addCriterion("has_item", hasItem(CraftingItems.FLAX_FLOWERS))
+                .build(consumer, SilentGear.getId("blue_dye_from_flax_flowers"));
+
         // TODO: Maybe should organize these better...
         // A
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ADVANCED_UPGRADE_BASE)
