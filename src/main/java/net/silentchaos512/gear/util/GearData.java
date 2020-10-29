@@ -191,7 +191,7 @@ public final class GearData {
                         oldValue,
                         newValue,
                         change < 0 ? change : "+" + change,
-                        StatModifierMap.formatText(stats.values(), stat, 5)
+                        StatModifierMap.formatText(stats.get(stat), stat, 5).getString()
                 );
             }
         }

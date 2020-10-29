@@ -70,7 +70,7 @@ public class PartsProvider implements IDataProvider {
                 .stat(ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(Const.Traits.SPOON, 1)
-                .display(GearType.ALL, new MaterialLayer(SilentGear.getId("spoon"), Color.VALUE_WHITE))
+                .display(GearType.PICKAXE, new MaterialLayer(SilentGear.getId("spoon"), Color.VALUE_WHITE))
         );
         ret.add(upgradePart("misc/red_card", CraftingItems.RED_CARD_UPGRADE)
                 .upgradeGearTypes(GearTypeMatcher.ALL)
