@@ -436,6 +436,15 @@ public final class GearData {
         return null;
     }
 
+    @Nullable
+    public static MaterialInstance getPrimaryArmorMaterial(ItemStack stack) {
+        PartData coating = getPartOfType(stack, PartType.COATING);
+        if (coating != null && coating.getPart() instanceof CompoundPart) {
+            return CompoundPartItem.getPrimaryMaterial(coating.getCraftingItem());
+        }
+        return getPrimaryMainMaterial(stack);
+    }
+
     /**
      * Gets the primary part, but only the part itself. Grade and crafting stack are omitted so that
      * the cached PartData can be retrieved instead of constructing a new one.

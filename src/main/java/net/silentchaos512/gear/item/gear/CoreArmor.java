@@ -207,11 +207,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
 
         // New material-based armor
-        MaterialInstance material = GearData.getPrimaryMainMaterial(stack);
+        MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
         if (material != null) {
             IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
             if (materialModel != null) {
-                MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, PartType.MAIN).getFirstLayer();
+                PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
+                MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, partType).getFirstLayer();
                 if (materialLayer != null) {
                     ResourceLocation tex = materialLayer.getTextureId();
                     return tex.getNamespace() + ":textures/models/armor/"
@@ -223,7 +224,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             }
         }
 
-        return "silentgear:textures/models/armor/generic_hc_layer_" + layer + (type != null ? "_" + type : "") + ".png";
+        return "silentgear:textures/models/armor/main_generic_hc_layer_" + layer + (type != null ? "_" + type : "") + ".png";
     }
 
     @Override
@@ -233,11 +234,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public int getColor(ItemStack stack) {
-        MaterialInstance material = GearData.getPrimaryMainMaterial(stack);
+        MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
         if (material != null) {
             IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
             if (materialModel != null) {
-                MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, PartType.MAIN).getFirstLayer();
+                PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
+                MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, partType).getFirstLayer();
                 if (materialLayer != null) {
                     return materialLayer.getColor();
                 }

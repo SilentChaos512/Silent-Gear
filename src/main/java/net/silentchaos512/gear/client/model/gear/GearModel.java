@@ -50,7 +50,6 @@ public class GearModel extends LayeredModel<GearModel> {
                 .orElse(null);
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
         if (overrideList != null) {
             overrideList.clearCache();
@@ -126,6 +125,7 @@ public class GearModel extends LayeredModel<GearModel> {
         }
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     @Override
     public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
         Set<RenderMaterial> ret = new HashSet<>();

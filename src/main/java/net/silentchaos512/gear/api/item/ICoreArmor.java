@@ -50,6 +50,6 @@ public interface ICoreArmor extends ICoreItem {
 
     @Override
     default boolean hasTexturesFor(PartType partType) {
-        return partType == PartType.MAIN;
+        return partType == PartType.MAIN || partType == PartType.TIP || partType == PartType.MISC_UPGRADE;
     }
 }
