@@ -169,7 +169,7 @@ public class StatInstance {
 
     private IFormattableTextComponent formatMax(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         String format = "%s" + ("%." + decimalPlaces + "f");
-        String text = trimNumber(String.format(format, "^", this.value));
+        String text = trimNumber(String.format(format, "\u2191", this.value)); // ↑
         return TextUtil.withColor(new StringTextComponent(text), Color.WHITE);
     }
 
