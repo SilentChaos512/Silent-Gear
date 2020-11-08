@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.5] - 2020-11-08
+- DEVS: Updated mappings to 20201028-1.16.3
+### Changed
+- Removed max value caps on all armor stats. Normally, values under 40 are "sane", but this should allow greater mod compatibility [#231]
+- Removed max value caps on enchantability, rarity, harvest level, harvest speed, and melee/magic/ranged damage (they already had extremely high values anyway)
+- "MAX" stat modifiers (common with harvest level) now display an up arrow (↑) instead of a caret (^) before the number
+### Fixed
+- Repair efficiency of shields [#246]
+- Netherwood blocks not breaking quickly with axes [#245]
+- Synergy and grades making negative stat modifiers more negative (they now become less negative, improving stats) [#212]
+
 ## [2.3.4] - 2020-11-07
 - Marked compatible with 1.16.4 (untested)
 ### Fixed
