@@ -42,15 +42,15 @@ public final class ModWorldFeatures {
     @SuppressWarnings("WeakerAccess")
     public static final class Configured {
         public static final ConfiguredFeature<?, ?> CRIMSON_IRON_ORE_VEINS = Feature.ORE
-                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241883_b, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(24, 0, 120)))
-                .func_242728_a()
+                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
+                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(24, 0, 120)))
+                .square()
                 .func_242731_b(24);
 
         public static final ConfiguredFeature<?, ?> AZURE_SILVER_ORE_VEINS = Feature.ORE
                 .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
-                .withPlacement(Placement.field_242907_l.configure(new TopSolidRangeConfig(16, 0, 92)))
-                .func_242728_a()
+                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(16, 0, 92)))
+                .square()
                 .func_242731_b(15);
 
         public static final ConfiguredFeature<?, ?> WILD_FLAX_PATCHES = Feature.FLOWER
@@ -72,9 +72,9 @@ public final class ModWorldFeatures {
                         NETHERWOOD_TREE_FEATURE.get()
                                 .withConfiguration(NETHERWOOD_TREE_CONFIG.get())
                 ))
-                .withPlacement(Placement.field_242897_C.configure(new FeatureSpreadConfig(8)))
-                .func_242733_d(128)
-                .func_242729_a(2);
+                .withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(8)))
+                .range(128)
+                .chance(2);
 
         private Configured() {}
     }

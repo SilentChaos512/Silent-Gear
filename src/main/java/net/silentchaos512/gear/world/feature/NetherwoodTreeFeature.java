@@ -85,15 +85,15 @@ public class NetherwoodTreeFeature extends Feature<BaseTreeFeatureConfig> {
      * Called when placing the tree feature.
      */
     private boolean place(IWorldGenerationReader generationReader, Random rand, BlockPos positionIn, Set<BlockPos> p_225557_4_, Set<BlockPos> p_225557_5_, MutableBoundingBox boundingBoxIn, BaseTreeFeatureConfig configIn) {
-        int i = configIn.field_236678_g_.func_236917_a_(rand);
-        int j = configIn.field_236677_f_.func_230374_a_(rand, i, configIn);
+        int i = configIn.trunkPlacer.func_236917_a_(rand);
+        int j = configIn.foliagePlacer.func_230374_a_(rand, i, configIn);
         int k = i - j;
-        int l = configIn.field_236677_f_.func_230376_a_(rand, k);
+        int l = configIn.foliagePlacer.func_230376_a_(rand, k);
         BlockPos blockpos;
         if (!configIn.forcePlacement) {
             int i1 = generationReader.getHeight(Heightmap.Type.OCEAN_FLOOR, positionIn).getY();
             int j1 = generationReader.getHeight(Heightmap.Type.WORLD_SURFACE, positionIn).getY();
-            if (j1 - i1 > configIn.field_236680_i_) {
+            if (j1 - i1 > configIn.maxWaterDepth) {
                 return false;
             }
 
@@ -115,12 +115,12 @@ public class NetherwoodTreeFeature extends Feature<BaseTreeFeatureConfig> {
             BlockPos pos1 = new BlockPos(blockpos.getX(), y, blockpos.getZ());
             if (pos1.getY() >= 1 && pos1.getY() + i + 1 <= 256) {
                 if (isDirtOrFarmlandAt(generationReader, pos1.down(y))) {
-                    OptionalInt optionalint = configIn.field_236679_h_.func_236710_c_();
+                    OptionalInt optionalint = configIn.minimumSize.func_236710_c_();
                     int l1 = this.func_241521_a_(generationReader, i, pos1, configIn);
                     if (l1 >= i || optionalint.isPresent() && l1 >= optionalint.getAsInt()) {
-                        List<FoliagePlacer.Foliage> list = configIn.field_236678_g_.func_230382_a_(generationReader, rand, l1, pos1, p_225557_4_, boundingBoxIn, configIn);
+                        List<FoliagePlacer.Foliage> list = configIn.trunkPlacer.func_230382_a_(generationReader, rand, l1, pos1, p_225557_4_, boundingBoxIn, configIn);
                         list.forEach((p_236407_8_) -> {
-                            configIn.field_236677_f_.func_236752_a_(generationReader, rand, configIn, l1, p_236407_8_, j, l, p_225557_5_, boundingBoxIn);
+                            configIn.foliagePlacer.func_236752_a_(generationReader, rand, configIn, l1, p_236407_8_, j, l, p_225557_5_, boundingBoxIn);
                         });
                         return true;
                     }
@@ -131,16 +131,16 @@ public class NetherwoodTreeFeature extends Feature<BaseTreeFeatureConfig> {
         return false;
     }
 
-    private int func_241521_a_(IWorldGenerationBaseReader p_241521_1_, int p_241521_2_, BlockPos p_241521_3_, BaseTreeFeatureConfig p_241521_4_) {
+    private int func_241521_a_(IWorldGenerationBaseReader worldIn, int p_241521_2_, BlockPos pos, BaseTreeFeatureConfig config) {
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
 
         for(int i = 0; i <= p_241521_2_ + 1; ++i) {
-            int j = p_241521_4_.field_236679_h_.func_230369_a_(p_241521_2_, i);
+            int j = config.minimumSize.func_230369_a_(p_241521_2_, i);
 
             for(int k = -j; k <= j; ++k) {
                 for(int l = -j; l <= j; ++l) {
-                    blockpos$mutable.setAndOffset(p_241521_3_, k, i, l);
-                    if (!func_236410_c_(p_241521_1_, blockpos$mutable) || !p_241521_4_.field_236681_j_ && func_236414_e_(p_241521_1_, blockpos$mutable)) {
+                    blockpos$mutable.setAndOffset(pos, k, i, l);
+                    if (!func_236410_c_(worldIn, blockpos$mutable) || !config.ignoreVines && func_236414_e_(worldIn, blockpos$mutable)) {
                         return i - 2;
                     }
                 }
@@ -155,7 +155,7 @@ public class NetherwoodTreeFeature extends Feature<BaseTreeFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader p_241855_1_, ChunkGenerator p_241855_2_, Random p_241855_3_, BlockPos p_241855_4_, BaseTreeFeatureConfig p_241855_5_) {
+    public boolean generate(ISeedReader p_241855_1_, ChunkGenerator p_241855_2_, Random p_241855_3_, BlockPos p_241855_4_, BaseTreeFeatureConfig p_241855_5_) {
         Set<BlockPos> set = Sets.newHashSet();
         Set<BlockPos> set1 = Sets.newHashSet();
         Set<BlockPos> set2 = Sets.newHashSet();
@@ -208,7 +208,7 @@ public class NetherwoodTreeFeature extends Feature<BaseTreeFeatureConfig> {
                     BlockState blockstate = p_236403_1_.getBlockState(blockpos$mutable);
                     if (blockstate.hasProperty(BlockStateProperties.DISTANCE_1_7)) {
                         list.get(0).add(blockpos$mutable.toImmutable());
-                        func_236408_b_(p_236403_1_, blockpos$mutable, blockstate.with(BlockStateProperties.DISTANCE_1_7, Integer.valueOf(1)));
+                        func_236408_b_(p_236403_1_, blockpos$mutable, blockstate.with(BlockStateProperties.DISTANCE_1_7, 1));
                         if (p_236403_2_.isVecInside(blockpos$mutable)) {
                             voxelshapepart.setFilled(blockpos$mutable.getX() - p_236403_2_.minX, blockpos$mutable.getY() - p_236403_2_.minY, blockpos$mutable.getZ() - p_236403_2_.minZ, true, true);
                         }
@@ -233,7 +233,7 @@ public class NetherwoodTreeFeature extends Feature<BaseTreeFeatureConfig> {
                         if (blockstate1.hasProperty(BlockStateProperties.DISTANCE_1_7)) {
                             int k = blockstate1.get(BlockStateProperties.DISTANCE_1_7);
                             if (k > l + 1) {
-                                BlockState blockstate2 = blockstate1.with(BlockStateProperties.DISTANCE_1_7, Integer.valueOf(l + 1));
+                                BlockState blockstate2 = blockstate1.with(BlockStateProperties.DISTANCE_1_7, l + 1);
                                 func_236408_b_(p_236403_1_, blockpos$mutable, blockstate2);
                                 if (p_236403_2_.isVecInside(blockpos$mutable)) {
                                     voxelshapepart.setFilled(blockpos$mutable.getX() - p_236403_2_.minX, blockpos$mutable.getY() - p_236403_2_.minY, blockpos$mutable.getZ() - p_236403_2_.minZ, true, true);
