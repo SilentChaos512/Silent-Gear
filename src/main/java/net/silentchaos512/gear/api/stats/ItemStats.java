@@ -47,24 +47,24 @@ public final class ItemStats {
             .displayFormat(ItemStat.DisplayFormat.PERCENTAGE)
             .affectedByGrades(false)
     );
-    public static final ItemStat ENCHANTABILITY = new ItemStat(0f, 0f, 10000f, Color.STEELBLUE, new ItemStat.Properties()
+    public static final ItemStat ENCHANTABILITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat RARITY = new ItemStat(0f, 0f, 10000f, Color.STEELBLUE, new ItemStat.Properties()
+    public static final ItemStat RARITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(true)
             .hidden()
     );
 
     // Harvesting Tools
-    public static final ItemStat HARVEST_LEVEL = new ItemStat(0f, 0f, 10000f, Color.SEAGREEN, new ItemStat.Properties()
+    public static final ItemStat HARVEST_LEVEL = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
             .defaultOp(StatInstance.Operation.MAX)
             .displayAsInt()
             .affectedByGrades(false)
     );
-    public static final ItemStat HARVEST_SPEED = new ItemStat(0f, 0f, 10000f, Color.SEAGREEN, new ItemStat.Properties()
+    public static final ItemStat HARVEST_SPEED = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
             .missingRodFunction(f -> Math.max(2, f / 8))
@@ -75,12 +75,12 @@ public final class ItemStats {
     );
 
     // Melee Weapons
-    public static final ItemStat MELEE_DAMAGE = new ItemStat(0f, 0f, 10000f, Color.SANDYBROWN, new ItemStat.Properties()
+    public static final ItemStat MELEE_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
             .missingRodFunction(f -> f / 2)
     );
-    public static final ItemStat MAGIC_DAMAGE = new ItemStat(0f, 0f, 10000f, Color.SANDYBROWN, new ItemStat.Properties()
+    public static final ItemStat MAGIC_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
@@ -89,7 +89,7 @@ public final class ItemStats {
     );
 
     // Ranged Weapons
-    public static final ItemStat RANGED_DAMAGE = new ItemStat(0f, 0f, 10000f, Color.SKYBLUE, new ItemStat.Properties()
+    public static final ItemStat RANGED_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SKYBLUE, new ItemStat.Properties()
             .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
             .affectedByGrades(true)
             .synergyApplies()
@@ -100,19 +100,19 @@ public final class ItemStats {
     );
 
     // Armor
-    public static final ItemStat ARMOR = new ItemStat(0f, 0f, 40f, Color.VIOLET, new ItemStat.Properties()
+    public static final ItemStat ARMOR = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat ARMOR_TOUGHNESS = new ItemStat(0f, 0f, 40f, Color.VIOLET, new ItemStat.Properties()
+    public static final ItemStat ARMOR_TOUGHNESS = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat KNOCKBACK_RESISTANCE = new ItemStat(0f, 0f, 100f, Color.VIOLET, new ItemStat.Properties()
+    public static final ItemStat KNOCKBACK_RESISTANCE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat MAGIC_ARMOR = new ItemStat(0f, 0f, 40f, Color.VIOLET, new ItemStat.Properties()
+    public static final ItemStat MAGIC_ARMOR = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
