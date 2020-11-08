@@ -25,18 +25,18 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3,)"
+    versionRange="[1.16.3,1.17)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]
     modId="silentlib"
     mandatory=true
-    versionRange="[4.8,)"
+    versionRange="[4.9,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]
     modId="silentgems"
     mandatory=false
-    versionRange="[3.5.8,)"
+    versionRange="[3.7.3,)"
     ordering="BEFORE"
     side="BOTH"
