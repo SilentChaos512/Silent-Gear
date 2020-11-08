@@ -10,8 +10,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -65,13 +68,20 @@ public class CoreShield extends ShieldItem implements ICoreItem {
         return RELEVANT_STATS;
     }
 
-    public static Set<ItemStat> getExcludedStats() {
+
+    @Override
+    public Set<ItemStat> getExcludedStats(ItemStack stack) {
         return EXCLUDED_STATS;
     }
 
     @Override
     public ItemStat getDurabilityStat() {
         return ItemStats.ARMOR_DURABILITY;
+    }
+
+    @Override
+    public float getRepairModifier(ItemStack stack) {
+        return DURABILITY_MULTI;
     }
 
     @Override
@@ -175,6 +185,15 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     @Override
     public UseAction getUseAction(ItemStack stack) {
         return GearHelper.isBroken(stack) ? UseAction.NONE : super.getUseAction(stack);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack stack = playerIn.getHeldItem(handIn);
+        if (GearHelper.isBroken(stack)) {
+            return ActionResult.resultPass(stack);
+        }
+        return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
     @Override
