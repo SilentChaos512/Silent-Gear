@@ -152,11 +152,14 @@ public class CompoundPart extends AbstractGearPart {
 
         // Synergy
         if (stat.doesSynergyApply()) {
-            float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(part, gear));
+            final float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(part, gear));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
+                final float multi = synergy - 1f;
                 for (int i = 0; i < ret.size(); ++i) {
                     StatInstance oldMod = ret.get(i);
-                    StatInstance newMod = oldMod.copySetValue(synergy * oldMod.getValue());
+                    float value = oldMod.getValue();
+                    // Taking the abs of value times multi makes negative mods become less negative
+                    StatInstance newMod = oldMod.copySetValue(value + Math.abs(value) * multi);
                     ret.remove(i);
                     ret.add(i, newMod);
                 }
