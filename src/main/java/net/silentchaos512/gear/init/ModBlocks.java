@@ -71,46 +71,27 @@ public final class ModBlocks {
                     .sound(SoundType.STONE)
                     .lootFrom(STONE_TORCH.get()),
                     ParticleTypes.FLAME));
+
     public static final BlockRegistryObject<RotatedPillarBlock> NETHERWOOD_LOG = register("netherwood_log", () ->
-            new RotatedPillarBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(2f)
-                    .sound(SoundType.WOOD)));
+            new RotatedPillarBlock(netherWoodProps(2f, 2f)));
     public static final BlockRegistryObject<RotatedPillarBlock> STRIPPED_NETHERWOOD_LOG = register("stripped_netherwood_log", () ->
-            new RotatedPillarBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(2f)
-                    .sound(SoundType.WOOD)));
+            new RotatedPillarBlock(netherWoodProps(2f, 2f)));
     public static final BlockRegistryObject<Block> NETHERWOOD_PLANKS = register("netherwood_planks", () ->
-            new Block(AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(2f, 3f)
-                    .sound(SoundType.WOOD)));
+            new Block(netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<SlabBlock> NETHERWOOD_SLAB = register("netherwood_slab", () ->
-            new SlabBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(2f, 3f)
-                    .sound(SoundType.WOOD)));
+            new SlabBlock(netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<StairsBlock> NETHERWOOD_STAIRS = register("netherwood_stairs", () ->
-            new StairsBlock(NETHERWOOD_PLANKS::asBlockState, AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(2f, 3f)
-                    .sound(SoundType.WOOD)));
+            new StairsBlock(NETHERWOOD_PLANKS::asBlockState, netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<FenceBlock> NETHERWOOD_FENCE = register("netherwood_fence", () ->
-            new FenceBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(2f, 3f)
-                    .sound(SoundType.WOOD)));
+            new FenceBlock(netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->
-            new FenceGateBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(2f, 3f)
-                    .sound(SoundType.WOOD)));
+            new FenceGateBlock(netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<DoorBlock> NETHERWOOD_DOOR = register("netherwood_door", () ->
-            new DoorBlock(AbstractBlock.Properties.create(Material.WOOD)
-                    .hardnessAndResistance(3f)
-                    .notSolid()
-                    .sound(SoundType.WOOD)));
+            new DoorBlock(netherWoodProps(3f, 3f).notSolid()));
     public static final BlockRegistryObject<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
-            new TrapDoorBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
-                    .hardnessAndResistance(3f)
-                    .notSolid()
-                    .sound(SoundType.WOOD)));
+            new TrapDoorBlock(netherWoodProps(3f, 3f).notSolid()));
     public static final BlockRegistryObject<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
-            new LeavesBlock(AbstractBlock.Properties.create(Material.NETHER_WOOD)
+            new LeavesBlock(AbstractBlock.Properties.create(Material.LEAVES)
                     .hardnessAndResistance(0.2f)
                     .tickRandomly()
                     .notSolid()
@@ -121,6 +102,7 @@ public final class ModBlocks {
                     .doesNotBlockMovement()
                     .tickRandomly()
                     .sound(SoundType.PLANT)));
+
     public static final BlockRegistryObject<FlowerPotBlock> POTTED_NETHERWOOD_SAPLING = registerNoItem("potted_netherwood_sapling", () ->
             makePottedPlant(NETHERWOOD_SAPLING));
     public static final BlockRegistryObject<PhantomLight> PHANTOM_LIGHT = register("phantom_light", PhantomLight::new);
@@ -184,5 +166,12 @@ public final class ModBlocks {
         ResourceLocation flowerId = Objects.requireNonNull(flower.get().getRegistryName());
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
         return potted;
+    }
+
+    private static AbstractBlock.Properties netherWoodProps(float hardnessIn, float resistanceIn) {
+        return AbstractBlock.Properties.create(Material.NETHER_WOOD)
+                .harvestTool(ToolType.AXE)
+                .hardnessAndResistance(hardnessIn, resistanceIn)
+                .sound(SoundType.WOOD);
     }
 }
