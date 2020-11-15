@@ -141,6 +141,18 @@ public class AttributeTrait extends SimpleTrait {
         }
     }
 
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        Collection<String> ret = new ArrayList<>();
+        this.modifiers.forEach((type, list) -> {
+            ret.add("  - " + type);
+            list.forEach(mod -> {
+                ret.add("    - " + mod.getWikiLine());
+            });
+        });
+        return ret;
+    }
+
     public static class ModifierData {
         private ResourceLocation name;
         private float[] values;
@@ -222,6 +234,14 @@ public class AttributeTrait extends SimpleTrait {
 
         public Optional<Attribute> getAttribute() {
             return Optional.ofNullable(ForgeRegistries.ATTRIBUTES.getValue(this.name));
+        }
+
+        private String getWikiLine() {
+            String[] valueText = new String[values.length];
+            for (int i = 0; i < values.length; ++i) {
+                valueText[i] = Float.toString(values[i]);
+            }
+            return name + ": " + operation.name() + " [" + String.join(", ", valueText) + "]";
         }
     }
 }

@@ -679,7 +679,8 @@
   "trait.silentgear.light": "Light",
   "trait.silentgear.light.desc": "Armor increases movement speed",
   "trait.silentgear.lucky": "Lucky",
-  "trait.silentgear.lucky.desc": "Adds luck when held",
+  "trait.silentgear.lucky.desc": "Adds luck when held (this is not Fortune)",
+  "trait.silentgear.lucky.desc.long": "Luck is a vanilla attribute which influences loot in some cases, usually just loot chests. This has nothing to do with the Fortune enchantment! Lucky will not increase drops from ores!",
   "trait.silentgear.lustrous": "Lustrous",
   "trait.silentgear.lustrous.desc": "Tools gain a large harvest speed boost when in light",
   "trait.silentgear.magmatic": "Magmatic",
@@ -713,5 +714,7 @@
   "trait.silentgear.terminus": "Terminus",
   "trait.silentgear.terminus.desc": "Creates and places stone blocks when used",
   "trait.silentgear.venom": "Venom",
-  "trait.silentgear.venom.desc": "Poisons the target when attacked"
+  "trait.silentgear.venom.desc": "Poisons the target when attacked",
+  "trait.silentgear.vulcan": "Vulcan",
+  "trait.silentgear.vulcan.desc": "Places obsidian at a high durability cost"
 }

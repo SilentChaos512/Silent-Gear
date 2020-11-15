@@ -129,6 +129,18 @@ public final class PotionEffectTrait extends SimpleTrait {
         }
     }
 
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        Collection<String> ret = new ArrayList<>();
+        this.potions.forEach((type, list) -> {
+            ret.add("  - " + type);
+            list.forEach(mod -> {
+                ret.add("    - " + mod.getWikiLine());
+            });
+        });
+        return ret;
+    }
+
     public static class PotionData {
         private boolean requiresFullSet;
         private ResourceLocation effectId;
@@ -218,6 +230,24 @@ public final class PotionEffectTrait extends SimpleTrait {
             if (effectLevel < 1) return Optional.empty();
 
             return Optional.of(new EffectInstance(potion, duration, effectLevel - 1, true, false));
+        }
+
+        public String getWikiLine() {
+            String[] levelsText = new String[levels.length];
+            for (int i = 0; i < levels.length; ++i) {
+                levelsText[i] = Integer.toString(levels[i]);
+            }
+
+            Effect effect = ForgeRegistries.POTIONS.getValue(effectId);
+            String effectName;
+            if (effect != null) {
+                effectName = effect.getDisplayName().getString();
+            } else {
+                effectName = effectId.toString();
+            }
+
+            return effectName + ": [" + String.join(", ", levelsText) + "]"
+                    + (requiresFullSet ? " (full set required)" : "");
         }
     }
 }

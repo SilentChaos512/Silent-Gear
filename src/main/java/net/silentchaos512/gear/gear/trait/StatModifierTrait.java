@@ -30,9 +30,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class StatModifierTrait extends SimpleTrait {
     public static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
@@ -92,6 +90,18 @@ public final class StatModifierTrait extends SimpleTrait {
             buffer.writeResourceLocation(Objects.requireNonNull(stat.getRegistryName()));
             mod.write(buffer);
         });
+    }
+
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        Collection<String> ret = new ArrayList<>();
+        this.mods.forEach((stat, mod) -> {
+            ret.add("  - " + stat.getDisplayName().getString() + ": " + mod.multi
+                    + " * level"
+                    + (mod.factorDamage ? " * damage" : "")
+                    + (mod.factorValue ? " * value" : ""));
+        });
+        return ret;
     }
 
     public static class StatMod {

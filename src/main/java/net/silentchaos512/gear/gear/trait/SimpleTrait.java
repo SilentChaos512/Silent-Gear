@@ -25,9 +25,7 @@ import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -65,6 +63,11 @@ public class SimpleTrait implements ITrait {
     @Override
     public boolean willCancelWith(ITrait other) {
         return cancelsWith.contains(other.getId().toString());
+    }
+
+    @Override
+    public Collection<String> getCancelsWithSet() {
+        return Collections.unmodifiableSet(cancelsWith);
     }
 
     @Override

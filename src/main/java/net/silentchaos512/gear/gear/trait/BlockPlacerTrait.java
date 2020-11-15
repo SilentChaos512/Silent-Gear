@@ -14,7 +14,10 @@ import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.block.PhantomLight;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.item.FakeItemUseContext;
+import net.silentchaos512.lib.util.NameUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 public class BlockPlacerTrait extends SimpleTrait {
@@ -89,5 +92,16 @@ public class BlockPlacerTrait extends SimpleTrait {
         buffer.writeResourceLocation(Objects.requireNonNull(trait.sound.getRegistryName()));
         buffer.writeFloat(trait.soundVolume);
         buffer.writeFloat(trait.soundPitch);
+    }
+
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        Collection<String> ret = new ArrayList<>();
+        ret.add("  - Places: " + NameUtils.from(block));
+        ret.add("  - Durability Cost: " + damageOnUse);
+        if (cooldown > 0) {
+            ret.add("  - Cooldown: " + cooldown);
+        }
+        return ret;
     }
 }

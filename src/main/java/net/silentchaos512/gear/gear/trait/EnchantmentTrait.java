@@ -134,6 +134,18 @@ public final class EnchantmentTrait extends SimpleTrait {
         }
     }
 
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        Collection<String> ret = new ArrayList<>();
+        this.enchantments.forEach((type, list) -> {
+            ret.add("  - " + type);
+            list.forEach(mod -> {
+                ret.add("    - " + mod.getWikiLine());
+            });
+        });
+        return ret;
+    }
+
     public static class EnchantmentData {
         private ResourceLocation enchantmentId;
         private int[] levels;
@@ -203,6 +215,14 @@ public final class EnchantmentTrait extends SimpleTrait {
         int getLevel(int traitLevel) {
             int index = MathHelper.clamp(traitLevel, 1, levels.length) - 1;
             return levels[index];
+        }
+
+        public String getWikiLine() {
+            String[] levelsText = new String[levels.length];
+            for (int i = 0; i < levels.length; ++i) {
+                levelsText[i] = Integer.toString(levels[i]);
+            }
+            return enchantmentId + ": [" + String.join(", ", levelsText) + "]";
         }
     }
 }

@@ -84,6 +84,16 @@ public class TargetEffectTrait extends SimpleTrait {
         }
     }
 
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        Collection<String> ret = new ArrayList<>();
+        this.effects.forEach((type, map) -> {
+            ret.add("  - " + type);
+            ret.addAll(map.getWikiLines());
+        });
+        return ret;
+    }
+
     public static class EffectMap {
         private final Map<Integer, List<EffectInstance>> effects = new LinkedHashMap<>();
 
@@ -202,6 +212,17 @@ public class TargetEffectTrait extends SimpleTrait {
                     buffer.writeVarInt(effect.getDuration());
                 }
             }
+        }
+
+        public Collection<String> getWikiLines() {
+            Collection<String> ret = new ArrayList<>();
+            effects.forEach((level, list) -> {
+                ret.add("    - Level " + level + ":");
+                list.forEach(effect -> {
+                    ret.add("      - " + effect);
+                });
+            });
+            return ret;
         }
     }
 }

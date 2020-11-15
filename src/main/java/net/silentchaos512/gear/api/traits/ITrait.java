@@ -19,6 +19,8 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.util.TextUtil;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -79,7 +81,8 @@ public interface ITrait {
      * @param level      The trait level
      * @param tooltip    The tooltip list
      * @param flag       The tooltip flag
-     * @param affixFirst A function which can be used to make additional changes to the first line (display name)
+     * @param affixFirst A function which can be used to make additional changes to the first line
+     *                   (display name)
      */
     default void addInformation(int level, List<ITextComponent> tooltip, ITooltipFlag flag, Function<ITextComponent, ITextComponent> affixFirst) {
         if (!showInTooltip(flag)) return;
@@ -117,5 +120,20 @@ public interface ITrait {
         tag.putString("Name", this.getId().toString());
         tag.putByte("Level", (byte) level);
         return tag;
+    }
+
+    /**
+     * Gets the IDs of the traits that this trait will cancel with. This should only be used to
+     * provide information to players. It should <em>not</em> be used to actually check if traits
+     * will cancel.
+     *
+     * @return A collection of trait IDs
+     */
+    default Collection<String> getCancelsWithSet() {
+        return Collections.emptySet();
+    }
+
+    default Collection<String> getExtraWikiLines() {
+        return Collections.emptyList();
     }
 }

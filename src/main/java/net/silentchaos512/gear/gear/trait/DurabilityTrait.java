@@ -28,6 +28,9 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.utils.MathUtils;
 
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * A Trait that modifies durability damage taken by gear, similar to the unbreaking enchantment (or
  * the reverse in some cases). Chance of modification increases with trait level. Effect scale does
@@ -71,6 +74,13 @@ public final class DurabilityTrait extends SimpleTrait {
         }
 
         return super.onDurabilityDamage(context, damageTaken);
+    }
+
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        int chancePercent = (int) (100 * activationChance);
+        String line = String.format("  - %.1f damage with a %d%% chance per level", effectScale, chancePercent);
+        return Collections.singleton(line);
     }
 
     private boolean shouldActivate(int level) {

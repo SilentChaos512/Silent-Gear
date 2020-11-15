@@ -391,6 +391,8 @@ public final class GearEvents {
         ItemStack stack = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET);
 
         if (!stack.isEmpty()) {
+            // TODO: Add a dedicated fall protection trait
+            //  Slime armor linings?
             int moonwalker = TraitHelper.getTraitLevel(stack, Const.Traits.MOONWALKER);
             if (moonwalker > 0) {
                 float gravity = 1 + moonwalker * Const.Traits.MOONWALKER_GRAVITY_MOD;

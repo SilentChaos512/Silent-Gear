@@ -7,6 +7,9 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class SynergyTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("synergy");
     public static final ITraitSerializer<SynergyTrait> SERIALIZER = new Serializer<>(
@@ -51,5 +54,17 @@ public class SynergyTrait extends SimpleTrait {
         buffer.writeFloat(trait.multi);
         buffer.writeFloat(trait.rangeMin);
         buffer.writeFloat(trait.rangeMax);
+    }
+
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        String multiStr = multi > 0f ? "+" + multi : String.valueOf(multi);
+        String str;
+        if (rangeMax < Float.MAX_VALUE) {
+            str = multiStr + " synergy if between " + rangeMin + " and " + rangeMax;
+        } else {
+            str = multiStr + " synergy if greater than " + rangeMin;
+        }
+        return Collections.singleton(str);
     }
 }

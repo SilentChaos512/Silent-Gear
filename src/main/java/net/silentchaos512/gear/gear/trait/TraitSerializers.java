@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.trait.condition.*;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -137,5 +138,9 @@ public final class TraitSerializers {
         if (Config.Common.extraPartAndTraitLogging.get()) {
             SilentGear.LOGGER.info(TraitManager.MARKER, msg.get());
         }
+    }
+
+    public static Collection<ITraitSerializer<?>> getSerializers() {
+        return REGISTRY.values();
     }
 }
