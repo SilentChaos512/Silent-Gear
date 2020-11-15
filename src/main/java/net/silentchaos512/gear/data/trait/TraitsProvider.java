@@ -140,7 +140,7 @@ public class TraitsProvider implements IDataProvider {
                 .addEnchantments(GearType.HARVEST_TOOL, Enchantments.SILK_TOUCH, 1)
         );
 
-        // Potion
+        // Wielder Effect (Potion)
 
         ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
                 .addEffect(GearType.ARMOR, false, Effects.RESISTANCE, 1, 1, 1, 2)
@@ -155,6 +155,12 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5)
                 .addEffect(GearType.ARMOR, false, Effects.SPEED, 0, 1, 2, 3)
                 .addEffect(GearType.ARMOR, false, Effects.JUMP_BOOST, 1, 2, 3, 4)
+        );
+
+        // Target Effect
+
+        ret.add(new TargetEffectTraitBuilder(Const.Traits.VENOM, 5)
+                .withDurationByLevel(GearType.TOOL, Effects.POISON, 0, 4.0f)
         );
 
         // Stat mod

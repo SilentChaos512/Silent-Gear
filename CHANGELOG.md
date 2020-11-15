@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Removed max value caps on all armor stats. Normally, values under 40 are "sane", but this should allow greater mod compatibility [#231]
 - Removed max value caps on enchantability, rarity, harvest level, harvest speed, and melee/magic/ranged damage (they already had extremely high values anyway)
-- "MAX" stat modifiers (common with harvest level) now display an up arrow (↑) instead of a caret (^) before the number
+- "MAX" stat modifiers (common with harvest level) now display an up arrow instead of a caret (^) before the number
 ### Fixed
 - Repair efficiency of shields [#246]
 - Netherwood blocks not breaking quickly with axes [#245]

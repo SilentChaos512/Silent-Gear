@@ -24,6 +24,7 @@ import net.silentchaos512.lib.util.TimeUtils;
 
 import java.util.*;
 
+// TODO: rename to WielderEffectTrait?
 public final class PotionEffectTrait extends SimpleTrait {
     public static final ITraitSerializer<PotionEffectTrait> SERIALIZER = new Serializer<>(
             SilentGear.getId("potion_effect_trait"),

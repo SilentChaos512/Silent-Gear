@@ -1,0 +1,49 @@
+{
+  "type": "silentgear:target_effect",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.venom"
+  },
+  "description": {
+    "translate": "trait.silentgear.venom.desc"
+  },
+  "effects": {
+    "tool": {
+      "1": [
+        {
+          "effect": "minecraft:poison",
+          "amplifier": 0,
+          "duration": 4.0
+        }
+      ],
+      "2": [
+        {
+          "effect": "minecraft:poison",
+          "amplifier": 0,
+          "duration": 8.0
+        }
+      ],
+      "3": [
+        {
+          "effect": "minecraft:poison",
+          "amplifier": 0,
+          "duration": 12.0
+        }
+      ],
+      "4": [
+        {
+          "effect": "minecraft:poison",
+          "amplifier": 0,
+          "duration": 16.0
+        }
+      ],
+      "5": [
+        {
+          "effect": "minecraft:poison",
+          "amplifier": 0,
+          "duration": 20.0
+        }
+      ]
+    }
+  }
+}

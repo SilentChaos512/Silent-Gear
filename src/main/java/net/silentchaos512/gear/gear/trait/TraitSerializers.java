@@ -42,6 +42,7 @@ public final class TraitSerializers {
         register(AttributeTrait.SERIALIZER);
         register(BlockPlacerTrait.SERIALIZER);
         register(SynergyTrait.SERIALIZER);
+        register(TargetEffectTrait.SERIALIZER);
     }
 
     private TraitSerializers() {}

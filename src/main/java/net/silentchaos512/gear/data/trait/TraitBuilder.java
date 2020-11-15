@@ -16,9 +16,9 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public class TraitBuilder {
-    final ResourceLocation traitId;
-    private final int maxLevel;
-    private final ResourceLocation type;
+    protected final ResourceLocation traitId;
+    protected final int maxLevel;
+    protected final ResourceLocation type;
 
     private ITextComponent name;
     private ITextComponent description;
