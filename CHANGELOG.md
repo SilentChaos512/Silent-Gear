@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.3.6] - 2020-11-16
 ### Added
 - Configs to disable the "kachink" sound when tool stats are recalculated [#256]
 - Target effect traits. Will apply potion effects to the target when attacked. See Venom trait for an example.

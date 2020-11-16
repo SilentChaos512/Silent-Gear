@@ -520,23 +520,17 @@ public final class GearHelper {
     }
 
     public static Collection<IPartData> getExamplePartsFromRecipe(GearType gearType, Iterable<Ingredient> ingredients) {
-        Collection<IPartData> list = new ArrayList<>();
+        Map<PartType, IPartData> map = new LinkedHashMap<>();
+
+        PartType.MAIN.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(PartType.MAIN, p));
 
         for (Ingredient ingredient : ingredients) {
             if (ingredient instanceof IPartIngredient) {
                 PartType type = ((IPartIngredient) ingredient).getPartType();
-                type.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(list::add);
-            } else {
-                // This isn't perfect, since parts may not be loaded at this time...
-                ItemStack[] matchingStacks = ingredient.getMatchingStacks();
-                if (matchingStacks.length > 0) {
-                    PartData part = PartData.from(matchingStacks[0]);
-                    if (part != null)
-                        list.add(part);
-                }
+                type.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(type, p));
             }
         }
 
-        return list;
+        return map.values();
     }
 }
