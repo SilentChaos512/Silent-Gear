@@ -258,7 +258,9 @@ public final class GearHelper {
 
     private static void onDamageFactorChange(ServerPlayerEntity player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
-            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
+            if (Config.Client.playKachinkSound.get()) {
+                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
+            }
             LibTriggers.GENERIC_INT.trigger(player, DAMAGE_FACTOR_CHANGE, 1);
         }
     }
@@ -270,7 +272,8 @@ public final class GearHelper {
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
         if (maxDamage == 0) return 1;
-        int step = Math.max(1, maxDamage / DAMAGE_FACTOR_LEVELS);
+        int levels = Config.Common.damageFactorLevels.get();
+        int step = Math.max(1, maxDamage / (levels < 1 ? 10 : levels));
         return stack.getDamage() / step;
     }
 

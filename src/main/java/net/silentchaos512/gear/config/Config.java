@@ -40,6 +40,7 @@ public final class Config {
         // Gear
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
+        public static final ForgeConfigSpec.IntValue damageFactorLevels;
         public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
         public static final ForgeConfigSpec.IntValue prospectorHammerRange;
         public static final ForgeConfigSpec.DoubleValue repairFactorAnvil;
@@ -156,6 +157,11 @@ public final class Config {
             {
                 builder.comment("Settings for gear (tools, weapons, and armor)");
                 builder.push("gear");
+
+                damageFactorLevels = builder
+                        .comment("How frequently gear will recalcute stats as damaged",
+                                "Higher numbers will cause more recalculations, allowing traits to update stat values more often")
+                        .defineInRange("damageFactorLevels", 10, 1, Integer.MAX_VALUE);
 
                 gearBreaksPermanently = builder
                         .comment("If true, gear breaks permanently, like vanilla tools and armor")
@@ -286,23 +292,24 @@ public final class Config {
         static final ForgeConfigSpec spec;
 
         public static final ForgeConfigSpec.BooleanValue allowEnchantedEffect;
-        public static final ForgeConfigSpec.BooleanValue useLiteModels;
-        public static final ForgeConfigSpec.BooleanValue disableNewMaterialTooltips;
+        public static final ForgeConfigSpec.BooleanValue playKachinkSound;
+        //public static final ForgeConfigSpec.BooleanValue useLiteModels;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
             allowEnchantedEffect = builder
                     .comment("Allow gear items to have the 'enchanted glow' effect. Set to 'false' to disable the effect.",
-                            "The way vanilla handles the effect is bugged, and it is recommended to disable this until custom models are possible again.")
+                            "The way vanilla handles the effect is bugged, and it is recommended to disable this until it can be fixed",
+                            "The bug is not harmful and some like the way the overpowered effect looks")
                     .define("gear.allowEnchantedEffect", false);
-            useLiteModels = builder
+            playKachinkSound = builder
+                    .comment("Plays a sped-up 'item breaking' sound when an item's stats are recalculated due to durability loss")
+                    .define("gear.playKachinkSound", true);
+            /*useLiteModels = builder
                     .comment("Use 'lite' gear models. These should be easier on some systems, but do not allow unique textures for different materials.",
                             "Currently, this option has no effect, as the normal model system is not working yet (lite models are used)")
-                    .define("gear.useLiteModels", false);
-            disableNewMaterialTooltips = builder
-                    .comment("Disable item tooltips related to the new material system. Will be removed when fully implemented.")
-                    .define("item.gear.materials.disableNewTooltips", false);
+                    .define("gear.useLiteModels", false);*/
 
             spec = builder.build();
         }
