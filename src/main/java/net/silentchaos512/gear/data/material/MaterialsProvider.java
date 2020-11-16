@@ -689,7 +689,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
-                .stat(PartType.MAIN, ItemStats.ARMOR, 6)
+                .stat(PartType.MAIN, ItemStats.ARMOR, 7)
                 .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 0)
                 .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 8)
                 .stat(PartType.MAIN, ItemStats.RARITY, 11)
