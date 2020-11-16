@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Configs to disable the "kachink" sound when tool stats are recalculated [#256]
+- Target effect traits. Will apply potion effects to the target when attacked. See Venom trait for an example.
+- Added a command to generate an MD file containing details on loaded traits. You can find built-in traits [here](https://github.com/SilentChaos512/Silent-Gear/wiki/Trait-List)
+### Changed
+- Russian translation of grade (Voknehzyr) [#255]
+- Update Chinese translation (XuyuEre) [#248]
+### Fixed
+- Leather's armor value was wrong
+
 ## [2.3.5] - 2020-11-08
 - DEVS: Updated mappings to 20201028-1.16.3
 ### Changed
