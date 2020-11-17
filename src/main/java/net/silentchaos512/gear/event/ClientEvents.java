@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -12,7 +13,7 @@ import net.silentchaos512.gear.network.GearLeftClickPacket;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.util.GearHelper;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = SilentGear.MOD_ID)
 public final class ClientEvents {
     private ClientEvents() {}
 
