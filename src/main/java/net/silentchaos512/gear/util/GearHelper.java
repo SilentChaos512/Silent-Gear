@@ -437,6 +437,13 @@ public final class GearHelper {
         return ret;
     }
 
+    public static void onItemSwing(ItemStack stack, LivingEntity entity) {
+        Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
+        for (Map.Entry<ITrait, Integer> entry : traits.entrySet()) {
+            entry.getKey().onItemSwing(stack, entity, entry.getValue());
+        }
+    }
+
     public static Rarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, ItemStats.RARITY);
         if (stack.isEnchanted())

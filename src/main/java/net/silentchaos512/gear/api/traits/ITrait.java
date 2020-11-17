@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
@@ -112,6 +113,16 @@ public interface ITrait {
     void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot);
 
     ActionResultType onItemUse(ItemUseContext context, int traitLevel);
+
+    /**
+     * Called when the player left-clicks with the item in their hand without targeting a block or
+     * an entity.
+     *
+     * @param stack      The gear item
+     * @param entity     The entity using the item
+     * @param traitLevel The level of this trait
+     */
+    void onItemSwing(ItemStack stack, LivingEntity entity, int traitLevel);
 
     void onUpdate(TraitActionContext context, boolean isEquipped);
 

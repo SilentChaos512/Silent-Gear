@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ActionResultType;
@@ -120,6 +121,10 @@ public class SimpleTrait implements ITrait {
     @Override
     public ActionResultType onItemUse(ItemUseContext context, int traitLevel) {
         return ActionResultType.PASS;
+    }
+
+    @Override
+    public void onItemSwing(ItemStack stack, LivingEntity entity, int traitLevel) {
     }
 
     @Override

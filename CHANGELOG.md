@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.7] - 2020-11-17
+### Added
+- (API) `onItemSwing` method for `ITrait`, which is called when the player left-clicks without targeting a block or entity
+### Changed
+- Small optimizations made by replacing stream API use with loops in some places [#259]
+### Fixed
+- Cache example output of gear recipes (performance improvement in some cases) [#259]
+- Possibly fixes missing textures for pack-added materials [#190, #183, maybe #257]
+
 ## [2.3.6] - 2020-11-16
 ### Added
 - Configs to disable the "kachink" sound when tool stats are recalculated [#256]
