@@ -86,11 +86,9 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
     private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
         // This method will display an example item for items with no data (ie, for advancements)
         IMaterialDisplay model = MaterialDisplayManager.get(material);
-        if (model != null) {
-            MaterialLayer exampleMain = model.getLayers(GearType.FRAGMENT, PartType.MAIN).getFirstLayer();
-            if (exampleMain != null) {
-                builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(GearType.FRAGMENT, 0))), rotation, exampleMain.getColor()));
-            }
+        MaterialLayer exampleMain = model.getLayers(GearType.FRAGMENT, PartType.MAIN).getFirstLayer();
+        if (exampleMain != null) {
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(GearType.FRAGMENT, 0))), rotation, exampleMain.getColor()));
         }
     }
 

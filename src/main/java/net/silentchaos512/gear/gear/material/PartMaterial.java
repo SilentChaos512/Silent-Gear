@@ -12,7 +12,6 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -210,11 +209,8 @@ public final class PartMaterial implements IMaterial {
     @Override
     public int getNameColor(PartType partType, GearType gearType) {
         IMaterialDisplay model = MaterialDisplayManager.get(this);
-        if (model != null) {
-            int color = model.getLayerColor(gearType, partType, 0);
-            return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
-        }
-        return Objects.requireNonNull(TextFormatting.GRAY.getColor());
+        int color = model.getLayerColor(gearType, partType, 0);
+        return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
     }
 
     @Override

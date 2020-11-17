@@ -36,10 +36,9 @@ public interface IPartData {
         return part != null ? part.getTier() : 0;
     }
 
-    @Nullable
     default PartType getType() {
         IGearPart part = getPart();
-        return part != null ? part.getType() : null;
+        return part != null ? part.getType() : PartType.NONE;
     }
 
     default GearType getGearType() {

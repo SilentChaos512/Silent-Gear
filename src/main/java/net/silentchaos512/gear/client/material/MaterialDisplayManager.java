@@ -135,15 +135,13 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         }
     }
 
-    @Nullable
     public static IMaterialDisplay get(IMaterial material) {
         return getMaterial(material.getId());
     }
 
-    @Nullable
     public static IMaterialDisplay getMaterial(ResourceLocation materialId) {
         synchronized (MATERIALS) {
-            return MATERIALS.get(materialId);
+            return MATERIALS.getOrDefault(materialId, DefaultMaterialDisplay.INSTANCE);
         }
     }
 

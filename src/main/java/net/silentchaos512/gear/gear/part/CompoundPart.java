@@ -74,7 +74,7 @@ public class CompoundPart extends AbstractGearPart {
     public int getColor(PartData part, ItemStack gear, int layer, int animationFrame) {
         List<MaterialInstance> materials = getMaterials(part);
         if (gear.getItem() instanceof ICoreItem) {
-            return ColorUtils.getBlendedColor((ICoreItem) gear.getItem(), part.getType(), materials, layer);
+            return ColorUtils.getBlendedColor((ICoreItem) gear.getItem(), part, materials, layer);
         } else {
             return ColorUtils.getBlendedColor((CompoundPartItem) part.getCraftingItem().getItem(), materials, layer);
         }

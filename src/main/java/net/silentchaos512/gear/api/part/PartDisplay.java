@@ -11,21 +11,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PartDisplay implements IPartDisplay {
-    private final Map<GearType, MaterialLayerList> map = new LinkedHashMap<>();
-    private final ResourceLocation modelId;
-
-    public PartDisplay(ResourceLocation modelId) {
-        this.modelId = modelId;
-    }
+    protected final Map<GearType, MaterialLayerList> map = new LinkedHashMap<>();
 
     public static PartDisplay of(Map<GearType, MaterialLayerList> display) {
-        PartDisplay model = new PartDisplay(new ResourceLocation("null"));
+        PartDisplay model = new PartDisplay();
         model.map.putAll(display);
         return model;
     }
 
     @Override
-    public IMaterialLayerList getLayers(GearType gearType) {
+    public IMaterialLayerList getLayers(GearType gearType, IPartData part) {
         return map.getOrDefault(getMostSpecificKey(gearType), MaterialLayerList.DEFAULT);
     }
 
@@ -53,19 +48,12 @@ public class PartDisplay implements IPartDisplay {
     }
 
     public static PartDisplay deserialize(ResourceLocation modelId, JsonObject json) {
-        PartDisplay ret = new PartDisplay(modelId);
+        PartDisplay ret = new PartDisplay();
         json.entrySet().forEach(entry -> {
             GearType key = GearType.get(entry.getKey());
             JsonElement value = entry.getValue();
             ret.map.put(key, MaterialLayerList.deserialize(value, MaterialLayerList.DEFAULT));
         });
         return ret;
-    }
-
-    @Override
-    public String toString() {
-        return "PartDisplay{" +
-                "modelId=" + modelId +
-                '}';
     }
 }

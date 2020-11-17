@@ -75,10 +75,8 @@ public class FragmentModelOverrideList extends ItemOverrideList {
         IMaterial material = FragmentItem.getMaterial(stack);
         if (material != null) {
             IMaterialDisplay model = MaterialDisplayManager.get(material);
-            if (model != null) {
-                for (MaterialLayer layer : model.getLayers(GearType.FRAGMENT, PartType.MAIN)) {
-                    layers.add(layer);
-                }
+            for (MaterialLayer layer : model.getLayers(GearType.FRAGMENT, PartType.MAIN)) {
+                layers.add(layer);
             }
         }
 

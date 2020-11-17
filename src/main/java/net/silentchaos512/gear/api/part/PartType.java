@@ -31,6 +31,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.init.ModItems;
@@ -52,24 +53,30 @@ public final class PartType {
 
     public static final PartType BINDING = create(Builder.builder(SilentGear.getId("binding"))
             .compoundPartItem(() -> ModItems.BINDING.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.BINDING_GENERIC)
             .isRemovable(true)
     );
     public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring"))
             .compoundPartItem(() -> ModItems.BOWSTRING.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.BOWSTRING_STRING)
     );
     public static final PartType COATING = create(Builder.builder(SilentGear.getId("coating"))
             .compoundPartItem(() -> ModItems.COATING.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.MAIN_GENERIC_HC)
             .isRemovable(true)
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
             .compoundPartItem(() -> ModItems.FLETCHING.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.FLETCHING_GENERIC)
     );
     public static final PartType GRIP = create(Builder.builder(SilentGear.getId("grip"))
             .compoundPartItem(() -> ModItems.GRIP.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.GRIP_WOOL)
             .isRemovable(true)
     );
     public static final PartType MAIN = create(Builder.builder(SilentGear.getId("main"))
             .compoundPartItem(PartType::getToolHeadItem)
+            .defaultTexture(PartTextures.MAIN_GENERIC_HC)
     );
     public static final PartType MISC_UPGRADE = create(Builder.builder(SilentGear.getId("misc_upgrade"))
             .isRemovable(true)
@@ -78,9 +85,11 @@ public final class PartType {
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
             .compoundPartItem(() -> ModItems.ROD.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.ROD_GENERIC_LC)
     );
     public static final PartType TIP = create(Builder.builder(SilentGear.getId("tip"))
             .compoundPartItem(() -> ModItems.TIP.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.TIP_SHARP)
             .isRemovable(true)
     );
 
@@ -128,6 +137,7 @@ public final class PartType {
     private final boolean isUpgrade;
     private final Function<GearType, Integer> maxPerItem;
     @Nullable private final Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
+    @Nullable private final PartTextures defaultTexture;
 
     private PartType(Builder builder) {
         this.name = builder.name;
@@ -135,6 +145,7 @@ public final class PartType {
         this.isUpgrade = builder.isUpgrade;
         this.maxPerItem = builder.maxPerItem;
         this.compoundPartItem = builder.compoundPartItem;
+        this.defaultTexture = builder.defaultTexture;
     }
 
     public ResourceLocation getName() {
@@ -184,6 +195,11 @@ public final class PartType {
                 });
     }
 
+    @Nullable
+    public PartTextures getDefaultTexture() {
+        return defaultTexture;
+    }
+
     @Override
     public String toString() {
         return "PartType{" +
@@ -211,6 +227,7 @@ public final class PartType {
         private boolean isUpgrade = false;
         @Nullable private Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
         private Function<GearType, Integer> maxPerItem = gt -> 1;
+        @Nullable private PartTextures defaultTexture;
 
         private Builder(ResourceLocation name) {
             this.name = name;
@@ -245,6 +262,11 @@ public final class PartType {
 
         public Builder maxPerItem(Function<GearType, Integer> function) {
             this.maxPerItem = function;
+            return this;
+        }
+
+        public Builder defaultTexture(PartTextures texture) {
+            this.defaultTexture = texture;
             return this;
         }
     }

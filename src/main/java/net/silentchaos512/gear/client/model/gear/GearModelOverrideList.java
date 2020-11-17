@@ -73,7 +73,7 @@ public class GearModelOverrideList extends ItemOverrideList {
         int animationFrame = getAnimationFrame(stack, worldIn, entityIn);
         CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
-            return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn, animationFrame));
+            return bakedModelCache.get(key, () -> getOverrideModel(key, stack, worldIn, entityIn, animationFrame));
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
@@ -84,7 +84,11 @@ public class GearModelOverrideList extends ItemOverrideList {
         return ((ICoreItem) stack.getItem()).getAnimationFrame(stack, world, entity);
     }
 
-    private IBakedModel getOverrideModel(ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
+    private IBakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
+        if (SilentGear.LOGGER.isDebugEnabled()) {
+            SilentGear.LOGGER.debug("getOverrideModel for {}", stack.getDisplayName().getString());
+            SilentGear.LOGGER.debug("- model key {}", key.data);
+        }
         List<MaterialLayer> layers = new ArrayList<>();
 
         for (PartData part : getPartsInRenderOrder(stack)) {
@@ -127,18 +131,16 @@ public class GearModelOverrideList extends ItemOverrideList {
     @SuppressWarnings("TypeMayBeWeakened")
     private static void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
         IMaterialDisplay model = MaterialDisplayManager.get(material.getMaterial());
-        if (model != null) {
-            GearType gearType = GearHelper.getType(stack);
-            List<MaterialLayer> layers = model.getLayers(gearType, part.getType()).getLayers();
-            addColorBlendedLayers(list, part, stack, layers);
-        }
+        GearType gearType = GearHelper.getType(stack);
+        List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();
+        addColorBlendedLayers(list, part, stack, layers);
     }
 
     private static void addSimplePartLayers(List<MaterialLayer> list, PartData part, ItemStack stack) {
         IPartDisplay model = MaterialDisplayManager.get(part.getPart());
         if (model != null) {
             GearType gearType = GearHelper.getType(stack);
-            List<MaterialLayer> layers = model.getLayers(gearType).getLayers();
+            List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();
             addColorBlendedLayers(list, part, stack, layers);
         }
     }
@@ -149,8 +151,14 @@ public class GearModelOverrideList extends ItemOverrideList {
             if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
                 int blendedColor = part.getColor(stack, i, 0);
                 list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
+                if (SilentGear.LOGGER.isDebugEnabled()) {
+                    SilentGear.LOGGER.debug("  - add layer {} ({})", layer.getTextureId(), Color.format(blendedColor));
+                }
             } else {
                 list.add(layer);
+                if (SilentGear.LOGGER.isDebugEnabled()) {
+                    SilentGear.LOGGER.debug("  - add layer {} (colorless)", layer.getTextureId());
+                }
             }
         }
     }
@@ -186,7 +194,6 @@ public class GearModelOverrideList extends ItemOverrideList {
         return super.getOverrides();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
         SilentGear.LOGGER.debug("Clearing model cache for {}", this.model.gearType);
         bakedModelCache.invalidateAll();

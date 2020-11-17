@@ -7,28 +7,24 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
+import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class MaterialDisplay implements IMaterialDisplay {
-    private final Map<PartGearKey, MaterialLayerList> map = new LinkedHashMap<>();
-    private final ResourceLocation modelId;
-
-    private MaterialDisplay(ResourceLocation modelId) {
-        this.modelId = modelId;
-    }
+public class MaterialDisplay implements IMaterialDisplay {
+    protected final Map<PartGearKey, MaterialLayerList> map = new LinkedHashMap<>();
 
     public static MaterialDisplay of(Map<PartGearKey, MaterialLayerList> display) {
-        MaterialDisplay model = new MaterialDisplay(new ResourceLocation("null"));
+        MaterialDisplay model = new MaterialDisplay();
         model.map.putAll(display);
         return model;
     }
 
     @Override
-    public IMaterialLayerList getLayers(GearType gearType, PartType partType) {
-        return map.getOrDefault(getMostSpecificKey(gearType, partType), MaterialLayerList.DEFAULT);
+    public IMaterialLayerList getLayers(GearType gearType, IPartData part) {
+        return map.getOrDefault(getMostSpecificKey(gearType, part.getType()), MaterialLayerList.DEFAULT);
     }
 
     private PartGearKey getMostSpecificKey(GearType gearType, PartType partType) {
@@ -56,19 +52,12 @@ public final class MaterialDisplay implements IMaterialDisplay {
     }
 
     public static MaterialDisplay deserialize(ResourceLocation modelId, JsonObject json) {
-        MaterialDisplay ret = new MaterialDisplay(modelId);
+        MaterialDisplay ret = new MaterialDisplay();
         json.entrySet().forEach(entry -> {
             PartGearKey key = PartGearKey.read(entry.getKey());
             JsonElement value = entry.getValue();
             ret.map.put(key, MaterialLayerList.deserialize(value, MaterialLayerList.DEFAULT));
         });
         return ret;
-    }
-
-    @Override
-    public String toString() {
-        return "MaterialDisplay{" +
-                "modelId=" + modelId +
-                '}';
     }
 }
