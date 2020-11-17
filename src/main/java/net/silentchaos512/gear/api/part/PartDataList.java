@@ -21,6 +21,7 @@ package net.silentchaos512.gear.api.part;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 
 import javax.annotation.Nullable;
@@ -49,6 +50,7 @@ public final class PartDataList implements List<PartData> {
         return ret;
     }
 
+    @Deprecated
     public static PartDataList from(Collection<ItemStack> stacks) {
         PartDataList ret = new PartDataList();
         // Get part data for each stack, if it is a part. Silently ignore non-parts.
@@ -93,7 +95,11 @@ public final class PartDataList implements List<PartData> {
 
     public List<PartData> getParts(Predicate<PartData> predicate) {
         ImmutableList.Builder<PartData> builder = ImmutableList.builder();
-        this.list.stream().filter(predicate).forEach(builder::add);
+        for (PartData partData : this.list) {
+            if (predicate.test(partData)) {
+                builder.add(partData);
+            }
+        }
         return builder.build();
     }
 
@@ -110,9 +116,16 @@ public final class PartDataList implements List<PartData> {
     }
 
     public int getPartsWithTrait(ITrait trait) {
-        return (int) this.stream()
-                .filter(part -> part.getTraits().stream().anyMatch(inst -> inst.getTrait() == trait))
-                .count();
+        int count = 0;
+        for (PartData part : this) {
+            for (TraitInstance inst : part.getTraits()) {
+                if (inst.getTrait() == trait) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
     }
 
     //region List overrides

@@ -28,11 +28,7 @@ import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public final class GearClientHelper {
@@ -167,14 +163,19 @@ public final class GearClientHelper {
 
     private static void addTraitsInfo(ItemStack stack, List<ITextComponent> tooltip, GearTooltipFlag flag) {
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
-        List<ITrait> visibleTraits = traits.keySet().stream()
-                .filter(t -> t != null && t.showInTooltip(flag))
-                .collect(Collectors.toList());
+        List<ITrait> visibleTraits = new ArrayList<>();
+        for (ITrait t : traits.keySet()) {
+            if (t != null && t.showInTooltip(flag)) {
+                visibleTraits.add(t);
+            }
+        }
+
         int traitIndex = getTraitDisplayIndex(visibleTraits.size(), flag);
         IFormattableTextComponent textTraits = TextUtil.withColor(misc("tooltip.traits"), Color.GOLD);
         if (traitIndex < 0) {
             tooltip.add(textTraits);
         }
+
         int i = 0;
         for (ITrait trait : visibleTraits) {
             if (traitIndex < 0 || traitIndex == i) {

@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -45,7 +46,12 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGea
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
-        return getParts(inv).stream().allMatch(part -> part.isCraftingAllowed(gearType, inv));
+        for (PartData part : getParts(inv)) {
+            if (!part.isCraftingAllowed(gearType, inv)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

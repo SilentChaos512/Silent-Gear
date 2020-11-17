@@ -47,8 +47,12 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public boolean matches(CraftingInventory inv, World worldIn) {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
-        return getMaterials(inv).stream().allMatch(mat ->
-                mat.getMaterial().isCraftingAllowed(mat, item.getPartType(), this.getGearType()));
+        for (MaterialInstance mat : getMaterials(inv)) {
+            if (!mat.getMaterial().isCraftingAllowed(mat, item.getPartType(), this.getGearType())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

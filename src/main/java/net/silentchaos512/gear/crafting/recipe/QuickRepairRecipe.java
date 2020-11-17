@@ -80,10 +80,13 @@ public class QuickRepairRecipe extends SpecialRecipe {
             }
         }
 
-        final ItemStack gearFinal = gear;
-        return !gear.isEmpty() && foundKit && materials.stream().allMatch(stack -> {
-            return ModRecipes.isRepairMaterial(gearFinal, stack);
-        });
+        if (gear.isEmpty() || !foundKit) return false;
+        for (ItemStack stack : materials) {
+            if (!ModRecipes.isRepairMaterial(gear, stack)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

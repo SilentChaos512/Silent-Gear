@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -48,12 +49,12 @@ public class GearTypeMatcher implements Predicate<GearType> {
         boolean matchParents = JSONUtils.getBoolean(json, "match_parents");
         GearTypeMatcher result = new GearTypeMatcher(matchParents);
         JsonArray array = json.getAsJsonArray("types");
-        array.forEach(e -> {
+        for (JsonElement e : array) {
             GearType type = GearType.get(e.getAsString());
             if (type != GearType.NONE) {
                 result.types.add(type);
             }
-        });
+        }
         return result;
     }
 

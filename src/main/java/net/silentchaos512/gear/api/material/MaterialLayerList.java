@@ -20,7 +20,7 @@ public class MaterialLayerList implements IMaterialLayerList {
     private PartTextureSet oldTextureType = PartTextureSet.ABSENT;
 
     public MaterialLayerList() {
-        this(PartType.MAIN, PartTextureSet.ABSENT, Color.VALUE_WHITE);
+        this.layers = Collections.emptyList();
     }
 
     public MaterialLayerList(PartType partType, PartTextureSet texture, int color) {

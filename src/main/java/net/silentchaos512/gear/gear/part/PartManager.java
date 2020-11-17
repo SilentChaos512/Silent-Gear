@@ -126,13 +126,13 @@ public final class PartManager implements IResourceManagerReloadListener {
                 .collect(Collectors.toList());
     }
 
+    @Deprecated
     public static Collection<IGearPart> getMains() {
-        // TODO: cache this?
         return getPartsOfType(PartType.MAIN);
     }
 
+    @Deprecated
     public static Collection<IGearPart> getRods() {
-        // TODO: cache this?
         return getPartsOfType(PartType.ROD);
     }
 

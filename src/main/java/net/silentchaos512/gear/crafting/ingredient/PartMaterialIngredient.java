@@ -69,8 +69,7 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
     }
 
     private boolean tierMatches(int tier) {
-        return tier >= this.minTier
-                && tier <= this.maxTier;
+        return tier >= this.minTier && tier <= this.maxTier;
     }
 
     @Override

@@ -67,7 +67,11 @@ public class RepairKitItem extends Item {
     }
 
     private static float getStoredMaterialAmount(ItemStack repairKit) {
-        return (float) getStoredMaterials(repairKit).values().stream().mapToDouble(f -> f).sum();
+        float sum = 0f;
+        for (float amount : getStoredMaterials(repairKit).values()) {
+            sum += amount;
+        }
+        return sum;
     }
 
     private static Map<MaterialInstance, Float> getStoredMaterials(ItemStack stack) {

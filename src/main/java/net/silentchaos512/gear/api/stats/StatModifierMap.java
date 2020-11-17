@@ -16,12 +16,8 @@ import net.silentchaos512.gear.api.part.IGearPart;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     private final Multimap<IItemStat, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
@@ -37,19 +33,29 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
             return inst.getFormattedText(stat, decimalPlaces, addModColors);
         }
 
+        // Sort modifiers by operation
         IFormattableTextComponent result = new StringTextComponent("");
-        mods.stream().sorted(Comparator.comparing(inst -> inst.getOp().ordinal())).forEach(inst -> {
-            if (!result.getSiblings().isEmpty())
+        List<StatInstance> toSort = new ArrayList<>(mods);
+        toSort.sort(Comparator.comparing(inst -> inst.getOp().ordinal()));
+
+        for (StatInstance inst : toSort) {
+            if (!result.getSiblings().isEmpty()) {
                 result.appendString(", ");
+            }
             result.append(inst.getFormattedText(stat, inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces), addModColors));
-        });
+        }
+
         return result;
     }
 
     public Set<ItemStat> getStats() {
-        return this.keySet().stream()
-                .filter(s -> s instanceof ItemStat)
-                .map(s -> (ItemStat) s).collect(Collectors.toSet());
+        Set<ItemStat> set = new HashSet<>();
+        for (IItemStat s : this.keySet()) {
+            if (s instanceof ItemStat) {
+                set.add((ItemStat) s);
+            }
+        }
+        return set;
     }
 
     @Override

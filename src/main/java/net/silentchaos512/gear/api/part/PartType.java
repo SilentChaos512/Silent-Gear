@@ -20,6 +20,7 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -193,10 +194,14 @@ public final class PartType {
         if (gearType.isArmor()) {
             return Optional.of(ModItems.ARMOR_BODY.get());
         }
-        return ForgeRegistries.ITEMS.getValues().stream()
-                .filter(item -> item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType())
-                .map(item -> (CompoundPartItem) item)
-                .findFirst();
+
+        for (Item item : ForgeRegistries.ITEMS.getValues()) {
+            if (item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType()) {
+                return Optional.of((CompoundPartItem) item);
+            }
+        }
+
+        return Optional.empty();
     }
 
     @SuppressWarnings("WeakerAccess")

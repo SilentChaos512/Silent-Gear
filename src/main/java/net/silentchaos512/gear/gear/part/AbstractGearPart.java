@@ -99,7 +99,12 @@ public abstract class AbstractGearPart implements IGearPart {
     @Override
     public boolean isCraftingAllowed(PartData part, GearType gearType, @Nullable CraftingInventory inventory) {
         if (!gearType.matches(GearType.ALL)) return true;
-        return blacklistedGearTypes.stream().noneMatch(gearType::matches) && IGearPart.super.isCraftingAllowed(part, gearType, inventory);
+        for (String blacklistedGearType : blacklistedGearTypes) {
+            if (gearType.matches(blacklistedGearType)) {
+                return false;
+            }
+        }
+        return IGearPart.super.isCraftingAllowed(part, gearType, inventory);
     }
 
     @Override

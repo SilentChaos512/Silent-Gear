@@ -15,8 +15,8 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModKitItem extends Item implements ICycleItem {
     private static final String NBT_SELECTED = "SelectedType";
@@ -56,9 +56,13 @@ public class ModKitItem extends Item implements ICycleItem {
     }
 
     private static List<PartType> getRemovableTypes() {
-        return PartType.getValues().stream()
-                .filter(PartType::isRemovable)
-                .collect(Collectors.toList());
+        List<PartType> list = new ArrayList<>();
+        for (PartType partType : PartType.getValues()) {
+            if (partType.isRemovable()) {
+                list.add(partType);
+            }
+        }
+        return list;
     }
 
     @Override

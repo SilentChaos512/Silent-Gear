@@ -255,6 +255,7 @@ public final class GearData {
         return a * (x / (x + a)) + (1 / (1 + a));
     }
 
+    @Deprecated
     public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<ITrait, Integer> traits) {
         if (parts.stream().allMatch(part -> part.getPart() instanceof CompoundPart)) {
             // This must be a new gear item
@@ -592,7 +593,12 @@ public final class GearData {
     }
 
     public static boolean hasPart(ItemStack gear, PartType partType, Predicate<PartData> predicate) {
-        return getConstructionParts(gear).stream().anyMatch(predicate);
+        for (PartData partData : getConstructionParts(gear)) {
+            if (predicate.test(partData)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

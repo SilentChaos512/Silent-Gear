@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public final class TooltipHandler {
     public static final TooltipHandler INSTANCE = new TooltipHandler();
@@ -161,9 +160,13 @@ public final class TooltipHandler {
         }
 
         // Traits
-        List<TraitInstance> traits = part.getTraits().stream()
-                .filter(inst -> inst.getTrait().showInTooltip(event.getFlags()))
-                .collect(Collectors.toList());
+        List<TraitInstance> traits = new ArrayList<>();
+        for (TraitInstance traitInstance : part.getTraits()) {
+            if (traitInstance.getTrait().showInTooltip(event.getFlags())) {
+                traits.add(traitInstance);
+            }
+        }
+
         int numTraits = traits.size();
         int traitIndex = getTraitDisplayIndex(numTraits);
         int i = 0;
@@ -174,6 +177,7 @@ public final class TooltipHandler {
             ++i;
         }
 
+        // Stats
         if (KeyTracker.isControlDown()) {
             event.getToolTip().add(new TranslationTextComponent("misc.silentgear.tooltip.stats")
                     .mergeStyle(TextFormatting.GOLD)

@@ -87,6 +87,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
     }
 
     private static void addIngredientChecks(Multimap<String, IMaterial> map, IMaterial material, JsonObject json) {
+        // Adds main ingredient to the map. Used to check for ingredient conflicts.
         JsonObject craftingItemsJson = json.getAsJsonObject("crafting_items");
         if (craftingItemsJson != null && craftingItemsJson.has("main")) {
             JsonElement mainJson = craftingItemsJson.get("main");
@@ -112,17 +113,25 @@ public class MaterialManager implements IResourceManagerReloadListener {
 
     public static List<IMaterial> getValues(boolean includeChildren) {
         synchronized (MAP) {
-            return MAP.values().stream()
-                    .filter(m -> includeChildren || m.getParent() == null)
-                    .collect(Collectors.toList());
+            List<IMaterial> list = new ArrayList<>();
+            for (IMaterial m : MAP.values()) {
+                if (includeChildren || m.getParent() == null) {
+                    list.add(m);
+                }
+            }
+            return list;
         }
     }
 
     public static List<IMaterial> getChildren(IMaterial material) {
         synchronized (MAP) {
-            return MAP.values().stream()
-                    .filter(m -> m.getParent() == material)
-                    .collect(Collectors.toList());
+            List<IMaterial> list = new ArrayList<>();
+            for (IMaterial m : MAP.values()) {
+                if (m.getParent() == material) {
+                    list.add(m);
+                }
+            }
+            return list;
         }
     }
 
