@@ -75,6 +75,7 @@ public enum CraftingItems implements IItemProvider {
     NETHERWOOD_STICK,
     // Misc Upgrades
     SPOON_UPGRADE,
+    ROAD_MAKER_UPGRADE,
     RED_CARD_UPGRADE;
 
     @SuppressWarnings("NonFinalFieldInEnum")

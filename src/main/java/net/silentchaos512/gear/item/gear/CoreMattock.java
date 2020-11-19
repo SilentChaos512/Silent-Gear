@@ -62,10 +62,11 @@ public class CoreMattock extends HoeItem implements ICoreTool {
         ItemStack stack = context.getItem();
         if (GearHelper.isBroken(stack)) return ActionResultType.PASS;
 
-        ActionResultType hoeResult = super.onItemUse(context);
-        if (hoeResult == ActionResultType.PASS)
-            return GearHelper.onItemUse(context);
-        return hoeResult;
+        // Try to let traits do their thing first
+        ActionResultType result = GearHelper.onItemUse(context);
+        if (result == ActionResultType.PASS)
+            return super.onItemUse(context);
+        return result;
     }
 
 //    @Override

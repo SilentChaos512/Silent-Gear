@@ -97,6 +97,7 @@ public final class Const {
         public static final DataResource<ITrait> ORGANIC = DataResource.trait("organic");
         public static final DataResource<ITrait> RACKER = DataResource.trait("racker");
         public static final DataResource<ITrait> REFRACTIVE = DataResource.trait("refractive");
+        public static final DataResource<ITrait> ROAD_MAKER = DataResource.trait("road_maker");
         public static final DataResource<ITrait> RUSTIC = DataResource.trait("rustic");
         public static final DataResource<ITrait> SILKY = DataResource.trait("silky");
         public static final DataResource<ITrait> SOFT = DataResource.trait("soft");

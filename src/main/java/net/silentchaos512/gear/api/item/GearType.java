@@ -223,6 +223,10 @@ public final class GearType {
                 .orElse(Collections.emptySet());
     }
 
+    public GearTypeMatcher getMatcher(boolean matchParents) {
+        return new GearTypeMatcher(matchParents, this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -83,11 +83,12 @@ public class CoreAxe extends AxeItem implements ICoreTool {
         // No action if broken or player is sneaking
         if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isCrouching())
             return ActionResultType.PASS;
+        // Try to let traits do their thing first
+        ActionResultType result = GearHelper.onItemUse(context);
         // Strip bark
-        ActionResultType stripResult = GearHelper.useAndCheckBroken(context, super::onItemUse);
-        if (stripResult == ActionResultType.PASS)
-            return GearHelper.onItemUse(context);
-        return stripResult;
+        if (result == ActionResultType.PASS)
+            GearHelper.useAndCheckBroken(context, super::onItemUse);
+        return result;
     }
 
     //endregion

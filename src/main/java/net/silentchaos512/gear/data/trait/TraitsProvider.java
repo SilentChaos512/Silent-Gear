@@ -15,8 +15,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.ForgeMod;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.gear.trait.DamageTypeTrait;
+import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.Const;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -214,6 +214,12 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.VULCAN, 1, Blocks.OBSIDIAN, 20)
                 .cooldown(100)
+        );
+
+        // Block fillers
+        ret.add(new BlockFillerTraitBuilder(Const.Traits.ROAD_MAKER, 1, Blocks.GRASS_PATH, 0.5f)
+                .target(Blocks.GRASS_BLOCK)
+                .fillRange(1, 0, 1, false)
         );
 
         // Misfits

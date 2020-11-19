@@ -699,6 +699,8 @@
   "trait.silentgear.racker.desc": "Places netherrack at the cost of durability",
   "trait.silentgear.refractive": "Refractive",
   "trait.silentgear.refractive.desc": "Place phantom lights when used",
+  "trait.silentgear.road_maker": "Road Maker",
+  "trait.silentgear.road_maker.desc": "Turns dirt-like blocks into grass paths",
   "trait.silentgear.rustic": "Rustic",
   "trait.silentgear.rustic.desc": "Increases synergy if it's 100% or less",
   "trait.silentgear.silky": "Silky",
