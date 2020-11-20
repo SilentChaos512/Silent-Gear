@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Block filler traits. Replaces targeted block(s) with a given block when item is used on a block.
 - Road Maker trait and upgrade for excavators. This block filler trait replaces grass blocks with grass paths in a 3x3 area
+### Fixed
+- Gear item models added by other mods crashing the game
 
 ## [2.3.7] - 2020-11-17
 - Hotfix 1: Fix server crash on launch [#261]

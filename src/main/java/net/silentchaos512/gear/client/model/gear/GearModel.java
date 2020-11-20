@@ -11,7 +11,7 @@ import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.geometry.IModelGeometryPart;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -26,7 +26,6 @@ import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.part.FakePartData;
-import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.*;
@@ -43,12 +42,11 @@ public class GearModel extends LayeredModel<GearModel> {
     GearModel(ItemCameraTransforms cameraTransforms, GearType gearType) {
         this.cameraTransforms = cameraTransforms;
         this.gearType = gearType;
-        this.item = Registration.ITEMS.getEntries().stream()
-                .map(RegistryObject::get)
+        this.item = ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof ICoreItem && ((ICoreItem) item).getGearType() == this.gearType)
                 .map(item -> (ICoreItem) item)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new NullPointerException("No item for gear type: " + this.gearType.getName()));
     }
 
     public void clearCache() {
