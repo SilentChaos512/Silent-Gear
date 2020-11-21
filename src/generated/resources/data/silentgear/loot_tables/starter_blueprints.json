@@ -42,6 +42,15 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "silentgear:dagger_blueprint"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "weight": 11,
           "name": "silentgear:sword_blueprint"
         },
