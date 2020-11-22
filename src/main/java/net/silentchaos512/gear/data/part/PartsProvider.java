@@ -229,6 +229,9 @@ public class PartsProvider implements IDataProvider {
             return builder;
         if (isToolHead(builder, ModItems.SHIELD_PLATE))
             return builder;
+        if (isToolHead(builder, ModItems.ARROW_HEADS))
+            return builder
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f);
 
         throw new IllegalArgumentException("Stats for " + builder.id + " are missing!");
     }

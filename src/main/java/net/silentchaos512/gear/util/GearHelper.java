@@ -351,6 +351,39 @@ public final class GearHelper {
         return ((ICoreItem) gear.getItem()).getGearType();
     }
 
+    /**
+     * Check if both gear items are made of the same parts.
+     *
+     * @param gear1 First item
+     * @param gear2 Second item
+     * @return True only if all parts are identical
+     */
+    public static boolean isEquivalent(ItemStack gear1, ItemStack gear2) {
+        if (!GearHelper.isGear(gear1) || !GearHelper.isGear(gear2) || gear1.getItem() != gear2.getItem()) {
+            return false;
+        }
+
+        List<PartData> parts1 = GearData.getConstructionParts(gear1);
+        List<PartData> parts2 = GearData.getConstructionParts(gear2);
+        if (parts1.size() != parts2.size()) {
+            return false;
+        }
+        if (parts1.isEmpty()) {
+            return true;
+        }
+
+        for (PartData part1 : parts1) {
+            for (PartData part2 : parts2) {
+                if (part1.equals(part2)) {
+                    parts2.remove(part2);
+                    break;
+                }
+            }
+        }
+
+        return parts2.isEmpty();
+    }
+
     public static int getHarvestLevel(ItemStack stack, ToolType toolClass, @Nullable BlockState state, @Nullable Set<Material> effectiveMaterials) {
         if (isBroken(stack) || !stack.getItem().getToolTypes(stack).contains(toolClass))
             return -1;

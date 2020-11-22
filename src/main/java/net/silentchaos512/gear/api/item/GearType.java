@@ -34,6 +34,8 @@ public final class GearType {
     public static final GearType PART = getOrCreate("part");
     public static final GearType FRAGMENT = getOrCreate("fragment");
 
+    public static final GearType PROJECTILE = getOrCreate("projectile", ALL);
+
     // Parent of everything except armor
     public static final GearType TOOL = getOrCreate("tool", ALL);
     public static final GearType WEAPON = getOrCreate("weapon", TOOL);
@@ -70,6 +72,8 @@ public final class GearType {
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
     public static final GearType HELMET = getOrCreate("helmet", ARMOR);
     public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR);
+    // Projectiles
+    public static final GearType ARROW = getOrCreate("arrow", PROJECTILE);
 
     /**
      * Gets the gear type of the given name, or null if it does not exist.

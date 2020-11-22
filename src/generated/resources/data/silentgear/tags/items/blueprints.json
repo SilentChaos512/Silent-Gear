@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "#silentgear:blueprints/arrow",
     "#silentgear:blueprints/axe",
     "#silentgear:blueprints/binding",
     "#silentgear:blueprints/boots",

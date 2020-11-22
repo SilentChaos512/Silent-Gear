@@ -8,7 +8,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.part.*;
+import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.IPartData;
+import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -16,6 +19,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.lib.util.InventoryUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -262,5 +266,19 @@ public final class PartData implements IPartData {
         return "PartData{" +
                 this.part +
                 "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PartData partData = (PartData) o;
+        return part.equals(partData.part) &&
+                InventoryUtils.canItemsStack(craftingItem, partData.craftingItem);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(part, craftingItem);
     }
 }

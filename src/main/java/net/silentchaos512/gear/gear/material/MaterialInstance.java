@@ -24,6 +24,7 @@ import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
@@ -31,6 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class MaterialInstance implements IMaterialInstance {
@@ -255,5 +257,20 @@ public final class MaterialInstance implements IMaterialInstance {
             return material.getMaterialId() + "#" + material.grade;
         }
         return material.getMaterialId().toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MaterialInstance that = (MaterialInstance) o;
+        return material.equals(that.material) &&
+                grade == that.grade &&
+                InventoryUtils.canItemsStack(item, that.item);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(material, grade, item);
     }
 }

@@ -111,6 +111,7 @@ public class ModRecipesProvider extends RecipeProvider {
         toolBlueprint(consumer, "crossbow", ModItems.CROSSBOW_BLUEPRINT, ModItems.CROSSBOW_TEMPLATE, "/#/", "###", " / ");
         toolBlueprint(consumer, "slingshot", ModItems.SLINGSHOT_BLUEPRINT, ModItems.SLINGSHOT_TEMPLATE, "# #", " / ", " / ");
         toolBlueprint(consumer, "shield", ModItems.SHIELD_BLUEPRINT, ModItems.SHIELD_TEMPLATE, "# #", "///", " # ");
+        toolBlueprint(consumer, "arrow", ModItems.ARROW_BLUEPRINT, ModItems.ARROW_TEMPLATE, Ingredient.fromTag(Tags.Items.FEATHERS), "#", "/", "@");
         armorBlueprint(consumer, "helmet", ModItems.HELMET_BLUEPRINT, ModItems.HELMET_TEMPLATE, "###", "# #");
         armorBlueprint(consumer, "chestplate", ModItems.CHESTPLATE_BLUEPRINT, ModItems.CHESTPLATE_TEMPLATE, "# #", "###", "###");
         armorBlueprint(consumer, "leggings", ModItems.LEGGINGS_BLUEPRINT, ModItems.LEGGINGS_TEMPLATE, "###", "# #", "# #");
@@ -333,6 +334,7 @@ public class ModRecipesProvider extends RecipeProvider {
         bowRecipes(consumer, "bow", 3, ModItems.BOW, ModItems.BOW_LIMBS, ModItems.BOW_BLUEPRINT.get());
         bowRecipes(consumer, "crossbow", 3, ModItems.CROSSBOW, ModItems.CROSSBOW_LIMBS, ModItems.CROSSBOW_BLUEPRINT.get());
         bowRecipes(consumer, "slingshot", 2, ModItems.SLINGSHOT, ModItems.SLINGSHOT_LIMBS, ModItems.SLINGSHOT_BLUEPRINT.get());
+        arrowRecipes(consumer, "arrow", ModItems.ARROW, ModItems.ARROW_HEADS, ModItems.ARROW_BLUEPRINT.get());
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.SHIELD)
                 .addIngredient(BlueprintIngredient.of(ModItems.SHIELD_BLUEPRINT.get()))
@@ -876,6 +878,28 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .addIngredient(GearPartIngredient.of(PartType.BOWSTRING))
+                .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
+    }
+
+    private static void arrowRecipes(Consumer<IFinishedRecipe> consumer, String name, IItemProvider arrow, IItemProvider arrowHead, GearBlueprintItem blueprintItem) {
+        BlueprintIngredient blueprint = BlueprintIngredient.of(blueprintItem);
+        // Arrow head
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), arrowHead)
+                .addIngredient(blueprint)
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.PROJECTILE))
+                .build(consumer, SilentGear.getId("gear/" + name + "_head"));
+        // Arrows from head
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), arrow)
+                .addIngredient(arrowHead)
+                .addIngredient(GearPartIngredient.of(PartType.ROD))
+                .addIngredient(GearPartIngredient.of(PartType.FLETCHING))
+                .build(consumer, SilentGear.getId("gear/" + name));
+        // Quick arrows
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), arrow)
+                .addIngredient(BlueprintIngredient.of(blueprintItem))
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .addIngredient(GearPartIngredient.of(PartType.ROD))
+                .addIngredient(GearPartIngredient.of(PartType.FLETCHING))
                 .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
 

@@ -98,6 +98,15 @@ public final class ItemStats {
             .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
             .affectedByGrades(false)
     );
+    public static final ItemStat PROJECTILE_SPEED = new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.SKYBLUE, new ItemStat.Properties()
+            .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
+            .affectedByGrades(false)
+            .synergyApplies()
+    );
+    public static final ItemStat PROJECTILE_ACCURACY = new ItemStat(1f, 0f, 10000f, Color.SKYBLUE, new ItemStat.Properties()
+            .displayFormat(ItemStat.DisplayFormat.PERCENTAGE)
+            .affectedByGrades(false)
+    );
 
     // Armor
     public static final ItemStat ARMOR = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
@@ -167,6 +176,8 @@ public final class ItemStats {
         register(event.getRegistry(), ATTACK_SPEED, "attack_speed");
         register(event.getRegistry(), RANGED_DAMAGE, "ranged_damage");
         register(event.getRegistry(), RANGED_SPEED, "ranged_speed");
+        register(event.getRegistry(), PROJECTILE_ACCURACY, "projectile_accuracy");
+        register(event.getRegistry(), PROJECTILE_SPEED, "projectile_speed");
         register(event.getRegistry(), ARMOR, "armor");
         register(event.getRegistry(), ARMOR_TOUGHNESS, "armor_toughness");
         register(event.getRegistry(), KNOCKBACK_RESISTANCE, "knockback_resistance");

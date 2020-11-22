@@ -34,9 +34,9 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
-import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
@@ -44,7 +44,6 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 public class QuickRepairRecipe extends SpecialRecipe {
     public QuickRepairRecipe(ResourceLocation idIn) {
@@ -119,11 +118,13 @@ public class QuickRepairRecipe extends SpecialRecipe {
     }
 
     private static float getRepairValueFromMaterials(ItemStack gear, Collection<ItemStack> mats) {
-        float repairValue = (float) mats.stream()
-                .map(MaterialInstance::from)
-                .filter(Objects::nonNull)
-                .mapToDouble(mat -> mat.getRepairValue(gear))
-                .sum();
+        float repairValue = 0f;
+        for (ItemStack stack : mats) {
+            MaterialInstance material = MaterialInstance.from(stack);
+            if (material != null) {
+                repairValue += material.getRepairValue(gear);
+            }
+        }
 
         // Repair efficiency instance tool class
         if (gear.getItem() instanceof ICoreItem) {

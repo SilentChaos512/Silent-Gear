@@ -84,6 +84,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_BLUEPRINT = registerGearBlueprint(GearType.CHESTPLATE, false);
     public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_BLUEPRINT = registerGearBlueprint(GearType.LEGGINGS, false);
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_BLUEPRINT = registerGearBlueprint(GearType.BOOTS, false);
+    public static final ItemRegistryObject<GearBlueprintItem> ARROW_BLUEPRINT = registerGearBlueprint(GearType.ARROW, false);
     // Templates
     public static final ItemRegistryObject<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartType.ROD, true);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartType.TIP, true);
@@ -116,6 +117,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_TEMPLATE = registerGearBlueprint(GearType.CHESTPLATE, true);
     public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_TEMPLATE = registerGearBlueprint(GearType.LEGGINGS, true);
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearType.BOOTS, true);
+    public static final ItemRegistryObject<GearBlueprintItem> ARROW_TEMPLATE = registerGearBlueprint(GearType.ARROW, true);
     //endregion
 
     //region Compound Parts and Tool Heads
@@ -162,6 +164,8 @@ public final class ModItems {
             new ToolHeadItem(GearType.SHIELD, new Item.Properties().maxStackSize(1)));
     public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
             new ToolHeadItem(GearType.ARMOR, new Item.Properties().maxStackSize(1)));
+    public static final ItemRegistryObject<ToolHeadItem> ARROW_HEADS = registerCompoundPart("arrow_heads", () ->
+            new ToolHeadItem(GearType.ARROW, unstackableProps()));
     // Compound Parts
     public static final ItemRegistryObject<CompoundPartItem> ROD = registerCompoundPart("rod", () ->
             new CompoundPartItem(PartType.ROD, baseProps()));
@@ -223,6 +227,7 @@ public final class ModItems {
     public static final ItemRegistryObject<CoreCrossbow> CROSSBOW = register("crossbow", () -> new CoreCrossbow());
     public static final ItemRegistryObject<CoreSlingshot> SLINGSHOT = register("slingshot", () -> new CoreSlingshot());
     public static final ItemRegistryObject<CoreShield> SHIELD = register("shield", () -> new CoreShield());
+    public static final ItemRegistryObject<CoreArrow> ARROW = register("arrow", () -> new CoreArrow(unstackableProps()));
 
     public static final ItemRegistryObject<CoreArmor> HELMET = register("helmet", () -> new CoreArmor(EquipmentSlotType.HEAD));
     public static final ItemRegistryObject<CoreArmor> CHESTPLATE = register("chestplate", () -> new CoreArmor(EquipmentSlotType.CHEST));

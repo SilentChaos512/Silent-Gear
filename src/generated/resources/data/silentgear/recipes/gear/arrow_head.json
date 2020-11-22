@@ -1,0 +1,17 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "arrow"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "projectile"
+    }
+  ],
+  "result": {
+    "item": "silentgear:arrow_heads"
+  }
+}

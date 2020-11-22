@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "arrow",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:arrow_heads"
+  },
+  "name": {
+    "translate": "part.silentgear.arrow_heads"
+  },
+  "stats": {
+    "repair_efficiency": 0.75
+  }
+}
