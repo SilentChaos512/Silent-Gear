@@ -26,7 +26,7 @@
     "main": {
       "durability": 2500.0,
       "armor_durability": 50.0,
-      "repair_value": 0.7,
+      "repair_value": -0.3,
       "enchantability": 40.0,
       "harvest_level": 3.0,
       "harvest_speed": 20.0,
