@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.3.8] - 2020-11-22
 ### Added
+- Arrows
+    - Crafted with an arrow blueprint, main material, rod, and fletching
+    - Can be repaired to refill arrows (hold 256 total)
+    - Right-click with arrows in your hand to merge similar stacks together
+    - Currently missing the new projectile stats on all materials, will fix next version
 - Block filler traits. Replaces targeted block(s) with a given block when item is used on a block.
 - Road Maker trait and upgrade for excavators. This block filler trait replaces grass blocks with grass paths in a 3x3 area
 - Dagger blueprint to blueprint package loot table
