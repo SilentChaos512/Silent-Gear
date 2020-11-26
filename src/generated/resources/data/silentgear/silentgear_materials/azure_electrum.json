@@ -29,6 +29,8 @@
       "magic_armor": 19.0,
       "ranged_damage": 3.0,
       "ranged_speed": 0.0,
+      "projectile_speed": 2.0,
+      "projectile_accuracy": 1.5,
       "rarity": 109.0,
       "silentgems:chargeability": 1.5
     },
@@ -38,6 +40,9 @@
       },
       "harvest_speed": {
         "add": 5.0
+      },
+      "projectile_speed": {
+        "mul2": 1.5
       },
       "rarity": 67.0
     },

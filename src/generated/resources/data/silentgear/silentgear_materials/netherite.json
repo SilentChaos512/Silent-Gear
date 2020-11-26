@@ -41,6 +41,9 @@
       "magic_damage": {
         "mul2": 0.33333334
       },
+      "ranged_damage": {
+        "mul2": 0.33333334
+      },
       "armor_toughness": {
         "add": 4.0
       },

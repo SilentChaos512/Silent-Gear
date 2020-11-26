@@ -29,6 +29,8 @@
       "magic_armor": 3.0,
       "ranged_damage": 0.0,
       "ranged_speed": -0.2,
+      "projectile_speed": 1.0,
+      "projectile_accuracy": 0.9,
       "rarity": 7.0
     },
     "rod": {

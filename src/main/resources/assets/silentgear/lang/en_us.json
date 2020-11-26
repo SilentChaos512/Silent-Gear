@@ -616,6 +616,8 @@
   "stat.silentgear.magic_armor": "Magic Armor",
   "stat.silentgear.magic_damage": "Magic Damage",
   "stat.silentgear.melee_damage": "Attack Damage",
+  "stat.silentgear.projectile_speed": "Projectile Speed",
+  "stat.silentgear.projectile_accuracy": "Projectile Accuracy",
   "stat.silentgear.ranged_damage": "Ranged Damage",
   "stat.silentgear.ranged_speed": "Ranged Speed",
   "stat.silentgear.rarity": "Rarity",

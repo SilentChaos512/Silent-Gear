@@ -29,6 +29,8 @@
       "magic_armor": 13.0,
       "ranged_damage": 2.0,
       "ranged_speed": 0.0,
+      "projectile_speed": 1.2,
+      "projectile_accuracy": 1.1,
       "rarity": 83.0,
       "silentgems:chargeability": 1.4
     },
