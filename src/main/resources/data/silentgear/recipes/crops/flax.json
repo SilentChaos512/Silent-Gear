@@ -39,7 +39,7 @@
         {
             "chance": 0.05,
             "output": {
-                "item": "silentgear:flaxseeds"
+                "item": "silentgear:flax_seeds"
             },
             "minRolls": 1,
             "maxRolls": 2
