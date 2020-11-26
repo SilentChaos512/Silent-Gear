@@ -29,7 +29,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -102,7 +101,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
         if (gear.getDamage() > 0) {
             RepairKitItem item = (RepairKitItem) repairKit.getItem();
             int value = item.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
-            gear.attemptDamageItem(-Math.round(value), SilentGear.RANDOM, null);
+            gear.setDamage(gear.getDamage() - Math.round(value));
         }
 
         GearData.incrementRepairCount(gear, 1);
@@ -114,7 +113,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
         float repairValue = getRepairValueFromMaterials(gear, mats);
         float kitEfficiency = ((RepairKitItem) repairKit.getItem()).getRepairEfficiency(RepairContext.Type.QUICK);
         float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-        gear.attemptDamageItem(-Math.round(repairValue * kitEfficiency * gearRepairEfficiency), SilentGear.RANDOM, null);
+        gear.setDamage(gear.getDamage() - Math.round(repairValue * kitEfficiency * gearRepairEfficiency));
     }
 
     private static float getRepairValueFromMaterials(ItemStack gear, Collection<ItemStack> mats) {
