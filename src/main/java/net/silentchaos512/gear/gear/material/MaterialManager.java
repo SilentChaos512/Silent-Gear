@@ -161,10 +161,10 @@ public class MaterialManager implements IResourceManagerReloadListener {
         synchronized (MAP) {
             Map<ResourceLocation, IMaterial> oldMaterials = ImmutableMap.copyOf(MAP);
             MAP.clear();
-            msg.getMaterials().forEach(mat -> {
+            for (IMaterial mat : msg.getMaterials()) {
                 mat.retainData(oldMaterials.get(mat.getId()));
                 MAP.put(mat.getId(), mat);
-            });
+            }
             SilentGear.LOGGER.info("Read {} materials from server", MAP.size());
         }
         ctx.get().setPacketHandled(true);

@@ -19,7 +19,6 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -204,7 +203,7 @@ public class BlockFillerTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        Collection<String> ret = new ArrayList<>();
+        Collection<String> ret = super.getExtraWikiLines();
 
         ret.add("  - Fills with: " + NameUtils.from(fillBlock));
         ret.add("  - Replaces");

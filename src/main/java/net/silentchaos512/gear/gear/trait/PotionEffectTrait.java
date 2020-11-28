@@ -131,7 +131,7 @@ public final class PotionEffectTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        Collection<String> ret = new ArrayList<>();
+        Collection<String> ret = super.getExtraWikiLines();
         this.potions.forEach((type, list) -> {
             ret.add("  - " + type);
             list.forEach(mod -> {

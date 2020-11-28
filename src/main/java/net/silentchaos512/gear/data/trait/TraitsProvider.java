@@ -94,6 +94,7 @@ public class TraitsProvider implements IDataProvider {
                         AttributeModifier.Operation.ADDITION,
                         -0.5f, -1f, -1.5f, -2f, -3f, -4f, -5f)
                 .cancelsWith(Const.Traits.LUCKY)
+                .extraWikiLines("  - Please see the extra info on the Lucky trait and this wiki page: https://minecraft.gamepedia.com/Luck")
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.LUCKY, 7)
                 .addModifiersEitherHand(GearType.ALL,
@@ -101,6 +102,7 @@ public class TraitsProvider implements IDataProvider {
                         AttributeModifier.Operation.ADDITION,
                         0.5f, 1f, 1.5f, 2f, 3f, 4f, 5f)
                 .cancelsWith(Const.Traits.CURSED)
+                .extraWikiLines("  - **Luck has nothing to do with the Fortune enchantment!** It affects loot from some loot tables, but not most. It does not increase drops from normal ores. Please read here for more information: https://minecraft.gamepedia.com/Luck")
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.HEAVY, 5)
                 .addArmorModifier(

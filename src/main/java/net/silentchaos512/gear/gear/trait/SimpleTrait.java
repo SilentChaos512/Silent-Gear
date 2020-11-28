@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SimpleTrait implements ITrait {
     public static final Serializer<SimpleTrait> SERIALIZER = new Serializer<>(Serializer.NAME, SimpleTrait::new);
@@ -40,6 +41,7 @@ public class SimpleTrait implements ITrait {
     ITextComponent displayName;
     ITextComponent description;
     boolean hidden;
+    final Collection<ITextComponent> wikiLines = new ArrayList<>();
 
     @Deprecated
     public SimpleTrait(ResourceLocation id) {
@@ -69,6 +71,13 @@ public class SimpleTrait implements ITrait {
     @Override
     public Collection<String> getCancelsWithSet() {
         return Collections.unmodifiableSet(cancelsWith);
+    }
+
+    @Override
+    public void retainData(@Nullable ITrait oldTrait) {
+        if (oldTrait instanceof SimpleTrait) {
+            this.wikiLines.addAll(((SimpleTrait) oldTrait).wikiLines);
+        }
     }
 
     @Override
@@ -131,6 +140,26 @@ public class SimpleTrait implements ITrait {
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
     }
 
+    @Override
+    public Collection<String> getExtraWikiLines() {
+        return this.wikiLines.stream()
+                .map(ITextComponent::getString)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleTrait that = (SimpleTrait) o;
+        return objId.equals(that.objId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(objId);
+    }
+
     public static final class Serializer<T extends SimpleTrait> implements ITraitSerializer<T> {
         private static final ResourceLocation NAME = SilentGear.getId("simple_trait");
 
@@ -168,6 +197,13 @@ public class SimpleTrait implements ITrait {
                 JsonArray array = json.getAsJsonArray("cancels_with");
                 for (JsonElement elem : array) {
                     trait.cancelsWith.add(elem.getAsString());
+                }
+            }
+
+            if (json.has("extra_wiki_lines")) {
+                JsonArray array = json.getAsJsonArray("extra_wiki_lines");
+                for (JsonElement elem : array) {
+                    trait.wikiLines.add(ITextComponent.Serializer.getComponentFromJson(elem));
                 }
             }
 
@@ -246,6 +282,11 @@ public class SimpleTrait implements ITrait {
             } else {
                 throw new JsonParseException("Missing required object '" + name + "'");
             }
+        }
+
+        public String getTypeName() {
+            T temp = this.factory.apply(new ResourceLocation("null"));
+            return temp.getClass().getCanonicalName();
         }
     }
 }

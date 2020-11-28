@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -12,6 +13,7 @@ import net.silentchaos512.gear.gear.trait.SimpleTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
 
@@ -25,6 +27,7 @@ public class TraitBuilder {
 
     private final Collection<ResourceLocation> cancelsList = new ArrayList<>();
     private final Collection<ResourceLocation> overridesList = new ArrayList<>();
+    private final Collection<ITextComponent> extraWikiLines = new ArrayList<>();
 
     private Consumer<JsonObject> extraData = json -> {};
 
@@ -77,6 +80,18 @@ public class TraitBuilder {
         return this;
     }
 
+    public TraitBuilder extraWikiLines(String... lines) {
+        for (String line : lines) {
+            this.extraWikiLines.add(new StringTextComponent(line));
+        }
+        return this;
+    }
+
+    public TraitBuilder extraWikiLines(ITextComponent... lines) {
+        this.extraWikiLines.addAll(Arrays.asList(lines));
+        return this;
+    }
+
     /**
      * The "I don't feel like extending the class for this basic trait" method. Use it to append
      * small amounts of extra properties to JSON.
@@ -107,6 +122,12 @@ public class TraitBuilder {
             JsonArray overridesArray = new JsonArray();
             this.overridesList.forEach(id -> overridesArray.add(id.toString()));
             json.add("overrides", overridesArray);
+        }
+
+        if (!this.extraWikiLines.isEmpty()) {
+            JsonArray array = new JsonArray();
+            this.extraWikiLines.forEach(t -> array.add(ITextComponent.Serializer.toJsonTree(t)));
+            json.add("extra_wiki_lines", array);
         }
 
         this.extraData.accept(json);

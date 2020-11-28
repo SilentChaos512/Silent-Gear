@@ -167,10 +167,10 @@ public final class PartManager implements IResourceManagerReloadListener {
         synchronized (MAP) {
             Map<ResourceLocation, IGearPart> oldParts = ImmutableMap.copyOf(MAP);
             MAP.clear();
-            packet.getParts().forEach(part -> {
+            for (IGearPart part : packet.getParts()) {
                 part.retainData(oldParts.get(part.getId()));
                 MAP.put(part.getId(), part);
-            });
+            }
             SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
         }
         context.get().setPacketHandled(true);

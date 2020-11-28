@@ -143,7 +143,7 @@ public class AttributeTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        Collection<String> ret = new ArrayList<>();
+        Collection<String> ret = super.getExtraWikiLines();
         this.modifiers.forEach((type, list) -> {
             ret.add("  - " + type);
             list.forEach(mod -> {

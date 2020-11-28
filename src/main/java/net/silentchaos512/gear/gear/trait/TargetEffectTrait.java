@@ -86,7 +86,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        Collection<String> ret = new ArrayList<>();
+        Collection<String> ret = super.getExtraWikiLines();
         this.effects.forEach((type, map) -> {
             ret.add("  - " + type);
             ret.addAll(map.getWikiLines());

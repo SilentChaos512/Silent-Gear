@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Individual traits can now supply extra wiki lines in their JSON. _This is not synced with the client on dedicated servers._ Useful for adding more information to frequently confused traits, like Lucky.
+### Changed
+- Improvements to formatting of the trait wiki page dump command
+    - Material list is formatted for easier reading
+    - Shows list of parts that provide traits (useful for upgrades)
+### Fixed
+- Damage on use for block filler traits (Road Maker) being loaded incorrect (value was truncated to an int)
+
 ## [2.3.9] - 2020-11-26
 ### Added
 - New projectile stats to most basic materials (mains only right now)

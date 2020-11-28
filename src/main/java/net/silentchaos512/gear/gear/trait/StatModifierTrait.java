@@ -94,7 +94,7 @@ public final class StatModifierTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        Collection<String> ret = new ArrayList<>();
+        Collection<String> ret = super.getExtraWikiLines();
         this.mods.forEach((stat, mod) -> {
             ret.add("  - " + stat.getDisplayName().getString() + ": " + mod.multi
                     + " * level"

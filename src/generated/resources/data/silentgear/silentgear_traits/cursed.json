@@ -10,6 +10,11 @@
   "cancels_with": [
     "silentgear:lucky"
   ],
+  "extra_wiki_lines": [
+    {
+      "text": "  - Please see the extra info on the Lucky trait and this wiki page: https://minecraft.gamepedia.com/Luck"
+    }
+  ],
   "attribute_modifiers": {
     "all/mainhand": [
       {

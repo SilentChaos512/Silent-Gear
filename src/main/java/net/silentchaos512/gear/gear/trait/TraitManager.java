@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.gear.trait;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -117,9 +118,15 @@ public final class TraitManager implements IResourceManagerReloadListener {
     }
 
     public static void handleTraitSyncPacket(SyncTraitsPacket packet, Supplier<NetworkEvent.Context> context) {
-        MAP.clear();
-        packet.getTraits().forEach(trait -> MAP.put(trait.getId(), trait));
-        SilentGear.LOGGER.info("Read {} traits from server", MAP.size());
+        synchronized (MAP) {
+            Map<ResourceLocation, ITrait> oldTraits = ImmutableMap.copyOf(MAP);
+            MAP.clear();
+            for (ITrait trait : packet.getTraits()) {
+                trait.retainData(oldTraits.get(trait.getId()));
+                MAP.put(trait.getId(), trait);
+            }
+            SilentGear.LOGGER.info("Read {} traits from server", MAP.size());
+        }
         context.get().setPacketHandled(true);
     }
 

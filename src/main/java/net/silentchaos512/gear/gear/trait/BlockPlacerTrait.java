@@ -16,7 +16,6 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.item.FakeItemUseContext;
 import net.silentchaos512.lib.util.NameUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -96,7 +95,7 @@ public class BlockPlacerTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        Collection<String> ret = new ArrayList<>();
+        Collection<String> ret = super.getExtraWikiLines();
         ret.add("  - Places: " + NameUtils.from(block));
         ret.add("  - Durability Cost: " + damageOnUse);
         if (cooldown > 0) {

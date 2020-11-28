@@ -8,7 +8,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 
 import java.util.Collection;
-import java.util.Collections;
 
 public class SynergyTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("synergy");
@@ -58,13 +57,20 @@ public class SynergyTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        String multiStr = multi > 0f ? "+" + multi : String.valueOf(multi);
+        Collection<String> ret = super.getExtraWikiLines();
+        ret.add("  - Please read [this page](https://github.com/SilentChaos512/Silent-Gear/wiki/Synergy) for more information on synergy");
+        String multiStr = "  - " + (multi > 0f ? "+" + multi : String.valueOf(multi));
         String str;
         if (rangeMax < Float.MAX_VALUE) {
-            str = multiStr + " synergy if between " + rangeMin + " and " + rangeMax;
+            str = multiStr + " synergy if between " + formatPercent(rangeMin) + " and " + formatPercent(rangeMax);
         } else {
-            str = multiStr + " synergy if greater than " + rangeMin;
+            str = multiStr + " synergy if greater than " + formatPercent(rangeMin);
         }
-        return Collections.singleton(str);
+        ret.add(str);
+        return ret;
+    }
+
+    private static String formatPercent(float value) {
+        return (int) (value * 100) + "%";
     }
 }

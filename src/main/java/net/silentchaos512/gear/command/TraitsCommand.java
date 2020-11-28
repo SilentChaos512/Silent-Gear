@@ -7,19 +7,26 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.ResourceLocationArgument;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.trait.SimpleTrait;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 
@@ -94,6 +101,10 @@ public final class TraitsCommand {
             writer.write("Generated in-game by `sgear_traits dump_md` command on " + getCurrentDateTime() + "\n\n");
             writer.write("This data may or may not be accurate depending on the mod pack you are playing and the mods or data packs installed.\n\n");
 
+            writer.write("## Data Sources\n\n");
+            writer.write("The following mods and data packs have added traits to the output. Running the dump command yourself may produce different results.\n\n");
+            writer.write(getDataSources() + "\n");
+
             writer.write("## Trait Types\n\n");
             writer.write("These are trait serializers. You can define custom instances of these types using data packs.\n");
             writer.write("Code for traits and their serializers can be found in `net.silentchaos512.gear.gear.trait`.\n\n");
@@ -101,7 +112,12 @@ public final class TraitsCommand {
             writer.write("They are not especially useful when just defined by a data pack.\n\n");
 
             for (ITraitSerializer<?> serializer : TraitSerializers.getSerializers()) {
-                writer.write("- `" + serializer.getName() + "`\n");
+                String typeName = serializer instanceof SimpleTrait.Serializer ? ((SimpleTrait.Serializer) serializer).getTypeName() : "";
+                writer.write("- `" + serializer.getName() + "`");
+                if (!typeName.isEmpty()) {
+                    writer.write(" _(" + typeName + ")_");
+                }
+                writer.write("\n");
             }
 
             writer.write("\n## List of Traits");
@@ -117,12 +133,16 @@ public final class TraitsCommand {
                 writer.write("### " + getLinkToBuiltinTraitJson(id, trait.getDisplayName(0).getString()) + "\n");
                 writer.write("- " + trait.getDescription(0).getString() + "\n");
                 String materialsWithTrait = getMaterialsWithTrait(trait);
-                writer.write("- Found On: " + (materialsWithTrait.isEmpty() ? "Nothing" : materialsWithTrait) + "\n");
+                writer.write("- Found On:\n  - Materials: " + (materialsWithTrait.isEmpty() ? "Nothing" : materialsWithTrait) + "\n");
+                String partsWithTrait = getPartsWithTrait(trait);
+                if (!partsWithTrait.isEmpty()) {
+                    writer.write("  - Parts: " + partsWithTrait + "\n");
+                }
                 writer.write("- ID: `" + id + "`\n");
                 writer.write("- Type: `" + trait.getSerializer().getName() + "`\n");
                 writer.write("- Max Level: " + trait.getMaxLevel() + "\n");
 
-                Collection<String> cancelsWithSet = trait.getCancelsWithSet();
+                Collection<String> cancelsWithSet = trait.getCancelsWithSet().stream().map(s -> "`" + s + "`").collect(Collectors.toList());
                 if (!cancelsWithSet.isEmpty()) {
                     writer.write("- Cancels With: " + String.join(", ", cancelsWithSet) + "\n");
                 }
@@ -185,14 +205,57 @@ public final class TraitsCommand {
                 }
                 foundAny = true;
 
-                str.append(material.getDisplayName(PartType.MAIN).getString())
-                        .append(" (")
+                str.append("**")
+                        .append(material.getDisplayName(PartType.MAIN).getString())
+                        .append("**")
+                        .append(" _(")
                         .append(typesWithTrait.stream().map(pt ->
                                 pt.getDisplayName(0).getString()).collect(Collectors.joining(", ")))
-                        .append(")");
+                        .append(")_");
             }
         }
 
         return str.toString();
+    }
+
+    private static String getPartsWithTrait(ITrait trait) {
+        StringBuilder str = new StringBuilder();
+        boolean foundAny = false;
+
+        for (IGearPart part : PartManager.getValues()) {
+            PartData partData = PartData.of(part);
+            for (TraitInstance inst : partData.getTraits()) {
+                if (inst.getTrait().equals(trait) && part.isVisible()) {
+                    if (foundAny) {
+                        str.append(", ");
+                    }
+                    foundAny = true;
+
+                    str.append("**").append(partData.getDisplayName(ItemStack.EMPTY).getString()).append("**");
+                }
+            }
+        }
+
+        return str.toString();
+    }
+
+    private static String getDataSources() {
+        Set<String> sourceSet = new LinkedHashSet<>();
+        for (ITrait trait : TraitManager.getValues()) {
+            sourceSet.add(trait.getId().getNamespace());
+        }
+
+        StringBuilder ret = new StringBuilder();
+        for (String id : sourceSet) {
+            ret.append("- ");
+            Optional<? extends ModContainer> container = ModList.get().getModContainerById(id);
+            if (container.isPresent()) {
+                ret.append(container.get().getModInfo().getDisplayName()).append(" (").append(id).append(")\n");
+            } else {
+                ret.append(id);
+            }
+        }
+
+        return ret.toString();
     }
 }

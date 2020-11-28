@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.util.TextUtil;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +42,13 @@ public interface ITrait {
         }
         return level;
     }
+
+    /**
+     * Used to retain data on integrated server which is not sent on connect.
+     *
+     * @param oldTrait The old trait instance
+     */
+    default void retainData(@Nullable ITrait oldTrait) {}
 
     IFormattableTextComponent getDisplayName(int level);
 
@@ -144,6 +152,13 @@ public interface ITrait {
         return Collections.emptySet();
     }
 
+    /**
+     * Used by the trait command's markdown dump subcommand (TraitsCommand#runDumpMd). Note that the
+     * trait is responsible for adding indentation, bullets, and newlines if desired. A two-space
+     * indentation is assumed (eg "  - My info...")
+     *
+     * @return Lines to add to the extra info of the wiki page dump
+     */
     default Collection<String> getExtraWikiLines() {
         return Collections.emptyList();
     }
