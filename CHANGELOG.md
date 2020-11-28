@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.3.10] - 2020-11-28
 ### Added
 - Material categories. These are unused currently, but will be used for synergy calculations in the future. Categories can be any string and may be defined by mods or data packs. [#267]
 - Individual traits can now supply extra wiki lines in their JSON. _This is not synced with the client on dedicated servers._ Useful for adding more information to frequently confused traits, like Lucky.
