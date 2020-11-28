@@ -151,7 +151,7 @@ public class BlockFillerTrait extends SimpleTrait {
         trait.fillRangeZ = JSONUtils.getInt(json, "fill_spread_z", 0);
         trait.fillFacingPlaneOnly = JSONUtils.getBoolean(json, "fill_facing_plane_only", false);
         trait.sneakMode = SneakMode.byName(JSONUtils.getString(json, "sneak_mode", "pass"));
-        trait.damageOnUse = JSONUtils.getInt(json, "damage_on_use");
+        trait.damageOnUse = JSONUtils.getFloat(json, "damage_on_use");
         trait.cooldown = JSONUtils.getInt(json, "cooldown", 0);
         trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getString(json, "sound")));
         trait.soundVolume = JSONUtils.getFloat(json, "sound_volume");
