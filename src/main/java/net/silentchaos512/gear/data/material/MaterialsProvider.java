@@ -1110,8 +1110,16 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(wood(sgWood, "jungle", Items.JUNGLE_PLANKS, 0xB88764));
         ret.add(wood(sgWood, "oak", Items.OAK_PLANKS, 0xB8945F));
         ret.add(wood(sgWood, "spruce", Items.SPRUCE_PLANKS, 0x82613A));
-        ret.add(wood(sgWood, "crimson", Items.CRIMSON_PLANKS, 0x7E3A56));
-        ret.add(wood(sgWood, "warped", Items.WARPED_PLANKS, 0x398382));
+        ret.add(wood(sgWood, "crimson", Items.CRIMSON_PLANKS, 0x7E3A56)
+                .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 2)
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 1)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
+        );
+        ret.add(wood(sgWood, "warped", Items.WARPED_PLANKS, 0x398382)
+                .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 2)
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 1)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
+        );
 
         // Rough wood
         ret.add(new MaterialBuilder(SilentGear.getId("wood/rough"), 0, Ingredient.EMPTY)

@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Individual traits can now supply extra wiki lines in their JSON. _This is not synced with the client on dedicated servers._ Useful for adding more information to frequently confused traits, like Lucky.
 ### Changed
+- Materials will no longer inherit stats and traits from their parent of they provide any of their own [related to #266]
 - Improvements to formatting of the trait wiki page dump command
     - Material list is formatted for easier reading
     - Shows list of parts that provide traits (useful for upgrades)
 ### Fixed
+- Crimson wood and warped wood having the flammable trait [#266]
 - Damage on use for block filler traits (Road Maker) being loaded incorrect (value was truncated to an int)
 
 ## [2.3.9] - 2020-11-26

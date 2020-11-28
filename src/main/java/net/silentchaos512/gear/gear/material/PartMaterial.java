@@ -124,7 +124,7 @@ public final class PartMaterial implements IMaterial {
     @Override
     public Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear) {
         Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(stat));
-        if (getParent() != null) {
+        if (ret.isEmpty() && getParent() != null) {
             ret.addAll(getParent().getStatModifiers(material, stat, partType, gear));
         }
         return ret;
@@ -133,7 +133,7 @@ public final class PartMaterial implements IMaterial {
     @Override
     public List<TraitInstance> getTraits(PartType partType, ItemStack gear) {
         List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
-        if (getParent() != null) {
+        if (ret.isEmpty() && getParent() != null) {
             ret.addAll(getParent().getTraits(partType, gear));
         }
         return ret;
