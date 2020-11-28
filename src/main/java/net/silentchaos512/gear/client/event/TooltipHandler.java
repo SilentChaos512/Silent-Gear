@@ -7,6 +7,7 @@ import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public final class TooltipHandler {
     public static final TooltipHandler INSTANCE = new TooltipHandler();
@@ -117,6 +119,8 @@ public final class TooltipHandler {
         if (keyHeld) {
             getGradeLine(event, material.getGrade());
 
+            getMaterialCategoriesLine(material).ifPresent(t -> event.getToolTip().add(t));
+
             List<PartType> partTypes = new ArrayList<>(material.getPartTypes());
             if (!partTypes.isEmpty()) {
                 int index = KeyTracker.getMaterialCycleIndex(partTypes.size());
@@ -134,6 +138,16 @@ public final class TooltipHandler {
                 getGradeLine(event, material.getGrade());
             }
         }
+    }
+
+    private static Optional<ITextComponent> getMaterialCategoriesLine(MaterialInstance material) {
+        Collection<IMaterialCategory> categories = material.getCategories();
+        if (!categories.isEmpty()) {
+            ITextComponent text = new StringTextComponent(categories.stream().map(IMaterialCategory::getName).collect(Collectors.joining(", ")))
+                    .mergeStyle(TextFormatting.ITALIC);
+            return Optional.of(TextUtil.misc("materialCategories", text));
+        }
+        return Optional.empty();
     }
 
     private static ITextComponent buildPartTypeHeader(Collection<PartType> types, PartType selectedType) {

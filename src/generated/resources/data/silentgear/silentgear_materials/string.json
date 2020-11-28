@@ -1,6 +1,9 @@
 {
   "availability": {
     "tier": 0,
+    "categories": [
+      "organic"
+    ],
     "visible": true,
     "gear_blacklist": [],
     "can_salvage": true

@@ -1,10 +1,7 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.Sets;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -37,6 +34,7 @@ public final class PartMaterial implements IMaterial {
     private final ResourceLocation materialId;
     @Nullable private ResourceLocation parent;
     private final String packName;
+    private final Collection<IMaterialCategory> categories = new ArrayList<>();
     private Ingredient ingredient = Ingredient.EMPTY;
     private final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
     private boolean visible = true;
@@ -79,6 +77,14 @@ public final class PartMaterial implements IMaterial {
             return MaterialManager.get(parent);
         }
         return null;
+    }
+
+    @Override
+    public Collection<IMaterialCategory> getCategories() {
+        if (this.categories.isEmpty() && getParent() != null) {
+            return getParent().getCategories();
+        }
+        return Collections.unmodifiableCollection(this.categories);
     }
 
     @Override
@@ -351,6 +357,8 @@ public final class PartMaterial implements IMaterial {
             JsonElement elementAvailability = json.get("availability");
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
+
+                deserializeCategories(obj.get("categories"), ret);
                 ret.tier = JSONUtils.getInt(obj, "tier", ret.tier);
                 ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
                 ret.canSalvage = JSONUtils.getBoolean(obj, "can_salvage", ret.canSalvage);
@@ -362,6 +370,21 @@ public final class PartMaterial implements IMaterial {
                 }
             } else if (ret.parent == null) {
                 throw new JsonSyntaxException("Expected 'availability' to be an object");
+            }
+        }
+
+        private static void deserializeCategories(@Nullable JsonElement json, PartMaterial material) {
+            if (json != null) {
+                if (json.isJsonArray()) {
+                    JsonArray array = json.getAsJsonArray();
+                    for (JsonElement elem : array) {
+                        material.categories.add(MaterialCategories.get(elem.getAsString()));
+                    }
+                } else if (json.isJsonPrimitive()) {
+                    material.categories.add(MaterialCategories.get(json.getAsString()));
+                } else {
+                    throw new JsonParseException("Expected 'categories' to be array or string");
+                }
             }
         }
 
@@ -379,6 +402,11 @@ public final class PartMaterial implements IMaterial {
 
             if (buffer.readBoolean())
                 material.parent = buffer.readResourceLocation();
+
+            int categoryCount = buffer.readByte();
+            for (int i = 0; i < categoryCount; ++i) {
+                material.categories.add(MaterialCategories.get(buffer.readString()));
+            }
 
             material.displayName = buffer.readTextComponent();
             if (buffer.readBoolean())
@@ -424,6 +452,9 @@ public final class PartMaterial implements IMaterial {
             buffer.writeBoolean(material.parent != null);
             if (material.parent != null)
                 buffer.writeResourceLocation(material.parent);
+
+            buffer.writeByte(material.categories.size());
+            material.categories.forEach(cat -> buffer.writeString(cat.getName()));
 
             buffer.writeTextComponent(material.displayName);
             buffer.writeBoolean(material.namePrefix != null);

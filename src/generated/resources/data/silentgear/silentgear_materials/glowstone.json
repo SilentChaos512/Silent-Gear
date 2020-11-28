@@ -1,6 +1,10 @@
 {
   "availability": {
     "tier": 2,
+    "categories": [
+      "rock",
+      "gem"
+    ],
     "visible": true,
     "gear_blacklist": [],
     "can_salvage": true

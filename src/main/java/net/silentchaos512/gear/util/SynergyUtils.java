@@ -29,6 +29,9 @@ public final class SynergyUtils {
     private SynergyUtils() {}
 
     public static float getSynergy(PartType partType, List<? extends IMaterialInstance> materials, List<TraitInstance> traits) {
+        // TODO: Factor material categories into calculation, decrease weight of rarity and maybe tier
+        //  https://github.com/SilentChaos512/Silent-Gear/issues/267
+
         if (materials.isEmpty()) {
             return 1;
         }

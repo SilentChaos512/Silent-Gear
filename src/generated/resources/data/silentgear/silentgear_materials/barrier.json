@@ -1,6 +1,9 @@
 {
   "availability": {
     "tier": 5,
+    "categories": [
+      "intangible"
+    ],
     "visible": false,
     "gear_blacklist": [],
     "can_salvage": false

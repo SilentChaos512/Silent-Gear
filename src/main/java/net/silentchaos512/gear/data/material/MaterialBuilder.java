@@ -16,6 +16,7 @@ import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -48,6 +49,7 @@ public class MaterialBuilder {
     private Collection<String> gearBlacklist = new ArrayList<>();
     private final Collection<ICondition> loadConditions = new ArrayList<>();
     @Nullable private ResourceLocation parent;
+    private final Collection<IMaterialCategory> categories = new ArrayList<>();
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
 
@@ -88,6 +90,11 @@ public class MaterialBuilder {
 
     public MaterialBuilder parent(ResourceLocation parent) {
         this.parent = parent;
+        return this;
+    }
+
+    public MaterialBuilder categories(IMaterialCategory... categories) {
+        this.categories.addAll(Arrays.asList(categories));
         return this;
     }
 
@@ -276,7 +283,7 @@ public class MaterialBuilder {
         return model.serialize();
     }
 
-    @SuppressWarnings("OverlyComplexMethod")
+    @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
 
@@ -295,12 +302,23 @@ public class MaterialBuilder {
         JsonObject availability = new JsonObject();
         if (this.tier >= 0) {
             availability.addProperty("tier", this.tier);
+
+            if (!this.categories.isEmpty()) {
+                JsonArray array = new JsonArray();
+                for (IMaterialCategory category : this.categories) {
+                    array.add(category.getName());
+                }
+                availability.add("categories", array);
+            }
+
             availability.addProperty("visible", this.visible);
+
             JsonArray array = new JsonArray();
             for (String gearType : this.gearBlacklist) {
                 array.add(gearType);
             }
             availability.add("gear_blacklist", array);
+
             availability.addProperty("can_salvage", this.canSalvage);
         }
         if (!availability.entrySet().isEmpty()) {

@@ -10,10 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -111,6 +108,10 @@ public final class MaterialInstance implements IMaterialInstance {
     @Override
     public ItemStack getItem() {
         return item;
+    }
+
+    public Collection<IMaterialCategory> getCategories() {
+        return material.getCategories();
     }
 
     @Override

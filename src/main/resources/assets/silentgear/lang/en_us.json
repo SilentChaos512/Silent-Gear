@@ -555,6 +555,7 @@
   "misc.silentgear.invalidParts": "Seems to contain invalid parts",
   "misc.silentgear.key": "[%s]",
   "misc.silentgear.lockedStats": "Stats are locked",
+  "misc.silentgear.materialCategories": "Categories: %s",
   "misc.silentgear.missingBowstring": "Missing required bowstring, cannot be fired",
   "misc.silentgear.missingRod": "Missing a required rod, some stats reduced",
   "misc.silentgear.missingRod.attack": "Your tool is missing a rod!",

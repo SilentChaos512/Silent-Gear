@@ -67,6 +67,13 @@ public interface IMaterial {
     }
 
     /**
+     * Gets the categories this material belongs to.
+     *
+     * @return Collection of categories
+     */
+    Collection<IMaterialCategory> getCategories();
+
+    /**
      * Gets the tier of the material. Currently, the tier never depends on the part type.
      *
      * @param partType The part type
@@ -161,7 +168,8 @@ public interface IMaterial {
 
     /**
      * Calculate a stat value for the material. This has limited usefulness, {@link
-     * #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most cases.
+     * #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most
+     * cases.
      *
      * @param material The material
      * @param stat     The stat
@@ -174,8 +182,8 @@ public interface IMaterial {
 
     /**
      * Calculate a stat value for the material. The stat value is not clamped. This has limited
-     * usefulness, {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most
-     * cases.
+     * usefulness, {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)}
+     * should be used in most cases.
      *
      * @param material The material
      * @param stat     The stat
@@ -189,7 +197,6 @@ public interface IMaterial {
     /**
      * Determine if the material can be used to craft parts of a given type and for a given gear
      * type.
-     *
      *
      * @param material The material
      * @param partType The part type

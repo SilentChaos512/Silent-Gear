@@ -10,6 +10,9 @@
   ],
   "availability": {
     "tier": 3,
+    "categories": [
+      "metal"
+    ],
     "visible": true,
     "gear_blacklist": [],
     "can_salvage": true

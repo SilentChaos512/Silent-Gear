@@ -1,6 +1,9 @@
 {
   "availability": {
     "tier": 0,
+    "categories": [
+      "intangible"
+    ],
     "visible": false,
     "gear_blacklist": [
       "all"

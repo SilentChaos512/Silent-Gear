@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
+import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -64,6 +65,7 @@ public class MaterialsProvider implements IDataProvider {
 
         // Azure Electrum
         ret.add(new MaterialBuilder(SilentGear.getId("azure_electrum"), 4, ModTags.Items.INGOTS_AZURE_ELECTRUM)
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1259)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 61)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -110,6 +112,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Azure Silver
         ret.add(new MaterialBuilder(SilentGear.getId("azure_silver"), 3, ModTags.Items.INGOTS_AZURE_SILVER)
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 197)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 17)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -150,6 +153,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Barrier
         ret.add(new MaterialBuilder(SilentGear.getId("barrier"), 5, Items.BARRIER)
+                .categories(MaterialCategories.INTANGIBLE)
                 .visible(false)
                 .canSalvage(false)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1337)
@@ -175,6 +179,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Basalt
         ret.add(new MaterialBuilder(SilentGear.getId("basalt"), 1, Items.BASALT)
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 137)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 6)
@@ -207,6 +212,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Blackstone
         ret.add(new MaterialBuilder(SilentGear.getId("blackstone"), 1, Items.BLACKSTONE)
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 151)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 4)
@@ -243,6 +249,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Blaze Gold
         ret.add(new MaterialBuilder(SilentGear.getId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 69)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 24)
@@ -288,6 +295,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Bone
         ret.add(new MaterialBuilder(SilentGear.getId("bone"), 1, Items.BONE_BLOCK)
+                .categories(MaterialCategories.ORGANIC)
                 .partSubstitute(PartType.ROD, Items.BONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 108)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
@@ -315,6 +323,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Crimson Iron
         ret.add(new MaterialBuilder(SilentGear.getId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 420)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 27)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -354,6 +363,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Crimson Steel
         ret.add(new MaterialBuilder(SilentGear.getId("crimson_steel"), 4, ModTags.Items.INGOTS_CRIMSON_STEEL)
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 2400)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 42)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -394,6 +404,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Diamond
         ret.add(new MaterialBuilder(SilentGear.getId("diamond"), 3, Tags.Items.GEMS_DIAMOND)
+                .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1561)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 33)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 10)
@@ -440,6 +451,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Emerald
         ret.add(new MaterialBuilder(SilentGear.getId("emerald"), 3, Tags.Items.GEMS_EMERALD)
+                .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1080)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 24)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
@@ -481,6 +493,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // End Stone
         ret.add(new MaterialBuilder(SilentGear.getId("end_stone"), 1, Tags.Items.END_STONES)
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1164)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
@@ -511,6 +524,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Example
         ret.add(new MaterialBuilder(SilentGear.getId("example"), 0, Ingredient.EMPTY)
+                .categories(MaterialCategories.INTANGIBLE)
                 .visible(false)
                 .canSalvage(false)
                 .blacklistGearType("all")
@@ -541,12 +555,14 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Feather
         ret.add(new MaterialBuilder(SilentGear.getId("feather"), 1, Tags.Items.FEATHERS)
+                .categories(MaterialCategories.ORGANIC)
                 .noStats(PartType.FLETCHING)
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Flax
         ret.add(new MaterialBuilder(SilentGear.getId("flax"), 1, CraftingItems.FLAX_STRING)
+                .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
                 .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, 0.05f, StatInstance.Operation.MUL1)
@@ -562,6 +578,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Flint
         ret.add(new MaterialBuilder(SilentGear.getId("flint"), 1, Items.FLINT)
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 124)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 3)
@@ -589,6 +606,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Glowstone
         ret.add(new MaterialBuilder(SilentGear.getId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
+                .categories(MaterialCategories.ROCK, MaterialCategories.GEM)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.4f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -603,6 +621,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Gold
         ret.add(new MaterialBuilder(SilentGear.getId("gold"), 2, Tags.Items.INGOTS_GOLD)
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 32)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 7)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 22)
@@ -641,6 +660,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Iron
         ret.add(new MaterialBuilder(SilentGear.getId("iron"), 2, Tags.Items.INGOTS_IRON)
+                .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 250)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
@@ -681,6 +701,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Lapis Lazuli
         ret.add(new MaterialBuilder(SilentGear.getId("lapis_lazuli"), 2, Tags.Items.GEMS_LAPIS)
+                .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 200)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 17)
@@ -717,6 +738,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Leather
         ret.add(new MaterialBuilder(SilentGear.getId("leather"), 0, Tags.Items.LEATHER)
+                .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
@@ -736,12 +758,14 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Leaves
         ret.add(new MaterialBuilder(SilentGear.getId("leaves"), 1, ItemTags.LEAVES)
+                .categories(MaterialCategories.ORGANIC)
                 .noStats(PartType.FLETCHING)
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0x4A8F28)
                 .displayFragment(PartTextures.CLOTH, 0x4A8F28)
         );
         // Netherrack
         ret.add(new MaterialBuilder(SilentGear.getId("netherrack"), 1, Tags.Items.NETHERRACK)
+                .categories(MaterialCategories.ROCK, MaterialCategories.ORGANIC)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 142)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
@@ -771,6 +795,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Netherite
         ret.add(new MaterialBuilder(SilentGear.getId("netherite"), 4, Items.NETHERITE_INGOT)
+                .categories(MaterialCategories.METAL)
                 .namePrefix(TextUtil.translate("material", "netherite"))
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.DURABILITY, 2, StatInstance.Operation.ADD)
@@ -788,6 +813,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Netherwood
         ret.add(new MaterialBuilder(SilentGear.getId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
+                .categories(MaterialCategories.ORGANIC)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_NETHERWOOD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 72)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 12)
@@ -822,6 +848,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Obsidian
         ret.add(new MaterialBuilder(SilentGear.getId("obsidian"), 3, Tags.Items.OBSIDIAN)
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 3072)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.5f)
@@ -851,6 +878,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Prismarine
         ret.add(new MaterialBuilder(SilentGear.getId("prismarine"), 3, Tags.Items.GEMS_PRISMARINE)
+                .categories(MaterialCategories.GEM, MaterialCategories.ORGANIC)
                 .namePrefix(TextUtil.translate("material", "prismarine"))
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.075f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, 0.125f, StatInstance.Operation.MUL2)
@@ -863,6 +891,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Quartz
         ret.add(new MaterialBuilder(SilentGear.getId("quartz"), 2, Tags.Items.GEMS_QUARTZ)
+                .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 10)
@@ -902,6 +931,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Redstone
         ret.add(new MaterialBuilder(SilentGear.getId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.5f, StatInstance.Operation.ADD)
@@ -915,6 +945,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(sgSandstone, 1,
                 ExclusionIngredient.of(Tags.Items.SANDSTONE,
                         Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 117)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 6)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
@@ -947,6 +978,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Sinew
         ret.add(new MaterialBuilder(SilentGear.getId("sinew"), 1, CraftingItems.SINEW_FIBER)
+                .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, -0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
@@ -963,6 +995,7 @@ public class MaterialsProvider implements IDataProvider {
         // Stone
         ResourceLocation stone = SilentGear.getId("stone");
         ret.add(new MaterialBuilder(stone, 1, Tags.Items.COBBLESTONE)
+                .categories(MaterialCategories.ROCK)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_STONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 131)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
@@ -1010,6 +1043,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(SilentGear.getId("string"), 0,
                 ExclusionIngredient.of(Tags.Items.STRING,
                         CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))
+                .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
@@ -1023,6 +1057,7 @@ public class MaterialsProvider implements IDataProvider {
         // Terracotta
         ResourceLocation sgTerracotta = SilentGear.getId("terracotta");
         ret.add(new MaterialBuilder(sgTerracotta, 1, Items.TERRACOTTA)
+                .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 165)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 11)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
@@ -1074,6 +1109,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(sgWood, 0,
                 ExclusionIngredient.of(ItemTags.PLANKS,
                         Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS))
+                .categories(MaterialCategories.ORGANIC)
                 .partSubstitute(PartType.ROD,
                         ExclusionIngredient.of(Tags.Items.RODS_WOODEN,
                                 CraftingItems.NETHERWOOD_STICK))
@@ -1123,6 +1159,7 @@ public class MaterialsProvider implements IDataProvider {
 
         // Rough wood
         ret.add(new MaterialBuilder(SilentGear.getId("wood/rough"), 0, Ingredient.EMPTY)
+                .categories(MaterialCategories.ORGANIC)
                 .namePrefix(TextUtil.misc("crude"))
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_ROUGH)
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.25f, StatInstance.Operation.MUL1)
@@ -1136,6 +1173,7 @@ public class MaterialsProvider implements IDataProvider {
         ResourceLocation sgWool = SilentGear.getId("wool");
         ret.add(new MaterialBuilder(sgWool, 0, ExclusionIngredient.of(ItemTags.WOOL,
                 Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.CYAN_WOOL, Items.GRAY_WOOL, Items.GREEN_WOOL, Items.LIGHT_BLUE_WOOL, Items.LIGHT_GRAY_WOOL, Items.LIME_WOOL, Items.MAGENTA_WOOL, Items.ORANGE_WOOL, Items.PINK_WOOL, Items.PURPLE_WOOL, Items.RED_WOOL, Items.WHITE_WOOL, Items.YELLOW_WOOL))
+                .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)
@@ -1166,6 +1204,7 @@ public class MaterialsProvider implements IDataProvider {
         //region Extra Mod Metals
         // Aluminum
         ret.add(extraMetal("aluminum", 2, forgeId("ingots/aluminum"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 365)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 14)
@@ -1193,6 +1232,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Aluminum Steel
         ret.add(extraMetal("aluminum_steel", 3, forgeId("ingots/aluminum_steel"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 660)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
@@ -1220,6 +1260,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Bismuth
         ret.add(extraMetal("bismuth", 2, forgeId("ingots/bismuth"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 12)
@@ -1245,6 +1286,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Bismuth Brass
         ret.add(extraMetal("bismuth_brass", 2, forgeId("ingots/bismuth_brass"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 580)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1271,6 +1313,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Bismuth Brass
         ret.add(extraMetal("bismuth_steel", 3, forgeId("ingots/bismuth_steel"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1050)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 25)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
@@ -1297,6 +1340,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Brass
         ret.add(extraMetal("brass", 2, forgeId("ingots/brass"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 240)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1323,6 +1367,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Bronze
         ret.add(extraMetal("bronze", 2, forgeId("ingots/bronze"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 480)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1351,6 +1396,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Compressed Iron
         ret.add(extraMetal("compressed_iron", 3, forgeId("ingots/compressed_iron"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1024)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 24)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
@@ -1379,6 +1425,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Copper
         ret.add(extraMetal("copper", 1, forgeId("ingots/copper"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 128)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
@@ -1404,6 +1451,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Electrum
         ret.add(extraMetal("electrum", 2, forgeId("ingots/electrum"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 96)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 25)
@@ -1429,6 +1477,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Enderium
         ret.add(extraMetal("enderium", 4, forgeId("ingots/enderium"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1200)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 34)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1454,6 +1503,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Invar
         ret.add(extraMetal("invar", 2, forgeId("ingots/invar"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 640)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1482,6 +1532,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Lead
         ret.add(extraMetal("lead", 2, forgeId("ingots/lead"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 260)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 14)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
@@ -1509,6 +1560,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Lumium
         ret.add(extraMetal("lumium", 3, forgeId("ingots/lumium"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 920)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1540,6 +1592,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Nickel
         ret.add(extraMetal("nickel", 2, forgeId("ingots/nickel"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 380)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 17)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 12)
@@ -1567,6 +1620,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Osmium
         ret.add(extraMetal("osmium", 2, forgeId("ingots/osmium"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 30)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 12)
@@ -1591,6 +1645,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Platinum
         ret.add(extraMetal("platinum", 3, forgeId("ingots/platinum"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 900)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 21)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 14)
@@ -1617,6 +1672,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Redstone Alloy
         ret.add(extraMetal("redstone_alloy", 2, forgeId("ingots/redstone_alloy"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 840)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
@@ -1642,6 +1698,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Refined glowstone
         ret.add(extraMetal("refined_glowstone", 3, forgeId("ingots/refined_glowstone"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 300)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1673,6 +1730,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Refined Iron
         ret.add(extraMetal("refined_iron", 2, forgeId("ingots/refined_iron"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 512)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
@@ -1702,6 +1760,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Refined obsidian
         ret.add(extraMetal("refined_obsidian", 4, forgeId("ingots/refined_obsidian"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 2500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 50)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.3f)
@@ -1730,6 +1789,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Signalum
         ret.add(extraMetal("signalum", 4, forgeId("ingots/signalum"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 800)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 25)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1757,6 +1817,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Silver
         ret.add(extraMetal("silver", 2, forgeId("ingots/silver"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 64)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 20)
@@ -1783,6 +1844,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Steel
         ret.add(extraMetal("steel", 2, forgeId("ingots/steel"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
@@ -1807,6 +1869,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Tin
         ret.add(extraMetal("tin", 1, forgeId("ingots/tin"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 192)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 12)
@@ -1832,6 +1895,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Titanium
         ret.add(extraMetal("titanium", 4, forgeId("ingots/titanium"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1600)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 12)
@@ -1859,6 +1923,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Uranium
         ret.add(extraMetal("uranium", 3, forgeId("ingots/uranium"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 800)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
@@ -1884,6 +1949,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Zinc
         ret.add(extraMetal("zinc", 1, forgeId("ingots/zinc"))
+                .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 192)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)

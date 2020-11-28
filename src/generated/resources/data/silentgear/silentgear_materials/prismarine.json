@@ -1,6 +1,10 @@
 {
   "availability": {
     "tier": 3,
+    "categories": [
+      "gem",
+      "organic"
+    ],
     "visible": true,
     "gear_blacklist": [],
     "can_salvage": true
