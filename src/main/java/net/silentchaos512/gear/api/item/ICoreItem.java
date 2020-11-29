@@ -52,6 +52,10 @@ public interface ICoreItem extends IItemProvider, IStatItem {
 
     GearType getGearType();
 
+    default boolean isValidSlot(String slot) {
+        return false;
+    }
+
     default boolean requiresPartOfType(PartType type) {
         return getRequiredParts().contains(type);
     }
@@ -125,7 +129,8 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     //region Client-side stuff
 
     /**
-     * Gets an ordered list of parts to render. Other part types will still be rendered, but after all type in the list.
+     * Gets an ordered list of parts to render. Other part types will still be rendered, but after
+     * all type in the list.
      *
      * @return An ordered list of part types to render first
      */

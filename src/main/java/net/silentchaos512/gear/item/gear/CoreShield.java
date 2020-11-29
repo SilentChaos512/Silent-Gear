@@ -64,6 +64,12 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
+    public boolean isValidSlot(String slot) {
+        return EquipmentSlotType.MAINHAND.getName().equalsIgnoreCase(slot)
+                || EquipmentSlotType.OFFHAND.getName().equalsIgnoreCase(slot);
+    }
+
+    @Override
     public Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
     }

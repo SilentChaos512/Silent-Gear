@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -21,6 +19,7 @@ import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class AttributeTrait extends SimpleTrait {
@@ -40,47 +39,36 @@ public class AttributeTrait extends SimpleTrait {
     }
 
     @Override
-    public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> map, EquipmentSlotType slot) {
+    public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> map, String slot) {
         int traitLevel = context.getTraitLevel();
         for (Map.Entry<String, List<ModifierData>> entry : this.modifiers.entrySet()) {
             String key = entry.getKey();
             List<ModifierData> mods = entry.getValue();
 
             if (gearMatchesKey(context.getGear(), key, slot)) {
-                mods.forEach(d -> {
-                    String modName = String.format("%s_%s_%d_%s_%s", this.getId().getNamespace(), this.getId().getPath(), traitLevel, d.name, key);
-                    float modValue = d.values[MathHelper.clamp(traitLevel - 1, 0, d.values.length - 1)];
-                    d.getAttribute().ifPresent(attr ->
-                            map.put(attr, new AttributeModifier(d.uuid, modName, modValue, d.operation)));
-                });
+                for (ModifierData mod : mods) {
+                    Attribute attribute = mod.getAttribute();
+                    if (attribute != null) {
+                        String modName = String.format("%s_%s_%d_%s_%s", this.getId().getNamespace(), this.getId().getPath(), traitLevel, mod.name, key);
+                        float modValue = mod.values[MathHelper.clamp(traitLevel - 1, 0, mod.values.length - 1)];
+                        map.put(attribute, new AttributeModifier(mod.uuid, modName, modValue, mod.operation));
+                    }
+                }
             }
         }
     }
 
-    private static boolean gearMatchesKey(ItemStack gear, String key, EquipmentSlotType slotType) {
+    private static boolean gearMatchesKey(ItemStack gear, String key, String slotType) {
         String[] parts = key.split("/");
-        if (parts.length != 2) {
+        if (parts.length > 2) {
             // Invalid key
             return false;
         }
 
-        EquipmentSlotType slot = null;
-        for (EquipmentSlotType type : EquipmentSlotType.values()) {
-            if (type.getName().equalsIgnoreCase(parts[1])) {
-                slot = type;
-            }
-        }
-        if (slot == null) {
-            // Invalid slot
-            return false;
-        }
-
-        if (gear.getItem() instanceof ArmorItem && ((ArmorItem) gear.getItem()).getEquipmentSlot() != slotType) {
-            return false;
-        }
-
         GearType gearType = GearHelper.getType(gear);
-        return gearType.matches(parts[0]) && slotType == slot;
+        return gearType.matches(parts[0])
+                && (parts.length < 2 || slotType.equals(parts[1]))
+                && GearHelper.isValidSlot(gear, slotType);
     }
 
     private static void readJson(AttributeTrait trait, JsonObject json) {
@@ -232,8 +220,9 @@ public class AttributeTrait extends SimpleTrait {
             buffer.writeUniqueId(uuid);
         }
 
-        public Optional<Attribute> getAttribute() {
-            return Optional.ofNullable(ForgeRegistries.ATTRIBUTES.getValue(this.name));
+        @Nullable
+        public Attribute getAttribute() {
+            return ForgeRegistries.ATTRIBUTES.getValue(this.name);
         }
 
         private String getWikiLine() {

@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -47,16 +48,23 @@ public interface ICoreTool extends ICoreItem {
     }
 
     @Override
+    default boolean isValidSlot(String slot) {
+        return EquipmentSlotType.MAINHAND.getName().equalsIgnoreCase(slot)
+                || EquipmentSlotType.OFFHAND.getName().equalsIgnoreCase(slot);
+    }
+
+    @Override
     default Collection<PartType> getRequiredParts() {
         return ImmutableList.of(PartType.MAIN, PartType.ROD);
     }
 
     /**
      * The base damage done to the item when breaking a block, not considering enchantments
-     * @param gear The item
+     *
+     * @param gear  The item
      * @param world The world
      * @param state The block being broken
-     * @param pos The position of the block
+     * @param pos   The position of the block
      * @return The amount of damage done (durability lost) to the item
      */
     default int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {

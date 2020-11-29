@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Rings. Requires Curios to function correctly. Can only be crafted with metals.
 - Knives. Weaker and slower than daggers, but more durable. Tagged as `forge:knives`, same as daggers, so they work for template crafting.
 - Missing recipe for road maker upgrade
 - Several traits from the Just Gems data packs: crackler, floatstoner, ignite, kitty vision, mighty, and sharp

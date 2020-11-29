@@ -28,6 +28,10 @@ public class AttributeTraitBuilder extends TraitBuilder {
     }
 
     public AttributeTraitBuilder addModifier(GearType gearType, EquipmentSlotType slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
+        return addModifier(gearType, slot.getName(), attribute, operation, values);
+    }
+
+    public AttributeTraitBuilder addModifier(GearType gearType, String slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
         this.modifiers.computeIfAbsent(makeKey(gearType, slot), str -> new ArrayList<>())
                 .add(AttributeTrait.ModifierData.of(attribute, operation, values));
         return this;
@@ -47,8 +51,15 @@ public class AttributeTraitBuilder extends TraitBuilder {
         return this;
     }
 
-    private static String makeKey(GearType gearType, EquipmentSlotType slot) {
-        return gearType.getName() + "/" + slot.getName();
+    public AttributeTraitBuilder addModifierAnySlot(GearType gearType, Attribute attribute, AttributeModifier.Operation operation, float... values) {
+        return addModifier(gearType, "", attribute, operation, values);
+    }
+
+    private static String makeKey(GearType gearType, String slot) {
+        if (slot.isEmpty()) {
+            return gearType.getName();
+        }
+        return gearType.getName() + "/" + slot;
     }
 
     @Override

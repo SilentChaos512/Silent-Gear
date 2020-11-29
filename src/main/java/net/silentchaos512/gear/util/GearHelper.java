@@ -137,7 +137,11 @@ public final class GearHelper {
     }
 
     public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map, boolean addStandardMainHandMods) {
-        if (addStandardMainHandMods && slot == EquipmentSlotType.MAINHAND) {
+        return getAttributeModifiers(slot.getName(), stack, map, addStandardMainHandMods);
+    }
+
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(String slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map, boolean addStandardMainHandMods) {
+        if (addStandardMainHandMods && isValidSlot(stack, slot) && slot.equals(EquipmentSlotType.MAINHAND.getName())) {
             // Melee Damage
             replaceAttributeModifierInMap(map, Attributes.ATTACK_DAMAGE, getMeleeDamageModifier(stack));
 
@@ -166,6 +170,13 @@ public final class GearHelper {
                 map.put(key, new AttributeModifier(mod.getID(), mod.getName(), value, mod.getOperation()));
             }
         }
+    }
+
+    public static boolean isValidSlot(ItemStack gear, String slot) {
+        if (gear.getItem() instanceof ICoreItem) {
+            return ((ICoreItem) gear.getItem()).isValidSlot(slot);
+        }
+        return false;
     }
 
     //endregion

@@ -124,6 +124,11 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
+    public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, String slot) {
+    }
+
+    @Deprecated
+    @Override
     public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot) {
     }
 

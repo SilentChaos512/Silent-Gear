@@ -243,7 +243,7 @@ public final class ModItems {
     public static final ItemRegistryObject<CoreArmor> LEGGINGS = register("leggings", () -> new CoreArmor(EquipmentSlotType.LEGS));
     public static final ItemRegistryObject<CoreArmor> BOOTS = register("boots", () -> new CoreArmor(EquipmentSlotType.FEET));
 
-    public static final ItemRegistryObject<CoreCurio> RING = register("ring", () -> new CoreCurio(GearType.RING, unstackableProps()));
+    public static final ItemRegistryObject<CoreCurio> RING = register("ring", () -> new CoreCurio(GearType.RING, "ring", unstackableProps()));
 
     private ModItems() {}
 

@@ -269,6 +269,7 @@ curseforge {
 //                displayName = "$project.description $display_version"
                 relations {
                     requiredDependency 'silent-lib'
+                    optionalDependency 'curios'
                 }
             }
 //            if (project.hasProperty('doAPIJar')) {

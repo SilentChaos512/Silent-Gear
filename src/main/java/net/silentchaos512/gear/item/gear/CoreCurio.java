@@ -48,10 +48,12 @@ public class CoreCurio extends Item implements ICoreItem {
     );
 
     private final GearType gearType;
+    private final String slot;
 
-    public CoreCurio(GearType gearType, Properties properties) {
+    public CoreCurio(GearType gearType, String slot, Properties properties) {
         super(properties);
         this.gearType = gearType;
+        this.slot = slot;
     }
 
     @Nullable
@@ -66,6 +68,11 @@ public class CoreCurio extends Item implements ICoreItem {
     @Override
     public GearType getGearType() {
         return gearType;
+    }
+
+    @Override
+    public boolean isValidSlot(String slot) {
+        return this.slot.equalsIgnoreCase(slot);
     }
 
     @Override

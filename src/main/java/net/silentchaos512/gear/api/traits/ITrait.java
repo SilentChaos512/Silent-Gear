@@ -118,7 +118,12 @@ public interface ITrait {
 
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
-    void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot);
+    void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, String slot);
+
+    @Deprecated
+    default void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot) {
+        onGetAttributeModifiers(context, modifiers, slot.getName());
+    }
 
     ActionResultType onItemUse(ItemUseContext context, int traitLevel);
 

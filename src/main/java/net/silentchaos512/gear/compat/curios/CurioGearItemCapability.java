@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.compat.curios;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -8,6 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -77,14 +81,23 @@ public class CurioGearItemCapability {
 
         @Override
         public Multimap<Attribute, AttributeModifier> getAttributeModifiers(String identifier) {
-            // FIXME
-            return ICurio.super.getAttributeModifiers(identifier);
+            return GearHelper.getAttributeModifiers(identifier, stack, HashMultimap.create(), false);
         }
 
         @Nonnull
         @Override
         public DropRule getDropRule(LivingEntity livingEntity) {
             return DropRule.ALWAYS_KEEP;
+        }
+
+        @Override
+        public boolean canRightClickEquip() {
+            return true;
+        }
+
+        @Override
+        public void playRightClickEquipSound(LivingEntity livingEntity) {
+            livingEntity.world.playSound(null, new BlockPos(livingEntity.getPositionVec()), SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         }
     }
 }

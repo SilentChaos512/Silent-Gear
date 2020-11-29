@@ -73,6 +73,11 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         }
     }
 
+    @Override
+    public boolean isValidSlot(String slot) {
+        return this.getEquipmentSlot().getName().equalsIgnoreCase(slot);
+    }
+
     //region Stats and attributes
 
     @Override
