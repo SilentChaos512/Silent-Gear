@@ -5,12 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Knives. Weaker and slower than daggers, but more durable. Tagged as `forge:knives`, same as daggers, so they work for template crafting.
 - Missing recipe for road maker upgrade
 - Several traits from the Just Gems data packs: crackler, floatstoner, ignite, kitty vision, mighty, and sharp
 ### Changed
 - Potion effects traits now have a "type" enum for each effect instead of just a boolean for "full set required"
     - Type values: `trait_level` (based on level of trait), `piece_count` (number of armor pieces with trait, same as false in old files), `full_set_only` (same as true in old files)
     - Old files should still load correctly for now
+- Replaced dagger blueprint with knife blueprint in the blueprint package
+- Survival Tool advancement will now trigger with either a knife or a dagger
 
 ## [2.3.10] - 2020-11-28
 ### Added

@@ -61,10 +61,11 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_BLUEPRINT = registerPartBlueprint(PartType.BOWSTRING, false);
     public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartType.FLETCHING, false);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearType.SWORD, false);
-    public static final ItemRegistryObject<GearBlueprintItem> DAGGER_BLUEPRINT = registerGearBlueprint(GearType.DAGGER, false);
     public static final ItemRegistryObject<GearBlueprintItem> KATANA_BLUEPRINT = registerGearBlueprint(GearType.KATANA, false);
     public static final ItemRegistryObject<GearBlueprintItem> MACHETE_BLUEPRINT = registerGearBlueprint(GearType.MACHETE, false);
     public static final ItemRegistryObject<GearBlueprintItem> SPEAR_BLUEPRINT = registerGearBlueprint(GearType.SPEAR, false);
+    public static final ItemRegistryObject<GearBlueprintItem> KNIFE_BLUEPRINT = registerGearBlueprint(GearType.KNIFE, false);
+    public static final ItemRegistryObject<GearBlueprintItem> DAGGER_BLUEPRINT = registerGearBlueprint(GearType.DAGGER, false);
     public static final ItemRegistryObject<GearBlueprintItem> PICKAXE_BLUEPRINT = registerGearBlueprint(GearType.PICKAXE, false);
     public static final ItemRegistryObject<GearBlueprintItem> SHOVEL_BLUEPRINT = registerGearBlueprint(GearType.SHOVEL, false);
     public static final ItemRegistryObject<GearBlueprintItem> AXE_BLUEPRINT = registerGearBlueprint(GearType.AXE, false);
@@ -94,10 +95,11 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_TEMPLATE = registerPartBlueprint(PartType.BOWSTRING, true);
     public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartType.FLETCHING, true);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearType.SWORD, true);
-    public static final ItemRegistryObject<GearBlueprintItem> DAGGER_TEMPLATE = registerGearBlueprint(GearType.DAGGER, true);
     public static final ItemRegistryObject<GearBlueprintItem> KATANA_TEMPLATE = registerGearBlueprint(GearType.KATANA, true);
     public static final ItemRegistryObject<GearBlueprintItem> MACHETE_TEMPLATE = registerGearBlueprint(GearType.MACHETE, true);
     public static final ItemRegistryObject<GearBlueprintItem> SPEAR_TEMPLATE = registerGearBlueprint(GearType.SPEAR, true);
+    public static final ItemRegistryObject<GearBlueprintItem> KNIFE_TEMPLATE = registerGearBlueprint(GearType.KNIFE, true);
+    public static final ItemRegistryObject<GearBlueprintItem> DAGGER_TEMPLATE = registerGearBlueprint(GearType.DAGGER, true);
     public static final ItemRegistryObject<GearBlueprintItem> PICKAXE_TEMPLATE = registerGearBlueprint(GearType.PICKAXE, true);
     public static final ItemRegistryObject<GearBlueprintItem> SHOVEL_TEMPLATE = registerGearBlueprint(GearType.SHOVEL, true);
     public static final ItemRegistryObject<GearBlueprintItem> AXE_TEMPLATE = registerGearBlueprint(GearType.AXE, true);
@@ -124,14 +126,16 @@ public final class ModItems {
     // Tool Heads
     public static final ItemRegistryObject<ToolHeadItem> SWORD_BLADE = registerCompoundPart("sword_blade", () ->
             new ToolHeadItem(GearType.SWORD, unstackableProps()));
-    public static final ItemRegistryObject<ToolHeadItem> DAGGER_BLADE = registerCompoundPart("dagger_blade", () ->
-            new ToolHeadItem(GearType.DAGGER, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> KATANA_BLADE = registerCompoundPart("katana_blade", () ->
             new ToolHeadItem(GearType.KATANA, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> MACHETE_BLADE = registerCompoundPart("machete_blade", () ->
             new ToolHeadItem(GearType.MACHETE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SPEAR_TIP = registerCompoundPart("spear_tip", () ->
             new ToolHeadItem(GearType.SPEAR, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> KNIFE_BLADE = registerCompoundPart("knife_blade", () ->
+            new ToolHeadItem(GearType.KNIFE, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> DAGGER_BLADE = registerCompoundPart("dagger_blade", () ->
+            new ToolHeadItem(GearType.DAGGER, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> PICKAXE_HEAD = registerCompoundPart("pickaxe_head", () ->
             new ToolHeadItem(GearType.PICKAXE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHOVEL_HEAD = registerCompoundPart("shovel_head", () ->
@@ -208,10 +212,11 @@ public final class ModItems {
                             .build())));
 
     public static final ItemRegistryObject<CoreSword> SWORD = register("sword", () -> new CoreSword(GearType.SWORD));
-    public static final ItemRegistryObject<CoreDagger> DAGGER = register("dagger", () -> new CoreDagger(GearType.DAGGER));
     public static final ItemRegistryObject<CoreSword> KATANA = register("katana", () -> new CoreSword(GearType.KATANA));
     public static final ItemRegistryObject<CoreMachete> MACHETE = register("machete", () -> new CoreMachete(GearType.MACHETE));
     public static final ItemRegistryObject<CoreSword> SPEAR = register("spear", () -> new CoreSword(GearType.SPEAR));
+    public static final ItemRegistryObject<CoreDagger> KNIFE = register("knife", () -> new CoreDagger(GearType.KNIFE));
+    public static final ItemRegistryObject<CoreDagger> DAGGER = register("dagger", () -> new CoreDagger(GearType.DAGGER));
     public static final ItemRegistryObject<CorePickaxe> PICKAXE = register("pickaxe", () -> new CorePickaxe());
     public static final ItemRegistryObject<CoreShovel> SHOVEL = register("shovel", () -> new CoreShovel());
     public static final ItemRegistryObject<CoreAxe> AXE = register("axe", () -> new CoreAxe());

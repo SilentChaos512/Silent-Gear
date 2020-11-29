@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "silentgear:blueprints/knife",
+  "pattern": [
+    " #",
+    "/ "
+  ],
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "silentgear:knife_blueprint"
+  }
+}

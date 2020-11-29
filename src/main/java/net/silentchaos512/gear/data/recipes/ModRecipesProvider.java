@@ -91,10 +91,11 @@ public class ModRecipesProvider extends RecipeProvider {
 
     private void registerBlueprints(Consumer<IFinishedRecipe> consumer) {
         toolBlueprint(consumer, "sword", ModItems.SWORD_BLUEPRINT, ModItems.SWORD_TEMPLATE, "#", "#", "/");
-        toolBlueprint(consumer, "dagger", ModItems.DAGGER_BLUEPRINT, ModItems.DAGGER_TEMPLATE, "#", "/");
         toolBlueprint(consumer, "katana", ModItems.KATANA_BLUEPRINT, ModItems.KATANA_TEMPLATE, "##", "# ", "/ ");
         toolBlueprint(consumer, "machete", ModItems.MACHETE_BLUEPRINT, ModItems.MACHETE_TEMPLATE, "  #", " ##", "/  ");
         toolBlueprint(consumer, "spear", ModItems.SPEAR_BLUEPRINT, ModItems.SPEAR_TEMPLATE, "#  ", " / ", "  /");
+        toolBlueprint(consumer, "knife", ModItems.KNIFE_BLUEPRINT, ModItems.KNIFE_TEMPLATE, " #", "/ ");
+        toolBlueprint(consumer, "dagger", ModItems.DAGGER_BLUEPRINT, ModItems.DAGGER_TEMPLATE, "#", "/");
         toolBlueprint(consumer, "pickaxe", ModItems.PICKAXE_BLUEPRINT, ModItems.PICKAXE_TEMPLATE, "###", " / ", " / ");
         toolBlueprint(consumer, "shovel", ModItems.SHOVEL_BLUEPRINT, ModItems.SHOVEL_TEMPLATE, "#", "/", "/");
         toolBlueprint(consumer, "axe", ModItems.AXE_BLUEPRINT, ModItems.AXE_TEMPLATE, "##", "#/", " /");
@@ -316,10 +317,11 @@ public class ModRecipesProvider extends RecipeProvider {
 
     private void registerGear(Consumer<IFinishedRecipe> consumer) {
         toolRecipes(consumer, "sword", 2, ModItems.SWORD, ModItems.SWORD_BLADE, ModItems.SWORD_BLUEPRINT.get());
-        toolRecipes(consumer, "dagger", 1, ModItems.DAGGER, ModItems.DAGGER_BLADE, ModItems.DAGGER_BLUEPRINT.get());
         toolRecipes(consumer, "katana", 3, ModItems.KATANA, ModItems.KATANA_BLADE, ModItems.KATANA_BLUEPRINT.get());
         toolRecipes(consumer, "machete", 3, ModItems.MACHETE, ModItems.MACHETE_BLADE, ModItems.MACHETE_BLUEPRINT.get());
         toolRecipes(consumer, "spear", 1, ModItems.SPEAR, ModItems.SPEAR_TIP, ModItems.SPEAR_BLUEPRINT.get());
+        toolRecipes(consumer, "knife", 1, ModItems.KNIFE, ModItems.KNIFE_BLADE, ModItems.KNIFE_BLUEPRINT.get());
+        toolRecipes(consumer, "dagger", 1, ModItems.DAGGER, ModItems.DAGGER_BLADE, ModItems.DAGGER_BLUEPRINT.get());
         toolRecipes(consumer, "pickaxe", 3, ModItems.PICKAXE, ModItems.PICKAXE_HEAD, ModItems.PICKAXE_BLUEPRINT.get());
         toolRecipes(consumer, "shovel", 1, ModItems.SHOVEL, ModItems.SHOVEL_HEAD, ModItems.SHOVEL_BLUEPRINT.get());
         toolRecipes(consumer, "axe", 3, ModItems.AXE, ModItems.AXE_HEAD, ModItems.AXE_BLUEPRINT.get());
@@ -376,6 +378,12 @@ public class ModRecipesProvider extends RecipeProvider {
                 .key('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
                 .key('/', ModTags.Items.RODS_ROUGH)
                 .build(consumer, SilentGear.getId("gear/rough/dagger"));
+        ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.KNIFE)
+                .patternLine(" #")
+                .patternLine("/ ")
+                .key('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .key('/', ModTags.Items.RODS_ROUGH)
+                .build(consumer, SilentGear.getId("gear/rough/knife"));
         ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.PICKAXE)
                 .patternLine("###")
                 .patternLine(" / ")

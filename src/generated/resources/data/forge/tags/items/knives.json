@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "silentgear:knife",
     "silentgear:dagger"
   ]
 }

@@ -41,7 +41,7 @@ public class ModGiftLootTables extends GiftLootTables {
                 .addLootPool(LootPool.builder()
                         .addEntry(ItemLootEntry.builder(ModItems.AXE_BLUEPRINT)))
                 .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.DAGGER_BLUEPRINT)))
+                        .addEntry(ItemLootEntry.builder(ModItems.KNIFE_BLUEPRINT)))
                 .addLootPool(LootPool.builder()
                         .addEntry(ItemLootEntry.builder(ModItems.SWORD_BLUEPRINT)
                                 .weight(11))

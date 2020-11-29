@@ -1,0 +1,28 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "knife",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:knife_blade"
+  },
+  "name": {
+    "translate": "part.silentgear.knife_blade"
+  },
+  "stats": {
+    "melee_damage": [
+      {
+        "add": 1.0
+      },
+      {
+        "mul1": -0.5
+      }
+    ],
+    "attack_speed": {
+      "add": -1.6
+    },
+    "repair_efficiency": 2.0,
+    "durability": {
+      "mul1": 0.25
+    }
+  }
+}

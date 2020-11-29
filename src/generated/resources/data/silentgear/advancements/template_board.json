@@ -1,5 +1,5 @@
 {
-  "parent": "silentgear:dagger",
+  "parent": "silentgear:survival_tool",
   "display": {
     "icon": {
       "item": "silentgear:template_board"

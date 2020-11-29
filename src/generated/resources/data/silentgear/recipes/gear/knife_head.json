@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "knife"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main"
+    }
+  ],
+  "result": {
+    "item": "silentgear:knife_blade"
+  }
+}

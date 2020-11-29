@@ -125,8 +125,14 @@ public class ModAdvancementProvider implements IDataProvider {
                     .withDisplay(CraftingItems.ROUGH_ROD, title("crude_tool"), description("crude_tool"), null, FrameType.TASK, true, true, false)
                     .withCriterion("tool_has_rough_rod", genericInt(GearEvents.CRAFTED_WITH_ROUGH_ROD, 1))
                     .register(consumer, id("crude_tool"));
-            Advancement dagger = simpleGetItem(consumer, ModItems.DAGGER, crudeTool);
-            Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, dagger);
+            Advancement survivalTool = Advancement.Builder.builder()
+                    .withParent(crudeTool)
+                    .withDisplay(ModItems.KNIFE, title("survival_tool"), description("survival_tool"), null, FrameType.TASK, true, true, false)
+                    .withCriterion("knife", getItem(ModItems.KNIFE))
+                    .withCriterion("dagger", getItem(ModItems.DAGGER))
+                    .withRequirementsStrategy(IRequirementsStrategy.OR)
+                    .register(consumer, id("survival_tool"));
+            Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, survivalTool);
 
             Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
             Advancement upgradeBase = simpleGetItem(consumer, CraftingItems.UPGRADE_BASE, templateBoard);
