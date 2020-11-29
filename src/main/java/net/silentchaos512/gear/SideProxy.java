@@ -35,6 +35,8 @@ import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
+import net.silentchaos512.gear.compat.curios.CurioGearItemCapability;
+import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
@@ -103,9 +105,17 @@ class SideProxy implements IProxy {
         }
 
         Greetings.addMessage(SideProxy::detectDataLoadingFailure);
+
+        if (ModList.get().isLoaded(Const.CURIOS)) {
+            CurioGearItemCapability.register();
+        }
     }
 
-    private static void imcEnqueue(InterModEnqueueEvent event) {}
+    private static void imcEnqueue(InterModEnqueueEvent event) {
+        if (ModList.get().isLoaded(Const.CURIOS)) {
+            CuriosCompat.imcEnqueue(event);
+        }
+    }
 
     private static void imcProcess(InterModProcessEvent event) {}
 

@@ -451,9 +451,8 @@ public final class GearHelper {
 
     // Formerly onUpdate
     public static void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        @Nullable PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity) entity : null;
-
         if (!world.isRemote) {
+            @Nullable PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity) entity : null;
             TraitHelper.tickTraits(world, player, stack, isSelected);
         }
     }

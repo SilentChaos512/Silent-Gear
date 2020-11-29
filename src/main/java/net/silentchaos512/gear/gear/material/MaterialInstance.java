@@ -114,6 +114,17 @@ public final class MaterialInstance implements IMaterialInstance {
         return material.getCategories();
     }
 
+    public boolean hasAnyCategory(Collection<IMaterialCategory> others) {
+        for (IMaterialCategory cat1 : this.getCategories()) {
+            for (IMaterialCategory cat2 : others) {
+                if (cat1.matches(cat2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public int getTier(PartType partType) {
         return material.getTier(partType);

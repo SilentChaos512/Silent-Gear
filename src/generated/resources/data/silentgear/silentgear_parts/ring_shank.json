@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "ring",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:ring_shank"
+  },
+  "name": {
+    "translate": "part.silentgear.ring_shank"
+  }
+}

@@ -29,6 +29,8 @@ public final class Const {
     public static final ResourceLocation SMITHING_UPGRADE = SilentGear.getId("smithing/upgrade");
     public static final ResourceLocation SWAP_GEAR_PART = SilentGear.getId("swap_gear_part");
 
+    // Mod IDs
+    public static final String CURIOS = "curios";
 
     private Const() {}
 

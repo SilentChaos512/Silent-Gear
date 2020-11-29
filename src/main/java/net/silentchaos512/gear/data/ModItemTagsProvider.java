@@ -25,6 +25,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
+import net.silentchaos512.gear.util.Const;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -182,6 +183,13 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
             getBuilder(tag).add(blueprints.get(tagId).toArray(new Item[0]));
             blueprintsBuilder.addTag(tag);
         });
+
+        // Curios
+        builder(makeWrapper(Const.CURIOS, "ring"), ModItems.RING);
+    }
+
+    private ITag.INamedTag<Item> makeWrapper(String namespace, String path) {
+        return ItemTags.makeWrapperTag(new ResourceLocation(namespace, path).toString());
     }
 
     private void builder(ITag.INamedTag<Item> tag, IItemProvider... items) {

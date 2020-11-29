@@ -366,23 +366,29 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!event.player.world.isRemote) {
-            int magnetic = TraitHelper.getHighestLevelEitherHand(event.player, Const.Traits.MAGNETIC);
-            if (magnetic > 0) {
-                final int range = magnetic * 3 + 1;
-                Vector3d target = new Vector3d(event.player.getPosX(), event.player.getPosYHeight(0.5), event.player.getPosZ());
+            int magnetic = Math.max(TraitHelper.getHighestLevelEitherHand(event.player, Const.Traits.MAGNETIC),
+                    TraitHelper.getHighestLevelCurio(event.player, Const.Traits.MAGNETIC));
 
-                AxisAlignedBB aabb = new AxisAlignedBB(event.player.getPosX() - range, event.player.getPosY() - range, event.player.getPosZ() - range, event.player.getPosX() + range + 1, event.player.getPosY() + range + 1, event.player.getPosZ() + range + 1);
-                for (ItemEntity entity : event.player.world.getEntitiesWithinAABB(ItemEntity.class, aabb, e -> e.getDistanceSq(event.player) < range * range)) {
-                    // Accelerate to target point
-                    Vector3d vec = entity.func_230268_c_(event.player).subtractReverse(target);
-                    vec = vec.normalize().scale(0.03);
-                    if (entity.getPosY() < target.y) {
-                        double xzDistanceSq = (entity.getPosX() - target.x) * (entity.getPosX() - target.x) + (entity.getPosZ() - target.z) * (entity.getPosZ() - target.z);
-                        vec = vec.add(0, 0.005 + xzDistanceSq / 1000, 0);
-                    }
-                    entity.addVelocity(vec.x, vec.y, vec.z);
-                }
+            if (magnetic > 0) {
+                tickMagnetic(event.player, magnetic);
             }
+        }
+    }
+
+    private static void tickMagnetic(PlayerEntity player, int magneticLevel) {
+        final int range = magneticLevel * 3 + 1;
+        Vector3d target = new Vector3d(player.getPosX(), player.getPosYHeight(0.5), player.getPosZ());
+
+        AxisAlignedBB aabb = new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range + 1, player.getPosY() + range + 1, player.getPosZ() + range + 1);
+        for (ItemEntity entity : player.world.getEntitiesWithinAABB(ItemEntity.class, aabb, e -> e.getDistanceSq(player) < range * range)) {
+            // Accelerate to target point
+            Vector3d vec = entity.func_230268_c_(player).subtractReverse(target);
+            vec = vec.normalize().scale(0.03);
+            if (entity.getPosY() < target.y) {
+                double xzDistanceSq = (entity.getPosX() - target.x) * (entity.getPosX() - target.x) + (entity.getPosZ() - target.z) * (entity.getPosZ() - target.z);
+                vec = vec.add(0, 0.005 + xzDistanceSq / 1000, 0);
+            }
+            entity.addVelocity(vec.x, vec.y, vec.z);
         }
     }
 

@@ -21,6 +21,7 @@ import net.silentchaos512.gear.crafting.ingredient.BlueprintIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
@@ -118,6 +119,36 @@ public class ModRecipesProvider extends RecipeProvider {
         armorBlueprint(consumer, "leggings", ModItems.LEGGINGS_BLUEPRINT, ModItems.LEGGINGS_TEMPLATE, "###", "# #", "# #");
         armorBlueprint(consumer, "boots", ModItems.BOOTS_BLUEPRINT, ModItems.BOOTS_TEMPLATE, "# #", "# #");
 
+        // Curio blueprints
+        ShapedRecipeBuilder.shapedRecipe(ModItems.RING_BLUEPRINT)
+                .setGroup("silentgear:blueprints/ring")
+                .key('#', ModTags.Items.BLUEPRINT_PAPER)
+                .key('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .patternLine(" #/")
+                .patternLine("# #")
+                .patternLine("/# ")
+                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINT_PAPER))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.RING_BLUEPRINT)
+                .setGroup("silentgear:blueprints/ring")
+                .key('#', ModTags.Items.BLUEPRINT_PAPER)
+                .key('/', Tags.Items.INGOTS_GOLD)
+                .patternLine(" #/")
+                .patternLine("# #")
+                .patternLine("/# ")
+                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINT_PAPER))
+                .build(consumer, SilentGear.getId("ring_blueprint_alt"));
+        ShapedRecipeBuilder.shapedRecipe(ModItems.RING_TEMPLATE)
+                .setGroup("silentgear:blueprints/ring")
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .patternLine(" #/")
+                .patternLine("# #")
+                .patternLine("/# ")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+
+        // Part blueprints
         ShapelessRecipeBuilder.shapelessRecipe(ModItems.BINDING_BLUEPRINT)
                 .setGroup("silentgear:blueprints/binding")
                 .addIngredient(Ingredient.fromTag(ModTags.Items.BLUEPRINT_PAPER), 1)
@@ -337,6 +368,11 @@ public class ModRecipesProvider extends RecipeProvider {
         bowRecipes(consumer, "crossbow", 3, ModItems.CROSSBOW, ModItems.CROSSBOW_LIMBS, ModItems.CROSSBOW_BLUEPRINT.get());
         bowRecipes(consumer, "slingshot", 2, ModItems.SLINGSHOT, ModItems.SLINGSHOT_LIMBS, ModItems.SLINGSHOT_BLUEPRINT.get());
         arrowRecipes(consumer, "arrow", ModItems.ARROW, ModItems.ARROW_HEADS, ModItems.ARROW_BLUEPRINT.get());
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.RING)
+                .addIngredient(BlueprintIngredient.of(ModItems.RING_BLUEPRINT.get()))
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), 2)
+                .build(consumer, SilentGear.getId("gear/ring"));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.SHIELD)
                 .addIngredient(BlueprintIngredient.of(ModItems.SHIELD_BLUEPRINT.get()))

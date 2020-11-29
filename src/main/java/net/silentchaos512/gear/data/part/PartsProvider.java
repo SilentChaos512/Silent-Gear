@@ -229,6 +229,10 @@ public class PartsProvider implements IDataProvider {
                     .stat(ItemStats.ENCHANTABILITY, -0.65f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.RANGED_DAMAGE, -0.75f, StatInstance.Operation.MUL1);
 
+        // Curios
+        if (isToolHead(builder, ModItems.RING_SHANK))
+            return builder;
+
         // Oddballs
         if (isToolHead(builder, ModItems.ARMOR_BODY))
             return builder;

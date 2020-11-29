@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "silentgear:blueprints/ring",
+  "pattern": [
+    " #/",
+    "# #",
+    "/# "
+  ],
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "curio",
+      "categories": [
+        "metal"
+      ]
+    }
+  },
+  "result": {
+    "item": "silentgear:ring_blueprint"
+  }
+}

@@ -76,6 +76,11 @@ public final class GearType {
     // Projectiles
     public static final GearType ARROW = getOrCreate("arrow", PROJECTILE);
 
+    // Curios
+    public static final GearType CURIO = getOrCreate("curio", ALL);
+    public static final GearType BRACELET = getOrCreate("bracelet", CURIO);
+    public static final GearType RING = getOrCreate("ring", CURIO);
+
     /**
      * Gets the gear type of the given name, or null if it does not exist.
      *

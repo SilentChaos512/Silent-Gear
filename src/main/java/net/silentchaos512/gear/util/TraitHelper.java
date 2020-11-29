@@ -19,6 +19,7 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -28,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.part.PartDataList;
@@ -36,6 +38,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.trait.TraitManager;
@@ -186,16 +189,25 @@ public final class TraitHelper {
         return getHighestLevelEitherHand(player, trait.getId());
     }
 
+    @Deprecated
     public static int getHighestLevelEitherHand(PlayerEntity player, ResourceLocation traitId) {
         ItemStack main = player.getHeldItemMainhand();
         ItemStack off = player.getHeldItemOffhand();
         return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
     }
 
+    public static int getHighestLevelCurio(LivingEntity entity, DataResource<ITrait> trait) {
+        if (ModList.get().isLoaded(Const.CURIOS)) {
+            return CuriosCompat.getHighestTraitLevel(entity, trait);
+        }
+        return 0;
+    }
+
     public static boolean hasTraitEitherHand(PlayerEntity player, DataResource<ITrait> trait) {
         return hasTraitEitherHand(player, trait.getId());
     }
 
+    @Deprecated
     public static boolean hasTraitEitherHand(PlayerEntity player, ResourceLocation traitId) {
         ItemStack main = player.getHeldItemMainhand();
         ItemStack off = player.getHeldItemOffhand();
