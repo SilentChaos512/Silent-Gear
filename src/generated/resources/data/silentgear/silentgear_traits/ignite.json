@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:block_placer",
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.ignite"
+  },
+  "description": {
+    "translate": "trait.silentgear.ignite.desc"
+  },
+  "block": "minecraft:fire",
+  "damage_on_use": 1,
+  "cooldown": 0,
+  "sound": "minecraft:item.flintandsteel.use",
+  "sound_volume": 1.0,
+  "sound_pitch": 1.0
+}

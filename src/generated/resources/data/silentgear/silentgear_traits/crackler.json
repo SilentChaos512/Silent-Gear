@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:block_placer",
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.crackler"
+  },
+  "description": {
+    "translate": "trait.silentgear.crackler.desc"
+  },
+  "block": "minecraft:basalt",
+  "damage_on_use": 3,
+  "cooldown": 0,
+  "sound": "minecraft:block.basalt.place",
+  "sound_volume": 1.0,
+  "sound_pitch": 1.0
+}

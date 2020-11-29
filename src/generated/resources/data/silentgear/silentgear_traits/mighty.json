@@ -1,0 +1,36 @@
+{
+  "type": "silentgear:potion_effect_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.mighty"
+  },
+  "description": {
+    "translate": "trait.silentgear.mighty.desc"
+  },
+  "potion_effects": {
+    "tool": [
+      {
+        "type": "trait_level",
+        "effect": "minecraft:strength",
+        "level": [
+          0,
+          0,
+          1,
+          1,
+          2
+        ]
+      },
+      {
+        "type": "trait_level",
+        "effect": "minecraft:haste",
+        "level": [
+          1,
+          1,
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  }
+}

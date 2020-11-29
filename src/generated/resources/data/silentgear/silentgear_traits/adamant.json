@@ -10,7 +10,7 @@
   "potion_effects": {
     "armor": [
       {
-        "full_set": false,
+        "type": "piece_count",
         "effect": "minecraft:resistance",
         "level": [
           1,

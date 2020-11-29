@@ -3,18 +3,26 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Several traits from the Just Gems data packs: crackler, floatstoner, ignite, kitty vision, mighty, and sharp
+### Changed
+- Potion effects traits now have a "type" enum for each effect instead of just a boolean for "full set required"
+    - Type values: `trait_level` (based on level of trait), `piece_count` (number of armor pieces with trait, same as false in old files), `full_set_only` (same as true in old files)
+    - Old files should still load correctly for now
+
 ## [2.3.10] - 2020-11-28
 ### Added
 - Material categories. These are unused currently, but will be used for synergy calculations in the future. Categories can be any string and may be defined by mods or data packs. [#267]
 - Individual traits can now supply extra wiki lines in their JSON. _This is not synced with the client on dedicated servers._ Useful for adding more information to frequently confused traits, like Lucky.
 ### Changed
-- Materials will no longer inherit stats and traits from their parent of they provide any of their own [related to #266]
+- Materials will no longer inherit stats and traits from their parent if they provide any of their own [related to #266]
 - Improvements to formatting of the trait wiki page dump command
     - Material list is formatted for easier reading
     - Shows list of parts that provide traits (useful for upgrades)
 ### Fixed
 - Crimson wood and warped wood having the flammable trait [#266]
-- Damage on use for block filler traits (Road Maker) being loaded incorrect (value was truncated to an int)
+- Damage on use for block filler traits (Road Maker) being loaded incorrectly (value was truncated to an int)
 
 ## [2.3.9] - 2020-11-26
 ### Added

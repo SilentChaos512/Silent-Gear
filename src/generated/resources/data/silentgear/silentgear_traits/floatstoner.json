@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:block_placer",
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.floatstoner"
+  },
+  "description": {
+    "translate": "trait.silentgear.floatstoner.desc"
+  },
+  "block": "minecraft:end_stone",
+  "damage_on_use": 3,
+  "cooldown": 0,
+  "sound": "minecraft:block.stone.place",
+  "sound_volume": 1.0,
+  "sound_pitch": 1.0
+}

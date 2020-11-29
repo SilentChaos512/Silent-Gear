@@ -10,7 +10,7 @@
   "potion_effects": {
     "armor": [
       {
-        "full_set": true,
+        "type": "full_set_only",
         "effect": "minecraft:water_breathing",
         "level": [
           1

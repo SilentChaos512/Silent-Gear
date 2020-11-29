@@ -2,19 +2,19 @@
   "type": "silentgear:potion_effect_trait",
   "max_level": 1,
   "name": {
-    "translate": "trait.silentgear.flame_ward"
+    "translate": "trait.silentgear.kitty_vision"
   },
   "description": {
-    "translate": "trait.silentgear.flame_ward.desc"
+    "translate": "trait.silentgear.kitty_vision.desc"
   },
   "overrides": [
     "silentgear:flammable"
   ],
   "potion_effects": {
-    "armor": [
+    "helmet": [
       {
-        "type": "full_set_only",
-        "effect": "minecraft:fire_resistance",
+        "type": "trait_level",
+        "effect": "minecraft:night_vision",
         "level": [
           1
         ]

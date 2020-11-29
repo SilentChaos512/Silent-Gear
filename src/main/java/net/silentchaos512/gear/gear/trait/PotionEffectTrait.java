@@ -11,7 +11,6 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -21,7 +20,9 @@ import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.TimeUtils;
+import net.silentchaos512.utils.EnumUtils;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 // TODO: rename to WielderEffectTrait?
@@ -45,14 +46,23 @@ public final class PotionEffectTrait extends SimpleTrait {
         PlayerEntity player = context.getPlayer();
         if (player == null || !isEquipped) return;
         GearType gearType = ((ICoreItem) context.getGear().getItem()).getGearType();
-        potions.forEach((type, list) -> applyEffects(player, gearType, type, list));
+        potions.forEach((type, list) -> applyEffects(context, gearType, type, list));
     }
 
-    private void applyEffects(PlayerEntity player, GearType gearType, String type, Iterable<PotionData> effects) {
+    private void applyEffects(TraitActionContext context, GearType gearType, String type, Iterable<PotionData> effects) {
+        PlayerEntity player = context.getPlayer();
+        assert player != null; // checked in onUpdate
+
         if (gearType.matches(type) || "all".equals(type)) {
             int setPieceCount = getSetPieceCount(type, player);
             boolean hasFullSet = !"armor".equals(type) || setPieceCount >= 4;
-            effects.forEach(d -> d.getEffect(setPieceCount, hasFullSet).ifPresent(player::addPotionEffect));
+
+            for (PotionData potionData : effects) {
+                EffectInstance effect = potionData.getEffect(context.getTraitLevel(), setPieceCount, hasFullSet);
+                if (effect != null) {
+                    player.addPotionEffect(effect);
+                }
+            }
         }
     }
 
@@ -142,15 +152,20 @@ public final class PotionEffectTrait extends SimpleTrait {
     }
 
     public static class PotionData {
-        private boolean requiresFullSet;
+        private LevelType type;
         private ResourceLocation effectId;
         private int duration;
         private int[] levels;
 
+        @Deprecated
         @SuppressWarnings("TypeMayBeWeakened")
         public static PotionData of(boolean requiresFullSet, Effect effect, int... levels) {
+            return of(requiresFullSet ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT, effect, levels);
+        }
+
+        public static PotionData of(LevelType type, Effect effect, int... levels) {
             PotionData ret = new PotionData();
-            ret.requiresFullSet = requiresFullSet;
+            ret.type = type;
             ret.effectId = Objects.requireNonNull(effect.getRegistryName());
             ret.duration = TimeUtils.ticksFromSeconds(getDefaultDuration(ret.effectId));
             ret.levels = levels.clone();
@@ -159,7 +174,7 @@ public final class PotionEffectTrait extends SimpleTrait {
 
         public JsonObject serialize() {
             JsonObject json = new JsonObject();
-            json.addProperty("full_set", this.requiresFullSet);
+            json.addProperty("type", this.type.getName());
             json.addProperty("effect", this.effectId.toString());
 
             JsonArray levelsArray = new JsonArray();
@@ -170,7 +185,7 @@ public final class PotionEffectTrait extends SimpleTrait {
 
         static PotionData from(JsonObject json) {
             PotionData ret = new PotionData();
-            ret.requiresFullSet = JSONUtils.getBoolean(json, "full_set", false);
+            ret.type = deserializeType(json);
             // Effect ID, get actual potion only when needed
             ret.effectId = new ResourceLocation(JSONUtils.getString(json, "effect", "unknown"));
             // Effects duration in seconds.
@@ -199,9 +214,18 @@ public final class PotionEffectTrait extends SimpleTrait {
             return ret;
         }
 
+        private static LevelType deserializeType(JsonObject json) {
+            if (json.has("type")) {
+                return EnumUtils.byName(JSONUtils.getString(json, "type"), LevelType.FULL_SET_ONLY);
+            } else if (json.has("full_set")) {
+                return JSONUtils.getBoolean(json, "full_set") ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT;
+            }
+            return LevelType.TRAIT_LEVEL;
+        }
+
         static PotionData read(PacketBuffer buffer) {
             PotionData ret = new PotionData();
-            ret.requiresFullSet = buffer.readBoolean();
+            ret.type = buffer.readEnumValue(LevelType.class);
             ret.effectId = buffer.readResourceLocation();
             ret.duration = buffer.readVarInt();
             ret.levels = buffer.readVarIntArray();
@@ -209,7 +233,7 @@ public final class PotionEffectTrait extends SimpleTrait {
         }
 
         void write(PacketBuffer buffer) {
-            buffer.writeBoolean(requiresFullSet);
+            buffer.writeEnumValue(type);
             buffer.writeResourceLocation(effectId);
             buffer.writeVarInt(duration);
             buffer.writeVarIntArray(levels);
@@ -220,16 +244,30 @@ public final class PotionEffectTrait extends SimpleTrait {
             return new ResourceLocation("night_vision").equals(effectId) ? 15.5f : 1.5f;
         }
 
-        Optional<EffectInstance> getEffect(int pieceCount, boolean hasFullSet) {
-            if (this.requiresFullSet && !hasFullSet) return Optional.empty();
+        @Nullable
+        EffectInstance getEffect(int traitLevel, int pieceCount, boolean hasFullSet) {
+            if (this.type == LevelType.FULL_SET_ONLY && !hasFullSet) return null;
 
             Effect potion = ForgeRegistries.POTIONS.getValue(effectId);
-            if (potion == null) return Optional.empty();
+            if (potion == null) return null;
 
-            int effectLevel = levels[MathHelper.clamp(pieceCount - 1, 0, levels.length - 1)];
-            if (effectLevel < 1) return Optional.empty();
+            int effectLevel = getEffectLevel(traitLevel, pieceCount, hasFullSet);
+            if (effectLevel < 1) return null;
 
-            return Optional.of(new EffectInstance(potion, duration, effectLevel - 1, true, false));
+            return new EffectInstance(potion, duration, effectLevel - 1, true, false);
+        }
+
+        int getEffectLevel(int traitLevel, int pieceCount, boolean hasFullSet) {
+            switch (this.type) {
+                case TRAIT_LEVEL:
+                    return this.levels[traitLevel - 1];
+                case PIECE_COUNT:
+                    return this.levels[pieceCount - 1];
+                case FULL_SET_ONLY:
+                    return this.levels[0];
+                default:
+                    throw new IllegalArgumentException("Unknown level type for potion effect trait: " + this.type);
+            }
         }
 
         public String getWikiLine() {
@@ -246,8 +284,23 @@ public final class PotionEffectTrait extends SimpleTrait {
                 effectName = effectId.toString();
             }
 
-            return effectName + ": [" + String.join(", ", levelsText) + "]"
-                    + (requiresFullSet ? " (full set required)" : "");
+            return String.format("%s: [%s] (%s)", effectName, String.join(", ", levelsText), type.wikiText);
+        }
+    }
+
+    public enum LevelType {
+        TRAIT_LEVEL("by trait level"),
+        PIECE_COUNT("by armor piece count"),
+        FULL_SET_ONLY("requires full set of armor");
+
+        final String wikiText;
+
+        LevelType(String wikiText) {
+            this.wikiText = wikiText;
+        }
+
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
         }
     }
 }

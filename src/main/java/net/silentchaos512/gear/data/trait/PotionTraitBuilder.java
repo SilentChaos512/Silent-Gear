@@ -25,9 +25,16 @@ public class PotionTraitBuilder extends TraitBuilder {
         super(traitId, maxLevel, PotionEffectTrait.SERIALIZER);
     }
 
+    @Deprecated
     public PotionTraitBuilder addEffect(GearType gearType, boolean requiresFullSet, Effect effect, int... levels) {
         this.potions.computeIfAbsent(gearType, gt -> new ArrayList<>())
                 .add(PotionEffectTrait.PotionData.of(requiresFullSet, effect, levels));
+        return this;
+    }
+
+    public PotionTraitBuilder addEffect(GearType gearType, PotionEffectTrait.LevelType type, Effect effect, int... levels) {
+        this.potions.computeIfAbsent(gearType, gt -> new ArrayList<>())
+                .add(PotionEffectTrait.PotionData.of(type, effect, levels));
         return this;
     }
 

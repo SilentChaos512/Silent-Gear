@@ -10,7 +10,7 @@
   "potion_effects": {
     "armor": [
       {
-        "full_set": false,
+        "type": "piece_count",
         "effect": "minecraft:speed",
         "level": [
           0,
@@ -20,7 +20,7 @@
         ]
       },
       {
-        "full_set": false,
+        "type": "piece_count",
         "effect": "minecraft:jump_boost",
         "level": [
           1,

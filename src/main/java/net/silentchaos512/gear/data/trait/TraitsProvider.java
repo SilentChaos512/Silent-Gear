@@ -16,6 +16,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.trait.DamageTypeTrait;
+import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.Const;
 import org.apache.logging.log4j.LogManager;
@@ -145,18 +146,26 @@ public class TraitsProvider implements IDataProvider {
         // Wielder Effect (Potion)
 
         ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
-                .addEffect(GearType.ARMOR, false, Effects.RESISTANCE, 1, 1, 1, 2)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.RESISTANCE, 1, 1, 1, 2)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.AQUATIC, 5)
-                .addEffect(GearType.ARMOR, true, Effects.WATER_BREATHING, 1)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.WATER_BREATHING, 1)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.FLAME_WARD, 1)
-                .addEffect(GearType.ARMOR, true, Effects.FIRE_RESISTANCE, 1)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.FIRE_RESISTANCE, 1)
                 .overridesTrait(Const.Traits.FLAMMABLE)
         );
+        ret.add(new PotionTraitBuilder(Const.Traits.KITTY_VISION, 1)
+                .addEffect(GearType.HELMET, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
+                .overridesTrait(Const.Traits.FLAMMABLE)
+        );
+        ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
+                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.STRENGTH, 0, 0, 1, 1, 2)
+                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 1, 2, 3)
+        );
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5)
-                .addEffect(GearType.ARMOR, false, Effects.SPEED, 0, 1, 2, 3)
-                .addEffect(GearType.ARMOR, false, Effects.JUMP_BOOST, 1, 2, 3, 4)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.SPEED, 0, 1, 2, 3)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.JUMP_BOOST, 1, 2, 3, 4)
         );
 
         // Target Effect
@@ -203,12 +212,21 @@ public class TraitsProvider implements IDataProvider {
                 .addStatMod(ItemStats.MAGIC_DAMAGE, -0.15f, true, true)
                 .cancelsWith(Const.Traits.ERODED)
         );
+        ret.add(new StatModifierTraitBuilder(Const.Traits.SHARP, 5)
+                .addStatMod(ItemStats.HARVEST_SPEED, 0.125f, true, true)
+                .addStatMod(ItemStats.MELEE_DAMAGE, 0.125f, true, true)
+        );
         ret.add(new StatModifierTraitBuilder(Const.Traits.SOFT, 5)
                 .addStatMod(ItemStats.HARVEST_SPEED, -0.15f, true, true)
                 .cancelsWith(Const.Traits.HARD)
         );
 
         // Block placers
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.CRACKLER, 1, Blocks.BASALT, 3));
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.FLOATSTONER, 1, Blocks.END_STONE, 3));
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.IGNITE, 1, Blocks.FIRE, 1)
+                .sound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1f, 1f)
+        );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, ModBlocks.PHANTOM_LIGHT.get(), 5)
                 .sound(SoundEvents.ENTITY_ITEM_PICKUP, 0.75f, 0.5f)
