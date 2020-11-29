@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Missing recipe for road maker upgrade
 - Several traits from the Just Gems data packs: crackler, floatstoner, ignite, kitty vision, mighty, and sharp
 ### Changed
 - Potion effects traits now have a "type" enum for each effect instead of just a boolean for "full set required"

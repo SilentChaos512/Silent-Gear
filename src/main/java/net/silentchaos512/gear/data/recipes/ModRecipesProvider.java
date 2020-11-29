@@ -514,6 +514,19 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(CraftingItems.FLAX_FLOWERS))
                 .build(consumer, SilentGear.getId("blue_dye_from_flax_flowers"));
 
+        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.ROAD_MAKER_UPGRADE)
+                .addIngredient(CraftingItems.ADVANCED_UPGRADE_BASE)
+                .addIngredient(Items.IRON_SHOVEL)
+                .addIngredient(Tags.Items.DYES_ORANGE)
+                .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
+                .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.SPOON_UPGRADE)
+                .addIngredient(CraftingItems.ADVANCED_UPGRADE_BASE)
+                .addIngredient(Items.DIAMOND_SHOVEL)
+                .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
+                .build(consumer);
+
         // TODO: Maybe should organize these better...
         // A
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ADVANCED_UPGRADE_BASE)
@@ -730,11 +743,6 @@ public class ModRecipesProvider extends RecipeProvider {
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.SINEW_FIBER, 3)
                 .addIngredient(CraftingItems.DRIED_SINEW)
                 .addCriterion("has_item", hasItem(CraftingItems.SINEW))
-                .build(consumer);
-        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.SPOON_UPGRADE)
-                .addIngredient(CraftingItems.ADVANCED_UPGRADE_BASE)
-                .addIngredient(Items.DIAMOND_SHOVEL)
-                .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
                 .build(consumer);
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.STONE_ROD, 4)
                 .key('#', Tags.Items.COBBLESTONE)
