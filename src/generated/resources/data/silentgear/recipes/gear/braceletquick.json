@@ -1,0 +1,40 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "bracelet"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "curio",
+      "categories": [
+        "metal"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "curio",
+      "categories": [
+        "metal"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "curio",
+      "categories": [
+        "metal"
+      ]
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:adornment"
+    }
+  ],
+  "result": {
+    "item": "silentgear:bracelet"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "bracelet",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:bracelet_band"
+  },
+  "name": {
+    "translate": "part.silentgear.bracelet_band"
+  }
+}

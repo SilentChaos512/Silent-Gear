@@ -1,0 +1,36 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "bracelet"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "curio",
+      "categories": [
+        "metal"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "curio",
+      "categories": [
+        "metal"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "curio",
+      "categories": [
+        "metal"
+      ]
+    }
+  ],
+  "result": {
+    "item": "silentgear:bracelet_band"
+  }
+}

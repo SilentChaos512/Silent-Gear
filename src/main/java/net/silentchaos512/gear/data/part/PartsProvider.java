@@ -230,10 +230,6 @@ public class PartsProvider implements IDataProvider {
                     .stat(ItemStats.ENCHANTABILITY, -0.65f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.RANGED_DAMAGE, -0.75f, StatInstance.Operation.MUL1);
 
-        // Curios
-        if (isToolHead(builder, ModItems.RING_SHANK))
-            return builder;
-
         // Oddballs
         if (isToolHead(builder, ModItems.ARMOR_BODY))
             return builder;
@@ -244,6 +240,12 @@ public class PartsProvider implements IDataProvider {
         if (isToolHead(builder, ModItems.ARROW_HEADS))
             return builder
                     .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f);
+
+        // Curios
+        if (isToolHead(builder, ModItems.RING_SHANK))
+            return builder;
+        if (isToolHead(builder, ModItems.BRACELET_BAND))
+            return builder;
 
         throw new IllegalArgumentException("Stats for " + builder.id + " are missing!");
     }

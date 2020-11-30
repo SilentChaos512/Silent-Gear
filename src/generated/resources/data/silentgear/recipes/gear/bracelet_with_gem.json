@@ -1,0 +1,18 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "item": "silentgear:jeweler_tools"
+    },
+    {
+      "item": "silentgear:bracelet_band"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:adornment"
+    }
+  ],
+  "result": {
+    "item": "silentgear:bracelet"
+  }
+}

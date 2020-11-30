@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "item": "silentgear:jeweler_tools"
+    },
+    {
+      "item": "silentgear:bracelet_band"
+    }
+  ],
+  "result": {
+    "item": "silentgear:bracelet"
+  }
+}

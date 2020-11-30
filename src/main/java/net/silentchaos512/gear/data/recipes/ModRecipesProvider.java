@@ -386,27 +386,8 @@ public class ModRecipesProvider extends RecipeProvider {
         bowRecipes(consumer, "slingshot", 2, ModItems.SLINGSHOT, ModItems.SLINGSHOT_LIMBS, ModItems.SLINGSHOT_BLUEPRINT.get());
         arrowRecipes(consumer, "arrow", ModItems.ARROW, ModItems.ARROW_HEADS, ModItems.ARROW_BLUEPRINT.get());
 
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.RING_SHANK)
-                .addIngredient(BlueprintIngredient.of(ModItems.RING_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), 2)
-                .build(consumer, SilentGear.getId("gear/ring_shank"));
-
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.RING)
-                .addIngredient(ModItems.JEWELER_TOOLS)
-                .addIngredient(ModItems.RING_SHANK)
-                .build(consumer, SilentGear.getId("gear/ring"));
-
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.RING)
-                .addIngredient(ModItems.JEWELER_TOOLS)
-                .addIngredient(ModItems.RING_SHANK)
-                .addIngredient(GearPartIngredient.of(PartType.ADORNMENT))
-                .build(consumer, SilentGear.getId("gear/ring_with_gem"));
-
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.RING)
-                .addIngredient(BlueprintIngredient.of(ModItems.RING_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), 2)
-                .addIngredient(GearPartIngredient.of(PartType.ADORNMENT))
-                .build(consumer, SilentGear.getId("gear/ring_quick"));
+        curioRecipes(consumer, "ring", 2, ModItems.RING, ModItems.RING_SHANK, ModItems.RING_BLUEPRINT.get());
+        curioRecipes(consumer, "bracelet", 3, ModItems.BRACELET, ModItems.BRACELET_BAND, ModItems.BRACELET_BLUEPRINT.get());
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.SHIELD)
                 .addIngredient(BlueprintIngredient.of(ModItems.SHIELD_BLUEPRINT.get()))
@@ -987,6 +968,30 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .addIngredient(GearPartIngredient.of(PartType.FLETCHING))
                 .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
+    }
+
+    private static void curioRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider curioItem, IItemProvider curioMain, GearBlueprintItem blueprint) {
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), curioMain)
+                .addIngredient(BlueprintIngredient.of(blueprint))
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
+                .build(consumer, SilentGear.getId("gear/" + name + "_main_only"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), curioItem)
+                .addIngredient(ModItems.JEWELER_TOOLS)
+                .addIngredient(curioMain)
+                .build(consumer, SilentGear.getId("gear/" + name));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), curioItem)
+                .addIngredient(ModItems.JEWELER_TOOLS)
+                .addIngredient(curioMain)
+                .addIngredient(GearPartIngredient.of(PartType.ADORNMENT))
+                .build(consumer, SilentGear.getId("gear/" + name + "_with_gem"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), curioItem)
+                .addIngredient(BlueprintIngredient.of(blueprint))
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
+                .addIngredient(GearPartIngredient.of(PartType.ADORNMENT))
+                .build(consumer, SilentGear.getId("gear/" + name + "quick"));
     }
 
     private void toolBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, String... pattern) {
