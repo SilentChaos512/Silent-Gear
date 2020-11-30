@@ -70,7 +70,8 @@
       "rarity": {
         "add": 20.0
       }
-    }
+    },
+    "adornment": {}
   },
   "traits": {
     "main": [
@@ -136,6 +137,12 @@
       {
         "name": "silentgear:lustrous",
         "level": 2
+      }
+    ],
+    "adornment": [
+      {
+        "name": "silentgear:bastion",
+        "level": 1
       }
     ]
   }

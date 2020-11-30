@@ -70,7 +70,8 @@
       "rarity": {
         "add": 20.0
       }
-    }
+    },
+    "adornment": {}
   },
   "traits": {
     "main": [
@@ -97,6 +98,18 @@
       {
         "name": "silentgear:jagged",
         "level": 3
+      }
+    ],
+    "adornment": [
+      {
+        "name": "silentgear:mighty",
+        "level": 2,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
       }
     ]
   }

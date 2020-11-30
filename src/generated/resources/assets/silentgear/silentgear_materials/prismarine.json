@@ -17,6 +17,25 @@
       "texture": "silentgear:coating_jar"
     }
   ],
+  "adornment/all": [
+    {
+      "texture": "silentgear:adornment_generic",
+      "color": "#91C5B7"
+    },
+    {
+      "texture": "silentgear:adornment_highlight",
+      "color": "#91C5B7"
+    }
+  ],
+  "adornment/part": [
+    {
+      "texture": "silentgear:adornment",
+      "color": "#91C5B7"
+    },
+    {
+      "texture": "silentgear:adornment_highlight"
+    }
+  ],
   "main/fragment": [
     {
       "texture": "silentgear:dust",

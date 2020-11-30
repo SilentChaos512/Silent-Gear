@@ -89,6 +89,12 @@ public class TraitsProvider implements IDataProvider {
 
         // Attribute
 
+        ret.add(new AttributeTraitBuilder(Const.Traits.BASTION, 5)
+                .addModifierAnySlot(GearType.ALL,
+                        Attributes.ARMOR,
+                        AttributeModifier.Operation.ADDITION,
+                        2, 4, 6, 8, 10)
+        );
         ret.add(new AttributeTraitBuilder(Const.Traits.CURSED, 7)
                 .addModifiersEitherHand(GearType.ALL,
                         Attributes.LUCK,
@@ -132,6 +138,18 @@ public class TraitsProvider implements IDataProvider {
                             values)
             );
         }
+        ret.add(new AttributeTraitBuilder(Const.Traits.REACH, 5)
+                .addModifierAnySlot(GearType.ALL,
+                        ForgeMod.REACH_DISTANCE.get(),
+                        AttributeModifier.Operation.ADDITION,
+                        0.5f, 1f, 1.5f, 2f, 3f)
+        );
+        ret.add(new AttributeTraitBuilder(Const.Traits.SWIFT_SWIM, 5)
+                .addModifierAnySlot(GearType.ALL,
+                        ForgeMod.SWIM_SPEED.get(),
+                        AttributeModifier.Operation.ADDITION,
+                        0.2f, 0.4f, 0.6f, 0.8f, 1f)
+        );
 
         // Enchantment
 
@@ -162,6 +180,7 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
                 .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.STRENGTH, 0, 0, 1, 1, 2)
                 .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 1, 2, 3)
+                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 2, 2, 3)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.SPEED, 0, 1, 2, 3)

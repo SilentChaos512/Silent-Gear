@@ -28,5 +28,20 @@
       "texture": "silentgear:rod",
       "color": "#969696"
     }
+  ],
+  "adornment/all": [
+    {
+      "texture": "silentgear:adornment_generic",
+      "color": "#969696"
+    }
+  ],
+  "adornment/part": [
+    {
+      "texture": "silentgear:adornment",
+      "color": "#969696"
+    },
+    {
+      "texture": "silentgear:adornment_highlight"
+    }
   ]
 }

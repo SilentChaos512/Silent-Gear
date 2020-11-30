@@ -71,7 +71,8 @@
       "rarity": {
         "add": 20.0
       }
-    }
+    },
+    "adornment": {}
   },
   "traits": {
     "main": [
@@ -113,6 +114,12 @@
       },
       {
         "name": "silentgear:synergistic",
+        "level": 2
+      }
+    ],
+    "adornment": [
+      {
+        "name": "silentgear:reach",
         "level": 2
       }
     ]

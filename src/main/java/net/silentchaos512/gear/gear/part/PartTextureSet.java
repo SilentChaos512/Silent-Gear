@@ -19,6 +19,7 @@ public enum PartTextureSet {
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
             .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
+            .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC))
             .build()),
     HIGH_CONTRAST(ImmutableMap.<PartType, List<PartTextures>>builder()
             .put(PartType.MAIN, ImmutableList.of(PartTextures.MAIN_GENERIC_HC))
@@ -28,6 +29,7 @@ public enum PartTextureSet {
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
             .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
+            .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC))
             .build()),
     HIGH_CONTRAST_WITH_HIGHLIGHT(ImmutableMap.<PartType, List<PartTextures>>builder()
             .put(PartType.MAIN, ImmutableList.of(PartTextures.MAIN_GENERIC_HC, PartTextures.HIGHLIGHT))
@@ -37,6 +39,7 @@ public enum PartTextureSet {
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
             .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
+            .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC, PartTextures.ADORNMENT_HIGHLIGHT))
             .build());
 
     final Map<PartType, List<PartTextures>> layers;

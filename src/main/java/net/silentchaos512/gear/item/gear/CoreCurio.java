@@ -38,13 +38,14 @@ import java.util.function.Consumer;
 
 public class CoreCurio extends Item implements ICoreItem {
     private static final Collection<PartType> REQUIRED_PARTS = ImmutableList.of(
-            PartType.MAIN
+            PartType.MAIN,
+            PartType.ADORNMENT
     );
     private static final ImmutableSet<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY
     );
     private static final ImmutableSet<ItemStat> EXCLUDED_STATS = ImmutableSet.copyOf(
-            ItemStats.allStatsOrderedExcluding(RELEVANT_STATS)
+            ItemStats.allStatsOrderedExcluding(RELEVANT_STATS) // FYI, this should NOT be done in most cases
     );
 
     private final GearType gearType;

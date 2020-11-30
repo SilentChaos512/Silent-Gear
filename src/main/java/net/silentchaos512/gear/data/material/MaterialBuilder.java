@@ -150,7 +150,9 @@ public class MaterialBuilder {
                     ? PartTextureSet.HIGH_CONTRAST
                     : texture;
 
-            if (partType == PartType.BOWSTRING)
+            if (partType == PartType.ADORNMENT)
+                displayAdornment(targetTexture, color);
+            else if (partType == PartType.BOWSTRING)
                 displayBowstring(color);
             else if (partType == PartType.TIP)
                 displayTip(targetTexture.getLayers(partType).get(0), color);
@@ -159,6 +161,15 @@ public class MaterialBuilder {
             else
                 display(partType, targetTexture, color);
         }
+        return this;
+    }
+
+    public MaterialBuilder displayAdornment(PartTextureSet textures, int color) {
+        display(PartType.ADORNMENT, GearType.ALL, new MaterialLayerList(PartType.ADORNMENT, textures, color));
+        display(PartType.ADORNMENT, GearType.PART,
+                new MaterialLayer(SilentGear.getId("adornment"), color),
+                new MaterialLayer(SilentGear.getId("adornment_highlight"), Color.VALUE_WHITE)
+        );
         return this;
     }
 

@@ -50,11 +50,17 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer1", "item/blueprint_book_pages")
                 .texture("layer2", "item/blueprint_book_deco");
 
+        builder(ModItems.JEWELER_TOOLS, itemGenerated, "item/jeweler_tools");
+
         // Blueprints and templates
-        Registration.getItems(PartBlueprintItem.class).forEach(item -> getBuilder(NameUtils.from(item).getPath())
-                .parent(itemGenerated)
-                .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
-                .texture("layer1", "item/blueprint_" + item.getPartType().getName().getPath()));
+        Registration.getItems(PartBlueprintItem.class).forEach(item -> {
+            if (item.hasStandardModel()) {
+                getBuilder(NameUtils.from(item).getPath())
+                        .parent(itemGenerated)
+                        .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
+                        .texture("layer1", "item/blueprint_" + item.getPartType().getName().getPath());
+            }
+        });
         Registration.getItems(GearBlueprintItem.class).forEach(item -> getBuilder(NameUtils.from(item).getPath())
                 .parent(itemGenerated)
                 .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))

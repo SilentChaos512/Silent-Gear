@@ -6,6 +6,10 @@
     },
     {
       "item": "silentgear:ring_shank"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:adornment"
     }
   ],
   "result": {

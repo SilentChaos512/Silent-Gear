@@ -73,6 +73,6 @@ public interface ICoreRangedWeapon extends ICoreTool {
 
     @Override
     default boolean hasTexturesFor(PartType partType) {
-        return partType != PartType.FLETCHING;
+        return partType != PartType.FLETCHING && partType != PartType.ADORNMENT;
     }
 }

@@ -51,6 +51,11 @@ public final class PartType {
 
     public static final PartType NONE = create(Builder.builder(SilentGear.getId("none")));
 
+    public static final PartType ADORNMENT = create(Builder.builder(SilentGear.getId("adornment"))
+            .compoundPartItem(() -> ModItems.ADORNMENT.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.ADORNMENT_GENERIC)
+            .isRemovable(true)
+    );
     public static final PartType BINDING = create(Builder.builder(SilentGear.getId("binding"))
             .compoundPartItem(() -> ModItems.BINDING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.BINDING_GENERIC)

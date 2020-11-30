@@ -433,6 +433,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 0.5f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
+                .noStats(PartType.ADORNMENT)
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
                 .trait(PartType.MAIN, Const.Traits.LUSTROUS, 1,
                         new GearTypeTraitCondition(GearType.HARVEST_TOOL),
@@ -445,9 +446,11 @@ public class MaterialsProvider implements IDataProvider {
                 )
                 .trait(PartType.TIP, Const.Traits.BRITTLE, 2)
                 .trait(PartType.TIP, Const.Traits.LUSTROUS, 2)
+                .trait(PartType.ADORNMENT, Const.Traits.BASTION, 1)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
                 .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x33EBCB)
                 .displayTip(PartTextures.TIP_SHARP, 0x33EBCB)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
         );
         // Emerald
         ret.add(new MaterialBuilder(SilentGear.getId("emerald"), 3, Tags.Items.GEMS_EMERALD)
@@ -481,15 +484,18 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
+                .noStats(PartType.ADORNMENT)
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
                 .trait(PartType.MAIN, Const.Traits.SYNERGISTIC, 2)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 4, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.SYNERGISTIC, 3, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.BRITTLE, 1)
                 .trait(PartType.TIP, Const.Traits.SYNERGISTIC, 2)
+                .trait(PartType.ADORNMENT, Const.Traits.REACH, 2)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
                 .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x00B038)
                 .displayTip(PartTextures.TIP_SHARP, 0x00B038)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
         );
         // End Stone
         ret.add(new MaterialBuilder(SilentGear.getId("end_stone"), 1, Tags.Items.END_STONES)
@@ -551,6 +557,7 @@ public class MaterialsProvider implements IDataProvider {
                 .noStats(PartType.BINDING)
                 .noStats(PartType.BOWSTRING)
                 .noStats(PartType.FLETCHING)
+                .noStats(PartType.ADORNMENT)
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
         );
         // Feather
@@ -598,11 +605,11 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, chargeability, 0.8f)
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 2)
+                .noStats(PartType.ADORNMENT)
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 3)
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST, 0x969696)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x969696)
+                .displayAll(PartTextureSet.HIGH_CONTRAST, 0x969696)
         );
         // Glowstone
         ret.add(new MaterialBuilder(SilentGear.getId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
@@ -724,6 +731,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.3f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
+                .noStats(PartType.ADORNMENT)
                 .trait(PartType.TIP, Const.Traits.HOLY, 1, new OrTraitCondition(
                         new GearTypeTraitCondition(GearType.WEAPON),
                         new MaterialRatioTraitCondition(0.75f)
@@ -733,7 +741,10 @@ public class MaterialsProvider implements IDataProvider {
                         new GearTypeTraitCondition(GearType.WEAPON),
                         new MaterialRatioTraitCondition(0.75f)
                 ))
+                .trait(PartType.ADORNMENT, Const.Traits.LUCKY, 3,
+                        new MaterialRatioTraitCondition(0.75f))
                 .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
+                .displayAdornment(PartTextureSet.LOW_CONTRAST, 0x224BAF)
                 .displayFragment(PartTextures.METAL, 0x224BAF)
         );
         // Leather
@@ -884,9 +895,12 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, 0.125f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.ARMOR_TOUGHNESS, 1, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 0.25f, StatInstance.Operation.ADD)
+                .noStats(PartType.ADORNMENT)
                 .trait(PartType.COATING, Const.Traits.AQUATIC, 5, new MaterialRatioTraitCondition(0.67f))
                 .trait(PartType.COATING, Const.Traits.AQUATIC, 3, new NotTraitCondition(new MaterialRatioTraitCondition(0.67f)))
+                .trait(PartType.ADORNMENT, Const.Traits.SWIFT_SWIM, 3, new MaterialRatioTraitCondition(0.67f))
                 .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
                 .displayFragment(PartTextures.DUST, 0x91C5B7)
         );
         // Quartz
@@ -920,14 +934,18 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 1.5f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
+                .noStats(PartType.ADORNMENT)
                 .trait(PartType.MAIN, Const.Traits.CRUSHING, 3)
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
                 .trait(PartType.TIP, Const.Traits.CHIPPING, 1)
                 .trait(PartType.TIP, Const.Traits.JAGGED, 3)
+                .trait(PartType.ADORNMENT, Const.Traits.MIGHTY, 2,
+                        new MaterialRatioTraitCondition(0.5f))
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD4CABA)
                 .displayTip(PartTextures.TIP_SHARP, 0xD4CABA)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
         );
         // Redstone
         ret.add(new MaterialBuilder(SilentGear.getId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)

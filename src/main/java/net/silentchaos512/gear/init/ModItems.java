@@ -53,6 +53,8 @@ public final class ModItems {
     public static final ItemRegistryObject<BlueprintBookItem> BLUEPRINT_BOOK = register("blueprint_book", () ->
             new BlueprintBookItem(unstackableProps().rarity(Rarity.UNCOMMON)));
     // Blueprints
+    public static final ItemRegistryObject<PartBlueprintItem> JEWELER_TOOLS = register("jeweler_tools", () ->
+            new JewelerKitItem(PartType.ADORNMENT, false, unstackableProps()));
     public static final ItemRegistryObject<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartType.ROD, false);
     public static final ItemRegistryObject<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartType.TIP, false);
     public static final ItemRegistryObject<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartType.COATING, false);
@@ -191,6 +193,8 @@ public final class ModItems {
             new CompoundPartItem(PartType.BOWSTRING, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> FLETCHING = registerCompoundPart("fletching", () ->
             new CompoundPartItem(PartType.FLETCHING, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> ADORNMENT = registerCompoundPart("adornment", () ->
+            new CompoundPartItem(PartType.ADORNMENT, baseProps()));
     //endregion
 
     static {

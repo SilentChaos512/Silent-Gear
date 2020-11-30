@@ -5,7 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Rings. Requires Curios to function correctly. Can only be crafted with metals.
+- Rings. Requires Curios to function correctly. The shank can only be crafted with metals (this can be overridden with data packs if desired).
+- Adornments, a new part type. Currently only works with rings.
+- Jeweler Tools (texture WIP, but usable). Used to craft adornments and attach them to ring shanks.
 - Knives. Weaker and slower than daggers, but more durable. Tagged as `forge:knives`, same as daggers, so they work for template crafting.
 - Missing recipe for road maker upgrade
 - Several traits from the Just Gems data packs: crackler, floatstoner, ignite, kitty vision, mighty, and sharp

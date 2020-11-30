@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "all",
+  "part_type": "silentgear:adornment",
+  "crafting_item": {
+    "item": "silentgear:adornment"
+  },
+  "name": {
+    "translate": "part.silentgear.adornment"
+  }
+}

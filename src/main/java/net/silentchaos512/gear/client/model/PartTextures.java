@@ -7,9 +7,8 @@ import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public enum PartTextures {
     HIGHLIGHT("_highlight", PartType.MISC_UPGRADE, GearType.TOOL, true),
@@ -26,6 +25,8 @@ public enum PartTextures {
     CHARGED_ARROW("charged_arrow", PartType.MISC_UPGRADE, GearType.CROSSBOW, false),
     CHARGED_FIREWORK("charged_firework", PartType.MISC_UPGRADE, GearType.CROSSBOW, false),
     FLETCHING_GENERIC("fletching_generic", PartType.MISC_UPGRADE, GearType.NONE, true),
+    ADORNMENT_GENERIC("adornment_generic", PartType.ADORNMENT, GearType.CURIO, false),
+    ADORNMENT_HIGHLIGHT("adornment_highlight", PartType.ADORNMENT, GearType.CURIO, false),
     // Fragments
     CLOTH("cloth", PartType.MAIN, GearType.FRAGMENT, false),
     DUST("dust", PartType.MAIN, GearType.FRAGMENT, false),
@@ -61,9 +62,13 @@ public enum PartTextures {
     }
 
     public static List<PartTextures> getTextures(GearType gearType) {
-        return Arrays.stream(values())
-                .filter(t -> gearType.matches(t.gearType))
-                .collect(Collectors.toList());
+        List<PartTextures> list = new ArrayList<>();
+        for (PartTextures t : values()) {
+            if (gearType.matches(t.gearType)) {
+                list.add(t);
+            }
+        }
+        return list;
     }
 
     @Nullable

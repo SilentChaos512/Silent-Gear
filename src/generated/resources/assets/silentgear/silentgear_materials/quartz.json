@@ -52,5 +52,24 @@
     {
       "texture": "silentgear:tip_shine"
     }
+  ],
+  "adornment/all": [
+    {
+      "texture": "silentgear:adornment_generic",
+      "color": "#D4CABA"
+    },
+    {
+      "texture": "silentgear:adornment_highlight",
+      "color": "#D4CABA"
+    }
+  ],
+  "adornment/part": [
+    {
+      "texture": "silentgear:adornment",
+      "color": "#D4CABA"
+    },
+    {
+      "texture": "silentgear:adornment_highlight"
+    }
   ]
 }

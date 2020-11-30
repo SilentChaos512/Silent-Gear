@@ -1,0 +1,25 @@
+{
+  "type": "silentgear:attribute_trait",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.bastion"
+  },
+  "description": {
+    "translate": "trait.silentgear.bastion.desc"
+  },
+  "attribute_modifiers": {
+    "all": [
+      {
+        "attribute": "minecraft:generic.armor",
+        "operation": 0,
+        "value": [
+          2.0,
+          4.0,
+          6.0,
+          8.0,
+          10.0
+        ]
+      }
+    ]
+  }
+}

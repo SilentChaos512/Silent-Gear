@@ -149,6 +149,18 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer);
 
         // Part blueprints
+        ShapedRecipeBuilder.shapedRecipe(ModItems.JEWELER_TOOLS)
+                .patternLine("  p")
+                .patternLine("d#s")
+                .patternLine("ips")
+                .key('p', ItemTags.PLANKS)
+                .key('d', Tags.Items.GEMS_DIAMOND)
+                .key('#', ModTags.Items.BLUEPRINT_PAPER)
+                .key('s', Tags.Items.RODS_WOODEN)
+                .key('i', Tags.Items.INGOTS_IRON)
+                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINT_PAPER))
+                .build(consumer);
+
         ShapelessRecipeBuilder.shapelessRecipe(ModItems.BINDING_BLUEPRINT)
                 .setGroup("silentgear:blueprints/binding")
                 .addIngredient(Ingredient.fromTag(ModTags.Items.BLUEPRINT_PAPER), 1)
@@ -285,6 +297,11 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     private void registerCompoundParts(Consumer<IFinishedRecipe> consumer) {
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ADORNMENT)
+                .addIngredient(BlueprintIngredient.of(ModItems.JEWELER_TOOLS.get()))
+                .addIngredient(PartMaterialIngredient.of(PartType.ADORNMENT))
+                .build(consumer, SilentGear.getId("part/adornment"));
+
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ROD, 4)
                 .addIngredient(BlueprintIngredient.of(ModItems.ROD_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.ROD), 2)
@@ -369,10 +386,27 @@ public class ModRecipesProvider extends RecipeProvider {
         bowRecipes(consumer, "slingshot", 2, ModItems.SLINGSHOT, ModItems.SLINGSHOT_LIMBS, ModItems.SLINGSHOT_BLUEPRINT.get());
         arrowRecipes(consumer, "arrow", ModItems.ARROW, ModItems.ARROW_HEADS, ModItems.ARROW_BLUEPRINT.get());
 
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.RING_SHANK)
+                .addIngredient(BlueprintIngredient.of(ModItems.RING_BLUEPRINT.get()))
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), 2)
+                .build(consumer, SilentGear.getId("gear/ring_shank"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.RING)
+                .addIngredient(ModItems.JEWELER_TOOLS)
+                .addIngredient(ModItems.RING_SHANK)
+                .build(consumer, SilentGear.getId("gear/ring"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.RING)
+                .addIngredient(ModItems.JEWELER_TOOLS)
+                .addIngredient(ModItems.RING_SHANK)
+                .addIngredient(GearPartIngredient.of(PartType.ADORNMENT))
+                .build(consumer, SilentGear.getId("gear/ring_with_gem"));
+
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.RING)
                 .addIngredient(BlueprintIngredient.of(ModItems.RING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), 2)
-                .build(consumer, SilentGear.getId("gear/ring"));
+                .addIngredient(GearPartIngredient.of(PartType.ADORNMENT))
+                .build(consumer, SilentGear.getId("gear/ring_quick"));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.SHIELD)
                 .addIngredient(BlueprintIngredient.of(ModItems.SHIELD_BLUEPRINT.get()))

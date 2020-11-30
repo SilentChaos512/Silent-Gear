@@ -34,7 +34,8 @@
       "knockback_resistance": {
         "add": 0.25
       }
-    }
+    },
+    "adornment": {}
   },
   "traits": {
     "coating": [
@@ -58,6 +59,18 @@
               "type": "silentgear:material_ratio",
               "ratio": 0.67
             }
+          }
+        ]
+      }
+    ],
+    "adornment": [
+      {
+        "name": "silentgear:swift_swim",
+        "level": 3,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.67
           }
         ]
       }

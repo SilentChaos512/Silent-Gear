@@ -95,5 +95,18 @@
     {
       "texture": "silentgear:fletching"
     }
+  ],
+  "adornment/all": [
+    {
+      "texture": "silentgear:adornment_generic"
+    }
+  ],
+  "adornment/part": [
+    {
+      "texture": "silentgear:adornment"
+    },
+    {
+      "texture": "silentgear:adornment_highlight"
+    }
   ]
 }

@@ -31,6 +31,19 @@
           3
         ]
       }
+    ],
+    "curio": [
+      {
+        "type": "trait_level",
+        "effect": "minecraft:haste",
+        "level": [
+          1,
+          1,
+          2,
+          2,
+          3
+        ]
+      }
     ]
   }
 }

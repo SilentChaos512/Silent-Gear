@@ -68,6 +68,7 @@ public final class Const {
         public static final DataResource<ITrait> ADAMANT = DataResource.trait("adamant");
         public static final DataResource<ITrait> ANCIENT = DataResource.trait("ancient");
         public static final DataResource<ITrait> AQUATIC = DataResource.trait("aquatic");
+        public static final DataResource<ITrait> BASTION = DataResource.trait("bastion");
         public static final DataResource<ITrait> BRILLIANT = DataResource.trait("brilliant");
         public static final DataResource<ITrait> BRITTLE = DataResource.trait("brittle");
         public static final DataResource<ITrait> BULKY = DataResource.trait("bulky");
@@ -78,6 +79,7 @@ public final class Const {
         public static final DataResource<ITrait> CRUDE = DataResource.trait("crude");
         public static final DataResource<ITrait> CRUSHING = DataResource.trait("crushing");
         public static final DataResource<ITrait> CURSED = DataResource.trait("cursed");
+        public static final DataResource<ITrait> SWIFT_SWIM = DataResource.trait("swift_swim");
         public static final DataResource<ITrait> ERODED = DataResource.trait("eroded");
         public static final DataResource<ITrait> FIERY = DataResource.trait("fiery");
         public static final DataResource<ITrait> FLAME_WARD = DataResource.trait("flame_ward");
@@ -103,6 +105,7 @@ public final class Const {
         public static final DataResource<ITrait> MULTI_BREAK = DataResource.trait("multi_break");
         public static final DataResource<ITrait> ORGANIC = DataResource.trait("organic");
         public static final DataResource<ITrait> RACKER = DataResource.trait("racker");
+        public static final DataResource<ITrait> REACH = DataResource.trait("reach");
         public static final DataResource<ITrait> REFRACTIVE = DataResource.trait("refractive");
         public static final DataResource<ITrait> ROAD_MAKER = DataResource.trait("road_maker");
         public static final DataResource<ITrait> RUSTIC = DataResource.trait("rustic");

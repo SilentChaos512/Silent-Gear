@@ -61,4 +61,8 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     public Rarity getRarity(ItemStack stack) {
         return this.singleUse ? Rarity.COMMON : Rarity.UNCOMMON;
     }
+
+    public boolean hasStandardModel() {
+        return true;
+    }
 }
