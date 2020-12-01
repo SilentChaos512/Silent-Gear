@@ -16,6 +16,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.material.StaticLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
@@ -23,11 +24,15 @@ import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.ModResourceLocation;
+import net.silentchaos512.utils.Color;
 
 import java.util.*;
 import java.util.function.Function;
 
 public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
+    private static final ModResourceLocation PART_MARKER_TEXTURE = SilentGear.getId("part_marker");
+
     private final ItemCameraTransforms cameraTransforms;
     final GearType gearType;
     final PartType partType;
@@ -79,9 +84,14 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");
                 TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
-                builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
+                builder.addAll(getQuadsForSprite(0, texture, rotation, Color.VALUE_WHITE));
             }
         }
+
+        builder.addAll(getQuadsForSprite(layers.size(),
+                spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE, Color.VALUE_WHITE).getTexture(gearType, 0))),
+                rotation,
+                Color.VALUE_WHITE));
 
         TextureAtlasSprite particle = spriteGetter.apply(owner.resolveTexture("particle"));
 
@@ -95,6 +105,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         if (exampleMain != null) {
             builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(gearType, 0))), rotation, exampleMain.getColor()));
         }
+        builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE, Color.VALUE_WHITE).getTexture(gearType, 0))), rotation, Color.VALUE_WHITE));
     }
 
     @Override
@@ -118,6 +129,8 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
                 ret.add(getTexture(layer));
             }
         }
+
+        ret.add(getTexture(new StaticLayer(PART_MARKER_TEXTURE, Color.VALUE_WHITE)));
 
         return ret;
     }

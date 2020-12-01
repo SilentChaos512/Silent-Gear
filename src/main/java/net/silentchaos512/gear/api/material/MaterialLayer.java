@@ -10,9 +10,9 @@ import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.utils.Color;
 
 public class MaterialLayer {
-    private final ResourceLocation texture;
-    private final int color; // TODO: Replace with a color provider?
-    private final boolean animated;
+    protected final ResourceLocation texture;
+    protected final int color; // TODO: Replace with a color provider?
+    protected final boolean animated;
 
     public MaterialLayer(PartTextures texture, int color) {
         this(texture.getTexture(), color, texture.isAnimated());

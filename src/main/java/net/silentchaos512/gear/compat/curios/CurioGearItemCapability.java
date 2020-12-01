@@ -84,6 +84,18 @@ public class CurioGearItemCapability {
             return GearHelper.getAttributeModifiers(identifier, stack, HashMultimap.create(), false);
         }
 
+        @Override
+        public int getFortuneBonus(String identifier, LivingEntity livingEntity, ItemStack curio, int index) {
+            // TODO: Add trait
+            return 0;
+        }
+
+        @Override
+        public int getLootingBonus(String identifier, LivingEntity livingEntity, ItemStack curio, int index) {
+            // TODO: Add trait
+            return 0;
+        }
+
         @Nonnull
         @Override
         public DropRule getDropRule(LivingEntity livingEntity) {
