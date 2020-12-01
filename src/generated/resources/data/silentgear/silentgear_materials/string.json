@@ -2,7 +2,8 @@
   "availability": {
     "tier": 0,
     "categories": [
-      "organic"
+      "organic",
+      "cloth"
     ],
     "visible": true,
     "gear_blacklist": [],

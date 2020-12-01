@@ -2,8 +2,8 @@
   "availability": {
     "tier": 2,
     "categories": [
-      "rock",
-      "gem"
+      "gem",
+      "dust"
     ],
     "visible": true,
     "gear_blacklist": [],

@@ -569,7 +569,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Flax
         ret.add(new MaterialBuilder(SilentGear.getId("flax"), 1, CraftingItems.FLAX_STRING)
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
                 .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, 0.05f, StatInstance.Operation.MUL1)
@@ -613,7 +613,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Glowstone
         ret.add(new MaterialBuilder(SilentGear.getId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
-                .categories(MaterialCategories.ROCK, MaterialCategories.GEM)
+                .categories(MaterialCategories.GEM, MaterialCategories.DUST)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.4f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -749,7 +749,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Leather
         ret.add(new MaterialBuilder(SilentGear.getId("leather"), 0, Tags.Items.LEATHER)
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
@@ -824,7 +824,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Netherwood
         ret.add(new MaterialBuilder(SilentGear.getId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_NETHERWOOD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 72)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 12)
@@ -949,7 +949,7 @@ public class MaterialsProvider implements IDataProvider {
         );
         // Redstone
         ret.add(new MaterialBuilder(SilentGear.getId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)
-                .categories(MaterialCategories.ROCK)
+                .categories(MaterialCategories.GEM, MaterialCategories.DUST)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.5f, StatInstance.Operation.ADD)
@@ -1061,7 +1061,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(SilentGear.getId("string"), 0,
                 ExclusionIngredient.of(Tags.Items.STRING,
                         CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
@@ -1127,7 +1127,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(sgWood, 0,
                 ExclusionIngredient.of(ItemTags.PLANKS,
                         Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS))
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD,
                         ExclusionIngredient.of(Tags.Items.RODS_WOODEN,
                                 CraftingItems.NETHERWOOD_STICK))
@@ -1177,7 +1177,7 @@ public class MaterialsProvider implements IDataProvider {
 
         // Rough wood
         ret.add(new MaterialBuilder(SilentGear.getId("wood/rough"), 0, Ingredient.EMPTY)
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .namePrefix(TextUtil.misc("crude"))
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_ROUGH)
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.25f, StatInstance.Operation.MUL1)
@@ -1191,7 +1191,7 @@ public class MaterialsProvider implements IDataProvider {
         ResourceLocation sgWool = SilentGear.getId("wool");
         ret.add(new MaterialBuilder(sgWool, 0, ExclusionIngredient.of(ItemTags.WOOL,
                 Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.CYAN_WOOL, Items.GRAY_WOOL, Items.GREEN_WOOL, Items.LIGHT_BLUE_WOOL, Items.LIGHT_GRAY_WOOL, Items.LIME_WOOL, Items.MAGENTA_WOOL, Items.ORANGE_WOOL, Items.PINK_WOOL, Items.PURPLE_WOOL, Items.RED_WOOL, Items.WHITE_WOOL, Items.YELLOW_WOOL))
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)

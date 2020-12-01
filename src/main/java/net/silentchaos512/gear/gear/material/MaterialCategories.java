@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public enum MaterialCategories implements IMaterialCategory {
-    METAL, GEM, ROCK, ORGANIC, INTANGIBLE;
+    METAL, GEM, ROCK, DUST, CLOTH, WOOD, ORGANIC, INTANGIBLE;
 
     private static final Map<String, IMaterialCategory> CACHE = new HashMap<>();
 
