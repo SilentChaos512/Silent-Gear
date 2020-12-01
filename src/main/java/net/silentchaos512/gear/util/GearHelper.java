@@ -277,8 +277,10 @@ public final class GearHelper {
     }
 
     private static void notifyPlayerOfBrokenGear(ItemStack stack, PlayerEntity player) {
-        // Notify player. Mostly for armor, but might help new players as well.
-        player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()), Util.DUMMY_UUID);
+        if (Config.Common.sendGearBrokenMessage.get()) {
+            // Notify player. Mostly for armor, but might help new players as well.
+            player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()), Util.DUMMY_UUID);
+        }
     }
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {

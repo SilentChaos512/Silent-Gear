@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Bracelets (requires Curios). Functionally identical to rings, but they go in the bracelet slots.
+- Config to disable the "tool broken" message
 ### Removed
 - Broken, unnecessary Botany Pots recipe for flax [#263]
 ### Fixed

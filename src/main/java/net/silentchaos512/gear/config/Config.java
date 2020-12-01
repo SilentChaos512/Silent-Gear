@@ -38,6 +38,7 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue sinewDropRate;
         static final ForgeConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
+        public static final ForgeConfigSpec.BooleanValue sendGearBrokenMessage;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
         public static final ForgeConfigSpec.IntValue damageFactorLevels;
@@ -157,6 +158,10 @@ public final class Config {
             {
                 builder.comment("Settings for gear (tools, weapons, and armor)");
                 builder.push("gear");
+
+                sendGearBrokenMessage = builder
+                        .comment("Displays a message in chat, notifying the player that an item broke and hinting that it can be repaired")
+                        .define("sendBrokenMessage", true);
 
                 damageFactorLevels = builder
                         .comment("How frequently gear will recalcute stats as damaged",
