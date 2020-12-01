@@ -128,13 +128,13 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     private static boolean func_220023_a(LivingEntity entityIn, ItemStack crossbow, ItemStack ammo, boolean p_220023_3_, boolean p_220023_4_) {
-        if (ammo.isEmpty()) {
+        if (isAmmoInvalid(ammo)) {
             return false;
         } else {
             boolean flag = p_220023_4_ && ammo.getItem() instanceof ArrowItem;
             ItemStack itemstack;
             if (!flag && !p_220023_4_ && !p_220023_3_) {
-                itemstack = ammo.split(1);
+                itemstack = splitOneAmmo(ammo);
                 if (ammo.isEmpty() && entityIn instanceof PlayerEntity) {
                     ((PlayerEntity) entityIn).inventory.deleteStack(ammo);
                 }
@@ -145,6 +145,22 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
             addChargedProjectile(crossbow, itemstack);
             return true;
         }
+    }
+
+    private static boolean isAmmoInvalid(ItemStack ammo) {
+        // Temp fix for https://github.com/SilentChaos512/Silent-Gear/issues/270
+        return ammo.isEmpty() || (ammo.getItem() instanceof CoreArrow && GearHelper.isBroken(ammo));
+    }
+
+    private static ItemStack splitOneAmmo(ItemStack ammo) {
+        // Temp fix for https://github.com/SilentChaos512/Silent-Gear/issues/270
+        if (ammo.getItem() instanceof CoreArrow) {
+            ItemStack copy = ammo.copy();
+            ammo.setDamage(ammo.getDamage() + 1);
+            copy.setDamage(copy.getMaxDamage() - 1);
+            return copy;
+        }
+        return ammo.split(1);
     }
 
     private static void addChargedProjectile(ItemStack crossbow, ItemStack projectile) {

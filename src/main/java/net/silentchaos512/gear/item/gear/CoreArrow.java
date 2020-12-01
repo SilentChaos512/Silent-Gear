@@ -17,6 +17,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -24,10 +26,12 @@ import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -168,6 +172,13 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        if (!KeyTracker.isDisplayStatsDown() && !KeyTracker.isDisplayTraitsDown() && !KeyTracker.isDisplayConstructionDown()) {
+            tooltip.add(new StringTextComponent("Do not use with vanilla crossbows, see issue #270")
+                    .mergeStyle(TextFormatting.RED));
+        }
+
+        tooltip.add(TextUtil.misc("ammo", stack.getMaxDamage() - stack.getDamage()));
+
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
