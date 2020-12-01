@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Bracelets (requires Curios). Functionally identical to rings, but they go in the bracelet slots.
+### Removed
+- Broken, unnecessary Botany Pots recipe for flax [#263]
 ### Fixed
 - (Partial fix) Gear crossbows destroying gear arrows. Vanilla crossbows not fixed. [#270]
 
