@@ -743,6 +743,7 @@ public class MaterialsProvider implements IDataProvider {
                 ))
                 .trait(PartType.ADORNMENT, Const.Traits.LUCKY, 3,
                         new MaterialRatioTraitCondition(0.75f))
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x224BAF)
                 .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
                 .displayAdornment(PartTextureSet.LOW_CONTRAST, 0x224BAF)
                 .displayFragment(PartTextures.METAL, 0x224BAF)
@@ -1043,18 +1044,18 @@ public class MaterialsProvider implements IDataProvider {
         );
         ret.add(new MaterialBuilder(SilentGear.getId("stone/andesite"), -1, Items.ANDESITE)
                 .parent(stone)
-                .display(PartType.MAIN, new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x8A8A8E))
-                .display(PartType.ROD, new MaterialLayer(PartTextures.ROD_GENERIC_LC, 0x8A8A8E))
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x8A8A8E)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x8A8A8E)
         );
         ret.add(new MaterialBuilder(SilentGear.getId("stone/diorite"), -1, Items.DIORITE)
                 .parent(stone)
-                .display(PartType.MAIN, new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0xFFFFFF))
-                .display(PartType.ROD, new MaterialLayer(PartTextures.ROD_GENERIC_LC, 0xFFFFFF))
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
         );
         ret.add(new MaterialBuilder(SilentGear.getId("stone/granite"), -1, Items.GRANITE)
                 .parent(stone)
-                .display(PartType.MAIN, new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x9F6B58))
-                .display(PartType.ROD, new MaterialLayer(PartTextures.ROD_GENERIC_LC, 0x9F6B58))
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x9F6B58)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9F6B58)
         );
 
         // String

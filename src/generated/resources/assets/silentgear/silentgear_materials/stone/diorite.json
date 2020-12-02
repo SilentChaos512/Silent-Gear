@@ -9,9 +9,19 @@
       "texture": "silentgear:metal"
     }
   ],
+  "main/armor": [
+    {
+      "texture": "silentgear:main_generic_lc"
+    }
+  ],
   "rod/all": [
     {
       "texture": "silentgear:rod_generic_lc"
+    }
+  ],
+  "rod/part": [
+    {
+      "texture": "silentgear:rod"
     }
   ]
 }

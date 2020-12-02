@@ -172,7 +172,7 @@ public class CompoundPartItem extends Item {
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (this == ModItems.ARMOR_BODY.get() || this == ModItems.SHIELD_PLATE.get()) {
+        if (!isInGroup(group) || this == ModItems.ARMOR_BODY.get() || this == ModItems.SHIELD_PLATE.get()) {
             return;
         }
         items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
