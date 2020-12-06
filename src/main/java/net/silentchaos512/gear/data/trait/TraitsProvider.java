@@ -93,7 +93,7 @@ public class TraitsProvider implements IDataProvider {
                 .addModifierAnySlot(GearType.ALL,
                         Attributes.ARMOR,
                         AttributeModifier.Operation.ADDITION,
-                        2, 4, 6, 8, 10)
+                        1, 2, 3, 4, 5)
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.CURSED, 7)
                 .addModifiersEitherHand(GearType.ALL,
