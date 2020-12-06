@@ -108,7 +108,8 @@ public final class GearEvents {
     public static void onAttackEntity(LivingAttackEvent event) {
         // Check if already handled
         LivingEntity attacked = event.getEntityLiving();
-        if (attacked == null || entityAttackedThisTick.contains(attacked.getUniqueID())) return;
+        if (attacked == null || attacked.world.isRemote || entityAttackedThisTick.contains(attacked.getUniqueID()))
+            return;
 
         DamageSource source = event.getSource();
         if (source == null || !"player".equals(source.damageType)) return;
