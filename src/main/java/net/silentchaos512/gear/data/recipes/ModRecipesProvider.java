@@ -1005,12 +1005,12 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer, SilentGear.getId("gear/" + name + "_main_only"));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), curioItem)
-                .addIngredient(ModItems.JEWELER_TOOLS)
+                .addIngredient(BlueprintIngredient.of(ModItems.JEWELER_TOOLS.get()))
                 .addIngredient(curioMain)
                 .build(consumer, SilentGear.getId("gear/" + name));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), curioItem)
-                .addIngredient(ModItems.JEWELER_TOOLS)
+                .addIngredient(BlueprintIngredient.of(ModItems.JEWELER_TOOLS.get()))
                 .addIngredient(curioMain)
                 .addIngredient(GearPartIngredient.of(PartType.ADORNMENT))
                 .build(consumer, SilentGear.getId("gear/" + name + "_with_gem"));
