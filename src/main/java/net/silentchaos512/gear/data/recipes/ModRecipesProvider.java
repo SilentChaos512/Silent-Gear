@@ -148,6 +148,34 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(ModItems.BRACELET_BLUEPRINT)
+                .setGroup("silentgear:blueprints/bracelet")
+                .key('#', ModTags.Items.BLUEPRINT_PAPER)
+                .key('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .patternLine("###")
+                .patternLine("# #")
+                .patternLine("/#/")
+                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINT_PAPER))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.BRACELET_BLUEPRINT)
+                .setGroup("silentgear:blueprints/bracelet")
+                .key('#', ModTags.Items.BLUEPRINT_PAPER)
+                .key('/', Tags.Items.INGOTS_GOLD)
+                .patternLine("###")
+                .patternLine("# #")
+                .patternLine("/#/")
+                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINT_PAPER))
+                .build(consumer, SilentGear.getId("bracelet_blueprint_alt"));
+        ShapedRecipeBuilder.shapedRecipe(ModItems.BRACELET_TEMPLATE)
+                .setGroup("silentgear:blueprints/bracelet")
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .patternLine("###")
+                .patternLine("# #")
+                .patternLine("/#/")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+
         // Part blueprints
         ShapedRecipeBuilder.shapedRecipe(ModItems.JEWELER_TOOLS)
                 .patternLine("  p")

@@ -23,8 +23,10 @@ import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
+import net.silentchaos512.gear.item.gear.CoreCurio;
 import net.silentchaos512.gear.util.Const;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -185,7 +187,8 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         });
 
         // Curios
-        builder(makeWrapper(Const.CURIOS, "ring"), ModItems.RING);
+        Registration.getItems(CoreCurio.class).forEach(item ->
+                builder(makeWrapper(Const.CURIOS, item.getSlot()), item));
     }
 
     private ITag.INamedTag<Item> makeWrapper(String namespace, String path) {

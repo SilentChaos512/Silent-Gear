@@ -57,6 +57,10 @@ public class CoreCurio extends Item implements ICoreItem {
         this.slot = slot;
     }
 
+    public String getSlot() {
+        return slot;
+    }
+
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
