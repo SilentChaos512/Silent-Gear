@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.2] - 2020-12-06
+### Changed
+- Halved the armor bonus from Bastion (now +1 per level)
+### Fixed
+- Jeweler tools not working from within the blueprint book for some recipes [#277]
+- Not being able to equip bracelets [#275]
+- Missing recipes for bracelet blueprints [#275]
+- ITrait#onAttackEntity being called on the client
+
 ## [2.4.1] - 2020-12-03
 ### Added
 - Bracelets (requires Curios). Functionally identical to rings, but they go in the bracelet slots.
