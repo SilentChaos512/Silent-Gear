@@ -375,20 +375,44 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(PartMaterialIngredient.of(PartType.TIP))
                 .build(consumer, SilentGear.getId("part/tip"));
 
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.TIP, 1)
+                .addIngredient(BlueprintIngredient.of(ModItems.TIP_BLUEPRINT.get()))
+                .addIngredient(CraftingItems.UPGRADE_BASE)
+                .addIngredient(PartMaterialIngredient.of(PartType.TIP))
+                .build(consumer, SilentGear.getId("part/tip_alt"));
+
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.TIP, 2)
                 .addIngredient(BlueprintIngredient.of(ModItems.TIP_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.TIP), 2)
                 .build(consumer, SilentGear.getId("part/tip2"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.TIP, 2)
+                .addIngredient(BlueprintIngredient.of(ModItems.TIP_BLUEPRINT.get()))
+                .addIngredient(CraftingItems.UPGRADE_BASE)
+                .addIngredient(PartMaterialIngredient.of(PartType.TIP), 2)
+                .build(consumer, SilentGear.getId("part/tip2_alt"));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.COATING, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.COATING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.COATING))
                 .build(consumer, SilentGear.getId("part/coating"));
 
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.COATING, 1)
+                .addIngredient(BlueprintIngredient.of(ModItems.COATING_BLUEPRINT.get()))
+                .addIngredient(Items.GLASS_BOTTLE)
+                .addIngredient(PartMaterialIngredient.of(PartType.COATING))
+                .build(consumer, SilentGear.getId("part/coating_alt"));
+
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.COATING, 2)
                 .addIngredient(BlueprintIngredient.of(ModItems.COATING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.COATING), 2)
                 .build(consumer, SilentGear.getId("part/coating2"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.COATING, 2)
+                .addIngredient(BlueprintIngredient.of(ModItems.COATING_BLUEPRINT.get()))
+                .addIngredient(Items.GLASS_BOTTLE)
+                .addIngredient(PartMaterialIngredient.of(PartType.COATING), 2)
+                .build(consumer, SilentGear.getId("part/coating2_alt"));
     }
 
     private void registerGear(Consumer<IFinishedRecipe> consumer) {
