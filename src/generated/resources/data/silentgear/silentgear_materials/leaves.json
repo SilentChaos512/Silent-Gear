@@ -17,6 +17,9 @@
     "translate": "material.silentgear.leaves"
   },
   "stats": {
-    "fletching": {}
+    "fletching": {
+      "projectile_speed": 1.1,
+      "projectile_accuracy": 0.9
+    }
   }
 }

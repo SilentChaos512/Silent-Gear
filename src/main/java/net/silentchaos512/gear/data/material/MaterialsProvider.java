@@ -563,7 +563,8 @@ public class MaterialsProvider implements IDataProvider {
         // Feather
         ret.add(new MaterialBuilder(SilentGear.getId("feather"), 1, Tags.Items.FEATHERS)
                 .categories(MaterialCategories.ORGANIC)
-                .noStats(PartType.FLETCHING)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 0.9f)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 1.1f)
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
@@ -771,7 +772,8 @@ public class MaterialsProvider implements IDataProvider {
         // Leaves
         ret.add(new MaterialBuilder(SilentGear.getId("leaves"), 1, ItemTags.LEAVES)
                 .categories(MaterialCategories.ORGANIC)
-                .noStats(PartType.FLETCHING)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0x4A8F28)
                 .displayFragment(PartTextures.CLOTH, 0x4A8F28)
         );
