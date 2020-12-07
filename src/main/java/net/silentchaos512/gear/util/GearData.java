@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.trait.EnchantmentTrait;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
@@ -89,6 +90,12 @@ public final class GearData {
         }
 
         getUUID(stack);
+
+        TraitHelper.activateTraits(stack, 0f, (trait, level, value) -> {
+            trait.onRecalculatePre(new TraitActionContext(player, level, stack));
+            return 0f;
+        });
+
         ICoreItem item = (ICoreItem) stack.getItem();
         PartDataList parts = getConstructionParts(stack);
 
@@ -141,6 +148,13 @@ public final class GearData {
             propertiesCompound.put("Traits", traitList);
 
             propertiesCompound.remove(NBT_SYNERGY);
+
+            // Remove trait-added enchantments then let traits re-add them
+            EnchantmentTrait.removeTraitEnchantments(stack);
+            TraitHelper.activateTraits(stack, 0f, (trait, level, value) -> {
+                trait.onRecalculatePost(new TraitActionContext(player, level, stack));
+                return 0f;
+            });
         } else {
             SilentGear.LOGGER.debug("Not recalculating stats for {}'s {}", player, stack);
             fixStatsCompound(propertiesCompound);

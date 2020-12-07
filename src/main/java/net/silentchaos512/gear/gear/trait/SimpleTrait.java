@@ -119,6 +119,14 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
+    public void onRecalculatePre(TraitActionContext context) {
+    }
+
+    @Override
+    public void onRecalculatePost(TraitActionContext context) {
+    }
+
+    @Override
     public float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio) {
         return value;
     }

@@ -116,6 +116,10 @@ public interface ITrait {
 
     void onGearCrafted(TraitActionContext context);
 
+    void onRecalculatePre(TraitActionContext context);
+
+    void onRecalculatePost(TraitActionContext context);
+
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
     void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, String slot);
