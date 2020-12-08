@@ -12,7 +12,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -117,7 +116,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     default ItemStat getDurabilityStat() {
-        return ItemStats.DURABILITY;
+        return getGearType().getDurabilityStat();
     }
 
     default float getRepairModifier(ItemStack stack) {

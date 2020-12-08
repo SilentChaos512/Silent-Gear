@@ -66,9 +66,9 @@ public final class GearType {
     public static final GearType CROSSBOW = getOrCreate("crossbow", RANGED_WEAPON);
     public static final GearType SLINGSHOT = getOrCreate("slingshot", RANGED_WEAPON);
     // Other
-    public static final GearType SHIELD = getOrCreate("shield", TOOL);
+    public static final GearType SHIELD = getOrCreate("shield", TOOL, ItemStats.ARMOR_DURABILITY);
     // Armor
-    public static final GearType ARMOR = getOrCreate("armor", ALL);
+    public static final GearType ARMOR = getOrCreate("armor", ALL, ItemStats.ARMOR_DURABILITY);
     public static final GearType BOOTS = getOrCreate("boots", ARMOR);
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
     public static final GearType HELMET = getOrCreate("helmet", ARMOR);
@@ -108,6 +108,15 @@ public final class GearType {
         return getOrCreate(name, parent, 1);
     }
 
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames) {
+        ItemStat durabilityStat = parent != null ? parent.durabilityStat : ItemStats.DURABILITY;
+        return getOrCreate(name, parent, animationFrames, durabilityStat);
+    }
+
+    public static GearType getOrCreate(String name, @Nullable GearType parent, ItemStat durabilityStat) {
+        return getOrCreate(name, parent, 1, durabilityStat);
+    }
+
     /**
      * Gets or creates a new gear type with the given parent. If the gear type already exists, the
      * existing instance is not modified in any way.
@@ -119,10 +128,10 @@ public final class GearType {
      * @return The newly created gear type, or the existing instance if it already exists
      * @throws IllegalArgumentException if the name is invalid
      */
-    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames) {
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, ItemStat durabilityStat) {
         if (VALID_NAME.matcher(name).find())
             throw new IllegalArgumentException("Invalid name: " + name);
-        return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames));
+        return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames, durabilityStat));
     }
 
     public static GearType fromJson(JsonObject json, String key) {
@@ -137,11 +146,13 @@ public final class GearType {
     private final String name;
     @Nullable private final GearType parent;
     private final int animationFrames;
+    private final ItemStat durabilityStat;
 
-    private GearType(String name, @Nullable GearType parent, int animationFrames) {
+    private GearType(String name, @Nullable GearType parent, int animationFrames, ItemStat durabilityStat) {
         this.name = name;
         this.parent = parent;
         this.animationFrames = animationFrames;
+        this.durabilityStat = durabilityStat;
     }
 
     public String getName() {
@@ -160,6 +171,10 @@ public final class GearType {
 
     public int getAnimationFrames() {
         return animationFrames;
+    }
+
+    public ItemStat getDurabilityStat() {
+        return durabilityStat;
     }
 
     /**

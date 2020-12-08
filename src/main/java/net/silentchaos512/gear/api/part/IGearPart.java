@@ -11,7 +11,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -114,10 +113,7 @@ public interface IGearPart {
      */
     default boolean isCraftingAllowed(PartData part, GearType gearType) {
         if (gearType.isGear() && this.getType() == PartType.MAIN) {
-            if (gearType.isArmor())
-                return computeUnclampedStatValue(ItemStats.ARMOR_DURABILITY, part) > 0;
-            else
-                return computeUnclampedStatValue(ItemStats.DURABILITY, part) > 0;
+            return computeUnclampedStatValue(gearType.getDurabilityStat(), part) > 0;
         }
         return true;
     }
