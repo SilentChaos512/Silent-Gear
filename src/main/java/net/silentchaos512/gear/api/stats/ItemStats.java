@@ -84,7 +84,7 @@ public final class ItemStats {
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -4f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
+    public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -3.9f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(false)
     );
 
