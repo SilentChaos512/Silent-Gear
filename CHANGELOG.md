@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Tools can no longer have zero attack speed [#183]
+- Magnetic now respects the `PreventRemoteMovement` from Demagnetize
+- Magnetic no longer pulls items that cannot be picked up yet or when the player is sneaking
 ### Fixed
 - Shields not craftable with armor-only materials [#268]
 
