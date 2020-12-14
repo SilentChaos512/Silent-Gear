@@ -26,6 +26,10 @@ import java.util.regex.Pattern;
  * @since Experimental
  */
 public class StatInstance {
+    public StatInstance copySetValue(float v) {
+        return new StatInstance(v, this.op);
+    }
+
     public enum Operation {
         AVG, ADD, MUL1, MUL2, MAX;
 
