@@ -14,14 +14,15 @@ import java.util.Map;
 public final class MaterialSerializers {
     private static final Map<ResourceLocation, IMaterialSerializer<?>> REGISTRY = new HashMap<>();
     public static final PartMaterial.Serializer STANDARD = register(new PartMaterial.Serializer());
+    public static final CompoundMaterial.Serializer COMPOUND = register(new CompoundMaterial.Serializer());
 
     private MaterialSerializers() {}
 
     public static <S extends IMaterialSerializer<T>, T extends IMaterial> S register(S serializer) {
         if (REGISTRY.containsKey(serializer.getName())) {
-            throw new IllegalArgumentException("Duplicate gear part serializer " + serializer.getName());
+            throw new IllegalArgumentException("Duplicate material serializer " + serializer.getName());
         }
-        SilentGear.LOGGER.info(MaterialManager.MARKER, "Registered serializer '{}'", serializer.getName());
+        SilentGear.LOGGER.info(MaterialManager.MARKER, "Registered material serializer '{}'", serializer.getName());
         REGISTRY.put(serializer.getName(), serializer);
         return serializer;
     }

@@ -113,7 +113,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public Collection<IMaterialCategory> getCategories() {
-        return material.getCategories();
+        return material.getCategories(this);
     }
 
     public boolean hasAnyCategory(Collection<IMaterialCategory> others) {
@@ -133,7 +133,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public Collection<PartType> getPartTypes() {
-        return material.getPartTypes();
+        return material.getPartTypes(this);
     }
 
     @Override
@@ -162,6 +162,14 @@ public final class MaterialInstance implements IMaterialInstance {
         return event.getModifiers();
     }
 
+    public Collection<TraitInstance> getTraits(PartType partType) {
+        return material.getTraits(this, partType, ItemStack.EMPTY);
+    }
+
+    public Collection<TraitInstance> getTraits(PartType partType, ItemStack gear) {
+        return material.getTraits(this, partType, gear);
+    }
+
     @Override
     public float getStat(PartType partType, StatGearKey key, ItemStack gear) {
         ItemStat stat = ItemStats.get(key.getStat());
@@ -176,7 +184,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public boolean canRepair(ItemStack gear) {
-        return material.allowedInPart(PartType.MAIN) && GearData.getTier(gear) <= this.getTier(PartType.MAIN);
+        return material.allowedInPart(this, PartType.MAIN) && GearData.getTier(gear) <= this.getTier(PartType.MAIN);
     }
 
     public int getRepairValue(ItemStack gear) {

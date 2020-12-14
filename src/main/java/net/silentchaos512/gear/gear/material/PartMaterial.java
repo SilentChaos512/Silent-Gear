@@ -12,7 +12,6 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -29,9 +28,7 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public final class PartMaterial implements IMaterial {
-    private static final StatModifierMap EMPTY_STAT_MAP = new StatModifierMap();
-
+public class PartMaterial implements IMaterial {
     private final ResourceLocation materialId;
     @Nullable private ResourceLocation parent;
     private final String packName;
@@ -51,7 +48,7 @@ public final class PartMaterial implements IMaterial {
     private final Map<String, MaterialLayerList> display = new HashMap<>();
     private final List<String> blacklistedGearTypes = new ArrayList<>();
 
-    private PartMaterial(ResourceLocation id, String packName) {
+    public PartMaterial(ResourceLocation id, String packName) {
         this.materialId = id;
         this.packName = packName;
     }
@@ -81,9 +78,9 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<IMaterialCategory> getCategories() {
+    public Collection<IMaterialCategory> getCategories(MaterialInstance material) {
         if (this.categories.isEmpty() && getParent() != null) {
-            return getParent().getCategories();
+            return getParent().getCategories(material);
         }
         return Collections.unmodifiableCollection(this.categories);
     }
@@ -117,15 +114,15 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Set<PartType> getPartTypes() {
+    public Set<PartType> getPartTypes(MaterialInstance material) {
         // Grab the part types from this part and its parent(s)
         return Sets.union(stats.keySet(), getParentOptional()
-                .<Set<PartType>>map(m -> new LinkedHashSet<>(m.getPartTypes())).orElse(Collections.emptySet()));
+                .<Set<PartType>>map(m -> new LinkedHashSet<>(m.getPartTypes(material))).orElse(Collections.emptySet()));
     }
 
     @Override
-    public boolean allowedInPart(PartType partType) {
-        return stats.containsKey(partType) || (getParent() != null && getParent().allowedInPart(partType));
+    public boolean allowedInPart(MaterialInstance material, PartType partType) {
+        return stats.containsKey(partType) || (getParent() != null && getParent().allowedInPart(material, partType));
     }
 
     @Override
@@ -241,6 +238,7 @@ public final class PartMaterial implements IMaterial {
 
     public static final class Serializer implements IMaterialSerializer<PartMaterial> {
         static final int PACK_NAME_MAX_LENGTH = 32;
+        public static final ModResourceLocation NAME = SilentGear.getId("standard");
 
         //region deserialize
 
@@ -486,7 +484,7 @@ public final class PartMaterial implements IMaterial {
 
         @Override
         public ResourceLocation getName() {
-            return SilentGear.getId("standard");
+            return NAME;
         }
 
         private static void readStats(PacketBuffer buffer, PartMaterial material) {
