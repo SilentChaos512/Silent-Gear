@@ -214,6 +214,10 @@ public final class ModItems {
             new CompoundPartItem(PartType.ADORNMENT, baseProps()));
     //endregion
 
+    // Compound materials
+    public static final ItemRegistryObject<CompoundMaterialItem> ALLOY_INGOT = register("alloy_ingot", () ->
+            new CompoundMaterialItem(baseProps()));
+
     static {
         CraftingItems.register(Registration.ITEMS);
     }

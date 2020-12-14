@@ -14,6 +14,7 @@ import java.util.Map;
 public final class MaterialSerializers {
     private static final Map<ResourceLocation, IMaterialSerializer<?>> REGISTRY = new HashMap<>();
     public static final PartMaterial.Serializer STANDARD = register(new PartMaterial.Serializer());
+    public static final CompoundMaterial.Serializer COMPOUND = register(new CompoundMaterial.Serializer());
 
     private MaterialSerializers() {}
 

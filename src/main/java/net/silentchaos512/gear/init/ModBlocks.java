@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.init;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
@@ -22,9 +23,12 @@ import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
 import net.silentchaos512.gear.block.WoodBlock;
+import net.silentchaos512.gear.block.compounder.CompounderBlock;
+import net.silentchaos512.gear.block.compounder.CompounderTileEntity;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
 
 import java.util.HashMap;
@@ -57,6 +61,17 @@ public final class ModBlocks {
     public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", () ->
             new SalvagerBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(4, 20)));
+
+    @SuppressWarnings("Convert2MethodRef")
+    public static final BlockRegistryObject<CompounderBlock> METAL_ALLOYER = register("metal_alloyer", () ->
+            new CompounderBlock(() -> ModTileEntities.METAL_ALLOYER.get(),
+                    () -> ModContainers.METAL_ALLOYER.get(),
+                    CompounderTileEntity.STANDARD_SIZE,
+                    ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST),
+                    AbstractBlock.Properties.create(Material.IRON)
+                            .hardnessAndResistance(4, 20)
+                            .sound(SoundType.METAL)));
+
     public static final BlockRegistryObject<FlaxPlant> FLAX_PLANT = registerNoItem("flax_plant", () ->
             new FlaxPlant(AbstractBlock.Properties.create(Material.PLANTS)
                     .hardnessAndResistance(0)

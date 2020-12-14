@@ -64,12 +64,18 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
         return Optional.ofNullable(getParent());
     }
 
+    @Deprecated
+    default Collection<IMaterialCategory> getCategories() {
+        return getCategories(MaterialInstance.of(this));
+    }
+
     /**
      * Gets the categories this material belongs to.
      *
+     * @param material
      * @return Collection of categories
      */
-    Collection<IMaterialCategory> getCategories();
+    Collection<IMaterialCategory> getCategories(MaterialInstance material);
 
     /**
      * Gets the tier of the material. Currently, the tier never depends on the part type.
@@ -90,17 +96,20 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * if the type is present in the stats JSON object (even if the value is empty).
      *
      * @return Supported part types
+     * @param material
      */
-    Set<PartType> getPartTypes();
+    Set<PartType> getPartTypes(MaterialInstance material);
 
     /**
      * Determine if the material can be used to craft parts of the given type. This should include a
      * parent check.
      *
+     *
+     * @param material
      * @param partType The part type
      * @return True if and only if crafting should be allowed
      */
-    boolean allowedInPart(PartType partType);
+    boolean allowedInPart(MaterialInstance material, PartType partType);
 
     /**
      * Used to retain data on integrated server which is not sent on connect.
@@ -119,7 +128,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * @return Material display properties
      */
     @Deprecated
-    IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType);
+    default IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType) {return MaterialLayerList.DEFAULT;}
 
     IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear);
 

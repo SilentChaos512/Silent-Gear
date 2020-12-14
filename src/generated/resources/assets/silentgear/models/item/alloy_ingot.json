@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/alloy_ingot",
+    "layer1": "silentgear:item/alloy_ingot_highlight"
+  }
+}
