@@ -647,7 +647,6 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(SilentGear.getId("obsidian"), 3, Tags.Items.OBSIDIAN)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 3072)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
-                .stat(PartType.MAIN, ItemStats.REPAIR_EFFICIENCY, -0.75f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 7)
                 .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 6)
