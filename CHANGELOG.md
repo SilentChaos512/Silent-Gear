@@ -4,9 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.11.4] - 2020-12-14
-- Fixes a couple of major issues this DOES NOT catch up 1.15.2 to 1.16.x. It never will, they are too different.
+- Fixes a couple of major issues. This DOES NOT catch up 1.15.2 to 1.16.x. It never will, they are too different.
 ### Fixed
-
+- Obsidian armor not being repairable [#243]
+- Blueprint books crashing game if an invalid slot is selected [#236]
+- Supercharging not affecting stats of graded materials
+- Shields having awful repair efficiency
 
 ## [1.11.3] - 2020-08-11
 - Merged most recent changes from 1.16.x branch, versions 2.0.5 through 2.0.9
