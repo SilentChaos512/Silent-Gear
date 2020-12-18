@@ -545,6 +545,7 @@
   "misc.silentgear.ammo": "Ammo: %d",
   "misc.silentgear.broken": "You broke it!",
   "misc.silentgear.crude": "Crude",
+  "misc.silentgear.curiosNotInstalled": "Requires Curios to equip",
   "misc.silentgear.exampleOutput1": "Example output (modular recipe)",
   "misc.silentgear.exampleOutput2": "If you crafted this, something went wrong!",
   "misc.silentgear.graderCatalyst": "Grader Catalyst (Tier %d)",
