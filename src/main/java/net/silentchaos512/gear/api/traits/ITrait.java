@@ -136,10 +136,10 @@ public interface ITrait {
      * an entity.
      *
      * @param stack      The gear item
-     * @param entity     The entity using the item
+     * @param wielder     The entity using the item
      * @param traitLevel The level of this trait
      */
-    void onItemSwing(ItemStack stack, LivingEntity entity, int traitLevel);
+    void onItemSwing(ItemStack stack, LivingEntity wielder, int traitLevel);
 
     void onUpdate(TraitActionContext context, boolean isEquipped);
 

@@ -146,7 +146,7 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public void onItemSwing(ItemStack stack, LivingEntity entity, int traitLevel) {
+    public void onItemSwing(ItemStack stack, LivingEntity wielder, int traitLevel) {
     }
 
     @Override

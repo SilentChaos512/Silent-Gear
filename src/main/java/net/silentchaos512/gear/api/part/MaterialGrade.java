@@ -111,6 +111,7 @@ public enum MaterialGrade {
         return new TranslationTextComponent("stat.silentgear.grade." + name());
     }
 
+    @Deprecated
     public static class Argument implements ArgumentType<MaterialGrade> {
         @Override
         public MaterialGrade parse(StringReader reader) {

@@ -213,11 +213,11 @@ public final class GearType {
     }
 
     public boolean isGear() {
-        return matches(GearType.ALL);
+        return matches(ALL);
     }
 
     public boolean isArmor() {
-        return matches(GearType.ARMOR);
+        return matches(ARMOR);
     }
 
     public boolean isInvalid() {
