@@ -29,6 +29,7 @@ import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
+import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
@@ -82,6 +83,7 @@ class SideProxy implements IProxy {
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
+        MinecraftForge.EVENT_BUS.register(new GearHudOverlay());
 
         ModLootStuff.init();
 

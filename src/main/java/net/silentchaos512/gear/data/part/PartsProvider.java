@@ -202,7 +202,8 @@ public class PartsProvider implements IDataProvider {
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.7f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f)
-                    .stat(ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL1);
+                    .stat(ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.REACH_DISTANCE, 1, StatInstance.Operation.ADD);
         if (isToolHead(builder, ModItems.SWORD_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)

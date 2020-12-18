@@ -9,14 +9,19 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -482,11 +487,79 @@ public final class GearHelper {
         return ret;
     }
 
-    public static void onItemSwing(ItemStack stack, LivingEntity entity) {
+    public static void onItemSwing(ItemStack stack, LivingEntity wielder) {
+        if (wielder instanceof PlayerEntity
+                && GearHelper.getType(stack).matches(GearType.MELEE_WEAPON)
+                && tryAttackWithExtraReach((PlayerEntity) wielder, false) != null) {
+            // Player attacked something, ignore traits
+            return;
+        }
+
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
         for (Map.Entry<ITrait, Integer> entry : traits.entrySet()) {
-            entry.getKey().onItemSwing(stack, entity, entry.getValue());
+            entry.getKey().onItemSwing(stack, wielder, entry.getValue());
         }
+    }
+
+    /**
+     * Checks if the player would be able to attack an entity which may be outside the vanilla
+     * range, based on reach distance attribute value.
+     *
+     * @param player The attacking player
+     * @return The targeted entity if a vulnerable entity is within range, null otherwise
+     */
+    @Nullable
+    public static Entity getAttackTargetWithExtraReach(PlayerEntity player) {
+        if (GearHelper.getType(player.getHeldItemMainhand()).matches(GearType.MELEE_WEAPON))
+                return tryAttackWithExtraReach(player, true);
+        return null;
+    }
+
+    /**
+     * Attempts to attack an entity which may be outside the vanilla range, based on reach distance
+     * attribute value.
+     *
+     * @param player The attacking player
+     * @return The attacked entity if the attack was successful, null otherwise
+     */
+    @Nullable
+    public static Entity tryAttackWithExtraReach(PlayerEntity player) {
+        return tryAttackWithExtraReach(player, false);
+    }
+
+    @Nullable
+    private static Entity tryAttackWithExtraReach(PlayerEntity player, boolean simulate) {
+        // Attempt to attack something if wielding a weapon with increased melee range
+        double range = getAttackRange(player);
+        Vector3d vector3d = player.getEyePosition(0f);
+        double rangeSquared = range * range;
+
+        Vector3d vector3d1 = player.getLook(1.0F);
+        Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
+        AxisAlignedBB axisalignedbb = player.getBoundingBox().expand(vector3d1.scale(range)).grow(1.0D, 1.0D, 1.0D);
+
+        EntityRayTraceResult rayTrace = ProjectileHelper.rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (entity) -> {
+            return !entity.isSpectator() && entity.canBeCollidedWith();
+        }, rangeSquared);
+
+        if (rayTrace != null) {
+            Entity entity = rayTrace.getEntity();
+            if (!simulate) {
+                player.attackTargetEntityWithCurrentItem(entity);
+            }
+            return entity;
+        }
+
+        return null;
+    }
+
+    private static double getAttackRange(LivingEntity entity) {
+        ModifiableAttributeInstance attribute = entity.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        double base = 4f;
+        if (attribute != null) {
+            return base + attribute.getValue();
+        }
+        return base;
     }
 
     public static Rarity getRarity(ItemStack stack) {
