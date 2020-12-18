@@ -489,7 +489,7 @@ public final class GearHelper {
 
     public static void onItemSwing(ItemStack stack, LivingEntity wielder) {
         if (wielder instanceof PlayerEntity
-                && GearHelper.getType(stack).matches(GearType.MELEE_WEAPON)
+                && getType(stack).matches(GearType.MELEE_WEAPON)
                 && tryAttackWithExtraReach((PlayerEntity) wielder, false) != null) {
             // Player attacked something, ignore traits
             return;
@@ -510,7 +510,7 @@ public final class GearHelper {
      */
     @Nullable
     public static Entity getAttackTargetWithExtraReach(PlayerEntity player) {
-        if (GearHelper.getType(player.getHeldItemMainhand()).matches(GearType.MELEE_WEAPON))
+        if (getType(player.getHeldItemMainhand()).matches(GearType.MELEE_WEAPON))
                 return tryAttackWithExtraReach(player, true);
         return null;
     }
@@ -554,11 +554,18 @@ public final class GearHelper {
     }
 
     private static double getAttackRange(LivingEntity entity) {
+        ItemStack stack = entity.getHeldItemMainhand();
+        double base = getType(stack).matches(GearType.TOOL)
+                ? GearData.getStat(stack, ItemStats.ATTACK_REACH)
+                : ItemStats.ATTACK_REACH.getBaseValue();
+
+        // Also check Forge reach distance, to allow curios to add more reach
         ModifiableAttributeInstance attribute = entity.getAttribute(ForgeMod.REACH_DISTANCE.get());
-        double base = 4f;
         if (attribute != null) {
-            return base + attribute.getValue();
+            double reachBonus = attribute.getValue() - attribute.getBaseValue();
+            return base + reachBonus;
         }
+
         return base;
     }
 

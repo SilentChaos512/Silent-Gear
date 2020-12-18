@@ -594,6 +594,7 @@
   "stat.silentgear.armorFormat": "%1$s (%2$s)",
   "stat.silentgear.armor_durability": "Armor Durability",
   "stat.silentgear.armor_toughness": "Armor Toughness",
+  "stat.silentgear.attack_reach": "Attack Reach",
   "stat.silentgear.attack_speed": "Attack Speed",
   "stat.silentgear.displayFormat": "%1$s §r§8:§r %2$s",
   "stat.silentgear.durability": "Durability",

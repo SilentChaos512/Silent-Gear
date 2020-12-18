@@ -177,7 +177,7 @@ public interface IMaterial {
      * @return The calculated stat
      */
     default float getStat(IMaterialInstance material, ItemStat stat, PartType partType) {
-        return stat.compute(0, getStatModifiers(material, stat, partType));
+        return stat.compute(getStatModifiers(material, stat, partType));
     }
 
     /**
@@ -191,7 +191,7 @@ public interface IMaterial {
      * @return The calculated stat
      */
     default float getStatUnclamped(IMaterialInstance material, ItemStat stat, PartType partType) {
-        return stat.compute(0, false, getStatModifiers(material, stat, partType));
+        return stat.compute(stat.getBaseValue(), false, getStatModifiers(material, stat, partType));
     }
 
     /**

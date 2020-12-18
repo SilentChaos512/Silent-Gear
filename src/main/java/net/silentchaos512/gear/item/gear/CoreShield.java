@@ -50,6 +50,7 @@ public class CoreShield extends ShieldItem implements ICoreItem {
             ItemStats.MELEE_DAMAGE,
             ItemStats.MAGIC_DAMAGE,
             ItemStats.ATTACK_SPEED,
+            ItemStats.ATTACK_REACH,
             ItemStats.RANGED_DAMAGE,
             ItemStats.RANGED_SPEED
     );

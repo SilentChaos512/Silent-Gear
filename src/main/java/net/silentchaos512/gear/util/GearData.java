@@ -124,7 +124,7 @@ public final class GearData {
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
             CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.getStats()) {
-                final float initialValue = stat.compute(0, stats.get(stat));
+                final float initialValue = stat.compute(stats.get(stat));
                 // Allow traits to modify stat
                 final float withTraits = TraitHelper.activateTraits(stack, initialValue, (trait, level, val) -> {
                     TraitActionContext context = new TraitActionContext(player, level, stack);

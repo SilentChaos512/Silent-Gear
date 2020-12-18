@@ -87,6 +87,10 @@ public final class ItemStats {
     public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -3.9f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(false)
     );
+    public static final ItemStat ATTACK_REACH = new ItemStat(3f, 0f, 100f, Color.SANDYBROWN, new ItemStat.Properties()
+            .baseValue(3f)
+            .affectedByGrades(false)
+    );
 
     // Ranged Weapons
     public static final ItemStat RANGED_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SKYBLUE, new ItemStat.Properties()
@@ -162,6 +166,7 @@ public final class ItemStats {
     }
 
     public static void registerStats(RegistryEvent.Register<ItemStat> event) {
+        // TODO: Replace with DeferredRegister?
         register(event.getRegistry(), DURABILITY, "durability");
         register(event.getRegistry(), ARMOR_DURABILITY, "armor_durability");
         register(event.getRegistry(), REPAIR_EFFICIENCY, "repair_efficiency");
@@ -174,6 +179,7 @@ public final class ItemStats {
         register(event.getRegistry(), MELEE_DAMAGE, "melee_damage");
         register(event.getRegistry(), MAGIC_DAMAGE, "magic_damage");
         register(event.getRegistry(), ATTACK_SPEED, "attack_speed");
+        register(event.getRegistry(), ATTACK_REACH, "attack_reach");
         register(event.getRegistry(), RANGED_DAMAGE, "ranged_damage");
         register(event.getRegistry(), RANGED_SPEED, "ranged_speed");
         register(event.getRegistry(), PROJECTILE_ACCURACY, "projectile_accuracy");

@@ -84,11 +84,11 @@ public interface IGearPart {
     }
 
     default float computeStatValue(ItemStat stat, PartData part) {
-        return stat.compute(0, getStatModifiers(stat, part));
+        return stat.compute(getStatModifiers(stat, part));
     }
 
     default float computeUnclampedStatValue(ItemStat stat, PartData part) {
-        return stat.compute(0, false, getStatModifiers(stat, part));
+        return stat.compute(stat.getBaseValue(), false, getStatModifiers(stat, part));
     }
 
     /**

@@ -19,7 +19,7 @@
     "durability": {
       "mul1": -0.2
     },
-    "reach_distance": {
+    "attack_reach": {
       "add": 1.0
     }
   }
