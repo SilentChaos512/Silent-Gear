@@ -158,6 +158,8 @@ public class MaterialBuilder {
                 displayTip(targetTexture.getLayers(partType).get(0), color);
             else if (partType == PartType.COATING)
                 displayCoating(targetTexture, color);
+            else if (partType == PartType.LINING)
+                displayLining(targetTexture, color);
             else
                 display(partType, targetTexture, color);
         }
@@ -193,6 +195,11 @@ public class MaterialBuilder {
         return this;
     }
 
+    public MaterialBuilder displayLining(PartTextureSet textures, int color) {
+        display(PartType.LINING, GearType.PART, new MaterialLayerList(PartType.LINING, textures, color));
+        return this;
+    }
+
     public MaterialBuilder displayMain(PartTextureSet textures, int color) {
         return display(PartType.MAIN, GearType.ALL, new MaterialLayerList(PartType.MAIN, textures, color));
     }
@@ -216,9 +223,6 @@ public class MaterialBuilder {
 
     public MaterialBuilder display(PartType partType, PartTextureSet texture, int color) {
         display(partType, GearType.ALL, texture, color);
-        if (partType == PartType.MAIN) {
-            display(partType, GearType.ARMOR, texture, color);
-        }
 
         // Compound part models
         if (partType != PartType.MAIN) {

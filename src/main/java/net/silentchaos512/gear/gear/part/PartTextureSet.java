@@ -17,6 +17,7 @@ public enum PartTextureSet {
             .put(PartType.TIP, ImmutableList.of(PartTextures.TIP_SHARP))
             .put(PartType.BINDING, ImmutableList.of(PartTextures.BINDING_GENERIC))
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
+            .put(PartType.LINING, ImmutableList.of(PartTextures.LINING_CLOTH))
             .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
             .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC))
@@ -27,6 +28,7 @@ public enum PartTextureSet {
             .put(PartType.TIP, ImmutableList.of(PartTextures.TIP_SHARP))
             .put(PartType.BINDING, ImmutableList.of(PartTextures.BINDING_GENERIC))
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
+            .put(PartType.LINING, ImmutableList.of(PartTextures.LINING_CLOTH))
             .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
             .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC))
@@ -37,6 +39,7 @@ public enum PartTextureSet {
             .put(PartType.TIP, ImmutableList.of(PartTextures.TIP_SHARP))
             .put(PartType.BINDING, ImmutableList.of(PartTextures.BINDING_GENERIC))
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
+            .put(PartType.LINING, ImmutableList.of(PartTextures.LINING_SLIME, PartTextures.LINING_SLIME_HIGHLIGHT))
             .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
             .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC, PartTextures.ADORNMENT_HIGHLIGHT))
@@ -53,6 +56,6 @@ public enum PartTextureSet {
     }
 
     public List<PartTextures> getLayers(PartType partType) {
-        return layers.getOrDefault(partType, Collections.emptyList());
+        return layers.getOrDefault(partType, Collections.singletonList(partType.getDefaultTexture()));
     }
 }

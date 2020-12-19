@@ -44,6 +44,11 @@
       "rarity": {
         "add": 5.0
       }
+    },
+    "lining": {
+      "armor_durability": {
+        "add": 1.0
+      }
     }
   },
   "traits": {
@@ -51,6 +56,12 @@
       {
         "name": "silentgear:flexible",
         "level": 3
+      }
+    ],
+    "lining": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
       }
     ]
   }

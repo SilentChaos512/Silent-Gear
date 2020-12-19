@@ -1,0 +1,23 @@
+{
+  "availability": {
+    "tier": 1,
+    "categories": [
+      "slime",
+      "organic"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:slime_ball"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.slime"
+  },
+  "stats": {
+    "lining": {}
+  }
+}

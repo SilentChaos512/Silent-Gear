@@ -555,6 +555,7 @@ public class MaterialsProvider implements IDataProvider {
                 .noStats(PartType.COATING)
                 .noStats(PartType.GRIP)
                 .noStats(PartType.BINDING)
+                .noStats(PartType.LINING)
                 .noStats(PartType.BOWSTRING)
                 .noStats(PartType.FLETCHING)
                 .noStats(PartType.ADORNMENT)
@@ -765,7 +766,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.15f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.15f, StatInstance.Operation.ADD)
                 .stat(PartType.GRIP, ItemStats.RARITY, 5, StatInstance.Operation.ADD)
+                .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 1f, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, Const.Traits.FLEXIBLE, 3)
+                .trait(PartType.LINING, Const.Traits.FLEXIBLE, 2)
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0xC65C35)
                 .displayFragment(PartTextures.CLOTH, 0xC65C35)
         );
@@ -1012,6 +1015,16 @@ public class MaterialsProvider implements IDataProvider {
                 .displayBowstring(0x7E6962)
                 .displayFragment(PartTextures.CLOTH, 0x7E6962)
         );
+        // Slime
+        ret.add(new MaterialBuilder(SilentGear.getId("slime"), 1, Items.SLIME_BALL)
+                .categories(MaterialCategories.SLIME, MaterialCategories.ORGANIC)
+                .noStats(PartType.LINING)
+                .display(PartType.LINING,
+                        GearType.PART,
+                        new MaterialLayer(PartTextures.LINING_SLIME, 0x8CD782),
+                        new MaterialLayer(SilentGear.getId("lining_slime_highlight"), Color.VALUE_WHITE))
+                .displayFragment(PartTextures.DUST, 0x8CD782)
+        );
 
         // Stone
         ResourceLocation stone = SilentGear.getId("stone");
@@ -1199,7 +1212,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.GRIP, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
-                .trait(PartType.GRIP, Const.Traits.SYNERGISTIC, 1)
+                .stat(PartType.LINING, ItemStats.KNOCKBACK_RESISTANCE, 0.1f, StatInstance.Operation.ADD)
+                .trait(PartType.GRIP, Const.Traits.FLEXIBLE, 1)
+                .trait(PartType.LINING, Const.Traits.FLEXIBLE, 1)
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
@@ -2023,6 +2038,7 @@ public class MaterialsProvider implements IDataProvider {
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
                 .display(PartType.GRIP, PartTextureSet.LOW_CONTRAST, color)
+                .displayLining(PartTextureSet.LOW_CONTRAST, color)
                 .displayFragment(PartTextures.CLOTH, color);
     }
 

@@ -11,6 +11,12 @@
       "color": "#792AAC"
     }
   ],
+  "lining/part": [
+    {
+      "texture": "silentgear:lining_cloth",
+      "color": "#792AAC"
+    }
+  ],
   "main/fragment": [
     {
       "texture": "silentgear:cloth",

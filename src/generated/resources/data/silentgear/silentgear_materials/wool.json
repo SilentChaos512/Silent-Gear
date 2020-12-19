@@ -52,12 +52,23 @@
       "rarity": {
         "add": 4.0
       }
+    },
+    "lining": {
+      "knockback_resistance": {
+        "add": 0.1
+      }
     }
   },
   "traits": {
     "grip": [
       {
-        "name": "silentgear:synergistic",
+        "name": "silentgear:flexible",
+        "level": 1
+      }
+    ],
+    "lining": [
+      {
+        "name": "silentgear:flexible",
         "level": 1
       }
     ]

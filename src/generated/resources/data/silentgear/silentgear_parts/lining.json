@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "armor",
+  "part_type": "silentgear:lining",
+  "crafting_item": {
+    "item": "silentgear:lining"
+  },
+  "name": {
+    "translate": "part.silentgear.lining"
+  }
+}

@@ -269,6 +269,21 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
 
+        ExtendedShapelessRecipeBuilder.vanillaBuilder(ModItems.LINING_BLUEPRINT)
+                .setGroup("silentgear:blueprints/lining")
+                .addIngredient(ModTags.Items.BLUEPRINT_PAPER, 3)
+                .addIngredient(ItemTags.WOOL, 2)
+                .addIngredient(Tags.Items.STRING, 2)
+                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINT_PAPER))
+                .build(consumer);
+        ExtendedShapelessRecipeBuilder.vanillaBuilder(ModItems.LINING_TEMPLATE)
+                .setGroup("silentgear:blueprints/lining")
+                .addIngredient(ModTags.Items.TEMPLATE_BOARDS, 3)
+                .addIngredient(ItemTags.WOOL, 2)
+                .addIngredient(Tags.Items.STRING, 2)
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(ModItems.ROD_BLUEPRINT)
                 .setGroup("silentgear:blueprints/rod")
                 .key('#', ModTags.Items.BLUEPRINT_PAPER)
@@ -370,6 +385,11 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(BlueprintIngredient.of(ModItems.GRIP_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.GRIP), 2)
                 .build(consumer, SilentGear.getId("part/grip2"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.LINING, 1)
+                .addIngredient(BlueprintIngredient.of(ModItems.LINING_BLUEPRINT.get()))
+                .addIngredient(PartMaterialIngredient.of(PartType.LINING))
+                .build(consumer, SilentGear.getId("part/lining"));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.TIP, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.TIP_BLUEPRINT.get()))
@@ -1027,6 +1047,11 @@ public class ModRecipesProvider extends RecipeProvider {
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), armor)
                 .addIngredient(plates)
                 .build(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(armor).getPath()));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), armor)
+                .addIngredient(plates)
+                .addIngredient(GearPartIngredient.of(PartType.LINING))
+                .build(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(armor).getPath() + "_with_lining"));
     }
 
     private static void curioRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider curioItem, IItemProvider curioMain, GearBlueprintItem blueprint) {

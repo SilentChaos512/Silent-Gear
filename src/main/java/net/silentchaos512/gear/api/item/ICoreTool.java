@@ -85,6 +85,9 @@ public interface ICoreTool extends ICoreItem {
 
     @Override
     default boolean hasTexturesFor(PartType partType) {
-        return partType != PartType.BOWSTRING && partType != PartType.FLETCHING && partType != PartType.ADORNMENT;
+        return partType != PartType.BOWSTRING
+                && partType != PartType.FLETCHING
+                && partType != PartType.ADORNMENT
+                && partType != PartType.LINING;
     }
 }

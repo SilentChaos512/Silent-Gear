@@ -81,6 +81,11 @@ public final class PartType {
             .defaultTexture(PartTextures.GRIP_WOOL)
             .isRemovable(true)
     );
+    public static final PartType LINING = create(Builder.builder(SilentGear.getId("lining"))
+            .compoundPartItem(() -> ModItems.LINING.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.LINING_CLOTH)
+            .isRemovable(true)
+    );
     public static final PartType MAIN = create(Builder.builder(SilentGear.getId("main"))
             .compoundPartItem(PartType::getToolHeadItem)
             .defaultTexture(PartTextures.MAIN_GENERIC_HC)

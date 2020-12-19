@@ -47,11 +47,16 @@ public interface ICoreArmor extends ICoreItem {
     default boolean supportsPart(ItemStack gear, PartData part) {
         PartType type = part.getType();
         boolean supported = ICoreItem.super.supportsPart(gear, part);
-        return (type == PartType.MAIN && supported) || type == PartType.TIP || supported;
+        return (type == PartType.MAIN && supported)
+                || type == PartType.TIP
+                || type == PartType.LINING
+                || supported;
     }
 
     @Override
     default boolean hasTexturesFor(PartType partType) {
-        return partType == PartType.MAIN || partType == PartType.TIP || partType == PartType.MISC_UPGRADE;
+        return partType == PartType.MAIN
+                || partType == PartType.TIP
+                || partType == PartType.MISC_UPGRADE;
     }
 }

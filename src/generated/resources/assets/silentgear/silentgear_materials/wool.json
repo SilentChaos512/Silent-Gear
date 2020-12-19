@@ -9,6 +9,11 @@
       "texture": "silentgear:grip"
     }
   ],
+  "lining/part": [
+    {
+      "texture": "silentgear:lining_cloth"
+    }
+  ],
   "main/fragment": [
     {
       "texture": "silentgear:cloth"
