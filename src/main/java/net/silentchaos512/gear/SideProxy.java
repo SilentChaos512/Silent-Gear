@@ -83,7 +83,6 @@ class SideProxy implements IProxy {
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
-        MinecraftForge.EVENT_BUS.register(new GearHudOverlay());
 
         ModLootStuff.init();
 
@@ -166,6 +165,7 @@ class SideProxy implements IProxy {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandlers::onItemColors);
 
             MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
+            MinecraftForge.EVENT_BUS.register(new GearHudOverlay());
             MinecraftForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
             MinecraftForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
 

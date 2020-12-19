@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.4.4] - 2020-12-19
+### Hotfix
+- Fix client-only class (`GearHudOverlay`) referenced on server
 ### Added
 - Attack reach stat. Weapons with bonus reach will attack mobs outside the normal vanilla range (the attack indicator will be green in the extra range). Decreasing attack reach will not work. [#65]
 - Salvager recipes for vanilla netherite gear [#281]
