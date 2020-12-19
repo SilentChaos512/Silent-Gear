@@ -7,6 +7,7 @@ import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.FragmentItem;
@@ -66,7 +67,16 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
         if (material == null) return ItemStack.EMPTY;
 
         ItemStack[] matchingStacks = material.getIngredient().getMatchingStacks();
-        if (matchingStacks.length < 1) return ItemStack.EMPTY;
+        if (matchingStacks.length < 1) {
+            if (material.getIngredient() instanceof ExclusionIngredient) {
+                // Get excluded ingredients if no others are available
+                ItemStack[] allMatches = ((ExclusionIngredient) material.getIngredient()).getMatchingStacksWithExclusions();
+                if (allMatches.length > 0) {
+                    return allMatches[0];
+                }
+            }
+            return ItemStack.EMPTY;
+        }
 
         return matchingStacks[0].copy();
     }

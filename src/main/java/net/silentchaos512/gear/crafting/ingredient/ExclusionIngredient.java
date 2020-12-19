@@ -54,6 +54,10 @@ public class ExclusionIngredient extends Ingredient {
         return ret.toArray(new ItemStack[0]);
     }
 
+    public ItemStack[] getMatchingStacksWithExclusions() {
+        return parent.getMatchingStacks();
+    }
+
     @Override
     public IntList getValidItemStacksPacked() {
         // FIXME?

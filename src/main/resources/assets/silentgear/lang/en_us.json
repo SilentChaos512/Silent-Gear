@@ -282,6 +282,7 @@
   "item.silentgear.fletching": "Compound Fletching",
   "item.silentgear.fletching.nameProper": "%s Fletching",
   "item.silentgear.fragment": "%s Fragment",
+  "item.silentgear.fragment.hint": "Combine eight (8) in a crafting grid",
   "item.silentgear.fragment.invalid": "Fragment (Unknown Material)",
   "item.silentgear.glittery_dust": "Glittery Dust",
   "item.silentgear.glowing_dust": "Glowing Dust",
