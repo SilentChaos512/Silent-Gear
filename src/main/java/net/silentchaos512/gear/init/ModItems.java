@@ -172,8 +172,16 @@ public final class ModItems {
             new ToolHeadItem(GearType.SLINGSHOT, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHIELD_PLATE = registerCompoundPart("shield_plate", () ->
             new ToolHeadItem(GearType.SHIELD, new Item.Properties().maxStackSize(1)));
-    public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
-            new ToolHeadItem(GearType.ARMOR, new Item.Properties().maxStackSize(1)));
+    @Deprecated public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
+            new ToolHeadItem(GearType.ARMOR, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> HELMET_PLATES = registerCompoundPart("helmet_plates", () ->
+            new ToolHeadItem(GearType.HELMET, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> CHESTPLATE_PLATES = registerCompoundPart("chestplate_plates", () ->
+            new ToolHeadItem(GearType.CHESTPLATE, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> LEGGING_PLATES = registerCompoundPart("legging_plates", () ->
+            new ToolHeadItem(GearType.LEGGINGS, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> BOOT_PLATES = registerCompoundPart("boot_plates", () ->
+            new ToolHeadItem(GearType.BOOTS, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> ARROW_HEADS = registerCompoundPart("arrow_heads", () ->
             new ToolHeadItem(GearType.ARROW, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> RING_SHANK = registerCompoundPart("ring_shank", () ->

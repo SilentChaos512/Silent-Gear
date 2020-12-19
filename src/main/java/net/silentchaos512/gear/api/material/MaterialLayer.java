@@ -29,7 +29,11 @@ public class MaterialLayer {
     }
 
     public ResourceLocation getTexture(GearType gearType, int animationFrame) {
-        String path = "item/" + gearType.getName() + "/" + this.texture.getPath();
+        return getTexture(gearType.getName(), animationFrame);
+    }
+
+    public ResourceLocation getTexture(String texturePath, int animationFrame) {
+        String path = "item/" + texturePath + "/" + this.texture.getPath();
         String suffix = animated && animationFrame > 0 ? "_" + animationFrame : "";
         return new ResourceLocation(this.texture.getNamespace(), path + suffix);
     }

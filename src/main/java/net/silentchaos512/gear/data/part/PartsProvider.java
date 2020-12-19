@@ -232,7 +232,11 @@ public class PartsProvider implements IDataProvider {
                     .stat(ItemStats.RANGED_DAMAGE, -0.75f, StatInstance.Operation.MUL1);
 
         // Oddballs
-        if (isToolHead(builder, ModItems.ARMOR_BODY))
+        if (isToolHead(builder, ModItems.ARMOR_BODY)
+                || isToolHead(builder, ModItems.HELMET_PLATES)
+                || isToolHead(builder, ModItems.CHESTPLATE_PLATES)
+                || isToolHead(builder, ModItems.LEGGING_PLATES)
+                || isToolHead(builder, ModItems.BOOT_PLATES))
             return builder;
         if (isToolHead(builder, ModItems.SHEARS_BLADES))
             return builder;

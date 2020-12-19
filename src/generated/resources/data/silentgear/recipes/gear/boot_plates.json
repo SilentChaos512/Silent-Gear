@@ -1,0 +1,32 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "boots"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "boots"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "boots"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "boots"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "boots"
+    }
+  ],
+  "result": {
+    "item": "silentgear:boot_plates"
+  }
+}

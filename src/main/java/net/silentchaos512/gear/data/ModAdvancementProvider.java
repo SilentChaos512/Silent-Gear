@@ -290,7 +290,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .register(consumer, id("azure_electrum"));
 
             ItemStack azureSilverBoots = new ItemStack(ModItems.BOOTS);
-            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, ModItems.ARMOR_BODY.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
+            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, ModItems.BOOT_PLATES.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
             Advancement moonwalker = Advancement.Builder.builder()
                     .withParent(azureSilver)
                     .withDisplay(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, FrameType.TASK, true, true, false)

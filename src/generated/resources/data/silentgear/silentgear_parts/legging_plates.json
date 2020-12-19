@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "leggings",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:legging_plates"
+  },
+  "name": {
+    "translate": "part.silentgear.legging_plates"
+  }
+}

@@ -1,7 +1,10 @@
 {
   "parent": "minecraft:item/generated",
   "loader": "silentgear:compound_part_model",
-  "gear_type": "sword",
+  "gear_type": "leggings",
   "part_type": "silentgear:main",
-  "texture_path": "sword"
+  "texture_path": "part/armor",
+  "extra_layers": [
+    "silentgear:blueprint_leggings"
+  ]
 }

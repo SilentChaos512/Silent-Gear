@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "boots",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:boot_plates"
+  },
+  "name": {
+    "translate": "part.silentgear.boot_plates"
+  }
+}

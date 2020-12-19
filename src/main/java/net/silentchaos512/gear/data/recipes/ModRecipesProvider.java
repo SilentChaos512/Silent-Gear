@@ -26,6 +26,7 @@ import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
+import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.lib.data.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.ExtendedShapelessRecipeBuilder;
 import net.silentchaos512.lib.util.NameUtils;
@@ -447,25 +448,10 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .build(consumer, SilentGear.getId("gear/shield"));
 
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.HELMET)
-                .addIngredient(BlueprintIngredient.of(ModItems.HELMET_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 5)
-                .build(consumer, SilentGear.getId("gear/helmet"));
-
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.CHESTPLATE)
-                .addIngredient(BlueprintIngredient.of(ModItems.CHESTPLATE_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 8)
-                .build(consumer, SilentGear.getId("gear/chestplate"));
-
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.LEGGINGS)
-                .addIngredient(BlueprintIngredient.of(ModItems.LEGGINGS_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 7)
-                .build(consumer, SilentGear.getId("gear/leggings"));
-
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.BOOTS)
-                .addIngredient(BlueprintIngredient.of(ModItems.BOOTS_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 4)
-                .build(consumer, SilentGear.getId("gear/boots"));
+        armorRecipes(consumer, 5, ModItems.HELMET.get(), ModItems.HELMET_PLATES, ModItems.HELMET_BLUEPRINT.get());
+        armorRecipes(consumer, 8, ModItems.CHESTPLATE.get(), ModItems.CHESTPLATE_PLATES, ModItems.CHESTPLATE_BLUEPRINT.get());
+        armorRecipes(consumer, 7, ModItems.LEGGINGS.get(), ModItems.LEGGING_PLATES, ModItems.LEGGINGS_BLUEPRINT.get());
+        armorRecipes(consumer, 4, ModItems.BOOTS.get(), ModItems.BOOT_PLATES, ModItems.BOOTS_BLUEPRINT.get());
 
         // Rough recipes
         ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.SWORD)
@@ -1030,6 +1016,17 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .addIngredient(GearPartIngredient.of(PartType.FLETCHING))
                 .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
+    }
+
+    private void armorRecipes(Consumer<IFinishedRecipe> consumer, int mainCount, CoreArmor armor, IItemProvider plates, GearBlueprintItem blueprintItem) {
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), plates)
+                .addIngredient(BlueprintIngredient.of(blueprintItem))
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, armor.getGearType()), mainCount)
+                .build(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(plates).getPath()));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), armor)
+                .addIngredient(plates)
+                .build(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(armor).getPath()));
     }
 
     private static void curioRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider curioItem, IItemProvider curioMain, GearBlueprintItem blueprint) {

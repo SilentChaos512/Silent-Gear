@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "chestplate",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:chestplate_plates"
+  },
+  "name": {
+    "translate": "part.silentgear.chestplate_plates"
+  }
+}
