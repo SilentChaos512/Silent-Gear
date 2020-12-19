@@ -888,6 +888,16 @@ public class ModRecipesProvider extends RecipeProvider {
         Registration.getItems(item -> item instanceof ICoreItem).forEach(item ->
                 gearSalvage(consumer, (ICoreItem) item));
 
+        vanillaSalvage(consumer, Items.NETHERITE_SWORD, Items.DIAMOND, 2, 1, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_PICKAXE, Items.DIAMOND, 3, 2, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_SHOVEL, Items.DIAMOND, 1, 2, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_AXE, Items.DIAMOND, 3, 2, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_HOE, Items.DIAMOND, 2, 2, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_HELMET, Items.DIAMOND, 5, 0, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_CHESTPLATE, Items.DIAMOND, 8, 0, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_LEGGINGS, Items.DIAMOND, 7, 0, Items.NETHERITE_INGOT);
+        vanillaSalvage(consumer, Items.NETHERITE_BOOTS, Items.DIAMOND, 4, 0, Items.NETHERITE_INGOT);
+
         vanillaSalvage(consumer, Items.DIAMOND_SWORD, Items.DIAMOND, 2, 1);
         vanillaSalvage(consumer, Items.DIAMOND_PICKAXE, Items.DIAMOND, 3, 2);
         vanillaSalvage(consumer, Items.DIAMOND_SHOVEL, Items.DIAMOND, 1, 2);
@@ -1143,7 +1153,14 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     private static void vanillaSalvage(Consumer<IFinishedRecipe> consumer, IItemProvider gear, IItemProvider main, int mainCount, int rodCount) {
+        vanillaSalvage(consumer, gear, main, mainCount, rodCount, null);
+    }
+
+    private static void vanillaSalvage(Consumer<IFinishedRecipe> consumer, IItemProvider gear, IItemProvider main, int mainCount, int rodCount, @Nullable IItemProvider secondary) {
         SalvagingRecipeBuilder builder = SalvagingRecipeBuilder.builder(gear).addResult(main, mainCount);
+        if (secondary != null) {
+            builder.addResult(secondary);
+        }
         if (rodCount > 0) {
             builder.addResult(Items.STICK, rodCount);
         }

@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:netherite_helmet"
+  },
+  "results": [
+    {
+      "item": "minecraft:diamond",
+      "count": 5
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    }
+  ]
+}
