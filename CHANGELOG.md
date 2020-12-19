@@ -3,13 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.4.4] - 2020-12-19
+### Added
+- Attack reach stat. Weapons with bonus reach will attack mobs outside the normal vanilla range (the attack indicator will be green in the extra range). Decreasing attack reach will not work. [#65]
+- Salvager recipes for vanilla netherite gear [#281]
+- Detailed logging for textures custom models are attempting to load, may help debug [#190]
+- Dedicated items for the main parts of each armor type
+  - Blueprint + main materials will craft the new part items
+  - Craft the main part to make the final armor item
+- Hint to fragment item tooltip about how to combine
 ### Changed
 - Tools can no longer have zero attack speed [#183]
 - Magnetic now respects the `PreventRemoteMovement` from Demagnetize
-- Magnetic no longer pulls items that cannot be picked up yet or when the player is sneaking
+- Magnetic no longer pulls items with a pickup timer (thrown) or when the player is sneaking
 ### Fixed
 - Shields not craftable with armor-only materials [#268]
+- Fragments for materials with exclusion ingredients (ie "wooden") sometimes not combining together
+- Very crude repair kit missing from "Handyman" advancement
 
 ## [2.4.3] - 2020-12-07
 ### Added
