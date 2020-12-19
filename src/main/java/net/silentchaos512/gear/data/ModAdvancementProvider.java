@@ -29,7 +29,9 @@ import net.silentchaos512.gear.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -136,15 +138,16 @@ public class ModAdvancementProvider implements IDataProvider {
 
             Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
             Advancement upgradeBase = simpleGetItem(consumer, CraftingItems.UPGRADE_BASE, templateBoard);
-            Advancement repairKit = Advancement.Builder.builder()
-                    .withParent(templateBoard)
-                    .withDisplay(ModItems.CRUDE_REPAIR_KIT, title("repair_kit"), description("repair_kit"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("crude", getItem(ModItems.CRUDE_REPAIR_KIT))
-                    .withCriterion("sturdy", getItem(ModItems.STURDY_REPAIR_KIT))
-                    .withCriterion("crimson", getItem(ModItems.CRIMSON_REPAIR_KIT))
-                    .withCriterion("azure", getItem(ModItems.AZURE_REPAIR_KIT))
-                    .withRequirementsStrategy(IRequirementsStrategy.OR)
-                    .register(consumer, id("repair_kit"));
+            Advancement repairKit;
+            {
+                Advancement.Builder builder = Advancement.Builder.builder()
+                        .withParent(templateBoard)
+                        .withDisplay(ModItems.CRUDE_REPAIR_KIT, title("repair_kit"), description("repair_kit"), null, FrameType.TASK, true, true, false)
+                        .withRequirementsStrategy(IRequirementsStrategy.OR);
+                Registration.getItems(RepairKitItem.class).forEach(item ->
+                        builder.withCriterion(NameUtils.fromItem(item).getPath(), getItem(item)));
+                repairKit = builder.register(consumer, id("repair_kit"));
+            }
 
             Advancement crimsonRepairKit = simpleGetItem(consumer, ModItems.CRIMSON_REPAIR_KIT, repairKit);
             Advancement azureRepairKit = simpleGetItem(consumer, ModItems.AZURE_REPAIR_KIT, crimsonRepairKit);
