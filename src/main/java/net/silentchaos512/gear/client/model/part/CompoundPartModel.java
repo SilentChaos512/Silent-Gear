@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.StaticLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
@@ -129,8 +130,6 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
             return ret;
         }
 
-        ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
-
         // Generic built-in textures
         for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
             ret.add(getTexture(tex.getTexture()));
@@ -148,6 +147,12 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         }
 
         ret.add(getTexture(new StaticLayer(PART_MARKER_TEXTURE)));
+        ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+
+        SilentGear.LOGGER.info("Textures for compound part model '{}'", PartGearKey.of(this.gearType, this.partType));
+        for (RenderMaterial mat : ret) {
+            SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+        }
 
         return ret;
     }

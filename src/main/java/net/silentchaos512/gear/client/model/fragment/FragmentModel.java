@@ -110,6 +110,11 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
             }
         }
 
+        SilentGear.LOGGER.info("Textures for fragment model");
+        for (RenderMaterial mat : ret) {
+            SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+        }
+
         return ret;
     }
 

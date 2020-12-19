@@ -155,6 +155,11 @@ public class GearModel extends LayeredModel<GearModel> {
             }
         }
 
+        SilentGear.LOGGER.info("Textures for gear model '{}'", this.gearType.getName());
+        for (RenderMaterial mat : ret) {
+            SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+        }
+
         return ret;
     }
 
