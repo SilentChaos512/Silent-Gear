@@ -78,9 +78,9 @@ public class GearHudOverlay extends AbstractGui {
             }
         }
 
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.color4f(1f, 1f, 1f, 1f);
-        RenderSystem.disableBlend();
+//        RenderSystem.defaultBlendFunc();
+//        RenderSystem.color4f(1f, 1f, 1f, 1f);
+//        RenderSystem.disableBlend();
     }
 
     private static boolean isEntityTargeted(@Nullable RayTraceResult rayTraceIn) {
