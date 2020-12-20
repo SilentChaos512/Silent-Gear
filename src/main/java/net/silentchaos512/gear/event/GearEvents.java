@@ -123,7 +123,7 @@ public final class GearEvents {
 
         final float baseDamage = event.getAmount();
         final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, level, value) ->
-                trait.onAttackEntity(new TraitActionContext(player, level, weapon), attacked, baseDamage));
+                trait.onAttackEntity(new TraitActionContext(player, level, weapon), attacked, value));
 
         if (Math.abs(newDamage - baseDamage) > 0.0001f) {
             event.setCanceled(true);

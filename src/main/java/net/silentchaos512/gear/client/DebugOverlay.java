@@ -22,6 +22,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,6 +32,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.ToolType;
@@ -110,6 +112,13 @@ public class DebugOverlay extends DebugRenderOverlay {
                         list.add(String.format("speed = %.1f", destroySpeed));
                     }
                 }
+            }
+        } else if (rt != null && rt.getType() == RayTraceResult.Type.ENTITY) {
+            EntityRayTraceResult ert = (EntityRayTraceResult) rt;
+            Entity entity = ert.getEntity();
+            if (entity instanceof LivingEntity) {
+                list.add(String.format("%s", entity.getScoreboardName()));
+                list.add(String.format("health = %.3f", ((LivingEntity) entity).getHealth()));
             }
         }
 

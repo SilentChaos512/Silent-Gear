@@ -15,13 +15,16 @@ import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.ForgeMod;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.DamageTypeTrait;
 import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.DataResource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,7 +55,6 @@ public class TraitsProvider implements IDataProvider {
 
         ret.add(TraitBuilder.simple(Const.Traits.ANCIENT, 5));
         ret.add(TraitBuilder.simple(Const.Traits.BRILLIANT, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.CHILLED, 5));
         ret.add(TraitBuilder.simple(Const.Traits.CONFETTI, 5));
         ret.add(TraitBuilder.simple(Const.Traits.FLAMMABLE, 1));
         ret.add(TraitBuilder.simple(Const.Traits.INDESTRUCTIBLE, 1));
@@ -263,14 +265,19 @@ public class TraitsProvider implements IDataProvider {
 
         // Misfits
 
-        ret.add(new TraitBuilder(Const.Traits.HOLY, 5, DamageTypeTrait.SERIALIZER)
-                .extraData(json -> {
-                    json.addProperty("damage_type", "holy");
-                    json.addProperty("damage_bonus", 2);
-                })
-        );
+        ret.add(damageTypeTrait(Const.Traits.CHILLED, 5, "chilled", 2));
+        ret.add(damageTypeTrait(Const.Traits.HOLY, 5, "holy", 2));
 
         return ret;
+    }
+
+    @Nonnull
+    private TraitBuilder damageTypeTrait(DataResource<ITrait> trait, int maxLevel, String damageType, int damageBonus) {
+        return new TraitBuilder(trait, maxLevel, DamageTypeTrait.SERIALIZER)
+                .extraData(json -> {
+                    json.addProperty("damage_type", damageType);
+                    json.addProperty("damage_bonus", damageBonus);
+                });
     }
 
     @Override

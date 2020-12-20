@@ -1,10 +1,12 @@
 {
-  "type": "silentgear:simple_trait",
+  "type": "silentgear:damage_type_trait",
   "max_level": 5,
   "name": {
     "translate": "trait.silentgear.chilled"
   },
   "description": {
     "translate": "trait.silentgear.chilled.desc"
-  }
+  },
+  "damage_type": "chilled",
+  "damage_bonus": 2
 }
