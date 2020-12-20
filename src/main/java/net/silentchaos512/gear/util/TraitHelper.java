@@ -29,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
@@ -70,7 +71,7 @@ public final class TraitHelper {
             return inputValue;
         }
 
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
         float value = inputValue;
 
         for (INBT nbt : tagList) {
@@ -125,7 +126,7 @@ public final class TraitHelper {
      */
     public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
             for (INBT nbt : tagList) {
                 if (nbt instanceof CompoundNBT) {
@@ -167,7 +168,7 @@ public final class TraitHelper {
      */
     public static boolean hasTrait(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
             for (INBT nbt : tagList) {
                 if (nbt instanceof CompoundNBT) {
@@ -218,7 +219,7 @@ public final class TraitHelper {
         if (!GearHelper.isGear(gear)) return ImmutableMap.of();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
         for (INBT nbt : tagList) {
             if (nbt instanceof CompoundNBT) {
@@ -331,7 +332,7 @@ public final class TraitHelper {
 
     static void tickTraits(World world, @Nullable PlayerEntity player, ItemStack gear, boolean isEquipped) {
         // Performance test on 2018-11-26 - roughly 5% FPS loss max (negligible), average ~420 FPS
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
         for (INBT nbt : tagList) {
             if (nbt instanceof CompoundNBT) {

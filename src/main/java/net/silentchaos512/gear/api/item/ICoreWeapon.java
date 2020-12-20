@@ -14,7 +14,6 @@ public interface ICoreWeapon extends ICoreTool {
             ItemStats.REPAIR_EFFICIENCY,
             ItemStats.ENCHANTABILITY,
             ItemStats.MELEE_DAMAGE,
-            ItemStats.MAGIC_DAMAGE,
             ItemStats.ATTACK_SPEED,
             ItemStats.ATTACK_REACH
     );

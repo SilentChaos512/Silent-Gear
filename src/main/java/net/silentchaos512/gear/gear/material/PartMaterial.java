@@ -153,7 +153,7 @@ public final class PartMaterial implements IMaterial {
 
         if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType))) {
             if (partType == PartType.MAIN) {
-                ItemStat stat = gearType == GearType.ARMOR ? ItemStats.ARMOR_DURABILITY : ItemStats.DURABILITY;
+                ItemStat stat = gearType.getDurabilityStat();
                 return !getStatModifiers(material, stat, partType).isEmpty() && getStatUnclamped(material, stat, partType) > 0;
             }
             return true;

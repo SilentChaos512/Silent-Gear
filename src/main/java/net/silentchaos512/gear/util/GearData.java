@@ -772,14 +772,10 @@ public final class GearData {
         CompoundNBT tags = getData(stack, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = new ListNBT();
 
-        // Mains must be first in the list!
-        parts.stream().filter(p -> p.getType() == PartType.MAIN)
-                .map(p -> p.write(new CompoundNBT()))
-                .forEach(tagList::add);
-        // Write everything else in any order
-        parts.stream().filter(p -> p.getType() != PartType.MAIN)
-                .map(p -> p.write(new CompoundNBT()))
-                .forEach(tagList::add);
+        for (IPartData part : parts) {
+            CompoundNBT write = part.write(new CompoundNBT());
+            tagList.add(write);
+        }
 
         tags.put(NBT_CONSTRUCTION_PARTS, tagList);
     }
