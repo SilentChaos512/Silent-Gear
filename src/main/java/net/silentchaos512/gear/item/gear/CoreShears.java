@@ -3,15 +3,19 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -49,6 +53,29 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     @Override
     public Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
+        if (GearHelper.isBroken(stack)) {
+            return 0f;
+        }
+
+        float speed = getStat(stack, ItemStats.HARVEST_SPEED);
+
+        if (!state.isIn(Blocks.COBWEB) && !state.isIn(BlockTags.LEAVES)) {
+            return state.isIn(BlockTags.WOOL) ? speed - 1 : 1;
+        } else {
+            return 2.5f * speed;
+        }
+    }
+
+    @Override
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
+        if (GearHelper.isBroken(stack)) {
+            return ActionResultType.PASS;
+        }
+        return super.itemInteractionForEntity(stack, playerIn, entity, hand);
     }
 
     @Override
