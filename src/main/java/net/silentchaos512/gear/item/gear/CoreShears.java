@@ -2,8 +2,10 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -14,9 +16,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.tileentity.BeehiveTileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -171,6 +172,39 @@ public class CoreShears extends ShearsItem implements ICoreTool {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
+        BlockState state = world.getBlockState(pos);
+        PlayerEntity player = context.getPlayer();
+
+        if (player != null && getHoneyLevel(state) >= 5) {
+            world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            BeehiveBlock.dropHoneyComb(world, pos);
+            context.getItem().damageItem(1, player, (playerEntity) -> {
+                playerEntity.sendBreakAnimation(context.getHand());
+            });
+
+            BeehiveBlock block = (BeehiveBlock) state.getBlock();
+            if (!CampfireBlock.isSmokingBlockAt(world, pos)) {
+                if (block.hasBees(world, pos)) {
+                    block.angerNearbyBees(world, pos);
+                }
+
+                block.takeHoney(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
+            } else {
+                block.takeHoney(world, state, pos);
+            }
+
+            return ActionResultType.func_233537_a_(world.isRemote);
+        }
+
         return GearHelper.onItemUse(context);
+    }
+
+    private static int getHoneyLevel(BlockState state) {
+        if (state.getBlock() instanceof BeehiveBlock && state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
+            return state.get(BeehiveBlock.HONEY_LEVEL);
+        }
+        return 0;
     }
 }
