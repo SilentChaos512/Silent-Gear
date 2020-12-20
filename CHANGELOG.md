@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.5] - 2020-12-20
+### Fixed
+- Swinging gear melee weapons crashing servers [#291]
+- Nether portal effect broken (missing transparency) [#289]
+- Fix durability traits (malleable, brittle, etc) not working in some cases [#286]
+- Broken shears being usable [#285]
+- Attribute traits not stacking effects with items with same trait in different slots
+- Armor-only materials not working for new armor parts
+
 ## [2.4.4] - 2020-12-19
 ### Hotfix
 - Fix client-only class (`GearHudOverlay`) referenced on server
