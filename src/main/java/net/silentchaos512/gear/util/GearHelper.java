@@ -335,17 +335,20 @@ public final class GearHelper {
     }
 
     public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        int value;
+        final int preTraitValue;
         if (GearHelper.isUnbreakable(stack)) {
-            value = 0;
+            preTraitValue = 0;
         } else if (!Config.Common.gearBreaksPermanently.get()) {
-            value = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
-            if (!isBroken(stack) && stack.getDamage() + value >= stack.getMaxDamage() - 1) {
+            preTraitValue = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
+            if (!isBroken(stack) && stack.getDamage() + preTraitValue >= stack.getMaxDamage() - 1) {
                 onBroken.accept(entity);
             }
         } else {
-            value = amount;
+            preTraitValue = amount;
         }
+
+        final int value = (int) TraitHelper.activateTraits(stack, preTraitValue, (trait, level, val) ->
+                trait.onDurabilityDamage(new TraitActionContext(null, level, stack), (int) val));
         GearHelper.damageParts(stack, value);
         return value;
     }
