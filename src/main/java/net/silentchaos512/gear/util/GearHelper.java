@@ -12,7 +12,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
@@ -53,6 +52,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Contains various methods used by gear items. Many are delegates for item overrides, to cut down
@@ -510,8 +510,9 @@ public final class GearHelper {
      */
     @Nullable
     public static Entity getAttackTargetWithExtraReach(PlayerEntity player) {
-        if (getType(player.getHeldItemMainhand()).matches(GearType.MELEE_WEAPON))
-                return tryAttackWithExtraReach(player, true);
+        if (getType(player.getHeldItemMainhand()).matches(GearType.MELEE_WEAPON)) {
+            return tryAttackWithExtraReach(player, true);
+        }
         return null;
     }
 
@@ -538,7 +539,7 @@ public final class GearHelper {
         Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
         AxisAlignedBB axisalignedbb = player.getBoundingBox().expand(vector3d1.scale(range)).grow(1.0D, 1.0D, 1.0D);
 
-        EntityRayTraceResult rayTrace = ProjectileHelper.rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (entity) -> {
+        EntityRayTraceResult rayTrace = rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (entity) -> {
             return !entity.isSpectator() && entity.canBeCollidedWith();
         }, rangeSquared);
 
@@ -567,6 +568,45 @@ public final class GearHelper {
         }
 
         return base;
+    }
+
+    @SuppressWarnings({"MethodWithTooManyParameters", "OverlyComplexMethod"})
+    @Nullable
+    private static EntityRayTraceResult rayTraceEntities(Entity shooter, Vector3d startVec, Vector3d endVec, AxisAlignedBB boundingBox, Predicate<Entity> filter, double distance) {
+        // Copied from ProjectileHelper (func_221273_a)
+        World world = shooter.world;
+        double d0 = distance;
+        Entity entity = null;
+        Vector3d vector3d = null;
+
+        for (Entity entity1 : world.getEntitiesInAABBexcluding(shooter, boundingBox, filter)) {
+            AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
+            Optional<Vector3d> optional = axisalignedbb.rayTrace(startVec, endVec);
+            if (axisalignedbb.contains(startVec)) {
+                if (d0 >= 0.0D) {
+                    entity = entity1;
+                    vector3d = optional.orElse(startVec);
+                    d0 = 0.0D;
+                }
+            } else if (optional.isPresent()) {
+                Vector3d vector3d1 = optional.get();
+                double d1 = startVec.squareDistanceTo(vector3d1);
+                if (d1 < d0 || d0 == 0.0D) {
+                    if (entity1.getLowestRidingEntity() == shooter.getLowestRidingEntity() && !entity1.canRiderInteract()) {
+                        if (d0 == 0.0D) {
+                            entity = entity1;
+                            vector3d = vector3d1;
+                        }
+                    } else {
+                        entity = entity1;
+                        vector3d = vector3d1;
+                        d0 = d1;
+                    }
+                }
+            }
+        }
+
+        return entity == null ? null : new EntityRayTraceResult(entity, vector3d);
     }
 
     public static Rarity getRarity(ItemStack stack) {
