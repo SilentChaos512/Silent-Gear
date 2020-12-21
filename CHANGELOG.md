@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Vein count configs for crimson iron and azure silver ore [#269]
+- Configs for wild flax generation [#269]
 ### Changed
 - Default vein counts for crimson iron and azure silver reduced by almost half
 - Crimson iron vein count is doubled in basalt deltas and soul sand valley
+### Fixed
+- Gear not returning swapped parts when applying a material substitute part (sticks, bones, etc) [#287]
 
 ## [2.4.6] - 2020-12-20
 ### Fixed

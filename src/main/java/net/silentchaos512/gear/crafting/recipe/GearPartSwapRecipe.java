@@ -102,7 +102,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
             if (stack.getItem() instanceof ICoreItem) {
                 list.set(i, ItemStack.EMPTY);
             } else {
-                IGearPart newPart = PartManager.from(stack);
+                PartData newPart = PartData.from(stack);
                 if (newPart != null) {
                     PartType type = newPart.getType();
                     List<PartData> partsOfType = oldParts.getPartsOfType(type);
