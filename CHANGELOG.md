@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crimson iron vein count is doubled in basalt deltas and soul sand valley
 ### Fixed
 - Gear not returning swapped parts when applying a material substitute part (sticks, bones, etc) [#287]
+- Reverted a change that made main parts not always be first in the list, causing several bugs
 
 ## [2.4.6] - 2020-12-20
 ### Fixed
