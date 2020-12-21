@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.6] - 2020-12-20
+### Fixed
+- Ranged weapons missing ranged weapon stats [#292]
+- Holy and Chilled traits not working [#290]
+- Material/trait dump commands outputting to server instead of client [#253]
+- Gear shears not working on beehives [#200]
+
 ## [2.4.5] - 2020-12-20
 ### Fixed
 - Swinging gear melee weapons crashing servers [#291]
