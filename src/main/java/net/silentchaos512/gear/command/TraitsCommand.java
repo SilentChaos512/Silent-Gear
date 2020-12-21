@@ -2,13 +2,17 @@ package net.silentchaos512.gear.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.ResourceLocationArgument;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -16,6 +20,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -29,6 +34,8 @@ import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.SimpleTrait;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.network.ClientOutputCommandPacket;
+import net.silentchaos512.gear.network.Network;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -86,14 +93,28 @@ public final class TraitsCommand {
         return 1;
     }
 
-    private static int runDumpMd(CommandContext<CommandSource> context) {
+    private static int runDumpMd(CommandContext<CommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().asPlayer();
+        SilentGear.LOGGER.info("Send traits wiki dump packet to client {}", player.getScoreboardName());
+        ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.TRAITS, true);
+        Network.channel.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        return 1;
+    }
+
+    public static void runDumpMdClient() {
+        PlayerEntity player = SilentGear.PROXY.getClientPlayer();
+        if (player == null) {
+            SilentGear.LOGGER.error("TraitsCommand#runDumpMcClient: player is null?");
+            return;
+        }
+
         String fileName = "traits_list.md";
         String dirPath = "output/silentgear";
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            context.getSource().sendErrorMessage(new StringTextComponent("Could not create directory: " + output.getParent()));
-            return 0;
+            player.sendMessage(new StringTextComponent("Could not create directory: " + output.getParent()), Util.DUMMY_UUID);
+            return;
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
@@ -162,10 +183,8 @@ public final class TraitsCommand {
         } finally {
             ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).mergeStyle(TextFormatting.UNDERLINE).modifyStyle(style ->
                     style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            context.getSource().sendFeedback(new StringTextComponent("Wrote to ").append(fileNameText), true);
+            player.sendMessage(new StringTextComponent("Wrote to ").append(fileNameText), Util.DUMMY_UUID);
         }
-
-        return 1;
     }
 
     private static String getCurrentDateTime() {

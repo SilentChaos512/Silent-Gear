@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public final class Network {
     private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
-    private static final String VERSION = "sgear-net-6";
+    private static final String VERSION = "sgear-net-7";
 
     public static SimpleChannel channel;
 
@@ -102,6 +102,11 @@ public final class Network {
                 .decoder(GearLeftClickPacket::decode)
                 .encoder(GearLeftClickPacket::encode)
                 .consumer(GearLeftClickPacket::handle)
+                .add();
+        channel.messageBuilder(ClientOutputCommandPacket.class, 13)
+                .encoder(ClientOutputCommandPacket::encode)
+                .decoder(ClientOutputCommandPacket::decode)
+                .consumer(ClientOutputCommandPacket::handle)
                 .add();
     }
 
