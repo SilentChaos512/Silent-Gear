@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Vein count configs for crimson iron and azure silver ore [#269]
+### Changed
+- Default vein counts for crimson iron and azure silver reduced by almost half
+- Crimson iron vein count is doubled in basalt deltas and soul sand valley
+
 ## [2.4.6] - 2020-12-20
 ### Fixed
 - Ranged weapons missing ranged weapon stats [#292]

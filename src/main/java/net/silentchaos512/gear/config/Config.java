@@ -61,6 +61,11 @@ public final class Config {
         // Salvager
         public static final ForgeConfigSpec.DoubleValue salvagerMinLossRate;
         public static final ForgeConfigSpec.DoubleValue salvagerMaxLossRate;
+        // World
+        public static final ForgeConfigSpec.IntValue azureSilverCount;
+        public static final ForgeConfigSpec.IntValue crimsonIronCount;
+        public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
+        public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
         // Compatibility
         public static final ForgeConfigSpec.BooleanValue mineAndSlashSupport;
         // Debug
@@ -241,6 +246,24 @@ public final class Config {
                         .comment("Maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
                                 "Rate depends on remaining durability.")
                         .defineInRange("partLossRate.max", 0.5, 0, 1);
+                builder.pop();
+            }
+
+            {
+                builder.comment("World generation options (REQUIRES GAME RESTART)");
+                builder.push("world");
+                azureSilverCount = builder
+                        .comment("Veins of azure silver ore per chunk")
+                        .defineInRange("azureSilver.count", 8, 0, 1000);
+                crimsonIronCount = builder
+                        .comment("Veins of crimson iron ore per chunk")
+                        .defineInRange("crimsonIron.count", 14, 0, 1000);
+                wildFlaxPatchCount = builder
+                        .comment("Number of patches of wild flax to attempt to place per chunk (some biomes only)")
+                        .defineInRange("wildFlax.patchCount", 1, 0, 100);
+                wildFlaxTryCount = builder
+                        .comment("Block place attempts per wild flax cluster")
+                        .defineInRange("wildFlax.tryCount", 16, 0, 1000);
                 builder.pop();
             }
 

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
@@ -21,6 +22,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
 
@@ -45,22 +47,28 @@ public final class ModWorldFeatures {
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
                 .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(24, 0, 120)))
                 .square()
-                .func_242731_b(24);
+                .func_242731_b(Config.Common.crimsonIronCount.get());
+
+        public static final ConfiguredFeature<?, ?> DOUBLE_CRIMSON_IRON_ORE_VEINS = Feature.ORE
+                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
+                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(24, 0, 120)))
+                .square()
+                .func_242731_b(2 * Config.Common.crimsonIronCount.get());
 
         public static final ConfiguredFeature<?, ?> AZURE_SILVER_ORE_VEINS = Feature.ORE
                 .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
                 .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(16, 0, 92)))
                 .square()
-                .func_242731_b(15);
+                .func_242731_b(Config.Common.azureSilverCount.get());
 
         public static final ConfiguredFeature<?, ?> WILD_FLAX_PATCHES = Feature.FLOWER
                 .withConfiguration(new BlockClusterFeatureConfig.Builder(
                         new SimpleBlockStateProvider(ModBlocks.WILD_FLAX_PLANT.asBlockState()),
                         SimpleBlockPlacer.PLACER
-                ).tries(64).build())
+                ).tries(Config.Common.wildFlaxTryCount.get()).build())
                 .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
                 .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
-                .func_242731_b(1);
+                .func_242731_b(Config.Common.wildFlaxPatchCount.get());
 
         public static final ConfiguredFeature<?, ?> NETHERWOOD_TREES = Feature.RANDOM_SELECTOR
                 .withConfiguration(new MultipleRandomFeatureConfig(
@@ -123,8 +131,13 @@ public final class ModWorldFeatures {
     }
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {
-        // FIXME: There are biomes with less netherrack now, right? Might need to tweak vein counts for those.
-        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS);
+        if (Biomes.BASALT_DELTAS.getLocation().equals(biome.getName()) || Biomes.SOUL_SAND_VALLEY.getLocation().equals(biome.getName())) {
+            SilentGear.LOGGER.debug("Add double crimson iron ores to {}", biome.getName());
+            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.DOUBLE_CRIMSON_IRON_ORE_VEINS);
+        } else {
+            SilentGear.LOGGER.debug("Add crimson iron ores to {}", biome.getName());
+            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS);
+        }
     }
 
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
