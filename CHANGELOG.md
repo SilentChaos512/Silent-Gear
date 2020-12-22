@@ -3,11 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.4.7] - 2020-12-21
 ### Added
 - Vein count configs for crimson iron and azure silver ore [#269]
 - Configs for wild flax generation [#269]
+- Elytra (requires Caelus API to work) [#147]
+  - Elytra wings are crafted from main materials with armor durability in the cloth category (wool, leather, phantom membrane)
+  - Elytra are crafted from elytra wings and a binding
+- Phantom membrane material (armor/elytra main, grips)
 ### Changed
+- Gear models can now optionally have broken textures (see elytra)
+- Wool can now be used to craft armor and elytra
 - Default vein counts for crimson iron and azure silver reduced by almost half
 - Crimson iron vein count is doubled in basalt deltas and soul sand valley
 ### Fixed
