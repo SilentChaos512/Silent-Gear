@@ -76,7 +76,7 @@ public class CurioGearItemCapability {
 
         @Override
         public void curioTick(String identifier, int index, LivingEntity livingEntity) {
-            GearHelper.inventoryTick(stack, livingEntity.world, livingEntity, -1, false);
+            GearHelper.inventoryTick(stack, livingEntity.world, livingEntity, -1, true);
         }
 
         @Override
