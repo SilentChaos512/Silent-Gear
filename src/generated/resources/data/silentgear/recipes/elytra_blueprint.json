@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "/e/",
+    "p#p",
+    "p p"
+  ],
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "forge:ingots/netherite"
+    },
+    "e": {
+      "item": "minecraft:elytra"
+    },
+    "p": {
+      "item": "minecraft:phantom_membrane"
+    }
+  },
+  "result": {
+    "item": "silentgear:elytra_blueprint"
+  }
+}

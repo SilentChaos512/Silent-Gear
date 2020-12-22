@@ -120,6 +120,27 @@ public class ModRecipesProvider extends RecipeProvider {
         armorBlueprint(consumer, "leggings", ModItems.LEGGINGS_BLUEPRINT, ModItems.LEGGINGS_TEMPLATE, "###", "# #", "# #");
         armorBlueprint(consumer, "boots", ModItems.BOOTS_BLUEPRINT, ModItems.BOOTS_TEMPLATE, "# #", "# #");
 
+        ShapedRecipeBuilder.shapedRecipe(ModItems.ELYTRA_BLUEPRINT)
+                .key('#', ModTags.Items.BLUEPRINT_PAPER)
+                .key('/', Tags.Items.INGOTS_NETHERITE)
+                .key('e', Items.ELYTRA)
+                .key('p', Items.PHANTOM_MEMBRANE)
+                .patternLine("/e/")
+                .patternLine("p#p")
+                .patternLine("p p")
+                .addCriterion("has_item", hasItem(ModTags.Items.BLUEPRINT_PAPER))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.ELYTRA_TEMPLATE)
+                .key('#', ModTags.Items.TEMPLATE_BOARDS)
+                .key('/', Tags.Items.INGOTS_NETHERITE)
+                .key('e', Items.ELYTRA)
+                .key('p', Items.PHANTOM_MEMBRANE)
+                .patternLine("/e/")
+                .patternLine("p#p")
+                .patternLine("p p")
+                .addCriterion("has_item", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+
         // Curio blueprints
         ShapedRecipeBuilder.shapedRecipe(ModItems.RING_BLUEPRINT)
                 .setGroup("silentgear:blueprints/ring")

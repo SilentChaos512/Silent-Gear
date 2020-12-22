@@ -189,6 +189,8 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         // Curios
         Registration.getItems(CoreCurio.class).forEach(item ->
                 builder(makeWrapper(Const.CURIOS, item.getSlot()), item));
+
+        builder(makeWrapper(Const.CURIOS, "back"), ModItems.ELYTRA);
     }
 
     private ITag.INamedTag<Item> makeWrapper(String namespace, String path) {
