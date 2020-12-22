@@ -85,8 +85,9 @@ public class GearModelOverrideList extends ItemOverrideList {
     }
 
     private IBakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
+        boolean broken = GearHelper.isBroken(stack);
         if (SilentGear.LOGGER.isDebugEnabled()) {
-            SilentGear.LOGGER.debug("getOverrideModel for {}", stack.getDisplayName().getString());
+            SilentGear.LOGGER.debug("getOverrideModel for {} ({})", stack.getDisplayName().getString(), broken ? "broken" : "normal");
             SilentGear.LOGGER.debug("- model key {}", key.data);
         }
         List<MaterialLayer> layers = new ArrayList<>();
@@ -107,7 +108,7 @@ public class GearModelOverrideList extends ItemOverrideList {
             getCrossbowCharge(stack, worldIn, entityIn).ifPresent(layers::add);
         }
 
-        return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
+        return model.bake(stack, layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
     }
 
     private static PartDataList getPartsInRenderOrder(ItemStack stack) {
@@ -183,10 +184,11 @@ public class GearModelOverrideList extends ItemOverrideList {
     }
 
     private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int animationFrame) {
+        String brokenSuffix = GearHelper.isBroken(stack) ? "broken" : "";
         String chargeSuffix = getCrossbowCharge(stack, world, entity)
-                .map(l -> l.getTextureId().getPath())
+                .map(l -> ";" + l.getTextureId().getPath())
                 .orElse("");
-        return new CacheKey(model, GearData.getModelKey(stack, animationFrame) + chargeSuffix);
+        return new CacheKey(model, GearData.getModelKey(stack, animationFrame) + brokenSuffix + chargeSuffix);
     }
 
     @Override

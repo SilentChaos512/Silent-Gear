@@ -59,4 +59,9 @@ public interface ICoreArmor extends ICoreItem {
                 || partType == PartType.TIP
                 || partType == PartType.MISC_UPGRADE;
     }
+
+    @Override
+    default ItemStat getDurabilityStat() {
+        return ItemStats.ARMOR_DURABILITY;
+    }
 }

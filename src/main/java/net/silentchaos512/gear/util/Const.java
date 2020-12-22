@@ -12,6 +12,9 @@ public final class Const {
     public static final ResourceLocation FRAGMENT_MODEL_LOADER = SilentGear.getId("fragment_model");
     public static final ResourceLocation GEAR_MODEL_LOADER = SilentGear.getId("gear_model");
 
+    // Model properties
+    public static final ResourceLocation BROKEN_PROPERTY = SilentGear.getId("broken");
+
     // Recipe types and categories
     public static final ResourceLocation COMBINE_FRAGMENTS = SilentGear.getId("combine_fragments");
     public static final ResourceLocation COMPOUND_PART = SilentGear.getId("compound_part");
@@ -30,6 +33,7 @@ public final class Const {
     public static final ResourceLocation SWAP_GEAR_PART = SilentGear.getId("swap_gear_part");
 
     // Mod IDs
+    public static final String CAELUS = "caelus";
     public static final String CURIOS = "curios";
 
     private Const() {}

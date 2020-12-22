@@ -7,5 +7,8 @@
   },
   "name": {
     "translate": "part.silentgear.shears_blades"
+  },
+  "stats": {
+    "repair_efficiency": 1.0
   }
 }

@@ -1,0 +1,65 @@
+{
+  "availability": {
+    "tier": 0,
+    "categories": [
+      "organic",
+      "cloth"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:phantom_membrane"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.phantom_membrane"
+  },
+  "stats": {
+    "main": {
+      "durability": 0.0,
+      "armor_durability": 36.0,
+      "enchantability": 10.0,
+      "armor": 6.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 6.0,
+      "rarity": 35.0,
+      "silentgems:chargeability": 0.5
+    },
+    "grip": {
+      "repair_efficiency": {
+        "mul1": 0.15
+      },
+      "harvest_speed": {
+        "mul1": 0.1
+      },
+      "attack_speed": {
+        "add": 0.2
+      },
+      "rarity": {
+        "add": 5.0
+      }
+    },
+    "lining": {
+      "armor_durability": {
+        "add": 4.0
+      }
+    }
+  },
+  "traits": {
+    "grip": [
+      {
+        "name": "silentgear:ancient",
+        "level": 2
+      }
+    ],
+    "lining": [
+      {
+        "name": "silentgear:light",
+        "level": 2
+      }
+    ]
+  }
+}

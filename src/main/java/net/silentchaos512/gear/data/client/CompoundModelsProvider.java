@@ -75,7 +75,7 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
                 .setGearType(item.getGearType())
                 .setPartType(item.getPartType());
 
-        if (item.getGearType().isArmor()) {
+        if (item.getGearType().isArmor() && item.getGearType() != GearType.ELYTRA) {
             builder.setTexturePath("part/armor");
             if (item.getGearType().matches(GearType.HELMET))
                 builder.addExtraLayer(SilentGear.getId("blueprint_helmet"));

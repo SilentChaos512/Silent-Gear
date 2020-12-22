@@ -473,6 +473,16 @@ public class ModRecipesProvider extends RecipeProvider {
         armorRecipes(consumer, 7, ModItems.LEGGINGS.get(), ModItems.LEGGING_PLATES, ModItems.LEGGINGS_BLUEPRINT.get());
         armorRecipes(consumer, 4, ModItems.BOOTS.get(), ModItems.BOOT_PLATES, ModItems.BOOTS_BLUEPRINT.get());
 
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ELYTRA_WINGS)
+                .addIngredient(BlueprintIngredient.of(ModItems.ELYTRA_BLUEPRINT.get()))
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ELYTRA, MaterialCategories.CLOTH), 6)
+                .build(consumer, SilentGear.getId("gear/elytra_wings"));
+
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.ELYTRA.get())
+                .addIngredient(ModItems.ELYTRA_WINGS)
+                .addIngredient(GearPartIngredient.of(PartType.BINDING))
+                .build(consumer, SilentGear.getId("gear/elytra"));
+
         // Rough recipes
         ExtendedShapedRecipeBuilder.builder(ModRecipes.SHAPED_GEAR.get(), ModItems.SWORD)
                 .patternLine("#")
@@ -885,7 +895,9 @@ public class ModRecipesProvider extends RecipeProvider {
 
     private void registerSmithing(Consumer<IFinishedRecipe> consumer) {
         Registration.getItems(item -> item instanceof ICoreItem).forEach(item -> {
-            GearSmithingRecipeBuilder.coating(item).build(consumer);
+            if (((ICoreItem) item).getGearType() != GearType.ELYTRA) {
+                GearSmithingRecipeBuilder.coating(item).build(consumer);
+            }
             GearSmithingRecipeBuilder.upgrade(item, PartType.MISC_UPGRADE).build(consumer);
         });
     }

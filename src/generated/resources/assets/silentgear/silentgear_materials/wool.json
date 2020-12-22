@@ -1,4 +1,14 @@
 {
+  "main/all": [
+    {
+      "texture": "silentgear:main_generic_lc"
+    }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth"
+    }
+  ],
   "grip/all": [
     {
       "texture": "silentgear:grip_wool"
@@ -12,11 +22,6 @@
   "lining/part": [
     {
       "texture": "silentgear:lining_cloth"
-    }
-  ],
-  "main/fragment": [
-    {
-      "texture": "silentgear:cloth"
     }
   ]
 }

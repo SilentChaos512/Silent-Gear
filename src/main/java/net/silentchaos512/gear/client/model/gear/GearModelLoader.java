@@ -34,8 +34,10 @@ public class GearModelLoader implements IModelLoader<GearModel> {
         if (gearType.isInvalid()) {
             throw new NullPointerException("Unknown gear type: " + gearTypeStr);
         }
+        String texturePath = JSONUtils.getString(modelContents, "texture_path", gearType.getName());
+        String brokenTexturePath = JSONUtils.getString(modelContents, "broken_texture_path", gearType.getName());
 
-        GearModel model = new GearModel(cameraTransforms, gearType);
+        GearModel model = new GearModel(cameraTransforms, gearType, texturePath, brokenTexturePath);
         MODELS.add(model);
         return model;
     }

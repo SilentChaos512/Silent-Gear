@@ -88,6 +88,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_BLUEPRINT = registerGearBlueprint(GearType.CHESTPLATE, false);
     public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_BLUEPRINT = registerGearBlueprint(GearType.LEGGINGS, false);
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_BLUEPRINT = registerGearBlueprint(GearType.BOOTS, false);
+    public static final ItemRegistryObject<GearBlueprintItem> ELYTRA_BLUEPRINT = registerGearBlueprint(GearType.ELYTRA, false);
     public static final ItemRegistryObject<GearBlueprintItem> ARROW_BLUEPRINT = registerGearBlueprint(GearType.ARROW, false);
     public static final ItemRegistryObject<GearBlueprintItem> RING_BLUEPRINT = registerGearBlueprint(GearType.RING, false);
     public static final ItemRegistryObject<GearBlueprintItem> BRACELET_BLUEPRINT = registerGearBlueprint(GearType.BRACELET, false);
@@ -125,6 +126,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_TEMPLATE = registerGearBlueprint(GearType.CHESTPLATE, true);
     public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_TEMPLATE = registerGearBlueprint(GearType.LEGGINGS, true);
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearType.BOOTS, true);
+    public static final ItemRegistryObject<GearBlueprintItem> ELYTRA_TEMPLATE = registerGearBlueprint(GearType.ELYTRA, true);
     public static final ItemRegistryObject<GearBlueprintItem> ARROW_TEMPLATE = registerGearBlueprint(GearType.ARROW, true);
     public static final ItemRegistryObject<GearBlueprintItem> RING_TEMPLATE = registerGearBlueprint(GearType.RING, true);
     public static final ItemRegistryObject<GearBlueprintItem> BRACELET_TEMPLATE = registerGearBlueprint(GearType.BRACELET, true);
@@ -184,6 +186,8 @@ public final class ModItems {
             new ToolHeadItem(GearType.LEGGINGS, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> BOOT_PLATES = registerCompoundPart("boot_plates", () ->
             new ToolHeadItem(GearType.BOOTS, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> ELYTRA_WINGS = registerCompoundPart("elytra_wings", () ->
+            new ToolHeadItem(GearType.ELYTRA, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> ARROW_HEADS = registerCompoundPart("arrow_heads", () ->
             new ToolHeadItem(GearType.ARROW, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> RING_SHANK = registerCompoundPart("ring_shank", () ->
@@ -262,6 +266,8 @@ public final class ModItems {
     public static final ItemRegistryObject<CoreArmor> CHESTPLATE = register("chestplate", () -> new CoreArmor(EquipmentSlotType.CHEST));
     public static final ItemRegistryObject<CoreArmor> LEGGINGS = register("leggings", () -> new CoreArmor(EquipmentSlotType.LEGS));
     public static final ItemRegistryObject<CoreArmor> BOOTS = register("boots", () -> new CoreArmor(EquipmentSlotType.FEET));
+
+    public static final ItemRegistryObject<CoreElytra> ELYTRA = register("elytra", () -> new CoreElytra(unstackableProps()));
 
     public static final ItemRegistryObject<CoreCurio> RING = register("ring", () ->
             new CoreCurio(GearType.RING, "ring", unstackableProps()));

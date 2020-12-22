@@ -54,7 +54,9 @@ public class PartsProvider implements IDataProvider {
         ret.add(part("adornment", GearType.ALL, PartType.ADORNMENT, ModItems.ADORNMENT));
         ret.add(part("binding", GearType.TOOL, PartType.BINDING, ModItems.BINDING));
         ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.BOWSTRING, ModItems.BOWSTRING));
-        ret.add(part("coating", GearType.ALL, PartType.COATING, ModItems.COATING));
+        ret.add(part("coating", GearType.ALL, PartType.COATING, ModItems.COATING)
+                .blacklistGearType(GearType.ELYTRA)
+        );
         ret.add(part("fletching", GearType.NONE, PartType.FLETCHING, ModItems.FLETCHING));
         ret.add(part("grip", GearType.TOOL, PartType.GRIP, ModItems.GRIP));
         ret.add(part("lining", GearType.ARMOR, PartType.LINING, ModItems.LINING));
@@ -239,13 +241,22 @@ public class PartsProvider implements IDataProvider {
                 || isToolHead(builder, ModItems.CHESTPLATE_PLATES)
                 || isToolHead(builder, ModItems.LEGGING_PLATES)
                 || isToolHead(builder, ModItems.BOOT_PLATES))
-            return builder;
+            return builder
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1);
+
+        if (isToolHead(builder, ModItems.ELYTRA_WINGS))
+            return builder
+                    .stat(ItemStats.ARMOR, -0.65f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ARMOR, -3.5f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1);
 
         // Oddballs
         if (isToolHead(builder, ModItems.SHEARS_BLADES))
-            return builder;
+            return builder
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1);
         if (isToolHead(builder, ModItems.SHIELD_PLATE))
-            return builder;
+            return builder
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1);
         if (isToolHead(builder, ModItems.ARROW_HEADS))
             return builder
                     .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f);

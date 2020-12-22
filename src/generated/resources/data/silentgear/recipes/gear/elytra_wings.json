@@ -1,0 +1,60 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "elytra"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "elytra",
+      "categories": [
+        "cloth"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "elytra",
+      "categories": [
+        "cloth"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "elytra",
+      "categories": [
+        "cloth"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "elytra",
+      "categories": [
+        "cloth"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "elytra",
+      "categories": [
+        "cloth"
+      ]
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "elytra",
+      "categories": [
+        "cloth"
+      ]
+    }
+  ],
+  "result": {
+    "item": "silentgear:elytra_wings"
+  }
+}

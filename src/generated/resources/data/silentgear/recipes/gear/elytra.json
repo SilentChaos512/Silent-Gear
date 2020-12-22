@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "item": "silentgear:elytra_wings"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:binding"
+    }
+  ],
+  "result": {
+    "item": "silentgear:elytra"
+  }
+}

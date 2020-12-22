@@ -39,6 +39,16 @@
     "translate": "material.silentgear.wool"
   },
   "stats": {
+    "main": {
+      "durability": 0.0,
+      "armor_durability": 4.0,
+      "enchantability": 7.0,
+      "armor": 4.0,
+      "armor_toughness": 0.0,
+      "magic_armor": 4.0,
+      "rarity": 7.0,
+      "silentgems:chargeability": 0.7
+    },
     "grip": {
       "repair_efficiency": {
         "mul1": 0.2

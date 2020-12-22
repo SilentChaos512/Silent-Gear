@@ -35,7 +35,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     protected GearType getGearType() {
-        return GearType.TOOL;
+        return this.item.getGearType();
     }
 
     @Override

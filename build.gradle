@@ -133,7 +133,7 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
-    // Curios
+    // Curios, Caelus
     maven {
         url = "https://maven.theillusivec4.top/"
     }
@@ -172,6 +172,13 @@ dependencies {
     if (project.hasProperty('curios_version')) {
         runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}")
         compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}:api")
+    }
+
+    // Caelus
+    if (project.hasProperty('caelus_version')) {
+        // FIXME: Crashes with Mixin apply failed
+        //runtimeOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}")
+        compileOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}:api")
     }
 
     // compile('com.robertx22:mine-and-slash-1.14.4:2.+') {

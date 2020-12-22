@@ -71,6 +71,7 @@ public final class GearType {
     public static final GearType ARMOR = getOrCreate("armor", ALL, ItemStats.ARMOR_DURABILITY);
     public static final GearType BOOTS = getOrCreate("boots", ARMOR);
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
+    public static final GearType ELYTRA = getOrCreate("elytra", ARMOR);
     public static final GearType HELMET = getOrCreate("helmet", ARMOR);
     public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR);
     // Projectiles

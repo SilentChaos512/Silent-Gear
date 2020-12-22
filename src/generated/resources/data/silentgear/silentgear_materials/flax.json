@@ -27,6 +27,9 @@
           "add": 10.0
         }
       ],
+      "armor_durability": {
+        "mul1": 0.05
+      },
       "harvest_speed": {
         "mul1": 0.05
       }

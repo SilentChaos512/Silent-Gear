@@ -41,6 +41,7 @@ public class PartBuilder {
     @Nullable private ITextComponent namePrefix;
     @Nullable private GearTypeMatcher upgradeGearTypes;
     private final Map<GearType, MaterialLayerList> display = new LinkedHashMap<>();
+    private final List<GearType> gearBlacklist = new ArrayList<>();
 
     private final StatModifierMap stats = new StatModifierMap();
     private final List<ITraitInstance> traits = new ArrayList<>();
@@ -95,6 +96,11 @@ public class PartBuilder {
         return this;
     }
 
+    public PartBuilder blacklistGearType(GearType type) {
+        this.gearBlacklist.add(type);
+        return this;
+    }
+
     public PartBuilder upgradeGearTypes(GearTypeMatcher matcher) {
         this.upgradeGearTypes = matcher;
         return this;
@@ -121,6 +127,11 @@ public class PartBuilder {
         json.addProperty("part_type", this.partType.getName().toString());
 
         JsonObject availability = new JsonObject();
+        if (!this.gearBlacklist.isEmpty()) {
+            JsonArray array = new JsonArray();
+            this.gearBlacklist.forEach(gt -> array.add(gt.getName()));
+            availability.add("gear_blacklist", array);
+        }
         if (!availability.entrySet().isEmpty()) {
             json.add("availability", availability);
         }

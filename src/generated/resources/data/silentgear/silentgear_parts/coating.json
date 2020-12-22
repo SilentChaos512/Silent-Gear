@@ -2,6 +2,11 @@
   "type": "silentgear:compound_part",
   "gear_type": "all",
   "part_type": "silentgear:coating",
+  "availability": {
+    "gear_blacklist": [
+      "elytra"
+    ]
+  },
   "crafting_item": {
     "item": "silentgear:coating"
   },

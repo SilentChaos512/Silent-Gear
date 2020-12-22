@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraftforge.client.model.IModelConfiguration;
@@ -27,6 +28,7 @@ import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.part.FakePartData;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -38,10 +40,14 @@ public class GearModel extends LayeredModel<GearModel> {
     final GearType gearType;
     private final ICoreItem item;
     private GearModelOverrideList overrideList;
+    private final String texturePath;
+    private final String brokenTexturePath;
 
-    GearModel(ItemCameraTransforms cameraTransforms, GearType gearType) {
+    GearModel(ItemCameraTransforms cameraTransforms, GearType gearType, String texturePath, String brokenTexturePath) {
         this.cameraTransforms = cameraTransforms;
         this.gearType = gearType;
+        this.texturePath = texturePath;
+        this.brokenTexturePath = brokenTexturePath;
         this.item = ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof ICoreItem && ((ICoreItem) item).getGearType() == this.gearType)
                 .map(item -> (ICoreItem) item)
@@ -55,6 +61,10 @@ public class GearModel extends LayeredModel<GearModel> {
         }
     }
 
+    private String getTexturePath(boolean broken) {
+        return broken ? brokenTexturePath : texturePath;
+    }
+
     @Override
     public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
         overrideList = new GearModelOverrideList(this, owner, bakery, spriteGetter, modelTransform, modelLocation);
@@ -62,7 +72,8 @@ public class GearModel extends LayeredModel<GearModel> {
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    public IBakedModel bake(List<MaterialLayer> layers,
+    public IBakedModel bake(ItemStack stack,
+                            List<MaterialLayer> layers,
                             int animationFrame,
                             String transformVariant,
                             IModelConfiguration owner,
@@ -76,9 +87,12 @@ public class GearModel extends LayeredModel<GearModel> {
         TransformationMatrix rotation = modelTransform.getRotation();
         ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
 
+        boolean broken = GearHelper.isBroken(stack);
+        String texturePath = getTexturePath(broken);
+
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.gearType, animationFrame)));
+            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(texturePath, animationFrame)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -133,7 +147,8 @@ public class GearModel extends LayeredModel<GearModel> {
         for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
             int animationFrames = tex.isAnimated() ? item.getAnimationFrames() : 1;
             for (int i = 0; i < animationFrames; ++i) {
-                ret.add(getTexture(tex.getTexture(), i));
+                ret.add(getTexture(tex.getTexture(), i, false));
+                ret.add(getTexture(tex.getTexture(), i, true));
             }
         }
 
@@ -143,7 +158,8 @@ public class GearModel extends LayeredModel<GearModel> {
                 if (item.hasTexturesFor(partType)) {
                     for (MaterialLayer layer : materialDisplay.getLayers(gearType, partType)) {
                         int animationFrames = layer.isAnimated() ? item.getAnimationFrames() : 1;
-                        ret.addAll(this.getTexturesForAllFrames(layer, animationFrames));
+                        ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, false));
+                        ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, true));
                     }
                 }
             }
@@ -151,11 +167,12 @@ public class GearModel extends LayeredModel<GearModel> {
         for (IPartDisplay partDisplay : MaterialDisplayManager.getParts()) {
             for (MaterialLayer layer : partDisplay.getLayers(gearType, FakePartData.of(PartType.NONE))) {
                 int animationFrames = layer.isAnimated() ? item.getAnimationFrames() : 1;
-                ret.addAll(this.getTexturesForAllFrames(layer, animationFrames));
+                ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, false));
+                ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, true));
             }
         }
 
-        SilentGear.LOGGER.info("Textures for gear model '{}'", this.gearType.getName());
+        SilentGear.LOGGER.info("Textures for gear model '{}' ({})", getTexturePath(false), this.gearType.getName());
         for (RenderMaterial mat : ret) {
             SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
         }
@@ -163,9 +180,9 @@ public class GearModel extends LayeredModel<GearModel> {
         return ret;
     }
 
-    private Collection<RenderMaterial> getTexturesForAllFrames(MaterialLayer layer, int animationFrameCount) {
+    private Collection<RenderMaterial> getTexturesForAllFrames(MaterialLayer layer, int animationFrameCount, boolean broken) {
         return IntStream.range(0, animationFrameCount)
-                .mapToObj(frame -> getTexture(layer, frame))
+                .mapToObj(frame -> getTexture(layer.getTextureId(), frame, broken))
                 .collect(Collectors.toList());
     }
 
@@ -173,8 +190,8 @@ public class GearModel extends LayeredModel<GearModel> {
         return getMaterial(layer.getTexture(this.gearType, animationFrame));
     }
 
-    private RenderMaterial getTexture(ResourceLocation tex, int animationFrame) {
-        String path = "item/" + gearType.getName() + "/" + tex.getPath();
+    private RenderMaterial getTexture(ResourceLocation tex, int animationFrame, boolean broken) {
+        String path = "item/" + this.getTexturePath(broken) + "/" + tex.getPath();
         String suffix = animationFrame > 0 ? "_" + animationFrame : "";
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path + suffix);
         return getMaterial(location);

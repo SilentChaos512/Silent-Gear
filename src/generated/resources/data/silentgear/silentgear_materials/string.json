@@ -29,6 +29,9 @@
       "durability": {
         "mul1": -0.05
       },
+      "armor_durability": {
+        "mul1": 0.05
+      },
       "repair_efficiency": {
         "mul1": 0.05
       }

@@ -22,7 +22,6 @@ import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -79,11 +78,6 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     //region Stats and attributes
-
-    @Override
-    public ItemStat getDurabilityStat() {
-        return ItemStats.ARMOR_DURABILITY;
-    }
 
     @Override
     public float getRepairModifier(ItemStack stack) {
