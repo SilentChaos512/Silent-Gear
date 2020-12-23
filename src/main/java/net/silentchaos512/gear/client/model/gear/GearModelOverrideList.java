@@ -93,12 +93,14 @@ public class GearModelOverrideList extends ItemOverrideList {
         List<MaterialLayer> layers = new ArrayList<>();
 
         for (PartData part : getPartsInRenderOrder(stack)) {
-            addSimplePartLayers(layers, part, stack);
+            if (((ICoreItem) stack.getItem()).hasTexturesFor(part.getType())) {
+                addSimplePartLayers(layers, part, stack);
 
-            if (part.getPart() instanceof CompoundPart) {
-                MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
-                if (mat != null) {
-                    addWithBlendedColor(layers, part, mat, stack);
+                if (part.getPart() instanceof CompoundPart) {
+                    MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
+                    if (mat != null) {
+                        addWithBlendedColor(layers, part, mat, stack);
+                    }
                 }
             }
         }

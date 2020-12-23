@@ -198,7 +198,7 @@ public class GearModel extends LayeredModel<GearModel> {
     private RenderMaterial getTexture(MaterialLayer layer, int animationFrame, boolean broken) {
         ResourceLocation tex = layer.getTextureId();
         String path = "item/" + this.getTexturePath(broken) + "/" + tex.getPath();
-        String suffix = animationFrame > 0 ? "_" + animationFrame : "";
+        String suffix = animationFrame > 0 && layer.isAnimated() ? "_" + animationFrame : "";
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path + suffix);
         if (broken && !hasBrokenTexture(layer.getPartType())) {
             return getTexture(layer, animationFrame, false);
