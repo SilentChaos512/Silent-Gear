@@ -90,12 +90,14 @@ public class MaterialLayer {
     public static MaterialLayer read(PacketBuffer buffer) {
         ResourceLocation texture = buffer.readResourceLocation();
         int color = buffer.readVarInt();
-        return new MaterialLayer(texture, color);
+        PartType partType = PartType.getNonNull(buffer.readResourceLocation());
+        return new MaterialLayer(texture, partType, color, true);
     }
 
     public void write(PacketBuffer buffer) {
         buffer.writeResourceLocation(this.texture);
         buffer.writeVarInt(this.color);
+        buffer.writeResourceLocation(this.partType.getName());
     }
 
     @Override

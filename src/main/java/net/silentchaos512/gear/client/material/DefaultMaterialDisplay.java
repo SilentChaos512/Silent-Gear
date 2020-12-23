@@ -34,7 +34,7 @@ public class DefaultMaterialDisplay extends MaterialDisplay {
         if (!map.containsKey(key)) {
             PartTextures texture = part.getType().getDefaultTexture();
             if (texture != null) {
-                map.put(key, new MaterialLayerList(new MaterialLayer(texture, 0)));
+                map.put(key, new MaterialLayerList(new MaterialLayer(texture.getTexture(), part.getType(), 0, false)));
             } else {
                 map.put(key, MaterialLayerList.DEFAULT);
             }
