@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
@@ -346,9 +347,9 @@ public final class PartMaterial implements IMaterial {
                 }
 
                 for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-                    String key = entry.getKey();
+                    PartGearKey key = PartGearKey.read(entry.getKey());
                     JsonElement value = entry.getValue();
-                    ret.display.put(key, MaterialLayerList.deserialize(value, defaultProps));
+                    ret.display.put(key.toString(), MaterialLayerList.deserialize(key, value, defaultProps));
                 }
             }
         }

@@ -6,16 +6,21 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.utils.Color;
 
+import javax.annotation.Nullable;
+
 public class MaterialLayer {
     protected final ResourceLocation texture;
+    protected final PartType partType;
     protected final int color; // TODO: Replace with a color provider?
     protected final boolean animated;
 
     public MaterialLayer(PartTextures texture, int color) {
-        this(texture.getTexture(), color, texture.isAnimated());
+        this(texture.getTexture(), texture.getPartType(), color, texture.isAnimated());
     }
 
     public MaterialLayer(ResourceLocation texture, int color) {
@@ -23,9 +28,18 @@ public class MaterialLayer {
     }
 
     public MaterialLayer(ResourceLocation texture, int color, boolean animated) {
+        this(texture, null, color, animated);
+    }
+
+    public MaterialLayer(ResourceLocation texture, @Nullable PartType partType, int color, boolean animated) {
         this.texture = texture;
+        this.partType = partType;
         this.color = color;
         this.animated = animated;
+    }
+
+    public MaterialLayer withColor(int color) {
+        return new MaterialLayer(this.texture, this.partType, color, this.animated);
     }
 
     public ResourceLocation getTexture(GearType gearType, int animationFrame) {
@@ -42,6 +56,10 @@ public class MaterialLayer {
         return texture;
     }
 
+    public PartType getPartType() {
+        return partType;
+    }
+
     public int getColor() {
         return color;
     }
@@ -50,12 +68,12 @@ public class MaterialLayer {
         return animated;
     }
 
-    public static MaterialLayer deserialize(JsonElement json) {
+    public static MaterialLayer deserialize(PartGearKey key, JsonElement json) {
         if (json.isJsonObject()) {
             JsonObject jo = json.getAsJsonObject();
             ResourceLocation texture = new ResourceLocation(JSONUtils.getString(jo, "texture"));
             int color = Color.from(jo, "color", Color.VALUE_WHITE).getColor();
-            return new MaterialLayer(texture, color);
+            return new MaterialLayer(texture, key.getPartType(), color, false);
         }
 
         ResourceLocation texture = new ResourceLocation(json.getAsString());
@@ -86,6 +104,7 @@ public class MaterialLayer {
     public String toString() {
         return "MaterialLayer{" +
                 "texture=" + texture +
+                "partType=" + partType.getName() +
                 ", color=" + Color.format(color) +
                 '}';
     }

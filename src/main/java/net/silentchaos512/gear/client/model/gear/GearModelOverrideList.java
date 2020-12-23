@@ -151,14 +151,20 @@ public class GearModelOverrideList extends ItemOverrideList {
             MaterialLayer layer = layers.get(i);
             if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
                 int blendedColor = part.getColor(stack, i, 0);
-                list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
+                MaterialLayer coloredLayer = layer.withColor(blendedColor);
+                list.add(coloredLayer);
                 if (SilentGear.LOGGER.isDebugEnabled()) {
-                    SilentGear.LOGGER.debug("  - add layer {} ({})", layer.getTextureId(), Color.format(blendedColor));
+                    SilentGear.LOGGER.debug("  - add layer {} (type={}, color={})",
+                            coloredLayer.getTextureId(),
+                            coloredLayer.getPartType().getName(),
+                            Color.format(blendedColor));
                 }
             } else {
                 list.add(layer);
                 if (SilentGear.LOGGER.isDebugEnabled()) {
-                    SilentGear.LOGGER.debug("  - add layer {} (colorless)", layer.getTextureId());
+                    SilentGear.LOGGER.debug("  - add layer {} (type={}, colorless)",
+                            layer.getTextureId(),
+                            layer.getPartType().getName());
                 }
             }
         }

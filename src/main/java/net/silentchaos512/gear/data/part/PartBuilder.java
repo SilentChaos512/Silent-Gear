@@ -22,6 +22,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.util.DataResource;
 
@@ -40,7 +41,7 @@ public class PartBuilder {
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
     @Nullable private GearTypeMatcher upgradeGearTypes;
-    private final Map<GearType, MaterialLayerList> display = new LinkedHashMap<>();
+    private final Map<PartGearKey, MaterialLayerList> display = new LinkedHashMap<>();
     private final List<GearType> gearBlacklist = new ArrayList<>();
 
     private final StatModifierMap stats = new StatModifierMap();
@@ -106,12 +107,12 @@ public class PartBuilder {
         return this;
     }
 
-    public PartBuilder display(GearType gearType, MaterialLayer... layers) {
-        return display(gearType, new MaterialLayerList(layers));
+    public PartBuilder display(GearType gearType, PartType partType, MaterialLayer... layers) {
+        return display(gearType, partType, new MaterialLayerList(layers));
     }
 
-    public PartBuilder display(GearType gearType, MaterialLayerList layers) {
-        this.display.put(gearType, layers);
+    public PartBuilder display(GearType gearType, PartType partType, MaterialLayerList layers) {
+        this.display.put(PartGearKey.of(gearType, partType), layers);
         return this;
     }
 

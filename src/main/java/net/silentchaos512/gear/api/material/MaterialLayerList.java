@@ -2,10 +2,10 @@ package net.silentchaos512.gear.api.material;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.minecraft.network.PacketBuffer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.utils.Color;
@@ -67,17 +67,13 @@ public class MaterialLayerList implements IMaterialLayerList {
         return jsonLayers;
     }
 
-    public static MaterialLayerList deserialize(JsonObject json) {
-        return deserialize(json.getAsJsonArray("types"), DEFAULT);
-    }
-
-    public static MaterialLayerList deserialize(JsonElement json, IMaterialLayerList defaultProps) {
+    public static MaterialLayerList deserialize(PartGearKey key, JsonElement json, IMaterialLayerList defaultProps) {
         MaterialLayerList props = new MaterialLayerList();
 
         JsonArray jsonLayers = json.getAsJsonArray();
         if (jsonLayers != null) {
             for (JsonElement je : jsonLayers) {
-                props.layers.add(MaterialLayer.deserialize(je));
+                props.layers.add(MaterialLayer.deserialize(key, je));
             }
         }
 

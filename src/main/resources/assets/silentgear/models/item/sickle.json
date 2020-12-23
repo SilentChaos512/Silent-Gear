@@ -2,6 +2,13 @@
   "parent": "item/generated",
   "loader": "silentgear:gear_model",
   "gear_type": "sickle",
+  "texture_path": "sickle",
+  "broken_texture_path": "sickle/broken",
+  "broken_texture_types": [
+    "coating",
+    "main",
+    "tip"
+  ],
   "display": {
     "ground": {
       "rotation": [ 0, 0, 0 ],

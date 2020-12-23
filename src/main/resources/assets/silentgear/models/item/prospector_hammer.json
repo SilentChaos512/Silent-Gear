@@ -2,6 +2,13 @@
   "parent": "item/generated",
   "loader": "silentgear:gear_model",
   "gear_type": "prospector_hammer",
+  "texture_path": "prospector_hammer",
+  "broken_texture_path": "prospector_hammer/broken",
+  "broken_texture_types": [
+    "coating",
+    "main",
+    "tip"
+  ],
   "display": {
     "ground": {
       "rotation": [ 0, 0, 0 ],

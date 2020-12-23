@@ -38,6 +38,14 @@ public final class PartGearKey {
         return null;
     }
 
+    public GearType getGearType() {
+        return gearType;
+    }
+
+    public PartType getPartType() {
+        return partType;
+    }
+
     public static PartGearKey read(String key) {
         String[] parts = key.split("/");
         if (parts.length != 2) {

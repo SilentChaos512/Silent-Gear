@@ -4,6 +4,9 @@
   "gear_type": "elytra",
   "texture_path": "elytra",
   "broken_texture_path": "elytra/broken",
+  "broken_texture_types": [
+    "main"
+  ],
   "display": {
     "ground": {
       "rotation": [ 0, 0, 0 ],

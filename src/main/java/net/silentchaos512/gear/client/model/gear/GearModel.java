@@ -29,6 +29,7 @@ import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.part.FakePartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.utils.Color;
 
 import java.util.*;
 import java.util.function.Function;
@@ -42,12 +43,18 @@ public class GearModel extends LayeredModel<GearModel> {
     private GearModelOverrideList overrideList;
     private final String texturePath;
     private final String brokenTexturePath;
+    private final Set<PartType> brokenTextureTypes = new HashSet<>();
 
-    GearModel(ItemCameraTransforms cameraTransforms, GearType gearType, String texturePath, String brokenTexturePath) {
+    GearModel(ItemCameraTransforms cameraTransforms,
+              GearType gearType,
+              String texturePath,
+              String brokenTexturePath,
+              Collection<PartType> brokenTextureTypes) {
         this.cameraTransforms = cameraTransforms;
         this.gearType = gearType;
         this.texturePath = texturePath;
         this.brokenTexturePath = brokenTexturePath;
+        this.brokenTextureTypes.addAll(brokenTextureTypes);
         this.item = ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof ICoreItem && ((ICoreItem) item).getGearType() == this.gearType)
                 .map(item -> (ICoreItem) item)
@@ -88,11 +95,12 @@ public class GearModel extends LayeredModel<GearModel> {
         ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
 
         boolean broken = GearHelper.isBroken(stack);
-        String texturePath = getTexturePath(broken);
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(texturePath, animationFrame)));
+            RenderMaterial renderMaterial = getTexture(layer, animationFrame, broken);
+            SilentGear.LOGGER.debug("  - {} -> {}", layer.getTextureId(), renderMaterial.getTextureLocation());
+            TextureAtlasSprite texture = spriteGetter.apply(renderMaterial);
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -147,8 +155,9 @@ public class GearModel extends LayeredModel<GearModel> {
         for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
             int animationFrames = tex.isAnimated() ? item.getAnimationFrames() : 1;
             for (int i = 0; i < animationFrames; ++i) {
-                ret.add(getTexture(tex.getTexture(), i, false));
-                ret.add(getTexture(tex.getTexture(), i, true));
+                MaterialLayer layer = new MaterialLayer(tex, Color.VALUE_WHITE);
+                ret.add(getTexture(layer, i, false));
+                ret.add(getTexture(layer, i, true));
             }
         }
 
@@ -182,19 +191,23 @@ public class GearModel extends LayeredModel<GearModel> {
 
     private Collection<RenderMaterial> getTexturesForAllFrames(MaterialLayer layer, int animationFrameCount, boolean broken) {
         return IntStream.range(0, animationFrameCount)
-                .mapToObj(frame -> getTexture(layer.getTextureId(), frame, broken))
+                .mapToObj(frame -> getTexture(layer, frame, broken))
                 .collect(Collectors.toList());
     }
 
-    private RenderMaterial getTexture(MaterialLayer layer, int animationFrame) {
-        return getMaterial(layer.getTexture(this.gearType, animationFrame));
-    }
-
-    private RenderMaterial getTexture(ResourceLocation tex, int animationFrame, boolean broken) {
+    private RenderMaterial getTexture(MaterialLayer layer, int animationFrame, boolean broken) {
+        ResourceLocation tex = layer.getTextureId();
         String path = "item/" + this.getTexturePath(broken) + "/" + tex.getPath();
         String suffix = animationFrame > 0 ? "_" + animationFrame : "";
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path + suffix);
+        if (broken && !hasBrokenTexture(layer.getPartType())) {
+            return getTexture(layer, animationFrame, false);
+        }
         return getMaterial(location);
+    }
+
+    private boolean hasBrokenTexture(PartType type) {
+        return this.brokenTextureTypes.contains(type);
     }
 
     private static RenderMaterial getMaterial(ResourceLocation tex) {

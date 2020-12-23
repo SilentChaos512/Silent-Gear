@@ -1,12 +1,17 @@
 package net.silentchaos512.gear.client.model.gear;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelLoader;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.part.PartType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +42,23 @@ public class GearModelLoader implements IModelLoader<GearModel> {
         String texturePath = JSONUtils.getString(modelContents, "texture_path", gearType.getName());
         String brokenTexturePath = JSONUtils.getString(modelContents, "broken_texture_path", gearType.getName());
 
-        GearModel model = new GearModel(cameraTransforms, gearType, texturePath, brokenTexturePath);
+        Collection<PartType> brokenTextureTypes = new ArrayList<>();
+        JsonArray brokenTypesJson = JSONUtils.getJsonArray(modelContents, "broken_texture_types", null);
+        if (brokenTypesJson != null) {
+            for (JsonElement element : brokenTypesJson) {
+                ResourceLocation id = SilentGear.getIdWithDefaultNamespace(element.getAsString());
+                if (id != null) {
+                    PartType type = PartType.get(id);
+                    if (type != null) {
+                        brokenTextureTypes.add(type);
+                    } else {
+                        SilentGear.LOGGER.error("Unknown part type '{}' in model {}", id, this.getSimpleName());
+                    }
+                }
+            }
+        }
+
+        GearModel model = new GearModel(cameraTransforms, gearType, texturePath, brokenTexturePath, brokenTextureTypes);
         MODELS.add(model);
         return model;
     }

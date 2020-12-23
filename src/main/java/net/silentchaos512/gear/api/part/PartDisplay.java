@@ -6,16 +6,21 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
+import net.silentchaos512.gear.client.material.PartGearKey;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PartDisplay implements IPartDisplay {
-    protected final Map<GearType, MaterialLayerList> map = new LinkedHashMap<>();
+    protected final Map<PartGearKey, MaterialLayerList> map = new LinkedHashMap<>();
+    private PartType partType = PartType.NONE;
 
-    public static PartDisplay of(Map<GearType, MaterialLayerList> display) {
+    public static PartDisplay of(Map<PartGearKey, MaterialLayerList> display) {
         PartDisplay model = new PartDisplay();
-        model.map.putAll(display);
+        if (!display.isEmpty()) {
+            model.partType = display.keySet().iterator().next().getPartType();
+        }
+        display.forEach(model.map::put);
         return model;
     }
 
@@ -24,12 +29,13 @@ public class PartDisplay implements IPartDisplay {
         return map.getOrDefault(getMostSpecificKey(gearType), MaterialLayerList.DEFAULT);
     }
 
-    private GearType getMostSpecificKey(GearType gearType) {
-        if (map.containsKey(gearType)) {
-            return gearType;
+    private PartGearKey getMostSpecificKey(GearType gearType) {
+        PartGearKey key = PartGearKey.of(gearType, this.partType);
+        if (map.containsKey(key)) {
+            return key;
         }
 
-        GearType parent = gearType.getParent();
+        PartGearKey parent = key.getParent();
         while (parent != null) {
             if (map.containsKey(parent)) {
                 return parent;
@@ -38,21 +44,23 @@ public class PartDisplay implements IPartDisplay {
         }
 
         // No match
-        return gearType;
+        return key;
     }
 
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
-        this.map.forEach((key, layerList) -> json.add(key.getName(), layerList.serialize()));
+        this.map.forEach((key, layerList) -> json.add(key.toString(), layerList.serialize()));
         return json;
     }
 
     public static PartDisplay deserialize(ResourceLocation modelId, JsonObject json) {
         PartDisplay ret = new PartDisplay();
+        //noinspection OverlyLongLambda
         json.entrySet().forEach(entry -> {
-            GearType key = GearType.get(entry.getKey());
+            PartGearKey key = PartGearKey.read(entry.getKey());
             JsonElement value = entry.getValue();
-            ret.map.put(key, MaterialLayerList.deserialize(value, MaterialLayerList.DEFAULT));
+            ret.partType = key.getPartType();
+            ret.map.put(key, MaterialLayerList.deserialize(key, value, MaterialLayerList.DEFAULT));
         });
         return ret;
     }

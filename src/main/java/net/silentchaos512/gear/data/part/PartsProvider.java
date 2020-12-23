@@ -74,14 +74,14 @@ public class PartsProvider implements IDataProvider {
                 .stat(ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(Const.Traits.SPOON, 1)
-                .display(GearType.PICKAXE, new MaterialLayer(SilentGear.getId("spoon"), Color.VALUE_WHITE))
+                .display(GearType.PICKAXE, PartType.MISC_UPGRADE, new MaterialLayer(SilentGear.getId("spoon"), Color.VALUE_WHITE))
         );
         ret.add(upgradePart("misc/road_maker", CraftingItems.ROAD_MAKER_UPGRADE)
                 .upgradeGearTypes(GearType.EXCAVATOR.getMatcher(false))
                 .stat(ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
                 .stat(ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(Const.Traits.ROAD_MAKER, 1)
-                .display(GearType.EXCAVATOR, new MaterialLayer(SilentGear.getId("road_maker"), Color.VALUE_WHITE))
+                .display(GearType.EXCAVATOR, PartType.MISC_UPGRADE, new MaterialLayer(SilentGear.getId("road_maker"), Color.VALUE_WHITE))
         );
         ret.add(upgradePart("misc/red_card", CraftingItems.RED_CARD_UPGRADE)
                 .upgradeGearTypes(GearTypeMatcher.ALL)

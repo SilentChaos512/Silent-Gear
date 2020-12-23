@@ -56,7 +56,7 @@ public class MaterialDisplay implements IMaterialDisplay {
         json.entrySet().forEach(entry -> {
             PartGearKey key = PartGearKey.read(entry.getKey());
             JsonElement value = entry.getValue();
-            ret.map.put(key, MaterialLayerList.deserialize(value, MaterialLayerList.DEFAULT));
+            ret.map.put(key, MaterialLayerList.deserialize(key, value, MaterialLayerList.DEFAULT));
         });
         return ret;
     }
