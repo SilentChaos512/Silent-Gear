@@ -51,7 +51,7 @@ public class PartsProvider implements IDataProvider {
     protected Collection<PartBuilder> getParts() {
         Collection<PartBuilder> ret = new ArrayList<>();
 
-        ret.add(part("adornment", GearType.ALL, PartType.ADORNMENT, ModItems.ADORNMENT));
+        ret.add(part("adornment", GearType.CURIO, PartType.ADORNMENT, ModItems.ADORNMENT));
         ret.add(part("binding", GearType.TOOL, PartType.BINDING, ModItems.BINDING));
         ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.BOWSTRING, ModItems.BOWSTRING));
         ret.add(part("coating", GearType.ALL, PartType.COATING, ModItems.COATING)

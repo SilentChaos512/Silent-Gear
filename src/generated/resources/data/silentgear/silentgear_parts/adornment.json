@@ -1,6 +1,6 @@
 {
   "type": "silentgear:compound_part",
-  "gear_type": "all",
+  "gear_type": "curio",
   "part_type": "silentgear:adornment",
   "crafting_item": {
     "item": "silentgear:adornment"

@@ -895,7 +895,7 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x443464)
         );
         // Phantom Membrane
-        ret.add(new MaterialBuilder(SilentGear.getId("phantom_membrane"), 0, Items.PHANTOM_MEMBRANE)
+        ret.add(new MaterialBuilder(SilentGear.getId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 36)
