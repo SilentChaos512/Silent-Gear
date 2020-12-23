@@ -28,10 +28,7 @@ import net.silentchaos512.lib.util.InventoryUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class MaterialInstance implements IMaterialInstance {
@@ -132,7 +129,7 @@ public final class MaterialInstance implements IMaterialInstance {
         return material.getTier(partType);
     }
 
-    public Collection<PartType> getPartTypes() {
+    public Set<PartType> getPartTypes() {
         return material.getPartTypes(this);
     }
 

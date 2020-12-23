@@ -121,6 +121,7 @@ public final class PartType {
         return type;
     }
 
+    @Deprecated // Use getNonNull
     @Nullable
     public static PartType get(ResourceLocation name) {
         return VALUES.get(name);
@@ -158,6 +159,10 @@ public final class PartType {
         this.maxPerItem = builder.maxPerItem;
         this.compoundPartItem = builder.compoundPartItem;
         this.defaultTexture = builder.defaultTexture;
+    }
+
+    public boolean isInvalid() {
+        return this == NONE;
     }
 
     public ResourceLocation getName() {
