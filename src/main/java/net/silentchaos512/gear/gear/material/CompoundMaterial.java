@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.gear.material;
 
-import com.google.common.collect.Sets;
 import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -46,7 +45,7 @@ public class CompoundMaterial implements IMaterial {
         this.packName = packName;
     }
 
-    public static Collection<MaterialInstance> getSubMaterials(IMaterialInstance material) {
+    public static List<MaterialInstance> getSubMaterials(IMaterialInstance material) {
         return CompoundMaterialItem.getSubMaterials(material.getItem());
     }
 
@@ -106,10 +105,32 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
+    public boolean isSimple() {
+        return false;
+    }
+
+    @Override
     public Set<PartType> getPartTypes(MaterialInstance material) {
-        return getSubMaterials(material).stream()
-                .map(m -> (Set<PartType>) new HashSet<>(m.getPartTypes()))
-                .reduce(new HashSet<>(PartType.getValues()), Sets::intersection);
+        List<MaterialInstance> subMaterials = getSubMaterials(material);
+        if (subMaterials.isEmpty()) {
+            return Collections.emptySet();
+        } else if (subMaterials.size() == 1) {
+            return subMaterials.get(0).getPartTypes();
+        }
+
+        Set<PartType> set = new LinkedHashSet<>(subMaterials.get(0).getPartTypes());
+        for (int i = 1; i < subMaterials.size(); ++i) {
+            Set<PartType> set1 = subMaterials.get(i).getPartTypes();
+            Set<PartType> toRemove = new HashSet<>();
+            for (PartType type : set) {
+                if (!set1.contains(type)) {
+                    toRemove.add(type);
+                }
+            }
+            set.removeAll(toRemove);
+        }
+
+        return set;
     }
 
     @Override

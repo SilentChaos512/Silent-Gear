@@ -43,8 +43,8 @@ public class CompoundMaterialItem extends Item {
         super(properties);
     }
 
-    public static Collection<MaterialInstance> getSubMaterials(ItemStack stack) {
-        Collection<MaterialInstance> ret = new ArrayList<>();
+    public static List<MaterialInstance> getSubMaterials(ItemStack stack) {
+        List<MaterialInstance> ret = new ArrayList<>();
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
         for (INBT nbt : listNbt) {
             IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getString()));

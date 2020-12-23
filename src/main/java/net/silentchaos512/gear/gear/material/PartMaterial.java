@@ -114,6 +114,11 @@ public class PartMaterial implements IMaterial {
     }
 
     @Override
+    public boolean isSimple() {
+        return true;
+    }
+
+    @Override
     public Set<PartType> getPartTypes(MaterialInstance material) {
         // Grab the part types from this part and its parent(s)
         return Sets.union(stats.keySet(), getParentOptional()

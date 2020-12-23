@@ -13,6 +13,7 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -88,7 +89,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
 
         List<MaterialInstance> materials = getInputs();
-        if (materials.size() < 2) {
+        if (!hasMultipleMaterials(materials)) {
             progress = 0;
             return;
         }
@@ -106,18 +107,37 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
 
         if (progress >= WORK_TIME && !world.isRemote) {
-            progress = 0;
-            for (int i = 0; i < getSizeInventory() - 1; ++i) {
-                decrStackSize(i, 1);
-            }
+            finishWork(materials, current);
+        }
+    }
 
-            if (!current.isEmpty()) {
-                current.grow(materials.size());
-            } else {
-                ItemStack output = getOutputItem(materials).create(materials);
-                setInventorySlotContents(getSizeInventory() - 1, output);
+    private void finishWork(List<MaterialInstance> materials, ItemStack current) {
+        progress = 0;
+        for (int i = 0; i < getSizeInventory() - 1; ++i) {
+            decrStackSize(i, 1);
+        }
+
+        if (!current.isEmpty()) {
+            current.grow(materials.size());
+        } else {
+            ItemStack output = getOutputItem(materials).create(materials);
+            setInventorySlotContents(getSizeInventory() - 1, output);
+        }
+    }
+
+    private static boolean hasMultipleMaterials(List<MaterialInstance> materials) {
+        if (materials.size() < 2) {
+            return false;
+        }
+
+        IMaterial first = materials.get(0).getMaterial();
+        for (int i = 1; i < materials.size(); ++i) {
+            if (materials.get(i).getMaterial() != first) {
+                return true;
             }
         }
+
+        return false;
     }
 
     private List<MaterialInstance> getInputs() {
@@ -156,7 +176,12 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return index < this.items.size() - 1 && MaterialManager.from(stack) != null;
+        return index < this.items.size() - 1 && isSimpleMaterial(stack);
+    }
+
+    private static boolean isSimpleMaterial(ItemStack stack) {
+        IMaterial material = MaterialManager.from(stack);
+        return material != null && material.isSimple();
     }
 
     @Override
