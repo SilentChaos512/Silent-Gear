@@ -67,6 +67,11 @@ public class GearModelOverrideList extends ItemOverrideList {
         this.modelLocation = modelLocation;
     }
 
+    private static boolean debugLogging() {
+        // TODO: Add a config option?
+        return true;
+    }
+
     @Nullable
     @Override
     public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
@@ -86,9 +91,9 @@ public class GearModelOverrideList extends ItemOverrideList {
 
     private IBakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
         boolean broken = GearHelper.isBroken(stack);
-        if (SilentGear.LOGGER.isDebugEnabled()) {
-            SilentGear.LOGGER.debug("getOverrideModel for {} ({})", stack.getDisplayName().getString(), broken ? "broken" : "normal");
-            SilentGear.LOGGER.debug("- model key {}", key.data);
+        if (debugLogging()) {
+            SilentGear.LOGGER.info("getOverrideModel for {} ({})", stack.getDisplayName().getString(), broken ? "broken" : "normal");
+            SilentGear.LOGGER.info("- model key {}", key.data);
         }
         List<MaterialLayer> layers = new ArrayList<>();
 
@@ -155,16 +160,16 @@ public class GearModelOverrideList extends ItemOverrideList {
                 int blendedColor = part.getColor(stack, i, 0);
                 MaterialLayer coloredLayer = layer.withColor(blendedColor);
                 list.add(coloredLayer);
-                if (SilentGear.LOGGER.isDebugEnabled()) {
-                    SilentGear.LOGGER.debug("  - add layer {} (type={}, color={})",
+                if (debugLogging()) {
+                    SilentGear.LOGGER.info("  - add layer {} (type={}, color={})",
                             coloredLayer.getTextureId(),
                             coloredLayer.getPartType().getName(),
                             Color.format(blendedColor));
                 }
             } else {
                 list.add(layer);
-                if (SilentGear.LOGGER.isDebugEnabled()) {
-                    SilentGear.LOGGER.debug("  - add layer {} (type={}, colorless)",
+                if (debugLogging()) {
+                    SilentGear.LOGGER.info("  - add layer {} (type={}, colorless)",
                             layer.getTextureId(),
                             layer.getPartType().getName());
                 }

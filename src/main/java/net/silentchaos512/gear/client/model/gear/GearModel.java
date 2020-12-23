@@ -99,7 +99,7 @@ public class GearModel extends LayeredModel<GearModel> {
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
             RenderMaterial renderMaterial = getTexture(layer, animationFrame, broken);
-            SilentGear.LOGGER.debug("  - {} -> {}", layer.getTextureId(), renderMaterial.getTextureLocation());
+            SilentGear.LOGGER.info("  - {} -> {}", layer.getTextureId(), renderMaterial.getTextureLocation());
             TextureAtlasSprite texture = spriteGetter.apply(renderMaterial);
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }

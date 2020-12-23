@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Most model debug logging should now appear in latest.log. This will add a lot of spam to the log file, but it may help debug the texture issues that some users have.
+### Fixed
+- Adornments not being restricted to curios
+- Crossbow charged arrow/firework textures broken
+
 ## [2.4.8] - 2020-12-22
 ### Added
 - Broken models/textures for most gear items
