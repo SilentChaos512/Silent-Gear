@@ -92,18 +92,24 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
     boolean canSalvage();
 
     /**
+     * Check if the material is simple or compound.
+     *
+     * @return True if simple, false if compound
+     */
+    boolean isSimple();
+
+    /**
      * Gets the part types this material supports. In general, a material will support a part type
      * if the type is present in the stats JSON object (even if the value is empty).
      *
-     * @return Supported part types
      * @param material
+     * @return Supported part types
      */
     Set<PartType> getPartTypes(MaterialInstance material);
 
     /**
      * Determine if the material can be used to craft parts of the given type. This should include a
      * parent check.
-     *
      *
      * @param material
      * @param partType The part type
