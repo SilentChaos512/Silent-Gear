@@ -140,7 +140,7 @@ public class GearModelOverrideList extends ItemOverrideList {
     private static void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
         IMaterialDisplay model = MaterialDisplayManager.get(material.get());
         GearType gearType = GearHelper.getType(stack);
-        List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();
+        List<MaterialLayer> layers = model.getLayerList(gearType, part, material).getLayers();
         addColorBlendedLayers(list, part, stack, layers);
     }
 

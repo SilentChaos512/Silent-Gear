@@ -2074,7 +2074,7 @@ public class MaterialsProvider implements IDataProvider {
 
             // Model data
             try {
-                String jsonStr = GSON.toJson(builder.serializeModel());
+                String jsonStr = GSON.toJson(builder.serializeModel(builder.id));
                 String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
                 // TODO: change path?
                 Path path = outputFolder.resolve(String.format("assets/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));

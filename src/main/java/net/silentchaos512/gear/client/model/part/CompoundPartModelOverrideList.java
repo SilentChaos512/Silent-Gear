@@ -83,7 +83,7 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
     private void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
         IMaterialDisplay materialModel = MaterialDisplayManager.get(material.get());
 
-        List<MaterialLayer> layers = materialModel.getLayers(this.model.gearType, part).getLayers();
+        List<MaterialLayer> layers = materialModel.getLayerList(this.model.gearType, part, material).getLayers();
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
             if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {

@@ -89,6 +89,11 @@ public class LazyMaterialInstance implements IMaterialInstance {
         return material != null ? material.getDisplayName(partType, gear) : new StringTextComponent("INVALID");
     }
 
+    @Override
+    public String getModelKey() {
+        return "null";
+    }
+
     public static LazyMaterialInstance deserialize(JsonObject json) {
         ResourceLocation id = new ResourceLocation(JSONUtils.getString(json, "material"));
         MaterialGrade grade = EnumUtils.byName(JSONUtils.getString(json, "grade", "NONE"), MaterialGrade.NONE);

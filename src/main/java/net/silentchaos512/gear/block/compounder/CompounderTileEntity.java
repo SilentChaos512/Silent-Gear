@@ -74,7 +74,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     public static boolean canAcceptInput(ItemStack stack, Collection<IMaterialCategory> categories) {
         MaterialInstance material = MaterialInstance.from(stack);
-        return material != null && material.hasAnyCategory(categories);
+        return material != null && material.getMaterial().isSimple() && material.hasAnyCategory(categories);
     }
 
     public CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
@@ -161,7 +161,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         for (int i = 0; i < inputSlotCount; ++i) {
             ItemStack stack = getStackInSlot(i);
             MaterialInstance material = MaterialInstance.from(stack);
-            if (material != null) {
+            if (material != null && material.getMaterial().isSimple()) {
                 ret.add(material);
             }
         }

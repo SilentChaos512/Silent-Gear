@@ -212,9 +212,9 @@ public class PartMaterial implements IMaterial {
     }
 
     @Override
-    public int getNameColor(PartType partType, GearType gearType) {
+    public int getNameColor(PartType partType, GearType gearType, IMaterialInstance material) {
         IMaterialDisplay model = MaterialDisplayManager.get(this);
-        int color = model.getLayerColor(gearType, partType, 0);
+        int color = model.getLayerColor(gearType, partType, material, 0);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
     }
 
