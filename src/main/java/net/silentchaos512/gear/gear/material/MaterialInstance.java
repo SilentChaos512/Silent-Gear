@@ -229,8 +229,27 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
+    public int getColor(PartType partType, ItemStack gear) {
+        return material.getPrimaryColor(gear, partType);
+    }
+
+    public int getPrimaryColor(GearType gearType, PartType partType) {
+        IMaterialDisplay model = MaterialDisplayManager.get(this.material);
+        MaterialLayer layer = model.getLayers(gearType, partType).getFirstLayer();
+        if (layer != null) {
+            return layer.getColor();
+        }
+        return Color.VALUE_WHITE;
+    }
+
+    @Override
     public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
         return material.getDisplayName(partType, gear);
+    }
+
+    @Override
+    public String getModelKey() {
+        return this.material.getModelKey(this);
     }
 
     public ITextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {

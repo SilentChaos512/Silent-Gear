@@ -89,6 +89,8 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         return getDisplayName(partType, ItemStack.EMPTY);
     }
 
+    String getModelKey();
+
     default IFormattableTextComponent getDisplayNameWithGrade(PartType partType) {
         IFormattableTextComponent displayName = getDisplayName(partType, ItemStack.EMPTY);
         MaterialGrade grade = getGrade();

@@ -36,6 +36,9 @@ public final class Const {
     public static final String CAELUS = "caelus";
     public static final String CURIOS = "curios";
 
+    // Random
+    public static final ResourceLocation NULL_ID = new ResourceLocation("null");
+
     private Const() {}
 
     public static final class Materials {

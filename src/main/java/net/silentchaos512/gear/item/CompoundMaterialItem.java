@@ -55,6 +55,18 @@ public class CompoundMaterialItem extends Item {
         return ret;
     }
 
+    @Nullable
+    public static MaterialInstance getPrimarySubMaterial(ItemStack stack) {
+        ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
+        for (INBT nbt : listNbt) {
+            IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getString()));
+            if (mat != null) {
+                return MaterialInstance.of(mat);
+            }
+        }
+        return null;
+    }
+
     public int getCraftedCount(ItemStack stack) {
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
         return listNbt.size();

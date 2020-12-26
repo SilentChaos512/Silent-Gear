@@ -49,6 +49,11 @@ public class CompoundMaterial implements IMaterial {
         return CompoundMaterialItem.getSubMaterials(material.getItem());
     }
 
+    @Nullable
+    public static MaterialInstance getPrimarySubMaterial(IMaterialInstance material) {
+        return CompoundMaterialItem.getPrimarySubMaterial(material.getItem());
+    }
+
     @Override
     public String getPackName() {
         return packName;
@@ -245,10 +250,38 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public int getNameColor(PartType partType, GearType gearType) {
+    public int getNameColor(PartType partType, GearType gearType, IMaterialInstance material) {
         IMaterialDisplay model = MaterialDisplayManager.get(this);
-        int color = model.getLayerColor(gearType, partType, 0);
+        int color = model.getLayerColor(gearType, partType, material, 0);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
+    }
+
+    @Override
+    public String getModelKey(IMaterialInstance material) {
+        StringBuilder str = new StringBuilder(IMaterial.super.getModelKey(material) + "[");
+        List<String> elements = new ArrayList<>();
+
+        MaterialInstance last = null;
+        IMaterial previous = null;
+        int prevCount = 0;
+
+        for (MaterialInstance mat : getSubMaterials(material)) {
+            last = mat;
+            if (mat.getMaterial() != previous) {
+                if (previous != null) {
+                    elements.add(mat.getModelKey() + (prevCount > 1 ? "*" + prevCount : ""));
+                }
+                previous = mat.getMaterial();
+                prevCount = 0;
+            }
+            ++prevCount;
+        }
+
+        if (prevCount > 0) {
+            elements.add(last.getModelKey());
+        }
+
+        return str.append(String.join(",", elements)).append("]").toString();
     }
 
     @Override

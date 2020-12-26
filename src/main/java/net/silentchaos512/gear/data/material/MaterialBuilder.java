@@ -369,7 +369,7 @@ public class MaterialBuilder {
     }
 
     public JsonObject serializeModel() {
-        MaterialDisplay model = MaterialDisplay.of(this.display);
+        MaterialDisplay model = MaterialDisplay.of(id, this.display);
         return model.serialize();
     }
 

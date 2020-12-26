@@ -4,11 +4,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.IGearComponent;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 
@@ -149,7 +158,16 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
         return getNameColor(partType, GearHelper.getType(gear, GearType.ALL));
     }
 
-    int getNameColor(PartType partType, GearType gearType);
+    @Deprecated
+    default int getNameColor(PartType partType, GearType gearType) {
+        return getNameColor(partType, gearType, LazyMaterialInstance.of(Const.NULL_ID));
+    }
+
+    int getNameColor(PartType partType, GearType gearType, IMaterialInstance material);
+
+    default String getModelKey(IMaterialInstance material) {
+        return SilentGear.shortenId(getId());
+    }
 
     default boolean isVisible(PartType partType) {
         return true;
