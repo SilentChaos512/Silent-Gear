@@ -20,10 +20,7 @@ import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.IItemStat;
-import net.silentchaos512.gear.api.stats.LazyItemStat;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
@@ -277,6 +274,42 @@ public class MaterialBuilder {
 
     public MaterialBuilder stat(PartType partType, ResourceLocation statId, float value, StatInstance.Operation operation) {
         return stat(partType, LazyItemStat.of(statId), value, operation);
+    }
+
+    public MaterialBuilder mainStatsCommon(float toolDurability, float armorDurability, float enchantability, float rarity) {
+        stat(PartType.MAIN, ItemStats.DURABILITY, toolDurability);
+        stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, armorDurability);
+        stat(PartType.MAIN, ItemStats.ENCHANTABILITY, enchantability);
+        stat(PartType.MAIN, ItemStats.RARITY, rarity);
+        return this;
+    }
+
+    public MaterialBuilder mainStatsHarvest(int harvestLevel, float harvestSpeed) {
+        stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, harvestLevel);
+        stat(PartType.MAIN, ItemStats.HARVEST_SPEED, harvestSpeed);
+        return this;
+    }
+
+    public MaterialBuilder mainStatsMelee(float attackDamage, float magicDamage, float attackSpeed) {
+        stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, attackDamage);
+        if (magicDamage > 0) {
+            stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, magicDamage);
+        }
+        stat(PartType.MAIN, ItemStats.ATTACK_SPEED, attackSpeed);
+        return this;
+    }
+
+    public MaterialBuilder mainStatsRanged(float rangedDamage, float rangedSpeed) {
+        stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, rangedDamage);
+        stat(PartType.MAIN, ItemStats.RANGED_SPEED, rangedSpeed);
+        return this;
+    }
+
+    public MaterialBuilder mainStatsArmor(float armor, float toughness, float magicArmor) {
+        stat(PartType.MAIN, ItemStats.ARMOR, armor);
+        stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, toughness);
+        stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, magicArmor);
+        return this;
     }
 
     public MaterialBuilder trait(PartType partType, DataResource<ITrait> trait, int level, ITraitCondition... conditions) {
