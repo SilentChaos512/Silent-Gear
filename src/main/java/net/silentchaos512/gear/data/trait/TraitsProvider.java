@@ -2,6 +2,7 @@ package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
@@ -11,6 +12,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.ForgeMod;
@@ -20,14 +22,15 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.BonusDropsTrait;
 import net.silentchaos512.gear.gear.trait.DamageTypeTrait;
+import net.silentchaos512.gear.gear.trait.CancelEffectsTrait;
 import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.lib.util.NameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -271,6 +274,9 @@ public class TraitsProvider implements IDataProvider {
         ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.fromTag(Tags.Items.NUGGETS)));
         ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.fromTag(Tags.Items.GEMS)));
 
+        ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, Effects.POISON));
+        ret.add(cancelEffectsTrait(Const.Traits.CURE_WITHER, Effects.WITHER));
+
         ret.add(damageTypeTrait(Const.Traits.CHILLED, 5, "chilled", 2));
         ret.add(damageTypeTrait(Const.Traits.HOLY, 5, "holy", 2));
 
@@ -286,7 +292,18 @@ public class TraitsProvider implements IDataProvider {
                 });
     }
 
-    @Nonnull
+    protected TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, Effect... effects) {
+        JsonArray array = new JsonArray();
+        for (Effect effect : effects) {
+            array.add(NameUtils.from(effect).toString());
+        }
+
+        return new TraitBuilder(trait, 1, CancelEffectsTrait.SERIALIZER)
+                .extraData(json -> {
+                    json.add("effects", array);
+                });
+    }
+
     protected TraitBuilder damageTypeTrait(DataResource<ITrait> trait, int maxLevel, String damageType, int damageBonus) {
         return new TraitBuilder(trait, maxLevel, DamageTypeTrait.SERIALIZER)
                 .extraData(json -> {

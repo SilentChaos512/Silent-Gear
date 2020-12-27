@@ -82,6 +82,8 @@ public final class Const {
         public static final DataResource<ITrait> CRACKLER = DataResource.trait("crackler");
         public static final DataResource<ITrait> CRUDE = DataResource.trait("crude");
         public static final DataResource<ITrait> CRUSHING = DataResource.trait("crushing");
+        public static final DataResource<ITrait> CURE_POISON = DataResource.trait("cure_poison");
+        public static final DataResource<ITrait> CURE_WITHER = DataResource.trait("cure_wither");
         public static final DataResource<ITrait> CURSED = DataResource.trait("cursed");
         public static final DataResource<ITrait> SWIFT_SWIM = DataResource.trait("swift_swim");
         public static final DataResource<ITrait> ERODED = DataResource.trait("eroded");

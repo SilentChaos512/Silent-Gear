@@ -46,6 +46,7 @@ public final class TraitSerializers {
         register(SynergyTrait.SERIALIZER);
         register(TargetEffectTrait.SERIALIZER);
         register(BonusDropsTrait.SERIALIZER);
+        register(CancelEffectsTrait.SERIALIZER);
     }
 
     private TraitSerializers() {}

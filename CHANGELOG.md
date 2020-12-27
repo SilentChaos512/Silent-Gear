@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New trait type, `silentgear:cancel_effects`: Cancels specific potion effects when equipped (see Cure Poison and Cure Wither for examples)
+- New trait type, `silentgear:bonus_drops`: Gives a chance of increasing loot drops for a given ingredient/item/tag (see Imperial and Gold Digger for examples)
+- New traits (no default materials): Cure Poison, Cure Wither, Gold Digger, Imperial
 ### Changed
 - Most model debug logging should now appear in latest.log. This will add a lot of spam to the log file, but it may help debug the texture issues that some users have.
 ### Fixed
