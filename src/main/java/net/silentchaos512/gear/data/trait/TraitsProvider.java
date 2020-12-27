@@ -10,12 +10,15 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.gear.trait.BonusDropsTrait;
 import net.silentchaos512.gear.gear.trait.DamageTypeTrait;
 import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -265,14 +268,26 @@ public class TraitsProvider implements IDataProvider {
 
         // Misfits
 
+        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.fromTag(Tags.Items.NUGGETS)));
+        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.fromTag(Tags.Items.GEMS)));
+
         ret.add(damageTypeTrait(Const.Traits.CHILLED, 5, "chilled", 2));
         ret.add(damageTypeTrait(Const.Traits.HOLY, 5, "holy", 2));
 
         return ret;
     }
 
+    protected TraitBuilder bonusDropsTraits(DataResource<ITrait> trait, int maxLevel, float chance, float multiplier, Ingredient ingredient) {
+        return new TraitBuilder(trait, maxLevel, BonusDropsTrait.SERIALIZER)
+                .extraData(json -> {
+                    json.addProperty("base_chance", chance);
+                    json.addProperty("bonus_multiplier", multiplier);
+                    json.add("ingredient", ingredient.serialize());
+                });
+    }
+
     @Nonnull
-    private TraitBuilder damageTypeTrait(DataResource<ITrait> trait, int maxLevel, String damageType, int damageBonus) {
+    protected TraitBuilder damageTypeTrait(DataResource<ITrait> trait, int maxLevel, String damageType, int damageBonus) {
         return new TraitBuilder(trait, maxLevel, DamageTypeTrait.SERIALIZER)
                 .extraData(json -> {
                     json.addProperty("damage_type", damageType);

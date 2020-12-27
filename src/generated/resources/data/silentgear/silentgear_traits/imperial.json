@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:bonus_drops",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.imperial"
+  },
+  "description": {
+    "translate": "trait.silentgear.imperial.desc"
+  },
+  "base_chance": 0.08,
+  "bonus_multiplier": 1.0,
+  "ingredient": {
+    "tag": "forge:gems"
+  }
+}

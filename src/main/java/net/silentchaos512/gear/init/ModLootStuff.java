@@ -20,23 +20,27 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.loot.LootConditionType;
 import net.minecraft.loot.LootFunctionType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasPartCondition;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
+import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
 import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
+
+import java.util.function.Supplier;
 
 public final class ModLootStuff {
     public static final LootConditionType HAS_PART = new LootConditionType(HasPartCondition.SERIALIZER);
     public static final LootConditionType HAS_TRAIT = new LootConditionType(HasTraitCondition.SERIALIZER);
     public static final LootFunctionType SELECT_TIER = new LootFunctionType(SelectGearTierLootFunction.SERIALIZER);
     public static final LootFunctionType SET_PARTS = new LootFunctionType(SetPartsFunction.SERIALIZER);
+
+    public static final RegistryObject<GlobalLootModifierSerializer<?>> BONUS_DROPS_TRAIT = register("bonus_drops_trait", BonusDropsTraitLootModifier.Serializer::new);
+    public static final RegistryObject<GlobalLootModifierSerializer<?>> MAGMATIC_SMELTING = register("magmatic_smelting", MagmaticTraitLootModifier.Serializer::new);
 
     private ModLootStuff() {}
 
@@ -47,13 +51,7 @@ public final class ModLootStuff {
         Registry.register(Registry.LOOT_FUNCTION_TYPE, SilentGear.getId("set_parts"), SET_PARTS);
     }
 
-    public static void registerGlobalModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-        register("magmatic_smelting", new MagmaticTraitLootModifier.Serializer());
-    }
-
-    private static <T extends GlobalLootModifierSerializer<?>> void register(String name, T serializer) {
-        ResourceLocation id = SilentGear.getId(name);
-        serializer.setRegistryName(id);
-        ForgeRegistries.LOOT_MODIFIER_SERIALIZERS.register(serializer);
+    private static <T extends GlobalLootModifierSerializer<?>> RegistryObject<T> register(String name, Supplier<T> serializer) {
+        return Registration.LOOT_MODIFIERS.register(name, serializer);
     }
 }

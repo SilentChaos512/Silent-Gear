@@ -154,6 +154,11 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
+    public ItemStack addLootDrops(TraitActionContext context, ItemStack stack) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
     public Collection<String> getExtraWikiLines() {
         return this.wikiLines.stream()
                 .map(ITextComponent::getString)

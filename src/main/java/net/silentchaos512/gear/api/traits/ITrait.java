@@ -143,6 +143,8 @@ public interface ITrait {
 
     void onUpdate(TraitActionContext context, boolean isEquipped);
 
+    ItemStack addLootDrops(TraitActionContext context, ItemStack stack);
+
     default CompoundNBT write(int level) {
         CompoundNBT tag = new CompoundNBT();
         tag.putString("Name", this.getId().toString());

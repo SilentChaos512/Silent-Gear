@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:bonus_drops",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.gold_digger"
+  },
+  "description": {
+    "translate": "trait.silentgear.gold_digger.desc"
+  },
+  "base_chance": 0.15,
+  "bonus_multiplier": 0.5,
+  "ingredient": {
+    "tag": "forge:nuggets"
+  }
+}

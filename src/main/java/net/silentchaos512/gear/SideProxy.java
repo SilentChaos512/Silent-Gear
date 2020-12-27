@@ -13,7 +13,6 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -75,7 +74,6 @@ class SideProxy implements IProxy {
 
         modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
-        modEventBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootStuff::registerGlobalModifiers);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
         modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
 
@@ -83,8 +81,6 @@ class SideProxy implements IProxy {
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
-
-        ModLootStuff.init();
 
         ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new ArgumentSerializer<>(MaterialGrade.Argument::new));
     }
