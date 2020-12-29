@@ -44,6 +44,7 @@ public final class TooltipHandler {
         assert TextFormatting.DARK_GRAY.getColor() != null;
         assert TextFormatting.GRAY.getColor() != null;
     }
+
     public static final Color MC_DARK_GRAY = new Color(TextFormatting.DARK_GRAY.getColor());
     public static final Color MC_GRAY = new Color(TextFormatting.GRAY.getColor());
 
@@ -227,15 +228,33 @@ public final class TooltipHandler {
     }
 
     private static void getMaterialTraitLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
-        material.getMaterial().getTraits(partType).forEach(t -> {
-            event.getToolTip().add(t.getDisplayName());
+        Collection<TraitInstance> traits = material.getMaterial().getTraits(partType);
+        if (traits.isEmpty()) return;
 
-            // Trait conditions
-            if (event.getFlags().isAdvanced()) {
-                event.getToolTip().add(new StringTextComponent("  ")
-                        .append(TextUtil.withColor(t.getConditionsText(), TextFormatting.DARK_GRAY)));
+        IFormattableTextComponent header = TextUtil.misc("tooltip.traits").mergeStyle(TextFormatting.GOLD);
+        if (!KeyTracker.isDisplayTraitsDown()) {
+            IFormattableTextComponent keyHint = TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_TRAITS), Color.AQUAMARINE);
+            header.appendString(" ").append(keyHint);
+        }
+        event.getToolTip().add(header);
+
+        TextListBuilder builder = new TextListBuilder();
+
+        for (TraitInstance trait : traits) {
+            builder.add(trait.getDisplayName());
+
+            // Trait description and conditions
+            if (event.getFlags().isAdvanced() || KeyTracker.isDisplayTraitsDown()) {
+                builder.indent();
+                builder.add(trait.getTrait().getDescription(trait.getLevel()).mergeStyle(TextFormatting.DARK_GRAY));
+                if (!trait.getConditions().isEmpty()) {
+                    builder.add(TextUtil.withColor(trait.getConditionsText(), TextFormatting.DARK_GRAY));
+                }
+                builder.unindent();
             }
-        });
+        }
+
+        event.getToolTip().addAll(builder.build());
     }
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
