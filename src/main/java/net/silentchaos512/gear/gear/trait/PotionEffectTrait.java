@@ -11,6 +11,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -260,9 +261,9 @@ public final class PotionEffectTrait extends SimpleTrait {
         int getEffectLevel(int traitLevel, int pieceCount, boolean hasFullSet) {
             switch (this.type) {
                 case TRAIT_LEVEL:
-                    return this.levels[traitLevel - 1];
+                    return this.levels[MathHelper.clamp(traitLevel - 1, 0, this.levels.length - 1)];
                 case PIECE_COUNT:
-                    return this.levels[pieceCount - 1];
+                    return this.levels[MathHelper.clamp(pieceCount - 1, 0, this.levels.length - 1)];
                 case FULL_SET_ONLY:
                     return this.levels[0];
                 default:

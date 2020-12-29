@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Potion effect traits crashing if arrays are missing elements
+
 ## [2.4.9] - 2020-12-26
 ### Added
 - New trait type, `silentgear:cancel_effects`: Cancels specific potion effects when equipped (see Cure Poison and Cure Wither for examples)
