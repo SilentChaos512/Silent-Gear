@@ -22,10 +22,13 @@
       "durability": 0.0,
       "armor_durability": 5.0,
       "enchantability": 15.0,
-      "armor": 7.0,
-      "armor_toughness": 0.0,
-      "magic_armor": 8.0,
       "rarity": 11.0,
+      "armor": 7.0,
+      "armor/helmet": 1.0,
+      "armor/chestplate": 3.0,
+      "armor/leggings": 2.0,
+      "armor/boots": 1.0,
+      "magic_armor": 8.0,
       "silentgems:chargeability": 0.8
     },
     "grip": {
