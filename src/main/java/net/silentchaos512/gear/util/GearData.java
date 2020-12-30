@@ -11,21 +11,23 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.*;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.trait.EnchantmentTrait;
-import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.trait.EnchantmentTrait;
 import net.silentchaos512.gear.gear.trait.SynergyTrait;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
@@ -124,7 +126,11 @@ public final class GearData {
             final float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
             CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.getStats()) {
-                final float initialValue = stat.compute(stats.get(stat));
+                StatGearKey key = StatGearKey.of(stat, item.getGearType());
+                Collection<StatInstance> modifiers = stats.get(key);
+                GearType statGearType = stats.getMostSpecificKey(key).getGearType();
+
+                final float initialValue = stat.compute(stat.getBaseValue(), true, item.getGearType(), statGearType, modifiers);
                 // Allow traits to modify stat
                 final float withTraits = TraitHelper.activateTraits(stack, initialValue, (trait, level, val) -> {
                     TraitActionContext context = new TraitActionContext(player, level, stack);
@@ -193,6 +199,7 @@ public final class GearData {
     private static void printStatsForDebugging(ItemStack stack, StatModifierMap stats, @Nullable Map<ItemStat, Float> oldStats) {
         // Prints stats that have changed for debugging purposes
         if (oldStats != null && SilentGear.LOGGER.isDebugEnabled()) {
+            GearType gearType = GearHelper.getType(stack);
             Map<ItemStat, Float> newStats = getCurrentStatsForDebugging(stack);
             assert newStats != null;
 
@@ -205,7 +212,7 @@ public final class GearData {
                         oldValue,
                         newValue,
                         change < 0 ? change : "+" + change,
-                        StatModifierMap.formatText(stats.get(stat), stat, 5).getString()
+                        StatModifierMap.formatText(stats.get(stat, gearType), stat, 5).getString()
                 );
             }
         }
@@ -249,14 +256,14 @@ public final class GearData {
     }
 
     @Deprecated
-    public static StatModifierMap getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts, double synergy) {
+    public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts, double synergy) {
         return getStatModifiers(stack, item, parts);
     }
 
-    public static StatModifierMap getStatModifiers(ItemStack stack, @Nullable ICoreItem item, PartDataList parts) {
+    public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts) {
         StatModifierMap stats = new StatModifierMap();
-        for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item != null ? item.getExcludedStats(stack) : Collections.emptyList())) {
-            parts.forEach(part -> part.getStatModifiers(stack, stat).forEach(mod -> stats.put(stat, mod.copy())));
+        for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
+            parts.forEach(part -> part.getStatModifiers(stack, stat).forEach(mod -> stats.put(stat, item.getGearType(), mod.copy())));
         }
         return stats;
     }

@@ -161,12 +161,12 @@ public class CompoundPartItem extends Item {
             float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
             tooltip.add(SynergyUtils.getDisplayText(synergy));
 
-            TextListBuilder statsBuilder = new TextListBuilder();
+            TextListBuilder matsBuilder = new TextListBuilder();
             getMaterials(stack).forEach(material -> {
                 int nameColor = material.getMaterial().getNameColor(part.getType(), this.getGearType());
-                statsBuilder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
+                matsBuilder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
             });
-            tooltip.addAll(statsBuilder.build());
+            tooltip.addAll(matsBuilder.build());
         }
     }
 

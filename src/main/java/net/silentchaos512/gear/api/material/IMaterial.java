@@ -7,11 +7,13 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
@@ -128,7 +130,25 @@ public interface IMaterial {
      * @param gear     The gear item (may be empty)
      * @return A collection of stat modifiers
      */
-    Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear);
+    default Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear) {
+        return getStatModifiers(material, stat, partType, GearHelper.getType(gear, GearType.ALL));
+    }
+
+    /**
+     * Gets the stat modifiers this material gives for the given stat and part type. Collection may
+     * be empty.
+     *
+     * @param material The material instance (includes crafting item)
+     * @param stat     The stat
+     * @param partType The part type
+     * @param gearType     The gear type
+     * @return A collection of stat modifiers
+     */
+    default Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, GearType gearType) {
+        return getStatModifiers(material, partType, StatGearKey.of(stat, gearType));
+    }
+
+    Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key);
 
     /**
      * Gets the stat modifiers this material gives for the given stat and part type. Collection may
@@ -144,6 +164,8 @@ public interface IMaterial {
         return getStatModifiers(material, stat, partType, ItemStack.EMPTY);
     }
 
+    Collection<StatGearKey> getStatKeys(PartType type);
+
     /**
      * Gets the traits for the given part type. This returns all traits for the given type. Trait
      * conditions should be checked afterwards.
@@ -152,7 +174,11 @@ public interface IMaterial {
      * @param gear     The gear item
      * @return The traits for the part type
      */
-    Collection<TraitInstance> getTraits(PartType partType, ItemStack gear);
+    default Collection<TraitInstance> getTraits(PartType partType, ItemStack gear) {
+        return getTraits(partType, GearHelper.getType(gear, GearType.ALL));
+    }
+
+    Collection<TraitInstance> getTraits(PartType partType, GearType gearType);
 
     /**
      * Gets the traits for the given part type. This returns all traits for the given type. Trait
@@ -190,8 +216,11 @@ public interface IMaterial {
      * @param partType The part type
      * @return The calculated stat
      */
-    default float getStatUnclamped(IMaterialInstance material, ItemStat stat, PartType partType) {
-        return stat.compute(stat.getBaseValue(), false, getStatModifiers(material, stat, partType));
+    default float getStatUnclamped(IMaterialInstance material, PartType partType, StatGearKey key) {
+        ItemStat stat = ItemStats.get(key.getStat());
+        if (stat == null) return 0;
+
+        return stat.compute(stat.getBaseValue(), false, key.getGearType(), getStatModifiers(material, partType, key));
     }
 
     /**
@@ -239,7 +268,7 @@ public interface IMaterial {
     IFormattableTextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
 
     default int getNameColor(PartType partType, ItemStack gear) {
-        return getNameColor(partType, GearHelper.getType(gear));
+        return getNameColor(partType, GearHelper.getType(gear, GearType.ALL));
     }
 
     int getNameColor(PartType partType, GearType gearType);

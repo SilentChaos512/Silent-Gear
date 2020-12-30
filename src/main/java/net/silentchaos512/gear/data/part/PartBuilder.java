@@ -32,6 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 public class PartBuilder {
     final ResourceLocation id;
     private IPartSerializer<?> serializerType = PartSerializers.COMPOUND_PART;
@@ -87,7 +88,7 @@ public class PartBuilder {
 
     public PartBuilder stat(IItemStat stat, float value, StatInstance.Operation operation) {
         StatInstance mod = StatInstance.of(value, operation);
-        this.stats.put(stat, mod);
+        this.stats.put(stat, GearType.ALL, mod);
         return this;
     }
 

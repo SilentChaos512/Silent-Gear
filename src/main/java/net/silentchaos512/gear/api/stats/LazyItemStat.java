@@ -26,4 +26,9 @@ public final class LazyItemStat implements IItemStat {
     public ResourceLocation getStatId() {
         return id;
     }
+
+    @Override
+    public StatInstance.Operation getDefaultOperation() {
+        return StatInstance.Operation.AVG;
+    }
 }

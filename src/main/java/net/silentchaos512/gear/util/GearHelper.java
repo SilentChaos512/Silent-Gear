@@ -366,8 +366,12 @@ public final class GearHelper {
     }
 
     public static GearType getType(ItemStack gear) {
+        return getType(gear, GearType.NONE);
+    }
+
+    public static GearType getType(ItemStack gear, GearType defaultType) {
         if (gear.isEmpty() || !(gear.getItem() instanceof ICoreItem)) {
-            return GearType.NONE;
+            return defaultType;
         }
         return ((ICoreItem) gear.getItem()).getGearType();
     }

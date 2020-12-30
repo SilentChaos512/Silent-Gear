@@ -12,6 +12,7 @@ import net.silentchaos512.gear.init.Registration;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -66,9 +67,9 @@ public final class GearType {
     public static final GearType CROSSBOW = getOrCreate("crossbow", RANGED_WEAPON);
     public static final GearType SLINGSHOT = getOrCreate("slingshot", RANGED_WEAPON);
     // Other
-    public static final GearType SHIELD = getOrCreate("shield", TOOL, ItemStats.ARMOR_DURABILITY);
+    public static final GearType SHIELD = getOrCreate("shield", TOOL, () -> ItemStats.ARMOR_DURABILITY);
     // Armor
-    public static final GearType ARMOR = getOrCreate("armor", ALL, ItemStats.ARMOR_DURABILITY);
+    public static final GearType ARMOR = getOrCreate("armor", ALL, () -> ItemStats.ARMOR_DURABILITY);
     public static final GearType BOOTS = getOrCreate("boots", ARMOR);
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
     public static final GearType ELYTRA = getOrCreate("elytra", ARMOR);
@@ -110,12 +111,22 @@ public final class GearType {
     }
 
     public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames) {
-        ItemStat durabilityStat = parent != null ? parent.durabilityStat : ItemStats.DURABILITY;
+        Supplier<ItemStat> durabilityStat = () -> parent != null ? parent.durabilityStat.get() : ItemStats.DURABILITY;
         return getOrCreate(name, parent, animationFrames, durabilityStat);
     }
 
+    @Deprecated
     public static GearType getOrCreate(String name, @Nullable GearType parent, ItemStat durabilityStat) {
+        return getOrCreate(name, parent, () -> durabilityStat);
+    }
+
+    public static GearType getOrCreate(String name, @Nullable GearType parent, Supplier<ItemStat> durabilityStat) {
         return getOrCreate(name, parent, 1, durabilityStat);
+    }
+
+    @Deprecated
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, ItemStat durabilityStat) {
+        return getOrCreate(name, parent, animationFrames, () -> durabilityStat);
     }
 
     /**
@@ -129,7 +140,7 @@ public final class GearType {
      * @return The newly created gear type, or the existing instance if it already exists
      * @throws IllegalArgumentException if the name is invalid
      */
-    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, ItemStat durabilityStat) {
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat) {
         if (VALID_NAME.matcher(name).find())
             throw new IllegalArgumentException("Invalid name: " + name);
         return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames, durabilityStat));
@@ -147,9 +158,9 @@ public final class GearType {
     private final String name;
     @Nullable private final GearType parent;
     private final int animationFrames;
-    private final ItemStat durabilityStat;
+    private final Supplier<ItemStat> durabilityStat;
 
-    private GearType(String name, @Nullable GearType parent, int animationFrames, ItemStat durabilityStat) {
+    private GearType(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat) {
         this.name = name;
         this.parent = parent;
         this.animationFrames = animationFrames;
@@ -175,7 +186,7 @@ public final class GearType {
     }
 
     public ItemStat getDurabilityStat() {
-        return durabilityStat;
+        return durabilityStat.get();
     }
 
     /**

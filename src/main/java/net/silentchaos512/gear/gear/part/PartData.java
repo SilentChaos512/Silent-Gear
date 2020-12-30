@@ -190,7 +190,11 @@ public final class PartData implements IPartData {
     }
 
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat) {
-        return part.getStatModifiers(stat, this, gear);
+        return part.getStatModifiers(stat, this, this.getGearType(), gear);
+    }
+
+    public Collection<StatInstance> getStatModifiers(ItemStack gear, GearType gearType, ItemStat stat) {
+        return part.getStatModifiers(stat, this, gearType, gear);
     }
 
     @Override

@@ -17,6 +17,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartPositions;
 import net.silentchaos512.gear.gear.part.RepairContext;
+import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -62,7 +63,11 @@ public interface IGearPart {
         return getStatModifiers(stat, part, ItemStack.EMPTY);
     }
 
-    Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear);
+    default Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear) {
+        return getStatModifiers(stat, part, GearHelper.getType(gear, GearType.ALL), gear);
+    }
+
+    Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, GearType gearType, ItemStack gear);
 
     default List<TraitInstance> getTraits(PartData part) {
         return getTraits(part, ItemStack.EMPTY);
@@ -87,8 +92,8 @@ public interface IGearPart {
         return stat.compute(getStatModifiers(stat, part));
     }
 
-    default float computeUnclampedStatValue(ItemStat stat, PartData part) {
-        return stat.compute(stat.getBaseValue(), false, getStatModifiers(stat, part));
+    default float computeUnclampedStatValue(ItemStat stat, PartData part, GearType gearType) {
+        return stat.compute(stat.getBaseValue(), false, this.getGearType(), getStatModifiers(stat, part, gearType, ItemStack.EMPTY));
     }
 
     /**
@@ -113,7 +118,7 @@ public interface IGearPart {
      */
     default boolean isCraftingAllowed(PartData part, GearType gearType) {
         if (gearType.isGear() && this.getType() == PartType.MAIN) {
-            return computeUnclampedStatValue(gearType.getDurabilityStat(), part) > 0;
+            return computeUnclampedStatValue(gearType.getDurabilityStat(), part, gearType) > 0;
         }
         return true;
     }

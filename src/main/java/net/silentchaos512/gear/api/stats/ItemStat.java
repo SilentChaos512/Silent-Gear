@@ -7,7 +7,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.utils.Color;
 
@@ -87,6 +87,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return maximumValue;
     }
 
+    @Override
     public Operation getDefaultOperation() {
         return defaultOperation;
     }
@@ -122,11 +123,20 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     }
 
     public float compute(float baseValue, Collection<StatInstance> modifiers) {
-        return compute(baseValue, true, modifiers);
+        return compute(baseValue, true, GearType.ALL, modifiers);
+    }
+
+    @Deprecated
+    public float compute(float baseValue, boolean clampValue, Collection<StatInstance> modifiers) {
+        return compute(baseValue, clampValue, GearType.ALL, modifiers);
+    }
+
+    public float compute(float baseValue, boolean clampValue, GearType gearType, Collection<StatInstance> modifiers) {
+        return compute(baseValue, clampValue, gearType, gearType, modifiers);
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    public float compute(float baseValue, boolean clampValue, Collection<StatInstance> modifiers) {
+    public float compute(float baseValue, boolean clampValue, GearType itemGearType, GearType statGearType, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
             return baseValue;
 
@@ -193,12 +203,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return (float) Math.pow(weightBaseClamped, -(count == 0 ? count : 0.5 + 0.5f * count));
     }
 
-    @Deprecated
-    public StatInstance computeForDisplay(float baseValue, MaterialGrade grade, Collection<StatInstance> modifiers) {
-        return computeForDisplay(baseValue, modifiers);
-    }
-
-    public StatInstance computeForDisplay(float baseValue, Collection<StatInstance> modifiers) {
+    public StatInstance computeForDisplay(float baseValue, GearType gearType, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
             return StatInstance.of(baseValue);
 
@@ -211,7 +216,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
             }
         }
 
-        float value = compute(baseValue + add, false, modifiers) - add;
+        float value = compute(baseValue + add, false, gearType, modifiers) - add;
         Operation op = modifiers.iterator().next().getOp();
         return StatInstance.of(value, op);
     }

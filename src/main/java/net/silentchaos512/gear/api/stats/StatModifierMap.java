@@ -11,16 +11,17 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.util.StatGearKey;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
-    private final Multimap<IItemStat, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
+public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
+    private final Multimap<StatGearKey, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
     public static IFormattableTextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
         return formatText(mods, stat, maxDecimalPlaces, false);
@@ -50,9 +51,9 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
 
     public Set<ItemStat> getStats() {
         Set<ItemStat> set = new HashSet<>();
-        for (IItemStat s : this.keySet()) {
-            if (s instanceof ItemStat) {
-                set.add((ItemStat) s);
+        for (StatGearKey key : this.keySet()) {
+            if (key.getStat() instanceof ItemStat) {
+                set.add((ItemStat) key.getStat());
             }
         }
         return set;
@@ -83,8 +84,12 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
         return this.map.containsEntry(key, value);
     }
 
+    public boolean put(IItemStat stat, GearType gearType, StatInstance value) {
+        return put(StatGearKey.of(stat, gearType), value);
+    }
+
     @Override
-    public boolean put(@Nullable IItemStat key, @Nullable StatInstance value) {
+    public boolean put(@Nullable StatGearKey key, @Nullable StatInstance value) {
         return this.map.put(key, value);
     }
 
@@ -94,17 +99,17 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     }
 
     @Override
-    public boolean putAll(@Nullable IItemStat key, @Nonnull Iterable<? extends StatInstance> values) {
+    public boolean putAll(@Nullable StatGearKey key, @Nonnull Iterable<? extends StatInstance> values) {
         return this.map.putAll(key, values);
     }
 
     @Override
-    public boolean putAll(@Nonnull Multimap<? extends IItemStat, ? extends StatInstance> multimap) {
+    public boolean putAll(@Nonnull Multimap<? extends StatGearKey, ? extends StatInstance> multimap) {
         return this.map.putAll(multimap);
     }
 
     @Override
-    public Collection<StatInstance> replaceValues(@Nullable IItemStat key, @Nonnull Iterable<? extends StatInstance> values) {
+    public Collection<StatInstance> replaceValues(@Nullable StatGearKey key, @Nonnull Iterable<? extends StatInstance> values) {
         return this.map.replaceValues(key, values);
     }
 
@@ -118,18 +123,50 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
         this.map.clear();
     }
 
-    @Override
-    public Collection<StatInstance> get(@Nullable IItemStat key) {
-        return this.map.get(key);
+    public Collection<StatInstance> get(IItemStat stat, GearType gearType) {
+        return get(StatGearKey.of(stat, gearType));
     }
 
     @Override
-    public Set<IItemStat> keySet() {
+    public Collection<StatInstance> get(@Nullable StatGearKey key) {
+        if (key == null || this.map.containsKey(key)) {
+            return this.map.get(key);
+        }
+
+        StatGearKey parent = key.getParent();
+        while (parent != null) {
+            if (this.map.containsKey(parent)) {
+                return this.map.get(parent);
+            }
+            parent = parent.getParent();
+        }
+
+        return Collections.emptyList();
+    }
+
+    public StatGearKey getMostSpecificKey(StatGearKey key) {
+        if (this.map.containsKey(key)) {
+            return key;
+        }
+
+        StatGearKey parent = key.getParent();
+        while (parent != null) {
+            if (this.map.containsKey(parent)) {
+                return parent;
+            }
+            parent = parent.getParent();
+        }
+
+        return StatGearKey.of(key.getStat(), GearType.ALL);
+    }
+
+    @Override
+    public Set<StatGearKey> keySet() {
         return this.map.keySet();
     }
 
     @Override
-    public Multiset<IItemStat> keys() {
+    public Multiset<StatGearKey> keys() {
         return this.map.keys();
     }
 
@@ -139,28 +176,30 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
     }
 
     @Override
-    public Collection<Entry<IItemStat, StatInstance>> entries() {
+    public Collection<Entry<StatGearKey, StatInstance>> entries() {
         return this.map.entries();
     }
 
     @Override
-    public Map<IItemStat, Collection<StatInstance>> asMap() {
+    public Map<StatGearKey, Collection<StatInstance>> asMap() {
         return this.map.asMap();
     }
 
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
-        for (IItemStat stat : this.keySet()) {
-            Collection<StatInstance> mods = this.get(stat);
-            String shortStatId = SilentGear.shortenId(stat.getStatId());
+
+        for (StatGearKey key : this.keySet()) {
+            Collection<StatInstance> mods = this.get(key);
+
             if (mods.size() > 1) {
                 JsonArray array = new JsonArray();
-                mods.forEach(mod -> array.add(mod.serialize(stat)));
-                json.add(shortStatId, array);
+                mods.forEach(mod -> array.add(mod.serialize()));
+                json.add(key.toString(), array);
             } else if (mods.size() == 1) {
-                json.add(shortStatId, mods.iterator().next().serialize(stat));
+                json.add(key.toString(), mods.iterator().next().serialize());
             }
         }
+
         return json;
     }
 
@@ -173,21 +212,21 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
         StatModifierMap map = new StatModifierMap();
         if (json.isJsonObject()) {
             for (Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
-                ItemStat stat = ItemStats.byName(entry.getKey());
-                if (stat != null) {
+                StatGearKey key = StatGearKey.read(entry.getKey());
+                if (key != null) {
                     JsonElement value = entry.getValue();
                     if (value.isJsonArray())
-                        value.getAsJsonArray().forEach(e -> map.put(stat, StatInstance.read(stat, e)));
+                        value.getAsJsonArray().forEach(e -> map.put(key, StatInstance.read(key.getStat(), e)));
                     else
-                        map.put(stat, StatInstance.read(stat, value));
+                        map.put(key, StatInstance.read(key.getStat(), value));
                 }
             }
         } else if (json.isJsonArray()) {
             for (JsonElement element : json.getAsJsonArray()) {
                 JsonObject jsonObj = element.getAsJsonObject();
-                ItemStat stat = ItemStats.byName(JSONUtils.getString(jsonObj, "name"));
-                if (stat != null) {
-                    map.put(stat, StatInstance.read(stat, element));
+                StatGearKey key = StatGearKey.read(JSONUtils.getString(jsonObj, "name"));
+                if (key != null) {
+                    map.put(key, StatInstance.read(key.getStat(), element));
                 }
             }
         } else {
@@ -201,9 +240,9 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
 
         int count = buffer.readVarInt();
         for (int i = 0; i < count; ++i) {
-            ItemStat stat = ItemStats.REGISTRY.get().getValue(buffer.readResourceLocation());
+            StatGearKey key = StatGearKey.read(buffer);
             StatInstance instance = StatInstance.read(buffer);
-            map.put(stat, instance);
+            map.put(key, instance);
         }
 
         return map;
@@ -211,8 +250,8 @@ public class StatModifierMap implements Multimap<IItemStat, StatInstance> {
 
     public void write(PacketBuffer buffer) {
         buffer.writeVarInt(this.size());
-        this.forEach((stat, instance) -> {
-            buffer.writeResourceLocation(stat.getStatId());
+        this.forEach((key, instance) -> {
+            key.write(buffer);
             instance.write(buffer);
         });
     }

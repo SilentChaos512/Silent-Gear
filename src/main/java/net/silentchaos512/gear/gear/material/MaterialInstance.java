@@ -21,6 +21,7 @@ import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.utils.Color;
 
@@ -134,12 +135,30 @@ public final class MaterialInstance implements IMaterialInstance {
         return material.getPartTypes();
     }
 
+    @Deprecated
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
         return getStatModifiers(stat, partType, ItemStack.EMPTY);
     }
 
+    @Deprecated
     public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
-        Collection<StatInstance> mods = material.getStatModifiers(this, stat, partType, gear);
+        return getStatModifiers(stat, partType, GearHelper.getType(gear, GearType.ALL));
+    }
+
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, GearType gearType) {
+        return getStatModifiers(partType, StatGearKey.of(stat, gearType));
+    }
+
+    public Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key) {
+        Collection<StatInstance> mods = material.getStatModifiers(this, partType, key);
+
+        ItemStat stat = ItemStats.get(key.getStat());
+        if (stat == null) {
+            SilentGear.LOGGER.warn("Unknown item stat: {}", key.getStat().getStatId());
+            SilentGear.LOGGER.catching(new NullPointerException());
+            return mods;
+        }
+
         if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
             // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
             float bonus = grade.bonusPercent / 100f;
@@ -149,6 +168,7 @@ public final class MaterialInstance implements IMaterialInstance {
                 return m.copySetValue(value + Math.abs(value) * bonus);
             }).collect(Collectors.toList());
         }
+
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();

@@ -1,10 +1,12 @@
 package net.silentchaos512.gear.api.stats;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.lib.util.Lazy;
 import net.silentchaos512.utils.Color;
 
@@ -113,9 +115,16 @@ public final class ItemStats {
     );
 
     // Armor
-    public static final ItemStat ARMOR = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
-            .affectedByGrades(true)
-            .synergyApplies()
+    public static final ItemStat ARMOR = new SplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+            ImmutableMap.of(
+                    GearType.HELMET, 3f,
+                    GearType.CHESTPLATE, 8f,
+                    GearType.LEGGINGS, 6f,
+                    GearType.BOOTS, 3f
+            ),
+            new ItemStat.Properties()
+                    .affectedByGrades(true)
+                    .synergyApplies()
     );
     public static final ItemStat ARMOR_TOUGHNESS = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
@@ -125,9 +134,16 @@ public final class ItemStats {
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat MAGIC_ARMOR = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
-            .affectedByGrades(true)
-            .synergyApplies()
+    public static final ItemStat MAGIC_ARMOR = new SplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+            ImmutableMap.of(
+                    GearType.HELMET, 3f,
+                    GearType.CHESTPLATE, 8f,
+                    GearType.LEGGINGS, 6f,
+                    GearType.BOOTS, 3f
+            ),
+            new ItemStat.Properties()
+                    .affectedByGrades(true)
+                    .synergyApplies()
     );
 
     private ItemStats() {}
@@ -157,6 +173,11 @@ public final class ItemStats {
     public static ItemStat byName(String name) {
         ResourceLocation id = SilentGear.getIdWithDefaultNamespace(name);
         return id != null ? REGISTRY.get().getValue(id) : null;
+    }
+
+    @Nullable
+    public static ItemStat get(IItemStat stat) {
+        return REGISTRY.get().getValue(stat.getStatId());
     }
 
     // region Registry creation - other mods should not call these methods!

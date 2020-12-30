@@ -15,7 +15,6 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -24,6 +23,7 @@ import net.silentchaos512.gear.client.material.PartGearKey;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
+import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -129,19 +129,24 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear) {
-        Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(stat));
+    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key) {
+        Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(key));
         if (ret.isEmpty() && getParent() != null) {
-            ret.addAll(getParent().getStatModifiers(material, stat, partType, gear));
+            ret.addAll(getParent().getStatModifiers(material, partType, key));
         }
         return ret;
     }
 
     @Override
-    public List<TraitInstance> getTraits(PartType partType, ItemStack gear) {
+    public Collection<StatGearKey> getStatKeys(PartType type) {
+        return this.stats.get(type).keySet();
+    }
+
+    @Override
+    public List<TraitInstance> getTraits(PartType partType, GearType gearType) {
         List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
         if (ret.isEmpty() && getParent() != null) {
-            ret.addAll(getParent().getTraits(partType, gear));
+            ret.addAll(getParent().getTraits(partType, gearType));
         }
         return ret;
     }
@@ -155,7 +160,8 @@ public final class PartMaterial implements IMaterial {
         if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType))) {
             if (partType == PartType.MAIN) {
                 ItemStat stat = gearType.getDurabilityStat();
-                return !getStatModifiers(material, stat, partType).isEmpty() && getStatUnclamped(material, stat, partType) > 0;
+                StatGearKey key = StatGearKey.of(stat, gearType);
+                return !getStatModifiers(material, partType, key).isEmpty() && getStatUnclamped(material, partType, key) > 0;
             }
             return true;
         }
@@ -501,9 +507,9 @@ public final class PartMaterial implements IMaterial {
                 int statCount = buffer.readByte();
                 StatModifierMap map = new StatModifierMap();
                 for (int j = 0; j < statCount; ++j) {
-                    ItemStat stat = ItemStats.REGISTRY.get().getValue(buffer.readResourceLocation());
+                    StatGearKey key = StatGearKey.read(buffer);
                     StatInstance mod = StatInstance.read(buffer);
-                    map.put(stat, mod);
+                    map.put(key, mod);
                 }
                 material.stats.put(partType, map);
             }
@@ -515,8 +521,8 @@ public final class PartMaterial implements IMaterial {
             material.stats.forEach((partType, map) -> {
                 buffer.writeResourceLocation(partType.getName());
                 buffer.writeByte(map.size());
-                map.forEach((stat, mod) -> {
-                    buffer.writeResourceLocation(Objects.requireNonNull(stat.getStatId()));
+                map.forEach((key, mod) -> {
+                    buffer.writeString(key.toString());
                     mod.write(buffer);
                 });
             });

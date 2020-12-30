@@ -120,15 +120,15 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear) {
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, GearType gearType, ItemStack gear) {
         // Get the materials and all the stat modifiers they provide for this stat
         List<MaterialInstance> materials = getMaterials(part);
         List<StatInstance> statMods = materials.stream()
-                .flatMap(m -> m.getStatModifiers(stat, this.partType, gear).stream())
+                .flatMap(m -> m.getStatModifiers(stat, this.partType, gearType).stream())
                 .collect(Collectors.toList());
 
         // Get any base modifiers for this part (could be none)
-        statMods.addAll(this.stats.get(stat));
+        statMods.addAll(this.stats.get(stat, gearType));
 
         if (statMods.isEmpty()) {
             // No modifiers for this stat, so doing anything else is pointless

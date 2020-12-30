@@ -23,6 +23,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
@@ -268,16 +269,49 @@ public final class TooltipHandler {
 
     private static void getMaterialStatLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
         TextListBuilder builder = new TextListBuilder();
+
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> modifiers = material.getStatModifiers(stat, partType);
-            getStatTooltipLine(event, partType, stat, modifiers).ifPresent(builder::add);
+            Collection<StatInstance> modsAll = material.getStatModifiers(stat, partType, GearType.ALL);
+            Optional<IFormattableTextComponent> head = getStatTooltipLine(event, partType, stat, modsAll);
+            boolean headPresent = head.isPresent();
+            builder.add(head.orElseGet(() -> TextUtil.withColor(stat.getDisplayName(), stat.getNameColor())));
+
+            builder.indent();
+
+            int subCount = 0;
+            List<StatGearKey> keysForStat = material.getMaterial().getStatKeys(partType).stream()
+                    .filter(key -> key.getStat().equals(stat))
+                    .collect(Collectors.toList());
+
+            for (StatGearKey key : keysForStat) {
+                if (key.getGearType() != GearType.ALL) {
+                    ItemStat stat1 = ItemStats.get(key.getStat());
+
+                    if (stat1 != null) {
+                        Collection<StatInstance> mods = material.getStatModifiers(partType, key);
+                        Optional<IFormattableTextComponent> line = getSubStatTooltipLine(event, partType, stat1, key.getGearType(), mods);
+
+                        if (line.isPresent()) {
+                            builder.add(line.get());
+                            ++subCount;
+                        }
+                    }
+                }
+            }
+
+            if (subCount == 0 && !headPresent) {
+                builder.removeLast();
+            }
+
+            builder.unindent();
         }
+
         event.getToolTip().addAll(builder.build());
     }
 
     private static Optional<IFormattableTextComponent> getStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, Collection<StatInstance> modifiers) {
         if (!modifiers.isEmpty()) {
-            StatInstance inst = stat.computeForDisplay(0, modifiers);
+            StatInstance inst = stat.computeForDisplay(0, GearType.ALL, modifiers);
             if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
                 boolean isZero = inst.getValue() == 0;
                 Color nameColor = isZero ? MC_DARK_GRAY : stat.getNameColor();
@@ -286,6 +320,29 @@ public final class TooltipHandler {
                 IFormattableTextComponent nameStr = TextUtil.withColor(stat.getDisplayName(), nameColor);
                 int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
                 IFormattableTextComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), statColor);
+
+                // Harvest level hints
+                IFormattableTextComponent textWithAdditions = stat == ItemStats.HARVEST_LEVEL && modifiers.size() == 1
+                        ? harvestLevelWithHint(statListText, inst.getValue())
+                        : statListText;
+
+                return Optional.of(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, textWithAdditions));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<IFormattableTextComponent> getSubStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, GearType gearType, Collection<StatInstance> modifiers) {
+        if (!modifiers.isEmpty()) {
+            StatInstance inst = stat.computeForDisplay(0, gearType, modifiers);
+            if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
+                boolean isZero = inst.getValue() == 0;
+                Color color = isZero ? MC_DARK_GRAY : Color.WHITE;
+
+                IFormattableTextComponent nameStr = TextUtil.withColor(gearType.getDisplayName().deepCopy(), color);
+                int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
+                IFormattableTextComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), color);
 
                 // Harvest level hints
                 IFormattableTextComponent textWithAdditions = stat == ItemStats.HARVEST_LEVEL && modifiers.size() == 1

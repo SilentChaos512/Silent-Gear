@@ -1,0 +1,42 @@
+{
+  "availability": {
+    "tier": 2,
+    "categories": [
+      "organic"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:scute"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.turtle"
+  },
+  "stats": {
+    "main": {
+      "durability": 0.0,
+      "armor_durability/helmet": 25.0,
+      "enchantability": 9.0,
+      "rarity": 20.0,
+      "armor/helmet": 2.0,
+      "magic_armor": 4.0,
+      "silentgems:chargeability": 0.5
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:jagged",
+        "level": 3
+      },
+      {
+        "name": "silentgear:crushing",
+        "level": 2
+      }
+    ]
+  }
+}

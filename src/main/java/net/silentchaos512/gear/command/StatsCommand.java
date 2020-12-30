@@ -68,12 +68,12 @@ public final class StatsCommand {
         StatModifierMap stats = GearData.getStatModifiers(stack, item, parts);
 
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding((item).getExcludedStats(stack))) {
-            Collection<StatInstance> mods = stats.get(stat);
+            Collection<StatInstance> mods = stats.get(stat, item.getGearType());
             if (!mods.isEmpty()) {
                 ITextComponent name = TextUtil.withColor(stat.getDisplayName(), stat.getNameColor());
                 ITextComponent modsText = StatModifierMap.formatText(mods, stat, 5, true);
                 ITextComponent valueText = TextUtil.withColor(
-                        StatInstance.of(stat.compute(0f, true, mods))
+                        StatInstance.of(stat.compute(0f, true, item.getGearType(), mods))
                                 .getFormattedText(stat, 5, false),
                         TextFormatting.YELLOW);
 

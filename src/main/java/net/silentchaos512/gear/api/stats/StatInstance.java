@@ -220,7 +220,7 @@ public class StatInstance {
         return String.format("StatInstance{value=%f, op=%s}", this.value, this.op);
     }
 
-    public JsonElement serialize(IItemStat stat) {
+    public JsonElement serialize() {
         if (op == Operation.AVG) {
             return new JsonPrimitive(this.value);
         }
@@ -229,11 +229,11 @@ public class StatInstance {
         return json;
     }
 
-    public static StatInstance read(ItemStat stat, JsonElement json) {
+    public static StatInstance read(IItemStat stat, JsonElement json) {
         return read(stat, stat.getDefaultOperation(), json);
     }
 
-    public static StatInstance read(ItemStat stat, Operation defaultOp, JsonElement json) {
+    public static StatInstance read(IItemStat stat, Operation defaultOp, JsonElement json) {
         if (json.isJsonPrimitive()) {
             // Primitive default op shorthand
             return new StatInstance(json.getAsFloat(), defaultOp);
@@ -256,7 +256,7 @@ public class StatInstance {
     }
 
     @Nullable
-    private static StatInstance readShorthandObject(ItemStat stat, JsonObject json) {
+    private static StatInstance readShorthandObject(IItemStat stat, JsonObject json) {
         StatInstance result = null;
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
             Operation op = Operation.byNameOrNull(entry.getKey());

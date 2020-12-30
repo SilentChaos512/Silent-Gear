@@ -258,13 +258,21 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder stat(PartType partType, IItemStat stat, float value) {
-        return stat(partType, stat, value, StatInstance.Operation.AVG);
+        return stat(partType, stat, GearType.ALL, value, StatInstance.Operation.AVG);
+    }
+
+    public MaterialBuilder stat(PartType partType, IItemStat stat, GearType gearType, float value) {
+        return stat(partType, stat, gearType, value, StatInstance.Operation.AVG);
     }
 
     public MaterialBuilder stat(PartType partType, IItemStat stat, float value, StatInstance.Operation operation) {
+        return stat(partType, stat, GearType.ALL, value, operation);
+    }
+
+    public MaterialBuilder stat(PartType partType, IItemStat stat, GearType gearType, float value, StatInstance.Operation operation) {
         StatInstance mod = StatInstance.of(value, operation);
         StatModifierMap map = stats.computeIfAbsent(partType, pt -> new StatModifierMap());
-        map.put(stat, mod);
+        map.put(stat, gearType, mod);
         return this;
     }
 
@@ -305,10 +313,34 @@ public class MaterialBuilder {
         return this;
     }
 
+    @Deprecated
     public MaterialBuilder mainStatsArmor(float armor, float toughness, float magicArmor) {
         stat(PartType.MAIN, ItemStats.ARMOR, armor);
         stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, toughness);
         stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, magicArmor);
+        return this;
+    }
+
+    @SuppressWarnings({"MethodWithTooManyParameters", "OverlyComplexMethod"})
+    public MaterialBuilder mainStatsArmor(float head, float chest, float legs, float feet, float toughness, float magicArmor) {
+        if (head > 0 && chest > 0 && legs > 0 && feet > 0) {
+            float sum = head + chest + legs + feet;
+            stat(PartType.MAIN, ItemStats.ARMOR, sum);
+        }
+
+        if (head > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.HELMET, head);
+        if (chest > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.CHESTPLATE, chest);
+        if (legs > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.LEGGINGS, legs);
+        if (feet > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.BOOTS, feet);
+        if (toughness > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, toughness);
+        if (magicArmor > 0)
+            stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, magicArmor);
+
         return this;
     }
 

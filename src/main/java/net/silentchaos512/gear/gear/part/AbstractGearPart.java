@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.gear.part;
 
-import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,7 +19,6 @@ import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartSerializer;
-import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
@@ -84,8 +82,8 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear) {
-        List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
+    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, GearType gearType, ItemStack gear) {
+        List<StatInstance> mods = new ArrayList<>(this.stats.get(stat, gearType));
         GetStatModifierEvent event = new GetStatModifierEvent(part, stat, mods);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
@@ -170,7 +168,7 @@ public abstract class AbstractGearPart implements IGearPart {
             // Stats
             JsonElement elementStats = json.get("stats");
             if (elementStats != null) {
-                Multimap<IItemStat, StatInstance> statMap = StatModifierMap.deserialize(elementStats);
+                StatModifierMap statMap = StatModifierMap.deserialize(elementStats);
                 // Move the newly loaded modifiers into the stat map, replacing existing ones
                 statMap.keySet().forEach(stat -> part.stats.removeAll(stat));
                 statMap.forEach((stat, mod) -> part.stats.put(stat, mod));

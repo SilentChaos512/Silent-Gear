@@ -4,4 +4,6 @@ import net.minecraft.util.ResourceLocation;
 
 public interface IItemStat {
     ResourceLocation getStatId();
+
+    StatInstance.Operation getDefaultOperation();
 }

@@ -86,7 +86,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     public double getArmorProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.ARMOR);
+        return GearData.getStat(stack, ItemStats.ARMOR);
     }
 
     public double getArmorToughness(ItemStack stack) {
@@ -96,7 +96,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     public double getArmorMagicProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.MAGIC_ARMOR);
+        return GearData.getStat(stack, ItemStats.MAGIC_ARMOR);
     }
 
     private static double getGenericArmorProtection(ItemStack stack) {
