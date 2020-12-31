@@ -144,10 +144,6 @@ public final class GearClientHelper {
                     textStat = statText("durabilityFormat", durabilityLeft, durabilityMax);
                 } else if (stat == ItemStats.HARVEST_LEVEL) {
                     textStat = TooltipHandler.harvestLevelWithHint(textStat, statValue);
-                } else if (stat == ItemStats.ARMOR || stat == ItemStats.MAGIC_ARMOR || stat == ItemStats.ARMOR_TOUGHNESS) {
-                    String str1 = String.format("%.1f", statValue);
-                    String str2 = String.format("%.1f", totalArmor);
-                    textStat = statText("armorFormat", str1, str2);
                 }
 
                 builder.add(statText("displayFormat", textName, textStat));

@@ -261,9 +261,10 @@ public final class GearData {
     }
 
     public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts) {
+        GearType gearType = item.getGearType();
         StatModifierMap stats = new StatModifierMap();
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
-            parts.forEach(part -> part.getStatModifiers(stack, stat).forEach(mod -> stats.put(stat, item.getGearType(), mod.copy())));
+            parts.forEach(part -> part.getStatModifiers(stack, gearType, stat).forEach(mod -> stats.put(stat, gearType, mod.copy())));
         }
         return stats;
     }
