@@ -358,6 +358,14 @@ public class MaterialBuilder {
         return this;
     }
 
+    private void validate() {
+        for (PartType type : this.stats.keySet()) {
+            if (this.display.keySet().stream().noneMatch(key -> key.getPartType().equals(type))) {
+                throw new NullPointerException(String.format("Material builder %s has no model data for part type %s", this.id, type.getName()));
+            }
+        }
+    }
+
     public JsonObject serializeModel() {
         MaterialDisplay model = MaterialDisplay.of(this.display);
         return model.serialize();
@@ -365,6 +373,8 @@ public class MaterialBuilder {
 
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     public JsonObject serialize() {
+        validate();
+
         JsonObject json = new JsonObject();
 
         if (this.parent != null) {

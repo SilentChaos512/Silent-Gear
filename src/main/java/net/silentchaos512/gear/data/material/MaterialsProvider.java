@@ -1119,6 +1119,13 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(SilentGear.getId("turtle"), 0x47BF4A))
         );
 
+        // Vines
+        ret.add(new MaterialBuilder(SilentGear.getId("vine"), 0, Items.VINE)
+                .categories(MaterialCategories.ORGANIC)
+                .noStats(PartType.BINDING)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
+        );
+
         // Wood
         ResourceLocation sgWood = SilentGear.getId("wood");
         ret.add(new MaterialBuilder(sgWood, 0,
