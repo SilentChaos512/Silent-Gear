@@ -237,24 +237,30 @@ public final class TraitHelper {
         return result;
     }
 
+    @Deprecated
+    public static Map<ITrait, Integer> getTraits(ItemStack gear, PartDataList parts) {
+        return getTraits(gear, GearHelper.getType(gear), parts);
+    }
+
     /**
      * Gets a Map of Traits and levels from the parts, used to calculate trait levels and should not
      * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ResourceLocation)} or
      * {@link #hasTrait(ItemStack, ResourceLocation)} when appropriate.
      *
      * @param gear  The item
+     * @param gearType
      * @param parts The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
-    public static Map<ITrait, Integer> getTraits(ItemStack gear, PartDataList parts) {
-        if (parts.isEmpty() || GearHelper.isBroken(gear))
+    public static Map<ITrait, Integer> getTraits(ItemStack gear, GearType gearType, PartDataList parts) {
+        if (parts.isEmpty() || (!gear.isEmpty() && GearHelper.isBroken(gear)))
             return ImmutableMap.of();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
 
         for (PartData part : parts) {
             for (TraitInstance inst : part.getTraits(gear)) {
-                if (inst.conditionsMatch(parts, gear)) {
+                if (inst.conditionsMatch(gearType, parts, gear)) {
                     ITrait trait = inst.getTrait();
                     // Get the highest value in any part
                     result.merge(trait, inst.getLevel(), Integer::max);
@@ -269,7 +275,12 @@ public final class TraitHelper {
         return result;
     }
 
+    @Deprecated
     public static Map<ITrait, Integer> getTraits(List<MaterialInstance> materials, PartType partType, ItemStack gear) {
+        return getTraits(materials, GearHelper.getType(gear), partType, gear);
+    }
+
+    public static Map<ITrait, Integer> getTraits(List<MaterialInstance> materials, GearType gearType, PartType partType, ItemStack gear) {
         if (materials.isEmpty())
             return Collections.emptyMap();
 

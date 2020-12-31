@@ -12,6 +12,7 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -57,9 +58,9 @@ public class OrTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
+    public boolean matches(ItemStack gear, GearType gearType, PartDataList parts, ITrait trait) {
         for (ITraitCondition child : this.children) {
-            if (child.matches(gear, parts, trait)) {
+            if (child.matches(gear, gearType, parts, trait)) {
                 return true;
             }
         }
@@ -67,9 +68,9 @@ public class OrTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
+    public boolean matches(ItemStack gear, GearType gearType, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         for (ITraitCondition child : this.children) {
-            if (child.matches(gear, partType, materials, trait)) {
+            if (child.matches(gear, gearType, partType, materials, trait)) {
                 return true;
             }
         }

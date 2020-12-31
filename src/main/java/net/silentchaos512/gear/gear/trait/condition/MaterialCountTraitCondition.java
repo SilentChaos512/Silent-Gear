@@ -41,7 +41,7 @@ public class MaterialCountTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
+    public boolean matches(ItemStack gear, GearType gearType, PartDataList parts, ITrait trait) {
         int count = parts.getPartsWithTrait(trait);
         return count >= this.requiredCount;
     }

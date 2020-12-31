@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -21,6 +22,7 @@ import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
+import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
@@ -144,17 +146,19 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear) {
+    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key) {
         // Get the materials and all the stat modifiers they provide for this stat
         Collection<MaterialInstance> materials = getSubMaterials(material);
         List<StatInstance> statMods = materials.stream()
-                .flatMap(m -> m.getStatModifiers(stat, partType, gear).stream())
+                .flatMap(m -> m.getStatModifiers(partType, key).stream())
                 .collect(Collectors.toList());
+
+        ItemStat stat = key.getStat() instanceof ItemStat ? (ItemStat) key.getStat() : null;
 
         // Get any base modifiers for this material (could be none)
         //statMods.addAll(this.stats.get(stat));
 
-        if (statMods.isEmpty()) {
+        if (stat == null || statMods.isEmpty()) {
             // No modifiers for this stat, so doing anything else is pointless
             return statMods;
         }
@@ -162,6 +166,7 @@ public class CompoundMaterial implements IMaterial {
         MaterialInstance matInst = material instanceof MaterialInstance ? (MaterialInstance) material : null;
         GetMaterialStatsEvent event = null;
         if (matInst != null) {
+            // FIXME: Potentially bad cast, need to rework event
             event = new GetMaterialStatsEvent(matInst, stat, partType, statMods);
             MinecraftForge.EVENT_BUS.post(event);
         }
@@ -180,7 +185,7 @@ public class CompoundMaterial implements IMaterial {
 
         // Synergy
         if (stat.doesSynergyApply() && matInst != null) {
-            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(materials), getTraits(matInst, partType, gear));
+            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(materials), getTraits(matInst, partType, key.getGearType()));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 final float multi = synergy - 1f;
                 for (int i = 0; i < ret.size(); ++i) {
@@ -197,6 +202,13 @@ public class CompoundMaterial implements IMaterial {
         return ret;
     }
 
+    @Override
+    public Collection<StatGearKey> getStatKeys(PartType type, IItemStat stat) {
+        return getSubMaterials(MaterialInstance.of(this)).stream()
+                .flatMap(mat -> mat.getMaterial().getStatKeys(type, stat).stream())
+                .collect(Collectors.toSet());
+    }
+
     private static StatInstance compressModifiers(Collection<StatInstance> mods, StatInstance.Operation operation) {
         // We do NOT want to average together max modifiers...
         if (operation == StatInstance.Operation.MAX) {
@@ -210,13 +222,13 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(MaterialInstance material, PartType partType, ItemStack gear) {
+    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartType partType, GearType gearType) {
         List<TraitInstance> ret = new ArrayList<>();
         List<MaterialInstance> list = new ArrayList<>(getSubMaterials(material));
 
-        TraitHelper.getTraits(list, partType, gear).forEach((trait, level) -> {
+        TraitHelper.getTraits(list, gearType, partType, ItemStack.EMPTY).forEach((trait, level) -> {
             TraitInstance inst = TraitInstance.of(trait, level);
-            if (inst.conditionsMatch(list, partType, gear)) {
+            if (inst.conditionsMatch(list, gearType, partType, ItemStack.EMPTY)) {
                 ret.add(inst);
             }
         });
@@ -232,7 +244,7 @@ public class CompoundMaterial implements IMaterial {
 
         if (partType == PartType.MAIN) {
             ItemStat stat = gearType.getDurabilityStat();
-            return !getStatModifiers(material, stat, partType).isEmpty() && getStatUnclamped(material, stat, partType) > 0;
+            return !getStatModifiers(material, stat, partType).isEmpty() && getStatUnclamped(material, partType, StatGearKey.of(stat, gearType)) > 0;
         }
 
         return true;
