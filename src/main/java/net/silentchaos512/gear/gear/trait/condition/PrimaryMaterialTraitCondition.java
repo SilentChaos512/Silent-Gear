@@ -34,12 +34,12 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
+    public boolean matches(ItemStack gear, GearType gearType, PartDataList parts, ITrait trait) {
         return false;
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
+    public boolean matches(ItemStack gear, GearType gearType, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         if (materials.isEmpty()) return false;
         GearType gearType = GearHelper.getType(gear, GearType.ALL);
         for (TraitInstance t : materials.get(0).getTraits(partType, gearType, gear)) {

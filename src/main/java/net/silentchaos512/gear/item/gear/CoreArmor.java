@@ -210,7 +210,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         if (material != null) {
             IMaterialDisplay materialModel = MaterialDisplayManager.get(material.get());
             PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
-            MaterialLayer materialLayer = materialModel.getLayers(this.getGearType(), partType).getFirstLayer();
+            MaterialLayer materialLayer = materialModel.getLayerList(this.getGearType(), partType, material).getFirstLayer();
             if (materialLayer != null) {
                 ResourceLocation tex = materialLayer.getTextureId();
                 return tex.getNamespace() + ":textures/models/armor/"
@@ -235,7 +235,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         if (material != null) {
             IMaterialDisplay materialModel = MaterialDisplayManager.get(material.get());
             PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
-            MaterialLayer materialLayer = materialModel.getLayers(this.getGearType(), partType).getFirstLayer();
+            MaterialLayer materialLayer = materialModel.getLayerList(this.getGearType(), partType, material).getFirstLayer();
             if (materialLayer != null) {
                 return materialLayer.getColor();
             }

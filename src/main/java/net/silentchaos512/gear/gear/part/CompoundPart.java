@@ -189,9 +189,9 @@ public class CompoundPart extends AbstractGearPart {
         List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, partType, gearType, gear));
         List<MaterialInstance> materials = getMaterials(part);
 
-        TraitHelper.getTraits(materials, this.partType, gear).forEach((trait, level) -> {
+        TraitHelper.getTraits(materials, GearHelper.getType(gear), this.partType, gear).forEach((trait, level) -> {
             TraitInstance inst = TraitInstance.of(trait, level);
-            if (inst.conditionsMatch(materials, this.partType, gear)) {
+            if (inst.conditionsMatch(materials, GearHelper.getType(gear), this.partType, gear)) {
                 ret.add(inst);
             }
         });

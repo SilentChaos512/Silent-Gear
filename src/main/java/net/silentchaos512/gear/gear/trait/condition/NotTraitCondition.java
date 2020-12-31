@@ -7,6 +7,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -39,13 +40,13 @@ public class NotTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
-        return !child.matches(gear, parts, trait);
+    public boolean matches(ItemStack gear, GearType gearType, PartDataList parts, ITrait trait) {
+        return !child.matches(gear, gearType, parts, trait);
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
-        return !child.matches(gear, partType, materials, trait);
+    public boolean matches(ItemStack gear, GearType gearType, PartType partType, List<MaterialInstance> materials, ITrait trait) {
+        return !child.matches(gear, gearType, partType, materials, trait);
     }
 
     @Override

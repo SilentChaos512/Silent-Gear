@@ -41,7 +41,7 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
+    public boolean matches(ItemStack gear, GearType gearType, PartDataList parts, ITrait trait) {
         float ratio = (float) parts.getPartsWithTrait(trait) / parts.getMains().size();
         return ratio >= this.requiredRatio;
     }
