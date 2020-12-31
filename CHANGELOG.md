@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stats can now be specified per gear type. For instance, this allows the armor stat to be manually set for each piece, rather than using a predefined ratio. Old files should still work as before.
 - Netherite-coated armor now uses the vanilla model texture
 ### Fixed
+- Elytra having no model [#297]
 - Potion effect traits crashing if arrays are missing elements
 
 ## [2.4.9] - 2020-12-26

@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -33,6 +34,14 @@ import java.util.*;
 @OnlyIn(Dist.CLIENT)
 public final class GearClientHelper {
     private GearClientHelper() {
+    }
+
+    public static int getColor(ItemStack stack, PartType layer) {
+        PartData part = GearData.getPartOfType(stack, layer);
+        if (part != null) {
+            return part.getColor(stack, 0, 0);
+        }
+        return Color.VALUE_WHITE;
     }
 
     public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {

@@ -1,6 +1,7 @@
 package net.silentchaos512.gear;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,6 +35,7 @@ import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
+import net.silentchaos512.gear.client.renderer.entity.GearElytraLayer;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.compat.curios.CurioGearItemCapability;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
@@ -158,6 +160,7 @@ class SideProxy implements IProxy {
     static class Client extends SideProxy {
         Client() {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::clientSetup);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::postSetup);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandlers::onItemColors);
 
             MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
@@ -191,6 +194,12 @@ class SideProxy implements IProxy {
             ModTileEntities.registerRenderers(event);
             ModContainers.registerScreens(event);
             ModItemModelProperties.register(event);
+        }
+
+        private static void postSetup(FMLLoadCompleteEvent event) {
+            EntityRendererManager rendererManager = Minecraft.getInstance().getRenderManager();
+            rendererManager.getSkinMap().values().forEach(renderer ->
+                    renderer.addLayer(new GearElytraLayer<>(renderer)));
         }
 
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
