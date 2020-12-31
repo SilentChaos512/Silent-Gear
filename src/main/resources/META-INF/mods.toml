@@ -13,7 +13,7 @@ authors="SilentChaos512"
     displayName="Silent Gear"
     updateJSONURL="https://raw.githubusercontent.com/SilentChaos512/Silent-Gear/1.16.x/update.json"
     description='''
-    Modular and upgradeable tools, weapons, and armor. Allows full customization of parts used in gear crafting, even user-defined parts!
+    Modular and upgradeable tools, weapons, and armor. Allows full customization of materials and parts used in gear crafting, even user-defined ones!
     '''
 
 [[dependencies.silentgear]]

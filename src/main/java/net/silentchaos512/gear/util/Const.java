@@ -124,6 +124,7 @@ public final class Const {
         public static final DataResource<ITrait> STELLAR = DataResource.trait("stellar");
         public static final DataResource<ITrait> SYNERGISTIC = DataResource.trait("synergistic");
         public static final DataResource<ITrait> TERMINUS = DataResource.trait("terminus");
+        public static final DataResource<ITrait> TURTLE = DataResource.trait("turtle");
         public static final DataResource<ITrait> VENOM = DataResource.trait("venom");
         public static final DataResource<ITrait> VULCAN = DataResource.trait("vulcan");
 

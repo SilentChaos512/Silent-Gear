@@ -767,6 +767,8 @@
   "trait.silentgear.synergistic.desc": "Gear gets a synergy bonus (if base value is more than 100%)",
   "trait.silentgear.terminus": "Terminus",
   "trait.silentgear.terminus.desc": "Creates and places stone blocks when used",
+  "trait.silentgear.turtle": "Turtle",
+  "trait.silentgear.turtle.desc": "Hold your breath for longer",
   "trait.silentgear.venom": "Venom",
   "trait.silentgear.venom.desc": "Poisons the target when attacked",
   "trait.silentgear.vulcan": "Vulcan",

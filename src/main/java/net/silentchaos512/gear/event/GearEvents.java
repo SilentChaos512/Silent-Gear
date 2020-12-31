@@ -44,6 +44,9 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
@@ -372,6 +375,13 @@ public final class GearEvents {
 
             if (magnetic > 0) {
                 tickMagnetic(event.player, magnetic);
+            }
+
+            // Turtle trait
+            // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
+            if (!event.player.areEyesInFluid(FluidTags.WATER) && TraitHelper.hasTrait(event.player.getItemStackFromSlot(EquipmentSlotType.HEAD), Const.Traits.TURTLE)) {
+                // Vanilla duration is 200, but that causes flickering numbers/icon
+                event.player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 210, 0, false, false, true));
             }
         }
     }

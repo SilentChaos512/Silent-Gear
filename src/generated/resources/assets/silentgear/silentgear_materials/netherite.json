@@ -17,6 +17,11 @@
       "texture": "silentgear:coating_jar"
     }
   ],
+  "coating/armor": [
+    {
+      "texture": "minecraft:netherite"
+    }
+  ],
   "main/fragment": [
     {
       "texture": "silentgear:dust",

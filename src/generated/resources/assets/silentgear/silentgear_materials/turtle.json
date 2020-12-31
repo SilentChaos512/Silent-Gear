@@ -1,7 +1,7 @@
 {
-  "main/all": [
+  "main/helmet": [
     {
-      "texture": "silentgear:main_generic_lc",
+      "texture": "silentgear:turtle",
       "color": "#47BF4A"
     }
   ],

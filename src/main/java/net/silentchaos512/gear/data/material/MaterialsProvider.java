@@ -15,6 +15,7 @@ import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialLayer;
+import net.silentchaos512.gear.api.material.StaticLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -22,11 +23,11 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
+import net.silentchaos512.gear.gear.part.PartTextureSet;
+import net.silentchaos512.gear.gear.trait.condition.*;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.gear.gear.trait.condition.*;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
@@ -786,6 +787,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 1f, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.ENCHANTABILITY, 5, StatInstance.Operation.ADD)
                 .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x867B86)
+                .display(PartType.COATING, GearType.ARMOR, new StaticLayer(new ResourceLocation("netherite")))
                 .displayFragment(PartTextures.DUST, 0x867B86)
         );
         // Netherwood
@@ -1112,9 +1114,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.RARITY, 20)
                 .mainStatsArmor(2, 0, 0, 0, 0, 4)
                 .stat(PartType.MAIN, chargeability, 0.5f)
-                .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
-                .trait(PartType.MAIN, Const.Traits.CRUSHING, 2)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x47BF4A)
+                .trait(PartType.MAIN, Const.Traits.TURTLE, 1,
+                        new MaterialCountTraitCondition(3))
+                .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(SilentGear.getId("turtle"), 0x47BF4A))
         );
 
         // Wood
