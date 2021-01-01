@@ -51,6 +51,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .parent(itemGenerated)
                 .texture("layer0", "item/alloy_ingot")
                 .texture("layer1", "item/alloy_ingot_highlight");
+        getBuilder(NameUtils.fromItem(ModItems.HYBRID_GEM).getPath())
+                .parent(itemGenerated)
+                .texture("layer0", "item/hybrid_gem")
+                .texture("layer1", "item/hybrid_gem_highlight");
 
         getBuilder(NameUtils.fromItem(ModItems.BLUEPRINT_BOOK).getPath())
                 .parent(itemGenerated)

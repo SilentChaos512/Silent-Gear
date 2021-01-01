@@ -217,6 +217,8 @@ public final class ModItems {
     // Compound materials
     public static final ItemRegistryObject<CompoundMaterialItem> ALLOY_INGOT = register("alloy_ingot", () ->
             new CompoundMaterialItem(baseProps()));
+    public static final ItemRegistryObject<CompoundMaterialItem> HYBRID_GEM = register("hybrid_gem", () ->
+            new CompoundMaterialItem(baseProps()));
 
     static {
         CraftingItems.register(Registration.ITEMS);
