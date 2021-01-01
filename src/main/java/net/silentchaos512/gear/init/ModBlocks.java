@@ -58,7 +58,7 @@ public final class ModBlocks {
             new CompounderBlock(() -> ModTileEntities.METAL_ALLOYER.get(),
                     () -> ModContainers.METAL_ALLOYER.get(),
                     ModItems.ALLOY_INGOT,
-                    CompounderTileEntity.STANDARD_SIZE,
+                    CompounderTileEntity.STANDARD_INPUT_SLOTS,
                     ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST),
                     AbstractBlock.Properties.create(Material.IRON)
                             .hardnessAndResistance(4, 20)
@@ -68,7 +68,7 @@ public final class ModBlocks {
             new CompounderBlock(() -> ModTileEntities.RECRYSTALLIZER.get(),
                     () -> ModContainers.RECRYSTALLIZER.get(),
                     ModItems.HYBRID_GEM,
-                    CompounderTileEntity.STANDARD_SIZE,
+                    CompounderTileEntity.STANDARD_INPUT_SLOTS,
                     ImmutableList.of(MaterialCategories.GEM, MaterialCategories.DUST),
                     AbstractBlock.Properties.create(Material.IRON)
                             .hardnessAndResistance(4, 20)
