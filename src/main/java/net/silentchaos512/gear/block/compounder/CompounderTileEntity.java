@@ -17,7 +17,6 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 public class CompounderTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
@@ -37,6 +37,8 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     private final ContainerType<? extends CompounderContainer> containerType;
     private final Collection<IMaterialCategory> categories;
+    private final Supplier<CompoundMaterialItem> outputItem;
+
     @SyncVariable(name = "progress")
     private int progress = 0;
 
@@ -66,9 +68,14 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
     };
 
-    public CompounderTileEntity(TileEntityType<?> typeIn, ContainerType<? extends CompounderContainer> containerType, int inventorySize, Collection<IMaterialCategory> categoriesIn) {
+    public CompounderTileEntity(TileEntityType<?> typeIn,
+                                ContainerType<? extends CompounderContainer> containerType,
+                                Supplier<CompoundMaterialItem> outputItem,
+                                int inventorySize,
+                                Collection<IMaterialCategory> categoriesIn) {
         super(typeIn, inventorySize);
         this.containerType = containerType;
+        this.outputItem = outputItem;
         this.categories = ImmutableSet.copyOf(categoriesIn);
     }
 
@@ -78,8 +85,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
     }
 
     public CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
-        // TODO
-        return ModItems.ALLOY_INGOT.get();
+        return this.outputItem.get();
     }
 
     @Override

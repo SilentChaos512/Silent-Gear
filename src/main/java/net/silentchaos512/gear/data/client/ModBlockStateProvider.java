@@ -29,6 +29,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         simpleBlock(ModBlocks.METAL_ALLOYER.get());
+        simpleBlock(ModBlocks.RECRYSTALLIZER.get());
 
         simpleBlock(ModBlocks.BORT_ORE.get());
         simpleBlock(ModBlocks.CRIMSON_IRON_ORE.get());

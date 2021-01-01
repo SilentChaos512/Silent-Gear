@@ -16,6 +16,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.item.CompoundMaterialItem;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -24,17 +25,20 @@ import java.util.function.Supplier;
 public class CompounderBlock extends Block {
     private final Supplier<TileEntityType<? extends CompounderTileEntity>> tileEntityType;
     private final Supplier<ContainerType<? extends CompounderContainer>> containerType;
+    private final Supplier<CompoundMaterialItem> outputItem;
     private final int inventorySize;
     private final Collection<IMaterialCategory> categories;
 
     public CompounderBlock(Supplier<TileEntityType<? extends CompounderTileEntity>> tileEntityType,
                            Supplier<ContainerType<? extends CompounderContainer>> containerType,
+                           Supplier<CompoundMaterialItem> outputItem,
                            int inventorySize,
                            Collection<IMaterialCategory> categories,
                            Properties properties) {
         super(properties);
         this.tileEntityType = tileEntityType;
         this.containerType = containerType;
+        this.outputItem = outputItem;
         this.inventorySize = inventorySize;
         this.categories = ImmutableSet.copyOf(categories);
     }
@@ -64,6 +68,6 @@ public class CompounderBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CompounderTileEntity(this.tileEntityType.get(), this.containerType.get(), this.inventorySize, this.categories);
+        return new CompounderTileEntity(this.tileEntityType.get(), this.containerType.get(), this.outputItem, this.inventorySize, this.categories);
     }
 }

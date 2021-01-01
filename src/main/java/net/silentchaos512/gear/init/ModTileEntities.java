@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 public final class ModTileEntities {
     public static final RegistryObject<TileEntityType<GraderTileEntity>> MATERIAL_GRADER = register("material_grader", GraderTileEntity::new, ModBlocks.MATERIAL_GRADER);
     public static final RegistryObject<TileEntityType<CompounderTileEntity>> METAL_ALLOYER = register("metal_alloy", ModTileEntities::getMetalAlloyer, ModBlocks.METAL_ALLOYER);
+    public static final RegistryObject<TileEntityType<CompounderTileEntity>> RECRYSTALLIZER = register("recrystallizer", ModTileEntities::getRecrystallizer, ModBlocks.RECRYSTALLIZER);
     public static final RegistryObject<TileEntityType<SalvagerTileEntity>> SALVAGER = register("salvager", SalvagerTileEntity::new, ModBlocks.SALVAGER);
 
     private ModTileEntities() {}
@@ -41,6 +42,15 @@ public final class ModTileEntities {
     private static CompounderTileEntity getMetalAlloyer() {
         return new CompounderTileEntity(METAL_ALLOYER.get(),
                 ModContainers.METAL_ALLOYER.get(),
+                ModItems.ALLOY_INGOT,
+                5,
+                ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST));
+    }
+
+    private static CompounderTileEntity getRecrystallizer() {
+        return new CompounderTileEntity(RECRYSTALLIZER.get(),
+                ModContainers.RECRYSTALLIZER.get(),
+                ModItems.HYBRID_GEM,
                 5,
                 ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST));
     }
