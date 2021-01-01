@@ -675,6 +675,22 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
                 .build(consumer);
 
+        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(ModTags.Items.NETHERWOOD_LOGS), ModItems.NETHERWOOD_CHARCOAL, 0.15f, 200)
+                .addCriterion("has_item", hasItem(ModTags.Items.NETHERWOOD_LOGS))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK)
+                .key('#', ModItems.NETHERWOOD_CHARCOAL)
+                .patternLine("###")
+                .patternLine("###")
+                .patternLine("###")
+                .addCriterion("has_item", hasItem(ModItems.NETHERWOOD_CHARCOAL))
+                .build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(ModItems.NETHERWOOD_CHARCOAL, 9)
+                .addIngredient(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK)
+                .addCriterion("has_item", hasItem(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK))
+                .build(consumer, SilentGear.getId("netherwood_charcoal_from_block"));
+
         // TODO: Maybe should organize these better...
         // A
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ADVANCED_UPGRADE_BASE)

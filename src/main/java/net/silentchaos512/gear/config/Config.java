@@ -58,6 +58,8 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue repairKitAzureEfficiency;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
+        // Other items
+        public static final ForgeConfigSpec.IntValue netherwoodCharcoalBurnTime;
         // Salvager
         public static final ForgeConfigSpec.DoubleValue salvagerMinLossRate;
         public static final ForgeConfigSpec.DoubleValue salvagerMaxLossRate;
@@ -120,6 +122,10 @@ public final class Config {
 
                     builder.pop();
                 }
+
+                netherwoodCharcoalBurnTime = builder
+                        .comment("Burn time of netherwood charcoal, in ticks. Vanilla charcoal is 1600.")
+                        .defineInRange("netherwood_charcoal.burn_time", 2400, 0, Integer.MAX_VALUE);
 
                 builder.pop();
             }

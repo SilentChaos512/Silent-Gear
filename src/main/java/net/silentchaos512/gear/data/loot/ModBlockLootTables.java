@@ -48,6 +48,7 @@ public class ModBlockLootTables extends BlockLootTables {
         ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
         this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(flaxBuilder));
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE_GATE.get());
         registerLootTable(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));

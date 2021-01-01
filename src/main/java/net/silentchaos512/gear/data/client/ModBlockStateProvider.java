@@ -36,6 +36,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.AZURE_SILVER_BLOCK.get());
         simpleBlock(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
 
+        simpleBlock(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
         simpleBlock(ModBlocks.NETHERWOOD_PLANKS.get());
         simpleBlock(ModBlocks.NETHERWOOD_LEAVES.get());
         axisBlock(ModBlocks.NETHERWOOD_LOG.get(), modLoc("block/netherwood_log"), modLoc("block/netherwood_log_top"));

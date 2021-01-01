@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.WallOrFloorItem;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +21,7 @@ import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
 
 import java.util.Objects;
@@ -71,6 +73,17 @@ public final class ModBlocks {
                     .sound(SoundType.STONE)
                     .lootFrom(STONE_TORCH.get()),
                     ParticleTypes.FLAME));
+
+    public static final BlockRegistryObject<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
+            () -> new Block(AbstractBlock.Properties.create(Material.ROCK)
+                    .setRequiresTool()
+                    .hardnessAndResistance(5, 6)),
+            bro -> () -> new BlockItem(bro.get(), new Item.Properties().group(SilentGear.ITEM_GROUP)) {
+                @Override
+                public int getBurnTime(ItemStack itemStack) {
+                    return 10 * Config.Common.netherwoodCharcoalBurnTime.get();
+                }
+            });
 
     public static final BlockRegistryObject<RotatedPillarBlock> NETHERWOOD_LOG = register("netherwood_log", () ->
             new RotatedPillarBlock(netherWoodProps(2f, 2f)));

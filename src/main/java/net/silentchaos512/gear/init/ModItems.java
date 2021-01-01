@@ -1,10 +1,7 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BlockNamedItem;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
+import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.silentchaos512.gear.SilentGear;
@@ -238,6 +235,13 @@ public final class ModItems {
                             .effect(() -> new EffectInstance(Effects.RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
                             .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
                             .build())));
+    public static final ItemRegistryObject<Item> NETHERWOOD_CHARCOAL = register("netherwood_charcoal", () ->
+            new Item(baseProps()) {
+                @Override
+                public int getBurnTime(ItemStack itemStack) {
+                    return Config.Common.netherwoodCharcoalBurnTime.get();
+                }
+            });
 
     public static final ItemRegistryObject<CoreSword> SWORD = register("sword", () -> new CoreSword(GearType.SWORD));
     public static final ItemRegistryObject<CoreSword> KATANA = register("katana", () -> new CoreSword(GearType.KATANA));

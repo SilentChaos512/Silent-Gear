@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Turtle (scute) material. Can be used to craft helmets only.
 - Turtle trait. Mimics the vanilla turtle shell helmet's effect.
+- Netherwood charcoal, burns 2400 ticks (smelts 12 items, configurable)
+- Netherwood charcoal blocks, 10 times the configured burn time
 ### Changed
-- Stats can now be specified per gear type. For instance, this allows the armor stat to be manually set for each piece, rather than using a predefined ratio. Old files should still work as before.
+- Stats can now be specified per gear type. For instance, this allows the armor stat to be manually set for each piece, rather than using a predefined ratio. Old files will still work as before.
 - Netherite-coated armor now uses the vanilla model texture
+- Updated pt_br.json (SAMUELPV) [#282]
 ### Fixed
 - Elytra having no model [#297]
 - Potion effect traits crashing if arrays are missing elements

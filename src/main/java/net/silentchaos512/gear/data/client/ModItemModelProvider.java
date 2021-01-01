@@ -44,6 +44,8 @@ public class ModItemModelProvider extends ItemModelProvider {
                 builder(item, itemGenerated, "item/" + item.getName());
         }
 
+        builder(ModItems.NETHERWOOD_CHARCOAL, itemGenerated);
+
         getBuilder(NameUtils.fromItem(ModItems.BLUEPRINT_BOOK).getPath())
                 .parent(itemGenerated)
                 .texture("layer0", "item/blueprint_book_cover")
