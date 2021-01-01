@@ -26,20 +26,20 @@ public class CompounderBlock extends Block {
     private final Supplier<TileEntityType<? extends CompounderTileEntity>> tileEntityType;
     private final Supplier<ContainerType<? extends CompounderContainer>> containerType;
     private final Supplier<CompoundMaterialItem> outputItem;
-    private final int inventorySize;
+    private final int inputSlotCount;
     private final Collection<IMaterialCategory> categories;
 
     public CompounderBlock(Supplier<TileEntityType<? extends CompounderTileEntity>> tileEntityType,
                            Supplier<ContainerType<? extends CompounderContainer>> containerType,
                            Supplier<CompoundMaterialItem> outputItem,
-                           int inventorySize,
+                           int inputSlotCount,
                            Collection<IMaterialCategory> categories,
                            Properties properties) {
         super(properties);
         this.tileEntityType = tileEntityType;
         this.containerType = containerType;
         this.outputItem = outputItem;
-        this.inventorySize = inventorySize;
+        this.inputSlotCount = inputSlotCount;
         this.categories = ImmutableSet.copyOf(categories);
     }
 
@@ -68,6 +68,6 @@ public class CompounderBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CompounderTileEntity(this.tileEntityType.get(), this.containerType.get(), this.outputItem, this.inventorySize, this.categories);
+        return new CompounderTileEntity(this.tileEntityType.get(), this.containerType.get(), this.outputItem, this.inputSlotCount, this.categories);
     }
 }

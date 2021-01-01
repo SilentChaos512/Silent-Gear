@@ -34,7 +34,7 @@ public class CompounderContainer extends Container {
 
         //assertInventorySize(this.inventory, CompounderTileEntity.INVENTORY_SIZE);
 
-        for (int i = 0; i < this.inventory.getSizeInventory() - 1; ++i) {
+        for (int i = 0; i < this.inventory.getSizeInventory() - 2; ++i) {
             addSlot(new Slot(this.inventory, i, 17 + 18 * i, 35) {
                 @Override
                 public boolean isItemValid(ItemStack stack) {
@@ -42,7 +42,13 @@ public class CompounderContainer extends Container {
                 }
             });
         }
-        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getSizeInventory() - 1, 126, 35));
+        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getSizeInventory() - 2, 126, 35));
+        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getSizeInventory() - 1, 126, 60) {
+            @Override
+            public boolean canTakeStack(PlayerEntity playerIn) {
+                return false;
+            }
+        });
 
         InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 

@@ -32,22 +32,26 @@ import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 public class CompounderTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
-    public static final int STANDARD_SIZE = 5;
+    public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 10 : 15);
 
     private final ContainerType<? extends CompounderContainer> containerType;
     private final Collection<IMaterialCategory> categories;
     private final Supplier<CompoundMaterialItem> outputItem;
 
-    @SyncVariable(name = "progress")
+    @SyncVariable(name = "Progress")
     private int progress = 0;
+    @SyncVariable(name = "WorkEnabled")
+    private boolean workEnabled = true;
 
-    private final IIntArray fields = new IIntArray() {
+    @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final IIntArray fields = new IIntArray() {
         @Override
         public int get(int index) {
             switch (index) {
                 case 0:
                     return progress;
+                case 1:
+                    return workEnabled ? 1 : 0;
                 default:
                     return 0;
             }
@@ -59,21 +63,24 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
                 case 0:
                     progress = value;
                     break;
+                case 1:
+                    workEnabled = value != 0;
+                    break;
             }
         }
 
         @Override
         public int size() {
-            return 1;
+            return 2;
         }
     };
 
     public CompounderTileEntity(TileEntityType<?> typeIn,
                                 ContainerType<? extends CompounderContainer> containerType,
                                 Supplier<CompoundMaterialItem> outputItem,
-                                int inventorySize,
+                                int inputSlotCount,
                                 Collection<IMaterialCategory> categoriesIn) {
-        super(typeIn, inventorySize);
+        super(typeIn, inputSlotCount + 2);
         this.containerType = containerType;
         this.outputItem = outputItem;
         this.categories = ImmutableSet.copyOf(categoriesIn);
@@ -84,42 +91,82 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         return material != null && material.getMaterial().isSimple() && material.hasAnyCategory(categories);
     }
 
-    public CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
+    public boolean isWorkEnabled() {
+        return workEnabled;
+    }
+
+    public void setWorkEnabled(boolean workEnabled) {
+        this.workEnabled = workEnabled;
+    }
+
+    public int getInputSlotCount() {
+        return getSizeInventory() - 2;
+    }
+
+    public int getOutputSlotIndex() {
+        return getSizeInventory() - 2;
+    }
+
+    public int getOutputHintSlotIndex() {
+        return getSizeInventory() - 1;
+    }
+
+    private CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
         return this.outputItem.get();
+    }
+
+    public void encodeExtraData(PacketBuffer buffer) {
+        buffer.writeByte(this.items.size());
+        buffer.writeByte(this.fields.size());
     }
 
     @Override
     public void tick() {
-        if (world == null) {
+        if (world == null || world.isRemote) {
             return;
         }
 
         List<MaterialInstance> materials = getInputs();
         if (!hasMultipleMaterials(materials)) {
-            progress = 0;
+            stopWork();
             return;
         }
 
-        ItemStack current = getStackInSlot(getSizeInventory() - 1);
+        ItemStack current = getStackInSlot(getOutputSlotIndex());
         if (!current.isEmpty()) {
             ItemStack output = getOutputItem(materials).create(materials);
             if (!InventoryUtils.canItemsStack(current, output) || current.getCount() + output.getCount() > output.getMaxStackSize()) {
+                stopWork();
                 return;
             }
         }
 
-        if (progress < WORK_TIME) {
-            ++progress;
-        }
+        if (workEnabled) {
+            if (getStackInSlot(getOutputHintSlotIndex()).isEmpty()) {
+                ItemStack hintStack = getOutputItem(materials).create(materials);
+                hintStack.setCount(1);
+                setInventorySlotContents(getOutputHintSlotIndex(), hintStack);
+                markDirty();
+            }
 
-        if (progress >= WORK_TIME && !world.isRemote) {
-            finishWork(materials, current);
+            if (progress < WORK_TIME) {
+                ++progress;
+            }
+
+            if (progress >= WORK_TIME && !world.isRemote) {
+                finishWork(materials, current);
+            }
         }
+    }
+
+    private void stopWork() {
+        progress = 0;
+        setInventorySlotContents(getOutputHintSlotIndex(), ItemStack.EMPTY);
     }
 
     private void finishWork(List<MaterialInstance> materials, ItemStack current) {
         progress = 0;
-        for (int i = 0; i < getSizeInventory() - 1; ++i) {
+        for (int i = 0; i < getInputSlotCount(); ++i) {
             decrStackSize(i, 1);
         }
 
@@ -127,7 +174,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
             current.grow(materials.size());
         } else {
             ItemStack output = getOutputItem(materials).create(materials);
-            setInventorySlotContents(getSizeInventory() - 1, output);
+            setInventorySlotContents(getOutputSlotIndex(), output);
         }
     }
 
@@ -148,9 +195,8 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     private List<MaterialInstance> getInputs() {
         boolean allEmpty = true;
-        int inputSlotCount = getSizeInventory() - 1;
 
-        for (int i = 0; i < inputSlotCount; ++i) {
+        for (int i = 0; i < getInputSlotCount(); ++i) {
             ItemStack stack = getStackInSlot(i);
             if (!stack.isEmpty()) {
                 allEmpty = false;
@@ -164,7 +210,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
         List<MaterialInstance> ret = new ArrayList<>();
 
-        for (int i = 0; i < inputSlotCount; ++i) {
+        for (int i = 0; i < getInputSlotCount(); ++i) {
             ItemStack stack = getStackInSlot(i);
             MaterialInstance material = MaterialInstance.from(stack);
             if (material != null && material.getMaterial().isSimple()) {
@@ -175,6 +221,16 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         return ret;
     }
 
+    private static boolean isSimpleMaterial(ItemStack stack) {
+        IMaterial material = MaterialManager.from(stack);
+        return material != null && material.isSimple();
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        super.setInventorySlotContents(index, stack);
+    }
+
     @Override
     public int[] getSlotsForFace(Direction side) {
         return IntStream.range(0, this.items.size()).toArray();
@@ -183,11 +239,6 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         return index < this.items.size() - 1 && isSimpleMaterial(stack);
-    }
-
-    private static boolean isSimpleMaterial(ItemStack stack) {
-        IMaterial material = MaterialManager.from(stack);
-        return material != null && material.isSimple();
     }
 
     @Override
@@ -208,10 +259,5 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
         return new CompounderContainer(this.containerType, id, player, this, this.fields, this.categories);
-    }
-
-    public void encodeExtraData(PacketBuffer buffer) {
-        buffer.writeByte(this.items.size());
-        buffer.writeByte(this.fields.size());
     }
 }
