@@ -139,7 +139,7 @@ public final class PartMaterial implements IMaterial {
 
     @Override
     public Collection<StatGearKey> getStatKeys(PartType type) {
-        return this.stats.get(type).keySet();
+        return this.stats.getOrDefault(type, EMPTY_STAT_MAP).keySet();
     }
 
     @Override
