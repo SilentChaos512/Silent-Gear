@@ -56,7 +56,7 @@ public final class ItemStats {
     );
     public static final ItemStat RARITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
-            .affectedByGrades(true)
+            .affectedByGrades(false)
             .hidden()
     );
 

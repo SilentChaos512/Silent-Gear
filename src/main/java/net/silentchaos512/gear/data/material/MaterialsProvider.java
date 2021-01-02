@@ -46,9 +46,16 @@ public class MaterialsProvider implements IDataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
+    private final String modId;
 
+    @Deprecated
     public MaterialsProvider(DataGenerator generator) {
+        this(generator, SilentGear.MOD_ID);
+    }
+
+    public MaterialsProvider(DataGenerator generator, String modId) {
         this.generator = generator;
+        this.modId = modId;
     }
 
     @Override
@@ -56,7 +63,7 @@ public class MaterialsProvider implements IDataProvider {
         return "Silent Gear - Materials";
     }
 
-    @SuppressWarnings({"MethodMayBeStatic", "OverlyLongMethod"})
+    @SuppressWarnings("OverlyLongMethod")
     protected Collection<MaterialBuilder> getMaterials() {
         ResourceLocation chargeability = new ResourceLocation("silentgems", "chargeability");
 
@@ -65,7 +72,7 @@ public class MaterialsProvider implements IDataProvider {
         //region Base Materials
 
         // Azure Electrum
-        ret.add(new MaterialBuilder(SilentGear.getId("azure_electrum"), 4, ModTags.Items.INGOTS_AZURE_ELECTRUM)
+        ret.add(new MaterialBuilder(modId("azure_electrum"), 4, ModTags.Items.INGOTS_AZURE_ELECTRUM)
                 .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1259)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 61)
@@ -76,7 +83,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 7)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 11)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(3, 7, 6, 3, 8, 19)
+                .mainStatsArmor(3, 7, 6, 3, 8, 19) //19
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 2f)
@@ -110,7 +117,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0x4575E3)
         );
         // Azure Silver
-        ret.add(new MaterialBuilder(SilentGear.getId("azure_silver"), 3, ModTags.Items.INGOTS_AZURE_SILVER)
+        ret.add(new MaterialBuilder(modId("azure_silver"), 3, ModTags.Items.INGOTS_AZURE_SILVER)
                 .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 197)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 17)
@@ -121,7 +128,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 5)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 7)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(2, 5, 4, 2, 0, 13)
+                .mainStatsArmor(2, 5, 4, 2, 0, 13) //13
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.2f)
@@ -149,7 +156,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0xCBBAFF)
         );
         // Barrier
-        ret.add(new MaterialBuilder(SilentGear.getId("barrier"), 5, Items.BARRIER)
+        ret.add(new MaterialBuilder(modId("barrier"), 5, Items.BARRIER)
                 .categories(MaterialCategories.INTANGIBLE)
                 .visible(false)
                 .canSalvage(false)
@@ -175,7 +182,7 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
         );
         // Basalt
-        ret.add(new MaterialBuilder(SilentGear.getId("basalt"), 1, Items.BASALT)
+        ret.add(new MaterialBuilder(modId("basalt"), 1, Items.BASALT)
                 .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 137)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
@@ -185,7 +192,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(1, 3, 1, 1, 0, 0)
+                .mainStatsArmor(1, 3, 1, 1, 0, 0) //6
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -206,7 +213,7 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
         );
         // Blackstone
-        ret.add(new MaterialBuilder(SilentGear.getId("blackstone"), 1, Items.BLACKSTONE)
+        ret.add(new MaterialBuilder(modId("blackstone"), 1, Items.BLACKSTONE)
                 .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 151)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
@@ -216,7 +223,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(1, 2, 1, 1, 0, 0)
+                .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -241,7 +248,7 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x3C3947)
         );
         // Blaze Gold
-        ret.add(new MaterialBuilder(SilentGear.getId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
+        ret.add(new MaterialBuilder(modId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
                 .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 69)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
@@ -251,7 +258,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 5)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
-                .mainStatsArmor(2, 5, 4, 2, 1, 10)
+                .mainStatsArmor(2, 5, 4, 2, 1, 10) //13
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.2f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.2f)
@@ -285,7 +292,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SMOOTH, 0xE48534)
         );
         // Bone
-        ret.add(new MaterialBuilder(SilentGear.getId("bone"), 1, Items.BONE_BLOCK)
+        ret.add(new MaterialBuilder(modId("bone"), 1, Items.BONE_BLOCK)
                 .categories(MaterialCategories.ORGANIC)
                 .partSubstitute(PartType.ROD, Items.BONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 108)
@@ -296,7 +303,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
-                .mainStatsArmor(1, 2, 1, 1, 0, 1)
+                .mainStatsArmor(1, 2, 1, 1, 0, 1) //5
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.9f)
@@ -311,7 +318,7 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFCFBED)
         );
         // Crimson Iron
-        ret.add(new MaterialBuilder(SilentGear.getId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
+        ret.add(new MaterialBuilder(modId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
                 .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 420)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 27)
@@ -323,7 +330,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
                 .stat(PartType.MAIN, ItemStats.ARMOR, 18)
-                .mainStatsArmor(3, 7, 5, 3, 2, 6)
+                .mainStatsArmor(3, 7, 5, 3, 2, 6) //18
                 .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 6)
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
@@ -352,7 +359,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
         );
         // Crimson Steel
-        ret.add(new MaterialBuilder(SilentGear.getId("crimson_steel"), 4, ModTags.Items.INGOTS_CRIMSON_STEEL)
+        ret.add(new MaterialBuilder(modId("crimson_steel"), 4, ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 2400)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 42)
@@ -363,7 +370,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 6)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 6)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
-                .mainStatsArmor(4, 8, 6, 4, 10, 10)
+                .mainStatsArmor(4, 8, 6, 4, 10, 10) //22
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -391,7 +398,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
         );
         // Diamond
-        ret.add(new MaterialBuilder(SilentGear.getId("diamond"), 3, Tags.Items.GEMS_DIAMOND)
+        ret.add(new MaterialBuilder(modId("diamond"), 3, Tags.Items.GEMS_DIAMOND)
                 .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1561)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 33)
@@ -401,7 +408,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
-                .mainStatsArmor(3, 8, 6, 3, 8, 4)
+                .mainStatsArmor(3, 8, 6, 3, 8, 4) //20
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.9f)
@@ -439,7 +446,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
         );
         // Emerald
-        ret.add(new MaterialBuilder(SilentGear.getId("emerald"), 3, Tags.Items.GEMS_EMERALD)
+        ret.add(new MaterialBuilder(modId("emerald"), 3, Tags.Items.GEMS_EMERALD)
                 .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1080)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 24)
@@ -450,7 +457,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
-                .mainStatsArmor(3, 6, 4, 3, 4, 6)
+                .mainStatsArmor(3, 6, 4, 3, 4, 6) //16
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.1f)
@@ -482,7 +489,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
         );
         // End Stone
-        ret.add(new MaterialBuilder(SilentGear.getId("end_stone"), 1, Tags.Items.END_STONES)
+        ret.add(new MaterialBuilder(modId("end_stone"), 1, Tags.Items.END_STONES)
                 .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1164)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
@@ -493,7 +500,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
-                .mainStatsArmor(3, 5, 4, 3, 1, 6)
+                .mainStatsArmor(3, 5, 4, 3, 1, 6) //15
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -511,7 +518,7 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFFFCC)
         );
         // Example
-        ret.add(new MaterialBuilder(SilentGear.getId("example"), 0, Ingredient.EMPTY)
+        ret.add(new MaterialBuilder(modId("example"), 0, Ingredient.EMPTY)
                 .categories(MaterialCategories.INTANGIBLE)
                 .visible(false)
                 .canSalvage(false)
@@ -544,7 +551,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
         );
         // Feather
-        ret.add(new MaterialBuilder(SilentGear.getId("feather"), 1, Tags.Items.FEATHERS)
+        ret.add(new MaterialBuilder(modId("feather"), 1, Tags.Items.FEATHERS)
                 .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 0.9f)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 1.1f)
@@ -552,7 +559,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Flax
-        ret.add(new MaterialBuilder(SilentGear.getId("flax"), 1, CraftingItems.FLAX_STRING)
+        ret.add(new MaterialBuilder(modId("flax"), 1, CraftingItems.FLAX_STRING)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
@@ -569,7 +576,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.CLOTH, 0x845E37)
         );
         // Flint
-        ret.add(new MaterialBuilder(SilentGear.getId("flint"), 1, Items.FLINT)
+        ret.add(new MaterialBuilder(modId("flint"), 1, Items.FLINT)
                 .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 124)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
@@ -579,7 +586,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
-                .mainStatsArmor(0.5f, 2f, 1f, 0.5f, 0, 0)
+                .mainStatsArmor(0.5f, 2f, 1f, 0.5f, 0, 0) //4
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.3f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
@@ -595,7 +602,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAll(PartTextureSet.HIGH_CONTRAST, 0x969696)
         );
         // Glowstone
-        ret.add(new MaterialBuilder(SilentGear.getId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
+        ret.add(new MaterialBuilder(modId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
                 .categories(MaterialCategories.GEM, MaterialCategories.DUST)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.4f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -610,7 +617,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.DUST, 0xD2D200)
         );
         // Gold
-        ret.add(new MaterialBuilder(SilentGear.getId("gold"), 2, Tags.Items.INGOTS_GOLD)
+        ret.add(new MaterialBuilder(modId("gold"), 2, Tags.Items.INGOTS_GOLD)
                 .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 32)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 7)
@@ -620,7 +627,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
-                .mainStatsArmor(2, 5, 3, 1, 0, 8)
+                .mainStatsArmor(2, 5, 3, 1, 0, 8) //11
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.3f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.1f)
@@ -647,7 +654,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SMOOTH, 0xEAEE57)
         );
         // Iron
-        ret.add(new MaterialBuilder(SilentGear.getId("iron"), 2, Tags.Items.INGOTS_IRON)
+        ret.add(new MaterialBuilder(modId("iron"), 2, Tags.Items.INGOTS_IRON)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 250)
@@ -658,7 +665,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
-                .mainStatsArmor(2, 6, 5, 2, 0, 6)
+                .mainStatsArmor(2, 6, 5, 2, 0, 6) //15
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
@@ -686,7 +693,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayTip(PartTextures.TIP_SHARP, Color.VALUE_WHITE)
         );
         // Lapis Lazuli
-        ret.add(new MaterialBuilder(SilentGear.getId("lapis_lazuli"), 2, Tags.Items.GEMS_LAPIS)
+        ret.add(new MaterialBuilder(modId("lapis_lazuli"), 2, Tags.Items.GEMS_LAPIS)
                 .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 200)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
@@ -696,7 +703,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(2, 6, 5, 2, 0, 10)
+                .mainStatsArmor(2, 6, 5, 2, 0, 10) //15
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
@@ -726,10 +733,10 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.METAL, 0x224BAF)
         );
         // Leather
-        ret.add(new MaterialBuilder(SilentGear.getId("leather"), 0, Tags.Items.LEATHER)
+        ret.add(new MaterialBuilder(modId("leather"), 0, Tags.Items.LEATHER)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .mainStatsCommon(0, 5, 15, 11)
-                .mainStatsArmor(1, 3, 2, 1, 0, 8)
+                .mainStatsArmor(1, 3, 2, 1, 0, 8) //7
                 .stat(PartType.MAIN, chargeability, 0.8f)
                 .stat(PartType.GRIP, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.1f, StatInstance.Operation.MUL1)
@@ -743,7 +750,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.CLOTH, 0xC65C35)
         );
         // Leaves
-        ret.add(new MaterialBuilder(SilentGear.getId("leaves"), 1, ItemTags.LEAVES)
+        ret.add(new MaterialBuilder(modId("leaves"), 1, ItemTags.LEAVES)
                 .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
@@ -751,14 +758,14 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.CLOTH, 0x4A8F28)
         );
         // Netherrack
-        ret.add(new MaterialBuilder(SilentGear.getId("netherrack"), 1, Tags.Items.NETHERRACK)
+        ret.add(new MaterialBuilder(modId("netherrack"), 1, Tags.Items.NETHERRACK)
                 .categories(MaterialCategories.ROCK, MaterialCategories.ORGANIC)
                 .mainStatsCommon(142, 5, 8, 11)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
                 .mainStatsHarvest(1, 5)
                 .mainStatsMelee(0.5f, 0.5f, -0.1f)
                 .mainStatsRanged(0.5f, 0.1f)
-                .mainStatsArmor(1, 4, 2, 1, 0, 4)
+                .mainStatsArmor(1, 4, 2, 1, 0, 4) //8
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.8f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.0f)
                 .stat(PartType.MAIN, chargeability, 0.8f)
@@ -772,7 +779,7 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x854242)
         );
         // Netherite
-        ret.add(new MaterialBuilder(SilentGear.getId("netherite"), 4, Items.NETHERITE_INGOT)
+        ret.add(new MaterialBuilder(modId("netherite"), 4, Items.NETHERITE_INGOT)
                 .categories(MaterialCategories.METAL)
                 .namePrefix(TextUtil.translate("material", "netherite"))
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.3f, StatInstance.Operation.MUL2)
@@ -791,7 +798,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.DUST, 0x867B86)
         );
         // Netherwood
-        ret.add(new MaterialBuilder(SilentGear.getId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
+        ret.add(new MaterialBuilder(modId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_NETHERWOOD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 72)
@@ -804,7 +811,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
-                .mainStatsArmor(1, 4, 2, 1, 0, 6)
+                .mainStatsArmor(1, 4, 2, 1, 0, 6) //8
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -824,7 +831,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.WOOD, 0xD83200)
         );
         // Obsidian
-        ret.add(new MaterialBuilder(SilentGear.getId("obsidian"), 3, Tags.Items.OBSIDIAN)
+        ret.add(new MaterialBuilder(modId("obsidian"), 3, Tags.Items.OBSIDIAN)
                 .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 3072)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
@@ -835,7 +842,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.4f)
-                .mainStatsArmor(3, 8, 6, 3, 4, 8)
+                .mainStatsArmor(3, 8, 6, 3, 4, 8) //20
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.4f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.7f)
@@ -852,10 +859,10 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x443464)
         );
         // Phantom Membrane
-        ret.add(new MaterialBuilder(SilentGear.getId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
+        ret.add(new MaterialBuilder(modId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .mainStatsCommon(0, 36, 10, 35)
-                .mainStatsArmor(1, 2, 2, 1, 0, 8)
+                .mainStatsArmor(1, 2, 2, 1, 0, 8) //6
                 .stat(PartType.MAIN, chargeability, 0.5f)
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.15f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
@@ -868,7 +875,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
         );
         // Prismarine
-        ret.add(new MaterialBuilder(SilentGear.getId("prismarine"), 3, Tags.Items.GEMS_PRISMARINE)
+        ret.add(new MaterialBuilder(modId("prismarine"), 3, Tags.Items.GEMS_PRISMARINE)
                 .categories(MaterialCategories.GEM, MaterialCategories.ORGANIC)
                 .namePrefix(TextUtil.translate("material", "prismarine"))
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.075f, StatInstance.Operation.MUL2)
@@ -884,7 +891,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.DUST, 0x91C5B7)
         );
         // Quartz
-        ret.add(new MaterialBuilder(SilentGear.getId("quartz"), 2, Tags.Items.GEMS_QUARTZ)
+        ret.add(new MaterialBuilder(modId("quartz"), 2, Tags.Items.GEMS_QUARTZ)
                 .categories(MaterialCategories.GEM)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
@@ -894,7 +901,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
-                .mainStatsArmor(3, 5, 4, 2, 0, 4)
+                .mainStatsArmor(3, 5, 4, 2, 0, 4) //14
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -926,7 +933,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
         );
         // Redstone
-        ret.add(new MaterialBuilder(SilentGear.getId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)
+        ret.add(new MaterialBuilder(modId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)
                 .categories(MaterialCategories.GEM, MaterialCategories.DUST)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -937,7 +944,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.DUST, 0xBB0000)
         );
         // Sandstone
-        ResourceLocation sgSandstone = SilentGear.getId("sandstone");
+        ResourceLocation sgSandstone = modId("sandstone");
         ret.add(new MaterialBuilder(sgSandstone, 1,
                 ExclusionIngredient.of(Tags.Items.SANDSTONE,
                         Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
@@ -951,7 +958,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
-                .mainStatsArmor(1, 2, 1, 1, 0, 0)
+                .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -964,14 +971,14 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0xE3DBB0)
         );
         // Red sandstone
-        ret.add(new MaterialBuilder(SilentGear.getId("sandstone/red"), -1, Ingredient.fromItems(
+        ret.add(new MaterialBuilder(modId("sandstone/red"), -1, Ingredient.fromItems(
                 Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
                 .parent(sgSandstone)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xD97B30)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD97B30)
         );
         // Sinew
-        ret.add(new MaterialBuilder(SilentGear.getId("sinew"), 1, CraftingItems.SINEW_FIBER)
+        ret.add(new MaterialBuilder(modId("sinew"), 1, CraftingItems.SINEW_FIBER)
                 .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, -0.05f, StatInstance.Operation.MUL1)
@@ -986,18 +993,18 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.CLOTH, 0x7E6962)
         );
         // Slime
-        ret.add(new MaterialBuilder(SilentGear.getId("slime"), 1, Items.SLIME_BALL)
+        ret.add(new MaterialBuilder(modId("slime"), 1, Items.SLIME_BALL)
                 .categories(MaterialCategories.SLIME, MaterialCategories.ORGANIC)
-                .noStats(PartType.LINING)
+                .stat(PartType.LINING, ItemStats.ARMOR_TOUGHNESS, 0.5f, StatInstance.Operation.ADD)
                 .display(PartType.LINING,
                         GearType.PART,
                         new MaterialLayer(PartTextures.LINING_SLIME, 0x8CD782),
-                        new MaterialLayer(SilentGear.getId("lining_slime_highlight"), Color.VALUE_WHITE))
+                        new MaterialLayer(modId("lining_slime_highlight"), Color.VALUE_WHITE))
                 .displayFragment(PartTextures.DUST, 0x8CD782)
         );
 
         // Stone
-        ResourceLocation stone = SilentGear.getId("stone");
+        ResourceLocation stone = modId("stone");
         ret.add(new MaterialBuilder(stone, 1, Tags.Items.COBBLESTONE)
                 .categories(MaterialCategories.ROCK)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_STONE)
@@ -1009,7 +1016,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(1, 2, 1, 1, 0, 0)
+                .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -1025,24 +1032,24 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
         );
-        ret.add(new MaterialBuilder(SilentGear.getId("stone/andesite"), -1, Items.ANDESITE)
+        ret.add(new MaterialBuilder(modId("stone/andesite"), -1, Items.ANDESITE)
                 .parent(stone)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x8A8A8E)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x8A8A8E)
         );
-        ret.add(new MaterialBuilder(SilentGear.getId("stone/diorite"), -1, Items.DIORITE)
+        ret.add(new MaterialBuilder(modId("stone/diorite"), -1, Items.DIORITE)
                 .parent(stone)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
         );
-        ret.add(new MaterialBuilder(SilentGear.getId("stone/granite"), -1, Items.GRANITE)
+        ret.add(new MaterialBuilder(modId("stone/granite"), -1, Items.GRANITE)
                 .parent(stone)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x9F6B58)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9F6B58)
         );
 
         // String
-        ret.add(new MaterialBuilder(SilentGear.getId("string"), 0,
+        ret.add(new MaterialBuilder(modId("string"), 0,
                 ExclusionIngredient.of(Tags.Items.STRING,
                         CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
@@ -1058,7 +1065,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Terracotta
-        ResourceLocation sgTerracotta = SilentGear.getId("terracotta");
+        ResourceLocation sgTerracotta = modId("terracotta");
         ret.add(new MaterialBuilder(sgTerracotta, 1, Items.TERRACOTTA)
                 .categories(MaterialCategories.ROCK)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 165)
@@ -1070,7 +1077,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
-                .mainStatsArmor(2, 3, 3, 1, 0, 3)
+                .mainStatsArmor(2, 3, 3, 1, 0, 3) //9
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -1106,7 +1113,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(terracotta(sgTerracotta, "yellow", Items.YELLOW_TERRACOTTA, 0xB98423));
 
         // Turtle
-        ret.add(new MaterialBuilder(SilentGear.getId("turtle"), 2, Items.SCUTE)
+        ret.add(new MaterialBuilder(modId("turtle"), 2, Items.SCUTE)
                 .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.HELMET, 25)
@@ -1116,18 +1123,18 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, chargeability, 0.5f)
                 .trait(PartType.MAIN, Const.Traits.TURTLE, 1,
                         new MaterialCountTraitCondition(3))
-                .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(SilentGear.getId("turtle"), 0x47BF4A))
+                .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(modId("turtle"), 0x47BF4A))
         );
 
         // Vines
-        ret.add(new MaterialBuilder(SilentGear.getId("vine"), 0, Items.VINE)
+        ret.add(new MaterialBuilder(modId("vine"), 0, Items.VINE)
                 .categories(MaterialCategories.ORGANIC)
-                .noStats(PartType.BINDING)
+                .noStats(PartType.BINDING) // TODO
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
         );
 
         // Wood
-        ResourceLocation sgWood = SilentGear.getId("wood");
+        ResourceLocation sgWood = modId("wood");
         ret.add(new MaterialBuilder(sgWood, 0,
                 ExclusionIngredient.of(ItemTags.PLANKS,
                         Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS))
@@ -1144,7 +1151,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
-                .mainStatsArmor(1, 3, 2, 1, 0, 2)
+                .mainStatsArmor(1, 3, 2, 1, 0, 2) //7
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
@@ -1178,7 +1185,7 @@ public class MaterialsProvider implements IDataProvider {
         );
 
         // Rough wood
-        ret.add(new MaterialBuilder(SilentGear.getId("wood/rough"), 0, Ingredient.EMPTY)
+        ret.add(new MaterialBuilder(modId("wood/rough"), 0, Ingredient.EMPTY)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .namePrefix(TextUtil.misc("crude"))
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_ROUGH)
@@ -1190,12 +1197,12 @@ public class MaterialsProvider implements IDataProvider {
         );
 
         // Wool
-        ResourceLocation sgWool = SilentGear.getId("wool");
+        ResourceLocation sgWool = modId("wool");
         ret.add(new MaterialBuilder(sgWool, 0, ExclusionIngredient.of(ItemTags.WOOL,
                 Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.CYAN_WOOL, Items.GRAY_WOOL, Items.GREEN_WOOL, Items.LIGHT_BLUE_WOOL, Items.LIGHT_GRAY_WOOL, Items.LIME_WOOL, Items.MAGENTA_WOOL, Items.ORANGE_WOOL, Items.PINK_WOOL, Items.PURPLE_WOOL, Items.RED_WOOL, Items.WHITE_WOOL, Items.YELLOW_WOOL))
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 .mainStatsCommon(0, 4, 7, 7)
-                .mainStatsArmor(0.5f, 2f, 1.0f, 0.5f, 0, 4)
+                .mainStatsArmor(0.5f, 2f, 1.0f, 0.5f, 0, 4) //4
                 .stat(PartType.MAIN, chargeability, 0.7f)
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
@@ -2037,8 +2044,13 @@ public class MaterialsProvider implements IDataProvider {
         return new OrTraitCondition(new MaterialCountTraitCondition(count), new MaterialRatioTraitCondition(ratio));
     }
 
-    private static ResourceLocation forgeId(String path) {
+    @SuppressWarnings("WeakerAccess")
+    protected static ResourceLocation forgeId(String path) {
         return new ResourceLocation("forge", path);
+    }
+
+    protected ResourceLocation modId(String path) {
+        return new ResourceLocation(this.modId, path);
     }
 
     @Override

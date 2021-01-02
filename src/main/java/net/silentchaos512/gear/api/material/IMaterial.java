@@ -212,7 +212,7 @@ public interface IMaterial {
      * should be used in most cases.
      *
      * @param material The material
-     * @param stat     The stat
+     * @param key     The stat and gear type
      * @param partType The part type
      * @return The calculated stat
      */

@@ -56,7 +56,7 @@ public final class SynergyUtils {
             }
             if (maxTier > 0) {
                 int tier = material.getTier(partType);
-                synergy -= 0.16 * Math.abs(maxTier - tier);
+                synergy -= 0.08 * Math.abs(maxTier - tier);
             }
         }
 
