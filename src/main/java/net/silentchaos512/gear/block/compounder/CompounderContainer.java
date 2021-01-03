@@ -79,34 +79,34 @@ public class CompounderContainer extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack stack1 = slot.getStack();
             stack = stack1.copy();
-            final int size = inventory.getSizeInventory();
-            final int startPlayer = size;
-            final int endPlayer = size + 27;
-            final int startHotbar = size + 27;
-            final int endHotbar = size + 36;
-            int outputSlot = size - 1;
+            final int inventorySize = inventory.getSizeInventory();
+            final int playerInventoryEnd = inventorySize + 27;
+            final int playerHotbarEnd = playerInventoryEnd + 9;
+            int outputSlot = inventorySize - 2;
 
             if (index == outputSlot) {
-                // Remove from output slot?
-                if (!this.mergeItemStack(stack1, startPlayer, endHotbar, true)) {
+                // Move output to player
+                if (!this.mergeItemStack(stack1, inventorySize, playerHotbarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index < outputSlot && inventory.isItemValidForSlot(index, stack1)) {
-                // Move from player to input slots?
-                if (!mergeItemStack(stack1, 0, outputSlot, false)) {
+
+                slot.onSlotChange(stack1, stack);
+            } else if (index >= inventorySize) {
+                if (isValidIngredient()) {
+                    if (!this.mergeItemStack(stack1, 0, outputSlot, false)) {
+                        // Move from player or hotbar to input slots
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < playerInventoryEnd) {
+                    if (!this.mergeItemStack(stack1, playerInventoryEnd, playerHotbarEnd, false)) {
+                        // Move from player to hotbar
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < playerHotbarEnd && !this.mergeItemStack(stack1, inventorySize, playerInventoryEnd, false)) {
+                    // Move from hotbar to player
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= startPlayer && index < endPlayer) {
-                // Move player items to hotbar.
-                if (!mergeItemStack(stack1, startHotbar, endHotbar, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (index >= startHotbar && index < endHotbar) {
-                // Move player items from hotbar.
-                if (!mergeItemStack(stack1, startPlayer, endPlayer, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!mergeItemStack(stack1, startPlayer, endHotbar, false)) {
+            } else if (!this.mergeItemStack(stack1, inventorySize, playerHotbarEnd, false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -124,5 +124,9 @@ public class CompounderContainer extends Container {
         }
 
         return stack;
+    }
+
+    private boolean isValidIngredient() {
+        return true; // TODO
     }
 }
