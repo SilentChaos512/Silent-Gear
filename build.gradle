@@ -24,7 +24,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 repositories {
     flatDir {
@@ -206,20 +206,14 @@ dependencies {
 jar {
     appendix = "${project.mc_version}"
     manifest {
-        attributes(["Specification-Title"     : project.mod_id,
+        attributes(["Specification-Title"     : project.name,
                     "Specification-Vendor"    : "SilentChaos512",
-                    "Specification-Version"   : "1.2",
+                    "Specification-Version"   : "${version}",
                     "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${version}",
                     "Implementation-Vendor"   : "SilentChaos512",
+                    "Implementation-Version"  : "${version}",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
-}
-
-task deobfJar(type: Jar) {
-    appendix = "${project.mc_version}"
-    classifier = 'deobf'
-    from sourceSets.main.output
 }
 
 task sourcesJar(type: Jar) {
@@ -234,16 +228,18 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.getDestinationDir()
 }
 
+task apiJar(type: Jar) {
+    appendix = "${project.mc_version}"
+    classifier = 'api'
+    include 'net/silentchaos512/gear/api/**/*'
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+}
+
 artifacts {
-    if (project.hasProperty('doDeobfJar')) {
-        archives deobfJar
-    }
-    if (project.hasProperty('doSourceJar')) {
-        archives sourcesJar
-    }
-    if (project.hasProperty('doJavadocJar')) {
-        archives javadocJar
-    }
+    archives javadocJar
+    archives sourcesJar
+    archives apiJar
 }
 
 class Secrets {
