@@ -1,0 +1,18 @@
+{
+  "type": "silentgear:compound",
+  "availability": {
+    "categories": [
+      "gem"
+    ],
+    "visible": true,
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:hybrid_gem"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.hybrid_gem"
+  }
+}

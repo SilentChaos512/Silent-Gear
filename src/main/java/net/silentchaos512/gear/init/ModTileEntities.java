@@ -52,6 +52,6 @@ public final class ModTileEntities {
                 ModContainers.RECRYSTALLIZER.get(),
                 ModItems.HYBRID_GEM,
                 CompounderTileEntity.STANDARD_INPUT_SLOTS,
-                ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST));
+                ImmutableList.of(MaterialCategories.GEM, MaterialCategories.DUST));
     }
 }
