@@ -153,7 +153,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
             doWork(recipe, Collections.emptyList());
         } else {
             List<MaterialInstance> materials = getInputs();
-            if (!hasMultipleMaterials(materials)) {
+            if (!hasMultipleMaterials(materials) || !canCompoundMaterials(materials)) {
                 stopWork();
                 return;
             }
@@ -227,6 +227,15 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
 
         return false;
+    }
+
+    private boolean canCompoundMaterials(List<MaterialInstance> materials) {
+        for (MaterialInstance material : materials) {
+            if (!material.hasAnyCategory(this.categories)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private List<MaterialInstance> getInputs() {
