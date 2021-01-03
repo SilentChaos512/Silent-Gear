@@ -220,6 +220,12 @@ public final class ModItems {
     public static final ItemRegistryObject<CompoundMaterialItem> HYBRID_GEM = register("hybrid_gem", () ->
             new CompoundMaterialItem(baseProps()));
 
+    // Custom materials
+    public static final ItemRegistryObject<CustomMaterialItem> CUSTOM_INGOT = register("custom_ingot", () ->
+            new CustomMaterialItem(baseProps()));
+    public static final ItemRegistryObject<CustomMaterialItem> CUSTOM_GEM = register("custom_gem", () ->
+            new CustomMaterialItem(baseProps()));
+
     static {
         CraftingItems.register(Registration.ITEMS);
     }

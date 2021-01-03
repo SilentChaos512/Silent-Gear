@@ -18,6 +18,9 @@ public final class Const {
     // Recipe types and categories
     public static final ResourceLocation COMBINE_FRAGMENTS = SilentGear.getId("combine_fragments");
     public static final ResourceLocation COMPOUND_PART = SilentGear.getId("compound_part");
+    public static final ResourceLocation COMPOUNDING = SilentGear.getId("compounding");
+    public static final ResourceLocation COMPOUNDING_GEM = SilentGear.getId("compounding/gem");
+    public static final ResourceLocation COMPOUNDING_METAL = SilentGear.getId("compounding/metal");
     public static final ResourceLocation DAMAGE_ITEM = SilentGear.getId("damage_item");
     public static final ResourceLocation FILL_REPAIR_KIT = SilentGear.getId("fill_repair_kit");
     public static final ResourceLocation GRADING = SilentGear.getId("grading");

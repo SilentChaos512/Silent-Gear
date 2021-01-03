@@ -10,7 +10,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.init.Registration;
-import net.silentchaos512.gear.item.CompoundMaterialItem;
+import net.silentchaos512.gear.item.IColoredMaterialItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.item.gear.CoreShield;
 import net.silentchaos512.gear.util.GearData;
@@ -39,7 +39,10 @@ public final class ColorHandlers {
                 .map(item -> (ICoreItem) item)
                 .forEach(item -> itemColors.register(item.getItemColors(), item));
 
-        Registration.getItems(CompoundMaterialItem.class).forEach(item -> itemColors.register(item::getColor, item));
+        Registration.getItems(item -> item instanceof IColoredMaterialItem).forEach(item -> {
+            IColoredMaterialItem coloredMaterialItem = (IColoredMaterialItem) item;
+            itemColors.register(coloredMaterialItem::getColor, item);
+        });
     }
 
     private static void register(ItemColors colors, IItemColor itemColor, ItemRegistryObject<? extends Item> item) {

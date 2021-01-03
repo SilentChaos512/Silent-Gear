@@ -10,6 +10,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
@@ -21,6 +22,8 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
+import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.gear.api.util.StatGearKey;
@@ -28,27 +31,29 @@ import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class PartMaterial implements IMaterial {
     private final ResourceLocation materialId;
-    @Nullable private ResourceLocation parent;
-    private final String packName;
-    private final Collection<IMaterialCategory> categories = new ArrayList<>();
-    private Ingredient ingredient = Ingredient.EMPTY;
-    private final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
-    private boolean visible = true;
-    private int tier = -1;
-    private boolean canSalvage = true;
+    @Nullable ResourceLocation parent;
+    final String packName;
+    final Collection<IMaterialCategory> categories = new ArrayList<>();
+    Ingredient ingredient = Ingredient.EMPTY;
+    final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
+    boolean visible = true;
+    int tier = -1;
+    boolean canSalvage = true;
+    boolean simple = true;
 
-    private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
-    private final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
+    final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
+    final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
 
-    private ITextComponent displayName;
-    @Nullable private ITextComponent namePrefix = null;
+    ITextComponent displayName;
+    @Nullable ITextComponent namePrefix = null;
     // Keys are part_type/gear_type
-    private final Map<String, MaterialLayerList> display = new HashMap<>();
-    private final List<String> blacklistedGearTypes = new ArrayList<>();
+    final Map<String, MaterialLayerList> display = new HashMap<>();
+    final List<String> blacklistedGearTypes = new ArrayList<>();
 
     public PartMaterial(ResourceLocation id, String packName) {
         this.materialId = id;
@@ -117,7 +122,7 @@ public class PartMaterial implements IMaterial {
 
     @Override
     public boolean isSimple() {
-        return true;
+        return this.simple;
     }
 
     @Override
@@ -243,15 +248,22 @@ public class PartMaterial implements IMaterial {
                 '}';
     }
 
-    public static final class Serializer implements IMaterialSerializer<PartMaterial> {
+    public static final class Serializer<T extends PartMaterial> implements IMaterialSerializer<T> {
         static final int PACK_NAME_MAX_LENGTH = 32;
-        public static final ModResourceLocation NAME = SilentGear.getId("standard");
+
+        private final ResourceLocation id;
+        private final BiFunction<ResourceLocation, String, T> factory;
+
+        public Serializer(ResourceLocation id, BiFunction<ResourceLocation, String, T> factory) {
+            this.id = id;
+            this.factory = factory;
+        }
 
         //region deserialize
 
         @Override
-        public PartMaterial deserialize(ResourceLocation id, String packName, JsonObject json) {
-            PartMaterial ret = new PartMaterial(id, packName);
+        public T deserialize(ResourceLocation id, String packName, JsonObject json) {
+            T ret = this.factory.apply(id, packName);
 
             if (json.has("parent")) {
                 ret.parent = new ResourceLocation(JSONUtils.getString(json, "parent"));
@@ -267,7 +279,7 @@ public class PartMaterial implements IMaterial {
             return ret;
         }
 
-        static void deserializeStats(JsonObject json, PartMaterial ret) {
+        void deserializeStats(JsonObject json, T ret) {
             JsonElement elementStats = json.get("stats");
             if (elementStats != null && elementStats.isJsonObject()) {
                 for (Map.Entry<String, JsonElement> entry : elementStats.getAsJsonObject().entrySet()) {
@@ -281,7 +293,7 @@ public class PartMaterial implements IMaterial {
             }
         }
 
-        private static void deserializeTraits(JsonObject json, PartMaterial ret) {
+        private void deserializeTraits(JsonObject json, T ret) {
             JsonElement elementTraits = json.get("traits");
             if (elementTraits != null && elementTraits.isJsonObject()) {
                 for (Map.Entry<String, JsonElement> entry : elementTraits.getAsJsonObject().entrySet()) {
@@ -301,6 +313,16 @@ public class PartMaterial implements IMaterial {
                 JsonElement main = craftingItems.getAsJsonObject().get("main");
                 if (main != null) {
                     ret.ingredient = Ingredient.deserialize(main);
+                }
+
+                JsonElement customCompound = craftingItems.getAsJsonObject().get("custom_compound");
+                if (customCompound != null && customCompound.isJsonObject()) {
+                    ResourceLocation itemId = new ResourceLocation(JSONUtils.getString(customCompound.getAsJsonObject(), "item"));
+                    Item item = ForgeRegistries.ITEMS.getValue(itemId);
+                    if (!(item instanceof CustomMaterialItem)) {
+                        throw new JsonParseException("Item '" + itemId + "' is not a CustomMaterialItem");
+                    }
+                    ret.ingredient = CustomCompoundIngredient.of((CustomMaterialItem) item, ret.materialId);
                 }
 
                 JsonElement subs = craftingItems.getAsJsonObject().get("subs");
@@ -356,6 +378,8 @@ public class PartMaterial implements IMaterial {
         }
 
         private static void deserializeAvailability(JsonObject json, PartMaterial ret) {
+            ret.simple = JSONUtils.getBoolean(json, "simple", true);
+
             JsonElement elementAvailability = json.get("availability");
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
@@ -399,8 +423,8 @@ public class PartMaterial implements IMaterial {
         // region read/write
 
         @Override
-        public PartMaterial read(ResourceLocation id, PacketBuffer buffer) {
-            PartMaterial material = new PartMaterial(id, buffer.readString(PACK_NAME_MAX_LENGTH));
+        public T read(ResourceLocation id, PacketBuffer buffer) {
+            T material = this.factory.apply(id, buffer.readString(PACK_NAME_MAX_LENGTH));
 
             if (buffer.readBoolean())
                 material.parent = buffer.readResourceLocation();
@@ -417,6 +441,7 @@ public class PartMaterial implements IMaterial {
             material.tier = buffer.readByte();
             material.visible = buffer.readBoolean();
             material.canSalvage = buffer.readBoolean();
+            material.simple = buffer.readBoolean();
             material.ingredient = Ingredient.read(buffer);
 
             int subCount = buffer.readByte();
@@ -448,7 +473,7 @@ public class PartMaterial implements IMaterial {
         }
 
         @Override
-        public void write(PacketBuffer buffer, PartMaterial material) {
+        public void write(PacketBuffer buffer, T material) {
             buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
 
             buffer.writeBoolean(material.parent != null);
@@ -466,6 +491,7 @@ public class PartMaterial implements IMaterial {
             buffer.writeByte(material.tier);
             buffer.writeBoolean(material.visible);
             buffer.writeBoolean(material.canSalvage);
+            buffer.writeBoolean(material.simple);
             material.ingredient.write(buffer);
 
             buffer.writeByte(material.partSubstitutes.size());
@@ -491,7 +517,7 @@ public class PartMaterial implements IMaterial {
 
         @Override
         public ResourceLocation getName() {
-            return NAME;
+            return id;
         }
 
         private static void readStats(PacketBuffer buffer, PartMaterial material) {

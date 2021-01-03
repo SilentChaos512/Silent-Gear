@@ -56,6 +56,16 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/hybrid_gem")
                 .texture("layer1", "item/hybrid_gem_highlight");
 
+        // Custom materials
+        getBuilder(NameUtils.fromItem(ModItems.CUSTOM_INGOT).getPath())
+                .parent(itemGenerated)
+                .texture("layer0", "item/alloy_ingot")
+                .texture("layer1", "item/alloy_ingot_highlight");
+        getBuilder(NameUtils.fromItem(ModItems.CUSTOM_GEM).getPath())
+                .parent(itemGenerated)
+                .texture("layer0", "item/hybrid_gem")
+                .texture("layer1", "item/hybrid_gem_highlight");
+
         getBuilder(NameUtils.fromItem(ModItems.BLUEPRINT_BOOK).getPath())
                 .parent(itemGenerated)
                 .texture("layer0", "item/blueprint_book_cover")
