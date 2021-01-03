@@ -36,7 +36,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class CompoundMaterialItem extends Item {
+public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     private static final String NBT_MATERIALS = "Materials";
 
     public CompoundMaterialItem(Properties properties) {
@@ -120,6 +120,7 @@ public class CompoundMaterialItem extends Item {
         return s.toString();
     }
 
+    @Override
     public int getColor(ItemStack stack, int layer) {
         return ColorUtils.getBlendedColor(this, getSubMaterials(stack), layer);
     }

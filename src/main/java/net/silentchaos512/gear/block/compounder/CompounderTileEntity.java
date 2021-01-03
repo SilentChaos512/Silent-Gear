@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -15,8 +16,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -38,6 +41,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
     private final ContainerType<? extends CompounderContainer> containerType;
     private final Collection<IMaterialCategory> categories;
     private final Supplier<CompoundMaterialItem> outputItem;
+    private final int[] allSlots;
 
     @SyncVariable(name = "Progress")
     private int progress = 0;
@@ -84,11 +88,33 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         this.containerType = containerType;
         this.outputItem = outputItem;
         this.categories = ImmutableSet.copyOf(categoriesIn);
+        this.allSlots = IntStream.range(0, this.items.size()).toArray();
     }
 
     public static boolean canAcceptInput(ItemStack stack, Collection<IMaterialCategory> categories) {
         MaterialInstance material = MaterialInstance.from(stack);
         return material != null && material.getMaterial().isSimple() && material.hasAnyCategory(categories);
+    }
+
+    protected IRecipeType<? extends CompoundingRecipe> getRecipeType() {
+        return ModRecipes.COMPOUNDING_METAL_TYPE;
+    }
+
+    @Nullable
+    public CompoundingRecipe getRecipe() {
+        if (world == null) return null;
+        return world.getRecipeManager().getRecipe(getRecipeType(), this, world).orElse(null);
+    }
+
+    protected CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
+        return this.outputItem.get();
+    }
+
+    protected ItemStack getWorkOutput(@Nullable CompoundingRecipe recipe, List<MaterialInstance> materials) {
+        if (recipe != null) {
+            return recipe.getCraftingResult(this);
+        }
+        return getOutputItem(materials).create(materials);
     }
 
     public boolean isWorkEnabled() {
@@ -111,10 +137,6 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         return getSizeInventory() - 1;
     }
 
-    private CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
-        return this.outputItem.get();
-    }
-
     public void encodeExtraData(PacketBuffer buffer) {
         buffer.writeByte(this.items.size());
         buffer.writeByte(this.fields.size());
@@ -126,35 +148,45 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
             return;
         }
 
-        List<MaterialInstance> materials = getInputs();
-        if (!hasMultipleMaterials(materials)) {
-            stopWork();
-            return;
+        CompoundingRecipe recipe = getRecipe();
+        if (recipe != null) {
+            doWork(recipe, Collections.emptyList());
+        } else {
+            List<MaterialInstance> materials = getInputs();
+            if (!hasMultipleMaterials(materials)) {
+                stopWork();
+                return;
+            }
+
+            doWork(null, materials);
         }
+    }
+
+    private void doWork(@Nullable CompoundingRecipe recipe, List<MaterialInstance> materials) {
+        assert this.world != null;
 
         ItemStack current = getStackInSlot(getOutputSlotIndex());
+        ItemStack output = getWorkOutput(recipe, materials);
+
         if (!current.isEmpty()) {
-            ItemStack output = getOutputItem(materials).create(materials);
-            if (!InventoryUtils.canItemsStack(current, output) || current.getCount() + output.getCount() > output.getMaxStackSize()) {
+            int newCount = current.getCount() + output.getCount();
+
+            if (!InventoryUtils.canItemsStack(current, output) || newCount > output.getMaxStackSize()) {
+                // Output items do not match or not enough room
                 stopWork();
                 return;
             }
         }
 
-        if (workEnabled) {
-            if (getStackInSlot(getOutputHintSlotIndex()).isEmpty()) {
-                ItemStack hintStack = getOutputItem(materials).create(materials);
-                hintStack.setCount(1);
-                setInventorySlotContents(getOutputHintSlotIndex(), hintStack);
-                markDirty();
-            }
+        updateOutputHint(output);
 
+        if (workEnabled) {
             if (progress < WORK_TIME) {
                 ++progress;
             }
 
             if (progress >= WORK_TIME && !world.isRemote) {
-                finishWork(materials, current);
+                finishWork(recipe, materials, current);
             }
         }
     }
@@ -164,7 +196,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         setInventorySlotContents(getOutputHintSlotIndex(), ItemStack.EMPTY);
     }
 
-    private void finishWork(List<MaterialInstance> materials, ItemStack current) {
+    private void finishWork(@Nullable CompoundingRecipe recipe, List<MaterialInstance> materials, ItemStack current) {
         progress = 0;
         for (int i = 0; i < getInputSlotCount(); ++i) {
             decrStackSize(i, 1);
@@ -173,9 +205,13 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         if (!current.isEmpty()) {
             current.grow(materials.size());
         } else {
-            ItemStack output = getOutputItem(materials).create(materials);
+            ItemStack output = getWorkOutput(recipe, materials);
             setInventorySlotContents(getOutputSlotIndex(), output);
         }
+    }
+
+    private void updateOutputHint(ItemStack hintStack) {
+        setInventorySlotContents(getOutputHintSlotIndex(), hintStack);
     }
 
     private static boolean hasMultipleMaterials(List<MaterialInstance> materials) {
@@ -233,12 +269,12 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     @Override
     public int[] getSlotsForFace(Direction side) {
-        return IntStream.range(0, this.items.size()).toArray();
+        return allSlots.clone();
     }
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return index < this.items.size() - 1 && isSimpleMaterial(stack);
+        return index < getInputSlotCount()/* && isSimpleMaterial(stack)*/;
     }
 
     @Override
@@ -248,7 +284,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return index == this.items.size() - 1;
+        return index == getOutputSlotIndex();
     }
 
     @Override

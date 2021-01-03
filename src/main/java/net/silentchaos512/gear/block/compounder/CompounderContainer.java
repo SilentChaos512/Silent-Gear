@@ -35,12 +35,12 @@ public class CompounderContainer extends Container {
         //assertInventorySize(this.inventory, CompounderTileEntity.INVENTORY_SIZE);
 
         for (int i = 0; i < this.inventory.getSizeInventory() - 2; ++i) {
-            addSlot(new Slot(this.inventory, i, 17 + 18 * i, 35) {
+            addSlot(new Slot(this.inventory, i, 17 + 18 * i, 35) /*{
                 @Override
                 public boolean isItemValid(ItemStack stack) {
                     return CompounderTileEntity.canAcceptInput(stack, categories);
                 }
-            });
+            }*/);
         }
         addSlot(new SlotOutputOnly(this.inventory, this.inventory.getSizeInventory() - 2, 126, 35));
         addSlot(new SlotOutputOnly(this.inventory, this.inventory.getSizeInventory() - 1, 126, 60) {

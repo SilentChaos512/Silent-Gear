@@ -260,6 +260,10 @@ public final class MaterialInstance implements IMaterialInstance {
         return text;
     }
 
+    public int getNameColor(PartType partType, GearType gearType) {
+        return material.getNameColor(partType, gearType, this);
+    }
+
     @Override
     public void write(PacketBuffer buffer) {
         buffer.writeResourceLocation(this.material.getId());
