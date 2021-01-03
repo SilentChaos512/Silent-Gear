@@ -17,9 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 
@@ -118,10 +116,7 @@ public class CompoundingRecipe implements IRecipe<IInventory> {
 
             if (item instanceof CustomMaterialItem && resultJson.has("material")) {
                 ResourceLocation id = new ResourceLocation(JSONUtils.getString(resultJson, "material"));
-                IMaterial material = MaterialManager.get(id);
-                if (material != null) {
-                    ret.result = ((CustomMaterialItem) item).create(MaterialInstance.of(material), count);
-                }
+                ret.result = ((CustomMaterialItem) item).create(LazyMaterialInstance.of(id), count);
             }
 
             if (ret.result == null) {
