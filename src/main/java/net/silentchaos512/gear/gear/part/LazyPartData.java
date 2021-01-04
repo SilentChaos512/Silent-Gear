@@ -63,22 +63,22 @@ public class LazyPartData implements IPartData {
     }
 
     @Override
-    public ResourceLocation getPartId() {
+    public ResourceLocation getId() {
         return partId;
     }
 
     @Nullable
     @Override
-    public IGearPart getPart() {
+    public IGearPart get() {
         return PartManager.get(partId);
     }
 
     @Override
-    public ItemStack getCraftingItem() {
+    public ItemStack getItem() {
         if (this.craftingItem.isEmpty()) {
-            IGearPart part = getPart();
+            IGearPart part = get();
             if (part != null) {
-                return PartData.of(part).getCraftingItem();
+                return PartData.of(part).getItem();
             }
         }
         return this.craftingItem;
@@ -99,7 +99,7 @@ public class LazyPartData implements IPartData {
     }
 
     public boolean isValid() {
-        return getPart() != null;
+        return get() != null;
     }
 
     public static LazyPartData deserialize(JsonElement json) {
@@ -116,7 +116,7 @@ public class LazyPartData implements IPartData {
     public static List<PartData> createPartList(Collection<LazyPartData> parts) {
         return parts.stream()
                 .filter(LazyPartData::isValid)
-                .map(LazyPartData::getPart)
+                .map(LazyPartData::get)
                 .filter(Objects::nonNull)
                 .map(PartData::of)
                 .collect(Collectors.toList());

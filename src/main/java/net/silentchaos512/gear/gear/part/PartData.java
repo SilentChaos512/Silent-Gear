@@ -12,9 +12,8 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -25,7 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public final class PartData implements IPartData {
+public final class PartData implements IPartData { // TODO: move to api.part package
     private static final Map<ResourceLocation, PartData> CACHE_UNGRADED_PARTS = new HashMap<>();
     public static final String NBT_ID = "ID";
 
@@ -119,18 +118,18 @@ public final class PartData implements IPartData {
     }
 
     @Override
-    public ResourceLocation getPartId() {
+    public ResourceLocation getId() {
         return part.getId();
     }
 
     @Nonnull
     @Override
-    public IGearPart getPart() {
+    public IGearPart get() {
         return part;
     }
 
     @Override
-    public ItemStack getCraftingItem() {
+    public ItemStack getItem() {
         return craftingItem;
     }
 
@@ -150,21 +149,9 @@ public final class PartData implements IPartData {
         return part.getGearType();
     }
 
-    public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat) {
-        return part.getStatModifiers(stat, this, this.getGearType(), gear);
-    }
-
-    public Collection<StatInstance> getStatModifiers(ItemStack gear, GearType gearType, ItemStat stat) {
-        return part.getStatModifiers(stat, this, gearType, gear);
-    }
-
     @Override
-    public List<TraitInstance> getTraits() {
-        return getTraits(ItemStack.EMPTY);
-    }
-
-    public List<TraitInstance> getTraits(ItemStack gear) {
-        return part.getTraits(this, gear);
+    public Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key, ItemStack gear) {
+        return part.getStatModifiers(this, this.getType(), key, gear);
     }
 
     public List<MaterialInstance> getMaterials() {
@@ -174,7 +161,7 @@ public final class PartData implements IPartData {
     public boolean containsMaterial(DataResource<IMaterial> materialIn) {
         if (materialIn.isPresent()) {
             for (MaterialInstance mat : this.getMaterials()) {
-                if (mat.getMaterial().equals(materialIn.get())) {
+                if (mat.get().equals(materialIn.get())) {
                     return true;
                 }
             }
@@ -183,12 +170,8 @@ public final class PartData implements IPartData {
         return false;
     }
 
-    public boolean isCraftingAllowed(GearType gearType) {
-        return isCraftingAllowed(gearType, null);
-    }
-
     public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInventory inventory) {
-        return part.isCraftingAllowed(this, gearType, inventory);
+        return part.isCraftingAllowed(this, this.getType(), gearType, inventory);
     }
 
     public ITextComponent getDisplayName(ItemStack gear) {
@@ -197,11 +180,6 @@ public final class PartData implements IPartData {
 
     public ITextComponent getMaterialName(ItemStack gear) {
         return part.getMaterialName(this, gear);
-    }
-
-    @Deprecated
-    public float getRepairAmount(ItemStack gear, RepairContext.Type type) {
-        return part.getRepairAmount(new RepairContext(type, gear, this));
     }
 
     @Override

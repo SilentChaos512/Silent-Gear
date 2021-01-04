@@ -48,7 +48,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
         for (MaterialInstance mat : getMaterials(inv)) {
-            if (!mat.getMaterial().isCraftingAllowed(mat, item.getPartType(), this.getGearType())) {
+            if (!mat.get().isCraftingAllowed(mat, item.getPartType(), this.getGearType(), inv)) {
                 return false;
             }
         }

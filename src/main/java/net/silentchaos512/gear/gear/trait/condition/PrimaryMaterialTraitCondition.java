@@ -6,6 +6,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -13,6 +14,7 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
@@ -39,7 +41,8 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
     @Override
     public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         if (materials.isEmpty()) return false;
-        for (TraitInstance t : materials.get(0).getMaterial().getTraits(partType)) {
+        GearType gearType = GearHelper.getType(gear, GearType.ALL);
+        for (TraitInstance t : materials.get(0).getTraits(partType, gearType, gear)) {
             if (t.getTrait() == trait) {
                 return true;
             }

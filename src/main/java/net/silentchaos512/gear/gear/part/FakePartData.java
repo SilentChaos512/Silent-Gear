@@ -8,8 +8,11 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,19 +41,24 @@ public final class FakePartData implements IPartData {
     }
 
     @Override
-    public ResourceLocation getPartId() {
+    public ResourceLocation getId() {
         return FAKE_ID;
     }
 
     @Nullable
     @Override
-    public IGearPart getPart() {
+    public IGearPart get() {
         return null;
     }
 
     @Override
-    public ItemStack getCraftingItem() {
+    public ItemStack getItem() {
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public Collection<TraitInstance> getTraits(PartType partType, GearType gearType, ItemStack gear) {
+        return Collections.emptyList();
     }
 
     @Override

@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
-import net.silentchaos512.gear.client.material.PartGearKey;
+import net.silentchaos512.gear.api.util.PartGearKey;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

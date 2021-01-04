@@ -24,4 +24,8 @@ public interface IItemStat {
     default StatInstance.Operation getDefaultOperation() {
         return StatInstance.Operation.AVG;
     }
+
+    default boolean doesSynergyApply() {
+        return false;
+    }
 }

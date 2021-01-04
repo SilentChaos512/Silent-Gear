@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.util;
+package net.silentchaos512.gear.api.util;
 
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;

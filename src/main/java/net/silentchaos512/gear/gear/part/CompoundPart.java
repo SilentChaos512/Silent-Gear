@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -51,7 +52,7 @@ public class CompoundPart extends AbstractGearPart {
 
     @Nullable
     public static MaterialInstance getPrimaryMaterial(IPartData part) {
-        return CompoundPartItem.getPrimaryMaterial(part.getCraftingItem());
+        return CompoundPartItem.getPrimaryMaterial(part.getItem());
     }
 
     @Override
@@ -76,14 +77,14 @@ public class CompoundPart extends AbstractGearPart {
         if (gear.getItem() instanceof ICoreItem) {
             return ColorUtils.getBlendedColor((ICoreItem) gear.getItem(), part, materials, layer);
         } else {
-            return ColorUtils.getBlendedColor((CompoundPartItem) part.getCraftingItem().getItem(), materials, layer);
+            return ColorUtils.getBlendedColor((CompoundPartItem) part.getItem().getItem(), materials, layer);
         }
     }
 
     @Override
     public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
         if (part != null) {
-            return part.getCraftingItem().getDisplayName();
+            return part.getItem().getDisplayName();
         }
         return super.getDisplayName(null, gear);
     }
@@ -93,7 +94,7 @@ public class CompoundPart extends AbstractGearPart {
         if (part != null) {
             MaterialInstance material = getPrimaryMaterial(part);
             if (material != null) {
-                return material.getMaterial().getDisplayNamePrefix(gear, partType);
+                return material.get().getDisplayNamePrefix(gear, partType);
             }
         }
         return super.getDisplayNamePrefix(part, gear);
@@ -113,29 +114,31 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public String getModelKey(PartData part) {
         String str = "{" + getMaterials(part).stream()
-                .map(m -> SilentGear.shortenId(m.getMaterialId()))
+                .map(m -> SilentGear.shortenId(m.getId()))
                 .collect(Collectors.joining(",")) +
                 "}";
         return super.getModelKey(part) + str;
     }
 
+
+
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, GearType gearType, ItemStack gear) {
+    public Collection<StatInstance> getStatModifiers(IPartData part, PartType partType, StatGearKey key, ItemStack gear) {
         // Get the materials and all the stat modifiers they provide for this stat
         List<MaterialInstance> materials = getMaterials(part);
         List<StatInstance> statMods = materials.stream()
-                .flatMap(m -> m.getStatModifiers(stat, this.partType, gearType).stream())
+                .flatMap(m -> m.getStatModifiers(partType, key).stream())
                 .collect(Collectors.toList());
 
         // Get any base modifiers for this part (could be none)
-        statMods.addAll(this.stats.get(stat, gearType));
+        statMods.addAll(this.stats.get(key));
 
         if (statMods.isEmpty()) {
             // No modifiers for this stat, so doing anything else is pointless
             return statMods;
         }
 
-        GetStatModifierEvent event = new GetStatModifierEvent(part, stat, statMods);
+        GetStatModifierEvent event = new GetStatModifierEvent((PartData) part, (ItemStat) key.getStat(), statMods);
         MinecraftForge.EVENT_BUS.post(event);
 
         // Average together all modifiers of the same op. This makes things like rods with varying
@@ -151,8 +154,8 @@ public class CompoundPart extends AbstractGearPart {
         }
 
         // Synergy
-        if (stat.doesSynergyApply()) {
-            final float synergy = SynergyUtils.getSynergy(partType, materials, getTraits(part, gear));
+        if (key.getStat().doesSynergyApply()) {
+            final float synergy = SynergyUtils.getSynergy(this.partType, materials, getTraits(part, partType, gearType, gear));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 final float multi = synergy - 1f;
                 for (int i = 0; i < ret.size(); ++i) {
@@ -182,8 +185,8 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public List<TraitInstance> getTraits(PartData part, ItemStack gear) {
-        List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, gear));
+    public Collection<TraitInstance> getTraits(IPartData part, PartType partType, GearType gearType, ItemStack gear) {
+        List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, partType, gearType, gear));
         List<MaterialInstance> materials = getMaterials(part);
 
         TraitHelper.getTraits(materials, this.partType, gear).forEach((trait, level) -> {
@@ -197,8 +200,8 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public List<MaterialInstance> getMaterials(PartData part) {
-        return CompoundPartItem.getMaterials(part.getCraftingItem());
+    public List<MaterialInstance> getMaterials(IPartData part) {
+        return CompoundPartItem.getMaterials(part.getItem());
     }
 
     @Override

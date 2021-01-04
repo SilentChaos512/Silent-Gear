@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -83,7 +84,7 @@ public final class StatsCommand {
                 );
 
                 for (PartData part : parts) {
-                    Collection<StatInstance> partMods = part.getStatModifiers(stack, stat);
+                    Collection<StatInstance> partMods = part.getStatModifiers(StatGearKey.of(stat, item.getGearType()), stack);
                     if (!partMods.isEmpty()) {
                         ITextComponent partName = part.getDisplayName(stack);
                         ITextComponent partModsText = StatModifierMap.formatText(partMods, stat, 5, true);

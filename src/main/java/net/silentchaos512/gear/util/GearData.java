@@ -11,6 +11,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -234,23 +235,16 @@ public final class GearData {
         stack.getOrCreateChildTag(NBT_ROOT).remove("ModelKeys");
     }
 
-    @Deprecated
-    public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts, double synergy) {
-        return getStatModifiers(stack, item, parts);
-    }
-
     public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts) {
         GearType gearType = item.getGearType();
         StatModifierMap stats = new StatModifierMap();
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
-            parts.forEach(part -> part.getStatModifiers(stack, gearType, stat).forEach(mod -> stats.put(stat, gearType, mod.copy())));
+            parts.forEach(part -> {
+                StatGearKey key = StatGearKey.of(stat, gearType);
+                part.getStatModifiers(key, stack).forEach(mod -> stats.put(key, mod.copy()));
+            });
         }
         return stats;
-    }
-
-    @Deprecated
-    public static double calculateSynergyValue(PartDataList parts, PartDataList uniqueParts, Map<ITrait, Integer> traits) {
-        return 1;
     }
 
     public static float getStat(ItemStack stack, IItemStat stat) {
@@ -338,7 +332,7 @@ public final class GearData {
         int partCount = parts.size();
         for (int i = 0; i < partCount; ++i) {
             PartData part = parts.get(i);
-            int color = part.getPart().getColor(part, gear, 0, 0);
+            int color = part.get().getColor(part, gear, 0, 0);
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;
@@ -386,8 +380,8 @@ public final class GearData {
     @Nullable
     public static MaterialInstance getPrimaryMainMaterial(ItemStack stack) {
         PartData part = getPrimaryPart(stack);
-        if (part != null && part.getPart() instanceof CompoundPart) {
-            return CompoundPartItem.getPrimaryMaterial(part.getCraftingItem());
+        if (part != null && part.get() instanceof CompoundPart) {
+            return CompoundPartItem.getPrimaryMaterial(part.getItem());
         }
         return null;
     }
@@ -395,8 +389,8 @@ public final class GearData {
     @Nullable
     public static MaterialInstance getPrimaryArmorMaterial(ItemStack stack) {
         PartData coating = getPartOfType(stack, PartType.COATING);
-        if (coating != null && coating.getPart() instanceof CompoundPart) {
-            return CompoundPartItem.getPrimaryMaterial(coating.getCraftingItem());
+        if (coating != null && coating.get() instanceof CompoundPart) {
+            return CompoundPartItem.getPrimaryMaterial(coating.getItem());
         }
         return getPrimaryMainMaterial(stack);
     }
@@ -465,10 +459,10 @@ public final class GearData {
         PartDataList parts = getConstructionParts(gear);
 
         // Make sure the upgrade is valid for the gear type
-        if (!part.getPart().canAddToGear(gear, part))
+        if (!part.get().canAddToGear(gear, part))
             return;
         // Only one allowed of this type? Remove existing if needed.
-        if (part.getPart().replacesExistingInPosition(part)) {
+        if (part.get().replacesExistingInPosition(part)) {
             parts.removeIf(p -> p.getType() == part.getType());
         }
 
@@ -477,7 +471,7 @@ public final class GearData {
 
         // Other upgrades allow no exact duplicates, but any number of total upgrades
         for (PartData partInList : parts) {
-            if (partInList.getPart() == part.getPart()) {
+            if (partInList.get() == part.get()) {
                 return;
             }
         }

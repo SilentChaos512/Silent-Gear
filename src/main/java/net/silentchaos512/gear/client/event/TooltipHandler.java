@@ -23,7 +23,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModTags;
-import net.silentchaos512.gear.util.StatGearKey;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
@@ -115,7 +115,8 @@ public final class TooltipHandler {
         }
 
         if (event.getFlags().isAdvanced()) {
-            event.getToolTip().add(new StringTextComponent("Material ID: " + material.getMaterialId()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("Material ID: " + material.getId()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("Material data pack: " + material.get().getPackName()).mergeStyle(TextFormatting.DARK_GRAY));
         }
 
         if (keyHeld) {
@@ -171,8 +172,8 @@ public final class TooltipHandler {
         event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(part.getTier()), Color.AQUAMARINE));
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
-            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getPartId()).mergeStyle(TextFormatting.DARK_GRAY));
-            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.getPart().getPackName()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getId()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.get().getPackName()).mergeStyle(TextFormatting.DARK_GRAY));
         }
 
         // Traits
@@ -206,8 +207,8 @@ public final class TooltipHandler {
         }
 
         // Gear type blacklist?
-        if (part.getPart() instanceof AbstractGearPart) {
-            List<GearType> blacklist = ((AbstractGearPart) part.getPart()).getBlacklistedGearTypes();
+        if (part.get() instanceof AbstractGearPart) {
+            List<GearType> blacklist = ((AbstractGearPart) part.get()).getBlacklistedGearTypes();
             if (!blacklist.isEmpty()) {
                 int index = (ClientTicks.ticksInGame() / 20) % blacklist.size();
                 GearType gearType = blacklist.get(index);
@@ -229,7 +230,7 @@ public final class TooltipHandler {
     }
 
     private static void getMaterialTraitLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
-        Collection<TraitInstance> traits = material.getMaterial().getTraits(partType);
+        Collection<TraitInstance> traits = material.getTraits(partType);
         if (traits.isEmpty()) return;
 
         IFormattableTextComponent header = TextUtil.misc("tooltip.traits").mergeStyle(TextFormatting.GOLD);
@@ -261,7 +262,7 @@ public final class TooltipHandler {
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
         TextListBuilder builder = new TextListBuilder();
         for (ItemStat stat : part.getGearType().getRelevantStats()) {
-            Collection<StatInstance> modifiers = part.getStatModifiers(ItemStack.EMPTY, stat);
+            Collection<StatInstance> modifiers = part.getStatModifiers(StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
             getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
@@ -271,7 +272,7 @@ public final class TooltipHandler {
         TextListBuilder builder = new TextListBuilder();
 
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> modsAll = material.getStatModifiers(stat, partType, GearType.ALL);
+            Collection<StatInstance> modsAll = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
             Optional<IFormattableTextComponent> head = getStatTooltipLine(event, partType, stat, modsAll);
             boolean headPresent = head.isPresent();
             builder.add(head.orElseGet(() -> TextUtil.withColor(stat.getDisplayName(), stat.getNameColor())));
@@ -279,7 +280,7 @@ public final class TooltipHandler {
             builder.indent();
 
             int subCount = 0;
-            List<StatGearKey> keysForStat = material.getMaterial().getStatKeys(partType).stream()
+            List<StatGearKey> keysForStat = material.get().getStatKeys(partType).stream()
                     .filter(key -> key.getStat().equals(stat))
                     .collect(Collectors.toList());
 

@@ -20,12 +20,14 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.network.ClientOutputCommandPacket;
@@ -127,15 +129,16 @@ public final class MaterialsCommand {
         }
     }
 
-    private static String makeTsvLine(IMaterial material, PartType partType) {
+    private static String makeTsvLine(IMaterial materialIn, PartType partType) {
+        MaterialInstance material = MaterialInstance.of(materialIn);
         StringBuilder builder = new StringBuilder();
-        appendTsv(builder, material.getPackName());
+        appendTsv(builder, material.get().getPackName());
         appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
         int tier = material.getTier(partType);
 //        appendTsv(builder, partType.getDisplayName(tier).getFormattedText());
         appendTsv(builder, partType.getDisplayName(0).getString());
         appendTsv(builder, material.getId().toString());
-        appendTsv(builder, getParentId(material));
+        appendTsv(builder, getParentId(material.get()));
 
         // Traits
         appendTsv(builder, material.getTraits(partType).stream()
@@ -146,7 +149,7 @@ public final class MaterialsCommand {
 
         // Stats
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> statModifiers = MaterialInstance.of(material).getStatModifiers(stat, partType);
+            Collection<StatInstance> statModifiers = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
             appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
         }
 

@@ -33,6 +33,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -274,9 +275,10 @@ public final class TraitHelper {
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
         Map<ITrait, Integer> countMatsWithTrait = new HashMap<>();
+        GearType gearType = GearHelper.getType(gear, GearType.ALL);
 
         for (MaterialInstance material : materials) {
-            for (TraitInstance inst : material.getMaterial().getTraits(partType, gear)) {
+            for (TraitInstance inst : material.getTraits(partType, gearType, gear)) {
                 if (inst.conditionsMatch(materials, partType, gear)) {
                     result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
@@ -331,19 +333,16 @@ public final class TraitHelper {
     }
 
     static void tickTraits(World world, @Nullable PlayerEntity player, ItemStack gear, boolean isEquipped) {
-        // Performance test on 2018-11-26 - roughly 5% FPS loss max (negligible), average ~420 FPS
         ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
-        for (INBT nbt : tagList) {
-            if (nbt instanceof CompoundNBT) {
-                CompoundNBT tagCompound = (CompoundNBT) nbt;
-                String regName = tagCompound.getString("Name");
-                ITrait trait = TraitManager.get(regName);
+        for (int i = 0; i < tagList.size(); ++i) {
+            CompoundNBT tagCompound = tagList.getCompound(i);
+            String regName = tagCompound.getString("Name");
+            ITrait trait = TraitManager.get(regName);
 
-                if (trait != null) {
-                    int level = tagCompound.getByte("Level");
-                    trait.onUpdate(new TraitActionContext(player, level, gear), isEquipped);
-                }
+            if (trait != null) {
+                int level = tagCompound.getByte("Level");
+                trait.onUpdate(new TraitActionContext(player, level, gear), isEquipped);
             }
         }
     }

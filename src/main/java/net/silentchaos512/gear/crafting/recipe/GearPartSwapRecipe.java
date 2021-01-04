@@ -8,11 +8,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -112,7 +110,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
                         if (index < partsOfType.size()) {
                             PartData oldPart = partsOfType.get(index);
                             oldPart.onRemoveFromGear(gear);
-                            list.set(i, oldPart.getCraftingItem());
+                            list.set(i, oldPart.getItem());
                             removedCount.merge(type, 1, Integer::sum);
                         }
                     } else {

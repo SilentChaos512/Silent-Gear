@@ -208,7 +208,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         // New material-based armor
         MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
         if (material != null) {
-            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
+            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.get());
             PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
             MaterialLayer materialLayer = materialModel.getLayers(this.getGearType(), partType).getFirstLayer();
             if (materialLayer != null) {
@@ -233,7 +233,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     public int getColor(ItemStack stack) {
         MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
         if (material != null) {
-            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
+            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.get());
             PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
             MaterialLayer materialLayer = materialModel.getLayers(this.getGearType(), partType).getFirstLayer();
             if (materialLayer != null) {

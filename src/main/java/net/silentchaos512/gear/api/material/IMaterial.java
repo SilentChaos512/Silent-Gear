@@ -6,14 +6,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.gear.part.PartTextureSet;
+import net.silentchaos512.gear.api.util.IGearComponent;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
@@ -24,7 +20,7 @@ import java.util.Set;
 /**
  * A material used for crafting gear parts. Provides stats and traits for different part types.
  */
-public interface IMaterial {
+public interface IMaterial extends IGearComponent<IMaterialInstance> {
     /**
      * The name of the data pack this material is from. For mods, this is the name of the JAR file.
      * In userdev, it's "main".
@@ -83,13 +79,6 @@ public interface IMaterial {
      */
     int getTier(PartType partType);
 
-    /**
-     * Gets the ingredient to match for crafting. Currently, part type is never used.
-     *
-     * @return The ingredient to match
-     */
-    Ingredient getIngredient();
-
     Optional<Ingredient> getPartSubstitute(PartType partType);
 
     boolean hasPartSubstitutes();
@@ -120,133 +109,7 @@ public interface IMaterial {
      */
     default void retainData(@Nullable IMaterial oldMaterial) {}
 
-    /**
-     * Gets the stat modifiers this material gives for the given stat and part type. Collection may
-     * be empty.
-     *
-     * @param material The material instance (includes crafting item)
-     * @param stat     The stat
-     * @param partType The part type
-     * @param gear     The gear item (may be empty)
-     * @return A collection of stat modifiers
-     */
-    default Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, ItemStack gear) {
-        return getStatModifiers(material, stat, partType, GearHelper.getType(gear, GearType.ALL));
-    }
-
-    /**
-     * Gets the stat modifiers this material gives for the given stat and part type. Collection may
-     * be empty.
-     *
-     * @param material The material instance (includes crafting item)
-     * @param stat     The stat
-     * @param partType The part type
-     * @param gearType     The gear type
-     * @return A collection of stat modifiers
-     */
-    default Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType, GearType gearType) {
-        return getStatModifiers(material, partType, StatGearKey.of(stat, gearType));
-    }
-
-    Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key);
-
-    /**
-     * Gets the stat modifiers this material gives for the given stat and part type. Collection may
-     * be empty. {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} instead
-     * when possible.
-     *
-     * @param material The material
-     * @param stat     The stat
-     * @param partType The part type
-     * @return A collection of stat modifiers
-     */
-    default Collection<StatInstance> getStatModifiers(IMaterialInstance material, ItemStat stat, PartType partType) {
-        return getStatModifiers(material, stat, partType, ItemStack.EMPTY);
-    }
-
     Collection<StatGearKey> getStatKeys(PartType type);
-
-    /**
-     * Gets the traits for the given part type. This returns all traits for the given type. Trait
-     * conditions should be checked afterwards.
-     *
-     * @param partType The part type
-     * @param gear     The gear item
-     * @return The traits for the part type
-     */
-    default Collection<TraitInstance> getTraits(PartType partType, ItemStack gear) {
-        return getTraits(partType, GearHelper.getType(gear, GearType.ALL));
-    }
-
-    Collection<TraitInstance> getTraits(PartType partType, GearType gearType);
-
-    /**
-     * Gets the traits for the given part type. This returns all traits for the given type. Trait
-     * conditions should be checked afterwards. Use {@link #getTraits(PartType, ItemStack)} instead
-     * when possible.
-     *
-     * @param partType The part type
-     * @return The traits for the part type
-     */
-    default Collection<TraitInstance> getTraits(PartType partType) {
-        return getTraits(partType, ItemStack.EMPTY);
-    }
-
-    /**
-     * Calculate a stat value for the material. This has limited usefulness, {@link
-     * #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)} should be used in most
-     * cases.
-     *
-     * @param material The material
-     * @param stat     The stat
-     * @param partType The part type
-     * @return The calculated stat
-     */
-    default float getStat(IMaterialInstance material, ItemStat stat, PartType partType) {
-        return stat.compute(getStatModifiers(material, stat, partType));
-    }
-
-    /**
-     * Calculate a stat value for the material. The stat value is not clamped. This has limited
-     * usefulness, {@link #getStatModifiers(IMaterialInstance, ItemStat, PartType, ItemStack)}
-     * should be used in most cases.
-     *
-     * @param material The material
-     * @param key     The stat and gear type
-     * @param partType The part type
-     * @return The calculated stat
-     */
-    default float getStatUnclamped(IMaterialInstance material, PartType partType, StatGearKey key) {
-        ItemStat stat = ItemStats.get(key.getStat());
-        if (stat == null) return 0;
-
-        return stat.compute(stat.getBaseValue(), false, key.getGearType(), getStatModifiers(material, partType, key));
-    }
-
-    /**
-     * Determine if the material can be used to craft parts of a given type and for a given gear
-     * type.
-     *
-     * @param material The material
-     * @param partType The part type
-     * @param gearType The gear type
-     * @return True if and only if crafting should be allowed
-     */
-    boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType);
-
-    /**
-     * Gets the color of the materials primary (bottom) render layer/texture. The primary color is
-     * usually the only one which is not white.
-     *
-     * @param gear     The gear item
-     * @param partType The part type
-     * @return The color of the primary render layer
-     */
-    @Deprecated
-    int getPrimaryColor(ItemStack gear, PartType partType);
-
-    @Deprecated
-    PartTextureSet getTexture(PartType partType, ItemStack gear);
 
     /**
      * Gets the rendering properties of the material, including textures and colors.

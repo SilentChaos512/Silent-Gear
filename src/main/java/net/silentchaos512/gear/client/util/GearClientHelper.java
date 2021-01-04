@@ -86,7 +86,7 @@ public final class GearClientHelper {
         // Let parts add information if they need to
         Collections.reverse(constructionParts);
         for (PartData data : constructionParts) {
-            data.getPart().addInformation(data, stack, tooltip, flag);
+            data.get().addInformation(data, stack, tooltip, flag);
         }
 
         // Traits
@@ -216,7 +216,7 @@ public final class GearClientHelper {
         TextListBuilder builder = new TextListBuilder();
 
         for (PartData part : parts) {
-            if (part.getPart().isVisible()) {
+            if (part.get().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
                 IFormattableTextComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).deepCopy(), partNameColor);
                 builder.add(flag.isAdvanced()
@@ -224,10 +224,10 @@ public final class GearClientHelper {
                         : partNameText);
 
                 // List materials for compound parts
-                if (part.getPart() instanceof CompoundPart) {
+                if (part.get() instanceof CompoundPart) {
                     builder.indent();
-                    for (MaterialInstance material : CompoundPartItem.getMaterials(part.getCraftingItem())) {
-                        int nameColor = material.getMaterial().getNameColor(part.getType(), gear);
+                    for (MaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
+                        int nameColor = material.get().getNameColor(part.getType(), gear);
                         builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
                     }
                     builder.unindent();

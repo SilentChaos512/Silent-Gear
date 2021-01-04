@@ -10,20 +10,21 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.*;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.lib.util.InventoryUtils;
-import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -91,13 +92,13 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public ResourceLocation getMaterialId() {
+    public ResourceLocation getId() {
         return material.getId();
     }
 
     @Nonnull
     @Override
-    public IMaterial getMaterial() {
+    public IMaterial get() {
         return material;
     }
 
@@ -135,22 +136,9 @@ public final class MaterialInstance implements IMaterialInstance {
         return material.getPartTypes();
     }
 
-    @Deprecated
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType) {
-        return getStatModifiers(stat, partType, ItemStack.EMPTY);
-    }
-
-    @Deprecated
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, ItemStack gear) {
-        return getStatModifiers(stat, partType, GearHelper.getType(gear, GearType.ALL));
-    }
-
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartType partType, GearType gearType) {
-        return getStatModifiers(partType, StatGearKey.of(stat, gearType));
-    }
-
-    public Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key) {
-        Collection<StatInstance> mods = material.getStatModifiers(this, partType, key);
+    @Override
+    public Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key, ItemStack gear) {
+        Collection<StatInstance> mods = material.getStatModifiers(this, partType, key, gear);
 
         ItemStat stat = ItemStats.get(key.getStat());
         if (stat == null) {
@@ -175,8 +163,16 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public float getStat(ItemStat stat, PartType partType, ItemStack gear) {
-        return stat.compute(stat.getDefaultValue(), getStatModifiers(stat, partType, gear));
+    public float getStat(PartType partType, StatGearKey key, ItemStack gear) {
+        ItemStat stat = ItemStats.get(key.getStat());
+        if (stat == null) return key.getStat().getDefaultValue();
+
+        return stat.compute(stat.getDefaultValue(), getStatModifiers(partType, key));
+    }
+
+    @Override
+    public Collection<TraitInstance> getTraits(PartType partType, GearType gearType, ItemStack gear) {
+        return material.getTraits(this, partType, gearType, gear);
     }
 
     public boolean canRepair(ItemStack gear) {
@@ -189,8 +185,8 @@ public final class MaterialInstance implements IMaterialInstance {
 
     public int getRepairValue(ItemStack gear, RepairContext.Type type) {
         if (this.canRepair(gear)) {
-            float durability = getStat(GearHelper.getDurabilityStat(gear), PartType.MAIN);
-            float repairValueMulti = getStat(ItemStats.REPAIR_VALUE, PartType.MAIN);
+            float durability = getStat(PartType.MAIN, GearHelper.getDurabilityStat(gear));
+            float repairValueMulti = getStat(PartType.MAIN, ItemStats.REPAIR_VALUE);
             float itemRepairModifier = GearHelper.getRepairModifier(gear);
             float typeBonus = 1f + type.getBonusEfficiency();
             return Math.round(durability * repairValueMulti * itemRepairModifier * typeBonus) + 1;
@@ -225,21 +221,6 @@ public final class MaterialInstance implements IMaterialInstance {
         nbt.putString("ID", material.getId().toString());
         nbt.put("Item", item.write(new CompoundNBT()));
         return nbt;
-    }
-
-    @Deprecated
-    @Override
-    public int getColor(PartType partType, ItemStack gear) {
-        return material.getPrimaryColor(gear, partType);
-    }
-
-    public int getPrimaryColor(GearType gearType, PartType partType) {
-        IMaterialDisplay model = MaterialDisplayManager.get(this.material);
-        MaterialLayer layer = model.getLayers(gearType, partType).getFirstLayer();
-        if (layer != null) {
-            return layer.getColor();
-        }
-        return Color.VALUE_WHITE;
     }
 
     @Override
@@ -286,9 +267,9 @@ public final class MaterialInstance implements IMaterialInstance {
 
     public static String writeShorthand(MaterialInstance material) {
         if (material.grade != MaterialGrade.NONE) {
-            return material.getMaterialId() + "#" + material.grade;
+            return material.getId() + "#" + material.grade;
         }
-        return material.getMaterialId().toString();
+        return material.getId().toString();
     }
 
     @Override

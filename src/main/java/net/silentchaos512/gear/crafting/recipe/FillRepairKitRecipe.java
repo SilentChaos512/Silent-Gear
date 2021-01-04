@@ -88,9 +88,9 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     }
 
     private static boolean isRepairMaterial(MaterialInstance material) {
-        float durability = material.getStat(ItemStats.DURABILITY, PartType.MAIN);
-        float armorDurability = material.getStat(ItemStats.ARMOR_DURABILITY, PartType.MAIN);
-        return material.getMaterial().allowedInPart(PartType.MAIN) && (durability > 0 || armorDurability > 0);
+        float durability = material.getStat(PartType.MAIN, ItemStats.DURABILITY);
+        float armorDurability = material.getStat(PartType.MAIN, ItemStats.ARMOR_DURABILITY);
+        return material.get().allowedInPart(PartType.MAIN) && (durability > 0 || armorDurability > 0);
     }
 
     @Override

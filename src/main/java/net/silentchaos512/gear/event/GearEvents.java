@@ -324,8 +324,8 @@ public final class GearEvents {
 
     private static int getUniqueMainMaterialCount(PartDataList parts) {
         for (PartData part : parts) {
-            if (part.getPart() instanceof CompoundPart && part.getType() == PartType.MAIN) {
-                List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getCraftingItem());
+            if (part.get() instanceof CompoundPart && part.getType() == PartType.MAIN) {
+                List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getItem());
                 return SynergyUtils.getUniques(materials).size();
             }
         }

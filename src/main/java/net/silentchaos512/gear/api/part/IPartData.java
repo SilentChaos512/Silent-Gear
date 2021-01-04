@@ -5,56 +5,90 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartData;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
- * Represents an instance of an {@link IGearPart}. In most cases, {@link
- * PartData} should be used. {@link LazyPartData}
- * can be useful in cases where a part might not exist yet, but you have something that needs a
- * part, such as a recipe or loot table.
+ * Represents an instance of an {@link IGearPart}. In most cases, {@link PartData} should be used.
+ * {@link LazyPartData} can be useful in cases where a part might not exist yet, but you have
+ * something that needs a part, such as a recipe or loot table.
  *
  * @since 1.3.9
  */
-public interface IPartData {
-    ResourceLocation getPartId();
+public interface IPartData extends IGearComponentInstance<IGearPart> {
+    @Deprecated
+    default ResourceLocation getPartId() {return getId();}
 
+    @Deprecated
     @Nullable
-    IGearPart getPart();
+    default IGearPart getPart() {return get();}
 
-    ItemStack getCraftingItem();
+    @Deprecated
+    default ItemStack getCraftingItem() {return getItem();}
 
     CompoundNBT write(CompoundNBT nbt);
 
     default int getTier() {
-        IGearPart part = getPart();
+        IGearPart part = get();
         return part != null ? part.getTier() : 0;
     }
 
     default PartType getType() {
-        IGearPart part = getPart();
+        IGearPart part = get();
         return part != null ? part.getType() : PartType.NONE;
     }
 
     default GearType getGearType() {
-        IGearPart part = getPart();
+        IGearPart part = get();
         return part != null ? part.getGearType() : GearType.ALL;
     }
 
-    @Deprecated
-    @Nullable
-    default IPartPosition getPartPosition() {
-        IGearPart part = getPart();
-        return part != null ? part.getPartPosition() : null;
+    @Override
+    default float getStat(PartType partType, StatGearKey key, ItemStack gear) {
+        ItemStat stat = ItemStats.get(key.getStat());
+        if (stat == null) return key.getStat().getDefaultValue();
+
+        return stat.compute(stat.getDefaultValue(), getStatModifiers(partType, key));
     }
 
-    default List<TraitInstance> getTraits() {
-        return Collections.emptyList();
+    default Collection<StatInstance> getStatModifiers(StatGearKey key, ItemStack gear) {
+        return getStatModifiers(this.getType(), key, gear);
+    }
+
+    @Override
+    default Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key, ItemStack gear) {
+        IGearPart part = get();
+        if (part == null) {
+            return Collections.emptyList();
+        }
+        return part.getStatModifiers(this, this.getType(), key, gear);
+    }
+
+    default Collection<TraitInstance> getTraits() {
+        return getTraits(this.getType(), this.getGearType(), ItemStack.EMPTY);
+    }
+
+    default Collection<TraitInstance> getTraits(ItemStack gear) {
+        return getTraits(this.getType(), this.getGearType(), gear);
+    }
+
+    @Override
+    default Collection<TraitInstance> getTraits(PartType partType, GearType gearType, ItemStack gear) {
+        IGearPart part = get();
+        if (part == null) {
+            return Collections.emptyList();
+        }
+        return part.getTraits(this, partType, gearType, gear);
     }
 
     String getModelKey();
@@ -64,9 +98,9 @@ public interface IPartData {
 
     default JsonObject serialize() {
         JsonObject json = new JsonObject();
-        json.addProperty("part", getPartId().toString());
+        json.addProperty("part", getId().toString());
 
-        ItemStack stack = getCraftingItem();
+        ItemStack stack = getItem();
         if (!stack.isEmpty()) {
         }
 

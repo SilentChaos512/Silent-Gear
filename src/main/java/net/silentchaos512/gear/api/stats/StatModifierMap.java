@@ -13,7 +13,7 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.util.StatGearKey;
+import net.silentchaos512.gear.api.util.StatGearKey;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

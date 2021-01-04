@@ -7,6 +7,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -14,6 +15,7 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
@@ -46,9 +48,10 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
 
     @Override
     public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
+        GearType gearType = GearHelper.getType(gear, GearType.ALL);
         int count = 0;
         for (MaterialInstance mat : materials) {
-            for (TraitInstance inst : mat.getMaterial().getTraits(partType, gear)) {
+            for (TraitInstance inst : mat.getTraits(partType, gearType, gear)) {
                 if (inst.getTrait() == trait) {
                     count++;
                     break;

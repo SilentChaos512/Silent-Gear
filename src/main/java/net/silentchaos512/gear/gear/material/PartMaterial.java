@@ -2,6 +2,7 @@ package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.Sets;
 import com.google.gson.*;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -19,11 +20,10 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
-import net.silentchaos512.gear.client.material.PartGearKey;
-import net.silentchaos512.gear.gear.part.PartTextureSet;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
-import net.silentchaos512.gear.util.StatGearKey;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -129,10 +129,10 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key) {
+    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key, ItemStack gear) {
         Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(key));
         if (ret.isEmpty() && getParent() != null) {
-            ret.addAll(getParent().getStatModifiers(material, partType, key));
+            ret.addAll(getParent().getStatModifiers(material, partType, key, gear));
         }
         return ret;
     }
@@ -143,25 +143,25 @@ public final class PartMaterial implements IMaterial {
     }
 
     @Override
-    public List<TraitInstance> getTraits(PartType partType, GearType gearType) {
+    public Collection<TraitInstance> getTraits(IMaterialInstance instance, PartType partType, GearType gearType, ItemStack gear) {
         List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
         if (ret.isEmpty() && getParent() != null) {
-            ret.addAll(getParent().getTraits(partType, gearType));
+            ret.addAll(getParent().getTraits(instance, partType, gearType, gear));
         }
         return ret;
     }
 
     @Override
-    public boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType) {
+    public boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType, @Nullable IInventory inventory) {
         if (isGearTypeBlacklisted(gearType) || !allowedInPart(partType)) {
             return false;
         }
 
-        if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType))) {
+        if (stats.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType, inventory))) {
             if (partType == PartType.MAIN) {
                 ItemStat stat = gearType.getDurabilityStat();
                 StatGearKey key = StatGearKey.of(stat, gearType);
-                return !getStatModifiers(material, partType, key).isEmpty() && getStatUnclamped(material, partType, key) > 0;
+                return !getStatModifiers(material, partType, key).isEmpty() && getStatUnclamped(material, partType, key, ItemStack.EMPTY) > 0;
             }
             return true;
         }
@@ -175,16 +175,6 @@ public final class PartMaterial implements IMaterial {
             }
         }
         return false;
-    }
-
-    @Override
-    public int getPrimaryColor(ItemStack gear, PartType partType) {
-        return getMaterialDisplay(gear, partType).getPrimaryColor();
-    }
-
-    @Override
-    public PartTextureSet getTexture(PartType partType, ItemStack gear) {
-        return getMaterialDisplay(gear, partType).getTexture();
     }
 
     @Deprecated

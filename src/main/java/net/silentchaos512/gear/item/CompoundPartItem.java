@@ -128,7 +128,7 @@ public class CompoundPartItem extends Item {
         }
 
         for (MaterialInstance material : getMaterials(stack)) {
-            s.append(SilentGear.shortenId(material.getMaterialId()));
+            s.append(SilentGear.shortenId(material.getId()));
         }
 
         return s.toString();
@@ -163,7 +163,7 @@ public class CompoundPartItem extends Item {
 
             TextListBuilder matsBuilder = new TextListBuilder();
             getMaterials(stack).forEach(material -> {
-                int nameColor = material.getMaterial().getNameColor(part.getType(), this.getGearType());
+                int nameColor = material.get().getNameColor(part.getType(), this.getGearType());
                 matsBuilder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
             });
             tooltip.addAll(matsBuilder.build());

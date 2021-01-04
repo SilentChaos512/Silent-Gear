@@ -77,7 +77,7 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         if (material == null) return false;
 
         int tier = material.getTier(this.partType);
-        return material.getMaterial().isCraftingAllowed(material, partType, gearType)
+        return material.get().isCraftingAllowed(material, partType, gearType)
                 && (categories.isEmpty() || material.hasAnyCategory(categories))
                 && tierMatches(tier);
     }
@@ -92,10 +92,10 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         if (!materials.isEmpty()) {
             return materials.stream()
                     .map(MaterialInstance::of)
-                    .filter(mat -> mat.getMaterial().isCraftingAllowed(mat, partType, gearType))
+                    .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
                     .filter(mat -> categories.isEmpty() || mat.hasAnyCategory(categories))
                     .filter(mat -> tierMatches(mat.getTier(this.partType)))
-                    .flatMap(mat -> Stream.of(mat.getMaterial().getIngredient().getMatchingStacks()))
+                    .flatMap(mat -> Stream.of(mat.get().getIngredient().getMatchingStacks()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
         }

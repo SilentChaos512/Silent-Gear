@@ -6,12 +6,19 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.IItemStat;
+import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * An instance of an {@link IMaterial} used in crafting, including the grade and item used. There
@@ -20,24 +27,13 @@ import javax.annotation.Nullable;
  * used in the majority of cases. {@code LazyMaterialInstance} is useful for cases where materials
  * may not yet be loaded (ie loot tables).
  */
-public interface IMaterialInstance {
-    /**
-     * Gets the material ID. This is particular useful for lazy instances, since the ID can exist
-     * before the material.
-     *
-     * @return The material ID
-     */
-    ResourceLocation getMaterialId();
+public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
+    @Deprecated
+    default ResourceLocation getMaterialId() {return getId();}
 
-    /**
-     * Gets the material, if possible. For lazy instances, this will return null if materials are
-     * not yet loaded. Use {@link #getMaterialId()} for such cases. {@link
-     * net.silentchaos512.gear.gear.material.MaterialInstance} will never return null here.
-     *
-     * @return The material, or null if not yet available.
-     */
+    @Deprecated
     @Nullable
-    IMaterial getMaterial();
+    default IMaterial getMaterial() {return get();}
 
     /**
      * Gets the grade on the material, or {@code MaterialGrade.NONE} if ungraded.
@@ -47,13 +43,6 @@ public interface IMaterialInstance {
     MaterialGrade getGrade();
 
     /**
-     * Gets the item stack used in crafting, including all NBT the item had.
-     *
-     * @return The crafting item
-     */
-    ItemStack getItem();
-
-    /**
      * Gets the tier of the material. Shortcut for {@link IMaterial#getTier(PartType)}.
      *
      * @param partType The part type
@@ -61,21 +50,38 @@ public interface IMaterialInstance {
      */
     int getTier(PartType partType);
 
-    default float getStat(ItemStat stat, PartType partType) {
-        return getStat(stat, partType, ItemStack.EMPTY);
+    default float getStat(PartType partType, IItemStat stat) {
+        return getStat(partType, StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
     }
 
-    float getStat(ItemStat stat, PartType partType, ItemStack gear);
+    @Override
+    default float getStat(PartType partType, StatGearKey key, ItemStack gear) {
+        IMaterial material = get();
+        if (material != null) {
+            return material.getStat(this, partType, key, gear);
+        }
+        return 0;
+    }
+
+    @Override
+    default Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key, ItemStack gear) {
+        IMaterial material = get();
+        if (material == null) {
+            return Collections.emptyList();
+        }
+        return material.getStatModifiers(this, partType, key, gear);
+    }
+
+    @Override
+    default Collection<TraitInstance> getTraits(PartType partType, GearType gearType, ItemStack gear) {
+        IMaterial material = get();
+        if (material == null) {
+            return Collections.emptyList();
+        }
+        return material.getTraits(this, partType, gearType, gear);
+    }
 
     CompoundNBT write(CompoundNBT nbt);
-
-    @Deprecated
-    int getColor(PartType partType, ItemStack gear);
-
-    @Deprecated
-    default int getColor(PartType partType) {
-        return getColor(partType, ItemStack.EMPTY);
-    }
 
     IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear);
 
@@ -94,7 +100,7 @@ public interface IMaterialInstance {
 
     default JsonObject serialize() {
         JsonObject json = new JsonObject();
-        json.addProperty("material", getMaterialId().toString());
+        json.addProperty("material", getId().toString());
         MaterialGrade grade = getGrade();
         if (grade != MaterialGrade.NONE) {
             json.addProperty("grade", grade.name());

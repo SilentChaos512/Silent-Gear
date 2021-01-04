@@ -101,7 +101,7 @@ public class GearModelOverrideList extends ItemOverrideList {
             if (((ICoreItem) stack.getItem()).hasTexturesFor(part.getType())) {
                 addSimplePartLayers(layers, part, stack);
 
-                if (part.getPart() instanceof CompoundPart) {
+                if (part.get() instanceof CompoundPart) {
                     MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
                     if (mat != null) {
                         addWithBlendedColor(layers, part, mat, stack);
@@ -138,14 +138,14 @@ public class GearModelOverrideList extends ItemOverrideList {
 
     @SuppressWarnings("TypeMayBeWeakened")
     private static void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
-        IMaterialDisplay model = MaterialDisplayManager.get(material.getMaterial());
+        IMaterialDisplay model = MaterialDisplayManager.get(material.get());
         GearType gearType = GearHelper.getType(stack);
         List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();
         addColorBlendedLayers(list, part, stack, layers);
     }
 
     private static void addSimplePartLayers(List<MaterialLayer> list, PartData part, ItemStack stack) {
-        IPartDisplay model = MaterialDisplayManager.get(part.getPart());
+        IPartDisplay model = MaterialDisplayManager.get(part.get());
         if (model != null) {
             GearType gearType = GearHelper.getType(stack);
             List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();

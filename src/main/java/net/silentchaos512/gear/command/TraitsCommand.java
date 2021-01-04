@@ -28,6 +28,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
@@ -208,7 +209,7 @@ public final class TraitsCommand {
             Collection<PartType> typesWithTrait = new ArrayList<>();
 
             for (PartType partType : PartType.getValues()) {
-                Collection<TraitInstance> traits = material.getTraits(partType);
+                Collection<TraitInstance> traits = MaterialInstance.of(material).getTraits(partType);
 
                 for (TraitInstance inst : traits) {
                     if (inst.getTrait().equals(trait) && material.isVisible(partType)) {

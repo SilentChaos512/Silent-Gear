@@ -101,7 +101,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     @Override
     public boolean supportsPart(ItemStack gear, PartData part) {
         PartType type = part.getType();
-        boolean canAdd = part.getPart().canAddToGear(gear, part);
+        boolean canAdd = part.get().canAddToGear(gear, part);
         boolean supported = (requiresPartOfType(part.getType()) && canAdd) || canAdd;
         return (type == PartType.MAIN && supported)
                 || type == PartType.LINING

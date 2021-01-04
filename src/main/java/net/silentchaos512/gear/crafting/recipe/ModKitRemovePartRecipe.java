@@ -81,7 +81,7 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
             ItemStack stack = inv.getStackInSlot(i);
 
             if (stack.getItem() instanceof ICoreItem) {
-                list.set(i, part != null ? part.getCraftingItem() : ItemStack.EMPTY);
+                list.set(i, part != null ? part.getItem() : ItemStack.EMPTY);
             } else if (stack.hasContainerItem()) {
                 list.set(i, stack.getContainerItem());
             }

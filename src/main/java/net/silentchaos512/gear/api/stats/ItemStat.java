@@ -229,6 +229,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return visible;
     }
 
+    @Override
     public boolean doesSynergyApply() {
         return synergyApplies;
     }

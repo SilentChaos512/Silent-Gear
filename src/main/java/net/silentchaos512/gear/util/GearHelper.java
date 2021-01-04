@@ -66,7 +66,6 @@ public final class GearHelper {
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
-    private static final int DAMAGE_FACTOR_LEVELS = 10;
 
     private GearHelper() {}
 
@@ -85,17 +84,6 @@ public final class GearHelper {
      */
     public static boolean isGear(ItemStack stack) {
         return stack.getItem() instanceof ICoreItem;
-    }
-
-    /**
-     * Check if the item is a Silent Gear tool, weapon, or armor item. Also checks that the stack is
-     * not null and not empty.
-     *
-     * @param stack The item
-     * @return True if {@code stack} is a gear item, false if null, empty, or not a gear item
-     */
-    public static boolean isGearNullable(@Nullable ItemStack stack) {
-        return stack != null && !stack.isEmpty() && isGear(stack);
     }
 
     //region Attribute modifiers
@@ -353,8 +341,8 @@ public final class GearHelper {
         return value;
     }
 
-    public static void damageParts(ItemStack stack, int amount) {
-        GearData.getConstructionParts(stack).forEach(p -> p.getPart().onGearDamaged(p, stack, amount));
+    private static void damageParts(ItemStack stack, int amount) {
+        GearData.getConstructionParts(stack).forEach(p -> p.get().onGearDamaged(p, stack, amount));
     }
 
     //endregion
@@ -414,15 +402,6 @@ public final class GearHelper {
             return -1;
 
         return GearData.getStatInt(stack, ItemStats.HARVEST_LEVEL);
-    }
-
-    public static void setHarvestLevel(ICoreItem item, String toolClass, int level, Set<String> mutableSet) {
-        // Add tool class to list if level is non-negative. Because this is on the item level, the
-        // actual number is meaningless. Harvest levels can be customized in the material JSONs.
-        final boolean add = level >= 0;
-        SilentGear.LOGGER.info("{}: {} tool class \"{}\"", item.getClass().getSimpleName(), (add ? "set" : "remove"), toolClass);
-        if (add) mutableSet.add(toolClass);
-        else mutableSet.remove(toolClass);
     }
 
     public static float getDestroySpeed(ItemStack stack, BlockState state, @Nullable Set<Material> extraMaterials) {
@@ -630,7 +609,6 @@ public final class GearHelper {
         return Rarity.EPIC;
     }
 
-    // Formerly getSubItems
     public static void fillItemGroup(ICoreItem item, ItemGroup group, Collection<ItemStack> items) {
         boolean inTab = false;
         for (ItemGroup tabInList : item.asItem().getCreativeTabs()) {
