@@ -307,7 +307,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.Common.gearBreaksPermanently.get() || GearData.hasPart(stack, Const.Parts.RED_CARD.getId());
+        return Config.Common.gearBreaksPermanently.get() || TraitHelper.hasTrait(stack, Const.Traits.RED_CARD);
     }
 
     public static boolean isBroken(ItemStack stack) {

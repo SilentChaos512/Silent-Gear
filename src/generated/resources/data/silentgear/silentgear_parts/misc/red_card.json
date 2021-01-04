@@ -18,5 +18,11 @@
     "rarity": {
       "add": -5.0
     }
-  }
+  },
+  "traits": [
+    {
+      "name": "silentgear:red_card",
+      "level": 1
+    }
+  ]
 }

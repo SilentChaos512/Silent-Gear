@@ -69,6 +69,7 @@ public class TraitsProvider implements IDataProvider {
         ret.add(TraitBuilder.simple(Const.Traits.MAGMATIC, 1));
         ret.add(TraitBuilder.simple(Const.Traits.MAGNETIC, 5));
         ret.add(TraitBuilder.simple(Const.Traits.MULTI_BREAK, 5));
+        ret.add(TraitBuilder.simple(Const.Traits.RED_CARD, 1));
         ret.add(TraitBuilder.simple(Const.Traits.SPOON, 1));
         ret.add(TraitBuilder.simple(Const.Traits.TURTLE, 1));
 

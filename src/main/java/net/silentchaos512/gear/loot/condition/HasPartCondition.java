@@ -10,7 +10,9 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -30,7 +32,11 @@ public class HasPartCondition extends GearLootCondition {
     public boolean test(LootContext context) {
         ItemStack tool = getItemUsed(context);
         if (!GearHelper.isGear(tool)) return false;
-        return GearData.hasPart(tool, partId, gradeRange);
+
+        IGearPart part = PartManager.get(this.partId);
+        if (part == null) return false;
+
+        return GearData.hasPart(tool, part);
     }
 
     public static ILootCondition.IBuilder builder(ResourceLocation partId) {

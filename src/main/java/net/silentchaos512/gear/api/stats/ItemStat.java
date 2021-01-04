@@ -71,18 +71,22 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return Objects.requireNonNull(getRegistryName());
     }
 
+    @Override
     public float getBaseValue() {
         return baseValue;
     }
 
+    @Override
     public float getDefaultValue() {
         return defaultValue;
     }
 
+    @Override
     public float getMinimumValue() {
         return minimumValue;
     }
 
+    @Override
     public float getMaximumValue() {
         return maximumValue;
     }

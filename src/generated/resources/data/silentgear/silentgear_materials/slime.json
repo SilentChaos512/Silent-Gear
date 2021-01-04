@@ -18,6 +18,10 @@
     "translate": "material.silentgear.slime"
   },
   "stats": {
-    "lining": {}
+    "lining": {
+      "armor_toughness": {
+        "add": 0.5
+      }
+    }
   }
 }

@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Red card trait, found on the red card part (function is the same as before, it's just a trait now)
+- (API) GearApi class, which contains methods that redirect to many commonly used methods (GearData, TraitHelper, etc.)
+
 ## [2.4.11] - 2020-01-02
 ### Changed
 - Reduced impact of tier differences on synergy by half

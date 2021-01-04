@@ -6,11 +6,11 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
-import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -59,26 +59,10 @@ public final class PartData implements IPartData {
         return new PartData(part, craftingItem);
     }
 
-    @Deprecated
-    public static PartData of(IGearPart part, MaterialGrade grade) {
-        return new PartData(part);
-    }
-
-    @Deprecated
-    public static PartData of(IGearPart part, MaterialGrade grade, ItemStack craftingItem) {
-        return new PartData(part, craftingItem);
-    }
-
     public static IPartData of(DataResource<IGearPart> part, ItemStack craftingItem) {
         if (part.isPresent())
             return of(part.get(), craftingItem);
         return LazyPartData.of(part, craftingItem);
-    }
-
-    @Nullable
-    public static PartData ofNullable(@Nullable IGearPart part) {
-        if (part == null) return null;
-        return of(part);
     }
 
     @Nullable
@@ -112,40 +96,21 @@ public final class PartData implements IPartData {
         return null;
     }
 
-    @Deprecated
-    @Nullable
-    public static PartData fromStackFast(ItemStack craftingItem) {
-        return ofNullable(PartManager.from(craftingItem));
-    }
-
-    @Nullable
-    public static PartData fromId(ResourceLocation partId) {
-        return ofNullable(PartManager.get(partId));
-    }
-
     @Nullable
     public static PartData read(CompoundNBT tags) {
-        String key = tags.getString(NBT_ID);
-        IGearPart part = PartManager.get(new ResourceLocation(key));
+        ResourceLocation id = SilentGear.getIdWithDefaultNamespace(tags.getString(NBT_ID));
+        if (id == null) return null;
+
+        IGearPart part = PartManager.get(id);
         if (part == null) return null;
 
-        MaterialGrade grade = MaterialGrade.fromString(tags.getString("Grade"));
         ItemStack craftingItem = ItemStack.read(tags.getCompound("Item"));
-        return of(part, grade, craftingItem);
-    }
-
-    @Nullable
-    public static PartData readFast(CompoundNBT tags) {
-        String key = tags.getString(NBT_ID);
-        if (key.isEmpty()) return null;
-        IGearPart part = PartManager.get(new ResourceLocation(key));
-        if (part == null) return null;
-        return of(part);
+        return of(part, craftingItem);
     }
 
     @Override
     public CompoundNBT write(@Nonnull CompoundNBT tags) {
-        tags.putString("ID", part.getId().toString());
+        tags.putString(NBT_ID, part.getId().toString());
 
         CompoundNBT itemTag = new CompoundNBT();
         this.craftingItem.write(itemTag);
@@ -183,10 +148,6 @@ public final class PartData implements IPartData {
     @Override
     public GearType getGearType() {
         return part.getGearType();
-    }
-
-    public float computeStat(ItemStat stat) {
-        return part.computeStatValue(stat, this);
     }
 
     public Collection<StatInstance> getStatModifiers(ItemStack gear, ItemStat stat) {

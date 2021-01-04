@@ -290,9 +290,8 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onGearCrafted(PlayerEvent.ItemCraftedEvent event) {
         ItemStack result = event.getCrafting();
-        if (!(result.getItem() instanceof ICoreItem)) return;
 
-        if (event.getPlayer() instanceof ServerPlayerEntity) {
+        if (GearHelper.isGear(result) && event.getPlayer() instanceof ServerPlayerEntity) {
             // Try to trigger some advancments
             ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 

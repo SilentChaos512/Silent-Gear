@@ -145,7 +145,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     @Nullable
     public static IGearPart get(String id) {
-        ResourceLocation partId = ResourceLocation.tryCreate(id);
+        ResourceLocation partId = SilentGear.getIdWithDefaultNamespace(id);
         return partId != null ? get(partId) : null;
     }
 

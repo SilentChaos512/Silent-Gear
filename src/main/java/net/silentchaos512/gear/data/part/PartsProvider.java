@@ -86,6 +86,7 @@ public class PartsProvider implements IDataProvider {
         ret.add(upgradePart("misc/red_card", CraftingItems.RED_CARD_UPGRADE)
                 .upgradeGearTypes(GearTypeMatcher.ALL)
                 .stat(ItemStats.RARITY, -5, StatInstance.Operation.ADD)
+                .trait(Const.Traits.RED_CARD, 1)
         );
 
         return ret;
