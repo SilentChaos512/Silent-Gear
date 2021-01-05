@@ -68,7 +68,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             case FEET:
                 return GearType.BOOTS;
             default:
-                return GearType.ARMOR;
+                throw new IllegalStateException("Don't know the gear type for " + this.getRegistryName());
         }
     }
 

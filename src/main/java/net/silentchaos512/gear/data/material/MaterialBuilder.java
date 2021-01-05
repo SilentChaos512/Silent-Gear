@@ -25,6 +25,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
@@ -270,7 +271,8 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder stat(PartType partType, IItemStat stat, GearType gearType, float value, StatInstance.Operation operation) {
-        StatInstance mod = StatInstance.of(value, operation);
+        StatGearKey key = StatGearKey.of(stat, gearType);
+        StatInstance mod = StatInstance.of(value, operation, key);
         StatModifierMap map = stats.computeIfAbsent(partType, pt -> new StatModifierMap());
         map.put(stat, gearType, mod);
         return this;

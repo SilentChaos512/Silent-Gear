@@ -8,8 +8,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 import net.silentchaos512.utils.MathUtils;
@@ -17,9 +20,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -48,42 +49,47 @@ public class StatInstance {
         }
     }
 
+    protected static final StatGearKey DEFAULT_KEY = StatGearKey.of(() -> SilentGear.getId("null"), GearType.ALL);
     private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
     private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
 
     final float value;
     final Operation op;
+    final StatGearKey key;
 
-    // deprecated: Use "of" static factory method
-    @Deprecated
-    public StatInstance(float value, Operation op) {
+    protected StatInstance(float value, Operation op, StatGearKey key) {
         this.value = value;
         this.op = op;
+        this.key = key;
     }
 
     public static StatInstance of(float value) {
-        return of(value, Operation.AVG);
+        return of(value, Operation.AVG, DEFAULT_KEY);
     }
 
     public static StatInstance of(float value, Operation op) {
-        return new StatInstance(value, op);
+        return of(value, op, DEFAULT_KEY);
     }
 
-    public static StatInstance of(float value, String source) {
-        return of(value, Operation.AVG, source);
+    public static StatInstance of(float value, Operation op, StatGearKey key) {
+        return new StatInstance(value, op, key);
     }
 
-    public static StatInstance of(float value, Operation op, String source) {
+    public static StatInstance withSource(float value, String source) {
+        return withSource(value, Operation.AVG, source);
+    }
+
+    public static StatInstance withSource(float value, Operation op, String source) {
         return new StatInstanceWithSource(value, op, source);
     }
 
     public StatInstance copySetValue(float newValue) {
-        return of(newValue, this.op);
+        return of(newValue, this.op, this.key);
     }
 
     // TODO: Is this method needed?
     public StatInstance copy() {
-        return new StatInstance(this.value, this.op);
+        return new StatInstance(this.value, this.op, this.key);
     }
 
     /**
@@ -104,22 +110,46 @@ public class StatInstance {
         return op;
     }
 
+    public StatGearKey getKey() {
+        return key;
+    }
+
     public String getSource() {
         return "N/A";
     }
 
-    @Deprecated
-    public static StatInstance makeBaseMod(float value) {
-        return new StatInstance(value, Operation.ADD);
-    }
-
-    @Deprecated
-    public static StatInstance makeGearMod(float multi) {
-        return new StatInstance(multi, Operation.MUL1);
-    }
-
     public static StatInstance getWeightedAverageMod(Collection<StatInstance> modifiers, Operation op) {
-        return new StatInstance(ItemStat.getWeightedAverage(modifiers, op), op);
+        float value = ItemStat.getWeightedAverage(modifiers, op);
+        StatGearKey key = getMostSpecificKey(modifiers);
+        return new StatInstance(value, op, key);
+    }
+
+    private static StatGearKey getMostSpecificKey(Collection<StatInstance> modifiers) {
+        // Gets the key furthest down the gear type hierarchy (key with most parents)
+        Set<StatGearKey> found = new HashSet<>();
+        for (StatInstance mod : modifiers) {
+            found.add(mod.key);
+        }
+
+        StatGearKey ret = null;
+        int best = 0;
+
+        for (StatGearKey key : found) {
+            int parents = 0;
+            StatGearKey parent = key.getParent();
+
+            while (parent != null) {
+                parent = parent.getParent();
+                ++parents;
+            }
+
+            if (parents > best || ret == null) {
+                best = parents;
+                ret = key;
+            }
+        }
+
+        return ret != null ? ret : DEFAULT_KEY;
     }
 
     public IFormattableTextComponent getFormattedText(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
@@ -229,18 +259,15 @@ public class StatInstance {
         return json;
     }
 
-    public static StatInstance read(IItemStat stat, JsonElement json) {
-        return read(stat, stat.getDefaultOperation(), json);
-    }
-
-    public static StatInstance read(IItemStat stat, Operation defaultOp, JsonElement json) {
+    public static StatInstance read(StatGearKey key, JsonElement json) {
+        Operation defaultOp = key.getStat().getDefaultOperation();
         if (json.isJsonPrimitive()) {
             // Primitive default op shorthand
-            return new StatInstance(json.getAsFloat(), defaultOp);
+            return new StatInstance(json.getAsFloat(), defaultOp, key);
         } else if (json.isJsonObject()) {
             // Either a specified op shorthand or classic format
             JsonObject jsonObj = json.getAsJsonObject();
-            StatInstance result = readShorthandObject(stat, jsonObj);
+            StatInstance result = readShorthandObject(key, jsonObj);
             if (result != null) {
                 return result;
             } else {
@@ -249,20 +276,20 @@ public class StatInstance {
                 Operation op = jsonObj.has("op")
                         ? Operation.byName(JSONUtils.getString(jsonObj, "op"))
                         : defaultOp;
-                return new StatInstance(value, op);
+                return new StatInstance(value, op, key);
             }
         }
         throw new JsonParseException("Expected stat modifier JSON to be float or object");
     }
 
     @Nullable
-    private static StatInstance readShorthandObject(IItemStat stat, JsonObject json) {
+    private static StatInstance readShorthandObject(StatGearKey key, JsonObject json) {
         StatInstance result = null;
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
             Operation op = Operation.byNameOrNull(entry.getKey());
             if (op != null) {
                 if (result == null) {
-                    result = new StatInstance(entry.getValue().getAsFloat(), op);
+                    result = new StatInstance(entry.getValue().getAsFloat(), op, key);
                 } else {
                     // Found multiple ops in the object. This does not make sense!
                     throw new JsonParseException("Found multiple op keys in stat modifier object");
@@ -272,10 +299,10 @@ public class StatInstance {
         return result;
     }
 
-    public static StatInstance read(PacketBuffer buffer) {
+    public static StatInstance read(@Nullable StatGearKey key, PacketBuffer buffer) {
         float value = buffer.readFloat();
         Operation op = buffer.readEnumValue(Operation.class);
-        return new StatInstance(value, op);
+        return new StatInstance(value, op, key != null ? key : DEFAULT_KEY);
     }
 
     public void write(PacketBuffer buffer) {

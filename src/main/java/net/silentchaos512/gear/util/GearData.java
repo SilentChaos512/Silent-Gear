@@ -240,8 +240,8 @@ public final class GearData {
         StatModifierMap stats = new StatModifierMap();
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
             parts.forEach(part -> {
-                StatGearKey key = StatGearKey.of(stat, gearType);
-                part.getStatModifiers(key, stack).forEach(mod -> stats.put(key, mod.copy()));
+                StatGearKey itemKey = StatGearKey.of(stat, gearType);
+                part.getStatModifiers(itemKey, stack).forEach(mod -> stats.put(mod.getKey(), mod.copy()));
             });
         }
         return stats;

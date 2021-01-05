@@ -4,13 +4,13 @@ public class StatInstanceWithSource extends StatInstance {
     private final String source;
 
     public StatInstanceWithSource(float value, Operation op, String source) {
-        super(value, op);
+        super(value, op, DEFAULT_KEY);
         this.source = source;
     }
 
     @Override
     public StatInstance copySetValue(float newValue) {
-        return of(newValue, this.op, this.source);
+        return withSource(newValue, this.op, this.source);
     }
 
     @Override

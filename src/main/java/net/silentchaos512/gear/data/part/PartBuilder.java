@@ -23,6 +23,7 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.util.DataResource;
 
@@ -87,7 +88,8 @@ public class PartBuilder {
     }
 
     public PartBuilder stat(IItemStat stat, float value, StatInstance.Operation operation) {
-        StatInstance mod = StatInstance.of(value, operation);
+        StatGearKey key = StatGearKey.of(stat, GearType.ALL);
+        StatInstance mod = StatInstance.of(value, operation, key);
         this.stats.put(stat, GearType.ALL, mod);
         return this;
     }

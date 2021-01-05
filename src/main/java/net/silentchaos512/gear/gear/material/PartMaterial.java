@@ -498,7 +498,7 @@ public final class PartMaterial implements IMaterial {
                 StatModifierMap map = new StatModifierMap();
                 for (int j = 0; j < statCount; ++j) {
                     StatGearKey key = StatGearKey.read(buffer);
-                    StatInstance mod = StatInstance.read(buffer);
+                    StatInstance mod = StatInstance.read(key, buffer);
                     map.put(key, mod);
                 }
                 material.stats.put(partType, map);

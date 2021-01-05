@@ -215,10 +215,14 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
                 StatGearKey key = StatGearKey.read(entry.getKey());
                 if (key != null) {
                     JsonElement value = entry.getValue();
-                    if (value.isJsonArray())
-                        value.getAsJsonArray().forEach(e -> map.put(key, StatInstance.read(key.getStat(), e)));
-                    else
-                        map.put(key, StatInstance.read(key.getStat(), value));
+                    if (value.isJsonArray()) {
+                        for (JsonElement je : value.getAsJsonArray()) {
+                            StatInstance mod = StatInstance.read(key, je);
+                            map.put(key, mod);
+                        }
+                    } else {
+                        map.put(key, StatInstance.read(key, value));
+                    }
                 }
             }
         } else if (json.isJsonArray()) {
@@ -226,7 +230,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
                 JsonObject jsonObj = element.getAsJsonObject();
                 StatGearKey key = StatGearKey.read(JSONUtils.getString(jsonObj, "name"));
                 if (key != null) {
-                    map.put(key, StatInstance.read(key.getStat(), element));
+                    map.put(key, StatInstance.read(key, element));
                 }
             }
         } else {
@@ -241,7 +245,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         int count = buffer.readVarInt();
         for (int i = 0; i < count; ++i) {
             StatGearKey key = StatGearKey.read(buffer);
-            StatInstance instance = StatInstance.read(buffer);
+            StatInstance instance = StatInstance.read(key, buffer);
             map.put(key, instance);
         }
 
