@@ -52,17 +52,22 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
                 .addTag(Tags.Blocks.ORES);
 
         // Forge
+        builder(ModTags.Blocks.ORES_BORT, ModBlocks.BORT_ORE);
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
         builder(ModTags.Blocks.ORES_AZURE_SILVER, ModBlocks.AZURE_SILVER_ORE);
         getBuilder(Tags.Blocks.ORES)
+                .addTag(ModTags.Blocks.ORES_BORT)
                 .addTag(ModTags.Blocks.ORES_CRIMSON_IRON)
                 .addTag(ModTags.Blocks.ORES_AZURE_SILVER);
+
+        builder(ModTags.Blocks.STORAGE_BLOCKS_BORT, ModBlocks.BORT_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, ModBlocks.CRIMSON_STEEL_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModBlocks.BLAZE_GOLD_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, ModBlocks.AZURE_SILVER_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, ModBlocks.AZURE_ELECTRUM_BLOCK);
         getBuilder(Tags.Blocks.STORAGE_BLOCKS)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_BORT)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL)

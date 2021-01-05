@@ -1,4 +1,5 @@
 {
+  "Item.silentgear.bort": "Bort",
   "advancements.silentgear.armor.description": "Craft any piece of armor from Silent Gear",
   "advancements.silentgear.armor.title": "Better Armor",
   "advancements.silentgear.azure_electrum.description": "Craft some azure electrum. It's fast!",
@@ -91,6 +92,8 @@
   "block.silentgear.azure_silver_block": "Block of Azure Silver",
   "block.silentgear.azure_silver_ore": "Azure Silver Ore",
   "block.silentgear.blaze_gold_block": "Block of Blaze Gold",
+  "block.silentgear.bort_block": "Block of Bort",
+  "block.silentgear.bort_ore": "Bort Ore",
   "block.silentgear.crimson_iron_block": "Block of Crimson Iron",
   "block.silentgear.crimson_iron_ore": "Crimson Iron Ore",
   "block.silentgear.crimson_steel_block": "Block of Crimson Steel",

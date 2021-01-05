@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.world;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
@@ -26,6 +27,8 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
 
+import javax.annotation.Nonnull;
+
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class ModWorldFeatures {
     public static final RuleTest END_STONE_RULE_TEST = new TagMatchRuleTest(Tags.Blocks.END_STONES);
@@ -43,21 +46,27 @@ public final class ModWorldFeatures {
 
     @SuppressWarnings("WeakerAccess")
     public static final class Configured {
+        public static final ConfiguredFeature<?, ?> BORT_ORE_VEINS = Feature.EMERALD_ORE
+                .withConfiguration(new ReplaceBlockConfig(Blocks.STONE.getDefaultState(), ModBlocks.BORT_ORE.asBlockState()))
+                .withPlacement(Placement.RANGE.configure(topSolidRange(4, 20)))
+                .square()
+                .func_242731_b(Config.Common.bortCount.get());
+
         public static final ConfiguredFeature<?, ?> CRIMSON_IRON_ORE_VEINS = Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(24, 0, 120)))
+                .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
                 .square()
                 .func_242731_b(Config.Common.crimsonIronCount.get());
 
         public static final ConfiguredFeature<?, ?> DOUBLE_CRIMSON_IRON_ORE_VEINS = Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(24, 0, 120)))
+                .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
                 .square()
                 .func_242731_b(2 * Config.Common.crimsonIronCount.get());
 
         public static final ConfiguredFeature<?, ?> AZURE_SILVER_ORE_VEINS = Feature.ORE
                 .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
-                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(16, 0, 92)))
+                .withPlacement(Placement.RANGE.configure(topSolidRange(16, 92)))
                 .square()
                 .func_242731_b(Config.Common.azureSilverCount.get());
 
@@ -84,6 +93,11 @@ public final class ModWorldFeatures {
                 .range(128)
                 .chance(2);
 
+        @Nonnull
+        private static TopSolidRangeConfig topSolidRange(int bottom, int top) {
+            return new TopSolidRangeConfig(bottom, 0, top - bottom);
+        }
+
         private Configured() {}
     }
 
@@ -92,6 +106,7 @@ public final class ModWorldFeatures {
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
 
+        registerConfiguredFeature("bort_ore_veins", Configured.BORT_ORE_VEINS);
         registerConfiguredFeature("crimson_iron_ore_veins", Configured.CRIMSON_IRON_ORE_VEINS);
         registerConfiguredFeature("azure_silver_ore_veins", Configured.AZURE_SILVER_ORE_VEINS);
         registerConfiguredFeature("wild_flax_patches", Configured.WILD_FLAX_PATCHES);
@@ -114,10 +129,10 @@ public final class ModWorldFeatures {
         if (biome.getCategory() == Biome.Category.NETHER) {
             addNetherwoodTrees(biome);
             addCrimsonIronOre(biome);
-        }
-
-        if (biome.getCategory() == Biome.Category.THEEND) {
+        } else if (biome.getCategory() == Biome.Category.THEEND) {
             addAzureSilverOre(biome);
+        } else {
+            addBortOre(biome);
         }
     }
 
@@ -128,6 +143,10 @@ public final class ModWorldFeatures {
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
         biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES);
+    }
+
+    private static void addBortOre(BiomeLoadingEvent biome) {
+        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.BORT_ORE_VEINS);
     }
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {

@@ -117,6 +117,22 @@ sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
 
+import groovy.json.JsonSlurper
+
+def secretFile
+if (System.getenv().SECRET_FILE) {
+    secretFile = file System.getenv().SECRET_FILE
+} else {
+    secretFile = file 'secret.json'
+}
+
+project.ext.secret = new Secrets()
+if (secretFile.exists()) {
+    secretFile.withReader {
+        project.ext.secret.data = new JsonSlurper().parse it
+    }
+}
+
 repositories {
     jcenter()
     mavenLocal()
@@ -143,6 +159,14 @@ repositories {
     // Curios, Caelus
     maven {
         url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        name = "WorldStripper"
+        url = uri("https://maven.pkg.github.com/ewyboy/world-stripper")
+        credentials {
+            username = secret.github_username ?: System.getenv('github_username')
+            password = secret.github_token ?: System.getenv('github_token')
+        }
     }
     maven {
         url 'https://maven.mcmoddev.com'
@@ -201,6 +225,11 @@ dependencies {
         compileOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
         runtimeOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
     }
+
+    // World Stripper
+    if (project.hasProperty('world_stripper_version')) {
+        runtimeOnly fg.deobf("com.ewyboy.worldstripper:World-Stripper:${project.world_stripper_version}")
+    }
 }
 
 jar {
@@ -247,23 +276,6 @@ class Secrets {
 
     def getProperty(String key) {
         return data ? data[key] : ''
-    }
-}
-
-
-import groovy.json.JsonSlurper
-
-def secretFile
-if (System.getenv().SECRET_FILE) {
-    secretFile = file System.getenv().SECRET_FILE
-} else {
-    secretFile = file 'secret.json'
-}
-
-project.ext.secret = new Secrets()
-if (secretFile.exists()) {
-    secretFile.withReader {
-        project.ext.secret.data = new JsonSlurper().parse it
     }
 }
 

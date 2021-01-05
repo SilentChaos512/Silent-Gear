@@ -53,10 +53,12 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
     @Override
     public void registerTags() {
         // Forge
+        copy(ModTags.Blocks.ORES_BORT, ModTags.Items.ORES_BORT);
         copy(ModTags.Blocks.ORES_CRIMSON_IRON, ModTags.Items.ORES_CRIMSON_IRON);
         copy(ModTags.Blocks.ORES_AZURE_SILVER, ModTags.Items.ORES_AZURE_SILVER);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
 
+        copy(ModTags.Blocks.STORAGE_BLOCKS_BORT, ModTags.Items.STORAGE_BLOCKS_BORT);
         copy(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModTags.Items.STORAGE_BLOCKS_BLAZE_GOLD);
         copy(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModTags.Items.STORAGE_BLOCKS_CRIMSON_IRON);
         copy(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, ModTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL);
@@ -78,6 +80,10 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
                 .addTag(ModTags.Items.DUSTS_CRIMSON_STEEL)
                 .addTag(ModTags.Items.DUSTS_AZURE_SILVER)
                 .addTag(ModTags.Items.DUSTS_AZURE_ELECTRUM);
+
+        builder(ModTags.Items.GEMS_BORT, CraftingItems.BORT);
+        getBuilder(Tags.Items.GEMS)
+                .addTag(ModTags.Items.GEMS_BORT);
 
         builder(ModTags.Items.INGOTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_INGOT);
         builder(ModTags.Items.INGOTS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_INGOT);

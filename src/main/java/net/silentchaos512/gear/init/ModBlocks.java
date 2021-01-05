@@ -16,7 +16,6 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
-import net.silentchaos512.gear.block.MetalBlock;
 import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
 import net.silentchaos512.gear.block.grader.GraderBlock;
@@ -29,16 +28,19 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class ModBlocks {
+    public static final BlockRegistryObject<OreBlock> BORT_ORE = register("bort_ore", () ->
+            getOre(2, SoundType.STONE));
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
             getOre(2, SoundType.NETHER_GOLD));
     public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
             getOre(4, SoundType.STONE));
 
-    public static final BlockRegistryObject<MetalBlock> CRIMSON_IRON_BLOCK = register("crimson_iron_block", ModBlocks::getMetalBlock);
-    public static final BlockRegistryObject<MetalBlock> CRIMSON_STEEL_BLOCK = register("crimson_steel_block", ModBlocks::getMetalBlock);
-    public static final BlockRegistryObject<MetalBlock> BLAZE_GOLD_BLOCK = register("blaze_gold_block", ModBlocks::getMetalBlock);
-    public static final BlockRegistryObject<MetalBlock> AZURE_SILVER_BLOCK = register("azure_silver_block", ModBlocks::getMetalBlock);
-    public static final BlockRegistryObject<MetalBlock> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block", ModBlocks::getMetalBlock);
+    public static final BlockRegistryObject<Block> BORT_BLOCK = register("bort_block", ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> CRIMSON_IRON_BLOCK = register("crimson_iron_block", ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> CRIMSON_STEEL_BLOCK = register("crimson_steel_block", ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> BLAZE_GOLD_BLOCK = register("blaze_gold_block", ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> AZURE_SILVER_BLOCK = register("azure_silver_block", ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block", ModBlocks::getStorageBlock);
 
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(AbstractBlock.Properties.create(Material.IRON)
@@ -145,8 +147,8 @@ public final class ModBlocks {
                 .sound(soundType));
     }
 
-    private static MetalBlock getMetalBlock() {
-        return new MetalBlock(AbstractBlock.Properties.create(Material.IRON)
+    private static Block getStorageBlock() {
+        return new Block(AbstractBlock.Properties.create(Material.IRON)
                 .hardnessAndResistance(3.0f, 6.0f)
                 .sound(SoundType.METAL));
     }

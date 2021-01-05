@@ -65,6 +65,7 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue salvagerMaxLossRate;
         // World
         public static final ForgeConfigSpec.IntValue azureSilverCount;
+        public static final ForgeConfigSpec.IntValue bortCount;
         public static final ForgeConfigSpec.IntValue crimsonIronCount;
         public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
         public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
@@ -261,6 +262,9 @@ public final class Config {
                 azureSilverCount = builder
                         .comment("Veins of azure silver ore per chunk")
                         .defineInRange("azureSilver.count", 8, 0, 1000);
+                bortCount = builder
+                        .comment("Attempts to place individual bort ore blocks per chunk.")
+                        .defineInRange("bort.count", 4, 0, 1000);
                 crimsonIronCount = builder
                         .comment("Veins of crimson iron ore per chunk")
                         .defineInRange("crimsonIron.count", 14, 0, 1000);

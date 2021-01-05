@@ -39,6 +39,7 @@ public enum CraftingItems implements IItemProvider {
     TEMPLATE_BOARD,
     UPGRADE_BASE,
     ADVANCED_UPGRADE_BASE,
+    BORT,
     CRIMSON_IRON_INGOT,
     CRIMSON_STEEL_INGOT,
     BLAZE_GOLD_INGOT,
