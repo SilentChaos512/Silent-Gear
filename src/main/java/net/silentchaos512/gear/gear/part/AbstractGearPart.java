@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -126,7 +125,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     /**
      * List of blacklisted {@link GearType}s, mostly used for part tooltips. To know whether of not
-     * a part may be used in crafting, use {@link IGearPart#isCraftingAllowed(IPartData, PartType, GearType, CraftingInventory)} instead.
+     * a part may be used in crafting, use {@link #isCraftingAllowed(IPartData, PartType, GearType, IInventory)} instead.
      *
      * @return The List of GearTypes the part may not be used to craft (may be empty)
      */

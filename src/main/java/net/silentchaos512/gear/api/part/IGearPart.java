@@ -67,6 +67,7 @@ public interface IGearPart extends IGearComponent<IPartData> {
     /**
      * Determine if the part can be used to craft an item of the given type.
      *
+     * @param part     The part
      * @param gearType The gear type (or null if not available)
      * @return True if crafting is allowed or {@code gearType} is {@code null}, false otherwise
      */
@@ -129,8 +130,9 @@ public interface IGearPart extends IGearComponent<IPartData> {
      * Creates a {@link PartData} instance with possibly randomized data. This can be overridden to
      * apply custom data to randomized parts (see {@link net.silentchaos512.gear.util.GearGenerator}).
      *
-     * @param tier The target tier for random materials. If there are no materials of that tier,
-     *             materials of another tier should be selected.
+     * @param gearType The gear type
+     * @param tier     The target tier for random materials. If there are no materials of that tier,
+     *                 materials of another tier should be selected.
      * @return Part data instance
      */
     default PartData randomizeData(GearType gearType, int tier) {

@@ -21,6 +21,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.Registration;
@@ -68,6 +69,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
 
         builder(ModTags.Items.CHUNKS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_CHUNKS);
         builder(ModTags.Items.CHUNKS_AZURE_SILVER, CraftingItems.AZURE_SILVER_CHUNKS);
+        builder(ModTags.Items.COAL_GENERATOR_FUELS, ModItems.NETHERWOOD_CHARCOAL, ModBlocks.NETHERWOOD_CHARCOAL_BLOCK);
 
         builder(ModTags.Items.DUSTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_DUST);
         builder(ModTags.Items.DUSTS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_DUST);

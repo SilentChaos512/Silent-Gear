@@ -49,6 +49,7 @@ public final class ModTags {
 
         public static final ITag.INamedTag<Item> CHUNKS_CRIMSON_IRON = silentsMechanisms("chunks/crimson_iron");
         public static final ITag.INamedTag<Item> CHUNKS_AZURE_SILVER = silentsMechanisms("chunks/azure_silver");
+        public static final ITag.INamedTag<Item> COAL_GENERATOR_FUELS = silentsMechanisms("coal_generator_fuels");
 
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_BORT = forge("storage_blocks/bort");
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_BLAZE_GOLD = forge("storage_blocks/blaze_gold");

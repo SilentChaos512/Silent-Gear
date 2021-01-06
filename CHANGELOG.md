@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Red card trait, found on the red card part (function is the same as before, it's just a trait now)
-- Bort (gem, block, ore). Will be required to craft adornments in the future, but is optional for now.
+- Bort (gem, block, ore). Spawns rarely in the overworld (a few blocks per chunk). Will be required to craft adornments in the future, but is optional for now.
 - (API) GearApi class, which contains methods that redirect to many commonly used methods (GearData, TraitHelper, etc.)
 ### Fixed
 - Some armor items having incorrect armor values [#304]

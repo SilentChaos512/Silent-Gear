@@ -133,10 +133,12 @@ public final class GearType {
      * Gets or creates a new gear type with the given parent. If the gear type already exists, the
      * existing instance is not modified in any way.
      *
-     * @param name   The gear type name. Must be unique and contain only lowercase letters and
-     *               underscores.
-     * @param parent The parent gear type. This will typically be harvest_tool, melee_weapon, or
-     *               ranged_weapon, but it could be any existing type.
+     * @param name            The gear type name. Must be unique and contain only lowercase letters
+     *                        and underscores.
+     * @param parent          The parent gear type. This will typically be harvest_tool,
+     *                        melee_weapon, or ranged_weapon, but it could be any existing type.
+     * @param animationFrames Number of animation frames (bow pulling, etc) the gear has
+     * @param durabilityStat  The stat used to calculate the items durability
      * @return The newly created gear type, or the existing instance if it already exists
      * @throws IllegalArgumentException if the name is invalid
      */
