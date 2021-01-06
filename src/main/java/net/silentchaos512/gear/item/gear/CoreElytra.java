@@ -14,11 +14,13 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
@@ -27,6 +29,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.compat.caelus.CaelusCompat;
+import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.Const;
@@ -90,7 +93,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
 
     @Override
     public boolean isValidSlot(String slot) {
-        return EquipmentSlotType.CHEST.getName().equalsIgnoreCase(slot);
+        return EquipmentSlotType.CHEST.getName().equalsIgnoreCase(slot) || "back".equalsIgnoreCase(slot);
     }
 
     @Override
@@ -166,20 +169,33 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
         return TraitHelper.hasTrait(stack, Const.Traits.BRILLIANT);
     }
 
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+        if (ModList.get().isLoaded(Const.CURIOS)) {
+            return CuriosCompat.createProvider(stack, multimap -> addAttributes("back", stack, multimap, false));
+        }
+        return super.initCapabilities(stack, nbt);
+    }
+
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = LinkedHashMultimap.create();
 
-        if (slot == this.getEquipmentSlot(stack)) {
-            float armor = getStat(stack, ItemStats.ARMOR);
-            if (armor > 0) {
-                multimap.put(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "Elytra armor modifier", armor, AttributeModifier.Operation.ADDITION));
-            }
-            GearHelper.getAttributeModifiers(EquipmentSlotType.CHEST, stack, multimap);
-            CaelusCompat.tryAddFlightAttribute(multimap);
+        if (isValidSlot(slot.getName())) {
+            addAttributes(slot.getName(), stack, multimap, true);
         }
 
         return multimap;
+    }
+
+    private void addAttributes(String slot, ItemStack stack, Multimap<Attribute, AttributeModifier> multimap, boolean includeArmor) {
+        float armor = getStat(stack, ItemStats.ARMOR);
+        if (armor > 0 && includeArmor) {
+            multimap.put(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "Elytra armor modifier", armor, AttributeModifier.Operation.ADDITION));
+        }
+        GearHelper.getAttributeModifiers(slot, stack, multimap, false);
+        CaelusCompat.tryAddFlightAttribute(multimap);
     }
 
     @Override

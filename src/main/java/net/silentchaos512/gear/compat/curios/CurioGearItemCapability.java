@@ -22,6 +22,7 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class CurioGearItemCapability {
     public static void register() {
@@ -39,8 +40,8 @@ public class CurioGearItemCapability {
         });
     }
 
-    public static ICapabilityProvider createProvider(ItemStack stack) {
-        return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack));
+    public static ICapabilityProvider createProvider(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
+        return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack, extraAttributes));
     }
 
     public static ICapabilityProvider createProvider(CurioGearItemWrapper curio) {
@@ -65,13 +66,15 @@ public class CurioGearItemCapability {
 
     private static final class CurioGearItemWrapper implements ICurio {
         private final ItemStack stack;
+        private final Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes;
 
         private CurioGearItemWrapper() {
-            this(ItemStack.EMPTY);
+            this(ItemStack.EMPTY, multimap -> {});
         }
 
-        private CurioGearItemWrapper(ItemStack stack) {
+        private CurioGearItemWrapper(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
             this.stack = stack;
+            this.extraAttributes = extraAttributes;
         }
 
         @Override
@@ -81,7 +84,9 @@ public class CurioGearItemCapability {
 
         @Override
         public Multimap<Attribute, AttributeModifier> getAttributeModifiers(String identifier) {
-            return GearHelper.getAttributeModifiers(identifier, stack, HashMultimap.create(), false);
+            Multimap<Attribute, AttributeModifier> multimap = GearHelper.getAttributeModifiers(identifier, stack, HashMultimap.create(), false);
+            extraAttributes.accept(multimap);
+            return multimap;
         }
 
         @Override
