@@ -163,6 +163,11 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
         copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
         getBuilder(ItemTags.ARROWS).add(ModItems.ARROW.get());
+        builder(ItemTags.PIGLIN_LOVED,
+                ModBlocks.BLAZE_GOLD_BLOCK,
+                ModItems.GOLDEN_NETHER_BANANA,
+                CraftingItems.BLAZE_GOLD_DUST,
+                CraftingItems.BLAZE_GOLD_INGOT);
 
         // Silent Gear
         copy(ModTags.Blocks.NETHERWOOD_LOGS, ModTags.Items.NETHERWOOD_LOGS);
