@@ -11,10 +11,10 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
 
 import javax.annotation.Nullable;
@@ -50,8 +50,9 @@ public class BlueprintIngredient extends Ingredient {
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return Registration.getItems(IBlueprint.class).stream()
-                .map(item -> new ItemStack((Item) item))
+        return ForgeRegistries.ITEMS.getValues().stream()
+                .filter(item -> item instanceof IBlueprint)
+                .map(ItemStack::new)
                 .filter(this)
                 .toArray(ItemStack[]::new);
     }

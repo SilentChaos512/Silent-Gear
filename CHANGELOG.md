@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (API) GearApi class, which contains methods that redirect to many commonly used methods (GearData, TraitHelper, etc.)
 ### Fixed
 - Some armor items having incorrect armor values [#304]
+- Blueprints from other mods not showing up in recipes (but still working)
 
 ## [2.4.11] - 2020-01-02
 ### Changed
