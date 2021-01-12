@@ -3,24 +3,27 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.5.0] - 2021-01-12
+(API) Some refactoring was done (no changes to trait classes)
 ### Added
 - Items to `minecraft:piglin_loved` tag: golden nether banana and blaze gold block/dust/ingot [#306]
 - Red card trait, found on the red card part (function is the same as before, it's just a trait now)
-- Bort (gem, block, ore). Spawns rarely in the overworld (a few blocks per chunk). Will be required to craft adornments in the future, but is optional for now.
+- Bort (gem, block, ore). Spawns rarely in the overworld (a few single blocks per chunk). Will be required to craft adornments in the future, but is optional for now.
 - (API) GearApi class, which contains methods that redirect to many commonly used methods (GearData, TraitHelper, etc.)
 ### Fixed
 - Some armor items having incorrect armor values [#304]
+- Crash when creating gear models in some cases
+- A large number of false missing texture errors showing in the log
 - Blueprints from other mods not showing up in recipes (but still working)
 
-## [2.4.11] - 2020-01-02
+## [2.4.11] - 2021-01-02
 ### Changed
 - Reduced impact of tier differences on synergy by half
 - Grades no longer affect rarity
 ### Fixed
 - Should fix a crash caused by stat rework from last version [#303]
 
-## [2.4.10] - 2020-01-02
+## [2.4.10] - 2021-01-02
 ### Added
 - Stats can now be specified per gear type. For instance, this allows the armor stat to be manually set for each piece, rather than using a predefined ratio. Old files will still work as before.
 - Turtle (scute) material. Can be used to craft helmets only.

@@ -1,5 +1,4 @@
 {
-  "Item.silentgear.bort": "Bort",
   "advancements.silentgear.armor.description": "Craft any piece of armor from Silent Gear",
   "advancements.silentgear.armor.title": "Better Armor",
   "advancements.silentgear.azure_electrum.description": "Craft some azure electrum. It's fast!",
@@ -235,6 +234,7 @@
   "item.silentgear.boot_plates.nameProper": "%s Boot Plates",
   "item.silentgear.boots": "Boots",
   "item.silentgear.boots.nameProper": "%s Boots",
+  "item.silentgear.bort": "Bort",
   "item.silentgear.bow": "Bow",
   "item.silentgear.bow.nameProper": "%s Bow",
   "item.silentgear.bow.unstrung": "Unstrung %s",
@@ -750,6 +750,7 @@
   "trait.silentgear.racker.desc": "Places netherrack at the cost of durability",
   "trait.silentgear.reach": "Reach",
   "trait.silentgear.reach.desc": "Increases block reach distance",
+  "trait.silentgear.red_card": "Red Card",
   "trait.silentgear.refractive": "Refractive",
   "trait.silentgear.refractive.desc": "Place phantom lights when used",
   "trait.silentgear.road_maker": "Road Maker",
