@@ -121,7 +121,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
                     if (!worldIn.isRemote) {
                         ArrowItem arrowitem = (ArrowItem) (ammoItem.getItem() instanceof ArrowItem ? ammoItem.getItem() : Items.ARROW);
                         AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoItem, player);
-                        arrowEntity.setDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
+                        arrowEntity.setDamage(arrowEntity.getDamage() - 2 + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
                         arrowEntity.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1f)) {
                             arrowEntity.setIsCritical(true);
