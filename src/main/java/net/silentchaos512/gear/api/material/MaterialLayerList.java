@@ -28,7 +28,7 @@ public class MaterialLayerList implements IMaterialLayerList {
                 .map(PartTextures::getTexture)
                 .map(tex -> {
                     int c = tex.equals(SilentGear.getId("_highlight")) ? Color.VALUE_WHITE : color;
-                    return new MaterialLayer(tex, c);
+                    return new MaterialLayer(tex, partType, c, false);
                 })
                 .collect(Collectors.toList()));
         this.oldTextureType = texture;

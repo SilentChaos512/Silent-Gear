@@ -88,7 +88,7 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
             MaterialLayer layer = layers.get(i);
             if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
                 int blendedColor = part.getColor(stack, i, 0);
-                list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
+                list.add(new MaterialLayer(layer.getTextureId(), part.getType(), blendedColor, false));
             } else {
                 list.add(layer);
             }

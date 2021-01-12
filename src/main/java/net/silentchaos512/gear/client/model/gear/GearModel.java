@@ -157,7 +157,7 @@ public class GearModel extends LayeredModel<GearModel> {
             for (int i = 0; i < animationFrames; ++i) {
                 MaterialLayer layer = new MaterialLayer(tex, Color.VALUE_WHITE);
                 ret.add(getTexture(layer, i, false));
-                ret.add(getTexture(layer, i, true));
+                ret.add(getTexture(layer, 0, true));
             }
         }
 
@@ -168,7 +168,7 @@ public class GearModel extends LayeredModel<GearModel> {
                     for (MaterialLayer layer : materialDisplay.getLayers(gearType, partType)) {
                         int animationFrames = layer.isAnimated() ? item.getAnimationFrames() : 1;
                         ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, false));
-                        ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, true));
+                        ret.addAll(this.getTexturesForAllFrames(layer, 1, true));
                     }
                 }
             }

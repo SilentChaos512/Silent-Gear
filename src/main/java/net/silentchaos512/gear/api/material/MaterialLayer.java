@@ -11,8 +11,6 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.utils.Color;
 
-import javax.annotation.Nullable;
-
 public class MaterialLayer {
     protected final ResourceLocation texture;
     protected final PartType partType;
@@ -28,10 +26,10 @@ public class MaterialLayer {
     }
 
     public MaterialLayer(ResourceLocation texture, int color, boolean animated) {
-        this(texture, null, color, animated);
+        this(texture, PartType.NONE, color, animated);
     }
 
-    public MaterialLayer(ResourceLocation texture, @Nullable PartType partType, int color, boolean animated) {
+    public MaterialLayer(ResourceLocation texture, PartType partType, int color, boolean animated) {
         this.texture = texture;
         this.partType = partType;
         this.color = color;
@@ -77,7 +75,7 @@ public class MaterialLayer {
         }
 
         ResourceLocation texture = new ResourceLocation(json.getAsString());
-        return new MaterialLayer(texture, Color.VALUE_WHITE);
+        return new MaterialLayer(texture, key.getPartType(), Color.VALUE_WHITE, false);
     }
 
     public JsonElement serialize() {

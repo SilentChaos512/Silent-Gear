@@ -163,7 +163,7 @@ public class GearModelOverrideList extends ItemOverrideList {
                 if (debugLogging()) {
                     SilentGear.LOGGER.info("  - add layer {} (type={}, color={})",
                             coloredLayer.getTextureId(),
-                            coloredLayer.getPartType().getName(),
+                            SilentGear.shortenId(coloredLayer.getPartType().getName()),
                             Color.format(blendedColor));
                 }
             } else {
@@ -171,7 +171,7 @@ public class GearModelOverrideList extends ItemOverrideList {
                 if (debugLogging()) {
                     SilentGear.LOGGER.info("  - add layer {} (type={}, colorless)",
                             layer.getTextureId(),
-                            layer.getPartType().getName());
+                            SilentGear.shortenId(layer.getPartType().getName()));
                 }
             }
         }
