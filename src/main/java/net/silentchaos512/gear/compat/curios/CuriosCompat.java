@@ -51,4 +51,21 @@ public final class CuriosCompat {
 
         return max;
     }
+
+    public static Collection<ItemStack> getEquippedCurios(LivingEntity entity) {
+        LazyOptional<IItemHandlerModifiable> lazy = CuriosApi.getCuriosHelper().getEquippedCurios(entity);
+        Collection<ItemStack> ret = new ArrayList<>();
+
+        if (lazy.isPresent()) {
+            IItemHandlerModifiable handler = lazy.orElseThrow(IllegalStateException::new);
+            for (int i = 0; i < handler.getSlots(); ++i) {
+                ItemStack stack = handler.getStackInSlot(i);
+                if (stack.getItem() instanceof ICoreItem) {
+                    ret.add(stack);
+                }
+            }
+        }
+
+        return ret;
+    }
 }

@@ -9,9 +9,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -21,6 +21,8 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
@@ -694,6 +696,10 @@ public final class GearData {
                     .stream()
                     .filter(s -> s.getItem() instanceof ICoreItem)
                     .forEach(s -> recalculateStats(s, player));
+
+            if (ModList.get().isLoaded(Const.CURIOS)) {
+                CuriosCompat.getEquippedCurios(player).forEach(s -> recalculateStats(s, player));
+            }
         }
     }
 }
