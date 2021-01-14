@@ -106,7 +106,7 @@ public class TraitsProvider implements IDataProvider {
                         1, 2, 3, 4, 5)
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.CURSED, 7)
-                .addModifiersEitherHand(GearType.ALL,
+                .addModifierAnySlot(GearType.ALL,
                         Attributes.LUCK,
                         AttributeModifier.Operation.ADDITION,
                         -0.5f, -1f, -1.5f, -2f, -3f, -4f, -5f)
@@ -114,7 +114,7 @@ public class TraitsProvider implements IDataProvider {
                 .extraWikiLines("  - Please see the extra info on the Lucky trait and this wiki page: https://minecraft.gamepedia.com/Luck")
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.LUCKY, 7)
-                .addModifiersEitherHand(GearType.ALL,
+                .addModifierAnySlot(GearType.ALL,
                         Attributes.LUCK,
                         AttributeModifier.Operation.ADDITION,
                         0.5f, 1f, 1.5f, 2f, 3f, 4f, 5f)
