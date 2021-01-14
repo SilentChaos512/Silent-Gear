@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.1] - 2021-01-14
+### Added
+- Config to toggle model/texture debug logging (left enabled by default)
+### Fixed
+- Second attempt at fixing crash when creating gear models in some cases (likely a third-party issue)
+- Lucky and Cursed traits not working on curios
+- Equipped curios not recalculating stats and traits on login
+- Crimson iron having duplicate armor stat modifiers
+
 ## [2.5.0] - 2021-01-12
 (API) Some refactoring was done (no changes to trait classes)
 ### Added
