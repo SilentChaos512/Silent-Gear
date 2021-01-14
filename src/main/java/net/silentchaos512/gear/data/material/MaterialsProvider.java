@@ -329,10 +329,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
-                .stat(PartType.MAIN, ItemStats.ARMOR, 18)
                 .mainStatsArmor(3, 7, 5, 3, 2, 6) //18
-                .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 6)
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
