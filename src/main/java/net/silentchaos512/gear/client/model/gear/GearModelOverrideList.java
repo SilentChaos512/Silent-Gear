@@ -22,6 +22,7 @@ import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -67,9 +68,8 @@ public class GearModelOverrideList extends ItemOverrideList {
         this.modelLocation = modelLocation;
     }
 
-    private static boolean debugLogging() {
-        // TODO: Add a config option?
-        return true;
+    private static boolean isDebugLoggingEnabled() {
+        return Config.Common.modelAndTextureLogging.get();
     }
 
     @Nullable
@@ -91,7 +91,7 @@ public class GearModelOverrideList extends ItemOverrideList {
 
     private IBakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
         boolean broken = GearHelper.isBroken(stack);
-        if (debugLogging()) {
+        if (isDebugLoggingEnabled()) {
             SilentGear.LOGGER.info("getOverrideModel for {} ({})", stack.getDisplayName().getString(), broken ? "broken" : "normal");
             SilentGear.LOGGER.info("- model key {}", key.data);
         }
@@ -160,21 +160,27 @@ public class GearModelOverrideList extends ItemOverrideList {
                 int blendedColor = part.getColor(stack, i, 0);
                 MaterialLayer coloredLayer = layer.withColor(blendedColor);
                 list.add(coloredLayer);
-                if (debugLogging()) {
-                    SilentGear.LOGGER.info("  - add layer {} (type={}, color={})",
-                            coloredLayer.getTextureId(),
-                            SilentGear.shortenId(coloredLayer.getPartType().getName()),
-                            Color.format(blendedColor));
+                if (isDebugLoggingEnabled()) {
+                    debugLogLayer(coloredLayer, Color.format(blendedColor));
                 }
             } else {
                 list.add(layer);
-                if (debugLogging()) {
-                    SilentGear.LOGGER.info("  - add layer {} (type={}, colorless)",
-                            layer.getTextureId(),
-                            SilentGear.shortenId(layer.getPartType().getName()));
+                if (isDebugLoggingEnabled()) {
+                    debugLogLayer(layer, "colorless");
                 }
             }
         }
+    }
+
+    private static void debugLogLayer(MaterialLayer layer, String colorStr) {
+        //noinspection ConstantConditions -- unknown NPE for some data pack users
+        String partTypeStr = layer.getPartType() != null
+                ? SilentGear.shortenId(layer.getPartType().getName())
+                : "null type?";
+        SilentGear.LOGGER.info("  - add layer {} ({}, {})",
+                layer.getTextureId(),
+                partTypeStr,
+                colorStr);
     }
 
     private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {

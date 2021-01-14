@@ -74,6 +74,7 @@ public final class Config {
         // Debug
         public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
+        public static final ForgeConfigSpec.BooleanValue modelAndTextureLogging;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -289,6 +290,11 @@ public final class Config {
             statsDebugLogging = builder
                     .comment("Log stat calculations in the debug.log every time gear stats are recalculated")
                     .define("debug.logging.stats", true);
+
+            modelAndTextureLogging = builder
+                    .comment("Log information on construction of gear and part models, as well as textures they attempt to load.",
+                            "This is intended to help find and fix rare issues that some users are experiencing.")
+                    .define("debug.logging.modelAndTexture", true);
 
             spec = builder.build();
         }
