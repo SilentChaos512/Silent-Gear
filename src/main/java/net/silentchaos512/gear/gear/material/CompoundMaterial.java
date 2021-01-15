@@ -51,11 +51,6 @@ public class CompoundMaterial implements IMaterial {
         return CompoundMaterialItem.getSubMaterials(material.getItem());
     }
 
-    @Nullable
-    public static MaterialInstance getPrimarySubMaterial(IMaterialInstance material) {
-        return CompoundMaterialItem.getPrimarySubMaterial(material.getItem());
-    }
-
     @Override
     public String getPackName() {
         return packName;

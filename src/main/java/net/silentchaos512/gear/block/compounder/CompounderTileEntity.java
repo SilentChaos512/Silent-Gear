@@ -19,7 +19,6 @@ import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -39,6 +38,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 10 : 15);
 
     private final ContainerType<? extends CompounderContainer> containerType;
+    private final IRecipeType<CompoundingRecipe> recipeType;
     private final Collection<IMaterialCategory> categories;
     private final Supplier<CompoundMaterialItem> outputItem;
     private final int[] allSlots;
@@ -81,11 +81,13 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     public CompounderTileEntity(TileEntityType<?> typeIn,
                                 ContainerType<? extends CompounderContainer> containerType,
+                                IRecipeType<CompoundingRecipe> recipeType,
                                 Supplier<CompoundMaterialItem> outputItem,
                                 int inputSlotCount,
                                 Collection<IMaterialCategory> categoriesIn) {
         super(typeIn, inputSlotCount + 2);
         this.containerType = containerType;
+        this.recipeType = recipeType;
         this.outputItem = outputItem;
         this.categories = ImmutableSet.copyOf(categoriesIn);
         this.allSlots = IntStream.range(0, this.items.size()).toArray();
@@ -93,11 +95,11 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     public static boolean canAcceptInput(ItemStack stack, Collection<IMaterialCategory> categories) {
         MaterialInstance material = MaterialInstance.from(stack);
-        return material != null && material.getMaterial().isSimple() && material.hasAnyCategory(categories);
+        return material != null && material.get().isSimple() && material.hasAnyCategory(categories);
     }
 
     protected IRecipeType<? extends CompoundingRecipe> getRecipeType() {
-        return ModRecipes.COMPOUNDING_METAL_TYPE;
+        return recipeType;
     }
 
     @Nullable
@@ -202,10 +204,10 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
             decrStackSize(i, 1);
         }
 
+        ItemStack output = getWorkOutput(recipe, materials);
         if (!current.isEmpty()) {
-            current.grow(materials.size());
+            current.grow(output.getCount());
         } else {
-            ItemStack output = getWorkOutput(recipe, materials);
             setInventorySlotContents(getOutputSlotIndex(), output);
         }
     }

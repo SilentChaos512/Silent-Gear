@@ -141,10 +141,9 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
     }
 
     public static IMaterialDisplay get(IMaterial material) {
-        if (!material.isSimple()) {
+        if (!MATERIALS.containsKey(material.getId()) && !material.isSimple()) {
             return CompoundMaterialDisplay.INSTANCE;
         }
-
         return getMaterial(material.getId());
     }
 

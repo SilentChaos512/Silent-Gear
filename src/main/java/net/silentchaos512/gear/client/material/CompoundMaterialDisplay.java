@@ -6,10 +6,9 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.client.util.ColorUtils;
-import net.silentchaos512.gear.gear.material.CompoundMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
+import net.silentchaos512.gear.item.IColoredMaterialItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.utils.Color;
 
@@ -25,11 +24,11 @@ public class CompoundMaterialDisplay implements IMaterialDisplay {
 
     @Override
     public IMaterialLayerList getLayerList(GearType gearType, IPartData part, IMaterialInstance material) {
-        if (part.getPart() instanceof CompoundPart && material.getMaterial() instanceof CompoundMaterial) {
-            MaterialInstance primary = CompoundMaterial.getPrimarySubMaterial(material);
+        if (!material.isSimple()) {
+            MaterialInstance primary = IColoredMaterialItem.getPrimarySubMaterial(material.getItem());
 
             if (primary != null) {
-                IMaterialDisplay model = MaterialDisplayManager.get(primary.getMaterial());
+                IMaterialDisplay model = MaterialDisplayManager.get(primary.get());
                 return model.getLayerList(gearType, part, material);
             }
         }

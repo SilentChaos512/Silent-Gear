@@ -168,6 +168,8 @@
   "gearType.silentgear.tool": "Tools",
   "gui.silentgear.category.gearCrafting": "Gear Crafting",
   "gui.silentgear.material_grader.catalystTier": "Catalyst Tier: %s",
+  "item.silengear.custom_gem": "Custom Gem (No Data)",
+  "item.silengear.custom_ingot": "Custom Ingot (No Data)",
   "item.silentgear.adornment": "Adornment",
   "item.silentgear.adornment.nameProper": "%s Adornment",
   "item.silentgear.advanced_upgrade_base": "Advanced Upgrade Base",
