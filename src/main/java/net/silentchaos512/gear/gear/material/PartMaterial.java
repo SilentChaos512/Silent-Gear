@@ -3,6 +3,7 @@ package net.silentchaos512.gear.gear.material;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -13,26 +14,25 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
-import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public class PartMaterial implements IMaterial {
     private final ResourceLocation materialId;
@@ -126,20 +126,20 @@ public class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Set<PartType> getPartTypes(MaterialInstance material) {
+    public Set<PartType> getPartTypes(IMaterialInstance material) {
         // Grab the part types from this part and its parent(s)
         return Sets.union(stats.keySet(), getParentOptional()
                 .<Set<PartType>>map(m -> new LinkedHashSet<>(m.getPartTypes(material))).orElse(Collections.emptySet()));
     }
 
     @Override
-    public boolean allowedInPart(MaterialInstance material, PartType partType) {
+    public boolean allowedInPart(IMaterialInstance material, PartType partType) {
         return stats.containsKey(partType) || (getParent() != null && getParent().allowedInPart(material, partType));
     }
 
     @Override
     public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key, ItemStack gear) {
-        Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, EMPTY_STAT_MAP).get(key));
+        Collection<StatInstance> ret = new ArrayList<>(stats.getOrDefault(partType, StatModifierMap.EMPTY_STAT_MAP).get(key));
         if (ret.isEmpty() && getParent() != null) {
             ret.addAll(getParent().getStatModifiers(material, partType, key, gear));
         }
@@ -148,7 +148,7 @@ public class PartMaterial implements IMaterial {
 
     @Override
     public Collection<StatGearKey> getStatKeys(PartType type) {
-        return this.stats.getOrDefault(type, EMPTY_STAT_MAP).keySet();
+        return this.stats.getOrDefault(type, StatModifierMap.EMPTY_STAT_MAP).keySet();
     }
 
     @Override
@@ -162,7 +162,7 @@ public class PartMaterial implements IMaterial {
 
     @Override
     public boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType, @Nullable IInventory inventory) {
-        if (isGearTypeBlacklisted(gearType) || !allowedInPart(partType)) {
+        if (isGearTypeBlacklisted(gearType) || !allowedInPart(material, partType)) {
             return false;
         }
 

@@ -121,7 +121,6 @@ public final class PartType {
         return type;
     }
 
-    @Deprecated // Use getNonNull
     @Nullable
     public static PartType get(ResourceLocation name) {
         return VALUES.get(name);

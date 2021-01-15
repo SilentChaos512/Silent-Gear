@@ -130,8 +130,7 @@ public final class MaterialsCommand {
         }
     }
 
-    private static String makeTsvLine(IMaterial materialIn, PartType partType) {
-        MaterialInstance material = MaterialInstance.of(materialIn);
+    private static String makeTsvLine(MaterialInstance material, PartType partType) {
         StringBuilder builder = new StringBuilder();
         appendTsv(builder, material.get().getPackName());
         appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
