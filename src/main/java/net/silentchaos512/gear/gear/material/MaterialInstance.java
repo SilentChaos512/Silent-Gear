@@ -10,9 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -20,11 +18,13 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.InventoryUtils;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -159,14 +159,6 @@ public final class MaterialInstance implements IMaterialInstance {
         return event.getModifiers();
     }
 
-    public Collection<TraitInstance> getTraits(PartType partType) {
-        return material.getTraits(this, partType, ItemStack.EMPTY);
-    }
-
-    public Collection<TraitInstance> getTraits(PartType partType, ItemStack gear) {
-        return material.getTraits(this, partType, gear);
-    }
-
     @Override
     public float getStat(PartType partType, StatGearKey key, ItemStack gear) {
         ItemStat stat = ItemStats.get(key.getStat());
@@ -228,14 +220,9 @@ public final class MaterialInstance implements IMaterialInstance {
         return nbt;
     }
 
-    @Override
-    public int getColor(PartType partType, ItemStack gear) {
-        return material.getPrimaryColor(gear, partType);
-    }
-
     public int getPrimaryColor(GearType gearType, PartType partType) {
         IMaterialDisplay model = MaterialDisplayManager.get(this.material);
-        MaterialLayer layer = model.getLayers(gearType, partType).getFirstLayer();
+        MaterialLayer layer = model.getLayerList(gearType, partType, this).getFirstLayer();
         if (layer != null) {
             return layer.getColor();
         }

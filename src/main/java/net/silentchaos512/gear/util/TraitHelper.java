@@ -286,11 +286,10 @@ public final class TraitHelper {
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
         Map<ITrait, Integer> countMatsWithTrait = new HashMap<>();
-        GearType gearType = GearHelper.getType(gear, GearType.ALL);
 
         for (MaterialInstance material : materials) {
             for (TraitInstance inst : material.getTraits(partType, gearType, gear)) {
-                if (inst.conditionsMatch(materials, partType, gear)) {
+                if (inst.conditionsMatch(materials, gearType, partType, gear)) {
                     result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
                 }

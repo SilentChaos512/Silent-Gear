@@ -9,13 +9,8 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.IGearComponent;
 import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
@@ -114,7 +109,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * @param material
      * @return Supported part types
      */
-    Set<PartType> getPartTypes(MaterialInstance material);
+    Set<PartType> getPartTypes(IMaterialInstance material);
 
     /**
      * Determine if the material can be used to craft parts of the given type. This should include a
@@ -124,7 +119,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * @param partType The part type
      * @return True if and only if crafting should be allowed
      */
-    boolean allowedInPart(MaterialInstance material, PartType partType);
+    boolean allowedInPart(IMaterialInstance material, PartType partType);
 
     /**
      * Used to retain data on integrated server which is not sent on connect.

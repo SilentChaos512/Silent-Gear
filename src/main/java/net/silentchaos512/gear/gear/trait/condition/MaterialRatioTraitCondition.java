@@ -15,7 +15,6 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
@@ -47,8 +46,7 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
-        GearType gearType = GearHelper.getType(gear, GearType.ALL);
+    public boolean matches(ItemStack gear, GearType gearType, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         int count = 0;
         for (MaterialInstance mat : materials) {
             for (TraitInstance inst : mat.getTraits(partType, gearType, gear)) {

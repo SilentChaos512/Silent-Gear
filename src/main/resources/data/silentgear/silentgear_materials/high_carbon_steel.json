@@ -1,0 +1,49 @@
+{
+  "type": "silentgear:custom_compound",
+  "simple": false,
+  "availability": {
+    "tier": 2,
+    "categories": [
+      "metal"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "custom_compound": {
+      "item": "silentgear:custom_ingot"
+    }
+  },
+  "name": {
+    "text": "High-Carbon Steel (Test)"
+  },
+  "stats": {
+    "main": {
+      "durability": 420.0,
+      "armor_durability": 24.0,
+      "repair_value": 0.05,
+      "enchantability": 11.0,
+      "harvest_level": 2.0,
+      "harvest_speed": 6.0,
+      "melee_damage": 4.0,
+      "magic_damage": 1.0,
+      "attack_speed": -0.2,
+      "armor": 20.0,
+      "armor_toughness": 2.0,
+      "magic_armor": 6.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": -0.2,
+      "rarity": 40.0,
+      "silentgems:chargeability": 0.8
+    }
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:malleable",
+        "level": 3
+      }
+    ]
+  }
+}

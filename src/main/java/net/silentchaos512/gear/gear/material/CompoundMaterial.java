@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.gson.*;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -14,15 +15,14 @@ import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
-import net.silentchaos512.gear.util.StatGearKey;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
@@ -117,7 +117,7 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public Set<PartType> getPartTypes(MaterialInstance material) {
+    public Set<PartType> getPartTypes(IMaterialInstance material) {
         List<MaterialInstance> subMaterials = getSubMaterials(material);
         if (subMaterials.isEmpty()) {
             return Collections.emptySet();
@@ -141,12 +141,12 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public boolean allowedInPart(MaterialInstance material, PartType partType) {
+    public boolean allowedInPart(IMaterialInstance material, PartType partType) {
         return getPartTypes(material).contains(partType);
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key) {
+    public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key, ItemStack gear) {
         // Get the materials and all the stat modifiers they provide for this stat
         Collection<MaterialInstance> materials = getSubMaterials(material);
         List<StatInstance> statMods = materials.stream()
@@ -185,7 +185,7 @@ public class CompoundMaterial implements IMaterial {
 
         // Synergy
         if (stat.doesSynergyApply() && matInst != null) {
-            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(materials), getTraits(matInst, partType, key.getGearType()));
+            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(materials), getTraits(matInst, partType, key.getGearType(), gear));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 final float multi = synergy - 1f;
                 for (int i = 0; i < ret.size(); ++i) {
@@ -203,9 +203,9 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<StatGearKey> getStatKeys(PartType type, IItemStat stat) {
+    public Collection<StatGearKey> getStatKeys(PartType type) {
         return getSubMaterials(MaterialInstance.of(this)).stream()
-                .flatMap(mat -> mat.getMaterial().getStatKeys(type, stat).stream())
+                .flatMap(mat -> mat.get().getStatKeys(type).stream())
                 .collect(Collectors.toSet());
     }
 
@@ -222,7 +222,7 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartType partType, GearType gearType) {
+    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartType partType, GearType gearType, ItemStack gear) {
         List<TraitInstance> ret = new ArrayList<>();
         List<MaterialInstance> list = new ArrayList<>(getSubMaterials(material));
 
@@ -237,14 +237,14 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public boolean isCraftingAllowed(MaterialInstance material, PartType partType, GearType gearType) {
+    public boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType, @Nullable IInventory inventory) {
         if (!allowedInPart(material, partType)) {
             return false;
         }
 
         if (partType == PartType.MAIN) {
-            ItemStat stat = gearType.getDurabilityStat();
-            return !getStatModifiers(material, stat, partType).isEmpty() && getStatUnclamped(material, partType, StatGearKey.of(stat, gearType)) > 0;
+            StatGearKey key = StatGearKey.of(gearType.getDurabilityStat(), gearType);
+            return !getStatModifiers(material, partType, key).isEmpty() && getStatUnclamped(material, partType, key, ItemStack.EMPTY) > 0;
         }
 
         return true;
