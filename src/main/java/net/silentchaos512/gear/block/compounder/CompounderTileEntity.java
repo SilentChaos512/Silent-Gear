@@ -221,9 +221,9 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
             return false;
         }
 
-        IMaterial first = materials.get(0).getMaterial();
+        IMaterial first = materials.get(0).get();
         for (int i = 1; i < materials.size(); ++i) {
-            if (materials.get(i).getMaterial() != first) {
+            if (materials.get(i).get() != first) {
                 return true;
             }
         }
@@ -260,7 +260,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         for (int i = 0; i < getInputSlotCount(); ++i) {
             ItemStack stack = getStackInSlot(i);
             MaterialInstance material = MaterialInstance.from(stack);
-            if (material != null && material.getMaterial().isSimple()) {
+            if (material != null && material.get().isSimple()) {
                 ret.add(material);
             }
         }

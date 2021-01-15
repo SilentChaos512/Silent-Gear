@@ -44,7 +44,7 @@ public class CustomCompoundIngredient extends Ingredient {
         if (stack == null || stack.isEmpty() || !stack.getItem().equals(this.item)) return false;
 
         MaterialInstance material = CustomMaterialItem.getMaterial(stack);
-        return material != null && material.getMaterialId().equals(this.material);
+        return material != null && material.getId().equals(this.material);
     }
 
     @Override

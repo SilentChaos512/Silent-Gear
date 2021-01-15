@@ -25,7 +25,7 @@ public final class ColorUtils {
 
         int i = 0;
         for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = MaterialDisplayManager.get(mat.get());
+            IMaterialDisplay model = MaterialDisplayManager.get(mat);
             int color = model.getLayerColor(item.getGearType(), part, mat, layer);
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
@@ -51,7 +51,7 @@ public final class ColorUtils {
 
         int i = 0;
         for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = MaterialDisplayManager.getMaterial(mat.getId());
+            IMaterialDisplay model = MaterialDisplayManager.get(mat);
             List<MaterialLayer> layers = model.getLayerList(item.getGearType(), item.getPartType(), mat).getLayers();
             if (layers.size() > layer) {
                 int color = model.getLayerColor(item.getGearType(), item.getPartType(), mat, layer);
@@ -80,7 +80,7 @@ public final class ColorUtils {
 
         int i = 0;
         for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = MaterialDisplayManager.get(mat.getMaterial());
+            IMaterialDisplay model = MaterialDisplayManager.get(mat);
             List<MaterialLayer> layers = model.getLayerList(GearType.ALL, PartType.MAIN, mat).getLayers();
             if (layers.size() > layer) {
                 int color = layers.get(layer).getColor();

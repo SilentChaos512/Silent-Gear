@@ -274,11 +274,11 @@ public class CompoundMaterial implements IMaterial {
 
         for (MaterialInstance mat : getSubMaterials(material)) {
             last = mat;
-            if (mat.getMaterial() != previous) {
+            if (mat.get() != previous) {
                 if (previous != null) {
                     elements.add(mat.getModelKey() + (prevCount > 1 ? "*" + prevCount : ""));
                 }
-                previous = mat.getMaterial();
+                previous = mat.get();
                 prevCount = 0;
             }
             ++prevCount;
