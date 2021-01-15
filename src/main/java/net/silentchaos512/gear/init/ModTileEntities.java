@@ -42,6 +42,7 @@ public final class ModTileEntities {
     private static CompounderTileEntity getMetalAlloyer() {
         return new CompounderTileEntity(METAL_ALLOYER.get(),
                 ModContainers.METAL_ALLOYER.get(),
+                ModRecipes.COMPOUNDING_METAL_TYPE,
                 ModItems.ALLOY_INGOT,
                 CompounderTileEntity.STANDARD_INPUT_SLOTS,
                 ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST));
@@ -50,6 +51,7 @@ public final class ModTileEntities {
     private static CompounderTileEntity getRecrystallizer() {
         return new CompounderTileEntity(RECRYSTALLIZER.get(),
                 ModContainers.RECRYSTALLIZER.get(),
+                ModRecipes.COMPOUNDING_GEM_TYPE,
                 ModItems.HYBRID_GEM,
                 CompounderTileEntity.STANDARD_INPUT_SLOTS,
                 ImmutableList.of(MaterialCategories.GEM, MaterialCategories.DUST));

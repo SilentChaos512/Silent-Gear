@@ -50,6 +50,11 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
      */
     int getTier(PartType partType);
 
+    default boolean isSimple() {
+        IMaterial mat = get();
+        return mat != null && mat.isSimple();
+    }
+
     default float getStat(PartType partType, IItemStat stat) {
         return getStat(partType, StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
     }

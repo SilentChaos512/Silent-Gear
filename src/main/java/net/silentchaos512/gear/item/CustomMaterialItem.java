@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -35,7 +35,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
 
     public ItemStack create(IMaterialInstance material, int count) {
         CompoundNBT tag = new CompoundNBT();
-        tag.putString(NBT_MATERIAL, SilentGear.shortenId(material.getMaterialId()));
+        tag.putString(NBT_MATERIAL, SilentGear.shortenId(material.getId()));
 
         ItemStack result = new ItemStack(this, count);
         result.setTag(tag);
@@ -57,9 +57,11 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public int getColor(ItemStack stack, int layer) {
-        MaterialInstance material = getMaterial(stack);
-        if (material != null) {
-            return material.getPrimaryColor(GearType.ALL, PartType.MAIN);
+        if (layer == 0) {
+            MaterialInstance material = getMaterial(stack);
+            if (material != null) {
+                return material.getPrimaryColor(GearType.ALL, PartType.MAIN);
+            }
         }
         return Color.VALUE_WHITE;
     }
@@ -68,7 +70,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     public ITextComponent getDisplayName(ItemStack stack) {
         MaterialInstance material = getMaterial(stack);
         if (material != null) {
-            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(PartType.MAIN));
+            IFormattableTextComponent nameText = material.getDisplayName(PartType.MAIN);
             int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
             return TextUtil.withColor(nameText, nameColor);
         }

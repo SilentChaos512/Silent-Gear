@@ -57,6 +57,7 @@ public final class ModBlocks {
     public static final BlockRegistryObject<CompounderBlock> METAL_ALLOYER = register("metal_alloyer", () ->
             new CompounderBlock(() -> ModTileEntities.METAL_ALLOYER.get(),
                     () -> ModContainers.METAL_ALLOYER.get(),
+                    ModRecipes.COMPOUNDING_METAL_TYPE,
                     ModItems.ALLOY_INGOT,
                     CompounderTileEntity.STANDARD_INPUT_SLOTS,
                     ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST),
@@ -67,6 +68,7 @@ public final class ModBlocks {
     public static final BlockRegistryObject<CompounderBlock> RECRYSTALLIZER = register("recrystallizer", () ->
             new CompounderBlock(() -> ModTileEntities.RECRYSTALLIZER.get(),
                     () -> ModContainers.RECRYSTALLIZER.get(),
+                    ModRecipes.COMPOUNDING_GEM_TYPE,
                     ModItems.HYBRID_GEM,
                     CompounderTileEntity.STANDARD_INPUT_SLOTS,
                     ImmutableList.of(MaterialCategories.GEM, MaterialCategories.DUST),
