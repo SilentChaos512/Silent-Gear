@@ -65,7 +65,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     public ItemStack create(List<? extends IMaterialInstance> materials, int craftedCount) {
         ListNBT materialListNbt = new ListNBT();
         for (IMaterialInstance mat : materials) {
-            materialListNbt.add(StringNBT.valueOf(mat.getMaterialId().toString()));
+            materialListNbt.add(StringNBT.valueOf(mat.getId().toString()));
         }
 
         CompoundNBT tag = new CompoundNBT();
@@ -100,7 +100,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         }
 
         for (MaterialInstance material : getSubMaterials(stack)) {
-            s.append(SilentGear.shortenId(material.getMaterialId()));
+            s.append(SilentGear.shortenId(material.getId()));
         }
 
         return s.toString();
@@ -133,7 +133,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
         TextListBuilder statsBuilder = new TextListBuilder();
         for (MaterialInstance material : materials) {
-            int nameColor = material.getMaterial().getNameColor(PartType.MAIN, GearType.ALL);
+            int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
             statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN), nameColor));
         }
         tooltip.addAll(statsBuilder.build());

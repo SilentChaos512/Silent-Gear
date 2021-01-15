@@ -13,6 +13,7 @@ import net.minecraftforge.resource.VanillaResourceType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartDisplay;
@@ -135,6 +136,23 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         }
     }
 
+    /**
+     * Gets the materials model, or a default model if none was loaded for the material.
+     *
+     * @param material The material
+     * @return A material model (possibly a default one)
+     */
+    public static IMaterialDisplay get(IMaterialInstance material) {
+        IMaterial mat = material.get();
+        return mat != null ? get(mat) : getMaterial(material.getId());
+    }
+
+    /**
+     * @param material The material
+     * @return The material's model
+     * @deprecated Use {@link #get(IMaterialInstance)} instead
+     */
+    @Deprecated
     public static IMaterialDisplay get(IMaterial material) {
         if (!MATERIALS.containsKey(material.getId()) && !material.isSimple()) {
             return CompoundMaterialDisplay.INSTANCE;
@@ -142,6 +160,12 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         return getMaterial(material.getId());
     }
 
+    /**
+     * @param materialId The material ID
+     * @return The material's model
+     * @deprecated Internal use only, use {@link #get(IMaterialInstance)} instead
+     */
+    @Deprecated
     public static IMaterialDisplay getMaterial(ResourceLocation materialId) {
         synchronized (MATERIALS) {
             return MATERIALS.getOrDefault(materialId, DefaultMaterialDisplay.INSTANCE);
