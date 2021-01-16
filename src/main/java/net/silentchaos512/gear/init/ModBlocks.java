@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.init;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
@@ -20,11 +19,10 @@ import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
 import net.silentchaos512.gear.block.compounder.CompounderBlock;
-import net.silentchaos512.gear.block.compounder.CompounderTileEntity;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.material.MaterialCategories;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
 
 import java.util.Objects;
@@ -53,25 +51,13 @@ public final class ModBlocks {
             new SalvagerBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(4, 20)));
 
-    @SuppressWarnings("Convert2MethodRef")
     public static final BlockRegistryObject<CompounderBlock> METAL_ALLOYER = register("metal_alloyer", () ->
-            new CompounderBlock(() -> ModTileEntities.METAL_ALLOYER.get(),
-                    () -> ModContainers.METAL_ALLOYER.get(),
-                    ModRecipes.COMPOUNDING_METAL_TYPE,
-                    ModItems.ALLOY_INGOT,
-                    CompounderTileEntity.STANDARD_INPUT_SLOTS,
-                    ImmutableList.of(MaterialCategories.METAL, MaterialCategories.DUST),
+            new CompounderBlock(Const.METAL_COMPOUNDER_INFO,
                     AbstractBlock.Properties.create(Material.IRON)
                             .hardnessAndResistance(4, 20)
                             .sound(SoundType.METAL)));
-    @SuppressWarnings("Convert2MethodRef")
     public static final BlockRegistryObject<CompounderBlock> RECRYSTALLIZER = register("recrystallizer", () ->
-            new CompounderBlock(() -> ModTileEntities.RECRYSTALLIZER.get(),
-                    () -> ModContainers.RECRYSTALLIZER.get(),
-                    ModRecipes.COMPOUNDING_GEM_TYPE,
-                    ModItems.HYBRID_GEM,
-                    CompounderTileEntity.STANDARD_INPUT_SLOTS,
-                    ImmutableList.of(MaterialCategories.GEM, MaterialCategories.DUST),
+            new CompounderBlock(Const.GEM_COMPOUNDER_INFO,
                     AbstractBlock.Properties.create(Material.IRON)
                             .hardnessAndResistance(4, 20)
                             .sound(SoundType.METAL)));

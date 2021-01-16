@@ -1,21 +1,17 @@
 package net.silentchaos512.gear.block.compounder;
 
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -30,17 +26,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("WeakerAccess")
 public class CompounderTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
     public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 10 : 15);
 
-    private final ContainerType<? extends CompounderContainer> containerType;
-    private final IRecipeType<CompoundingRecipe> recipeType;
-    private final Collection<IMaterialCategory> categories;
-    private final Supplier<CompoundMaterialItem> outputItem;
+    private final CompounderInfo info;
     private final int[] allSlots;
 
     @SyncVariable(name = "Progress")
@@ -79,27 +72,14 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
     };
 
-    public CompounderTileEntity(TileEntityType<?> typeIn,
-                                ContainerType<? extends CompounderContainer> containerType,
-                                IRecipeType<CompoundingRecipe> recipeType,
-                                Supplier<CompoundMaterialItem> outputItem,
-                                int inputSlotCount,
-                                Collection<IMaterialCategory> categoriesIn) {
-        super(typeIn, inputSlotCount + 2);
-        this.containerType = containerType;
-        this.recipeType = recipeType;
-        this.outputItem = outputItem;
-        this.categories = ImmutableSet.copyOf(categoriesIn);
+    public CompounderTileEntity(CompounderInfo info) {
+        super(info.getTileEntityType(), info.getInputSlotCount() + 2);
+        this.info = info;
         this.allSlots = IntStream.range(0, this.items.size()).toArray();
     }
 
-    public static boolean canAcceptInput(ItemStack stack, Collection<IMaterialCategory> categories) {
-        MaterialInstance material = MaterialInstance.from(stack);
-        return material != null && material.get().isSimple() && material.hasAnyCategory(categories);
-    }
-
     protected IRecipeType<? extends CompoundingRecipe> getRecipeType() {
-        return recipeType;
+        return this.info.getRecipeType();
     }
 
     @Nullable
@@ -109,7 +89,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
     }
 
     protected CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
-        return this.outputItem.get();
+        return this.info.getOutputItem();
     }
 
     protected ItemStack getWorkOutput(@Nullable CompoundingRecipe recipe, List<MaterialInstance> materials) {
@@ -233,7 +213,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     private boolean canCompoundMaterials(List<MaterialInstance> materials) {
         for (MaterialInstance material : materials) {
-            if (!material.hasAnyCategory(this.categories)) {
+            if (!material.hasAnyCategory(this.info.getCategories())) {
                 return false;
             }
         }
@@ -305,6 +285,11 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return new CompounderContainer(this.containerType, id, player, this, this.fields, this.categories);
+        return new CompounderContainer(this.info.getContainerType(),
+                id,
+                player,
+                this,
+                this.fields,
+                this.info.getCategories());
     }
 }
