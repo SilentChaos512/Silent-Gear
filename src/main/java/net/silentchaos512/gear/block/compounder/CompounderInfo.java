@@ -14,14 +14,15 @@ import java.util.function.Supplier;
 public class CompounderInfo {
     private final Supplier<TileEntityType<? extends CompounderTileEntity>> tileEntityType;
     private final Supplier<ContainerType<? extends CompounderContainer>> containerType;
-    private final IRecipeType<CompoundingRecipe> recipeType;
+    private final Supplier<IRecipeType<CompoundingRecipe>> recipeType;
     private final Supplier<CompoundMaterialItem> outputItem;
     private final int inputSlotCount;
     private final ImmutableList<IMaterialCategory> categories;
 
+    @SuppressWarnings("ConstructorWithTooManyParameters")
     public CompounderInfo(Supplier<TileEntityType<? extends CompounderTileEntity>> tileEntityType,
                           Supplier<ContainerType<? extends CompounderContainer>> containerType,
-                          IRecipeType<CompoundingRecipe> recipeType,
+                          Supplier<IRecipeType<CompoundingRecipe>> recipeType,
                           Supplier<CompoundMaterialItem> outputItem,
                           int inputSlotCount,
                           Collection<IMaterialCategory> categories) {
@@ -42,7 +43,7 @@ public class CompounderInfo {
     }
 
     public IRecipeType<CompoundingRecipe> getRecipeType() {
-        return recipeType;
+        return recipeType.get();
     }
 
     public CompoundMaterialItem getOutputItem() {

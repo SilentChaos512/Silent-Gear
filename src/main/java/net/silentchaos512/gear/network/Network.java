@@ -108,6 +108,11 @@ public final class Network {
                 .decoder(ClientOutputCommandPacket::decode)
                 .consumer(ClientOutputCommandPacket::handle)
                 .add();
+        channel.messageBuilder(CompounderUpdatePacket.class, 14, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(CompounderUpdatePacket::encode)
+                .decoder(CompounderUpdatePacket::decode)
+                .consumer(CompounderUpdatePacket::handle)
+                .add();
     }
 
     private Network() {}
