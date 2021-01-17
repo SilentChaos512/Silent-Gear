@@ -53,7 +53,7 @@ public final class Const {
     public static final CompounderInfo METAL_COMPOUNDER_INFO = new CompounderInfo(
             () -> ModTileEntities.METAL_ALLOYER.get(),
             () -> ModContainers.METAL_ALLOYER.get(),
-            ModRecipes.COMPOUNDING_METAL_TYPE,
+            () -> ModRecipes.COMPOUNDING_METAL_TYPE,
             () -> ModItems.ALLOY_INGOT.get(),
             4,
             ImmutableList.of(
@@ -64,7 +64,7 @@ public final class Const {
     public static final CompounderInfo GEM_COMPOUNDER_INFO = new CompounderInfo(
             () -> ModTileEntities.RECRYSTALLIZER.get(),
             () -> ModContainers.RECRYSTALLIZER.get(),
-            ModRecipes.COMPOUNDING_GEM_TYPE,
+            () -> ModRecipes.COMPOUNDING_GEM_TYPE,
             () -> ModItems.HYBRID_GEM.get(),
             4,
             ImmutableList.of(

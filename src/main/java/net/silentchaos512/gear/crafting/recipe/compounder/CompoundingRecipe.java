@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -17,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.silentchaos512.gear.block.compounder.CompounderTileEntity;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CustomMaterialItem;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class CompoundingRecipe implements IRecipe<IInventory> {
+public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
     private final ResourceLocation recipeId;
     final List<Ingredient> ingredients = new ArrayList<>();
     ItemStack result;
@@ -36,13 +36,16 @@ public class CompoundingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(CompounderTileEntity inv, World worldIn) {
         int matches = 0;
+        int inputs = 0;
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+        for (int i = 0; i < inv.getInputSlotCount(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
 
             if (!stack.isEmpty()) {
+                ++inputs;
+
                 for (Ingredient ingredient : this.ingredients) {
                     if (ingredient.test(stack)) {
                         ++matches;
@@ -52,11 +55,11 @@ public class CompoundingRecipe implements IRecipe<IInventory> {
             }
         }
 
-        return matches == this.ingredients.size();
+        return matches == inputs && matches == this.ingredients.size();
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getCraftingResult(CompounderTileEntity inv) {
         return this.result.copy();
     }
 

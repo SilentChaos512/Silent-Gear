@@ -13,6 +13,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.network.CompounderUpdatePacket;
+import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 
@@ -53,6 +55,19 @@ public class CompounderContainer extends Container {
         InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
         trackIntArray(this.fields);
+    }
+
+    boolean getWorkEnabled() {
+        return this.fields.get(1) != 0;
+    }
+
+    public void setWorkEnabled(boolean value) {
+        this.fields.set(1, value ? 1 : 0);
+    }
+
+    void toggleWorkEnabled() {
+        this.fields.set(1, this.fields.get(1) == 0 ? 1 : 0);
+        Network.channel.sendToServer(new CompounderUpdatePacket(getWorkEnabled()));
     }
 
     public int getProgressArrowScale() {
