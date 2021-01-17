@@ -17,6 +17,8 @@ import net.silentchaos512.gear.util.TraitHelper;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public final class CuriosCompat {
