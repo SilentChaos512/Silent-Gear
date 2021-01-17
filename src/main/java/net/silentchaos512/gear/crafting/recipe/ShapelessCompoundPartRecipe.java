@@ -9,6 +9,8 @@ import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -47,11 +49,26 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public boolean matches(CraftingInventory inv, World worldIn) {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
-        for (MaterialInstance mat : getMaterials(inv)) {
-            if (!mat.get().isCraftingAllowed(mat, item.getPartType(), this.getGearType(), inv)) {
-                return false;
+        IMaterial first = null;
+
+        for (int i = 0; i < inv.getSizeInventory(); ++i) {
+            ItemStack stack = inv.getStackInSlot(i);
+            MaterialInstance mat = MaterialInstance.from(stack);
+
+            if (mat != null) {
+                if (!mat.get().isCraftingAllowed(mat, item.getPartType(), this.getGearType(), inv)) {
+                    return false;
+                }
+
+                // If classic mixing is disabled, all materials must be the same
+                if (first == null) {
+                    first = mat.get();
+                } else if (!Config.Common.allowClassicMaterialMixing.get() && first != mat.get()) {
+                    return false;
+                }
             }
         }
+
         return true;
     }
 

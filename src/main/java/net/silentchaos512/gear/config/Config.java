@@ -38,6 +38,7 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue sinewDropRate;
         static final ForgeConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
+        public static final ForgeConfigSpec.BooleanValue allowClassicMaterialMixing;
         public static final ForgeConfigSpec.BooleanValue sendGearBrokenMessage;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
@@ -171,6 +172,11 @@ public final class Config {
             {
                 builder.comment("Settings for gear (tools, weapons, and armor)");
                 builder.push("gear");
+
+                allowClassicMaterialMixing = builder
+                        .comment("Allow parts to be crafted with mixed materials in a crafting grid, just like all recent versions.",
+                                "In 1.17, mixing will only be allowed in compound-crafting blocks.")
+                        .define("allowClassicMaterialMixing", true);
 
                 sendGearBrokenMessage = builder
                         .comment("Displays a message in chat, notifying the player that an item broke and hinting that it can be repaired")

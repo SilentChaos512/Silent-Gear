@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Config to disable material mixing in the crafting grid when crafting parts. This is left enabled (old behavior by default).
+
 ## [2.5.2] - 2021-01-17
 ### Fixed
 - Crash caused when attempting to get the part from an item in some cases [#310]
