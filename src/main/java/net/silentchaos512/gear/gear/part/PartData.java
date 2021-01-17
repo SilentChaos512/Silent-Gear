@@ -66,9 +66,18 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
 
     @Nullable
     public static PartData from(ItemStack craftingItem) {
+        return from(craftingItem, true);
+    }
+
+    @Nullable
+    public static PartData from(ItemStack craftingItem, boolean checkSubstitutes) {
         IGearPart part = PartManager.from(craftingItem);
         if (part == null) {
-            return fromMaterialSubstitute(craftingItem);
+            if (checkSubstitutes) {
+                return fromMaterialSubstitute(craftingItem);
+            } else {
+                return null;
+            }
         }
         return of(part, craftingItem);
     }
@@ -85,7 +94,7 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
 
                         if (item.isPresent()) {
                             ItemStack result = item.get().create(MaterialInstance.of(material));
-                            return PartData.from(result);
+                            return PartData.from(result, false);
                         }
                     }
                 }
