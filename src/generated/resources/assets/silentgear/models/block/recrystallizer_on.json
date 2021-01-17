@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_top",
   "textures": {
     "side": "silentgear:block/recrystallizer_side",
-    "top": "silentgear:block/recrystallizer_top"
+    "top": "silentgear:block/recrystallizer_top_on"
   }
 }

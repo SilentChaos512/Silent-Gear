@@ -2,7 +2,7 @@
   "parent": "minecraft:block/orientable",
   "textures": {
     "side": "silentgear:block/metal_alloyer_side",
-    "front": "silentgear:block/metal_alloyer_front",
+    "front": "silentgear:block/metal_alloyer_front_on",
     "top": "silentgear:block/metal_alloyer_top"
   }
 }
