@@ -55,6 +55,7 @@ public class CustomCompoundIngredient extends Ingredient {
     @Override
     public JsonElement serialize() {
         JsonObject json = new JsonObject();
+        json.addProperty("type", Serializer.NAME.toString());
         json.addProperty("item", NameUtils.from(this.item).toString());
         json.addProperty("material", this.material.toString());
         return json;

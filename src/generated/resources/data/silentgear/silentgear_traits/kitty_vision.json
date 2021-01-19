@@ -7,11 +7,17 @@
   "description": {
     "translate": "trait.silentgear.kitty_vision.desc"
   },
-  "overrides": [
-    "silentgear:flammable"
-  ],
   "potion_effects": {
     "helmet": [
+      {
+        "type": "trait_level",
+        "effect": "minecraft:night_vision",
+        "level": [
+          1
+        ]
+      }
+    ],
+    "curio": [
       {
         "type": "trait_level",
         "effect": "minecraft:night_vision",

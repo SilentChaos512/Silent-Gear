@@ -1,12 +1,6 @@
 {
   "type": "silentgear:compound",
-  "availability": {
-    "categories": [
-      "metal"
-    ],
-    "visible": true,
-    "can_salvage": true
-  },
+  "simple": false,
   "crafting_items": {
     "main": {
       "item": "silentgear:alloy_ingot"
