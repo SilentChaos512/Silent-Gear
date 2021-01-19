@@ -17,6 +17,7 @@ import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.IMaterialSerializer;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -29,6 +30,7 @@ import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.utils.Color;
@@ -50,21 +52,23 @@ public class MaterialBuilder {
     private final Collection<IMaterialCategory> categories = new ArrayList<>();
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
+    private IMaterialSerializer<?> serializer = MaterialSerializers.STANDARD;
+    private boolean simple = true;
 
     private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
     private final Map<PartType, List<ITraitInstance>> traits = new LinkedHashMap<>();
     private final Map<PartGearKey, MaterialLayerList> display = new LinkedHashMap<>();
 
-    public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation tag) {
-        this(id, tier, Ingredient.fromTag(ItemTags.makeWrapperTag(tag.toString())));
+    public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation ingredientTagName) {
+        this(id, tier, Ingredient.fromTag(ItemTags.makeWrapperTag(ingredientTagName.toString())));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, ITag<Item> tag) {
-        this(id, tier, Ingredient.fromTag(tag));
+    public MaterialBuilder(ResourceLocation id, int tier, ITag<Item> ingredient) {
+        this(id, tier, Ingredient.fromTag(ingredient));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, IItemProvider... items) {
-        this(id, tier, Ingredient.fromItems(items));
+    public MaterialBuilder(ResourceLocation id, int tier, IItemProvider... ingredients) {
+        this(id, tier, Ingredient.fromItems(ingredients));
     }
 
     public MaterialBuilder(ResourceLocation id, int tier, Ingredient ingredient) {
@@ -75,6 +79,12 @@ public class MaterialBuilder {
         this.name = new TranslationTextComponent(String.format("material.%s.%s",
                 this.id.getNamespace(),
                 this.id.getPath().replace("/", ".")));
+    }
+
+    public MaterialBuilder type(IMaterialSerializer<?> serializer, boolean simple) {
+        this.serializer = serializer;
+        this.simple = simple;
+        return this;
     }
 
     public MaterialBuilder loadConditionTagExists(ResourceLocation tagId) {
@@ -378,6 +388,12 @@ public class MaterialBuilder {
         validate();
 
         JsonObject json = new JsonObject();
+
+        // TODO: Remove conditions for 'type' and 'simple' after merging into master
+        if (this.serializer != MaterialSerializers.STANDARD)
+            json.addProperty("type", this.serializer.getName().toString());
+        if (!this.simple)
+            json.addProperty("simple", this.simple);
 
         if (this.parent != null) {
             json.addProperty("parent", this.parent.toString());

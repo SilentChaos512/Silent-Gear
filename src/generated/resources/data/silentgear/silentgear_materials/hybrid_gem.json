@@ -1,12 +1,6 @@
 {
   "type": "silentgear:compound",
-  "availability": {
-    "categories": [
-      "gem"
-    ],
-    "visible": true,
-    "can_salvage": true
-  },
+  "simple": false,
   "crafting_items": {
     "main": {
       "item": "silentgear:hybrid_gem"

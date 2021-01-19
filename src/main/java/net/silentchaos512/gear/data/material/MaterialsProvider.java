@@ -2,6 +2,7 @@ package net.silentchaos512.gear.data.material;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
@@ -21,13 +22,17 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
 import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
+import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.gear.trait.condition.*;
 import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
@@ -1230,6 +1235,54 @@ public class MaterialsProvider implements IDataProvider {
 
         //endregion
 
+        //region Compound Materials
+
+        ret.add(compoundBuilder(modId("hybrid_gem"), ModItems.HYBRID_GEM));
+        ret.add(compoundBuilder(modId("metal_alloy"), ModItems.ALLOY_INGOT));
+
+        //endregion
+
+        //region Custom Compound Materials
+
+        // Dimerald
+        ret.add(customCompoundBuilder(modId("dimerald"), 3, ModItems.CUSTOM_GEM.get())
+                .categories(MaterialCategories.GEM)
+                .mainStatsCommon(1776, 36, 12, 80)
+                .mainStatsHarvest(3, 9)
+                .mainStatsMelee(3, 3, 0.1f)
+                .mainStatsRanged(3, 0.1f)
+                .mainStatsArmor(4, 9, 6, 3, 10, 10) //22
+                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
+                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.2f)
+                .stat(PartType.MAIN, chargeability, 0.7f)
+                .stat(PartType.ROD, ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.15f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 70)
+                .stat(PartType.TIP, ItemStats.DURABILITY, 360, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
+                .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 0.5f, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.RARITY, 25, StatInstance.Operation.ADD)
+                .noStats(PartType.ADORNMENT)
+                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
+                .trait(PartType.MAIN, Const.Traits.GOLD_DIGGER, 2,
+                        new GearTypeTraitCondition(GearType.HARVEST_TOOL),
+                        materialCountOrRatio(3, 0.5f)
+                )
+                .trait(PartType.ROD, Const.Traits.BRITTLE, 4, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.ROD, Const.Traits.ANCIENT, 3, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.TIP, Const.Traits.IMPERIAL, 2)
+                .trait(PartType.ADORNMENT, Const.Traits.KITTY_VISION, 1)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x1ACE82)
+                .displayTip(PartTextures.TIP_SHARP, 0x1ACE82)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
+        );
+
+        //endregion
+
         //region Extra Mod Metals
         // Aluminum
         ret.add(extraMetal("aluminum", 2, forgeId("ingots/aluminum"))
@@ -2008,6 +2061,19 @@ public class MaterialsProvider implements IDataProvider {
         return ret;
     }
 
+    @SuppressWarnings("WeakerAccess")
+    protected MaterialBuilder compoundBuilder(ResourceLocation id, IItemProvider item) {
+        return new MaterialBuilder(id, -1, item)
+                .type(MaterialSerializers.COMPOUND, false)
+                .categories(MaterialCategories.GEM);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    protected MaterialBuilder customCompoundBuilder(ResourceLocation id, int tier, CustomMaterialItem item) {
+        return new MaterialBuilder(id, tier, CustomCompoundIngredient.of(item, id))
+                .type(MaterialSerializers.CUSTOM_COMPOUND, false);
+    }
+
     private static MaterialBuilder extraMetal(String name, int tier, ResourceLocation tag) {
         return new MaterialBuilder(SilentGear.getId(name), tier, tag).loadConditionTagExists(tag);
     }
@@ -2074,7 +2140,12 @@ public class MaterialsProvider implements IDataProvider {
 
             // Model data
             try {
-                String jsonStr = GSON.toJson(builder.serializeModel());
+                JsonObject json = builder.serializeModel();
+                if (json.entrySet().isEmpty()) {
+                    continue;
+                }
+
+                String jsonStr = GSON.toJson(json);
                 String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
                 // TODO: change path?
                 Path path = outputFolder.resolve(String.format("assets/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
