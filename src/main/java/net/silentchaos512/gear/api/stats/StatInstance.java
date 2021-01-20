@@ -124,6 +124,12 @@ public class StatInstance {
         return new StatInstance(value, op, key);
     }
 
+    public static StatInstance getMaterialWeightedAverageMod(Collection<StatInstance> modifiers, Operation op) {
+        float value = ItemStat.getMaterialWeightedAverage(modifiers, op);
+        StatGearKey key = getMostSpecificKey(modifiers);
+        return new StatInstance(value, op, key);
+    }
+
     private static StatGearKey getMostSpecificKey(Collection<StatInstance> modifiers) {
         // Gets the key furthest down the gear type hierarchy (key with most parents)
         Set<StatGearKey> found = new HashSet<>();
