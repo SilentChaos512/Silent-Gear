@@ -96,7 +96,7 @@ public class CompounderBlock extends Block {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
             if (tileEntity instanceof CompounderTileEntity) {
                 CompounderTileEntity te = (CompounderTileEntity) tileEntity;
-                InventoryHelper.dropInventoryItems(worldIn, pos, te);
+                InventoryHelper.dropItems(worldIn, pos, te.getItemsToDrop());
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
             super.onReplaced(state, worldIn, pos, newState, isMoving);

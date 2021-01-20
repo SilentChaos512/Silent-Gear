@@ -8,6 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
@@ -15,7 +16,6 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -127,6 +127,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
     public void tick() {
         if (world == null || world.isRemote || areInputsEmpty()) {
             // No point in doing anything on the client or when input slots are empty
+            updateOutputHint(ItemStack.EMPTY);
             return;
         }
 
@@ -261,9 +262,16 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         return ret;
     }
 
-    private static boolean isSimpleMaterial(ItemStack stack) {
-        IMaterial material = MaterialManager.from(stack);
-        return material != null && material.isSimple();
+    NonNullList<ItemStack> getItemsToDrop() {
+        // Gets the items dropped when the block is broken. Excludes the "hint stack"
+        NonNullList<ItemStack> ret = NonNullList.create();
+        for (int i = 0; i < this.getSizeInventory() - 1; ++i) {
+            ItemStack stack = getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                ret.add(stack);
+            }
+        }
+        return ret;
     }
 
     @Override
