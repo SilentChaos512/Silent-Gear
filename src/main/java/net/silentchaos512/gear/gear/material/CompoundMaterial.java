@@ -213,7 +213,7 @@ public class CompoundMaterial implements IMaterial {
                     .copy();
         }
 
-        return StatInstance.getWeightedAverageMod(mods, operation);
+        return StatInstance.getMaterialWeightedAverageMod(mods, operation);
     }
 
     @Override
@@ -258,7 +258,7 @@ public class CompoundMaterial implements IMaterial {
 
     @Override
     public int getNameColor(PartType partType, GearType gearType, IMaterialInstance material) {
-        IMaterialDisplay model = MaterialDisplayManager.get(this);
+        IMaterialDisplay model = MaterialDisplayManager.get(material);
         int color = model.getLayerColor(gearType, partType, material, 0);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
     }

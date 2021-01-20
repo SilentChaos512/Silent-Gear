@@ -112,7 +112,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     public int getColorWeight(int index, int totalCount) {
-        return totalCount - index;
+        return 1;
     }
 
     @Override
