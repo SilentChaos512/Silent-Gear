@@ -139,6 +139,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.BOWS, ModItems.BOW);
         builder(ModTags.Items.CHESTPLATES, ModItems.CHESTPLATE);
         builder(ModTags.Items.CROSSBOWS, ModItems.CROSSBOW);
+        builder(ModTags.Items.ELYTRA, ModItems.ELYTRA);
         builder(ModTags.Items.HAMMERS, ModItems.HAMMER, ModItems.PROSPECTOR_HAMMER);
         builder(ModTags.Items.HELMETS, ModItems.HELMET);
         builder(ModTags.Items.HOES, ModItems.MATTOCK);
