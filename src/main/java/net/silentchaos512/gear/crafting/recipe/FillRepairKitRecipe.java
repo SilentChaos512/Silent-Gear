@@ -27,10 +27,12 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.collection.StackList;
@@ -83,6 +85,11 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     }
 
     private static boolean isRepairMaterial(ItemStack stack) {
+        if (stack.getItem() instanceof FragmentItem) {
+            IMaterial material = FragmentItem.getMaterial(stack);
+            return material != null && isRepairMaterial(MaterialInstance.of(material));
+        }
+
         MaterialInstance material = MaterialInstance.from(stack);
         return material != null && isRepairMaterial(material);
     }

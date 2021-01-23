@@ -69,7 +69,7 @@ public class SGearJeiPlugin implements IModPlugin {
         assert Minecraft.getInstance().world != null;
         RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
 
-        // Repair kit hint
+        // Repair kit hints
         for (RepairKitItem item : Registration.getItems(RepairKitItem.class)) {
             String itemName = NameUtils.fromItem(item).getPath();
             reg.addRecipes(Collections.singleton(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
@@ -79,6 +79,15 @@ public class SGearJeiPlugin implements IModPlugin {
                                     PartMaterialIngredient.of(PartType.MAIN),
                                     PartMaterialIngredient.of(PartType.MAIN),
                                     PartMaterialIngredient.of(PartType.MAIN)
+                            ))),
+                    VanillaRecipeCategoryUid.CRAFTING);
+            reg.addRecipes(Collections.singleton(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint_frag"), "",
+                            new ItemStack(item),
+                            NonNullList.from(Ingredient.EMPTY,
+                                    Ingredient.fromItems(item),
+                                    Ingredient.fromItems(ModItems.FRAGMENT),
+                                    Ingredient.fromItems(ModItems.FRAGMENT),
+                                    Ingredient.fromItems(ModItems.FRAGMENT)
                             ))),
                     VanillaRecipeCategoryUid.CRAFTING);
         }

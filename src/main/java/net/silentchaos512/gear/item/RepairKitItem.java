@@ -5,10 +5,12 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -35,22 +37,42 @@ public class RepairKitItem extends Item {
     }
 
     public boolean addMaterial(ItemStack repairKit, ItemStack materialStack) {
-        float storedAmount = getStoredMaterialAmount(repairKit);
-        if (storedAmount > getKitCapacity() - 1) {
-            // Repair kit is full
-            return false;
-        }
+        Tuple<MaterialInstance, Float> tuple = getMaterialAndValue(materialStack);
 
-        MaterialInstance mat = MaterialInstance.from(materialStack);
-        if (mat != null) {
+        if (tuple != null) {
+            MaterialInstance mat = tuple.getA();
+            float value = tuple.getB();
+
+            if (getStoredMaterialAmount(repairKit) > getKitCapacity() - value) {
+                // Repair kit is full
+                return false;
+            }
+
             String key = getShorthandKey(mat);
             CompoundNBT storageTag = repairKit.getOrCreateChildTag(NBT_STORAGE);
             float current = storageTag.getFloat(key);
-            storageTag.putFloat(key, current + 1);
+            storageTag.putFloat(key, current + value);
             return true;
         }
 
         return false;
+    }
+
+    @Nullable
+    private static Tuple<MaterialInstance, Float> getMaterialAndValue(ItemStack stack) {
+        if (stack.getItem() instanceof FragmentItem) {
+            IMaterial material = FragmentItem.getMaterial(stack);
+            if (material != null) {
+                return new Tuple<>(MaterialInstance.of(material), 0.125f);
+            }
+            return null;
+        }
+
+        MaterialInstance mat = MaterialInstance.from(stack);
+        if (mat != null) {
+            return new Tuple<>(mat, 1f);
+        }
+        return null;
     }
 
     private int getKitCapacity() {
