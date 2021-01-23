@@ -24,6 +24,7 @@ import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
@@ -260,9 +261,16 @@ public final class TooltipHandler {
     }
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
+        GearType gearType;
+        if (part.getItem().getItem() instanceof CompoundPartItem) {
+            gearType = ((CompoundPartItem) part.getItem().getItem()).getGearType();
+        } else {
+            gearType = GearType.ALL;
+        }
+
         TextListBuilder builder = new TextListBuilder();
         for (ItemStat stat : part.getGearType().getRelevantStats()) {
-            Collection<StatInstance> modifiers = part.getStatModifiers(StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
+            Collection<StatInstance> modifiers = part.getStatModifiers(StatGearKey.of(stat, gearType), ItemStack.EMPTY);
             getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
