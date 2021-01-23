@@ -12,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.item.gear.CoreElytra;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.TraitHelper;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -35,6 +36,10 @@ public final class CuriosCompat {
 
     public static ICapabilityProvider createProvider(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
         return CurioGearItemCapability.createProvider(stack, extraAttributes);
+    }
+
+    public static ICapabilityProvider createElytraProvider(ItemStack stack, CoreElytra item) {
+        return CurioGearItemCapability.createElytraProvider(stack, item);
     }
 
     public static int getHighestTraitLevel(LivingEntity entity, DataResource<ITrait> trait) {

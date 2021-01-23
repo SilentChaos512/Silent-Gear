@@ -5,6 +5,8 @@ import com.google.common.collect.Multimap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -16,6 +18,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.silentchaos512.gear.item.gear.CoreElytra;
 import net.silentchaos512.gear.util.GearHelper;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -35,13 +39,31 @@ public class CurioGearItemCapability {
             @Override
             public void readNBT(Capability<CurioGearItemWrapper> capability, CurioGearItemWrapper instance, Direction side, INBT nbt) {
             }
-        }, () -> {
-            return new CurioGearItemCapability.CurioGearItemWrapper();
-        });
+        }, CurioGearItemWrapper::new);
     }
 
     public static ICapabilityProvider createProvider(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
         return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack, extraAttributes));
+    }
+
+    public static ICapabilityProvider createElytraProvider(ItemStack stack, CoreElytra item) {
+        //noinspection OverlyComplexAnonymousInnerClass
+        return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack, multimap -> {
+            // Add armor, flight, and trait-related attributes
+            item.addAttributes("back", stack, multimap, false);
+        }) {
+            @Override
+            public void curioTick(String identifier, int index, LivingEntity livingEntity) {
+                if (livingEntity.world.isRemote || !ElytraItem.isUsable(stack)) {
+                    return;
+                }
+                Integer ticksFlying = ObfuscationReflectionHelper.getPrivateValue(LivingEntity.class, livingEntity, "field_184629_bo");
+
+                if (ticksFlying != null && (ticksFlying + 1) % 20 == 0) {
+                    stack.damageItem(1, livingEntity, entity -> entity.sendBreakAnimation(EquipmentSlotType.CHEST));
+                }
+            }
+        });
     }
 
     public static ICapabilityProvider createProvider(CurioGearItemWrapper curio) {
@@ -64,7 +86,7 @@ public class CurioGearItemCapability {
         }
     }
 
-    private static final class CurioGearItemWrapper implements ICurio {
+    public static class CurioGearItemWrapper implements ICurio {
         private final ItemStack stack;
         private final Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes;
 

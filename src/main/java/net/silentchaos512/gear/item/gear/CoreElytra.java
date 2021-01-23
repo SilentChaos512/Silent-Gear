@@ -173,7 +173,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         if (ModList.get().isLoaded(Const.CURIOS)) {
-            return CuriosCompat.createProvider(stack, multimap -> addAttributes("back", stack, multimap, false));
+            return CuriosCompat.createElytraProvider(stack, this);
         }
         return super.initCapabilities(stack, nbt);
     }
@@ -189,7 +189,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
         return multimap;
     }
 
-    private void addAttributes(String slot, ItemStack stack, Multimap<Attribute, AttributeModifier> multimap, boolean includeArmor) {
+    public void addAttributes(String slot, ItemStack stack, Multimap<Attribute, AttributeModifier> multimap, boolean includeArmor) {
         float armor = getStat(stack, ItemStats.ARMOR);
         if (armor > 0 && includeArmor) {
             multimap.put(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "Elytra armor modifier", armor, AttributeModifier.Operation.ADDITION));

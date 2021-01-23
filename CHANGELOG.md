@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Config to disable material mixing in the crafting grid when crafting parts. This is left enabled (old behavior by default).
+### Fixed
+- Elytra not working on back slot with Caelus API [#302]
 
 ## [2.5.2] - 2021-01-17
 ### Fixed
