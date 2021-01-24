@@ -13,21 +13,30 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
+import net.silentchaos512.gear.block.WoodBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModBlocks {
+    private static final Map<Block, Block> STRIPPED_WOOD = new HashMap<>();
+
     public static final BlockRegistryObject<OreBlock> BORT_ORE = register("bort_ore", () ->
             getOre(2, SoundType.STONE));
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
@@ -87,10 +96,15 @@ public final class ModBlocks {
                 }
             });
 
-    public static final BlockRegistryObject<RotatedPillarBlock> NETHERWOOD_LOG = register("netherwood_log", () ->
-            new RotatedPillarBlock(netherWoodProps(2f, 2f)));
+    public static final BlockRegistryObject<WoodBlock> NETHERWOOD_LOG = register("netherwood_log", () ->
+            new WoodBlock(STRIPPED_WOOD::get, netherWoodProps(2f, 2f)));
     public static final BlockRegistryObject<RotatedPillarBlock> STRIPPED_NETHERWOOD_LOG = register("stripped_netherwood_log", () ->
             new RotatedPillarBlock(netherWoodProps(2f, 2f)));
+    public static final BlockRegistryObject<WoodBlock> NETHERWOOD_WOOD = register("netherwood_wood", () ->
+            new WoodBlock(STRIPPED_WOOD::get, netherWoodProps(2f, 2f)));
+    public static final BlockRegistryObject<RotatedPillarBlock> STRIPPED_NETHERWOOD_WOOD = register("stripped_netherwood_wood", () ->
+            new RotatedPillarBlock(netherWoodProps(2f, 2f)));
+
     public static final BlockRegistryObject<Block> NETHERWOOD_PLANKS = register("netherwood_planks", () ->
             new Block(netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<SlabBlock> NETHERWOOD_SLAB = register("netherwood_slab", () ->
@@ -136,6 +150,12 @@ public final class ModBlocks {
         RenderTypeLookup.setRenderLayer(STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.getCutout());
+    }
+
+    @SubscribeEvent
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
+        STRIPPED_WOOD.put(NETHERWOOD_LOG.get(), STRIPPED_NETHERWOOD_LOG.get());
+        STRIPPED_WOOD.put(NETHERWOOD_WOOD.get(), STRIPPED_NETHERWOOD_WOOD.get());
     }
 
     private static OreBlock getOre(int harvestLevel, SoundType soundType) {

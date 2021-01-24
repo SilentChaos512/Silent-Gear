@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "silentgear:netherwood_log"
+      "tag": "silentgear:netherwood_logs"
     }
   ],
   "result": {

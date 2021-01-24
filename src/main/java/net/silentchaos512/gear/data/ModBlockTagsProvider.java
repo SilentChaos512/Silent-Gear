@@ -42,7 +42,9 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
         // Silent Gear
         getBuilder(ModTags.Blocks.NETHERWOOD_LOGS)
                 .add(ModBlocks.NETHERWOOD_LOG.get())
-                .add(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+                .add(ModBlocks.STRIPPED_NETHERWOOD_LOG.get())
+                .add(ModBlocks.NETHERWOOD_WOOD.get())
+                .add(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get());
         getBuilder(ModTags.Blocks.NETHERWOOD_SOIL)
                 .addTag(Tags.Blocks.NETHERRACK)
                 .addTag(Tags.Blocks.DIRT)

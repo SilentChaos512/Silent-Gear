@@ -56,6 +56,9 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE_GATE.get());
         registerLootTable(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_LOG.get());
+        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_WOOD.get());
+        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_PLANKS.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_SAPLING.get());
         registerLootTable(ModBlocks.NETHERWOOD_DOOR.get(), block ->
@@ -67,7 +70,6 @@ public class ModBlockLootTables extends BlockLootTables {
         registerFlowerPot(ModBlocks.POTTED_NETHERWOOD_SAPLING.get());
         registerDropSelfLootTable(ModBlocks.SALVAGER.get());
         registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
-        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
         registerDropping(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAX_SEEDS);
     }
 

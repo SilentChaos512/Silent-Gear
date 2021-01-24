@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Fragments can now be used to fill repair kits (1/8 of a unit per) [#311]
+- Add netherwood wood (log with the side texture on all side), with stripped variant [#301]
 - Config to disable material mixing in the crafting grid when crafting parts. This is left enabled (old behavior by default).
 ### Fixed
 - Elytra not working on back slot with Caelus API [#302]
+- Netherwood logs not being strippable [#301]
 - Armor plates displaying the wrong armor value
 
 ## [2.5.2] - 2021-01-17
