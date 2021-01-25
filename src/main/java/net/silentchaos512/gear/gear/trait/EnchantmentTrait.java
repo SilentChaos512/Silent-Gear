@@ -60,12 +60,17 @@ public final class EnchantmentTrait extends SimpleTrait {
      */
     public static void removeTraitEnchantments(ItemStack gear) {
         Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> enchants = getEnchantmentsOnGear(gear);
+        Collection<Enchantment> toRemove = new ArrayList<>();
 
         for (Enchantment enchantment : enchants.keySet()) {
             Triple<Integer, ResourceLocation, Integer> info = enchants.get(enchantment);
             if (info.getRight() > 0) {
-                enchants.remove(enchantment);
+                toRemove.add(enchantment);
             }
+        }
+
+        for (Enchantment enchantment : toRemove) {
+            enchants.remove(enchantment);
         }
 
         setEnchantmentsOnGear(gear, enchants);
