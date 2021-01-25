@@ -1,5 +1,8 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -85,8 +88,22 @@ public final class GearData {
      *               use {@link net.minecraftforge.common.ForgeHooks#getCraftingPlayer} the get the
      *               player during crafting.
      */
-    @SuppressWarnings("OverlyLongMethod")
     public static void recalculateStats(ItemStack gear, @Nullable PlayerEntity player) {
+        try {
+            tryRecalculateStats(gear, player);
+        } catch (Throwable ex) {
+            CrashReport report = CrashReport.makeCrashReport(ex, "Failed to recalculate gear properties");
+
+            CrashReportCategory itemCategory = report.makeCategory("Gear Item");
+            itemCategory.addDetail("Name", gear.getDisplayName().getString() + " (" + NameUtils.fromItem(gear) + ")");
+            itemCategory.addDetail("Data", gear.getOrCreateTag().toString());
+
+            throw new ReportedException(report);
+        }
+    }
+
+    @SuppressWarnings("OverlyLongMethod")
+    private static void tryRecalculateStats(ItemStack gear, @Nullable PlayerEntity player) {
         if (checkNonGearItem(gear, "recalculateStats")) return;
 
         getUUID(gear);
@@ -160,7 +177,8 @@ public final class GearData {
                 return 0f;
             });
         } else {
-            SilentGear.LOGGER.debug("Not recalculating stats for {}'s {}", player, gear);
+            String playerName = player != null ? player.getScoreboardName() : "null";
+            SilentGear.LOGGER.debug("Not recalculating stats for {}'s {}", playerName, gear);
         }
 
         // Update rendering info even if we didn't update stats
