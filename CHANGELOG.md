@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.4] - 2021-01-25
+### Added
+- Gear item name and NBT will now be shown in crash reports whenever the game crashes while recalculating stats and traits
+### Fixed
+- `set_damage` command not triggering a gear stat recalculation
+- (maybe) A crash (CME) when enchantment traits are updating an item's enchantments
+
 ## [2.5.3] - 2021-01-24
 ### Added
 - Fragments can now be used to fill repair kits (1/8 of a unit per) [#311]
