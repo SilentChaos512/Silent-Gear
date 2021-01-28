@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Display a chat message on player login when part/material models fail to load properly, directing the player to the log file
+### Fixed
+- World generation configs not working
+
 ## [2.5.4] - 2021-01-25
 ### Added
 - Gear item name and NBT will now be shown in crash reports whenever the game crashes while recalculating stats and traits

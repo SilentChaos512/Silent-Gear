@@ -44,42 +44,44 @@ public final class ModWorldFeatures {
 
     public static final Lazy<NetherwoodTreeFeature> NETHERWOOD_TREE_FEATURE = Lazy.of(() -> new NetherwoodTreeFeature(BaseTreeFeatureConfig.CODEC));
 
+    private static boolean configuredFeaturesRegistered = false;
+
     @SuppressWarnings("WeakerAccess")
     public static final class Configured {
-        public static final ConfiguredFeature<?, ?> BORT_ORE_VEINS = Feature.EMERALD_ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = Lazy.of(() -> Feature.EMERALD_ORE
                 .withConfiguration(new ReplaceBlockConfig(Blocks.STONE.getDefaultState(), ModBlocks.BORT_ORE.asBlockState()))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(4, 20)))
                 .square()
-                .func_242731_b(Config.Common.bortCount.get());
+                .func_242731_b(Config.Common.bortCount.get()));
 
-        public static final ConfiguredFeature<?, ?> CRIMSON_IRON_ORE_VEINS = Feature.ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> CRIMSON_IRON_ORE_VEINS = Lazy.of(() -> Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
                 .square()
-                .func_242731_b(Config.Common.crimsonIronCount.get());
+                .func_242731_b(Config.Common.crimsonIronCount.get()));
 
-        public static final ConfiguredFeature<?, ?> DOUBLE_CRIMSON_IRON_ORE_VEINS = Feature.ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> DOUBLE_CRIMSON_IRON_ORE_VEINS = Lazy.of(() -> Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
                 .square()
-                .func_242731_b(2 * Config.Common.crimsonIronCount.get());
+                .func_242731_b(2 * Config.Common.crimsonIronCount.get()));
 
-        public static final ConfiguredFeature<?, ?> AZURE_SILVER_ORE_VEINS = Feature.ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> AZURE_SILVER_ORE_VEINS = Lazy.of(() -> Feature.ORE
                 .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(16, 92)))
                 .square()
-                .func_242731_b(Config.Common.azureSilverCount.get());
+                .func_242731_b(Config.Common.azureSilverCount.get()));
 
-        public static final ConfiguredFeature<?, ?> WILD_FLAX_PATCHES = Feature.FLOWER
+        public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLAX_PATCHES = Lazy.of(() -> Feature.FLOWER
                 .withConfiguration(new BlockClusterFeatureConfig.Builder(
                         new SimpleBlockStateProvider(ModBlocks.WILD_FLAX_PLANT.asBlockState()),
                         SimpleBlockPlacer.PLACER
                 ).tries(Config.Common.wildFlaxTryCount.get()).build())
                 .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
                 .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
-                .func_242731_b(Config.Common.wildFlaxPatchCount.get());
+                .func_242731_b(Config.Common.wildFlaxPatchCount.get()));
 
-        public static final ConfiguredFeature<?, ?> NETHERWOOD_TREES = Feature.RANDOM_SELECTOR
+        public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = Lazy.of(() -> Feature.RANDOM_SELECTOR
                 .withConfiguration(new MultipleRandomFeatureConfig(
                         ImmutableList.of(
                                 NETHERWOOD_TREE_FEATURE.get()
@@ -91,7 +93,7 @@ public final class ModWorldFeatures {
                 ))
                 .withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(8)))
                 .range(128)
-                .chance(2);
+                .chance(2));
 
         @Nonnull
         private static TopSolidRangeConfig topSolidRange(int bottom, int top) {
@@ -105,12 +107,18 @@ public final class ModWorldFeatures {
 
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
+    }
 
-        registerConfiguredFeature("bort_ore_veins", Configured.BORT_ORE_VEINS);
-        registerConfiguredFeature("crimson_iron_ore_veins", Configured.CRIMSON_IRON_ORE_VEINS);
-        registerConfiguredFeature("azure_silver_ore_veins", Configured.AZURE_SILVER_ORE_VEINS);
-        registerConfiguredFeature("wild_flax_patches", Configured.WILD_FLAX_PATCHES);
-        registerConfiguredFeature("netherwood_trees", Configured.NETHERWOOD_TREES);
+    public static void registerConfiguredFeatures() {
+        if (configuredFeaturesRegistered) return;
+
+        configuredFeaturesRegistered = true;
+
+        registerConfiguredFeature("bort_ore_veins", Configured.BORT_ORE_VEINS.get());
+        registerConfiguredFeature("crimson_iron_ore_veins", Configured.CRIMSON_IRON_ORE_VEINS.get());
+        registerConfiguredFeature("azure_silver_ore_veins", Configured.AZURE_SILVER_ORE_VEINS.get());
+        registerConfiguredFeature("wild_flax_patches", Configured.WILD_FLAX_PATCHES.get());
+        registerConfiguredFeature("netherwood_trees", Configured.NETHERWOOD_TREES.get());
     }
 
     private static void registerConfiguredFeature(String name, ConfiguredFeature<?, ?> configuredFeature) {
@@ -122,6 +130,9 @@ public final class ModWorldFeatures {
 
     @SubscribeEvent
     public static void addFeaturesToBiomes(BiomeLoadingEvent biome) {
+        // Need to load these as late as possible, or configs won't be loaded
+        registerConfiguredFeatures();
+
         if (biome.getCategory() == Biome.Category.EXTREME_HILLS || biome.getCategory() == Biome.Category.PLAINS) {
             addWildFlax(biome);
         }
@@ -138,28 +149,28 @@ public final class ModWorldFeatures {
 
     private static void addWildFlax(BiomeLoadingEvent biome) {
         SilentGear.LOGGER.debug("Add wild flax to {}", biome.getName());
-        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES);
+        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES.get());
     }
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
-        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES);
+        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES.get());
     }
 
     private static void addBortOre(BiomeLoadingEvent biome) {
-        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.BORT_ORE_VEINS);
+        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.BORT_ORE_VEINS.get());
     }
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {
         if (Biomes.BASALT_DELTAS.getLocation().equals(biome.getName()) || Biomes.SOUL_SAND_VALLEY.getLocation().equals(biome.getName())) {
             SilentGear.LOGGER.debug("Add double crimson iron ores to {}", biome.getName());
-            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.DOUBLE_CRIMSON_IRON_ORE_VEINS);
+            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.DOUBLE_CRIMSON_IRON_ORE_VEINS.get());
         } else {
             SilentGear.LOGGER.debug("Add crimson iron ores to {}", biome.getName());
-            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS);
+            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS.get());
         }
     }
 
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
-        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.AZURE_SILVER_ORE_VEINS);
+        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.AZURE_SILVER_ORE_VEINS.get());
     }
 }
