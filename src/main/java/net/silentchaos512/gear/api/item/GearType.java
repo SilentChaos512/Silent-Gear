@@ -215,7 +215,7 @@ public final class GearType {
      *                   trying to match more specific types.
      * @return True if this type's name is equal to type, or if its parent matches (recursive)
      */
-    public boolean matches(String type, boolean includeAll) {
+    public boolean matches(String type, boolean includeAll) { //FIXME: The way includesAll is handled does not make sense anymore
         if (type.contains("/")) {
             return matches(type.split("/")[1], includeAll);
         }
@@ -227,7 +227,7 @@ public final class GearType {
     }
 
     public boolean isGear() {
-        return matches(ALL);
+        return matches(ALL, false);
     }
 
     public boolean isArmor() {

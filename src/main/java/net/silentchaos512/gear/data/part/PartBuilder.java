@@ -62,6 +62,10 @@ public class PartBuilder {
         this.partType = partType;
         this.id = id;
         this.ingredient = ingredient;
+
+        if (!this.gearType.isGear()) {
+            throw new IllegalArgumentException("Part gear type must extend GearType.ALL");
+        }
     }
 
     public PartBuilder serializerType(IPartSerializer<?> serializer) {

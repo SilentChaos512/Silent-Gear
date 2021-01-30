@@ -12,7 +12,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ToolHeadItem extends CompoundPartItem {
+public class ToolHeadItem extends CompoundPartItem { // TODO: Rename to MainPartItem?
     private final GearType gearType;
 
     public ToolHeadItem(GearType gearType, Properties properties) {

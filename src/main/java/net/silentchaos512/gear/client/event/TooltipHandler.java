@@ -261,12 +261,7 @@ public final class TooltipHandler {
     }
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
-        GearType gearType;
-        if (part.getItem().getItem() instanceof CompoundPartItem) {
-            gearType = ((CompoundPartItem) part.getItem().getItem()).getGearType();
-        } else {
-            gearType = GearType.ALL;
-        }
+        GearType gearType = getPartGearType(part);
 
         TextListBuilder builder = new TextListBuilder();
         for (ItemStat stat : part.getGearType().getRelevantStats()) {
@@ -274,6 +269,17 @@ public final class TooltipHandler {
             getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
+    }
+
+    private static GearType getPartGearType(PartData part) {
+        if (part.getItem().getItem() instanceof CompoundPartItem) {
+            GearType gearType = ((CompoundPartItem) part.getItem().getItem()).getGearType();
+
+            if (gearType.isGear()) {
+                return gearType;
+            }
+        }
+        return GearType.ALL;
     }
 
     private static void getMaterialStatLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {

@@ -57,7 +57,7 @@ public class PartsProvider implements IDataProvider {
         ret.add(part("coating", GearType.ALL, PartType.COATING, ModItems.COATING)
                 .blacklistGearType(GearType.ELYTRA)
         );
-        ret.add(part("fletching", GearType.NONE, PartType.FLETCHING, ModItems.FLETCHING));
+        ret.add(part("fletching", GearType.PROJECTILE, PartType.FLETCHING, ModItems.FLETCHING));
         ret.add(part("grip", GearType.TOOL, PartType.GRIP, ModItems.GRIP));
         ret.add(part("lining", GearType.ARMOR, PartType.LINING, ModItems.LINING));
         ret.add(part("long_rod", GearType.TOOL, PartType.ROD, ModItems.LONG_ROD));

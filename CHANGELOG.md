@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Display a chat message on player login when part/material models fail to load properly, directing the player to the log file
 ### Fixed
+- Non-main parts not displaying stats in tooltip [#314]
 - World generation configs not working
 
 ## [2.5.4] - 2021-01-25
