@@ -31,6 +31,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
@@ -54,6 +55,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
         // Need 1 gear, 1 repair kit, and optional materials
         ItemStack gear = ItemStack.EMPTY;
         boolean foundKit = false;
+        float repairKitEfficiency = Config.Common.missingRepairKitEfficiency.get().floatValue();
         List<ItemStack> materials = new ArrayList<>();
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
@@ -70,6 +72,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
                         return false;
                     }
                     foundKit = true;
+                    repairKitEfficiency = getKitEfficiency(stack);
                 } else if (MaterialManager.from(stack) != null) {
                     materials.add(stack);
                 } else {
@@ -78,13 +81,22 @@ public class QuickRepairRecipe extends SpecialRecipe {
             }
         }
 
-        if (gear.isEmpty() || !foundKit) return false;
+        if (gear.isEmpty() || repairKitEfficiency < 0.1E-9) return false;
+
         for (ItemStack stack : materials) {
             if (!ModRecipes.isRepairMaterial(gear, stack)) {
                 return false;
             }
         }
+
         return true;
+    }
+
+    private static float getKitEfficiency(ItemStack stack) {
+        if (stack.getItem() instanceof RepairKitItem) {
+            return ((RepairKitItem) stack.getItem()).getRepairEfficiency(RepairContext.Type.QUICK);
+        }
+        return Config.Common.missingRepairKitEfficiency.get().floatValue();
     }
 
     @Override
@@ -98,10 +110,12 @@ public class QuickRepairRecipe extends SpecialRecipe {
         repairWithLooseMaterials(gear, repairKit, mats);
 
         // Then use repair kit, if necessary
-        if (gear.getDamage() > 0) {
+        if (gear.getDamage() > 0 && repairKit.getItem() instanceof RepairKitItem) {
             RepairKitItem item = (RepairKitItem) repairKit.getItem();
             int value = item.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
-            gear.setDamage(gear.getDamage() - Math.round(value));
+            if (value > 0) {
+                gear.setDamage(gear.getDamage() - Math.round(value));
+            }
         }
 
         GearData.incrementRepairCount(gear, 1);
@@ -111,7 +125,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
 
     private static void repairWithLooseMaterials(ItemStack gear, ItemStack repairKit, Collection<ItemStack> mats) {
         float repairValue = getRepairValueFromMaterials(gear, mats);
-        float kitEfficiency = ((RepairKitItem) repairKit.getItem()).getRepairEfficiency(RepairContext.Type.QUICK);
+        float kitEfficiency = getKitEfficiency(repairKit);
         float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
         gear.setDamage(gear.getDamage() - Math.round(repairValue * kitEfficiency * gearRepairEfficiency));
     }

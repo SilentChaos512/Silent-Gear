@@ -57,6 +57,7 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue repairKitSturdyEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitCrimsonEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitAzureEfficiency;
+        public static final ForgeConfigSpec.DoubleValue missingRepairKitEfficiency;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Other items
@@ -120,6 +121,10 @@ public final class Config {
                         repairKitSturdyEfficiency = builder.defineInRange("sturdy", 0.4f, 0f, 10f);
                         repairKitCrimsonEfficiency = builder.defineInRange("crimson", 0.45f, 0f, 10f);
                         repairKitAzureEfficiency = builder.defineInRange("azure", 0.5f, 0f, 10f);
+                        missingRepairKitEfficiency = builder
+                                .comment("Repair efficiency with loose materials if no repair kit is used.",
+                                        "Setting a value greater than zero makes repair kits optional.")
+                                .defineInRange("missing", 0.0f, 0f, 10f);
                         builder.pop();
                     }
 
