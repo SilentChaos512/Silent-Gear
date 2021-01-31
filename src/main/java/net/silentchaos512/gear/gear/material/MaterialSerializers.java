@@ -19,9 +19,9 @@ public final class MaterialSerializers {
 
     public static <S extends IMaterialSerializer<T>, T extends IMaterial> S register(S serializer) {
         if (REGISTRY.containsKey(serializer.getName())) {
-            throw new IllegalArgumentException("Duplicate gear part serializer " + serializer.getName());
+            throw new IllegalArgumentException("Duplicate material serializer " + serializer.getName());
         }
-        SilentGear.LOGGER.info(MaterialManager.MARKER, "Registered serializer '{}'", serializer.getName());
+        SilentGear.LOGGER.info(MaterialManager.MARKER, "Registered material serializer '{}'", serializer.getName());
         REGISTRY.put(serializer.getName(), serializer);
         return serializer;
     }

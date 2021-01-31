@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.5.5] - 2021-01-31
 ### Added
 - Config option to allow repairs without repair kits (item.repairKits.efficiency.missing). Default value is zero, which requires repair kits. If enabled, repair kits may still be used. [#316]
 - Display a chat message on player login when part/material models fail to load properly, directing the player to the log file
