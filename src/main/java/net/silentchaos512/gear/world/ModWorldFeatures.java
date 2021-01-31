@@ -25,9 +25,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
 
 import javax.annotation.Nonnull;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class ModWorldFeatures {
@@ -48,31 +52,33 @@ public final class ModWorldFeatures {
 
     @SuppressWarnings("WeakerAccess")
     public static final class Configured {
-        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = Lazy.of(() -> Feature.EMERALD_ORE
+        static final Map<String, Lazy<ConfiguredFeature<?, ?>>> TO_REGISTER = new LinkedHashMap<>();
+
+        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = createLazy("bort_ore_veins", () -> Feature.EMERALD_ORE
                 .withConfiguration(new ReplaceBlockConfig(Blocks.STONE.getDefaultState(), ModBlocks.BORT_ORE.asBlockState()))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(4, 20)))
                 .square()
                 .func_242731_b(Config.Common.bortCount.get()));
 
-        public static final Lazy<ConfiguredFeature<?, ?>> CRIMSON_IRON_ORE_VEINS = Lazy.of(() -> Feature.ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> CRIMSON_IRON_ORE_VEINS = createLazy("crimson_iron_ore_veins", () -> Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
                 .square()
                 .func_242731_b(Config.Common.crimsonIronCount.get()));
 
-        public static final Lazy<ConfiguredFeature<?, ?>> DOUBLE_CRIMSON_IRON_ORE_VEINS = Lazy.of(() -> Feature.ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> DOUBLE_CRIMSON_IRON_ORE_VEINS = createLazy("double_crimson_iron_ore_veins", () -> Feature.ORE
                 .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
                 .square()
                 .func_242731_b(2 * Config.Common.crimsonIronCount.get()));
 
-        public static final Lazy<ConfiguredFeature<?, ?>> AZURE_SILVER_ORE_VEINS = Lazy.of(() -> Feature.ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> AZURE_SILVER_ORE_VEINS = createLazy("azure_silver_ore_veins", () -> Feature.ORE
                 .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
                 .withPlacement(Placement.RANGE.configure(topSolidRange(16, 92)))
                 .square()
                 .func_242731_b(Config.Common.azureSilverCount.get()));
 
-        public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLAX_PATCHES = Lazy.of(() -> Feature.FLOWER
+        public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLAX_PATCHES = createLazy("wild_flax_patches", () -> Feature.FLOWER
                 .withConfiguration(new BlockClusterFeatureConfig.Builder(
                         new SimpleBlockStateProvider(ModBlocks.WILD_FLAX_PLANT.asBlockState()),
                         SimpleBlockPlacer.PLACER
@@ -81,7 +87,7 @@ public final class ModWorldFeatures {
                 .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
                 .func_242731_b(Config.Common.wildFlaxPatchCount.get()));
 
-        public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = Lazy.of(() -> Feature.RANDOM_SELECTOR
+        public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = createLazy("netherwood_trees", () -> Feature.RANDOM_SELECTOR
                 .withConfiguration(new MultipleRandomFeatureConfig(
                         ImmutableList.of(
                                 NETHERWOOD_TREE_FEATURE.get()
@@ -94,6 +100,16 @@ public final class ModWorldFeatures {
                 .withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(8)))
                 .range(128)
                 .chance(2));
+
+        private static Lazy<ConfiguredFeature<?, ?>> createLazy(String name, Supplier<ConfiguredFeature<?, ?>> supplier) {
+            if (TO_REGISTER.containsKey(name)) {
+                throw new IllegalArgumentException("Configured feature lazy with name '" + name + "' already created");
+            }
+
+            Lazy<ConfiguredFeature<?, ?>> lazy = Lazy.of(supplier);
+            TO_REGISTER.put(name, lazy);
+            return lazy;
+        }
 
         @Nonnull
         private static TopSolidRangeConfig topSolidRange(int bottom, int top) {
@@ -109,20 +125,18 @@ public final class ModWorldFeatures {
         event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
     }
 
-    public static void registerConfiguredFeatures() {
+    private static void registerConfiguredFeatures() {
         if (configuredFeaturesRegistered) return;
 
         configuredFeaturesRegistered = true;
 
-        registerConfiguredFeature("bort_ore_veins", Configured.BORT_ORE_VEINS.get());
-        registerConfiguredFeature("crimson_iron_ore_veins", Configured.CRIMSON_IRON_ORE_VEINS.get());
-        registerConfiguredFeature("azure_silver_ore_veins", Configured.AZURE_SILVER_ORE_VEINS.get());
-        registerConfiguredFeature("wild_flax_patches", Configured.WILD_FLAX_PATCHES.get());
-        registerConfiguredFeature("netherwood_trees", Configured.NETHERWOOD_TREES.get());
+        Configured.TO_REGISTER.forEach((name, cf) -> registerConfiguredFeature(name, cf.get()));
     }
 
     private static void registerConfiguredFeature(String name, ConfiguredFeature<?, ?> configuredFeature) {
-        Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, SilentGear.getId(name), configuredFeature);
+        ModResourceLocation id = SilentGear.getId(name);
+        SilentGear.LOGGER.debug("Register configured feature {}", id);
+        Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, id, configuredFeature);
     }
 
     public static void registerPlacements(RegistryEvent.Register<Placement<?>> event) {
