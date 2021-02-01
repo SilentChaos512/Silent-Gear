@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -70,7 +70,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     public ITextComponent getDisplayName(ItemStack stack) {
         MaterialInstance material = getMaterial(stack);
         if (material != null) {
-            IFormattableTextComponent nameText = material.getDisplayName(PartType.MAIN);
+            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey(), material.getDisplayName(PartType.MAIN));
             int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
             return TextUtil.withColor(nameText, nameColor);
         }

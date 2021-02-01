@@ -1,10 +1,14 @@
 package net.silentchaos512.gear.block.compounder;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
@@ -312,5 +316,32 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
                 this,
                 this.fields,
                 this.info.getCategories());
+    }
+
+    @Override
+    public void read(BlockState state, CompoundNBT tags) {
+        super.read(state, tags);
+        SyncVariable.Helper.readSyncVars(this, tags);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tags) {
+        CompoundNBT compoundTag = super.write(tags);
+        SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
+        return compoundTag;
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tags = super.getUpdateTag();
+        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
+        return tags;
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        super.onDataPacket(net, packet);
+        CompoundNBT tags = packet.getNbtCompound();
+        SyncVariable.Helper.readSyncVars(this, tags);
     }
 }

@@ -24,11 +24,9 @@ import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
-import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -117,14 +115,13 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        PartData part = PartData.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
-        if (part != null && material != null) {
-            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(PartType.MAIN));
-            int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
+        if (material != null) {
+            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey(), material.getDisplayName(PartType.MAIN));
+            int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
             return TextUtil.withColor(nameText, nameColor);
         }
-        return super.getDisplayName(stack);
+        return new TranslationTextComponent(this.getTranslationKey(), TextUtil.misc("unknown"));
     }
 
     @Override
