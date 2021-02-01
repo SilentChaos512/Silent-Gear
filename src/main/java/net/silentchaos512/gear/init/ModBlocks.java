@@ -21,6 +21,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
+import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.WoodBlock;
 import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
