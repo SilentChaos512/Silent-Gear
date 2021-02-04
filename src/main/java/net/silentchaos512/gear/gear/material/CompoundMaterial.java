@@ -198,9 +198,9 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<StatGearKey> getStatKeys(PartType type) {
-        return getSubMaterials(MaterialInstance.of(this)).stream()
-                .flatMap(mat -> mat.get().getStatKeys(type).stream())
+    public Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type) {
+        return getSubMaterials(material).stream()
+                .flatMap(mat -> mat.get().getStatKeys(mat, type).stream())
                 .collect(Collectors.toSet());
     }
 

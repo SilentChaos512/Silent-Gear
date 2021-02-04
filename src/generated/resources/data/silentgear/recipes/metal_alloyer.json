@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "/#/",
+    "/ /",
+    "#i#"
+  ],
+  "key": {
+    "/": {
+      "tag": "forge:ingots/crimson_steel"
+    },
+    "i": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "#": {
+      "item": "minecraft:red_nether_bricks"
+    }
+  },
+  "result": {
+    "item": "silentgear:metal_alloyer"
+  }
+}

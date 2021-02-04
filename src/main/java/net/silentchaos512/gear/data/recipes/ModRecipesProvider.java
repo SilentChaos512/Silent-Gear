@@ -81,6 +81,7 @@ public class ModRecipesProvider extends RecipeProvider {
         registerCompoundParts(consumer);
         registerGear(consumer);
         registerModifierKits(consumer);
+        registerMachines(consumer);
         registerSmithing(consumer);
         registerSalvaging(consumer);
     }
@@ -632,6 +633,28 @@ public class ModRecipesProvider extends RecipeProvider {
                     .addIngredient(Tags.Items.RODS_WOODEN)
                     .build(consumer, SilentGear.getId(NameUtils.from(item).getPath() + "_empty"));
         }
+    }
+
+    private void registerMachines(Consumer<IFinishedRecipe> consumer) {
+        ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.METAL_ALLOYER)
+                .key('/', ModTags.Items.INGOTS_CRIMSON_STEEL)
+                .key('i', Tags.Items.STORAGE_BLOCKS_IRON)
+                .key('#', Blocks.RED_NETHER_BRICKS)
+                .patternLine("/#/")
+                .patternLine("/ /")
+                .patternLine("#i#")
+                .build(consumer);
+
+        ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.RECRYSTALLIZER)
+                .key('/', ModTags.Items.INGOTS_AZURE_ELECTRUM)
+                .key('g', Tags.Items.STORAGE_BLOCKS_GOLD)
+                .key('d', Tags.Items.GEMS_DIAMOND)
+                .key('e', Tags.Items.GEMS_EMERALD)
+                .key('#', Blocks.PURPUR_BLOCK)
+                .patternLine("/e/")
+                .patternLine("/d/")
+                .patternLine("#g#")
+                .build(consumer);
     }
 
     private void registerCraftingItems(Consumer<IFinishedRecipe> consumer) {

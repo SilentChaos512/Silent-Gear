@@ -147,7 +147,7 @@ public class PartMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<StatGearKey> getStatKeys(PartType type) {
+    public Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type) {
         return this.stats.getOrDefault(type, StatModifierMap.EMPTY_STAT_MAP).keySet();
     }
 

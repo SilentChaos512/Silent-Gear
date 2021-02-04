@@ -33,7 +33,7 @@ import java.util.stream.IntStream;
 @SuppressWarnings("WeakerAccess")
 public class CompounderTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
     public static final int STANDARD_INPUT_SLOTS = 4;
-    static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 10 : 15);
+    static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
     private final CompounderInfo info;
     private final int[] allSlots;

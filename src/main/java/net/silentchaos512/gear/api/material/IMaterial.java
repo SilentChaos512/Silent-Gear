@@ -128,7 +128,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      */
     default void retainData(@Nullable IMaterial oldMaterial) {}
 
-    Collection<StatGearKey> getStatKeys(PartType type);
+    Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type);
 
     /**
      * Gets the rendering properties of the material, including textures and colors.
