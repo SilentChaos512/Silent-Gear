@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -7,7 +8,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -21,6 +24,7 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     private static final String NBT_MATERIAL = "Material";
@@ -75,6 +79,11 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
             return TextUtil.withColor(nameText, nameColor);
         }
         return super.getDisplayName(stack);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(TextUtil.withColor(TextUtil.misc("wip"), TextFormatting.RED));
     }
 
     @Override

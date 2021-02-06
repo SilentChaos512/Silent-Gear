@@ -11,6 +11,7 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -126,6 +127,8 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(TextUtil.withColor(TextUtil.misc("wip"), TextFormatting.RED));
+
         Collection<MaterialInstance> materials = getSubMaterials(stack);
 
         TextListBuilder statsBuilder = new TextListBuilder();
