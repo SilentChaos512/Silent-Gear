@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - '*.java'
+      - '*.yml'
   pull_request:
     paths:
       - '*.java'
+      - '*.yml'
 jobs:
   gradle_build:
     runs-on: ubuntu-latest
