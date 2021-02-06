@@ -3,10 +3,10 @@ name: Test
 on:
   push:
     paths:
-      - '*.py'
+      - '*.java'
   pull_request:
     paths:
-      - '*.py'
+      - '*.java'
 jobs:
   gradle_build:
     runs-on: ubuntu-latest
