@@ -1,5 +1,3 @@
-from enum import Enum
-import io
 import json
 import os
 
