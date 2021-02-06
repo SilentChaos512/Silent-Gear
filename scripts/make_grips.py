@@ -1,6 +1,3 @@
-import io
-
-
 def color_str(color: int):
     return '#' + hex(color)[2:].upper()
 
