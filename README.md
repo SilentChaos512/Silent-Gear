@@ -12,7 +12,7 @@ Add-on mods can add new part types, gear types, and trait types, as well as anyt
 - [Wiki](https://github.com/SilentChaos512/Silent-Gear/wiki) (advanced information)
 - [GitHub repository](https://github.com/SilentChaos512/Silent-Gear) (source code)
 - [Issue Tracker on GitHub](https://github.com/SilentChaos512/Silent-Gear/issues) (bug reports and feature requests)
-- [Discord Server](https://discord.gg/gh84eWK) (easiest way to get quick questions answered, do not use to report bugs)
+- [Discord Server](https://discord.gg/Adyk9zHnUn) (easiest way to get quick questions answered, do not use to report bugs)
 
 ### Note on Downloads
 
