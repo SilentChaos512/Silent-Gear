@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Tooltip keybindings will now be ignored and default to old behavior if unbound or bound to either left/right modifier keys [#319]
-- New shield model and texture by UnmovingJaveline
+- New shield model and texture (UnmovingJaveline)
+- Fix spear model offsets (UnmovingJaveline)
 
 ## [2.5.5] - 2021-01-31
 ### Added
