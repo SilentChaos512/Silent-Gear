@@ -996,6 +996,7 @@ public class ModRecipesProvider extends RecipeProvider {
         vanillaSalvage(consumer, Items.IRON_CHESTPLATE, Items.IRON_INGOT, 8, 0);
         vanillaSalvage(consumer, Items.IRON_LEGGINGS, Items.IRON_INGOT, 7, 0);
         vanillaSalvage(consumer, Items.IRON_BOOTS, Items.IRON_INGOT, 4, 0);
+        vanillaSalvage(consumer, Items.SHEARS, Items.IRON_INGOT, 2, 0);
 
         vanillaSalvage(consumer, Items.LEATHER_HELMET, Items.LEATHER, 5, 0);
         vanillaSalvage(consumer, Items.LEATHER_CHESTPLATE, Items.LEATHER, 8, 0);
