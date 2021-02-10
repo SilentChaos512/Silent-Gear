@@ -144,6 +144,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.HELMETS, ModItems.HELMET);
         builder(ModTags.Items.HOES, ModItems.MATTOCK);
         builder(ModTags.Items.KNIVES, ModItems.KNIFE, ModItems.DAGGER);
+        getBuilder(makeWrapper("forge", "tools/knives")).addTag(ModTags.Items.KNIVES); // alt tag that some mods are apparently using :(
         builder(ModTags.Items.LEGGINGS, ModItems.LEGGINGS);
         builder(ModTags.Items.PICKAXES, ModItems.HAMMER, ModItems.PAXEL, ModItems.PICKAXE);
         builder(ModTags.Items.SAWS, ModItems.SAW);
