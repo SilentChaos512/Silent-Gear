@@ -294,7 +294,7 @@ public final class TooltipHandler {
             builder.indent();
 
             int subCount = 0;
-            List<StatGearKey> keysForStat = material.get().getStatKeys(partType).stream()
+            List<StatGearKey> keysForStat = material.get().getStatKeys(material, partType).stream()
                     .filter(key -> key.getStat().equals(stat))
                     .collect(Collectors.toList());
 

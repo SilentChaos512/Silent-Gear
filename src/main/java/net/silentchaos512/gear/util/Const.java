@@ -1,10 +1,17 @@
 package net.silentchaos512.gear.util;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.block.compounder.CompounderInfo;
+import net.silentchaos512.gear.gear.material.MaterialCategories;
+import net.silentchaos512.gear.init.ModContainers;
+import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.ModTileEntities;
 
 public final class Const {
     // Model loaders
@@ -18,6 +25,9 @@ public final class Const {
     // Recipe types and categories
     public static final ResourceLocation COMBINE_FRAGMENTS = SilentGear.getId("combine_fragments");
     public static final ResourceLocation COMPOUND_PART = SilentGear.getId("compound_part");
+    public static final ResourceLocation COMPOUNDING = SilentGear.getId("compounding");
+    public static final ResourceLocation COMPOUNDING_GEM = SilentGear.getId("compounding/gem");
+    public static final ResourceLocation COMPOUNDING_METAL = SilentGear.getId("compounding/metal");
     public static final ResourceLocation DAMAGE_ITEM = SilentGear.getId("damage_item");
     public static final ResourceLocation FILL_REPAIR_KIT = SilentGear.getId("fill_repair_kit");
     public static final ResourceLocation GRADING = SilentGear.getId("grading");
@@ -35,6 +45,33 @@ public final class Const {
     // Mod IDs
     public static final String CAELUS = "caelus";
     public static final String CURIOS = "curios";
+
+    // Random
+    public static final ResourceLocation NULL_ID = new ResourceLocation("null");
+
+    // Compound-crafting block info
+    public static final CompounderInfo METAL_COMPOUNDER_INFO = new CompounderInfo(
+            () -> ModTileEntities.METAL_ALLOYER.get(),
+            () -> ModContainers.METAL_ALLOYER.get(),
+            () -> ModRecipes.COMPOUNDING_METAL_TYPE,
+            () -> ModItems.ALLOY_INGOT.get(),
+            4,
+            ImmutableList.of(
+                    MaterialCategories.METAL,
+                    MaterialCategories.DUST
+            )
+    );
+    public static final CompounderInfo GEM_COMPOUNDER_INFO = new CompounderInfo(
+            () -> ModTileEntities.RECRYSTALLIZER.get(),
+            () -> ModContainers.RECRYSTALLIZER.get(),
+            () -> ModRecipes.COMPOUNDING_GEM_TYPE,
+            () -> ModItems.HYBRID_GEM.get(),
+            4,
+            ImmutableList.of(
+                    MaterialCategories.GEM,
+                    MaterialCategories.DUST
+            )
+    );
 
     private Const() {}
 

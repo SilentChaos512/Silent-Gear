@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "/e/",
+    "/d/",
+    "#g#"
+  ],
+  "key": {
+    "/": {
+      "tag": "forge:ingots/azure_electrum"
+    },
+    "g": {
+      "tag": "forge:storage_blocks/gold"
+    },
+    "d": {
+      "tag": "forge:gems/diamond"
+    },
+    "e": {
+      "tag": "forge:gems/emerald"
+    },
+    "#": {
+      "item": "minecraft:purpur_block"
+    }
+  },
+  "result": {
+    "item": "silentgear:recrystallizer"
+  }
+}

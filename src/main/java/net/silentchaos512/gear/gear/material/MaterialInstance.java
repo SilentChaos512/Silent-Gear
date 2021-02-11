@@ -10,9 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -20,18 +18,17 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.InventoryUtils;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class MaterialInstance implements IMaterialInstance {
@@ -113,7 +110,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public Collection<IMaterialCategory> getCategories() {
-        return material.getCategories();
+        return material.getCategories(this);
     }
 
     public boolean hasAnyCategory(Collection<IMaterialCategory> others) {
@@ -132,8 +129,8 @@ public final class MaterialInstance implements IMaterialInstance {
         return material.getTier(partType);
     }
 
-    public Collection<PartType> getPartTypes() {
-        return material.getPartTypes();
+    public Set<PartType> getPartTypes() {
+        return material.getPartTypes(this);
     }
 
     @Override
@@ -176,7 +173,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public boolean canRepair(ItemStack gear) {
-        return material.allowedInPart(PartType.MAIN) && GearData.getTier(gear) <= this.getTier(PartType.MAIN);
+        return material.allowedInPart(this, PartType.MAIN) && GearData.getTier(gear) <= this.getTier(PartType.MAIN);
     }
 
     public int getRepairValue(ItemStack gear) {
@@ -223,9 +220,23 @@ public final class MaterialInstance implements IMaterialInstance {
         return nbt;
     }
 
+    public int getPrimaryColor(GearType gearType, PartType partType) {
+        IMaterialDisplay model = MaterialDisplayManager.get(this.material);
+        MaterialLayer layer = model.getLayerList(gearType, partType, this).getFirstLayer();
+        if (layer != null) {
+            return layer.getColor();
+        }
+        return Color.VALUE_WHITE;
+    }
+
     @Override
     public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
         return material.getDisplayName(partType, gear);
+    }
+
+    @Override
+    public String getModelKey() {
+        return this.material.getModelKey(this);
     }
 
     public ITextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
@@ -234,6 +245,10 @@ public final class MaterialInstance implements IMaterialInstance {
             text.appendString(" (").append(this.grade.getDisplayName()).appendString(")");
         }
         return text;
+    }
+
+    public int getNameColor(PartType partType, GearType gearType) {
+        return material.getNameColor(partType, gearType, this);
     }
 
     @Override

@@ -207,6 +207,36 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return (float) Math.pow(weightBaseClamped, -(count == 0 ? count : 0.5 + 0.5f * count));
     }
 
+    private static float getMaterialPrimaryMod(Iterable<StatInstance> modifiers, Operation op) {
+        float ret = -1f;
+        for (StatInstance mod : modifiers) {
+            if (mod.getOp() == op) {
+                if (ret < mod.value) {
+                    ret = mod.value;
+                }
+            }
+        }
+        return ret > 0 ? ret : 1f;
+    }
+
+    public static float getMaterialWeightedAverage(Collection<StatInstance> modifiers, Operation op) {
+        float primaryMod = getMaterialPrimaryMod(modifiers, op);
+        float ret = 0;
+        float totalWeight = 0f;
+        for (StatInstance mod : modifiers) {
+            if (mod.getOp() == op) {
+                float weight = getMaterialModifierWeight(mod, primaryMod);
+                totalWeight += weight;
+                ret += mod.getValue() * weight;
+            }
+        }
+        return totalWeight > 0 ? ret / totalWeight : ret;
+    }
+
+    private static float getMaterialModifierWeight(StatInstance mod, float primaryMod) {
+        return 1f + mod.value / (1f + Math.abs(primaryMod));
+    }
+
     public StatInstance computeForDisplay(float baseValue, GearType gearType, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
             return StatInstance.of(baseValue);

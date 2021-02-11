@@ -14,7 +14,6 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
@@ -44,13 +43,13 @@ public class GearTypeTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
-        return gear.isEmpty() || GearHelper.getType(gear).matches(this.gearType);
+    public boolean matches(ItemStack gear, GearType gearType, PartDataList parts, ITrait trait) {
+        return gear.isEmpty() || gearType.matches(this.gearType);
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
-        return gear.isEmpty() || GearHelper.getType(gear).matches(this.gearType);
+    public boolean matches(ItemStack gear, GearType gearType, PartType partType, List<MaterialInstance> materials, ITrait trait) {
+        return gear.isEmpty() || gearType.matches(this.gearType);
     }
 
     @Override

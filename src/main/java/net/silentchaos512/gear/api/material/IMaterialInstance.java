@@ -50,6 +50,11 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
      */
     int getTier(PartType partType);
 
+    default boolean isSimple() {
+        IMaterial mat = get();
+        return mat != null && mat.isSimple();
+    }
+
     default float getStat(PartType partType, IItemStat stat) {
         return getStat(partType, StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
     }
@@ -88,6 +93,8 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
     default IFormattableTextComponent getDisplayName(PartType partType) {
         return getDisplayName(partType, ItemStack.EMPTY);
     }
+
+    String getModelKey();
 
     default IFormattableTextComponent getDisplayNameWithGrade(PartType partType) {
         IFormattableTextComponent displayName = getDisplayName(partType, ItemStack.EMPTY);

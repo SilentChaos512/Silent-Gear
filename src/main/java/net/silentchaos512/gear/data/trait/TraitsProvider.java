@@ -185,7 +185,7 @@ public class TraitsProvider implements IDataProvider {
         );
         ret.add(new PotionTraitBuilder(Const.Traits.KITTY_VISION, 1)
                 .addEffect(GearType.HELMET, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
-                .overridesTrait(Const.Traits.FLAMMABLE)
+                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
                 .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.STRENGTH, 0, 0, 1, 1, 2)

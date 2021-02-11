@@ -189,9 +189,9 @@ public class CompoundPart extends AbstractGearPart {
         List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, partType, gearType, gear));
         List<MaterialInstance> materials = getMaterials(part);
 
-        TraitHelper.getTraits(materials, this.partType, gear).forEach((trait, level) -> {
+        TraitHelper.getTraits(materials, GearHelper.getType(gear), this.partType, gear).forEach((trait, level) -> {
             TraitInstance inst = TraitInstance.of(trait, level);
-            if (inst.conditionsMatch(materials, this.partType, gear)) {
+            if (inst.conditionsMatch(materials, GearHelper.getType(gear), this.partType, gear)) {
                 ret.add(inst);
             }
         });
@@ -241,7 +241,10 @@ public class CompoundPart extends AbstractGearPart {
         // Excludes children, will select a random child material (if appropriate) below
         List<IMaterial> matsOfTier = MaterialManager.getValues(tier == 0).stream()
                 .filter(m -> tier < 0 || tier == m.getTier(this.partType))
-                .filter(m -> m.allowedInPart(this.partType) && m.isCraftingAllowed(MaterialInstance.of(m), this.partType, gearType))
+                .filter(m -> {
+                    MaterialInstance inst = MaterialInstance.of(m);
+                    return m.allowedInPart(inst, this.partType) && m.isCraftingAllowed(inst, this.partType, gearType);
+                })
                 .collect(Collectors.toList());
 
         if (!matsOfTier.isEmpty()) {

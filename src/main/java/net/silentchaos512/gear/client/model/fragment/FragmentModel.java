@@ -22,6 +22,8 @@ import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.*;
@@ -86,7 +88,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
     private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
         // This method will display an example item for items with no data (ie, for advancements)
         IMaterialDisplay model = MaterialDisplayManager.get(material);
-        MaterialLayer exampleMain = model.getLayers(GearType.FRAGMENT, PartType.MAIN).getFirstLayer();
+        MaterialLayer exampleMain = model.getLayerList(GearType.FRAGMENT, PartType.MAIN, MaterialInstance.of(material)).getFirstLayer();
         if (exampleMain != null) {
             builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(GearType.FRAGMENT, 0))), rotation, exampleMain.getColor()));
         }
@@ -105,7 +107,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
 
         // Custom textures
         for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
-            for (MaterialLayer layer : materialDisplay.getLayers(GearType.FRAGMENT, PartType.MAIN)) {
+            for (MaterialLayer layer : materialDisplay.getLayerList(GearType.FRAGMENT, PartType.MAIN, LazyMaterialInstance.of(materialDisplay.getMaterialId()))) {
                 ret.add(getTexture(layer));
             }
         }

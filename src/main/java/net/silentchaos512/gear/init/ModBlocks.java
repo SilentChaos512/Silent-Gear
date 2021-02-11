@@ -21,10 +21,13 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
+import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.WoodBlock;
+import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
 
 import java.util.HashMap;
@@ -57,6 +60,18 @@ public final class ModBlocks {
     public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", () ->
             new SalvagerBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(4, 20)));
+
+    public static final BlockRegistryObject<CompounderBlock> METAL_ALLOYER = register("metal_alloyer", () ->
+            new CompounderBlock(Const.METAL_COMPOUNDER_INFO,
+                    AbstractBlock.Properties.create(Material.IRON)
+                            .hardnessAndResistance(4, 20)
+                            .sound(SoundType.METAL)));
+    public static final BlockRegistryObject<CompounderBlock> RECRYSTALLIZER = register("recrystallizer", () ->
+            new CompounderBlock(Const.GEM_COMPOUNDER_INFO,
+                    AbstractBlock.Properties.create(Material.IRON)
+                            .hardnessAndResistance(4, 20)
+                            .sound(SoundType.METAL)));
+
     public static final BlockRegistryObject<FlaxPlant> FLAX_PLANT = registerNoItem("flax_plant", () ->
             new FlaxPlant(AbstractBlock.Properties.create(Material.PLANTS)
                     .hardnessAndResistance(0)

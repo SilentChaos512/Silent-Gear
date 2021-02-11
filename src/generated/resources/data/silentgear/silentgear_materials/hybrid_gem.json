@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:compound",
+  "simple": false,
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:hybrid_gem"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.hybrid_gem"
+  }
+}

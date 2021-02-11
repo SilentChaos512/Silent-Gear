@@ -114,8 +114,9 @@ public final class MaterialsCommand {
             for (PartType partType : partTypes) {
                 for (IMaterial material : MaterialManager.getValues()) {
                     if (includeChildren || getParentId(material).isEmpty()) {
-                        if (material.allowedInPart(partType)) {
-                            writer.write(makeTsvLine(material, partType) + "\n");
+                        MaterialInstance inst = MaterialInstance.of(material);
+                        if (material.allowedInPart(inst, partType)) {
+                            writer.write(makeTsvLine(inst, partType) + "\n");
                         }
                     }
                 }
@@ -129,8 +130,7 @@ public final class MaterialsCommand {
         }
     }
 
-    private static String makeTsvLine(IMaterial materialIn, PartType partType) {
-        MaterialInstance material = MaterialInstance.of(materialIn);
+    private static String makeTsvLine(MaterialInstance material, PartType partType) {
         StringBuilder builder = new StringBuilder();
         appendTsv(builder, material.get().getPackName());
         appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());

@@ -65,6 +65,33 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         .rotationY((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 90)
                         .build());
 
+        // Compounders
+        {
+            BlockModelBuilder offModel = models().orientable("metal_alloyer",
+                    modLoc("block/metal_alloyer_side"),
+                    modLoc("block/metal_alloyer_front"),
+                    modLoc("block/metal_alloyer_top"));
+            BlockModelBuilder onModel = models().orientable("metal_alloyer_on",
+                    modLoc("block/metal_alloyer_side"),
+                    modLoc("block/metal_alloyer_front_on"),
+                    modLoc("block/metal_alloyer_top"));
+            horizontalFaceBlock(ModBlocks.METAL_ALLOYER.get(), state ->
+                    state.get(BlockStateProperties.LIT) ? onModel : offModel);
+        }
+        {
+            BlockModelBuilder offModel = models().cubeTop("recrystallizer",
+                    modLoc("block/recrystallizer_side"),
+                    modLoc("block/recrystallizer_top"));
+            BlockModelBuilder onModel = models().cubeTop("recrystallizer_on",
+                    modLoc("block/recrystallizer_side"),
+                    modLoc("block/recrystallizer_top_on"));
+            getVariantBuilder(ModBlocks.RECRYSTALLIZER.get()).forAllStates(state -> {
+                return ConfiguredModel.builder()
+                        .modelFile(state.get(BlockStateProperties.LIT) ? onModel : offModel)
+                        .build();
+            });
+        }
+
         getVariantBuilder(ModBlocks.FLAX_PLANT.get()).forAllStates(state -> {
             int i = cropAgeToIndex(state.get(FlaxPlant.AGE));
             return ConfiguredModel.builder()

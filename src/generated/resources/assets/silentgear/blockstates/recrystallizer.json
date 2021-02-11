@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=north,lit=false": {
+      "model": "silentgear:block/recrystallizer"
+    },
+    "facing=south,lit=false": {
+      "model": "silentgear:block/recrystallizer"
+    },
+    "facing=west,lit=false": {
+      "model": "silentgear:block/recrystallizer"
+    },
+    "facing=east,lit=false": {
+      "model": "silentgear:block/recrystallizer"
+    },
+    "facing=north,lit=true": {
+      "model": "silentgear:block/recrystallizer_on"
+    },
+    "facing=south,lit=true": {
+      "model": "silentgear:block/recrystallizer_on"
+    },
+    "facing=west,lit=true": {
+      "model": "silentgear:block/recrystallizer_on"
+    },
+    "facing=east,lit=true": {
+      "model": "silentgear:block/recrystallizer_on"
+    }
+  }
+}

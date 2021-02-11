@@ -160,6 +160,10 @@ public final class PartType {
         this.defaultTexture = builder.defaultTexture;
     }
 
+    public boolean isInvalid() {
+        return this == NONE;
+    }
+
     public ResourceLocation getName() {
         return name;
     }

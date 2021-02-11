@@ -21,6 +21,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
+    public static final StatModifierMap EMPTY_STAT_MAP = new StatModifierMap();
+
     private final Multimap<StatGearKey, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
     public static IFormattableTextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {

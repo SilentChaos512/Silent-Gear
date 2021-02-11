@@ -4,11 +4,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.IGearComponent;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 
@@ -64,12 +68,18 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
         return Optional.ofNullable(getParent());
     }
 
+    @Deprecated
+    default Collection<IMaterialCategory> getCategories() {
+        return getCategories(MaterialInstance.of(this));
+    }
+
     /**
      * Gets the categories this material belongs to.
      *
+     * @param material
      * @return Collection of categories
      */
-    Collection<IMaterialCategory> getCategories();
+    Collection<IMaterialCategory> getCategories(MaterialInstance material);
 
     /**
      * Gets the tier of the material. Currently, the tier never depends on the part type.
@@ -86,21 +96,30 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
     boolean canSalvage();
 
     /**
+     * Check if the material is simple or compound.
+     *
+     * @return True if simple, false if compound
+     */
+    boolean isSimple();
+
+    /**
      * Gets the part types this material supports. In general, a material will support a part type
      * if the type is present in the stats JSON object (even if the value is empty).
      *
+     * @param material
      * @return Supported part types
      */
-    Set<PartType> getPartTypes();
+    Set<PartType> getPartTypes(IMaterialInstance material);
 
     /**
      * Determine if the material can be used to craft parts of the given type. This should include a
      * parent check.
      *
+     * @param material
      * @param partType The part type
      * @return True if and only if crafting should be allowed
      */
-    boolean allowedInPart(PartType partType);
+    boolean allowedInPart(IMaterialInstance material, PartType partType);
 
     /**
      * Used to retain data on integrated server which is not sent on connect.
@@ -109,7 +128,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      */
     default void retainData(@Nullable IMaterial oldMaterial) {}
 
-    Collection<StatGearKey> getStatKeys(PartType type);
+    Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type);
 
     /**
      * Gets the rendering properties of the material, including textures and colors.
@@ -119,7 +138,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * @return Material display properties
      */
     @Deprecated
-    IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType);
+    default IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType) {return MaterialLayerList.DEFAULT;}
 
     IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear);
 
@@ -134,7 +153,16 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
         return getNameColor(partType, GearHelper.getType(gear, GearType.ALL));
     }
 
-    int getNameColor(PartType partType, GearType gearType);
+    @Deprecated
+    default int getNameColor(PartType partType, GearType gearType) {
+        return getNameColor(partType, gearType, LazyMaterialInstance.of(Const.NULL_ID));
+    }
+
+    int getNameColor(PartType partType, GearType gearType, IMaterialInstance material);
+
+    default String getModelKey(IMaterialInstance material) {
+        return SilentGear.shortenId(getId());
+    }
 
     default boolean isVisible(PartType partType) {
         return true;

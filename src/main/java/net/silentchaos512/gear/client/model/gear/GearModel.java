@@ -26,6 +26,8 @@ import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.FakePartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
@@ -125,19 +127,19 @@ public class GearModel extends LayeredModel<GearModel> {
         // This method will display an example tool for items with no data (ie, for advancements)
         IMaterialDisplay model = MaterialDisplayManager.get(material);
         if (!gearType.isArmor()) {
-            MaterialLayer exampleRod = model.getLayers(this.gearType, PartType.ROD).getFirstLayer();
+            MaterialLayer exampleRod = model.getLayerList(this.gearType, PartType.ROD, MaterialInstance.of(material)).getFirstLayer();
             if (exampleRod != null) {
                 builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleRod.getTexture(gearType, 0))), rotation, exampleRod.getColor()));
             }
         }
 
-        MaterialLayer exampleMain = model.getLayers(this.gearType, PartType.MAIN).getFirstLayer();
+        MaterialLayer exampleMain = model.getLayerList(this.gearType, PartType.MAIN, MaterialInstance.of(material)).getFirstLayer();
         if (exampleMain != null) {
             builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(gearType, 0))), rotation, exampleMain.getColor()));
         }
 
         if (gearType.matches(GearType.RANGED_WEAPON)) {
-            MaterialLayer exampleBowstring = model.getLayers(this.gearType, PartType.BOWSTRING).getFirstLayer();
+            MaterialLayer exampleBowstring = model.getLayerList(this.gearType, PartType.BOWSTRING, MaterialInstance.of(material)).getFirstLayer();
             if (exampleBowstring != null) {
                 builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleBowstring.getTexture(gearType, 0))), rotation, exampleBowstring.getColor()));
             }
@@ -165,7 +167,7 @@ public class GearModel extends LayeredModel<GearModel> {
         for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
             for (PartType partType : PartType.getValues()) {
                 if (item.hasTexturesFor(partType)) {
-                    for (MaterialLayer layer : materialDisplay.getLayers(gearType, partType)) {
+                    for (MaterialLayer layer : materialDisplay.getLayerList(gearType, partType, LazyMaterialInstance.of(materialDisplay.getMaterialId()))) {
                         int animationFrames = layer.isAnimated() ? item.getAnimationFrames() : 1;
                         ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, false));
                         ret.addAll(this.getTexturesForAllFrames(layer, 1, true));

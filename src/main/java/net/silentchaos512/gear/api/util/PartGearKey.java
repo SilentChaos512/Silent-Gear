@@ -52,8 +52,8 @@ public final class PartGearKey {
             throw new JsonParseException("invalid key: " + key);
         }
 
-        PartType partType = PartType.get(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(parts[0])));
-        if (partType == null) {
+        PartType partType = PartType.getNonNull(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(parts[0])));
+        if (partType.isInvalid()) {
             throw new JsonParseException("Unknown part type: " + parts[0]);
         }
 

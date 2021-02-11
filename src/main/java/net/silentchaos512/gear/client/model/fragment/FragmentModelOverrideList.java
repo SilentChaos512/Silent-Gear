@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.FragmentItem;
 
 import javax.annotation.Nullable;
@@ -75,7 +76,7 @@ public class FragmentModelOverrideList extends ItemOverrideList {
         IMaterial material = FragmentItem.getMaterial(stack);
         if (material != null) {
             IMaterialDisplay model = MaterialDisplayManager.get(material);
-            for (MaterialLayer layer : model.getLayers(GearType.FRAGMENT, PartType.MAIN)) {
+            for (MaterialLayer layer : model.getLayerList(GearType.FRAGMENT, PartType.MAIN, MaterialInstance.of(material))) {
                 layers.add(layer);
             }
         }
