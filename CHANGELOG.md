@@ -3,7 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.0] - 2021-02-10
+### Added
+- Compound materials. These are still being fine-tuned, so expect changes. They are completely optional and nothing else has changed yet. [#326]
+  - The plan for 1.17 is to disallow material mixing in the crafting grid by default, requiring compound materials to get mixing bonuses
+  - Currently there are two compound crafters, the Metal Alloyer and Recrystallizer
+  - Recipes can also be added to either block for crafting custom materials or other items
 ### Changed
 - Tooltip keybindings will now be ignored and default to old behavior if unbound or bound to either left/right modifier keys [#319]
 - New shield model and texture (UnmovingJaveline)
