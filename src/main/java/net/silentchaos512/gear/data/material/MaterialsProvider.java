@@ -160,6 +160,14 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xCBBAFF)
                 .displayTip(PartTextures.TIP_SHARP, 0xCBBAFF)
         );
+        // Bamboo
+        ret.add(new MaterialBuilder(modId("bamboo"), 0, Items.BAMBOO)
+                .categories(MaterialCategories.ORGANIC)
+                .partSubstitute(PartType.ROD, Items.BAMBOO)
+                .stat(PartType.ROD, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.ROD, ItemStats.RARITY, 4)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9AC162)
+        );
         // Barrier
         ret.add(new MaterialBuilder(modId("barrier"), 5, Items.BARRIER)
                 .categories(MaterialCategories.INTANGIBLE)
@@ -860,6 +868,13 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x443464)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x443464)
         );
+        // Paper
+        ret.add(new MaterialBuilder(modId("paper"), 0, ModTags.Items.PAPER)
+                .categories(MaterialCategories.ORGANIC)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
+                .display(PartType.FLETCHING, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
+        );
         // Phantom Membrane
         ret.add(new MaterialBuilder(modId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
@@ -1131,7 +1146,10 @@ public class MaterialsProvider implements IDataProvider {
         // Vines
         ret.add(new MaterialBuilder(modId("vine"), 0, Items.VINE)
                 .categories(MaterialCategories.ORGANIC)
-                .noStats(PartType.BINDING) // TODO
+                .stat(PartType.BINDING, ItemStats.DURABILITY, 0.03f, StatInstance.Operation.MUL1)
+                .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, -0.03f, StatInstance.Operation.MUL1)
+                .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.03f, StatInstance.Operation.MUL1)
+                .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
         );
 

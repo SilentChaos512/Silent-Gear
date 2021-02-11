@@ -1,0 +1,32 @@
+{
+  "availability": {
+    "tier": 0,
+    "categories": [
+      "organic"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:bamboo"
+    },
+    "subs": {
+      "rod": {
+        "item": "minecraft:bamboo"
+      }
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.bamboo"
+  },
+  "stats": {
+    "rod": {
+      "durability": {
+        "mul1": 0.05
+      },
+      "rarity": 4.0
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "availability": {
+    "tier": 0,
+    "categories": [
+      "organic"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "tag": "forge:paper"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.paper"
+  },
+  "stats": {
+    "fletching": {
+      "projectile_speed": 1.1,
+      "projectile_accuracy": 0.9
+    }
+  }
+}

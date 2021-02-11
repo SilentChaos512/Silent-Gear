@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- New materials: bamboo (rod) and paper (fletching)
+- Stats for vine binding
+
 ## [2.6.0] - 2021-02-10
 ### Added
 - Compound materials. These are still being fine-tuned, so expect changes. They are completely optional and nothing else has changed yet. [#326]
