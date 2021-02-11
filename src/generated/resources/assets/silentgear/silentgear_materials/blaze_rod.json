@@ -1,0 +1,14 @@
+{
+  "rod/all": [
+    {
+      "texture": "silentgear:rod_generic_hc",
+      "color": "#FFC100"
+    }
+  ],
+  "rod/part": [
+    {
+      "texture": "silentgear:rod",
+      "color": "#FFC100"
+    }
+  ]
+}

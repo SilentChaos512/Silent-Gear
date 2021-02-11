@@ -1,0 +1,53 @@
+{
+  "availability": {
+    "tier": 3,
+    "categories": [
+      "metal"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "subs": {
+      "rod": {
+        "item": "minecraft:end_rod"
+      }
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.end_rod"
+  },
+  "stats": {
+    "rod": {
+      "durability": {
+        "mul2": 0.35
+      },
+      "harvest_level": {
+        "max": 3.0
+      },
+      "harvest_speed": {
+        "mul2": 0.2
+      },
+      "melee_damage": {
+        "mul2": 0.1
+      },
+      "ranged_damage": {
+        "mul2": 0.1
+      },
+      "rarity": 50.0
+    }
+  },
+  "traits": {
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      },
+      {
+        "name": "silentgear:refractive",
+        "level": 1
+      }
+    ]
+  }
+}

@@ -86,6 +86,17 @@
       "rarity": {
         "add": 14.0
       }
+    },
+    "coating": {
+      "durability": {
+        "mul2": -0.05
+      },
+      "armor_durability": {
+        "mul2": -0.05
+      },
+      "rarity": {
+        "add": 20.0
+      }
     }
   },
   "traits": {
@@ -138,6 +149,16 @@
             "gear_type": "weapon"
           }
         ]
+      }
+    ],
+    "coating": [
+      {
+        "name": "silentgear:brilliant",
+        "level": 1
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 2
       }
     ]
   }

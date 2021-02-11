@@ -43,5 +43,23 @@
     {
       "texture": "silentgear:tip_shine"
     }
+  ],
+  "coating/all": [
+    {
+      "texture": "silentgear:main_generic_hc",
+      "color": "#EAEE57"
+    },
+    {
+      "texture": "silentgear:_highlight"
+    }
+  ],
+  "coating/part": [
+    {
+      "texture": "silentgear:coating_material",
+      "color": "#EAEE57"
+    },
+    {
+      "texture": "silentgear:coating_jar"
+    }
   ]
 }

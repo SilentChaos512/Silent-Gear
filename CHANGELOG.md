@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New materials: bamboo (rod) and paper (fletching)
 - Stats for vine binding
+- Blaze rod and end rod materials (rod only part subs)
 
 ## [2.6.0] - 2021-02-10
 ### Added

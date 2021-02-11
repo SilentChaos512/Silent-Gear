@@ -67,6 +67,17 @@
       "rarity": {
         "add": 30.0
       }
+    },
+    "coating": {
+      "durability": {
+        "mul2": -0.1
+      },
+      "armor_durability": {
+        "mul2": -0.1
+      },
+      "rarity": {
+        "add": 10.0
+      }
     }
   },
   "traits": {
@@ -104,6 +115,16 @@
     "tip": [
       {
         "name": "silentgear:malleable",
+        "level": 1
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 3
+      }
+    ],
+    "coating": [
+      {
+        "name": "silentgear:brilliant",
         "level": 1
       },
       {
