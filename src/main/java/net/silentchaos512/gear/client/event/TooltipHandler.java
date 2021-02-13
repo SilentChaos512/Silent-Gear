@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.block.grader.GraderTileEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -23,16 +24,12 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModTags;
-import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class TooltipHandler {
@@ -141,7 +138,37 @@ public final class TooltipHandler {
             if (material.getGrade() != MaterialGrade.NONE) {
                 getGradeLine(event, material.getGrade());
             }
+
+            if (event.getFlags().isAdvanced()) {
+                addJeiSearchTerms(event, material);
+            }
         }
+    }
+
+    private static void addJeiSearchTerms(ItemTooltipEvent event, MaterialInstance material) {
+        // Add search terms to allow advanced filtering in JEI (requires the
+        // `SearchAdvancedTooltips` JEI config to be set)
+
+        StringBuilder b = new StringBuilder();
+
+        for (IMaterialCategory category : material.getCategories()) {
+            b.append(category.getName()).append(" ");
+        }
+
+        Collection<String> traits = new HashSet<>();
+
+        for (PartType partType : material.getPartTypes()) {
+            b.append(partType.getDisplayName(0).getString()).append(" ");
+            for (TraitInstance trait : material.getTraits(partType)) {
+                traits.add(trait.getTrait().getDisplayName(0).getString());
+            }
+        }
+
+        for (String str : traits) {
+            b.append(str).append(" ");
+        }
+
+        event.getToolTip().add(new StringTextComponent(b.toString().toLowerCase(Locale.ROOT)).mergeStyle(TextFormatting.DARK_GRAY).mergeStyle(TextFormatting.ITALIC));
     }
 
     private static Optional<ITextComponent> getMaterialCategoriesLine(MaterialInstance material) {

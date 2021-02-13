@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Materials can now be searched for traits, categories, and part types in JEI, but JEI's `SearchAdvancedTooltips` config must be enabled
+  - This works by dumping a list of terms on the last line of the tooltip when building "advanced" tooltips (F3+H mode)
 - New materials: bamboo (rod) and paper (fletching)
 - Stats for vine binding
 - Blaze rod and end rod materials (rod only part subs)
