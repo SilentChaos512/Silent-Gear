@@ -27,6 +27,8 @@ import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
+import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.lib.data.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.ExtendedShapelessRecipeBuilder;
 import net.silentchaos512.lib.util.NameUtils;
@@ -86,6 +88,7 @@ public class ModRecipesProvider extends RecipeProvider {
         registerGear(consumer);
         registerModifierKits(consumer);
         registerMachines(consumer);
+        registerCompounding(consumer);
         registerSmithing(consumer);
         registerSalvaging(consumer);
     }
@@ -658,6 +661,26 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("/e/")
                 .patternLine("/d/")
                 .patternLine("#g#")
+                .build(consumer);
+    }
+
+    private void registerCompounding(Consumer<IFinishedRecipe> consumer) {
+        CompoundingRecipeBuilder.gemBuilder(ModItems.CUSTOM_GEM, 1)
+                .withCustomMaterial(Const.Materials.DIMERALD)
+                .addIngredient(Tags.Items.GEMS_DIAMOND)
+                .addIngredient(Tags.Items.GEMS_EMERALD)
+                .build(consumer);
+
+        CompoundingRecipeBuilder.metalBuilder(ModItems.CUSTOM_INGOT, 1)
+                .withCustomMaterial(DataResource.material("high_carbon_steel"))
+                .addIngredient(Tags.Items.INGOTS_IRON)
+                .addIngredient(ItemTags.COALS, 3)
+                .build(consumer);
+
+        CompoundingRecipeBuilder.metalBuilder(CraftingItems.TYRIAN_STEEL_INGOT, 4)
+                .addIngredient(ModTags.Items.INGOTS_CRIMSON_STEEL)
+                .addIngredient(ModTags.Items.INGOTS_AZURE_ELECTRUM)
+                .addIngredient(Items.NETHER_STAR)
                 .build(consumer);
     }
 

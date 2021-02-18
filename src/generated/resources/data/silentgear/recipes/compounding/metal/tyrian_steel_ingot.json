@@ -1,0 +1,18 @@
+{
+  "type": "silentgear:compounding/metal",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/crimson_steel"
+    },
+    {
+      "tag": "forge:ingots/azure_electrum"
+    },
+    {
+      "item": "minecraft:nether_star"
+    }
+  ],
+  "result": {
+    "item": "silentgear:tyrian_steel_ingot",
+    "count": 4
+  }
+}
