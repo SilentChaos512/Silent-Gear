@@ -72,6 +72,10 @@ public class ModRecipesProvider extends RecipeProvider {
                 .block(ModBlocks.AZURE_ELECTRUM_BLOCK, ModTags.Items.STORAGE_BLOCKS_AZURE_ELECTRUM)
                 .dust(CraftingItems.AZURE_ELECTRUM_DUST, ModTags.Items.DUSTS_AZURE_ELECTRUM)
                 .nugget(CraftingItems.AZURE_ELECTRUM_NUGGET, ModTags.Items.NUGGETS_AZURE_ELECTRUM));
+        metals(consumer, 0.75f, new Metals("tyrian_steel", CraftingItems.TYRIAN_STEEL_INGOT, ModTags.Items.INGOTS_TYRIAN_STEEL)
+                .block(ModBlocks.TYRIAN_STEEL_BLOCK, ModTags.Items.STORAGE_BLOCKS_TYRIAN_STEEL)
+                .dust(CraftingItems.TYRIAN_STEEL_DUST, ModTags.Items.DUSTS_TYRIAN_STEEL)
+                .nugget(CraftingItems.TYRIAN_STEEL_NUGGET, ModTags.Items.NUGGETS_TYRIAN_STEEL));
         metals(consumer, 1.0f, new Metals("bort", CraftingItems.BORT, ModTags.Items.GEMS_BORT)
                 .block(ModBlocks.BORT_BLOCK, ModTags.Items.STORAGE_BLOCKS_BORT));
 

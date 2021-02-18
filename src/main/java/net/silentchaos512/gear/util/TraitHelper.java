@@ -198,6 +198,14 @@ public final class TraitHelper {
         return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
     }
 
+    public static int getHighestLevelArmor(PlayerEntity player, DataResource<ITrait> trait) {
+        int max = 0;
+        for (ItemStack stack : player.inventory.armorInventory) {
+            max = Math.max(max, getTraitLevel(stack, trait));
+        }
+        return max;
+    }
+
     public static int getHighestLevelCurio(LivingEntity entity, DataResource<ITrait> trait) {
         if (ModList.get().isLoaded(Const.CURIOS)) {
             return CuriosCompat.getHighestTraitLevel(entity, trait);
@@ -214,6 +222,15 @@ public final class TraitHelper {
         ItemStack main = player.getHeldItemMainhand();
         ItemStack off = player.getHeldItemOffhand();
         return hasTrait(main, traitId) || hasTrait(off, traitId);
+    }
+
+    public static boolean hasTraitArmor(PlayerEntity player, DataResource<ITrait> trait) {
+        for (ItemStack stack : player.inventory.armorInventory) {
+            if (hasTrait(stack, trait)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static Map<ITrait, Integer> getCachedTraits(ItemStack gear) {

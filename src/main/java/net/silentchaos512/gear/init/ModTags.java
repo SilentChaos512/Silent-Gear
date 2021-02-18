@@ -29,6 +29,7 @@ public final class ModTags {
         public static final ITag.INamedTag<Block> STORAGE_BLOCKS_CRIMSON_STEEL = forge("storage_blocks/crimson_steel");
         public static final ITag.INamedTag<Block> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
         public static final ITag.INamedTag<Block> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
+        public static final ITag.INamedTag<Block> STORAGE_BLOCKS_TYRIAN_STEEL = forge("storage_blocks/tyrian_steel");
 
         private Blocks() {}
 
@@ -57,12 +58,14 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_CRIMSON_STEEL = forge("storage_blocks/crimson_steel");
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
         public static final ITag.INamedTag<Item> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
+        public static final ITag.INamedTag<Item> STORAGE_BLOCKS_TYRIAN_STEEL = forge("storage_blocks/tyrian_steel");
 
         public static final ITag.INamedTag<Item> DUSTS_BLAZE_GOLD = forge("dusts/blaze_gold");
         public static final ITag.INamedTag<Item> DUSTS_CRIMSON_IRON = forge("dusts/crimson_iron");
         public static final ITag.INamedTag<Item> DUSTS_CRIMSON_STEEL = forge("dusts/crimson_steel");
         public static final ITag.INamedTag<Item> DUSTS_AZURE_SILVER = forge("dusts/azure_silver");
         public static final ITag.INamedTag<Item> DUSTS_AZURE_ELECTRUM = forge("dusts/azure_electrum");
+        public static final ITag.INamedTag<Item> DUSTS_TYRIAN_STEEL = forge("dusts/tyrian_steel");
 
         public static final ITag.INamedTag<Item> GEMS_BORT = forge("gems/bort");
 
@@ -71,12 +74,14 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> INGOTS_CRIMSON_STEEL = forge("ingots/crimson_steel");
         public static final ITag.INamedTag<Item> INGOTS_AZURE_SILVER = forge("ingots/azure_silver");
         public static final ITag.INamedTag<Item> INGOTS_AZURE_ELECTRUM = forge("ingots/azure_electrum");
+        public static final ITag.INamedTag<Item> INGOTS_TYRIAN_STEEL = forge("ingots/tyrian_steel");
 
         public static final ITag.INamedTag<Item> NUGGETS_BLAZE_GOLD = forge("nuggets/blaze_gold");
         public static final ITag.INamedTag<Item> NUGGETS_CRIMSON_IRON = forge("nuggets/crimson_iron");
         public static final ITag.INamedTag<Item> NUGGETS_CRIMSON_STEEL = forge("nuggets/crimson_steel");
         public static final ITag.INamedTag<Item> NUGGETS_AZURE_SILVER = forge("nuggets/azure_silver");
         public static final ITag.INamedTag<Item> NUGGETS_AZURE_ELECTRUM = forge("nuggets/azure_electrum");
+        public static final ITag.INamedTag<Item> NUGGETS_TYRIAN_STEEL = forge("nuggets/tyrian_steel");
         public static final ITag.INamedTag<Item> NUGGETS_DIAMOND = forge("nuggets/diamond");
         public static final ITag.INamedTag<Item> NUGGETS_EMERALD = forge("nuggets/emerald");
 

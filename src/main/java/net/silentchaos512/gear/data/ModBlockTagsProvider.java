@@ -68,13 +68,15 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
         builder(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, ModBlocks.BLAZE_GOLD_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, ModBlocks.AZURE_SILVER_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, ModBlocks.AZURE_ELECTRUM_BLOCK);
+        builder(ModTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL, ModBlocks.TYRIAN_STEEL_BLOCK);
         getBuilder(Tags.Blocks.STORAGE_BLOCKS)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_BORT)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER)
-                .addTag(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM);
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL);
 
         // Minecraft
         builder(BlockTags.LEAVES, ModBlocks.NETHERWOOD_LEAVES);

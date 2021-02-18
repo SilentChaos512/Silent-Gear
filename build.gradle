@@ -348,7 +348,7 @@ bintray {
     pkg {
         repo = project.repoName
         name = "${project.repoName}-${project.mc_version}"
-        licenses = ["LGPL-3.0"]
+        licenses = ["MIT"]
         vcsUrl = project.vcsUrl
 
         version {

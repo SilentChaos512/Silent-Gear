@@ -21,7 +21,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FlaxPlant;
 import net.silentchaos512.gear.block.NetherwoodSapling;
 import net.silentchaos512.gear.block.PhantomLight;
-import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.WoodBlock;
 import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
@@ -53,6 +52,7 @@ public final class ModBlocks {
     public static final BlockRegistryObject<Block> BLAZE_GOLD_BLOCK = register("blaze_gold_block", ModBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> AZURE_SILVER_BLOCK = register("azure_silver_block", ModBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block", ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> TYRIAN_STEEL_BLOCK = register("tyrian_steel_block", ModBlocks::getStorageBlock);
 
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(AbstractBlock.Properties.create(Material.IRON)

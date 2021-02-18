@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/tyrian_steel"
+    }
+  ],
+  "result": {
+    "item": "silentgear:tyrian_steel_nugget",
+    "count": 9
+  }
+}

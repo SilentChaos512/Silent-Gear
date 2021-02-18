@@ -48,6 +48,7 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.AZURE_SILVER_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.TYRIAN_STEEL_BLOCK.get());
         ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
         this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(flaxBuilder));
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());

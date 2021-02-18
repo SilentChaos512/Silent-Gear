@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:nuggets/tyrian_steel"
+    }
+  },
+  "result": {
+    "item": "silentgear:tyrian_steel_ingot"
+  }
+}

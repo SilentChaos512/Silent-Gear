@@ -37,6 +37,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.BLAZE_GOLD_BLOCK.get());
         simpleBlock(ModBlocks.AZURE_SILVER_BLOCK.get());
         simpleBlock(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
+        simpleBlock(ModBlocks.TYRIAN_STEEL_BLOCK.get());
 
         simpleBlock(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
         simpleBlock(ModBlocks.NETHERWOOD_PLANKS.get());

@@ -137,23 +137,28 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
-        if (event.getEntity() instanceof PlayerEntity && isFireDamage(event.getSource())) {
-            for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-                ItemStack stack = event.getEntityLiving().getItemStackFromSlot(slot);
-                if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
-                    GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
-                    if (GearHelper.isBroken(stack)) {
-                        event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getDisplayName()), Util.DUMMY_UUID);
-                        event.getEntityLiving().sendBreakAnimation(slot);
-                        stack.shrink(1);
-                    }
-                }
+        if (event.getEntity() instanceof PlayerEntity)
+            if (isFireDamage(event.getSource())) {
+                damageFlammableItems(event);
             }
-        }
     }
 
     private static boolean isFireDamage(DamageSource source) {
         return source == DamageSource.IN_FIRE || source == DamageSource.ON_FIRE || source == DamageSource.LAVA;
+    }
+
+    private static void damageFlammableItems(LivingDamageEvent event) {
+        for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+            ItemStack stack = event.getEntityLiving().getItemStackFromSlot(slot);
+            if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
+                GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
+                if (GearHelper.isBroken(stack)) {
+                    event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getDisplayName()), Util.DUMMY_UUID);
+                    event.getEntityLiving().sendBreakAnimation(slot);
+                    stack.shrink(1);
+                }
+            }
+        }
     }
 
     private static final float BURN_TICKS_PER_DURABILITY = 200f / 50f;
@@ -368,7 +373,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.world.isRemote) {
+        if (!event.player.world.isRemote && event.phase == TickEvent.Phase.START) {
             int magnetic = Math.max(TraitHelper.getHighestLevelEitherHand(event.player, Const.Traits.MAGNETIC),
                     TraitHelper.getHighestLevelCurio(event.player, Const.Traits.MAGNETIC));
 
@@ -381,6 +386,15 @@ public final class GearEvents {
             if (!event.player.areEyesInFluid(FluidTags.WATER) && TraitHelper.hasTrait(event.player.getItemStackFromSlot(EquipmentSlotType.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
                 event.player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 210, 0, false, false, true));
+            }
+
+            // Void Ward trait
+            if (event.player.getPosY() < -64 && TraitHelper.hasTraitArmor(event.player, Const.Traits.VOID_WARD)) {
+                // A small boost to get the player out of the void, then levitation and slow falling
+                // to allow them to navigate back to safety
+                event.player.addVelocity(0, 10, 0);
+                event.player.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 400, 3, true, false));
+                event.player.addPotionEffect(new EffectInstance(Effects.LEVITATION, 200, 9, true, false));
             }
         }
     }

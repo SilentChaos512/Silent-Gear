@@ -5,6 +5,7 @@
     "#forge:ingots/crimson_iron",
     "#forge:ingots/crimson_steel",
     "#forge:ingots/azure_silver",
-    "#forge:ingots/azure_electrum"
+    "#forge:ingots/azure_electrum",
+    "#forge:ingots/tyrian_steel"
   ]
 }

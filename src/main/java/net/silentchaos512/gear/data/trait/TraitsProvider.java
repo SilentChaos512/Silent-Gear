@@ -72,6 +72,7 @@ public class TraitsProvider implements IDataProvider {
         ret.add(TraitBuilder.simple(Const.Traits.RED_CARD, 1));
         ret.add(TraitBuilder.simple(Const.Traits.SPOON, 1));
         ret.add(TraitBuilder.simple(Const.Traits.TURTLE, 1));
+        ret.add(TraitBuilder.simple(Const.Traits.VOID_WARD, 1));
 
         // Synergy
 
@@ -95,6 +96,8 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new DurabilityTraitBuilder(Const.Traits.FLEXIBLE, 5, -1, 0.05f)
                 .cancelsWith(Const.Traits.BRITTLE));
         ret.add(new DurabilityTraitBuilder(Const.Traits.MALLEABLE, 5, -1, 0.1f)
+                .cancelsWith(Const.Traits.BRITTLE));
+        ret.add(new DurabilityTraitBuilder(Const.Traits.STURDY, 5, -1, 0.175f)
                 .cancelsWith(Const.Traits.BRITTLE));
 
         // Attribute

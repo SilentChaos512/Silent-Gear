@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Tyrian Steel: a new metal alloy and gear material
+- Sturdy trait: has a high chance of reducing damage taken by gear
+- Void Ward trait: attempts to save the player from falling out of the world (only works on armor). Knocks the player upward and gives levitation and slow falling when taking void damage. 
 - Materials can now be searched for traits, categories, and part types in JEI, but JEI's `SearchAdvancedTooltips` config must be enabled
   - This works by dumping a list of terms on the last line of the tooltip when building "advanced" tooltips (F3+H mode)
 - New materials: bamboo (rod) and paper (fletching)

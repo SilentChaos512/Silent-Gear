@@ -1256,6 +1256,35 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.WOOD, 0x6B4909)
         );
 
+        // Tyrian Steel
+        ret.add(new MaterialBuilder(modId("tyrian_steel"), 4, ModTags.Items.INGOTS_TYRIAN_STEEL)
+                .categories(MaterialCategories.METAL)
+                .mainStatsCommon(3652, 81, 16, 100)
+                .mainStatsHarvest(5, 18)
+                .mainStatsMelee(8, 6, 0.0f)
+                .mainStatsRanged(4, 0.0f)
+                .mainStatsArmor(5, 9, 7, 4, 10, 10) //25
+                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.1f)
+                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.1f)
+                .stat(PartType.MAIN, chargeability, 1.1f)
+                .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 100)
+                .stat(PartType.TIP, ItemStats.DURABILITY, 251, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 5, StatInstance.Operation.MAX)
+                .stat(PartType.TIP, ItemStats.RARITY, 30, StatInstance.Operation.ADD)
+                .trait(PartType.MAIN, Const.Traits.STURDY, 3, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.MAIN, Const.Traits.VOID_WARD, 1,
+                        new GearTypeTraitCondition(GearType.ARMOR),
+                        materialCountOrRatio(3, 0.5f)
+                )
+                .trait(PartType.ROD, Const.Traits.STURDY, 4, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.TIP, Const.Traits.IMPERIAL, 3, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
+                .trait(PartType.TIP, Const.Traits.GOLD_DIGGER, 3, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB01080)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xB01080)
+                .displayTip(PartTextures.TIP_SHARP, 0xB01080)
+        );
+
         // Wool
         ResourceLocation sgWool = modId("wool");
         ret.add(new MaterialBuilder(sgWool, 0, ExclusionIngredient.of(ItemTags.WOOL,
