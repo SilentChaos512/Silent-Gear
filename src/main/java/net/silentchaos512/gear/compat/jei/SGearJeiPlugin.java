@@ -18,6 +18,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.block.compounder.MetalAlloyerScreen;
+import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
@@ -43,12 +45,6 @@ public class SGearJeiPlugin implements IModPlugin {
     private static final ResourceLocation PLUGIN_UID = SilentGear.getId("plugin/main");
     static final ResourceLocation GEAR_CRAFTING = SilentGear.getId("category/gear_crafting");
 
-    private static boolean initFailed = false;
-
-    public static boolean hasInitFailed() {
-        return initFailed;
-    }
-
     @Override
     public ResourceLocation getPluginUid() {
         return PLUGIN_UID;
@@ -58,14 +54,14 @@ public class SGearJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration reg) {
         IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
         reg.addRecipeCategories(new GearCraftingRecipeCategoryJei(guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory<>(Const.METAL_COMPOUNDER_INFO, "metal", guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory<>(Const.GEM_COMPOUNDER_INFO, "gem", guiHelper));
         reg.addRecipeCategories(new MaterialGraderRecipeCategory(guiHelper));
         reg.addRecipeCategories(new SalvagingRecipeCategoryJei(guiHelper));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration reg) {
-        initFailed = true;
-
         assert Minecraft.getInstance().world != null;
         RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
 
@@ -96,6 +92,14 @@ public class SGearJeiPlugin implements IModPlugin {
                 .filter(SGearJeiPlugin::isGearCraftingRecipe)
                 .collect(Collectors.toList()), GEAR_CRAFTING);
 
+        // Compounders
+        reg.addRecipes(recipeManager.getRecipes().stream()
+                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_GEM_TYPE)
+                .collect(Collectors.toList()), Const.COMPOUNDING_GEM);
+        reg.addRecipes(recipeManager.getRecipes().stream()
+                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_METAL_TYPE)
+                .collect(Collectors.toList()), Const.COMPOUNDING_METAL);
+
         // Grading
         reg.addRecipes(Collections.singleton(new MaterialGraderRecipeCategory.GraderRecipe()), Const.GRADING);
 
@@ -109,8 +113,6 @@ public class SGearJeiPlugin implements IModPlugin {
         for (Item item : Registration.getItems(item -> item instanceof ICoreTool)) {
             addInfoPage(reg, item);
         }
-
-        initFailed = false;
     }
 
     private static boolean isGearCraftingRecipe(IRecipe<?> recipe) {
@@ -121,26 +123,26 @@ public class SGearJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
         reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.METAL_ALLOYER), Const.COMPOUNDING_METAL);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.RECRYSTALLIZER), Const.COMPOUNDING_GEM);
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.MATERIAL_GRADER), Const.GRADING);
         reg.addRecipeCatalyst(new ItemStack(ModBlocks.SALVAGER), Const.SALVAGING);
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration reg) {
+        reg.addRecipeClickArea(MetalAlloyerScreen.class, 90, 30, 28, 23, Const.COMPOUNDING_METAL);
+        reg.addRecipeClickArea(RecrystallizerScreen.class, 90, 30, 28, 23, Const.COMPOUNDING_GEM);
         reg.addRecipeClickArea(GraderScreen.class, 48, 30, 28, 23, Const.GRADING);
         reg.addRecipeClickArea(SalvagerScreen.class, 30, 30, 28, 23, Const.SALVAGING);
     }
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration reg) {
-        initFailed = true;
-
         reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), stack -> {
             IMaterial material = FragmentItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         });
-
-        initFailed = false;
     }
 
     private static void addInfoPage(IRecipeRegistration reg, IItemProvider item) {

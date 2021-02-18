@@ -7,11 +7,10 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
+import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
-import net.silentchaos512.gear.init.ModContainers;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModRecipes;
-import net.silentchaos512.gear.init.ModTileEntities;
+import net.silentchaos512.gear.init.*;
 
 public final class Const {
     // Model loaders
@@ -50,28 +49,34 @@ public final class Const {
     public static final ResourceLocation NULL_ID = new ResourceLocation("null");
 
     // Compound-crafting block info
-    public static final CompounderInfo METAL_COMPOUNDER_INFO = new CompounderInfo(
-            () -> ModTileEntities.METAL_ALLOYER.get(),
-            () -> ModContainers.METAL_ALLOYER.get(),
-            () -> ModRecipes.COMPOUNDING_METAL_TYPE,
-            () -> ModItems.ALLOY_INGOT.get(),
-            4,
+    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
+    public static final CompounderInfo<MetalCompoundingRecipe> METAL_COMPOUNDER_INFO = new CompounderInfo<>(
             ImmutableList.of(
                     MaterialCategories.METAL,
                     MaterialCategories.DUST
-            )
-    );
-    public static final CompounderInfo GEM_COMPOUNDER_INFO = new CompounderInfo(
-            () -> ModTileEntities.RECRYSTALLIZER.get(),
-            () -> ModContainers.RECRYSTALLIZER.get(),
-            () -> ModRecipes.COMPOUNDING_GEM_TYPE,
-            () -> ModItems.HYBRID_GEM.get(),
+            ),
             4,
+            () -> ModItems.ALLOY_INGOT.get(),
+            () -> ModBlocks.METAL_ALLOYER.get(),
+            () -> ModTileEntities.METAL_ALLOYER.get(),
+            () -> ModContainers.METAL_ALLOYER.get(),
+            () -> ModRecipes.COMPOUNDING_METAL.get(),
+            () -> ModRecipes.COMPOUNDING_METAL_TYPE,
+            MetalCompoundingRecipe.class);
+    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
+    public static final CompounderInfo<GemCompoundingRecipe> GEM_COMPOUNDER_INFO = new CompounderInfo<>(
             ImmutableList.of(
                     MaterialCategories.GEM,
                     MaterialCategories.DUST
-            )
-    );
+            ),
+            4,
+            () -> ModItems.HYBRID_GEM.get(),
+            () -> ModBlocks.RECRYSTALLIZER.get(),
+            () -> ModTileEntities.RECRYSTALLIZER.get(),
+            () -> ModContainers.RECRYSTALLIZER.get(),
+            () -> ModRecipes.COMPOUNDING_GEM.get(),
+            () -> ModRecipes.COMPOUNDING_GEM_TYPE,
+            GemCompoundingRecipe.class);
 
     private Const() {}
 

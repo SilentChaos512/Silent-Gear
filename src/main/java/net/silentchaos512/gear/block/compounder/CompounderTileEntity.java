@@ -31,11 +31,11 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("WeakerAccess")
-public class CompounderTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
+public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
     public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
-    private final CompounderInfo info;
+    private final CompounderInfo<R> info;
     private final int[] allSlots;
 
     @SyncVariable(name = "Progress")
@@ -74,18 +74,18 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
     };
 
-    public CompounderTileEntity(CompounderInfo info) {
+    public CompounderTileEntity(CompounderInfo<R> info) {
         super(info.getTileEntityType(), info.getInputSlotCount() + 2);
         this.info = info;
         this.allSlots = IntStream.range(0, this.items.size()).toArray();
     }
 
-    protected IRecipeType<? extends CompoundingRecipe> getRecipeType() {
+    protected IRecipeType<R> getRecipeType() {
         return this.info.getRecipeType();
     }
 
     @Nullable
-    public CompoundingRecipe getRecipe() {
+    public R getRecipe() {
         if (world == null) return null;
         return world.getRecipeManager().getRecipe(getRecipeType(), this, world).orElse(null);
     }
@@ -94,7 +94,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         return this.info.getOutputItem();
     }
 
-    protected ItemStack getWorkOutput(@Nullable CompoundingRecipe recipe, List<MaterialInstance> materials) {
+    protected ItemStack getWorkOutput(@Nullable R recipe, List<MaterialInstance> materials) {
         if (recipe != null) {
             return recipe.getCraftingResult(this);
         }
@@ -135,7 +135,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
             return;
         }
 
-        CompoundingRecipe recipe = getRecipe();
+        R recipe = getRecipe();
         if (recipe != null) {
             // Inputs match a custom recipe
             doWork(recipe, Collections.emptyList());
@@ -151,7 +151,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
     }
 
-    private void doWork(@Nullable CompoundingRecipe recipe, List<MaterialInstance> materials) {
+    private void doWork(@Nullable R recipe, List<MaterialInstance> materials) {
         assert world != null;
 
         ItemStack current = getStackInSlot(getOutputSlotIndex());
@@ -194,7 +194,7 @@ public class CompounderTileEntity extends LockableSidedInventoryTileEntity imple
         }
     }
 
-    private void finishWork(@Nullable CompoundingRecipe recipe, List<MaterialInstance> materials, ItemStack current) {
+    private void finishWork(@Nullable R recipe, List<MaterialInstance> materials, ItemStack current) {
         progress = 0;
         for (int i = 0; i < getInputSlotCount(); ++i) {
             decrStackSize(i, 1);

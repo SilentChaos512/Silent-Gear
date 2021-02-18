@@ -12,6 +12,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -71,6 +72,13 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
     @Override
     public ItemStack getRecipeOutput() {
         return this.result.copy();
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ret = NonNullList.create();
+        ret.addAll(ingredients);
+        return ret;
     }
 
     @Override

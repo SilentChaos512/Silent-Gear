@@ -27,8 +27,8 @@ import java.util.function.Supplier;
 
 public final class ModRecipes {
     public static final IRecipeType<CompoundingRecipe> COMPOUNDING_TYPE = IRecipeType.register(Const.COMPOUNDING.toString());
-    public static final IRecipeType<CompoundingRecipe> COMPOUNDING_GEM_TYPE = IRecipeType.register(Const.COMPOUNDING_GEM.toString());
-    public static final IRecipeType<CompoundingRecipe> COMPOUNDING_METAL_TYPE = IRecipeType.register(Const.COMPOUNDING_METAL.toString());
+    public static final IRecipeType<GemCompoundingRecipe> COMPOUNDING_GEM_TYPE = IRecipeType.register(Const.COMPOUNDING_GEM.toString());
+    public static final IRecipeType<MetalCompoundingRecipe> COMPOUNDING_METAL_TYPE = IRecipeType.register(Const.COMPOUNDING_METAL.toString());
     public static final IRecipeType<SalvagingRecipe> SALVAGING_TYPE = IRecipeType.register(Const.SALVAGING.toString());
 
     public static final RegistryObject<IRecipeSerializer<?>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () -> new SpecialRecipeSerializer<>(CombineFragmentsRecipe::new));

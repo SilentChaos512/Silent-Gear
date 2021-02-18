@@ -10,7 +10,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.network.IContainerFactory;
 import net.silentchaos512.gear.block.compounder.CompounderContainer;
-import net.silentchaos512.gear.block.compounder.CompounderScreen;
+import net.silentchaos512.gear.block.compounder.MetalAlloyerScreen;
+import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
@@ -42,8 +43,8 @@ public final class ModContainers {
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
         ScreenManager.registerFactory(MATERIAL_GRADER.get(), GraderScreen::new);
-        ScreenManager.registerFactory(METAL_ALLOYER.get(), CompounderScreen::new);
-        ScreenManager.registerFactory(RECRYSTALLIZER.get(), CompounderScreen::new);
+        ScreenManager.registerFactory(METAL_ALLOYER.get(), MetalAlloyerScreen::new);
+        ScreenManager.registerFactory(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
         ScreenManager.registerFactory(SALVAGER.get(), SalvagerScreen::new);
         ScreenManager.registerFactory(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
     }

@@ -36,9 +36,9 @@ public class CompounderBlock extends Block {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    private final CompounderInfo info;
+    private final CompounderInfo<?> info;
 
-    public CompounderBlock(CompounderInfo info, Properties properties) {
+    public CompounderBlock(CompounderInfo<?> info, Properties properties) {
         super(properties);
         this.info = info;
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(LIT, false));
