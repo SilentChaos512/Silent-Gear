@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.1] - 2021-02-18
 ### Added
 - Tyrian Steel: a new metal alloy and gear material
+  - Recipe (may change, JEI support coming soon): 1 each of crimson steel ingot, azure electrum ingots, and nether star in the metal alloyer
 - Sturdy trait: has a high chance of reducing damage taken by gear
 - Void Ward trait: attempts to save the player from falling out of the world (only works on armor). Knocks the player upward and gives levitation and slow falling when taking void damage. 
 - Materials can now be searched for traits, categories, and part types in JEI, but JEI's `SearchAdvancedTooltips` config must be enabled
