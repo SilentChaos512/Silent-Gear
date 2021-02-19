@@ -72,6 +72,23 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.SALVAGER.get());
         registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
 
+        registerDropSelfLootTable(ModBlocks.WHITE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.ORANGE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.MAGENTA_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.LIGHT_BLUE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.YELLOW_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.LIME_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.PINK_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.GRAY_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.LIGHT_GRAY_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.CYAN_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.PURPLE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.BLUE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.BROWN_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.GREEN_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.RED_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.BLACK_FLUFFY_BLOCK.get());
+
         this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flaxPlant(BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get())
                 .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
                         .withIntProp(CropsBlock.AGE, 7))));

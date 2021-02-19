@@ -55,6 +55,23 @@ public class ModBlockStateProvider extends BlockStateProvider {
         doorBlock(ModBlocks.NETHERWOOD_DOOR.get(), modLoc("block/netherwood_door_bottom"), modLoc("block/netherwood_door_top"));
         trapdoorBlock(ModBlocks.NETHERWOOD_TRAPDOOR.get(), modLoc("block/netherwood_trapdoor"), true);
 
+        simpleBlock(ModBlocks.WHITE_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.ORANGE_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.MAGENTA_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.LIGHT_BLUE_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.YELLOW_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.LIME_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.PINK_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.GRAY_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.LIGHT_GRAY_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.CYAN_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.PURPLE_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.BLUE_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.BROWN_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.GREEN_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.RED_FLUFFY_BLOCK.get());
+        simpleBlock(ModBlocks.BLACK_FLUFFY_BLOCK.get());
+
         simpleBlock(ModBlocks.PHANTOM_LIGHT.get(), models().cubeAll("phantom_light", modLoc("item/blank")));
         simpleBlock(ModBlocks.POTTED_NETHERWOOD_SAPLING.get(), models()
                 .withExistingParent("potted_netherwood_sapling", "block/flower_pot_cross")
