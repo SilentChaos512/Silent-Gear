@@ -69,6 +69,8 @@ public enum CraftingItems implements IItemProvider {
     SINEW,
     DRIED_SINEW,
     SINEW_FIBER,
+    FINE_SILK,
+    FINE_SILK_CLOTH,
     FLAX_FIBER,
     FLAX_STRING,
     FLAX_FLOWERS,

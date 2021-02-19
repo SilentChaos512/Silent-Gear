@@ -824,6 +824,18 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(CraftingItems.FLUFFY_PUFF))
                 .build(consumer, SilentGear.getId("fluffy_wool"));
 
+        ShapedRecipeBuilder.shapedRecipe(CraftingItems.FINE_SILK_CLOTH)
+                .patternLine("##")
+                .patternLine("##")
+                .key('#', CraftingItems.FINE_SILK)
+                .addCriterion("has_item", hasItem(CraftingItems.FINE_SILK))
+                .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.FINE_SILK, 4)
+                .addIngredient(CraftingItems.FINE_SILK_CLOTH)
+                .addCriterion("has_item", hasItem(CraftingItems.FINE_SILK))
+                .build(consumer);
+
         // TODO: Maybe should organize these better...
         // A
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.ADVANCED_UPGRADE_BASE)

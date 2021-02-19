@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.2] - 2021-02-19
 ### Added
 - JEI support for compounders (metal alloyer and recrystallizer)
 - All fluffy puff-related stuff moved to Silent Gear from Silent's Gems (old Gems version will remain until 1.17)
@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added fluffy feathers and fluffy string, which can be crafted into vanilla items if necessary
   - New textures for some blocks and items
   - Materials coming soon
+- Fine Silk (rare drop from spiders, double rate for cave spiders) and Fine Silk Sloth. Both will be materials.
 
 ## [2.6.1] - 2021-02-18
 ### Added

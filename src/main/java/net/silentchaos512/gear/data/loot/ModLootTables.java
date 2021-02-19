@@ -28,6 +28,7 @@ public class ModLootTables extends LootTableProvider {
         return ImmutableList.of(
                 Pair.of(ModBlockLootTables::new, LootParameterSets.BLOCK),
                 Pair.of(ModChestLootTables::new, LootParameterSets.CHEST),
+                Pair.of(ModEntityLootTables::new, LootParameterSets.ENTITY),
                 Pair.of(ModGiftLootTables::new, LootParameterSets.GIFT)
         );
     }

@@ -9,7 +9,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class LootInjector {
@@ -21,6 +24,9 @@ public final class LootInjector {
         public static final ResourceLocation CHESTS_BASTION_OTHER = inject(LootTables.BASTION_OTHER);
         public static final ResourceLocation CHESTS_BASTION_BRIDGE = inject(LootTables.BASTION_BRIDGE);
         public static final ResourceLocation CHESTS_RUINED_PORTAL = inject(LootTables.RUINED_PORTAL);
+
+        public static final ResourceLocation ENTITIES_CAVE_SPIDER = inject(new ResourceLocation("entities/cave_spider"));
+        public static final ResourceLocation ENTITIES_SPIDER = inject(new ResourceLocation("entities/spider"));
 
         private Tables() {}
 
