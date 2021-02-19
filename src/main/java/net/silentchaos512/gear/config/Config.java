@@ -71,6 +71,8 @@ public final class Config {
         public static final ForgeConfigSpec.IntValue crimsonIronCount;
         public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
         public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
+        public static final ForgeConfigSpec.IntValue wildFluffyTryCount;
+        public static final ForgeConfigSpec.IntValue wildFluffyPatchCount;
         // Compatibility
         public static final ForgeConfigSpec.BooleanValue mineAndSlashSupport;
         // Debug
@@ -286,6 +288,12 @@ public final class Config {
                 wildFlaxTryCount = builder
                         .comment("Block place attempts per wild flax cluster")
                         .defineInRange("wildFlax.tryCount", 16, 0, 1000);
+                wildFluffyPatchCount = builder
+                        .comment("Number of patches of wild fluffy plants to attempt to place per chunk (some biomes only)")
+                        .defineInRange("wildFluffy.patchCount", 1, 0, 100);
+                wildFluffyTryCount = builder
+                        .comment("Block place attempts per wild fluffy plants cluster")
+                        .defineInRange("wildFluffy.tryCount", 16, 0, 1000);
                 builder.pop();
             }
 

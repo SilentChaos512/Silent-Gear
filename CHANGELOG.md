@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - JEI support for compounders (metal alloyer and recrystallizer)
+- All fluffy puff-related stuff moved to Silent Gear from Silent's Gems (old Gems version will remain until 1.17)
+  - Seeds are obtained from wild fluffy plants. Search in less-dry biomes, like forests.
+  - Fluffy blocks now bounce the player, similar to beds (they still reduce damage based on stack depth as well)
+  - Added fluffy feathers and fluffy string, which can be crafted into vanilla items if necessary
+  - New textures for some blocks and items
+  - Materials coming soon
 
 ## [2.6.1] - 2021-02-18
 ### Added

@@ -87,6 +87,15 @@ public final class ModWorldFeatures {
                 .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
                 .func_242731_b(Config.Common.wildFlaxPatchCount.get()));
 
+        public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLUFFY_PATCHES = createLazy("wild_fluffy_plant_patches", () -> Feature.FLOWER
+                .withConfiguration(new BlockClusterFeatureConfig.Builder(
+                        new SimpleBlockStateProvider(ModBlocks.WILD_FLUFFY_PLANT.asBlockState()),
+                        SimpleBlockPlacer.PLACER
+                ).tries(Config.Common.wildFluffyTryCount.get()).build())
+                .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
+                .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
+                .func_242731_b(Config.Common.wildFluffyPatchCount.get()));
+
         public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = createLazy("netherwood_trees", () -> Feature.RANDOM_SELECTOR
                 .withConfiguration(new MultipleRandomFeatureConfig(
                         ImmutableList.of(
@@ -147,10 +156,6 @@ public final class ModWorldFeatures {
         // Need to load these as late as possible, or configs won't be loaded
         registerConfiguredFeatures();
 
-        if (biome.getCategory() == Biome.Category.EXTREME_HILLS || biome.getCategory() == Biome.Category.PLAINS) {
-            addWildFlax(biome);
-        }
-
         if (biome.getCategory() == Biome.Category.NETHER) {
             addNetherwoodTrees(biome);
             addCrimsonIronOre(biome);
@@ -158,12 +163,24 @@ public final class ModWorldFeatures {
             addAzureSilverOre(biome);
         } else {
             addBortOre(biome);
+
+            if (biome.getCategory() == Biome.Category.EXTREME_HILLS || biome.getCategory() == Biome.Category.PLAINS) {
+                addWildFlax(biome);
+            }
+            if (biome.getClimate().downfall > 0.4f) {
+                addWildFluffyPlants(biome);
+            }
         }
     }
 
     private static void addWildFlax(BiomeLoadingEvent biome) {
         SilentGear.LOGGER.debug("Add wild flax to {}", biome.getName());
         biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES.get());
+    }
+
+    private static void addWildFluffyPlants(BiomeLoadingEvent biome) {
+        SilentGear.LOGGER.debug("Add wild fluffy plants to {}", biome.getName());
+        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLUFFY_PATCHES.get());
     }
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
