@@ -140,7 +140,7 @@ public final class GearClientHelper {
                     }
                 }
 
-                StatInstance inst = StatInstance.of(statValue);
+                StatInstance inst = StatInstance.of(statValue, StatInstance.Operation.AVG, StatInstance.DEFAULT_KEY);
                 Color nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TooltipHandler.MC_DARK_GRAY;
                 ITextComponent textName = TextUtil.withColor(stat.getDisplayName(), nameColor);
                 IFormattableTextComponent textStat = inst.getFormattedText(stat, stat.isDisplayAsInt() ? 0 : 2, false);

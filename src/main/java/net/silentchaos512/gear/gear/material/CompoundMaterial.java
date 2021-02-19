@@ -172,7 +172,7 @@ public class CompoundMaterial implements IMaterial {
         for (StatInstance.Operation op : StatInstance.Operation.values()) {
             Collection<StatInstance> modsForOp = ret.stream().filter(s -> s.getOp() == op).collect(Collectors.toList());
             if (modsForOp.size() > 1) {
-                StatInstance mod = compressModifiers(modsForOp, op);
+                StatInstance mod = compressModifiers(modsForOp, op, key);
                 ret.removeIf(inst -> inst.getOp() == op);
                 ret.add(mod);
             }
@@ -204,12 +204,12 @@ public class CompoundMaterial implements IMaterial {
                 .collect(Collectors.toSet());
     }
 
-    private static StatInstance compressModifiers(Collection<StatInstance> mods, StatInstance.Operation operation) {
+    private static StatInstance compressModifiers(Collection<StatInstance> mods, StatInstance.Operation operation, StatGearKey key) {
         // We do NOT want to average together max modifiers...
         if (operation == StatInstance.Operation.MAX) {
             return mods.stream()
                     .max((o1, o2) -> Float.compare(o1.getValue(), o2.getValue()))
-                    .orElse(StatInstance.of(0, operation))
+                    .orElse(StatInstance.of(0, operation, key))
                     .copy();
         }
 

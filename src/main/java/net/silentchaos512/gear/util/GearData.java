@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -138,7 +139,8 @@ public final class GearData {
             Map<ItemStat, Float> oldStatValues = getCurrentStatsForDebugging(gear);
 
             // Calculate and write stats
-            final float damageRatio = (float) gear.getDamage() / (float) gear.getMaxDamage();
+            int maxDamage = gear.getMaxDamage() > 0 ? gear.getMaxDamage() : 1;
+            final float damageRatio = MathHelper.clamp((float) gear.getDamage() / maxDamage, 0f, 1f);
             CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.getStats()) {
                 StatGearKey key = StatGearKey.of(stat, item.getGearType());
@@ -258,12 +260,18 @@ public final class GearData {
     public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts) {
         GearType gearType = item.getGearType();
         StatModifierMap stats = new StatModifierMap();
+
         for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
-            parts.forEach(part -> {
-                StatGearKey itemKey = StatGearKey.of(stat, gearType);
-                part.getStatModifiers(itemKey, stack).forEach(mod -> stats.put(mod.getKey(), mod.copy()));
-            });
+            StatGearKey itemKey = StatGearKey.of(stat, gearType);
+
+            for (PartData part : parts) {
+                for (StatInstance mod : part.getStatModifiers(itemKey, stack)) {
+                    StatInstance modCopy = StatInstance.of(mod.getValue(), mod.getOp(), itemKey);
+                    stats.put(modCopy.getKey(), modCopy);
+                }
+            }
         }
+
         return stats;
     }
 

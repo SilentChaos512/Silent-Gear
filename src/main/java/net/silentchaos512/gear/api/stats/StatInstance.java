@@ -49,7 +49,7 @@ public class StatInstance {
         }
     }
 
-    protected static final StatGearKey DEFAULT_KEY = StatGearKey.of(() -> SilentGear.getId("null"), GearType.ALL);
+    public static final StatGearKey DEFAULT_KEY = StatGearKey.of(() -> SilentGear.getId("null"), GearType.ALL);
     private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
     private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
 
@@ -63,10 +63,12 @@ public class StatInstance {
         this.key = key;
     }
 
+    @Deprecated
     public static StatInstance of(float value) {
         return of(value, Operation.AVG, DEFAULT_KEY);
     }
 
+    @Deprecated
     public static StatInstance of(float value, Operation op) {
         return of(value, op, DEFAULT_KEY);
     }
@@ -75,19 +77,24 @@ public class StatInstance {
         return new StatInstance(value, op, key);
     }
 
+    @Deprecated
     public static StatInstance withSource(float value, String source) {
         return withSource(value, Operation.AVG, source);
     }
 
+    @Deprecated
     public static StatInstance withSource(float value, Operation op, String source) {
-        return new StatInstanceWithSource(value, op, source);
+        return withSource(value, op, DEFAULT_KEY, source);
+    }
+
+    public static StatInstance withSource(float value, Operation op, StatGearKey key, String source) {
+        return new StatInstanceWithSource(value, op, key, source);
     }
 
     public StatInstance copySetValue(float newValue) {
         return of(newValue, this.op, this.key);
     }
 
-    // TODO: Is this method needed?
     public StatInstance copy() {
         return new StatInstance(this.value, this.op, this.key);
     }
@@ -253,7 +260,7 @@ public class StatInstance {
 
     @Override
     public String toString() {
-        return String.format("StatInstance{value=%f, op=%s}", this.value, this.op);
+        return String.format("StatInstance{value=%.3f, op=%s, key=%s}", this.value, this.op, this.key);
     }
 
     public JsonElement serialize() {

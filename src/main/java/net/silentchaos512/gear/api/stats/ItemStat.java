@@ -238,8 +238,9 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     }
 
     public StatInstance computeForDisplay(float baseValue, GearType gearType, Collection<StatInstance> modifiers) {
-        if (modifiers.isEmpty())
-            return StatInstance.of(baseValue);
+        if (modifiers.isEmpty()) {
+            return StatInstance.of(baseValue, Operation.AVG, StatInstance.DEFAULT_KEY);
+        }
 
         int add = 1;
         for (StatInstance inst : modifiers) {
@@ -252,7 +253,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
 
         float value = compute(baseValue + add, false, gearType, modifiers) - add;
         Operation op = modifiers.iterator().next().getOp();
-        return StatInstance.of(value, op);
+        return StatInstance.of(value, op, StatInstance.DEFAULT_KEY);
     }
 
     public boolean isVisible() {
