@@ -1025,14 +1025,23 @@ public class MaterialsProvider implements IDataProvider {
 
     private void addWoods(Collection<MaterialBuilder> ret) {
         // Wood
-        ResourceLocation sgWood = modId("wood");
-        ret.add(new MaterialBuilder(sgWood, 0,
-                ExclusionIngredient.of(ItemTags.PLANKS,
-                        Items.ACACIA_PLANKS, Items.BIRCH_PLANKS, Items.DARK_OAK_PLANKS, Items.JUNGLE_PLANKS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, ModBlocks.NETHERWOOD_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS))
+        ExclusionIngredient planksIngredient = ExclusionIngredient.of(ItemTags.PLANKS,
+                Items.ACACIA_PLANKS,
+                Items.BIRCH_PLANKS,
+                Items.DARK_OAK_PLANKS,
+                Items.JUNGLE_PLANKS,
+                Items.OAK_PLANKS,
+                Items.SPRUCE_PLANKS,
+                ModBlocks.NETHERWOOD_PLANKS,
+                Items.CRIMSON_PLANKS,
+                Items.WARPED_PLANKS
+        );
+        ExclusionIngredient woodRodSubstitute = ExclusionIngredient.of(Tags.Items.RODS_WOODEN,
+                CraftingItems.NETHERWOOD_STICK
+        );
+        ret.add(new MaterialBuilder(Const.Materials.WOOD.getId(), 0, planksIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
-                .partSubstitute(PartType.ROD,
-                        ExclusionIngredient.of(Tags.Items.RODS_WOODEN,
-                                CraftingItems.NETHERWOOD_STICK))
+                .partSubstitute(PartType.ROD, woodRodSubstitute)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 59)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
@@ -1058,18 +1067,18 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0x896727)
                 .displayFragment(PartTextures.WOOD, 0X896727)
         );
-        ret.add(wood(sgWood, "acacia", Items.ACACIA_PLANKS, 0xBA6337));
-        ret.add(wood(sgWood, "birch", Items.BIRCH_PLANKS, 0xD7C185));
-        ret.add(wood(sgWood, "dark_oak", Items.DARK_OAK_PLANKS, 0x4F3218));
-        ret.add(wood(sgWood, "jungle", Items.JUNGLE_PLANKS, 0xB88764));
-        ret.add(wood(sgWood, "oak", Items.OAK_PLANKS, 0xB8945F));
-        ret.add(wood(sgWood, "spruce", Items.SPRUCE_PLANKS, 0x82613A));
-        ret.add(wood(sgWood, "crimson", Items.CRIMSON_PLANKS, 0x7E3A56)
+        ret.add(wood("acacia", Items.ACACIA_PLANKS, 0xBA6337));
+        ret.add(wood("birch", Items.BIRCH_PLANKS, 0xD7C185));
+        ret.add(wood("dark_oak", Items.DARK_OAK_PLANKS, 0x4F3218));
+        ret.add(wood("jungle", Items.JUNGLE_PLANKS, 0xB88764));
+        ret.add(wood("oak", Items.OAK_PLANKS, 0xB8945F));
+        ret.add(wood("spruce", Items.SPRUCE_PLANKS, 0x82613A));
+        ret.add(wood("crimson", Items.CRIMSON_PLANKS, 0x7E3A56)
                 .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 2)
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 1)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
         );
-        ret.add(wood(sgWood, "warped", Items.WARPED_PLANKS, 0x398382)
+        ret.add(wood("warped", Items.WARPED_PLANKS, 0x398382)
                 .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 2)
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 1)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
@@ -1131,120 +1140,203 @@ public class MaterialsProvider implements IDataProvider {
     }
 
     private void addClothLikes(Collection<MaterialBuilder> ret) {
+        // Phantom Membrane
+        ret.add(new MaterialBuilder(modId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+
+                .mainStatsCommon(0, 36, 10, 35)
+                .mainStatsArmor(1, 2, 2, 1, 0, 8) //6
+                .stat(PartType.MAIN, CHARGEABILITY, 0.7f)
+
+                .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.15f, StatInstance.Operation.MUL1)
+                .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)
+                .stat(PartType.GRIP, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
+                .trait(PartType.GRIP, Const.Traits.ANCIENT, 2)
+
+                .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 4, StatInstance.Operation.ADD)
+                .trait(PartType.LINING, Const.Traits.LIGHT, 2)
+
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
+                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
+        );
+        // Fine Silk Cloth
+        ret.add(new MaterialBuilder(modId("fine_silk_cloth"), 2, CraftingItems.FINE_SILK_CLOTH)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+
+                .mainStatsCommon(0, 42, 14, 40)
+                .mainStatsArmor(1, 2, 2, 1, 0, 14) //6
+                .stat(PartType.MAIN, CHARGEABILITY, 0.9f)
+
+                .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.15f, StatInstance.Operation.MUL1)
+                .stat(PartType.GRIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
+                .trait(PartType.GRIP, Const.Traits.ACCELERATE, 1)
+
+                .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 5, StatInstance.Operation.ADD)
+                .stat(PartType.LINING, ItemStats.MAGIC_ARMOR, 2, StatInstance.Operation.ADD)
+                .trait(PartType.LINING, Const.Traits.FLEXIBLE, 3)
+
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
+                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
+        );
         // Leather
         ret.add(new MaterialBuilder(modId("leather"), 0, Tags.Items.LEATHER)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+
                 .mainStatsCommon(0, 5, 15, 11)
                 .mainStatsArmor(1, 3, 2, 1, 0, 8) //7
                 .stat(PartType.MAIN, CHARGEABILITY, 0.8f)
+
                 .stat(PartType.GRIP, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.15f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.15f, StatInstance.Operation.ADD)
                 .stat(PartType.GRIP, ItemStats.RARITY, 5, StatInstance.Operation.ADD)
-                .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 1f, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, Const.Traits.FLEXIBLE, 3)
+
+                .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 1f, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 2)
+
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0xC65C35)
                 .displayFragment(PartTextures.CLOTH, 0xC65C35)
         );
-        // Phantom Membrane
-        ret.add(new MaterialBuilder(modId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
-                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
-                .mainStatsCommon(0, 36, 10, 35)
-                .mainStatsArmor(1, 2, 2, 1, 0, 8) //6
-                .stat(PartType.MAIN, CHARGEABILITY, 0.5f)
-                .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.15f, StatInstance.Operation.MUL1)
-                .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
-                .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)
-                .stat(PartType.GRIP, ItemStats.RARITY, 5, StatInstance.Operation.ADD)
-                .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 4f, StatInstance.Operation.ADD)
-                .trait(PartType.GRIP, Const.Traits.ANCIENT, 2)
-                .trait(PartType.LINING, Const.Traits.LIGHT, 2)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
-                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
-        );
         // Wool
-        ResourceLocation sgWool = modId("wool");
-        ret.add(new MaterialBuilder(sgWool, 0, ExclusionIngredient.of(ItemTags.WOOL,
-                Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.CYAN_WOOL, Items.GRAY_WOOL, Items.GREEN_WOOL, Items.LIGHT_BLUE_WOOL, Items.LIGHT_GRAY_WOOL, Items.LIME_WOOL, Items.MAGENTA_WOOL, Items.ORANGE_WOOL, Items.PINK_WOOL, Items.PURPLE_WOOL, Items.RED_WOOL, Items.WHITE_WOOL, Items.YELLOW_WOOL))
+        ExclusionIngredient woolIngredient = ExclusionIngredient.of(ItemTags.WOOL, Items.BLACK_WOOL,
+                Items.BLUE_WOOL, Items.BROWN_WOOL, Items.CYAN_WOOL, Items.GRAY_WOOL,
+                Items.GREEN_WOOL, Items.LIGHT_BLUE_WOOL, Items.LIGHT_GRAY_WOOL, Items.LIME_WOOL,
+                Items.MAGENTA_WOOL, Items.ORANGE_WOOL, Items.PINK_WOOL, Items.PURPLE_WOOL,
+                Items.RED_WOOL, Items.WHITE_WOOL, Items.YELLOW_WOOL
+        );
+        ret.add(new MaterialBuilder(Const.Materials.WOOL.getId(), 0, woolIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+
                 .mainStatsCommon(0, 4, 7, 7)
                 .mainStatsArmor(0.5f, 2f, 1.0f, 0.5f, 0, 4) //4
                 .stat(PartType.MAIN, CHARGEABILITY, 0.7f)
+
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.GRIP, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
-                .stat(PartType.LINING, ItemStats.KNOCKBACK_RESISTANCE, 0.1f, StatInstance.Operation.ADD)
                 .trait(PartType.GRIP, Const.Traits.FLEXIBLE, 1)
+
+                .stat(PartType.LINING, ItemStats.KNOCKBACK_RESISTANCE, 0.1f, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 1)
+
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
-        ret.add(wool(sgWool, "black", Items.BLACK_WOOL, 0x141519));
-        ret.add(wool(sgWool, "blue", Items.BLUE_WOOL, 0x35399D));
-        ret.add(wool(sgWool, "brown", Items.BROWN_WOOL, 0x724728));
-        ret.add(wool(sgWool, "cyan", Items.CYAN_WOOL, 0x158991));
-        ret.add(wool(sgWool, "gray", Items.GRAY_WOOL, 0x3E4447));
-        ret.add(wool(sgWool, "green", Items.GREEN_WOOL, 0x546D1B));
-        ret.add(wool(sgWool, "light_blue", Items.LIGHT_BLUE_WOOL, 0x3AAFD9));
-        ret.add(wool(sgWool, "light_gray", Items.LIGHT_GRAY_WOOL, 0x8E8E86));
-        ret.add(wool(sgWool, "lime", Items.LIME_WOOL, 0x70B919));
-        ret.add(wool(sgWool, "magenta", Items.MAGENTA_WOOL, 0xBD44B3));
-        ret.add(wool(sgWool, "orange", Items.ORANGE_WOOL, 0xF07613));
-        ret.add(wool(sgWool, "pink", Items.PINK_WOOL, 0xED8DAC));
-        ret.add(wool(sgWool, "purple", Items.PURPLE_WOOL, 0x792AAC));
-        ret.add(wool(sgWool, "red", Items.RED_WOOL, 0xA12722));
-        ret.add(wool(sgWool, "white", Items.WHITE_WOOL, 0xE9ECEC));
-        ret.add(wool(sgWool, "yellow", Items.YELLOW_WOOL, 0xF8C627));
+        ret.add(wool("black", Items.BLACK_WOOL, 0x141519));
+        ret.add(wool("blue", Items.BLUE_WOOL, 0x35399D));
+        ret.add(wool("brown", Items.BROWN_WOOL, 0x724728));
+        ret.add(wool("cyan", Items.CYAN_WOOL, 0x158991));
+        ret.add(wool("gray", Items.GRAY_WOOL, 0x3E4447));
+        ret.add(wool("green", Items.GREEN_WOOL, 0x546D1B));
+        ret.add(wool("light_blue", Items.LIGHT_BLUE_WOOL, 0x3AAFD9));
+        ret.add(wool("light_gray", Items.LIGHT_GRAY_WOOL, 0x8E8E86));
+        ret.add(wool("lime", Items.LIME_WOOL, 0x70B919));
+        ret.add(wool("magenta", Items.MAGENTA_WOOL, 0xBD44B3));
+        ret.add(wool("orange", Items.ORANGE_WOOL, 0xF07613));
+        ret.add(wool("pink", Items.PINK_WOOL, 0xED8DAC));
+        ret.add(wool("purple", Items.PURPLE_WOOL, 0x792AAC));
+        ret.add(wool("red", Items.RED_WOOL, 0xA12722));
+        ret.add(wool("white", Items.WHITE_WOOL, 0xE9ECEC));
+        ret.add(wool("yellow", Items.YELLOW_WOOL, 0xF8C627));
     }
 
     private void addStringsAndFibers(Collection<MaterialBuilder> ret) {
+        // Fine Silk
+        ret.add(new MaterialBuilder(modId("fine_silk"), 2, CraftingItems.FINE_SILK)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
+
+                .stat(PartType.BINDING, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.BINDING, ItemStats.MAGIC_ARMOR, 2, StatInstance.Operation.ADD)
+                .stat(PartType.BINDING, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
+                .trait(PartType.BINDING, Const.Traits.LUCKY, 1)
+
+                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, 0.07f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
+                .trait(PartType.BOWSTRING, Const.Traits.FLEXIBLE, 2)
+
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xCCFFFF)
+                .displayBowstring(0xCCFFFF)
+                .displayFragment(PartTextures.CLOTH, 0xCCFFFF)
+        );
         // Flax
         ret.add(new MaterialBuilder(modId("flax"), 1, CraftingItems.FLAX_STRING)
-                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
+
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, 0.05f, StatInstance.Operation.MUL1)
-                .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
+                .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
+
                 .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, -0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
-                .trait(PartType.BOWSTRING, Const.Traits.SYNERGISTIC, 2)
+
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xB3804B)
                 .displayBowstring(0x845E37)
                 .displayFragment(PartTextures.CLOTH, 0x845E37)
         );
+        // Fluffy String
+        ret.add(new MaterialBuilder(modId("fluffy_string"), 1, CraftingItems.FLUFFY_STRING)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
+
+                .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.BINDING, ItemStats.DURABILITY, -10, StatInstance.Operation.ADD)
+                .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, -0.05f, StatInstance.Operation.MUL1)
+                .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
+
+                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, -0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.BOWSTRING, ItemStats.RARITY, 7, StatInstance.Operation.ADD)
+
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xFFFAE5)
+                .displayBowstring(0xFFFAE5)
+                .displayFragment(PartTextures.CLOTH, 0xFFFAE5)
+        );
         // Sinew
         ret.add(new MaterialBuilder(modId("sinew"), 1, CraftingItems.SINEW_FIBER)
-                .categories(MaterialCategories.ORGANIC)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
+
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, -0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
-                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.ENCHANTABILITY, -0.1f, StatInstance.Operation.MUL1)
+
+                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
-                .trait(PartType.BOWSTRING, Const.Traits.FLEXIBLE, 3)
+                .trait(PartType.BOWSTRING, Const.Traits.FLEXIBLE, 1)
+
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xD8995B)
                 .displayBowstring(0x7E6962)
                 .displayFragment(PartTextures.CLOTH, 0x7E6962)
         );
         // String
-        ret.add(new MaterialBuilder(modId("string"), 0,
-                ExclusionIngredient.of(Tags.Items.STRING,
-                        CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER))
-                .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+        ExclusionIngredient stringIngredient = ExclusionIngredient.of(Tags.Items.STRING,
+                CraftingItems.FLAX_STRING,
+                CraftingItems.FLUFFY_STRING,
+                CraftingItems.SINEW_FIBER
+        );
+        ret.add(new MaterialBuilder(modId("string"), 1, stringIngredient)
+                .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
+
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.05f, StatInstance.Operation.MUL1)
-                .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
+                .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
+
                 .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.BOWSTRING, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
-                .trait(PartType.BOWSTRING, Const.Traits.ORGANIC, 2)
+
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .displayBowstring(Color.VALUE_WHITE)
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
@@ -1255,7 +1347,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.03f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, -0.03f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.03f, StatInstance.Operation.MUL1)
-                .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
+
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
         );
     }
@@ -2209,7 +2301,8 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, color);
     }
 
-    private static MaterialBuilder wood(ResourceLocation parent, String suffix, IItemProvider item, int color) {
+    private static MaterialBuilder wood(String suffix, IItemProvider item, int color) {
+        ResourceLocation parent = Const.Materials.WOOD.getId();
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, color)
@@ -2217,7 +2310,8 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.WOOD, color);
     }
 
-    private static MaterialBuilder wool(ResourceLocation parent, String suffix, IItemProvider item, int color) {
+    private static MaterialBuilder wool(String suffix, IItemProvider item, int color) {
+        ResourceLocation parent = Const.Materials.WOOL.getId();
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, color)

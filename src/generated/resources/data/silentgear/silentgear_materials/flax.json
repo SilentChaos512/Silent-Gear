@@ -3,7 +3,7 @@
     "tier": 1,
     "categories": [
       "organic",
-      "cloth"
+      "fiber"
     ],
     "visible": true,
     "gear_blacklist": [],
@@ -53,13 +53,7 @@
     "binding": [
       {
         "name": "silentgear:flexible",
-        "level": 2
-      }
-    ],
-    "bowstring": [
-      {
-        "name": "silentgear:synergistic",
-        "level": 2
+        "level": 1
       }
     ]
   }

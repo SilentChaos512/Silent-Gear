@@ -90,7 +90,9 @@ public final class Const {
         public static final DataResource<IMaterial> EXAMPLE = DataResource.material("example");
         public static final DataResource<IMaterial> STRING = DataResource.material("string");
 
+        public static final DataResource<IMaterial> WOOD = DataResource.material("wood");
         public static final DataResource<IMaterial> WOOD_ROUGH = DataResource.material("wood/rough");
+        public static final DataResource<IMaterial> WOOL = DataResource.material("wool");
         public static final DataResource<IMaterial> WOOL_BLACK = DataResource.material("wool/black");
 
         private Materials() {}

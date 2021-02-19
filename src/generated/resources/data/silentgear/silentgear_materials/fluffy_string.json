@@ -11,38 +11,41 @@
   },
   "crafting_items": {
     "main": {
-      "type": "silentgear:exclusion",
-      "value": {
-        "tag": "forge:string"
-      },
-      "exclusions": [
-        "silentgear:flax_string",
-        "silentgear:fluffy_string",
-        "silentgear:sinew_fiber"
-      ]
+      "item": "silentgear:fluffy_string"
     }
   },
   "name": {
-    "translate": "material.silentgear.string"
+    "translate": "material.silentgear.fluffy_string"
   },
   "stats": {
     "binding": {
-      "durability": {
-        "mul1": -0.05
-      },
+      "durability": [
+        {
+          "mul1": 0.05
+        },
+        {
+          "add": -10.0
+        }
+      ],
       "armor_durability": {
         "mul1": 0.05
       },
-      "repair_efficiency": {
-        "mul1": 0.05
+      "harvest_speed": {
+        "mul1": -0.05
       }
     },
     "bowstring": {
+      "durability": {
+        "mul1": 0.05
+      },
+      "ranged_damage": {
+        "mul1": 0.05
+      },
       "ranged_speed": {
-        "mul1": 0.1
+        "mul1": -0.05
       },
       "rarity": {
-        "add": 4.0
+        "add": 7.0
       }
     }
   },

@@ -28,13 +28,5 @@
         "mul1": 0.03
       }
     }
-  },
-  "traits": {
-    "binding": [
-      {
-        "name": "silentgear:flexible",
-        "level": 1
-      }
-    ]
   }
 }
