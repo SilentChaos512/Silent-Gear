@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "silentgear:block/light_gray_fluffy_block"
+  }
+}

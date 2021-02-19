@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "silentgear:fluffy_blocks"
+    }
+  ],
+  "result": {
+    "item": "silentgear:fluffy_fabric",
+    "count": 4
+  }
+}

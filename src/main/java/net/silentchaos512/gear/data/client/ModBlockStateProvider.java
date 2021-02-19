@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.block.FlaxPlant;
+import net.silentchaos512.gear.block.ModCropBlock;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -94,19 +94,27 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
 
         getVariantBuilder(ModBlocks.FLAX_PLANT.get()).forAllStates(state -> {
-            int i = cropAgeToIndex(state.get(FlaxPlant.AGE));
+            int i = cropAgeToIndex(state.get(ModCropBlock.AGE));
             return ConfiguredModel.builder()
                     .modelFile(models().crop("flax_plant" + i, modLoc("block/flax_plant" + i)))
                     .build();
         });
         simpleBlock(ModBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", SilentGear.getId("block/flax_plant3")));
+
+        getVariantBuilder(ModBlocks.FLUFFY_PLANT.get()).forAllStates(state -> {
+            int i = cropAgeToIndex(state.get(ModCropBlock.AGE));
+            return ConfiguredModel.builder()
+                    .modelFile(models().crop("fluffy_plant" + i, modLoc("block/fluffy_plant" + i)))
+                    .build();
+        });
+        simpleBlock(ModBlocks.WILD_FLUFFY_PLANT.get(), models().crop("wild_fluffy_plant", SilentGear.getId("block/fluffy_plant3")));
     }
 
     public ModelBuilder<BlockModelBuilder> wallTorch(String name, ResourceLocation torch) {
         return models().singleTexture(name, mcLoc(BLOCK_FOLDER + "/wall_torch"), "torch", torch);
     }
 
-    private int cropAgeToIndex(int age) {
+    private static int cropAgeToIndex(int age) {
         if (age > 6)
             return 3;
         if (age > 3)

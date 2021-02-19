@@ -138,7 +138,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.TEMPLATE_BOARDS, CraftingItems.TEMPLATE_BOARD);
 
         builder(ModTags.Items.FRUITS, ModItems.NETHER_BANANA);
-        builder(Tags.Items.SEEDS, ModItems.FLAX_SEEDS);
+        builder(Tags.Items.SEEDS, ModItems.FLAX_SEEDS, ModItems.FLUFFY_SEEDS);
         builder(Tags.Items.STRING, CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER);
 
         builder(ModTags.Items.AXES, ModItems.AXE, ModItems.SAW, ModItems.MACHETE, ModItems.MATTOCK, ModItems.PAXEL);
@@ -171,6 +171,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
         copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
         copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
+
         getBuilder(ItemTags.ARROWS).add(ModItems.ARROW.get());
         builder(ItemTags.PIGLIN_LOVED,
                 ModBlocks.BLAZE_GOLD_BLOCK,
@@ -179,6 +180,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
                 CraftingItems.BLAZE_GOLD_INGOT);
 
         // Silent Gear
+        copy(ModTags.Blocks.FLUFFY_BLOCKS, ModTags.Items.FLUFFY_BLOCKS);
         copy(ModTags.Blocks.NETHERWOOD_LOGS, ModTags.Items.NETHERWOOD_LOGS);
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_1)
                 .add(CraftingItems.GLOWING_DUST.asItem())
