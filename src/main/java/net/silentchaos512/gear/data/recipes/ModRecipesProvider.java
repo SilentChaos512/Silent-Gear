@@ -1159,6 +1159,25 @@ public class ModRecipesProvider extends RecipeProvider {
 
         vanillaSalvage(consumer, Items.BOW, Items.STRING, 3, 3);
 
+        SalvagingRecipeBuilder.builder(Items.DIAMOND_HORSE_ARMOR)
+                .addResult(Items.DIAMOND, 6)
+                .addResult(Items.LEATHER)
+                .build(consumer, SilentGear.getId("salvaging/diamond horse armor"));
+        
+        SalvagingRecipeBuilder.builder(Items.GOLDEN_HORSE_ARMOR)
+                .addResult(Items.GOLD_INGOT, 6)
+                .addResult(Items.LEATHER)
+                .build(consumer, SilentGear.getId("salvaging/golden horse armor"));
+        
+        SalvagingRecipeBuilder.builder(Items.IRON_HORSE_ARMOR)
+                .addResult(Items.IRON_INGOT, 6)
+                .addResult(Items.LEATHER)
+                .build(consumer, SilentGear.getId("salvaging/iron horse armor"));
+        
+        SalvagingRecipeBuilder.builder(Items.IRON_HORSE_ARMOR)
+                .addResult(Items.LEATHER, 7)
+                .build(consumer, SilentGear.getId("salvaging/leather horse armor"));
+        
         SalvagingRecipeBuilder.builder(Items.CROSSBOW)
                 .addResult(Items.STICK, 3)
                 .addResult(Items.STRING, 2)
