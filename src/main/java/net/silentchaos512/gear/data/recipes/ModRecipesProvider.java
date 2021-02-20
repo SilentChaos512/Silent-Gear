@@ -1124,7 +1124,7 @@ public class ModRecipesProvider extends RecipeProvider {
         vanillaSalvage(consumer, Items.DIAMOND_CHESTPLATE, Items.DIAMOND, 8, 0);
         vanillaSalvage(consumer, Items.DIAMOND_LEGGINGS, Items.DIAMOND, 7, 0);
         vanillaSalvage(consumer, Items.DIAMOND_BOOTS, Items.DIAMOND, 4, 0);
-
+        
         vanillaSalvage(consumer, Items.GOLDEN_SWORD, Items.GOLD_INGOT, 2, 1);
         vanillaSalvage(consumer, Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 2);
         vanillaSalvage(consumer, Items.GOLDEN_SHOVEL, Items.GOLD_INGOT, 1, 2);
@@ -1157,6 +1157,11 @@ public class ModRecipesProvider extends RecipeProvider {
         vanillaSalvage(consumer, Items.STONE_AXE, Items.COBBLESTONE, 3, 2);
         vanillaSalvage(consumer, Items.STONE_HOE, Items.COBBLESTONE, 2, 2);
 
+        vanillaSalvage(consumer, Items.DIAMOND_HORSE_ARMOR, Items.DIAMOND, 6, 3, Items.LEATHER);
+        vanillaSalvage(consumer, Items.GOLDEN_HORSE_ARMOR, Items.GOLD_INGOT, 6, 3, Items.LEATHER);
+        vanillaSalvage(consumer, Items.IRON_HORSE_ARMOR, Items.IRON_INGOT, 6, 3, Items.LEATHER);
+        vanillaSalvage(consumer, Items.LEATHER_HORSE_ARMOR, Items.LEATHER, 7, 5);
+        
         vanillaSalvage(consumer, Items.BOW, Items.STRING, 3, 3);
 
         SalvagingRecipeBuilder.builder(Items.CROSSBOW)
