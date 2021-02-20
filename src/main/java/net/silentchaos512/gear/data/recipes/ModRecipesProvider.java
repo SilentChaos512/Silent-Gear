@@ -1150,7 +1150,8 @@ public class ModRecipesProvider extends RecipeProvider {
         vanillaSalvage(consumer, Items.LEATHER_CHESTPLATE, Items.LEATHER, 8, 0);
         vanillaSalvage(consumer, Items.LEATHER_LEGGINGS, Items.LEATHER, 7, 0);
         vanillaSalvage(consumer, Items.LEATHER_BOOTS, Items.LEATHER, 4, 0);
-
+        vanillaSalvage(consumer, Items.LEATHER_HORSE_ARMOR, Items.LEATHER, 7, 0);
+        
         vanillaSalvage(consumer, Items.STONE_SWORD, Items.COBBLESTONE, 2, 1);
         vanillaSalvage(consumer, Items.STONE_PICKAXE, Items.COBBLESTONE, 3, 2);
         vanillaSalvage(consumer, Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 2);
@@ -1159,6 +1160,21 @@ public class ModRecipesProvider extends RecipeProvider {
 
         vanillaSalvage(consumer, Items.BOW, Items.STRING, 3, 3);
 
+        SalvagingRecipeBuilder.builder(Items.DIAMOND_HORSE_ARMOR)
+                .addResult(Items.DIAMOND, 6)
+                .addResult(Items.LEATHER)
+                .build(consumer, SilentGear.getId("salvaging/diamond_horse_armor"));
+        
+        SalvagingRecipeBuilder.builder(Items.GOLDEN_HORSE_ARMOR)
+                .addResult(Items.GOLD_INGOT, 6)
+                .addResult(Items.LEATHER)
+                .build(consumer, SilentGear.getId("salvaging/golden_horse_armor"));
+        
+        SalvagingRecipeBuilder.builder(Items.IRON_HORSE_ARMOR)
+                .addResult(Items.IRON_INGOT, 6)
+                .addResult(Items.LEATHER)
+                .build(consumer, SilentGear.getId("salvaging/iron_horse_armor"));
+        
         SalvagingRecipeBuilder.builder(Items.CROSSBOW)
                 .addResult(Items.STICK, 3)
                 .addResult(Items.STRING, 2)
