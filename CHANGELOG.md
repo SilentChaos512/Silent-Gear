@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.3] - 2021-02-20
+### Added
+- Horse armor salvaging recipes (Gmoney2123) [#331]
+- Some work on new materials (items added in 2.6.2), incomplete
+### Fixed
+- Stat modifiers not applying in some cases. Might fix the issue with Silent's Gems' gear souls.
+
 ## [2.6.2] - 2021-02-19
 ### Added
 - JEI support for compounders (metal alloyer and recrystallizer)
