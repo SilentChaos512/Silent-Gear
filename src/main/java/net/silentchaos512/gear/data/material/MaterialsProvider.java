@@ -377,7 +377,7 @@ public class MaterialsProvider implements IDataProvider {
                 .mainStatsHarvest(5, 18)
                 .mainStatsMelee(8, 6, 0.0f)
                 .mainStatsRanged(4, 0.0f)
-                .mainStatsArmor(5, 9, 7, 4, 10, 10) //25
+                .mainStatsArmor(5, 9, 7, 4, 12, 12) //25
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.1f)
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.1f)
                 .stat(PartType.MAIN, CHARGEABILITY, 1.1f)

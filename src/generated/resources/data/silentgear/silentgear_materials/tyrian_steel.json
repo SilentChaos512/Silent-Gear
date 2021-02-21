@@ -34,8 +34,8 @@
       "armor/chestplate": 9.0,
       "armor/leggings": 7.0,
       "armor/boots": 4.0,
-      "armor_toughness": 10.0,
-      "magic_armor": 10.0,
+      "armor_toughness": 12.0,
+      "magic_armor": 12.0,
       "projectile_speed": 1.1,
       "projectile_accuracy": 1.1,
       "silentgems:chargeability": 1.1

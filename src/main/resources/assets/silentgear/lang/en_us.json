@@ -703,7 +703,7 @@
   "stat.silentgear.rarity": "Rarity",
   "stat.silentgear.reach_distance": "Reach Distance",
   "stat.silentgear.repair_efficiency": "Repair Efficiency",
-  "stat.silentgear.repair_value": "Repair Value",
+  "stat.silentgear.repair_value": "Repair Bonus",
   "trait.condition.silentgear.and": " AND ",
   "trait.condition.silentgear.gear_type": "Gear Type: %s",
   "trait.condition.silentgear.material_count": "Material Count: %d",
