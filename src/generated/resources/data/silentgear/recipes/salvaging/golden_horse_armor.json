@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:golden_horse_armor"
+  },
+  "results": [
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 6
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ]
+}

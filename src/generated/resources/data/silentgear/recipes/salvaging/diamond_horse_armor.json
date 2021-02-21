@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:diamond_horse_armor"
+  },
+  "results": [
+    {
+      "item": "minecraft:diamond",
+      "count": 6
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ]
+}
