@@ -410,7 +410,7 @@ public final class GearEvents {
             if (canMagneticPullItem(entity)) {
                 // Accelerate to target point
                 Vector3d vec = entity.func_230268_c_(player).subtractReverse(target);
-                vec = vec.normalize().scale(0.03);
+                vec = vec.normalize().scale(0.06);
                 if (entity.getPosY() < target.y) {
                     double xzDistanceSq = (entity.getPosX() - target.x) * (entity.getPosX() - target.x) + (entity.getPosZ() - target.z) * (entity.getPosZ() - target.z);
                     vec = vec.add(0, 0.005 + xzDistanceSq / 1000, 0);
