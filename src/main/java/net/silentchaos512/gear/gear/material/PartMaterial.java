@@ -17,9 +17,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
@@ -30,6 +28,7 @@ import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.utils.Color;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -290,6 +289,53 @@ public class PartMaterial implements IMaterial {
                         ret.stats.put(partType, statMods);
                     }
                 }
+            }
+
+            sanitizeStats(ret);
+        }
+
+        private static <T extends PartMaterial> void sanitizeStats(T ret) {
+            for (PartType partType : ret.stats.keySet()) {
+                StatModifierMap statMap = ret.stats.get(partType);
+
+                for (IItemStat stat : ItemStats.allStatsOrdered()) {
+                    if (stat instanceof SplitItemStat) {
+                        sanitizeSplitStat((SplitItemStat) stat, statMap);
+                    }
+                }
+            }
+        }
+
+        private static void sanitizeSplitStat(SplitItemStat stat, StatModifierMap statMap) {
+            // Creates new gear type-specific modifiers for split stats, if they were missing
+            StatGearKey all = StatGearKey.of(stat, GearType.ALL);
+
+            for (GearType type : stat.getSplitTypes()) {
+                StatGearKey key = StatGearKey.of(stat, type);
+
+                if (!statMap.containsKey(key)) {
+                    Collection<StatInstance> mods = statMap.get(all);
+
+                    for (StatInstance mod : mods) {
+                        statMap.put(key, getSplitStatMod(stat, key, mod));
+                    }
+                }
+            }
+        }
+
+        @Nonnull
+        private static StatInstance getSplitStatMod(SplitItemStat stat, StatGearKey key, StatInstance mod) {
+            if (mod.getOp() == StatInstance.Operation.AVG) {
+                // AVG mods should be adjusted to fit the split values
+                float value = stat.compute(stat.getBaseValue(),
+                        true,
+                        key.getGearType(),
+                        mod.getKey().getGearType(),
+                        Collections.singleton(mod));
+                return StatInstance.of(value, mod.getOp(), key);
+            } else {
+                // Others can just be copied as-is (but with updated key)
+                return StatInstance.of(mod.getValue(), mod.getOp(), key);
             }
         }
 

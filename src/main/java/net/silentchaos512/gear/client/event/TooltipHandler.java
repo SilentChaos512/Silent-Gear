@@ -292,7 +292,15 @@ public final class TooltipHandler {
 
         TextListBuilder builder = new TextListBuilder();
         for (ItemStat stat : part.getGearType().getRelevantStats()) {
-            Collection<StatInstance> modifiers = part.getStatModifiers(StatGearKey.of(stat, gearType), ItemStack.EMPTY);
+            Collection<StatInstance> modifiers = new ArrayList<>();
+            for (StatInstance mod : part.getStatModifiers(StatGearKey.of(stat, gearType), ItemStack.EMPTY)) {
+                if (mod.getOp() == StatInstance.Operation.AVG) {
+                    float computed = stat.compute(Collections.singleton(mod));
+                    modifiers.add(StatInstance.of(computed, StatInstance.Operation.AVG, mod.getKey()));
+                } else {
+                    modifiers.add(mod);
+                }
+            }
             getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());

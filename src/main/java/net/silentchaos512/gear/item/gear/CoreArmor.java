@@ -91,7 +91,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     public double getArmorToughness(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return GearData.getStat(stack, ItemStats.ARMOR_TOUGHNESS) / 4;
+        return GearData.getStat(stack, ItemStats.ARMOR_TOUGHNESS);
     }
 
     public double getArmorMagicProtection(ItemStack stack) {

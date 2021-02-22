@@ -126,21 +126,18 @@ public final class ItemStats {
                     .affectedByGrades(true)
                     .synergyApplies()
     );
-    public static final ItemStat ARMOR_TOUGHNESS = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
-            .affectedByGrades(true)
-            .synergyApplies()
+    public static final ItemStat ARMOR_TOUGHNESS = new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+            4,
+            new ItemStat.Properties()
+                    .affectedByGrades(true)
+                    .synergyApplies()
     );
     public static final ItemStat KNOCKBACK_RESISTANCE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat MAGIC_ARMOR = new SplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
-            ImmutableMap.of(
-                    GearType.HELMET, 3f,
-                    GearType.CHESTPLATE, 8f,
-                    GearType.LEGGINGS, 6f,
-                    GearType.BOOTS, 3f
-            ),
+    public static final ItemStat MAGIC_ARMOR = new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+            4,
             new ItemStat.Properties()
                     .affectedByGrades(true)
                     .synergyApplies()

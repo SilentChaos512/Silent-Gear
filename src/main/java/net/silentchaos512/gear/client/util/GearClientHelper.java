@@ -21,7 +21,6 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
@@ -121,24 +120,6 @@ public final class GearClientHelper {
 
             for (ItemStat stat : displayStats) {
                 float statValue = GearData.getStat(stack, stat);
-
-                // Used for the total armor/toughness a full suit of armor would provide
-                float totalArmor = -1;
-                if (item instanceof CoreArmor) {
-                    if (stat == ItemStats.ARMOR) {
-                        // Armor value varies by type
-                        totalArmor = statValue;
-                        statValue = (float) ((CoreArmor) item).getArmorProtection(stack);
-                    } else if (stat == ItemStats.MAGIC_ARMOR) {
-                        // Same as armor
-                        totalArmor = statValue;
-                        statValue = (float) ((CoreArmor) item).getArmorMagicProtection(stack);
-                    } else if (stat == ItemStats.ARMOR_TOUGHNESS) {
-                        // Toughness split equally to each piece
-                        totalArmor = statValue;
-                        statValue /= 4;
-                    }
-                }
 
                 StatInstance inst = StatInstance.of(statValue, StatInstance.Operation.AVG, StatInstance.DEFAULT_KEY);
                 Color nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TooltipHandler.MC_DARK_GRAY;

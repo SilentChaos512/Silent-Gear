@@ -5,11 +5,11 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.utils.Color;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SplitItemStat extends ItemStat {
-    private final Map<GearType, Float> splits = new HashMap<>();
+    private final Map<GearType, Float> splits = new LinkedHashMap<>();
     private final float splitsTotal;
 
     public SplitItemStat(float defaultValue, float minValue, float maxValue, TextFormatting nameColor, Map<GearType, Float> splitsIn, Properties properties) {
@@ -31,5 +31,9 @@ public class SplitItemStat extends ItemStat {
             return value * this.splits.get(itemGearType) / this.splitsTotal;
         }
         return value;
+    }
+
+    public Collection<GearType> getSplitTypes() {
+        return this.splits.keySet();
     }
 }
