@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Self repair traits, which can repair (or damage) gear gradually over time.
 - Renew trait, a self repair trait that restores durability slowly
+### Fixed
+- Stellar trait not repairing items, now set to 2% chance per level per second [#312]
 
 ## [2.6.4] - 2021-02-21
 ### Fixed

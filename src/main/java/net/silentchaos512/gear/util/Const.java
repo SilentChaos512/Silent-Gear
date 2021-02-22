@@ -180,6 +180,7 @@ public final class Const {
         // Misc constants
         public static final float ANCIENT_XP_BOOST = 0.25f;
         public static final float MOONWALKER_GRAVITY_MOD = -0.15f;
+        public static final float STELLAR_REPAIR_CHANCE = 0.02f;
         @Deprecated
         public static final float SYNERGY_BOOST_MULTI = 0.04f;
 

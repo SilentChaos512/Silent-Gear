@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -44,6 +45,7 @@ import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -264,9 +266,9 @@ public final class TraitHelper {
      * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ResourceLocation)} or
      * {@link #hasTrait(ItemStack, ResourceLocation)} when appropriate.
      *
-     * @param gear  The item
+     * @param gear     The item
      * @param gearType
-     * @param parts The list of all parts used in constructing the gear.
+     * @param parts    The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
     public static Map<ITrait, Integer> getTraits(ItemStack gear, GearType gearType, PartDataList parts) {
@@ -369,7 +371,20 @@ public final class TraitHelper {
 
             if (trait != null) {
                 int level = tagCompound.getByte("Level");
-                trait.onUpdate(new TraitActionContext(player, level, gear), isEquipped);
+                TraitActionContext context = new TraitActionContext(player, level, gear);
+                trait.onUpdate(context, isEquipped);
+                extraTickFunctions(trait, context);
+            }
+        }
+    }
+
+    private static void extraTickFunctions(ITrait trait, TraitActionContext context) {
+        // Stellar repair
+        PlayerEntity player = context.getPlayer();
+        if (trait.getId().equals(Const.Traits.STELLAR.getId()) && player != null && player.ticksExisted % 20 == 0) {
+            float chance = Const.Traits.STELLAR_REPAIR_CHANCE * context.getTraitLevel();
+            if (MathUtils.tryPercentage(chance)) {
+                GearHelper.attemptDamage(context.getGear(), -1, player, Hand.MAIN_HAND);
             }
         }
     }

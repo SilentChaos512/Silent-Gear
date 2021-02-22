@@ -200,6 +200,8 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.SPEED, 0, 1, 2, 3)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.JUMP_BOOST, 1, 2, 3, 4)
+                .extraWikiLines(String.format("  - Has a %d%% chance per level to restore 1 durability each second",
+                        (int) (100 * Const.Traits.STELLAR_REPAIR_CHANCE)))
         );
 
         // Target Effect

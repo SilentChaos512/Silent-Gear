@@ -7,6 +7,11 @@
   "description": {
     "translate": "trait.silentgear.stellar.desc"
   },
+  "extra_wiki_lines": [
+    {
+      "text": "  - Has a 2% chance per level to restore 1 durability each second"
+    }
+  ],
   "potion_effects": {
     "armor": [
       {
