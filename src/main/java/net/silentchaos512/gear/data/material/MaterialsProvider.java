@@ -1147,6 +1147,7 @@ public class MaterialsProvider implements IDataProvider {
                 .mainStatsCommon(0, 36, 10, 35)
                 .mainStatsArmor(1, 2, 2, 1, 0, 8) //6
                 .stat(PartType.MAIN, CHARGEABILITY, 0.7f)
+                .trait(PartType.MAIN, Const.Traits.RENEW, 1, new MaterialRatioTraitCondition(0.5f))
 
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.15f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)

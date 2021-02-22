@@ -20,10 +20,7 @@ import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.gear.trait.BonusDropsTrait;
-import net.silentchaos512.gear.gear.trait.DamageTypeTrait;
-import net.silentchaos512.gear.gear.trait.CancelEffectsTrait;
-import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
+import net.silentchaos512.gear.gear.trait.*;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
@@ -39,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public class TraitsProvider implements IDataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
@@ -53,7 +51,7 @@ public class TraitsProvider implements IDataProvider {
         return "Silent Gear - Traits";
     }
 
-    @SuppressWarnings("MethodMayBeStatic")
+    @SuppressWarnings({"OverlyLongMethod", "MethodMayBeStatic"})
     protected Collection<TraitBuilder> getTraits() {
         Collection<TraitBuilder> ret = new ArrayList<>();
 
@@ -99,6 +97,10 @@ public class TraitsProvider implements IDataProvider {
                 .cancelsWith(Const.Traits.BRITTLE));
         ret.add(new DurabilityTraitBuilder(Const.Traits.STURDY, 5, -1, 0.175f)
                 .cancelsWith(Const.Traits.BRITTLE));
+
+        // Self Repair
+
+        ret.add(selfRepairTrait(Const.Traits.RENEW, 5, 0.018f, 1));
 
         // Attribute
 
@@ -288,7 +290,7 @@ public class TraitsProvider implements IDataProvider {
         return ret;
     }
 
-    protected TraitBuilder bonusDropsTraits(DataResource<ITrait> trait, int maxLevel, float chance, float multiplier, Ingredient ingredient) {
+    protected static TraitBuilder bonusDropsTraits(DataResource<ITrait> trait, int maxLevel, float chance, float multiplier, Ingredient ingredient) {
         return new TraitBuilder(trait, maxLevel, BonusDropsTrait.SERIALIZER)
                 .extraData(json -> {
                     json.addProperty("base_chance", chance);
@@ -297,7 +299,7 @@ public class TraitsProvider implements IDataProvider {
                 });
     }
 
-    protected TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, Effect... effects) {
+    protected static TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, Effect... effects) {
         JsonArray array = new JsonArray();
         for (Effect effect : effects) {
             array.add(NameUtils.from(effect).toString());
@@ -309,11 +311,19 @@ public class TraitsProvider implements IDataProvider {
                 });
     }
 
-    protected TraitBuilder damageTypeTrait(DataResource<ITrait> trait, int maxLevel, String damageType, int damageBonus) {
+    protected static TraitBuilder damageTypeTrait(DataResource<ITrait> trait, int maxLevel, String damageType, int damageBonus) {
         return new TraitBuilder(trait, maxLevel, DamageTypeTrait.SERIALIZER)
                 .extraData(json -> {
                     json.addProperty("damage_type", damageType);
                     json.addProperty("damage_bonus", damageBonus);
+                });
+    }
+
+    protected static TraitBuilder selfRepairTrait(DataResource<ITrait> trait, int maxLevel, float activationChance, int repairAmount) {
+        return new TraitBuilder(trait, maxLevel, SelfRepairTrait.SERIALIZER)
+                .extraData(json -> {
+                    json.addProperty("activation_chance", activationChance);
+                    json.addProperty("repair_amount", repairAmount);
                 });
     }
 

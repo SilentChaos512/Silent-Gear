@@ -52,6 +52,18 @@
     }
   },
   "traits": {
+    "main": [
+      {
+        "name": "silentgear:renew",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.5
+          }
+        ]
+      }
+    ],
     "grip": [
       {
         "name": "silentgear:ancient",

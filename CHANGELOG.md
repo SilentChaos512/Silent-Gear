@@ -3,7 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.6.4]
+## [Unreleased]
+### Added
+- Self repair traits, which can repair (or damage) gear gradually over time.
+- Renew trait, a self repair trait that restores durability slowly
+
+## [2.6.4] - 2021-02-21
 ### Fixed
 - Compound materials not splitting armor stats correctly [#327]
 - Colors of lumium and signalum [#318]

@@ -807,6 +807,8 @@
   "trait.silentgear.red_card": "Red Card",
   "trait.silentgear.refractive": "Refractive",
   "trait.silentgear.refractive.desc": "Place phantom lights when used",
+  "trait.silentgear.renew": "Renew",
+  "trait.silentgear.renew.desc": "Slowly repairs the item over time",
   "trait.silentgear.road_maker": "Road Maker",
   "trait.silentgear.road_maker.desc": "Turns dirt-like blocks into grass paths",
   "trait.silentgear.rustic": "Rustic",

@@ -161,6 +161,7 @@ public final class Const {
         public static final DataResource<ITrait> REACH = DataResource.trait("reach");
         public static final DataResource<ITrait> RED_CARD = DataResource.trait("red_card");
         public static final DataResource<ITrait> REFRACTIVE = DataResource.trait("refractive");
+        public static final DataResource<ITrait> RENEW = DataResource.trait("renew");
         public static final DataResource<ITrait> ROAD_MAKER = DataResource.trait("road_maker");
         public static final DataResource<ITrait> RUSTIC = DataResource.trait("rustic");
         public static final DataResource<ITrait> SHARP = DataResource.trait("sharp");
