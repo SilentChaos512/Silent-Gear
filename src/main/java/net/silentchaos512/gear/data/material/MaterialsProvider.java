@@ -1144,7 +1144,8 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(modId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
 
-                .mainStatsCommon(0, 36, 10, 35)
+                .mainStatsCommon(0, 13, 10, 35)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.ELYTRA, 36)
                 .mainStatsArmor(1, 2, 2, 1, 0, 8) //6
                 .stat(PartType.MAIN, CHARGEABILITY, 0.7f)
                 .trait(PartType.MAIN, Const.Traits.RENEW, 1, new MaterialRatioTraitCondition(0.5f))
@@ -1165,7 +1166,8 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(modId("fine_silk_cloth"), 2, CraftingItems.FINE_SILK_CLOTH)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
 
-                .mainStatsCommon(0, 42, 14, 40)
+                .mainStatsCommon(0, 15, 14, 40)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.ELYTRA, 42)
                 .mainStatsArmor(1, 2, 2, 1, 0, 14) //6
                 .stat(PartType.MAIN, CHARGEABILITY, 0.9f)
 
