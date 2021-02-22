@@ -335,6 +335,10 @@ public class MaterialBuilder {
 
     @SuppressWarnings({"MethodWithTooManyParameters", "OverlyComplexMethod"})
     public MaterialBuilder mainStatsArmor(float head, float chest, float legs, float feet, float toughness, float magicArmor) {
+        if (this.stats.get(PartType.MAIN).containsKey(StatGearKey.of(ItemStats.ARMOR, GearType.ALL))) {
+            throw new IllegalStateException("Called mainStatsArmor when armor stat is already defined");
+        }
+
         if (head > 0 && chest > 0 && legs > 0 && feet > 0) {
             float sum = head + chest + legs + feet;
             stat(PartType.MAIN, ItemStats.ARMOR, sum);
