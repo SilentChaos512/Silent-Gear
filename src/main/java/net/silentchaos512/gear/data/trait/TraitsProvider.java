@@ -61,16 +61,24 @@ public class TraitsProvider implements IDataProvider {
         ret.add(TraitBuilder.simple(Const.Traits.BRILLIANT, 1));
         ret.add(TraitBuilder.simple(Const.Traits.CONFETTI, 5));
         ret.add(TraitBuilder.simple(Const.Traits.FLAMMABLE, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.INDESTRUCTIBLE, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.JABBERWOCKY, 1));
+        ret.add(TraitBuilder.simple(Const.Traits.INDESTRUCTIBLE, 1)
+                .extraWikiLines("  - The damage (durability lost) of the item will remain the same as when the trait was added",
+                        "  - The item can still be repaired if desired"));
+        ret.add(TraitBuilder.simple(Const.Traits.JABBERWOCKY, 1)
+                .extraWikiLines("Something may happen if you mine certain blocks with this"));
         ret.add(TraitBuilder.simple(Const.Traits.LUSTROUS, 5));
-        ret.add(TraitBuilder.simple(Const.Traits.MAGMATIC, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.MAGNETIC, 5));
-        ret.add(TraitBuilder.simple(Const.Traits.MULTI_BREAK, 5));
+        ret.add(TraitBuilder.simple(Const.Traits.MAGMATIC, 1)
+                .extraWikiLines("Smelted drops are not affected by fortune to prevent item duplication"));
+        ret.add(TraitBuilder.simple(Const.Traits.MAGNETIC, 5)
+                .extraWikiLines("Higher levels increase range"));
+        ret.add(TraitBuilder.simple(Const.Traits.MULTI_BREAK, 5)
+                .extraWikiLines("  - This trait has never been coded ~~and has almost achieved meme status~~",
+                        "  - Intended effect: mine multiple blocks like vein miner"));
         ret.add(TraitBuilder.simple(Const.Traits.RED_CARD, 1));
         ret.add(TraitBuilder.simple(Const.Traits.SPOON, 1));
         ret.add(TraitBuilder.simple(Const.Traits.TURTLE, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.VOID_WARD, 1));
+        ret.add(TraitBuilder.simple(Const.Traits.VOID_WARD, 1)
+                .extraWikiLines("When void damage is taken, the player is launched upward and given a levitation and slow falling effect"));
 
         // Synergy
 

@@ -6,5 +6,10 @@
   },
   "description": {
     "translate": "trait.silentgear.jabberwocky.desc"
-  }
+  },
+  "extra_wiki_lines": [
+    {
+      "text": "Something may happen if you mine certain blocks with this"
+    }
+  ]
 }
