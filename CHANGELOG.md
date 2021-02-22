@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.4]
 ### Fixed
 - Compound materials not splitting armor stats correctly [#327]
+- Colors of lumium and signalum [#318]
 - Armor displaying toughness and magic armor values incorrectly
 - Armor plates showing some incorrect stats, including the wrong durability stat
 
