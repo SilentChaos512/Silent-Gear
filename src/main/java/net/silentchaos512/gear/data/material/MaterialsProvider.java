@@ -1887,7 +1887,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, Const.Traits.REFRACTIVE, 1,
                         new MaterialRatioTraitCondition(0.5f),
                         new GearTypeTraitCondition(GearType.TOOL))
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFFD789)
         );
         // Nickel
         ret.add(extraMetal("nickel", 2, forgeId("ingots/nickel"))
@@ -2112,7 +2112,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, Const.Traits.LUSTROUS, 4)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 4)
                 .trait(PartType.ROD, Const.Traits.LUSTROUS, 2)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x468C75)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF5E28)
         );
         // Silver
         ret.add(extraMetal("silver", 2, forgeId("ingots/silver"))
