@@ -289,9 +289,16 @@ public final class TooltipHandler {
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
         GearType gearType = getPartGearType(part);
-
         TextListBuilder builder = new TextListBuilder();
-        for (ItemStat stat : part.getGearType().getRelevantStats()) {
+
+        List<ItemStat> relevantStats = new ArrayList<>(part.getGearType().getRelevantStats());
+        if (part.getGearType().isArmor() && relevantStats.contains(ItemStats.DURABILITY)) {
+            int index = relevantStats.indexOf(ItemStats.DURABILITY);
+            relevantStats.remove(ItemStats.DURABILITY);
+            relevantStats.add(index, ItemStats.ARMOR_DURABILITY);
+        }
+
+        for (ItemStat stat : relevantStats) {
             Collection<StatInstance> modifiers = new ArrayList<>();
             for (StatInstance mod : part.getStatModifiers(StatGearKey.of(stat, gearType), ItemStack.EMPTY)) {
                 if (mod.getOp() == StatInstance.Operation.AVG) {
