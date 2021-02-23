@@ -1,0 +1,10 @@
+{
+  "type": "silentgear:simple_trait",
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.bounce"
+  },
+  "description": {
+    "translate": "trait.silentgear.bounce.desc"
+  }
+}

@@ -721,6 +721,8 @@
   "trait.silentgear.aquatic.desc": "Full set of armor gives water breathing, deals more damage to aquatic mobs",
   "trait.silentgear.bastion": "Bastion",
   "trait.silentgear.bastion.desc": "Provides bonus armor",
+  "trait.silentgear.bounce": "Bounce",
+  "trait.silentgear.bounce.desc": "Boots negate fall damage, armor knocks back attackers",
   "trait.silentgear.brilliant": "Brilliant",
   "trait.silentgear.brilliant.desc": "Shiny! Piglin like.",
   "trait.silentgear.brittle": "Brittle",

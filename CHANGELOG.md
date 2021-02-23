@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Self repair traits, which can repair (or damage) gear gradually over time.
 - Renew trait, a self repair trait that restores durability slowly. Level 1 given to phantom membrane material.
+- Bounce trait. On boots, it nullifies fall damage, consuming durability based on the fall distance. On armor, it knocks back attackers.
+  - Found on slime lining (existing items in your inventory will gain the trait)
+  - Note: This is also intended to cause the wearer to bounce, as if they landed on slime blocks. This does not work well, so that code is currently disabled.
 ### Changed
 - Manually split the armor stats of extra mod metals and made some slight tweaks on some
+- Slime material now requires slime blocks instead of balls
 ### Fixed
 - Stellar trait not repairing items, now set to 2% chance per level per second [#312]
 - Magnetic trait's pull strength (was cut in half by a recent update)

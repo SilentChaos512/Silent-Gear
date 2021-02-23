@@ -47,11 +47,10 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.LightType;
@@ -81,10 +80,7 @@ import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.util.EntityHelper;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 @Mod.EventBusSubscriber
@@ -428,9 +424,8 @@ public final class GearEvents {
     public static void onLivingFall(LivingFallEvent event) {
         ItemStack stack = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET);
 
-        if (!stack.isEmpty()) {
-            // TODO: Add a dedicated fall protection trait
-            //  Slime armor linings?
+        if (event.getDistance() > 3 && GearHelper.isGear(stack) && !GearHelper.isBroken(stack)) {
+            // Moonwalker fall damage canceling/reduction
             int moonwalker = TraitHelper.getTraitLevel(stack, Const.Traits.MOONWALKER);
             if (moonwalker > 0) {
                 float gravity = 1 + moonwalker * Const.Traits.MOONWALKER_GRAVITY_MOD;
@@ -438,6 +433,67 @@ public final class GearEvents {
 
                 if (event.getEntityLiving() instanceof ServerPlayerEntity) {
                     LibTriggers.GENERIC_INT.trigger((ServerPlayerEntity) event.getEntityLiving(), FALL_WITH_MOONWALKER, 1);
+                }
+            }
+
+            // Bounce fall damage nullification and bouncing
+            // FIXME: bounce is very unpredictable. Usually it does not work at all. The few times
+            //  it does, the bounce height is inconsistent
+            int bounce = TraitHelper.getTraitLevel(stack, Const.Traits.BOUNCE);
+            if (bounce > 0) {
+                if (!event.getEntity().isSuppressingBounce()) {
+//                    bounceEntity(event.getEntity());
+                    int damage = (int) (event.getDistance() / 3) - 1;
+                    GearHelper.attemptDamage(stack, damage, event.getEntityLiving(), EquipmentSlotType.FEET);
+                    event.getEntity().world.playSound(null, event.getEntity().getPosition(), SoundEvents.BLOCK_SLIME_BLOCK_FALL, SoundCategory.PLAYERS, 1f, 1f);
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    private static final Map<Entity, Vector3d> BOUNCE_TICKS = new HashMap<>();
+
+//    @SubscribeEvent
+    public static void onPlayerTickBouncing(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && !event.player.isElytraFlying() && BOUNCE_TICKS.containsKey(event.player)) {
+//            event.player.moveForced(event.player.getPosX(), event.player.getPosY() + 0.1, event.player.getPosZ());
+            Vector3d motion = BOUNCE_TICKS.get(event.player);
+            event.player.setMotion(motion.x, motion.y * 20, motion.z); // why * 20?
+            event.player.setOnGround(false);
+            BOUNCE_TICKS.remove(event.player);
+            SilentGear.LOGGER.debug("bounce {}", motion);
+
+            if (event.player.getMotion().y < 0) {
+                bounceEntity(event.player);
+            }
+        }
+    }
+
+    private static void bounceEntity(Entity entity) {
+        Vector3d vector3d = entity.getMotion();
+        if (vector3d.y < 0) {
+//            entity.moveForced(entity.getPosX(), entity.getPosY() + 0.1, entity.getPosZ());
+//            entity.setOnGround(false);
+            Vector3d vec = new Vector3d(vector3d.x, -vector3d.y * 0.75, vector3d.z);
+//            entity.setMotion(vec);
+            SilentGear.LOGGER.debug("{} -> {}", vector3d, vec);
+            BOUNCE_TICKS.put(entity, vec);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerHurt(LivingHurtEvent event) {
+        if (event.getEntityLiving() instanceof PlayerEntity) {
+            Entity source = event.getSource().getImmediateSource();
+            if (source instanceof LivingEntity) {
+                PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+                int bounce = TraitHelper.getHighestLevelArmor(player, Const.Traits.BOUNCE);
+                if (bounce > 0) {
+                    SilentGear.LOGGER.debug("knockback");
+                    ((LivingEntity) source).applyKnockback(2 * bounce,
+                            -MathHelper.sin(source.rotationYaw * ((float)Math.PI / 180F)),
+                            MathHelper.cos(source.rotationYaw * ((float)Math.PI / 180F)));
                 }
             }
         }

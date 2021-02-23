@@ -58,6 +58,7 @@ public class TraitsProvider implements IDataProvider {
         // Simple
 
         ret.add(TraitBuilder.simple(Const.Traits.ANCIENT, 5));
+        ret.add(TraitBuilder.simple(Const.Traits.BOUNCE, 1));
         ret.add(TraitBuilder.simple(Const.Traits.BRILLIANT, 1));
         ret.add(TraitBuilder.simple(Const.Traits.CONFETTI, 5));
         ret.add(TraitBuilder.simple(Const.Traits.FLAMMABLE, 1));

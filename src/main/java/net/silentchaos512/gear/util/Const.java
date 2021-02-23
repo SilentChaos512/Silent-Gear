@@ -118,6 +118,7 @@ public final class Const {
         public static final DataResource<ITrait> ANCIENT = DataResource.trait("ancient");
         public static final DataResource<ITrait> AQUATIC = DataResource.trait("aquatic");
         public static final DataResource<ITrait> BASTION = DataResource.trait("bastion");
+        public static final DataResource<ITrait> BOUNCE = DataResource.trait("bounce");
         public static final DataResource<ITrait> BRILLIANT = DataResource.trait("brilliant");
         public static final DataResource<ITrait> BRITTLE = DataResource.trait("brittle");
         public static final DataResource<ITrait> BULKY = DataResource.trait("bulky");

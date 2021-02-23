@@ -1380,11 +1380,11 @@ public class MaterialsProvider implements IDataProvider {
                 .display(PartType.FLETCHING, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
         );
         // Slime
-        ret.add(new MaterialBuilder(modId("slime"), 1, Items.SLIME_BALL)
+        ret.add(new MaterialBuilder(modId("slime"), 1, Items.SLIME_BLOCK)
                 .categories(MaterialCategories.SLIME, MaterialCategories.ORGANIC)
                 .stat(PartType.LINING, ItemStats.ARMOR_TOUGHNESS, 0.5f, StatInstance.Operation.ADD)
-                .display(PartType.LINING,
-                        GearType.PART,
+                .trait(PartType.LINING, Const.Traits.BOUNCE, 1, new GearTypeTraitCondition(GearType.ARMOR))
+                .display(PartType.LINING, GearType.PART,
                         new MaterialLayer(PartTextures.LINING_SLIME, 0x8CD782),
                         new MaterialLayer(modId("lining_slime_highlight"), Color.VALUE_WHITE))
                 .displayFragment(PartTextures.DUST, 0x8CD782)

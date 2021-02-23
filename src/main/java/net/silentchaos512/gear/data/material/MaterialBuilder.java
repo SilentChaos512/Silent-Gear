@@ -249,7 +249,7 @@ public class MaterialBuilder {
         return display(partType, GearType.ALL, layers);
     }
 
-    public MaterialBuilder display(PartType partType, GearType gearType, MaterialLayer... layers) {
+    public MaterialBuilder display(PartType partType, GearType gearType, MaterialLayer... layers) { // TODO: use PartGearKey parameter?
         return display(partType, gearType, new MaterialLayerList(layers));
     }
 
@@ -272,7 +272,7 @@ public class MaterialBuilder {
         return stat(partType, stat, GearType.ALL, value, StatInstance.Operation.AVG);
     }
 
-    public MaterialBuilder stat(PartType partType, IItemStat stat, GearType gearType, float value) {
+    public MaterialBuilder stat(PartType partType, IItemStat stat, GearType gearType, float value) { // TODO: use PartGearKey parameter?
         return stat(partType, stat, gearType, value, StatInstance.Operation.AVG);
     }
 
@@ -367,6 +367,7 @@ public class MaterialBuilder {
         return this;
     }
 
+    @Deprecated
     public MaterialBuilder trait(PartType partType, ResourceLocation traitId, int level, ITraitCondition... conditions) {
         ITraitInstance inst = TraitInstance.lazy(traitId, level, conditions);
         List<ITraitInstance> list = traits.computeIfAbsent(partType, pt -> new ArrayList<>());
