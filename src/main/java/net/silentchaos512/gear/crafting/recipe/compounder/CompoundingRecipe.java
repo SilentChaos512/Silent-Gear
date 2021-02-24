@@ -24,7 +24,9 @@ import net.silentchaos512.gear.item.CustomMaterialItem;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
@@ -38,25 +40,34 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
 
     @Override
     public boolean matches(CompounderTileEntity inv, World worldIn) {
-        int matches = 0;
+        Set<Integer> matches = new HashSet<>();
         int inputs = 0;
 
         for (int i = 0; i < inv.getInputSlotCount(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
-
-            if (!stack.isEmpty()) {
+            if (!inv.getStackInSlot(i).isEmpty()) {
                 ++inputs;
-
-                for (Ingredient ingredient : this.ingredients) {
-                    if (ingredient.test(stack)) {
-                        ++matches;
-                        break;
-                    }
-                }
             }
         }
 
-        return matches == inputs && matches == this.ingredients.size();
+        for (Ingredient ingredient : this.ingredients) {
+            boolean found = false;
+
+            for (int i = 0; i < inv.getInputSlotCount(); ++i) {
+                ItemStack stack = inv.getStackInSlot(i);
+
+                if (!stack.isEmpty() && ingredient.test(stack)) {
+                    found = true;
+                    matches.add(i);
+                }
+            }
+
+            if (!found) {
+                return false;
+            }
+        }
+
+        int matchCount = matches.size();
+        return matchCount == inputs && matchCount == this.ingredients.size();
     }
 
     @Override
