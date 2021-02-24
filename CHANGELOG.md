@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bounce trait. On boots, it nullifies fall damage, consuming durability based on the fall distance. On armor, it knocks back attackers.
   - Found on slime lining (existing items in your inventory will gain the trait)
   - Note: This is also intended to cause the wearer to bounce, as if they landed on slime blocks. This does not work well, so that code is currently disabled.
+- Traits can now specify conditions. Trait instances on materials and parts can still have conditions as well, but most of the `gear_type` conditions have moved to the trait files.
 ### Changed
 - Manually split the armor stats of extra mod metals and made some slight tweaks on some
 - Slime material now requires slime blocks instead of balls

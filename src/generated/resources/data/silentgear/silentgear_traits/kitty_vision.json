@@ -1,6 +1,21 @@
 {
   "type": "silentgear:potion_effect_trait",
   "max_level": 1,
+  "conditions": [
+    {
+      "type": "silentgear:or",
+      "values": [
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "helmet"
+        },
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "curio"
+        }
+      ]
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.kitty_vision"
   },

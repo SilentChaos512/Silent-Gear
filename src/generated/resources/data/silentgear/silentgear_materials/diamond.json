@@ -88,10 +88,6 @@
         "level": 1,
         "conditions": [
           {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          },
-          {
             "type": "silentgear:or",
             "values": [
               {
@@ -122,10 +118,6 @@
         "name": "silentgear:lustrous",
         "level": 4,
         "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          },
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.5

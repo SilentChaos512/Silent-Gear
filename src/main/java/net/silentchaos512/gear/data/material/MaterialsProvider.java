@@ -189,15 +189,10 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.3f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 41, StatInstance.Operation.ADD)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
-                .trait(PartType.MAIN, Const.Traits.ACCELERATE, 3,
-                        new MaterialRatioTraitCondition(0.35f),
-                        new GearTypeTraitCondition(GearType.TOOL))
-                .trait(PartType.MAIN, Const.Traits.LIGHT, 4,
-                        new MaterialRatioTraitCondition(0.5f),
-                        new GearTypeTraitCondition(GearType.ARMOR))
+                .trait(PartType.MAIN, Const.Traits.ACCELERATE, 3, new MaterialRatioTraitCondition(0.35f))
+                .trait(PartType.MAIN, Const.Traits.LIGHT, 4, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
-                .trait(PartType.ROD, Const.Traits.ACCELERATE, 5,
-                        new MaterialRatioTraitCondition(0.66f))
+                .trait(PartType.ROD, Const.Traits.ACCELERATE, 5, new MaterialRatioTraitCondition(0.66f))
                 .trait(PartType.TIP, Const.Traits.MALLEABLE, 3)
                 //.trait(PartType.TIP, Const.Traits.ACCELERATE, 2)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x4575E3)
@@ -234,8 +229,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 31, StatInstance.Operation.ADD)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
                 .trait(PartType.MAIN, Const.Traits.SOFT, 2)
-                .trait(PartType.MAIN, Const.Traits.MOONWALKER, 4,
-                        new GearTypeTraitCondition(GearType.BOOTS), new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.MAIN, Const.Traits.MOONWALKER, 4, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
                 .trait(PartType.TIP, Const.Traits.MALLEABLE, 3)
                 .trait(PartType.TIP, Const.Traits.SOFT, 2)
@@ -285,7 +279,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.SYNERGISTIC, 2)
                 .trait(PartType.TIP, Const.Traits.SOFT, 2)
-                .trait(PartType.TIP, Const.Traits.FIERY, 4, new GearTypeTraitCondition(GearType.WEAPON))
+                .trait(PartType.TIP, Const.Traits.FIERY, 4)
                 .trait(PartType.COATING, Const.Traits.BRILLIANT, 1)
                 .trait(PartType.COATING, Const.Traits.SOFT, 2)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE48534)
@@ -326,7 +320,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
                 .trait(PartType.MAIN, Const.Traits.HARD, 2)
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 3, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.TIP, Const.Traits.FIERY, 1, new GearTypeTraitCondition(GearType.WEAPON))
+                .trait(PartType.TIP, Const.Traits.FIERY, 1)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF6189)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFF6189)
                 .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
@@ -360,12 +354,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
                 .trait(PartType.MAIN, Const.Traits.HARD, 3)
-                .trait(PartType.MAIN, Const.Traits.FLAME_WARD, 1,
-                        new GearTypeTraitCondition(GearType.ARMOR),
-                        materialCountOrRatio(3, 0.33f)
-                )
+                .trait(PartType.MAIN, Const.Traits.FLAME_WARD, 1, materialCountOrRatio(3, 0.33f))
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 5, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.TIP, Const.Traits.MAGMATIC, 1, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
+                .trait(PartType.TIP, Const.Traits.MAGMATIC, 1)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC143C)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xDC143C)
                 .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
@@ -387,13 +378,10 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 5, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.RARITY, 30, StatInstance.Operation.ADD)
                 .trait(PartType.MAIN, Const.Traits.STURDY, 3, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.MAIN, Const.Traits.VOID_WARD, 1,
-                        new GearTypeTraitCondition(GearType.ARMOR),
-                        materialCountOrRatio(3, 0.5f)
-                )
+                .trait(PartType.MAIN, Const.Traits.VOID_WARD, 1, materialCountOrRatio(3, 0.5f))
                 .trait(PartType.ROD, Const.Traits.STURDY, 4, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.TIP, Const.Traits.IMPERIAL, 3, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
-                .trait(PartType.TIP, Const.Traits.GOLD_DIGGER, 3, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
+                .trait(PartType.TIP, Const.Traits.IMPERIAL, 3)
+                .trait(PartType.TIP, Const.Traits.GOLD_DIGGER, 3)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB01080)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xB01080)
                 .displayTip(PartTextures.TIP_SHARP, 0xB01080)
@@ -536,15 +524,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
-                .trait(PartType.MAIN, Const.Traits.LUSTROUS, 1,
-                        new GearTypeTraitCondition(GearType.HARVEST_TOOL),
-                        materialCountOrRatio(3, 0.5f)
-                )
+                .trait(PartType.MAIN, Const.Traits.LUSTROUS, 1, materialCountOrRatio(3, 0.5f))
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 5, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.LUSTROUS, 4,
-                        new GearTypeTraitCondition(GearType.HARVEST_TOOL),
-                        new MaterialRatioTraitCondition(0.5f)
-                )
+                .trait(PartType.ROD, Const.Traits.LUSTROUS, 4, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.BRITTLE, 2)
                 .trait(PartType.TIP, Const.Traits.LUSTROUS, 2)
                 .trait(PartType.ADORNMENT, Const.Traits.BASTION, 1)
@@ -620,17 +602,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.3f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .noStats(PartType.ADORNMENT)
-                .trait(PartType.TIP, Const.Traits.HOLY, 1, new OrTraitCondition(
-                        new GearTypeTraitCondition(GearType.WEAPON),
-                        new MaterialRatioTraitCondition(0.75f)
-                ))
-                .trait(PartType.TIP, Const.Traits.LUCKY, 4, new OrTraitCondition(
-                        new GearTypeTraitCondition(GearType.TOOL),
-                        new GearTypeTraitCondition(GearType.WEAPON),
-                        new MaterialRatioTraitCondition(0.75f)
-                ))
-                .trait(PartType.ADORNMENT, Const.Traits.LUCKY, 3,
-                        new MaterialRatioTraitCondition(0.75f))
+                .trait(PartType.TIP, Const.Traits.HOLY, 1, new MaterialRatioTraitCondition(0.75f))
+                .trait(PartType.TIP, Const.Traits.LUCKY, 4, new MaterialRatioTraitCondition(0.75f))
+                .trait(PartType.ADORNMENT, Const.Traits.LUCKY, 3, new MaterialRatioTraitCondition(0.75f))
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x224BAF)
                 .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
                 .displayAdornment(PartTextureSet.LOW_CONTRAST, 0x224BAF)
@@ -705,10 +679,8 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_SPEED, 0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.RARITY, 15, StatInstance.Operation.ADD)
-                .trait(PartType.TIP, Const.Traits.REFRACTIVE, 1, new OrTraitCondition(
-                        new GearTypeTraitCondition(GearType.HARVEST_TOOL), new GearTypeTraitCondition(GearType.MELEE_WEAPON)
-                ))
-                .trait(PartType.TIP, Const.Traits.LUSTROUS, 4, new GearTypeTraitCondition(GearType.HARVEST_TOOL))
+                .trait(PartType.TIP, Const.Traits.REFRACTIVE, 1)
+                .trait(PartType.TIP, Const.Traits.LUSTROUS, 4)
                 .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
                 .displayFragment(PartTextures.DUST, 0xD2D200)
         );
@@ -725,6 +697,7 @@ public class MaterialsProvider implements IDataProvider {
         );
     }
 
+    @SuppressWarnings("OverlyLongMethod")
     private void addStones(Collection<MaterialBuilder> ret) {
         // Basalt
         ret.add(new MaterialBuilder(modId("basalt"), 1, Items.BASALT)
@@ -1383,7 +1356,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(new MaterialBuilder(modId("slime"), 1, Items.SLIME_BLOCK)
                 .categories(MaterialCategories.SLIME, MaterialCategories.ORGANIC)
                 .stat(PartType.LINING, ItemStats.ARMOR_TOUGHNESS, 0.5f, StatInstance.Operation.ADD)
-                .trait(PartType.LINING, Const.Traits.BOUNCE, 1, new GearTypeTraitCondition(GearType.ARMOR))
+                .trait(PartType.LINING, Const.Traits.BOUNCE, 1)
                 .display(PartType.LINING, GearType.PART,
                         new MaterialLayer(PartTextures.LINING_SLIME, 0x8CD782),
                         new MaterialLayer(modId("lining_slime_highlight"), Color.VALUE_WHITE))
@@ -1431,10 +1404,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 25, StatInstance.Operation.ADD)
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
-                .trait(PartType.MAIN, Const.Traits.GOLD_DIGGER, 2,
-                        new GearTypeTraitCondition(GearType.HARVEST_TOOL),
-                        materialCountOrRatio(3, 0.5f)
-                )
+                .trait(PartType.MAIN, Const.Traits.GOLD_DIGGER, 2, materialCountOrRatio(3, 0.5f))
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 4, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.ANCIENT, 3, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.IMPERIAL, 2)
@@ -1676,9 +1646,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.05f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 35)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.ADAMANT, 1,
-                        new GearTypeTraitCondition(GearType.ARMOR),
-                        new MaterialRatioTraitCondition(0.35f))
+                .trait(PartType.MAIN, Const.Traits.ADAMANT, 1, new MaterialRatioTraitCondition(0.35f))
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 3)
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD96121)
         );
@@ -1704,9 +1672,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 2)
                 .trait(PartType.MAIN, Const.Traits.HARD, 3)
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 2)
-                .trait(PartType.ROD, Const.Traits.MAGNETIC, 4,
-                        new GearTypeTraitCondition(GearType.TOOL),
-                        new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.ROD, Const.Traits.MAGNETIC, 4, new MaterialRatioTraitCondition(0.5f))
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA6A6A6)
         );
         // Copper
@@ -1802,9 +1768,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 50)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.ADAMANT, 2,
-                        materialCountOrRatio(3, 0.35f),
-                        new GearTypeTraitCondition(GearType.ARMOR))
+                .trait(PartType.MAIN, Const.Traits.ADAMANT, 2, materialCountOrRatio(3, 0.35f))
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 3)
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC2CBB8)
         );
@@ -1828,9 +1792,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 40)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 2)
-                .trait(PartType.MAIN, Const.Traits.AQUATIC, 2,
-                        materialCountOrRatio(3, 0.35f),
-                        new GearTypeTraitCondition(GearType.ARMOR))
+                .trait(PartType.MAIN, Const.Traits.AQUATIC, 2, materialCountOrRatio(3, 0.35f))
                 .trait(PartType.ROD, Const.Traits.SOFT, 4)
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xC2CBB8)
         );
@@ -1855,13 +1817,9 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.RANGED_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 75)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.REFRACTIVE, 1,
-                        new MaterialRatioTraitCondition(0.5f),
-                        new GearTypeTraitCondition(GearType.TOOL))
+                .trait(PartType.MAIN, Const.Traits.REFRACTIVE, 1, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.ROD, Const.Traits.REFRACTIVE, 1,
-                        new MaterialRatioTraitCondition(0.5f),
-                        new GearTypeTraitCondition(GearType.TOOL))
+                .trait(PartType.ROD, Const.Traits.REFRACTIVE, 1, new MaterialRatioTraitCondition(0.5f))
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFFD789)
         );
         // Nickel
@@ -1884,9 +1842,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 40)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.ADAMANT, 1,
-                        materialCountOrRatio(3, 0.35f),
-                        new GearTypeTraitCondition(GearType.ARMOR))
+                .trait(PartType.MAIN, Const.Traits.ADAMANT, 1, materialCountOrRatio(3, 0.35f))
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 3)
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xEFE87B)
         );
@@ -1986,9 +1942,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 2)
                 .trait(PartType.MAIN, Const.Traits.LUSTROUS, 4)
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 4)
-                .trait(PartType.ROD, Const.Traits.LUSTROUS, 1,
-                        new GearTypeTraitCondition(GearType.TOOL),
-                        new MaterialRatioTraitCondition(0.75f))
+                .trait(PartType.ROD, Const.Traits.LUSTROUS, 1, new MaterialRatioTraitCondition(0.75f))
                 .trait(PartType.TIP, Const.Traits.REFRACTIVE, 1)
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDE054)
         );
@@ -2015,9 +1969,7 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 4)
                 .trait(PartType.MAIN, Const.Traits.STELLAR, 1)
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 4)
-                .trait(PartType.ROD, Const.Traits.MAGNETIC, 3,
-                        new GearTypeTraitCondition(GearType.TOOL),
-                        new MaterialRatioTraitCondition(0.35f))
+                .trait(PartType.ROD, Const.Traits.MAGNETIC, 3, new MaterialRatioTraitCondition(0.35f))
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD7D7D7)
         );
         // Refined obsidian

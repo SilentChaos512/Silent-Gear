@@ -89,10 +89,6 @@
         "level": 2,
         "conditions": [
           {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          },
-          {
             "type": "silentgear:or",
             "values": [
               {

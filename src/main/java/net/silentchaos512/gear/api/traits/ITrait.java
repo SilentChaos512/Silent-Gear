@@ -31,6 +31,8 @@ public interface ITrait {
 
     int getMaxLevel();
 
+    Collection<ITraitCondition> getConditions();
+
     boolean willCancelWith(ITrait other);
 
     default int getCanceledLevel(int level, ITrait other, int otherLevel) {

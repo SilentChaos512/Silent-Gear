@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.gear.trait;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -22,6 +23,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 
@@ -37,6 +39,7 @@ public class SimpleTrait implements ITrait {
     private final ResourceLocation objId;
     private final ITraitSerializer<?> serializer;
     int maxLevel;
+    ImmutableList<ITraitCondition> conditions = ImmutableList.of();
     Set<String> cancelsWith = new HashSet<>();
     ITextComponent displayName;
     ITextComponent description;
@@ -61,6 +64,11 @@ public class SimpleTrait implements ITrait {
     @Override
     public int getMaxLevel() {
         return maxLevel;
+    }
+
+    @Override
+    public Collection<ITraitCondition> getConditions() {
+        return conditions;
     }
 
     @Override
@@ -210,6 +218,15 @@ public class SimpleTrait implements ITrait {
             trait.displayName = deserializeText(json.get("name"));
             trait.description = deserializeText(json.get("description"));
             trait.hidden = JSONUtils.getBoolean(json, "hidden", false);
+
+            if (json.has("conditions")) {
+                List<ITraitCondition> conditions = new ArrayList<>();
+                JsonArray array = json.getAsJsonArray("conditions");
+                for (JsonElement elem : array) {
+                    conditions.add(TraitSerializers.deserializeCondition(elem.getAsJsonObject()));
+                }
+                trait.conditions = ImmutableList.copyOf(conditions);
+            }
 
             if (json.has("cancels_with")) {
                 JsonArray array = json.getAsJsonArray("cancels_with");

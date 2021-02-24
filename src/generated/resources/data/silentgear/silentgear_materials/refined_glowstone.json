@@ -83,10 +83,6 @@
         "level": 1,
         "conditions": [
           {
-            "type": "silentgear:gear_type",
-            "gear_type": "tool"
-          },
-          {
             "type": "silentgear:material_ratio",
             "ratio": 0.75
           }

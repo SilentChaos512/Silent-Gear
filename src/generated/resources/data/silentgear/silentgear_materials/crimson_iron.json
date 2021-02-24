@@ -105,13 +105,7 @@
     "tip": [
       {
         "name": "silentgear:fiery",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "weapon"
-          }
-        ]
+        "level": 1
       }
     ]
   }

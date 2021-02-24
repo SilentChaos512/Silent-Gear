@@ -18,6 +18,8 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 import net.silentchaos512.gear.util.TextUtil;
@@ -71,6 +73,16 @@ public class OrTraitCondition implements ITraitCondition {
     public boolean matches(ItemStack gear, GearType gearType, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         for (ITraitCondition child : this.children) {
             if (child.matches(gear, gearType, partType, materials, trait)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<IGearComponentInstance<?>> components) {
+        for (ITraitCondition child : this.children) {
+            if (child.matches(trait, key, gear, components)) {
                 return true;
             }
         }

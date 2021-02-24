@@ -1,6 +1,12 @@
 {
   "type": "silentgear:bonus_drops",
   "max_level": 5,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "harvest_tool"
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.gold_digger"
   },

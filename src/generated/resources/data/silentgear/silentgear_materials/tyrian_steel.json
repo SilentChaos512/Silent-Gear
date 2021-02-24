@@ -75,10 +75,6 @@
         "level": 1,
         "conditions": [
           {
-            "type": "silentgear:gear_type",
-            "gear_type": "armor"
-          },
-          {
             "type": "silentgear:or",
             "values": [
               {
@@ -109,23 +105,11 @@
     "tip": [
       {
         "name": "silentgear:imperial",
-        "level": 3,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          }
-        ]
+        "level": 3
       },
       {
         "name": "silentgear:gold_digger",
-        "level": 3,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          }
-        ]
+        "level": 3
       }
     ]
   }

@@ -71,10 +71,6 @@
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.5
-          },
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "tool"
           }
         ]
       }
@@ -91,10 +87,6 @@
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.5
-          },
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "tool"
           }
         ]
       }

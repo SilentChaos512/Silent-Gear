@@ -13,11 +13,14 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
 
+@Deprecated
 public class PrimaryMaterialTraitCondition implements ITraitCondition {
     public static final Serializer SERIALIZER = new Serializer();
     private static final ResourceLocation NAME = SilentGear.getId("primary_material");
@@ -43,6 +46,18 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
         for (TraitInstance t : materials.get(0).getTraits(partType, gearType, gear)) {
             if (t.getTrait() == trait) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<IGearComponentInstance<?>> components) {
+        if (!components.isEmpty()) {
+            for (TraitInstance t : components.get(0).getTraits(key, gear)) {
+                if (t.getTrait() == trait) {
+                    return true;
+                }
             }
         }
         return false;

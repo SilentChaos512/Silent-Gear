@@ -57,18 +57,24 @@ public class TraitsProvider implements IDataProvider {
 
         // Simple
 
-        ret.add(TraitBuilder.simple(Const.Traits.ANCIENT, 5));
-        ret.add(TraitBuilder.simple(Const.Traits.BOUNCE, 1));
+        ret.add(TraitBuilder.simple(Const.Traits.ANCIENT, 5)
+                .withGearTypeCondition(GearType.TOOL));
+        ret.add(TraitBuilder.simple(Const.Traits.BOUNCE, 1)
+                .withGearTypeCondition(GearType.ARMOR));
         ret.add(TraitBuilder.simple(Const.Traits.BRILLIANT, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.CONFETTI, 5));
+        ret.add(TraitBuilder.simple(Const.Traits.CONFETTI, 5)
+                .withGearTypeCondition(GearType.WEAPON));
         ret.add(TraitBuilder.simple(Const.Traits.FLAMMABLE, 1));
         ret.add(TraitBuilder.simple(Const.Traits.INDESTRUCTIBLE, 1)
                 .extraWikiLines("  - The damage (durability lost) of the item will remain the same as when the trait was added",
                         "  - The item can still be repaired if desired"));
         ret.add(TraitBuilder.simple(Const.Traits.JABBERWOCKY, 1)
+                .withGearTypeCondition(GearType.HARVEST_TOOL)
                 .extraWikiLines("Something may happen if you mine certain blocks with this"));
-        ret.add(TraitBuilder.simple(Const.Traits.LUSTROUS, 5));
+        ret.add(TraitBuilder.simple(Const.Traits.LUSTROUS, 5)
+                .withGearTypeCondition(GearType.HARVEST_TOOL));
         ret.add(TraitBuilder.simple(Const.Traits.MAGMATIC, 1)
+                .withGearTypeCondition(GearType.HARVEST_TOOL)
                 .extraWikiLines("Smelted drops are not affected by fortune to prevent item duplication"));
         ret.add(TraitBuilder.simple(Const.Traits.MAGNETIC, 5)
                 .extraWikiLines("Higher levels increase range"));
@@ -76,9 +82,12 @@ public class TraitsProvider implements IDataProvider {
                 .extraWikiLines("  - This trait has never been coded ~~and has almost achieved meme status~~",
                         "  - Intended effect: mine multiple blocks like vein miner"));
         ret.add(TraitBuilder.simple(Const.Traits.RED_CARD, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.SPOON, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.TURTLE, 1));
+        ret.add(TraitBuilder.simple(Const.Traits.SPOON, 1)
+                .withGearTypeCondition(GearType.PICKAXE));
+        ret.add(TraitBuilder.simple(Const.Traits.TURTLE, 1)
+                .withGearTypeCondition(GearType.HELMET, GearType.CURIO));
         ret.add(TraitBuilder.simple(Const.Traits.VOID_WARD, 1)
+                .withGearTypeCondition(GearType.ARMOR)
                 .extraWikiLines("When void damage is taken, the player is launched upward and given a levitation and slow falling effect"));
 
         // Synergy
@@ -118,6 +127,7 @@ public class TraitsProvider implements IDataProvider {
                         Attributes.ARMOR,
                         AttributeModifier.Operation.ADDITION,
                         1, 2, 3, 4, 5)
+                .withGearTypeCondition(GearType.ARMOR, GearType.CURIO)
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.CURSED, 7)
                 .addModifierAnySlot(GearType.ALL,
@@ -141,6 +151,7 @@ public class TraitsProvider implements IDataProvider {
                         AttributeModifier.Operation.MULTIPLY_BASE,
                         -0.01f, -0.02f, -0.03f, -0.04f, -0.05f)
                 .cancelsWith(Const.Traits.LIGHT)
+                .withGearTypeCondition(GearType.ARMOR)
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.LIGHT, 5)
                 .addArmorModifier(
@@ -148,6 +159,7 @@ public class TraitsProvider implements IDataProvider {
                         AttributeModifier.Operation.MULTIPLY_BASE,
                         0.01f, 0.02f, 0.03f, 0.04f, 0.05f)
                 .cancelsWith(Const.Traits.HEAVY)
+                .withGearTypeCondition(GearType.ARMOR)
         );
         {
             int maxLevel = 5;
@@ -160,6 +172,7 @@ public class TraitsProvider implements IDataProvider {
                             ForgeMod.ENTITY_GRAVITY.get(),
                             AttributeModifier.Operation.MULTIPLY_BASE,
                             values)
+                    .withGearTypeCondition(GearType.BOOTS)
             );
         }
         ret.add(new AttributeTraitBuilder(Const.Traits.REACH, 5)
@@ -180,31 +193,38 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new EnchantmentTraitBuilder(Const.Traits.FIERY, 2)
                 .addEnchantments(GearType.MELEE_WEAPON, Enchantments.FIRE_ASPECT, 1, 2)
                 .addEnchantments(GearType.RANGED_WEAPON, Enchantments.FLAME, 1)
+                .withGearTypeCondition(GearType.WEAPON)
         );
         ret.add(new EnchantmentTraitBuilder(Const.Traits.SILKY, 1)
                 .addEnchantments(GearType.HARVEST_TOOL, Enchantments.SILK_TOUCH, 1)
+                .withGearTypeCondition(GearType.HARVEST_TOOL)
         );
 
         // Wielder Effect (Potion)
 
         ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.RESISTANCE, 1, 1, 1, 2)
+                .withGearTypeCondition(GearType.ARMOR)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.AQUATIC, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.WATER_BREATHING, 1)
+                .withGearTypeCondition(GearType.ARMOR)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.FLAME_WARD, 1)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.FIRE_RESISTANCE, 1)
                 .overridesTrait(Const.Traits.FLAMMABLE)
+                .withGearTypeCondition(GearType.ARMOR)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.KITTY_VISION, 1)
                 .addEffect(GearType.HELMET, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
                 .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
+                .withGearTypeCondition(GearType.HELMET, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
                 .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.STRENGTH, 0, 0, 1, 1, 2)
                 .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 1, 2, 3)
                 .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 2, 2, 3)
+                .withGearTypeCondition(GearType.TOOL, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.SPEED, 0, 1, 2, 3)
@@ -217,6 +237,7 @@ public class TraitsProvider implements IDataProvider {
 
         ret.add(new TargetEffectTraitBuilder(Const.Traits.VENOM, 5)
                 .withDurationByLevel(GearType.TOOL, Effects.POISON, 0, 4.0f)
+                .withGearTypeCondition(GearType.TOOL)
         );
 
         // Stat mod
@@ -225,9 +246,11 @@ public class TraitsProvider implements IDataProvider {
                 .addStatMod(ItemStats.HARVEST_SPEED, 2f, true, false)
                 .addStatMod(ItemStats.ATTACK_SPEED, 0.01f, true, false)
                 .addStatMod(ItemStats.RANGED_SPEED, 0.01f, true, false)
+                .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new StatModifierTraitBuilder(Const.Traits.BULKY, 5)
                 .addStatMod(ItemStats.ATTACK_SPEED, -0.075f, true, false)
+                .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new StatModifierTraitBuilder(Const.Traits.CHIPPING, 5)
                 .addStatMod(ItemStats.ARMOR, -0.075f, true, true)
@@ -241,11 +264,13 @@ public class TraitsProvider implements IDataProvider {
                 .addStatMod(ItemStats.MELEE_DAMAGE, -0.15f, true, true)
                 .addStatMod(ItemStats.HARVEST_SPEED, 0.15f, true, true)
                 .cancelsWith(Const.Traits.JAGGED)
+                .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new StatModifierTraitBuilder(Const.Traits.HARD, 5)
                 .addStatMod(ItemStats.HARVEST_SPEED, 0.05f, true, true)
                 .addStatMod(ItemStats.RANGED_DAMAGE, -0.1f, true, true)
                 .cancelsWith(Const.Traits.SOFT)
+                .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new StatModifierTraitBuilder(Const.Traits.JAGGED, 5)
                 .addStatMod(ItemStats.MELEE_DAMAGE, 0.1667f, true, true)
@@ -260,25 +285,34 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new StatModifierTraitBuilder(Const.Traits.SHARP, 5)
                 .addStatMod(ItemStats.HARVEST_SPEED, 0.125f, true, true)
                 .addStatMod(ItemStats.MELEE_DAMAGE, 0.125f, true, true)
+                .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new StatModifierTraitBuilder(Const.Traits.SOFT, 5)
                 .addStatMod(ItemStats.HARVEST_SPEED, -0.15f, true, true)
                 .cancelsWith(Const.Traits.HARD)
+                .withGearTypeCondition(GearType.TOOL)
         );
 
         // Block placers
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.CRACKLER, 1, Blocks.BASALT, 3));
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.FLOATSTONER, 1, Blocks.END_STONE, 3));
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.CRACKLER, 1, Blocks.BASALT, 3)
+                .withGearTypeCondition(GearType.TOOL));
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.FLOATSTONER, 1, Blocks.END_STONE, 3)
+                .withGearTypeCondition(GearType.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.IGNITE, 1, Blocks.FIRE, 1)
                 .sound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1f, 1f)
+                .withGearTypeCondition(GearType.TOOL)
         );
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3));
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3)
+                .withGearTypeCondition(GearType.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, ModBlocks.PHANTOM_LIGHT.get(), 5)
                 .sound(SoundEvents.ENTITY_ITEM_PICKUP, 0.75f, 0.5f)
+                .withGearTypeCondition(GearType.TOOL)
         );
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3));
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3)
+                .withGearTypeCondition(GearType.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.VULCAN, 1, Blocks.OBSIDIAN, 20)
                 .cooldown(100)
+                .withGearTypeCondition(GearType.TOOL)
         );
 
         // Block fillers
@@ -289,14 +323,18 @@ public class TraitsProvider implements IDataProvider {
 
         // Misfits
 
-        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.fromTag(Tags.Items.NUGGETS)));
-        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.fromTag(Tags.Items.GEMS)));
+        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.fromTag(Tags.Items.NUGGETS))
+                .withGearTypeCondition(GearType.HARVEST_TOOL));
+        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.fromTag(Tags.Items.GEMS))
+                .withGearTypeCondition(GearType.HARVEST_TOOL));
 
         ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, Effects.POISON));
         ret.add(cancelEffectsTrait(Const.Traits.CURE_WITHER, Effects.WITHER));
 
-        ret.add(damageTypeTrait(Const.Traits.CHILLED, 5, "chilled", 2));
-        ret.add(damageTypeTrait(Const.Traits.HOLY, 5, "holy", 2));
+        ret.add(damageTypeTrait(Const.Traits.CHILLED, 5, "chilled", 2)
+                .withGearTypeCondition(GearType.WEAPON));
+        ret.add(damageTypeTrait(Const.Traits.HOLY, 5, "holy", 2)
+                .withGearTypeCondition(GearType.WEAPON));
 
         return ret;
     }

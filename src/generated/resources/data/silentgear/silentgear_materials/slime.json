@@ -28,13 +28,7 @@
     "lining": [
       {
         "name": "silentgear:bounce",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "armor"
-          }
-        ]
+        "level": 1
       }
     ]
   }

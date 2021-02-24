@@ -1,6 +1,12 @@
 {
   "type": "silentgear:target_effect",
   "max_level": 5,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "tool"
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.venom"
   },

@@ -14,9 +14,12 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.TextUtil;
 
+import java.util.Collection;
 import java.util.List;
 
 public class MaterialRatioTraitCondition implements ITraitCondition {
@@ -57,6 +60,22 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
             }
         }
         float ratio = (float) count / materials.size();
+        return ratio >= this.requiredRatio;
+    }
+
+    @Override
+    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<IGearComponentInstance<?>> components) {
+        int count = 0;
+        for (IGearComponentInstance<?> comp : components) {
+            Collection<TraitInstance> traits = comp.getTraits(key, gear);
+            for (TraitInstance inst : traits) {
+                if (inst.getTrait() == trait) {
+                    ++count;
+                    break;
+                }
+            }
+        }
+        float ratio = (float) count / components.size();
         return ratio >= this.requiredRatio;
     }
 

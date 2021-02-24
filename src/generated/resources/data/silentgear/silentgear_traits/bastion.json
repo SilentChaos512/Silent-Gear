@@ -1,6 +1,21 @@
 {
   "type": "silentgear:attribute_trait",
   "max_level": 5,
+  "conditions": [
+    {
+      "type": "silentgear:or",
+      "values": [
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "armor"
+        },
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "curio"
+        }
+      ]
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.bastion"
   },

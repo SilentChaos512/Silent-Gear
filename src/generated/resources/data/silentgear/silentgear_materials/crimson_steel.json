@@ -83,10 +83,6 @@
         "level": 1,
         "conditions": [
           {
-            "type": "silentgear:gear_type",
-            "gear_type": "armor"
-          },
-          {
             "type": "silentgear:or",
             "values": [
               {
@@ -117,13 +113,7 @@
     "tip": [
       {
         "name": "silentgear:magmatic",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          }
-        ]
+        "level": 1
       }
     ]
   }

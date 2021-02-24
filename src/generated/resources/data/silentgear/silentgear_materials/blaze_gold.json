@@ -142,13 +142,7 @@
       },
       {
         "name": "silentgear:fiery",
-        "level": 4,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "weapon"
-          }
-        ]
+        "level": 4
       }
     ],
     "coating": [

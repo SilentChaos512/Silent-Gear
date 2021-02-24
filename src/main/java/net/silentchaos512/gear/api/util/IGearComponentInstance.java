@@ -32,6 +32,11 @@ public interface IGearComponentInstance<T extends IGearComponent<?>> {
 
     Collection<TraitInstance> getTraits(PartType partType, GearType gearType, ItemStack gear);
 
+    // TODO: Make this version the non-default
+    default Collection<TraitInstance> getTraits(PartGearKey key, ItemStack gear) {
+        return getTraits(key.getPartType(), key.getGearType(), gear);
+    }
+
     default Collection<TraitInstance> getTraits(PartType partType) {
         return getTraits(partType, GearType.ALL, ItemStack.EMPTY);
     }

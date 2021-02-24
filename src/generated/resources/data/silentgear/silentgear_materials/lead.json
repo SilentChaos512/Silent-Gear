@@ -78,10 +78,6 @@
                 "ratio": 0.35
               }
             ]
-          },
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "armor"
           }
         ]
       }

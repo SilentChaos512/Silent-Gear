@@ -1,6 +1,12 @@
 {
   "type": "silentgear:potion_effect_trait",
   "max_level": 1,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "armor"
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.flame_ward"
   },

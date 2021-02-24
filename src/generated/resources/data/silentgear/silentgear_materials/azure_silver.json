@@ -85,10 +85,6 @@
         "level": 4,
         "conditions": [
           {
-            "type": "silentgear:gear_type",
-            "gear_type": "boots"
-          },
-          {
             "type": "silentgear:material_ratio",
             "ratio": 0.5
           }

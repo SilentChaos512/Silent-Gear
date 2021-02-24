@@ -13,6 +13,8 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 import net.silentchaos512.gear.util.TextUtil;
@@ -47,6 +49,11 @@ public class NotTraitCondition implements ITraitCondition {
     @Override
     public boolean matches(ItemStack gear, GearType gearType, PartType partType, List<MaterialInstance> materials, ITrait trait) {
         return !child.matches(gear, gearType, partType, materials, trait);
+    }
+
+    @Override
+    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<IGearComponentInstance<?>> components) {
+        return !this.child.matches(trait, key, gear, components);
     }
 
     @Override
