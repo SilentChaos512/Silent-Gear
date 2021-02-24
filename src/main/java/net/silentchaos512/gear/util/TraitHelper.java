@@ -41,6 +41,7 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -279,7 +280,7 @@ public final class TraitHelper {
 
         for (PartData part : parts) {
             for (TraitInstance inst : part.getTraits(gear)) {
-                if (inst.conditionsMatch(gearType, parts, gear)) {
+                if (inst.conditionsMatch(PartGearKey.of(gearType, PartType.NONE), gear, parts)) {
                     ITrait trait = inst.getTrait();
                     // Get the highest value in any part
                     result.merge(trait, inst.getLevel(), Integer::max);
@@ -308,7 +309,7 @@ public final class TraitHelper {
 
         for (MaterialInstance material : materials) {
             for (TraitInstance inst : material.getTraits(partType, gearType, gear)) {
-                if (inst.conditionsMatch(materials, gearType, partType, gear)) {
+                if (inst.conditionsMatch(PartGearKey.of(gearType, partType), gear, materials)) {
                     result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
                 }

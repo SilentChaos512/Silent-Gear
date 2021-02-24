@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -191,7 +192,7 @@ public class CompoundPart extends AbstractGearPart {
 
         TraitHelper.getTraits(materials, GearHelper.getType(gear), this.partType, gear).forEach((trait, level) -> {
             TraitInstance inst = TraitInstance.of(trait, level);
-            if (inst.conditionsMatch(materials, GearHelper.getType(gear), this.partType, gear)) {
+            if (inst.conditionsMatch(PartGearKey.of(GearHelper.getType(gear), partType), gear, materials)) {
                 ret.add(inst);
             }
         });

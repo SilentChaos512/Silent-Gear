@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
@@ -223,7 +224,7 @@ public class CompoundMaterial implements IMaterial {
 
         TraitHelper.getTraits(list, gearType, partType, ItemStack.EMPTY).forEach((trait, level) -> {
             TraitInstance inst = TraitInstance.of(trait, level);
-            if (inst.conditionsMatch(list, gearType, partType, ItemStack.EMPTY)) {
+            if (inst.conditionsMatch(PartGearKey.of(gearType, partType), ItemStack.EMPTY, list)) {
                 ret.add(inst);
             }
         });
