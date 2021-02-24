@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.5] - 2021-02-24
 ### Added
 - Self repair traits, which can repair (or damage) gear gradually over time.
 - Renew trait, a self repair trait that restores durability slowly. Level 1 given to phantom membrane material.
