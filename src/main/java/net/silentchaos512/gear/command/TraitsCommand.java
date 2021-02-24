@@ -26,6 +26,7 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -35,6 +36,7 @@ import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.SimpleTrait;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.gear.trait.condition.AndTraitCondition;
 import net.silentchaos512.gear.network.ClientOutputCommandPacket;
 import net.silentchaos512.gear.network.Network;
 
@@ -160,6 +162,13 @@ public final class TraitsCommand {
                 if (!partsWithTrait.isEmpty()) {
                     writer.write("  - Parts: " + partsWithTrait + "\n");
                 }
+
+                if (!trait.getConditions().isEmpty()) {
+                    // Just wrap all of them inside an AND condition, since that's how the logic works anyway
+                    AndTraitCondition condition = new AndTraitCondition(trait.getConditions().toArray(new ITraitCondition[0]));
+                    writer.write("- Conditions: " + condition.getDisplayText().getString() + "\n");
+                }
+
                 writer.write("- ID: `" + id + "`\n");
                 writer.write("- Type: `" + trait.getSerializer().getName() + "`\n");
                 writer.write("- Max Level: " + trait.getMaxLevel() + "\n");

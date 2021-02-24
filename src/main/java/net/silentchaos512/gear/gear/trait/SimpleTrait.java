@@ -257,6 +257,12 @@ public class SimpleTrait implements ITrait {
             trait.description = buffer.readTextComponent();
             trait.hidden = buffer.readBoolean();
 
+            ITraitCondition[] conditions = new ITraitCondition[buffer.readByte()];
+            for (int i = 0; i < conditions.length; ++i) {
+                conditions[i] = TraitSerializers.readCondition(buffer);
+            }
+            trait.conditions = ImmutableList.copyOf(conditions);
+
             int cancelsCount = buffer.readVarInt();
             for (int i = 0; i < cancelsCount; ++i) {
                 trait.cancelsWith.add(buffer.readString(255));
@@ -275,6 +281,9 @@ public class SimpleTrait implements ITrait {
             buffer.writeTextComponent(trait.displayName);
             buffer.writeTextComponent(trait.description);
             buffer.writeBoolean(trait.hidden);
+
+            buffer.writeByte(trait.conditions.size());
+            trait.conditions.forEach(condition -> TraitSerializers.writeCondition(condition, buffer));
 
             buffer.writeVarInt(trait.cancelsWith.size());
             for (String str : trait.cancelsWith) {
