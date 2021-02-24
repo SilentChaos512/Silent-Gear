@@ -440,11 +440,13 @@ public final class GearEvents {
             // FIXME: bounce is very unpredictable. Usually it does not work at all. The few times
             //  it does, the bounce height is inconsistent
             int bounce = TraitHelper.getTraitLevel(stack, Const.Traits.BOUNCE);
-            if (bounce > 0) {
+            if (bounce > 0 && event.getDistance() > 3) {
                 if (!event.getEntity().isSuppressingBounce()) {
 //                    bounceEntity(event.getEntity());
                     int damage = (int) (event.getDistance() / 3) - 1;
-                    GearHelper.attemptDamage(stack, damage, event.getEntityLiving(), EquipmentSlotType.FEET);
+                    if (damage > 0) {
+                        GearHelper.attemptDamage(stack, damage, event.getEntityLiving(), EquipmentSlotType.FEET);
+                    }
                     event.getEntity().world.playSound(null, event.getEntity().getPosition(), SoundEvents.BLOCK_SLIME_BLOCK_FALL, SoundCategory.PLAYERS, 1f, 1f);
                     event.setCanceled(true);
                 }
