@@ -40,7 +40,6 @@ import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.compat.curios.CurioGearItemCapability;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
-import net.silentchaos512.gear.compat.mineandslash.MineAndSlashCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -94,20 +93,22 @@ class SideProxy implements IProxy {
             return Collections.emptyList();
         });
 
-        LibHooks.registerCompostable(0.3f, ModItems.FLAX_SEEDS);
-        LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
+        registerCompostables();
 
         NerfedGear.init();
-
-        if (ModList.get().isLoaded("mmorpg") && Config.Common.mineAndSlashSupport.get()) {
-            MineAndSlashCompat.init();
-        }
 
         Greetings.addMessage(SideProxy::detectDataLoadingFailure);
 
         if (ModList.get().isLoaded(Const.CURIOS)) {
             CurioGearItemCapability.register();
         }
+    }
+
+    private static void registerCompostables() {
+        LibHooks.registerCompostable(0.3f, ModItems.FLAX_SEEDS);
+        LibHooks.registerCompostable(0.3f, ModItems.FLUFFY_SEEDS);
+        LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
+        LibHooks.registerCompostable(0.5f, CraftingItems.FLUFFY_PUFF);
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {
