@@ -27,18 +27,24 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-public final class GearPartIngredient extends Ingredient implements IPartIngredient {
+public final class GearPartIngredient extends Ingredient implements IGearIngredient {
     private final PartType type;
 
     private GearPartIngredient(PartType type) {
@@ -54,6 +60,13 @@ public final class GearPartIngredient extends Ingredient implements IPartIngredi
     @Override
     public PartType getPartType() {
         return type;
+    }
+
+    @Override
+    public Optional<ITextComponent> getJeiHint() {
+        IFormattableTextComponent typeText = new StringTextComponent(this.type.getShortName());
+        IFormattableTextComponent text = TextUtil.withColor(typeText, Color.GOLD);
+        return Optional.of(TextUtil.translate("jei", "partType", text));
     }
 
     @Override

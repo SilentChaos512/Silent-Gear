@@ -168,6 +168,10 @@ public final class PartType {
         return name;
     }
 
+    public String getShortName() {
+        return SilentGear.shortenId(name);
+    }
+
     public boolean isRemovable() {
         return isRemovable;
     }

@@ -10,18 +10,25 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
+import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-public class BlueprintIngredient extends Ingredient {
+public class BlueprintIngredient extends Ingredient implements IGearIngredient {
     private final PartType partType;
     private final GearType gearType;
 
@@ -83,6 +90,24 @@ public class BlueprintIngredient extends Ingredient {
             json.addProperty("gear_type", this.gearType.getName());
         }
         return json;
+    }
+
+    @Override
+    public PartType getPartType() {
+        return this.partType;
+    }
+
+    @Override
+    public GearType getGearType() {
+        return this.gearType;
+    }
+
+    @Override
+    public Optional<ITextComponent> getJeiHint() {
+        PartGearKey key = PartGearKey.of(this.gearType, this.partType);
+        IFormattableTextComponent keyText = new StringTextComponent(key.toString());
+        ITextComponent text = TextUtil.withColor(keyText, Color.DODGERBLUE);
+        return Optional.of(TextUtil.translate("jei", "blueprintType", text));
     }
 
     public static final class Serializer implements IIngredientSerializer<BlueprintIngredient> {

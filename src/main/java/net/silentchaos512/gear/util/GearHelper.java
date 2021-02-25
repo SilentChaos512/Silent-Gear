@@ -41,7 +41,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
+import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
@@ -682,8 +682,8 @@ public final class GearHelper {
         PartType.MAIN.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(PartType.MAIN, p));
 
         for (Ingredient ingredient : ingredients) {
-            if (ingredient instanceof IPartIngredient) {
-                PartType type = ((IPartIngredient) ingredient).getPartType();
+            if (ingredient instanceof IGearIngredient) {
+                PartType type = ((IGearIngredient) ingredient).getPartType();
                 type.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(type, p));
             }
         }

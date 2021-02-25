@@ -6,21 +6,29 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class PartMaterialIngredient extends Ingredient implements IPartIngredient {
+public final class PartMaterialIngredient extends Ingredient implements IGearIngredient {
     private final PartType partType;
     private final GearType gearType;
     private final int minTier;
@@ -66,8 +74,33 @@ public final class PartMaterialIngredient extends Ingredient implements IPartIng
         return partType;
     }
 
+    @Override
     public GearType getGearType() {
         return gearType;
+    }
+
+    @Override
+    public Optional<ITextComponent> getJeiHint() {
+        IFormattableTextComponent text;
+        if (!this.categories.isEmpty()) {
+            IFormattableTextComponent cats = new StringTextComponent(categories.stream()
+                    .map(IMaterialCategory::getName)
+                    .collect(Collectors.joining(", "))
+            );
+            text = TextUtil.withColor(cats, Color.INDIANRED);
+        } else {
+            IFormattableTextComponent any = new StringTextComponent("any");
+            text = TextUtil.withColor(any, Color.LIGHTGREEN);
+        }
+
+        PartGearKey key = PartGearKey.of(this.gearType, this.partType);
+        text.append(TextUtil.misc("spaceBrackets", key.toString()).mergeStyle(TextFormatting.GRAY));
+
+        return Optional.of(TextUtil.translate("jei", "materialType", text));
+    }
+
+    public Set<IMaterialCategory> getCategories() {
+        return Collections.unmodifiableSet(categories);
     }
 
     @Override
