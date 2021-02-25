@@ -73,8 +73,6 @@ public final class Config {
         public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
         public static final ForgeConfigSpec.IntValue wildFluffyTryCount;
         public static final ForgeConfigSpec.IntValue wildFluffyPatchCount;
-        // Compatibility
-        public static final ForgeConfigSpec.BooleanValue mineAndSlashSupport;
         // Debug
         public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
@@ -296,10 +294,6 @@ public final class Config {
                         .defineInRange("wildFluffy.tryCount", 16, 0, 1000);
                 builder.pop();
             }
-
-            mineAndSlashSupport = builder
-                    .comment("Enable compatibility with the Mine and Slash mod, if installed")
-                    .define("compat.mineAndSlash.enabled", true);
 
             extraPartAndTraitLogging = builder
                     .comment("Log additional information related to loading and synchronizing gear parts and traits.",
