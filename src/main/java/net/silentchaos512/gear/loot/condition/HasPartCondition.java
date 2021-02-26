@@ -17,15 +17,18 @@ import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
+@Deprecated // Makes more sense to check for traits
 public class HasPartCondition extends GearLootCondition {
     public static final Serializer SERIALIZER = new Serializer();
 
     private final ResourceLocation partId;
-    private final MaterialGrade.Range gradeRange;
+
+    public HasPartCondition(ResourceLocation partId) {
+        this.partId = partId;
+    }
 
     public HasPartCondition(ResourceLocation partId, MaterialGrade.Range gradeRange) {
-        this.partId = partId;
-        this.gradeRange = gradeRange;
+        this(partId);
     }
 
     @Override

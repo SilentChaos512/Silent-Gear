@@ -57,11 +57,7 @@ public final class Network {
                 .decoder(SyncGearCraftingItemsPacket::fromBytes)
                 .consumer(SyncGearCraftingItemsPacket::handle)
                 .add();
-        channel.messageBuilder(ShowPartsScreenPacket.class, 5)
-                .encoder((packet, buffer) -> {})
-                .decoder(buffer -> new ShowPartsScreenPacket())
-                .consumer(ShowPartsScreenPacket::handle)
-                .add();
+        // 5 was ShowPartsScreenPacket
         channel.messageBuilder(SyncMaterialsPacket.class, 6)
                 .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
                 .decoder(SyncMaterialsPacket::fromBytes)
