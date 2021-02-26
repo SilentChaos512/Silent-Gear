@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Gear crafting recipes in JEI now display descriptive text, including material restrictions
+- Tooltip to sinew and fine silk describing how to get them
 ### Changed
 - Fluffy puffs and fluffy seeds can now be composted
 
