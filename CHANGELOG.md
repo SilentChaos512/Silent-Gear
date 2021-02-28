@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Missing translation keys for fluffy plants
+
+## [2.6.6] - 2021-02-28
+### Added
+- Exception handling code which _might_ prevent some Optifine crashes [#334]
 - Gear crafting recipes in JEI now display descriptive text, including material restrictions
 - Tooltip to sinew and fine silk describing how to get them
 ### Changed
