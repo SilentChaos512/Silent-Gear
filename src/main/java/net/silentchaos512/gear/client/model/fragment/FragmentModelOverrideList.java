@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.FragmentItem;
 
@@ -25,7 +26,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -64,8 +64,8 @@ public class FragmentModelOverrideList extends ItemOverrideList {
         CacheKey key = getKey(model, stack, worldIn, entityIn);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ModelErrorLogging.notifyOfException(e, "fragment");
         }
         return model;
     }

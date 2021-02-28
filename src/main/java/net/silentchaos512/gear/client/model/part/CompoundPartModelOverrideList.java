@@ -15,15 +15,15 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.item.CompoundPartItem;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -42,11 +42,11 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
 
     @SuppressWarnings("ConstructorWithTooManyParameters")
     public CompoundPartModelOverrideList(CompoundPartModel model,
-                                 IModelConfiguration owner,
-                                 ModelBakery bakery,
-                                 Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                 IModelTransform modelTransform,
-                                 ResourceLocation modelLocation) {
+                                         IModelConfiguration owner,
+                                         ModelBakery bakery,
+                                         Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
+                                         IModelTransform modelTransform,
+                                         ResourceLocation modelLocation) {
         this.model = model;
         this.owner = owner;
         this.bakery = bakery;
@@ -61,8 +61,8 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
         CacheKey key = getKey(model, stack, worldIn, entityIn);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ModelErrorLogging.notifyOfException(e, "compound part");
         }
         return model;
     }

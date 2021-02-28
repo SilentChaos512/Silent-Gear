@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -36,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -79,8 +79,8 @@ public class GearModelOverrideList extends ItemOverrideList {
         CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(key, stack, worldIn, entityIn, animationFrame));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ModelErrorLogging.notifyOfException(e, "gear item");
         }
         return model;
     }
