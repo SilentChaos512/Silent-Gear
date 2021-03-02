@@ -113,6 +113,12 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
+    public ITextComponent getDisplayName(@Nullable IPartData part, PartType type, ItemStack gear) {
+        if (displayName == null) return new StringTextComponent("<error: missing name>");
+        return displayName.deepCopy();
+    }
+
+    @Override
     public ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
         return namePrefix != null ? namePrefix.deepCopy() : null;
     }

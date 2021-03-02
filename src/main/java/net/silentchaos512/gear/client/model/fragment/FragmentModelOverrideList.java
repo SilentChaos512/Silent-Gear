@@ -13,13 +13,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.ModelErrorLogging;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.FragmentItem;
 
 import javax.annotation.Nullable;
@@ -73,10 +72,10 @@ public class FragmentModelOverrideList extends ItemOverrideList {
     private IBakedModel getOverrideModel(ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
         List<MaterialLayer> layers = new ArrayList<>();
 
-        IMaterial material = FragmentItem.getMaterial(stack);
+        IMaterialInstance material = FragmentItem.getMaterial(stack);
         if (material != null) {
             IMaterialDisplay model = MaterialDisplayManager.get(material);
-            for (MaterialLayer layer : model.getLayerList(GearType.FRAGMENT, PartType.MAIN, MaterialInstance.of(material))) {
+            for (MaterialLayer layer : model.getLayerList(GearType.FRAGMENT, PartType.MAIN, material)) {
                 layers.add(layer);
             }
         }

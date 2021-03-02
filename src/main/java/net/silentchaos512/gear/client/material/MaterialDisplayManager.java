@@ -149,7 +149,14 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
      */
     public static IMaterialDisplay get(IMaterialInstance material) {
         IMaterial mat = material.get();
-        return mat != null ? get(mat) : getMaterial(material.getId());
+        if (mat != null) {
+            IMaterialDisplay displayOverride = mat.getDisplayOverride(material);
+            if (displayOverride != null) {
+                return displayOverride;
+            }
+            return get(mat);
+        }
+        return getMaterial(material.getId());
     }
 
     /**
@@ -159,9 +166,6 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
      */
     @Deprecated
     public static IMaterialDisplay get(IMaterial material) {
-        if (!MATERIALS.containsKey(material.getId()) && !material.isSimple()) {
-            return CompoundMaterialDisplay.INSTANCE;
-        }
         return getMaterial(material.getId());
     }
 

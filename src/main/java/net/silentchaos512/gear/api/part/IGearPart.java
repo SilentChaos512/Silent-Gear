@@ -99,6 +99,10 @@ public interface IGearPart extends IGearComponent<IPartData> {
 
     int getColor(PartData part, ItemStack gear, int layer, int animationFrame);
 
+    default ITextComponent getDisplayName(@Nullable PartData part) {
+        return getDisplayName(part, ItemStack.EMPTY);
+    }
+
     ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
 
     default ITextComponent getMaterialName(@Nullable PartData part, ItemStack gear) {

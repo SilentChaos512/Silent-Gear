@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -37,10 +37,10 @@ public class RepairKitItem extends Item {
     }
 
     public boolean addMaterial(ItemStack repairKit, ItemStack materialStack) {
-        Tuple<MaterialInstance, Float> tuple = getMaterialAndValue(materialStack);
+        Tuple<IMaterialInstance, Float> tuple = getMaterialAndValue(materialStack);
 
         if (tuple != null) {
-            MaterialInstance mat = tuple.getA();
+            IMaterialInstance mat = tuple.getA();
             float value = tuple.getB();
 
             if (getStoredMaterialAmount(repairKit) > getKitCapacity() - value) {
@@ -59,11 +59,11 @@ public class RepairKitItem extends Item {
     }
 
     @Nullable
-    private static Tuple<MaterialInstance, Float> getMaterialAndValue(ItemStack stack) {
+    private static Tuple<IMaterialInstance, Float> getMaterialAndValue(ItemStack stack) {
         if (stack.getItem() instanceof FragmentItem) {
-            IMaterial material = FragmentItem.getMaterial(stack);
+            IMaterialInstance material = FragmentItem.getMaterial(stack);
             if (material != null) {
-                return new Tuple<>(MaterialInstance.of(material), 0.125f);
+                return new Tuple<>(material, 0.125f);
             }
             return null;
         }
@@ -102,7 +102,7 @@ public class RepairKitItem extends Item {
                 .map(MaterialInstance::readShorthand)
                 .filter(Objects::nonNull)
                 .sorted(Comparator.<MaterialInstance, Integer>comparing(mat1 -> mat1.getTier(PartType.MAIN))
-                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN).copyRaw().getString()))
+                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN, ItemStack.EMPTY).copyRaw().getString()))
                 .collect(Collectors.toList());
 
         Map<MaterialInstance, Float> ret = new LinkedHashMap<>();
@@ -114,7 +114,7 @@ public class RepairKitItem extends Item {
     }
 
     @Nonnull
-    private static String getShorthandKey(MaterialInstance mat) {
+    private static String getShorthandKey(IMaterialInstance mat) {
         return MaterialInstance.writeShorthand(mat);
     }
 
@@ -194,7 +194,7 @@ public class RepairKitItem extends Item {
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
             tooltip.add(TextUtil.translate("item", "repair_kit.material",
-                    entry.getKey().getDisplayNameWithGrade(PartType.MAIN),
+                    entry.getKey().getDisplayNameWithGrade(PartType.MAIN, ItemStack.EMPTY),
                     format(entry.getValue())));
         }
     }

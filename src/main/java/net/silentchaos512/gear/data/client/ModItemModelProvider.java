@@ -46,6 +46,12 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         builder(ModItems.NETHERWOOD_CHARCOAL, itemGenerated);
 
+        // Crafted materials
+        getBuilder(NameUtils.fromItem(ModItems.SHEET_METAL).getPath())
+                .parent(itemGenerated)
+                .texture("layer0", "item/sheet_metal")
+                .texture("layer1", "item/sheet_metal_highlight");
+
         // Compound materials
         getBuilder(NameUtils.fromItem(ModItems.ALLOY_INGOT).getPath())
                 .parent(itemGenerated)

@@ -1,0 +1,37 @@
+{
+  "type": "silentgear:crafted",
+  "simple": false,
+  "availability": {
+    "tier": 0,
+    "categories": [
+      "sheet"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:sheet_metal"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.sheet_metal"
+  },
+  "stats": {
+    "main": {
+      "durability": {
+        "mul2": -1.0
+      },
+      "armor_durability": {
+        "mul2": -0.4
+      },
+      "armor": {
+        "mul2": -0.5
+      },
+      "armor_toughness": {
+        "mul2": -0.5
+      }
+    }
+  }
+}

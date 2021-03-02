@@ -115,7 +115,7 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public String getModelKey(PartData part) {
         String str = "{" + getMaterials(part).stream()
-                .map(m -> SilentGear.shortenId(m.getId()))
+                .map(MaterialInstance::getModelKey)
                 .collect(Collectors.joining(",")) +
                 "}";
         return super.getModelKey(part) + str;

@@ -183,6 +183,11 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
         return part.isCraftingAllowed(this, this.getType(), gearType, inventory);
     }
 
+    @Override
+    public ITextComponent getDisplayName(PartType type, ItemStack gear) {
+        return part.getDisplayName(this, type, gear);
+    }
+
     public ITextComponent getDisplayName(ItemStack gear) {
         return part.getDisplayName(this, gear);
     }

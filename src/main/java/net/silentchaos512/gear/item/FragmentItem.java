@@ -12,7 +12,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -28,14 +30,18 @@ public class FragmentItem extends Item {
 
     public ItemStack create(IMaterial material, int count) {
         ItemStack stack = new ItemStack(this, count);
-        stack.getOrCreateTag().putString(NBT_MATERIAL, material.getId().toString());
+        stack.getOrCreateTag().putString(NBT_MATERIAL, SilentGear.shortenId(material.getId()));
         return stack;
     }
 
     @Nullable
-    public static IMaterial getMaterial(ItemStack stack) {
+    public static IMaterialInstance getMaterial(ItemStack stack) {
         ResourceLocation id = ResourceLocation.tryCreate(stack.getOrCreateTag().getString(NBT_MATERIAL));
-        return MaterialManager.get(id);
+        IMaterial material = MaterialManager.get(id);
+        if (material != null) {
+            return MaterialInstance.of(material);
+        }
+        return null;
     }
 
     public static String getModelKey(ItemStack stack) {
@@ -44,7 +50,7 @@ public class FragmentItem extends Item {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        IMaterial material = getMaterial(stack);
+        IMaterialInstance material = getMaterial(stack);
         if (material == null) {
             return new TranslationTextComponent(this.getTranslationKey(stack) + ".invalid");
         }

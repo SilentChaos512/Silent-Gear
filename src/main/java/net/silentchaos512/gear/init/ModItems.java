@@ -226,6 +226,9 @@ public final class ModItems {
     public static final ItemRegistryObject<CustomMaterialItem> CUSTOM_GEM = register("custom_gem", () ->
             new CustomMaterialItem(baseProps()));
 
+    public static final ItemRegistryObject<CraftedMaterialItem> SHEET_METAL = register("sheet_metal", () ->
+            new CraftedMaterialItem(baseProps()));
+
     static {
         CraftingItems.register(Registration.ITEMS);
     }

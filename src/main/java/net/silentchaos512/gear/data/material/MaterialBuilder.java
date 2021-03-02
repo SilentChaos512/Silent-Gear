@@ -58,6 +58,7 @@ public class MaterialBuilder {
     private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
     private final Map<PartType, List<ITraitInstance>> traits = new LinkedHashMap<>();
     private final Map<PartGearKey, MaterialLayerList> display = new LinkedHashMap<>();
+    private boolean hasModels = true;
 
     public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation ingredientTagName) {
         this(id, tier, Ingredient.fromTag(ItemTags.makeWrapperTag(ingredientTagName.toString())));
@@ -262,6 +263,11 @@ public class MaterialBuilder {
         return this;
     }
 
+    public MaterialBuilder noModels() {
+        this.hasModels = false;
+        return this;
+    }
+
     public MaterialBuilder noStats(PartType partType) {
         // Put an empty map for the part type, because the part type can only be supported if in the stats object
         stats.computeIfAbsent(partType, pt -> new StatModifierMap());
@@ -376,9 +382,11 @@ public class MaterialBuilder {
     }
 
     private void validate() {
-        for (PartType type : this.stats.keySet()) {
-            if (this.display.keySet().stream().noneMatch(key -> key.getPartType().equals(type))) {
-                throw new NullPointerException(String.format("Material builder %s has no model data for part type %s", this.id, type.getName()));
+        if (this.hasModels) {
+            for (PartType type : this.stats.keySet()) {
+                if (this.display.keySet().stream().noneMatch(key -> key.getPartType().equals(type))) {
+                    throw new NullPointerException(String.format("Material builder %s has no model data for part type %s", this.id, type.getName()));
+                }
             }
         }
     }

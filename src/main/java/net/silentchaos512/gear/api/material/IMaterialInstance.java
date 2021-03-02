@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.material;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +16,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -55,6 +57,18 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         return mat != null && mat.isSimple();
     }
 
+    default Collection<IMaterialCategory> getCategories() {
+        IMaterial material = get();
+        if (material != null) {
+            return material.getCategories(this);
+        }
+        return Collections.emptySet();
+    }
+
+    default Ingredient getIngredient() {
+        return Ingredient.EMPTY;
+    }
+
     default float getStat(PartType partType, IItemStat stat) {
         return getStat(partType, StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
     }
@@ -66,6 +80,14 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
             return material.getStat(this, partType, key, gear);
         }
         return 0;
+    }
+
+    default Collection<StatGearKey> getStatKeys(PartType type) {
+        IMaterial material = get();
+        if (material != null) {
+            return material.getStatKeys(this, type);
+        }
+        return Collections.emptyList();
     }
 
     @Override
@@ -86,18 +108,17 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         return material.getTraits(this, partType, gearType, gear);
     }
 
-    CompoundNBT write(CompoundNBT nbt);
-
-    IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear);
-
-    default IFormattableTextComponent getDisplayName(PartType partType) {
-        return getDisplayName(partType, ItemStack.EMPTY);
+    @Override
+    default int getNameColor(PartType partType, GearType gearType) {
+        return Color.VALUE_WHITE;
     }
+
+    CompoundNBT write(CompoundNBT nbt);
 
     String getModelKey();
 
-    default IFormattableTextComponent getDisplayNameWithGrade(PartType partType) {
-        IFormattableTextComponent displayName = getDisplayName(partType, ItemStack.EMPTY);
+    default IFormattableTextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
+        IFormattableTextComponent displayName = getDisplayName(partType, gear).deepCopy();
         MaterialGrade grade = getGrade();
         if (grade != MaterialGrade.NONE) {
             displayName.append(TextUtil.translate("misc", "spaceBrackets", grade.getDisplayName()));

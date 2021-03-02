@@ -1,7 +1,9 @@
 package net.silentchaos512.gear.api.util;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 
@@ -30,4 +32,6 @@ public interface IGearComponent<D> extends IStatModProvider<D>, ITraitProvider<D
     default boolean isCraftingAllowed(D instance, PartType partType, GearType gearType) {
         return isCraftingAllowed(instance, partType, gearType, null);
     }
+
+    ITextComponent getDisplayName(@Nullable D instance, PartType type, ItemStack gear);
 }

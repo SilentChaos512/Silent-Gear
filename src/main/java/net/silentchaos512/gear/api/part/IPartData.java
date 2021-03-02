@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -89,6 +90,11 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
             return Collections.emptyList();
         }
         return part.getTraits(this, partType, gearType, gear);
+    }
+
+    @Override
+    default int getNameColor(PartType partType, GearType gearType) {
+        return Color.VALUE_WHITE;
     }
 
     String getModelKey();

@@ -28,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -86,18 +87,20 @@ public class FillRepairKitRecipe extends SpecialRecipe {
 
     private static boolean isRepairMaterial(ItemStack stack) {
         if (stack.getItem() instanceof FragmentItem) {
-            IMaterial material = FragmentItem.getMaterial(stack);
-            return material != null && isRepairMaterial(MaterialInstance.of(material));
+            IMaterialInstance material = FragmentItem.getMaterial(stack);
+            return material != null && isRepairMaterial(material);
         }
 
         MaterialInstance material = MaterialInstance.from(stack);
         return material != null && isRepairMaterial(material);
     }
 
-    private static boolean isRepairMaterial(MaterialInstance material) {
+    private static boolean isRepairMaterial(IMaterialInstance material) {
         float durability = material.getStat(PartType.MAIN, ItemStats.DURABILITY);
         float armorDurability = material.getStat(PartType.MAIN, ItemStats.ARMOR_DURABILITY);
-        return material.get().allowedInPart(material, PartType.MAIN) && (durability > 0 || armorDurability > 0);
+        IMaterial mat = material.get();
+        return mat != null && mat.allowedInPart(material, PartType.MAIN)
+                && (durability > 0 || armorDurability > 0);
     }
 
     @Override

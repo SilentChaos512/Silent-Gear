@@ -16,7 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.compounder.MetalAlloyerScreen;
 import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
@@ -140,7 +140,7 @@ public class SGearJeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration reg) {
         reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), stack -> {
-            IMaterial material = FragmentItem.getMaterial(stack);
+            IMaterialInstance material = FragmentItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         });
     }

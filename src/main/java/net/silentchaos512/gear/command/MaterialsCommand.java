@@ -11,7 +11,6 @@ import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -133,7 +132,7 @@ public final class MaterialsCommand {
     private static String makeTsvLine(MaterialInstance material, PartType partType) {
         StringBuilder builder = new StringBuilder();
         appendTsv(builder, material.get().getPackName());
-        appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
+        appendTsv(builder, material.getDisplayName(partType).getString());
         int tier = material.getTier(partType);
 //        appendTsv(builder, partType.getDisplayName(tier).getFormattedText());
         appendTsv(builder, partType.getDisplayName(0).getString());

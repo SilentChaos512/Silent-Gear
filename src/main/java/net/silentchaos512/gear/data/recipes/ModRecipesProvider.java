@@ -29,8 +29,8 @@ import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
-import net.silentchaos512.lib.data.ExtendedShapedRecipeBuilder;
-import net.silentchaos512.lib.data.ExtendedShapelessRecipeBuilder;
+import net.silentchaos512.lib.data.recipe.ExtendedShapedRecipeBuilder;
+import net.silentchaos512.lib.data.recipe.ExtendedShapelessRecipeBuilder;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -512,7 +512,10 @@ public class ModRecipesProvider extends RecipeProvider {
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ELYTRA_WINGS)
                 .addIngredient(BlueprintIngredient.of(ModItems.ELYTRA_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.ELYTRA, MaterialCategories.CLOTH), 6)
+                .addIngredient(PartMaterialIngredient.of(PartType.MAIN,
+                        GearType.ELYTRA,
+                        MaterialCategories.CLOTH,
+                        MaterialCategories.SHEET), 6)
                 .build(consumer, SilentGear.getId("gear/elytra_wings"));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), ModItems.ELYTRA.get())
@@ -1151,7 +1154,7 @@ public class ModRecipesProvider extends RecipeProvider {
         vanillaSalvage(consumer, Items.LEATHER_LEGGINGS, Items.LEATHER, 7, 0);
         vanillaSalvage(consumer, Items.LEATHER_BOOTS, Items.LEATHER, 4, 0);
         vanillaSalvage(consumer, Items.LEATHER_HORSE_ARMOR, Items.LEATHER, 7, 0);
-        
+
         vanillaSalvage(consumer, Items.STONE_SWORD, Items.COBBLESTONE, 2, 1);
         vanillaSalvage(consumer, Items.STONE_PICKAXE, Items.COBBLESTONE, 3, 2);
         vanillaSalvage(consumer, Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 2);
@@ -1164,17 +1167,17 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addResult(Items.DIAMOND, 6)
                 .addResult(Items.LEATHER)
                 .build(consumer, SilentGear.getId("salvaging/diamond_horse_armor"));
-        
+
         SalvagingRecipeBuilder.builder(Items.GOLDEN_HORSE_ARMOR)
                 .addResult(Items.GOLD_INGOT, 6)
                 .addResult(Items.LEATHER)
                 .build(consumer, SilentGear.getId("salvaging/golden_horse_armor"));
-        
+
         SalvagingRecipeBuilder.builder(Items.IRON_HORSE_ARMOR)
                 .addResult(Items.IRON_INGOT, 6)
                 .addResult(Items.LEATHER)
                 .build(consumer, SilentGear.getId("salvaging/iron_horse_armor"));
-        
+
         SalvagingRecipeBuilder.builder(Items.CROSSBOW)
                 .addResult(Items.STICK, 3)
                 .addResult(Items.STRING, 2)

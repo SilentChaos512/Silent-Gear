@@ -5,7 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Sheet metal materials. Metals can be pressed into sheets. Not suitable for tools and makes weaker armor than the base materials, but can also be used to craft elytra.
 - Missing translation keys for fluffy plants
+### Changed
+- Elytra now have a 25x durability modifier (up from 12x)
+  - Elytra armor durability stat of phantom membrane and fine silk reduced to roughly match previous values
 
 ## [2.6.6] - 2021-02-28
 ### Added

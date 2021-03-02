@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.gear.material;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
@@ -109,8 +109,14 @@ public final class MaterialInstance implements IMaterialInstance {
         return item;
     }
 
+    @Override
     public Collection<IMaterialCategory> getCategories() {
         return material.getCategories(this);
+    }
+
+    @Override
+    public Ingredient getIngredient() {
+        return material.getIngredient();
     }
 
     public boolean hasAnyCategory(Collection<IMaterialCategory> others) {
@@ -230,8 +236,8 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
-        return material.getDisplayName(partType, gear);
+    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+        return material.getDisplayName(this, partType, gear);
     }
 
     @Override
@@ -239,16 +245,9 @@ public final class MaterialInstance implements IMaterialInstance {
         return this.material.getModelKey(this);
     }
 
-    public ITextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
-        IFormattableTextComponent text = getDisplayName(partType, gear).copyRaw();
-        if (this.grade != MaterialGrade.NONE) {
-            text.appendString(" (").append(this.grade.getDisplayName()).appendString(")");
-        }
-        return text;
-    }
-
+    @Override
     public int getNameColor(PartType partType, GearType gearType) {
-        return material.getNameColor(partType, gearType, this);
+        return material.getNameColor(this, partType, gearType);
     }
 
     @Override
@@ -280,11 +279,12 @@ public final class MaterialInstance implements IMaterialInstance {
         return null;
     }
 
-    public static String writeShorthand(MaterialInstance material) {
-        if (material.grade != MaterialGrade.NONE) {
-            return material.getId() + "#" + material.grade;
+    public static String writeShorthand(IMaterialInstance material) {
+        String id = SilentGear.shortenId(material.getId());
+        if (material.getGrade() != MaterialGrade.NONE) {
+            return id + "#" + material.getGrade();
         }
-        return material.getId().toString();
+        return id;
     }
 
     @Override

@@ -13,9 +13,14 @@ import java.util.Map;
 
 public final class MaterialSerializers {
     private static final Map<ResourceLocation, IMaterialSerializer<?>> REGISTRY = new HashMap<>();
-    public static final PartMaterial.Serializer<?> STANDARD = register(new PartMaterial.Serializer<>(SilentGear.getId("standard"), PartMaterial::new));
-    public static final CompoundMaterial.Serializer COMPOUND = register(new CompoundMaterial.Serializer());
-    public static final PartMaterial.Serializer<?> CUSTOM_COMPOUND = register(new PartMaterial.Serializer<>(SilentGear.getId("custom_compound"), CustomCompoundMaterial::new));
+    public static final PartMaterial.Serializer<?> STANDARD = register(
+            new PartMaterial.Serializer<>(SilentGear.getId("standard"), PartMaterial::new));
+    public static final CompoundMaterial.Serializer COMPOUND = register(
+            new CompoundMaterial.Serializer());
+    public static final PartMaterial.Serializer<?> CUSTOM_COMPOUND = register(
+            new PartMaterial.Serializer<>(SilentGear.getId("custom_compound"), CustomCompoundMaterial::new));
+    public static final CraftedMaterial.Serializer CRAFTED = register(
+            new CraftedMaterial.Serializer(SilentGear.getId("crafted")));
 
     private MaterialSerializers() {}
 

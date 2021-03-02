@@ -15,7 +15,7 @@ public interface IColoredMaterialItem {
     String NBT_MATERIALS = "Materials";
 
     @Nullable
-    static MaterialInstance getPrimarySubMaterial(ItemStack stack) {
+    default MaterialInstance getPrimarySubMaterial(ItemStack stack) {
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
         for (INBT nbt : listNbt) {
             IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getString()));

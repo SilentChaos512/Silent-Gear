@@ -215,10 +215,11 @@ public final class TraitsCommand {
         boolean foundAny = false;
 
         for (IMaterial material : MaterialManager.getValues(false)) {
+            MaterialInstance instance = MaterialInstance.of(material);
             Collection<PartType> typesWithTrait = new ArrayList<>();
 
             for (PartType partType : PartType.getValues()) {
-                Collection<TraitInstance> traits = MaterialInstance.of(material).getTraits(partType);
+                Collection<TraitInstance> traits = instance.getTraits(partType);
 
                 for (TraitInstance inst : traits) {
                     if (inst.getTrait().equals(trait) && material.isVisible(partType)) {
@@ -235,7 +236,7 @@ public final class TraitsCommand {
                 foundAny = true;
 
                 str.append("**")
-                        .append(material.getDisplayName(PartType.MAIN).getString())
+                        .append(instance.getDisplayName(PartType.MAIN).getString())
                         .append("**")
                         .append(" _(")
                         .append(typesWithTrait.stream().map(pt ->

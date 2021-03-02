@@ -6,10 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.DataResource;
@@ -82,6 +85,12 @@ public class LazyPartData implements IPartData {
             }
         }
         return this.craftingItem;
+    }
+
+    @Override
+    public ITextComponent getDisplayName(PartType type, ItemStack gear) {
+        IGearPart part = get();
+        return part != null ? part.getDisplayName(this, type, gear) : new StringTextComponent("INVALID");
     }
 
     @Override

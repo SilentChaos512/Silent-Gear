@@ -3,27 +3,21 @@ package net.silentchaos512.gear.gear.material;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
-import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
-import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
-import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
@@ -31,29 +25,25 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
-public class PartMaterial implements IMaterial { // TODO: Extend AbstractMaterial
-    private final ResourceLocation materialId;
+public abstract class AbstractMaterial implements IMaterial {
+    protected final ResourceLocation materialId;
     @Nullable ResourceLocation parent;
-    final String packName;
-    final Collection<IMaterialCategory> categories = new ArrayList<>();
-    Ingredient ingredient = Ingredient.EMPTY;
-    final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
-    boolean visible = true;
-    int tier = -1;
-    boolean canSalvage = true;
-    boolean simple = true;
+    protected final String packName;
+    protected final Collection<IMaterialCategory> categories = new ArrayList<>();
+    protected Ingredient ingredient = Ingredient.EMPTY;
+    protected boolean visible = true;
+    protected boolean canSalvage = true;
+    protected boolean simple = true;
 
-    final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
-    final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
+    protected final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
+    protected final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
+    protected final List<String> blacklistedGearTypes = new ArrayList<>();
 
-    ITextComponent displayName;
-    @Nullable ITextComponent namePrefix = null;
-    // Keys are part_type/gear_type
-    final Map<String, MaterialLayerList> display = new HashMap<>();
-    final List<String> blacklistedGearTypes = new ArrayList<>();
+    protected ITextComponent displayName;
+    @Nullable protected ITextComponent namePrefix = null;
 
-    public PartMaterial(ResourceLocation id, String packName) {
-        this.materialId = id;
+    protected AbstractMaterial(ResourceLocation materialId, String packName) {
+        this.materialId = materialId;
         this.packName = packName;
     }
 
@@ -64,16 +54,11 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
 
     @Override
     public ResourceLocation getId() {
-        return this.materialId;
+        return materialId;
     }
 
-    @Override
-    public IMaterialSerializer<?> getSerializer() {
-        return MaterialSerializers.STANDARD;
-    }
-
-    @Override
     @Nullable
+    @Override
     public IMaterial getParent() {
         if (parent != null) {
             return MaterialManager.get(parent);
@@ -86,40 +71,37 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
         if (this.categories.isEmpty() && getParent() != null) {
             return getParent().getCategories(material);
         }
-        return Collections.unmodifiableCollection(this.categories);
+        return new HashSet<>(categories);
     }
 
     @Override
     public int getTier(PartType partType) {
-        if (tier < 0 && getParent() != null) {
-            return getParent().getTier(partType);
-        }
-        return this.tier;
+        return 0;
     }
 
     @Override
     public Ingredient getIngredient() {
-        return this.ingredient;
+        return ingredient;
     }
 
     @Override
     public Optional<Ingredient> getPartSubstitute(PartType partType) {
-        return Optional.ofNullable(this.partSubstitutes.get(partType));
+        return Optional.empty();
     }
 
     @Override
     public boolean hasPartSubstitutes() {
-        return !this.partSubstitutes.isEmpty();
+        return false;
     }
 
     @Override
     public boolean canSalvage() {
-        return this.canSalvage;
+        return canSalvage;
     }
 
     @Override
     public boolean isSimple() {
-        return this.simple;
+        return simple;
     }
 
     @Override
@@ -131,7 +113,7 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
 
     @Override
     public boolean allowedInPart(IMaterialInstance material, PartType partType) {
-        return stats.containsKey(partType) || (getParent() != null && getParent().allowedInPart(material, partType));
+        return getPartTypes(material).contains(partType);
     }
 
     @Override
@@ -149,10 +131,10 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(IMaterialInstance instance, PartType partType, GearType gearType, ItemStack gear) {
+    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartType partType, GearType gearType, ItemStack gear) {
         List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
         if (ret.isEmpty() && getParent() != null) {
-            ret.addAll(getParent().getTraits(instance, partType, gearType, gear));
+            ret.addAll(getParent().getTraits(material, partType, gearType, gear));
         }
         return ret;
     }
@@ -210,50 +192,41 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
     public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
         if (msg.isValid()) {
             msg.getIngredient(this.materialId).ifPresent(ing -> this.ingredient = ing);
-            this.partSubstitutes.clear();
-            msg.getPartSubstitutes(this.materialId).forEach(this.partSubstitutes::put);
         }
     }
 
     @Override
     public String toString() {
-        return "PartMaterial{" +
+        return "AbstractMaterial{" +
                 "id=" + materialId +
-                ", tier=" + tier +
-                ", ingredient=" + ingredient +
                 '}';
     }
 
-    public static final class Serializer<T extends PartMaterial> implements IMaterialSerializer<T> {
+    public static class Serializer<T extends AbstractMaterial> implements IMaterialSerializer<T> {
         static final int PACK_NAME_MAX_LENGTH = 32;
 
-        private final ResourceLocation id;
+        private final ResourceLocation name;
         private final BiFunction<ResourceLocation, String, T> factory;
 
-        public Serializer(ResourceLocation id, BiFunction<ResourceLocation, String, T> factory) {
-            this.id = id;
+        public Serializer(ResourceLocation name, BiFunction<ResourceLocation, String, T> factory) {
+            this.name = name;
             this.factory = factory;
         }
 
-        //region deserialize
-
         @Override
         public T deserialize(ResourceLocation id, String packName, JsonObject json) {
-            T ret = this.factory.apply(id, packName);
-
-            if (json.has("parent")) {
-                ret.parent = new ResourceLocation(JSONUtils.getString(json, "parent"));
-            }
+            T ret = factory.apply(id, packName);
 
             deserializeStats(json, ret);
             deserializeTraits(json, ret);
             deserializeCraftingItems(json, ret);
             deserializeNames(json, ret);
-            deserializeDisplayProps(json, ret);
             deserializeAvailability(json, ret);
 
             return ret;
         }
+
+        //region deserialize methods
 
         void deserializeStats(JsonObject json, T ret) {
             JsonElement elementStats = json.get("stats");
@@ -271,7 +244,7 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
             sanitizeStats(ret);
         }
 
-        private static <T extends PartMaterial> void sanitizeStats(T ret) {
+        private void sanitizeStats(T ret) {
             for (PartType partType : ret.stats.keySet()) {
                 StatModifierMap statMap = ret.stats.get(partType);
 
@@ -316,6 +289,32 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
             }
         }
 
+        private void deserializeAvailability(JsonObject json, T ret) {
+            JsonElement elementAvailability = json.get("availability");
+            if (elementAvailability != null && elementAvailability.isJsonObject()) {
+                JsonObject obj = elementAvailability.getAsJsonObject();
+
+                deserializeCategories(obj.get("categories"), ret);
+                ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
+                ret.canSalvage = JSONUtils.getBoolean(obj, "can_salvage", ret.canSalvage);
+            }
+        }
+
+        private void deserializeCategories(@Nullable JsonElement json, T material) {
+            if (json != null) {
+                if (json.isJsonArray()) {
+                    JsonArray array = json.getAsJsonArray();
+                    for (JsonElement elem : array) {
+                        material.categories.add(MaterialCategories.get(elem.getAsString()));
+                    }
+                } else if (json.isJsonPrimitive()) {
+                    material.categories.add(MaterialCategories.get(json.getAsString()));
+                } else {
+                    throw new JsonParseException("Expected 'categories' to be array or string");
+                }
+            }
+        }
+
         private void deserializeTraits(JsonObject json, T ret) {
             JsonElement elementTraits = json.get("traits");
             if (elementTraits != null && elementTraits.isJsonObject()) {
@@ -330,42 +329,19 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
             }
         }
 
-        private static void deserializeCraftingItems(JsonObject json, PartMaterial ret) {
+        private void deserializeCraftingItems(JsonObject json, T ret) {
             JsonElement craftingItems = json.get("crafting_items");
             if (craftingItems != null && craftingItems.isJsonObject()) {
                 JsonElement main = craftingItems.getAsJsonObject().get("main");
                 if (main != null) {
                     ret.ingredient = Ingredient.deserialize(main);
                 }
-
-                JsonElement customCompound = craftingItems.getAsJsonObject().get("custom_compound");
-                if (customCompound != null && customCompound.isJsonObject()) {
-                    ResourceLocation itemId = new ResourceLocation(JSONUtils.getString(customCompound.getAsJsonObject(), "item"));
-                    Item item = ForgeRegistries.ITEMS.getValue(itemId);
-                    if (!(item instanceof CustomMaterialItem)) {
-                        throw new JsonParseException("Item '" + itemId + "' is not a CustomMaterialItem");
-                    }
-                    ret.ingredient = CustomCompoundIngredient.of((CustomMaterialItem) item, ret.materialId);
-                }
-
-                JsonElement subs = craftingItems.getAsJsonObject().get("subs");
-                if (subs != null && subs.isJsonObject()) {
-                    // Part substitutes
-                    JsonObject jo = subs.getAsJsonObject();
-                    Map<PartType, Ingredient> map = new HashMap<>();
-                    jo.entrySet().forEach(entry -> {
-                        PartType partType = PartType.get(new ModResourceLocation(entry.getKey()));
-                        Ingredient ingredient = Ingredient.deserialize(entry.getValue());
-                        map.put(partType, ingredient);
-                    });
-                    ret.partSubstitutes.putAll(map);
-                }
             } else {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
             }
         }
 
-        private static void deserializeNames(JsonObject json, PartMaterial ret) {
+        private void deserializeNames(JsonObject json, T ret) {
             // Name
             JsonElement elementName = json.get("name");
             if (elementName != null && elementName.isJsonObject()) {
@@ -381,169 +357,59 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
             }
         }
 
-        @Deprecated
-        private static void deserializeDisplayProps(JsonObject json, PartMaterial ret) {
-            JsonElement elementDisplay = json.get("display");
-            if (elementDisplay != null && elementDisplay.isJsonObject()) {
-                JsonObject obj = elementDisplay.getAsJsonObject();
-                MaterialLayerList defaultProps = ret.display.getOrDefault("all", MaterialLayerList.DEFAULT);
-
-                if (!ret.display.containsKey("all")) {
-                    ret.display.put("all", defaultProps);
-                }
-
-                for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-                    PartGearKey key = PartGearKey.read(entry.getKey());
-                    JsonElement value = entry.getValue();
-                    ret.display.put(key.toString(), MaterialLayerList.deserialize(key, value, defaultProps));
-                }
-            }
-        }
-
-        private static void deserializeAvailability(JsonObject json, PartMaterial ret) {
-            ret.simple = JSONUtils.getBoolean(json, "simple", true);
-
-            JsonElement elementAvailability = json.get("availability");
-            if (elementAvailability != null && elementAvailability.isJsonObject()) {
-                JsonObject obj = elementAvailability.getAsJsonObject();
-
-                deserializeCategories(obj.get("categories"), ret);
-                ret.tier = JSONUtils.getInt(obj, "tier", ret.tier);
-                ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
-                ret.canSalvage = JSONUtils.getBoolean(obj, "can_salvage", ret.canSalvage);
-
-                JsonArray blacklist = JSONUtils.getJsonArray(obj, "gear_blacklist", null);
-                if (blacklist != null) {
-                    ret.blacklistedGearTypes.clear();
-                    blacklist.forEach(e -> ret.blacklistedGearTypes.add(e.getAsString()));
-                }
-            } else if (ret.parent == null) {
-                throw new JsonSyntaxException("Expected 'availability' to be an object");
-            }
-        }
-
-        private static void deserializeCategories(@Nullable JsonElement json, PartMaterial material) {
-            if (json != null) {
-                if (json.isJsonArray()) {
-                    JsonArray array = json.getAsJsonArray();
-                    for (JsonElement elem : array) {
-                        material.categories.add(MaterialCategories.get(elem.getAsString()));
-                    }
-                } else if (json.isJsonPrimitive()) {
-                    material.categories.add(MaterialCategories.get(json.getAsString()));
-                } else {
-                    throw new JsonParseException("Expected 'categories' to be array or string");
-                }
-            }
-        }
-
         private static ITextComponent deserializeText(JsonElement json) {
             return Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(json));
         }
 
-        // endregion
-
-        // region read/write
+        //endregion
 
         @Override
         public T read(ResourceLocation id, PacketBuffer buffer) {
-            T material = this.factory.apply(id, buffer.readString(PACK_NAME_MAX_LENGTH));
+            T material = factory.apply(id, buffer.readString(PACK_NAME_MAX_LENGTH));
 
-            if (buffer.readBoolean())
-                material.parent = buffer.readResourceLocation();
-
-            int categoryCount = buffer.readByte();
-            for (int i = 0; i < categoryCount; ++i) {
-                material.categories.add(MaterialCategories.get(buffer.readString()));
-            }
-
-            material.displayName = buffer.readTextComponent();
-            if (buffer.readBoolean())
-                material.namePrefix = buffer.readTextComponent();
-
-            material.tier = buffer.readByte();
-            material.visible = buffer.readBoolean();
-            material.canSalvage = buffer.readBoolean();
-            material.simple = buffer.readBoolean();
-            material.ingredient = Ingredient.read(buffer);
-
-            int subCount = buffer.readByte();
-            for (int i = 0; i < subCount; ++i) {
-                PartType partType = PartType.get(buffer.readResourceLocation());
-                Ingredient ingredient = Ingredient.read(buffer);
-                material.partSubstitutes.put(partType, ingredient);
-            }
-
-            material.blacklistedGearTypes.clear();
-            int blacklistSize = buffer.readByte();
-            for (int i = 0; i < blacklistSize; ++i) {
-                material.blacklistedGearTypes.add(buffer.readString());
-            }
-
-            // Textures
-            int displayCount = buffer.readVarInt();
-            for (int i = 0; i < displayCount; ++i) {
-                String key = buffer.readString(255);
-                MaterialLayerList display = MaterialLayerList.read(buffer);
-                material.display.put(key, display);
-            }
-
-            // Stats and traits
+            readBasics(buffer, material);
+            readRestrictions(buffer, material);
             readStats(buffer, material);
             readTraits(buffer, material);
 
             return material;
         }
 
-        @Override
-        public void write(PacketBuffer buffer, T material) {
-            buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
+        //region read methods
 
-            buffer.writeBoolean(material.parent != null);
-            if (material.parent != null)
-                buffer.writeResourceLocation(material.parent);
+        private void readBasics(PacketBuffer buffer, T material) {
+            // Parent
+            if (buffer.readBoolean()) {
+                material.parent = buffer.readResourceLocation();
+            }
+            material.visible = buffer.readBoolean();
+            material.canSalvage = buffer.readBoolean();
+            material.simple = buffer.readBoolean();
+            material.ingredient = Ingredient.read(buffer);
 
-            buffer.writeByte(material.categories.size());
-            material.categories.forEach(cat -> buffer.writeString(cat.getName()));
-
-            buffer.writeTextComponent(material.displayName);
-            buffer.writeBoolean(material.namePrefix != null);
-            if (material.namePrefix != null)
-                buffer.writeTextComponent(material.namePrefix);
-
-            buffer.writeByte(material.tier);
-            buffer.writeBoolean(material.visible);
-            buffer.writeBoolean(material.canSalvage);
-            buffer.writeBoolean(material.simple);
-            material.ingredient.write(buffer);
-
-            buffer.writeByte(material.partSubstitutes.size());
-            material.partSubstitutes.forEach((type, ing) -> {
-                buffer.writeResourceLocation(type.getName());
-                ing.write(buffer);
-            });
-
-            buffer.writeByte(material.blacklistedGearTypes.size());
-            material.blacklistedGearTypes.forEach(buffer::writeString);
-
-            // Textures
-            buffer.writeVarInt(material.display.size());
-            material.display.forEach((s, display) -> {
-                buffer.writeString(s);
-                display.write(buffer);
-            });
-
-            // Stats and traits
-            writeStats(buffer, material);
-            writeTraits(buffer, material);
+            // Text
+            material.displayName = buffer.readTextComponent();
+            if (buffer.readBoolean()) {
+                material.namePrefix = buffer.readTextComponent();
+            }
         }
 
-        @Override
-        public ResourceLocation getName() {
-            return id;
+        private void readRestrictions(PacketBuffer buffer, T material) {
+            // Categories
+            int categoryCount = buffer.readByte();
+            for (int i = 0; i < categoryCount; ++i) {
+                material.categories.add(MaterialCategories.get(buffer.readString()));
+            }
+
+            // Gear Type Blacklist
+            material.blacklistedGearTypes.clear();
+            int blacklistSize = buffer.readByte();
+            for (int i = 0; i < blacklistSize; ++i) {
+                material.blacklistedGearTypes.add(buffer.readString());
+            }
         }
 
-        private static void readStats(PacketBuffer buffer, PartMaterial material) {
+        private void readStats(PacketBuffer buffer, T material) {
             material.stats.clear();
             int typeCount = buffer.readByte();
             for (int i = 0; i < typeCount; ++i) {
@@ -559,20 +425,7 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
             }
         }
 
-        private static void writeStats(PacketBuffer buffer, PartMaterial material) {
-            buffer.writeByte(material.stats.size());
-            //noinspection OverlyLongLambda
-            material.stats.forEach((partType, map) -> {
-                buffer.writeResourceLocation(partType.getName());
-                buffer.writeByte(map.size());
-                map.forEach((key, mod) -> {
-                    buffer.writeString(key.toString());
-                    mod.write(buffer);
-                });
-            });
-        }
-
-        private static void readTraits(PacketBuffer buffer, PartMaterial material) {
+        private void readTraits(PacketBuffer buffer, T material) {
             material.traits.clear();
             int typeCount = buffer.readByte();
             for (int i = 0; i < typeCount; ++i) {
@@ -586,7 +439,64 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
             }
         }
 
-        private static void writeTraits(PacketBuffer buffer, PartMaterial material) {
+        //endregion
+
+        @Override
+        public void write(PacketBuffer buffer, T material) {
+            buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
+
+            writeBasics(buffer, material);
+            writeRestrictions(buffer, material);
+            writeStats(buffer, material);
+            writeTraits(buffer, material);
+        }
+
+        //region write methods
+
+        private void writeBasics(PacketBuffer buffer, T material) {
+            // Parent
+            buffer.writeBoolean(material.parent != null);
+            if (material.parent != null) {
+                buffer.writeResourceLocation(material.parent);
+            }
+
+            buffer.writeBoolean(material.visible);
+            buffer.writeBoolean(material.canSalvage);
+            buffer.writeBoolean(material.simple);
+            material.ingredient.write(buffer);
+
+            // Text
+            buffer.writeTextComponent(material.displayName);
+            buffer.writeBoolean(material.namePrefix != null);
+            if (material.namePrefix != null) {
+                buffer.writeTextComponent(material.namePrefix);
+            }
+        }
+
+        private void writeRestrictions(PacketBuffer buffer, T material) {
+            // Categories
+            buffer.writeByte(material.categories.size());
+            material.categories.forEach(cat -> buffer.writeString(cat.getName()));
+
+            // Gear Type Blacklist
+            buffer.writeByte(material.blacklistedGearTypes.size());
+            material.blacklistedGearTypes.forEach(buffer::writeString);
+        }
+
+        private void writeStats(PacketBuffer buffer, T material) {
+            buffer.writeByte(material.stats.size());
+            //noinspection OverlyLongLambda
+            material.stats.forEach((partType, map) -> {
+                buffer.writeResourceLocation(partType.getName());
+                buffer.writeByte(map.size());
+                map.forEach((key, mod) -> {
+                    buffer.writeString(key.toString());
+                    mod.write(buffer);
+                });
+            });
+        }
+
+        private void writeTraits(PacketBuffer buffer, T material) {
             buffer.writeByte(material.traits.size());
             material.traits.forEach((partType, list) -> {
                 buffer.writeResourceLocation(partType.getName());
@@ -596,5 +506,10 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
         }
 
         //endregion
+
+        @Override
+        public ResourceLocation getName() {
+            return name;
+        }
     }
 }

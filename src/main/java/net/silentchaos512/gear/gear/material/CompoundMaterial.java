@@ -7,7 +7,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
@@ -20,6 +19,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.client.material.CompoundMaterialDisplay;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CompoundMaterial implements IMaterial {
+public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMaterial
     private final ResourceLocation materialId;
     private final String packName;
     private final Collection<IMaterialCategory> categories = new ArrayList<>();
@@ -74,7 +74,7 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<IMaterialCategory> getCategories(MaterialInstance material) {
+    public Collection<IMaterialCategory> getCategories(IMaterialInstance material) {
         Set<IMaterialCategory> set = new HashSet<>(categories);
         for (MaterialInstance mat : getSubMaterials(material)) {
             set.addAll(mat.getCategories());
@@ -205,6 +205,12 @@ public class CompoundMaterial implements IMaterial {
                 .collect(Collectors.toSet());
     }
 
+    @Nullable
+    @Override
+    public IMaterialDisplay getDisplayOverride(IMaterialInstance material) {
+        return CompoundMaterialDisplay.INSTANCE;
+    }
+
     private static StatInstance compressModifiers(Collection<StatInstance> mods, StatInstance.Operation operation, StatGearKey key) {
         // We do NOT want to average together max modifiers...
         if (operation == StatInstance.Operation.MAX) {
@@ -247,18 +253,21 @@ public class CompoundMaterial implements IMaterial {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
+    public ITextComponent getDisplayName(@Nullable IMaterialInstance material, PartType type, ItemStack gear) {
+        if (material != null) {
+            return material.getItem().getDisplayName();
+        }
         return displayName.deepCopy();
     }
 
     @Nullable
     @Override
-    public IFormattableTextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
+    public ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
         return namePrefix != null ? namePrefix.deepCopy() : null;
     }
 
     @Override
-    public int getNameColor(PartType partType, GearType gearType, IMaterialInstance material) {
+    public int getNameColor(IMaterialInstance material, PartType partType, GearType gearType) {
         IMaterialDisplay model = MaterialDisplayManager.get(material);
         int color = model.getLayerColor(gearType, partType, material, 0);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;

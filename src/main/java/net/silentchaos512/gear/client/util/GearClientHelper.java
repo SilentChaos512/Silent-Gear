@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -208,8 +209,8 @@ public final class GearClientHelper {
                 if (part.get() instanceof CompoundPart) {
                     builder.indent();
                     for (MaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
-                        int nameColor = material.get().getNameColor(part.getType(), gear);
-                        builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
+                        int nameColor = material.getNameColor(part.getType(), GearType.ALL);
+                        builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType(), ItemStack.EMPTY), nameColor));
                     }
                     builder.unindent();
                 }

@@ -147,7 +147,7 @@ public class CompoundPartItem extends Item {
         PartData part = PartData.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
         if (part != null && material != null) {
-            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(partType));
+            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
             int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
             return TextUtil.withColor(nameText, nameColor);
         }
@@ -163,8 +163,8 @@ public class CompoundPartItem extends Item {
 
             TextListBuilder matsBuilder = new TextListBuilder();
             getMaterials(stack).forEach(material -> {
-                int nameColor = material.get().getNameColor(part.getType(), this.getGearType());
-                matsBuilder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
+                int nameColor = material.getNameColor(part.getType(), this.getGearType());
+                matsBuilder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType(), ItemStack.EMPTY), nameColor));
             });
             tooltip.addAll(matsBuilder.build());
         }

@@ -3,17 +3,14 @@ package net.silentchaos512.gear.api.material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.IGearComponent;
 import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
-import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
@@ -79,7 +76,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * @param material
      * @return Collection of categories
      */
-    Collection<IMaterialCategory> getCategories(MaterialInstance material);
+    Collection<IMaterialCategory> getCategories(IMaterialInstance material);
 
     /**
      * Gets the tier of the material. Currently, the tier never depends on the part type.
@@ -130,35 +127,15 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
 
     Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type);
 
-    /**
-     * Gets the rendering properties of the material, including textures and colors.
-     *
-     * @param gear     The gear item
-     * @param partType The part type
-     * @return Material display properties
-     */
-    @Deprecated
-    default IMaterialLayerList getMaterialDisplay(ItemStack gear, PartType partType) {return MaterialLayerList.DEFAULT;}
-
-    IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear);
-
-    default IFormattableTextComponent getDisplayName(PartType partType) {
-        return getDisplayName(partType, ItemStack.EMPTY);
+    @Nullable
+    default IMaterialDisplay getDisplayOverride(IMaterialInstance material) {
+        return null;
     }
 
     @Nullable
-    IFormattableTextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
+    ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType);
 
-    default int getNameColor(PartType partType, ItemStack gear) {
-        return getNameColor(partType, GearHelper.getType(gear, GearType.ALL));
-    }
-
-    @Deprecated
-    default int getNameColor(PartType partType, GearType gearType) {
-        return getNameColor(partType, gearType, LazyMaterialInstance.of(Const.NULL_ID));
-    }
-
-    int getNameColor(PartType partType, GearType gearType, IMaterialInstance material);
+    int getNameColor(IMaterialInstance material, PartType partType, GearType gearType);
 
     default String getModelKey(IMaterialInstance material) {
         return SilentGear.shortenId(getId());

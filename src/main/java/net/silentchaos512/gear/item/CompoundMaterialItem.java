@@ -134,7 +134,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         TextListBuilder statsBuilder = new TextListBuilder();
         for (MaterialInstance material : materials) {
             int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
-            statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN), nameColor));
+            statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN).deepCopy(), nameColor));
         }
         tooltip.addAll(statsBuilder.build());
     }
