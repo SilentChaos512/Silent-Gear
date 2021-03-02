@@ -20,10 +20,10 @@
   "stats": {
     "main": {
       "durability": 0.0,
-      "armor_durability": 13.0,
+      "armor_durability": 12.0,
       "enchantability": 10.0,
       "rarity": 35.0,
-      "armor_durability/elytra": 36.0,
+      "armor_durability/elytra": 17.0,
       "armor": 6.0,
       "armor/helmet": 1.0,
       "armor/chestplate": 2.0,

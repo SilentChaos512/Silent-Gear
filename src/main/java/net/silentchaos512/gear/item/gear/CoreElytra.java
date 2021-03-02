@@ -45,7 +45,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CoreElytra extends ElytraItem implements ICoreArmor {
-    private static final int DURABILITY_MULTIPLIER = 12;
+    private static final int DURABILITY_MULTIPLIER = 25;
     private static final UUID ARMOR_UUID = UUID.fromString("f099f401-82f6-4565-a0b5-fd464f2dc72c");
 
     private static final List<PartType> REQUIRED_PARTS = ImmutableList.of(
