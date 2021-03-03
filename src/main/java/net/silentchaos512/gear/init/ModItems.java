@@ -238,9 +238,9 @@ public final class ModItems {
     public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
     public static final ItemRegistryObject<BlockNamedItem> FLAX_SEEDS = register("flax_seeds", () ->
-            new BlockNamedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
+            new SeedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
     public static final ItemRegistryObject<BlockNamedItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
-            new BlockNamedItem(ModBlocks.FLUFFY_PLANT.get(), baseProps()));
+            new SeedItem(ModBlocks.FLUFFY_PLANT.get(), baseProps()));
 
     public static final ItemRegistryObject<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
