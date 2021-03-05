@@ -18,6 +18,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
+import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.Const;
@@ -65,6 +66,11 @@ public final class ModBlocks {
                     AbstractBlock.Properties.create(Material.IRON)
                             .hardnessAndResistance(4, 20)
                             .sound(SoundType.METAL)));
+
+    public static final BlockRegistryObject<MetalPressBlock> METAL_PRESS = register("metal_press", () ->
+            new MetalPressBlock(AbstractBlock.Properties.create(Material.IRON)
+                    .hardnessAndResistance(4, 20)
+                    .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<ModCropBlock> FLAX_PLANT = registerNoItem("flax_plant", () ->
             new ModCropBlock(() -> ModItems.FLAX_SEEDS.get(), AbstractBlock.Properties.create(Material.PLANTS)
@@ -174,9 +180,11 @@ public final class ModBlocks {
             makePottedPlant(NETHERWOOD_SAPLING));
     public static final BlockRegistryObject<PhantomLight> PHANTOM_LIGHT = register("phantom_light", PhantomLight::new);
 
-    private ModBlocks() {}
+    private ModBlocks() {
+    }
 
-    static void register() {}
+    static void register() {
+    }
 
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderTypes(FMLClientSetupEvent event) {

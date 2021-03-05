@@ -31,6 +31,8 @@ public final class Const {
     public static final ResourceLocation FILL_REPAIR_KIT = SilentGear.getId("fill_repair_kit");
     public static final ResourceLocation GRADING = SilentGear.getId("grading");
     public static final ResourceLocation MOD_KIT_REMOVE_PART = SilentGear.getId("mod_kit_remove_part");
+    public static final ResourceLocation PRESSING = SilentGear.getId("pressing");
+    public static final ResourceLocation PRESSING_MATERIAL = SilentGear.getId("pressing/material");
     public static final ResourceLocation QUICK_REPAIR = SilentGear.getId("quick_repair");
     public static final ResourceLocation SALVAGING = SilentGear.getId("salvaging");
     public static final ResourceLocation SALVAGING_COMPOUND_PART = SilentGear.getId("salvaging/compound_part");

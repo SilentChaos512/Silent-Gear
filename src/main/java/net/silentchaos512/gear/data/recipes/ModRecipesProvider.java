@@ -31,6 +31,7 @@ import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.lib.data.recipe.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.ExtendedShapelessRecipeBuilder;
+import net.silentchaos512.lib.data.recipe.ExtendedSingleItemRecipeBuilder;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -89,6 +90,7 @@ public class ModRecipesProvider extends RecipeProvider {
         registerModifierKits(consumer);
         registerMachines(consumer);
         registerCompounding(consumer);
+        registerPressing(consumer);
         registerSmithing(consumer);
         registerSalvaging(consumer);
     }
@@ -684,6 +686,13 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addIngredient(ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .addIngredient(ModTags.Items.INGOTS_AZURE_ELECTRUM)
                 .addIngredient(Items.NETHER_STAR)
+                .build(consumer);
+    }
+
+    private void registerPressing(Consumer<IFinishedRecipe> consumer) {
+        ExtendedSingleItemRecipeBuilder.builder(ModRecipes.PRESSING_MATERIAL.get(),
+                PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
+                ModItems.SHEET_METAL, 2)
                 .build(consumer);
     }
 

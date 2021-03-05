@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "silentgear:block/metal_press"
+    },
+    "facing=south": {
+      "model": "silentgear:block/metal_press"
+    },
+    "facing=west": {
+      "model": "silentgear:block/metal_press"
+    },
+    "facing=east": {
+      "model": "silentgear:block/metal_press"
+    }
+  }
+}

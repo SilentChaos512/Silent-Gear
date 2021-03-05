@@ -83,6 +83,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         .rotationY((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 90)
                         .build());
 
+        getVariantBuilder(ModBlocks.METAL_PRESS.get()).forAllStates(state -> {
+            return ConfiguredModel.builder()
+                    .modelFile(models().cubeTop("metal_press",
+                            modLoc("block/metal_press_top"),
+                            modLoc("block/metal_press_side")))
+                    .build();
+        });
+
         // Compounders
         {
             BlockModelBuilder offModel = models().orientable("metal_alloyer",

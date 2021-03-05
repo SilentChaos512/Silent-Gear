@@ -13,6 +13,8 @@ import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
+import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
@@ -22,6 +24,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapedRecipe;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
+import net.silentchaos512.lib.crafting.recipe.ExtendedSingleItemRecipe;
 
 import java.util.function.Supplier;
 
@@ -29,6 +32,7 @@ public final class ModRecipes {
     public static final IRecipeType<CompoundingRecipe> COMPOUNDING_TYPE = IRecipeType.register(Const.COMPOUNDING.toString());
     public static final IRecipeType<GemCompoundingRecipe> COMPOUNDING_GEM_TYPE = IRecipeType.register(Const.COMPOUNDING_GEM.toString());
     public static final IRecipeType<MetalCompoundingRecipe> COMPOUNDING_METAL_TYPE = IRecipeType.register(Const.COMPOUNDING_METAL.toString());
+    public static final IRecipeType<PressingRecipe> PRESSING_TYPE = IRecipeType.register(Const.PRESSING.toString());
     public static final IRecipeType<SalvagingRecipe> SALVAGING_TYPE = IRecipeType.register(Const.SALVAGING.toString());
 
     public static final RegistryObject<IRecipeSerializer<?>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () -> new SpecialRecipeSerializer<>(CombineFragmentsRecipe::new));
@@ -40,6 +44,10 @@ public final class ModRecipes {
     public static final RegistryObject<IRecipeSerializer<?>> DAMAGE_ITEM = register(Const.DAMAGE_ITEM, SGearDamageItemRecipe.Serializer::new);
     public static final RegistryObject<IRecipeSerializer<?>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT, () -> new SpecialRecipeSerializer<>(FillRepairKitRecipe::new));
     public static final RegistryObject<IRecipeSerializer<?>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () -> new SpecialRecipeSerializer<>(ModKitRemovePartRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> PRESSING = register(Const.PRESSING, () ->
+            ExtendedSingleItemRecipe.Serializer.basic(PRESSING_TYPE, PressingRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> PRESSING_MATERIAL = register(Const.PRESSING_MATERIAL, () ->
+            ExtendedSingleItemRecipe.Serializer.basic(PRESSING_TYPE, MaterialPressingRecipe::new));
     public static final RegistryObject<IRecipeSerializer<?>> QUICK_REPAIR = register(Const.QUICK_REPAIR, () -> new SpecialRecipeSerializer<>(QuickRepairRecipe::new));
     public static final RegistryObject<IRecipeSerializer<?>> SALVAGING = register(Const.SALVAGING, SalvagingRecipe.Serializer::new);
     public static final RegistryObject<IRecipeSerializer<?>> SALVAGING_GEAR = register(Const.SALVAGING_GEAR, GearSalvagingRecipe.Serializer::new);

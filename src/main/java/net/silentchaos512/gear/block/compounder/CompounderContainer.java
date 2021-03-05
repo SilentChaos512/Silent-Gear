@@ -6,7 +6,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -22,10 +21,10 @@ import java.util.Collection;
 
 public class CompounderContainer extends Container {
     private final IInventory inventory;
-    final IIntArray fields;
+    private final IIntArray fields;
 
     public CompounderContainer(ContainerType<?> containerType, int id, PlayerInventory playerInventory, PacketBuffer buffer, Collection<IMaterialCategory> categories) {
-        this(containerType, id, playerInventory, new Inventory(buffer.readByte()), new IntArray(2), categories);
+        this(containerType, id, playerInventory, new Inventory(buffer.readByte()), new IntArray(buffer.readByte()), categories);
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
@@ -73,12 +72,6 @@ public class CompounderContainer extends Container {
     public int getProgressArrowScale() {
         int progress = fields.get(0);
         return progress != 0 ? progress * 24 / CompounderTileEntity.WORK_TIME : 0;
-    }
-
-    @Override
-    public void addListener(IContainerListener listener) {
-        super.addListener(listener);
-        listener.sendAllContents(this, getInventory());
     }
 
     @Override

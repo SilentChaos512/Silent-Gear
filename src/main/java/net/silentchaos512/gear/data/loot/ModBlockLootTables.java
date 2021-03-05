@@ -70,6 +70,7 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.METAL_ALLOYER.get());
         registerDropSelfLootTable(ModBlocks.RECRYSTALLIZER.get());
         registerDropSelfLootTable(ModBlocks.SALVAGER.get());
+        registerDropSelfLootTable(ModBlocks.METAL_PRESS.get());
         registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
 
         registerDropSelfLootTable(ModBlocks.WHITE_FLUFFY_BLOCK.get());
