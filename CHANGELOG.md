@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Elytra now have a 25x durability modifier (up from 12x)
   - Elytra armor durability stat of phantom membrane and fine silk reduced to roughly match previous values
 - Seeds (flax and fluffy) can now be fed to chickens and parrots, but will not cause them to follow the player
+### Fixed
+- Toughness of refined obsidian much lower than Mekanism values [#343]
 
 ## [2.6.6] - 2021-02-28
 ### Added
