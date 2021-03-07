@@ -66,6 +66,7 @@ public enum CraftingItems implements IItemProvider {
     GLOWING_DUST,
     BLAZING_DUST,
     GLITTERY_DUST,
+    CRUSHED_SHULKER_SHELL,
     LEATHER_SCRAP,
     SINEW,
     DRIED_SINEW,

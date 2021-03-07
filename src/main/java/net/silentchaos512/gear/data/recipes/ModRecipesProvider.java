@@ -667,6 +667,15 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("/d/")
                 .patternLine("#g#")
                 .build(consumer);
+
+        ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.METAL_PRESS)
+                .key('#', Tags.Items.OBSIDIAN)
+                .key('t', ModTags.Items.INGOTS_TYRIAN_STEEL)
+                .key('/', ModTags.Items.RODS_IRON)
+                .patternLine("#t#")
+                .patternLine("/ /")
+                .patternLine("#t#")
+                .build(consumer);
     }
 
     private void registerCompounding(Consumer<IFinishedRecipe> consumer) {
@@ -685,7 +694,8 @@ public class ModRecipesProvider extends RecipeProvider {
         CompoundingRecipeBuilder.metalBuilder(CraftingItems.TYRIAN_STEEL_INGOT, 4)
                 .addIngredient(ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .addIngredient(ModTags.Items.INGOTS_AZURE_ELECTRUM)
-                .addIngredient(Items.NETHER_STAR)
+                .addIngredient(CraftingItems.CRUSHED_SHULKER_SHELL)
+                .addIngredient(Items.NETHERITE_SCRAP)
                 .build(consumer);
     }
 
@@ -715,6 +725,11 @@ public class ModRecipesProvider extends RecipeProvider {
         damageGear(CraftingItems.TEMPLATE_BOARD, 6, 1)
                 .addIngredient(ModTags.Items.KNIVES)
                 .addIngredient(ItemTags.LOGS)
+                .build(consumer);
+
+        damageGear(CraftingItems.CRUSHED_SHULKER_SHELL, 1, 10)
+                .addIngredient(ModTags.Items.HAMMERS)
+                .addIngredient(Items.SHULKER_SHELL)
                 .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(CraftingItems.AZURE_ELECTRUM_INGOT)

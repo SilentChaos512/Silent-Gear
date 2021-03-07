@@ -8,7 +8,10 @@
       "tag": "forge:ingots/azure_electrum"
     },
     {
-      "item": "minecraft:nether_star"
+      "item": "silentgear:crushed_shulker_shell"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
     }
   ],
   "result": {

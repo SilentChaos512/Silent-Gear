@@ -3,11 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.7] - 2021-03-07
 ### Added
 - Sheet metal materials. Metals can be pressed into sheets. Not suitable for tools and makes weaker armor than the base materials, but can also be used to craft elytra.
+- Metal press, used to craft sheet metal
 - Missing translation keys for fluffy plants
 ### Changed
+- Tyrian steel recipe now requires crushed shulker shell and ancient debris instead of nether stars
 - Elytra now have a 25x durability modifier (up from 12x)
   - Elytra armor durability stat of phantom membrane and fine silk reduced to roughly match previous values
 - Seeds (flax and fluffy) can now be fed to chickens and parrots, but will not cause them to follow the player
