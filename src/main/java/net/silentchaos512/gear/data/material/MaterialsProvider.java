@@ -1998,7 +1998,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 10f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.3f)
-                .mainStatsArmor(5, 12, 8, 5, 2, 6) //30
+                .mainStatsArmor(5, 12, 8, 5, 16, 6) //30
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 4)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.2f)
                 .stat(PartType.MAIN, ItemStats.RARITY, 70)
