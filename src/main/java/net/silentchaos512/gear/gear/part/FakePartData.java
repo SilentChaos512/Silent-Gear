@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -59,7 +60,7 @@ public final class FakePartData implements IPartData {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(PartType partType, GearType gearType, ItemStack gear) {
+    public Collection<TraitInstance> getTraits(PartGearKey partKey, ItemStack gear) {
         return Collections.emptyList();
     }
 

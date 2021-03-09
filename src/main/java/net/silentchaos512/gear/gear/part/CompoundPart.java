@@ -121,8 +121,6 @@ public class CompoundPart extends AbstractGearPart {
         return super.getModelKey(part) + str;
     }
 
-
-
     @Override
     public Collection<StatInstance> getStatModifiers(IPartData part, PartType partType, StatGearKey key, ItemStack gear) {
         // Get the materials and all the stat modifiers they provide for this stat
@@ -156,7 +154,7 @@ public class CompoundPart extends AbstractGearPart {
 
         // Synergy
         if (key.getStat().doesSynergyApply()) {
-            final float synergy = SynergyUtils.getSynergy(this.partType, materials, getTraits(part, partType, gearType, gear));
+            final float synergy = SynergyUtils.getSynergy(this.partType, materials, getTraits(part, PartGearKey.of(gearType, partType), gear));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 final float multi = synergy - 1f;
                 for (int i = 0; i < ret.size(); ++i) {
@@ -186,16 +184,15 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(IPartData part, PartType partType, GearType gearType, ItemStack gear) {
-        List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, partType, gearType, gear));
+    public Collection<TraitInstance> getTraits(IPartData part, PartGearKey partKey, ItemStack gear) {
+        List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, partKey, gear));
         List<MaterialInstance> materials = getMaterials(part);
 
-        TraitHelper.getTraits(materials, GearHelper.getType(gear), this.partType, gear).forEach((trait, level) -> {
-            TraitInstance inst = TraitInstance.of(trait, level);
-            if (inst.conditionsMatch(PartGearKey.of(GearHelper.getType(gear), partType), gear, materials)) {
+        for (TraitInstance inst : TraitHelper.getTraits(materials, partKey, gear)) {
+            if (inst.conditionsMatch(partKey, gear, materials)) {
                 ret.add(inst);
             }
-        });
+        }
 
         return ret;
     }

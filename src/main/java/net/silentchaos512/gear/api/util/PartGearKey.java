@@ -29,6 +29,10 @@ public final class PartGearKey {
                 new PartGearKey(pair.getFirst(), pair.getSecond()));
     }
 
+    public static PartGearKey ofAll(PartType partType) {
+        return of(GearType.ALL, partType);
+    }
+
     @Nullable
     public PartGearKey getParent() {
         GearType parent = this.gearType.getParent();

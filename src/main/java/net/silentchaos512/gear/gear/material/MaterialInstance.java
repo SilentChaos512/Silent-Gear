@@ -17,6 +17,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
@@ -174,8 +175,8 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(PartType partType, GearType gearType, ItemStack gear) {
-        return material.getTraits(this, partType, gearType, gear);
+    public Collection<TraitInstance> getTraits(PartGearKey partKey, ItemStack gear) {
+        return material.getTraits(this, partKey, gear);
     }
 
     public boolean canRepair(ItemStack gear) {

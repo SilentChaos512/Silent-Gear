@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
@@ -105,7 +106,7 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         if (material == null) {
             return Collections.emptyList();
         }
-        return material.getTraits(this, partType, gearType, gear);
+        return material.getTraits(this, PartGearKey.of(gearType, partType), gear);
     }
 
     @Override

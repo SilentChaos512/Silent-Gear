@@ -10,6 +10,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -89,7 +90,7 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
         if (part == null) {
             return Collections.emptyList();
         }
-        return part.getTraits(this, partType, gearType, gear);
+        return part.getTraits(this, PartGearKey.of(gearType, partType), gear);
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
@@ -131,10 +132,10 @@ public abstract class AbstractMaterial implements IMaterial {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartType partType, GearType gearType, ItemStack gear) {
-        List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partType, Collections.emptyList()));
+    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartGearKey partKey, ItemStack gear) {
+        List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partKey.getPartType(), Collections.emptyList()));
         if (ret.isEmpty() && getParent() != null) {
-            ret.addAll(getParent().getTraits(material, partType, gearType, gear));
+            ret.addAll(getParent().getTraits(material, partKey, gear));
         }
         return ret;
     }

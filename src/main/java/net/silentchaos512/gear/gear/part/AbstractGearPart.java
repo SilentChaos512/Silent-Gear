@@ -23,6 +23,7 @@ import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 
 import javax.annotation.Nullable;
@@ -91,7 +92,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(IPartData part, PartType partType, GearType gearType, ItemStack gear) {
+    public Collection<TraitInstance> getTraits(IPartData part, PartGearKey partKey, ItemStack gear) {
         return Collections.unmodifiableList(traits);
     }
 

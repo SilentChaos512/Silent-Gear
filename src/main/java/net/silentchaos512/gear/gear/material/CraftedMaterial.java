@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.material.IMaterialSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CraftedMaterialItem;
@@ -81,10 +82,10 @@ public class CraftedMaterial extends AbstractMaterial {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartType partType, GearType gearType, ItemStack gear) {
-        Collection<TraitInstance> ret = super.getTraits(material, partType, gearType, gear);
+    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartGearKey partKey, ItemStack gear) {
+        Collection<TraitInstance> ret = super.getTraits(material, partKey, gear);
         IMaterialInstance base = getBaseMaterial(material);
-        ret.addAll(base.getTraits(partType, gearType, gear));
+        ret.addAll(base.getTraits(partKey, gear));
         return ret;
     }
 

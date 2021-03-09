@@ -22,7 +22,8 @@ import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainer;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerScreen;
 
 public final class ModContainers {
-    public static final RegistryObject<ContainerType<GraderContainer>> MATERIAL_GRADER = register("material_grader", GraderContainer::new);
+    public static final RegistryObject<ContainerType<GraderContainer>> MATERIAL_GRADER = register("material_grader",
+            GraderContainer::new);
 
     public static final RegistryObject<ContainerType<CompounderContainer>> METAL_ALLOYER = register("metal_alloyer", (id, playerInventory, buffer) ->
             new CompounderContainer(getMetalAlloyer(),
@@ -38,11 +39,14 @@ public final class ModContainers {
                     buffer,
                     ModBlocks.RECRYSTALLIZER.get().getCategories()));
 
-    public static final RegistryObject<ContainerType<SalvagerContainer>> SALVAGER = register("salvager", SalvagerContainer::new);
+    public static final RegistryObject<ContainerType<SalvagerContainer>> SALVAGER = register("salvager",
+            SalvagerContainer::new);
 
-    public static final RegistryObject<ContainerType<MetalPressContainer>> METAL_PRESS = register("metal_press", MetalPressContainer::new);
+    public static final RegistryObject<ContainerType<MetalPressContainer>> METAL_PRESS = register("metal_press",
+            MetalPressContainer::new);
 
-    public static final RegistryObject<ContainerType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book", BlueprintBookContainer::new);
+    public static final RegistryObject<ContainerType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book",
+            BlueprintBookContainer::new);
 
     private ModContainers() {}
 

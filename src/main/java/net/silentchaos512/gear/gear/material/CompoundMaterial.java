@@ -181,7 +181,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
 
         // Synergy
         if (stat.doesSynergyApply() && matInst != null) {
-            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(materials), getTraits(matInst, partType, key.getGearType(), gear));
+            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(materials), getTraits(matInst, PartGearKey.ofAll(partType), gear));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 final float multi = synergy - 1f;
                 for (int i = 0; i < ret.size(); ++i) {
@@ -224,16 +224,16 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartType partType, GearType gearType, ItemStack gear) {
+    public Collection<TraitInstance> getTraits(IMaterialInstance material, PartGearKey partKey, ItemStack gear) {
+        List<MaterialInstance> materials = new ArrayList<>(getSubMaterials(material));
+        List<TraitInstance> traits = TraitHelper.getTraits(materials, partKey, ItemStack.EMPTY);
         List<TraitInstance> ret = new ArrayList<>();
-        List<MaterialInstance> list = new ArrayList<>(getSubMaterials(material));
 
-        TraitHelper.getTraits(list, gearType, partType, ItemStack.EMPTY).forEach((trait, level) -> {
-            TraitInstance inst = TraitInstance.of(trait, level);
-            if (inst.conditionsMatch(PartGearKey.of(gearType, partType), ItemStack.EMPTY, list)) {
+        for (TraitInstance inst : traits) {
+            if (inst.conditionsMatch(partKey, ItemStack.EMPTY, materials)) {
                 ret.add(inst);
             }
-        });
+        }
 
         return ret;
     }

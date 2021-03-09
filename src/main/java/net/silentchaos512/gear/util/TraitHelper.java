@@ -41,9 +41,9 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.utils.MathUtils;
@@ -295,40 +295,39 @@ public final class TraitHelper {
         return result;
     }
 
-    @Deprecated
-    public static Map<ITrait, Integer> getTraits(List<MaterialInstance> materials, PartType partType, ItemStack gear) {
-        return getTraits(materials, GearHelper.getType(gear), partType, gear);
-    }
+    public static List<TraitInstance> getTraits(List<? extends IGearComponentInstance<?>> components, PartGearKey partKey, ItemStack gear) {
+        if (components.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-    public static Map<ITrait, Integer> getTraits(List<MaterialInstance> materials, GearType gearType, PartType partType, ItemStack gear) {
-        if (materials.isEmpty())
-            return Collections.emptyMap();
-
-        Map<ITrait, Integer> result = new LinkedHashMap<>();
+        Map<ITrait, Integer> map = new LinkedHashMap<>();
         Map<ITrait, Integer> countMatsWithTrait = new HashMap<>();
 
-        for (MaterialInstance material : materials) {
-            for (TraitInstance inst : material.getTraits(partType, gearType, gear)) {
-                if (inst.conditionsMatch(PartGearKey.of(gearType, partType), gear, materials)) {
-                    result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
+        for (IGearComponentInstance<?> comp : components) {
+            for (TraitInstance inst : comp.getTraits(partKey, gear)) {
+                if (inst.conditionsMatch(partKey, gear, components)) {
+                    map.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
                 }
             }
         }
 
-        ITrait[] keys = result.keySet().toArray(new ITrait[0]);
+        ITrait[] keys = map.keySet().toArray(new ITrait[0]);
 
         for (ITrait trait : keys) {
             final int matsWithTrait = countMatsWithTrait.get(trait);
-            final float divisor = Math.max(materials.size() / 2f, matsWithTrait);
-            final int value = Math.round(result.get(trait) / divisor);
-            result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
+            final float divisor = Math.max(components.size() / 2f, matsWithTrait);
+            final int value = Math.round(map.get(trait) / divisor);
+            map.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
         }
 
-        cancelTraits(result, keys);
+        cancelTraits(map, keys);
         // FIXME
 //        MinecraftForge.EVENT_BUS.post(new GetTraitsEvent(gear, materials, result));
-        return result;
+
+        List<TraitInstance> ret = new ArrayList<>();
+        map.forEach((trait, level) -> ret.add(TraitInstance.of(trait, level)));
+        return ret;
     }
 
     private static void cancelTraits(Map<ITrait, Integer> mapToModify, ITrait[] keys) {

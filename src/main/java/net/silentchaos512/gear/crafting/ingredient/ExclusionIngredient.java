@@ -24,7 +24,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// TODO: Move to Silent Lib?
+/**
+ * @deprecated Moving to Silent Lib
+ */
+@Deprecated
 public class ExclusionIngredient extends Ingredient {
     private final Ingredient parent;
     private final Collection<ResourceLocation> exclusions = new ArrayList<>();
