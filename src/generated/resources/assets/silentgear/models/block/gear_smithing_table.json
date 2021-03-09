@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "silentgear:block/gear_smithing_table_bottom",
+    "up": "silentgear:block/gear_smithing_table_top",
+    "north": "silentgear:block/gear_smithing_table_front",
+    "south": "silentgear:block/gear_smithing_table_front",
+    "east": "silentgear:block/gear_smithing_table_side",
+    "west": "silentgear:block/gear_smithing_table_side"
+  }
+}

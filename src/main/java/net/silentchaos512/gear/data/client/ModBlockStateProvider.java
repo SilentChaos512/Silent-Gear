@@ -83,6 +83,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         .rotationY((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 90)
                         .build());
 
+        {
+            ResourceLocation bottom = modLoc("block/gear_smithing_table_bottom");
+            ResourceLocation front = modLoc("block/gear_smithing_table_front");
+            ResourceLocation side = modLoc("block/gear_smithing_table_side");
+            ResourceLocation top = modLoc("block/gear_smithing_table_top");
+            simpleBlock(ModBlocks.GEAR_SMITHING_TABLE.get(),
+                    models().cube("gear_smithing_table", bottom, top, front, front, side, side)
+                            .texture("particle", front));
+        }
+
         getVariantBuilder(ModBlocks.METAL_PRESS.get()).forAllStates(state -> {
             return ConfiguredModel.builder()
                     .modelFile(models().cubeTop("metal_press",

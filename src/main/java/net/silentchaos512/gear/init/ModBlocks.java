@@ -49,6 +49,11 @@ public final class ModBlocks {
     public static final BlockRegistryObject<Block> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block", ModBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> TYRIAN_STEEL_BLOCK = register("tyrian_steel_block", ModBlocks::getStorageBlock);
 
+    public static final BlockRegistryObject<Block> GEAR_SMITHING_TABLE = register("gear_smithing_table", () ->
+            new Block(AbstractBlock.Properties.create(Material.WOOD)
+                    .hardnessAndResistance(2.5F)
+                    .sound(SoundType.WOOD)));
+
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(5, 30)));

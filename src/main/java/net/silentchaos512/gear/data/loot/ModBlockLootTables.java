@@ -65,13 +65,16 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_TRAPDOOR.get());
         registerLootTable(ModBlocks.NETHERWOOD_SLAB.get(), BlockLootTables::droppingSlab);
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_STAIRS.get());
+        registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
+
         registerLootTable(ModBlocks.PHANTOM_LIGHT.get(), blockNoDrop());
         registerFlowerPot(ModBlocks.POTTED_NETHERWOOD_SAPLING.get());
+
+        registerDropSelfLootTable(ModBlocks.GEAR_SMITHING_TABLE.get());
         registerDropSelfLootTable(ModBlocks.METAL_ALLOYER.get());
+        registerDropSelfLootTable(ModBlocks.METAL_PRESS.get());
         registerDropSelfLootTable(ModBlocks.RECRYSTALLIZER.get());
         registerDropSelfLootTable(ModBlocks.SALVAGER.get());
-        registerDropSelfLootTable(ModBlocks.METAL_PRESS.get());
-        registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
 
         registerDropSelfLootTable(ModBlocks.WHITE_FLUFFY_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.ORANGE_FLUFFY_BLOCK.get());
