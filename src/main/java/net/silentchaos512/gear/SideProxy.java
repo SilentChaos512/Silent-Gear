@@ -97,6 +97,8 @@ class SideProxy implements IProxy {
 
         NerfedGear.init();
 
+        event.enqueueWork(GearVillages::init);
+
         Greetings.addMessage(SideProxy::detectDataLoadingFailure);
 
         if (ModList.get().isLoaded(Const.CURIOS)) {

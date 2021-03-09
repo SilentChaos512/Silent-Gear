@@ -162,6 +162,7 @@
   "command.silentgear.traits.maxLevel": "Max Level: %d",
   "command.silentgear.traits.traitNotFound": "Trait does not exist",
   "container.silentgear.blueprint_book": "Blueprint Book (Ctrl+click)",
+  "entity.minecraft.villager.silentgear.gear_smith": "Gear Smith",
   "gearType.silentgear.all": "All Gear Types",
   "gearType.silentgear.armor": "Armor",
   "gearType.silentgear.axe": "Axe",

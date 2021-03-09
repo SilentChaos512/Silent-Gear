@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:arrow_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:excavator_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:hammer_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:paxel_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:prospector_hammer_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:tip_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:advanced_upgrade_base"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:road_maker_upgrade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "silentgear:spoon_upgrade"
+        }
+      ]
+    }
+  ]
+}
