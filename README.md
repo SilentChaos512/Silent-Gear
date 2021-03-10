@@ -77,7 +77,7 @@ And finally, add dependencies for Silent Gear and Silent Lib (which will include
 ```gradle
 dependencies {
     // Replace VERSION with the version you need, in the form of "MC_VERSION:MOD_VERSION"
-    // Example: compile fg.deobf("net.silentchaos512:silent-gear:1.16.3-4.+")
+    // Example: compile fg.deobf("net.silentchaos512:silent-gear:1.16.3-2.+")
     // Available builds can be found here: https://github.com/SilentChaos512/silent-gear/packages
     // The "exclude module" lines will prevent import errors in some cases
     compile fg.deobf("net.silentchaos512:silent-gear-VERSION") {
