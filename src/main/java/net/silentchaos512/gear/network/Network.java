@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public final class Network {
     private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
-    private static final String VERSION = "sgear-net-8";
+    private static final String VERSION = "sgear-net-9";
 
     public static SimpleChannel channel;
 

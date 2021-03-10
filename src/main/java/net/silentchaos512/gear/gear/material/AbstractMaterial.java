@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
+import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
@@ -31,10 +32,13 @@ public abstract class AbstractMaterial implements IMaterial {
     @Nullable ResourceLocation parent;
     protected final String packName;
     protected final Collection<IMaterialCategory> categories = new ArrayList<>();
-    protected Ingredient ingredient = Ingredient.EMPTY;
     protected boolean visible = true;
     protected boolean canSalvage = true;
     protected boolean simple = true;
+
+    protected int tier = -1;
+    protected Ingredient ingredient = Ingredient.EMPTY;
+    protected final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
 
     protected final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
     protected final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
@@ -77,7 +81,10 @@ public abstract class AbstractMaterial implements IMaterial {
 
     @Override
     public int getTier(PartType partType) {
-        return 0;
+        if (tier < 0 && getParent() != null) {
+            return getParent().getTier(partType);
+        }
+        return this.tier;
     }
 
     @Override
@@ -87,12 +94,12 @@ public abstract class AbstractMaterial implements IMaterial {
 
     @Override
     public Optional<Ingredient> getPartSubstitute(PartType partType) {
-        return Optional.empty();
+        return Optional.ofNullable(this.partSubstitutes.get(partType));
     }
 
     @Override
     public boolean hasPartSubstitutes() {
-        return false;
+        return !this.partSubstitutes.isEmpty();
     }
 
     @Override
@@ -133,7 +140,7 @@ public abstract class AbstractMaterial implements IMaterial {
 
     @Override
     public Collection<TraitInstance> getTraits(IMaterialInstance material, PartGearKey partKey, ItemStack gear) {
-        List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partKey.getPartType(), Collections.emptyList()));
+        Collection<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partKey.getPartType(), Collections.emptyList()));
         if (ret.isEmpty() && getParent() != null) {
             ret.addAll(getParent().getTraits(material, partKey, gear));
         }
@@ -193,6 +200,8 @@ public abstract class AbstractMaterial implements IMaterial {
     public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
         if (msg.isValid()) {
             msg.getIngredient(this.materialId).ifPresent(ing -> this.ingredient = ing);
+            this.partSubstitutes.clear();
+            msg.getPartSubstitutes(this.materialId).forEach(this.partSubstitutes::put);
         }
     }
 
@@ -217,6 +226,10 @@ public abstract class AbstractMaterial implements IMaterial {
         @Override
         public T deserialize(ResourceLocation id, String packName, JsonObject json) {
             T ret = factory.apply(id, packName);
+
+            if (json.has("parent")) {
+                ret.parent = new ResourceLocation(JSONUtils.getString(json, "parent"));
+            }
 
             deserializeStats(json, ret);
             deserializeTraits(json, ret);
@@ -291,13 +304,24 @@ public abstract class AbstractMaterial implements IMaterial {
         }
 
         private void deserializeAvailability(JsonObject json, T ret) {
+            ret.simple = JSONUtils.getBoolean(json, "simple", true);
+
             JsonElement elementAvailability = json.get("availability");
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
 
                 deserializeCategories(obj.get("categories"), ret);
+                ret.tier = JSONUtils.getInt(obj, "tier", ret.tier);
                 ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
                 ret.canSalvage = JSONUtils.getBoolean(obj, "can_salvage", ret.canSalvage);
+
+                JsonArray blacklist = JSONUtils.getJsonArray(obj, "gear_blacklist", null);
+                if (blacklist != null) {
+                    ret.blacklistedGearTypes.clear();
+                    blacklist.forEach(e -> ret.blacklistedGearTypes.add(e.getAsString()));
+                } else if (ret.simple && ret.parent == null) {
+                    throw new JsonSyntaxException("Expected 'availability' to be an object");
+                }
             }
         }
 
@@ -337,6 +361,19 @@ public abstract class AbstractMaterial implements IMaterial {
                 if (main != null) {
                     ret.ingredient = Ingredient.deserialize(main);
                 }
+
+                JsonElement subs = craftingItems.getAsJsonObject().get("subs");
+                if (subs != null && subs.isJsonObject()) {
+                    // Part substitutes
+                    JsonObject jo = subs.getAsJsonObject();
+                    Map<PartType, Ingredient> map = new HashMap<>();
+                    jo.entrySet().forEach(entry -> {
+                        PartType partType = PartType.get(new ModResourceLocation(entry.getKey()));
+                        Ingredient ingredient = Ingredient.deserialize(entry.getValue());
+                        map.put(partType, ingredient);
+                    });
+                    ret.partSubstitutes.putAll(map);
+                }
             } else {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
             }
@@ -369,6 +406,7 @@ public abstract class AbstractMaterial implements IMaterial {
             T material = factory.apply(id, buffer.readString(PACK_NAME_MAX_LENGTH));
 
             readBasics(buffer, material);
+            readCraftingItems(buffer, material);
             readRestrictions(buffer, material);
             readStats(buffer, material);
             readTraits(buffer, material);
@@ -383,15 +421,27 @@ public abstract class AbstractMaterial implements IMaterial {
             if (buffer.readBoolean()) {
                 material.parent = buffer.readResourceLocation();
             }
+            material.tier = buffer.readByte();
             material.visible = buffer.readBoolean();
             material.canSalvage = buffer.readBoolean();
             material.simple = buffer.readBoolean();
-            material.ingredient = Ingredient.read(buffer);
 
-            // Text
+            // Name and Prefix
             material.displayName = buffer.readTextComponent();
             if (buffer.readBoolean()) {
                 material.namePrefix = buffer.readTextComponent();
+            }
+        }
+
+        private void readCraftingItems(PacketBuffer buffer, T material) {
+            material.ingredient = Ingredient.read(buffer);
+
+            // Part subs
+            int subCount = buffer.readByte();
+            for (int i = 0; i < subCount; ++i) {
+                PartType partType = PartType.get(buffer.readResourceLocation());
+                Ingredient ingredient = Ingredient.read(buffer);
+                material.partSubstitutes.put(partType, ingredient);
             }
         }
 
@@ -447,6 +497,7 @@ public abstract class AbstractMaterial implements IMaterial {
             buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
 
             writeBasics(buffer, material);
+            writeCraftingItems(buffer, material);
             writeRestrictions(buffer, material);
             writeStats(buffer, material);
             writeTraits(buffer, material);
@@ -461,10 +512,10 @@ public abstract class AbstractMaterial implements IMaterial {
                 buffer.writeResourceLocation(material.parent);
             }
 
+            buffer.writeByte(material.tier);
             buffer.writeBoolean(material.visible);
             buffer.writeBoolean(material.canSalvage);
             buffer.writeBoolean(material.simple);
-            material.ingredient.write(buffer);
 
             // Text
             buffer.writeTextComponent(material.displayName);
@@ -472,6 +523,17 @@ public abstract class AbstractMaterial implements IMaterial {
             if (material.namePrefix != null) {
                 buffer.writeTextComponent(material.namePrefix);
             }
+        }
+
+        private void writeCraftingItems(PacketBuffer buffer, T material) {
+            material.ingredient.write(buffer);
+
+            // Part subs
+            buffer.writeByte(material.partSubstitutes.size());
+            material.partSubstitutes.forEach((type, ing) -> {
+                buffer.writeResourceLocation(type.getName());
+                ing.write(buffer);
+            });
         }
 
         private void writeRestrictions(PacketBuffer buffer, T material) {
