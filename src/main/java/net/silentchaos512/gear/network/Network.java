@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -14,13 +13,12 @@ import net.silentchaos512.gear.gear.trait.TraitManager;
 import java.util.Objects;
 
 public final class Network {
-    private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
-    private static final String VERSION = "sgear-net-9";
+    public static final String VERSION = "sgear-net-9";
 
     public static SimpleChannel channel;
 
     static {
-        channel = NetworkRegistry.ChannelBuilder.named(NAME)
+        channel = NetworkRegistry.ChannelBuilder.named(SilentGear.getId("network"))
                 .clientAcceptedVersions(s -> Objects.equals(s, VERSION))
                 .serverAcceptedVersions(s -> Objects.equals(s, VERSION))
                 .networkProtocolVersion(() -> VERSION)
@@ -114,4 +112,14 @@ public final class Network {
     private Network() {}
 
     public static void init() {}
+
+    static void verifyNetworkVersion(String netVersion) {
+        // Throws an exception if versions do not match and provides a less cryptic message to the player
+        if (!netVersion.equals(Network.VERSION)) {
+            String msg = String.format("Incorrect Silent Gear network version. Client is \"%s\" and server is \"%s\". Try updating the client and/or server.",
+                    Network.VERSION,
+                    netVersion);
+            throw new IllegalStateException(msg);
+        }
+    }
 }

@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SyncMaterialsPacket extends LoginPacket {
-    private List<IMaterial> materials;
+    private final List<IMaterial> materials;
 
     public SyncMaterialsPacket() {
         this(MaterialManager.getValues());
@@ -24,10 +24,15 @@ public class SyncMaterialsPacket extends LoginPacket {
 
     public static SyncMaterialsPacket fromBytes(PacketBuffer buf) {
         SilentGear.LOGGER.debug("Materials packet: {} bytes", buf.readableBytes());
-        SyncMaterialsPacket packet = new SyncMaterialsPacket();
-        packet.materials = new ArrayList<>();
-        int count = buf.readVarInt();
+        SyncMaterialsPacket packet = new SyncMaterialsPacket(Collections.emptyList());
 
+        // Verify network version
+        String netVersion = buf.readString();
+        SilentGear.LOGGER.debug("SyncMaterialsPacket: network version {}", netVersion);
+        Network.verifyNetworkVersion(netVersion);
+
+        // Read materials
+        int count = buf.readVarInt();
         for (int i = 0; i < count; ++i) {
             packet.materials.add(MaterialSerializers.read(buf));
         }
@@ -36,6 +41,7 @@ public class SyncMaterialsPacket extends LoginPacket {
     }
 
     public void toBytes(PacketBuffer buf) {
+        buf.writeString(Network.VERSION);
         buf.writeVarInt(this.materials.size());
         this.materials.forEach(mat -> MaterialSerializers.write(mat, buf));
     }
