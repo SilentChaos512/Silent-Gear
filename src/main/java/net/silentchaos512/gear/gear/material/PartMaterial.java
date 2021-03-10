@@ -150,7 +150,7 @@ public class PartMaterial implements IMaterial { // TODO: Extend AbstractMateria
 
     @Override
     public Collection<TraitInstance> getTraits(IMaterialInstance instance, PartGearKey partKey, ItemStack gear) {
-        List<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partKey, Collections.emptyList()));
+        Collection<TraitInstance> ret = new ArrayList<>(traits.getOrDefault(partKey.getPartType(), Collections.emptyList()));
         if (ret.isEmpty() && getParent() != null) {
             ret.addAll(getParent().getTraits(instance, partKey, gear));
         }

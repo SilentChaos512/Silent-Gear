@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.9] - 2021-03-10
+### Fixed
+- Traits not appearing on anything (gear or materials) [#348]
+
 ## [2.6.8] - 2021-03-09
 (.1 patch) - fixes incorrect version format
 ### Added
