@@ -16,7 +16,7 @@
     "hidden": false
   },
   "criteria": {
-    "seeds": {
+    "flax_seeds": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -26,7 +26,7 @@
         ]
       }
     },
-    "fiber": {
+    "flax_fibers": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -35,14 +35,40 @@
           }
         ]
       }
+    },
+    "fluffy_seeds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:fluffy_seeds"
+          }
+        ]
+      }
+    },
+    "fluffy_puffs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:fluffy_puff"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
-      "seeds"
+      "flax_seeds"
     ],
     [
-      "fiber"
+      "flax_fibers"
+    ],
+    [
+      "fluffy_seeds"
+    ],
+    [
+      "fluffy_puffs"
     ]
   ]
 }

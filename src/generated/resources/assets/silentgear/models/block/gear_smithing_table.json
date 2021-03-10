@@ -6,6 +6,7 @@
     "north": "silentgear:block/gear_smithing_table_front",
     "south": "silentgear:block/gear_smithing_table_front",
     "east": "silentgear:block/gear_smithing_table_side",
-    "west": "silentgear:block/gear_smithing_table_side"
+    "west": "silentgear:block/gear_smithing_table_side",
+    "particle": "silentgear:block/gear_smithing_table_front"
   }
 }
