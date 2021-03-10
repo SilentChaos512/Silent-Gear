@@ -39,9 +39,10 @@ javadoc {
 archivesBaseName = project.archivesBaseName
 def versionInfo = getModVersion()
 System.out.println(versionInfo)
+def version_short = "${versionInfo['version_short']}"
 version = "${versionInfo['version']}"
 
-def gpr_creds = { // Credentials for GitHub Packages, since this is used multple times
+def gpr_creds = { // Credentials for GitHub Packages, since this is used multiple times
     username = property('gpr.username')
     password = property('gpr.token')
 }
@@ -196,10 +197,10 @@ jar {
     manifest {
         attributes(["Specification-Title"     : project.name,
                     "Specification-Vendor"    : "SilentChaos512",
-                    "Specification-Version"   : "${version}",
+                    "Specification-Version"   : "1",
                     "Implementation-Title"    : project.name,
                     "Implementation-Vendor"   : "SilentChaos512",
-                    "Implementation-Version"  : "${version}",
+                    "Implementation-Version"  : version_short,
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }
