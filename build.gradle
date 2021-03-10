@@ -1,29 +1,21 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
-        maven { url = 'https://dist.creeper.host/Sponge/maven' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
-//        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
 plugins {
     id 'maven'
     id 'maven-publish'
-    id "com.jfrog.bintray" version "1.8.5"
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'maven-publish'
-//apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'idea'
 
 repositories {
@@ -48,7 +40,11 @@ archivesBaseName = project.archivesBaseName
 def versionInfo = getModVersion()
 System.out.println(versionInfo)
 version = "${versionInfo['version']}"
-def build_num = getBuildNumber()
+
+def gpr_creds = { // Credentials for GitHub Packages, since this is used multple times
+    username = property('gpr.username')
+    password = property('gpr.token')
+}
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -60,11 +56,6 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -76,11 +67,6 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -92,11 +78,6 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             args '--mod', project.mod_id, '--all',
@@ -117,31 +98,17 @@ sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
 
-import groovy.json.JsonSlurper
-
-def secretFile
-if (System.getenv().SECRET_FILE) {
-    secretFile = file System.getenv().SECRET_FILE
-} else {
-    secretFile = file 'secret.json'
-}
-
-project.ext.secret = new Secrets()
-if (secretFile.exists()) {
-    secretFile.withReader {
-        project.ext.secret.data = new JsonSlurper().parse it
-    }
-}
-
 repositories {
     jcenter()
     mavenLocal()
     // Silent Lib
     maven {
-        url "https://dl.bintray.com/silentchaos512/silent-lib"
+        url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
+        credentials gpr_creds
     }
     maven {
-        url "https://dl.bintray.com/silentchaos512/silent-utils"
+        url = uri("https://maven.pkg.github.com/silentchaos512/silent-utils")
+        credentials gpr_creds
     }
     maven {
         url "https://dl.bintray.com/silentchaos512/silents-mechanisms"
@@ -161,18 +128,11 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
     maven {
-        name = "WorldStripper"
         url = uri("https://maven.pkg.github.com/ewyboy/world-stripper")
-        credentials {
-            username = secret.github_username ?: System.getenv('github_username')
-            password = secret.github_token ?: System.getenv('github_token')
-        }
+        credentials gpr_creds
     }
     maven {
         url 'https://maven.mcmoddev.com'
-    }
-    maven {
-        url 'https://jitpack.io'
     }
 }
 
@@ -233,7 +193,6 @@ dependencies {
 }
 
 jar {
-    appendix = "${project.mc_version}"
     manifest {
         attributes(["Specification-Title"     : project.name,
                     "Specification-Vendor"    : "SilentChaos512",
@@ -246,19 +205,16 @@ jar {
 }
 
 task sourcesJar(type: Jar) {
-    appendix = "${project.mc_version}"
     classifier = 'sources'
     from sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    appendix = "${project.mc_version}"
     classifier = 'javadoc'
     from javadoc.getDestinationDir()
 }
 
 task apiJar(type: Jar) {
-    appendix = "${project.mc_version}"
     classifier = 'api'
     include 'net/silentchaos512/gear/api/**/*'
     from sourceSets.main.allSource
@@ -271,18 +227,10 @@ artifacts {
     archives apiJar
 }
 
-class Secrets {
-    def data = null
-
-    def getProperty(String key) {
-        return data ? data[key] : ''
-    }
-}
-
 curseforge {
     if (project.hasProperty('cf_project_id') && project.hasProperty('cf_release_type') && project.hasProperty('cf_changelog_filename') &&
             ((project.cf_release_type == 'alpha') || (project.cf_release_type == 'beta') || (project.cf_release_type == 'release'))) {
-        apiKey = secret.curseforgeAPIKey
+        apiKey = property('curseforge.apiKey')
         project {
             id = project.cf_project_id
             changelog = file(project.cf_changelog_filename)
@@ -298,64 +246,25 @@ curseforge {
                     optionalDependency 'curios'
                 }
             }
-//            if (project.hasProperty('doAPIJar')) {
-//                addArtifact(apiJar) {
-//                    displayName = "$project.description $display_version API"
-//                }
-//            }
-//            if (project.hasProperty('doSourceJar')) {
-//                addArtifact(sourceJar) {
-//                    displayName = "$project.description $display_version Sources"
-//                }
-//            }
-//            if (project.hasProperty('doDeobfJar')) {
-//                addArtifact(deobfJar) {
-//                    displayName = "$project.description $display_version Development"
-//                }
-//            }
-//            if (project.hasProperty('doJavadocJar')) {
-//                addArtifact(javadocJar) {
-//                    displayName = "$project.description $display_version Javadoc"
-//                }
-//            }
         }
     }
 }
 
-// Bintray/Maven publishing
+// GPR/Maven publishing
 
 publishing {
-    publications {
-        publication(MavenPublication) {
-            groupId project.group
-            artifactId "${project.repoName}-${project.mc_version}"
-            version "${versionInfo['version_short']}".toString()
-
-            from components.java
-
-            artifact apiJar
-            artifact sourcesJar
-            artifact javadocJar
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/silentchaos512/${project.repoName}")
+            credentials gpr_creds
         }
     }
-}
-
-bintray {
-    user = secret.BINTRAY_USER ?: System.getenv('BINTRAY_USER')
-    key = secret.BINTRAY_KEY ?: System.getenv('BINTRAY_KEY')
-    publications = ['publication']
-
-    pkg {
-        repo = project.repoName
-        name = "${project.repoName}-${project.mc_version}"
-        licenses = ["MIT"]
-        vcsUrl = project.vcsUrl
-
-        version {
-            name = "${versionInfo['version_short']}".toString()
-            desc = "${project.name} (${project.mc_version}) ${versionInfo['version_short']}".toString()
-            released = new Date()
-            vcsTag = "v${versionInfo['version_short']}".toString()
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }
@@ -406,7 +315,7 @@ def makeVersionMap(version) {
     return makeVersionMap(maj, min, rev, bn, matcher[0][4])
 }
 
-static def makeVersionMap(maj, min, rev, bn, githash) {
+def makeVersionMap(maj, min, rev, bn, githash) {
     def out = [:]
     out['build.major.number'] = maj.toString()
     out['build.minor.number'] = min.toString()
@@ -414,7 +323,7 @@ static def makeVersionMap(maj, min, rev, bn, githash) {
     out['build.githash'] = githash
     out['build.number'] = bn.toString()
     out['version_short'] = "${maj}.${min}.${rev}".toString()
-    out['version'] = "${maj}.${min}.${rev}+${bn}".toString()
+    out['version'] = "${project.mc_version}-${maj}.${min}.${rev}".toString()
     return out
 }
 
@@ -450,6 +359,7 @@ build.finalizedBy incrementBuild // only increment on successful builds
 // Update JSON management
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
 def writeUpdateJson() {
     def version = getModVersion()['version_short']
