@@ -46,7 +46,7 @@ I prefer to assign my authentication details to a variable to reduce duplication
 
 ```gradle
 // Authentication details for GitHub packages
-// This can also go in the `repositories` block if you prefer
+// This can also go in the `repositories` block or you can inline it if you prefer
 def gpr_creds = {
     username = property('gpr.username')
     password = property('gpr.token')
@@ -76,20 +76,20 @@ And finally, add dependencies for Silent Gear and Silent Lib (which will include
 
 ```gradle
 dependencies {
-    // Replace VERSION with the version you need, in the form of "MC_VERSION:MOD_VERSION"
+    // Replace VERSION with the version you need, in the form of "MC_VERSION-MOD_VERSION"
     // Example: compile fg.deobf("net.silentchaos512:silent-gear:1.16.3-2.+")
     // Available builds can be found here: https://github.com/SilentChaos512/silent-gear/packages
     // The "exclude module" lines will prevent import errors in some cases
-    compile fg.deobf("net.silentchaos512:silent-gear-VERSION") {
+    compile fg.deobf("net.silentchaos512:silent-gear:VERSION") {
         exclude module: 'forge'
         exclude module: 'jei-1.16.3'
         exclude module: 'silent-lib-1.16.3'
         exclude module: 'curios-forge'
     }
 
-    // Same as before, VERSION is in the form "MC_VERSION:MOD_VERSION" (eg, 1.16.3-4.+)
+    // Same as before, VERSION is in the form "MC_VERSION-MOD_VERSION" (eg, 1.16.3-4.+)
     // https://github.com/SilentChaos512/silentlib/packages
-    compile fg.deobf("net.silentchaos512:silent-lib-VERSION") {
+    compile fg.deobf("net.silentchaos512:silent-lib:VERSION") {
         exclude module: "forge"
     }
 }
