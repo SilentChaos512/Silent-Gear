@@ -102,7 +102,6 @@ sourceSets.main.resources {
 repositories {
     jcenter()
     mavenLocal()
-    // Silent Lib
     maven {
         url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
         credentials gpr_creds
@@ -140,7 +139,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    compile fg.deobf("net.silentchaos512:silent-lib-${project.sl_version}") {
+    compile fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
 
