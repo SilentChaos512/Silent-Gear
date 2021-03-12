@@ -50,6 +50,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
         if (resources.isEmpty()) return;
 
         Multimap<String, IMaterial> ingredientConflicts = HashMultimap.create();
+        Collection<ResourceLocation> skippedList = new ArrayList<>();
 
         synchronized (MAP) {
             MAP.clear();
@@ -65,10 +66,13 @@ public class MaterialManager implements IResourceManagerReloadListener {
                     packName = iresource.getPackName();
                     JsonObject json = JSONUtils.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                     if (json == null) {
+                        // Something is very wrong or the JSON is somehow empty
                         SilentGear.LOGGER.error(MARKER, "Could not load material {} as it's null or empty", name);
                     } else if (!CraftingHelper.processConditions(json, "conditions")) {
-                        SilentGear.LOGGER.info(MARKER, "Skipping loading material {} as its conditions were not met", name);
+                        // Conditions not met, so do not load the material
+                        skippedList.add(name);
                     } else {
+                        // Attempt to deserialize the material
                         IMaterial material = MaterialSerializers.deserialize(name, packName, json);
                         MAP.put(material.getId(), material);
                         addIngredientChecks(ingredientConflicts, material, json);
@@ -84,6 +88,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
         }
 
         checkForIngredientConflicts(ingredientConflicts);
+        logSkippedMaterials(skippedList);
     }
 
     private static void addIngredientChecks(Multimap<String, IMaterial> map, IMaterial material, JsonObject json) {
@@ -104,6 +109,15 @@ public class MaterialManager implements IResourceManagerReloadListener {
                 String collect = map.get(key).stream().map(mat -> mat.getId().toString()).collect(Collectors.joining(" and "));
                 INGREDIENT_CONFLICT_LIST.add("Conflicting crafting items for: " + collect);
             }
+        }
+    }
+
+    private static void logSkippedMaterials(Collection<ResourceLocation> list) {
+        if (!list.isEmpty()) {
+            SilentGear.LOGGER.info("Skipped loading {} material(s), as their conditions were not met. This is usually NOT an error!",
+                    list.size());
+            SilentGear.LOGGER.info("Skipped materials: {}",
+                    list.stream().map(ResourceLocation::toString).collect(Collectors.joining(", ")));
         }
     }
 
