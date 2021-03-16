@@ -36,4 +36,8 @@ public class SplitItemStat extends ItemStat {
     public Collection<GearType> getSplitTypes() {
         return this.splits.keySet();
     }
+
+    public float getSplitsTotal() {
+        return this.splitsTotal;
+    }
 }
