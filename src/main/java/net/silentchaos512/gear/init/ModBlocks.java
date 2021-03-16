@@ -16,6 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
+import net.silentchaos512.gear.block.charger.ChargerTileEntity;
 import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
@@ -59,7 +60,11 @@ public final class ModBlocks {
                     .hardnessAndResistance(5, 30)));
     public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", () ->
             new SalvagerBlock(AbstractBlock.Properties.create(Material.IRON)
-                    .hardnessAndResistance(4, 20)));
+                    .hardnessAndResistance(5, 30)));
+    public static final BlockRegistryObject<ModContainerBlock<ChargerTileEntity>> STARLIGHT_CHARGER = register("starlight_charger", () ->
+            new ModContainerBlock<>((state, world) -> ChargerTileEntity.createStarlightCharger(),
+                    AbstractBlock.Properties.create(Material.IRON)
+                            .hardnessAndResistance(5, 30)));
 
     public static final BlockRegistryObject<CompounderBlock> METAL_ALLOYER = register("metal_alloyer", () ->
             new CompounderBlock(Const.METAL_COMPOUNDER_INFO,

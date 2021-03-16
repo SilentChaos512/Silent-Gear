@@ -3,9 +3,9 @@ package net.silentchaos512.gear.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -13,14 +13,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
+import java.util.function.BiFunction;
 
-public class ModContainerBlock extends Block {
-    private final Supplier<? extends TileEntity> tileFactory;
+public class ModContainerBlock<T extends TileEntity & INamedContainerExtraData> extends Block {
+    private final BiFunction<BlockState, IBlockReader, ? extends T> tileFactory;
 
-    public ModContainerBlock(Supplier<? extends TileEntity> tileFactory, Properties properties) {
+    public ModContainerBlock(BiFunction<BlockState, IBlockReader, ? extends T> tileFactory, Properties properties) {
         super(properties);
         this.tileFactory = tileFactory;
     }
@@ -33,7 +34,7 @@ public class ModContainerBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return tileFactory.get();
+        return tileFactory.apply(state, world);
     }
 
     @SuppressWarnings("deprecation")
@@ -54,8 +55,9 @@ public class ModContainerBlock extends Block {
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof INamedContainerProvider) {
-                player.openContainer((INamedContainerProvider) tile);
+            if (tile instanceof INamedContainerExtraData && player instanceof ServerPlayerEntity) {
+                INamedContainerExtraData te = (INamedContainerExtraData) tile;
+                NetworkHooks.openGui((ServerPlayerEntity) player, te, te::encodeExtraData);
             }
         }
         return ActionResultType.SUCCESS;

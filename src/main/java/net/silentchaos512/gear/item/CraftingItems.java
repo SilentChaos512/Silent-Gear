@@ -63,6 +63,8 @@ public enum CraftingItems implements IItemProvider {
     TYRIAN_STEEL_DUST,
     DIAMOND_SHARD,
     EMERALD_SHARD,
+    NETHER_STAR_FRAGMENT,
+    STARMETAL_DUST,
     GLOWING_DUST,
     BLAZING_DUST,
     GLITTERY_DUST,

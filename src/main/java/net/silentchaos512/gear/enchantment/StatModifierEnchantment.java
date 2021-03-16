@@ -4,6 +4,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
 import net.silentchaos512.gear.api.stats.ChargedProperties;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.SplitItemStat;
@@ -13,7 +14,7 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
 
-public class StatModifierEnchantment extends Enchantment {
+public class StatModifierEnchantment extends Enchantment implements IStatModifierEnchantment {
     public StatModifierEnchantment(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
         super(rarityIn, typeIn, slots);
     }
@@ -28,6 +29,7 @@ public class StatModifierEnchantment extends Enchantment {
      * @return A modified stat modifier which replaces the original, or null if no replacement is
      * needed
      */
+    @Override
     @Nullable
     public StatInstance modifyStat(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
         if (isSupportedModifierOp(mod)) {
@@ -43,7 +45,7 @@ public class StatModifierEnchantment extends Enchantment {
         return null;
     }
 
-    private double getModifiedStatValue(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
+    private static double getModifiedStatValue(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
         if (stat.getStat() == ItemStats.DURABILITY)
             return mod.getValue() * Math.pow(1.5, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ARMOR_DURABILITY)
@@ -88,7 +90,7 @@ public class StatModifierEnchantment extends Enchantment {
 
     @Override
     protected boolean canApplyTogether(Enchantment ench) {
-        return !(ench instanceof StatModifierEnchantment);
+        return !(ench instanceof IStatModifierEnchantment);
     }
 
     @Override

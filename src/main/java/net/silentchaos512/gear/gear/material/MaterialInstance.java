@@ -10,17 +10,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.*;
+import net.silentchaos512.gear.api.stats.ChargedProperties;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
-import net.silentchaos512.gear.enchantment.StatModifierEnchantment;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
@@ -180,8 +183,8 @@ public final class MaterialInstance implements IMaterialInstance {
             Enchantment enchantment = entry.getKey();
             Integer level = entry.getValue();
 
-            if (enchantment instanceof StatModifierEnchantment) {
-                StatModifierEnchantment statModifierEnchantment = (StatModifierEnchantment) enchantment;
+            if (enchantment instanceof IStatModifierEnchantment) {
+                IStatModifierEnchantment statModifierEnchantment = (IStatModifierEnchantment) enchantment;
                 ChargedProperties charge = new ChargedProperties(level, getChargeability());
 
                 // Replace modifiers with updated ones (if provided)

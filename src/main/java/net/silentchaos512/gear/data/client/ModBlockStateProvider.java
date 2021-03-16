@@ -93,6 +93,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             .texture("particle", front));
         }
 
+        simpleBlock(ModBlocks.STARLIGHT_CHARGER.get());
+
         getVariantBuilder(ModBlocks.METAL_PRESS.get()).forAllStates(state -> {
             return ConfiguredModel.builder()
                     .modelFile(models().cubeTop("metal_press",
