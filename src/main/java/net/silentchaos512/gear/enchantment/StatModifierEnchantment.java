@@ -45,6 +45,7 @@ public class StatModifierEnchantment extends Enchantment implements IStatModifie
         return null;
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private static double getModifiedStatValue(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
         if (stat.getStat() == ItemStats.DURABILITY)
             return mod.getValue() * Math.pow(1.5, charge.getChargeValue());

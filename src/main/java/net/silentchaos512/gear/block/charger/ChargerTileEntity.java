@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -35,6 +36,7 @@ import java.util.function.Supplier;
 
 public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity, INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
+    private static final int CHARGE_RATE = SilentGear.isDevBuild() ? 100 : 10;
     private static final int UPDATE_FREQUENCY = TimeUtils.ticksFromSeconds(15);
 
     private final Supplier<Enchantment> enchantment;
@@ -174,8 +176,8 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
 
     protected void gatherEnergy() {
         assert world != null;
-        if (charge < getMaxCharge() && world.isNightTime() && world.canBlockSeeSky(pos)) {
-            ++charge;
+        if (charge < getMaxCharge() && world.isNightTime() && world.canBlockSeeSky(pos.up())) {
+            charge += CHARGE_RATE;
         }
     }
 
@@ -280,5 +282,25 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         if (index == 0) return GearApi.isMaterial(stack);
         if (index == 1) return getChargingAgentTier(stack) > 0;
         return false;
+    }
+
+    @Override
+    public void read(BlockState stateIn, CompoundNBT tags) {
+        super.read(stateIn, tags);
+        SyncVariable.Helper.readSyncVars(this, tags);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tags) {
+        CompoundNBT compoundTag = super.write(tags);
+        SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
+        return compoundTag;
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tags = super.getUpdateTag();
+        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
+        return tags;
     }
 }

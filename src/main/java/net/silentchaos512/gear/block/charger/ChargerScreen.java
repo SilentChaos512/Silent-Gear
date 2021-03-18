@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.util.TextUtil;
@@ -21,6 +22,17 @@ public class ChargerScreen extends ContainerScreen<ChargerContainer> {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrix, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {
+        if (isPointInRegion(153, 17, 13, 51, x, y)) {
+            IFormattableTextComponent text = TextUtil.translate("container", "material_charger.charge",
+                    String.format("%,d", container.getCharge()),
+                    String.format("%,d", container.getMaxCharge()));
+            renderTooltip(matrixStack, text, x, y);
+        }
+        super.renderHoveredTooltip(matrixStack, x, y);
     }
 
     @Override

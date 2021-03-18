@@ -163,6 +163,7 @@
   "command.silentgear.traits.traitNotFound": "Trait does not exist",
   "container.silentgear.blueprint_book": "Blueprint Book (Ctrl+click)",
   "container.silentgear.material_charger": "Material Charger",
+  "container.silentgear.material_charger.charge": "Charge: %s / %s",
   "enchantment.silentgear.star_charged": "Star Charged",
   "entity.minecraft.villager.silentgear.gear_smith": "Gear Smith",
   "gearType.silentgear.all": "All Gear Types",
