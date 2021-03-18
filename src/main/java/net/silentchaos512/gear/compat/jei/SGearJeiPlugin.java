@@ -23,6 +23,9 @@ import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
+import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -99,6 +102,12 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipes(recipeManager.getRecipes().stream()
                 .filter(r -> r.getType() == ModRecipes.COMPOUNDING_METAL_TYPE)
                 .collect(Collectors.toList()), Const.COMPOUNDING_METAL);
+        for (int i = 2; i <= 4; ++i) {
+            reg.addRecipes(Collections.singleton(CompoundingRecipe.makeExample(Const.METAL_COMPOUNDER_INFO,
+                    i, new MetalCompoundingRecipe(SilentGear.getId("metal_example_" + i)))), Const.COMPOUNDING_METAL);
+            reg.addRecipes(Collections.singleton(CompoundingRecipe.makeExample(Const.GEM_COMPOUNDER_INFO,
+                    i, new GemCompoundingRecipe(SilentGear.getId("gem_example_" + i)))), Const.COMPOUNDING_GEM);
+        }
 
         // Grading
         reg.addRecipes(Collections.singleton(new MaterialGraderRecipeCategory.GraderRecipe()), Const.GRADING);

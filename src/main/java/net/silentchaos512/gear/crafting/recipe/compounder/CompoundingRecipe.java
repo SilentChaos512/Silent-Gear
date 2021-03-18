@@ -17,7 +17,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.block.compounder.CompounderTileEntity;
+import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CustomMaterialItem;
@@ -32,10 +37,19 @@ import java.util.function.Function;
 public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
     private final ResourceLocation recipeId;
     final List<Ingredient> ingredients = new ArrayList<>();
-    ItemStack result;
+    ItemStack result = ItemStack.EMPTY;
 
     public CompoundingRecipe(ResourceLocation recipeId) {
         this.recipeId = recipeId;
+    }
+
+    public static CompoundingRecipe makeExample(CompounderInfo<?> info, int count, CompoundingRecipe recipe) {
+        IMaterialCategory[] cats = info.getCategories().toArray(new IMaterialCategory[0]);
+        for (int i = 0; i < count; ++i) {
+            recipe.ingredients.add(PartMaterialIngredient.of(PartType.MAIN, GearType.ALL, cats));
+        }
+        recipe.result = new ItemStack(info.getOutputItem(), count);
+        return recipe;
     }
 
     @Override
@@ -141,7 +155,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
                 ret.result = ((CustomMaterialItem) item).create(LazyMaterialInstance.of(id), count);
             }
 
-            if (ret.result == null) {
+            if (ret.result.isEmpty()) {
                 ret.result = new ItemStack(item, count);
             }
 

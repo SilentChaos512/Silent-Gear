@@ -17,8 +17,10 @@ import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements IRecipeCategory<R> {
     private static final int GUI_START_X = 15;
@@ -79,10 +81,24 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
             itemStacks.init(i, true, 18 * i + 16 - GUI_START_X, 34 - GUI_START_Y);
         }
         for (int i = 0; i < recipe.getIngredients().size(); ++i) {
-            itemStacks.set(i, Arrays.asList(recipe.getIngredients().get(i).getMatchingStacks()));
+            List<ItemStack> list = Arrays.asList(recipe.getIngredients().get(i).getMatchingStacks());
+            itemStacks.set(i, shiftIngredients(list, 3 * i));
         }
         itemStacks.init(info.getInputSlotCount(), false, 125 - GUI_START_X, 34 - GUI_START_Y);
         itemStacks.set(info.getInputSlotCount(), Collections.singletonList(recipe.getRecipeOutput()));
+    }
+
+    private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {
+        List<ItemStack> ret = new ArrayList<>(list);
+        if (ret.isEmpty()) {
+            return ret;
+        }
+        for (int i = 0; i < amount; ++i) {
+            ItemStack stack = ret.get(ret.size() - 1);
+            ret.remove(ret.size() - 1);
+            ret.add(0, stack);
+        }
+        return ret;
     }
 
     @Override
