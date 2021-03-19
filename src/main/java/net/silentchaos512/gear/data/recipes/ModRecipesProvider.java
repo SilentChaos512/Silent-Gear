@@ -32,6 +32,7 @@ import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.lib.data.recipe.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.ExtendedShapelessRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.ExtendedSingleItemRecipeBuilder;
+import net.silentchaos512.lib.data.recipe.LibRecipeProvider;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -39,9 +40,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class ModRecipesProvider extends RecipeProvider {
+public class ModRecipesProvider extends LibRecipeProvider {
     public ModRecipesProvider(DataGenerator generatorIn) {
-        super(generatorIn);
+        super(generatorIn, SilentGear.MOD_ID);
     }
 
     @Override
@@ -707,6 +708,12 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
     private void registerCraftingItems(Consumer<IFinishedRecipe> consumer) {
+        shapelessBuilder(ModItems.GUIDE_BOOK)
+                .addIngredient(Items.BOOK)
+                .addIngredient(ModTags.Items.TEMPLATE_BOARDS)
+                .addCriterion("has_template_board", hasItem(ModTags.Items.TEMPLATE_BOARDS))
+                .build(consumer);
+
         damageGear(CraftingItems.GLOWING_DUST, 4, 4)
                 .addIngredient(ModTags.Items.HAMMERS)
                 .addIngredient(Tags.Items.DUSTS_GLOWSTONE, 2)

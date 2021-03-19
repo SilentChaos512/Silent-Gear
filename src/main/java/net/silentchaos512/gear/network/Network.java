@@ -13,7 +13,7 @@ import net.silentchaos512.gear.gear.trait.TraitManager;
 import java.util.Objects;
 
 public final class Network {
-    public static final String VERSION = "sgear-net-9";
+    public static final String VERSION = "sgear-net-10";
 
     public static SimpleChannel channel;
 
@@ -106,6 +106,11 @@ public final class Network {
                 .encoder(CompounderUpdatePacket::encode)
                 .decoder(CompounderUpdatePacket::decode)
                 .consumer(CompounderUpdatePacket::handle)
+                .add();
+        channel.messageBuilder(OpenGuideBookPacket.class, 15, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder((pkt, buf) -> {})
+                .decoder(buf -> new OpenGuideBookPacket())
+                .consumer(OpenGuideBookPacket::handle)
                 .add();
     }
 

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    }
+  ],
+  "result": {
+    "item": "silentgear:guide_book"
+  }
+}

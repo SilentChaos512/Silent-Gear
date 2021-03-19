@@ -20,10 +20,15 @@ import java.util.function.Supplier;
 
 @SuppressWarnings({"unused", "OverlyCoupledClass"})
 public final class ModItems {
+    public static final ItemRegistryObject<GuideBookItem> GUIDE_BOOK = register("guide_book", () ->
+            new GuideBookItem(unstackableProps()));
+
     public static final ItemRegistryObject<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
             new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
+
     public static final ItemRegistryObject<Item> MOD_KIT = register("mod_kit", () -> new ModKitItem(
             unstackableProps().rarity(Rarity.UNCOMMON)));
+
     // Repair Kits
     public static final ItemRegistryObject<Item> VERY_CRUDE_REPAIR_KIT = register("very_crude_repair_kit", () -> new RepairKitItem(
             Config.Common.repairKitVeryCrudeCapacity::get,
