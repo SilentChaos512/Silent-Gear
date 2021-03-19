@@ -307,7 +307,7 @@ public final class Config {
             modelAndTextureLogging = builder
                     .comment("Log information on construction of gear and part models, as well as textures they attempt to load.",
                             "This is intended to help find and fix rare issues that some users are experiencing.")
-                    .define("debug.logging.modelAndTexture", true);
+                    .define("debug.logging.modelAndTexture", false);
 
             spec = builder.build();
         }
