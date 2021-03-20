@@ -39,6 +39,7 @@ public final class Config {
         static final ForgeConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
         public static final ForgeConfigSpec.BooleanValue allowClassicMaterialMixing;
+        public static final ForgeConfigSpec.BooleanValue allowConversionRecipes;
         public static final ForgeConfigSpec.BooleanValue sendGearBrokenMessage;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
         public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
@@ -182,6 +183,12 @@ public final class Config {
                         .comment("Allow parts to be crafted with mixed materials in a crafting grid, just like all recent versions.",
                                 "In 1.17, mixing will only be allowed in compound-crafting blocks.")
                         .define("allowClassicMaterialMixing", true);
+
+                allowConversionRecipes = builder
+                        .comment("If set to false all conversion recipes (type 'silentgear:conversion') will be disabled",
+                                "An example of a conversion recipe is placing a vanilla stone pickaxe into a crafting grid to make a Silent Gear stone pickaxe",
+                                "Note: This also affects conversion recipes added by data packs and other mods")
+                        .define("allowConversionRecipes", true);
 
                 sendGearBrokenMessage = builder
                         .comment("Displays a message in chat, notifying the player that an item broke and hinting that it can be repaired")
