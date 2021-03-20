@@ -767,6 +767,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
                 .build(consumer);
 
+        shapelessBuilder(CraftingItems.WIDE_PLATE_UPGRADE)
+                .addIngredient(CraftingItems.ADVANCED_UPGRADE_BASE)
+                .addIngredient(ModTags.Items.STORAGE_BLOCKS_CRIMSON_IRON)
+                .addIngredient(ModTags.Items.INGOTS_CRIMSON_STEEL)
+                .addCriterion("has_item", hasItem(CraftingItems.UPGRADE_BASE))
+                .build(consumer);
+
         CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(ModTags.Items.NETHERWOOD_LOGS), ModItems.NETHERWOOD_CHARCOAL, 0.15f, 200)
                 .addCriterion("has_item", hasItem(ModTags.Items.NETHERWOOD_LOGS))
                 .build(consumer);

@@ -15,7 +15,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
-import net.silentchaos512.gear.util.IAOETool;
+import net.silentchaos512.gear.util.IAoeTool;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +41,8 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue allowClassicMaterialMixing;
         public static final ForgeConfigSpec.BooleanValue allowConversionRecipes;
         public static final ForgeConfigSpec.BooleanValue sendGearBrokenMessage;
-        public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
-        public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
+        public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeStandard;
+        public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeOres;
         public static final ForgeConfigSpec.IntValue damageFactorLevels;
         public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
         public static final ForgeConfigSpec.IntValue prospectorHammerRange;
@@ -219,10 +219,10 @@ public final class Config {
                     builder.push("aoeTool");
                     matchModeStandard = builder
                             .comment("Match mode for most blocks")
-                            .defineEnum("matchMode.standard", IAOETool.MatchMode.MODERATE);
+                            .defineEnum("matchMode.standard", IAoeTool.MatchMode.MODERATE);
                     matchModeOres = builder
                             .comment("Match mode for ore blocks (anything in the forge:ores block tag)")
-                            .defineEnum("matchMode.ores", IAOETool.MatchMode.STRICT);
+                            .defineEnum("matchMode.ores", IAoeTool.MatchMode.STRICT);
                     builder.pop();
                 }
                 {

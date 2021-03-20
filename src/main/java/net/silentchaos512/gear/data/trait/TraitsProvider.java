@@ -89,6 +89,10 @@ public class TraitsProvider implements IDataProvider {
         ret.add(TraitBuilder.simple(Const.Traits.VOID_WARD, 1)
                 .withGearTypeCondition(GearType.ARMOR)
                 .extraWikiLines("When void damage is taken, the player is launched upward and given a levitation and slow falling effect"));
+        ret.add(TraitBuilder.simple(Const.Traits.WIDEN, 3)
+                .withGearTypeCondition(GearType.HARVEST_TOOL)
+                .extraWikiLines("Adds the trait level to the effect radius",
+                        "Level 1 = 5x5, 2 = 7x7, 3 = 9x9"));
 
         // Synergy
 

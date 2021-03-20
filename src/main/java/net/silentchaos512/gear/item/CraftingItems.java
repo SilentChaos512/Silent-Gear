@@ -88,6 +88,7 @@ public enum CraftingItems implements IItemProvider {
     // Misc Upgrades
     SPOON_UPGRADE,
     ROAD_MAKER_UPGRADE,
+    WIDE_PLATE_UPGRADE,
     RED_CARD_UPGRADE;
 
     @SuppressWarnings("NonFinalFieldInEnum")

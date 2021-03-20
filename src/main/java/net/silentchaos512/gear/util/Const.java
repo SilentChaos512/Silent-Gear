@@ -179,6 +179,7 @@ public final class Const {
         public static final DataResource<ITrait> VENOM = DataResource.trait("venom");
         public static final DataResource<ITrait> VOID_WARD = DataResource.trait("void_ward");
         public static final DataResource<ITrait> VULCAN = DataResource.trait("vulcan");
+        public static final DataResource<ITrait> WIDEN = DataResource.trait("widen");
 
         // Misc constants
         public static final float ANCIENT_XP_BOOST = 0.25f;

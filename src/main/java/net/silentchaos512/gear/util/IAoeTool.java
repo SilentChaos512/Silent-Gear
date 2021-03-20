@@ -48,6 +48,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.config.Config;
 
 import javax.annotation.Nonnull;
@@ -55,17 +56,21 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface IAOETool {
+public interface IAoeTool {
     /**
      * The tool class of the item (pickaxe, shovel, axe)
      *
      * @return The tool type
      */
     @Nonnull
-    ToolType getAOEToolClass();
+    ToolType getAoeToolType();
+
+    default int getAoeRadius(ItemStack stack) {
+        return 1 + GearApi.getTraitLevel(stack, Const.Traits.WIDEN);
+    }
 
     /**
-     * Call the item's rayTrace method inside this.
+     * Call {@link net.minecraft.item.Item}'s {@code rayTrace} method inside this.
      *
      * @param world  The world
      * @param player The player
@@ -84,40 +89,32 @@ public interface IAOETool {
         BlockState state = world.getBlockState(pos);
 
         if (isEffectiveOnBlock(stack, world, pos, state, player)) {
+            Direction dir1, dir2;
             switch (rt.getFace().getAxis()) {
                 case Y:
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH).offset(Direction.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST).offset(Direction.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH).offset(Direction.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST).offset(Direction.NORTH), stack, positions);
+                    dir1 = Direction.SOUTH;
+                    dir2 = Direction.EAST;
                     break;
                 case X:
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.NORTH).offset(Direction.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP).offset(Direction.SOUTH), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.SOUTH).offset(Direction.DOWN), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN).offset(Direction.NORTH), stack, positions);
+                    dir1 = Direction.UP;
+                    dir2 = Direction.SOUTH;
                     break;
-                case Z:
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.DOWN).offset(Direction.EAST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.EAST).offset(Direction.UP), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.UP).offset(Direction.WEST), stack, positions);
-                    attemptAddExtraBlock(world, state, pos.offset(Direction.WEST).offset(Direction.DOWN), stack, positions);
+                default: // Z
+                    dir1 = Direction.UP;
+                    dir2 = Direction.EAST;
                     break;
             }
+
+            int r = getAoeRadius(stack);
+            for (int i = -r; i <= r; ++i) {
+                for (int j = -r; j <= r; ++j) {
+                    if (!(i == 0 && j == 0)) {
+                        attemptAddExtraBlock(world, state, pos.offset(dir1, i).offset(dir2, j), stack, positions);
+                    }
+                }
+            }
         }
-//        SilentGear.log.debug("{}", positions);
+
         return positions;
     }
 
@@ -125,15 +122,15 @@ public interface IAOETool {
         return stack.getItem().canHarvestBlock(stack, state) || ForgeHooks.canHarvestBlock(state, player, world, pos);
     }
 
-    default void attemptAddExtraBlock(World world, BlockState state1, BlockPos pos2, ItemStack stack, List<BlockPos> list) {
-        final BlockState state2 = world.getBlockState(pos2);
+    default void attemptAddExtraBlock(World world, BlockState state, BlockPos pos, ItemStack stack, List<BlockPos> list) {
+        final BlockState state1 = world.getBlockState(pos);
         // Prevent breaking of unbreakable blocks, like bedrock
-        if (state2.getBlockHardness(world, pos2) < 0) return;
+        if (state1.getBlockHardness(world, pos) < 0) return;
 
-        if (!world.isAirBlock(pos2)
-                && BreakHandler.areBlocksSimilar(state1, state2)
-                && (state2.getBlock().isToolEffective(state2, getAOEToolClass()) || stack.getItem().canHarvestBlock(stack, state2))) {
-            list.add(pos2);
+        if (!world.isAirBlock(pos)
+                && BreakHandler.areBlocksSimilar(state, state1)
+                && (state1.getBlock().isToolEffective(state1, getAoeToolType()) || stack.getItem().canHarvestBlock(stack, state1))) {
+            list.add(pos);
         }
     }
 
@@ -150,10 +147,10 @@ public interface IAOETool {
 
         public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, PlayerEntity player) {
             World world = player.getEntityWorld();
-            if (world.isRemote || !(world instanceof ServerWorld) || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAOETool))
+            if (world.isRemote || !(world instanceof ServerWorld) || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAoeTool))
                 return false;
 
-            IAOETool item = (IAOETool) tool.getItem();
+            IAoeTool item = (IAoeTool) tool.getItem();
             RayTraceResult rt = item.rayTraceBlocks(world, player);
             BlockState stateOriginal = world.getBlockState(pos);
 
@@ -175,6 +172,7 @@ public interface IAOETool {
                         if (xp == -1) continue;
                         tool.getItem().onBlockDestroyed(tool, world, state, pos2, player);
                         TileEntity tileEntity = world.getTileEntity(pos2);
+
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState())) {
                             state.getBlock().onPlayerDestroy(world, pos2, state);
                             state.getBlock().harvestBlock(world, player, pos2, state, tileEntity, tool);
@@ -241,9 +239,9 @@ public interface IAOETool {
             if (rt.getType() == RayTraceResult.Type.BLOCK) {
                 ItemStack stack = player.getHeldItemMainhand();
 
-                if (stack.getItem() instanceof IAOETool) {
+                if (stack.getItem() instanceof IAoeTool) {
                     World world = player.getEntityWorld();
-                    IAOETool item = (IAOETool) stack.getItem();
+                    IAoeTool item = (IAoeTool) stack.getItem();
 
                     for (BlockPos pos : item.getExtraBlocks(world, (BlockRayTraceResult) rt, player, stack)) {
                         IVertexBuilder vertexBuilder = event.getBuffers().getBuffer(RenderType.getLines());
@@ -258,7 +256,7 @@ public interface IAOETool {
         // Copied from WorldRenderer
         @SuppressWarnings("MethodWithTooManyParameters")
         private static void drawSelectionBox(MatrixStack matrixStackIn, World world, IVertexBuilder bufferIn, Entity entityIn, double xIn, double yIn, double zIn, BlockPos blockPosIn, BlockState blockStateIn) {
-            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, ISelectionContext.forEntity(entityIn)), (double)blockPosIn.getX() - xIn, (double)blockPosIn.getY() - yIn, (double)blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
+            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, ISelectionContext.forEntity(entityIn)), (double) blockPosIn.getX() - xIn, (double) blockPosIn.getY() - yIn, (double) blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
         }
 
         // Copied from WorldRenderer
@@ -266,8 +264,8 @@ public interface IAOETool {
         private static void drawShape(MatrixStack matrixStackIn, IVertexBuilder bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
             Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
             shapeIn.forEachEdge((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
-                bufferIn.pos(matrix4f, (float)(p_230013_12_ + xIn), (float)(p_230013_14_ + yIn), (float)(p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
-                bufferIn.pos(matrix4f, (float)(p_230013_18_ + xIn), (float)(p_230013_20_ + yIn), (float)(p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
+                bufferIn.pos(matrix4f, (float) (p_230013_12_ + xIn), (float) (p_230013_14_ + yIn), (float) (p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
+                bufferIn.pos(matrix4f, (float) (p_230013_18_ + xIn), (float) (p_230013_20_ + yIn), (float) (p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
             });
         }
     }
