@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Config option to disable all conversion recipes
+### Changed
+- Small change to durability and repair efficiency of shears
 
 ## [2.6.11] - 2021-03-19
 ### Added

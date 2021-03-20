@@ -87,7 +87,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
      * @param stack The item
      * @return A set of stats to display in the item's tooltip
      */
-    Set<ItemStat> getRelevantStats(ItemStack stack);
+    Set<ItemStat> getRelevantStats(ItemStack stack); // TODO: Change to Set<IItemStat>?
 
     /**
      * Gets all stats that will not be calculated or stored for this item. <em>Be very careful with
@@ -99,7 +99,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
      * @param stack The item
      * @return A set of stats to not include.
      */
-    default Set<ItemStat> getExcludedStats(ItemStack stack) {
+    default Set<ItemStat> getExcludedStats(ItemStack stack) { // TODO: Change to Set<IItemStat>?
         return Collections.emptySet();
     }
 

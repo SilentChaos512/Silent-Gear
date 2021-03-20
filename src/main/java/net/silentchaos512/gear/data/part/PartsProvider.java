@@ -254,7 +254,8 @@ public class PartsProvider implements IDataProvider {
         // Oddballs
         if (isToolHead(builder, ModItems.SHEARS_BLADES))
             return builder
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 1);
+                    .stat(ItemStats.DURABILITY, 0.952f)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f);
         if (isToolHead(builder, ModItems.SHIELD_PLATE))
             return builder
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1);

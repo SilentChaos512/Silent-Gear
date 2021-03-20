@@ -9,6 +9,7 @@
     "translate": "part.silentgear.shears_blades"
   },
   "stats": {
-    "repair_efficiency": 1.0
+    "durability": 0.952,
+    "repair_efficiency": 1.25
   }
 }
