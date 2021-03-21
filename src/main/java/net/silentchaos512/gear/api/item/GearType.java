@@ -67,6 +67,7 @@ public final class GearType {
     public static final GearType CROSSBOW = getOrCreate("crossbow", RANGED_WEAPON);
     public static final GearType SLINGSHOT = getOrCreate("slingshot", RANGED_WEAPON);
     // Other
+    public static final GearType FISHING_ROD = getOrCreate("fishing_rod", TOOL);
     public static final GearType SHIELD = getOrCreate("shield", TOOL, () -> ItemStats.ARMOR_DURABILITY);
     // Armor
     public static final GearType ARMOR = getOrCreate("armor", ALL, () -> ItemStats.ARMOR_DURABILITY);

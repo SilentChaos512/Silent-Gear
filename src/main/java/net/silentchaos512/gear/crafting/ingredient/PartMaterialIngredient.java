@@ -33,7 +33,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     private final GearType gearType;
     private final int minTier;
     private final int maxTier;
-    private final Set<IMaterialCategory> categories = new HashSet<>();
+    private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
 
     private PartMaterialIngredient(PartType partType, GearType gearType, int minTier, int maxTier) {
         super(Stream.of());

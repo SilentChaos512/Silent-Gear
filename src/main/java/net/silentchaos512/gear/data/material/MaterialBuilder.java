@@ -187,7 +187,7 @@ public class MaterialBuilder {
     public MaterialBuilder displayBowstring(int color) {
         display(PartType.BOWSTRING,
                 new MaterialLayer(PartTextures.BOWSTRING_STRING, color),
-                new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE)
+                new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE) // FIXME: Doesn't quite make sense to have this here
         );
         display(PartType.BOWSTRING, GearType.PART,
                 new MaterialLayer(SilentGear.getId("bowstring"), color)

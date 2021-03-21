@@ -123,6 +123,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 Ingredient.fromTag(Tags.Items.INGOTS_IRON), "##", " /", " @");
         toolBlueprint(consumer, "sickle", ModItems.SICKLE_BLUEPRINT, ModItems.SICKLE_TEMPLATE, " #", "##", "/ ");
         toolBlueprint(consumer, "shears", ModItems.SHEARS_BLUEPRINT, ModItems.SHEARS_TEMPLATE, " #", "#/");
+        toolBlueprint(consumer, "fishing_rod", ModItems.FISHING_ROD_BLUEPRINT, ModItems.FISHING_ROD_TEMPLATE, "  /", " /#", "/ #");
         toolBlueprint(consumer, "bow", ModItems.BOW_BLUEPRINT, ModItems.BOW_TEMPLATE, " #/", "# /", " #/");
         toolBlueprint(consumer, "crossbow", ModItems.CROSSBOW_BLUEPRINT, ModItems.CROSSBOW_TEMPLATE, "/#/", "###", " / ");
         toolBlueprint(consumer, "slingshot", ModItems.SLINGSHOT_BLUEPRINT, ModItems.SLINGSHOT_TEMPLATE, "# #", " / ", " / ");
@@ -494,6 +495,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         toolRecipes(consumer, "saw", 5, ModItems.SAW, ModItems.SAW_BLADE, ModItems.SAW_BLUEPRINT.get());
         toolRecipes(consumer, "sickle", 3, ModItems.SICKLE, ModItems.SICKLE_BLADE, ModItems.SICKLE_BLUEPRINT.get());
         toolRecipes(consumer, "shears", 2, ModItems.SHEARS, ModItems.SHEARS_BLADES, ModItems.SHEARS_BLUEPRINT.get());
+        bowRecipes(consumer, "fishing_rod", 2, ModItems.FISHING_ROD, ModItems.FISHING_REEL_AND_HOOK, ModItems.FISHING_ROD_BLUEPRINT.get());
         bowRecipes(consumer, "bow", 3, ModItems.BOW, ModItems.BOW_LIMBS, ModItems.BOW_BLUEPRINT.get());
         bowRecipes(consumer, "crossbow", 3, ModItems.CROSSBOW, ModItems.CROSSBOW_LIMBS, ModItems.CROSSBOW_BLUEPRINT.get());
         bowRecipes(consumer, "slingshot", 2, ModItems.SLINGSHOT, ModItems.SLINGSHOT_LIMBS, ModItems.SLINGSHOT_BLUEPRINT.get());
@@ -1265,18 +1267,18 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
     @SuppressWarnings("MethodWithTooManyParameters")
     private static void bowRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, GearBlueprintItem blueprintItem) {
-        // Tool head
+        // Main part
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), toolHead)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
-                .build(consumer, SilentGear.getId("gear/" + name + "_limbs"));
-        // Bow from limbs, rod, and bowstring
+                .build(consumer, SilentGear.getId("gear/" + name + "_main"));
+        // Tool from main, rod, and bowstring
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(toolHead)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
                 .addIngredient(GearPartIngredient.of(PartType.BOWSTRING))
                 .build(consumer, SilentGear.getId("gear/" + name));
-        // Quick tool (mains, rod, and bowstring, skipping limbs)
+        // Quick tool (main materials, rod, and bowstring, skipping main part)
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)

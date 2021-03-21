@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Fishing rods. Requires a main part, rod, and a bowstring (which will be renamed to "cord" in the future)
+  - Known issue: model does not change after rod is cast
+- Some missing translations
+### Fixed
+- Previous changes to shears durability being completely wrong
+
 ## [2.6.12] - 2021-03-20
 ### Added
 - Widen trait. Increases the area-of-effect for hammers and excavators. Max level 3, only 1 is obtainable by default.

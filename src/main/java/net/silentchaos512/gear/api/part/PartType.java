@@ -63,7 +63,7 @@ public final class PartType {
             .defaultTexture(PartTextures.BINDING_GENERIC)
             .isRemovable(true)
     );
-    public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring"))
+    public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring")) // TODO: Rename to "cord"
             .compoundPartItem(() -> ModItems.BOWSTRING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.BOWSTRING_STRING)
     );
