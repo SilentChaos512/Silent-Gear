@@ -34,27 +34,30 @@ public class StatModifierEnchantment extends Enchantment implements IStatModifie
     public StatInstance modifyStat(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
         if (isSupportedModifierOp(mod)) {
             float modifiedStatValue = (float) getModifiedStatValue(stat, mod, charge);
+
             if (stat.getStat() instanceof SplitItemStat) {
+                // For stats like armor, split the bonus evenly between all gear types
                 SplitItemStat splitItemStat = (SplitItemStat) stat.getStat();
                 if (!splitItemStat.getSplitTypes().contains(stat.getGearType())) {
                     modifiedStatValue = mod.getValue() + (modifiedStatValue - mod.getValue()) * splitItemStat.getSplitTypes().size();
                 }
             }
+
             return mod.copySetValue(modifiedStatValue);
         }
         return null;
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    private static double getModifiedStatValue(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
+    protected double getModifiedStatValue(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
         if (stat.getStat() == ItemStats.DURABILITY)
-            return mod.getValue() * Math.pow(1.5, charge.getChargeValue());
+            return mod.getValue() * Math.pow(1.25, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ARMOR_DURABILITY)
-            return mod.getValue() * Math.pow(1.2, charge.getChargeValue());
+            return mod.getValue() * Math.pow(1.1, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ENCHANTABILITY)
             return mod.getValue() * (1 + charge.getChargeLevel() * (Math.sqrt(charge.getChargeability() - 1)));
         if (stat.getStat() == ItemStats.HARVEST_LEVEL)
-            return mod.getValue() + charge.getChargeLevel();
+            return mod.getValue() + 1;
         if (stat.getStat() == ItemStats.HARVEST_SPEED)
             return mod.getValue() + 1.5 * charge.getChargeLevel() * charge.getChargeValue();
         if (stat.getStat() == ItemStats.MELEE_DAMAGE)
@@ -66,7 +69,7 @@ public class StatModifierEnchantment extends Enchantment implements IStatModifie
         if (stat.getStat() == ItemStats.ARMOR)
             return mod.getValue() + charge.getChargeValue() / 2.0;
         if (stat.getStat() == ItemStats.ARMOR_TOUGHNESS)
-            return mod.getValue() + charge.getChargeValue() / 4.0;
+            return mod.getValue() + charge.getChargeValue() / 2.0;
         if (stat.getStat() == ItemStats.MAGIC_ARMOR)
             return mod.getValue() + charge.getChargeValue() / 2.0;
 
