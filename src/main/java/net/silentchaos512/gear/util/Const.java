@@ -5,6 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
@@ -49,6 +50,7 @@ public final class Const {
 
     // Random
     public static final ResourceLocation NULL_ID = new ResourceLocation("null");
+    public static final IItemStat SGEMS_CHARGEABILITY = () -> new ResourceLocation("silentgems", "chargeability");
 
     // Compound-crafting block info
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})

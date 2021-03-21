@@ -114,6 +114,10 @@ public final class GearApi {
         return MaterialManager.getValues(includeChildren);
     }
 
+    public static boolean isMaterial(ItemStack stack) {
+        return MaterialManager.from(stack) != null;
+    }
+
     //endregion
 
     //region Parts

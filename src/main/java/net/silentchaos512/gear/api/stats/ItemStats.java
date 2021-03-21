@@ -25,8 +25,6 @@ public final class ItemStats {
     public static final Lazy<IForgeRegistry<ItemStat>> REGISTRY = Lazy.of(() -> new RegistryBuilder<ItemStat>()
             .setType(ItemStat.class)
             .setName(SilentGear.getId("stat"))
-//            .add((IForgeRegistry.AddCallback<ItemStat>) (owner, stage, id, obj, oldObj) -> STATS_IN_ORDER.add(obj))
-//            .add((IForgeRegistry.ClearCallback<ItemStat>) (owner, stage) -> STATS_IN_ORDER.clear())
             .create());
 
     // Generic
@@ -54,6 +52,10 @@ public final class ItemStats {
             .affectedByGrades(true)
             .synergyApplies()
     );
+    public static final ItemStat CHARGEABILITY = new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
+            .affectedByGrades(false)
+            .hidden()
+    );
     public static final ItemStat RARITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(false)
@@ -69,18 +71,15 @@ public final class ItemStats {
     public static final ItemStat HARVEST_SPEED = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
-            .missingRodFunction(f -> Math.max(2, f / 8))
     );
     public static final ItemStat REACH_DISTANCE = new ItemStat(0f, -100f, 100f, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(false)
-            .missingRodFunction(f -> f - 1.5f)
     );
 
     // Melee Weapons
     public static final ItemStat MELEE_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
-            .missingRodFunction(f -> f / 2)
     );
     public static final ItemStat MAGIC_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
@@ -190,6 +189,7 @@ public final class ItemStats {
         register(event.getRegistry(), REPAIR_EFFICIENCY, "repair_efficiency");
         register(event.getRegistry(), REPAIR_VALUE, "repair_value");
         register(event.getRegistry(), ENCHANTABILITY, "enchantability");
+        register(event.getRegistry(), CHARGEABILITY, "chargeability");
         register(event.getRegistry(), RARITY, "rarity");
         register(event.getRegistry(), HARVEST_LEVEL, "harvest_level");
         register(event.getRegistry(), HARVEST_SPEED, "harvest_speed");

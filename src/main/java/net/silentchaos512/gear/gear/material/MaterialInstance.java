@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.gear.material;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
@@ -8,11 +10,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.stats.ChargedProperties;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -21,6 +25,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -142,7 +147,7 @@ public final class MaterialInstance implements IMaterialInstance {
 
     @Override
     public Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key, ItemStack gear) {
-        Collection<StatInstance> mods = material.getStatModifiers(this, partType, key, gear);
+        List<StatInstance> mods = new ArrayList<>(material.getStatModifiers(this, partType, key, gear));
 
         ItemStat stat = ItemStats.get(key.getStat());
         if (stat == null) {
@@ -161,9 +166,44 @@ public final class MaterialInstance implements IMaterialInstance {
             }).collect(Collectors.toList());
         }
 
+        getEnchantmentModifiedStats(mods, key);
+
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
+    }
+
+    private void getEnchantmentModifiedStats(List<StatInstance> mods, StatGearKey key) {
+        if (key.getStat() == ItemStats.CHARGEABILITY || key.getStat() == Const.SGEMS_CHARGEABILITY) {
+            return;
+        }
+
+        // Search for materials that stats
+        for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(this.item).entrySet()) {
+            Enchantment enchantment = entry.getKey();
+            Integer level = entry.getValue();
+
+            if (enchantment instanceof IStatModifierEnchantment) {
+                IStatModifierEnchantment statModifierEnchantment = (IStatModifierEnchantment) enchantment;
+                ChargedProperties charge = new ChargedProperties(level, getChargeability());
+
+                // Replace modifiers with updated ones (if provided)
+                for (int i = 0; i < mods.size(); i++) {
+                    StatInstance mod = mods.get(i);
+                    StatInstance newMod = statModifierEnchantment.modifyStat(key, mod, charge);
+                    if (newMod != null) {
+                        mods.remove(i);
+                        mods.add(i, newMod);
+                    }
+                }
+            }
+        }
+    }
+
+    private float getChargeability() {
+        // TODO: Remove SGems chargeability stat reference
+        return Math.max(getStat(PartType.MAIN, ItemStats.CHARGEABILITY),
+                getStat(PartType.MAIN, Const.SGEMS_CHARGEABILITY));
     }
 
     @Override

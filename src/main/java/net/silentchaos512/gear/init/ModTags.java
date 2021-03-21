@@ -68,6 +68,7 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> DUSTS_AZURE_SILVER = forge("dusts/azure_silver");
         public static final ITag.INamedTag<Item> DUSTS_AZURE_ELECTRUM = forge("dusts/azure_electrum");
         public static final ITag.INamedTag<Item> DUSTS_TYRIAN_STEEL = forge("dusts/tyrian_steel");
+        public static final ITag.INamedTag<Item> DUSTS_STARMETAL = forge("dusts/starmetal");
 
         public static final ITag.INamedTag<Item> GEMS_BORT = forge("gems/bort");
 
@@ -127,6 +128,12 @@ public final class ModTags {
         public static final ITag.INamedTag<Item> GRADER_CATALYSTS_TIER_4 = mod("grader_catalysts/tier4");
         public static final ITag.INamedTag<Item> GRADER_CATALYSTS_TIER_5 = mod("grader_catalysts/tier5");
         public static final List<ITag.INamedTag<Item>> GRADER_CATALYSTS_TIERS = ImmutableList.of(GRADER_CATALYSTS_TIER_1, GRADER_CATALYSTS_TIER_2, GRADER_CATALYSTS_TIER_3, GRADER_CATALYSTS_TIER_4, GRADER_CATALYSTS_TIER_5);
+
+        public static final ITag.INamedTag<Item> STARLIGHT_CHARGER_CATALYSTS = mod("starlight_charger_catalysts");
+        public static final ITag.INamedTag<Item> STARLIGHT_CHARGER_CATALYSTS_TIER_1 = mod("starlight_charger_catalysts/tier1");
+        public static final ITag.INamedTag<Item> STARLIGHT_CHARGER_CATALYSTS_TIER_2 = mod("starlight_charger_catalysts/tier2");
+        public static final ITag.INamedTag<Item> STARLIGHT_CHARGER_CATALYSTS_TIER_3 = mod("starlight_charger_catalysts/tier3");
+        public static final List<ITag.INamedTag<Item>> STARLIGHT_CHARGER_TIERS = ImmutableList.of(STARLIGHT_CHARGER_CATALYSTS_TIER_1, STARLIGHT_CHARGER_CATALYSTS_TIER_2, STARLIGHT_CHARGER_CATALYSTS_TIER_3);
 
         private Items() {}
 

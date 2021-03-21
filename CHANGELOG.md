@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Chargeability stat (was part of Silent's Gems)
+- Star Charged enchantment, which boost the stats of materials, like a weaker version of supercharging
+- Starlight Charger. Gives the Star Charged enchantment to materials. Must be exposed to the sky during nighttime to store energy for charging.
 - Fishing rods. Requires a main part, rod, and a bowstring (which will be renamed to "cord" in the future)
   - Known issue: model does not change after rod is cast
 - Some missing translations

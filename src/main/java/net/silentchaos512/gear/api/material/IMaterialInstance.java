@@ -53,6 +53,10 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
      */
     int getTier(PartType partType);
 
+    default int getTier() {
+        return getTier(PartType.MAIN);
+    }
+
     default boolean isSimple() {
         IMaterial mat = get();
         return mat != null && mat.isSimple();

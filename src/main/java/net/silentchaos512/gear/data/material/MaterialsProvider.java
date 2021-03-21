@@ -50,6 +50,7 @@ import java.util.Objects;
 public class MaterialsProvider implements IDataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+    // Old SGems chargeability stat
     private static final ResourceLocation CHARGEABILITY = new ResourceLocation("silentgems", "chargeability");
 
     private final DataGenerator generator;
