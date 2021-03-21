@@ -297,10 +297,10 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, Const.Traits.FIERY, 4)
                 .trait(PartType.COATING, Const.Traits.BRILLIANT, 1)
                 .trait(PartType.COATING, Const.Traits.SOFT, 2)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE48534)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xE48534)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xE48534)
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xE48534)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xDD8500)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xDD8500)
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
         );
         // Crimson Iron
         ret.add(new MaterialBuilder(modId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
@@ -442,10 +442,10 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.TIP, Const.Traits.SOFT, 3)
                 .trait(PartType.COATING, Const.Traits.BRILLIANT, 1)
                 .trait(PartType.COATING, Const.Traits.SOFT, 3)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xEAEE57)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xEAEE57)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xEAEE57)
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xEAEE57)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFDFF70)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xFDFF70)
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
         );
         // Iron
         ret.add(new MaterialBuilder(modId("iron"), 2, Tags.Items.INGOTS_IRON)
@@ -1444,7 +1444,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 30)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
                 .trait(PartType.ROD, Const.Traits.REACH, 1)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFC100)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFC600)
         );
         // Bone
         ret.add(new MaterialBuilder(modId("bone"), 1, Items.BONE_BLOCK)
