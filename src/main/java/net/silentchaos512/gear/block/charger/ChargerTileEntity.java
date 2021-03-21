@@ -23,7 +23,6 @@ import net.silentchaos512.gear.init.GearEnchantments;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.ModTileEntities;
-import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -124,9 +123,15 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     protected int getChargingAgentTier(ItemStack catalyst) {
-        if (catalyst.getItem().isIn(ModTags.Items.DUSTS_BLAZE_GOLD)) return 1;
-        if (catalyst.getItem().isIn(ModTags.Items.DUSTS_AZURE_SILVER)) return 2;
-        if (catalyst.getItem() == CraftingItems.STARMETAL_DUST.asItem()) return 3;
+        return getStarlightChargerCatalystTier(catalyst);
+    }
+
+    public static int getStarlightChargerCatalystTier(ItemStack catalyst) {
+        for (int i = ModTags.Items.STARLIGHT_CHARGER_TIERS.size() - 1; i >= 0; --i) {
+            if (catalyst.getItem().isIn(ModTags.Items.STARLIGHT_CHARGER_TIERS.get(i))) {
+                return i + 1;
+            }
+        }
 
         return 0;
     }
@@ -279,7 +284,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (index == 0) return GearApi.isMaterial(stack);
-        if (index == 1) return getChargingAgentTier(stack) > 0;
+        if (index == 1) return stack.getItem().isIn(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS);
         return false;
     }
 

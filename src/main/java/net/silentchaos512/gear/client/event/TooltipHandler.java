@@ -2,7 +2,6 @@ package net.silentchaos512.gear.client.event;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.TagRegistryManager;
 import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +15,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.block.charger.ChargerTileEntity;
 import net.silentchaos512.gear.block.grader.GraderTileEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -27,6 +27,7 @@ import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
+import net.silentchaos512.lib.util.TagUtils;
 import net.silentchaos512.utils.Color;
 
 import java.util.*;
@@ -62,8 +63,11 @@ public final class TooltipHandler {
 
         ItemStack stack = event.getItemStack();
 
-        if (isGraderCatalystWithHackyWorkaround(stack)) {
+        if (TagUtils.containsSafe(ModTags.Items.GRADER_CATALYSTS, stack)) {
             onGraderCatalystTooltip(event);
+        }
+        if (TagUtils.containsSafe(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack)) {
+            onStarlightChargerCatalystTooltip(event);
         }
 
         MaterialInstance material = MaterialInstance.from(stack);
@@ -85,20 +89,14 @@ public final class TooltipHandler {
         }
     }
 
-    private static boolean isGraderCatalystWithHackyWorkaround(ItemStack stack) {
-        // Workaround for https://github.com/SilentChaos512/Silent-Gear/issues/224 and related issues...
-        // This crash only happens on the client in some cases
-        try {
-            return stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS);
-        } catch (IllegalStateException ex) {
-            TagRegistryManager.fetchTags();
-        }
-        return stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS);
-    }
-
     private static void onGraderCatalystTooltip(ItemTooltipEvent event) {
         int tier = GraderTileEntity.getCatalystTier(event.getItemStack());
-        event.getToolTip().add(TextUtil.withColor(TextUtil.misc("graderCatalyst", tier), Color.REBECCAPURPLE));
+        event.getToolTip().add(TextUtil.withColor(TextUtil.misc("graderCatalyst", tier), Color.DARKORANGE));
+    }
+
+    private static void onStarlightChargerCatalystTooltip(ItemTooltipEvent event) {
+        int tier = ChargerTileEntity.getStarlightChargerCatalystTier(event.getItemStack());
+        event.getToolTip().add(TextUtil.withColor(TextUtil.misc("starlightChargerCataylst", tier), Color.REBECCAPURPLE));
     }
 
     private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, MaterialInstance material) {

@@ -78,13 +78,15 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.DUSTS_AZURE_SILVER, CraftingItems.AZURE_SILVER_DUST);
         builder(ModTags.Items.DUSTS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_DUST);
         builder(ModTags.Items.DUSTS_TYRIAN_STEEL, CraftingItems.TYRIAN_STEEL_DUST);
+        builder(ModTags.Items.DUSTS_STARMETAL, CraftingItems.STARMETAL_DUST);
         getBuilder(Tags.Items.DUSTS)
                 .addTag(ModTags.Items.DUSTS_BLAZE_GOLD)
                 .addTag(ModTags.Items.DUSTS_CRIMSON_IRON)
                 .addTag(ModTags.Items.DUSTS_CRIMSON_STEEL)
                 .addTag(ModTags.Items.DUSTS_AZURE_SILVER)
                 .addTag(ModTags.Items.DUSTS_AZURE_ELECTRUM)
-                .addTag(ModTags.Items.DUSTS_TYRIAN_STEEL);
+                .addTag(ModTags.Items.DUSTS_TYRIAN_STEEL)
+                .addTag(ModTags.Items.DUSTS_STARMETAL);
 
         builder(ModTags.Items.GEMS_BORT, CraftingItems.BORT);
         getBuilder(Tags.Items.GEMS)
@@ -180,10 +182,12 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
                 CraftingItems.BLAZE_GOLD_INGOT);
 
         // Silent Gear
+
         copy(ModTags.Blocks.FLUFFY_BLOCKS, ModTags.Items.FLUFFY_BLOCKS);
         copy(ModTags.Blocks.NETHERWOOD_LOGS, ModTags.Items.NETHERWOOD_LOGS);
+
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_1)
-                .add(CraftingItems.GLOWING_DUST.asItem())
+                .add(CraftingItems.GLOWING_DUST.asItem()) // TODO: Remove me
                 .addTag(Tags.Items.DUSTS_GLOWSTONE);
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
         getBuilder(ModTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());
@@ -195,7 +199,17 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
                 .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_3)
                 .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_4)
                 .addTag(ModTags.Items.GRADER_CATALYSTS_TIER_5);
+
+        getBuilder(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_1).addTag(ModTags.Items.DUSTS_BLAZE_GOLD);
+        getBuilder(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_2).addTag(ModTags.Items.DUSTS_AZURE_SILVER);
+        getBuilder(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_3).addTag(ModTags.Items.DUSTS_STARMETAL);
+        getBuilder(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS)
+                .addTag(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_1)
+                .addTag(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_2)
+                .addTag(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_3);
+
         builder(ModTags.Items.REPAIR_KITS, ModItems.CRUDE_REPAIR_KIT);
+
         // Blueprints
         Multimap<ResourceLocation, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();
         ForgeRegistries.ITEMS.getValues().stream()
