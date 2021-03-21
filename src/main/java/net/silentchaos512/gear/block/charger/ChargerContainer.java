@@ -3,7 +3,6 @@ package net.silentchaos512.gear.block.charger;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
@@ -22,7 +21,7 @@ public class ChargerContainer extends Container {
     private final IIntArray fields;
 
     public ChargerContainer(ContainerType<?> type, int id, PlayerInventory inv, PacketBuffer data) {
-        this(type, id, inv, new Inventory(ChargerTileEntity.INVENTORY_SIZE), new IntArray(data.readByte()));
+        this(type, id, inv, ChargerTileEntity.createStarlightCharger(), new IntArray(data.readByte()));
     }
 
     public ChargerContainer(ContainerType<?> type, int id, PlayerInventory inv, IInventory blockInv, IIntArray fields) {

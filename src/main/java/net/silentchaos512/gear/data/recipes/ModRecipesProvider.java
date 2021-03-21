@@ -676,6 +676,16 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("/ /")
                 .patternLine("#t#")
                 .build(consumer);
+
+        ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.STARLIGHT_CHARGER)
+                .key('#', Blocks.POLISHED_BLACKSTONE)
+                .key('/', ModTags.Items.STORAGE_BLOCKS_BLAZE_GOLD)
+                .key('q', Tags.Items.STORAGE_BLOCKS_QUARTZ)
+                .key('g', Tags.Items.GLASS_COLORLESS)
+                .patternLine("qgq")
+                .patternLine("#g#")
+                .patternLine("#/#")
+                .build(consumer);
     }
 
     private void registerCompounding(Consumer<IFinishedRecipe> consumer) {
@@ -861,6 +871,24 @@ public class ModRecipesProvider extends RecipeProvider {
         ShapelessRecipeBuilder.shapelessRecipe(CraftingItems.FINE_SILK, 4)
                 .addIngredient(CraftingItems.FINE_SILK_CLOTH)
                 .addCriterion("has_item", hasItem(CraftingItems.FINE_SILK))
+                .build(consumer);
+
+        ExtendedShapelessRecipeBuilder.vanillaBuilder(CraftingItems.NETHER_STAR_FRAGMENT, 9)
+                .addIngredient(Items.NETHER_STAR)
+                .build(consumer);
+
+        ExtendedShapedRecipeBuilder.vanillaBuilder(Items.NETHER_STAR)
+                .patternLine("###")
+                .patternLine("###")
+                .patternLine("###")
+                .key('#', CraftingItems.NETHER_STAR_FRAGMENT)
+                .build(consumer, SilentGear.getId("nether_star_from_fragments"));
+
+        ExtendedShapelessRecipeBuilder.vanillaBuilder(CraftingItems.STARMETAL_DUST, 3)
+                .addIngredient(ModTags.Items.DUSTS_AZURE_ELECTRUM, 1)
+                .addIngredient(ModTags.Items.DUSTS_AZURE_SILVER, 2)
+                .addIngredient(ModTags.Items.DUSTS_BLAZE_GOLD, 1)
+                .addIngredient(CraftingItems.NETHER_STAR_FRAGMENT)
                 .build(consumer);
 
         // TODO: Maybe should organize these better...

@@ -1,14 +1,16 @@
 package net.silentchaos512.gear.block.charger;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.util.TextUtil;
+
+import java.util.List;
 
 public class ChargerScreen extends ContainerScreen<ChargerContainer> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/charger.png");
@@ -27,10 +29,13 @@ public class ChargerScreen extends ContainerScreen<ChargerContainer> {
     @Override
     protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {
         if (isPointInRegion(153, 17, 13, 51, x, y)) {
-            IFormattableTextComponent text = TextUtil.translate("container", "material_charger.charge",
-                    String.format("%,d", container.getCharge()),
-                    String.format("%,d", container.getMaxCharge()));
-            renderTooltip(matrixStack, text, x, y);
+            List<ITextComponent> text = ImmutableList.of(
+                    TextUtil.translate("container", "material_charger.charge",
+                            String.format("%,d", container.getCharge()),
+                            String.format("%,d", container.getMaxCharge())),
+                    TextUtil.translate("container", "material_charger.charge.hint")
+            );
+            func_243308_b(matrixStack, text, x, y);
         }
         super.renderHoveredTooltip(matrixStack, x, y);
     }
@@ -53,7 +58,7 @@ public class ChargerScreen extends ContainerScreen<ChargerContainer> {
         blit(matrixStack, posX, posY, 0, 0, this.xSize, this.ySize);
 
         // Progress arrow
-        blit(matrixStack, posX + 49, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
+        blit(matrixStack, posX + 79, posY + 35, 176, 14, container.getProgressArrowScale() + 1, 16);
 
         // Charge meter
         int chargeMeterHeight = container.getChargeMeterHeight();

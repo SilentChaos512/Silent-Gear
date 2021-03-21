@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Chargeability stat (was part of Silent's Gems)
 - Star Charged enchantment, which boost the stats of materials, like a weaker version of supercharging
+- Starlight Charger. Gives the Star Charged enchantment to materials. Must be exposed to the sky during nighttime to store energy for charging.
 ### Changed
 - Update pt_br.json (SAMUELPV) [#329]
 - Change how skipped materials are logged to hopefully reduce confusion

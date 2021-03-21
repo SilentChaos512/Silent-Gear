@@ -13,6 +13,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
@@ -305,7 +306,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.silentgear.compounder");
+        return new TranslationTextComponent(Util.makeTranslationKey("container", this.info.getBlock().getRegistryName()));
     }
 
     @Override

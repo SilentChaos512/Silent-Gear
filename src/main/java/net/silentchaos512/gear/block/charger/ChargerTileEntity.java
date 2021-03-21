@@ -18,7 +18,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
 import net.silentchaos512.gear.init.GearEnchantments;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -115,9 +114,13 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     protected int getWorkTime(ItemStack input) {
         IMaterialInstance material = GearApi.getMaterial(input);
         if (material != null) {
-            return 100 * material.getTier(PartType.MAIN);
+            return 100 * material.getTier();
         }
         return -1;
+    }
+
+    protected int getDrainRate(ItemStack input, int level) {
+        return 150 + 50 * level * level;
     }
 
     protected int getChargingAgentTier(ItemStack catalyst) {
@@ -134,10 +137,6 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
 
     protected void chargeMaterial(ItemStack output, int level) {
         output.addEnchantment(this.enchantment.get(), level);
-    }
-
-    protected int getDrainRate(ItemStack input, int level) {
-        return 100 + 100 * level * level;
     }
 
     @Override
@@ -232,7 +231,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         return MaterialGrade.NONE;
     }
 
-    private boolean checkStructureLevel() {
+    protected boolean checkStructureLevel() {
         int oldValue = this.structureLevel;
         this.structureLevel = MathUtils.min(
                 this.getPillarLevel(this.pos.offset(Direction.NORTH, 3).offset(Direction.WEST, 3)),
@@ -242,7 +241,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         return this.structureLevel != oldValue;
     }
 
-    private int getPillarLevel(BlockPos pos) {
+    protected int getPillarLevel(BlockPos pos) {
         assert world != null;
         BlockState state = this.world.getBlockState(pos.up(2));
         if (state.getBlock() == ModBlocks.CRIMSON_STEEL_BLOCK.get()) return 1;
