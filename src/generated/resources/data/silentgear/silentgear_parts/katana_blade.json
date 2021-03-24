@@ -15,7 +15,7 @@
     "attack_speed": {
       "add": -2.2
     },
-    "repair_efficiency": 0.75,
+    "repair_efficiency": 1.0,
     "durability": {
       "mul1": -0.2
     }

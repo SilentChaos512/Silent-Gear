@@ -122,7 +122,7 @@ public class PartsProvider implements IDataProvider {
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 2.0f)
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
@@ -130,7 +130,7 @@ public class PartsProvider implements IDataProvider {
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3.2f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
@@ -138,7 +138,7 @@ public class PartsProvider implements IDataProvider {
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 1f)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f)
                     .stat(ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTABILITY, -0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
@@ -154,7 +154,7 @@ public class PartsProvider implements IDataProvider {
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3.0f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.9f)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.2f)
                     .stat(ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTABILITY, -0.3f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.2f, StatInstance.Operation.MUL1);
@@ -167,7 +167,7 @@ public class PartsProvider implements IDataProvider {
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.4f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.75f, StatInstance.Operation.MUL1);
@@ -187,19 +187,19 @@ public class PartsProvider implements IDataProvider {
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -1.2f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 2)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 2.0f)
                     .stat(ItemStats.MELEE_DAMAGE, -0.5f, StatInstance.Operation.MUL1);
         if (isToolHead(builder, ModItems.KATANA_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.2f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1.0f)
                     .stat(ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL1);
         if (isToolHead(builder, ModItems.KNIFE_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -1.6f, StatInstance.Operation.ADD)
-                    .stat(ItemStats.REPAIR_EFFICIENCY, 2)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 2.0f)
                     .stat(ItemStats.MELEE_DAMAGE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1);
         if (isToolHead(builder, ModItems.MACHETE_BLADE))
