@@ -78,6 +78,7 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
         public static final ForgeConfigSpec.BooleanValue modelAndTextureLogging;
+        public static final ForgeConfigSpec.BooleanValue worldGenLogging;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -315,6 +316,10 @@ public final class Config {
                     .comment("Log information on construction of gear and part models, as well as textures they attempt to load.",
                             "This is intended to help find and fix rare issues that some users are experiencing.")
                     .define("debug.logging.modelAndTexture", false);
+
+            worldGenLogging = builder
+                    .comment("Log details about certain features being adding to biomes and other world generator details")
+                    .define("debug.logging.worldGen", true);
 
             spec = builder.build();
         }

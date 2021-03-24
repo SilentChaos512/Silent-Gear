@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Config to disable debug logging related to world generator features [#354]
 ### Changed
 - Tweaked colors of blaze gold, blaze rod, and gold materials
 - `/sgear_traits dump_md` command now includes the version of loaded mods

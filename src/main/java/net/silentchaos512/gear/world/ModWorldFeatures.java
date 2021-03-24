@@ -144,7 +144,7 @@ public final class ModWorldFeatures {
 
     private static void registerConfiguredFeature(String name, ConfiguredFeature<?, ?> configuredFeature) {
         ModResourceLocation id = SilentGear.getId(name);
-        SilentGear.LOGGER.debug("Register configured feature {}", id);
+        debugLog("Register configured feature " + id);
         Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, id, configuredFeature);
     }
 
@@ -174,12 +174,12 @@ public final class ModWorldFeatures {
     }
 
     private static void addWildFlax(BiomeLoadingEvent biome) {
-        SilentGear.LOGGER.debug("Add wild flax to {}", biome.getName());
+        debugLog("Add wild flax to " + biome.getName());
         biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES.get());
     }
 
     private static void addWildFluffyPlants(BiomeLoadingEvent biome) {
-        SilentGear.LOGGER.debug("Add wild fluffy plants to {}", biome.getName());
+        debugLog("Add wild fluffy plants to " + biome.getName());
         biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLUFFY_PATCHES.get());
     }
 
@@ -193,15 +193,22 @@ public final class ModWorldFeatures {
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {
         if (Biomes.BASALT_DELTAS.getLocation().equals(biome.getName()) || Biomes.SOUL_SAND_VALLEY.getLocation().equals(biome.getName())) {
-            SilentGear.LOGGER.debug("Add double crimson iron ores to {}", biome.getName());
+            debugLog("Add double crimson iron ores to " + biome.getName());
             biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.DOUBLE_CRIMSON_IRON_ORE_VEINS.get());
         } else {
-            SilentGear.LOGGER.debug("Add crimson iron ores to {}", biome.getName());
+            debugLog("Add crimson iron ores to " + biome.getName());
             biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS.get());
         }
     }
 
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
+        debugLog("Add azure silver ores to " + biome.getName());
         biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.AZURE_SILVER_ORE_VEINS.get());
+    }
+
+    private static void debugLog(String msg) {
+        if (Config.Common.worldGenLogging.get()) {
+            SilentGear.LOGGER.debug(msg);
+        }
     }
 }
