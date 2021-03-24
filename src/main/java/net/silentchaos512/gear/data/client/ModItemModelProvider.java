@@ -118,7 +118,6 @@ public class ModItemModelProvider extends ItemModelProvider {
             return;
         }
 
-        SilentGear.LOGGER.debug("blockItemModel: {}, {}", block, block.asItem());
         if (block == ModBlocks.PHANTOM_LIGHT.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "item/phantom_light");
         else if (block == ModBlocks.NETHERWOOD_SAPLING.get() || block == ModBlocks.STONE_TORCH.get())

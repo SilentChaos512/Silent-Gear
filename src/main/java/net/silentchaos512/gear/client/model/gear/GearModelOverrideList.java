@@ -68,7 +68,7 @@ public class GearModelOverrideList extends ItemOverrideList {
         this.modelLocation = modelLocation;
     }
 
-    private static boolean isDebugLoggingEnabled() {
+    static boolean isDebugLoggingEnabled() {
         return Config.Common.modelAndTextureLogging.get();
     }
 

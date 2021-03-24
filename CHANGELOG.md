@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Tweaked colors of blaze gold, blaze rod, and gold materials
+### Fixed
+- Some model logging not being disabled with the config
 
 ## [2.6.13] - 2021-03-21
 ### Added

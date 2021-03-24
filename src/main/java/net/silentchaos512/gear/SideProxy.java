@@ -137,7 +137,7 @@ class SideProxy implements IProxy {
         SilentGear.LOGGER.info(PartManager.MARKER, "Parts loaded: {}", PartManager.getValues().size());
         SilentGear.LOGGER.info(PartManager.MARKER, "- Compound: {}", PartManager.getValues().stream()
                 .filter(part -> part instanceof CompoundPart).count());
-        SilentGear.LOGGER.info(PartManager.MARKER, "- Simple/Legacy: {}", PartManager.getValues().stream()
+        SilentGear.LOGGER.info(PartManager.MARKER, "- Simple: {}", PartManager.getValues().stream()
                 .filter(part -> !(part instanceof CompoundPart)).count());
         SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
         SilentGear.LOGGER.info(MaterialManager.MARKER, "- Standard: {}", MaterialManager.getValues().stream()

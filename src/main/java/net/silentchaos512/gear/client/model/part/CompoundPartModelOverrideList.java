@@ -16,6 +16,7 @@ import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.ModelErrorLogging;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -53,6 +54,10 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
         this.spriteGetter = spriteGetter;
         this.modelTransform = modelTransform;
         this.modelLocation = modelLocation;
+    }
+
+    static boolean isDebugLoggingEnabled() {
+        return Config.Common.modelAndTextureLogging.get();
     }
 
     @Nullable
@@ -104,9 +109,10 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
         return super.getOverrides();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
-        SilentGear.LOGGER.debug("Clearing model cache for {}/{}", this.model.partType, this.model.gearType);
+        if (CompoundPartModelOverrideList.isDebugLoggingEnabled()) {
+            SilentGear.LOGGER.debug("Clearing model cache for {}/{}", this.model.partType, this.model.gearType);
+        }
         bakedModelCache.invalidateAll();
     }
 

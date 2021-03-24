@@ -101,9 +101,12 @@ public class GearModel extends LayeredModel<GearModel> {
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
             RenderMaterial renderMaterial = getTexture(layer, animationFrame, broken);
-            SilentGear.LOGGER.info("  - {} -> {}", layer.getTextureId(), renderMaterial.getTextureLocation());
             TextureAtlasSprite texture = spriteGetter.apply(renderMaterial);
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
+
+            if (GearModelOverrideList.isDebugLoggingEnabled()) {
+                SilentGear.LOGGER.info("  - {} -> {}", layer.getTextureId(), renderMaterial.getTextureLocation());
+            }
         }
 
         // No layers?
@@ -183,9 +186,11 @@ public class GearModel extends LayeredModel<GearModel> {
             }
         }
 
-        SilentGear.LOGGER.info("Textures for gear model '{}' ({})", getTexturePath(false), this.gearType.getName());
-        for (RenderMaterial mat : ret) {
-            SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+        if (GearModelOverrideList.isDebugLoggingEnabled()) {
+            SilentGear.LOGGER.info("Textures for gear model '{}' ({})", getTexturePath(false), this.gearType.getName());
+            for (RenderMaterial mat : ret) {
+                SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+            }
         }
 
         return ret;
