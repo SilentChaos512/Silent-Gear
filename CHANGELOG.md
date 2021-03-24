@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Config to disable debug logging related to world generator features [#354]
 ### Changed
 - Increased repair efficiency for many tools: hammer and saw to 150%, excavator to 200%, mattock and paxel to 120%, katana to 100%
+- Hammers now work on glass [#69]
 - Tweaked colors of blaze gold, blaze rod, and gold materials
 - `/sgear_traits dump_md` command now includes the version of loaded mods
 ### Fixed
