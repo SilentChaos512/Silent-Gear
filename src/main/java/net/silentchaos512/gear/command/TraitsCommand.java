@@ -21,6 +21,7 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.forgespi.language.IModInfo;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -280,7 +281,13 @@ public final class TraitsCommand {
             ret.append("- ");
             Optional<? extends ModContainer> container = ModList.get().getModContainerById(id);
             if (container.isPresent()) {
-                ret.append(container.get().getModInfo().getDisplayName()).append(" (").append(id).append(")\n");
+                IModInfo modInfo = container.get().getModInfo();
+                ret.append(modInfo.getDisplayName())
+                        .append(" (")
+                        .append(id)
+                        .append(") ")
+                        .append(modInfo.getVersion())
+                        .append("\n");
             } else {
                 ret.append(id);
             }
