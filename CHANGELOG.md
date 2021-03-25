@@ -3,12 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.14] - 2021-03-24
 ### Added
 - Config to disable debug logging related to world generator features [#354]
 ### Changed
 - Increased repair efficiency for many tools: hammer and saw to 150%, excavator to 200%, mattock and paxel to 120%, katana to 100%
 - Hammers now work on glass [#69]
+- AOE tools (hammer, excavator) no longer play the "break event" (sound and particles) for each block broken, just the targeted one
 - Tweaked colors of blaze gold, blaze rod, and gold materials
 - `/sgear_traits dump_md` command now includes the version of loaded mods
 ### Fixed

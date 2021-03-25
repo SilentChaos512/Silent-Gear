@@ -180,7 +180,9 @@ public interface IAoeTool {
                         }
                     }
 
-                    world.playEvent(2001, pos, Block.getStateId(state));
+                    // TODO: Maybe add a config? Unfortunately, this code is called only on the server...
+                    //world.playEvent(2001, pos, Block.getStateId(state)); // Playing for each block gets very loud
+
                     ((ServerPlayerEntity) player).connection.sendPacket(new SChangeBlockPacket(world, pos));
                 }
             }
