@@ -74,9 +74,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     public ITextComponent getDisplayName(ItemStack stack) {
         MaterialInstance material = getMaterial(stack);
         if (material != null) {
-            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey(), material.getDisplayName(PartType.MAIN));
-            int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
-            return TextUtil.withColor(nameText, nameColor);
+            return new TranslationTextComponent(this.getTranslationKey(), material.getDisplayName(PartType.MAIN));
         }
         return super.getDisplayName(stack);
     }
@@ -88,9 +86,8 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (!isInGroup(group)) {
-            return;
+        if (isInGroup(group)) {
+            items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
         }
-        items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
     }
 }

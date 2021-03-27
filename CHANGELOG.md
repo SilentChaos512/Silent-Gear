@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Alloy ingots not turning into or working as sheet metal [#356]
+
 ## [2.6.14] - 2021-03-24
 ### Added
 - Config to disable debug logging related to world generator features [#354]

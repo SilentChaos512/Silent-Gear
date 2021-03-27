@@ -117,12 +117,8 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         MaterialInstance material = getPrimaryMaterial(stack);
-        if (material != null) {
-            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey(), material.getDisplayName(PartType.MAIN));
-            int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
-            return TextUtil.withColor(nameText, nameColor);
-        }
-        return new TranslationTextComponent(this.getTranslationKey(), TextUtil.misc("unknown"));
+        ITextComponent text = material != null ? material.getDisplayName(PartType.MAIN) : TextUtil.misc("unknown");
+        return new TranslationTextComponent(this.getTranslationKey(), text);
     }
 
     @Override

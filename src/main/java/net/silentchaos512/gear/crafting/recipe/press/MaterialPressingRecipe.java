@@ -21,11 +21,11 @@ public class MaterialPressingRecipe extends PressingRecipe {
     public ItemStack getCraftingResult(IInventory inv) {
         IMaterialInstance material = MaterialInstance.from(inv.getStackInSlot(0));
 
-        if (material != null && material.isSimple() && this.result.getItem() instanceof CraftedMaterialItem) {
+        if (material != null) {
             CraftedMaterialItem item = (CraftedMaterialItem) this.result.getItem();
             return item.create(material, this.result.getCount());
         }
 
-        return ItemStack.EMPTY;
+        return this.result.copy();
     }
 }
