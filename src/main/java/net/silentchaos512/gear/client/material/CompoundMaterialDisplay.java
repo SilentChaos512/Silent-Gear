@@ -29,7 +29,7 @@ public class CompoundMaterialDisplay implements IMaterialDisplay {
             MaterialInstance primary = ((IColoredMaterialItem) stack.getItem()).getPrimarySubMaterial(stack);
 
             if (primary != null) {
-                IMaterialDisplay model = MaterialDisplayManager.get(primary.get());
+                IMaterialDisplay model = MaterialDisplayManager.get(primary);
                 return model.getLayerList(gearType, part, material);
             }
         }

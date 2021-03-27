@@ -24,6 +24,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -98,7 +99,7 @@ public class CompounderBlock extends Block {
         if (!state.isIn(newState.getBlock())) {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
             if (tileEntity instanceof CompounderTileEntity) {
-                CompounderTileEntity te = (CompounderTileEntity) tileEntity;
+                IDroppableInventory te = (IDroppableInventory) tileEntity;
                 InventoryHelper.dropItems(worldIn, pos, te.getItemsToDrop());
                 worldIn.updateComparatorOutputLevel(pos, this);
             }

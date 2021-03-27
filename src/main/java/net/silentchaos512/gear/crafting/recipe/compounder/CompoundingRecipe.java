@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
+public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
     private final ResourceLocation recipeId;
     final List<Ingredient> ingredients = new ArrayList<>();
     ItemStack result = ItemStack.EMPTY;
@@ -53,7 +53,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
     }
 
     @Override
-    public boolean matches(CompounderTileEntity inv, World worldIn) {
+    public boolean matches(CompounderTileEntity<?> inv, World worldIn) {
         Set<Integer> matches = new HashSet<>();
         int inputs = 0;
 
@@ -85,7 +85,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity> {
     }
 
     @Override
-    public ItemStack getCraftingResult(CompounderTileEntity inv) {
+    public ItemStack getCraftingResult(CompounderTileEntity<?> inv) {
         return this.result.copy();
     }
 

@@ -19,6 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
@@ -32,7 +33,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("WeakerAccess")
-public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
+public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements ITickableTileEntity, IDroppableInventory {
     public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
@@ -267,7 +268,8 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         return ret;
     }
 
-    NonNullList<ItemStack> getItemsToDrop() {
+    @Override
+    public NonNullList<ItemStack> getItemsToDrop() {
         // Gets the items dropped when the block is broken. Excludes the "hint stack"
         NonNullList<ItemStack> ret = NonNullList.create();
         for (int i = 0; i < this.getSizeInventory() - 1; ++i) {

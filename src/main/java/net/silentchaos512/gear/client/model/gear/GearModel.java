@@ -128,21 +128,22 @@ public class GearModel extends LayeredModel<GearModel> {
 
     private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
         // This method will display an example tool for items with no data (ie, for advancements)
-        IMaterialDisplay model = MaterialDisplayManager.get(material);
+        MaterialInstance mat = MaterialInstance.of(material);
+        IMaterialDisplay model = MaterialDisplayManager.get(mat);
         if (!gearType.isArmor()) {
-            MaterialLayer exampleRod = model.getLayerList(this.gearType, PartType.ROD, MaterialInstance.of(material)).getFirstLayer();
+            MaterialLayer exampleRod = model.getLayerList(this.gearType, PartType.ROD, mat).getFirstLayer();
             if (exampleRod != null) {
                 builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleRod.getTexture(gearType, 0))), rotation, exampleRod.getColor()));
             }
         }
 
-        MaterialLayer exampleMain = model.getLayerList(this.gearType, PartType.MAIN, MaterialInstance.of(material)).getFirstLayer();
+        MaterialLayer exampleMain = model.getLayerList(this.gearType, PartType.MAIN, mat).getFirstLayer();
         if (exampleMain != null) {
             builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(gearType, 0))), rotation, exampleMain.getColor()));
         }
 
         if (gearType.matches(GearType.RANGED_WEAPON)) {
-            MaterialLayer exampleBowstring = model.getLayerList(this.gearType, PartType.BOWSTRING, MaterialInstance.of(material)).getFirstLayer();
+            MaterialLayer exampleBowstring = model.getLayerList(this.gearType, PartType.BOWSTRING, mat).getFirstLayer();
             if (exampleBowstring != null) {
                 builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleBowstring.getTexture(gearType, 0))), rotation, exampleBowstring.getColor()));
             }

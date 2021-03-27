@@ -268,7 +268,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public int getPrimaryColor(GearType gearType, PartType partType) {
-        IMaterialDisplay model = MaterialDisplayManager.get(this.material);
+        IMaterialDisplay model = MaterialDisplayManager.get(this);
         MaterialLayer layer = model.getLayerList(gearType, partType, this).getFirstLayer();
         if (layer != null) {
             return layer.getColor();

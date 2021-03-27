@@ -130,7 +130,7 @@ public final class GearData {
             }
             clearCachedData(gear);
             propertiesCompound.putString("ModVersion", SilentGear.getVersion());
-            Map<ITrait, Integer> traits = TraitHelper.getTraits(gear, parts);
+            Map<ITrait, Integer> traits = TraitHelper.getTraits(gear, item.getGearType(), parts);
 
             // Get all stat modifiers from all parts and item class modifiers
             StatModifierMap stats = getStatModifiers(gear, item, parts);

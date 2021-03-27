@@ -25,8 +25,7 @@ public class BlockPlacerTraitBuilder extends TraitBuilder {
         super(traitId, maxLevel, BlockPlacerTrait.SERIALIZER);
         this.block = block;
         this.damageOnUse = damageOnUse;
-        //noinspection deprecation
-        this.sound = this.block.getSoundType(this.block.getDefaultState()).getPlaceSound();
+        this.sound = this.block.getDefaultState().getSoundType().getPlaceSound();
     }
 
     public BlockPlacerTraitBuilder cooldown(int timeInTicks) {

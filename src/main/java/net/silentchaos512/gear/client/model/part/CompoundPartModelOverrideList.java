@@ -86,7 +86,7 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
 
     @SuppressWarnings("TypeMayBeWeakened")
     private void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
-        IMaterialDisplay materialModel = MaterialDisplayManager.get(material.get());
+        IMaterialDisplay materialModel = MaterialDisplayManager.get(material);
 
         List<MaterialLayer> layers = materialModel.getLayerList(this.model.gearType, part, material).getLayers();
         for (int i = 0; i < layers.size(); i++) {
