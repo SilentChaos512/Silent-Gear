@@ -217,7 +217,7 @@ public final class ModBlocks {
     }
 
     private static OreBlock getOre(int harvestLevel, SoundType soundType) {
-        return new OreBlock(AbstractBlock.Properties.create(Material.ROCK)
+        return new ModOreBlock(AbstractBlock.Properties.create(Material.ROCK)
                 .hardnessAndResistance(4, 10)
                 .setRequiresTool()
                 .harvestLevel(harvestLevel)
