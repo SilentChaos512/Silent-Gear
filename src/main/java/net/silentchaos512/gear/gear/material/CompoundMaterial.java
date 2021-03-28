@@ -48,7 +48,8 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
         this.packName = packName;
     }
 
-    public static List<MaterialInstance> getSubMaterials(IMaterialInstance material) {
+    @Override
+    public MaterialList getMaterials(IMaterialInstance material) {
         return CompoundMaterialItem.getSubMaterials(material.getItem());
     }
 
@@ -76,7 +77,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     @Override
     public Collection<IMaterialCategory> getCategories(IMaterialInstance material) {
         Set<IMaterialCategory> set = new HashSet<>(categories);
-        for (MaterialInstance mat : getSubMaterials(material)) {
+        for (IMaterialInstance mat : getMaterials(material)) {
             set.addAll(mat.getCategories());
         }
         return set;
@@ -114,7 +115,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
 
     @Override
     public Set<PartType> getPartTypes(IMaterialInstance material) {
-        List<MaterialInstance> subMaterials = getSubMaterials(material);
+        List<IMaterialInstance> subMaterials = getMaterials(material);
         if (subMaterials.isEmpty()) {
             return Collections.emptySet();
         } else if (subMaterials.size() == 1) {
@@ -141,10 +142,11 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
         return getPartTypes(material).contains(partType);
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     @Override
     public Collection<StatInstance> getStatModifiers(IMaterialInstance material, PartType partType, StatGearKey key, ItemStack gear) {
         // Get the materials and all the stat modifiers they provide for this stat
-        Collection<MaterialInstance> materials = getSubMaterials(material);
+        Collection<IMaterialInstance> materials = getMaterials(material);
         List<StatInstance> statMods = materials.stream()
                 .flatMap(m -> m.getStatModifiers(partType, key).stream())
                 .collect(Collectors.toList());
@@ -200,8 +202,8 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
 
     @Override
     public Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type) {
-        return getSubMaterials(material).stream()
-                .flatMap(mat -> mat.get().getStatKeys(mat, type).stream())
+        return getMaterials(material).stream()
+                .flatMap(mat -> mat.getStatKeys(type).stream())
                 .collect(Collectors.toSet());
     }
 
@@ -225,9 +227,9 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
 
     @Override
     public Collection<TraitInstance> getTraits(IMaterialInstance material, PartGearKey partKey, ItemStack gear) {
-        List<MaterialInstance> materials = new ArrayList<>(getSubMaterials(material));
+        List<IMaterialInstance> materials = new ArrayList<>(getMaterials(material));
         List<TraitInstance> traits = TraitHelper.getTraits(materials, partKey, ItemStack.EMPTY);
-        List<TraitInstance> ret = new ArrayList<>();
+        Collection<TraitInstance> ret = new ArrayList<>();
 
         for (TraitInstance inst : traits) {
             if (inst.conditionsMatch(partKey, ItemStack.EMPTY, materials)) {
@@ -275,30 +277,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
 
     @Override
     public String getModelKey(IMaterialInstance material) {
-        StringBuilder str = new StringBuilder(IMaterial.super.getModelKey(material) + "[");
-        List<String> elements = new ArrayList<>();
-
-        MaterialInstance last = null;
-        IMaterial previous = null;
-        int prevCount = 0;
-
-        for (MaterialInstance mat : getSubMaterials(material)) {
-            last = mat;
-            if (mat.get() != previous) {
-                if (previous != null) {
-                    elements.add(mat.getModelKey() + (prevCount > 1 ? "*" + prevCount : ""));
-                }
-                previous = mat.get();
-                prevCount = 0;
-            }
-            ++prevCount;
-        }
-
-        if (prevCount > 0) {
-            elements.add(last.getModelKey());
-        }
-
-        return str.append(String.join(",", elements)).append("]").toString();
+        return IMaterial.super.getModelKey(material) + "[" + getMaterials(material).getModelKey() + "]";
     }
 
     @Override

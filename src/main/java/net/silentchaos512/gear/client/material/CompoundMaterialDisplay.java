@@ -45,7 +45,7 @@ public class CompoundMaterialDisplay implements IMaterialDisplay {
             ItemStack stack = materialIn.getItem();
 
             if (stack.getItem() instanceof CompoundMaterialItem) {
-                List<MaterialInstance> subMaterials = CompoundMaterialItem.getSubMaterials(stack);
+                List<IMaterialInstance> subMaterials = CompoundMaterialItem.getSubMaterials(stack);
                 int color = ColorUtils.getBlendedColor((CompoundMaterialItem) stack.getItem(), subMaterials, layer);
 //                return layers.get(layer).getColor();
                 return color;

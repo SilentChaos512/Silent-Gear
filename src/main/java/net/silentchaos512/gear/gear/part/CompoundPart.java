@@ -13,6 +13,8 @@ import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
@@ -74,7 +76,7 @@ public class CompoundPart extends AbstractGearPart {
 
     @Override
     public int getColor(PartData part, ItemStack gear, int layer, int animationFrame) {
-        List<MaterialInstance> materials = getMaterials(part);
+        List<IMaterialInstance> materials = getMaterials(part);
         if (gear.getItem() instanceof ICoreItem) {
             return ColorUtils.getBlendedColor((ICoreItem) gear.getItem(), part, materials, layer);
         } else {
@@ -115,7 +117,7 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public String getModelKey(PartData part) {
         String str = "{" + getMaterials(part).stream()
-                .map(MaterialInstance::getModelKey)
+                .map(IMaterialInstance::getModelKey)
                 .collect(Collectors.joining(",")) +
                 "}";
         return super.getModelKey(part) + str;
@@ -124,7 +126,7 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public Collection<StatInstance> getStatModifiers(IPartData part, PartType partType, StatGearKey key, ItemStack gear) {
         // Get the materials and all the stat modifiers they provide for this stat
-        List<MaterialInstance> materials = getMaterials(part);
+        List<IMaterialInstance> materials = getMaterials(part);
         List<StatInstance> statMods = materials.stream()
                 .flatMap(m -> m.getStatModifiers(partType, key).stream())
                 .collect(Collectors.toList());
@@ -186,7 +188,7 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public Collection<TraitInstance> getTraits(IPartData part, PartGearKey partKey, ItemStack gear) {
         List<TraitInstance> ret = new ArrayList<>(super.getTraits(part, partKey, gear));
-        List<MaterialInstance> materials = getMaterials(part);
+        List<IMaterialInstance> materials = getMaterials(part);
 
         for (TraitInstance inst : TraitHelper.getTraits(materials, partKey, gear)) {
             if (inst.conditionsMatch(partKey, gear, materials)) {
@@ -198,7 +200,7 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public List<MaterialInstance> getMaterials(IPartData part) {
+    public MaterialList getMaterials(IPartData part) {
         return CompoundPartItem.getMaterials(part.getItem());
     }
 

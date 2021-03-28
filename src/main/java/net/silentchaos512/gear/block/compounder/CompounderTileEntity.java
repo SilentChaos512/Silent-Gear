@@ -18,6 +18,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
@@ -29,7 +31,9 @@ import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("WeakerAccess")
@@ -92,11 +96,11 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         return world.getRecipeManager().getRecipe(getRecipeType(), this, world).orElse(null);
     }
 
-    protected CompoundMaterialItem getOutputItem(Collection<MaterialInstance> materials) {
+    protected CompoundMaterialItem getOutputItem(MaterialList materials) {
         return this.info.getOutputItem();
     }
 
-    protected ItemStack getWorkOutput(@Nullable R recipe, List<MaterialInstance> materials) {
+    protected ItemStack getWorkOutput(@Nullable R recipe, MaterialList materials) {
         if (recipe != null) {
             return recipe.getCraftingResult(this);
         }
@@ -140,10 +144,10 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         R recipe = getRecipe();
         if (recipe != null) {
             // Inputs match a custom recipe
-            doWork(recipe, Collections.emptyList());
+            doWork(recipe, MaterialList.empty());
         } else {
             // No recipe, but we might be able to make a generic compound
-            List<MaterialInstance> materials = getInputs();
+            MaterialList materials = getInputs();
             if (!hasMultipleMaterials(materials) || !canCompoundMaterials(materials)) {
                 // Not a valid combination
                 stopWork(true);
@@ -153,7 +157,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         }
     }
 
-    private void doWork(@Nullable R recipe, List<MaterialInstance> materials) {
+    private void doWork(@Nullable R recipe, MaterialList materials) {
         assert world != null;
 
         ItemStack current = getStackInSlot(getOutputSlotIndex());
@@ -196,7 +200,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         }
     }
 
-    private void finishWork(@Nullable R recipe, List<MaterialInstance> materials, ItemStack current) {
+    private void finishWork(@Nullable R recipe, MaterialList materials, ItemStack current) {
         progress = 0;
         for (int i = 0; i < getInputSlotCount(); ++i) {
             decrStackSize(i, 1);
@@ -210,7 +214,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         }
     }
 
-    private static boolean hasMultipleMaterials(List<MaterialInstance> materials) {
+    private static boolean hasMultipleMaterials(List<IMaterialInstance> materials) {
         if (materials.size() < 2) {
             return false;
         }
@@ -225,9 +229,9 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         return false;
     }
 
-    private boolean canCompoundMaterials(List<MaterialInstance> materials) {
+    private boolean canCompoundMaterials(Iterable<IMaterialInstance> materials) {
         Set<PartType> partTypes = new HashSet<>(PartType.getValues());
-        for (MaterialInstance material : materials) {
+        for (IMaterialInstance material : materials) {
             if (!material.hasAnyCategory(this.info.getCategories())) {
                 return false;
             }
@@ -236,7 +240,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         return !partTypes.isEmpty();
     }
 
-    private List<MaterialInstance> getInputs() {
+    private MaterialList getInputs() {
         boolean allEmpty = true;
 
         for (int i = 0; i < getInputSlotCount(); ++i) {
@@ -248,10 +252,10 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         }
 
         if (allEmpty) {
-            return Collections.emptyList();
+            return MaterialList.empty();
         }
 
-        List<MaterialInstance> ret = new ArrayList<>();
+        MaterialList ret = MaterialList.empty();
 
         for (int i = 0; i < getInputSlotCount(); ++i) {
             ItemStack stack = getStackInSlot(i);
@@ -260,7 +264,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
                 if (material != null && material.get().isSimple()) {
                     ret.add(material);
                 } else {
-                    return Collections.emptyList();
+                    return MaterialList.empty();
                 }
             }
         }

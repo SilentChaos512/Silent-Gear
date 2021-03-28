@@ -22,6 +22,7 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * An instance of an {@link IMaterial} used in crafting, including the grade and item used. There
@@ -44,6 +45,22 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
      * @return The grade
      */
     MaterialGrade getGrade();
+
+    @Override
+    default MaterialList getMaterials() {
+        return MaterialList.empty();
+    }
+
+    default boolean hasAnyCategory(Collection<IMaterialCategory> others) {
+        for (IMaterialCategory cat1 : this.getCategories()) {
+            for (IMaterialCategory cat2 : others) {
+                if (cat1.matches(cat2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Gets the tier of the material. Shortcut for {@link IMaterial#getTier(PartType)}.
@@ -93,6 +110,14 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
             return material.getStatKeys(this, type);
         }
         return Collections.emptyList();
+    }
+
+    default Set<PartType> getPartTypes() {
+        IMaterial material = get();
+        if (material != null) {
+            return material.getPartTypes(this);
+        }
+        return Collections.emptySet();
     }
 
     @Override

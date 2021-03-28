@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Changed how material NBT is read and written in some cases. This makes the NBT a little more compact in most cases. Old items will still function normally.
 ### Fixed
 - Alloy ingots not turning into or working as sheet metal [#356]
 

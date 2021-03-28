@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -53,6 +54,12 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
     default GearType getGearType() {
         IGearPart part = get();
         return part != null ? part.getGearType() : GearType.ALL;
+    }
+
+    @Override
+    default MaterialList getMaterials() {
+        IGearPart part = get();
+        return part != null ? part.getMaterials(this) : MaterialList.empty();
     }
 
     @Override

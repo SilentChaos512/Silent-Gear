@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -18,7 +19,6 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -208,7 +208,7 @@ public final class GearClientHelper {
                 // List materials for compound parts
                 if (part.get() instanceof CompoundPart) {
                     builder.indent();
-                    for (MaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
+                    for (IMaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
                         int nameColor = material.getNameColor(part.getType(), GearType.ALL);
                         builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType(), ItemStack.EMPTY), nameColor));
                     }

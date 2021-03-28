@@ -4,10 +4,8 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -19,6 +17,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -30,9 +29,7 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
@@ -40,15 +37,22 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         super(properties);
     }
 
-    public static List<MaterialInstance> getSubMaterials(ItemStack stack) {
-        List<MaterialInstance> ret = new ArrayList<>();
+    public static MaterialList getSubMaterials(ItemStack stack) {
+        MaterialList ret = MaterialList.empty();
+
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
-        for (INBT nbt : listNbt) {
-            IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getString()));
-            if (mat != null) {
-                ret.add(MaterialInstance.of(mat));
+        if (!listNbt.isEmpty()) {
+            for (INBT nbt : listNbt) {
+                IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getString()));
+                if (mat != null) {
+                    ret.add(MaterialInstance.of(mat));
+                }
             }
+        } else {
+            ListNBT list = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND);
+            return MaterialList.deserializeNbt(list);
         }
+
         return ret;
     }
 
@@ -57,26 +61,24 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         return listNbt.size();
     }
 
-    public ItemStack create(List<? extends IMaterialInstance> materials) {
+    public ItemStack create(MaterialList materials) {
         return create(materials, materials.size());
     }
 
-    public ItemStack create(List<? extends IMaterialInstance> materials, int craftedCount) {
-        ListNBT materialListNbt = new ListNBT();
-        for (IMaterialInstance mat : materials) {
-            materialListNbt.add(StringNBT.valueOf(mat.getId().toString()));
-        }
-
-        CompoundNBT tag = new CompoundNBT();
-        tag.put(NBT_MATERIALS, materialListNbt);
-
-        ItemStack result = new ItemStack(this, materials.size());
-        result.setTag(tag);
+    public ItemStack create(MaterialList materials, int craftedCount) {
+        ItemStack result = new ItemStack(this, craftedCount);
+        result.getOrCreateTag().put(NBT_MATERIALS, materials.serializeNbt());
         return result;
     }
 
     @Nullable
-    public static MaterialInstance getPrimaryMaterial(ItemStack stack) {
+    private static IMaterialInstance getPrimaryMaterial(ItemStack stack) {
+        IMaterialInstance first = MaterialList.deserializeFirst(stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND));
+        if (first != null) {
+            return first;
+        }
+
+        // Read old style
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
         if (!listNbt.isEmpty()) {
             INBT nbt = listNbt.get(0);
@@ -88,6 +90,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
                 }
             }
         }
+
         return null;
     }
 
@@ -98,7 +101,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
             return s.append(Const.Materials.EXAMPLE.getId()).toString();
         }
 
-        for (MaterialInstance material : getSubMaterials(stack)) {
+        for (IMaterialInstance material : getSubMaterials(stack)) {
             s.append(SilentGear.shortenId(material.getId()));
         }
 
@@ -111,12 +114,13 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     public int getColorWeight(int index, int totalCount) {
+        // TODO: Is this even needed? Should probably axe material order mattering.
         return 1;
     }
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        MaterialInstance material = getPrimaryMaterial(stack);
+        IMaterialInstance material = getPrimaryMaterial(stack);
         ITextComponent text = material != null ? material.getDisplayName(PartType.MAIN) : TextUtil.misc("unknown");
         return new TranslationTextComponent(this.getTranslationKey(), text);
     }
@@ -125,10 +129,10 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TextUtil.withColor(TextUtil.misc("wip"), TextFormatting.RED));
 
-        Collection<MaterialInstance> materials = getSubMaterials(stack);
+        Collection<IMaterialInstance> materials = getSubMaterials(stack);
 
         TextListBuilder statsBuilder = new TextListBuilder();
-        for (MaterialInstance material : materials) {
+        for (IMaterialInstance material : materials) {
             int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
             statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN).deepCopy(), nameColor));
         }
@@ -137,9 +141,8 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (!isInGroup(group)) {
-            return;
+        if (isInGroup(group)) {
+            items.add(create(MaterialList.of(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), 1));
         }
-        items.add(create(Collections.singletonList(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), 1));
     }
 }

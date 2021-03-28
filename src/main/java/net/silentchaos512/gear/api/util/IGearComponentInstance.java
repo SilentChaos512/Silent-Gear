@@ -4,9 +4,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.util.DataResource;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -18,6 +21,8 @@ public interface IGearComponentInstance<T extends IGearComponent<?>> {
     ResourceLocation getId();
 
     ItemStack getItem();
+
+    MaterialList getMaterials();
 
     float getStat(PartType partType, StatGearKey key, ItemStack gear);
 
@@ -49,4 +54,17 @@ public interface IGearComponentInstance<T extends IGearComponent<?>> {
     ITextComponent getDisplayName(PartType type, ItemStack gear);
 
     int getNameColor(PartType partType, GearType gearType);
+
+    default boolean containsMaterial(DataResource<IMaterial> materialIn) {
+        if (materialIn.isPresent()) {
+            for (IGearComponentInstance<IMaterial> mat : this.getMaterials()) {
+                IMaterial material = mat.get();
+                if (material != null && material.equals(materialIn.get())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

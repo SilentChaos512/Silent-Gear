@@ -17,12 +17,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.CompoundPart;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -104,10 +104,10 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
                 return Collections.singletonList(part.getItem());
             }
 
-            List<MaterialInstance> materials = part.getMaterials();
+            List<IMaterialInstance> materials = part.getMaterials();
             Map<IMaterial, Integer> fragments = new LinkedHashMap<>();
 
-            for (MaterialInstance material : materials) {
+            for (IMaterialInstance material : materials) {
                 int fragmentCount = 8 / craftedCount;
                 fragments.merge(material.get(), fragmentCount, Integer::sum);
             }

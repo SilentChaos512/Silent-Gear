@@ -163,22 +163,6 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
         return part.getStatModifiers(this, this.getType(), key, gear);
     }
 
-    public List<MaterialInstance> getMaterials() {
-        return this.part.getMaterials(this);
-    }
-
-    public boolean containsMaterial(DataResource<IMaterial> materialIn) {
-        if (materialIn.isPresent()) {
-            for (MaterialInstance mat : this.getMaterials()) {
-                if (mat.get().equals(materialIn.get())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInventory inventory) {
         return part.isCraftingAllowed(this, this.getType(), gearType, inventory);
     }

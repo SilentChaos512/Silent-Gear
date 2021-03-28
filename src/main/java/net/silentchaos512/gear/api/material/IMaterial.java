@@ -162,4 +162,9 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
     }
 
     void updateIngredient(SyncMaterialCraftingItemsPacket msg);
+
+    @Override
+    default MaterialList getMaterials(IMaterialInstance instance) {
+        return MaterialList.empty();
+    }
 }

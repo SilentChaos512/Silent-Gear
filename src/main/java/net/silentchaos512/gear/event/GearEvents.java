@@ -68,10 +68,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -326,7 +326,7 @@ public final class GearEvents {
     private static int getUniqueMainMaterialCount(PartDataList parts) {
         for (PartData part : parts) {
             if (part.get() instanceof CompoundPart && part.getType() == PartType.MAIN) {
-                List<MaterialInstance> materials = CompoundPartItem.getMaterials(part.getItem());
+                MaterialList materials = CompoundPartItem.getMaterials(part.getItem());
                 return SynergyUtils.getUniques(materials).size();
             }
         }

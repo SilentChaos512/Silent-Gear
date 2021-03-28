@@ -11,9 +11,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -28,10 +30,8 @@ import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class CompoundPartItem extends Item {
     private static final String NBT_CRAFTED_COUNT = "CraftedCount";
@@ -75,17 +75,20 @@ public class CompoundPartItem extends Item {
         return create(material, -1);
     }
 
-    public ItemStack create(List<? extends IMaterialInstance> materials) {
-        return create(materials, -1);
+    public ItemStack create(Collection<? extends IMaterialInstance> materials) {
+        return create(MaterialList.of(materials), -1);
     }
 
     public ItemStack create(IMaterialInstance material, int craftedCount) {
-        return create(Collections.singletonList(material), craftedCount);
+        return create(MaterialList.of(material), craftedCount);
     }
 
-    public ItemStack create(List<? extends IMaterialInstance> materials, int craftedCount) {
-        ListNBT materialListNbt = new ListNBT();
-        materials.forEach(m -> materialListNbt.add(m.write(new CompoundNBT())));
+    public ItemStack create(MaterialList materials) {
+        return create(materials, -1);
+    }
+
+    public ItemStack create(MaterialList materials, int craftedCount) {
+        ListNBT materialListNbt = materials.serializeNbt();
 
         CompoundNBT tag = new CompoundNBT();
         tag.put(NBT_MATERIALS, materialListNbt);
@@ -98,14 +101,9 @@ public class CompoundPartItem extends Item {
         return result;
     }
 
-    public static List<MaterialInstance> getMaterials(ItemStack stack) {
-        ListNBT materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, 10);
-        return materialListNbt.stream()
-                .filter(nbt -> nbt instanceof CompoundNBT)
-                .map(nbt -> (CompoundNBT) nbt)
-                .map(MaterialInstance::read)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    public static MaterialList getMaterials(ItemStack stack) {
+        ListNBT materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND);
+        return MaterialList.deserializeNbt(materialListNbt);
     }
 
     @Nullable
@@ -127,7 +125,7 @@ public class CompoundPartItem extends Item {
             return s.append(Const.Materials.EXAMPLE.getId()).toString();
         }
 
-        for (MaterialInstance material : getMaterials(stack)) {
+        for (IMaterialInstance material : getMaterials(stack)) {
             s.append(SilentGear.shortenId(material.getId()));
         }
 
