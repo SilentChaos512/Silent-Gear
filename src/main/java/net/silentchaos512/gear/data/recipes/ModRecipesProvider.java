@@ -731,10 +731,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(Tags.Items.DUSTS_GLOWSTONE, 2)
                 .addIngredient(Tags.Items.GEMS_QUARTZ)
                 .build(consumer);
-        damageGear(CraftingItems.BLAZE_GOLD_DUST, 1, 1)
-                .addIngredient(ModTags.Items.HAMMERS)
-                .addIngredient(ModTags.Items.INGOTS_BLAZE_GOLD)
-                .build(consumer);
 
         damageGear(ModItems.PEBBLE, 9, 1)
                 .addIngredient(ModTags.Items.HAMMERS)
@@ -1517,11 +1513,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
         InventoryChangeTrigger.Instance hasIngot = hasItem(metal.ingotTag);
 
         if (metal.block != null) {
-            ShapelessRecipeBuilder.shapelessRecipe(metal.ingot, 9)
+            shapelessBuilder(metal.ingot, 9)
                     .addIngredient(metal.blockTag)
                     .addCriterion("has_item", hasIngot)
                     .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_from_block"));
-            ShapedRecipeBuilder.shapedRecipe(metal.block)
+            shapedBuilder(metal.block)
                     .key('#', metal.ingotTag)
                     .patternLine("###")
                     .patternLine("###")
@@ -1530,11 +1526,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
                     .build(consumer);
         }
         if (metal.nugget != null) {
-            ShapelessRecipeBuilder.shapelessRecipe(metal.nugget, 9)
+            shapelessBuilder(metal.nugget, 9)
                     .addIngredient(metal.ingotTag)
                     .addCriterion("has_item", hasIngot)
                     .build(consumer);
-            ShapedRecipeBuilder.shapedRecipe(metal.ingot)
+            shapedBuilder(metal.ingot)
                     .key('#', metal.nuggetTag)
                     .patternLine("###")
                     .patternLine("###")
@@ -1552,6 +1548,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
             CookingRecipeBuilder.smeltingRecipe(dustOrChunks, metal.ingot, smeltingXp, 200)
                     .addCriterion("has_item", hasIngot)
                     .build(consumer, SilentGear.getId(metal.name + "_dust_smelting"));
+        }
+        if (metal.dust != null) {
+            damageGear(metal.dust, 1, 1)
+                    .addIngredient(ModTags.Items.HAMMERS)
+                    .addIngredient(metal.ingotTag)
+                    .addCriterion("has_item", hasIngot)
+                    .build(consumer);
         }
     }
 

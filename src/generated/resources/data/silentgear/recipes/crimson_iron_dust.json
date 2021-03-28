@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:damage_item",
+  "ingredients": [
+    {
+      "tag": "forge:hammers"
+    },
+    {
+      "tag": "forge:ingots/crimson_iron"
+    }
+  ],
+  "result": {
+    "item": "silentgear:crimson_iron_dust"
+  },
+  "damage": 1
+}

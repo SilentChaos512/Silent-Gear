@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:damage_item",
+  "ingredients": [
+    {
+      "tag": "forge:hammers"
+    },
+    {
+      "tag": "forge:ingots/azure_electrum"
+    }
+  ],
+  "result": {
+    "item": "silentgear:azure_electrum_dust"
+  },
+  "damage": 1
+}

@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Missing recipes for dusts (hammer + ingot)
+- Harvest level tips to ore item tooltip
+### Fixed
+- Misspelling of recrystallizer container title
+
 ## [2.6.15] - 2021-03-28
 ### Changed
 - Changed how material NBT is read and written in some cases. This makes the NBT a little more compact in most cases. Old items will still function normally.
