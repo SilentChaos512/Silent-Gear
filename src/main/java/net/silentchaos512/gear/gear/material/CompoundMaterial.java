@@ -84,8 +84,12 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     }
 
     @Override
-    public int getTier(PartType partType) {
-        return 0;
+    public int getTier(IMaterialInstance material, PartType partType) {
+        MaterialList materials = getMaterials(material);
+        return materials.stream()
+                .mapToInt(m -> m.getTier(partType))
+                .max()
+                .orElse(0);
     }
 
     @Override

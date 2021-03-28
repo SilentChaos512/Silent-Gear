@@ -71,7 +71,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     @Override
     public int getTier(PartType partType) {
         IMaterial material = get();
-        return material != null ? material.getTier(partType) : 0;
+        return material != null ? material.getTier(this, partType) : 0;
     }
 
     @Override

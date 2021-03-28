@@ -78,13 +78,19 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      */
     Collection<IMaterialCategory> getCategories(IMaterialInstance material);
 
+    @Deprecated
+    default int getTier(PartType partType) {
+        return getTier(MaterialInstance.of(this), partType);
+    }
+
     /**
      * Gets the tier of the material. Currently, the tier never depends on the part type.
      *
+     * @param material The material instance
      * @param partType The part type
      * @return The tier
      */
-    int getTier(PartType partType);
+    int getTier(IMaterialInstance material, PartType partType);
 
     Optional<Ingredient> getPartSubstitute(PartType partType);
 
@@ -112,7 +118,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * Determine if the material can be used to craft parts of the given type. This should include a
      * parent check.
      *
-     * @param material
+     * @param material The material instance
      * @param partType The part type
      * @return True if and only if crafting should be allowed
      */

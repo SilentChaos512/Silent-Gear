@@ -80,9 +80,9 @@ public abstract class AbstractMaterial implements IMaterial {
     }
 
     @Override
-    public int getTier(PartType partType) {
+    public int getTier(IMaterialInstance material, PartType partType) {
         if (tier < 0 && getParent() != null) {
-            return getParent().getTier(partType);
+            return getParent().getTier(material, partType);
         }
         return this.tier;
     }

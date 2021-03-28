@@ -132,7 +132,7 @@ public final class MaterialInstance implements IMaterialInstance {
 
     @Override
     public int getTier(PartType partType) {
-        return material.getTier(partType);
+        return this.material.getTier(this, partType);
     }
 
     @Override

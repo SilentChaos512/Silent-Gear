@@ -63,7 +63,8 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
     }
 
     /**
-     * Gets the tier of the material. Shortcut for {@link IMaterial#getTier(PartType)}.
+     * Gets the tier of the material. Shortcut for {@link IMaterial#getTier(IMaterialInstance, PartType)}.
+     *
      *
      * @param partType The part type
      * @return The tier
@@ -167,4 +168,14 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
     }
 
     void write(PacketBuffer buffer);
+
+    default boolean allowedInPart(PartType partType) {
+        IMaterial material = get();
+        return material != null && material.allowedInPart(this, partType);
+    }
+
+    default boolean isCraftingAllowed(PartType partType, GearType gearType) {
+        IMaterial material = get();
+        return material != null && material.isCraftingAllowed(this, partType, gearType);
+    }
 }
