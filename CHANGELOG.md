@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Missing recipes for dusts (hammer + ingot)
 - Harvest level tips to ore item tooltip
 ### Fixed
+- Material grader shift-click appearing to not work on the client [#353]
 - Misspelling of recrystallizer container title
 
 ## [2.6.15] - 2021-03-28

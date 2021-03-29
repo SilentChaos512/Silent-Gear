@@ -94,12 +94,12 @@ public class GraderContainer extends Container {
                 if (!this.mergeItemStack(stack1, startPlayer, endHotbar, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= size && inventory.isItemValidForSlot(GraderTileEntity.INPUT_SLOT, stack1)) {
+            } else if (index >= size && GraderTileEntity.canAcceptInput(stack1)) {
                 // Move from player to input slot?
                 if (!mergeItemStack(stack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= size && inventory.isItemValidForSlot(GraderTileEntity.CATALYST_SLOT, stack1)) {
+            } else if (index >= size && GraderTileEntity.getCatalystTier(stack1) > 0) {
                 // Move from player to catalyst slot?
                 if (!mergeItemStack(stack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
