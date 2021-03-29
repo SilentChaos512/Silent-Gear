@@ -648,6 +648,9 @@ public final class GearHelper {
         if (part == null) return new TranslationTextComponent(gear.getTranslationKey());
 
         ITextComponent partName = part.getMaterialName(gear);
+        if (TimedEvents.isAprilFools()) {
+            partName = partName.deepCopy().append(new StringTextComponent(" & Knuckles"));
+        }
         ITextComponent gearName = new TranslationTextComponent(gear.getTranslationKey() + ".nameProper", partName);
         ITextComponent result = gearName;
 
