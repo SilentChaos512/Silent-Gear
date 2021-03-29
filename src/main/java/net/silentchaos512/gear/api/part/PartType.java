@@ -48,7 +48,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class PartType {
-    private static final Map<ResourceLocation, PartType> VALUES = new HashMap<>();
+    private static final Map<ResourceLocation, PartType> VALUES = new LinkedHashMap<>();
     private static final Map<PartGearKey, Optional<CompoundPartItem>> ITEM_CACHE = new HashMap<>();
 
     public static final PartType NONE = create(Builder.builder(SilentGear.getId("none")));

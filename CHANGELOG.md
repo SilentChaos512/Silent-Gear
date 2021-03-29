@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Missing recipes for dusts (hammer + ingot)
 - Harvest level tips to ore item tooltip
+- Blueprints for gear items now display a list of supported part types
 ### Fixed
 - Material grader shift-click appearing to not work on the client [#353]
 - Misspelling of recrystallizer container title

@@ -13,11 +13,21 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.client.util.TextListBuilder;
+import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
@@ -79,6 +89,40 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
             list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").mergeStyle(TextFormatting.RED));
         } else {
             list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").mergeStyle(TextFormatting.GREEN));
+        }
+
+        addInformationSupportedPartTypes(list);
+    }
+
+    private void addInformationSupportedPartTypes(Collection<ITextComponent> list) {
+        if (KeyTracker.isDisplayStatsDown()) {
+            Optional<ICoreItem> itemOptional = this.gearType.getItem();
+
+            if (itemOptional.isPresent()) {
+                TextListBuilder builder = new TextListBuilder();
+                ICoreItem item = itemOptional.get();
+                ItemStack gear = new ItemStack(item);
+
+                for (PartType type : PartType.getValues()) {
+                    if (type != PartType.MAIN) {
+                        List<IGearPart> partsOfType = PartManager.getPartsOfType(type);
+
+                        if (!partsOfType.isEmpty() && item.supportsPart(gear, PartData.of(partsOfType.get(0)))) {
+                            builder.add(type.getDisplayName(0));
+                        }
+                    }
+                }
+
+                List<ITextComponent> lines = builder.build();
+                if (!lines.isEmpty()) {
+                    list.add(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD));
+                    list.addAll(lines);
+                }
+            }
+        } else {
+            list.add(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD)
+                    .appendString(" ")
+                    .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY)));
         }
     }
 }
