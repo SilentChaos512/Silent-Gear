@@ -30,6 +30,7 @@ import net.silentchaos512.lib.util.TimeUtils;
 import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity, INamedContainerExtraData {
@@ -141,7 +142,9 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     protected void chargeMaterial(ItemStack output, int level) {
-        output.addEnchantment(this.enchantment.get(), level);
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(output);
+        enchantments.put(this.enchantment.get(), level);
+        EnchantmentHelper.setEnchantments(enchantments, output);
     }
 
     @Override
@@ -190,7 +193,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         int chargeLevel = getChargingAgentTier(catalyst);
         int drainRate = getDrainRate(input, chargeLevel);
 
-        if (chargeLevel > 0 && chargeLevel <= this.structureLevel && this.charge >= drainRate) {
+        if (chargeLevel > getMaterialChargeLevel(input) && chargeLevel <= this.structureLevel && this.charge >= drainRate) {
             if (wouldFitInOutputSlot(input, chargeLevel)) {
                 ++this.progress;
                 this.charge -= drainRate;
