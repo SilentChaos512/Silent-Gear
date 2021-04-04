@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Saws not working on fungi and some trees (especially ones with non-straight trunks) [#300]
+  - Now considers both leaves and wart blocks to be "foliage"
+
 ## [2.6.16] - 2021-03-29
 ### Added
 - Missing recipes for dusts (hammer + ingot)
