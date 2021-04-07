@@ -13,9 +13,12 @@ import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.util.MismatchedVersionsException;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public final class Network {
     public static final String VERSION = "sgear-net-11";
+    private static final Pattern NET_VERSION_PATTERN = Pattern.compile("sgear-net-\\d+$");
+    private static final Pattern MOD_VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+\\.\\d+$");
 
     public static SimpleChannel channel;
 
@@ -146,18 +149,18 @@ public final class Network {
 
     private static String readNetworkVersion(PacketBuffer buffer) {
         String str = buffer.readString(16);
-        if (!str.matches("\\d+$")) {
+        if (!NET_VERSION_PATTERN.matcher(str).matches()) {
             // Server is running a version that doesn't encode the net version
-            return "UNKNOWN";
+            return "UNKNOWN (received: " + str + ")";
         }
         return str;
     }
 
     private static String readModVersion(PacketBuffer buffer) {
         String str = buffer.readString(16);
-        if (!str.matches("^\\d+\\.\\d+\\.\\d+$")) {
+        if (!"NONE".equals(str) && !MOD_VERSION_PATTERN.matcher(str).matches()) {
             // Server is running a version that doesn't encode the mod version
-            return "UNKNOWN";
+            return "UNKNOWN (received: " + str + ")";
         }
         return str;
     }
