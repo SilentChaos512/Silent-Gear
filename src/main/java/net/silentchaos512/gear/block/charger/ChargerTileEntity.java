@@ -61,11 +61,19 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
                 case 1:
                     return workTime;
                 case 2:
-                    return charge;
-                case 3:
                     return structureLevel;
+                case 3:
+                    // Charge lower bytes
+                    return charge & 0xFFFF;
                 case 4:
-                    return getMaxCharge();
+                    // Charge upper bytes
+                    return (charge >> 16) & 0xFFFF;
+                case 5:
+                    // Max charge lower bytes
+                    return getMaxCharge() & 0xFFFF;
+                case 6:
+                    // Max charge upper bytes
+                    return (getMaxCharge() >> 16) & 0xFFFF;
                 default:
                     return 0;
             }
@@ -79,9 +87,8 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
                     break;
                 case 1:
                     workTime = value;
+                    break;
                 case 2:
-                    charge = value;
-                case 3:
                     structureLevel = value;
                     break;
             }
@@ -89,7 +96,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
 
         @Override
         public int size() {
-            return 5;
+            return 7;
         }
     };
 

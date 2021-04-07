@@ -12,8 +12,10 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.init.ModContainers;
+import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
+import net.silentchaos512.lib.util.TagUtils;
 import net.silentchaos512.utils.MathUtils;
 
 public class ChargerContainer extends Container {
@@ -40,7 +42,7 @@ public class ChargerContainer extends Container {
         addSlot(new Slot(inventory, 1, 56, 46) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return true; // FIXME: charging catalyst
+                return TagUtils.containsSafe(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack);
             }
         });
         addSlot(new SlotOutputOnly(inventory, 2, 116, 35));
@@ -66,16 +68,20 @@ public class ChargerContainer extends Container {
         return fields.get(1);
     }
 
-    public int getCharge() {
+    public int getStructureLevel() {
         return fields.get(2);
     }
 
-    public int getStructureLevel() {
-        return fields.get(3);
+    public int getCharge() {
+        int upper = fields.get(4) & 0xFFFF;
+        int lower = fields.get(3) & 0xFFFF;
+        return (upper << 16) + lower;
     }
 
     public int getMaxCharge() {
-        return fields.get(4);
+        int upper = fields.get(6) & 0xFFFF;
+        int lower = fields.get(5) & 0xFFFF;
+        return (upper << 16) + lower;
     }
 
     public int getChargeMeterHeight() {
