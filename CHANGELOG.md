@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Reworded the "incorrect network version" message to hopefully be clearer [#367]
 ### Fixed
+- Stack overflow exception with new saw code (also added a `gear.saw.recursionDepth` config option) [#366]
 - Starlight charger displaying incorrect/negative stored charge on servers
 
 ## [2.6.17] - 2021-04-04

@@ -16,6 +16,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.world.BlockEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.config.Config;
 
 import javax.annotation.Nullable;
 
@@ -38,11 +39,12 @@ public class CoreSaw extends CoreAxe {
                 }
 
                 TreeBreakResult result = new TreeBreakResult(stack, player);
-                breakTree(result, world, pos, pos);
-                SilentGear.LOGGER.debug("{} chopped down a tree with {} blocks using {}",
+                breakTree(result, world, pos, pos, 0);
+                SilentGear.LOGGER.debug("{} chopped down a tree with {} blocks using {}. Max recursion depth: {}",
                         player.getScoreboardName(),
                         result.blocksBroken,
-                        stack.getDisplayName().getString());
+                        stack.getDisplayName().getString(),
+                        result.maxDepth);
                 return true;
             }
         }
@@ -122,7 +124,13 @@ public class CoreSaw extends CoreAxe {
         return state.isIn(BlockTags.LEAVES) || state.isIn(BlockTags.WART_BLOCKS);
     }
 
-    private void breakTree(TreeBreakResult result, World world, BlockPos pos, BlockPos startPos) {
+    private void breakTree(TreeBreakResult result, World world, BlockPos pos, BlockPos startPos, int recursionDepth) {
+        result.maxDepth = recursionDepth;
+
+        if (recursionDepth > Config.Common.sawRecursionDepth.get()) {
+            return;
+        }
+
         for (int xPos = pos.getX() - 1; xPos <= pos.getX() + 1; ++xPos) {
             for (int yPos = pos.getY() - 1; yPos <= pos.getY() + 1; ++yPos) { // starts 1 down for hanging foliage
                 for (int zPos = pos.getZ() - 1; zPos <= pos.getZ() + 1; ++zPos) {
@@ -157,7 +165,7 @@ public class CoreSaw extends CoreAxe {
 
                             if (9 * xDist * xDist + yDist * yDist + 9 * zDist * zDist < 1000) {
                                 if (cancel) {
-                                    breakTree(result, world, localPos, startPos);
+                                    breakTree(result, world, localPos, startPos, recursionDepth + 1);
                                 } else {
                                     if (!result.player.abilities.isCreativeMode) {
                                         localBlock.harvestBlock(world, result.player, pos, localState, world.getTileEntity(pos), result.tool);
@@ -166,7 +174,7 @@ public class CoreSaw extends CoreAxe {
                                     }
 
                                     world.removeBlock(localPos, false);
-                                    breakTree(result, world, localPos, startPos);
+                                    breakTree(result, world, localPos, startPos, recursionDepth + 1);
                                 }
                             }
                         }
@@ -181,6 +189,7 @@ public class CoreSaw extends CoreAxe {
         final PlayerEntity player;
 
         int blocksBroken;
+        int maxDepth;
         Block firstLog;
         Block firstFoliage;
 

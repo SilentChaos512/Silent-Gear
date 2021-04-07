@@ -59,6 +59,7 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue repairKitCrimsonEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitAzureEfficiency;
         public static final ForgeConfigSpec.DoubleValue missingRepairKitEfficiency;
+        public static final ForgeConfigSpec.IntValue sawRecursionDepth;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Other items
@@ -209,6 +210,14 @@ public final class Config {
                     prospectorHammerRange = builder
                             .comment("The range in blocks the prospector hammer will search for blocks of interest")
                             .defineInRange("range", 16, 0, 64);
+                    builder.pop();
+                }
+                {
+                    builder.push("saw");
+                    sawRecursionDepth = builder
+                            .comment("Caps how far the saw can look for blocks when chopping down trees. Try decreasing this if you get stack overflow exceptions.",
+                                    "Increasing this value is allowed, but not recommended unless you know what you are doing.")
+                            .defineInRange("recursionDepth", 200, 0, Integer.MAX_VALUE);
                     builder.pop();
                 }
                 {
