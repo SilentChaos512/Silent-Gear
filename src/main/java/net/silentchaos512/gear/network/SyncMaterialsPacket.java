@@ -27,9 +27,7 @@ public class SyncMaterialsPacket extends LoginPacket {
         SyncMaterialsPacket packet = new SyncMaterialsPacket(Collections.emptyList());
 
         // Verify network version
-        String netVersion = buf.readString();
-        SilentGear.LOGGER.debug("SyncMaterialsPacket: network version {}", netVersion);
-        Network.verifyNetworkVersion(netVersion);
+        Network.verifyNetworkVersion(buf);
 
         // Read materials
         int count = buf.readVarInt();
@@ -41,7 +39,7 @@ public class SyncMaterialsPacket extends LoginPacket {
     }
 
     public void toBytes(PacketBuffer buf) {
-        buf.writeString(Network.VERSION);
+        Network.writeModVersionInfoToNetwork(buf);
         buf.writeVarInt(this.materials.size());
         this.materials.forEach(mat -> MaterialSerializers.write(mat, buf));
     }

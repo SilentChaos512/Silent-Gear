@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.network;
 
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -9,11 +10,12 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.gear.util.MismatchedVersionsException;
 
 import java.util.Objects;
 
 public final class Network {
-    public static final String VERSION = "sgear-net-10";
+    public static final String VERSION = "sgear-net-11";
 
     public static SimpleChannel channel;
 
@@ -118,13 +120,45 @@ public final class Network {
 
     public static void init() {}
 
-    static void verifyNetworkVersion(String netVersion) {
+    static void writeModVersionInfoToNetwork(PacketBuffer buffer) {
+        buffer.writeString(Network.VERSION); // Change to test error message (dedicated server only)
+        buffer.writeString(SilentGear.getVersion());
+    }
+
+    static void verifyNetworkVersion(PacketBuffer buffer) {
         // Throws an exception if versions do not match and provides a less cryptic message to the player
-        if (!netVersion.equals(Network.VERSION)) {
-            String msg = String.format("Incorrect Silent Gear network version. Client is \"%s\" and server is \"%s\". Try updating the client and/or server.",
+        // NOTE: This hangs without displaying a message on SSP, but that can't happen without messing with the written
+        // network version
+        String serverNetVersion = readNetworkVersion(buffer);
+        String serverModVersion = readModVersion(buffer);
+
+        SilentGear.LOGGER.debug("Read Silent Gear server version as {} ({})", serverModVersion, serverNetVersion);
+
+        if (!Network.VERSION.equals(serverNetVersion)) {
+            String msg = String.format("This server is running a different version of Silent Gear. Try updating Silent Gear on the client and/or server. Client version is %s (%s) and server version is %s (%s).",
+                    SilentGear.getVersion(),
                     Network.VERSION,
-                    netVersion);
-            throw new IllegalStateException(msg);
+                    serverModVersion,
+                    serverNetVersion);
+            throw new MismatchedVersionsException(msg);
         }
+    }
+
+    private static String readNetworkVersion(PacketBuffer buffer) {
+        String str = buffer.readString(16);
+        if (!str.matches("\\d+$")) {
+            // Server is running a version that doesn't encode the net version
+            return "UNKNOWN";
+        }
+        return str;
+    }
+
+    private static String readModVersion(PacketBuffer buffer) {
+        String str = buffer.readString(16);
+        if (!str.matches("^\\d+\\.\\d+\\.\\d+$")) {
+            // Server is running a version that doesn't encode the mod version
+            return "UNKNOWN";
+        }
+        return str;
     }
 }

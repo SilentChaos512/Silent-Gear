@@ -27,9 +27,7 @@ public class SyncGearPartsPacket extends LoginPacket {
         SyncGearPartsPacket packet = new SyncGearPartsPacket(Collections.emptyList());
 
         // Verify network version
-        String netVersion = buf.readString();
-        SilentGear.LOGGER.debug("SyncGearPartsPacket: network version {}", netVersion);
-        Network.verifyNetworkVersion(netVersion);
+        Network.verifyNetworkVersion(buf);
 
         // Read parts
         int count = buf.readVarInt();
@@ -41,7 +39,7 @@ public class SyncGearPartsPacket extends LoginPacket {
     }
 
     public void toBytes(PacketBuffer buf) {
-        buf.writeString(Network.VERSION);
+        Network.writeModVersionInfoToNetwork(buf);
         buf.writeVarInt(this.parts.size());
         this.parts.forEach(part -> PartSerializers.write(part, buf));
     }
