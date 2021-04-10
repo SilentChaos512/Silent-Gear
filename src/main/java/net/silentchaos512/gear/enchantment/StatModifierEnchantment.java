@@ -98,6 +98,16 @@ public class StatModifierEnchantment extends Enchantment implements IStatModifie
     }
 
     @Override
+    public boolean canVillagerTrade() {
+        return false;
+    }
+
+    @Override
+    public boolean canGenerateInLoot() {
+        return false;
+    }
+
+    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
         return false;
     }
