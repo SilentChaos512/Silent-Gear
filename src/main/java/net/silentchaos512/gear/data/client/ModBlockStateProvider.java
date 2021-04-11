@@ -93,8 +93,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             .texture("particle", front));
         }
 
-        simpleBlock(ModBlocks.STARLIGHT_CHARGER.get());
-
         getVariantBuilder(ModBlocks.METAL_PRESS.get()).forAllStates(state -> {
             return ConfiguredModel.builder()
                     .modelFile(models().cubeTop("metal_press",
@@ -105,13 +103,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         // Compounders
         {
-            BlockModelBuilder offModel = models().orientable("metal_alloyer",
+            BlockModelBuilder offModel = models().orientableWithBottom("metal_alloyer",
                     modLoc("block/metal_alloyer_side"),
                     modLoc("block/metal_alloyer_front"),
+                    modLoc("block/metal_alloyer_bottom"),
                     modLoc("block/metal_alloyer_top"));
-            BlockModelBuilder onModel = models().orientable("metal_alloyer_on",
+            BlockModelBuilder onModel = models().orientableWithBottom("metal_alloyer_on",
                     modLoc("block/metal_alloyer_side"),
                     modLoc("block/metal_alloyer_front_on"),
+                    modLoc("block/metal_alloyer_bottom"),
                     modLoc("block/metal_alloyer_top"));
             horizontalFaceBlock(ModBlocks.METAL_ALLOYER.get(), state ->
                     state.get(BlockStateProperties.LIT) ? onModel : offModel);

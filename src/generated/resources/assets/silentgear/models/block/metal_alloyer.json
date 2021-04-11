@@ -1,8 +1,9 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "minecraft:block/orientable_with_bottom",
   "textures": {
     "side": "silentgear:block/metal_alloyer_side",
     "front": "silentgear:block/metal_alloyer_front",
+    "bottom": "silentgear:block/metal_alloyer_bottom",
     "top": "silentgear:block/metal_alloyer_top"
   }
 }

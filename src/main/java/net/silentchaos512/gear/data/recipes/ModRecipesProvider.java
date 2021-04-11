@@ -654,7 +654,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.METAL_ALLOYER)
                 .key('/', ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .key('i', Tags.Items.STORAGE_BLOCKS_IRON)
-                .key('#', Blocks.RED_NETHER_BRICKS)
+                .key('#', Blocks.BLACKSTONE)
                 .patternLine("/#/")
                 .patternLine("/ /")
                 .patternLine("#i#")
