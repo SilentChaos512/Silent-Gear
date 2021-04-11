@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Starlight charger model (naj77)
 - Metal alloyer textures (naj77)
+- Metal press model (naj77)
 ### Fixed
 - Star Charged enchanted books existing (hopefully)
 

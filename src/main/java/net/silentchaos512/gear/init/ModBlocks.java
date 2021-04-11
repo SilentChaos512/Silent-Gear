@@ -201,6 +201,7 @@ public final class ModBlocks {
     public static void registerRenderTypes(FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(FLAX_PLANT.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(FLUFFY_PLANT.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(METAL_PRESS.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(NETHERWOOD_DOOR.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(NETHERWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(NETHERWOOD_TRAPDOOR.get(), RenderType.getCutout());

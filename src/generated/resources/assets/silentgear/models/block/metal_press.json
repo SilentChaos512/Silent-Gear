@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_top",
-  "textures": {
-    "side": "silentgear:block/metal_press_top",
-    "top": "silentgear:block/metal_press_side"
-  }
-}

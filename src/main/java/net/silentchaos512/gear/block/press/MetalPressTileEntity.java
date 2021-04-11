@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.press;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -58,7 +59,9 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
 
     @Nullable
     public PressingRecipe getRecipe() {
-        if (world == null) return null;
+        if (world == null || getStackInSlot(0).isEmpty()) {
+            return null;
+        }
         return world.getRecipeManager().getRecipe(ModRecipes.PRESSING_TYPE, this, world).orElse(null);
     }
 
@@ -71,7 +74,7 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
 
     @Override
     public void tick() {
-        if (world == null || world.isRemote || getStackInSlot(0).isEmpty()) {
+        if (world == null || world.isRemote) {
             return;
         }
 
@@ -106,10 +109,13 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
         if (progress >= WORK_TIME && !world.isRemote) {
             finishWork(recipe, current);
         }
+
+        sendUpdate(this.getBlockState().with(MetalPressBlock.LIT, true));
     }
 
     private void stopWork() {
         progress = 0;
+        sendUpdate(this.getBlockState().with(MetalPressBlock.LIT, false));
     }
 
     private void finishWork(PressingRecipe recipe, ItemStack current) {
@@ -122,6 +128,15 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
 
         progress = 0;
         decrStackSize(0, 1);
+    }
+
+    private void sendUpdate(BlockState newState) {
+        if (world == null) return;
+        BlockState oldState = world.getBlockState(pos);
+        if (oldState != newState) {
+            world.setBlockState(pos, newState, 3);
+            world.notifyBlockUpdate(pos, oldState, newState, 3);
+        }
     }
 
     @Override
