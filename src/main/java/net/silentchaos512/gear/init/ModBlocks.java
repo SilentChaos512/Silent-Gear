@@ -206,6 +206,7 @@ public final class ModBlocks {
         RenderTypeLookup.setRenderLayer(NETHERWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(NETHERWOOD_TRAPDOOR.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(POTTED_NETHERWOOD_SAPLING.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SALVAGER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.getCutout());
