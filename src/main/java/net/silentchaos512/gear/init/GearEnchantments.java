@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 public final class GearEnchantments {
     public static final RegistryObject<Enchantment> STAR_CHARGED = register("star_charged", () ->
             new StatModifierEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentType.VANISHABLE, new EquipmentSlotType[0]));
+
     private GearEnchantments() {}
 
     public static void register() {}

@@ -53,7 +53,6 @@ public final class Const {
     public static final IItemStat SGEMS_CHARGEABILITY = () -> new ResourceLocation("silentgems", "chargeability");
 
     // Compound-crafting block info
-    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
     public static final CompounderInfo<MetalCompoundingRecipe> METAL_COMPOUNDER_INFO = new CompounderInfo<>(
             ImmutableList.of(
                     MaterialCategories.METAL,
@@ -67,7 +66,6 @@ public final class Const {
             () -> ModRecipes.COMPOUNDING_METAL.get(),
             () -> ModRecipes.COMPOUNDING_METAL_TYPE,
             MetalCompoundingRecipe.class);
-    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
     public static final CompounderInfo<GemCompoundingRecipe> GEM_COMPOUNDER_INFO = new CompounderInfo<>(
             ImmutableList.of(
                     MaterialCategories.GEM,

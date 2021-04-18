@@ -12,8 +12,6 @@ import net.silentchaos512.gear.SilentGear;
 import java.util.List;
 
 public final class ModTags {
-    private ModTags() {}
-
     public static final class Blocks {
         public static final ITag.INamedTag<Block> FLUFFY_BLOCKS = mod("fluffy_blocks");
         public static final ITag.INamedTag<Block> NETHERWOOD_LOGS = mod("netherwood_logs");
@@ -149,4 +147,6 @@ public final class ModTags {
             return ItemTags.makeWrapperTag(new ResourceLocation("silents_mechanisms", path).toString());
         }
     }
+
+    private ModTags() {}
 }

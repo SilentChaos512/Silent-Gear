@@ -43,13 +43,20 @@ public final class ModBlocks {
     public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
             getOre(4, SoundType.STONE));
 
-    public static final BlockRegistryObject<Block> BORT_BLOCK = register("bort_block", ModBlocks::getStorageBlock);
-    public static final BlockRegistryObject<Block> CRIMSON_IRON_BLOCK = register("crimson_iron_block", ModBlocks::getStorageBlock);
-    public static final BlockRegistryObject<Block> CRIMSON_STEEL_BLOCK = register("crimson_steel_block", ModBlocks::getStorageBlock);
-    public static final BlockRegistryObject<Block> BLAZE_GOLD_BLOCK = register("blaze_gold_block", ModBlocks::getStorageBlock);
-    public static final BlockRegistryObject<Block> AZURE_SILVER_BLOCK = register("azure_silver_block", ModBlocks::getStorageBlock);
-    public static final BlockRegistryObject<Block> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block", ModBlocks::getStorageBlock);
-    public static final BlockRegistryObject<Block> TYRIAN_STEEL_BLOCK = register("tyrian_steel_block", ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> BORT_BLOCK = register("bort_block",
+            ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> CRIMSON_IRON_BLOCK = register("crimson_iron_block",
+            ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> CRIMSON_STEEL_BLOCK = register("crimson_steel_block",
+            ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> BLAZE_GOLD_BLOCK = register("blaze_gold_block",
+            ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> AZURE_SILVER_BLOCK = register("azure_silver_block",
+            ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block",
+            ModBlocks::getStorageBlock);
+    public static final BlockRegistryObject<Block> TYRIAN_STEEL_BLOCK = register("tyrian_steel_block",
+            ModBlocks::getStorageBlock);
 
     public static final BlockRegistryObject<Block> GEAR_SMITHING_TABLE = register("gear_smithing_table", () ->
             new Block(AbstractBlock.Properties.create(Material.WOOD)
@@ -59,9 +66,11 @@ public final class ModBlocks {
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(5, 30)));
+
     public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", () ->
             new SalvagerBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(5, 30)));
+
     public static final BlockRegistryObject<StarlightChargerBlock> STARLIGHT_CHARGER = register("starlight_charger", () ->
             new StarlightChargerBlock((state, world) -> ChargerTileEntity.createStarlightCharger(),
                     AbstractBlock.Properties.create(Material.IRON)
@@ -72,6 +81,7 @@ public final class ModBlocks {
                     AbstractBlock.Properties.create(Material.IRON)
                             .hardnessAndResistance(4, 20)
                             .sound(SoundType.METAL)));
+
     public static final BlockRegistryObject<CompounderBlock> RECRYSTALLIZER = register("recrystallizer", () ->
             new CompounderBlock(Const.GEM_COMPOUNDER_INFO,
                     AbstractBlock.Properties.create(Material.IRON)
@@ -189,13 +199,12 @@ public final class ModBlocks {
 
     public static final BlockRegistryObject<FlowerPotBlock> POTTED_NETHERWOOD_SAPLING = registerNoItem("potted_netherwood_sapling", () ->
             makePottedPlant(NETHERWOOD_SAPLING));
-    public static final BlockRegistryObject<PhantomLight> PHANTOM_LIGHT = register("phantom_light", PhantomLight::new);
+    public static final BlockRegistryObject<PhantomLight> PHANTOM_LIGHT = register("phantom_light",
+            PhantomLight::new);
 
-    private ModBlocks() {
-    }
+    private ModBlocks() {}
 
-    static void register() {
-    }
+    static void register() {}
 
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderTypes(FMLClientSetupEvent event) {
