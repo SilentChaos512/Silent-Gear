@@ -2,7 +2,7 @@
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/silent-gear",
     "changelog": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md",
     "1.16.3": {
-        "2.6.20": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md"
+        "2.6.21": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md"
     },
     "1.16.1": {
         "2.1.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md"
@@ -25,7 +25,7 @@
         "1.15.2-recommended": "1.10.3",
         "1.16.1-latest": "2.1.1",
         "1.16.1-recommended": "2.1.1",
-        "1.16.3-latest": "2.6.19",
+        "1.16.3-latest": "2.6.21",
         "1.16.3-recommended": "2.6.19"
     }
 }

@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.21] - 2021-04-21
 ### Fixed
 - Conditional traits sometimes not appearing gear items (magmatic, soft, etc.) [#372, #359]
+- Traits not ticking for armor and elytra when in non-armor slots (inventory, hands) [#365]
 
 ## [2.6.20] - 2021-04-21
 ### Added

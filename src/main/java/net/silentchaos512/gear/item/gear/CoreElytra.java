@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -157,6 +158,11 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     @Override
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         GearHelper.inventoryTick(stack, world, player, 0, true);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override

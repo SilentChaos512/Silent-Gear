@@ -176,6 +176,11 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+    }
+
+    @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
