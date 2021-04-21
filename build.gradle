@@ -384,4 +384,4 @@ task createUpdateJson {
         writeUpdateJson()
     }
 }
-build.finalizedBy createUpdateJson
+//build.finalizedBy createUpdateJson
