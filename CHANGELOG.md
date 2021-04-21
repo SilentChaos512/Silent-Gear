@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Refabricator, a compound maker that processes cloth, fiber, and slime materials [#344]
+- New models for most machine/crafting blocks (naj77)
 
 ## [2.6.19] - 2021-04-11
 ### Changed

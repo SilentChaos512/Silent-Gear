@@ -5,7 +5,7 @@
     "0": "silentgear:block/crimson_iron_block",
     "1": "block/iron_block",
     "2": "block/obsidian",
-    "4": "silentgear:block/salvager_pistons",
+    "4": "silentgear:block/salvager_pistons_on",
     "7": "silentgear:block/glass_pieces",
     "particle": "silentgear:block/crimson_iron_block"
   },

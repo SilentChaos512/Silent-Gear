@@ -216,12 +216,16 @@ public final class ModBlocks {
     public static void registerRenderTypes(FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(FLAX_PLANT.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(FLUFFY_PLANT.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(MATERIAL_GRADER.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(METAL_ALLOYER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(METAL_PRESS.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(NETHERWOOD_DOOR.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(NETHERWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(NETHERWOOD_TRAPDOOR.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(POTTED_NETHERWOOD_SAPLING.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(RECRYSTALLIZER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(SALVAGER.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(STARLIGHT_CHARGER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.getCutout());

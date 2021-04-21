@@ -119,6 +119,10 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         return getSizeInventory() - 1;
     }
 
+    public ItemStack getHintStack() {
+        return getStackInSlot(getOutputHintSlotIndex());
+    }
+
     public void encodeExtraData(PacketBuffer buffer) {
         buffer.writeByte(this.items.size());
         buffer.writeByte(this.fields.size());

@@ -18,15 +18,22 @@
 
 package net.silentchaos512.gear.block.salvager;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -41,10 +48,18 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class SalvagerBlock extends ContainerBlock {
+    private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final VoxelShape SHAPE = makeCuboidShape(0, 0, 0, 16, 8, 16);
 
     public SalvagerBlock(Properties builder) {
         super(builder);
+        setDefaultState(getDefaultState().with(FACING, Direction.SOUTH).with(LIT, false));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING, LIT);
     }
 
     @Nullable
@@ -59,7 +74,6 @@ public class SalvagerBlock extends ContainerBlock {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof SalvagerTileEntity) {
             player.openContainer((INamedContainerProvider) tileEntity);
-            //player.addStat(...);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
@@ -74,6 +88,13 @@ public class SalvagerBlock extends ContainerBlock {
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        Direction facing = context.getPlacementHorizontalFacing().getOpposite();
+        return getDefaultState().with(FACING, facing);
     }
 
     @SuppressWarnings("deprecation")

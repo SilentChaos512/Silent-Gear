@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/orientable_with_bottom",
-  "textures": {
-    "side": "silentgear:block/metal_alloyer_side",
-    "front": "silentgear:block/metal_alloyer_front_on",
-    "bottom": "silentgear:block/metal_alloyer_bottom",
-    "top": "silentgear:block/metal_alloyer_top"
-  }
-}
