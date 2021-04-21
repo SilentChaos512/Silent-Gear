@@ -4,6 +4,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 
 import javax.annotation.Nullable;
@@ -22,6 +23,10 @@ public final class PartGearKey {
         this.key = SilentGear.shortenId(partType.getName()) + "/" + gearType.getName();
         this.gearType = gearType;
         this.partType = partType;
+    }
+
+    public static PartGearKey of(GearType gearType, IPartData part) {
+        return of(gearType, part.getType());
     }
 
     public static PartGearKey of(GearType gearType, PartType partType) {

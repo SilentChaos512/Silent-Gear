@@ -36,7 +36,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
@@ -279,8 +278,9 @@ public final class TraitHelper {
         Map<ITrait, Integer> result = new LinkedHashMap<>();
 
         for (PartData part : parts) {
-            for (TraitInstance inst : part.getTraits(gear)) {
-                if (inst.conditionsMatch(PartGearKey.of(gearType, PartType.NONE), gear, parts)) {
+            PartGearKey key = PartGearKey.of(gearType, part);
+            for (TraitInstance inst : part.getTraits(key, gear)) {
+                if (inst.conditionsMatch(key, gear, parts)) {
                     ITrait trait = inst.getTrait();
                     // Get the highest value in any part
                     result.merge(trait, inst.getLevel(), Integer::max);

@@ -103,7 +103,7 @@ public final class GearData {
         }
     }
 
-    @SuppressWarnings("OverlyLongMethod")
+    @SuppressWarnings({"OverlyLongMethod", "OverlyComplexMethod"})
     private static void tryRecalculateStats(ItemStack gear, @Nullable PlayerEntity player) {
         if (checkNonGearItem(gear, "recalculateStats")) return;
 

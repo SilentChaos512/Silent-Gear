@@ -27,7 +27,15 @@ public interface ITraitInstance {
 
     default boolean conditionsMatch(PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components) {
         ITrait trait = getTrait();
-        return trait == null || getConditions().stream().allMatch(c -> c.matches(trait, key, gear, components));
+        if (trait == null) return true;
+
+        for (ITraitCondition condition : getConditions()) {
+            if (!condition.matches(trait, key, gear, components)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     default JsonObject serialize() {
