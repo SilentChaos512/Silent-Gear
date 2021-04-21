@@ -12,6 +12,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.*;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
@@ -31,6 +32,7 @@ import java.util.function.Supplier;
 
 public final class ModRecipes {
     public static final IRecipeType<CompoundingRecipe> COMPOUNDING_TYPE = registerType(Const.COMPOUNDING);
+    public static final IRecipeType<FabricCompoundingRecipe> COMPOUNDING_FABRIC_TYPE = registerType(Const.COMPOUNDING_FABRIC);
     public static final IRecipeType<GemCompoundingRecipe> COMPOUNDING_GEM_TYPE = registerType(Const.COMPOUNDING_GEM);
     public static final IRecipeType<MetalCompoundingRecipe> COMPOUNDING_METAL_TYPE = registerType(Const.COMPOUNDING_METAL);
     public static final IRecipeType<PressingRecipe> PRESSING_TYPE = registerType(Const.PRESSING);
@@ -42,6 +44,8 @@ public final class ModRecipes {
             ExtendedShapelessRecipe.Serializer.basic(ShapelessCompoundPartRecipe::new));
     public static final RegistryObject<IRecipeSerializer<?>> COMPOUNDING = register(Const.COMPOUNDING, () ->
             new CompoundingRecipe.Serializer<>(CompoundingRecipe::new));
+    public static final RegistryObject<IRecipeSerializer<?>> COMPOUNDING_FABRIC = register(Const.COMPOUNDING_FABRIC, () ->
+            new CompoundingRecipe.Serializer<>(GemCompoundingRecipe::new));
     public static final RegistryObject<IRecipeSerializer<?>> COMPOUNDING_GEM = register(Const.COMPOUNDING_GEM, () ->
             new CompoundingRecipe.Serializer<>(GemCompoundingRecipe::new));
     public static final RegistryObject<IRecipeSerializer<?>> COMPOUNDING_METAL = register(Const.COMPOUNDING_METAL, () ->

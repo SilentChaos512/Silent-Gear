@@ -35,6 +35,10 @@ public final class ModTileEntities {
             () -> new CompounderTileEntity<>(Const.GEM_COMPOUNDER_INFO),
             ModBlocks.RECRYSTALLIZER);
 
+    public static final RegistryObject<TileEntityType<CompounderTileEntity>> REFABRICATOR = register("refabricator",
+            () -> new CompounderTileEntity<>(Const.FABRIC_COMPOUNDER_INFO),
+            ModBlocks.REFABRICATOR);
+
     public static final RegistryObject<TileEntityType<SalvagerTileEntity>> SALVAGER = register("salvager",
             SalvagerTileEntity::new,
             ModBlocks.SALVAGER);

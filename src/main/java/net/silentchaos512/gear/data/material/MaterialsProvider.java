@@ -1395,6 +1395,7 @@ public class MaterialsProvider implements IDataProvider {
     private void addCompounds(Collection<MaterialBuilder> ret) {
         ret.add(compoundBuilder(modId("hybrid_gem"), ModItems.HYBRID_GEM));
         ret.add(compoundBuilder(modId("metal_alloy"), ModItems.ALLOY_INGOT));
+        ret.add(compoundBuilder(modId("mixed_fabric"), ModItems.MIXED_FABRIC));
 
         // Dimerald
         ret.add(customCompoundBuilder(modId("dimerald"), 3, ModItems.CUSTOM_GEM.get())

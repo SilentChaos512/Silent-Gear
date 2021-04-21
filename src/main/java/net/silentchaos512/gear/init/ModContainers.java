@@ -14,6 +14,7 @@ import net.silentchaos512.gear.block.charger.ChargerScreen;
 import net.silentchaos512.gear.block.compounder.CompounderContainer;
 import net.silentchaos512.gear.block.compounder.MetalAlloyerScreen;
 import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
+import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.press.MetalPressContainer;
@@ -44,6 +45,13 @@ public final class ModContainers {
                     buffer,
                     ModBlocks.RECRYSTALLIZER.get().getCategories()));
 
+    public static final RegistryObject<ContainerType<CompounderContainer>> REFABRICATOR = register("refabricator",
+            (id, playerInventory, buffer) -> new CompounderContainer(getRefabricator(),
+                    id,
+                    playerInventory,
+                    buffer,
+                    ModBlocks.REFABRICATOR.get().getCategories()));
+
     public static final RegistryObject<ContainerType<SalvagerContainer>> SALVAGER = register("salvager",
             SalvagerContainer::new);
 
@@ -63,6 +71,7 @@ public final class ModContainers {
         ScreenManager.registerFactory(METAL_ALLOYER.get(), MetalAlloyerScreen::new);
         ScreenManager.registerFactory(METAL_PRESS.get(), MetalPressScreen::new);
         ScreenManager.registerFactory(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
+        ScreenManager.registerFactory(REFABRICATOR.get(), RefabricatorScreen::new);
         ScreenManager.registerFactory(SALVAGER.get(), SalvagerScreen::new);
         ScreenManager.registerFactory(STARLIGHT_CHARGER.get(), ChargerScreen::new);
 
@@ -79,5 +88,9 @@ public final class ModContainers {
 
     private static ContainerType<?> getRecrystallizer() {
         return RECRYSTALLIZER.get();
+    }
+
+    private static ContainerType<?> getRefabricator() {
+        return REFABRICATOR.get();
     }
 }

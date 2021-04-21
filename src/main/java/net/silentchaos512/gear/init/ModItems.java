@@ -228,6 +228,8 @@ public final class ModItems {
             new CompoundMaterialItem(baseProps()));
     public static final ItemRegistryObject<CompoundMaterialItem> HYBRID_GEM = register("hybrid_gem", () ->
             new CompoundMaterialItem(baseProps()));
+    public static final ItemRegistryObject<CompoundMaterialItem> MIXED_FABRIC = register("mixed_fabric", () ->
+            new CompoundMaterialItem(baseProps()));
 
     // Custom materials
     public static final ItemRegistryObject<CustomMaterialItem> CUSTOM_INGOT = register("custom_ingot", () ->

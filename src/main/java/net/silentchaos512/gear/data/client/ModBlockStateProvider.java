@@ -121,6 +121,20 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         .build();
             });
         }
+//        {
+//            BlockModelBuilder offModel = models().cubeTop("refabricator",
+//                    modLoc("block/refabricator_side"),
+//                    modLoc("block/refabricator_top"));
+//            BlockModelBuilder onModel = models().cubeTop("refabricator_on",
+//                    modLoc("block/refabricator_side"),
+//                    modLoc("block/refabricator_top_on"));
+//            getVariantBuilder(ModBlocks.REFABRICATOR.get()).forAllStates(state -> {
+//                return ConfiguredModel.builder()
+//                        .modelFile(state.get(BlockStateProperties.LIT) ? onModel : offModel)
+//                        .build();
+//            });
+//        }
+        simpleBlock(ModBlocks.REFABRICATOR.get()); // temp
 
         getVariantBuilder(ModBlocks.FLAX_PLANT.get()).forAllStates(state -> {
             int i = cropAgeToIndex(state.get(ModCropBlock.AGE));

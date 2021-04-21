@@ -88,6 +88,12 @@ public final class ModBlocks {
                             .hardnessAndResistance(4, 20)
                             .sound(SoundType.METAL)));
 
+    public static final BlockRegistryObject<CompounderBlock> REFABRICATOR = register("refabricator", () ->
+            new CompounderBlock(Const.FABRIC_COMPOUNDER_INFO,
+                    AbstractBlock.Properties.create(Material.IRON)
+                            .hardnessAndResistance(4, 20)
+                            .sound(SoundType.METAL)));
+
     public static final BlockRegistryObject<MetalPressBlock> METAL_PRESS = register("metal_press", () ->
             new MetalPressBlock(AbstractBlock.Properties.create(Material.IRON)
                     .hardnessAndResistance(4, 20)

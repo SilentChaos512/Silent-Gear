@@ -8,6 +8,7 @@ import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
+import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
@@ -26,6 +27,7 @@ public final class Const {
     public static final ResourceLocation COMBINE_FRAGMENTS = modId("combine_fragments");
     public static final ResourceLocation COMPOUND_PART = modId("compound_part");
     public static final ResourceLocation COMPOUNDING = modId("compounding");
+    public static final ResourceLocation COMPOUNDING_FABRIC = modId("compounding/fabric");
     public static final ResourceLocation COMPOUNDING_GEM = modId("compounding/gem");
     public static final ResourceLocation COMPOUNDING_METAL = modId("compounding/metal");
     public static final ResourceLocation DAMAGE_ITEM = modId("damage_item");
@@ -79,6 +81,20 @@ public final class Const {
             () -> ModRecipes.COMPOUNDING_GEM.get(),
             () -> ModRecipes.COMPOUNDING_GEM_TYPE,
             GemCompoundingRecipe.class);
+    public static final CompounderInfo<FabricCompoundingRecipe> FABRIC_COMPOUNDER_INFO = new CompounderInfo<>(
+            ImmutableList.of(
+                    MaterialCategories.CLOTH,
+                    MaterialCategories.FIBER,
+                    MaterialCategories.SLIME
+            ),
+            4,
+            () -> ModItems.MIXED_FABRIC.get(),
+            () -> ModBlocks.REFABRICATOR.get(),
+            () -> ModTileEntities.REFABRICATOR.get(),
+            () -> ModContainers.REFABRICATOR.get(),
+            () -> ModRecipes.COMPOUNDING_FABRIC.get(),
+            () -> ModRecipes.COMPOUNDING_FABRIC_TYPE,
+            FabricCompoundingRecipe.class);
 
     private Const() {}
 

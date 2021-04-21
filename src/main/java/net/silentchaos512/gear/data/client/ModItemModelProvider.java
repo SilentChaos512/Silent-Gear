@@ -5,6 +5,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -47,32 +48,33 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(ModItems.NETHERWOOD_CHARCOAL, itemGenerated);
 
         // Crafted materials
-        getBuilder(NameUtils.fromItem(ModItems.SHEET_METAL).getPath())
+        builder(ModItems.SHEET_METAL)
                 .parent(itemGenerated)
                 .texture("layer0", "item/sheet_metal")
                 .texture("layer1", "item/sheet_metal_highlight");
 
         // Compound materials
-        getBuilder(NameUtils.fromItem(ModItems.ALLOY_INGOT).getPath())
+        builder(ModItems.ALLOY_INGOT)
                 .parent(itemGenerated)
                 .texture("layer0", "item/alloy_ingot")
                 .texture("layer1", "item/alloy_ingot_highlight");
-        getBuilder(NameUtils.fromItem(ModItems.HYBRID_GEM).getPath())
+        builder(ModItems.HYBRID_GEM)
                 .parent(itemGenerated)
                 .texture("layer0", "item/hybrid_gem")
                 .texture("layer1", "item/hybrid_gem_highlight");
+        builder(ModItems.MIXED_FABRIC, itemGenerated, "item/mixed_fabric");
 
         // Custom materials
-        getBuilder(NameUtils.fromItem(ModItems.CUSTOM_INGOT).getPath())
+        builder(ModItems.CUSTOM_INGOT)
                 .parent(itemGenerated)
                 .texture("layer0", "item/alloy_ingot")
                 .texture("layer1", "item/alloy_ingot_highlight");
-        getBuilder(NameUtils.fromItem(ModItems.CUSTOM_GEM).getPath())
+        builder(ModItems.CUSTOM_GEM)
                 .parent(itemGenerated)
                 .texture("layer0", "item/hybrid_gem")
                 .texture("layer1", "item/hybrid_gem_highlight");
 
-        getBuilder(NameUtils.fromItem(ModItems.BLUEPRINT_BOOK).getPath())
+        builder(ModItems.BLUEPRINT_BOOK)
                 .parent(itemGenerated)
                 .texture("layer0", "item/blueprint_book_cover")
                 .texture("layer1", "item/blueprint_book_pages")
@@ -83,13 +85,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         // Blueprints and templates
         Registration.getItems(PartBlueprintItem.class).forEach(item -> {
             if (item.hasStandardModel()) {
-                getBuilder(NameUtils.from(item).getPath())
+                builder(item)
                         .parent(itemGenerated)
                         .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
                         .texture("layer1", "item/blueprint_" + item.getPartType().getName().getPath());
             }
         });
-        Registration.getItems(GearBlueprintItem.class).forEach(item -> getBuilder(NameUtils.from(item).getPath())
+        Registration.getItems(GearBlueprintItem.class).forEach(item -> builder(item)
                 .parent(itemGenerated)
                 .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
                 .texture("layer1", "item/blueprint_" + item.getGearType().getName()));
@@ -134,12 +136,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void builder(IItemProvider item, ModelFile parent) {
-        String name = NameUtils.fromItem(item).getPath();
-        builder(item, parent, "item/" + name);
+    private ItemModelBuilder builder(IItemProvider item) {
+        return getBuilder(NameUtils.fromItem(item).getPath());
     }
 
-    private void builder(IItemProvider item, ModelFile parent, String texture) {
-        getBuilder(NameUtils.fromItem(item).getPath()).parent(parent).texture("layer0", texture);
+    private ItemModelBuilder builder(IItemProvider item, ModelFile parent) {
+        String name = NameUtils.fromItem(item).getPath();
+        return builder(item, parent, "item/" + name);
+    }
+
+    private ItemModelBuilder builder(IItemProvider item, ModelFile parent, String texture) {
+        return getBuilder(NameUtils.fromItem(item).getPath()).parent(parent).texture("layer0", texture);
     }
 }
