@@ -80,6 +80,8 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
         public static final ForgeConfigSpec.BooleanValue modelAndTextureLogging;
         public static final ForgeConfigSpec.BooleanValue worldGenLogging;
+        // Other
+        public static final ForgeConfigSpec.BooleanValue showWipText;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -329,6 +331,12 @@ public final class Config {
             worldGenLogging = builder
                     .comment("Log details about certain features being adding to biomes and other world generator details")
                     .define("debug.logging.worldGen", true);
+
+            // Other random stuff
+            showWipText = builder
+                    .comment("Shows a \"WIP\" (work in progress) label in the tooltip of certain unfinished, but usable blocks and items")
+                    .comment("Set to false to remove the text from tooltips")
+                    .define("other.showWipText", true);
 
             spec = builder.build();
         }

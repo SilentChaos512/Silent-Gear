@@ -8,7 +8,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.SilentGear;
@@ -81,7 +80,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextUtil.withColor(TextUtil.misc("wip"), TextFormatting.RED));
+        TextUtil.addWipText(tooltip);
     }
 
     @Override
