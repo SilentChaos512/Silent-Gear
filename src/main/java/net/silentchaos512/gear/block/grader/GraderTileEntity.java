@@ -94,7 +94,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
         if (catalystTier < 1) return;
 
         MaterialInstance material = MaterialInstance.from(input);
-        if (material != null && material.getGrade() != MaterialGrade.SSS) {
+        if (material != null && material.getGrade() != MaterialGrade.getMax()) {
             if (progress < BASE_ANALYZE_TIME) {
                 ++progress;
             }
@@ -137,7 +137,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
         ItemStack stack = getStackInSlot(INPUT_SLOT);
         if (!stack.isEmpty()) {
             MaterialInstance material = MaterialInstance.from(stack);
-            if (material != null && material.getGrade() != MaterialGrade.SSS) {
+            if (material != null && material.getGrade() != MaterialGrade.getMax()) {
                 return stack;
             }
         }
@@ -159,7 +159,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
 
     static boolean canAcceptInput(ItemStack stack) {
         MaterialInstance material = MaterialInstance.from(stack);
-        return material != null && material.getGrade() != MaterialGrade.SSS;
+        return material != null && material.getGrade() != MaterialGrade.getMax();
     }
 
     public static int getCatalystTier(ItemStack stack) {
