@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -87,6 +88,17 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (isInGroup(group)) {
             items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
+
+            for (IMaterial material : MaterialManager.getValues()) {
+                if (material instanceof CustomCompoundMaterial) {
+                    IMaterialInstance mat = MaterialInstance.of(material);
+                    ItemStack stack = create(mat);
+
+                    if (mat.getIngredient().test(stack)) {
+                        items.add(stack);
+                    }
+                }
+            }
         }
     }
 }

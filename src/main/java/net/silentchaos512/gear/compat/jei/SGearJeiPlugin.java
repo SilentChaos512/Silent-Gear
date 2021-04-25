@@ -5,6 +5,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.registration.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -31,6 +32,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
@@ -152,6 +154,13 @@ public class SGearJeiPlugin implements IModPlugin {
             IMaterialInstance material = FragmentItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         });
+
+        ISubtypeInterpreter customMaterials = stack -> {
+            IMaterialInstance material = CustomMaterialItem.getMaterial(stack);
+            return material != null ? material.getId().toString() : "";
+        };
+        reg.registerSubtypeInterpreter(ModItems.CUSTOM_GEM.get(), customMaterials);
+        reg.registerSubtypeInterpreter(ModItems.CUSTOM_INGOT.get(), customMaterials);
     }
 
     private static void addInfoPage(IRecipeRegistration reg, IItemProvider item) {
