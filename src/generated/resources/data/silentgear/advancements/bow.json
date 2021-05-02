@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:bow",
-      "nbt": "{Damage:0}"
+      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
     },
     "title": {
       "translate": "advancements.silentgear.bow.title"
