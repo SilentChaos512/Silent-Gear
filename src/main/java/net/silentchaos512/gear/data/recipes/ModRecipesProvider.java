@@ -671,6 +671,17 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .patternLine("#g#")
                 .build(consumer);
 
+        ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.REFABRICATOR)
+                .key('/', Tags.Items.INGOTS_IRON)
+                .key('i', Tags.Items.STORAGE_BLOCKS_IRON)
+                .key('d', Tags.Items.GEMS_DIAMOND)
+                .key('b', ModTags.Items.GEMS_BORT)
+                .key('#', ItemTags.PLANKS)
+                .patternLine("/ /")
+                .patternLine("dbd")
+                .patternLine("#i#")
+                .build(consumer);
+
         ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.METAL_PRESS)
                 .key('#', Tags.Items.OBSIDIAN)
                 .key('t', ModTags.Items.INGOTS_TYRIAN_STEEL)
