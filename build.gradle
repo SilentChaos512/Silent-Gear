@@ -64,6 +64,10 @@ minecraft {
                     source sourceSets.main
                 }
             }
+
+            // For Patchouli Mixins to not crash
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         server {
@@ -134,6 +138,9 @@ repositories {
     maven {
         url 'https://maven.mcmoddev.com'
     }
+    maven {
+        url 'https://maven.blamejared.com'
+    }
 }
 
 dependencies {
@@ -189,6 +196,12 @@ dependencies {
     // World Stripper
     if (project.hasProperty('world_stripper_version')) {
         runtimeOnly fg.deobf("com.ewyboy.worldstripper:World-Stripper:${project.world_stripper_version}")
+    }
+
+    // Patchouli
+    if (project.hasProperty('patchouli_version')) {
+        compileOnly fg.deobf("vazkii.patchouli:Patchouli:${project.patchouli_version}:api")
+        runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${project.patchouli_version}")
     }
 }
 
