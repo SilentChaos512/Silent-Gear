@@ -500,6 +500,7 @@
   "jei.silentgear.axe.desc": "A standard axe",
   "jei.silentgear.blueprint.desc": "Blueprints and templates are used to craft tool heads and armor. Blueprints can be reused infinitely, templates are single-use. When used in the crafting station, you can mix materials. Otherwise, the materials must all be the same. Check the tooltip of the blueprint/template for details on crafting the final item.",
   "jei.silentgear.blueprintType": "Blueprint: %s",
+  "jei.silentgear.category.compounding.fabric": "Fabric Compounding",
   "jei.silentgear.category.compounding.gem": "Gem Compounding",
   "jei.silentgear.category.compounding.metal": "Metal Compounding",
   "jei.silentgear.category.grading": "Grading",

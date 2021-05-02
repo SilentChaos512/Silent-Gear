@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Registered custom gems and ingots (such as dimerald) will now show in JEI
+- Missing JEI support for refabricator (partial, mixed fabric examples not working)
 
 ## [2.6.22] - 2021-04-23
 ### Added
