@@ -3,10 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.23] - 2021-05-03
 ### Added
 - Registered custom gems and ingots (such as dimerald) will now show in JEI
 - Missing JEI support for refabricator (partial, mixed fabric examples not working)
+- German translation (CptPICHU)
 
 ## [2.6.22] - 2021-04-23
 ### Added
