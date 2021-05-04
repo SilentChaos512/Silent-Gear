@@ -1,0 +1,23 @@
+{
+  "processor": "net.silentchaos512.gear.compat.patchouli.CompoundingRecipeProcessor",
+  "components": [
+    {
+      "type": "header", "text": "#title", "centered": false, "x": 4, "y": 0
+    },
+    {
+      "type": "item", "item": "#item1", "x": 10, "y": 10
+    },
+    {
+      "type": "item", "item": "#item2", "x": 30, "y": 10
+    },
+    {
+      "type": "item", "item": "#item3", "x": 10, "y": 30
+    },
+    {
+      "type": "item", "item": "#item4", "x": 30, "y": 30
+    },
+    {
+      "type": "text", "text": "Result:", "x": 70, "y": 20
+    }
+  ]
+}
