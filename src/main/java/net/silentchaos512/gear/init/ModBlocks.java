@@ -64,7 +64,7 @@ public final class ModBlocks {
             ModBlocks::getStorageBlock);
 
     public static final BlockRegistryObject<Block> GEAR_SMITHING_TABLE = register("gear_smithing_table", () ->
-            new Block(AbstractBlock.Properties.create(Material.WOOD)
+            new GearSmithingTableBlock(AbstractBlock.Properties.create(Material.WOOD)
                     .hardnessAndResistance(2.5F)
                     .sound(SoundType.WOOD)));
 

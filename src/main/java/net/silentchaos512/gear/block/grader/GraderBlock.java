@@ -32,7 +32,7 @@ public class GraderBlock extends Block implements IWaterLoggable {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    private static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 6, 16);
+    private static final VoxelShape SHAPE = Block.makeCuboidShape(1, 0, 0, 15, 12, 16);
 
     public GraderBlock(Properties properties) {
         super(properties);

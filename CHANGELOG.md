@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Crimson iron and azure silver ores now drop raw ores (unless silk touched)
 - Textures of crimson iron and azure silver ingots and ores
+### Fixed
+- New block models causing other blocks to not render on adjacent sides [#374]
 
 ## [2.6.23] - 2021-05-03
 ### Added

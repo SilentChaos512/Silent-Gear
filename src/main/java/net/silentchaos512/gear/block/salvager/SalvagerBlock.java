@@ -50,7 +50,7 @@ import java.util.List;
 public class SalvagerBlock extends ContainerBlock {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
-    private static final VoxelShape SHAPE = makeCuboidShape(0, 0, 0, 16, 8, 16);
+    private static final VoxelShape SHAPE = makeCuboidShape(1, 0, 1, 15, 16, 15);
 
     public SalvagerBlock(Properties builder) {
         super(builder);
