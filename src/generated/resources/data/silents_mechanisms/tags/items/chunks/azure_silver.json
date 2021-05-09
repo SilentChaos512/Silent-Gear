@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "silentgear:azure_silver_chunks"
+    "silentgear:azure_silver_chunks",
+    "silentgear:raw_azure_silver"
   ]
 }

@@ -1,16 +1,12 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:ingots/blaze_gold"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:blaze_gold_block"
     }
-  },
+  ],
   "result": {
-    "item": "silentgear:blaze_gold_block"
+    "item": "silentgear:blaze_gold_ingot",
+    "count": 9
   }
 }

@@ -7,10 +7,10 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:nuggets/blaze_gold"
+      "item": "silentgear:raw_crimson_iron"
     }
   },
   "result": {
-    "item": "silentgear:blaze_gold_ingot"
+    "item": "silentgear:raw_crimson_iron_block"
   }
 }

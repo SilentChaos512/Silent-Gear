@@ -7,10 +7,10 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:nuggets/tyrian_steel"
+      "item": "silentgear:azure_electrum_nugget"
     }
   },
   "result": {
-    "item": "silentgear:tyrian_steel_ingot"
+    "item": "silentgear:azure_electrum_ingot"
   }
 }

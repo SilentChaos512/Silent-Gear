@@ -1,16 +1,12 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:ingots/tyrian_steel"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:tyrian_steel_block"
     }
-  },
+  ],
   "result": {
-    "item": "silentgear:tyrian_steel_block"
+    "item": "silentgear:tyrian_steel_ingot",
+    "count": 9
   }
 }

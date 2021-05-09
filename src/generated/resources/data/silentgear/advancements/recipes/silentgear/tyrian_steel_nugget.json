@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/tyrian_steel"
+            "item": "silentgear:tyrian_steel_ingot"
           }
         ]
       }

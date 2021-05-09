@@ -1,16 +1,12 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:ingots/azure_electrum"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:azure_electrum_block"
     }
-  },
+  ],
   "result": {
-    "item": "silentgear:azure_electrum_block"
+    "item": "silentgear:azure_electrum_ingot",
+    "count": 9
   }
 }

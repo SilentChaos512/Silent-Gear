@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:ingots/azure_silver"
+      "item": "silentgear:azure_silver_ingot"
     }
   ],
   "result": {

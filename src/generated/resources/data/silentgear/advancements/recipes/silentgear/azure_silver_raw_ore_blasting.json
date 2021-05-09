@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "silentgear:crimson_iron_ingot_from_nuggets"
+      "silentgear:azure_silver_raw_ore_blasting"
     ]
   },
   "criteria": {
@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/crimson_iron"
+            "item": "silentgear:raw_azure_silver"
           }
         ]
       }
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "silentgear:crimson_iron_ingot_from_nuggets"
+        "recipe": "silentgear:azure_silver_raw_ore_blasting"
       }
     }
   },

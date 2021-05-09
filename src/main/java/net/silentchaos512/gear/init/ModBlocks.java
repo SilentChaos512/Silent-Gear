@@ -43,6 +43,11 @@ public final class ModBlocks {
     public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
             getOre(4, SoundType.STONE));
 
+    public static final BlockRegistryObject<Block> RAW_CRIMSON_IRON_BLOCK = register("raw_crimson_iron_block", () ->
+            getRawOreBlock(1, SoundType.NETHER_GOLD));
+    public static final BlockRegistryObject<Block> RAW_AZURE_SILVER_BLOCK = register("raw_azure_silver_block", () ->
+            getRawOreBlock(1, SoundType.STONE));
+
     public static final BlockRegistryObject<Block> BORT_BLOCK = register("bort_block",
             ModBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> CRIMSON_IRON_BLOCK = register("crimson_iron_block",
@@ -241,6 +246,15 @@ public final class ModBlocks {
     private static OreBlock getOre(int harvestLevel, SoundType soundType) {
         return new ModOreBlock(AbstractBlock.Properties.create(Material.ROCK)
                 .hardnessAndResistance(4, 10)
+                .setRequiresTool()
+                .harvestLevel(harvestLevel)
+                .harvestTool(ToolType.PICKAXE)
+                .sound(soundType));
+    }
+
+    private static Block getRawOreBlock(int harvestLevel, SoundType soundType) {
+        return new ModOreBlock(AbstractBlock.Properties.create(Material.ROCK)
+                .hardnessAndResistance(4, 20)
                 .setRequiresTool()
                 .harvestLevel(harvestLevel)
                 .harvestTool(ToolType.PICKAXE)

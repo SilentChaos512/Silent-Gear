@@ -8,7 +8,7 @@
   "type": "silents_mechanisms:crushing",
   "process_time": 300,
   "ingredient": {
-    "item": "silentgear:azure_silver_chunks"
+    "tag": "silents_mechanisms:chunks/azure_silver"
   },
   "results": [
     {

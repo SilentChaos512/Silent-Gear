@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "silentgear:tyrian_steel_ingot_from_nuggets"
+      "silentgear:raw_crimson_iron_block"
     ]
   },
   "criteria": {
@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/tyrian_steel"
+            "item": "silentgear:raw_crimson_iron"
           }
         ]
       }
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "silentgear:tyrian_steel_ingot_from_nuggets"
+        "recipe": "silentgear:raw_crimson_iron_block"
       }
     }
   },

@@ -68,8 +68,8 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         copy(ModTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL, ModTags.Items.STORAGE_BLOCKS_TYRIAN_STEEL);
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
-        builder(ModTags.Items.CHUNKS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_CHUNKS);
-        builder(ModTags.Items.CHUNKS_AZURE_SILVER, CraftingItems.AZURE_SILVER_CHUNKS);
+        builder(ModTags.Items.CHUNKS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_CHUNKS, CraftingItems.RAW_CRIMSON_IRON);
+        builder(ModTags.Items.CHUNKS_AZURE_SILVER, CraftingItems.AZURE_SILVER_CHUNKS, CraftingItems.RAW_AZURE_SILVER);
         builder(ModTags.Items.COAL_GENERATOR_FUELS, ModItems.NETHERWOOD_CHARCOAL, ModBlocks.NETHERWOOD_CHARCOAL_BLOCK);
 
         builder(ModTags.Items.DUSTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_DUST);

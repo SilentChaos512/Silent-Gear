@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:ingots/crimson_steel"
+      "item": "silentgear:crimson_steel_ingot"
     }
   ],
   "result": {

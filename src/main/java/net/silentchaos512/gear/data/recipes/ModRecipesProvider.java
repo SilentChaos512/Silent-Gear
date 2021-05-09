@@ -60,7 +60,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .block(ModBlocks.CRIMSON_IRON_BLOCK, ModTags.Items.STORAGE_BLOCKS_CRIMSON_IRON)
                 .dust(CraftingItems.CRIMSON_IRON_DUST, ModTags.Items.DUSTS_CRIMSON_IRON)
                 .chunks(ModTags.Items.CHUNKS_CRIMSON_IRON)
-                .ore(ModBlocks.CRIMSON_IRON_ORE, ModTags.Items.ORES_CRIMSON_IRON)
+                .ore(ModBlocks.CRIMSON_IRON_ORE, ModTags.Items.ORES_CRIMSON_IRON, CraftingItems.RAW_CRIMSON_IRON, ModBlocks.RAW_CRIMSON_IRON_BLOCK)
                 .nugget(CraftingItems.CRIMSON_IRON_NUGGET, ModTags.Items.NUGGETS_CRIMSON_IRON));
         metals(consumer, 0.5f, new Metals("crimson_steel", CraftingItems.CRIMSON_STEEL_INGOT, ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .block(ModBlocks.CRIMSON_STEEL_BLOCK, ModTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL)
@@ -70,7 +70,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .block(ModBlocks.AZURE_SILVER_BLOCK, ModTags.Items.STORAGE_BLOCKS_AZURE_SILVER)
                 .dust(CraftingItems.AZURE_SILVER_DUST, ModTags.Items.DUSTS_AZURE_SILVER)
                 .chunks(ModTags.Items.CHUNKS_AZURE_SILVER)
-                .ore(ModBlocks.AZURE_SILVER_ORE, ModTags.Items.ORES_AZURE_SILVER)
+                .ore(ModBlocks.AZURE_SILVER_ORE, ModTags.Items.ORES_AZURE_SILVER, CraftingItems.RAW_AZURE_SILVER, ModBlocks.RAW_AZURE_SILVER_BLOCK)
                 .nugget(CraftingItems.AZURE_SILVER_NUGGET, ModTags.Items.NUGGETS_AZURE_SILVER));
         metals(consumer, 0.5f, new Metals("azure_electrum", CraftingItems.AZURE_ELECTRUM_INGOT, ModTags.Items.INGOTS_AZURE_ELECTRUM)
                 .block(ModBlocks.AZURE_ELECTRUM_BLOCK, ModTags.Items.STORAGE_BLOCKS_AZURE_ELECTRUM)
@@ -1505,12 +1505,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
         return json;
     }
 
-    private void damagingItem(Consumer<IFinishedRecipe> consumer, ShapelessRecipeBuilder builder) {
-    }
-
-    private void gear(Consumer<IFinishedRecipe> consumer, GearType gearType, int mainCount, PartType... otherParts) {
-    }
-
     private void metals(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
         if (metal.ore != null) {
             CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(metal.oreTag), metal.ingot, smeltingXp, 100)
@@ -1521,34 +1515,23 @@ public class ModRecipesProvider extends LibRecipeProvider {
                     .build(consumer, SilentGear.getId(metal.name + "_ore_smelting"));
         }
 
+        if (metal.rawOre != null) {
+            CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(metal.rawOre), metal.ingot, smeltingXp, 100)
+                    .addCriterion("has_item", hasItem(metal.rawOre))
+                    .build(consumer, SilentGear.getId(metal.name + "_raw_ore_blasting"));
+            CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(metal.rawOre), metal.ingot, smeltingXp, 200)
+                    .addCriterion("has_item", hasItem(metal.rawOre))
+                    .build(consumer, SilentGear.getId(metal.name + "_raw_ore_smelting"));
+
+            compressionRecipes(consumer, metal.rawOreBlock, metal.rawOre, null);
+        }
+
         InventoryChangeTrigger.Instance hasIngot = hasItem(metal.ingotTag);
 
         if (metal.block != null) {
-            shapelessBuilder(metal.ingot, 9)
-                    .addIngredient(metal.blockTag)
-                    .addCriterion("has_item", hasIngot)
-                    .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_from_block"));
-            shapedBuilder(metal.block)
-                    .key('#', metal.ingotTag)
-                    .patternLine("###")
-                    .patternLine("###")
-                    .patternLine("###")
-                    .addCriterion("has_item", hasIngot)
-                    .build(consumer);
+            compressionRecipes(consumer, metal.block, metal.ingot, metal.nugget);
         }
-        if (metal.nugget != null) {
-            shapelessBuilder(metal.nugget, 9)
-                    .addIngredient(metal.ingotTag)
-                    .addCriterion("has_item", hasIngot)
-                    .build(consumer);
-            shapedBuilder(metal.ingot)
-                    .key('#', metal.nuggetTag)
-                    .patternLine("###")
-                    .patternLine("###")
-                    .patternLine("###")
-                    .addCriterion("has_item", hasIngot)
-                    .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_from_nuggets"));
-        }
+
         if (metal.dustTag != null) {
             Ingredient dustOrChunks = metal.chunksTag != null
                     ? Ingredient.fromItemListStream(Stream.of(new Ingredient.TagList(metal.chunksTag), new Ingredient.TagList(metal.dustTag)))
@@ -1560,6 +1543,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                     .addCriterion("has_item", hasIngot)
                     .build(consumer, SilentGear.getId(metal.name + "_dust_smelting"));
         }
+
         if (metal.dust != null) {
             damageGear(metal.dust, 1, 1)
                     .addIngredient(ModTags.Items.HAMMERS)
@@ -1574,6 +1558,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
         private final String name;
         private IItemProvider ore;
         private ITag<Item> oreTag;
+        private IItemProvider rawOre;
+        private IItemProvider rawOreBlock;
         private IItemProvider block;
         private ITag<Item> blockTag;
         private final IItemProvider ingot;
@@ -1593,6 +1579,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
         public Metals ore(IItemProvider item, ITag<Item> tag) {
             this.ore = item;
             this.oreTag = tag;
+            return this;
+        }
+
+        public Metals ore(IItemProvider oreBlockItem, ITag<Item> oreTag, IItemProvider rawOre, IItemProvider rawOreBlock) {
+            this.ore = oreBlockItem;
+            this.oreTag = oreTag;
+            this.rawOre = rawOre;
+            this.rawOreBlock = rawOreBlock;
             return this;
         }
 

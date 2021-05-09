@@ -1,16 +1,12 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:gems/bort"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:bort_block"
     }
-  },
+  ],
   "result": {
-    "item": "silentgear:bort_block"
+    "item": "silentgear:bort",
+    "count": 9
   }
 }
