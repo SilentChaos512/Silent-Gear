@@ -73,7 +73,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
     /**
      * Gets the categories this material belongs to.
      *
-     * @param material
+     * @param material The material
      * @return Collection of categories
      */
     Collection<IMaterialCategory> getCategories(IMaterialInstance material);
@@ -109,7 +109,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * Gets the part types this material supports. In general, a material will support a part type
      * if the type is present in the stats JSON object (even if the value is empty).
      *
-     * @param material
+     * @param material The material
      * @return Supported part types
      */
     Set<PartType> getPartTypes(IMaterialInstance material);

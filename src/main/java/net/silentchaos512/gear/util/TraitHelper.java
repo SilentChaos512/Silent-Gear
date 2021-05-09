@@ -267,7 +267,7 @@ public final class TraitHelper {
      * {@link #hasTrait(ItemStack, ResourceLocation)} when appropriate.
      *
      * @param gear     The item
-     * @param gearType
+     * @param gearType The gear type
      * @param parts    The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
