@@ -93,6 +93,12 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         return null;
     }
 
+    @Nullable
+    @Override
+    public IMaterialInstance getPrimarySubMaterial(ItemStack stack) {
+        return getPrimaryMaterial(stack);
+    }
+
     public static String getModelKey(ItemStack stack) {
         StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + "#");
 
