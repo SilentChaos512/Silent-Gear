@@ -6,7 +6,6 @@ import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -81,7 +80,7 @@ public class CoreShears extends ShearsItem implements ICoreTool {
 
     @Override
     public int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
-        if (state.getMaterial() == Material.LEAVES) {
+        if (!state.getBlock().isIn(BlockTags.FIRE)) {
             return 1;
         }
         return ICoreTool.super.getDamageOnBlockBreak(gear, world, state, pos);
