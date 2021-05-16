@@ -760,7 +760,7 @@
   "trait.condition.silentgear.material_ratio": "Proporção de Material: %d%%",
   "trait.condition.silentgear.not": "NÃO %s",
   "trait.condition.silentgear.or": " OU ",
-  "trait.condition.silentgear.primary": "Apenas Primário",
+  "trait.condition.silentgear.primary_material": "Apenas Primário",
   "trait.silentgear.accelerate": "Acelerado",
   "trait.silentgear.accelerate.desc": "Ganha velocidade de mineração, velocidade de ataque e velocidade de longo alcance conforme danificado",
   "trait.silentgear.adamant": "Inflexível",
