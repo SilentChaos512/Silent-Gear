@@ -104,7 +104,7 @@
   "block.silentgear.cyan_fluffy_block": "Bloco Fofinho Ciano",
   "block.silentgear.flax_plant": "Linho",
   "block.silentgear.fluffy_plant": "Planta Fofinha",
-  "block.silentgear.gear_smithing_table": "Bancada de Ferraria de Equipamento",
+  "block.silentgear.gear_smithing_table": "Bancada de Ferreiro de Equipamento",
   "block.silentgear.gray_fluffy_block": "Bloco Fofinho Cinza",
   "block.silentgear.green_fluffy_block": "Bloco Fofinho Verde",
   "block.silentgear.light_blue_fluffy_block": "Bloco Fofinho Azul Claro",
@@ -892,5 +892,5 @@
   "trait.silentgear.vulcan": "Vulcano",
   "trait.silentgear.vulcan.desc": "Coloca obsidiana com alto custo de durabilidade",
   "trait.silentgear.widen": "Ampliar",
-  "trait.silentgear.widen.desc": "Auemnta o raio de efeito dos martelos e excavadores"
+  "trait.silentgear.widen.desc": "Aumenta o raio de efeito dos martelos e excavadores"
 }
