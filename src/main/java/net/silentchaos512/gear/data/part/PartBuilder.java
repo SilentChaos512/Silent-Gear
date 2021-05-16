@@ -22,6 +22,8 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.util.DataResource;
 
@@ -31,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 public class PartBuilder {
     final ResourceLocation id;
     private IPartSerializer<?> serializerType = PartSerializers.COMPOUND_PART;
@@ -40,7 +43,8 @@ public class PartBuilder {
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
     @Nullable private GearTypeMatcher upgradeGearTypes;
-    private final Map<GearType, MaterialLayerList> display = new LinkedHashMap<>();
+    private final Map<PartGearKey, MaterialLayerList> display = new LinkedHashMap<>();
+    private final List<GearType> gearBlacklist = new ArrayList<>();
 
     private final StatModifierMap stats = new StatModifierMap();
     private final List<ITraitInstance> traits = new ArrayList<>();
@@ -58,6 +62,10 @@ public class PartBuilder {
         this.partType = partType;
         this.id = id;
         this.ingredient = ingredient;
+
+        if (!this.gearType.isGear()) {
+            throw new IllegalArgumentException("Part gear type must extend GearType.ALL");
+        }
     }
 
     public PartBuilder serializerType(IPartSerializer<?> serializer) {
@@ -84,8 +92,9 @@ public class PartBuilder {
     }
 
     public PartBuilder stat(IItemStat stat, float value, StatInstance.Operation operation) {
-        StatInstance mod = StatInstance.of(value, operation);
-        this.stats.put(stat, mod);
+        StatGearKey key = StatGearKey.of(stat, GearType.ALL);
+        StatInstance mod = StatInstance.of(value, operation, key);
+        this.stats.put(stat, GearType.ALL, mod);
         return this;
     }
 
@@ -95,17 +104,22 @@ public class PartBuilder {
         return this;
     }
 
+    public PartBuilder blacklistGearType(GearType type) {
+        this.gearBlacklist.add(type);
+        return this;
+    }
+
     public PartBuilder upgradeGearTypes(GearTypeMatcher matcher) {
         this.upgradeGearTypes = matcher;
         return this;
     }
 
-    public PartBuilder display(GearType gearType, MaterialLayer... layers) {
-        return display(gearType, new MaterialLayerList(layers));
+    public PartBuilder display(GearType gearType, PartType partType, MaterialLayer... layers) {
+        return display(gearType, partType, new MaterialLayerList(layers));
     }
 
-    public PartBuilder display(GearType gearType, MaterialLayerList layers) {
-        this.display.put(gearType, layers);
+    public PartBuilder display(GearType gearType, PartType partType, MaterialLayerList layers) {
+        this.display.put(PartGearKey.of(gearType, partType), layers);
         return this;
     }
 
@@ -121,6 +135,11 @@ public class PartBuilder {
         json.addProperty("part_type", this.partType.getName().toString());
 
         JsonObject availability = new JsonObject();
+        if (!this.gearBlacklist.isEmpty()) {
+            JsonArray array = new JsonArray();
+            this.gearBlacklist.forEach(gt -> array.add(gt.getName()));
+            availability.add("gear_blacklist", array);
+        }
         if (!availability.entrySet().isEmpty()) {
             json.add("availability", availability);
         }

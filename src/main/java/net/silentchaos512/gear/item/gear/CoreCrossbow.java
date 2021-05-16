@@ -275,7 +275,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         if (shooter instanceof PlayerEntity) {
             arrowEntity.setIsCritical(true);
         }
-        arrowEntity.setDamage(GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
+        arrowEntity.setDamage(arrowEntity.getDamage() - 2 + GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
 
         arrowEntity.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
         arrowEntity.setShotFromCrossbow(true);

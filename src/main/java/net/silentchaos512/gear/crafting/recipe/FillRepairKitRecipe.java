@@ -27,10 +27,13 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.collection.StackList;
@@ -83,14 +86,21 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     }
 
     private static boolean isRepairMaterial(ItemStack stack) {
+        if (stack.getItem() instanceof FragmentItem) {
+            IMaterialInstance material = FragmentItem.getMaterial(stack);
+            return material != null && isRepairMaterial(material);
+        }
+
         MaterialInstance material = MaterialInstance.from(stack);
         return material != null && isRepairMaterial(material);
     }
 
-    private static boolean isRepairMaterial(MaterialInstance material) {
-        float durability = material.getStat(ItemStats.DURABILITY, PartType.MAIN);
-        float armorDurability = material.getStat(ItemStats.ARMOR_DURABILITY, PartType.MAIN);
-        return material.getMaterial().allowedInPart(PartType.MAIN) && (durability > 0 || armorDurability > 0);
+    private static boolean isRepairMaterial(IMaterialInstance material) {
+        float durability = material.getStat(PartType.MAIN, ItemStats.DURABILITY);
+        float armorDurability = material.getStat(PartType.MAIN, ItemStats.ARMOR_DURABILITY);
+        IMaterial mat = material.get();
+        return mat != null && mat.allowedInPart(material, PartType.MAIN)
+                && (durability > 0 || armorDurability > 0);
     }
 
     @Override

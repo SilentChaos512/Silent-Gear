@@ -37,6 +37,10 @@
       "magic_damage": 1.0,
       "attack_speed": 0.2,
       "armor": 17.0,
+      "armor/helmet": 3.0,
+      "armor/chestplate": 7.0,
+      "armor/leggings": 5.0,
+      "armor/boots": 2.0,
       "armor_toughness": 1.0,
       "magic_armor": 6.0,
       "ranged_damage": 2.0,
@@ -64,10 +68,6 @@
         "name": "silentgear:adamant",
         "level": 1,
         "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "armor"
-          },
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.35

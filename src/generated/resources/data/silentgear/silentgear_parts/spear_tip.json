@@ -18,6 +18,9 @@
     "repair_efficiency": 1.25,
     "durability": {
       "mul1": -0.2
+    },
+    "attack_reach": {
+      "add": 1.0
     }
   }
 }

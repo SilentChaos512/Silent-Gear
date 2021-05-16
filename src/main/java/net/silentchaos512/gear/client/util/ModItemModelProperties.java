@@ -5,7 +5,11 @@ import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.GearHelper;
 
 public final class ModItemModelProperties {
     private ModItemModelProperties() {}
@@ -54,6 +58,12 @@ public final class ModItemModelProperties {
 
         ItemModelsProperties.registerProperty(ModItems.SHIELD.get(), new ResourceLocation("blocking"), (p_239421_0_, p_239421_1_, p_239421_2_) -> {
             return p_239421_2_ != null && p_239421_2_.isHandActive() && p_239421_2_.getActiveItemStack() == p_239421_0_ ? 1.0F : 0.0F;
+        });
+
+        Registration.getItems(ICoreItem.class).forEach(item -> {
+            ItemModelsProperties.registerProperty(item.asItem(), Const.BROKEN_PROPERTY, (stack, world, entity) -> {
+                return GearHelper.isBroken(stack) ? 0 : 1;
+            });
         });
     }
 }

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:ingots/blaze_gold"
+      "item": "silentgear:blaze_gold_ingot"
     }
   ],
   "result": {

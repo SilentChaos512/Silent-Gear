@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "silentgear:guide_book"
+    ]
+  },
+  "criteria": {
+    "has_template_board": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "silentgear:template_boards"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "silentgear:guide_book"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_template_board",
+      "has_the_recipe"
+    ]
+  ]
+}

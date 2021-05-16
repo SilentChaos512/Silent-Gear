@@ -1,10 +1,21 @@
 {
   "type": "silentgear:simple_trait",
   "max_level": 1,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "harvest_tool"
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.jabberwocky"
   },
   "description": {
     "translate": "trait.silentgear.jabberwocky.desc"
-  }
+  },
+  "extra_wiki_lines": [
+    {
+      "text": "Something may happen if you mine certain blocks with this"
+    }
+  ]
 }

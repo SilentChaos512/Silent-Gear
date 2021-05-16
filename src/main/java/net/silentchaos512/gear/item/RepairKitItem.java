@@ -5,10 +5,12 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -35,22 +37,42 @@ public class RepairKitItem extends Item {
     }
 
     public boolean addMaterial(ItemStack repairKit, ItemStack materialStack) {
-        float storedAmount = getStoredMaterialAmount(repairKit);
-        if (storedAmount > getKitCapacity() - 1) {
-            // Repair kit is full
-            return false;
-        }
+        Tuple<IMaterialInstance, Float> tuple = getMaterialAndValue(materialStack);
 
-        MaterialInstance mat = MaterialInstance.from(materialStack);
-        if (mat != null) {
+        if (tuple != null) {
+            IMaterialInstance mat = tuple.getA();
+            float value = tuple.getB();
+
+            if (getStoredMaterialAmount(repairKit) > getKitCapacity() - value) {
+                // Repair kit is full
+                return false;
+            }
+
             String key = getShorthandKey(mat);
             CompoundNBT storageTag = repairKit.getOrCreateChildTag(NBT_STORAGE);
             float current = storageTag.getFloat(key);
-            storageTag.putFloat(key, current + 1);
+            storageTag.putFloat(key, current + value);
             return true;
         }
 
         return false;
+    }
+
+    @Nullable
+    private static Tuple<IMaterialInstance, Float> getMaterialAndValue(ItemStack stack) {
+        if (stack.getItem() instanceof FragmentItem) {
+            IMaterialInstance material = FragmentItem.getMaterial(stack);
+            if (material != null) {
+                return new Tuple<>(material, 0.125f);
+            }
+            return null;
+        }
+
+        MaterialInstance mat = MaterialInstance.from(stack);
+        if (mat != null) {
+            return new Tuple<>(mat, 1f);
+        }
+        return null;
     }
 
     private int getKitCapacity() {
@@ -80,7 +102,7 @@ public class RepairKitItem extends Item {
                 .map(MaterialInstance::readShorthand)
                 .filter(Objects::nonNull)
                 .sorted(Comparator.<MaterialInstance, Integer>comparing(mat1 -> mat1.getTier(PartType.MAIN))
-                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN).copyRaw().getString()))
+                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN, ItemStack.EMPTY).copyRaw().getString()))
                 .collect(Collectors.toList());
 
         Map<MaterialInstance, Float> ret = new LinkedHashMap<>();
@@ -92,7 +114,7 @@ public class RepairKitItem extends Item {
     }
 
     @Nonnull
-    private static String getShorthandKey(MaterialInstance mat) {
+    private static String getShorthandKey(IMaterialInstance mat) {
         return MaterialInstance.writeShorthand(mat);
     }
 
@@ -172,7 +194,7 @@ public class RepairKitItem extends Item {
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
             tooltip.add(TextUtil.translate("item", "repair_kit.material",
-                    entry.getKey().getDisplayNameWithGrade(PartType.MAIN),
+                    entry.getKey().getDisplayNameWithGrade(PartType.MAIN, ItemStack.EMPTY),
                     format(entry.getValue())));
         }
     }

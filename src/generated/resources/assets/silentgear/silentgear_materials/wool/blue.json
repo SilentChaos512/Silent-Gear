@@ -1,4 +1,16 @@
 {
+  "main/all": [
+    {
+      "texture": "silentgear:main_generic_lc",
+      "color": "#35399D"
+    }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:cloth",
+      "color": "#35399D"
+    }
+  ],
   "grip/all": [
     {
       "texture": "silentgear:grip_wool",
@@ -11,9 +23,9 @@
       "color": "#35399D"
     }
   ],
-  "main/fragment": [
+  "lining/part": [
     {
-      "texture": "silentgear:cloth",
+      "texture": "silentgear:lining_cloth",
       "color": "#35399D"
     }
   ]

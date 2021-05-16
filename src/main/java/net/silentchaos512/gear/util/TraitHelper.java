@@ -25,23 +25,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -70,7 +74,7 @@ public final class TraitHelper {
             return inputValue;
         }
 
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
         float value = inputValue;
 
         for (INBT nbt : tagList) {
@@ -125,7 +129,7 @@ public final class TraitHelper {
      */
     public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
             for (INBT nbt : tagList) {
                 if (nbt instanceof CompoundNBT) {
@@ -167,7 +171,7 @@ public final class TraitHelper {
      */
     public static boolean hasTrait(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
             for (INBT nbt : tagList) {
                 if (nbt instanceof CompoundNBT) {
@@ -196,6 +200,14 @@ public final class TraitHelper {
         return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
     }
 
+    public static int getHighestLevelArmor(PlayerEntity player, DataResource<ITrait> trait) {
+        int max = 0;
+        for (ItemStack stack : player.inventory.armorInventory) {
+            max = Math.max(max, getTraitLevel(stack, trait));
+        }
+        return max;
+    }
+
     public static int getHighestLevelCurio(LivingEntity entity, DataResource<ITrait> trait) {
         if (ModList.get().isLoaded(Const.CURIOS)) {
             return CuriosCompat.getHighestTraitLevel(entity, trait);
@@ -214,11 +226,20 @@ public final class TraitHelper {
         return hasTrait(main, traitId) || hasTrait(off, traitId);
     }
 
+    public static boolean hasTraitArmor(PlayerEntity player, DataResource<ITrait> trait) {
+        for (ItemStack stack : player.inventory.armorInventory) {
+            if (hasTrait(stack, trait)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Map<ITrait, Integer> getCachedTraits(ItemStack gear) {
         if (!GearHelper.isGear(gear)) return ImmutableMap.of();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
         for (INBT nbt : tagList) {
             if (nbt instanceof CompoundNBT) {
@@ -235,24 +256,31 @@ public final class TraitHelper {
         return result;
     }
 
+    @Deprecated
+    public static Map<ITrait, Integer> getTraits(ItemStack gear, PartDataList parts) {
+        return getTraits(gear, GearHelper.getType(gear), parts);
+    }
+
     /**
      * Gets a Map of Traits and levels from the parts, used to calculate trait levels and should not
      * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ResourceLocation)} or
      * {@link #hasTrait(ItemStack, ResourceLocation)} when appropriate.
      *
-     * @param gear  The item
-     * @param parts The list of all parts used in constructing the gear.
+     * @param gear     The item
+     * @param gearType The gear type
+     * @param parts    The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
-    public static Map<ITrait, Integer> getTraits(ItemStack gear, PartDataList parts) {
-        if (parts.isEmpty() || GearHelper.isBroken(gear))
+    public static Map<ITrait, Integer> getTraits(ItemStack gear, GearType gearType, PartDataList parts) {
+        if (parts.isEmpty() || (!gear.isEmpty() && GearHelper.isBroken(gear)))
             return ImmutableMap.of();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
 
         for (PartData part : parts) {
-            for (TraitInstance inst : part.getTraits(gear)) {
-                if (inst.conditionsMatch(parts, gear)) {
+            PartGearKey key = PartGearKey.of(gearType, part);
+            for (TraitInstance inst : part.getTraits(key, gear)) {
+                if (inst.conditionsMatch(key, gear, parts)) {
                     ITrait trait = inst.getTrait();
                     // Get the highest value in any part
                     result.merge(trait, inst.getLevel(), Integer::max);
@@ -267,35 +295,39 @@ public final class TraitHelper {
         return result;
     }
 
-    public static Map<ITrait, Integer> getTraits(List<MaterialInstance> materials, PartType partType, ItemStack gear) {
-        if (materials.isEmpty())
-            return Collections.emptyMap();
+    public static List<TraitInstance> getTraits(List<? extends IGearComponentInstance<?>> components, PartGearKey partKey, ItemStack gear) {
+        if (components.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        Map<ITrait, Integer> result = new LinkedHashMap<>();
+        Map<ITrait, Integer> map = new LinkedHashMap<>();
         Map<ITrait, Integer> countMatsWithTrait = new HashMap<>();
 
-        for (MaterialInstance material : materials) {
-            for (TraitInstance inst : material.getMaterial().getTraits(partType, gear)) {
-                if (inst.conditionsMatch(materials, partType, gear)) {
-                    result.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
+        for (IGearComponentInstance<?> comp : components) {
+            for (TraitInstance inst : comp.getTraits(partKey, gear)) {
+                if (inst.conditionsMatch(partKey, gear, components)) {
+                    map.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
                 }
             }
         }
 
-        ITrait[] keys = result.keySet().toArray(new ITrait[0]);
+        ITrait[] keys = map.keySet().toArray(new ITrait[0]);
 
         for (ITrait trait : keys) {
             final int matsWithTrait = countMatsWithTrait.get(trait);
-            final float divisor = Math.max(materials.size() / 2f, matsWithTrait);
-            final int value = Math.round(result.get(trait) / divisor);
-            result.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
+            final float divisor = Math.max(components.size() / 2f, matsWithTrait);
+            final int value = Math.round(map.get(trait) / divisor);
+            map.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
         }
 
-        cancelTraits(result, keys);
+        cancelTraits(map, keys);
         // FIXME
 //        MinecraftForge.EVENT_BUS.post(new GetTraitsEvent(gear, materials, result));
-        return result;
+
+        List<TraitInstance> ret = new ArrayList<>();
+        map.forEach((trait, level) -> ret.add(TraitInstance.of(trait, level)));
+        return ret;
     }
 
     private static void cancelTraits(Map<ITrait, Integer> mapToModify, ITrait[] keys) {
@@ -330,19 +362,29 @@ public final class TraitHelper {
     }
 
     static void tickTraits(World world, @Nullable PlayerEntity player, ItemStack gear, boolean isEquipped) {
-        // Performance test on 2018-11-26 - roughly 5% FPS loss max (negligible), average ~420 FPS
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", 10);
+        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
-        for (INBT nbt : tagList) {
-            if (nbt instanceof CompoundNBT) {
-                CompoundNBT tagCompound = (CompoundNBT) nbt;
-                String regName = tagCompound.getString("Name");
-                ITrait trait = TraitManager.get(regName);
+        for (int i = 0; i < tagList.size(); ++i) {
+            CompoundNBT tagCompound = tagList.getCompound(i);
+            String regName = tagCompound.getString("Name");
+            ITrait trait = TraitManager.get(regName);
 
-                if (trait != null) {
-                    int level = tagCompound.getByte("Level");
-                    trait.onUpdate(new TraitActionContext(player, level, gear), isEquipped);
-                }
+            if (trait != null) {
+                int level = tagCompound.getByte("Level");
+                TraitActionContext context = new TraitActionContext(player, level, gear);
+                trait.onUpdate(context, isEquipped);
+                extraTickFunctions(trait, context);
+            }
+        }
+    }
+
+    private static void extraTickFunctions(ITrait trait, TraitActionContext context) {
+        // Stellar repair
+        PlayerEntity player = context.getPlayer();
+        if (trait.getId().equals(Const.Traits.STELLAR.getId()) && player != null && player.ticksExisted % 20 == 0) {
+            float chance = Const.Traits.STELLAR_REPAIR_CHANCE * context.getTraitLevel();
+            if (MathUtils.tryPercentage(chance)) {
+                GearHelper.attemptDamage(context.getGear(), -1, player, Hand.MAIN_HAND);
             }
         }
     }

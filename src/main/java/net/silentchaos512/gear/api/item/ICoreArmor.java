@@ -28,6 +28,7 @@ public interface ICoreArmor extends ICoreItem {
             ItemStats.MELEE_DAMAGE,
             ItemStats.MAGIC_DAMAGE,
             ItemStats.ATTACK_SPEED,
+            ItemStats.ATTACK_REACH,
             ItemStats.RANGED_DAMAGE,
             ItemStats.RANGED_SPEED
     );
@@ -45,11 +46,22 @@ public interface ICoreArmor extends ICoreItem {
     @Override
     default boolean supportsPart(ItemStack gear, PartData part) {
         PartType type = part.getType();
-        return type == PartType.MAIN || type == PartType.TIP || ICoreItem.super.supportsPart(gear, part);
+        boolean supported = ICoreItem.super.supportsPart(gear, part);
+        return (type == PartType.MAIN && supported)
+                || type == PartType.TIP
+                || type == PartType.LINING
+                || supported;
     }
 
     @Override
     default boolean hasTexturesFor(PartType partType) {
-        return partType == PartType.MAIN || partType == PartType.TIP || partType == PartType.MISC_UPGRADE;
+        return partType == PartType.MAIN
+                || partType == PartType.TIP
+                || partType == PartType.MISC_UPGRADE;
+    }
+
+    @Override
+    default ItemStat getDurabilityStat() {
+        return ItemStats.ARMOR_DURABILITY;
     }
 }

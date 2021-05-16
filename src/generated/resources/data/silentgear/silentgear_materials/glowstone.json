@@ -40,32 +40,11 @@
     "tip": [
       {
         "name": "silentgear:refractive",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:or",
-            "values": [
-              {
-                "type": "silentgear:gear_type",
-                "gear_type": "harvest_tool"
-              },
-              {
-                "type": "silentgear:gear_type",
-                "gear_type": "melee_weapon"
-              }
-            ]
-          }
-        ]
+        "level": 1
       },
       {
         "name": "silentgear:lustrous",
-        "level": 4,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          }
-        ]
+        "level": 4
       }
     ]
   }

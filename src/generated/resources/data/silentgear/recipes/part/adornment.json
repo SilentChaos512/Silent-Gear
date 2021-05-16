@@ -6,6 +6,9 @@
       "part_type": "silentgear:adornment"
     },
     {
+      "item": "silentgear:bort"
+    },
+    {
       "type": "silentgear:material",
       "part_type": "silentgear:adornment"
     }

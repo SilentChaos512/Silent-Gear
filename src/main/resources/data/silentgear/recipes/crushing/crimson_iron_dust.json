@@ -8,7 +8,7 @@
   "type": "silents_mechanisms:crushing",
   "process_time": 300,
   "ingredient": {
-    "item": "silentgear:crimson_iron_chunks"
+    "tag": "silents_mechanisms:chunks/crimson_iron"
   },
   "results": [
     {

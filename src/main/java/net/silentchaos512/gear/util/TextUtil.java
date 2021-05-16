@@ -2,9 +2,13 @@ package net.silentchaos512.gear.util;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.utils.Color;
+
+import java.util.Collection;
 
 public final class TextUtil {
     private TextUtil() {throw new IllegalAccessError("Utility class");}
@@ -36,5 +40,11 @@ public final class TextUtil {
     public static IFormattableTextComponent withColor(IFormattableTextComponent text, TextFormatting color) {
         int colorCode = color.getColor() != null ? color.getColor() : Color.VALUE_WHITE;
         return withColor(text, colorCode);
+    }
+
+    public static void addWipText(Collection<ITextComponent> tooltip) {
+        if (Config.Common.showWipText.get()) {
+            tooltip.add(withColor(misc("wip"), TextFormatting.RED));
+        }
     }
 }

@@ -1,0 +1,18 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:netherite_shovel"
+  },
+  "results": [
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:stick",
+      "count": 2
+    }
+  ]
+}

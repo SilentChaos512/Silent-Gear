@@ -7,12 +7,11 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -39,13 +38,8 @@ public class NotTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
-        return !child.matches(gear, parts, trait);
-    }
-
-    @Override
-    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
-        return !child.matches(gear, partType, materials, trait);
+    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components) {
+        return !this.child.matches(trait, key, gear, components);
     }
 
     @Override

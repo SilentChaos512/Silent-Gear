@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "helmet",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:helmet_plates"
+  },
+  "name": {
+    "translate": "part.silentgear.helmet_plates"
+  },
+  "stats": {
+    "repair_efficiency": 1.0
+  }
+}

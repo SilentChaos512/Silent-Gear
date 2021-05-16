@@ -33,7 +33,10 @@ public final class TraitInstance implements ITraitInstance {
     private TraitInstance(ITrait trait, int level, ITraitCondition... conditions) {
         this.trait = trait;
         this.level = level;
-        this.conditions = ImmutableList.<ITraitCondition>builder().add(conditions).build();
+        this.conditions = ImmutableList.<ITraitCondition>builder()
+                .add(this.trait.getConditions().toArray(new ITraitCondition[0]))
+                .add(conditions)
+                .build();
     }
 
     /**

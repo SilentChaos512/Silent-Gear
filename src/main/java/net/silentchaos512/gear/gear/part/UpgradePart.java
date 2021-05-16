@@ -27,7 +27,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.part.IPartSerializer;
-import net.silentchaos512.gear.api.part.IUpgradePart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
@@ -35,7 +34,7 @@ import net.silentchaos512.utils.Color;
 import java.util.List;
 import java.util.function.Function;
 
-public class UpgradePart extends AbstractGearPart implements IUpgradePart {
+public class UpgradePart extends AbstractGearPart {
     private GearTypeMatcher gearTypes = GearTypeMatcher.ALL;
 
     public UpgradePart(ResourceLocation registryName) {

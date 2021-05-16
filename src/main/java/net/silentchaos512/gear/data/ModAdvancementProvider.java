@@ -29,7 +29,9 @@ import net.silentchaos512.gear.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -105,8 +107,10 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement overworldPlants = Advancement.Builder.builder()
                     .withParent(root)
                     .withDisplay(CraftingItems.FLAX_FIBER, title("overworld_plants"), description("overworld_plants"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("seeds", getItem(ModItems.FLAX_SEEDS))
-                    .withCriterion("fiber", getItem(CraftingItems.FLAX_FIBER))
+                    .withCriterion("flax_seeds", getItem(ModItems.FLAX_SEEDS))
+                    .withCriterion("flax_fibers", getItem(CraftingItems.FLAX_FIBER))
+                    .withCriterion("fluffy_seeds", getItem(ModItems.FLUFFY_SEEDS))
+                    .withCriterion("fluffy_puffs", getItem(CraftingItems.FLUFFY_PUFF))
                     .withRequirementsStrategy(IRequirementsStrategy.AND)
                     .register(consumer, id("overworld_plants"));
             Advancement kachink1 = Advancement.Builder.builder()
@@ -136,15 +140,16 @@ public class ModAdvancementProvider implements IDataProvider {
 
             Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
             Advancement upgradeBase = simpleGetItem(consumer, CraftingItems.UPGRADE_BASE, templateBoard);
-            Advancement repairKit = Advancement.Builder.builder()
-                    .withParent(templateBoard)
-                    .withDisplay(ModItems.CRUDE_REPAIR_KIT, title("repair_kit"), description("repair_kit"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("crude", getItem(ModItems.CRUDE_REPAIR_KIT))
-                    .withCriterion("sturdy", getItem(ModItems.STURDY_REPAIR_KIT))
-                    .withCriterion("crimson", getItem(ModItems.CRIMSON_REPAIR_KIT))
-                    .withCriterion("azure", getItem(ModItems.AZURE_REPAIR_KIT))
-                    .withRequirementsStrategy(IRequirementsStrategy.OR)
-                    .register(consumer, id("repair_kit"));
+            Advancement repairKit;
+            {
+                Advancement.Builder builder = Advancement.Builder.builder()
+                        .withParent(templateBoard)
+                        .withDisplay(ModItems.CRUDE_REPAIR_KIT, title("repair_kit"), description("repair_kit"), null, FrameType.TASK, true, true, false)
+                        .withRequirementsStrategy(IRequirementsStrategy.OR);
+                Registration.getItems(RepairKitItem.class).forEach(item ->
+                        builder.withCriterion(NameUtils.fromItem(item).getPath(), getItem(item)));
+                repairKit = builder.register(consumer, id("repair_kit"));
+            }
 
             Advancement crimsonRepairKit = simpleGetItem(consumer, ModItems.CRIMSON_REPAIR_KIT, repairKit);
             Advancement azureRepairKit = simpleGetItem(consumer, ModItems.AZURE_REPAIR_KIT, crimsonRepairKit);
@@ -290,7 +295,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .register(consumer, id("azure_electrum"));
 
             ItemStack azureSilverBoots = new ItemStack(ModItems.BOOTS);
-            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, ModItems.ARMOR_BODY.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
+            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, ModItems.BOOT_PLATES.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
             Advancement moonwalker = Advancement.Builder.builder()
                     .withParent(azureSilver)
                     .withDisplay(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, FrameType.TASK, true, true, false)

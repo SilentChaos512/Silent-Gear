@@ -6,9 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -26,14 +25,17 @@ public interface ITraitInstance {
 
     Collection<ITraitCondition> getConditions();
 
-    default boolean conditionsMatch(PartDataList parts, ItemStack gear) {
+    default boolean conditionsMatch(PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components) {
         ITrait trait = getTrait();
-        return trait == null || getConditions().stream().allMatch(c -> c.matches(gear, parts, trait));
-    }
+        if (trait == null) return true;
 
-    default boolean conditionsMatch(List<MaterialInstance> materials, PartType partType, ItemStack gear) {
-        ITrait trait = getTrait();
-        return trait == null || getConditions().stream().allMatch(c -> c.matches(gear, partType, materials, trait));
+        for (ITraitCondition condition : getConditions()) {
+            if (!condition.matches(trait, key, gear, components)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     default JsonObject serialize() {

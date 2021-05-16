@@ -1,9 +1,9 @@
 {
   "availability": {
-    "tier": 0,
+    "tier": 1,
     "categories": [
       "organic",
-      "cloth"
+      "fiber"
     ],
     "visible": true,
     "gear_blacklist": [],
@@ -17,6 +17,7 @@
       },
       "exclusions": [
         "silentgear:flax_string",
+        "silentgear:fluffy_string",
         "silentgear:sinew_fiber"
       ]
     }
@@ -28,6 +29,9 @@
     "binding": {
       "durability": {
         "mul1": -0.05
+      },
+      "armor_durability": {
+        "mul1": 0.05
       },
       "repair_efficiency": {
         "mul1": 0.05
@@ -46,13 +50,7 @@
     "binding": [
       {
         "name": "silentgear:flexible",
-        "level": 2
-      }
-    ],
-    "bowstring": [
-      {
-        "name": "silentgear:organic",
-        "level": 2
+        "level": 1
       }
     ]
   }

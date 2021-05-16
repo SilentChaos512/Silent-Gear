@@ -24,7 +24,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// TODO: Move to Silent Lib?
+/**
+ * @deprecated Moving to Silent Lib
+ */
+@Deprecated
 public class ExclusionIngredient extends Ingredient {
     private final Ingredient parent;
     private final Collection<ResourceLocation> exclusions = new ArrayList<>();
@@ -52,6 +55,10 @@ public class ExclusionIngredient extends Ingredient {
         List<ItemStack> ret = new ArrayList<>(Arrays.asList(parent.getMatchingStacks()));
         exclusions.forEach(id -> ret.removeIf(stack -> isItem(id, stack)));
         return ret.toArray(new ItemStack[0]);
+    }
+
+    public ItemStack[] getMatchingStacksWithExclusions() {
+        return parent.getMatchingStacks();
     }
 
     @Override

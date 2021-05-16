@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/blaze_gold"
+            "item": "silentgear:blaze_gold_ingot"
           }
         ]
       }

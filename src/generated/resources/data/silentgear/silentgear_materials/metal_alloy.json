@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:compound",
+  "simple": false,
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:alloy_ingot"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.metal_alloy"
+  }
+}

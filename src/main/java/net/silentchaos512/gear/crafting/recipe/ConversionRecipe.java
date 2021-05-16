@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -87,7 +88,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
-        return getBaseRecipe().matches(inv, worldIn);
+        return Config.Common.allowConversionRecipes.get() && getBaseRecipe().matches(inv, worldIn);
     }
 
     @Override

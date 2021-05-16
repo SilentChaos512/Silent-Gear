@@ -1,0 +1,52 @@
+{
+  "type": "silentgear:compound_part",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    },
+    {
+      "type": "silentgear:material",
+      "part_type": "silentgear:main",
+      "gear_type": "chestplate"
+    }
+  ],
+  "result": {
+    "item": "silentgear:chestplate_plates"
+  }
+}

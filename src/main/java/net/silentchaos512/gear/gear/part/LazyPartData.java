@@ -6,10 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.DataResource;
@@ -63,25 +66,31 @@ public class LazyPartData implements IPartData {
     }
 
     @Override
-    public ResourceLocation getPartId() {
+    public ResourceLocation getId() {
         return partId;
     }
 
     @Nullable
     @Override
-    public IGearPart getPart() {
+    public IGearPart get() {
         return PartManager.get(partId);
     }
 
     @Override
-    public ItemStack getCraftingItem() {
+    public ItemStack getItem() {
         if (this.craftingItem.isEmpty()) {
-            IGearPart part = getPart();
+            IGearPart part = get();
             if (part != null) {
-                return PartData.of(part).getCraftingItem();
+                return PartData.of(part).getItem();
             }
         }
         return this.craftingItem;
+    }
+
+    @Override
+    public ITextComponent getDisplayName(PartType type, ItemStack gear) {
+        IGearPart part = get();
+        return part != null ? part.getDisplayName(this, type, gear) : new StringTextComponent("INVALID");
     }
 
     @Override
@@ -99,7 +108,7 @@ public class LazyPartData implements IPartData {
     }
 
     public boolean isValid() {
-        return getPart() != null;
+        return get() != null;
     }
 
     public static LazyPartData deserialize(JsonElement json) {
@@ -116,7 +125,7 @@ public class LazyPartData implements IPartData {
     public static List<PartData> createPartList(Collection<LazyPartData> parts) {
         return parts.stream()
                 .filter(LazyPartData::isValid)
-                .map(LazyPartData::getPart)
+                .map(LazyPartData::get)
                 .filter(Objects::nonNull)
                 .map(PartData::of)
                 .collect(Collectors.toList());

@@ -2,33 +2,7 @@
   "type": "silentgear:gear_crafting",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
-      "gear_type": "helmet"
-    },
-    {
-      "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "armor"
-    },
-    {
-      "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "armor"
-    },
-    {
-      "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "armor"
-    },
-    {
-      "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "armor"
-    },
-    {
-      "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "armor"
+      "item": "silentgear:helmet_plates"
     }
   ],
   "result": {

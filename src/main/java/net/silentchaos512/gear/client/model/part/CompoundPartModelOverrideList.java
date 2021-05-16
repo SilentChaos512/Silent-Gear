@@ -15,15 +15,16 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.ModelErrorLogging;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.item.CompoundPartItem;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -42,11 +43,11 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
 
     @SuppressWarnings("ConstructorWithTooManyParameters")
     public CompoundPartModelOverrideList(CompoundPartModel model,
-                                 IModelConfiguration owner,
-                                 ModelBakery bakery,
-                                 Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                 IModelTransform modelTransform,
-                                 ResourceLocation modelLocation) {
+                                         IModelConfiguration owner,
+                                         ModelBakery bakery,
+                                         Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
+                                         IModelTransform modelTransform,
+                                         ResourceLocation modelLocation) {
         this.model = model;
         this.owner = owner;
         this.bakery = bakery;
@@ -55,14 +56,18 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
         this.modelLocation = modelLocation;
     }
 
+    static boolean isDebugLoggingEnabled() {
+        return Config.Common.modelAndTextureLogging.get();
+    }
+
     @Nullable
     @Override
     public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
         CacheKey key = getKey(model, stack, worldIn, entityIn);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ModelErrorLogging.notifyOfException(e, "compound part");
         }
         return model;
     }
@@ -81,14 +86,14 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
 
     @SuppressWarnings("TypeMayBeWeakened")
     private void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
-        IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
+        IMaterialDisplay materialModel = MaterialDisplayManager.get(material);
 
-        List<MaterialLayer> layers = materialModel.getLayers(this.model.gearType, part).getLayers();
+        List<MaterialLayer> layers = materialModel.getLayerList(this.model.gearType, part, material).getLayers();
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
             if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
                 int blendedColor = part.getColor(stack, i, 0);
-                list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
+                list.add(new MaterialLayer(layer.getTextureId(), part.getType(), blendedColor, false));
             } else {
                 list.add(layer);
             }
@@ -104,9 +109,10 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
         return super.getOverrides();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void clearCache() {
-        SilentGear.LOGGER.debug("Clearing model cache for {}/{}", this.model.partType, this.model.gearType);
+        if (CompoundPartModelOverrideList.isDebugLoggingEnabled()) {
+            SilentGear.LOGGER.debug("Clearing model cache for {}/{}", this.model.partType, this.model.gearType);
+        }
         bakedModelCache.invalidateAll();
     }
 

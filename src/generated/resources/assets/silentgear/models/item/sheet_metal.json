@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/sheet_metal",
+    "layer1": "silentgear:item/sheet_metal_highlight"
+  }
+}

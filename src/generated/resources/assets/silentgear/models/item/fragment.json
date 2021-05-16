@@ -2,5 +2,6 @@
   "parent": "minecraft:item/generated",
   "loader": "silentgear:fragment_model",
   "gear_type": "fragment",
-  "part_type": "silentgear:main"
+  "part_type": "silentgear:main",
+  "texture_path": "fragment"
 }

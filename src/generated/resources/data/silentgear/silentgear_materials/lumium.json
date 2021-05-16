@@ -37,8 +37,12 @@
       "magic_damage": 3.0,
       "attack_speed": 0.2,
       "armor": 18.0,
-      "armor_toughness": 3.0,
-      "magic_armor": 3.0,
+      "armor/helmet": 2.0,
+      "armor/chestplate": 8.0,
+      "armor/leggings": 6.0,
+      "armor/boots": 2.0,
+      "armor_toughness": 4.0,
+      "magic_armor": 10.0,
       "ranged_damage": 2.0,
       "ranged_speed": 0.0,
       "rarity": 75.0,
@@ -67,10 +71,6 @@
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.5
-          },
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "tool"
           }
         ]
       }
@@ -87,10 +87,6 @@
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.5
-          },
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "tool"
           }
         ]
       }

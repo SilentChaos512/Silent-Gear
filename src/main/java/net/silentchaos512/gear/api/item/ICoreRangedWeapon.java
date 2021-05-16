@@ -25,9 +25,27 @@ public interface ICoreRangedWeapon extends ICoreTool {
             ItemStats.RANGED_SPEED
     );
 
+    Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
+            ItemStats.ARMOR_DURABILITY,
+            ItemStats.REPAIR_VALUE,
+            ItemStats.HARVEST_LEVEL,
+            ItemStats.HARVEST_SPEED,
+            ItemStats.REACH_DISTANCE,
+            ItemStats.MELEE_DAMAGE,
+            ItemStats.ARMOR,
+            ItemStats.ARMOR_TOUGHNESS,
+            ItemStats.MAGIC_ARMOR,
+            ItemStats.KNOCKBACK_RESISTANCE
+    );
+
     @Override
     default Set<ItemStat> getRelevantStats(ItemStack stack) {
         return RELEVANT_STATS;
+    }
+
+    @Override
+    default Set<ItemStat> getExcludedStats(ItemStack stack) {
+        return EXCLUDED_STATS;
     }
 
     @Override
@@ -73,6 +91,8 @@ public interface ICoreRangedWeapon extends ICoreTool {
 
     @Override
     default boolean hasTexturesFor(PartType partType) {
-        return partType != PartType.FLETCHING && partType != PartType.ADORNMENT;
+        return partType != PartType.FLETCHING
+                && partType != PartType.ADORNMENT
+                && partType != PartType.LINING;
     }
 }

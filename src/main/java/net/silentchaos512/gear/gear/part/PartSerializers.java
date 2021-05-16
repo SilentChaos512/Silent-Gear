@@ -29,9 +29,9 @@ public final class PartSerializers {
 
     public static <S extends IPartSerializer<T>, T extends IGearPart> S register(S serializer) {
         if (REGISTRY.containsKey(serializer.getName())) {
-            throw new IllegalArgumentException("Duplicate gear part serializer " + serializer.getName());
+            throw new IllegalArgumentException("Duplicate part serializer " + serializer.getName());
         }
-        SilentGear.LOGGER.info(PartManager.MARKER, "Registered serializer '{}'", serializer.getName());
+        SilentGear.LOGGER.info(PartManager.MARKER, "Registered part serializer '{}'", serializer.getName());
         REGISTRY.put(serializer.getName(), serializer);
         return serializer;
     }
@@ -43,7 +43,7 @@ public final class PartSerializers {
 
         IPartSerializer<?> serializer = REGISTRY.get(type);
         if (serializer == null) {
-            throw new JsonSyntaxException("Invalid or unsupported gear part type " + type);
+            throw new JsonSyntaxException("Invalid or unsupported part type " + type);
         }
         return serializer.read(id, json);
     }
@@ -54,7 +54,7 @@ public final class PartSerializers {
         log(() -> "read " + id + " (type " + type + ")");
         IPartSerializer<?> serializer = REGISTRY.get(type);
         if (serializer == null) {
-            throw new IllegalArgumentException("Unknown gear part serializer " + type);
+            throw new IllegalArgumentException("Unknown part serializer " + type);
         }
         return serializer.read(id, buffer);
     }

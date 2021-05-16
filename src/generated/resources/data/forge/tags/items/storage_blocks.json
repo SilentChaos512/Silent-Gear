@@ -1,10 +1,12 @@
 {
   "replace": false,
   "values": [
+    "#forge:storage_blocks/bort",
     "#forge:storage_blocks/blaze_gold",
     "#forge:storage_blocks/crimson_iron",
     "#forge:storage_blocks/crimson_steel",
     "#forge:storage_blocks/azure_silver",
-    "#forge:storage_blocks/azure_electrum"
+    "#forge:storage_blocks/azure_electrum",
+    "#forge:storage_blocks/tyrian_steel"
   ]
 }

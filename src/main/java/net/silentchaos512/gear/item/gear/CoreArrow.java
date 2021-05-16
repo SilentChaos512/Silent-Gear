@@ -53,6 +53,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
             ItemStats.REPAIR_VALUE,
             ItemStats.MELEE_DAMAGE,
             ItemStats.ATTACK_SPEED,
+            ItemStats.ATTACK_REACH,
             ItemStats.RANGED_SPEED,
             ItemStats.ARMOR,
             ItemStats.ARMOR_TOUGHNESS,

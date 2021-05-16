@@ -2,6 +2,13 @@
   "parent": "item/generated",
   "loader": "silentgear:gear_model",
   "gear_type": "excavator",
+  "texture_path": "excavator",
+  "broken_texture_path": "excavator/broken",
+  "broken_texture_types": [
+    "coating",
+    "main",
+    "tip"
+  ],
   "display": {
     "ground": {
       "rotation": [ 0, 0, 0 ],

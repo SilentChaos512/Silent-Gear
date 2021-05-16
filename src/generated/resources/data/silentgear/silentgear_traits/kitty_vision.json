@@ -1,17 +1,38 @@
 {
   "type": "silentgear:potion_effect_trait",
   "max_level": 1,
+  "conditions": [
+    {
+      "type": "silentgear:or",
+      "values": [
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "helmet"
+        },
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "curio"
+        }
+      ]
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.kitty_vision"
   },
   "description": {
     "translate": "trait.silentgear.kitty_vision.desc"
   },
-  "overrides": [
-    "silentgear:flammable"
-  ],
   "potion_effects": {
     "helmet": [
+      {
+        "type": "trait_level",
+        "effect": "minecraft:night_vision",
+        "level": [
+          1
+        ]
+      }
+    ],
+    "curio": [
       {
         "type": "trait_level",
         "effect": "minecraft:night_vision",

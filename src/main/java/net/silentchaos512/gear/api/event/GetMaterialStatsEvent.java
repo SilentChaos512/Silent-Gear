@@ -18,7 +18,7 @@ import java.util.List;
  * @since 2.0.0
  */
 public class GetMaterialStatsEvent extends Event {
-    private final ItemStat stat;
+    private final ItemStat stat; // TODO: change to StatGearKey
     private final PartType partType;
     private final List<StatInstance> modifiers;
     private final MaterialInstance material;

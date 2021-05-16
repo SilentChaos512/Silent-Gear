@@ -3,13 +3,20 @@ package net.silentchaos512.gear.gear.part;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,19 +45,29 @@ public final class FakePartData implements IPartData {
     }
 
     @Override
-    public ResourceLocation getPartId() {
+    public ResourceLocation getId() {
         return FAKE_ID;
     }
 
     @Nullable
     @Override
-    public IGearPart getPart() {
+    public IGearPart get() {
         return null;
     }
 
     @Override
-    public ItemStack getCraftingItem() {
+    public ItemStack getItem() {
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public Collection<TraitInstance> getTraits(PartGearKey partKey, ItemStack gear) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public ITextComponent getDisplayName(PartType type, ItemStack gear) {
+        return new StringTextComponent("fake part");
     }
 
     @Override

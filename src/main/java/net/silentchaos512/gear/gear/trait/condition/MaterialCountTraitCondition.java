@@ -7,13 +7,12 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
@@ -39,16 +38,10 @@ public class MaterialCountTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public boolean matches(ItemStack gear, PartDataList parts, ITrait trait) {
-        int count = parts.getPartsWithTrait(trait);
-        return count >= this.requiredCount;
-    }
-
-    @Override
-    public boolean matches(ItemStack gear, PartType partType, List<MaterialInstance> materials, ITrait trait) {
+    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components) {
         int count = 0;
-        for (MaterialInstance mat : materials) {
-            for (TraitInstance inst : mat.getMaterial().getTraits(partType, gear)) {
+        for (IGearComponentInstance<?> comp : components) {
+            for (TraitInstance inst : comp.getTraits(key, gear)) {
                 if (inst.getTrait() == trait) {
                     count++;
                     break;

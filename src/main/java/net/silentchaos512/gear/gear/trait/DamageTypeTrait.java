@@ -35,8 +35,8 @@ public final class DamageTypeTrait extends SimpleTrait {
 
     @Override
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
-        if ("holy".equals(damageType) && target.isEntityUndead()) {
-            // TODO: We need to actually cancel the event and attack with a new damage source
+        if (target.isEntityUndead() && "holy".equals(damageType)
+                || target.isImmuneToFire() && "chilled".equals(damageType)) {
             return baseValue + damageBonus * context.getTraitLevel();
         }
 

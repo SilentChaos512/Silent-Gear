@@ -1,0 +1,12 @@
+{
+  "misc_upgrade/hammer": [
+    {
+      "texture": "silentgear:wide_plate"
+    }
+  ],
+  "misc_upgrade/excavator": [
+    {
+      "texture": "silentgear:wide_plate"
+    }
+  ]
+}

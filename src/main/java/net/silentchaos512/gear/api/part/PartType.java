@@ -31,6 +31,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
@@ -47,7 +48,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class PartType {
-    private static final Map<ResourceLocation, PartType> VALUES = new HashMap<>();
+    private static final Map<ResourceLocation, PartType> VALUES = new LinkedHashMap<>();
+    private static final Map<PartGearKey, Optional<CompoundPartItem>> ITEM_CACHE = new HashMap<>();
 
     public static final PartType NONE = create(Builder.builder(SilentGear.getId("none")));
 
@@ -61,7 +63,7 @@ public final class PartType {
             .defaultTexture(PartTextures.BINDING_GENERIC)
             .isRemovable(true)
     );
-    public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring"))
+    public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring")) // TODO: Rename to "cord"
             .compoundPartItem(() -> ModItems.BOWSTRING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.BOWSTRING_STRING)
     );
@@ -77,6 +79,11 @@ public final class PartType {
     public static final PartType GRIP = create(Builder.builder(SilentGear.getId("grip"))
             .compoundPartItem(() -> ModItems.GRIP.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.GRIP_WOOL)
+            .isRemovable(true)
+    );
+    public static final PartType LINING = create(Builder.builder(SilentGear.getId("lining"))
+            .compoundPartItem(() -> ModItems.LINING.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.LINING_CLOTH)
             .isRemovable(true)
     );
     public static final PartType MAIN = create(Builder.builder(SilentGear.getId("main"))
@@ -153,8 +160,16 @@ public final class PartType {
         this.defaultTexture = builder.defaultTexture;
     }
 
+    public boolean isInvalid() {
+        return this == NONE;
+    }
+
     public ResourceLocation getName() {
         return name;
+    }
+
+    public String getShortName() {
+        return SilentGear.shortenId(name);
     }
 
     public boolean isRemovable() {
@@ -184,7 +199,8 @@ public final class PartType {
         if (compoundPartItem == null) {
             return Optional.empty();
         }
-        return compoundPartItem.apply(gearType);
+        PartGearKey key = PartGearKey.of(gearType, this);
+        return ITEM_CACHE.computeIfAbsent(key, gt -> compoundPartItem.apply(gearType));
     }
 
     public Optional<? extends IPartData> makeCompoundPart(GearType gearType, DataResource<IMaterial> material) {
@@ -200,6 +216,16 @@ public final class PartType {
                 });
     }
 
+    private static Optional<CompoundPartItem> getToolHeadItem(GearType gearType) {
+        for (Item item : ForgeRegistries.ITEMS.getValues()) {
+            if (item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType()) {
+                return Optional.of((CompoundPartItem) item);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     @Nullable
     public PartTextures getDefaultTexture() {
         return defaultTexture;
@@ -209,20 +235,6 @@ public final class PartType {
     public String toString() {
         return "PartType{" +
                 "name='" + name + "'}";
-    }
-
-    private static Optional<CompoundPartItem> getToolHeadItem(GearType gearType) {
-        if (gearType.isArmor()) {
-            return Optional.of(ModItems.ARMOR_BODY.get());
-        }
-
-        for (Item item : ForgeRegistries.ITEMS.getValues()) {
-            if (item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType()) {
-                return Optional.of((CompoundPartItem) item);
-            }
-        }
-
-        return Optional.empty();
     }
 
     @SuppressWarnings("WeakerAccess")

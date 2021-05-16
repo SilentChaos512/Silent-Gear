@@ -1,6 +1,12 @@
 {
   "type": "silentgear:enchantment_trait",
   "max_level": 1,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "harvest_tool"
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.silky"
   },

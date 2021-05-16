@@ -10,6 +10,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -44,6 +46,11 @@ public final class SetDamageCommand {
             int clamped = MathHelper.clamp(correctedAmount, 0, getMaxDamage(stack));
 
             stack.setDamage(clamped);
+
+            if (stack.getItem() instanceof ICoreItem) {
+                GearData.recalculateStats(stack, playerMP);
+            }
+
             return 1;
         } else {
             ITextComponent msg = TextUtil.translate("command", "set_damage.notDamageable", stack.getDisplayName());

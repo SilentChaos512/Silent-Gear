@@ -1,10 +1,12 @@
 package net.silentchaos512.gear.api.stats;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.lib.util.Lazy;
 import net.silentchaos512.utils.Color;
 
@@ -23,8 +25,6 @@ public final class ItemStats {
     public static final Lazy<IForgeRegistry<ItemStat>> REGISTRY = Lazy.of(() -> new RegistryBuilder<ItemStat>()
             .setType(ItemStat.class)
             .setName(SilentGear.getId("stat"))
-//            .add((IForgeRegistry.AddCallback<ItemStat>) (owner, stage, id, obj, oldObj) -> STATS_IN_ORDER.add(obj))
-//            .add((IForgeRegistry.ClearCallback<ItemStat>) (owner, stage) -> STATS_IN_ORDER.clear())
             .create());
 
     // Generic
@@ -52,9 +52,13 @@ public final class ItemStats {
             .affectedByGrades(true)
             .synergyApplies()
     );
+    public static final ItemStat CHARGEABILITY = new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
+            .affectedByGrades(false)
+            .hidden()
+    );
     public static final ItemStat RARITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
-            .affectedByGrades(true)
+            .affectedByGrades(false)
             .hidden()
     );
 
@@ -67,24 +71,25 @@ public final class ItemStats {
     public static final ItemStat HARVEST_SPEED = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
-            .missingRodFunction(f -> Math.max(2, f / 8))
     );
     public static final ItemStat REACH_DISTANCE = new ItemStat(0f, -100f, 100f, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(false)
-            .missingRodFunction(f -> f - 1.5f)
     );
 
     // Melee Weapons
     public static final ItemStat MELEE_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
-            .missingRodFunction(f -> f / 2)
     );
     public static final ItemStat MAGIC_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -4f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
+    public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -3.9f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
+            .affectedByGrades(false)
+    );
+    public static final ItemStat ATTACK_REACH = new ItemStat(3f, 0f, 100f, Color.SANDYBROWN, new ItemStat.Properties()
+            .baseValue(3f)
             .affectedByGrades(false)
     );
 
@@ -109,21 +114,32 @@ public final class ItemStats {
     );
 
     // Armor
-    public static final ItemStat ARMOR = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
-            .affectedByGrades(true)
-            .synergyApplies()
+    public static final ItemStat ARMOR = new SplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+            ImmutableMap.of(
+                    GearType.HELMET, 3f,
+                    GearType.CHESTPLATE, 8f,
+                    GearType.LEGGINGS, 6f,
+                    GearType.BOOTS, 3f
+            ),
+            new ItemStat.Properties()
+                    .affectedByGrades(true)
+                    .synergyApplies()
     );
-    public static final ItemStat ARMOR_TOUGHNESS = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
-            .affectedByGrades(true)
-            .synergyApplies()
+    public static final ItemStat ARMOR_TOUGHNESS = new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+            4,
+            new ItemStat.Properties()
+                    .affectedByGrades(true)
+                    .synergyApplies()
     );
     public static final ItemStat KNOCKBACK_RESISTANCE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
     );
-    public static final ItemStat MAGIC_ARMOR = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
-            .affectedByGrades(true)
-            .synergyApplies()
+    public static final ItemStat MAGIC_ARMOR = new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+            4,
+            new ItemStat.Properties()
+                    .affectedByGrades(true)
+                    .synergyApplies()
     );
 
     private ItemStats() {}
@@ -155,6 +171,11 @@ public final class ItemStats {
         return id != null ? REGISTRY.get().getValue(id) : null;
     }
 
+    @Nullable
+    public static ItemStat get(IItemStat stat) {
+        return REGISTRY.get().getValue(stat.getStatId());
+    }
+
     // region Registry creation - other mods should not call these methods!
 
     public static void createRegistry(RegistryEvent.NewRegistry event) {
@@ -162,11 +183,13 @@ public final class ItemStats {
     }
 
     public static void registerStats(RegistryEvent.Register<ItemStat> event) {
+        // TODO: Replace with DeferredRegister?
         register(event.getRegistry(), DURABILITY, "durability");
         register(event.getRegistry(), ARMOR_DURABILITY, "armor_durability");
         register(event.getRegistry(), REPAIR_EFFICIENCY, "repair_efficiency");
         register(event.getRegistry(), REPAIR_VALUE, "repair_value");
         register(event.getRegistry(), ENCHANTABILITY, "enchantability");
+        register(event.getRegistry(), CHARGEABILITY, "chargeability");
         register(event.getRegistry(), RARITY, "rarity");
         register(event.getRegistry(), HARVEST_LEVEL, "harvest_level");
         register(event.getRegistry(), HARVEST_SPEED, "harvest_speed");
@@ -174,6 +197,7 @@ public final class ItemStats {
         register(event.getRegistry(), MELEE_DAMAGE, "melee_damage");
         register(event.getRegistry(), MAGIC_DAMAGE, "magic_damage");
         register(event.getRegistry(), ATTACK_SPEED, "attack_speed");
+        register(event.getRegistry(), ATTACK_REACH, "attack_reach");
         register(event.getRegistry(), RANGED_DAMAGE, "ranged_damage");
         register(event.getRegistry(), RANGED_SPEED, "ranged_speed");
         register(event.getRegistry(), PROJECTILE_ACCURACY, "projectile_accuracy");

@@ -1,0 +1,69 @@
+{
+  "availability": {
+    "tier": 2,
+    "categories": [
+      "organic",
+      "cloth"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:fine_silk_cloth"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.fine_silk_cloth"
+  },
+  "stats": {
+    "main": {
+      "durability": 0.0,
+      "armor_durability": 14.0,
+      "enchantability": 14.0,
+      "rarity": 40.0,
+      "armor_durability/elytra": 18.0,
+      "armor": 6.0,
+      "armor/helmet": 1.0,
+      "armor/chestplate": 2.0,
+      "armor/leggings": 2.0,
+      "armor/boots": 1.0,
+      "magic_armor": 14.0,
+      "silentgems:chargeability": 0.9
+    },
+    "grip": {
+      "repair_efficiency": {
+        "mul1": 0.1
+      },
+      "harvest_speed": {
+        "mul1": 0.15
+      },
+      "rarity": {
+        "add": 10.0
+      }
+    },
+    "lining": {
+      "armor_durability": {
+        "add": 5.0
+      },
+      "magic_armor": {
+        "add": 2.0
+      }
+    }
+  },
+  "traits": {
+    "grip": [
+      {
+        "name": "silentgear:accelerate",
+        "level": 1
+      }
+    ],
+    "lining": [
+      {
+        "name": "silentgear:flexible",
+        "level": 3
+      }
+    ]
+  }
+}

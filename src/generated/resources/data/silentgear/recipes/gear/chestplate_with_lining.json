@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:gear_crafting",
+  "ingredients": [
+    {
+      "item": "silentgear:chestplate_plates"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:lining"
+    }
+  ],
+  "result": {
+    "item": "silentgear:chestplate"
+  }
+}

@@ -1,21 +1,3 @@
-/*
- * Silent Gear -- MaterialGrade
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonElement;
@@ -41,7 +23,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 public enum MaterialGrade {
-    NONE(0), E(1), D(2), C(3), B(4), A(5), S(10), SS(15), SSS(25);
+    NONE(0), E(1), D(2), C(3), B(4), A(5), S(10), SS(15), SSS(25), MAX(30);
 
     private static final String NBT_KEY = "SGear_Grade";
     private static final double GRADE_STD_DEV = 1.5;
@@ -50,6 +32,16 @@ public enum MaterialGrade {
 
     MaterialGrade(int bonusPercent) {
         this.bonusPercent = bonusPercent;
+    }
+
+    /**
+     * Gets the highest possible grade (MAX). This should be preferred over explicitly referencing
+     * the last value, so that users can mod the mod with custom grades easily.
+     *
+     * @return Returns the highest grade (MAX)
+     */
+    public static MaterialGrade getMax() {
+        return values()[values().length - 1];
     }
 
     public static MaterialGrade fromStack(ItemStack stack) {
@@ -75,25 +67,25 @@ public enum MaterialGrade {
      * Select a random grade, with median based on the catalyst tier. Standard median is C at
      * catalyst tier 1, each catalyst tier adds one to the median.
      *
-     * @param random       A random object to use
-     * @param catalystTier The catalyst tier (or zero if there is no catalyst
-     * @return A MaterialGrade that is not NONE
+     * @param random       A {@link Random} object to use
+     * @param catalystTier The catalyst tier (or zero if there is no catalyst)
+     * @return A random grade that is not NONE
      */
     public static MaterialGrade selectWithCatalyst(Random random, @Nonnegative int catalystTier) {
         int ordinal = MaterialGrade.C.ordinal() + catalystTier - 1;
-        MaterialGrade median = EnumUtils.byOrdinal(ordinal, SSS);
-        return selectRandom(random, median, GRADE_STD_DEV, SSS);
+        MaterialGrade median = EnumUtils.byOrdinal(ordinal, getMax());
+        return selectRandom(random, median, GRADE_STD_DEV, getMax());
     }
 
     /**
      * Select a random grade with the given parameters. Grades are normally distributed. That means
      * the median is most common, and each grade above/below is rarer.
      *
-     * @param random   A random object to use.
+     * @param random   A {@link Random} object to use
      * @param median   The median grade. This is the most common, in the center of the bell curve.
      * @param stdDev   The standard deviation. Larger values make a flatter distribution.
      * @param maxGrade The highest grade that can be selected
-     * @return A MaterialGrade that is not NONE
+     * @return A random grade that is not NONE
      */
     public static MaterialGrade selectRandom(Random random, MaterialGrade median, double stdDev, MaterialGrade maxGrade) {
         int val = (int) Math.round(stdDev * random.nextGaussian() + median.ordinal());
@@ -111,6 +103,7 @@ public enum MaterialGrade {
         return new TranslationTextComponent("stat.silentgear.grade." + name());
     }
 
+    @Deprecated
     public static class Argument implements ArgumentType<MaterialGrade> {
         @Override
         public MaterialGrade parse(StringReader reader) {
@@ -128,7 +121,7 @@ public enum MaterialGrade {
     }
 
     public static class Range {
-        public static final Range OPEN = new Range(MaterialGrade.NONE, MaterialGrade.SSS);
+        public static final Range OPEN = new Range(MaterialGrade.NONE, MaterialGrade.getMax());
 
         private final MaterialGrade min;
         private final MaterialGrade max;
@@ -154,7 +147,7 @@ public enum MaterialGrade {
             }
             JsonObject jsonObject = json.getAsJsonObject();
             String min = JSONUtils.getString(jsonObject, "min", "NONE");
-            String max = JSONUtils.getString(jsonObject, "max", "SSS");
+            String max = JSONUtils.getString(jsonObject, "max", "MAX");
             return new Range(MaterialGrade.fromString(min), MaterialGrade.fromString(max));
         }
     }

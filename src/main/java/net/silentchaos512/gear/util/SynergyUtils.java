@@ -28,7 +28,7 @@ public final class SynergyUtils {
 
     private SynergyUtils() {}
 
-    public static float getSynergy(PartType partType, List<? extends IMaterialInstance> materials, List<TraitInstance> traits) {
+    public static float getSynergy(PartType partType, List<? extends IMaterialInstance> materials, Collection<TraitInstance> traits) {
         // TODO: Factor material categories into calculation, decrease weight of rarity and maybe tier
         //  https://github.com/SilentChaos512/Silent-Gear/issues/267
 
@@ -41,9 +41,9 @@ public final class SynergyUtils {
 
         // Second, reduce synergy for differences in certain properties
         IMaterialInstance primary = materials.get(0);
-        final double primaryRarity = primary.getStat(ItemStats.RARITY, partType);
+        final double primaryRarity = primary.getStat(partType, ItemStats.RARITY);
         final double maxRarity = materials.stream()
-                .mapToDouble(m -> m.getStat(ItemStats.RARITY, partType))
+                .mapToDouble(m -> m.getStat(partType, ItemStats.RARITY))
                 .max().orElse(0);
         final int maxTier = materials.stream()
                 .mapToInt(m -> m.getTier(partType))
@@ -51,12 +51,12 @@ public final class SynergyUtils {
 
         for (IMaterialInstance material : getUniques(materials)) {
             if (maxRarity > 0) {
-                float rarity = material.getStat(ItemStats.RARITY, partType);
+                float rarity = material.getStat(partType, ItemStats.RARITY);
                 synergy -= 0.005 * Math.abs(primaryRarity - rarity);
             }
             if (maxTier > 0) {
                 int tier = material.getTier(partType);
-                synergy -= 0.16 * Math.abs(maxTier - tier);
+                synergy -= 0.08 * Math.abs(maxTier - tier);
             }
         }
 
@@ -73,7 +73,7 @@ public final class SynergyUtils {
     public static Collection<IMaterialInstance> getUniques(Collection<? extends IMaterialInstance> materials) {
         Map<ResourceLocation, IMaterialInstance> ret = new LinkedHashMap<>();
         for (IMaterialInstance material : materials) {
-            ret.put(material.getMaterialId(), material);
+            ret.put(material.getId(), material);
         }
         return ret.values();
     }
@@ -92,7 +92,7 @@ public final class SynergyUtils {
 
     private static int getUniqueCount(Collection<? extends IMaterialInstance> materials) {
         return materials.stream()
-                .map(IMaterialInstance::getMaterialId)
+                .map(IMaterialInstance::getId)
                 .collect(Collectors.toSet())
                 .size();
     }

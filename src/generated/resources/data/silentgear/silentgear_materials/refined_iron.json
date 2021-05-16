@@ -37,8 +37,12 @@
       "magic_damage": 2.0,
       "attack_speed": 0.0,
       "armor": 18.0,
-      "armor_toughness": 0.0,
-      "magic_armor": 7.0,
+      "armor/helmet": 3.0,
+      "armor/chestplate": 7.0,
+      "armor/leggings": 5.0,
+      "armor/boots": 3.0,
+      "armor_toughness": 2.0,
+      "magic_armor": 6.0,
       "ranged_damage": 2.0,
       "ranged_speed": 0.0,
       "rarity": 25.0,
@@ -74,10 +78,6 @@
         "name": "silentgear:magnetic",
         "level": 3,
         "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "tool"
-          },
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.35

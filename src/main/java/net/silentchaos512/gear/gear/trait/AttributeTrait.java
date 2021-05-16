@@ -51,7 +51,7 @@ public class AttributeTrait extends SimpleTrait {
                     if (attribute != null) {
                         String modName = String.format("%s_%s_%d_%s_%s", this.getId().getNamespace(), this.getId().getPath(), traitLevel, mod.name, key);
                         float modValue = mod.values[MathHelper.clamp(traitLevel - 1, 0, mod.values.length - 1)];
-                        map.put(attribute, new AttributeModifier(mod.uuid, modName, modValue, mod.operation));
+                        map.put(attribute, new AttributeModifier(mod.getUuid(slot), modName, modValue, mod.operation));
                     }
                 }
             }
@@ -145,7 +145,7 @@ public class AttributeTrait extends SimpleTrait {
         private ResourceLocation name;
         private float[] values;
         private AttributeModifier.Operation operation = AttributeModifier.Operation.ADDITION;
-        private UUID uuid;
+        private final Map<String, UUID> uuidMap = new HashMap<>();
 
         @SuppressWarnings("TypeMayBeWeakened")
         public static ModifierData of(Attribute attribute, AttributeModifier.Operation operation, float... values) {
@@ -154,6 +154,10 @@ public class AttributeTrait extends SimpleTrait {
             ret.operation = operation;
             ret.values = values.clone();
             return ret;
+        }
+
+        public UUID getUuid(String slot) {
+            return uuidMap.computeIfAbsent(slot, slot1 -> new UUID(this.name.hashCode(), slot1.hashCode()));
         }
 
         public JsonObject serialize() {
@@ -173,7 +177,6 @@ public class AttributeTrait extends SimpleTrait {
 
         static ModifierData from(JsonObject json) {
             ModifierData ret = new ModifierData();
-            ret.uuid = UUID.randomUUID();
 
             if (!json.has("attribute")) {
                 throw new JsonParseException("attribute element not found, should be string");
@@ -206,7 +209,6 @@ public class AttributeTrait extends SimpleTrait {
                 ret.values[i] = buffer.readFloat();
             }
             ret.operation = buffer.readEnumValue(AttributeModifier.Operation.class);
-            ret.uuid = buffer.readUniqueId();
             return ret;
         }
 
@@ -217,7 +219,6 @@ public class AttributeTrait extends SimpleTrait {
                 buffer.writeFloat(f);
             }
             buffer.writeEnumValue(operation);
-            buffer.writeUniqueId(uuid);
         }
 
         @Nullable

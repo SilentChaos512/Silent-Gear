@@ -11,12 +11,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.IUpgradePart;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.RepairContext;
+import net.silentchaos512.gear.gear.part.UpgradePart;
 import net.silentchaos512.gear.util.GearData;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public final class RepairHandler {
 
             if (material != null) {
                 handleGearRepair(event, material);
-            } else if (part != null && part.getPart() instanceof IUpgradePart) {
+            } else if (part != null && part.get() instanceof UpgradePart) {
                 handleUpgradeApplication(event, part);
             }
         }

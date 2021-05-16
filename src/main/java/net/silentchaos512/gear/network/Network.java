@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -10,17 +10,20 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.gear.util.MismatchedVersionsException;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public final class Network {
-    private static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "network");
-    private static final String VERSION = "sgear-net-6";
+    public static final String VERSION = "sgear-net-11";
+    private static final Pattern NET_VERSION_PATTERN = Pattern.compile("sgear-net-\\d+$");
+    private static final Pattern MOD_VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+\\.\\d+$");
 
     public static SimpleChannel channel;
 
     static {
-        channel = NetworkRegistry.ChannelBuilder.named(NAME)
+        channel = NetworkRegistry.ChannelBuilder.named(SilentGear.getId("network"))
                 .clientAcceptedVersions(s -> Objects.equals(s, VERSION))
                 .serverAcceptedVersions(s -> Objects.equals(s, VERSION))
                 .networkProtocolVersion(() -> VERSION)
@@ -57,11 +60,7 @@ public final class Network {
                 .decoder(SyncGearCraftingItemsPacket::fromBytes)
                 .consumer(SyncGearCraftingItemsPacket::handle)
                 .add();
-        channel.messageBuilder(ShowPartsScreenPacket.class, 5)
-                .encoder((packet, buffer) -> {})
-                .decoder(buffer -> new ShowPartsScreenPacket())
-                .consumer(ShowPartsScreenPacket::handle)
-                .add();
+        // 5 was ShowPartsScreenPacket
         channel.messageBuilder(SyncMaterialsPacket.class, 6)
                 .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
                 .decoder(SyncMaterialsPacket::fromBytes)
@@ -103,9 +102,66 @@ public final class Network {
                 .encoder(GearLeftClickPacket::encode)
                 .consumer(GearLeftClickPacket::handle)
                 .add();
+        channel.messageBuilder(ClientOutputCommandPacket.class, 13)
+                .encoder(ClientOutputCommandPacket::encode)
+                .decoder(ClientOutputCommandPacket::decode)
+                .consumer(ClientOutputCommandPacket::handle)
+                .add();
+        channel.messageBuilder(CompounderUpdatePacket.class, 14, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(CompounderUpdatePacket::encode)
+                .decoder(CompounderUpdatePacket::decode)
+                .consumer(CompounderUpdatePacket::handle)
+                .add();
+        channel.messageBuilder(OpenGuideBookPacket.class, 15, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder((pkt, buf) -> {})
+                .decoder(buf -> new OpenGuideBookPacket())
+                .consumer(OpenGuideBookPacket::handle)
+                .add();
     }
 
     private Network() {}
 
     public static void init() {}
+
+    static void writeModVersionInfoToNetwork(PacketBuffer buffer) {
+        buffer.writeString(Network.VERSION); // Change to test error message (dedicated server only)
+        buffer.writeString(SilentGear.getVersion());
+    }
+
+    static void verifyNetworkVersion(PacketBuffer buffer) {
+        // Throws an exception if versions do not match and provides a less cryptic message to the player
+        // NOTE: This hangs without displaying a message on SSP, but that can't happen without messing with the written
+        // network version
+        String serverNetVersion = readNetworkVersion(buffer);
+        String serverModVersion = readModVersion(buffer);
+
+        SilentGear.LOGGER.debug("Read Silent Gear server version as {} ({})", serverModVersion, serverNetVersion);
+
+        if (!Network.VERSION.equals(serverNetVersion)) {
+            String msg = String.format("This server is running a different version of Silent Gear. Try updating Silent Gear on the client and/or server. Client version is %s (%s) and server version is %s (%s).",
+                    SilentGear.getVersion(),
+                    Network.VERSION,
+                    serverModVersion,
+                    serverNetVersion);
+            throw new MismatchedVersionsException(msg);
+        }
+    }
+
+    private static String readNetworkVersion(PacketBuffer buffer) {
+        String str = buffer.readString(16);
+        if (!NET_VERSION_PATTERN.matcher(str).matches()) {
+            // Server is running a version that doesn't encode the net version
+            return "UNKNOWN (received: " + str + ")";
+        }
+        return str;
+    }
+
+    private static String readModVersion(PacketBuffer buffer) {
+        String str = buffer.readString(16);
+        if (!"NONE".equals(str) && !MOD_VERSION_PATTERN.matcher(str).matches()) {
+            // Server is running a version that doesn't encode the mod version
+            return "UNKNOWN (received: " + str + ")";
+        }
+        return str;
+    }
 }

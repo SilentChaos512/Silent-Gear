@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:compound",
+  "simple": false,
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:mixed_fabric"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.mixed_fabric"
+  }
+}

@@ -5,8 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -17,6 +18,8 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.lib.util.NameUtils;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -38,24 +41,47 @@ public final class EnchantmentTrait extends SimpleTrait {
     }
 
     @Override
-    public void onGearCrafted(TraitActionContext context) {
+    public void onRecalculatePost(TraitActionContext context) {
         ItemStack gear = context.getGear();
         GearType gearType = GearHelper.getType(gear);
 
         int traitLevel = context.getTraitLevel();
         enchantments.forEach((type, list) -> {
-            if (gearType.matches(type) || "all".equals(type)) {
+            if (gearType.matches(type)) {
                 addEnchantments(gear, traitLevel, list);
             }
         });
     }
 
-    private static void addEnchantments(ItemStack gear, int traitLevel, Iterable<EnchantmentData> list) {
-        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(gear);
+    /**
+     * Removes all enchantments which were added by EnchantmentTraits
+     *
+     * @param gear The gear item
+     */
+    public static void removeTraitEnchantments(ItemStack gear) {
+        Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> enchants = getEnchantmentsOnGear(gear);
+        Collection<Enchantment> toRemove = new ArrayList<>();
+
+        for (Enchantment enchantment : enchants.keySet()) {
+            Triple<Integer, ResourceLocation, Integer> info = enchants.get(enchantment);
+            if (info.getRight() > 0) {
+                toRemove.add(enchantment);
+            }
+        }
+
+        for (Enchantment enchantment : toRemove) {
+            enchants.remove(enchantment);
+        }
+
+        setEnchantmentsOnGear(gear, enchants);
+    }
+
+    private void addEnchantments(ItemStack gear, int traitLevel, Iterable<EnchantmentData> list) {
+        Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> enchants = getEnchantmentsOnGear(gear);
 
         for (EnchantmentData data : list) {
             Enchantment enchantment = data.getEnchantment();
-            if (enchantment != null) {
+            if (enchantment != null && !enchants.containsKey(enchantment)) {
                 boolean compatible = true;
                 for (Enchantment current : enchants.keySet()) {
                     if (!current.isCompatibleWith(enchantment)) {
@@ -65,12 +91,69 @@ public final class EnchantmentTrait extends SimpleTrait {
                 }
 
                 if (compatible) {
-                    enchants.put(enchantment, data.getLevel(traitLevel));
+                    enchants.put(enchantment, Triple.of(data.getLevel(traitLevel), this.getId(), traitLevel));
                 }
             }
         }
 
-        EnchantmentHelper.setEnchantments(enchants, gear);
+        setEnchantmentsOnGear(gear, enchants);
+    }
+
+    private static Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> getEnchantmentsOnGear(ItemStack gear) {
+        Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> map = new LinkedHashMap<>();
+
+        ListNBT tagList = gear.getEnchantmentTagList();
+        for (int i = 0; i < tagList.size(); ++i) {
+            CompoundNBT nbt = tagList.getCompound(i);
+            Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(nbt.getString("id")));
+
+            if (enchantment != null) {
+                int level = nbt.getInt("lvl");
+                String traitKey = nbt.getString("SGearTrait");
+
+                if (!traitKey.isEmpty()) {
+                    try {
+                        String[] parts = traitKey.split("#");
+                        ResourceLocation traitId = new ResourceLocation(parts[0]);
+                        Integer traitLevel = Integer.valueOf(parts[1]);
+                        map.put(enchantment, Triple.of(level, traitId, traitLevel));
+                    } catch (Exception ex) {
+                        map.put(enchantment, Triple.of(level, new ResourceLocation("null"), 0));
+                    }
+                } else {
+                    map.put(enchantment, Triple.of(level, new ResourceLocation("null"), 0));
+                }
+            }
+        }
+
+        return map;
+    }
+
+    private static void setEnchantmentsOnGear(ItemStack gear, Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> map) {
+        ListNBT tagList = new ListNBT();
+
+        for (Map.Entry<Enchantment, Triple<Integer, ResourceLocation, Integer>> entry : map.entrySet()) {
+            Enchantment enchantment = entry.getKey();
+            if (enchantment != null) {
+                int level = entry.getValue().getLeft();
+                ResourceLocation traitId = entry.getValue().getMiddle();
+                int traitLevel = entry.getValue().getRight();
+
+                CompoundNBT nbt = new CompoundNBT();
+                nbt.putString("id", NameUtils.from(enchantment).toString());
+                nbt.putShort("lvl", (short) level);
+                if (traitLevel > 0) {
+                    nbt.putString("SGearTrait", traitId + "#" + traitLevel);
+                }
+                tagList.add(nbt);
+            }
+        }
+
+        if (tagList.isEmpty()) {
+            gear.removeChildTag("Enchantments");
+        } else {
+            gear.setTagInfo("Enchantments", tagList);
+        }
     }
 
     private static void readJson(EnchantmentTrait trait, JsonObject json) {

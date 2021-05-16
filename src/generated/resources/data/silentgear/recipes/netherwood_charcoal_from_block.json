@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:netherwood_charcoal_block"
+    }
+  ],
+  "result": {
+    "item": "silentgear:netherwood_charcoal",
+    "count": 9
+  }
+}

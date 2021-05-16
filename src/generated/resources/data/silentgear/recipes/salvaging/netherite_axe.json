@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:netherite_axe"
+  },
+  "results": [
+    {
+      "item": "minecraft:diamond",
+      "count": 3
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:stick",
+      "count": 2
+    }
+  ]
+}

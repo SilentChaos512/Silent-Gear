@@ -7,7 +7,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.utils.Color;
 
@@ -23,6 +23,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         UNIT, MULTIPLIER, PERCENTAGE
     }
 
+    private final float baseValue;
     private final float defaultValue;
     private final float minimumValue;
     private final float maximumValue;
@@ -40,6 +41,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     }
 
     public ItemStat(float defaultValue, float minValue, float maxValue, Color nameColor, Properties properties) {
+        this.baseValue = properties.baseValue;
         this.defaultValue = defaultValue;
         this.minimumValue = minValue;
         this.maximumValue = maxValue;
@@ -69,18 +71,27 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return Objects.requireNonNull(getRegistryName());
     }
 
+    @Override
+    public float getBaseValue() {
+        return baseValue;
+    }
+
+    @Override
     public float getDefaultValue() {
         return defaultValue;
     }
 
+    @Override
     public float getMinimumValue() {
         return minimumValue;
     }
 
+    @Override
     public float getMaximumValue() {
         return maximumValue;
     }
 
+    @Override
     public Operation getDefaultOperation() {
         return defaultOperation;
     }
@@ -111,12 +122,25 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     private static final float WEIGHT_BASE_MAX = 40f;
     private static final float WEIGHT_DEVIATION_COEFF = 2f;
 
+    public float compute(Collection<StatInstance> modifiers) {
+        return compute(this.baseValue, modifiers);
+    }
+
     public float compute(float baseValue, Collection<StatInstance> modifiers) {
-        return compute(baseValue, true, modifiers);
+        return compute(baseValue, true, GearType.ALL, modifiers);
+    }
+
+    @Deprecated
+    public float compute(float baseValue, boolean clampValue, Collection<StatInstance> modifiers) {
+        return compute(baseValue, clampValue, GearType.ALL, modifiers);
+    }
+
+    public float compute(float baseValue, boolean clampValue, GearType gearType, Collection<StatInstance> modifiers) {
+        return compute(baseValue, clampValue, gearType, gearType, modifiers);
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    public float compute(float baseValue, boolean clampValue, Collection<StatInstance> modifiers) {
+    public float compute(float baseValue, boolean clampValue, GearType itemGearType, GearType statGearType, Collection<StatInstance> modifiers) {
         if (modifiers.isEmpty())
             return baseValue;
 
@@ -183,14 +207,40 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return (float) Math.pow(weightBaseClamped, -(count == 0 ? count : 0.5 + 0.5f * count));
     }
 
-    @Deprecated
-    public StatInstance computeForDisplay(float baseValue, MaterialGrade grade, Collection<StatInstance> modifiers) {
-        return computeForDisplay(baseValue, modifiers);
+    private static float getMaterialPrimaryMod(Iterable<StatInstance> modifiers, Operation op) {
+        float ret = -1f;
+        for (StatInstance mod : modifiers) {
+            if (mod.getOp() == op) {
+                if (ret < mod.value) {
+                    ret = mod.value;
+                }
+            }
+        }
+        return ret > 0 ? ret : 1f;
     }
 
-    public StatInstance computeForDisplay(float baseValue, Collection<StatInstance> modifiers) {
-        if (modifiers.isEmpty())
-            return StatInstance.of(baseValue);
+    public static float getMaterialWeightedAverage(Collection<StatInstance> modifiers, Operation op) {
+        float primaryMod = getMaterialPrimaryMod(modifiers, op);
+        float ret = 0;
+        float totalWeight = 0f;
+        for (StatInstance mod : modifiers) {
+            if (mod.getOp() == op) {
+                float weight = getMaterialModifierWeight(mod, primaryMod);
+                totalWeight += weight;
+                ret += mod.getValue() * weight;
+            }
+        }
+        return totalWeight > 0 ? ret / totalWeight : ret;
+    }
+
+    private static float getMaterialModifierWeight(StatInstance mod, float primaryMod) {
+        return 1f + mod.value / (1f + Math.abs(primaryMod));
+    }
+
+    public StatInstance computeForDisplay(float baseValue, GearType gearType, Collection<StatInstance> modifiers) {
+        if (modifiers.isEmpty()) {
+            return StatInstance.of(baseValue, Operation.AVG, StatInstance.DEFAULT_KEY);
+        }
 
         int add = 1;
         for (StatInstance inst : modifiers) {
@@ -201,15 +251,16 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
             }
         }
 
-        float value = compute(baseValue + add, false, modifiers) - add;
+        float value = compute(baseValue + add, false, gearType, modifiers) - add;
         Operation op = modifiers.iterator().next().getOp();
-        return StatInstance.of(value, op);
+        return StatInstance.of(value, op, StatInstance.DEFAULT_KEY);
     }
 
     public boolean isVisible() {
         return visible;
     }
 
+    @Override
     public boolean doesSynergyApply() {
         return synergyApplies;
     }
@@ -237,6 +288,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
 
     @SuppressWarnings("WeakerAccess")
     public static class Properties {
+        private float baseValue = 0f;
         private Operation defaultOp = Operation.AVG;
         private boolean displayAsInt;
         private DisplayFormat displayFormat = DisplayFormat.UNIT;
@@ -244,6 +296,11 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         private boolean synergyApplies = false;
         private boolean affectedByGrades = true;
         private Function<Float, Float> missingRodFunction;
+
+        public Properties baseValue(float value) {
+            this.baseValue = value;
+            return this;
+        }
 
         public Properties defaultOp(Operation op) {
             this.defaultOp = op;

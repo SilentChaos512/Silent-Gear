@@ -1,30 +1,23 @@
 package net.silentchaos512.gear.api.part;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialList;
+import net.silentchaos512.gear.api.util.IGearComponent;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.PartPositions;
-import net.silentchaos512.gear.gear.part.RepairContext;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-public interface IGearPart {
+public interface IGearPart extends IGearComponent<IPartData> {
     ResourceLocation getId();
 
     int getTier(PartData part);
@@ -39,13 +32,6 @@ public interface IGearPart {
         return GearType.ALL;
     }
 
-    @Deprecated
-    default IPartPosition getPartPosition() {
-        return PartPositions.ANY;
-    }
-
-    Ingredient getIngredient();
-
     IPartSerializer<?> getSerializer();
 
     default String getPackName() {
@@ -59,37 +45,9 @@ public interface IGearPart {
      */
     default void retainData(@Nullable IGearPart oldPart) {}
 
-    default Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part) {
-        return getStatModifiers(stat, part, ItemStack.EMPTY);
-    }
-
-    Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear);
-
-    default List<TraitInstance> getTraits(PartData part) {
-        return getTraits(part, ItemStack.EMPTY);
-    }
-
-    List<TraitInstance> getTraits(PartData part, ItemStack gear);
-
-    @Deprecated
-    default float getRepairAmount(RepairContext context){
-        return 0f;
-    }
-    default List<MaterialInstance> getMaterials(PartData part) {
-        return Collections.emptyList();
-    }
-
-
-    default float computeStatValue(ItemStat stat) {
-        return computeStatValue(stat, PartData.of(this));
-    }
-
-    default float computeStatValue(ItemStat stat, PartData part) {
-        return stat.compute(0, getStatModifiers(stat, part));
-    }
-
-    default float computeUnclampedStatValue(ItemStat stat, PartData part) {
-        return stat.compute(0, false, getStatModifiers(stat, part));
+    @Override
+    default MaterialList getMaterials(IPartData part) {
+        return MaterialList.empty();
     }
 
     /**
@@ -109,20 +67,20 @@ public interface IGearPart {
     /**
      * Determine if the part can be used to craft an item of the given type.
      *
+     * @param part     The part
      * @param gearType The gear type (or null if not available)
      * @return True if crafting is allowed or {@code gearType} is {@code null}, false otherwise
      */
-    default boolean isCraftingAllowed(PartData part, GearType gearType) {
+    default boolean isCraftingAllowed(IPartData part, GearType gearType) {
         if (gearType.isGear() && this.getType() == PartType.MAIN) {
-            if (gearType.isArmor())
-                return computeUnclampedStatValue(ItemStats.ARMOR_DURABILITY, part) > 0;
-            else
-                return computeUnclampedStatValue(ItemStats.DURABILITY, part) > 0;
+            StatGearKey key = StatGearKey.of(gearType.getDurabilityStat(), gearType);
+            return getStatUnclamped(part, this.getType(), key, ItemStack.EMPTY) > 0;
         }
         return true;
     }
 
-    default boolean isCraftingAllowed(PartData part, GearType gearType, @Nullable CraftingInventory inventory) {
+    @Override
+    default boolean isCraftingAllowed(IPartData part, PartType partType, GearType gearType, @Nullable IInventory inventory) {
 /*        if (!GameStagesCompatProxy.canCraft(gearType, inventory) || !GameStagesCompatProxy.canCraft(this, inventory)) {
             return false;
         }*/
@@ -140,6 +98,10 @@ public interface IGearPart {
     }
 
     int getColor(PartData part, ItemStack gear, int layer, int animationFrame);
+
+    default ITextComponent getDisplayName(@Nullable PartData part) {
+        return getDisplayName(part, ItemStack.EMPTY);
+    }
 
     ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
 
@@ -172,8 +134,9 @@ public interface IGearPart {
      * Creates a {@link PartData} instance with possibly randomized data. This can be overridden to
      * apply custom data to randomized parts (see {@link net.silentchaos512.gear.util.GearGenerator}).
      *
-     * @param tier The target tier for random materials. If there are no materials of that tier,
-     *             materials of another tier should be selected.
+     * @param gearType The gear type
+     * @param tier     The target tier for random materials. If there are no materials of that tier,
+     *                 materials of another tier should be selected.
      * @return Part data instance
      */
     default PartData randomizeData(GearType gearType, int tier) {

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartDataList;
@@ -21,6 +22,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.util.GearData;
@@ -37,7 +39,7 @@ public final class PartsCommand {
     private static final SuggestionProvider<CommandSource> partInGearSuggestions = (ctx, builder) -> {
         PartDataList parts = GearData.getConstructionParts(getGear(ctx));
         return ISuggestionProvider.func_212476_a(parts.getUniqueParts(false).stream().map(part ->
-                part.getPart().getId()), builder);
+                part.get().getId()), builder);
     };
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
@@ -116,12 +118,12 @@ public final class PartsCommand {
 
         // Stats
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> statModifiers = part.getStatModifiers(stat, partData);
+            Collection<StatInstance> statModifiers = partData.getStatModifiers(StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
             appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
         }
 
         // Traits
-        appendTsv(builder, part.getTraits(partData).stream()
+        appendTsv(builder, partData.getTraits().stream()
                 .map(t -> t.getTrait().getDisplayName(t.getLevel()).getString())
                 .collect(Collectors.joining(", ")));
 

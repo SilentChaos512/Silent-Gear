@@ -2,5 +2,6 @@
   "parent": "minecraft:item/generated",
   "loader": "silentgear:compound_part_model",
   "gear_type": "part",
-  "part_type": "silentgear:binding"
+  "part_type": "silentgear:binding",
+  "texture_path": "part"
 }

@@ -30,6 +30,11 @@ public class TextListBuilder {
         return this;
     }
 
+    public TextListBuilder removeLast() {
+        this.list.remove(this.list.size() - 1);
+        return this;
+    }
+
     private IFormattableTextComponent indentWithBullet() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < this.indent; ++i) {

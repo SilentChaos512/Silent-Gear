@@ -3,7 +3,7 @@
     "tier": 1,
     "categories": [
       "organic",
-      "cloth"
+      "fiber"
     ],
     "visible": true,
     "gear_blacklist": [],
@@ -27,6 +27,9 @@
           "add": 10.0
         }
       ],
+      "armor_durability": {
+        "mul1": 0.05
+      },
       "harvest_speed": {
         "mul1": 0.05
       }
@@ -50,13 +53,7 @@
     "binding": [
       {
         "name": "silentgear:flexible",
-        "level": 2
-      }
-    ],
-    "bowstring": [
-      {
-        "name": "silentgear:synergistic",
-        "level": 2
+        "level": 1
       }
     ]
   }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "silentgear:raw_crimson_iron"
+    }
+  },
+  "result": {
+    "item": "silentgear:raw_crimson_iron_block"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "availability": {
+    "tier": 1,
+    "categories": [
+      "organic",
+      "fiber"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:fluffy_string"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.fluffy_string"
+  },
+  "stats": {
+    "binding": {
+      "durability": [
+        {
+          "mul1": 0.05
+        },
+        {
+          "add": -10.0
+        }
+      ],
+      "armor_durability": {
+        "mul1": 0.05
+      },
+      "harvest_speed": {
+        "mul1": -0.05
+      }
+    },
+    "bowstring": {
+      "durability": {
+        "mul1": 0.05
+      },
+      "ranged_damage": {
+        "mul1": 0.05
+      },
+      "ranged_speed": {
+        "mul1": -0.05
+      },
+      "rarity": {
+        "add": 7.0
+      }
+    }
+  },
+  "traits": {
+    "binding": [
+      {
+        "name": "silentgear:flexible",
+        "level": 1
+      }
+    ]
+  }
+}

@@ -17,6 +17,9 @@
     "translate": "material.silentgear.feather"
   },
   "stats": {
-    "fletching": {}
+    "fletching": {
+      "projectile_speed": 0.9,
+      "projectile_accuracy": 1.1
+    }
   }
 }

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:raw_azure_silver_block"
+    }
+  ],
+  "result": {
+    "item": "silentgear:raw_azure_silver",
+    "count": 9
+  }
+}

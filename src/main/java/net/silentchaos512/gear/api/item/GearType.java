@@ -12,6 +12,7 @@ import net.silentchaos512.gear.init.Registration;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -66,11 +67,13 @@ public final class GearType {
     public static final GearType CROSSBOW = getOrCreate("crossbow", RANGED_WEAPON);
     public static final GearType SLINGSHOT = getOrCreate("slingshot", RANGED_WEAPON);
     // Other
-    public static final GearType SHIELD = getOrCreate("shield", TOOL);
+    public static final GearType FISHING_ROD = getOrCreate("fishing_rod", TOOL);
+    public static final GearType SHIELD = getOrCreate("shield", TOOL, () -> ItemStats.ARMOR_DURABILITY);
     // Armor
-    public static final GearType ARMOR = getOrCreate("armor", ALL);
+    public static final GearType ARMOR = getOrCreate("armor", ALL, () -> ItemStats.ARMOR_DURABILITY);
     public static final GearType BOOTS = getOrCreate("boots", ARMOR);
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
+    public static final GearType ELYTRA = getOrCreate("elytra", ARMOR);
     public static final GearType HELMET = getOrCreate("helmet", ARMOR);
     public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR);
     // Projectiles
@@ -108,21 +111,42 @@ public final class GearType {
         return getOrCreate(name, parent, 1);
     }
 
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames) {
+        Supplier<ItemStat> durabilityStat = () -> parent != null ? parent.durabilityStat.get() : ItemStats.DURABILITY;
+        return getOrCreate(name, parent, animationFrames, durabilityStat);
+    }
+
+    @Deprecated
+    public static GearType getOrCreate(String name, @Nullable GearType parent, ItemStat durabilityStat) {
+        return getOrCreate(name, parent, () -> durabilityStat);
+    }
+
+    public static GearType getOrCreate(String name, @Nullable GearType parent, Supplier<ItemStat> durabilityStat) {
+        return getOrCreate(name, parent, 1, durabilityStat);
+    }
+
+    @Deprecated
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, ItemStat durabilityStat) {
+        return getOrCreate(name, parent, animationFrames, () -> durabilityStat);
+    }
+
     /**
      * Gets or creates a new gear type with the given parent. If the gear type already exists, the
      * existing instance is not modified in any way.
      *
-     * @param name   The gear type name. Must be unique and contain only lowercase letters and
-     *               underscores.
-     * @param parent The parent gear type. This will typically be harvest_tool, melee_weapon, or
-     *               ranged_weapon, but it could be any existing type.
+     * @param name            The gear type name. Must be unique and contain only lowercase letters
+     *                        and underscores.
+     * @param parent          The parent gear type. This will typically be harvest_tool,
+     *                        melee_weapon, or ranged_weapon, but it could be any existing type.
+     * @param animationFrames Number of animation frames (bow pulling, etc) the gear has
+     * @param durabilityStat  The stat used to calculate the items durability
      * @return The newly created gear type, or the existing instance if it already exists
      * @throws IllegalArgumentException if the name is invalid
      */
-    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames) {
+    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat) {
         if (VALID_NAME.matcher(name).find())
             throw new IllegalArgumentException("Invalid name: " + name);
-        return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames));
+        return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames, durabilityStat));
     }
 
     public static GearType fromJson(JsonObject json, String key) {
@@ -137,11 +161,13 @@ public final class GearType {
     private final String name;
     @Nullable private final GearType parent;
     private final int animationFrames;
+    private final Supplier<ItemStat> durabilityStat;
 
-    private GearType(String name, @Nullable GearType parent, int animationFrames) {
+    private GearType(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat) {
         this.name = name;
         this.parent = parent;
         this.animationFrames = animationFrames;
+        this.durabilityStat = durabilityStat;
     }
 
     public String getName() {
@@ -160,6 +186,10 @@ public final class GearType {
 
     public int getAnimationFrames() {
         return animationFrames;
+    }
+
+    public ItemStat getDurabilityStat() {
+        return durabilityStat.get();
     }
 
     /**
@@ -186,7 +216,7 @@ public final class GearType {
      *                   trying to match more specific types.
      * @return True if this type's name is equal to type, or if its parent matches (recursive)
      */
-    public boolean matches(String type, boolean includeAll) {
+    public boolean matches(String type, boolean includeAll) { //FIXME: The way includesAll is handled does not make sense anymore
         if (type.contains("/")) {
             return matches(type.split("/")[1], includeAll);
         }
@@ -198,11 +228,11 @@ public final class GearType {
     }
 
     public boolean isGear() {
-        return matches(GearType.ALL);
+        return matches(ALL, false);
     }
 
     public boolean isArmor() {
-        return matches(GearType.ARMOR);
+        return matches(ARMOR);
     }
 
     public boolean isInvalid() {

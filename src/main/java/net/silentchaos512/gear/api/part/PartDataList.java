@@ -62,7 +62,7 @@ public final class PartDataList implements List<PartData> {
     public PartDataList getUniqueParts(boolean mainsOnly) {
         PartDataList result = PartDataList.of();
         for (PartData data : (mainsOnly ? getMains() : this.list)) {
-            if (result.stream().map(PartData::getPart).noneMatch(part -> part == data.getPart())) {
+            if (result.stream().map(PartData::get).noneMatch(part -> part == data.get())) {
                 result.add(data);
             }
         }

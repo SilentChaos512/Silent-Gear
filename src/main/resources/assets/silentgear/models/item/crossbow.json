@@ -2,6 +2,14 @@
   "parent": "item/generated",
   "loader": "silentgear:gear_model",
   "gear_type": "crossbow",
+  "texture_path": "crossbow",
+  "broken_texture_path": "crossbow/broken",
+  "broken_texture_types": [
+    "bowstring",
+    "coating",
+    "main",
+    "tip"
+  ],
   "display": {
     "ground": {
       "rotation": [ 0, 0, 0 ],

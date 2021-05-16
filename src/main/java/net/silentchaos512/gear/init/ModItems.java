@@ -1,10 +1,7 @@
 package net.silentchaos512.gear.init;
 
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BlockNamedItem;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
+import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.silentchaos512.gear.SilentGear;
@@ -23,10 +20,15 @@ import java.util.function.Supplier;
 
 @SuppressWarnings({"unused", "OverlyCoupledClass"})
 public final class ModItems {
+    public static final ItemRegistryObject<GuideBookItem> GUIDE_BOOK = register("guide_book", () ->
+            new GuideBookItem(unstackableProps()));
+
     public static final ItemRegistryObject<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
             new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
-    public static final ItemRegistryObject<Item> MOD_KIT = register("mod_kit", () -> new ModKitItem(
-            unstackableProps().rarity(Rarity.UNCOMMON)));
+
+    public static final ItemRegistryObject<Item> MOD_KIT = register("mod_kit", () ->
+            new ModKitItem(unstackableProps().rarity(Rarity.UNCOMMON)));
+
     // Repair Kits
     public static final ItemRegistryObject<Item> VERY_CRUDE_REPAIR_KIT = register("very_crude_repair_kit", () -> new RepairKitItem(
             Config.Common.repairKitVeryCrudeCapacity::get,
@@ -60,6 +62,7 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartType.COATING, false);
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartType.GRIP, false);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartType.BINDING, false);
+    public static final ItemRegistryObject<PartBlueprintItem> LINING_BLUEPRINT = registerPartBlueprint(PartType.LINING, false);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_BLUEPRINT = registerPartBlueprint(PartType.BOWSTRING, false);
     public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartType.FLETCHING, false);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearType.SWORD, false);
@@ -79,6 +82,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> PROSPECTOR_HAMMER_BLUEPRINT = registerGearBlueprint(GearType.PROSPECTOR_HAMMER, false);
     public static final ItemRegistryObject<GearBlueprintItem> SICKLE_BLUEPRINT = registerGearBlueprint(GearType.SICKLE, false);
     public static final ItemRegistryObject<GearBlueprintItem> SHEARS_BLUEPRINT = registerGearBlueprint(GearType.SHEARS, false);
+    public static final ItemRegistryObject<GearBlueprintItem> FISHING_ROD_BLUEPRINT = registerGearBlueprint(GearType.FISHING_ROD, false);
     public static final ItemRegistryObject<GearBlueprintItem> BOW_BLUEPRINT = registerGearBlueprint(GearType.BOW, false);
     public static final ItemRegistryObject<GearBlueprintItem> CROSSBOW_BLUEPRINT = registerGearBlueprint(GearType.CROSSBOW, false);
     public static final ItemRegistryObject<GearBlueprintItem> SLINGSHOT_BLUEPRINT = registerGearBlueprint(GearType.SLINGSHOT, false);
@@ -87,6 +91,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_BLUEPRINT = registerGearBlueprint(GearType.CHESTPLATE, false);
     public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_BLUEPRINT = registerGearBlueprint(GearType.LEGGINGS, false);
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_BLUEPRINT = registerGearBlueprint(GearType.BOOTS, false);
+    public static final ItemRegistryObject<GearBlueprintItem> ELYTRA_BLUEPRINT = registerGearBlueprint(GearType.ELYTRA, false);
     public static final ItemRegistryObject<GearBlueprintItem> ARROW_BLUEPRINT = registerGearBlueprint(GearType.ARROW, false);
     public static final ItemRegistryObject<GearBlueprintItem> RING_BLUEPRINT = registerGearBlueprint(GearType.RING, false);
     public static final ItemRegistryObject<GearBlueprintItem> BRACELET_BLUEPRINT = registerGearBlueprint(GearType.BRACELET, false);
@@ -96,6 +101,7 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> COATING_TEMPLATE = registerPartBlueprint(PartType.COATING, true);
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartType.GRIP, true);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartType.BINDING, true);
+    public static final ItemRegistryObject<PartBlueprintItem> LINING_TEMPLATE = registerPartBlueprint(PartType.LINING, true);
     public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_TEMPLATE = registerPartBlueprint(PartType.BOWSTRING, true);
     public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartType.FLETCHING, true);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearType.SWORD, true);
@@ -115,6 +121,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> PROSPECTOR_HAMMER_TEMPLATE = registerGearBlueprint(GearType.PROSPECTOR_HAMMER, true);
     public static final ItemRegistryObject<GearBlueprintItem> SICKLE_TEMPLATE = registerGearBlueprint(GearType.SICKLE, true);
     public static final ItemRegistryObject<GearBlueprintItem> SHEARS_TEMPLATE = registerGearBlueprint(GearType.SHEARS, true);
+    public static final ItemRegistryObject<GearBlueprintItem> FISHING_ROD_TEMPLATE = registerGearBlueprint(GearType.FISHING_ROD, true);
     public static final ItemRegistryObject<GearBlueprintItem> BOW_TEMPLATE = registerGearBlueprint(GearType.BOW, true);
     public static final ItemRegistryObject<GearBlueprintItem> CROSSBOW_TEMPLATE = registerGearBlueprint(GearType.CROSSBOW, true);
     public static final ItemRegistryObject<GearBlueprintItem> SLINGSHOT_TEMPLATE = registerGearBlueprint(GearType.SLINGSHOT, true);
@@ -123,6 +130,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearBlueprintItem> CHESTPLATE_TEMPLATE = registerGearBlueprint(GearType.CHESTPLATE, true);
     public static final ItemRegistryObject<GearBlueprintItem> LEGGINGS_TEMPLATE = registerGearBlueprint(GearType.LEGGINGS, true);
     public static final ItemRegistryObject<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearType.BOOTS, true);
+    public static final ItemRegistryObject<GearBlueprintItem> ELYTRA_TEMPLATE = registerGearBlueprint(GearType.ELYTRA, true);
     public static final ItemRegistryObject<GearBlueprintItem> ARROW_TEMPLATE = registerGearBlueprint(GearType.ARROW, true);
     public static final ItemRegistryObject<GearBlueprintItem> RING_TEMPLATE = registerGearBlueprint(GearType.RING, true);
     public static final ItemRegistryObject<GearBlueprintItem> BRACELET_TEMPLATE = registerGearBlueprint(GearType.BRACELET, true);
@@ -164,6 +172,8 @@ public final class ModItems {
             new ToolHeadItem(GearType.SICKLE, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHEARS_BLADES = registerCompoundPart("shears_blades", () ->
             new ToolHeadItem(GearType.SHEARS, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> FISHING_REEL_AND_HOOK = registerCompoundPart("fishing_reel_and_hook", () ->
+            new ToolHeadItem(GearType.FISHING_ROD, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> BOW_LIMBS = registerCompoundPart("bow_limbs", () ->
             new ToolHeadItem(GearType.BOW, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> CROSSBOW_LIMBS = registerCompoundPart("crossbow_limbs", () ->
@@ -172,8 +182,18 @@ public final class ModItems {
             new ToolHeadItem(GearType.SLINGSHOT, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHIELD_PLATE = registerCompoundPart("shield_plate", () ->
             new ToolHeadItem(GearType.SHIELD, new Item.Properties().maxStackSize(1)));
-    public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
-            new ToolHeadItem(GearType.ARMOR, new Item.Properties().maxStackSize(1)));
+    @Deprecated public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
+            new ToolHeadItem(GearType.ARMOR, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> HELMET_PLATES = registerCompoundPart("helmet_plates", () ->
+            new ToolHeadItem(GearType.HELMET, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> CHESTPLATE_PLATES = registerCompoundPart("chestplate_plates", () ->
+            new ToolHeadItem(GearType.CHESTPLATE, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> LEGGING_PLATES = registerCompoundPart("legging_plates", () ->
+            new ToolHeadItem(GearType.LEGGINGS, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> BOOT_PLATES = registerCompoundPart("boot_plates", () ->
+            new ToolHeadItem(GearType.BOOTS, unstackableProps()));
+    public static final ItemRegistryObject<ToolHeadItem> ELYTRA_WINGS = registerCompoundPart("elytra_wings", () ->
+            new ToolHeadItem(GearType.ELYTRA, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> ARROW_HEADS = registerCompoundPart("arrow_heads", () ->
             new ToolHeadItem(GearType.ARROW, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> RING_SHANK = registerCompoundPart("ring_shank", () ->
@@ -193,6 +213,8 @@ public final class ModItems {
             new CompoundPartItem(PartType.GRIP, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> BINDING = registerCompoundPart("binding", () ->
             new CompoundPartItem(PartType.BINDING, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> LINING = registerCompoundPart("lining", () ->
+            new CompoundPartItem(PartType.LINING, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> BOWSTRING = registerCompoundPart("bowstring", () ->
             new CompoundPartItem(PartType.BOWSTRING, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> FLETCHING = registerCompoundPart("fletching", () ->
@@ -200,6 +222,23 @@ public final class ModItems {
     public static final ItemRegistryObject<CompoundPartItem> ADORNMENT = registerCompoundPart("adornment", () ->
             new CompoundPartItem(PartType.ADORNMENT, baseProps()));
     //endregion
+
+    // Compound materials
+    public static final ItemRegistryObject<CompoundMaterialItem> ALLOY_INGOT = register("alloy_ingot", () ->
+            new CompoundMaterialItem(baseProps()));
+    public static final ItemRegistryObject<CompoundMaterialItem> HYBRID_GEM = register("hybrid_gem", () ->
+            new CompoundMaterialItem(baseProps()));
+    public static final ItemRegistryObject<CompoundMaterialItem> MIXED_FABRIC = register("mixed_fabric", () ->
+            new CompoundMaterialItem(baseProps()));
+
+    // Custom materials
+    public static final ItemRegistryObject<CustomMaterialItem> CUSTOM_INGOT = register("custom_ingot", () ->
+            new CustomMaterialItem(baseProps()));
+    public static final ItemRegistryObject<CustomMaterialItem> CUSTOM_GEM = register("custom_gem", () ->
+            new CustomMaterialItem(baseProps()));
+
+    public static final ItemRegistryObject<CraftedMaterialItem> SHEET_METAL = register("sheet_metal", () ->
+            new CraftedMaterialItem(baseProps()));
 
     static {
         CraftingItems.register(Registration.ITEMS);
@@ -210,7 +249,10 @@ public final class ModItems {
     public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
     public static final ItemRegistryObject<BlockNamedItem> FLAX_SEEDS = register("flax_seeds", () ->
-            new BlockNamedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
+            new SeedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
+    public static final ItemRegistryObject<BlockNamedItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
+            new SeedItem(ModBlocks.FLUFFY_PLANT.get(), baseProps()));
+
     public static final ItemRegistryObject<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
                     .food(new Food.Builder().hunger(5).saturation(0.4f).build())));
@@ -222,6 +264,13 @@ public final class ModItems {
                             .effect(() -> new EffectInstance(Effects.RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
                             .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
                             .build())));
+    public static final ItemRegistryObject<Item> NETHERWOOD_CHARCOAL = register("netherwood_charcoal", () ->
+            new Item(baseProps()) {
+                @Override
+                public int getBurnTime(ItemStack itemStack) {
+                    return Config.Common.netherwoodCharcoalBurnTime.get();
+                }
+            });
 
     public static final ItemRegistryObject<CoreSword> SWORD = register("sword", () -> new CoreSword(GearType.SWORD));
     public static final ItemRegistryObject<CoreSword> KATANA = register("katana", () -> new CoreSword(GearType.KATANA));
@@ -240,6 +289,7 @@ public final class ModItems {
     public static final ItemRegistryObject<CoreMattock> MATTOCK = register("mattock", () -> new CoreMattock());
     public static final ItemRegistryObject<CoreSickle> SICKLE = register("sickle", () -> new CoreSickle());
     public static final ItemRegistryObject<CoreShears> SHEARS = register("shears", () -> new CoreShears());
+    public static final ItemRegistryObject<GearFishingRod> FISHING_ROD = register("fishing_rod", GearFishingRod::new);
     public static final ItemRegistryObject<CoreBow> BOW = register("bow", () -> new CoreBow());
     public static final ItemRegistryObject<CoreCrossbow> CROSSBOW = register("crossbow", () -> new CoreCrossbow());
     public static final ItemRegistryObject<CoreSlingshot> SLINGSHOT = register("slingshot", () -> new CoreSlingshot());
@@ -250,6 +300,8 @@ public final class ModItems {
     public static final ItemRegistryObject<CoreArmor> CHESTPLATE = register("chestplate", () -> new CoreArmor(EquipmentSlotType.CHEST));
     public static final ItemRegistryObject<CoreArmor> LEGGINGS = register("leggings", () -> new CoreArmor(EquipmentSlotType.LEGS));
     public static final ItemRegistryObject<CoreArmor> BOOTS = register("boots", () -> new CoreArmor(EquipmentSlotType.FEET));
+
+    public static final ItemRegistryObject<CoreElytra> ELYTRA = register("elytra", () -> new CoreElytra(unstackableProps()));
 
     public static final ItemRegistryObject<CoreCurio> RING = register("ring", () ->
             new CoreCurio(GearType.RING, "ring", unstackableProps()));

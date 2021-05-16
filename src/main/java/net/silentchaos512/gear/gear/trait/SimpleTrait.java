@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.gear.trait;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -22,6 +23,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 
@@ -37,6 +39,7 @@ public class SimpleTrait implements ITrait {
     private final ResourceLocation objId;
     private final ITraitSerializer<?> serializer;
     int maxLevel;
+    ImmutableList<ITraitCondition> conditions = ImmutableList.of();
     Set<String> cancelsWith = new HashSet<>();
     ITextComponent displayName;
     ITextComponent description;
@@ -61,6 +64,11 @@ public class SimpleTrait implements ITrait {
     @Override
     public int getMaxLevel() {
         return maxLevel;
+    }
+
+    @Override
+    public Collection<ITraitCondition> getConditions() {
+        return conditions;
     }
 
     @Override
@@ -119,6 +127,14 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
+    public void onRecalculatePre(TraitActionContext context) {
+    }
+
+    @Override
+    public void onRecalculatePost(TraitActionContext context) {
+    }
+
+    @Override
     public float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio) {
         return value;
     }
@@ -138,11 +154,16 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public void onItemSwing(ItemStack stack, LivingEntity entity, int traitLevel) {
+    public void onItemSwing(ItemStack stack, LivingEntity wielder, int traitLevel) {
     }
 
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
+    }
+
+    @Override
+    public ItemStack addLootDrops(TraitActionContext context, ItemStack stack) {
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -198,6 +219,15 @@ public class SimpleTrait implements ITrait {
             trait.description = deserializeText(json.get("description"));
             trait.hidden = JSONUtils.getBoolean(json, "hidden", false);
 
+            if (json.has("conditions")) {
+                List<ITraitCondition> conditions = new ArrayList<>();
+                JsonArray array = json.getAsJsonArray("conditions");
+                for (JsonElement elem : array) {
+                    conditions.add(TraitSerializers.deserializeCondition(elem.getAsJsonObject()));
+                }
+                trait.conditions = ImmutableList.copyOf(conditions);
+            }
+
             if (json.has("cancels_with")) {
                 JsonArray array = json.getAsJsonArray("cancels_with");
                 for (JsonElement elem : array) {
@@ -227,6 +257,12 @@ public class SimpleTrait implements ITrait {
             trait.description = buffer.readTextComponent();
             trait.hidden = buffer.readBoolean();
 
+            ITraitCondition[] conditions = new ITraitCondition[buffer.readByte()];
+            for (int i = 0; i < conditions.length; ++i) {
+                conditions[i] = TraitSerializers.readCondition(buffer);
+            }
+            trait.conditions = ImmutableList.copyOf(conditions);
+
             int cancelsCount = buffer.readVarInt();
             for (int i = 0; i < cancelsCount; ++i) {
                 trait.cancelsWith.add(buffer.readString(255));
@@ -245,6 +281,9 @@ public class SimpleTrait implements ITrait {
             buffer.writeTextComponent(trait.displayName);
             buffer.writeTextComponent(trait.description);
             buffer.writeBoolean(trait.hidden);
+
+            buffer.writeByte(trait.conditions.size());
+            trait.conditions.forEach(condition -> TraitSerializers.writeCondition(condition, buffer));
 
             buffer.writeVarInt(trait.cancelsWith.size());
             for (String str : trait.cancelsWith) {

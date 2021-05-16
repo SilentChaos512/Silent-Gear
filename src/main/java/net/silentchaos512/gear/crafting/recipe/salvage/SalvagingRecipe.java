@@ -17,12 +17,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.CompoundPart;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -97,19 +97,19 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
      * @return The list of items to return
      */
     public static List<ItemStack> salvage(PartData part) {
-        if (part.getPart() instanceof CompoundPart && part.getCraftingItem().getItem() instanceof CompoundPartItem) {
-            int craftedCount = ((CompoundPartItem) part.getCraftingItem().getItem()).getCraftedCount(part.getCraftingItem());
+        if (part.get() instanceof CompoundPart && part.getItem().getItem() instanceof CompoundPartItem) {
+            int craftedCount = ((CompoundPartItem) part.getItem().getItem()).getCraftedCount(part.getItem());
             if (craftedCount < 1) {
-                SilentGear.LOGGER.warn("Compound part's crafted count is less than 1? {}", part.getCraftingItem());
-                return Collections.singletonList(part.getCraftingItem());
+                SilentGear.LOGGER.warn("Compound part's crafted count is less than 1? {}", part.getItem());
+                return Collections.singletonList(part.getItem());
             }
 
-            List<MaterialInstance> materials = part.getMaterials();
+            List<IMaterialInstance> materials = part.getMaterials();
             Map<IMaterial, Integer> fragments = new LinkedHashMap<>();
 
-            for (MaterialInstance material : materials) {
+            for (IMaterialInstance material : materials) {
                 int fragmentCount = 8 / craftedCount;
-                fragments.merge(material.getMaterial(), fragmentCount, Integer::sum);
+                fragments.merge(material.get(), fragmentCount, Integer::sum);
             }
 
             List<ItemStack> ret = new ArrayList<>();
@@ -129,7 +129,7 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
             }
             return ret;
         }
-        return Collections.singletonList(part.getCraftingItem());
+        return Collections.singletonList(part.getItem());
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SalvagingRecipe> {

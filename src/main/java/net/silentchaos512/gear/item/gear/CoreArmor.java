@@ -22,7 +22,6 @@ import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -69,7 +68,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             case FEET:
                 return GearType.BOOTS;
             default:
-                return GearType.ARMOR;
+                throw new IllegalStateException("Don't know the gear type for " + this.getRegistryName());
         }
     }
 
@@ -81,28 +80,23 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     //region Stats and attributes
 
     @Override
-    public ItemStat getDurabilityStat() {
-        return ItemStats.ARMOR_DURABILITY;
-    }
-
-    @Override
     public float getRepairModifier(ItemStack stack) {
         return MAX_DAMAGE_ARRAY[this.getEquipmentSlot().getIndex()];
     }
 
     public double getArmorProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.ARMOR);
+        return GearData.getStat(stack, ItemStats.ARMOR);
     }
 
     public double getArmorToughness(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return GearData.getStat(stack, ItemStats.ARMOR_TOUGHNESS) / 4;
+        return GearData.getStat(stack, ItemStats.ARMOR_TOUGHNESS);
     }
 
     public double getArmorMagicProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return ABSORPTION_RATIO_BY_SLOT[this.getEquipmentSlot().getIndex()] * GearData.getStat(stack, ItemStats.MAGIC_ARMOR);
+        return GearData.getStat(stack, ItemStats.MAGIC_ARMOR);
     }
 
     private static double getGenericArmorProtection(ItemStack stack) {
@@ -182,6 +176,11 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+    }
+
+    @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
@@ -214,9 +213,9 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         // New material-based armor
         MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
         if (material != null) {
-            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
+            IMaterialDisplay materialModel = MaterialDisplayManager.get(material);
             PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
-            MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, partType).getFirstLayer();
+            MaterialLayer materialLayer = materialModel.getLayerList(this.getGearType(), partType, material).getFirstLayer();
             if (materialLayer != null) {
                 ResourceLocation tex = materialLayer.getTextureId();
                 return tex.getNamespace() + ":textures/models/armor/"
@@ -239,9 +238,9 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     public int getColor(ItemStack stack) {
         MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
         if (material != null) {
-            IMaterialDisplay materialModel = MaterialDisplayManager.get(material.getMaterial());
+            IMaterialDisplay materialModel = MaterialDisplayManager.get(material);
             PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
-            MaterialLayer materialLayer = materialModel.getLayers(GearType.ARMOR, partType).getFirstLayer();
+            MaterialLayer materialLayer = materialModel.getLayerList(this.getGearType(), partType, material).getFirstLayer();
             if (materialLayer != null) {
                 return materialLayer.getColor();
             }

@@ -1,0 +1,61 @@
+{
+  "availability": {
+    "tier": 2,
+    "categories": [
+      "organic",
+      "fiber"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "silentgear:fine_silk"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.fine_silk"
+  },
+  "stats": {
+    "binding": {
+      "durability": {
+        "mul1": 0.1
+      },
+      "armor_durability": {
+        "mul1": 0.1
+      },
+      "magic_armor": {
+        "add": 2.0
+      },
+      "rarity": {
+        "add": 10.0
+      }
+    },
+    "bowstring": {
+      "durability": {
+        "mul1": 0.1
+      },
+      "ranged_damage": {
+        "mul1": 0.07
+      },
+      "rarity": {
+        "add": 10.0
+      }
+    }
+  },
+  "traits": {
+    "binding": [
+      {
+        "name": "silentgear:lucky",
+        "level": 1
+      }
+    ],
+    "bowstring": [
+      {
+        "name": "silentgear:flexible",
+        "level": 2
+      }
+    ]
+  }
+}

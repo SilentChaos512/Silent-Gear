@@ -4,24 +4,33 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.network.ClientOutputCommandPacket;
+import net.silentchaos512.gear.network.Network;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -70,14 +79,28 @@ public final class MaterialsCommand {
         return 1;
     }
 
-    private static int runDump(CommandContext<CommandSource> context, boolean includeChildren) {
+    private static int runDump(CommandContext<CommandSource> context, boolean includeChildren) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().asPlayer();
+        SilentGear.LOGGER.info("Send material dump packet to client {}", player.getScoreboardName());
+        ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.MATERIALS, includeChildren);
+        Network.channel.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        return 1;
+    }
+
+    public static void runDumpClient(boolean includeChildren) {
+        PlayerEntity player = SilentGear.PROXY.getClientPlayer();
+        if (player == null) {
+            SilentGear.LOGGER.error("MaterialsCommand#runDumpClient: player is null?");
+            return;
+        }
+
         String fileName = "material_export.tsv";
         String dirPath = "output/silentgear";
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            context.getSource().sendErrorMessage(new StringTextComponent("Could not create directory: " + output.getParent()));
-            return 0;
+            player.sendMessage(new StringTextComponent("Could not create directory: " + output.getParent()), Util.DUMMY_UUID);
+            return;
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
@@ -86,12 +109,13 @@ public final class MaterialsCommand {
             writer.write(builder + "\n");
 
             List<PartType> partTypes = new ArrayList<>(PartType.getValues());
-            partTypes.sort((o1, o2) -> Comparator.comparing(o -> ((PartType) o).getName()).compare(o1, o2));
+            partTypes.sort((o1, o2) -> Comparator.comparing(o -> ((PartType) o).getDisplayName(0).getString()).compare(o1, o2));
             for (PartType partType : partTypes) {
                 for (IMaterial material : MaterialManager.getValues()) {
                     if (includeChildren || getParentId(material).isEmpty()) {
-                        if (material.allowedInPart(partType)) {
-                            writer.write(makeTsvLine(material, partType) + "\n");
+                        MaterialInstance inst = MaterialInstance.of(material);
+                        if (material.allowedInPart(inst, partType)) {
+                            writer.write(makeTsvLine(inst, partType) + "\n");
                         }
                     }
                 }
@@ -101,21 +125,19 @@ public final class MaterialsCommand {
         } finally {
             ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).mergeStyle(TextFormatting.UNDERLINE).modifyStyle(style ->
                     style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            context.getSource().sendFeedback(new StringTextComponent("Wrote materials info to ").append(fileNameText), true);
+            player.sendMessage(new StringTextComponent("Wrote materials info to ").append(fileNameText), Util.DUMMY_UUID);
         }
-
-        return 1;
     }
 
-    private static String makeTsvLine(IMaterial material, PartType partType) {
+    private static String makeTsvLine(MaterialInstance material, PartType partType) {
         StringBuilder builder = new StringBuilder();
-        appendTsv(builder, material.getPackName());
-        appendTsv(builder, material.getDisplayName(partType, ItemStack.EMPTY).getString());
+        appendTsv(builder, material.get().getPackName());
+        appendTsv(builder, material.getDisplayName(partType).getString());
         int tier = material.getTier(partType);
 //        appendTsv(builder, partType.getDisplayName(tier).getFormattedText());
-        appendTsv(builder, partType.getName().toString());
+        appendTsv(builder, partType.getDisplayName(0).getString());
         appendTsv(builder, material.getId().toString());
-        appendTsv(builder, getParentId(material));
+        appendTsv(builder, getParentId(material.get()));
 
         // Traits
         appendTsv(builder, material.getTraits(partType).stream()
@@ -126,7 +148,7 @@ public final class MaterialsCommand {
 
         // Stats
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> statModifiers = MaterialInstance.of(material).getStatModifiers(stat, partType);
+            Collection<StatInstance> statModifiers = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
             appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
         }
 

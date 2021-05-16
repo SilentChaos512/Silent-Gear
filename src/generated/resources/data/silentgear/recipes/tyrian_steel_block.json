@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "silentgear:tyrian_steel_block"
+    }
+  ],
+  "result": {
+    "item": "silentgear:tyrian_steel_ingot",
+    "count": 9
+  }
+}

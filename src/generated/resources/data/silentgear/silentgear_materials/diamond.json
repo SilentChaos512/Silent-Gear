@@ -27,6 +27,10 @@
       "magic_damage": 1.0,
       "attack_speed": 0.0,
       "armor": 20.0,
+      "armor/helmet": 3.0,
+      "armor/chestplate": 8.0,
+      "armor/leggings": 6.0,
+      "armor/boots": 3.0,
       "armor_toughness": 8.0,
       "magic_armor": 4.0,
       "ranged_damage": 2.0,
@@ -84,10 +88,6 @@
         "level": 1,
         "conditions": [
           {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          },
-          {
             "type": "silentgear:or",
             "values": [
               {
@@ -118,10 +118,6 @@
         "name": "silentgear:lustrous",
         "level": 4,
         "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "harvest_tool"
-          },
           {
             "type": "silentgear:material_ratio",
             "ratio": 0.5

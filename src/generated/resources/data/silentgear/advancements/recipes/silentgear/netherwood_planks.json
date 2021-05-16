@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:netherwood_log"
+            "tag": "silentgear:netherwood_logs"
           }
         ]
       }

@@ -1,12 +1,11 @@
 package net.silentchaos512.gear.gear.part;
 
-import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -19,12 +18,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.IPartSerializer;
-import net.silentchaos512.gear.api.stats.IItemStat;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.api.util.StatGearKey;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -84,31 +84,37 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public Collection<StatInstance> getStatModifiers(ItemStat stat, PartData part, ItemStack gear) {
-        List<StatInstance> mods = new ArrayList<>(this.stats.get(stat));
-        GetStatModifierEvent event = new GetStatModifierEvent(part, stat, mods);
+    public Collection<StatInstance> getStatModifiers(IPartData part, PartType partType, StatGearKey key, ItemStack gear) {
+        List<StatInstance> mods = new ArrayList<>(this.stats.get(key));
+        GetStatModifierEvent event = new GetStatModifierEvent((PartData) part, (ItemStat) key.getStat(), mods);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
     }
 
     @Override
-    public List<TraitInstance> getTraits(PartData part, ItemStack gear) {
+    public Collection<TraitInstance> getTraits(IPartData part, PartGearKey partKey, ItemStack gear) {
         return Collections.unmodifiableList(traits);
     }
 
     @Override
-    public boolean isCraftingAllowed(PartData part, GearType gearType, @Nullable CraftingInventory inventory) {
+    public boolean isCraftingAllowed(IPartData part, PartType partType, GearType gearType, @Nullable IInventory inventory) {
         if (!gearType.matches(GearType.ALL)) return true;
         for (String blacklistedGearType : blacklistedGearTypes) {
             if (gearType.matches(blacklistedGearType)) {
                 return false;
             }
         }
-        return IGearPart.super.isCraftingAllowed(part, gearType, inventory);
+        return IGearPart.super.isCraftingAllowed(part, partType, gearType, inventory);
     }
 
     @Override
     public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
+        if (displayName == null) return new StringTextComponent("<error: missing name>");
+        return displayName.deepCopy();
+    }
+
+    @Override
+    public ITextComponent getDisplayName(@Nullable IPartData part, PartType type, ItemStack gear) {
         if (displayName == null) return new StringTextComponent("<error: missing name>");
         return displayName.deepCopy();
     }
@@ -124,8 +130,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     /**
      * List of blacklisted {@link GearType}s, mostly used for part tooltips. To know whether of not
-     * a part may be used in crafting, use {@link #isCraftingAllowed(PartData, GearType,
-     * CraftingInventory)} instead.
+     * a part may be used in crafting, use {@link #isCraftingAllowed(IPartData, PartType, GearType, IInventory)} instead.
      *
      * @return The List of GearTypes the part may not be used to craft (may be empty)
      */
@@ -170,10 +175,10 @@ public abstract class AbstractGearPart implements IGearPart {
             // Stats
             JsonElement elementStats = json.get("stats");
             if (elementStats != null) {
-                Multimap<IItemStat, StatInstance> statMap = StatModifierMap.deserialize(elementStats);
+                StatModifierMap statMap = StatModifierMap.deserialize(elementStats);
                 // Move the newly loaded modifiers into the stat map, replacing existing ones
-                statMap.keySet().forEach(stat -> part.stats.removeAll(stat));
-                statMap.forEach((stat, mod) -> part.stats.put(stat, mod));
+                statMap.keySet().forEach(key -> part.stats.removeAll(key));
+                statMap.forEach((key, mod) -> part.stats.put(key, mod));
             }
 
             // Traits

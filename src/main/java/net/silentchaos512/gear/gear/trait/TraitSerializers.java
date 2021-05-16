@@ -45,6 +45,9 @@ public final class TraitSerializers {
         register(BlockFillerTrait.SERIALIZER);
         register(SynergyTrait.SERIALIZER);
         register(TargetEffectTrait.SERIALIZER);
+        register(BonusDropsTrait.SERIALIZER);
+        register(CancelEffectsTrait.SERIALIZER);
+        register(SelfRepairTrait.SERIALIZER);
     }
 
     private TraitSerializers() {}

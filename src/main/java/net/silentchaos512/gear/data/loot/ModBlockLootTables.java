@@ -38,20 +38,30 @@ public class ModBlockLootTables extends BlockLootTables {
 
     @Override
     protected void addTables() {
-        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_ORE.get());
-        registerDropSelfLootTable(ModBlocks.AZURE_SILVER_ORE.get());
+        registerLootTable(ModBlocks.BORT_ORE.get(),
+                droppingItemWithFortune(ModBlocks.BORT_ORE.get(), CraftingItems.BORT.asItem()));
+        registerLootTable(ModBlocks.CRIMSON_IRON_ORE.get(),
+                droppingItemWithFortune(ModBlocks.CRIMSON_IRON_ORE.get(), CraftingItems.RAW_CRIMSON_IRON.asItem()));
+        registerLootTable(ModBlocks.AZURE_SILVER_ORE.get(),
+                droppingItemWithFortune(ModBlocks.AZURE_SILVER_ORE.get(), CraftingItems.RAW_AZURE_SILVER.asItem()));
+        registerDropSelfLootTable(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.RAW_AZURE_SILVER_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.BLAZE_GOLD_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.BORT_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.AZURE_SILVER_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
-        ILootCondition.IBuilder flaxBuilder = BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, 7));
-        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flax(flaxBuilder));
+        registerDropSelfLootTable(ModBlocks.TYRIAN_STEEL_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE_GATE.get());
         registerLootTable(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_LOG.get());
+        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+        registerDropSelfLootTable(ModBlocks.NETHERWOOD_WOOD.get());
+        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_PLANKS.get());
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_SAPLING.get());
         registerLootTable(ModBlocks.NETHERWOOD_DOOR.get(), block ->
@@ -59,12 +69,45 @@ public class ModBlockLootTables extends BlockLootTables {
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_TRAPDOOR.get());
         registerLootTable(ModBlocks.NETHERWOOD_SLAB.get(), BlockLootTables::droppingSlab);
         registerDropSelfLootTable(ModBlocks.NETHERWOOD_STAIRS.get());
+        registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
+
         registerLootTable(ModBlocks.PHANTOM_LIGHT.get(), blockNoDrop());
         registerFlowerPot(ModBlocks.POTTED_NETHERWOOD_SAPLING.get());
+
+        registerDropSelfLootTable(ModBlocks.GEAR_SMITHING_TABLE.get());
+        registerDropSelfLootTable(ModBlocks.METAL_ALLOYER.get());
+        registerDropSelfLootTable(ModBlocks.METAL_PRESS.get());
+        registerDropSelfLootTable(ModBlocks.RECRYSTALLIZER.get());
+        registerDropSelfLootTable(ModBlocks.REFABRICATOR.get());
         registerDropSelfLootTable(ModBlocks.SALVAGER.get());
-        registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
-        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+        registerDropSelfLootTable(ModBlocks.STARLIGHT_CHARGER.get());
+
+        registerDropSelfLootTable(ModBlocks.WHITE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.ORANGE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.MAGENTA_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.LIGHT_BLUE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.YELLOW_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.LIME_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.PINK_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.GRAY_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.LIGHT_GRAY_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.CYAN_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.PURPLE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.BLUE_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.BROWN_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.GREEN_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.RED_FLUFFY_BLOCK.get());
+        registerDropSelfLootTable(ModBlocks.BLACK_FLUFFY_BLOCK.get());
+
+        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flaxPlant(BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get())
+                .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
+                        .withIntProp(CropsBlock.AGE, 7))));
         registerDropping(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAX_SEEDS);
+
+        this.registerLootTable(ModBlocks.FLUFFY_PLANT.get(), fluffyPlant(BlockStateProperty.builder(ModBlocks.FLUFFY_PLANT.get())
+                .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
+                        .withIntProp(CropsBlock.AGE, 7))));
+        registerDropping(ModBlocks.WILD_FLUFFY_PLANT.get(), ModItems.FLUFFY_SEEDS);
     }
 
     @Nonnull
@@ -84,7 +127,7 @@ public class ModBlockLootTables extends BlockLootTables {
                                 .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
     }
 
-    private static LootTable.Builder flax(ILootCondition.IBuilder builder) {
+    private static LootTable.Builder flaxPlant(ILootCondition.IBuilder builder) {
         return withExplosionDecay(ModBlocks.FLAX_PLANT, LootTable.builder()
                 .addLootPool(LootPool.builder()
                         .acceptCondition(builder)
@@ -98,6 +141,19 @@ public class ModBlockLootTables extends BlockLootTables {
                         .acceptCondition(builder)
                         .addEntry(ItemLootEntry.builder(CraftingItems.FLAX_FLOWERS)
                                 .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5f, 1))))
+        );
+    }
+
+    private static LootTable.Builder fluffyPlant(ILootCondition.IBuilder builder) {
+        return withExplosionDecay(ModBlocks.FLUFFY_PLANT, LootTable.builder()
+                .addLootPool(LootPool.builder()
+                        .acceptCondition(builder)
+                        .addEntry(ItemLootEntry.builder(CraftingItems.FLUFFY_PUFF)
+                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
+                .addLootPool(LootPool.builder()
+                        .acceptCondition(builder)
+                        .addEntry(ItemLootEntry.builder(ModItems.FLUFFY_SEEDS)
+                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
         );
     }
 

@@ -2,7 +2,8 @@
   "availability": {
     "tier": 1,
     "categories": [
-      "organic"
+      "organic",
+      "fiber"
     ],
     "visible": true,
     "gear_blacklist": [],
@@ -27,10 +28,7 @@
     },
     "bowstring": {
       "durability": {
-        "mul1": 0.25
-      },
-      "enchantability": {
-        "mul1": -0.1
+        "mul1": 0.2
       },
       "ranged_damage": {
         "mul1": 0.2
@@ -50,7 +48,7 @@
     "bowstring": [
       {
         "name": "silentgear:flexible",
-        "level": 3
+        "level": 1
       }
     ]
   }

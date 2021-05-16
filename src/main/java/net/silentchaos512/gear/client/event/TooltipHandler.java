@@ -2,7 +2,6 @@ package net.silentchaos512.gear.client.event;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.TagRegistryManager;
 import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,6 +14,8 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.block.charger.ChargerTileEntity;
 import net.silentchaos512.gear.block.grader.GraderTileEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -23,14 +24,13 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
+import net.silentchaos512.lib.util.TagUtils;
 import net.silentchaos512.utils.Color;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class TooltipHandler {
@@ -44,6 +44,7 @@ public final class TooltipHandler {
         assert TextFormatting.DARK_GRAY.getColor() != null;
         assert TextFormatting.GRAY.getColor() != null;
     }
+
     public static final Color MC_DARK_GRAY = new Color(TextFormatting.DARK_GRAY.getColor());
     public static final Color MC_GRAY = new Color(TextFormatting.GRAY.getColor());
 
@@ -62,8 +63,11 @@ public final class TooltipHandler {
 
         ItemStack stack = event.getItemStack();
 
-        if (isGraderCatalystWithHackyWorkaround(stack)) {
+        if (TagUtils.containsSafe(ModTags.Items.GRADER_CATALYSTS, stack)) {
             onGraderCatalystTooltip(event);
+        }
+        if (TagUtils.containsSafe(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack)) {
+            onStarlightChargerCatalystTooltip(event);
         }
 
         MaterialInstance material = MaterialInstance.from(stack);
@@ -85,20 +89,14 @@ public final class TooltipHandler {
         }
     }
 
-    private static boolean isGraderCatalystWithHackyWorkaround(ItemStack stack) {
-        // Workaround for https://github.com/SilentChaos512/Silent-Gear/issues/224 and related issues...
-        // This crash only happens on the client in some cases
-        try {
-            return stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS);
-        } catch (IllegalStateException ex) {
-            TagRegistryManager.fetchTags();
-        }
-        return stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS);
-    }
-
     private static void onGraderCatalystTooltip(ItemTooltipEvent event) {
         int tier = GraderTileEntity.getCatalystTier(event.getItemStack());
-        event.getToolTip().add(TextUtil.withColor(TextUtil.misc("graderCatalyst", tier), Color.REBECCAPURPLE));
+        event.getToolTip().add(TextUtil.withColor(TextUtil.misc("graderCatalyst", tier), Color.DARKORANGE));
+    }
+
+    private static void onStarlightChargerCatalystTooltip(ItemTooltipEvent event) {
+        int tier = ChargerTileEntity.getStarlightChargerCatalystTier(event.getItemStack());
+        event.getToolTip().add(TextUtil.withColor(TextUtil.misc("starlightChargerCataylst", tier), Color.REBECCAPURPLE));
     }
 
     private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, MaterialInstance material) {
@@ -113,7 +111,8 @@ public final class TooltipHandler {
         }
 
         if (event.getFlags().isAdvanced()) {
-            event.getToolTip().add(new StringTextComponent("Material ID: " + material.getMaterialId()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("Material ID: " + material.getId()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("Material data pack: " + material.get().getPackName()).mergeStyle(TextFormatting.DARK_GRAY));
         }
 
         if (keyHeld) {
@@ -137,7 +136,37 @@ public final class TooltipHandler {
             if (material.getGrade() != MaterialGrade.NONE) {
                 getGradeLine(event, material.getGrade());
             }
+
+            if (event.getFlags().isAdvanced()) {
+                addJeiSearchTerms(event, material);
+            }
         }
+    }
+
+    private static void addJeiSearchTerms(ItemTooltipEvent event, MaterialInstance material) {
+        // Add search terms to allow advanced filtering in JEI (requires the
+        // `SearchAdvancedTooltips` JEI config to be set)
+
+        StringBuilder b = new StringBuilder();
+
+        for (IMaterialCategory category : material.getCategories()) {
+            b.append(category.getName()).append(" ");
+        }
+
+        Collection<String> traits = new HashSet<>();
+
+        for (PartType partType : material.getPartTypes()) {
+            b.append(partType.getDisplayName(0).getString()).append(" ");
+            for (TraitInstance trait : material.getTraits(partType)) {
+                traits.add(trait.getTrait().getDisplayName(0).getString());
+            }
+        }
+
+        for (String str : traits) {
+            b.append(str).append(" ");
+        }
+
+        event.getToolTip().add(new StringTextComponent(b.toString().toLowerCase(Locale.ROOT)).mergeStyle(TextFormatting.DARK_GRAY).mergeStyle(TextFormatting.ITALIC));
     }
 
     private static Optional<ITextComponent> getMaterialCategoriesLine(MaterialInstance material) {
@@ -169,8 +198,8 @@ public final class TooltipHandler {
         event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(part.getTier()), Color.AQUAMARINE));
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
-            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getPartId()).mergeStyle(TextFormatting.DARK_GRAY));
-            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.getPart().getPackName()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part ID: " + part.getId()).mergeStyle(TextFormatting.DARK_GRAY));
+            event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.get().getPackName()).mergeStyle(TextFormatting.DARK_GRAY));
         }
 
         // Traits
@@ -204,8 +233,8 @@ public final class TooltipHandler {
         }
 
         // Gear type blacklist?
-        if (part.getPart() instanceof AbstractGearPart) {
-            List<GearType> blacklist = ((AbstractGearPart) part.getPart()).getBlacklistedGearTypes();
+        if (part.get() instanceof AbstractGearPart) {
+            List<GearType> blacklist = ((AbstractGearPart) part.get()).getBlacklistedGearTypes();
             if (!blacklist.isEmpty()) {
                 int index = (ClientTicks.ticksInGame() / 20) % blacklist.size();
                 GearType gearType = blacklist.get(index);
@@ -227,38 +256,117 @@ public final class TooltipHandler {
     }
 
     private static void getMaterialTraitLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
-        material.getMaterial().getTraits(partType).forEach(t -> {
-            event.getToolTip().add(t.getDisplayName());
+        Collection<TraitInstance> traits = material.getTraits(partType);
+        if (traits.isEmpty()) return;
 
-            // Trait conditions
-            if (event.getFlags().isAdvanced()) {
-                event.getToolTip().add(new StringTextComponent("  ")
-                        .append(TextUtil.withColor(t.getConditionsText(), TextFormatting.DARK_GRAY)));
+        IFormattableTextComponent header = TextUtil.misc("tooltip.traits").mergeStyle(TextFormatting.GOLD);
+        if (!KeyTracker.isDisplayTraitsDown()) {
+            IFormattableTextComponent keyHint = TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_TRAITS), Color.AQUAMARINE);
+            header.appendString(" ").append(keyHint);
+        }
+        event.getToolTip().add(header);
+
+        TextListBuilder builder = new TextListBuilder();
+
+        for (TraitInstance trait : traits) {
+            builder.add(trait.getDisplayName());
+
+            // Trait description and conditions
+            if (event.getFlags().isAdvanced() || KeyTracker.isDisplayTraitsDown()) {
+                builder.indent();
+                builder.add(trait.getTrait().getDescription(trait.getLevel()).mergeStyle(TextFormatting.DARK_GRAY));
+                if (!trait.getConditions().isEmpty()) {
+                    builder.add(TextUtil.withColor(trait.getConditionsText(), TextFormatting.DARK_GRAY));
+                }
+                builder.unindent();
             }
-        });
+        }
+
+        event.getToolTip().addAll(builder.build());
     }
 
     private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartData part) {
+        GearType gearType = getPartGearType(part);
         TextListBuilder builder = new TextListBuilder();
-        for (ItemStat stat : part.getGearType().getRelevantStats()) {
-            Collection<StatInstance> modifiers = part.getStatModifiers(ItemStack.EMPTY, stat);
+
+        List<ItemStat> relevantStats = new ArrayList<>(part.getGearType().getRelevantStats());
+        if (part.getGearType().isArmor() && relevantStats.contains(ItemStats.DURABILITY)) {
+            int index = relevantStats.indexOf(ItemStats.DURABILITY);
+            relevantStats.remove(ItemStats.DURABILITY);
+            relevantStats.add(index, ItemStats.ARMOR_DURABILITY);
+        }
+
+        for (ItemStat stat : relevantStats) {
+            Collection<StatInstance> modifiers = new ArrayList<>();
+            for (StatInstance mod : part.getStatModifiers(StatGearKey.of(stat, gearType), ItemStack.EMPTY)) {
+                if (mod.getOp() == StatInstance.Operation.AVG) {
+                    float computed = stat.compute(Collections.singleton(mod));
+                    modifiers.add(StatInstance.of(computed, StatInstance.Operation.AVG, mod.getKey()));
+                } else {
+                    modifiers.add(mod);
+                }
+            }
             getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
     }
 
+    private static GearType getPartGearType(PartData part) {
+        if (part.getItem().getItem() instanceof CompoundPartItem) {
+            GearType gearType = ((CompoundPartItem) part.getItem().getItem()).getGearType();
+
+            if (gearType.isGear()) {
+                return gearType;
+            }
+        }
+        return GearType.ALL;
+    }
+
     private static void getMaterialStatLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
         TextListBuilder builder = new TextListBuilder();
+
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> modifiers = material.getStatModifiers(stat, partType);
-            getStatTooltipLine(event, partType, stat, modifiers).ifPresent(builder::add);
+            Collection<StatInstance> modsAll = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
+            Optional<IFormattableTextComponent> head = getStatTooltipLine(event, partType, stat, modsAll);
+            boolean headPresent = head.isPresent();
+            builder.add(head.orElseGet(() -> TextUtil.withColor(stat.getDisplayName(), stat.getNameColor())));
+
+            builder.indent();
+
+            int subCount = 0;
+            List<StatGearKey> keysForStat = material.get().getStatKeys(material, partType).stream()
+                    .filter(key -> key.getStat().equals(stat))
+                    .collect(Collectors.toList());
+
+            for (StatGearKey key : keysForStat) {
+                if (key.getGearType() != GearType.ALL) {
+                    ItemStat stat1 = ItemStats.get(key.getStat());
+
+                    if (stat1 != null) {
+                        Collection<StatInstance> mods = material.getStatModifiers(partType, key);
+                        Optional<IFormattableTextComponent> line = getSubStatTooltipLine(event, partType, stat1, key.getGearType(), mods);
+
+                        if (line.isPresent()) {
+                            builder.add(line.get());
+                            ++subCount;
+                        }
+                    }
+                }
+            }
+
+            if (subCount == 0 && !headPresent) {
+                builder.removeLast();
+            }
+
+            builder.unindent();
         }
+
         event.getToolTip().addAll(builder.build());
     }
 
     private static Optional<IFormattableTextComponent> getStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, Collection<StatInstance> modifiers) {
         if (!modifiers.isEmpty()) {
-            StatInstance inst = stat.computeForDisplay(0, modifiers);
+            StatInstance inst = stat.computeForDisplay(0, GearType.ALL, modifiers);
             if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
                 boolean isZero = inst.getValue() == 0;
                 Color nameColor = isZero ? MC_DARK_GRAY : stat.getNameColor();
@@ -267,6 +375,29 @@ public final class TooltipHandler {
                 IFormattableTextComponent nameStr = TextUtil.withColor(stat.getDisplayName(), nameColor);
                 int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
                 IFormattableTextComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), statColor);
+
+                // Harvest level hints
+                IFormattableTextComponent textWithAdditions = stat == ItemStats.HARVEST_LEVEL && modifiers.size() == 1
+                        ? harvestLevelWithHint(statListText, inst.getValue())
+                        : statListText;
+
+                return Optional.of(new TranslationTextComponent("stat.silentgear.displayFormat", nameStr, textWithAdditions));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<IFormattableTextComponent> getSubStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, GearType gearType, Collection<StatInstance> modifiers) {
+        if (!modifiers.isEmpty()) {
+            StatInstance inst = stat.computeForDisplay(0, gearType, modifiers);
+            if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
+                boolean isZero = inst.getValue() == 0;
+                Color color = isZero ? MC_DARK_GRAY : Color.WHITE;
+
+                IFormattableTextComponent nameStr = TextUtil.withColor(gearType.getDisplayName().deepCopy(), color);
+                int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
+                IFormattableTextComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), color);
 
                 // Harvest level hints
                 IFormattableTextComponent textWithAdditions = stat == ItemStats.HARVEST_LEVEL && modifiers.size() == 1

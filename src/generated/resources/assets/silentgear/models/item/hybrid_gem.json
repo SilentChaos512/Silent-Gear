@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/hybrid_gem",
+    "layer1": "silentgear:item/hybrid_gem_highlight"
+  }
+}

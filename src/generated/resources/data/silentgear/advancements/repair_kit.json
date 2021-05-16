@@ -16,7 +16,17 @@
     "hidden": false
   },
   "criteria": {
-    "crude": {
+    "very_crude_repair_kit": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "silentgear:very_crude_repair_kit"
+          }
+        ]
+      }
+    },
+    "crude_repair_kit": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -26,7 +36,7 @@
         ]
       }
     },
-    "sturdy": {
+    "sturdy_repair_kit": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -36,7 +46,7 @@
         ]
       }
     },
-    "crimson": {
+    "crimson_repair_kit": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -46,7 +56,7 @@
         ]
       }
     },
-    "azure": {
+    "azure_repair_kit": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -59,10 +69,11 @@
   },
   "requirements": [
     [
-      "crude",
-      "sturdy",
-      "crimson",
-      "azure"
+      "very_crude_repair_kit",
+      "crude_repair_kit",
+      "sturdy_repair_kit",
+      "crimson_repair_kit",
+      "azure_repair_kit"
     ]
   ]
 }

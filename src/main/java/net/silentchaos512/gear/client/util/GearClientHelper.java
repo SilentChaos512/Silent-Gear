@@ -7,8 +7,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -16,11 +19,9 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.gear.CoreArmor;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
@@ -33,6 +34,14 @@ import java.util.*;
 @OnlyIn(Dist.CLIENT)
 public final class GearClientHelper {
     private GearClientHelper() {
+    }
+
+    public static int getColor(ItemStack stack, PartType layer) {
+        PartData part = GearData.getPartOfType(stack, layer);
+        if (part != null) {
+            return part.getColor(stack, 0, 0);
+        }
+        return Color.VALUE_WHITE;
     }
 
     public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
@@ -77,7 +86,7 @@ public final class GearClientHelper {
         // Let parts add information if they need to
         Collections.reverse(constructionParts);
         for (PartData data : constructionParts) {
-            data.getPart().addInformation(data, stack, tooltip, flag);
+            data.get().addInformation(data, stack, tooltip, flag);
         }
 
         // Traits
@@ -113,25 +122,7 @@ public final class GearClientHelper {
             for (ItemStat stat : displayStats) {
                 float statValue = GearData.getStat(stack, stat);
 
-                // Used for the total armor/toughness a full suit of armor would provide
-                float totalArmor = -1;
-                if (item instanceof CoreArmor) {
-                    if (stat == ItemStats.ARMOR) {
-                        // Armor value varies by type
-                        totalArmor = statValue;
-                        statValue = (float) ((CoreArmor) item).getArmorProtection(stack);
-                    } else if (stat == ItemStats.MAGIC_ARMOR) {
-                        // Same as armor
-                        totalArmor = statValue;
-                        statValue = (float) ((CoreArmor) item).getArmorMagicProtection(stack);
-                    } else if (stat == ItemStats.ARMOR_TOUGHNESS) {
-                        // Toughness split equally to each piece
-                        totalArmor = statValue;
-                        statValue /= 4;
-                    }
-                }
-
-                StatInstance inst = StatInstance.of(statValue);
+                StatInstance inst = StatInstance.of(statValue, StatInstance.Operation.AVG, StatInstance.DEFAULT_KEY);
                 Color nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TooltipHandler.MC_DARK_GRAY;
                 ITextComponent textName = TextUtil.withColor(stat.getDisplayName(), nameColor);
                 IFormattableTextComponent textStat = inst.getFormattedText(stat, stat.isDisplayAsInt() ? 0 : 2, false);
@@ -144,10 +135,6 @@ public final class GearClientHelper {
                     textStat = statText("durabilityFormat", durabilityLeft, durabilityMax);
                 } else if (stat == ItemStats.HARVEST_LEVEL) {
                     textStat = TooltipHandler.harvestLevelWithHint(textStat, statValue);
-                } else if (stat == ItemStats.ARMOR || stat == ItemStats.MAGIC_ARMOR || stat == ItemStats.ARMOR_TOUGHNESS) {
-                    String str1 = String.format("%.1f", statValue);
-                    String str2 = String.format("%.1f", totalArmor);
-                    textStat = statText("armorFormat", str1, str2);
                 }
 
                 builder.add(statText("displayFormat", textName, textStat));
@@ -211,7 +198,7 @@ public final class GearClientHelper {
         TextListBuilder builder = new TextListBuilder();
 
         for (PartData part : parts) {
-            if (part.getPart().isVisible()) {
+            if (part.get().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
                 IFormattableTextComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).deepCopy(), partNameColor);
                 builder.add(flag.isAdvanced()
@@ -219,11 +206,11 @@ public final class GearClientHelper {
                         : partNameText);
 
                 // List materials for compound parts
-                if (part.getPart() instanceof CompoundPart) {
+                if (part.get() instanceof CompoundPart) {
                     builder.indent();
-                    for (MaterialInstance material : CompoundPartItem.getMaterials(part.getCraftingItem())) {
-                        int nameColor = material.getMaterial().getNameColor(part.getType(), gear);
-                        builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType()), nameColor));
+                    for (IMaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
+                        int nameColor = material.getNameColor(part.getType(), GearType.ALL);
+                        builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType(), ItemStack.EMPTY), nameColor));
                     }
                     builder.unindent();
                 }

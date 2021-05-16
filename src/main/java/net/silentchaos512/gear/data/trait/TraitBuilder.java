@@ -7,14 +7,20 @@ import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.gear.trait.SimpleTrait;
+import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.gear.trait.condition.GearTypeTraitCondition;
+import net.silentchaos512.gear.gear.trait.condition.OrTraitCondition;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Consumer;
 
 public class TraitBuilder {
@@ -25,6 +31,7 @@ public class TraitBuilder {
     private ITextComponent name;
     private ITextComponent description;
 
+    private final Collection<ITraitCondition> conditions = new ArrayList<>();
     private final Collection<ResourceLocation> cancelsList = new ArrayList<>();
     private final Collection<ResourceLocation> overridesList = new ArrayList<>();
     private final Collection<ITextComponent> extraWikiLines = new ArrayList<>();
@@ -60,6 +67,26 @@ public class TraitBuilder {
     public TraitBuilder setDescription(ITextComponent text) {
         this.description = text;
         return this;
+    }
+
+    public TraitBuilder withConditions(ITraitCondition... conditions) {
+        Collections.addAll(this.conditions, conditions);
+        return this;
+    }
+
+    public TraitBuilder withGearTypeCondition(GearType first, GearType... rest) {
+        if (rest.length > 0) {
+            Collection<GearType> types = new ArrayList<>(rest.length + 1);
+            types.add(first);
+            Collections.addAll(types, rest);
+
+            GearTypeTraitCondition[] values = types.stream()
+                    .map(GearTypeTraitCondition::new)
+                    .toArray(GearTypeTraitCondition[]::new);
+
+            return withConditions(new OrTraitCondition(values));
+        }
+        return withConditions(new GearTypeTraitCondition(first));
     }
 
     public TraitBuilder cancelsWith(DataResource<ITrait> trait) {
@@ -109,6 +136,13 @@ public class TraitBuilder {
 
         json.addProperty("type", this.type.toString());
         json.addProperty("max_level", this.maxLevel);
+
+        if (!this.conditions.isEmpty()) {
+            JsonArray array = new JsonArray();
+            this.conditions.forEach(c -> array.add(TraitSerializers.serializeCondition(c)));
+            json.add("conditions", array);
+        }
+
         json.add("name", ITextComponent.Serializer.toJsonTree(this.name));
         json.add("description", ITextComponent.Serializer.toJsonTree(this.description));
 

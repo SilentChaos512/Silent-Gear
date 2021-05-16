@@ -17,20 +17,20 @@ import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.IMaterialSerializer;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.IItemStat;
-import net.silentchaos512.gear.api.stats.LazyItemStat;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
+import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
-import net.silentchaos512.gear.client.material.PartGearKey;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.utils.Color;
@@ -52,21 +52,24 @@ public class MaterialBuilder {
     private final Collection<IMaterialCategory> categories = new ArrayList<>();
     private ITextComponent name;
     @Nullable private ITextComponent namePrefix;
+    private IMaterialSerializer<?> serializer = MaterialSerializers.STANDARD;
+    private boolean simple = true;
 
     private final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
     private final Map<PartType, List<ITraitInstance>> traits = new LinkedHashMap<>();
     private final Map<PartGearKey, MaterialLayerList> display = new LinkedHashMap<>();
+    private boolean hasModels = true;
 
-    public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation tag) {
-        this(id, tier, Ingredient.fromTag(ItemTags.makeWrapperTag(tag.toString())));
+    public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation ingredientTagName) {
+        this(id, tier, Ingredient.fromTag(ItemTags.makeWrapperTag(ingredientTagName.toString())));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, ITag<Item> tag) {
-        this(id, tier, Ingredient.fromTag(tag));
+    public MaterialBuilder(ResourceLocation id, int tier, ITag<Item> ingredient) {
+        this(id, tier, Ingredient.fromTag(ingredient));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, IItemProvider... items) {
-        this(id, tier, Ingredient.fromItems(items));
+    public MaterialBuilder(ResourceLocation id, int tier, IItemProvider... ingredients) {
+        this(id, tier, Ingredient.fromItems(ingredients));
     }
 
     public MaterialBuilder(ResourceLocation id, int tier, Ingredient ingredient) {
@@ -77,6 +80,12 @@ public class MaterialBuilder {
         this.name = new TranslationTextComponent(String.format("material.%s.%s",
                 this.id.getNamespace(),
                 this.id.getPath().replace("/", ".")));
+    }
+
+    public MaterialBuilder type(IMaterialSerializer<?> serializer, boolean simple) {
+        this.serializer = serializer;
+        this.simple = simple;
+        return this;
     }
 
     public MaterialBuilder loadConditionTagExists(ResourceLocation tagId) {
@@ -158,6 +167,8 @@ public class MaterialBuilder {
                 displayTip(targetTexture.getLayers(partType).get(0), color);
             else if (partType == PartType.COATING)
                 displayCoating(targetTexture, color);
+            else if (partType == PartType.LINING)
+                displayLining(targetTexture, color);
             else
                 display(partType, targetTexture, color);
         }
@@ -176,7 +187,7 @@ public class MaterialBuilder {
     public MaterialBuilder displayBowstring(int color) {
         display(PartType.BOWSTRING,
                 new MaterialLayer(PartTextures.BOWSTRING_STRING, color),
-                new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE)
+                new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE) // FIXME: Doesn't quite make sense to have this here
         );
         display(PartType.BOWSTRING, GearType.PART,
                 new MaterialLayer(SilentGear.getId("bowstring"), color)
@@ -190,6 +201,11 @@ public class MaterialBuilder {
                 new MaterialLayer(SilentGear.getId("coating_material"), color),
                 new MaterialLayer(SilentGear.getId("coating_jar"), Color.VALUE_WHITE)
         );
+        return this;
+    }
+
+    public MaterialBuilder displayLining(PartTextureSet textures, int color) {
+        display(PartType.LINING, GearType.PART, new MaterialLayerList(PartType.LINING, textures, color));
         return this;
     }
 
@@ -216,9 +232,6 @@ public class MaterialBuilder {
 
     public MaterialBuilder display(PartType partType, PartTextureSet texture, int color) {
         display(partType, GearType.ALL, texture, color);
-        if (partType == PartType.MAIN) {
-            display(partType, GearType.ARMOR, texture, color);
-        }
 
         // Compound part models
         if (partType != PartType.MAIN) {
@@ -237,7 +250,7 @@ public class MaterialBuilder {
         return display(partType, GearType.ALL, layers);
     }
 
-    public MaterialBuilder display(PartType partType, GearType gearType, MaterialLayer... layers) {
+    public MaterialBuilder display(PartType partType, GearType gearType, MaterialLayer... layers) { // TODO: use PartGearKey parameter?
         return display(partType, gearType, new MaterialLayerList(layers));
     }
 
@@ -250,6 +263,11 @@ public class MaterialBuilder {
         return this;
     }
 
+    public MaterialBuilder noModels() {
+        this.hasModels = false;
+        return this;
+    }
+
     public MaterialBuilder noStats(PartType partType) {
         // Put an empty map for the part type, because the part type can only be supported if in the stats object
         stats.computeIfAbsent(partType, pt -> new StatModifierMap());
@@ -257,13 +275,22 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder stat(PartType partType, IItemStat stat, float value) {
-        return stat(partType, stat, value, StatInstance.Operation.AVG);
+        return stat(partType, stat, GearType.ALL, value, StatInstance.Operation.AVG);
+    }
+
+    public MaterialBuilder stat(PartType partType, IItemStat stat, GearType gearType, float value) { // TODO: use PartGearKey parameter?
+        return stat(partType, stat, gearType, value, StatInstance.Operation.AVG);
     }
 
     public MaterialBuilder stat(PartType partType, IItemStat stat, float value, StatInstance.Operation operation) {
-        StatInstance mod = StatInstance.of(value, operation);
+        return stat(partType, stat, GearType.ALL, value, operation);
+    }
+
+    public MaterialBuilder stat(PartType partType, IItemStat stat, GearType gearType, float value, StatInstance.Operation operation) {
+        StatGearKey key = StatGearKey.of(stat, gearType);
+        StatInstance mod = StatInstance.of(value, operation, key);
         StatModifierMap map = stats.computeIfAbsent(partType, pt -> new StatModifierMap());
-        map.put(stat, mod);
+        map.put(stat, gearType, mod);
         return this;
     }
 
@@ -275,6 +302,70 @@ public class MaterialBuilder {
         return stat(partType, LazyItemStat.of(statId), value, operation);
     }
 
+    public MaterialBuilder mainStatsCommon(float toolDurability, float armorDurability, float enchantability, float rarity) {
+        stat(PartType.MAIN, ItemStats.DURABILITY, toolDurability);
+        stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, armorDurability);
+        stat(PartType.MAIN, ItemStats.ENCHANTABILITY, enchantability);
+        stat(PartType.MAIN, ItemStats.RARITY, rarity);
+        return this;
+    }
+
+    public MaterialBuilder mainStatsHarvest(int harvestLevel, float harvestSpeed) {
+        stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, harvestLevel);
+        stat(PartType.MAIN, ItemStats.HARVEST_SPEED, harvestSpeed);
+        return this;
+    }
+
+    public MaterialBuilder mainStatsMelee(float attackDamage, float magicDamage, float attackSpeed) {
+        stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, attackDamage);
+        if (magicDamage > 0) {
+            stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, magicDamage);
+        }
+        stat(PartType.MAIN, ItemStats.ATTACK_SPEED, attackSpeed);
+        return this;
+    }
+
+    public MaterialBuilder mainStatsRanged(float rangedDamage, float rangedSpeed) {
+        stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, rangedDamage);
+        stat(PartType.MAIN, ItemStats.RANGED_SPEED, rangedSpeed);
+        return this;
+    }
+
+    @Deprecated
+    public MaterialBuilder mainStatsArmor(float armor, float toughness, float magicArmor) {
+        stat(PartType.MAIN, ItemStats.ARMOR, armor);
+        stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, toughness);
+        stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, magicArmor);
+        return this;
+    }
+
+    @SuppressWarnings({"MethodWithTooManyParameters", "OverlyComplexMethod"})
+    public MaterialBuilder mainStatsArmor(float head, float chest, float legs, float feet, float toughness, float magicArmor) {
+        if (this.stats.get(PartType.MAIN).containsKey(StatGearKey.of(ItemStats.ARMOR, GearType.ALL))) {
+            throw new IllegalStateException("Called mainStatsArmor when armor stat is already defined");
+        }
+
+        if (head > 0 && chest > 0 && legs > 0 && feet > 0) {
+            float sum = head + chest + legs + feet;
+            stat(PartType.MAIN, ItemStats.ARMOR, sum);
+        }
+
+        if (head > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.HELMET, head);
+        if (chest > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.CHESTPLATE, chest);
+        if (legs > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.LEGGINGS, legs);
+        if (feet > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR, GearType.BOOTS, feet);
+        if (toughness > 0)
+            stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, toughness);
+        if (magicArmor > 0)
+            stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, magicArmor);
+
+        return this;
+    }
+
     public MaterialBuilder trait(PartType partType, DataResource<ITrait> trait, int level, ITraitCondition... conditions) {
         ITraitInstance inst = TraitInstance.of(trait, level, conditions);
         List<ITraitInstance> list = traits.computeIfAbsent(partType, pt -> new ArrayList<>());
@@ -282,6 +373,7 @@ public class MaterialBuilder {
         return this;
     }
 
+    @Deprecated
     public MaterialBuilder trait(PartType partType, ResourceLocation traitId, int level, ITraitCondition... conditions) {
         ITraitInstance inst = TraitInstance.lazy(traitId, level, conditions);
         List<ITraitInstance> list = traits.computeIfAbsent(partType, pt -> new ArrayList<>());
@@ -289,14 +381,32 @@ public class MaterialBuilder {
         return this;
     }
 
+    private void validate() {
+        if (this.hasModels) {
+            for (PartType type : this.stats.keySet()) {
+                if (this.display.keySet().stream().noneMatch(key -> key.getPartType().equals(type))) {
+                    throw new NullPointerException(String.format("Material builder %s has no model data for part type %s", this.id, type.getName()));
+                }
+            }
+        }
+    }
+
     public JsonObject serializeModel() {
-        MaterialDisplay model = MaterialDisplay.of(this.display);
+        MaterialDisplay model = MaterialDisplay.of(id, this.display);
         return model.serialize();
     }
 
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     public JsonObject serialize() {
+        validate();
+
         JsonObject json = new JsonObject();
+
+        // TODO: Remove conditions for 'type' and 'simple' after merging into master
+        if (this.serializer != MaterialSerializers.STANDARD)
+            json.addProperty("type", this.serializer.getName().toString());
+        if (!this.simple)
+            json.addProperty("simple", this.simple);
 
         if (this.parent != null) {
             json.addProperty("parent", this.parent.toString());

@@ -1,4 +1,16 @@
 {
+  "main/all": [
+    {
+      "texture": "silentgear:main_generic_lc",
+      "color": "#224BAF"
+    }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:metal",
+      "color": "#224BAF"
+    }
+  ],
   "tip/all": [
     {
       "texture": "silentgear:tip_smooth",
@@ -30,12 +42,6 @@
     },
     {
       "texture": "silentgear:adornment_highlight"
-    }
-  ],
-  "main/fragment": [
-    {
-      "texture": "silentgear:metal",
-      "color": "#224BAF"
     }
   ]
 }

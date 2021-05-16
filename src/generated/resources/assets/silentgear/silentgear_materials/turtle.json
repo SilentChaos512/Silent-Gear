@@ -1,0 +1,14 @@
+{
+  "main/helmet": [
+    {
+      "texture": "silentgear:turtle",
+      "color": "#47BF4A"
+    }
+  ],
+  "main/fragment": [
+    {
+      "texture": "silentgear:metal",
+      "color": "#47BF4A"
+    }
+  ]
+}

@@ -2,6 +2,13 @@
   "parent": "item/generated",
   "loader": "silentgear:gear_model",
   "gear_type": "katana",
+  "texture_path": "katana",
+  "broken_texture_path": "katana/broken",
+  "broken_texture_types": [
+    "coating",
+    "main",
+    "tip"
+  ],
   "display": {
     "ground": {
       "rotation": [ 0, 0, 0 ],

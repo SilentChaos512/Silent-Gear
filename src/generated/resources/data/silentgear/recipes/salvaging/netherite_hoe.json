@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:netherite_hoe"
+  },
+  "results": [
+    {
+      "item": "minecraft:diamond",
+      "count": 2
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:stick",
+      "count": 2
+    }
+  ]
+}

@@ -4,15 +4,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.VanillaResourceType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartDisplay;
@@ -20,6 +25,7 @@ import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.util.IEarlySelectiveReloadListener;
+import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
 
 import javax.annotation.Nullable;
@@ -60,7 +66,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         if (resources.isEmpty()) return;
 
         synchronized (MATERIALS) {
-            SilentGear.LOGGER.info("Reloading material display files");
+            SilentGear.LOGGER.info("Reloading material model files");
             MATERIALS.clear();
 
             String packName = "ERROR";
@@ -80,10 +86,10 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                     }
                 } catch (IllegalArgumentException | JsonParseException ex) {
                     SilentGear.LOGGER.error("Parsing error loading material model {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
+                    ERROR_LIST.add(String.format("material:%s (%s)", name, packName));
                 } catch (IOException ex) {
                     SilentGear.LOGGER.error("Could not read material model {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
+                    ERROR_LIST.add(String.format("material:%s (%s)", name, packName));
                 }
             }
         }
@@ -94,7 +100,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         if (resources.isEmpty()) return;
 
         synchronized (PARTS) {
-            SilentGear.LOGGER.info("Reloading part display files");
+            SilentGear.LOGGER.info("Reloading part model files");
             PARTS.clear();
 
             String packName = "ERROR";
@@ -114,10 +120,10 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                     }
                 } catch (IllegalArgumentException | JsonParseException ex) {
                     SilentGear.LOGGER.error("Parsing error loading part model {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
+                    ERROR_LIST.add(String.format("part:%s (%s)", name, packName));
                 } catch (IOException ex) {
                     SilentGear.LOGGER.error("Could not read part model {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
+                    ERROR_LIST.add(String.format("part:%s (%s)", name, packName));
                 }
             }
         }
@@ -135,10 +141,40 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         }
     }
 
+    /**
+     * Gets the materials model, or a default model if none was loaded for the material.
+     *
+     * @param material The material
+     * @return A material model (possibly a default one)
+     */
+    public static IMaterialDisplay get(IMaterialInstance material) {
+        IMaterial mat = material.get();
+        if (mat != null) {
+            IMaterialDisplay displayOverride = mat.getDisplayOverride(material);
+            if (displayOverride != null) {
+                return displayOverride;
+            }
+            return get(mat);
+        }
+        return getMaterial(material.getId());
+    }
+
+    /**
+     * @param material The material
+     * @return The material's model
+     * @deprecated Use {@link #get(IMaterialInstance)} instead
+     */
+    @Deprecated
     public static IMaterialDisplay get(IMaterial material) {
         return getMaterial(material.getId());
     }
 
+    /**
+     * @param materialId The material ID
+     * @return The material's model
+     * @deprecated Internal use only, use {@link #get(IMaterialInstance)} instead
+     */
+    @Deprecated
     public static IMaterialDisplay getMaterial(ResourceLocation materialId) {
         synchronized (MATERIALS) {
             return MATERIALS.getOrDefault(materialId, DefaultMaterialDisplay.INSTANCE);
@@ -155,5 +191,16 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         synchronized (PARTS) {
             return PARTS.get(partId);
         }
+    }
+
+    public static Collection<ITextComponent> getErrorMessages(PlayerEntity player) {
+        Collection<ITextComponent> ret = new ArrayList<>();
+        if (!ERROR_LIST.isEmpty()) {
+            String listStr = String.join(", ", ERROR_LIST);
+            ret.add(TextUtil.withColor(new StringTextComponent("[Silent Gear] The following part/material models failed to load, check your log file:"),
+                    TextFormatting.RED));
+            ret.add(new StringTextComponent(listStr));
+        }
+        return ret;
     }
 }

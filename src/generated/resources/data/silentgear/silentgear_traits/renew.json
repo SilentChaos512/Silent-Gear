@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:self_repair",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.renew"
+  },
+  "description": {
+    "translate": "trait.silentgear.renew.desc"
+  },
+  "activation_chance": 0.018,
+  "repair_amount": 1
+}

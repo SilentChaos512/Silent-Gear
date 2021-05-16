@@ -6,7 +6,8 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.FragmentItem;
@@ -47,7 +48,7 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
         // Now, check that the fragments are all the same material.
         Set<ResourceLocation> uniques = new HashSet<>();
         for (ItemStack stack : StackList.from(craftingInventory)) {
-            IMaterial material = FragmentItem.getMaterial(stack);
+            IMaterialInstance material = FragmentItem.getMaterial(stack);
             if (material == null) {
                 return false;
             }
@@ -62,11 +63,20 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
         ItemStack stack = list.firstOfType(FragmentItem.class);
         if (stack.isEmpty()) return ItemStack.EMPTY;
 
-        IMaterial material = FragmentItem.getMaterial(stack);
+        IMaterialInstance material = FragmentItem.getMaterial(stack);
         if (material == null) return ItemStack.EMPTY;
 
         ItemStack[] matchingStacks = material.getIngredient().getMatchingStacks();
-        if (matchingStacks.length < 1) return ItemStack.EMPTY;
+        if (matchingStacks.length < 1) {
+            if (material.getIngredient() instanceof ExclusionIngredient) {
+                // Get excluded ingredients if no others are available
+                ItemStack[] allMatches = ((ExclusionIngredient) material.getIngredient()).getMatchingStacksWithExclusions();
+                if (allMatches.length > 0) {
+                    return allMatches[0];
+                }
+            }
+            return ItemStack.EMPTY;
+        }
 
         return matchingStacks[0].copy();
     }

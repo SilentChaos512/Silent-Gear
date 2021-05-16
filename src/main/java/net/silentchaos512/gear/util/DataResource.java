@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public final class DataResource<T> {
+public final class DataResource<T> { // TODO: Move to api package?
     private final ResourceLocation objectId;
     private final Function<ResourceLocation, T> getter;
 

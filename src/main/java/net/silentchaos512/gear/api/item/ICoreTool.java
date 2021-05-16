@@ -31,6 +31,10 @@ public interface ICoreTool extends ICoreItem {
     Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
             ItemStats.ARMOR_DURABILITY,
             ItemStats.REPAIR_VALUE,
+            ItemStats.RANGED_DAMAGE,
+            ItemStats.RANGED_SPEED,
+            ItemStats.PROJECTILE_ACCURACY,
+            ItemStats.PROJECTILE_SPEED,
             ItemStats.ARMOR,
             ItemStats.ARMOR_TOUGHNESS,
             ItemStats.MAGIC_ARMOR,
@@ -85,6 +89,9 @@ public interface ICoreTool extends ICoreItem {
 
     @Override
     default boolean hasTexturesFor(PartType partType) {
-        return partType != PartType.BOWSTRING && partType != PartType.FLETCHING && partType != PartType.ADORNMENT;
+        return partType != PartType.BOWSTRING
+                && partType != PartType.FLETCHING
+                && partType != PartType.ADORNMENT
+                && partType != PartType.LINING;
     }
 }

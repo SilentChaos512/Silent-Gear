@@ -31,6 +31,8 @@ public interface ITrait {
 
     int getMaxLevel();
 
+    Collection<ITraitCondition> getConditions();
+
     boolean willCancelWith(ITrait other);
 
     default int getCanceledLevel(int level, ITrait other, int otherLevel) {
@@ -116,6 +118,10 @@ public interface ITrait {
 
     void onGearCrafted(TraitActionContext context);
 
+    void onRecalculatePre(TraitActionContext context);
+
+    void onRecalculatePost(TraitActionContext context);
+
     float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio);
 
     void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, String slot);
@@ -132,12 +138,14 @@ public interface ITrait {
      * an entity.
      *
      * @param stack      The gear item
-     * @param entity     The entity using the item
+     * @param wielder     The entity using the item
      * @param traitLevel The level of this trait
      */
-    void onItemSwing(ItemStack stack, LivingEntity entity, int traitLevel);
+    void onItemSwing(ItemStack stack, LivingEntity wielder, int traitLevel);
 
     void onUpdate(TraitActionContext context, boolean isEquipped);
+
+    ItemStack addLootDrops(TraitActionContext context, ItemStack stack);
 
     default CompoundNBT write(int level) {
         CompoundNBT tag = new CompoundNBT();

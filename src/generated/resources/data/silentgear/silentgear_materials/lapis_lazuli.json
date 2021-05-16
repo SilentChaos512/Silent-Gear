@@ -27,7 +27,10 @@
       "magic_damage": 3.0,
       "attack_speed": 0.0,
       "armor": 15.0,
-      "armor_toughness": 0.0,
+      "armor/helmet": 2.0,
+      "armor/chestplate": 6.0,
+      "armor/leggings": 5.0,
+      "armor/boots": 2.0,
       "magic_armor": 10.0,
       "ranged_damage": 0.0,
       "ranged_speed": -0.1,
@@ -62,17 +65,8 @@
         "level": 1,
         "conditions": [
           {
-            "type": "silentgear:or",
-            "values": [
-              {
-                "type": "silentgear:gear_type",
-                "gear_type": "weapon"
-              },
-              {
-                "type": "silentgear:material_ratio",
-                "ratio": 0.75
-              }
-            ]
+            "type": "silentgear:material_ratio",
+            "ratio": 0.75
           }
         ]
       },
@@ -81,21 +75,8 @@
         "level": 4,
         "conditions": [
           {
-            "type": "silentgear:or",
-            "values": [
-              {
-                "type": "silentgear:gear_type",
-                "gear_type": "tool"
-              },
-              {
-                "type": "silentgear:gear_type",
-                "gear_type": "weapon"
-              },
-              {
-                "type": "silentgear:material_ratio",
-                "ratio": 0.75
-              }
-            ]
+            "type": "silentgear:material_ratio",
+            "ratio": 0.75
           }
         ]
       }

@@ -6,5 +6,10 @@
   },
   "description": {
     "translate": "trait.silentgear.magnetic.desc"
-  }
+  },
+  "extra_wiki_lines": [
+    {
+      "text": "Higher levels increase range"
+    }
+  ]
 }

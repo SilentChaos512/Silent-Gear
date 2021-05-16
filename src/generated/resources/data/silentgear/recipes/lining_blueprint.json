@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "silentgear:blueprints/lining",
+  "ingredients": [
+    {
+      "tag": "silentgear:blueprint_paper"
+    },
+    {
+      "tag": "silentgear:blueprint_paper"
+    },
+    {
+      "tag": "silentgear:blueprint_paper"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "tag": "forge:string"
+    },
+    {
+      "tag": "forge:string"
+    }
+  ],
+  "result": {
+    "item": "silentgear:lining_blueprint"
+  }
+}

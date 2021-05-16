@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "silentgear:white_fluffy_block",
+    "silentgear:orange_fluffy_block",
+    "silentgear:magenta_fluffy_block",
+    "silentgear:light_blue_fluffy_block",
+    "silentgear:yellow_fluffy_block",
+    "silentgear:lime_fluffy_block",
+    "silentgear:pink_fluffy_block",
+    "silentgear:gray_fluffy_block",
+    "silentgear:light_gray_fluffy_block",
+    "silentgear:cyan_fluffy_block",
+    "silentgear:purple_fluffy_block",
+    "silentgear:blue_fluffy_block",
+    "silentgear:brown_fluffy_block",
+    "silentgear:green_fluffy_block",
+    "silentgear:red_fluffy_block",
+    "silentgear:black_fluffy_block"
+  ]
+}

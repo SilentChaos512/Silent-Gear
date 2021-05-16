@@ -18,11 +18,14 @@ import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.StaticLayer;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.utils.Color;
@@ -36,12 +39,16 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     private final ItemCameraTransforms cameraTransforms;
     final GearType gearType;
     final PartType partType;
+    final String texturePath;
+    private final List<ResourceLocation> extraLayers;
     private CompoundPartModelOverrideList overrideList;
 
-    CompoundPartModel(ItemCameraTransforms cameraTransforms, GearType gearType, PartType partType) {
+    CompoundPartModel(ItemCameraTransforms cameraTransforms, GearType gearType, PartType partType, String texturePath, List<ResourceLocation> extraLayers) {
         this.cameraTransforms = cameraTransforms;
         this.gearType = gearType;
         this.partType = partType;
+        this.texturePath = texturePath;
+        this.extraLayers = Collections.unmodifiableList(extraLayers);
     }
 
     public void clearCache() {
@@ -72,7 +79,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.gearType, 0)));
+            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.texturePath, 0)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -88,10 +95,19 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
             }
         }
 
+        // Extras
+        for (int i = 0; i < this.extraLayers.size(); i++) {
+            ResourceLocation texture = this.extraLayers.get(i);
+            builder.addAll(getQuadsForSprite(layers.size() + i,
+                    spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(texture).getTexture())),
+                    rotation,
+                    Color.VALUE_WHITE));
+        }
+
         builder.addAll(getQuadsForSprite(layers.size(),
-                spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE, Color.VALUE_WHITE).getTexture(gearType, 0))),
+                spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE).getTexture())),
                 rotation,
-                Color.VALUE_WHITE));
+                Color.LIGHTSKYBLUE.getColor()));
 
         TextureAtlasSprite particle = spriteGetter.apply(owner.resolveTexture("particle"));
 
@@ -100,23 +116,22 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
 
     private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
         // This method will display an example item for items with no data (ie, for advancements)
-        IMaterialDisplay model = MaterialDisplayManager.get(material);
-        MaterialLayer exampleMain = model.getLayers(this.gearType, this.partType).getFirstLayer();
+        MaterialInstance mat = MaterialInstance.of(material);
+        IMaterialDisplay model = MaterialDisplayManager.get(mat);
+        MaterialLayer exampleMain = model.getLayerList(this.gearType, this.partType, mat).getFirstLayer();
         if (exampleMain != null) {
-            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(gearType, 0))), rotation, exampleMain.getColor()));
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(this.texturePath, 0))), rotation, exampleMain.getColor()));
         }
-        builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE, Color.VALUE_WHITE).getTexture(gearType, 0))), rotation, Color.VALUE_WHITE));
+        builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE).getTexture(this.gearType, 0))), rotation, Color.VALUE_WHITE));
     }
 
     @Override
     public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
         Set<RenderMaterial> ret = new HashSet<>();
-        if (this.gearType == GearType.ARMOR || this.gearType == GearType.SHIELD) {
+        if (this.gearType == GearType.SHIELD) {
             // Unobtainable part items, no need for textures
             return ret;
         }
-
-        ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
 
         // Generic built-in textures
         for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
@@ -125,22 +140,34 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
 
         // Custom textures
         for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
-            for (MaterialLayer layer : materialDisplay.getLayers(this.gearType, this.partType)) {
+            for (MaterialLayer layer : materialDisplay.getLayerList(this.gearType, this.partType, LazyMaterialInstance.of(materialDisplay.getMaterialId()))) {
                 ret.add(getTexture(layer));
             }
         }
 
-        ret.add(getTexture(new StaticLayer(PART_MARKER_TEXTURE, Color.VALUE_WHITE)));
+        for (ResourceLocation texture : this.extraLayers) {
+            ret.add(getTexture(new StaticLayer(texture)));
+        }
+
+        ret.add(getTexture(new StaticLayer(PART_MARKER_TEXTURE)));
+        ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+
+        if (CompoundPartModelOverrideList.isDebugLoggingEnabled()) {
+            SilentGear.LOGGER.info("Textures for compound part model '{}'", PartGearKey.of(this.gearType, this.partType));
+            for (RenderMaterial mat : ret) {
+                SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+            }
+        }
 
         return ret;
     }
 
     private RenderMaterial getTexture(MaterialLayer layer) {
-        return getMaterial(layer.getTexture(this.gearType, 0));
+        return getMaterial(layer.getTexture(this.texturePath, 0));
     }
 
     private RenderMaterial getTexture(ResourceLocation tex) {
-        String path = "item/" + gearType.getName() + "/" + tex.getPath();
+        String path = "item/" + this.texturePath + "/" + tex.getPath();
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path);
         return getMaterial(location);
     }

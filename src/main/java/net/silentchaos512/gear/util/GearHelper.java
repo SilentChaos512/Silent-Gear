@@ -9,14 +9,18 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -37,7 +41,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.crafting.ingredient.IPartIngredient;
+import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
@@ -48,6 +52,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Contains various methods used by gear items. Many are delegates for item overrides, to cut down
@@ -61,7 +66,6 @@ public final class GearHelper {
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
-    private static final int DAMAGE_FACTOR_LEVELS = 10;
 
     private GearHelper() {}
 
@@ -80,17 +84,6 @@ public final class GearHelper {
      */
     public static boolean isGear(ItemStack stack) {
         return stack.getItem() instanceof ICoreItem;
-    }
-
-    /**
-     * Check if the item is a Silent Gear tool, weapon, or armor item. Also checks that the stack is
-     * not null and not empty.
-     *
-     * @param stack The item
-     * @return True if {@code stack} is a gear item, false if null, empty, or not a gear item
-     */
-    public static boolean isGearNullable(@Nullable ItemStack stack) {
-        return stack != null && !stack.isEmpty() && isGear(stack);
     }
 
     //region Attribute modifiers
@@ -277,8 +270,10 @@ public final class GearHelper {
     }
 
     private static void notifyPlayerOfBrokenGear(ItemStack stack, PlayerEntity player) {
-        // Notify player. Mostly for armor, but might help new players as well.
-        player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()), Util.DUMMY_UUID);
+        if (Config.Common.sendGearBrokenMessage.get()) {
+            // Notify player. Mostly for armor, but might help new players as well.
+            player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getDisplayName()), Util.DUMMY_UUID);
+        }
     }
 
     private static int getDamageFactor(ItemStack stack, int maxDamage) {
@@ -300,7 +295,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.Common.gearBreaksPermanently.get() || GearData.hasPart(stack, Const.Parts.RED_CARD.getId());
+        return Config.Common.gearBreaksPermanently.get() || TraitHelper.hasTrait(stack, Const.Traits.RED_CARD);
     }
 
     public static boolean isBroken(ItemStack stack) {
@@ -328,23 +323,26 @@ public final class GearHelper {
     }
 
     public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        int value;
+        final int preTraitValue;
         if (GearHelper.isUnbreakable(stack)) {
-            value = 0;
+            preTraitValue = 0;
         } else if (!Config.Common.gearBreaksPermanently.get()) {
-            value = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
-            if (!isBroken(stack) && stack.getDamage() + value >= stack.getMaxDamage() - 1) {
+            preTraitValue = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamage() - 1);
+            if (!isBroken(stack) && stack.getDamage() + preTraitValue >= stack.getMaxDamage() - 1) {
                 onBroken.accept(entity);
             }
         } else {
-            value = amount;
+            preTraitValue = amount;
         }
+
+        final int value = (int) TraitHelper.activateTraits(stack, preTraitValue, (trait, level, val) ->
+                trait.onDurabilityDamage(new TraitActionContext(null, level, stack), (int) val));
         GearHelper.damageParts(stack, value);
         return value;
     }
 
-    public static void damageParts(ItemStack stack, int amount) {
-        GearData.getConstructionParts(stack).forEach(p -> p.getPart().onGearDamaged(p, stack, amount));
+    private static void damageParts(ItemStack stack, int amount) {
+        GearData.getConstructionParts(stack).forEach(p -> p.get().onGearDamaged(p, stack, amount));
     }
 
     //endregion
@@ -356,8 +354,12 @@ public final class GearHelper {
     }
 
     public static GearType getType(ItemStack gear) {
+        return getType(gear, GearType.NONE);
+    }
+
+    public static GearType getType(ItemStack gear, GearType defaultType) {
         if (gear.isEmpty() || !(gear.getItem() instanceof ICoreItem)) {
-            return GearType.NONE;
+            return defaultType;
         }
         return ((ICoreItem) gear.getItem()).getGearType();
     }
@@ -400,15 +402,6 @@ public final class GearHelper {
             return -1;
 
         return GearData.getStatInt(stack, ItemStats.HARVEST_LEVEL);
-    }
-
-    public static void setHarvestLevel(ICoreItem item, String toolClass, int level, Set<String> mutableSet) {
-        // Add tool class to list if level is non-negative. Because this is on the item level, the
-        // actual number is meaningless. Harvest levels can be customized in the material JSONs.
-        final boolean add = level >= 0;
-        SilentGear.LOGGER.info("{}: {} tool class \"{}\"", item.getClass().getSimpleName(), (add ? "set" : "remove"), toolClass);
-        if (add) mutableSet.add(toolClass);
-        else mutableSet.remove(toolClass);
     }
 
     public static float getDestroySpeed(ItemStack stack, BlockState state, @Nullable Set<Material> extraMaterials) {
@@ -480,11 +473,126 @@ public final class GearHelper {
         return ret;
     }
 
-    public static void onItemSwing(ItemStack stack, LivingEntity entity) {
+    public static void onItemSwing(ItemStack stack, LivingEntity wielder) {
+        if (wielder instanceof PlayerEntity
+                && getType(stack).matches(GearType.MELEE_WEAPON)
+                && tryAttackWithExtraReach((PlayerEntity) wielder, false) != null) {
+            // Player attacked something, ignore traits
+            return;
+        }
+
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
         for (Map.Entry<ITrait, Integer> entry : traits.entrySet()) {
-            entry.getKey().onItemSwing(stack, entity, entry.getValue());
+            entry.getKey().onItemSwing(stack, wielder, entry.getValue());
         }
+    }
+
+    /**
+     * Checks if the player would be able to attack an entity which may be outside the vanilla
+     * range, based on reach distance attribute value.
+     *
+     * @param player The attacking player
+     * @return The targeted entity if a vulnerable entity is within range, null otherwise
+     */
+    @Nullable
+    public static Entity getAttackTargetWithExtraReach(PlayerEntity player) {
+        if (getType(player.getHeldItemMainhand()).matches(GearType.MELEE_WEAPON)) {
+            return tryAttackWithExtraReach(player, true);
+        }
+        return null;
+    }
+
+    /**
+     * Attempts to attack an entity which may be outside the vanilla range, based on reach distance
+     * attribute value.
+     *
+     * @param player The attacking player
+     * @return The attacked entity if the attack was successful, null otherwise
+     */
+    @Nullable
+    public static Entity tryAttackWithExtraReach(PlayerEntity player) {
+        return tryAttackWithExtraReach(player, false);
+    }
+
+    @Nullable
+    private static Entity tryAttackWithExtraReach(PlayerEntity player, boolean simulate) {
+        // Attempt to attack something if wielding a weapon with increased melee range
+        double range = getAttackRange(player);
+        Vector3d vector3d = player.getEyePosition(0f);
+        double rangeSquared = range * range;
+
+        Vector3d vector3d1 = player.getLook(1.0F);
+        Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
+        AxisAlignedBB axisalignedbb = player.getBoundingBox().expand(vector3d1.scale(range)).grow(1.0D, 1.0D, 1.0D);
+
+        EntityRayTraceResult rayTrace = rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (entity) -> {
+            return !entity.isSpectator() && entity.canBeCollidedWith();
+        }, rangeSquared);
+
+        if (rayTrace != null) {
+            Entity entity = rayTrace.getEntity();
+            if (!simulate) {
+                player.attackTargetEntityWithCurrentItem(entity);
+            }
+            return entity;
+        }
+
+        return null;
+    }
+
+    private static double getAttackRange(LivingEntity entity) {
+        ItemStack stack = entity.getHeldItemMainhand();
+        double base = getType(stack).matches(GearType.TOOL)
+                ? GearData.getStat(stack, ItemStats.ATTACK_REACH)
+                : ItemStats.ATTACK_REACH.getBaseValue();
+
+        // Also check Forge reach distance, to allow curios to add more reach
+        ModifiableAttributeInstance attribute = entity.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        if (attribute != null) {
+            double reachBonus = attribute.getValue() - attribute.getBaseValue();
+            return base + reachBonus;
+        }
+
+        return base;
+    }
+
+    @SuppressWarnings({"MethodWithTooManyParameters", "OverlyComplexMethod"})
+    @Nullable
+    private static EntityRayTraceResult rayTraceEntities(Entity shooter, Vector3d startVec, Vector3d endVec, AxisAlignedBB boundingBox, Predicate<Entity> filter, double distance) {
+        // Copied from ProjectileHelper (func_221273_a)
+        World world = shooter.world;
+        double d0 = distance;
+        Entity entity = null;
+        Vector3d vector3d = null;
+
+        for (Entity entity1 : world.getEntitiesInAABBexcluding(shooter, boundingBox, filter)) {
+            AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
+            Optional<Vector3d> optional = axisalignedbb.rayTrace(startVec, endVec);
+            if (axisalignedbb.contains(startVec)) {
+                if (d0 >= 0.0D) {
+                    entity = entity1;
+                    vector3d = optional.orElse(startVec);
+                    d0 = 0.0D;
+                }
+            } else if (optional.isPresent()) {
+                Vector3d vector3d1 = optional.get();
+                double d1 = startVec.squareDistanceTo(vector3d1);
+                if (d1 < d0 || d0 == 0.0D) {
+                    if (entity1.getLowestRidingEntity() == shooter.getLowestRidingEntity() && !entity1.canRiderInteract()) {
+                        if (d0 == 0.0D) {
+                            entity = entity1;
+                            vector3d = vector3d1;
+                        }
+                    } else {
+                        entity = entity1;
+                        vector3d = vector3d1;
+                        d0 = d1;
+                    }
+                }
+            }
+        }
+
+        return entity == null ? null : new EntityRayTraceResult(entity, vector3d);
     }
 
     public static Rarity getRarity(ItemStack stack) {
@@ -501,7 +609,6 @@ public final class GearHelper {
         return Rarity.EPIC;
     }
 
-    // Formerly getSubItems
     public static void fillItemGroup(ICoreItem item, ItemGroup group, Collection<ItemStack> items) {
         boolean inTab = false;
         for (ItemGroup tabInList : item.asItem().getCreativeTabs()) {
@@ -541,6 +648,9 @@ public final class GearHelper {
         if (part == null) return new TranslationTextComponent(gear.getTranslationKey());
 
         ITextComponent partName = part.getMaterialName(gear);
+        if (TimedEvents.isAprilFools()) {
+            partName = partName.deepCopy().append(new StringTextComponent(" & Knuckles"));
+        }
         ITextComponent gearName = new TranslationTextComponent(gear.getTranslationKey() + ".nameProper", partName);
         ITextComponent result = gearName;
 
@@ -575,8 +685,8 @@ public final class GearHelper {
         PartType.MAIN.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(PartType.MAIN, p));
 
         for (Ingredient ingredient : ingredients) {
-            if (ingredient instanceof IPartIngredient) {
-                PartType type = ((IPartIngredient) ingredient).getPartType();
+            if (ingredient instanceof IGearIngredient) {
+                PartType type = ((IGearIngredient) ingredient).getPartType();
                 type.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(type, p));
             }
         }

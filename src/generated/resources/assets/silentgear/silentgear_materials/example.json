@@ -9,11 +9,6 @@
       "texture": "silentgear:metal"
     }
   ],
-  "main/armor": [
-    {
-      "texture": "silentgear:main_generic_lc"
-    }
-  ],
   "rod/all": [
     {
       "texture": "silentgear:rod_generic_lc"
@@ -71,6 +66,11 @@
   "binding/part": [
     {
       "texture": "silentgear:binding"
+    }
+  ],
+  "lining/part": [
+    {
+      "texture": "silentgear:lining_cloth"
     }
   ],
   "bowstring/all": [

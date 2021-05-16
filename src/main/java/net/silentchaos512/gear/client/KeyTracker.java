@@ -113,7 +113,8 @@ public class KeyTracker {
     }
 
     public static boolean isDisplayStatsDown() {
-        if (DISPLAY_STATS.getKey().getKeyCode() == GLFW.GLFW_KEY_LEFT_CONTROL) {
+        int code = DISPLAY_STATS.getKey().getKeyCode();
+        if (code == GLFW.GLFW_KEY_LEFT_CONTROL || code == GLFW.GLFW_KEY_RIGHT_CONTROL || DISPLAY_STATS.isInvalid()) {
             // Maintain old behavior of checking both ctrl keys
             return isControlDown();
         }
@@ -121,14 +122,16 @@ public class KeyTracker {
     }
 
     public static boolean isDisplayConstructionDown() {
-        if (DISPLAY_CONSTRUCTION.getKey().getKeyCode() == GLFW.GLFW_KEY_LEFT_ALT) {
+        int code = DISPLAY_CONSTRUCTION.getKey().getKeyCode();
+        if (code == GLFW.GLFW_KEY_LEFT_ALT || code == GLFW.GLFW_KEY_RIGHT_ALT || DISPLAY_CONSTRUCTION.isInvalid()) {
             return isAltDown();
         }
         return DISPLAY_CONSTRUCTION.isKeyDown();
     }
 
     public static boolean isDisplayTraitsDown() {
-        if (DISPLAY_TRAITS.getKey().getKeyCode() == GLFW.GLFW_KEY_LEFT_SHIFT) {
+        int code = DISPLAY_TRAITS.getKey().getKeyCode();
+        if (code == GLFW.GLFW_KEY_LEFT_SHIFT || code == GLFW.GLFW_KEY_RIGHT_SHIFT || DISPLAY_TRAITS.isInvalid()) {
             return isShiftDown();
         }
         return DISPLAY_TRAITS.isKeyDown();

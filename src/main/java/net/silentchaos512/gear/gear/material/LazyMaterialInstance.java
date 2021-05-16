@@ -6,15 +6,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.util.DataResource;
-import net.silentchaos512.utils.Color;
 import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nullable;
@@ -49,13 +47,13 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public ResourceLocation getMaterialId() {
+    public ResourceLocation getId() {
         return materialId;
     }
 
     @Nullable
     @Override
-    public IMaterial getMaterial() {
+    public IMaterial get() {
         return MaterialManager.get(materialId);
     }
 
@@ -66,20 +64,14 @@ public class LazyMaterialInstance implements IMaterialInstance {
 
     @Override
     public ItemStack getItem() {
-        IMaterial material = getMaterial();
+        IMaterial material = get();
         return material != null ? MaterialInstance.of(material).getItem() : ItemStack.EMPTY;
     }
 
     @Override
     public int getTier(PartType partType) {
-        IMaterial material = getMaterial();
-        return material != null ? material.getTier(partType) : 0;
-    }
-
-    @Override
-    public float getStat(ItemStat stat, PartType partType, ItemStack gear) {
-        IMaterial material = getMaterial();
-        return material != null ? material.getStat(this, stat, partType) : 0;
+        IMaterial material = get();
+        return material != null ? material.getTier(this, partType) : 0;
     }
 
     @Override
@@ -92,15 +84,14 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public int getColor(PartType partType, ItemStack gear) {
-        IMaterial material = getMaterial();
-        return material != null ? material.getPrimaryColor(gear, partType) : Color.VALUE_WHITE;
+    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+        IMaterial material = get();
+        return material != null ? material.getDisplayName(this, partType, gear) : new StringTextComponent("INVALID");
     }
 
     @Override
-    public IFormattableTextComponent getDisplayName(PartType partType, ItemStack gear) {
-        IMaterial material = getMaterial();
-        return material != null ? material.getDisplayName(partType, gear) : new StringTextComponent("INVALID");
+    public String getModelKey() {
+        return "null";
     }
 
     public static LazyMaterialInstance deserialize(JsonObject json) {

@@ -1,0 +1,21 @@
+{
+  "type": "silentgear:simple_trait",
+  "max_level": 1,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "armor"
+    }
+  ],
+  "name": {
+    "translate": "trait.silentgear.void_ward"
+  },
+  "description": {
+    "translate": "trait.silentgear.void_ward.desc"
+  },
+  "extra_wiki_lines": [
+    {
+      "text": "When void damage is taken, the player is launched upward and given a levitation and slow falling effect"
+    }
+  ]
+}

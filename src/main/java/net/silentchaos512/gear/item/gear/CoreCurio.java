@@ -16,6 +16,7 @@ import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
@@ -29,6 +30,7 @@ import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -55,6 +57,10 @@ public class CoreCurio extends Item implements ICoreItem {
         super(properties);
         this.gearType = gearType;
         this.slot = slot;
+    }
+
+    public String getSlot() {
+        return slot;
     }
 
     @Nullable
@@ -98,6 +104,9 @@ public class CoreCurio extends Item implements ICoreItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        if (!ModList.get().isLoaded(Const.CURIOS)) {
+            tooltip.add(TextUtil.misc("curiosNotInstalled").mergeStyle(TextFormatting.RED));
+        }
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 

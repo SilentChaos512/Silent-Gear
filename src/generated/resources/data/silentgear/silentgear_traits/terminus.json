@@ -1,6 +1,12 @@
 {
   "type": "silentgear:block_placer",
   "max_level": 1,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "tool"
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.terminus"
   },

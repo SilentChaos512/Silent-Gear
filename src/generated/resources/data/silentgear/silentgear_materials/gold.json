@@ -27,7 +27,10 @@
       "magic_damage": 4.0,
       "attack_speed": 0.2,
       "armor": 11.0,
-      "armor_toughness": 0.0,
+      "armor/helmet": 2.0,
+      "armor/chestplate": 5.0,
+      "armor/leggings": 3.0,
+      "armor/boots": 1.0,
       "magic_armor": 8.0,
       "ranged_damage": 0.0,
       "ranged_speed": 0.3,
@@ -63,6 +66,17 @@
       },
       "rarity": {
         "add": 30.0
+      }
+    },
+    "coating": {
+      "durability": {
+        "mul2": -0.1
+      },
+      "armor_durability": {
+        "mul2": -0.1
+      },
+      "rarity": {
+        "add": 10.0
       }
     }
   },
@@ -101,6 +115,16 @@
     "tip": [
       {
         "name": "silentgear:malleable",
+        "level": 1
+      },
+      {
+        "name": "silentgear:soft",
+        "level": 3
+      }
+    ],
+    "coating": [
+      {
+        "name": "silentgear:brilliant",
         "level": 1
       },
       {

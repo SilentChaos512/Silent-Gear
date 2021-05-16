@@ -12,7 +12,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -61,7 +60,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     default boolean supportsPart(ItemStack gear, PartData part) {
-        boolean canAdd = part.getPart().canAddToGear(gear, part);
+        boolean canAdd = part.get().canAddToGear(gear, part);
         return (requiresPartOfType(part.getType()) && canAdd) || canAdd;
     }
 
@@ -88,7 +87,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
      * @param stack The item
      * @return A set of stats to display in the item's tooltip
      */
-    Set<ItemStat> getRelevantStats(ItemStack stack);
+    Set<ItemStat> getRelevantStats(ItemStack stack); // TODO: Change to Set<IItemStat>?
 
     /**
      * Gets all stats that will not be calculated or stored for this item. <em>Be very careful with
@@ -100,7 +99,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
      * @param stack The item
      * @return A set of stats to not include.
      */
-    default Set<ItemStat> getExcludedStats(ItemStack stack) {
+    default Set<ItemStat> getExcludedStats(ItemStack stack) { // TODO: Change to Set<IItemStat>?
         return Collections.emptySet();
     }
 
@@ -117,7 +116,7 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     default ItemStat getDurabilityStat() {
-        return ItemStats.DURABILITY;
+        return getGearType().getDurabilityStat();
     }
 
     default float getRepairModifier(ItemStack stack) {

@@ -13,7 +13,7 @@ public class GearNamePrefixesEvent extends GearItemEvent {
     public GearNamePrefixesEvent(ItemStack gear, Collection<PartData> parts) {
         super(gear, parts);
         parts.forEach(p -> {
-            ITextComponent prefix = p.getPart().getDisplayNamePrefix(p, gear);
+            ITextComponent prefix = p.get().getDisplayNamePrefix(p, gear);
             if (prefix != null) {
                 prefixes.add(prefix);
             }

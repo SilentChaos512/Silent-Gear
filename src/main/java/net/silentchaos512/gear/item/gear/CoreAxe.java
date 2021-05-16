@@ -87,7 +87,7 @@ public class CoreAxe extends AxeItem implements ICoreTool {
         ActionResultType result = GearHelper.onItemUse(context);
         // Strip bark
         if (result == ActionResultType.PASS)
-            GearHelper.useAndCheckBroken(context, super::onItemUse);
+            return GearHelper.useAndCheckBroken(context, super::onItemUse);
         return result;
     }
 

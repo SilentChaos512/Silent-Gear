@@ -36,7 +36,10 @@
       "magic_damage": 1.0,
       "attack_speed": 0.1,
       "armor": 13.0,
-      "armor_toughness": 0.0,
+      "armor/helmet": 2.0,
+      "armor/chestplate": 5.0,
+      "armor/leggings": 4.0,
+      "armor/boots": 2.0,
       "magic_armor": 6.0,
       "ranged_damage": 0.5,
       "ranged_speed": 0.1,
@@ -75,10 +78,6 @@
                 "ratio": 0.35
               }
             ]
-          },
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "armor"
           }
         ]
       }

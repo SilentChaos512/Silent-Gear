@@ -1,0 +1,32 @@
+{
+  "availability": {
+    "tier": 0,
+    "categories": [
+      "organic"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:vine"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.vine"
+  },
+  "stats": {
+    "binding": {
+      "durability": {
+        "mul1": 0.03
+      },
+      "armor_durability": {
+        "mul1": -0.03
+      },
+      "repair_efficiency": {
+        "mul1": 0.03
+      }
+    }
+  }
+}

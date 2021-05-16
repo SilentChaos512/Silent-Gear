@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "silentgear:block/fluffy_plant3"
+  }
+}

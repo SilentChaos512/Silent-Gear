@@ -21,7 +21,9 @@ import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -35,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -67,6 +68,10 @@ public class GearModelOverrideList extends ItemOverrideList {
         this.modelLocation = modelLocation;
     }
 
+    static boolean isDebugLoggingEnabled() {
+        return Config.Common.modelAndTextureLogging.get();
+    }
+
     @Nullable
     @Override
     public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
@@ -74,8 +79,8 @@ public class GearModelOverrideList extends ItemOverrideList {
         CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(key, stack, worldIn, entityIn, animationFrame));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ModelErrorLogging.notifyOfException(e, "gear item");
         }
         return model;
     }
@@ -85,19 +90,22 @@ public class GearModelOverrideList extends ItemOverrideList {
     }
 
     private IBakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
-        if (SilentGear.LOGGER.isDebugEnabled()) {
-            SilentGear.LOGGER.debug("getOverrideModel for {}", stack.getDisplayName().getString());
-            SilentGear.LOGGER.debug("- model key {}", key.data);
+        boolean broken = GearHelper.isBroken(stack);
+        if (isDebugLoggingEnabled()) {
+            SilentGear.LOGGER.info("getOverrideModel for {} ({})", stack.getDisplayName().getString(), broken ? "broken" : "normal");
+            SilentGear.LOGGER.info("- model key {}", key.data);
         }
         List<MaterialLayer> layers = new ArrayList<>();
 
         for (PartData part : getPartsInRenderOrder(stack)) {
-            addSimplePartLayers(layers, part, stack);
+            if (((ICoreItem) stack.getItem()).hasTexturesFor(part.getType())) {
+                addSimplePartLayers(layers, part, stack);
 
-            if (part.getPart() instanceof CompoundPart) {
-                MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
-                if (mat != null) {
-                    addWithBlendedColor(layers, part, mat, stack);
+                if (part.get() instanceof CompoundPart) {
+                    MaterialInstance mat = CompoundPart.getPrimaryMaterial(part);
+                    if (mat != null) {
+                        addWithBlendedColor(layers, part, mat, stack);
+                    }
                 }
             }
         }
@@ -107,7 +115,7 @@ public class GearModelOverrideList extends ItemOverrideList {
             getCrossbowCharge(stack, worldIn, entityIn).ifPresent(layers::add);
         }
 
-        return model.bake(layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
+        return model.bake(stack, layers, animationFrame, "test", owner, bakery, spriteGetter, modelTransform, this, modelLocation);
     }
 
     private static PartDataList getPartsInRenderOrder(ItemStack stack) {
@@ -130,14 +138,14 @@ public class GearModelOverrideList extends ItemOverrideList {
 
     @SuppressWarnings("TypeMayBeWeakened")
     private static void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
-        IMaterialDisplay model = MaterialDisplayManager.get(material.getMaterial());
+        IMaterialDisplay model = MaterialDisplayManager.get(material);
         GearType gearType = GearHelper.getType(stack);
-        List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();
+        List<MaterialLayer> layers = model.getLayerList(gearType, part, material).getLayers();
         addColorBlendedLayers(list, part, stack, layers);
     }
 
     private static void addSimplePartLayers(List<MaterialLayer> list, PartData part, ItemStack stack) {
-        IPartDisplay model = MaterialDisplayManager.get(part.getPart());
+        IPartDisplay model = MaterialDisplayManager.get(part.get());
         if (model != null) {
             GearType gearType = GearHelper.getType(stack);
             List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();
@@ -150,17 +158,29 @@ public class GearModelOverrideList extends ItemOverrideList {
             MaterialLayer layer = layers.get(i);
             if ((layer.getColor() & 0xFFFFFF) < 0xFFFFFF) {
                 int blendedColor = part.getColor(stack, i, 0);
-                list.add(new MaterialLayer(layer.getTextureId(), blendedColor));
-                if (SilentGear.LOGGER.isDebugEnabled()) {
-                    SilentGear.LOGGER.debug("  - add layer {} ({})", layer.getTextureId(), Color.format(blendedColor));
+                MaterialLayer coloredLayer = layer.withColor(blendedColor);
+                list.add(coloredLayer);
+                if (isDebugLoggingEnabled()) {
+                    debugLogLayer(coloredLayer, Color.format(blendedColor));
                 }
             } else {
                 list.add(layer);
-                if (SilentGear.LOGGER.isDebugEnabled()) {
-                    SilentGear.LOGGER.debug("  - add layer {} (colorless)", layer.getTextureId());
+                if (isDebugLoggingEnabled()) {
+                    debugLogLayer(layer, "colorless");
                 }
             }
         }
+    }
+
+    private static void debugLogLayer(MaterialLayer layer, String colorStr) {
+        //noinspection ConstantConditions -- unknown NPE for some data pack users
+        String partTypeStr = layer.getPartType() != null
+                ? SilentGear.shortenId(layer.getPartType().getName())
+                : "null type?";
+        SilentGear.LOGGER.info("  - add layer {} ({}, {})",
+                layer.getTextureId(),
+                partTypeStr,
+                colorStr);
     }
 
     private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
@@ -183,10 +203,11 @@ public class GearModelOverrideList extends ItemOverrideList {
     }
 
     private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int animationFrame) {
+        String brokenSuffix = GearHelper.isBroken(stack) ? "broken" : "";
         String chargeSuffix = getCrossbowCharge(stack, world, entity)
-                .map(l -> l.getTextureId().getPath())
+                .map(l -> ";" + l.getTextureId().getPath())
                 .orElse("");
-        return new CacheKey(model, GearData.getModelKey(stack, animationFrame) + chargeSuffix);
+        return new CacheKey(model, GearData.getModelKey(stack, animationFrame) + brokenSuffix + chargeSuffix);
     }
 
     @Override

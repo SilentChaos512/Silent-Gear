@@ -28,12 +28,13 @@ public class ModLootTables extends LootTableProvider {
         return ImmutableList.of(
                 Pair.of(ModBlockLootTables::new, LootParameterSets.BLOCK),
                 Pair.of(ModChestLootTables::new, LootParameterSets.CHEST),
+                Pair.of(ModEntityLootTables::new, LootParameterSets.ENTITY),
                 Pair.of(ModGiftLootTables::new, LootParameterSets.GIFT)
         );
     }
 
     @Override
     protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker validationtracker) {
-        map.forEach((p_218436_2_, p_218436_3_) -> LootTableManager.validateLootTable(validationtracker, p_218436_2_, p_218436_3_));
+        map.forEach((id, table) -> LootTableManager.validateLootTable(validationtracker, id, table));
     }
 }

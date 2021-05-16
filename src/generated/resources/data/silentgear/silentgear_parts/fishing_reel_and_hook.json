@@ -1,0 +1,20 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "fishing_rod",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:fishing_reel_and_hook"
+  },
+  "name": {
+    "translate": "part.silentgear.fishing_reel_and_hook"
+  },
+  "stats": {
+    "durability": {
+      "mul1": -0.5
+    },
+    "repair_efficiency": 1.25,
+    "enchantability": {
+      "mul1": -0.75
+    }
+  }
+}

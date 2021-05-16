@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "silentgear:blaze_gold_block",
+    "silentgear:golden_nether_banana",
+    "silentgear:blaze_gold_dust",
+    "silentgear:blaze_gold_ingot"
+  ]
+}

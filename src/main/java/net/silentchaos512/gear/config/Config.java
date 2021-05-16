@@ -15,7 +15,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
-import net.silentchaos512.gear.util.IAOETool;
+import net.silentchaos512.gear.util.IAoeTool;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +38,11 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue sinewDropRate;
         static final ForgeConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
-        public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeStandard;
-        public static final ForgeConfigSpec.EnumValue<IAOETool.MatchMode> matchModeOres;
+        public static final ForgeConfigSpec.BooleanValue allowClassicMaterialMixing;
+        public static final ForgeConfigSpec.BooleanValue allowConversionRecipes;
+        public static final ForgeConfigSpec.BooleanValue sendGearBrokenMessage;
+        public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeStandard;
+        public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeOres;
         public static final ForgeConfigSpec.IntValue damageFactorLevels;
         public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
         public static final ForgeConfigSpec.IntValue prospectorHammerRange;
@@ -55,16 +58,30 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue repairKitSturdyEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitCrimsonEfficiency;
         public static final ForgeConfigSpec.DoubleValue repairKitAzureEfficiency;
+        public static final ForgeConfigSpec.DoubleValue missingRepairKitEfficiency;
+        public static final ForgeConfigSpec.IntValue sawRecursionDepth;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
+        // Other items
+        public static final ForgeConfigSpec.IntValue netherwoodCharcoalBurnTime;
         // Salvager
         public static final ForgeConfigSpec.DoubleValue salvagerMinLossRate;
         public static final ForgeConfigSpec.DoubleValue salvagerMaxLossRate;
-        // Compatibility
-        public static final ForgeConfigSpec.BooleanValue mineAndSlashSupport;
+        // World
+        public static final ForgeConfigSpec.IntValue azureSilverCount;
+        public static final ForgeConfigSpec.IntValue bortCount;
+        public static final ForgeConfigSpec.IntValue crimsonIronCount;
+        public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
+        public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
+        public static final ForgeConfigSpec.IntValue wildFluffyTryCount;
+        public static final ForgeConfigSpec.IntValue wildFluffyPatchCount;
         // Debug
         public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
+        public static final ForgeConfigSpec.BooleanValue modelAndTextureLogging;
+        public static final ForgeConfigSpec.BooleanValue worldGenLogging;
+        // Other
+        public static final ForgeConfigSpec.BooleanValue showWipText;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -109,11 +126,19 @@ public final class Config {
                         repairKitSturdyEfficiency = builder.defineInRange("sturdy", 0.4f, 0f, 10f);
                         repairKitCrimsonEfficiency = builder.defineInRange("crimson", 0.45f, 0f, 10f);
                         repairKitAzureEfficiency = builder.defineInRange("azure", 0.5f, 0f, 10f);
+                        missingRepairKitEfficiency = builder
+                                .comment("Repair efficiency with loose materials if no repair kit is used.",
+                                        "Setting a value greater than zero makes repair kits optional.")
+                                .defineInRange("missing", 0.0f, 0f, 10f);
                         builder.pop();
                     }
 
                     builder.pop();
                 }
+
+                netherwoodCharcoalBurnTime = builder
+                        .comment("Burn time of netherwood charcoal, in ticks. Vanilla charcoal is 1600.")
+                        .defineInRange("netherwood_charcoal.burn_time", 2400, 0, Integer.MAX_VALUE);
 
                 builder.pop();
             }
@@ -158,6 +183,21 @@ public final class Config {
                 builder.comment("Settings for gear (tools, weapons, and armor)");
                 builder.push("gear");
 
+                allowClassicMaterialMixing = builder
+                        .comment("Allow parts to be crafted with mixed materials in a crafting grid, just like all recent versions.",
+                                "In 1.17, mixing will only be allowed in compound-crafting blocks.")
+                        .define("allowClassicMaterialMixing", true);
+
+                allowConversionRecipes = builder
+                        .comment("If set to false all conversion recipes (type 'silentgear:conversion') will be disabled",
+                                "An example of a conversion recipe is placing a vanilla stone pickaxe into a crafting grid to make a Silent Gear stone pickaxe",
+                                "Note: This also affects conversion recipes added by data packs and other mods")
+                        .define("allowConversionRecipes", true);
+
+                sendGearBrokenMessage = builder
+                        .comment("Displays a message in chat, notifying the player that an item broke and hinting that it can be repaired")
+                        .define("sendBrokenMessage", true);
+
                 damageFactorLevels = builder
                         .comment("How frequently gear will recalcute stats as damaged",
                                 "Higher numbers will cause more recalculations, allowing traits to update stat values more often")
@@ -175,6 +215,14 @@ public final class Config {
                     builder.pop();
                 }
                 {
+                    builder.push("saw");
+                    sawRecursionDepth = builder
+                            .comment("Caps how far the saw can look for blocks when chopping down trees. Try decreasing this if you get stack overflow exceptions.",
+                                    "Increasing this value is allowed, but not recommended unless you know what you are doing.")
+                            .defineInRange("recursionDepth", 200, 0, Integer.MAX_VALUE);
+                    builder.pop();
+                }
+                {
                     builder.comment("Settings for AOE tools (hammer, excavator)",
                             "Match modes determine what blocks are considered similar enough to be mined together.",
                             "LOOSE: Break anything (you probably do not want this)",
@@ -183,10 +231,10 @@ public final class Config {
                     builder.push("aoeTool");
                     matchModeStandard = builder
                             .comment("Match mode for most blocks")
-                            .defineEnum("matchMode.standard", IAOETool.MatchMode.MODERATE);
+                            .defineEnum("matchMode.standard", IAoeTool.MatchMode.MODERATE);
                     matchModeOres = builder
                             .comment("Match mode for ore blocks (anything in the forge:ores block tag)")
-                            .defineEnum("matchMode.ores", IAOETool.MatchMode.STRICT);
+                            .defineEnum("matchMode.ores", IAoeTool.MatchMode.STRICT);
                     builder.pop();
                 }
                 {
@@ -239,9 +287,32 @@ public final class Config {
                 builder.pop();
             }
 
-            mineAndSlashSupport = builder
-                    .comment("Enable compatibility with the Mine and Slash mod, if installed")
-                    .define("compat.mineAndSlash.enabled", true);
+            {
+                builder.comment("World generation options (REQUIRES GAME RESTART)");
+                builder.push("world");
+                azureSilverCount = builder
+                        .comment("Veins of azure silver ore per chunk")
+                        .defineInRange("azureSilver.count", 8, 0, 1000);
+                bortCount = builder
+                        .comment("Attempts to place individual bort ore blocks per chunk.")
+                        .defineInRange("bort.count", 4, 0, 1000);
+                crimsonIronCount = builder
+                        .comment("Veins of crimson iron ore per chunk")
+                        .defineInRange("crimsonIron.count", 14, 0, 1000);
+                wildFlaxPatchCount = builder
+                        .comment("Number of patches of wild flax to attempt to place per chunk (some biomes only)")
+                        .defineInRange("wildFlax.patchCount", 1, 0, 100);
+                wildFlaxTryCount = builder
+                        .comment("Block place attempts per wild flax cluster")
+                        .defineInRange("wildFlax.tryCount", 16, 0, 1000);
+                wildFluffyPatchCount = builder
+                        .comment("Number of patches of wild fluffy plants to attempt to place per chunk (some biomes only)")
+                        .defineInRange("wildFluffy.patchCount", 1, 0, 100);
+                wildFluffyTryCount = builder
+                        .comment("Block place attempts per wild fluffy plants cluster")
+                        .defineInRange("wildFluffy.tryCount", 16, 0, 1000);
+                builder.pop();
+            }
 
             extraPartAndTraitLogging = builder
                     .comment("Log additional information related to loading and synchronizing gear parts and traits.",
@@ -251,6 +322,21 @@ public final class Config {
             statsDebugLogging = builder
                     .comment("Log stat calculations in the debug.log every time gear stats are recalculated")
                     .define("debug.logging.stats", true);
+
+            modelAndTextureLogging = builder
+                    .comment("Log information on construction of gear and part models, as well as textures they attempt to load.",
+                            "This is intended to help find and fix rare issues that some users are experiencing.")
+                    .define("debug.logging.modelAndTexture", false);
+
+            worldGenLogging = builder
+                    .comment("Log details about certain features being adding to biomes and other world generator details")
+                    .define("debug.logging.worldGen", true);
+
+            // Other random stuff
+            showWipText = builder
+                    .comment("Shows a \"WIP\" (work in progress) label in the tooltip of certain unfinished, but usable blocks and items")
+                    .comment("Set to false to remove the text from tooltips")
+                    .define("other.showWipText", true);
 
             spec = builder.build();
         }

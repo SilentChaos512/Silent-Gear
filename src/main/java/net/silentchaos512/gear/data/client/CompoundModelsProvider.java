@@ -70,10 +70,24 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
     }
 
     protected CompoundModelBuilder partBuilder(CompoundPartItem item) {
-        return ((CompoundModelBuilder) getBuilder(NameUtils.from(item).getPath()))
+        CompoundModelBuilder builder = ((CompoundModelBuilder) getBuilder(NameUtils.from(item).getPath()))
                 .setLoader(Const.COMPOUND_PART_MODEL_LOADER)
                 .setGearType(item.getGearType())
                 .setPartType(item.getPartType());
+
+        if (item.getGearType().isArmor() && item.getGearType() != GearType.ELYTRA) {
+            builder.setTexturePath("part/armor");
+            if (item.getGearType().matches(GearType.HELMET))
+                builder.addExtraLayer(SilentGear.getId("blueprint_helmet"));
+            if (item.getGearType().matches(GearType.CHESTPLATE))
+                builder.addExtraLayer(SilentGear.getId("blueprint_chestplate"));
+            if (item.getGearType().matches(GearType.LEGGINGS))
+                builder.addExtraLayer(SilentGear.getId("blueprint_leggings"));
+            if (item.getGearType().matches(GearType.BOOTS))
+                builder.addExtraLayer(SilentGear.getId("blueprint_boots"));
+        }
+
+        return builder;
     }
 
     private CompoundModelBuilder fragmentBuilder(FragmentItem item) {

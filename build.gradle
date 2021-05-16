@@ -5,19 +5,18 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 
 plugins {
     id 'maven'
     id 'maven-publish'
-    id "com.jfrog.bintray" version "1.8.5"
-    id "com.matthewprenger.cursegradle" version "1.2.0"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 repositories {
     flatDir {
@@ -40,22 +39,24 @@ javadoc {
 archivesBaseName = project.archivesBaseName
 def versionInfo = getModVersion()
 System.out.println(versionInfo)
+def version_short = "${versionInfo['version_short']}"
 version = "${versionInfo['version']}"
-def build_num = getBuildNumber()
+
+def gpr_creds = { // Credentials for GitHub Packages, since this is used multiple times
+    username = property('gpr.username')
+    password = property('gpr.token')
+}
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
     mappings channel: project.mcp_channel.toString(), version: project.mcp_mappings.toString()
 
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
     runs {
         client {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -63,15 +64,14 @@ minecraft {
                     source sourceSets.main
                 }
             }
+
+            // For Patchouli Mixins to not crash
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         server {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -83,11 +83,6 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             args '--mod', project.mod_id, '--all',
@@ -111,12 +106,13 @@ sourceSets.main.resources {
 repositories {
     jcenter()
     mavenLocal()
-    // Silent Lib
     maven {
-        url "https://dl.bintray.com/silentchaos512/silent-lib"
+        url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
+        credentials gpr_creds
     }
     maven {
-        url "https://dl.bintray.com/silentchaos512/silent-utils"
+        url = uri("https://maven.pkg.github.com/silentchaos512/silent-utils")
+        credentials gpr_creds
     }
     maven {
         url "https://dl.bintray.com/silentchaos512/silents-mechanisms"
@@ -131,22 +127,26 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
-    // Curios
+    // Curios, Caelus
     maven {
         url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        url = uri("https://maven.pkg.github.com/ewyboy/world-stripper")
+        credentials gpr_creds
     }
     maven {
         url 'https://maven.mcmoddev.com'
     }
     maven {
-        url 'https://jitpack.io'
+        url 'https://maven.blamejared.com'
     }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    compile fg.deobf("net.silentchaos512:silent-lib-${project.sl_version}") {
+    compile fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
 
@@ -172,6 +172,13 @@ dependencies {
         compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}:api")
     }
 
+    // Caelus
+    if (project.hasProperty('caelus_version')) {
+        // FIXME: Crashes with Mixin apply failed
+        //runtimeOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}")
+        compileOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}:api")
+    }
+
     // compile('com.robertx22:mine-and-slash-1.14.4:2.+') {
     //     exclude module: 'curios'
     // }
@@ -185,150 +192,92 @@ dependencies {
         compileOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
         runtimeOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
     }
+
+    // World Stripper
+    if (project.hasProperty('world_stripper_version')) {
+        runtimeOnly fg.deobf("com.ewyboy.worldstripper:World-Stripper:${project.world_stripper_version}")
+    }
+
+    // Patchouli
+    if (project.hasProperty('patchouli_version')) {
+        compileOnly fg.deobf("vazkii.patchouli:Patchouli:${project.patchouli_version}:api")
+        runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${project.patchouli_version}")
+    }
 }
 
 jar {
-    appendix = "${project.mc_version}"
     manifest {
-        attributes(["Specification-Title"     : project.mod_id,
+        attributes(["Specification-Title"     : project.name,
                     "Specification-Vendor"    : "SilentChaos512",
-                    "Specification-Version"   : "1.2",
+                    "Specification-Version"   : "1",
                     "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${version}",
                     "Implementation-Vendor"   : "SilentChaos512",
+                    "Implementation-Version"  : version_short,
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }
 
-task deobfJar(type: Jar) {
-    appendix = "${project.mc_version}"
-    classifier = 'deobf'
-    from sourceSets.main.output
-}
-
 task sourcesJar(type: Jar) {
-    appendix = "${project.mc_version}"
     classifier = 'sources'
     from sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    appendix = "${project.mc_version}"
     classifier = 'javadoc'
     from javadoc.getDestinationDir()
 }
 
+task apiJar(type: Jar) {
+    classifier = 'api'
+    include 'net/silentchaos512/gear/api/**/*'
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+}
+
 artifacts {
-    if (project.hasProperty('doDeobfJar')) {
-        archives deobfJar
-    }
-    if (project.hasProperty('doSourceJar')) {
-        archives sourcesJar
-    }
-    if (project.hasProperty('doJavadocJar')) {
-        archives javadocJar
-    }
-}
-
-class Secrets {
-    def data = null
-
-    def getProperty(String key) {
-        return data ? data[key] : ''
-    }
-}
-
-
-import groovy.json.JsonSlurper
-
-def secretFile
-if (System.getenv().SECRET_FILE) {
-    secretFile = file System.getenv().SECRET_FILE
-} else {
-    secretFile = file 'secret.json'
-}
-
-project.ext.secret = new Secrets()
-if (secretFile.exists()) {
-    secretFile.withReader {
-        project.ext.secret.data = new JsonSlurper().parse it
-    }
+    archives javadocJar
+    archives sourcesJar
+    archives apiJar
 }
 
 curseforge {
     if (project.hasProperty('cf_project_id') && project.hasProperty('cf_release_type') && project.hasProperty('cf_changelog_filename') &&
             ((project.cf_release_type == 'alpha') || (project.cf_release_type == 'beta') || (project.cf_release_type == 'release'))) {
-        apiKey = secret.curseforgeAPIKey
+        apiKey = property('curseforge.apiKey')
         project {
             id = project.cf_project_id
             changelog = file(project.cf_changelog_filename)
             releaseType = project.cf_release_type
             addGameVersion(project.mc_version)
             addGameVersion("1.16.4")
+            addGameVersion("1.16.5")
             mainArtifact(jar) {
 //                displayName = "$project.description $display_version"
                 relations {
                     requiredDependency 'silent-lib'
+                    optionalDependency 'caelus'
                     optionalDependency 'curios'
                 }
             }
-//            if (project.hasProperty('doAPIJar')) {
-//                addArtifact(apiJar) {
-//                    displayName = "$project.description $display_version API"
-//                }
-//            }
-//            if (project.hasProperty('doSourceJar')) {
-//                addArtifact(sourceJar) {
-//                    displayName = "$project.description $display_version Sources"
-//                }
-//            }
-//            if (project.hasProperty('doDeobfJar')) {
-//                addArtifact(deobfJar) {
-//                    displayName = "$project.description $display_version Development"
-//                }
-//            }
-//            if (project.hasProperty('doJavadocJar')) {
-//                addArtifact(javadocJar) {
-//                    displayName = "$project.description $display_version Javadoc"
-//                }
-//            }
         }
     }
 }
 
-// Bintray/Maven publishing
+// GPR/Maven publishing
 
 publishing {
-    publications {
-        publication(MavenPublication) {
-            groupId project.group
-            artifactId "${project.repoName}-${project.mc_version}"
-            version "${versionInfo['version_short']}".toString()
-
-            from components.java
-
-            artifact sourcesJar
-            artifact javadocJar
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/silentchaos512/${project.repoName}")
+            credentials gpr_creds
         }
     }
-}
-
-bintray {
-    user = secret.BINTRAY_USER ?: System.getenv('BINTRAY_USER')
-    key = secret.BINTRAY_KEY ?: System.getenv('BINTRAY_KEY')
-    publications = ['publication']
-
-    pkg {
-        repo = project.repoName
-        name = "${project.repoName}-${project.mc_version}"
-        licenses = ["LGPL-3.0"]
-        vcsUrl = project.vcsUrl
-
-        version {
-            name = "${versionInfo['version_short']}".toString()
-            desc = "${project.name} (${project.mc_version}) ${versionInfo['version_short']}".toString()
-            released = new Date()
-            vcsTag = "v${versionInfo['version_short']}".toString()
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }
@@ -339,8 +288,8 @@ def getModVersion() {
     try {
         return getGitVersion()
     } catch (Exception ex) {
-        System.out.println("Git version failed, falling back to old method")
-        return getVersion('VERSION', getModFile())
+        System.out.println("Git version failed, falling back to gradle.properties")
+        return makeVersionMap(project.build_version + '-' + getGitHash())
     }
 }
 
@@ -353,8 +302,23 @@ def getGitVersion() {
         standardOutput = outStream
     }
 
-    def fullVersion = outStream.toString().trim()
-    def matcher = fullVersion =~ /(\d+).(\d+).(\d+)-(.*)/
+    def fullVersion = outStream.toString()
+    return makeVersionMap(fullVersion)
+}
+
+def getGitHash() {
+    def outStream = new ByteArrayOutputStream()
+    def result = exec {
+        executable = 'git'
+        args = ['rev-parse', 'HEAD']
+        standardOutput = outStream
+    }
+
+    return outStream.toString().trim().substring(0, 6)
+}
+
+def makeVersionMap(version) {
+    def matcher = version.trim() =~ /(\d+).(\d+).(\d+)-(.*)/
 
     def maj = matcher[0][1]
     def min = matcher[0][2]
@@ -364,7 +328,7 @@ def getGitVersion() {
     return makeVersionMap(maj, min, rev, bn, matcher[0][4])
 }
 
-static def makeVersionMap(maj, min, rev, bn, githash) {
+def makeVersionMap(maj, min, rev, bn, githash) {
     def out = [:]
     out['build.major.number'] = maj.toString()
     out['build.minor.number'] = min.toString()
@@ -372,52 +336,8 @@ static def makeVersionMap(maj, min, rev, bn, githash) {
     out['build.githash'] = githash
     out['build.number'] = bn.toString()
     out['version_short'] = "${maj}.${min}.${rev}".toString()
-    out['version'] = "${maj}.${min}.${rev}+${bn}".toString()
+    out['version'] = "${project.mc_version}-${maj}.${min}.${rev}".toString()
     return out
-}
-
-// Modified old version getter
-def getVersion(String type, String mod_file) {
-    String maj = '0'
-    String min = '0'
-    String rev = '0'
-    String bn = getBuildNumber()
-
-    File file = file(mod_file)
-    def prefix = ~/^(?:public|protected|private) static final String $type = ".*$/
-    file.eachLine { String s ->
-        s = s.trim()
-        if (s ==~ prefix || prefix.matcher(s).matches()) {
-            String[] bits = s.split("=")
-            String interesting = bits[1].trim()
-            interesting = interesting.substring(1, interesting.length() - 2)
-            String[] pts = interesting.trim().split("\\.")
-
-            maj = pts[0] ?: '0'
-            min = pts[1] ?: '0'
-            rev = pts[2] ?: '0'
-        }
-    }
-
-    return makeVersionMap(maj, min, rev, bn, 'unknown')
-}
-
-// Used by old getVersion
-String getModFile() {
-    String path = ''
-    FileTree tree = fileTree(dir: 'src/main/java')
-    tree.include '**/*.java'
-    tree.visit { element ->
-        if (element.file.isFile()) {
-            element.file.eachLine { String s ->
-                s = s.trim()
-                if (s.startsWith('@Mod(')) {
-                    path = "src/main/java/$element.relativePath"
-                }
-            }
-        }
-    }
-    return path
 }
 
 // Build number tracking
@@ -452,6 +372,7 @@ build.finalizedBy incrementBuild // only increment on successful builds
 // Update JSON management
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
 def writeUpdateJson() {
     def version = getModVersion()['version_short']
@@ -476,4 +397,4 @@ task createUpdateJson {
         writeUpdateJson()
     }
 }
-build.finalizedBy createUpdateJson
+//build.finalizedBy createUpdateJson

@@ -1,24 +1,31 @@
 package net.silentchaos512.gear.client.material;
 
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.MaterialLayerList;
 import net.silentchaos512.gear.api.part.IPartData;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.utils.Color;
 
 public class DefaultMaterialDisplay extends MaterialDisplay {
     public static final DefaultMaterialDisplay INSTANCE = new DefaultMaterialDisplay();
 
-    @Override
-    public IMaterialLayerList getLayers(GearType gearType, IPartData part) {
-        createMissingEntry(part);
-        return super.getLayers(gearType, part);
+    public DefaultMaterialDisplay() {
+        super(Const.NULL_ID);
     }
 
     @Override
-    public int getLayerColor(GearType gearType, IPartData part, int layer) {
+    public IMaterialLayerList getLayerList(GearType gearType, IPartData part, IMaterialInstance materialIn) {
+        createMissingEntry(part);
+        return super.getLayerList(gearType, part, materialIn);
+    }
+
+    @Override
+    public int getLayerColor(GearType gearType, IPartData part, IMaterialInstance materialIn, int layer) {
         createMissingEntry(part);
         // This would likely cause a stack overflow
         /*if (part instanceof PartData) {
@@ -33,7 +40,7 @@ public class DefaultMaterialDisplay extends MaterialDisplay {
         if (!map.containsKey(key)) {
             PartTextures texture = part.getType().getDefaultTexture();
             if (texture != null) {
-                map.put(key, new MaterialLayerList(new MaterialLayer(texture, 0)));
+                map.put(key, new MaterialLayerList(new MaterialLayer(texture.getTexture(), part.getType(), 0, false)));
             } else {
                 map.put(key, MaterialLayerList.DEFAULT);
             }

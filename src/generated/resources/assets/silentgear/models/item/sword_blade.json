@@ -2,5 +2,6 @@
   "parent": "minecraft:item/generated",
   "loader": "silentgear:compound_part_model",
   "gear_type": "sword",
-  "part_type": "silentgear:main"
+  "part_type": "silentgear:main",
+  "texture_path": "sword"
 }

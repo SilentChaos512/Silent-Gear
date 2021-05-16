@@ -2,6 +2,13 @@
   "parent": "item/generated",
   "loader": "silentgear:gear_model",
   "gear_type": "axe",
+  "texture_path": "axe",
+  "broken_texture_path": "axe/broken",
+  "broken_texture_types": [
+    "coating",
+    "main",
+    "tip"
+  ],
   "display": {
     "ground": {
       "rotation": [ 0, 0, 0 ],

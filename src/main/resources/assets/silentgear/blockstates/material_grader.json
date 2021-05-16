@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "silentgear:block/material_grader", "y": 180 },
-    "facing=south": { "model": "silentgear:block/material_grader" },
-    "facing=east": { "model": "silentgear:block/material_grader", "y": 270 },
-    "facing=west": { "model": "silentgear:block/material_grader", "y": 90 }
-  }
-}

@@ -1,6 +1,12 @@
 {
   "type": "silentgear:enchantment_trait",
   "max_level": 2,
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "weapon"
+    }
+  ],
   "name": {
     "translate": "trait.silentgear.fiery"
   },

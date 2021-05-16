@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/generated",
+  "loader": "silentgear:compound_part_model",
+  "gear_type": "chestplate",
+  "part_type": "silentgear:main",
+  "texture_path": "part/armor",
+  "extra_layers": [
+    "silentgear:blueprint_chestplate"
+  ]
+}
