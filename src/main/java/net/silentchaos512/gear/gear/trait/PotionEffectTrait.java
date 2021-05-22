@@ -48,10 +48,15 @@ public class PotionEffectTrait extends SimpleTrait {
 
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
-        PlayerEntity player = context.getPlayer();
-        if (player == null || !isEquipped) return;
+        if (!isEquipped || context.getPlayer() == null || context.getPlayer().ticksExisted % 10 != 0) return;
+
         GearType gearType = ((ICoreItem) context.getGear().getItem()).getGearType();
-        potions.forEach((type, list) -> applyEffects(context, gearType, type, list));
+
+        for (Map.Entry<String, List<PotionData>> entry : potions.entrySet()) {
+            String type = entry.getKey();
+            List<PotionData> list = entry.getValue();
+            applyEffects(context, gearType, type, list);
+        }
     }
 
     private void applyEffects(TraitActionContext context, GearType gearType, String type, Iterable<PotionData> effects) {
@@ -244,8 +249,8 @@ public class PotionEffectTrait extends SimpleTrait {
         }
 
         private static float getDefaultDuration(ResourceLocation effectId) {
-            // Duration in seconds. The .5 should prevent flickering.
-            return new ResourceLocation("night_vision").equals(effectId) ? 15.5f : 1.5f;
+            // Duration in seconds. The .9 should prevent flickering.
+            return new ResourceLocation("night_vision").equals(effectId) ? 15.9f : 1.9f;
         }
 
         @Nullable
