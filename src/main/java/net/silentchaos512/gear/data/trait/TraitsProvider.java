@@ -230,7 +230,7 @@ public class TraitsProvider implements IDataProvider {
                 .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 2, 2, 3)
                 .withGearTypeCondition(GearType.TOOL, GearType.CURIO)
         );
-        ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5)
+        ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5, StellarTrait.SERIALIZER)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.SPEED, 0, 1, 2, 3)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.JUMP_BOOST, 1, 2, 3, 4)
                 .extraWikiLines(String.format("  - Has a %d%% chance per level to restore 1 durability each second",

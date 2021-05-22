@@ -6,6 +6,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
 import net.silentchaos512.gear.util.DataResource;
 
@@ -23,6 +24,14 @@ public class PotionTraitBuilder extends TraitBuilder {
 
     public PotionTraitBuilder(ResourceLocation traitId, int maxLevel) {
         super(traitId, maxLevel, PotionEffectTrait.SERIALIZER);
+    }
+
+    public PotionTraitBuilder(DataResource<ITrait> trait, int maxLevel, ITraitSerializer<? extends PotionEffectTrait> serializer) {
+        this(trait.getId(), maxLevel, serializer);
+    }
+
+    public PotionTraitBuilder(ResourceLocation traitId, int maxLevel, ITraitSerializer<? extends PotionEffectTrait> serializer) {
+        super(traitId, maxLevel, serializer);
     }
 
     @Deprecated

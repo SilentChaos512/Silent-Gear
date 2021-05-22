@@ -48,6 +48,7 @@ public final class TraitSerializers {
         register(BonusDropsTrait.SERIALIZER);
         register(CancelEffectsTrait.SERIALIZER);
         register(SelfRepairTrait.SERIALIZER);
+        register(StellarTrait.SERIALIZER);
     }
 
     private TraitSerializers() {}

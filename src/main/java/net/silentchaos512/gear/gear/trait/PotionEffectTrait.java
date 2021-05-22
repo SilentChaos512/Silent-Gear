@@ -26,20 +26,24 @@ import net.silentchaos512.utils.EnumUtils;
 import javax.annotation.Nullable;
 import java.util.*;
 
-// TODO: rename to WielderEffectTrait?
-public final class PotionEffectTrait extends SimpleTrait {
+// TODO: rename to WielderEffectTrait or UserEffectTrait?
+public class PotionEffectTrait extends SimpleTrait {
     public static final ITraitSerializer<PotionEffectTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("potion_effect_trait"),
+            SilentGear.getId("potion_effect_trait"), // TODO: change to "wielder_effect"
             PotionEffectTrait::new,
-            PotionEffectTrait::readJson,
-            PotionEffectTrait::readBuffer,
-            PotionEffectTrait::writeBuffer
+            PotionEffectTrait::deserializeJson,
+            PotionEffectTrait::readFromNetwork,
+            PotionEffectTrait::writeToNetwork
     );
 
     private final Map<String, List<PotionData>> potions = new HashMap<>();
 
     private PotionEffectTrait(ResourceLocation id) {
-        super(id, SERIALIZER);
+        this(id, SERIALIZER);
+    }
+
+    protected PotionEffectTrait(ResourceLocation id, ITraitSerializer<? extends PotionEffectTrait> serializer) {
+        super(id, serializer);
     }
 
     @Override
@@ -79,7 +83,7 @@ public final class PotionEffectTrait extends SimpleTrait {
         return count;
     }
 
-    private static void readJson(PotionEffectTrait trait, JsonObject json) {
+    static void deserializeJson(PotionEffectTrait trait, JsonObject json) {
         if (!json.has("potion_effects")) {
             throw new JsonParseException("Potion effect trait '" + trait.getId() + "' is missing 'potion_effects' object");
         }
@@ -111,7 +115,7 @@ public final class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    private static void readBuffer(PotionEffectTrait trait, PacketBuffer buffer) {
+    static void readFromNetwork(PotionEffectTrait trait, PacketBuffer buffer) {
         trait.potions.clear();
         int gearTypeCount = buffer.readByte();
 
@@ -128,7 +132,7 @@ public final class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    private static void writeBuffer(PotionEffectTrait trait, PacketBuffer buffer) {
+    static void writeToNetwork(PotionEffectTrait trait, PacketBuffer buffer) {
         buffer.writeByte(trait.potions.size());
         for (Map.Entry<String, List<PotionData>> entry : trait.potions.entrySet()) {
             buffer.writeString(entry.getKey());
@@ -159,7 +163,6 @@ public final class PotionEffectTrait extends SimpleTrait {
         private int[] levels;
 
         @Deprecated
-        @SuppressWarnings("TypeMayBeWeakened")
         public static PotionData of(boolean requiresFullSet, Effect effect, int... levels) {
             return of(requiresFullSet ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT, effect, levels);
         }

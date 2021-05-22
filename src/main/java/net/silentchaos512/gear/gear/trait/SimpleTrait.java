@@ -191,9 +191,9 @@ public class SimpleTrait implements ITrait {
 
         private final ResourceLocation serializerId;
         private final Function<ResourceLocation, T> factory;
-        @Nullable private final BiConsumer<T, JsonObject> readJson;
-        @Nullable private final BiConsumer<T, PacketBuffer> readBuffer;
-        @Nullable private final BiConsumer<T, PacketBuffer> writeBuffer;
+        @Nullable private final BiConsumer<T, JsonObject> deserializeJson;
+        @Nullable private final BiConsumer<T, PacketBuffer> readFromNetwork;
+        @Nullable private final BiConsumer<T, PacketBuffer> writeToNetwork;
 
         public Serializer(ResourceLocation serializerId, Function<ResourceLocation, T> factory) {
             this(serializerId, factory, null, null, null);
@@ -201,14 +201,14 @@ public class SimpleTrait implements ITrait {
 
         public Serializer(ResourceLocation serializerId,
                           Function<ResourceLocation, T> factory,
-                          @Nullable BiConsumer<T, JsonObject> readJson,
-                          @Nullable BiConsumer<T, PacketBuffer> readBuffer,
-                          @Nullable BiConsumer<T, PacketBuffer> writeBuffer) {
+                          @Nullable BiConsumer<T, JsonObject> deserializeJson,
+                          @Nullable BiConsumer<T, PacketBuffer> readFromNetwork,
+                          @Nullable BiConsumer<T, PacketBuffer> writeToNetwork) {
             this.serializerId = serializerId;
             this.factory = factory;
-            this.readJson = readJson;
-            this.readBuffer = readBuffer;
-            this.writeBuffer = writeBuffer;
+            this.deserializeJson = deserializeJson;
+            this.readFromNetwork = readFromNetwork;
+            this.writeToNetwork = writeToNetwork;
         }
 
         @Override
@@ -242,8 +242,8 @@ public class SimpleTrait implements ITrait {
                 }
             }
 
-            if (readJson != null) {
-                readJson.accept(trait, json);
+            if (deserializeJson != null) {
+                deserializeJson.accept(trait, json);
             }
 
             return trait;
@@ -268,8 +268,8 @@ public class SimpleTrait implements ITrait {
                 trait.cancelsWith.add(buffer.readString(255));
             }
 
-            if (readBuffer != null) {
-                readBuffer.accept(trait, buffer);
+            if (readFromNetwork != null) {
+                readFromNetwork.accept(trait, buffer);
             }
 
             return trait;
@@ -290,8 +290,8 @@ public class SimpleTrait implements ITrait {
                 buffer.writeString(str);
             }
 
-            if (writeBuffer != null) {
-                writeBuffer.accept(trait, buffer);
+            if (writeToNetwork != null) {
+                writeToNetwork.accept(trait, buffer);
             }
         }
 

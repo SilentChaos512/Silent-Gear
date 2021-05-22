@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -45,7 +44,6 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -373,18 +371,6 @@ public final class TraitHelper {
                 int level = tagCompound.getByte("Level");
                 TraitActionContext context = new TraitActionContext(player, level, gear);
                 trait.onUpdate(context, isEquipped);
-                extraTickFunctions(trait, context);
-            }
-        }
-    }
-
-    private static void extraTickFunctions(ITrait trait, TraitActionContext context) {
-        // Stellar repair
-        PlayerEntity player = context.getPlayer();
-        if (trait.getId().equals(Const.Traits.STELLAR.getId()) && player != null && player.ticksExisted % 20 == 0) {
-            float chance = Const.Traits.STELLAR_REPAIR_CHANCE * context.getTraitLevel();
-            if (MathUtils.tryPercentage(chance)) {
-                GearHelper.attemptDamage(context.getGear(), -1, player, Hand.MAIN_HAND);
             }
         }
     }
