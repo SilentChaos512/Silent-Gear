@@ -326,42 +326,48 @@ public final class TooltipHandler {
         TextListBuilder builder = new TextListBuilder();
 
         for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> modsAll = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
-            Optional<IFormattableTextComponent> head = getStatTooltipLine(event, partType, stat, modsAll);
-            boolean headPresent = head.isPresent();
-            builder.add(head.orElseGet(() -> TextUtil.withColor(stat.getDisplayName(), stat.getNameColor())));
-
-            builder.indent();
-
-            int subCount = 0;
-            List<StatGearKey> keysForStat = material.get().getStatKeys(material, partType).stream()
-                    .filter(key -> key.getStat().equals(stat))
-                    .collect(Collectors.toList());
-
-            for (StatGearKey key : keysForStat) {
-                if (key.getGearType() != GearType.ALL) {
-                    ItemStat stat1 = ItemStats.get(key.getStat());
-
-                    if (stat1 != null) {
-                        Collection<StatInstance> mods = material.getStatModifiers(partType, key);
-                        Optional<IFormattableTextComponent> line = getSubStatTooltipLine(event, partType, stat1, key.getGearType(), mods);
-
-                        if (line.isPresent()) {
-                            builder.add(line.get());
-                            ++subCount;
-                        }
-                    }
-                }
+            if (stat.isVisible()) {
+                getMaterialStatModLines(event, partType, material, builder, stat);
             }
-
-            if (subCount == 0 && !headPresent) {
-                builder.removeLast();
-            }
-
-            builder.unindent();
         }
 
         event.getToolTip().addAll(builder.build());
+    }
+
+    private static void getMaterialStatModLines(ItemTooltipEvent event, PartType partType, MaterialInstance material, TextListBuilder builder, ItemStat stat) {
+        Collection<StatInstance> modsAll = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
+        Optional<IFormattableTextComponent> head = getStatTooltipLine(event, partType, stat, modsAll);
+        boolean headPresent = head.isPresent();
+        builder.add(head.orElseGet(() -> TextUtil.withColor(stat.getDisplayName(), stat.getNameColor())));
+
+        builder.indent();
+
+        int subCount = 0;
+        List<StatGearKey> keysForStat = material.get().getStatKeys(material, partType).stream()
+                .filter(key -> key.getStat().equals(stat))
+                .collect(Collectors.toList());
+
+        for (StatGearKey key : keysForStat) {
+            if (key.getGearType() != GearType.ALL) {
+                ItemStat stat1 = ItemStats.get(key.getStat());
+
+                if (stat1 != null) {
+                    Collection<StatInstance> mods = material.getStatModifiers(partType, key);
+                    Optional<IFormattableTextComponent> line = getSubStatTooltipLine(event, partType, stat1, key.getGearType(), mods);
+
+                    if (line.isPresent()) {
+                        builder.add(line.get());
+                        ++subCount;
+                    }
+                }
+            }
+        }
+
+        if (subCount == 0 && !headPresent) {
+            builder.removeLast();
+        }
+
+        builder.unindent();
     }
 
     private static Optional<IFormattableTextComponent> getStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, Collection<StatInstance> modifiers) {

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Missing description for road maker upgrade
 ### Changed
 - Potion effect traits now refresh every 10 ticks instead of every tick and eliminated use of streams API in tick method (optimization) [#389]
+- Magic damage stat is now hidden from material tooltips
 
 ## [2.6.24] - 2021-05-09
 ### Added

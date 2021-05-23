@@ -54,12 +54,10 @@ public final class ItemStats {
     );
     public static final ItemStat CHARGEABILITY = new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .affectedByGrades(false)
-            .hidden()
     );
     public static final ItemStat RARITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(false)
-            .hidden()
     );
 
     // Harvesting Tools
@@ -84,6 +82,7 @@ public final class ItemStats {
     public static final ItemStat MAGIC_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
+            .hidden()
     );
     public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -3.9f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(false)
