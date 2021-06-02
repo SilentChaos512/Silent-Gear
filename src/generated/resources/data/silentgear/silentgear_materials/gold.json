@@ -25,7 +25,7 @@
       "harvest_speed": 12.0,
       "melee_damage": 0.0,
       "magic_damage": 4.0,
-      "attack_speed": 0.2,
+      "attack_speed": 0.0,
       "armor": 11.0,
       "armor/helmet": 2.0,
       "armor/chestplate": 5.0,

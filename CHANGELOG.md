@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Tweaked some attack speed values, notably for gold and iron to match vanilla [#394]
 ### Fixed
 - Crash in some cases due to accidental use of `joptsimple.internal.Strings` class [#393]
 

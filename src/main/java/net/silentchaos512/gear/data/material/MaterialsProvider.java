@@ -124,7 +124,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 5)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ARMOR, 20)
                 .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 10)
                 .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 10)
@@ -152,7 +152,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 1)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ARMOR, 1)
                 .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 1)
@@ -414,7 +414,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 12)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
                 .mainStatsArmor(2, 5, 3, 1, 0, 8) //11
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.3f)
@@ -458,7 +458,8 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 6)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
                 .mainStatsArmor(2, 6, 5, 2, 0, 6) //15
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.1f)
@@ -518,7 +519,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 8)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
                 .mainStatsArmor(3, 8, 6, 3, 8, 4) //20
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
@@ -561,7 +562,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 10)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
                 .mainStatsArmor(3, 6, 4, 3, 4, 6) //16
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
@@ -841,7 +842,7 @@ public class MaterialsProvider implements IDataProvider {
                 .mainStatsCommon(142, 5, 8, 11)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
                 .mainStatsHarvest(1, 5)
-                .mainStatsMelee(0.5f, 0.5f, -0.1f)
+                .mainStatsMelee(0.5f, 0.5f, 0.0f)
                 .mainStatsRanged(0.5f, 0.1f)
                 .mainStatsArmor(1, 4, 2, 1, 0, 4) //8
                 .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.8f)
@@ -931,6 +932,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
@@ -1038,7 +1040,8 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 2)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
                 .mainStatsArmor(1, 3, 2, 1, 0, 2) //7
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
@@ -1750,7 +1753,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 18)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 6f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
                 .mainStatsArmor(3, 9, 7, 3, 8, 10) //22
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 3)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
@@ -1774,7 +1777,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 7)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3f)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
                 .mainStatsArmor(2, 8, 6, 2, 2, 6) //18
                 .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)

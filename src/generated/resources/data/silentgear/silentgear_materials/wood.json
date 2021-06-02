@@ -53,6 +53,7 @@
       "melee_damage": 0.0,
       "magic_damage": 0.0,
       "attack_speed": 0.0,
+      "attack_speed/axe": -0.2,
       "armor": 7.0,
       "armor/helmet": 1.0,
       "armor/chestplate": 3.0,
