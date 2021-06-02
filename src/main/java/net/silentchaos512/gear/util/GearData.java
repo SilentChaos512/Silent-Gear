@@ -423,6 +423,15 @@ public final class GearData {
         return getPrimaryMainMaterial(stack);
     }
 
+    @Nullable
+    public static PartData getCoatingOrMainPart(ItemStack stack) {
+        PartData coating = getPartOfType(stack, PartType.COATING);
+        if (coating != null) {
+            return coating;
+        }
+        return getPartOfType(stack, PartType.MAIN);
+    }
+
     /**
      * Gets the first part in the construction parts list that is of the given type.
      *

@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,9 +26,11 @@ import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -37,6 +41,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
@@ -46,6 +52,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     private static final float[] ABSORPTION_RATIO_BY_SLOT = {3f / 20f, 6f / 20f, 8f / 20f, 3f / 20f};
     // Same values as in ArmorItem.
     private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
+
+    // Caches armor colors by model key to speed up armor rendering
+    private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            .build();
 
     public CoreArmor(EquipmentSlotType slot) {
         super(ArmorMaterial.DIAMOND, slot, GearHelper.getBuilder(null));
@@ -236,14 +248,20 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public int getColor(ItemStack stack) {
-        MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
-        if (material != null) {
-            IMaterialDisplay materialModel = MaterialDisplayManager.get(material);
-            PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
-            MaterialLayer materialLayer = materialModel.getLayerList(this.getGearType(), partType, material).getFirstLayer();
-            if (materialLayer != null) {
-                return materialLayer.getColor();
-            }
+        try {
+            return ARMOR_COLORS.get(GearData.getModelKey(stack, 0), () -> getArmorColor(stack));
+        } catch (ExecutionException e) {
+            ModelErrorLogging.notifyOfException(e, "armor model");
+        }
+
+        return Color.VALUE_WHITE;
+    }
+
+    private static int getArmorColor(ItemStack stack) {
+        // Gets the outer-most (coating or main) part and compute its color
+        PartData part = GearData.getCoatingOrMainPart(stack);
+        if (part != null) {
+            return part.getColor(stack);
         }
         return Color.VALUE_WHITE;
     }

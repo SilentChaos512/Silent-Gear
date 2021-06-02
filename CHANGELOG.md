@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Tweaked some attack speed values, notably for gold and iron to match vanilla [#394]
+- Armor model colors are now cached for speed, like with item models
 ### Fixed
 - Crash in some cases due to accidental use of `joptsimple.internal.Strings` class [#393]
+- Armor model color not matching item color [#392, #192]
 
 ## [2.6.25] - 2021-05-26
 ### Added
