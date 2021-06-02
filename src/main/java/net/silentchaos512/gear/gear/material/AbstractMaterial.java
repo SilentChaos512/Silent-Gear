@@ -135,7 +135,11 @@ public abstract class AbstractMaterial implements IMaterial {
 
     @Override
     public Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type) {
-        return this.stats.getOrDefault(type, StatModifierMap.EMPTY_STAT_MAP).keySet();
+        StatModifierMap map = this.stats.getOrDefault(type, StatModifierMap.EMPTY_STAT_MAP);
+        if (map.isEmpty() && getParent() != null) {
+            return getParent().getStatKeys(material, type);
+        }
+        return map.keySet();
     }
 
     @Override

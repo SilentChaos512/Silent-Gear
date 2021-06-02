@@ -337,7 +337,6 @@ public final class TooltipHandler {
     private static void getMaterialStatModLines(ItemTooltipEvent event, PartType partType, MaterialInstance material, TextListBuilder builder, ItemStat stat) {
         Collection<StatInstance> modsAll = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
         Optional<IFormattableTextComponent> head = getStatTooltipLine(event, partType, stat, modsAll);
-        boolean headPresent = head.isPresent();
         builder.add(head.orElseGet(() -> TextUtil.withColor(stat.getDisplayName(), stat.getNameColor())));
 
         builder.indent();
@@ -363,7 +362,7 @@ public final class TooltipHandler {
             }
         }
 
-        if (subCount == 0 && !headPresent) {
+        if (subCount == 0 && !head.isPresent()) {
             builder.removeLast();
         }
 
