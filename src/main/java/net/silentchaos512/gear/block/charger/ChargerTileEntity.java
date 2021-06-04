@@ -35,7 +35,7 @@ import java.util.function.Supplier;
 
 public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity, INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
-    private static final int CHARGE_RATE = SilentGear.isDevBuild() ? 100 : 10;
+    private static final int CHARGE_RATE = 30 * (SilentGear.isDevBuild() ? 10 : 1);
     private static final int UPDATE_FREQUENCY = TimeUtils.ticksFromSeconds(15);
 
     private final Supplier<Enchantment> enchantment;
