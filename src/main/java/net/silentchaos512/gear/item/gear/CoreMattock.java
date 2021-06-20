@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class CoreMattock extends HoeItem implements ICoreTool {
-    private static final Set<ToolType> TOOL_CLASSES = ImmutableSet.of(ToolType.AXE, ToolType.SHOVEL);
+    private static final Set<ToolType> TOOL_CLASSES = ImmutableSet.of(ToolType.HOE, ToolType.AXE, ToolType.SHOVEL);
     private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
             Material.LEAVES,
             Material.PLANTS,
@@ -47,6 +47,7 @@ public class CoreMattock extends HoeItem implements ICoreTool {
 
     public CoreMattock() {
         super(ItemTier.DIAMOND, 0, 0f, GearHelper.getBuilder(null)
+                .addToolType(ToolType.HOE, 3)
                 .addToolType(ToolType.AXE, 3)
                 .addToolType(ToolType.SHOVEL, 3)
         );
