@@ -157,7 +157,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(ModTags.Items.LEGGINGS, ModItems.LEGGINGS);
         builder(ModTags.Items.PICKAXES, ModItems.HAMMER, ModItems.PAXEL, ModItems.PICKAXE);
         builder(ModTags.Items.SAWS, ModItems.SAW);
-        builder(ModTags.Items.SHEARS, ModItems.SHEARS);
+        builder(Tags.Items.SHEARS, ModItems.SHEARS);
         builder(ModTags.Items.SHIELDS, ModItems.SHIELD);
         builder(ModTags.Items.SHOVELS, ModItems.EXCAVATOR, ModItems.MATTOCK, ModItems.PAXEL, ModItems.SHOVEL);
         builder(ModTags.Items.SICKLES, ModItems.SICKLE);

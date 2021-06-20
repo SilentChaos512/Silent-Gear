@@ -9,7 +9,6 @@ import net.minecraft.block.CropsBlock;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Items;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.BlockStateProperty;
 import net.minecraft.loot.conditions.ILootCondition;
@@ -19,6 +18,7 @@ import net.minecraft.loot.functions.ApplyBonus;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.IItemProvider;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class ModBlockLootTables extends BlockLootTables {
     private static final float[] DEFAULT_SAPLING_DROP_RATES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
     private static final ILootCondition.IBuilder SILK_TOUCH = MatchTool.builder(ItemPredicate.Builder.create().enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
-    private static final ILootCondition.IBuilder SHEARS = MatchTool.builder(ItemPredicate.Builder.create().item(Items.SHEARS));
+    private static final ILootCondition.IBuilder SHEARS = MatchTool.builder(ItemPredicate.Builder.create().tag(Tags.Items.SHEARS));
     private static final ILootCondition.IBuilder SILK_TOUCH_OR_SHEARS = SHEARS.alternative(SILK_TOUCH);
     private static final ILootCondition.IBuilder NOT_SILK_TOUCH_OR_SHEARS = SILK_TOUCH_OR_SHEARS.inverted();
 
@@ -112,7 +112,7 @@ public class ModBlockLootTables extends BlockLootTables {
 
     @Nonnull
     private static Function<Block, LootTable.Builder> netherwoodLeaves(IItemProvider sapling, IItemProvider stick, float... chances) {
-        return (block) -> droppingWithSilkTouchOrShears(block, withSurvivesExplosion(block, ItemLootEntry.builder(sapling))
+        return (block) -> dropping(block, SILK_TOUCH_OR_SHEARS, withSurvivesExplosion(block, ItemLootEntry.builder(sapling))
                 .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances)))
                 .addLootPool(LootPool.builder()
                         .rolls(ConstantRange.of(1))
