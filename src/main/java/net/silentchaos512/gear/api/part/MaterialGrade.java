@@ -14,6 +14,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nonnegative;
@@ -26,7 +27,6 @@ public enum MaterialGrade {
     NONE(0), E(1), D(2), C(3), B(4), A(5), S(10), SS(15), SSS(25), MAX(30);
 
     private static final String NBT_KEY = "SGear_Grade";
-    private static final double GRADE_STD_DEV = 1.5;
 
     public final int bonusPercent;
 
@@ -72,9 +72,9 @@ public enum MaterialGrade {
      * @return A random grade that is not NONE
      */
     public static MaterialGrade selectWithCatalyst(Random random, @Nonnegative int catalystTier) {
-        int ordinal = MaterialGrade.C.ordinal() + catalystTier - 1;
+        int ordinal = Config.Common.graderMedianGrade.get().ordinal() + catalystTier - 1;
         MaterialGrade median = EnumUtils.byOrdinal(ordinal, getMax());
-        return selectRandom(random, median, GRADE_STD_DEV, getMax());
+        return selectRandom(random, median, Config.Common.graderStandardDeviation.get(), getMax());
     }
 
     /**

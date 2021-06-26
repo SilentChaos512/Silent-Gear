@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Enchantment description for Star Charged (TomasBorsje) [#399, #388]
+- Configs to control the distribution of grades produced by the material grader
+
 ## [2.6.27] - 2021-06-19
 ### Changed
 - Updated pt_br.json [#385]
