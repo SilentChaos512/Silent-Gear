@@ -893,5 +893,6 @@
   "trait.silentgear.vulcan": "Vulcan",
   "trait.silentgear.vulcan.desc": "Places obsidian at a high durability cost",
   "trait.silentgear.widen": "Widen",
-  "trait.silentgear.widen.desc": "Increases the effect radius of hammers and excavators"
+  "trait.silentgear.widen.desc": "Increases the effect radius of hammers and excavators",
+  "enchantment.silentgear.star_charged.desc": "Enhances material stats substantially. Applied to material items by the Starlight Charger."
 }
