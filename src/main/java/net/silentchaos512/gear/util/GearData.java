@@ -537,15 +537,34 @@ public final class GearData {
     public static boolean hasPart(ItemStack gear, IGearPart part) {
         if (checkNonGearItem(gear, "hasPart")) return false;
 
+        String partId = part.getId().toString();
+        return hasPart(gear, partId);
+    }
+
+    /**
+     * Determine if the gear has the specified part. This scans the construction NBT directly for
+     * speed, no part data list is created. Compares part registry names only.
+     *
+     * @param gear The gear item
+     * @param part The part to check for
+     * @return True if the item has the part in its construction, false otherwise
+     */
+    public static boolean hasPart(ItemStack gear, DataResource<IGearPart> part) {
+        if (checkNonGearItem(gear, "hasPart")) return false;
+
+        String partId = part.getId().toString();
+        return hasPart(gear, partId);
+    }
+
+    private static boolean hasPart(ItemStack gear, String partId) {
         CompoundNBT tags = getData(gear, NBT_ROOT_CONSTRUCTION);
         ListNBT tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Constants.NBT.TAG_COMPOUND);
-        String upgradeName = part.getId().toString();
 
         for (INBT nbt : tagList) {
             if (nbt instanceof CompoundNBT) {
                 CompoundNBT partCompound = (CompoundNBT) nbt;
                 String partKey = partCompound.getString(PartData.NBT_ID);
-                if (partKey.equals(upgradeName)) {
+                if (partKey.equals(partId)) {
                     return true;
                 }
             }
