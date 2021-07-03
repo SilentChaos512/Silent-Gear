@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Enchantment description for Star Charged (TomasBorsje) [#399, #388]
 - Configs to control the distribution of grades produced by the material grader
+### Fixed
+- Numerous issues related to salvaging compound materials and fragments [#364]
 
 ## [2.6.27] - 2021-06-19
 ### Changed

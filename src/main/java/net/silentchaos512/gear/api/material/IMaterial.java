@@ -98,6 +98,8 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
 
     boolean canSalvage();
 
+    IMaterialInstance onSalvage(IMaterialInstance material);
+
     /**
      * Check if the material is simple or compound.
      *

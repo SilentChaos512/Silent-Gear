@@ -95,7 +95,11 @@ public enum MaterialGrade {
 
     public void setGradeOnStack(@Nonnull ItemStack stack) {
         if (!stack.isEmpty()) {
-            stack.getOrCreateTag().putString(NBT_KEY, name());
+            if (this != NONE) {
+                stack.getOrCreateTag().putString(NBT_KEY, name());
+            } else {
+                stack.getOrCreateTag().remove(NBT_KEY);
+            }
         }
     }
 

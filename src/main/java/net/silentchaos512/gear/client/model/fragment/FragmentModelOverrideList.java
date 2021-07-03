@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public class FragmentModelOverrideList extends ItemOverrideList {
-
     private final Cache<CacheKey, IBakedModel> bakedModelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
@@ -75,8 +74,12 @@ public class FragmentModelOverrideList extends ItemOverrideList {
         IMaterialInstance material = FragmentItem.getMaterial(stack);
         if (material != null) {
             IMaterialDisplay model = MaterialDisplayManager.get(material);
+            int layerLevel = 0;
+
             for (MaterialLayer layer : model.getLayerList(GearType.FRAGMENT, PartType.MAIN, material)) {
-                layers.add(layer);
+                int blendedColor = model.getLayerColor(GearType.FRAGMENT, PartType.MAIN, material, layerLevel);
+                layers.add(new MaterialLayer(layer.getTextureId(), blendedColor));
+                ++layerLevel;
             }
         }
 

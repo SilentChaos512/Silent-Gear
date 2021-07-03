@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -105,23 +104,21 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
             }
 
             List<IMaterialInstance> materials = part.getMaterials();
-            Map<IMaterial, Integer> fragments = new LinkedHashMap<>();
+            Map<IMaterialInstance, Integer> fragments = new LinkedHashMap<>();
 
             for (IMaterialInstance material : materials) {
                 int fragmentCount = 8 / craftedCount;
-                fragments.merge(material.get(), fragmentCount, Integer::sum);
+                fragments.merge(material.onSalvage(), fragmentCount, Integer::sum);
             }
 
             List<ItemStack> ret = new ArrayList<>();
-            for (Map.Entry<IMaterial, Integer> entry : fragments.entrySet()) {
-                IMaterial material = entry.getKey();
+            for (Map.Entry<IMaterialInstance, Integer> entry : fragments.entrySet()) {
+                IMaterialInstance material = entry.getKey();
                 int count = entry.getValue();
                 int fulls = count / 8;
                 int frags = count % 8;
                 if (fulls > 0) {
-                    ItemStack[] stacks = material.getIngredient().getMatchingStacks();
-                    if (stacks.length > 0)
-                        ret.add(new ItemStack(stacks[0].getItem(), fulls));
+                    ret.add(material.getItem());
                 }
                 if (frags > 0) {
                     ret.add(ModItems.FRAGMENT.get().create(material, frags));

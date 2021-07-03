@@ -4,12 +4,14 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -28,14 +30,19 @@ public class FragmentItem extends Item {
         super(properties);
     }
 
-    public ItemStack create(IMaterial material, int count) {
+    public ItemStack create(IMaterialInstance material, int count) {
         ItemStack stack = new ItemStack(this, count);
-        stack.getOrCreateTag().putString(NBT_MATERIAL, SilentGear.shortenId(material.getId()));
+        stack.getOrCreateTag().put(NBT_MATERIAL, material.write(new CompoundNBT()));
         return stack;
     }
 
     @Nullable
     public static IMaterialInstance getMaterial(ItemStack stack) {
+        if (stack.getOrCreateTag().contains(NBT_MATERIAL, Constants.NBT.TAG_COMPOUND)) {
+            return MaterialInstance.read(stack.getOrCreateTag().getCompound(NBT_MATERIAL));
+        }
+
+        // Old, pre-compound style
         ResourceLocation id = ResourceLocation.tryCreate(stack.getOrCreateTag().getString(NBT_MATERIAL));
         IMaterial material = MaterialManager.get(id);
         if (material != null) {
@@ -45,6 +52,12 @@ public class FragmentItem extends Item {
     }
 
     public static String getModelKey(ItemStack stack) {
+        if (stack.getOrCreateTag().contains(NBT_MATERIAL, Constants.NBT.TAG_COMPOUND)) {
+            MaterialInstance material = MaterialInstance.read(stack.getOrCreateTag().getCompound(NBT_MATERIAL));
+            if (material != null) {
+                return material.getModelKey();
+            }
+        }
         return stack.getOrCreateTag().getString(NBT_MATERIAL);
     }
 
@@ -65,7 +78,7 @@ public class FragmentItem extends Item {
 
         if (SilentGear.isDevBuild()) {
             for (IMaterial material : MaterialManager.getValues()) {
-                items.add(create(material, 1));
+                items.add(create(MaterialInstance.of(material), 1));
             }
         }
     }

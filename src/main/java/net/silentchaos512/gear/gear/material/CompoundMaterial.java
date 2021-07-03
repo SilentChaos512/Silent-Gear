@@ -113,6 +113,11 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     }
 
     @Override
+    public IMaterialInstance onSalvage(IMaterialInstance material) {
+        return AbstractMaterial.removeEnhancements(material);
+    }
+
+    @Override
     public boolean isSimple() {
         return false;
     }

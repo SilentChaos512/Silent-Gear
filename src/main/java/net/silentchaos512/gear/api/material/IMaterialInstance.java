@@ -178,4 +178,9 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         IMaterial material = get();
         return material != null && material.isCraftingAllowed(this, partType, gearType);
     }
+
+    default IMaterialInstance onSalvage() {
+        IMaterial material = get();
+        return material != null ? material.onSalvage(this) : this;
+    }
 }

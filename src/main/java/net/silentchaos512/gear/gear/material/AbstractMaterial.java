@@ -2,6 +2,7 @@ package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.Sets;
 import com.google.gson.*;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -12,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -105,6 +107,24 @@ public abstract class AbstractMaterial implements IMaterial {
     @Override
     public boolean canSalvage() {
         return canSalvage;
+    }
+
+    @Override
+    public IMaterialInstance onSalvage(IMaterialInstance material) {
+        return removeEnhancements(material);
+    }
+
+    public static IMaterialInstance removeEnhancements(IMaterialInstance material) {
+        ItemStack stack = material.getItem().copy();
+        MaterialGrade.NONE.setGradeOnStack(stack);
+        EnchantmentHelper.setEnchantments(Collections.emptyMap(), stack);
+
+        IMaterial iMaterial = material.get();
+        if (iMaterial != null) {
+            return MaterialInstance.of(iMaterial, stack);
+        } else {
+            return material;
+        }
     }
 
     @Override

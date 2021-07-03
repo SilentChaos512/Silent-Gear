@@ -12,9 +12,7 @@ import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.lib.collection.StackList;
-
-import java.util.HashSet;
-import java.util.Set;
+import net.silentchaos512.lib.util.InventoryUtils;
 
 public class CombineFragmentsRecipe extends SpecialRecipe {
     public CombineFragmentsRecipe(ResourceLocation idIn) {
@@ -46,15 +44,20 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
         }
 
         // Now, check that the fragments are all the same material.
-        Set<ResourceLocation> uniques = new HashSet<>();
+        IMaterialInstance first = null;
         for (ItemStack stack : StackList.from(craftingInventory)) {
             IMaterialInstance material = FragmentItem.getMaterial(stack);
             if (material == null) {
                 return false;
             }
-            uniques.add(material.getId());
+
+            if (first == null) {
+                first = material;
+            } else if (!InventoryUtils.canItemsStack(material.getItem(), first.getItem())) {
+                return false;
+            }
         }
-        return uniques.size() == 1;
+        return first != null;
     }
 
     @Override
@@ -66,6 +69,12 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
         IMaterialInstance material = FragmentItem.getMaterial(stack);
         if (material == null) return ItemStack.EMPTY;
 
+        // Get the actual item the fragment came from (if present)
+        if (!material.getItem().isEmpty()) {
+            return material.getItem();
+        }
+
+        // Try to get an equivalent item from the material's ingredient
         ItemStack[] matchingStacks = material.getIngredient().getMatchingStacks();
         if (matchingStacks.length < 1) {
             if (material.getIngredient() instanceof ExclusionIngredient) {
