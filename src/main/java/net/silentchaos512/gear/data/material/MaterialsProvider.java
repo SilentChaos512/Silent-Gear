@@ -502,6 +502,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.COATING, ItemStats.ARMOR_TOUGHNESS, 4, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 1f, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.ENCHANTABILITY, 5, StatInstance.Operation.ADD)
+                .trait(PartType.COATING, Const.Traits.FIREPROOF, 1)
                 .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x867B86)
                 .display(PartType.COATING, GearType.ARMOR, new StaticLayer(new ResourceLocation("netherite")))
                 .displayFragment(PartTextures.DUST, 0x867B86)

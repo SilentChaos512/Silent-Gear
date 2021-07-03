@@ -152,6 +152,7 @@ public final class Const {
         public static final DataResource<ITrait> SWIFT_SWIM = DataResource.trait("swift_swim");
         public static final DataResource<ITrait> ERODED = DataResource.trait("eroded");
         public static final DataResource<ITrait> FIERY = DataResource.trait("fiery");
+        public static final DataResource<ITrait> FIREPROOF = DataResource.trait("fireproof");
         public static final DataResource<ITrait> FLAME_WARD = DataResource.trait("flame_ward");
         public static final DataResource<ITrait> FLAMMABLE = DataResource.trait("flammable");
         public static final DataResource<ITrait> FLEXIBLE = DataResource.trait("flexible");

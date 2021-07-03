@@ -1,11 +1,13 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
@@ -16,6 +18,7 @@ plugins {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'idea'
 
 repositories {
@@ -57,6 +60,8 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
+            arg "-mixin.config=${mod_id}.mixins.json".toString()
+
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -72,6 +77,8 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+            arg "-mixin.config=${mod_id}.mixins.json".toString()
+
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -83,6 +90,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
+
             property 'forge.logging.console.level', 'debug'
 
             args '--mod', project.mod_id, '--all',
@@ -146,6 +154,8 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
+    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+
     compile fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
@@ -176,7 +186,7 @@ dependencies {
     if (project.hasProperty('caelus_version')) {
         // FIXME: Crashes with Mixin apply failed
         //runtimeOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}")
-        compileOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}:api")
+        compileOnly("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}:api")
     }
 
     // compile('com.robertx22:mine-and-slash-1.14.4:2.+') {
@@ -213,7 +223,8 @@ jar {
                     "Implementation-Title"    : project.name,
                     "Implementation-Vendor"   : "SilentChaos512",
                     "Implementation-Version"  : version_short,
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs"            : "${mod_id}.mixins.json"])
     }
 }
 
@@ -398,3 +409,7 @@ task createUpdateJson {
     }
 }
 //build.finalizedBy createUpdateJson
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+}

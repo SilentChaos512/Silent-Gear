@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "package": "net.silentchaos512.gear.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "silentgear.refmap.json",
+  "mixins": [
+    "MixinItemEntity"
+  ],
+  "minVersion": "0.8"
+}

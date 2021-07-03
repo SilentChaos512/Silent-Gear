@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Enchantment description for Star Charged (TomasBorsje) [#399, #388]
+- Fireproof trait: makes it so item cannot be destroyed in fire or lava. Flame Ward also has the same effect. [#309]
 - Configs to control the distribution of grades produced by the material grader
 ### Fixed
 - Numerous issues related to salvaging compound materials and fragments [#364]
