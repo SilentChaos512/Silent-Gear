@@ -57,5 +57,13 @@
         "add": 5.0
       }
     }
+  },
+  "traits": {
+    "coating": [
+      {
+        "name": "silentgear:fireproof",
+        "level": 1
+      }
+    ]
   }
 }

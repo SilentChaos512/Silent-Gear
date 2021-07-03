@@ -64,6 +64,8 @@ public class TraitsProvider implements IDataProvider {
         ret.add(TraitBuilder.simple(Const.Traits.BRILLIANT, 1));
         ret.add(TraitBuilder.simple(Const.Traits.CONFETTI, 5)
                 .withGearTypeCondition(GearType.WEAPON));
+        ret.add(TraitBuilder.simple(Const.Traits.FIREPROOF, 1)
+                .extraWikiLines("  - The item cannot be destroyed by fire or lava"));
         ret.add(TraitBuilder.simple(Const.Traits.FLAMMABLE, 1));
         ret.add(TraitBuilder.simple(Const.Traits.INDESTRUCTIBLE, 1)
                 .extraWikiLines("  - The damage (durability lost) of the item will remain the same as when the trait was added",
@@ -218,6 +220,7 @@ public class TraitsProvider implements IDataProvider {
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.FIRE_RESISTANCE, 1)
                 .overridesTrait(Const.Traits.FLAMMABLE)
                 .withGearTypeCondition(GearType.ARMOR)
+                .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
         ret.add(new PotionTraitBuilder(Const.Traits.KITTY_VISION, 1)
                 .addEffect(GearType.HELMET, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
