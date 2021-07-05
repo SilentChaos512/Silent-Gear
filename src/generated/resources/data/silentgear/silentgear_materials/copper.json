@@ -9,7 +9,7 @@
     }
   ],
   "availability": {
-    "tier": 1,
+    "tier": 2,
     "categories": [
       "metal"
     ],
@@ -27,23 +27,24 @@
   },
   "stats": {
     "main": {
-      "durability": 128.0,
-      "armor_durability": 8.0,
+      "durability": 151.0,
+      "armor_durability": 12.0,
       "enchantability": 15.0,
+      "rarity": 12.0,
       "harvest_level": 1.0,
-      "harvest_speed": 4.0,
-      "melee_damage": 1.0,
-      "magic_damage": 2.0,
-      "attack_speed": 0.2,
+      "harvest_speed": 5.0,
+      "melee_damage": 1.5,
+      "magic_damage": 1.0,
+      "attack_speed": 0.1,
+      "attack_speed/axe": -0.1,
+      "ranged_damage": 0.1,
+      "ranged_speed": 0.0,
       "armor": 10.0,
       "armor/helmet": 2.0,
       "armor/chestplate": 4.0,
       "armor/leggings": 3.0,
       "armor/boots": 1.0,
       "magic_armor": 8.0,
-      "ranged_damage": 0.0,
-      "ranged_speed": 0.2,
-      "rarity": 15.0,
       "silentgems:chargeability": 1.3
     },
     "rod": {
@@ -53,15 +54,11 @@
       "harvest_speed": {
         "mul2": 0.2
       },
-      "rarity": 20.0
+      "rarity": 15.0
     }
   },
   "traits": {
     "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 2
-      },
       {
         "name": "silentgear:soft",
         "level": 1,

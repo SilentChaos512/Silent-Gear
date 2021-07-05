@@ -123,7 +123,8 @@ repositories {
         credentials gpr_creds
     }
     maven {
-        url "https://dl.bintray.com/silentchaos512/silents-mechanisms"
+        url = uri("https://maven.pkg.github.com/silentchaos512/silents-mechanisms")
+        credentials gpr_creds
     }
     maven {
         // location of the maven that hosts JEI files
@@ -168,13 +169,13 @@ dependencies {
         runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
     }
 
-/*     runtimeOnly("net.silentchaos512:silents-mechanisms-${project.mc_version}:0.+") {
-         exclude module: "cc-tweaked-${project.mc_version}"
+     runtimeOnly("net.silentchaos512:silents-mechanisms:1.16.5-1.+") {
+         exclude module: "cc-tweaked-1.16.3"
          exclude module: "forge"
-         exclude module: "jei-${project.mc_version}"
-         exclude module: "silent-gear-${project.mc_version}"
-         exclude module: "silent-lib-${project.mc_version}"
-     }*/
+         exclude module: "jei-1.16.5"
+         exclude module: "silent-gear-1.16.5"
+         exclude module: "silent-lib-1.16.3"
+     }
 
     // Curios
     if (project.hasProperty('curios_version')) {

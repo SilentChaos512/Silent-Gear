@@ -331,6 +331,12 @@ public class MaterialBuilder {
         return this;
     }
 
+    public MaterialBuilder mainStatsProjectile(float projectileSpeed, float projectileAccuracy) {
+        stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, projectileSpeed);
+        stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, projectileAccuracy);
+        return this;
+    }
+
     @Deprecated
     public MaterialBuilder mainStatsArmor(float armor, float toughness, float magicArmor) {
         stat(PartType.MAIN, ItemStats.ARMOR, armor);

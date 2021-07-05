@@ -404,6 +404,23 @@ public class MaterialsProvider implements IDataProvider {
     }
 
     private void addVanillaMetals(Collection<MaterialBuilder> ret) {
+        // Copper
+        ret.add(extraMetal("copper", 2, forgeId("ingots/copper"))
+                .categories(MaterialCategories.METAL)
+                .mainStatsCommon(151, 12, 15, 12)
+                .mainStatsHarvest(1, 5)
+                .mainStatsMelee(1.5f, 1.0f, 0.1f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
+                .mainStatsRanged(0.1f, 0.0f)
+                .mainStatsArmor(2, 4, 3, 1, 0, 8) //10
+                .stat(PartType.MAIN, MaterialsProvider.CHARGEABILITY, 1.3f)
+                .stat(PartType.ROD, ItemStats.DURABILITY, -0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 15)
+                .trait(PartType.MAIN, Const.Traits.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.ROD, Const.Traits.SOFT, 3)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
+        );
         // Gold
         ret.add(new MaterialBuilder(modId("gold"), 2, Tags.Items.INGOTS_GOLD)
                 .categories(MaterialCategories.METAL)
@@ -1034,7 +1051,7 @@ public class MaterialsProvider implements IDataProvider {
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD, woodRodSubstitute)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 59)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
                 .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
@@ -1695,30 +1712,6 @@ public class MaterialsProvider implements IDataProvider {
                 .trait(PartType.ROD, Const.Traits.MAGNETIC, 4, new MaterialRatioTraitCondition(0.5f))
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA6A6A6)
         );
-        // Copper
-        ret.add(extraMetal("copper", 1, forgeId("ingots/copper"))
-                .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 128)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1f)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2f)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
-                .mainStatsArmor(2, 4, 3, 1, 0, 8) //10
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.2f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 15)
-                .stat(PartType.MAIN, MaterialsProvider.CHARGEABILITY, 1.3f)
-                .stat(PartType.ROD, ItemStats.DURABILITY, -0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 20)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 2)
-                .trait(PartType.MAIN, Const.Traits.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.SOFT, 3)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
-        );
         // Electrum
         ret.add(extraMetal("electrum", 2, forgeId("ingots/electrum"))
                 .categories(MaterialCategories.METAL)
@@ -2049,7 +2042,7 @@ public class MaterialsProvider implements IDataProvider {
         ret.add(extraMetal("silver", 2, forgeId("ingots/silver"))
                 .categories(MaterialCategories.METAL)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 64)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
+                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 11)
