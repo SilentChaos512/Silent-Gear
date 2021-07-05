@@ -210,11 +210,9 @@ public class TraitsProvider implements IDataProvider {
 
         ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.RESISTANCE, 1, 1, 1, 2)
-                .withGearTypeCondition(GearType.ARMOR)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.AQUATIC, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.WATER_BREATHING, 1)
-                .withGearTypeCondition(GearType.ARMOR)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.FLAME_WARD, 1)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.FIRE_RESISTANCE, 1)

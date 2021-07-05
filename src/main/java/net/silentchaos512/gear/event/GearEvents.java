@@ -132,6 +132,39 @@ public final class GearEvents {
     }
 
     @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event) {
+        LivingEntity attacked = event.getEntityLiving();
+
+        DamageSource source = event.getSource();
+        if (source == null || !"player".equals(source.damageType)) return;
+
+        Entity attacker = source.getTrueSource();
+        if (!(attacker instanceof PlayerEntity)) return;
+
+        PlayerEntity player = (PlayerEntity) attacker;
+        ItemStack weapon = player.getHeldItemMainhand();
+        if (!(weapon.getItem() instanceof ICoreTool)) return;
+
+        // Traits that increase damage to specific mob types.
+        // TODO: Maybe add a new trait type/effect to give pack makers control?
+
+        int adamant = TraitHelper.getTraitLevel(weapon, Const.Traits.ADAMANT);
+        if (adamant > 0 && attacked.getMaxHealth() > 21f) {
+            event.setAmount(event.getAmount() + 2 * adamant);
+        }
+
+        int aquatic = TraitHelper.getTraitLevel(weapon, Const.Traits.AQUATIC);
+        if (aquatic > 0 && attacked.canBreatheUnderwater()) {
+            event.setAmount(event.getAmount() + 2 * aquatic);
+        }
+
+        int chilled = TraitHelper.getTraitLevel(weapon, Const.Traits.CHILLED);
+        if (chilled > 0 && attacked.isImmuneToFire()) {
+            event.setAmount(event.getAmount() + 2 * chilled);
+        }
+    }
+
+    @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
         if (event.getEntity() instanceof PlayerEntity)
             if (isFireDamage(event.getSource())) {
@@ -173,7 +206,7 @@ public final class GearEvents {
     //region Magic armor
 
     @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
+    public static void onLivingHurtMagicArmor(LivingHurtEvent event) {
         if (event.getSource().isMagicDamage()) {
             float magicArmor = getTotalMagicArmor(event.getEntityLiving());
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
