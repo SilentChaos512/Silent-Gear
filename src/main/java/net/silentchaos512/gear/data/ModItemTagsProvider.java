@@ -2,13 +2,8 @@ package net.silentchaos512.gear.data;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.TagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -29,16 +24,9 @@ import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
 import net.silentchaos512.gear.item.gear.CoreCurio;
 import net.silentchaos512.gear.util.Const;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Objects;
 
 public class ModItemTagsProvider extends ForgeItemTagsProvider {
     public ModItemTagsProvider(DataGenerator generatorIn, BlockTagsProvider blocks, ExistingFileHelper existingFileHelper) {
@@ -241,38 +229,5 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
 
     protected TagsProvider.Builder<Item> getBuilder(ITag.INamedTag<Item> tag) {
         return getOrCreateBuilder(tag);
-    }
-
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-
-    @Override
-    public void act(DirectoryCache cache) {
-        // Temp fix that removes the broken safety check
-        this.tagToBuilder.clear();
-        this.registerTags();
-        this.tagToBuilder.forEach((p_240524_4_, p_240524_5_) -> {
-            JsonObject jsonobject = p_240524_5_.serialize();
-            Path path = this.makePath(p_240524_4_);
-            if (path == null)
-                return; //Forge: Allow running this data provider without writing it. Recipe provider needs valid tags.
-
-            try {
-                String s = GSON.toJson((JsonElement) jsonobject);
-                String s1 = HASH_FUNCTION.hashUnencodedChars(s).toString();
-                if (!Objects.equals(cache.getPreviousHash(path), s1) || !Files.exists(path)) {
-                    Files.createDirectories(path.getParent());
-
-                    try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
-                        bufferedwriter.write(s);
-                    }
-                }
-
-                cache.recordHash(path, s1);
-            } catch (IOException ioexception) {
-                LOGGER.error("Couldn't save tags to {}", path, ioexception);
-            }
-
-        });
     }
 }

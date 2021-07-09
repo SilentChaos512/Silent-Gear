@@ -1,13 +1,8 @@
 package net.silentchaos512.gear.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
@@ -19,15 +14,8 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.lib.block.IBlockProvider;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
     public ModBlockTagsProvider(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
@@ -58,7 +46,7 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
                 .addTag(Tags.Blocks.ORES);
 
         // Forge
-        builder(ModTags.Blocks.ORES_BORT, ModBlocks.BORT_ORE);
+        builder(ModTags.Blocks.ORES_BORT, ModBlocks.BORT_ORE, ModBlocks.DEEPSLATE_BORT_ORE);
         builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
         builder(ModTags.Blocks.ORES_AZURE_SILVER, ModBlocks.AZURE_SILVER_ORE);
         getBuilder(Tags.Blocks.ORES)
@@ -101,38 +89,5 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
 
     protected TagsProvider.Builder<Block> getBuilder(ITag.INamedTag<Block> tag) {
         return getOrCreateBuilder(tag);
-    }
-
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-
-    @Override
-    public void act(DirectoryCache cache) {
-        // Temp fix that removes the broken safety check
-        this.tagToBuilder.clear();
-        this.registerTags();
-        this.tagToBuilder.forEach((p_240524_4_, p_240524_5_) -> {
-            JsonObject jsonobject = p_240524_5_.serialize();
-            Path path = this.makePath(p_240524_4_);
-            if (path == null)
-                return; //Forge: Allow running this data provider without writing it. Recipe provider needs valid tags.
-
-            try {
-                String s = GSON.toJson((JsonElement) jsonobject);
-                String s1 = HASH_FUNCTION.hashUnencodedChars(s).toString();
-                if (!Objects.equals(cache.getPreviousHash(path), s1) || !Files.exists(path)) {
-                    Files.createDirectories(path.getParent());
-
-                    try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
-                        bufferedwriter.write(s);
-                    }
-                }
-
-                cache.recordHash(path, s1);
-            } catch (IOException ioexception) {
-                LOGGER.error("Couldn't save tags to {}", path, ioexception);
-            }
-
-        });
     }
 }

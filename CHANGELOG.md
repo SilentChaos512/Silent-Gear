@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Deepslate bort ore (unused, 1.17 prep)
+### Changed
+- Bort ore textures tweaked
+
 ## [2.6.29] - 2021-07-08
 ### Added
 - Two config options related to gear enchanting (both in `gear.enchanting`). One allows or disallows normal enchanting (sets enchantability to zero). The other will forcibly remove all enchantments from existing items except those added by traits. [#375]

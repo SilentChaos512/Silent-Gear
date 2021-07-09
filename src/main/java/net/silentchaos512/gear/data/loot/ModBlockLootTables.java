@@ -40,6 +40,8 @@ public class ModBlockLootTables extends BlockLootTables {
     protected void addTables() {
         registerLootTable(ModBlocks.BORT_ORE.get(),
                 droppingItemWithFortune(ModBlocks.BORT_ORE.get(), CraftingItems.BORT.asItem()));
+        registerLootTable(ModBlocks.DEEPSLATE_BORT_ORE.get(),
+                droppingItemWithFortune(ModBlocks.DEEPSLATE_BORT_ORE.get(), CraftingItems.BORT.asItem()));
         registerLootTable(ModBlocks.CRIMSON_IRON_ORE.get(),
                 droppingItemWithFortune(ModBlocks.CRIMSON_IRON_ORE.get(), CraftingItems.RAW_CRIMSON_IRON.asItem()));
         registerLootTable(ModBlocks.AZURE_SILVER_ORE.get(),

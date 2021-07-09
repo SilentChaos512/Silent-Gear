@@ -38,6 +38,8 @@ public final class ModBlocks {
 
     public static final BlockRegistryObject<OreBlock> BORT_ORE = register("bort_ore", () ->
             getOre(2, SoundType.STONE));
+    public static final BlockRegistryObject<OreBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
+            getOre(2, SoundType.STONE));
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
             getOre(2, SoundType.NETHER_GOLD));
     public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->

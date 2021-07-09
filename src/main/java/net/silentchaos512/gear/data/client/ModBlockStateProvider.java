@@ -32,6 +32,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         // Ores and storage blocks
         simpleBlock(ModBlocks.BORT_ORE.get());
+        simpleBlock(ModBlocks.DEEPSLATE_BORT_ORE.get());
         simpleBlock(ModBlocks.CRIMSON_IRON_ORE.get());
         simpleBlock(ModBlocks.AZURE_SILVER_ORE.get());
         simpleBlock(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
