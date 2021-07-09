@@ -121,12 +121,15 @@ public final class GearData {
         if (!propertiesCompound.contains(NBT_LOCK_STATS))
             propertiesCompound.putBoolean(NBT_LOCK_STATS, false);
 
+        String playerName = player != null ? player.getScoreboardName() : "somebody";
+        String playersItemText = String.format("%s's %s", playerName, gear.getDisplayName().getString());
+
         final boolean statsUnlocked = !propertiesCompound.getBoolean(NBT_LOCK_STATS);
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
         if (statsUnlocked && partsListValid) {
             // We should recalculate the item's stats!
             if (player != null) {
-                SilentGear.LOGGER.debug("Recalculating for {}'s {}", player.getScoreboardName(), gear.getDisplayName().getString());
+                SilentGear.LOGGER.debug("Recalculating for {}", playersItemText);
             }
             clearCachedData(gear);
             propertiesCompound.putString("ModVersion", SilentGear.getVersion());
@@ -172,6 +175,12 @@ public final class GearData {
 
             propertiesCompound.remove(NBT_SYNERGY);
 
+            // Remove enchantments if mod is configured to. Must be done before traits add enchantments!
+            if (gear.getOrCreateTag().contains("Enchantments") && Config.Common.forceRemoveEnchantments.get()) {
+                SilentGear.LOGGER.debug("Forcibly removing all enchantments from {} as per config settings", playersItemText);
+                gear.removeChildTag("Enchantments");
+            }
+
             // Remove trait-added enchantments then let traits re-add them
             EnchantmentTrait.removeTraitEnchantments(gear);
             TraitHelper.activateTraits(gear, 0f, (trait, level, value) -> {
@@ -179,8 +188,7 @@ public final class GearData {
                 return 0f;
             });
         } else {
-            String playerName = player != null ? player.getScoreboardName() : "null";
-            SilentGear.LOGGER.debug("Not recalculating stats for {}'s {}", playerName, gear);
+            SilentGear.LOGGER.debug("Not recalculating stats for {}", playersItemText);
         }
 
         // Update rendering info even if we didn't update stats

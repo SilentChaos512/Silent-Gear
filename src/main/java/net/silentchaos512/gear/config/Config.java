@@ -41,6 +41,8 @@ public final class Config {
         // Gear
         public static final ForgeConfigSpec.BooleanValue allowClassicMaterialMixing;
         public static final ForgeConfigSpec.BooleanValue allowConversionRecipes;
+        public static final ForgeConfigSpec.BooleanValue allowEnchanting;
+        public static final ForgeConfigSpec.BooleanValue forceRemoveEnchantments;
         public static final ForgeConfigSpec.BooleanValue sendGearBrokenMessage;
         public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeStandard;
         public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeOres;
@@ -210,6 +212,19 @@ public final class Config {
                         .comment("If true, gear breaks permanently, like vanilla tools and armor")
                         .define("breaksPermanently", false);
 
+                {
+                    builder.push("enchanting");
+                    allowEnchanting = builder
+                            .comment("Allow gear items to be enchanted by normal means (enchanting table, etc.)",
+                                    "There may still be other ways to obtain enchantments on gear items, depending on what other mods are installed.",
+                                    "Enchantments will not be removed from gear items that have them.")
+                            .define("allowEnchanting", true);
+                    forceRemoveEnchantments = builder
+                            .comment("Forcibly remove all enchantments from gear items. Enchantments added by traits will not be removed.",
+                                    "Enchantments will be removed during stat recalculations, so items not in a player's inventory will not be affected.")
+                            .define("forceRemoveEnchantments", false);
+                    builder.pop();
+                }
                 {
                     builder.push("prospector_hammer");
                     prospectorHammerRange = builder

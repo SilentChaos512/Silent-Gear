@@ -7,6 +7,7 @@ import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -83,7 +84,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
 
         GearData.writeConstructionParts(result, parts);
         GearData.removeExcessParts(result);
-        GearData.recalculateStats(result, null);
+        GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
         return result;
     }
 

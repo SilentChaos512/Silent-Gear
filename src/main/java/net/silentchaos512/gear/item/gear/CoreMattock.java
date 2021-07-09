@@ -141,7 +141,7 @@ public class CoreMattock extends HoeItem implements ICoreTool {
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return GearData.getStatInt(stack, ItemStats.ENCHANTABILITY);
+        return GearHelper.getEnchantability(stack);
     }
 
     @Override

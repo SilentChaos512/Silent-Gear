@@ -91,7 +91,12 @@ public final class EnchantmentTrait extends SimpleTrait {
                 }
 
                 if (compatible) {
-                    enchants.put(enchantment, Triple.of(data.getLevel(traitLevel), this.getId(), traitLevel));
+                    int enchantmentLevel = data.getLevel(traitLevel);
+                    enchants.put(enchantment, Triple.of(enchantmentLevel, this.getId(), traitLevel));
+                    SilentGear.LOGGER.debug("Adding {} enchantment from {} trait to {}",
+                            enchantment.getDisplayName(enchantmentLevel).getString(),
+                            this.getDisplayName(traitLevel).getString(),
+                            gear.getDisplayName().getString());
                 }
             }
         }
