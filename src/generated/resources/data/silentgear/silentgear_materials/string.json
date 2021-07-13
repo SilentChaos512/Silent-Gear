@@ -11,14 +11,20 @@
   },
   "crafting_items": {
     "main": {
-      "type": "silentgear:exclusion",
+      "type": "silentlib:exclusion",
       "value": {
         "tag": "forge:string"
       },
       "exclusions": [
-        "silentgear:flax_string",
-        "silentgear:fluffy_string",
-        "silentgear:sinew_fiber"
+        {
+          "item": "silentgear:flax_string"
+        },
+        {
+          "item": "silentgear:fluffy_string"
+        },
+        {
+          "item": "silentgear:sinew_fiber"
+        }
       ]
     }
   },

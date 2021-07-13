@@ -10,15 +10,23 @@
   },
   "crafting_items": {
     "main": {
-      "type": "silentgear:exclusion",
+      "type": "silentlib:exclusion",
       "value": {
         "tag": "forge:sandstone"
       },
       "exclusions": [
-        "minecraft:red_sandstone",
-        "minecraft:chiseled_red_sandstone",
-        "minecraft:cut_red_sandstone",
-        "minecraft:smooth_red_sandstone"
+        {
+          "item": "minecraft:red_sandstone"
+        },
+        {
+          "item": "minecraft:chiseled_red_sandstone"
+        },
+        {
+          "item": "minecraft:cut_red_sandstone"
+        },
+        {
+          "item": "minecraft:smooth_red_sandstone"
+        }
       ]
     }
   },

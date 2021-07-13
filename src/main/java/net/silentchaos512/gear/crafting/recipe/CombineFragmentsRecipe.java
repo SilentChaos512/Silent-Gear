@@ -7,11 +7,11 @@ import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.lib.collection.StackList;
+import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.lib.util.InventoryUtils;
 
 public class CombineFragmentsRecipe extends SpecialRecipe {
