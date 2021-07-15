@@ -87,7 +87,7 @@ public final class NBTTrait extends SimpleTrait {
 
         for (int typeIndex = 0; typeIndex < gearTypeCount; ++typeIndex) {
             List<DataEntry> list = new ArrayList<>();
-            String gearType = buffer.readString();
+            String gearType = buffer.readUtf();
             int dataCount = buffer.readByte();
 
             for (int dataIndex = 0; dataIndex < dataCount; ++dataIndex) {
@@ -101,7 +101,7 @@ public final class NBTTrait extends SimpleTrait {
     private static void writeBuffer(NBTTrait trait, PacketBuffer buffer) {
         buffer.writeByte(trait.data.size());
         trait.data.forEach((type, list) -> {
-            buffer.writeString(type);
+            buffer.writeUtf(type);
             buffer.writeByte(list.size());
             list.forEach(e -> e.write(buffer));
         });
@@ -113,13 +113,13 @@ public final class NBTTrait extends SimpleTrait {
 
         static DataEntry from(JsonObject json) {
             DataEntry ret = new DataEntry();
-            ret.level = JSONUtils.getInt(json, "level", 1);
+            ret.level = JSONUtils.getAsInt(json, "level", 1);
             try {
                 JsonElement element = json.get("data");
                 if (element.isJsonObject())
-                    ret.data = JsonToNBT.getTagFromJson(GSON.toJson(element));
+                    ret.data = JsonToNBT.parseTag(GSON.toJson(element));
                 else
-                    ret.data = JsonToNBT.getTagFromJson(JSONUtils.getString(json, "data"));
+                    ret.data = JsonToNBT.parseTag(JSONUtils.getAsString(json, "data"));
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }
@@ -129,13 +129,13 @@ public final class NBTTrait extends SimpleTrait {
         static DataEntry read(PacketBuffer buffer) {
             DataEntry ret = new DataEntry();
             ret.level = buffer.readByte();
-            ret.data = buffer.readCompoundTag();
+            ret.data = buffer.readNbt();
             return ret;
         }
 
         void write(PacketBuffer buffer) {
             buffer.writeByte(this.level);
-            buffer.writeCompoundTag(this.data);
+            buffer.writeNbt(this.data);
         }
     }
 }

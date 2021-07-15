@@ -70,7 +70,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public GearType getGearType() {
-        switch (this.getEquipmentSlot()) {
+        switch (this.getSlot()) {
             case HEAD:
                 return GearType.HELMET;
             case CHEST:
@@ -86,14 +86,14 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public boolean isValidSlot(String slot) {
-        return this.getEquipmentSlot().getName().equalsIgnoreCase(slot);
+        return this.getSlot().getName().equalsIgnoreCase(slot);
     }
 
     //region Stats and attributes
 
     @Override
     public float getRepairModifier(ItemStack stack) {
-        return MAX_DAMAGE_ARRAY[this.getEquipmentSlot().getIndex()];
+        return MAX_DAMAGE_ARRAY[this.getSlot().getIndex()];
     }
 
     public double getArmorProtection(ItemStack stack) {
@@ -116,13 +116,13 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         if (item instanceof CoreArmor)
             return ((CoreArmor) item).getArmorProtection(stack);
         else if (item instanceof ArmorItem)
-            return ((ArmorItem) item).getDamageReduceAmount();
+            return ((ArmorItem) item).getDefense();
         return 0;
     }
 
     private static int getPlayerTotalArmorValue(LivingEntity player) {
         float total = 0;
-        for (ItemStack armor : player.getArmorInventoryList()) {
+        for (ItemStack armor : player.getArmorSlots()) {
             total += getGenericArmorProtection(armor);
         }
         return Math.round(total);
@@ -132,7 +132,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = LinkedHashMultimap.create();
-        if (slot == this.getEquipmentSlot()) {
+        if (slot == this.getSlot()) {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
             multimap.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
             multimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
@@ -152,7 +152,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     @Override
     public int getMaxDamage(ItemStack stack) {
         int maxDamageFactor = GearData.getStatInt(stack, getDurabilityStat());
-        return MAX_DAMAGE_ARRAY[this.getEquipmentSlot().getIndex()] * maxDamageFactor;
+        return MAX_DAMAGE_ARRAY[this.getSlot().getIndex()] * maxDamageFactor;
     }
 
     @Override
@@ -167,13 +167,13 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, t -> {
-            GearHelper.onBroken(stack, t instanceof PlayerEntity ? (PlayerEntity) t : null, this.getEquipmentSlot());
+            GearHelper.onBroken(stack, t instanceof PlayerEntity ? (PlayerEntity) t : null, this.getSlot());
             onBroken.accept(t);
         });
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -193,7 +193,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
@@ -242,7 +242,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
-    public boolean hasColor(ItemStack stack) {
+    public boolean hasCustomColor(ItemStack stack) {
         return true;
     }
 
@@ -267,23 +267,23 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
-    public void removeColor(ItemStack stack) {}
+    public void clearColor(ItemStack stack) {}
 
     @Override
     public void setColor(ItemStack stack, int color) {}
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 

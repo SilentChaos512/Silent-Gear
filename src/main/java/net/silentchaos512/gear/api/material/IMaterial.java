@@ -164,7 +164,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * @return An item matching the normal ingredient, or {@link ItemStack#EMPTY} if there are none
      */
     default ItemStack getDisplayItem(PartType type, int ticks) {
-        ItemStack[] stacks = getIngredient().getMatchingStacks();
+        ItemStack[] stacks = getIngredient().getItems();
         if (stacks.length == 0) return ItemStack.EMPTY;
         return stacks[(ticks / 20) % stacks.length];
     }

@@ -69,7 +69,7 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     );
 
     public GearFishingRod() {
-        super(GearHelper.getBuilder(null).maxDamage(100));
+        super(GearHelper.getBuilder(null).durability(100));
     }
 
     @Override
@@ -108,19 +108,19 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
         // Broken fishing rods cannot be used
         if (GearHelper.isBroken(stack)) {
-            return ActionResult.resultPass(stack);
+            return ActionResult.pass(stack);
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -130,7 +130,7 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -140,7 +140,7 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -160,22 +160,22 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return GearHelper.hitEntity(stack, target, attacker);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
@@ -190,7 +190,7 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         return GearHelper.onItemUse(context);
     }
 

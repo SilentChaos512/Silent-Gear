@@ -31,131 +31,131 @@ import java.util.stream.Collectors;
 
 public class ModBlockLootTables extends BlockLootTables {
     private static final float[] DEFAULT_SAPLING_DROP_RATES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
-    private static final ILootCondition.IBuilder SILK_TOUCH = MatchTool.builder(ItemPredicate.Builder.create().enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
-    private static final ILootCondition.IBuilder SHEARS = MatchTool.builder(ItemPredicate.Builder.create().tag(Tags.Items.SHEARS));
-    private static final ILootCondition.IBuilder SILK_TOUCH_OR_SHEARS = SHEARS.alternative(SILK_TOUCH);
-    private static final ILootCondition.IBuilder NOT_SILK_TOUCH_OR_SHEARS = SILK_TOUCH_OR_SHEARS.inverted();
+    private static final ILootCondition.IBuilder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
+    private static final ILootCondition.IBuilder SHEARS = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS));
+    private static final ILootCondition.IBuilder SILK_TOUCH_OR_SHEARS = SHEARS.or(SILK_TOUCH);
+    private static final ILootCondition.IBuilder NOT_SILK_TOUCH_OR_SHEARS = SILK_TOUCH_OR_SHEARS.invert();
 
     @Override
     protected void addTables() {
-        registerLootTable(ModBlocks.BORT_ORE.get(),
-                droppingItemWithFortune(ModBlocks.BORT_ORE.get(), CraftingItems.BORT.asItem()));
-        registerLootTable(ModBlocks.DEEPSLATE_BORT_ORE.get(),
-                droppingItemWithFortune(ModBlocks.DEEPSLATE_BORT_ORE.get(), CraftingItems.BORT.asItem()));
-        registerLootTable(ModBlocks.CRIMSON_IRON_ORE.get(),
-                droppingItemWithFortune(ModBlocks.CRIMSON_IRON_ORE.get(), CraftingItems.RAW_CRIMSON_IRON.asItem()));
-        registerLootTable(ModBlocks.AZURE_SILVER_ORE.get(),
-                droppingItemWithFortune(ModBlocks.AZURE_SILVER_ORE.get(), CraftingItems.RAW_AZURE_SILVER.asItem()));
-        registerDropSelfLootTable(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.RAW_AZURE_SILVER_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.BLAZE_GOLD_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.BORT_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.CRIMSON_IRON_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.CRIMSON_STEEL_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.AZURE_SILVER_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.TYRIAN_STEEL_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.MATERIAL_GRADER.get());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE.get());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_FENCE_GATE.get());
-        registerLootTable(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_LOG.get());
-        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_WOOD.get());
-        registerDropSelfLootTable(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_PLANKS.get());
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_SAPLING.get());
-        registerLootTable(ModBlocks.NETHERWOOD_DOOR.get(), block ->
-                droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_TRAPDOOR.get());
-        registerLootTable(ModBlocks.NETHERWOOD_SLAB.get(), BlockLootTables::droppingSlab);
-        registerDropSelfLootTable(ModBlocks.NETHERWOOD_STAIRS.get());
-        registerDropSelfLootTable(ModBlocks.STONE_TORCH.get());
+        add(ModBlocks.BORT_ORE.get(),
+                createOreDrop(ModBlocks.BORT_ORE.get(), CraftingItems.BORT.asItem()));
+        add(ModBlocks.DEEPSLATE_BORT_ORE.get(),
+                createOreDrop(ModBlocks.DEEPSLATE_BORT_ORE.get(), CraftingItems.BORT.asItem()));
+        add(ModBlocks.CRIMSON_IRON_ORE.get(),
+                createOreDrop(ModBlocks.CRIMSON_IRON_ORE.get(), CraftingItems.RAW_CRIMSON_IRON.asItem()));
+        add(ModBlocks.AZURE_SILVER_ORE.get(),
+                createOreDrop(ModBlocks.AZURE_SILVER_ORE.get(), CraftingItems.RAW_AZURE_SILVER.asItem()));
+        dropSelf(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
+        dropSelf(ModBlocks.RAW_AZURE_SILVER_BLOCK.get());
+        dropSelf(ModBlocks.BLAZE_GOLD_BLOCK.get());
+        dropSelf(ModBlocks.BORT_BLOCK.get());
+        dropSelf(ModBlocks.CRIMSON_IRON_BLOCK.get());
+        dropSelf(ModBlocks.CRIMSON_STEEL_BLOCK.get());
+        dropSelf(ModBlocks.AZURE_SILVER_BLOCK.get());
+        dropSelf(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
+        dropSelf(ModBlocks.TYRIAN_STEEL_BLOCK.get());
+        dropSelf(ModBlocks.MATERIAL_GRADER.get());
+        dropSelf(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
+        dropSelf(ModBlocks.NETHERWOOD_FENCE.get());
+        dropSelf(ModBlocks.NETHERWOOD_FENCE_GATE.get());
+        add(ModBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(ModBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
+        dropSelf(ModBlocks.NETHERWOOD_LOG.get());
+        dropSelf(ModBlocks.STRIPPED_NETHERWOOD_LOG.get());
+        dropSelf(ModBlocks.NETHERWOOD_WOOD.get());
+        dropSelf(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get());
+        dropSelf(ModBlocks.NETHERWOOD_PLANKS.get());
+        dropSelf(ModBlocks.NETHERWOOD_SAPLING.get());
+        add(ModBlocks.NETHERWOOD_DOOR.get(), block ->
+                createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
+        dropSelf(ModBlocks.NETHERWOOD_TRAPDOOR.get());
+        add(ModBlocks.NETHERWOOD_SLAB.get(), BlockLootTables::createSlabItemTable);
+        dropSelf(ModBlocks.NETHERWOOD_STAIRS.get());
+        dropSelf(ModBlocks.STONE_TORCH.get());
 
-        registerLootTable(ModBlocks.PHANTOM_LIGHT.get(), blockNoDrop());
-        registerFlowerPot(ModBlocks.POTTED_NETHERWOOD_SAPLING.get());
+        add(ModBlocks.PHANTOM_LIGHT.get(), noDrop());
+        dropPottedContents(ModBlocks.POTTED_NETHERWOOD_SAPLING.get());
 
-        registerDropSelfLootTable(ModBlocks.GEAR_SMITHING_TABLE.get());
-        registerDropSelfLootTable(ModBlocks.METAL_ALLOYER.get());
-        registerDropSelfLootTable(ModBlocks.METAL_PRESS.get());
-        registerDropSelfLootTable(ModBlocks.RECRYSTALLIZER.get());
-        registerDropSelfLootTable(ModBlocks.REFABRICATOR.get());
-        registerDropSelfLootTable(ModBlocks.SALVAGER.get());
-        registerDropSelfLootTable(ModBlocks.STARLIGHT_CHARGER.get());
+        dropSelf(ModBlocks.GEAR_SMITHING_TABLE.get());
+        dropSelf(ModBlocks.METAL_ALLOYER.get());
+        dropSelf(ModBlocks.METAL_PRESS.get());
+        dropSelf(ModBlocks.RECRYSTALLIZER.get());
+        dropSelf(ModBlocks.REFABRICATOR.get());
+        dropSelf(ModBlocks.SALVAGER.get());
+        dropSelf(ModBlocks.STARLIGHT_CHARGER.get());
 
-        registerDropSelfLootTable(ModBlocks.WHITE_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.ORANGE_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.MAGENTA_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.LIGHT_BLUE_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.YELLOW_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.LIME_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.PINK_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.GRAY_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.LIGHT_GRAY_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.CYAN_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.PURPLE_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.BLUE_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.BROWN_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.GREEN_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.RED_FLUFFY_BLOCK.get());
-        registerDropSelfLootTable(ModBlocks.BLACK_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.WHITE_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.ORANGE_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.MAGENTA_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.LIGHT_BLUE_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.YELLOW_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.LIME_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.PINK_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.GRAY_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.LIGHT_GRAY_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.CYAN_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.PURPLE_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.BLUE_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.BROWN_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.GREEN_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.RED_FLUFFY_BLOCK.get());
+        dropSelf(ModBlocks.BLACK_FLUFFY_BLOCK.get());
 
-        this.registerLootTable(ModBlocks.FLAX_PLANT.get(), flaxPlant(BlockStateProperty.builder(ModBlocks.FLAX_PLANT.get())
-                .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
-                        .withIntProp(CropsBlock.AGE, 7))));
-        registerDropping(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAX_SEEDS);
+        this.add(ModBlocks.FLAX_PLANT.get(), flaxPlant(BlockStateProperty.hasBlockStateProperties(ModBlocks.FLAX_PLANT.get())
+                .setProperties(StatePropertiesPredicate.Builder.properties()
+                        .hasProperty(CropsBlock.AGE, 7))));
+        dropOther(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAX_SEEDS);
 
-        this.registerLootTable(ModBlocks.FLUFFY_PLANT.get(), fluffyPlant(BlockStateProperty.builder(ModBlocks.FLUFFY_PLANT.get())
-                .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
-                        .withIntProp(CropsBlock.AGE, 7))));
-        registerDropping(ModBlocks.WILD_FLUFFY_PLANT.get(), ModItems.FLUFFY_SEEDS);
+        this.add(ModBlocks.FLUFFY_PLANT.get(), fluffyPlant(BlockStateProperty.hasBlockStateProperties(ModBlocks.FLUFFY_PLANT.get())
+                .setProperties(StatePropertiesPredicate.Builder.properties()
+                        .hasProperty(CropsBlock.AGE, 7))));
+        dropOther(ModBlocks.WILD_FLUFFY_PLANT.get(), ModItems.FLUFFY_SEEDS);
     }
 
     @Nonnull
     private static Function<Block, LootTable.Builder> netherwoodLeaves(IItemProvider sapling, IItemProvider stick, float... chances) {
-        return (block) -> dropping(block, SILK_TOUCH_OR_SHEARS, withSurvivesExplosion(block, ItemLootEntry.builder(sapling))
-                .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances)))
-                .addLootPool(LootPool.builder()
-                        .rolls(ConstantRange.of(1))
-                        .acceptCondition(NOT_SILK_TOUCH_OR_SHEARS)
-                        .addEntry(withExplosionDecay(block, ItemLootEntry.builder(stick)
-                                .acceptFunction(SetCount.builder(RandomValueRange.of(1.0F, 2.0F))))
-                                .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))))
-                .addLootPool(LootPool.builder()
-                        .rolls(ConstantRange.of(1))
-                        .acceptCondition(NOT_SILK_TOUCH_OR_SHEARS)
-                        .addEntry(withSurvivesExplosion(block, ItemLootEntry.builder(ModItems.NETHER_BANANA))
-                                .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
+        return (block) -> createSelfDropDispatchTable(block, SILK_TOUCH_OR_SHEARS, applyExplosionCondition(block, ItemLootEntry.lootTableItem(sapling))
+                .when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantRange.exactly(1))
+                        .when(NOT_SILK_TOUCH_OR_SHEARS)
+                        .add(applyExplosionDecay(block, ItemLootEntry.lootTableItem(stick)
+                                .apply(SetCount.setCount(RandomValueRange.between(1.0F, 2.0F))))
+                                .when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantRange.exactly(1))
+                        .when(NOT_SILK_TOUCH_OR_SHEARS)
+                        .add(applyExplosionCondition(block, ItemLootEntry.lootTableItem(ModItems.NETHER_BANANA))
+                                .when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
     }
 
     private static LootTable.Builder flaxPlant(ILootCondition.IBuilder builder) {
-        return withExplosionDecay(ModBlocks.FLAX_PLANT, LootTable.builder()
-                .addLootPool(LootPool.builder()
-                        .acceptCondition(builder)
-                        .addEntry(ItemLootEntry.builder(CraftingItems.FLAX_FIBER)
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
-                .addLootPool(LootPool.builder()
-                        .acceptCondition(builder)
-                        .addEntry(ItemLootEntry.builder(ModItems.FLAX_SEEDS)
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
-                .addLootPool(LootPool.builder()
-                        .acceptCondition(builder)
-                        .addEntry(ItemLootEntry.builder(CraftingItems.FLAX_FLOWERS)
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5f, 1))))
+        return applyExplosionDecay(ModBlocks.FLAX_PLANT, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .when(builder)
+                        .add(ItemLootEntry.lootTableItem(CraftingItems.FLAX_FIBER)
+                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                .withPool(LootPool.lootPool()
+                        .when(builder)
+                        .add(ItemLootEntry.lootTableItem(ModItems.FLAX_SEEDS)
+                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                .withPool(LootPool.lootPool()
+                        .when(builder)
+                        .add(ItemLootEntry.lootTableItem(CraftingItems.FLAX_FLOWERS)
+                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5f, 1))))
         );
     }
 
     private static LootTable.Builder fluffyPlant(ILootCondition.IBuilder builder) {
-        return withExplosionDecay(ModBlocks.FLUFFY_PLANT, LootTable.builder()
-                .addLootPool(LootPool.builder()
-                        .acceptCondition(builder)
-                        .addEntry(ItemLootEntry.builder(CraftingItems.FLUFFY_PUFF)
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
-                .addLootPool(LootPool.builder()
-                        .acceptCondition(builder)
-                        .addEntry(ItemLootEntry.builder(ModItems.FLUFFY_SEEDS)
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
+        return applyExplosionDecay(ModBlocks.FLUFFY_PLANT, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .when(builder)
+                        .add(ItemLootEntry.lootTableItem(CraftingItems.FLUFFY_PUFF)
+                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                .withPool(LootPool.lootPool()
+                        .when(builder)
+                        .add(ItemLootEntry.lootTableItem(ModItems.FLUFFY_SEEDS)
+                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
         );
     }
 

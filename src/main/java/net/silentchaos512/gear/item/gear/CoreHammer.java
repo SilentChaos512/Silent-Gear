@@ -34,7 +34,7 @@ public class CoreHammer extends CorePickaxe implements IAoeTool {
     @Nullable
     @Override
     public RayTraceResult rayTraceBlocks(World world, PlayerEntity player) {
-        return rayTrace(world, player, RayTraceContext.FluidMode.NONE);
+        return getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.NONE);
     }
 
     @Override

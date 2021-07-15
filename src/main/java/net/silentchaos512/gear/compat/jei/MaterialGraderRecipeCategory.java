@@ -78,13 +78,13 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     public static List<ItemStack> getMaterials() {
         return MaterialManager.getValues().stream()
                 .map(IMaterial::getIngredient)
-                .flatMap(ing -> Arrays.stream(ing.getMatchingStacks()))
+                .flatMap(ing -> Arrays.stream(ing.getItems()))
                 .collect(Collectors.toList());
     }
 
     @Nonnull
     public static List<ItemStack> getCatalysts() {
-        return ModTags.Items.GRADER_CATALYSTS.getAllElements().stream()
+        return ModTags.Items.GRADER_CATALYSTS.getValues().stream()
                 .map(ItemStack::new)
                 .collect(Collectors.toList());
     }

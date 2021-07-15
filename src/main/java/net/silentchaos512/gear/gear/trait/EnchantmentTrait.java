@@ -94,9 +94,9 @@ public final class EnchantmentTrait extends SimpleTrait {
                     int enchantmentLevel = data.getLevel(traitLevel);
                     enchants.put(enchantment, Triple.of(enchantmentLevel, this.getId(), traitLevel));
                     SilentGear.LOGGER.debug("Adding {} enchantment from {} trait to {}",
-                            enchantment.getDisplayName(enchantmentLevel).getString(),
+                            enchantment.getFullname(enchantmentLevel).getString(),
                             this.getDisplayName(traitLevel).getString(),
-                            gear.getDisplayName().getString());
+                            gear.getHoverName().getString());
                 }
             }
         }
@@ -107,7 +107,7 @@ public final class EnchantmentTrait extends SimpleTrait {
     private static Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> getEnchantmentsOnGear(ItemStack gear) {
         Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> map = new LinkedHashMap<>();
 
-        ListNBT tagList = gear.getEnchantmentTagList();
+        ListNBT tagList = gear.getEnchantmentTags();
         for (int i = 0; i < tagList.size(); ++i) {
             CompoundNBT nbt = tagList.getCompound(i);
             Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(nbt.getString("id")));
@@ -155,9 +155,9 @@ public final class EnchantmentTrait extends SimpleTrait {
         }
 
         if (tagList.isEmpty()) {
-            gear.removeChildTag("Enchantments");
+            gear.removeTagKey("Enchantments");
         } else {
-            gear.setTagInfo("Enchantments", tagList);
+            gear.addTagElement("Enchantments", tagList);
         }
     }
 
@@ -199,7 +199,7 @@ public final class EnchantmentTrait extends SimpleTrait {
 
         for (int typeIndex = 0; typeIndex < gearTypeCount; ++typeIndex) {
             List<EnchantmentData> list = new ArrayList<>();
-            String gearType = buffer.readString();
+            String gearType = buffer.readUtf();
             int dataCount = buffer.readByte();
 
             for (int dataIndex = 0; dataIndex < dataCount; ++dataIndex) {
@@ -213,7 +213,7 @@ public final class EnchantmentTrait extends SimpleTrait {
     private static void writeBuffer(EnchantmentTrait trait, PacketBuffer buffer) {
         buffer.writeByte(trait.enchantments.size());
         for (Map.Entry<String, List<EnchantmentData>> entry : trait.enchantments.entrySet()) {
-            buffer.writeString(entry.getKey());
+            buffer.writeUtf(entry.getKey());
             buffer.writeByte(entry.getValue().size());
 
             for (EnchantmentData data : entry.getValue()) {
@@ -259,7 +259,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         static EnchantmentData from(JsonObject json) {
             EnchantmentData ret = new EnchantmentData();
             // Enchantment ID, get actual enchantment only when needed
-            ret.enchantmentId = new ResourceLocation(JSONUtils.getString(json, "enchantment", "unknown"));
+            ret.enchantmentId = new ResourceLocation(JSONUtils.getAsString(json, "enchantment", "unknown"));
 
             // Level int or array
             JsonElement elementLevel = json.get("level");
@@ -268,7 +268,7 @@ public final class EnchantmentTrait extends SimpleTrait {
             }
             if (elementLevel.isJsonPrimitive()) {
                 // Single level
-                ret.levels = new int[]{JSONUtils.getInt(json, "level", 1)};
+                ret.levels = new int[]{JSONUtils.getAsInt(json, "level", 1)};
             } else if (elementLevel.isJsonArray()) {
                 // Levels
                 JsonArray array = elementLevel.getAsJsonArray();

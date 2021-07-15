@@ -35,18 +35,18 @@ import java.util.function.Consumer;
 
 public class CorePickaxe extends PickaxeItem implements ICoreTool {
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.ROCK,
-            Material.ANVIL,
+            Material.STONE,
+            Material.HEAVY_METAL,
             Material.ICE,
-            Material.IRON,
-            Material.PACKED_ICE,
-            Material.ROCK
+            Material.METAL,
+            Material.ICE_SOLID,
+            Material.STONE
     );
     private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.MISCELLANEOUS,
+            Material.DECORATION,
             Material.GLASS,
             Material.PISTON,
-            Material.REDSTONE_LIGHT
+            Material.BUILDABLE_GLASS
     );
 
     private static final ImmutableSet<ToolType> TOOL_CLASSES_BASE =
@@ -79,7 +79,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState state) {
+    public boolean isCorrectToolForDrops(BlockState state) {
         // Vanilla version... Not good because we can't get the actual harvest level.
         // Assume a very high level since we can't get the actual value.
         return canHarvestBlock(state, 10);
@@ -93,14 +93,14 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
         Material material = state.getMaterial();
         if (BASE_EFFECTIVE_MATERIALS.contains(material) || this.extraMaterials.contains(material))
             return true;
-        return super.canHarvestBlock(state);
+        return super.isCorrectToolForDrops(state);
     }
     //endregion
 
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -125,7 +125,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
 //    }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -135,7 +135,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -175,22 +175,22 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return GearHelper.hitEntity(stack, target, attacker);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
@@ -205,7 +205,7 @@ public class CorePickaxe extends PickaxeItem implements ICoreTool {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         return GearHelper.onItemUse(context);
     }
 

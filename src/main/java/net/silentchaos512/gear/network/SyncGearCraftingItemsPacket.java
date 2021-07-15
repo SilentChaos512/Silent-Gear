@@ -35,7 +35,7 @@ public class SyncGearCraftingItemsPacket {
         int count = buffer.readVarInt();
 
         for (int i = 0; i < count; ++i) {
-            packet.craftingItems.put(buffer.readResourceLocation(), Ingredient.read(buffer));
+            packet.craftingItems.put(buffer.readResourceLocation(), Ingredient.fromNetwork(buffer));
         }
 
         return packet;
@@ -45,7 +45,7 @@ public class SyncGearCraftingItemsPacket {
         buffer.writeVarInt(this.craftingItems.size());
         this.craftingItems.forEach((id, material) -> {
             buffer.writeResourceLocation(id);
-            material.write(buffer);
+            material.toNetwork(buffer);
         });
     }
 

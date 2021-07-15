@@ -23,6 +23,8 @@ import net.silentchaos512.gear.util.TextUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class FragmentItem extends Item {
     private static final String NBT_MATERIAL = "Material";
 
@@ -43,7 +45,7 @@ public class FragmentItem extends Item {
         }
 
         // Old, pre-compound style
-        ResourceLocation id = ResourceLocation.tryCreate(stack.getOrCreateTag().getString(NBT_MATERIAL));
+        ResourceLocation id = ResourceLocation.tryParse(stack.getOrCreateTag().getString(NBT_MATERIAL));
         IMaterial material = MaterialManager.get(id);
         if (material != null) {
             return MaterialInstance.of(material);
@@ -62,17 +64,17 @@ public class FragmentItem extends Item {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         IMaterialInstance material = getMaterial(stack);
         if (material == null) {
-            return new TranslationTextComponent(this.getTranslationKey(stack) + ".invalid");
+            return new TranslationTextComponent(this.getDescriptionId(stack) + ".invalid");
         }
-        return new TranslationTextComponent(this.getTranslationKey(stack), material.getDisplayName(PartType.MAIN));
+        return new TranslationTextComponent(this.getDescriptionId(stack), material.getDisplayName(PartType.MAIN));
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (!this.isInGroup(group)) return;
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (!this.allowdedIn(group)) return;
 
         items.add(new ItemStack(this));
 
@@ -84,7 +86,7 @@ public class FragmentItem extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextUtil.translate("item", "fragment.hint").mergeStyle(TextFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(TextUtil.translate("item", "fragment.hint").withStyle(TextFormatting.ITALIC));
     }
 }

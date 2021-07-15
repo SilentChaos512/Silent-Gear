@@ -68,7 +68,7 @@ public class GameStagesCompat implements IResourceManagerReloadListener {
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-        Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations("silentgear_gamestages", s -> s.endsWith(".json"));
+        Collection<ResourceLocation> resources = resourceManager.listResources("silentgear_gamestages", s -> s.endsWith(".json"));
 
         for (ResourceLocation id : resources) {
             String path = id.getPath().substring("silentgear_gamestages".length() + 1, id.getPath().length() - ".json".length());

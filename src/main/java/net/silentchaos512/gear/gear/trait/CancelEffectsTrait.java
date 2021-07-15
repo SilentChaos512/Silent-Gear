@@ -63,7 +63,7 @@ public class CancelEffectsTrait extends SimpleTrait {
             PlayerEntity player = context.getPlayer();
             if (player != null) {
                 for (Effect effect : this.effects) {
-                    player.removePotionEffect(effect);
+                    player.removeEffect(effect);
                 }
             }
         }

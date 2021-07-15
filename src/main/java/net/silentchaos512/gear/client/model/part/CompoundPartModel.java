@@ -79,7 +79,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(this.texturePath, 0)));
+            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, layer.getTexture(this.texturePath, 0)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -90,7 +90,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
             } else {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");
-                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
                 builder.addAll(getQuadsForSprite(0, texture, rotation, Color.VALUE_WHITE));
             }
         }
@@ -99,13 +99,13 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         for (int i = 0; i < this.extraLayers.size(); i++) {
             ResourceLocation texture = this.extraLayers.get(i);
             builder.addAll(getQuadsForSprite(layers.size() + i,
-                    spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(texture).getTexture())),
+                    spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new StaticLayer(texture).getTexture())),
                     rotation,
                     Color.VALUE_WHITE));
         }
 
         builder.addAll(getQuadsForSprite(layers.size(),
-                spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE).getTexture())),
+                spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new StaticLayer(PART_MARKER_TEXTURE).getTexture())),
                 rotation,
                 Color.LIGHTSKYBLUE.getColor()));
 
@@ -120,9 +120,9 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         IMaterialDisplay model = MaterialDisplayManager.get(mat);
         MaterialLayer exampleMain = model.getLayerList(this.gearType, this.partType, mat).getFirstLayer();
         if (exampleMain != null) {
-            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(this.texturePath, 0))), rotation, exampleMain.getColor()));
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, exampleMain.getTexture(this.texturePath, 0))), rotation, exampleMain.getColor()));
         }
-        builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new StaticLayer(PART_MARKER_TEXTURE).getTexture(this.gearType, 0))), rotation, Color.VALUE_WHITE));
+        builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new StaticLayer(PART_MARKER_TEXTURE).getTexture(this.gearType, 0))), rotation, Color.VALUE_WHITE));
     }
 
     @Override
@@ -150,12 +150,12 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         }
 
         ret.add(getTexture(new StaticLayer(PART_MARKER_TEXTURE)));
-        ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+        ret.add(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
 
         if (CompoundPartModelOverrideList.isDebugLoggingEnabled()) {
             SilentGear.LOGGER.info("Textures for compound part model '{}'", PartGearKey.of(this.gearType, this.partType));
             for (RenderMaterial mat : ret) {
-                SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+                SilentGear.LOGGER.info("- {}", mat.texture());
             }
         }
 
@@ -173,7 +173,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     }
 
     private static RenderMaterial getMaterial(ResourceLocation tex) {
-        return new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, tex);
+        return new RenderMaterial(PlayerContainer.BLOCK_ATLAS, tex);
     }
 
     @Override

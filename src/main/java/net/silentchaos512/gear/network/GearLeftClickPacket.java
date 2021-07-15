@@ -15,7 +15,7 @@ public class GearLeftClickPacket {
     public void handle(Supplier<NetworkEvent.Context> context) {
         ServerPlayerEntity player = context.get().getSender();
         if (player != null) {
-            ItemStack stack = player.getHeldItemMainhand();
+            ItemStack stack = player.getMainHandItem();
             if (GearHelper.isGear(stack)) {
                 GearHelper.onItemSwing(stack, player);
             }

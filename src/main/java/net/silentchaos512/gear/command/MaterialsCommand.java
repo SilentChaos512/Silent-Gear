@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 
 public final class MaterialsCommand {
     private static final SuggestionProvider<CommandSource> MATERIAL_ID_SUGGESTIONS = (ctx, builder) ->
-            ISuggestionProvider.func_212476_a(MaterialManager.getValues().stream().map(IMaterial::getId), builder);
+            ISuggestionProvider.suggestResource(MaterialManager.getValues().stream().map(IMaterial::getId), builder);
 
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
@@ -74,16 +74,16 @@ public final class MaterialsCommand {
         String listStr = MaterialManager.getValues().stream()
                 .map(mat -> mat.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendFeedback(new StringTextComponent(listStr), true);
+        context.getSource().sendSuccess(new StringTextComponent(listStr), true);
 
         return 1;
     }
 
     private static int runDump(CommandContext<CommandSource> context, boolean includeChildren) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().asPlayer();
+        ServerPlayerEntity player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send material dump packet to client {}", player.getScoreboardName());
         ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.MATERIALS, includeChildren);
-        Network.channel.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        Network.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         return 1;
     }
 
@@ -99,7 +99,7 @@ public final class MaterialsCommand {
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            player.sendMessage(new StringTextComponent("Could not create directory: " + output.getParent()), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("Could not create directory: " + output.getParent()), Util.NIL_UUID);
             return;
         }
 
@@ -123,9 +123,9 @@ public final class MaterialsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).mergeStyle(TextFormatting.UNDERLINE).modifyStyle(style ->
-                    style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            player.sendMessage(new StringTextComponent("Wrote materials info to ").append(fileNameText), Util.DUMMY_UUID);
+            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).withStyle(TextFormatting.UNDERLINE).withStyle(style ->
+                    style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
+            player.sendMessage(new StringTextComponent("Wrote materials info to ").append(fileNameText), Util.NIL_UUID);
         }
     }
 

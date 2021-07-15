@@ -56,7 +56,7 @@ public class NotTraitCondition implements ITraitCondition {
 
         @Override
         public NotTraitCondition deserialize(JsonObject json) {
-            return new NotTraitCondition(TraitSerializers.deserializeCondition(JSONUtils.getJsonObject(json, "value")));
+            return new NotTraitCondition(TraitSerializers.deserializeCondition(JSONUtils.getAsJsonObject(json, "value")));
         }
 
         @Override

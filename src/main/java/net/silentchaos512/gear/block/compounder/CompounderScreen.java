@@ -25,9 +25,9 @@ public class CompounderScreen extends ContainerScreen<CompounderContainer> {
     @Override
     protected void init() {
         super.init();
-        this.lastWorkEnabledValue = this.container.getWorkEnabled();
-        this.workButton = new Button(this.guiLeft + 70, this.guiTop + 60, 50, 20, getWorkEnabledButtonTitle(), b -> {
-            this.container.toggleWorkEnabled();
+        this.lastWorkEnabledValue = this.menu.getWorkEnabled();
+        this.workButton = new Button(this.leftPos + 70, this.topPos + 60, 50, 20, getWorkEnabledButtonTitle(), b -> {
+            this.menu.toggleWorkEnabled();
             b.setMessage(getWorkEnabledButtonTitle());
         });
         this.addButton(this.workButton);
@@ -37,15 +37,15 @@ public class CompounderScreen extends ContainerScreen<CompounderContainer> {
     public void tick() {
         super.tick();
 
-        if (this.container.getWorkEnabled() != lastWorkEnabledValue) {
-            lastWorkEnabledValue = this.container.getWorkEnabled();
+        if (this.menu.getWorkEnabled() != lastWorkEnabledValue) {
+            lastWorkEnabledValue = this.menu.getWorkEnabled();
             this.workButton.setMessage(getWorkEnabledButtonTitle());
         }
     }
 
     @Nonnull
     private ITextComponent getWorkEnabledButtonTitle() {
-        ITextComponent text = TextUtil.misc(this.container.getWorkEnabled() ? "on" : "off");
+        ITextComponent text = TextUtil.misc(this.menu.getWorkEnabled() ? "on" : "off");
         return TextUtil.translate("block", "compounder.workEnabled", text);
     }
 
@@ -53,21 +53,21 @@ public class CompounderScreen extends ContainerScreen<CompounderContainer> {
     public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrix, mouseX, mouseY);
+        this.renderTooltip(matrix, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
         RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bindTexture(TEXTURE);
+        minecraft.getTextureManager().bind(TEXTURE);
 
-        int posX = (this.width - this.xSize) / 2;
-        int posY = (this.height - this.ySize) / 2;
-        blit(matrixStack, posX, posY, 0, 0, this.xSize, this.ySize);
+        int posX = (this.width - this.imageWidth) / 2;
+        int posY = (this.height - this.imageHeight) / 2;
+        blit(matrixStack, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
 
         // Progress arrow
-        blit(matrixStack, posX + 93, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
+        blit(matrixStack, posX + 93, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
     }
 }

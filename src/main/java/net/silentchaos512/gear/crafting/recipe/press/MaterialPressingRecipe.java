@@ -18,8 +18,8 @@ public class MaterialPressingRecipe extends PressingRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
-        IMaterialInstance material = MaterialInstance.from(inv.getStackInSlot(0));
+    public ItemStack assemble(IInventory inv) {
+        IMaterialInstance material = MaterialInstance.from(inv.getItem(0));
 
         if (material != null) {
             CraftedMaterialItem item = (CraftedMaterialItem) this.result.getItem();

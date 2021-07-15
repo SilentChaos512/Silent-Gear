@@ -32,18 +32,18 @@ public class GearModelLoader implements IModelLoader<GearModel> {
     public GearModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
         ItemCameraTransforms cameraTransforms = deserializationContext.deserialize(modelContents.get("display"), ItemCameraTransforms.class);
         if (cameraTransforms == null) {
-            cameraTransforms = ItemCameraTransforms.DEFAULT;
+            cameraTransforms = ItemCameraTransforms.NO_TRANSFORMS;
         }
-        String gearTypeStr = JSONUtils.getString(modelContents, "gear_type");
+        String gearTypeStr = JSONUtils.getAsString(modelContents, "gear_type");
         GearType gearType = GearType.get(gearTypeStr);
         if (gearType.isInvalid()) {
             throw new NullPointerException("Unknown gear type: " + gearTypeStr);
         }
-        String texturePath = JSONUtils.getString(modelContents, "texture_path", gearType.getName());
-        String brokenTexturePath = JSONUtils.getString(modelContents, "broken_texture_path", gearType.getName());
+        String texturePath = JSONUtils.getAsString(modelContents, "texture_path", gearType.getName());
+        String brokenTexturePath = JSONUtils.getAsString(modelContents, "broken_texture_path", gearType.getName());
 
         Collection<PartType> brokenTextureTypes = new ArrayList<>();
-        JsonArray brokenTypesJson = JSONUtils.getJsonArray(modelContents, "broken_texture_types", null);
+        JsonArray brokenTypesJson = JSONUtils.getAsJsonArray(modelContents, "broken_texture_types", null);
         if (brokenTypesJson != null) {
             for (JsonElement element : brokenTypesJson) {
                 ResourceLocation id = SilentGear.getIdWithDefaultNamespace(element.getAsString());
@@ -52,7 +52,7 @@ public class GearModelLoader implements IModelLoader<GearModel> {
                     if (type != null) {
                         brokenTextureTypes.add(type);
                     } else {
-                        SilentGear.LOGGER.error("Unknown part type '{}' in model {}", id, this.getSimpleName());
+                        SilentGear.LOGGER.error("Unknown part type '{}' in model {}", id, this.getName());
                     }
                 }
             }

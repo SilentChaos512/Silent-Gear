@@ -14,6 +14,8 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.enchantment.Enchantment.Rarity;
+
 public class StatModifierEnchantment extends Enchantment implements IStatModifierEnchantment {
     public StatModifierEnchantment(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
         super(rarityIn, typeIn, slots);
@@ -88,22 +90,22 @@ public class StatModifierEnchantment extends Enchantment implements IStatModifie
     }
 
     @Override
-    public boolean canApply(ItemStack stack) {
+    public boolean canEnchant(ItemStack stack) {
         return MaterialManager.from(stack) != null;
     }
 
     @Override
-    protected boolean canApplyTogether(Enchantment ench) {
+    protected boolean checkCompatibility(Enchantment ench) {
         return !(ench instanceof IStatModifierEnchantment);
     }
 
     @Override
-    public boolean canVillagerTrade() {
+    public boolean isTradeable() {
         return false;
     }
 
     @Override
-    public boolean canGenerateInLoot() {
+    public boolean isDiscoverable() {
         return false;
     }
 

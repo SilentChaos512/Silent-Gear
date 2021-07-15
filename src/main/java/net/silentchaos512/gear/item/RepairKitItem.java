@@ -24,6 +24,8 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import net.minecraft.item.Item.Properties;
+
 public class RepairKitItem extends Item {
     private static final String NBT_STORAGE = "Storage";
 
@@ -49,7 +51,7 @@ public class RepairKitItem extends Item {
             }
 
             String key = getShorthandKey(mat);
-            CompoundNBT storageTag = repairKit.getOrCreateChildTag(NBT_STORAGE);
+            CompoundNBT storageTag = repairKit.getOrCreateTagElement(NBT_STORAGE);
             float current = storageTag.getFloat(key);
             storageTag.putFloat(key, current + value);
             return true;
@@ -84,7 +86,7 @@ public class RepairKitItem extends Item {
     }
 
     private static float getStoredAmount(ItemStack stack, MaterialInstance material) {
-        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_STORAGE);
+        CompoundNBT nbt = stack.getOrCreateTagElement(NBT_STORAGE);
         return nbt.getFloat(getShorthandKey(material));
     }
 
@@ -97,12 +99,12 @@ public class RepairKitItem extends Item {
     }
 
     private static Map<MaterialInstance, Float> getStoredMaterials(ItemStack stack) {
-        CompoundNBT nbt = stack.getOrCreateChildTag(NBT_STORAGE);
-        List<MaterialInstance> list = nbt.keySet().stream()
+        CompoundNBT nbt = stack.getOrCreateTagElement(NBT_STORAGE);
+        List<MaterialInstance> list = nbt.getAllKeys().stream()
                 .map(MaterialInstance::readShorthand)
                 .filter(Objects::nonNull)
                 .sorted(Comparator.<MaterialInstance, Integer>comparing(mat1 -> mat1.getTier(PartType.MAIN))
-                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN, ItemStack.EMPTY).copyRaw().getString()))
+                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN, ItemStack.EMPTY).plainCopy().getString()))
                 .collect(Collectors.toList());
 
         Map<MaterialInstance, Float> ret = new LinkedHashMap<>();
@@ -124,7 +126,7 @@ public class RepairKitItem extends Item {
         Map<MaterialInstance, Float> used = new HashMap<>();
         float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
         float kitEfficiency = this.getRepairEfficiency(repairType);
-        int damageLeft = gear.getDamage();
+        int damageLeft = gear.getDamageValue();
 
         if (gearRepairEfficiency > 0f && kitEfficiency > 0f) {
             for (Map.Entry<MaterialInstance, Float> entry : stored.entrySet()) {
@@ -148,7 +150,7 @@ public class RepairKitItem extends Item {
             }
         }
 
-        return Pair.of(used, gear.getDamage() - damageLeft);
+        return Pair.of(used, gear.getDamageValue() - damageLeft);
     }
 
     public Map<MaterialInstance, Float> getRepairMaterials(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
@@ -160,7 +162,7 @@ public class RepairKitItem extends Item {
     }
 
     public void removeRepairMaterials(ItemStack repairKit, Map<MaterialInstance, Float> toRemove) {
-        CompoundNBT nbt = repairKit.getOrCreateChildTag(NBT_STORAGE);
+        CompoundNBT nbt = repairKit.getOrCreateTagElement(NBT_STORAGE);
         for (Map.Entry<MaterialInstance, Float> entry : toRemove.entrySet()) {
             MaterialInstance mat = entry.getKey();
             Float amount = entry.getValue();
@@ -177,7 +179,7 @@ public class RepairKitItem extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TextUtil.translate("item", "repair_kit.efficiency",
                 (int) (this.getRepairEfficiency(RepairContext.Type.QUICK) * 100)));
         tooltip.add(TextUtil.translate("item", "repair_kit.capacity",
@@ -186,9 +188,9 @@ public class RepairKitItem extends Item {
 
         Map<MaterialInstance, Float> storedMaterials = getStoredMaterials(stack);
         if (storedMaterials.isEmpty()) {
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").mergeStyle(TextFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").mergeStyle(TextFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").mergeStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").withStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").withStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").withStyle(TextFormatting.ITALIC));
             return;
         }
 
@@ -211,7 +213,7 @@ public class RepairKitItem extends Item {
 
     @Override
     public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return MathHelper.hsvToRGB(Math.max(0.0F, (float) (1.0F - getDurabilityForDisplay(stack))) / 3f + 0.5f, 1f, 1f);
+        return MathHelper.hsvToRgb(Math.max(0.0F, (float) (1.0F - getDurabilityForDisplay(stack))) / 3f + 0.5f, 1f, 1f);
     }
 
     private static String format(float f) {

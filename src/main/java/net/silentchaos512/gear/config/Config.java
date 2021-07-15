@@ -395,7 +395,7 @@ public final class Config {
         private static boolean isThingInList(IForgeRegistryEntry<?> thing, ForgeConfigSpec.ConfigValue<List<? extends String>> list) {
             ResourceLocation name = thing.getRegistryName();
             for (String str : list.get()) {
-                ResourceLocation fromList = ResourceLocation.tryCreate(str);
+                ResourceLocation fromList = ResourceLocation.tryParse(str);
                 if (fromList != null && fromList.equals(name)) {
                     return true;
                 }
@@ -405,7 +405,7 @@ public final class Config {
     }
 
     private static boolean isResourceLocation(Object o) {
-        return o instanceof String && ResourceLocation.tryCreate((String) o) != null;
+        return o instanceof String && ResourceLocation.tryParse((String) o) != null;
     }
 
     public static final class Client {

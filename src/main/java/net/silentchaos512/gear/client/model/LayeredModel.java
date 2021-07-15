@@ -33,17 +33,17 @@ public abstract class LayeredModel<T extends IModelGeometry<T>> implements IMode
 
         // front
         builder.add(buildQuad(transform, Direction.NORTH, sprite, tintIndex, color,
-                0, 0, 7.5f / 16f, sprite.getMinU(), sprite.getMaxV(),
-                0, 1, 7.5f / 16f, sprite.getMinU(), sprite.getMinV(),
-                1, 1, 7.5f / 16f, sprite.getMaxU(), sprite.getMinV(),
-                1, 0, 7.5f / 16f, sprite.getMaxU(), sprite.getMaxV()
+                0, 0, 7.5f / 16f, sprite.getU0(), sprite.getV1(),
+                0, 1, 7.5f / 16f, sprite.getU0(), sprite.getV0(),
+                1, 1, 7.5f / 16f, sprite.getU1(), sprite.getV0(),
+                1, 0, 7.5f / 16f, sprite.getU1(), sprite.getV1()
         ));
         // back
         builder.add(buildQuad(transform, Direction.SOUTH, sprite, tintIndex, color,
-                0, 0, 8.5f / 16f, sprite.getMinU(), sprite.getMaxV(),
-                1, 0, 8.5f / 16f, sprite.getMaxU(), sprite.getMaxV(),
-                1, 1, 8.5f / 16f, sprite.getMaxU(), sprite.getMinV(),
-                0, 1, 8.5f / 16f, sprite.getMinU(), sprite.getMinV()
+                0, 0, 8.5f / 16f, sprite.getU0(), sprite.getV1(),
+                1, 0, 8.5f / 16f, sprite.getU1(), sprite.getV1(),
+                1, 1, 8.5f / 16f, sprite.getU1(), sprite.getV0(),
+                0, 1, 8.5f / 16f, sprite.getU0(), sprite.getV0()
         ));
 
         return builder.build();
@@ -87,8 +87,8 @@ public abstract class LayeredModel<T extends IModelGeometry<T>> implements IMode
         }
 
         final float eps = 1e-2f;
-        float dx = side.getDirectionVec().getX() * eps / width;
-        float dy = side.getDirectionVec().getY() * eps / height;
+        float dx = side.getNormal().getX() * eps / width;
+        float dy = side.getNormal().getY() * eps / height;
 
         float u0 = 16f * (x0 - dx);
         float u1 = 16f * (x1 - dx);
@@ -97,10 +97,10 @@ public abstract class LayeredModel<T extends IModelGeometry<T>> implements IMode
 
         return buildQuad(
                 transform, remap(side), sprite, tintIndex, color,
-                x0, y0, z0, sprite.getInterpolatedU(u0), sprite.getInterpolatedV(v0),
-                x1, y1, z0, sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1),
-                x1, y1, z1, sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1),
-                x0, y0, z1, sprite.getInterpolatedU(u0), sprite.getInterpolatedV(v0)
+                x0, y0, z0, sprite.getU(u0), sprite.getV(v0),
+                x1, y1, z0, sprite.getU(u1), sprite.getV(v1),
+                x1, y1, z1, sprite.getU(u1), sprite.getV(v1),
+                x0, y0, z1, sprite.getU(u0), sprite.getV(v0)
         );
     }
 
@@ -151,9 +151,9 @@ public abstract class LayeredModel<T extends IModelGeometry<T>> implements IMode
                     consumer.put(e, r, g, b, a);
                     break;
                 case NORMAL:
-                    float offX = (float) side.getXOffset();
-                    float offY = (float) side.getYOffset();
-                    float offZ = (float) side.getZOffset();
+                    float offX = (float) side.getStepX();
+                    float offY = (float) side.getStepY();
+                    float offZ = (float) side.getStepZ();
                     consumer.put(e, offX, offY, offZ, 0f);
                     break;
                 case UV:

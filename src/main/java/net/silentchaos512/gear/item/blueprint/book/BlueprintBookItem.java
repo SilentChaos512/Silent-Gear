@@ -34,6 +34,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class BlueprintBookItem extends Item implements IBlueprint, IContainerItem, ICycleItem {
     private static final String NBT_SELECTED = "Selected";
     public static final int INVENTORY_SIZE = 6 * 9;
@@ -91,7 +93,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         NetworkHooks.openGui(playerIn,
                 new SimpleNamedContainerProvider((id, inv, z) -> new BlueprintBookContainer(id, inv, stack),
                         new TranslationTextComponent("container.silentgear.blueprint_book")),
-                buf -> buf.writeItemStack(stack));
+                buf -> buf.writeItem(stack));
     }
 
     @Override
@@ -117,18 +119,18 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        if (!worldIn.isRemote) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        if (!worldIn.isClientSide) {
             openContainer((ServerPlayerEntity) playerIn, stack);
         }
-        return ActionResult.resultSuccess(stack);
+        return ActionResult.success(stack);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
-            super.fillItemGroup(group, items);
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
+            super.fillItemCategory(group, items);
 
             // Create a book with all blueprints
             ItemStack filled = new ItemStack(this);
@@ -138,17 +140,17 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
                 inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
             }
             this.saveInventory(filled, inventory);
-            filled.setDisplayName(new StringTextComponent("Fully-Loaded Blueprint Book"));
+            filled.setHoverName(new StringTextComponent("Fully-Loaded Blueprint Book"));
             items.add(filled);
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         ItemStack selected = getSelectedItem(stack);
         if (!selected.isEmpty()) {
             tooltip.add(TextUtil.withColor(TextUtil.translate("item", "blueprint_book.selected"), Color.SKYBLUE)
-                    .append(selected.getDisplayName().deepCopy().mergeStyle(TextFormatting.GRAY)));
+                    .append(selected.getHoverName().copy().withStyle(TextFormatting.GRAY)));
         }
 
         tooltip.add(TextUtil.translate("item", "blueprint_book.keyHint",

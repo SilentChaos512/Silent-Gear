@@ -25,6 +25,8 @@ import net.silentchaos512.gear.util.Const;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
     private static final String NBT_MATERIAL = "Material";
 
@@ -43,7 +45,7 @@ public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
             }
         } else if (nbt != null) {
             // Remain compatible with pre-2.6.15 items
-            String id = nbt.getString();
+            String id = nbt.getAsString();
             IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(id));
             if (mat != null) {
                 return MaterialInstance.of(mat);
@@ -67,23 +69,23 @@ public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         IMaterialInstance material = getMaterial(stack);
-        return new TranslationTextComponent(this.getTranslationKey(), material.getDisplayName(PartType.MAIN));
+        return new TranslationTextComponent(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
             items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE), 1));
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getOrCreateTag().get(NBT_MATERIAL) instanceof StringNBT) {
-            tooltip.add(new StringTextComponent("Has an older NBT format").mergeStyle(TextFormatting.RED));
-            tooltip.add(new StringTextComponent("May not stack with newer items").mergeStyle(TextFormatting.RED));
+            tooltip.add(new StringTextComponent("Has an older NBT format").withStyle(TextFormatting.RED));
+            tooltip.add(new StringTextComponent("May not stack with newer items").withStyle(TextFormatting.RED));
         }
     }
 }

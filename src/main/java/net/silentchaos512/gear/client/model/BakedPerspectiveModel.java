@@ -43,7 +43,7 @@ public class BakedPerspectiveModel extends BakedItemModel {
 
     @SuppressWarnings("deprecation")
     @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
+    public ItemCameraTransforms getTransforms() {
         return cameraTransforms;
     }
 }

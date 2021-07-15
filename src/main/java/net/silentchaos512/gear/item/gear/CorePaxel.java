@@ -17,14 +17,14 @@ public class CorePaxel extends CorePickaxe {
             ToolType.AXE
     );
     private static final Set<Material> EXTRA_EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.MISCELLANEOUS,
+            Material.DECORATION,
             Material.GLASS,
             Material.PISTON,
-            Material.REDSTONE_LIGHT,
+            Material.BUILDABLE_GLASS,
             Material.BAMBOO,
             Material.LEAVES,
-            Material.PLANTS,
-            Material.TALL_PLANTS,
+            Material.PLANT,
+            Material.REPLACEABLE_PLANT,
             Material.WOOD
     );
 

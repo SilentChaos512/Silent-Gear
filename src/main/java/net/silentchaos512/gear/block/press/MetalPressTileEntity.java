@@ -48,7 +48,7 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 1;
         }
     };
@@ -59,22 +59,22 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
 
     @Nullable
     public PressingRecipe getRecipe() {
-        if (world == null || getStackInSlot(0).isEmpty()) {
+        if (level == null || getItem(0).isEmpty()) {
             return null;
         }
-        return world.getRecipeManager().getRecipe(ModRecipes.PRESSING_TYPE, this, world).orElse(null);
+        return level.getRecipeManager().getRecipeFor(ModRecipes.PRESSING_TYPE, this, level).orElse(null);
     }
 
     private ItemStack getWorkOutput(@Nullable PressingRecipe recipe) {
         if (recipe != null) {
-            return recipe.getCraftingResult(this);
+            return recipe.assemble(this);
         }
         return ItemStack.EMPTY;
     }
 
     @Override
     public void tick() {
-        if (world == null || world.isRemote) {
+        if (level == null || level.isClientSide) {
             return;
         }
 
@@ -87,9 +87,9 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
     }
 
     private void doWork(PressingRecipe recipe) {
-        assert world != null;
+        assert level != null;
 
-        ItemStack current = getStackInSlot(1);
+        ItemStack current = getItem(1);
         ItemStack output = getWorkOutput(recipe);
 
         if (!current.isEmpty()) {
@@ -106,16 +106,16 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
             ++progress;
         }
 
-        if (progress >= WORK_TIME && !world.isRemote) {
+        if (progress >= WORK_TIME && !level.isClientSide) {
             finishWork(recipe, current);
         }
 
-        sendUpdate(this.getBlockState().with(MetalPressBlock.LIT, true));
+        sendUpdate(this.getBlockState().setValue(MetalPressBlock.LIT, true));
     }
 
     private void stopWork() {
         progress = 0;
-        sendUpdate(this.getBlockState().with(MetalPressBlock.LIT, false));
+        sendUpdate(this.getBlockState().setValue(MetalPressBlock.LIT, false));
     }
 
     private void finishWork(PressingRecipe recipe, ItemStack current) {
@@ -123,19 +123,19 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
         if (!current.isEmpty()) {
             current.grow(output.getCount());
         } else {
-            setInventorySlotContents(1, output);
+            setItem(1, output);
         }
 
         progress = 0;
-        decrStackSize(0, 1);
+        removeItem(0, 1);
     }
 
     private void sendUpdate(BlockState newState) {
-        if (world == null) return;
-        BlockState oldState = world.getBlockState(pos);
+        if (level == null) return;
+        BlockState oldState = level.getBlockState(worldPosition);
         if (oldState != newState) {
-            world.setBlockState(pos, newState, 3);
-            world.notifyBlockUpdate(pos, oldState, newState, 3);
+            level.setBlock(worldPosition, newState, 3);
+            level.sendBlockUpdated(worldPosition, oldState, newState, 3);
         }
     }
 
@@ -145,12 +145,12 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return index == 1;
     }
 
@@ -165,6 +165,6 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
     }
 
     void encodeExtraData(PacketBuffer buffer) {
-        buffer.writeByte(this.fields.size());
+        buffer.writeByte(this.fields.getCount());
     }
 }

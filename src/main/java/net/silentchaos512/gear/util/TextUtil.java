@@ -26,11 +26,11 @@ public final class TextUtil {
     }
 
     public static IFormattableTextComponent keyBinding(KeyBinding keyBinding) {
-        return misc("key", keyBinding.func_238171_j_());
+        return misc("key", keyBinding.getTranslatedKeyMessage());
     }
 
     public static IFormattableTextComponent withColor(IFormattableTextComponent text, int color) {
-        return text.mergeStyle(text.getStyle().setColor(net.minecraft.util.text.Color.fromInt(color & 0xFFFFFF)));
+        return text.withStyle(text.getStyle().withColor(net.minecraft.util.text.Color.fromRgb(color & 0xFFFFFF)));
     }
 
     public static IFormattableTextComponent withColor(IFormattableTextComponent text, Color color) {

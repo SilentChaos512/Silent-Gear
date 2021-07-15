@@ -58,7 +58,7 @@ public class SalvagerContainer extends Container {
 
         InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
-        trackIntArray(this.fields);
+        addDataSlots(this.fields);
     }
 
     public int getProgressArrowScale() {
@@ -67,25 +67,25 @@ public class SalvagerContainer extends Container {
     }
 
     @Override
-    public void addListener(IContainerListener listener) {
-        super.addListener(listener);
-        listener.sendAllContents(this, getInventory());
+    public void addSlotListener(IContainerListener listener) {
+        super.addSlotListener(listener);
+        listener.refreshContainer(this, getItems());
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return inventory.isUsableByPlayer(playerIn);
+    public boolean stillValid(PlayerEntity playerIn) {
+        return inventory.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
+        Slot slot = slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack stack1 = slot.getItem();
             stack = stack1.copy();
-            final int size = inventory.getSizeInventory();
+            final int size = inventory.getContainerSize();
             final int startPlayer = size;
             final int endPlayer = size + 27;
             final int startHotbar = size + 27;
@@ -93,32 +93,32 @@ public class SalvagerContainer extends Container {
 
             if (index >= 1 && index < size) {
                 // Remove from output slot?
-                if (!this.mergeItemStack(stack1, startPlayer, endHotbar, true)) {
+                if (!this.moveItemStackTo(stack1, startPlayer, endHotbar, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= size && inventory.isItemValidForSlot(0, stack1)) {
+            } else if (index >= size && inventory.canPlaceItem(0, stack1)) {
                 // Move from player to input slot?
-                if (!mergeItemStack(stack1, 0, 1, false)) {
+                if (!moveItemStackTo(stack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= startPlayer && index < endPlayer) {
                 // Move player items to hotbar.
-                if (!mergeItemStack(stack1, startHotbar, endHotbar, false)) {
+                if (!moveItemStackTo(stack1, startHotbar, endHotbar, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= startHotbar && index < endHotbar) {
                 // Move player items from hotbar.
-                if (!mergeItemStack(stack1, startPlayer, endPlayer, false)) {
+                if (!moveItemStackTo(stack1, startPlayer, endPlayer, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!mergeItemStack(stack1, startPlayer, endHotbar, false)) {
+            } else if (!moveItemStackTo(stack1, startPlayer, endHotbar, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (stack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (stack1.getCount() == stack.getCount()) {

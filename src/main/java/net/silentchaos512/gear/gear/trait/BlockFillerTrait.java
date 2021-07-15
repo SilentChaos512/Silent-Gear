@@ -41,7 +41,7 @@ public class BlockFillerTrait extends SimpleTrait {
     private SneakMode sneakMode;
     private float damageOnUse;
     private int cooldown;
-    private SoundEvent sound = SoundEvents.ENTITY_ITEM_PICKUP;
+    private SoundEvent sound = SoundEvents.ITEM_PICKUP;
     private float soundVolume = 1.0f;
     private float soundPitch = 1.0f;
 
@@ -54,14 +54,14 @@ public class BlockFillerTrait extends SimpleTrait {
         PlayerEntity player = context.getPlayer();
 
         if (player != null) {
-            if (player.isSneaking() && sneakMode == SneakMode.PASS) {
+            if (player.isShiftKeyDown() && sneakMode == SneakMode.PASS) {
                 return ActionResultType.PASS;
             }
         }
 
-        ItemStack stack = context.getItem();
-        World world = context.getWorld();
-        BlockPos center = context.getPos();
+        ItemStack stack = context.getItemInHand();
+        World world = context.getLevel();
+        BlockPos center = context.getClickedPos();
 
         // Constrain area on facing axis to behave similar to AOE tools
         int rangeX = shouldConstrain(context, Direction.Axis.X) ? 0 : fillRangeX;
@@ -71,9 +71,9 @@ public class BlockFillerTrait extends SimpleTrait {
         // Simulates replacement to get replace count for durability cost
         int replaceCount = replaceBlocks(context, stack, world, center, rangeX, rangeY, rangeZ, true);
         int durabilityCost = Math.round(damageOnUse * replaceCount);
-        boolean hasEnoughDurability = durabilityCost < 1 || stack.getDamage() < stack.getMaxDamage() - durabilityCost;
+        boolean hasEnoughDurability = durabilityCost < 1 || stack.getDamageValue() < stack.getMaxDamage() - durabilityCost;
 
-        if (player != null && player.world.isRemote) {
+        if (player != null && player.level.isClientSide) {
             // Bale out here on client
             return replaceCount > 0 && hasEnoughDurability ? ActionResultType.SUCCESS : ActionResultType.PASS;
         }
@@ -93,7 +93,7 @@ public class BlockFillerTrait extends SimpleTrait {
                 world.playSound(null, center, sound, SoundCategory.BLOCKS, soundVolume, pitch);
             }
             if (this.cooldown > 0 && player != null) {
-                player.getCooldownTracker().setCooldown(stack.getItem(), this.cooldown);
+                player.getCooldowns().addCooldown(stack.getItem(), this.cooldown);
             }
 
             return ActionResultType.SUCCESS;
@@ -111,9 +111,9 @@ public class BlockFillerTrait extends SimpleTrait {
                     BlockPos pos = new BlockPos(x, y, z);
                     BlockState state = world.getBlockState(pos);
 
-                    if (canReplace(state) && (replaceTileEntities || world.getTileEntity(pos) == null)) {
+                    if (canReplace(state) && (replaceTileEntities || world.getBlockEntity(pos) == null)) {
                         if (!simulate) {
-                            world.setBlockState(pos, fillBlock.getDefaultState(), 11);
+                            world.setBlock(pos, fillBlock.defaultBlockState(), 11);
                         }
                         ++count;
                     }
@@ -124,42 +124,42 @@ public class BlockFillerTrait extends SimpleTrait {
     }
 
     private boolean shouldConstrain(ItemUseContext context, Direction.Axis axis) {
-        if (context.getPlayer() != null && context.getPlayer().isSneaking() && sneakMode == SneakMode.CONSTRAIN) {
+        if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown() && sneakMode == SneakMode.CONSTRAIN) {
             return true;
         }
-        return fillFacingPlaneOnly && context.getFace().getAxis() == axis;
+        return fillFacingPlaneOnly && context.getClickedFace().getAxis() == axis;
     }
 
     private boolean canReplace(BlockState state) {
-        return (targetBlockTag != null && state.isIn(targetBlockTag))
-                || (targetBlock != null && state.isIn(targetBlock));
+        return (targetBlockTag != null && state.is(targetBlockTag))
+                || (targetBlock != null && state.is(targetBlock));
     }
 
     private static void readJson(BlockFillerTrait trait, JsonObject json) {
-        JsonObject targetJson = JSONUtils.getJsonObject(json, "target");
+        JsonObject targetJson = JSONUtils.getAsJsonObject(json, "target");
         if (targetJson.has("tag")) {
-            trait.targetBlockTag = BlockTags.makeWrapperTag(JSONUtils.getString(targetJson, "tag"));
+            trait.targetBlockTag = BlockTags.bind(JSONUtils.getAsString(targetJson, "tag"));
         }
         if (targetJson.has("block")) {
-            trait.targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getString(targetJson, "block")));
+            trait.targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getAsString(targetJson, "block")));
         }
-        trait.fillBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getString(json, "fill_block")));
-        trait.replaceTileEntities = JSONUtils.getBoolean(json, "replace_tile_entities", false);
-        trait.fillRangeX = JSONUtils.getInt(json, "fill_spread_x", 0);
-        trait.fillRangeY = JSONUtils.getInt(json, "fill_spread_y", 0);
-        trait.fillRangeZ = JSONUtils.getInt(json, "fill_spread_z", 0);
-        trait.fillFacingPlaneOnly = JSONUtils.getBoolean(json, "fill_facing_plane_only", false);
-        trait.sneakMode = SneakMode.byName(JSONUtils.getString(json, "sneak_mode", "pass"));
-        trait.damageOnUse = JSONUtils.getFloat(json, "damage_on_use");
-        trait.cooldown = JSONUtils.getInt(json, "cooldown", 0);
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getString(json, "sound")));
-        trait.soundVolume = JSONUtils.getFloat(json, "sound_volume");
-        trait.soundPitch = JSONUtils.getFloat(json, "sound_pitch");
+        trait.fillBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "fill_block")));
+        trait.replaceTileEntities = JSONUtils.getAsBoolean(json, "replace_tile_entities", false);
+        trait.fillRangeX = JSONUtils.getAsInt(json, "fill_spread_x", 0);
+        trait.fillRangeY = JSONUtils.getAsInt(json, "fill_spread_y", 0);
+        trait.fillRangeZ = JSONUtils.getAsInt(json, "fill_spread_z", 0);
+        trait.fillFacingPlaneOnly = JSONUtils.getAsBoolean(json, "fill_facing_plane_only", false);
+        trait.sneakMode = SneakMode.byName(JSONUtils.getAsString(json, "sneak_mode", "pass"));
+        trait.damageOnUse = JSONUtils.getAsFloat(json, "damage_on_use");
+        trait.cooldown = JSONUtils.getAsInt(json, "cooldown", 0);
+        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "sound")));
+        trait.soundVolume = JSONUtils.getAsFloat(json, "sound_volume");
+        trait.soundPitch = JSONUtils.getAsFloat(json, "sound_pitch");
     }
 
     private static void read(BlockFillerTrait trait, PacketBuffer buffer) {
         if (buffer.readBoolean()) {
-            trait.targetBlockTag = BlockTags.makeWrapperTag(buffer.readResourceLocation().toString());
+            trait.targetBlockTag = BlockTags.bind(buffer.readResourceLocation().toString());
         }
         if (buffer.readBoolean()) {
             trait.targetBlock = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
@@ -170,7 +170,7 @@ public class BlockFillerTrait extends SimpleTrait {
         trait.fillRangeY = buffer.readByte();
         trait.fillRangeZ = buffer.readByte();
         trait.fillFacingPlaneOnly = buffer.readBoolean();
-        trait.sneakMode = buffer.readEnumValue(SneakMode.class);
+        trait.sneakMode = buffer.readEnum(SneakMode.class);
         trait.damageOnUse = buffer.readFloat();
         trait.cooldown = buffer.readVarInt();
         trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(buffer.readResourceLocation());
@@ -193,7 +193,7 @@ public class BlockFillerTrait extends SimpleTrait {
         buffer.writeByte(trait.fillRangeY);
         buffer.writeByte(trait.fillRangeZ);
         buffer.writeBoolean(trait.fillFacingPlaneOnly);
-        buffer.writeEnumValue(trait.sneakMode);
+        buffer.writeEnum(trait.sneakMode);
         buffer.writeFloat(trait.damageOnUse);
         buffer.writeVarInt(trait.cooldown);
         buffer.writeResourceLocation(Objects.requireNonNull(trait.sound.getRegistryName()));

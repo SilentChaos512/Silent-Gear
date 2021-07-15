@@ -31,8 +31,8 @@ public class CompounderUpdatePacket {
     }
 
     private void handlePacket(@Nullable ServerPlayerEntity player) {
-        if (player != null && player.openContainer instanceof CompounderContainer) {
-            CompounderContainer container = (CompounderContainer) player.openContainer;
+        if (player != null && player.containerMenu instanceof CompounderContainer) {
+            CompounderContainer container = (CompounderContainer) player.containerMenu;
             container.setWorkEnabled(this.workEnabled);
         }
     }

@@ -16,8 +16,8 @@ public class SelfRepairTrait extends SimpleTrait {
             SilentGear.getId("self_repair"),
             SelfRepairTrait::new,
             (trait, json) -> {
-                trait.activationChance = JSONUtils.getFloat(json, "activation_chance");
-                trait.repairAmount = JSONUtils.getInt(json, "repair_amount", 1);
+                trait.activationChance = JSONUtils.getAsFloat(json, "activation_chance");
+                trait.repairAmount = JSONUtils.getAsInt(json, "repair_amount", 1);
             },
             (trait, buffer) -> {
                 trait.activationChance = buffer.readFloat();
@@ -45,7 +45,7 @@ public class SelfRepairTrait extends SimpleTrait {
     }
 
     private boolean shouldActivate(TraitActionContext context) {
-        if (context.getPlayer() != null && context.getPlayer().ticksExisted % 20 == 0) {
+        if (context.getPlayer() != null && context.getPlayer().tickCount % 20 == 0) {
             return MathUtils.tryPercentage(activationChance * context.getTraitLevel());
         }
         return false;

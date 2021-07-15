@@ -25,7 +25,7 @@ public class WoodBlock extends RotatedPillarBlock {
     public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
         Block block = this.strippedBlock.apply(state.getBlock());
         if (block != null) {
-            return block.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
+            return block.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
         }
         return super.getToolModifiedState(state, world, pos, player, stack, toolType);
     }

@@ -82,8 +82,8 @@ public final class TraitManager implements IResourceManagerReloadListener {
 
     private static Collection<ResourceLocation> getAllResources(IResourceManager resourceManager) {
         Collection<ResourceLocation> list = new ArrayList<>();
-        list.addAll(resourceManager.getAllResourceLocations(DATA_PATH, s -> s.endsWith(".json")));
-        list.addAll(resourceManager.getAllResourceLocations(DATA_PATH_OLD, s -> s.endsWith(".json")));
+        list.addAll(resourceManager.listResources(DATA_PATH, s -> s.endsWith(".json")));
+        list.addAll(resourceManager.listResources(DATA_PATH_OLD, s -> s.endsWith(".json")));
         return list;
     }
 
@@ -135,7 +135,7 @@ public final class TraitManager implements IResourceManagerReloadListener {
             String listStr = ERROR_LIST.stream().map(ResourceLocation::toString).collect(Collectors.joining(", "));
             return ImmutableList.of(
                     new StringTextComponent("[Silent Gear] The following traits failed to load, check your log file:")
-                            .mergeStyle(TextFormatting.RED),
+                            .withStyle(TextFormatting.RED),
                     new StringTextComponent(listStr)
             );
         }

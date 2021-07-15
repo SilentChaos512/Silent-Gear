@@ -37,7 +37,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
         super(traitId, maxLevel, BlockFillerTrait.SERIALIZER);
         this.fillBlock = fillBlock;
         this.damageOnUse = damageOnUse;
-        this.sound = this.fillBlock.getDefaultState().getSoundType().getBreakSound();
+        this.sound = this.fillBlock.defaultBlockState().getSoundType().getBreakSound();
     }
 
     public BlockFillerTraitBuilder target(ITag.INamedTag<Block> tag) {

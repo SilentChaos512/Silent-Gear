@@ -42,8 +42,8 @@ public final class DurabilityTrait extends SimpleTrait {
             SilentGear.getId("durability_trait"),
             DurabilityTrait::new,
             (trait, json) -> {
-                trait.activationChance = JSONUtils.getFloat(json, "activation_chance", 1);
-                trait.effectScale = JSONUtils.getInt(json, "effect_scale", 0);
+                trait.activationChance = JSONUtils.getAsFloat(json, "activation_chance", 1);
+                trait.effectScale = JSONUtils.getAsInt(json, "effect_scale", 0);
             },
             (trait, buffer) -> {
                 trait.activationChance = buffer.readFloat();

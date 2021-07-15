@@ -31,7 +31,7 @@ public class ProspectingResultPacket {
         for (int i = 0; i < count; ++i) {
             Block block = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
             if (block != null) {
-                blocks.add(block.getDefaultState());
+                blocks.add(block.defaultBlockState());
             }
         }
 
@@ -47,10 +47,10 @@ public class ProspectingResultPacket {
         ClientPlayerEntity player = Minecraft.getInstance().player;
         if (player != null) {
             ITextComponent text = this.blocksFound.stream()
-                    .map(state -> state.getBlock().getTranslatedName())
-                    .reduce((t1, t2) -> t1.appendString(", ").append(t2))
+                    .map(state -> state.getBlock().getName())
+                    .reduce((t1, t2) -> t1.append(", ").append(t2))
                     .orElseGet(() -> TextUtil.translate("item", "prospector_hammer.no_finds"));
-            player.sendMessage(!this.blocksFound.isEmpty() ? TextUtil.translate("item", "prospector_hammer.finds", text) : text, Util.DUMMY_UUID);
+            player.sendMessage(!this.blocksFound.isEmpty() ? TextUtil.translate("item", "prospector_hammer.finds", text) : text, Util.NIL_UUID);
         }
 
         context.get().setPacketHandled(true);

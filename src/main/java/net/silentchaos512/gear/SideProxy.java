@@ -183,7 +183,7 @@ class SideProxy implements IProxy {
 
                 IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
                 if (resourceManager instanceof IReloadableResourceManager) {
-                    ((IReloadableResourceManager) resourceManager).addReloadListener(MaterialDisplayManager.INSTANCE);
+                    ((IReloadableResourceManager) resourceManager).registerReloadListener(MaterialDisplayManager.INSTANCE);
                 }
             } else {
                 SilentGear.LOGGER.warn("MC instance is null? Must be running data generators! Not registering model loaders...");
@@ -200,7 +200,7 @@ class SideProxy implements IProxy {
         }
 
         private static void postSetup(FMLLoadCompleteEvent event) {
-            EntityRendererManager rendererManager = Minecraft.getInstance().getRenderManager();
+            EntityRendererManager rendererManager = Minecraft.getInstance().getEntityRenderDispatcher();
             rendererManager.getSkinMap().values().forEach(renderer ->
                     renderer.addLayer(new GearElytraLayer<>(renderer)));
         }

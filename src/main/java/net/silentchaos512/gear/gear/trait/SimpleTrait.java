@@ -90,16 +90,16 @@ public class SimpleTrait implements ITrait {
 
     @Override
     public IFormattableTextComponent getDisplayName(int level) {
-        IFormattableTextComponent text = displayName.deepCopy();
+        IFormattableTextComponent text = displayName.copy();
         if (level > 0 && maxLevel > 1) {
-            text.appendString(" ").append(new TranslationTextComponent("enchantment.level." + level));
+            text.append(" ").append(new TranslationTextComponent("enchantment.level." + level));
         }
         return text;
     }
 
     @Override
     public IFormattableTextComponent getDescription(int level) {
-        return description.deepCopy();
+        return description.copy();
     }
 
     @Override
@@ -214,10 +214,10 @@ public class SimpleTrait implements ITrait {
         @Override
         public T read(ResourceLocation id, JsonObject json) {
             T trait = factory.apply(id);
-            trait.maxLevel = JSONUtils.getInt(json, "max_level", 1);
+            trait.maxLevel = JSONUtils.getAsInt(json, "max_level", 1);
             trait.displayName = deserializeText(json.get("name"));
             trait.description = deserializeText(json.get("description"));
-            trait.hidden = JSONUtils.getBoolean(json, "hidden", false);
+            trait.hidden = JSONUtils.getAsBoolean(json, "hidden", false);
 
             if (json.has("conditions")) {
                 List<ITraitCondition> conditions = new ArrayList<>();
@@ -238,7 +238,7 @@ public class SimpleTrait implements ITrait {
             if (json.has("extra_wiki_lines")) {
                 JsonArray array = json.getAsJsonArray("extra_wiki_lines");
                 for (JsonElement elem : array) {
-                    trait.wikiLines.add(ITextComponent.Serializer.getComponentFromJson(elem));
+                    trait.wikiLines.add(ITextComponent.Serializer.fromJson(elem));
                 }
             }
 
@@ -253,8 +253,8 @@ public class SimpleTrait implements ITrait {
         public T read(ResourceLocation id, PacketBuffer buffer) {
             T trait = factory.apply(id);
             trait.maxLevel = buffer.readByte();
-            trait.displayName = buffer.readTextComponent();
-            trait.description = buffer.readTextComponent();
+            trait.displayName = buffer.readComponent();
+            trait.description = buffer.readComponent();
             trait.hidden = buffer.readBoolean();
 
             ITraitCondition[] conditions = new ITraitCondition[buffer.readByte()];
@@ -265,7 +265,7 @@ public class SimpleTrait implements ITrait {
 
             int cancelsCount = buffer.readVarInt();
             for (int i = 0; i < cancelsCount; ++i) {
-                trait.cancelsWith.add(buffer.readString(255));
+                trait.cancelsWith.add(buffer.readUtf(255));
             }
 
             if (readFromNetwork != null) {
@@ -278,8 +278,8 @@ public class SimpleTrait implements ITrait {
         @Override
         public void write(PacketBuffer buffer, T trait) {
             buffer.writeByte(trait.maxLevel);
-            buffer.writeTextComponent(trait.displayName);
-            buffer.writeTextComponent(trait.description);
+            buffer.writeComponent(trait.displayName);
+            buffer.writeComponent(trait.description);
             buffer.writeBoolean(trait.hidden);
 
             buffer.writeByte(trait.conditions.size());
@@ -287,7 +287,7 @@ public class SimpleTrait implements ITrait {
 
             buffer.writeVarInt(trait.cancelsWith.size());
             for (String str : trait.cancelsWith) {
-                buffer.writeString(str);
+                buffer.writeUtf(str);
             }
 
             if (writeToNetwork != null) {
@@ -303,21 +303,21 @@ public class SimpleTrait implements ITrait {
         private static ITextComponent deserializeText(JsonElement json) {
             // Handle the old style
             if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
-                boolean translate = JSONUtils.getBoolean(json.getAsJsonObject(), "translate", false);
-                String name = JSONUtils.getString(json.getAsJsonObject(), "name");
+                boolean translate = JSONUtils.getAsBoolean(json.getAsJsonObject(), "translate", false);
+                String name = JSONUtils.getAsString(json.getAsJsonObject(), "name");
                 return translate ? new TranslationTextComponent(name) : new StringTextComponent(name);
             }
 
             // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
         }
 
         private static ITextComponent readTextComponent(JsonObject json, String name) {
             JsonElement element = json.get(name);
             if (element != null && element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
-                final boolean translate = JSONUtils.getBoolean(obj, "translate", false);
-                final String value = JSONUtils.getString(obj, "name");
+                final boolean translate = JSONUtils.getAsBoolean(obj, "translate", false);
+                final String value = JSONUtils.getAsString(obj, "name");
                 return translate
                         ? new TranslationTextComponent(value)
                         : new StringTextComponent(value);

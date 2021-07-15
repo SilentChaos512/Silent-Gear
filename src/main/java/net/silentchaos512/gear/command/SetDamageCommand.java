@@ -20,7 +20,7 @@ public final class SetDamageCommand {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(Commands.literal("set_damage")
-                .requires(source -> source.hasPermissionLevel(2))
+                .requires(source -> source.hasPermission(2))
                 .then(
                         Commands.argument("amount", IntegerArgumentType.integer())
                                 .executes(context ->
@@ -37,15 +37,15 @@ public final class SetDamageCommand {
     }
 
     private static int run(CommandContext<CommandSource> context, int amount) throws CommandSyntaxException {
-        ServerPlayerEntity playerMP = context.getSource().asPlayer();
-        ItemStack stack = playerMP.getHeldItemMainhand();
+        ServerPlayerEntity playerMP = context.getSource().getPlayerOrException();
+        ItemStack stack = playerMP.getMainHandItem();
 
-        if (stack.isDamageable()) {
+        if (stack.isDamageableItem()) {
             // amount of -1 indicates "max" value
             int correctedAmount = amount < 0 ? getMaxDamage(stack) : amount;
             int clamped = MathHelper.clamp(correctedAmount, 0, getMaxDamage(stack));
 
-            stack.setDamage(clamped);
+            stack.setDamageValue(clamped);
 
             if (stack.getItem() instanceof ICoreItem) {
                 GearData.recalculateStats(stack, playerMP);
@@ -53,8 +53,8 @@ public final class SetDamageCommand {
 
             return 1;
         } else {
-            ITextComponent msg = TextUtil.translate("command", "set_damage.notDamageable", stack.getDisplayName());
-            context.getSource().sendErrorMessage(msg);
+            ITextComponent msg = TextUtil.translate("command", "set_damage.notDamageable", stack.getHoverName());
+            context.getSource().sendFailure(msg);
             return 0;
         }
     }

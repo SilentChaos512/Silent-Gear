@@ -36,7 +36,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
     public CoreBow() {
         // Max damage doesn't matter, just needs to be greater than zero
-        super(GearHelper.getBuilder(null).defaultMaxDamage(100));
+        super(GearHelper.getBuilder(null).defaultDurability(100));
 /*        this.addPropertyOverride(new ResourceLocation("pull"), (stack, world, entity) -> {
             if (entity == null) {
                 return 0.0F;
@@ -70,8 +70,8 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if (player.world.isRemote) {
-            float pull = (stack.getUseDuration() - player.getItemInUseCount()) / getDrawDelay(stack);
+        if (player.level.isClientSide) {
+            float pull = (stack.getUseDuration() - player.getUseItemRemainingTicks()) / getDrawDelay(stack);
 //            ToolModel.bowPull.put(GearData.getUUID(stack), pull);
         }
         super.onUsingTick(stack, player, count);
@@ -79,32 +79,32 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
+    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
         // Same as vanilla bow, except it can be fired without arrows with infinity.
-        ItemStack itemstack = player.getHeldItem(hand);
-        boolean flag = !player.findAmmo(itemstack).isEmpty() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0;
+        ItemStack itemstack = player.getItemInHand(hand);
+        boolean flag = !player.getProjectile(itemstack).isEmpty() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) > 0;
 
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, world, player, hand, flag);
         if (ret != null) return ret;
 
-        if (!player.abilities.isCreativeMode && !flag) {
+        if (!player.abilities.instabuild && !flag) {
             return new ActionResult<>(ActionResultType.FAIL, itemstack);
         } else {
-            player.setActiveHand(hand);
+            player.startUsingItem(hand);
             return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
         }
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
-        if (worldIn.isRemote) {
+    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+        if (worldIn.isClientSide) {
 //            ToolModel.bowPull.remove(GearData.getUUID(stack));
         }
 
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityLiving;
-            boolean infiniteAmmo = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-            ItemStack ammoItem = player.findAmmo(stack);
+            boolean infiniteAmmo = player.abilities.instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
+            ItemStack ammoItem = player.getProjectile(stack);
 
             int i = this.getUseDuration(stack) - timeLeft;
             i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, player, i, !ammoItem.isEmpty() || infiniteAmmo);
@@ -117,47 +117,47 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
                 float f = getArrowVelocity(stack, i);
                 if (!((double) f < 0.1D)) {
-                    boolean flag1 = player.abilities.isCreativeMode || (ammoItem.getItem() instanceof ArrowItem && ((ArrowItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
-                    if (!worldIn.isRemote) {
+                    boolean flag1 = player.abilities.instabuild || (ammoItem.getItem() instanceof ArrowItem && ((ArrowItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
+                    if (!worldIn.isClientSide) {
                         ArrowItem arrowitem = (ArrowItem) (ammoItem.getItem() instanceof ArrowItem ? ammoItem.getItem() : Items.ARROW);
                         AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoItem, player);
-                        arrowEntity.setDamage(arrowEntity.getDamage() - 2 + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
-                        arrowEntity.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+                        arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() - 2 + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
+                        arrowEntity.shootFromRotation(player, player.xRot, player.yRot, 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1f)) {
-                            arrowEntity.setIsCritical(true);
+                            arrowEntity.setCritArrow(true);
                         }
 
-                        int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+                        int powerLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
                         if (powerLevel > 0) {
-                            arrowEntity.setDamage(arrowEntity.getDamage() + (double) powerLevel * 0.5D + 0.5D);
+                            arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() + (double) powerLevel * 0.5D + 0.5D);
                         }
 
-                        int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+                        int punchLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
                         if (punchLevel > 0) {
-                            arrowEntity.setKnockbackStrength(punchLevel);
+                            arrowEntity.setKnockback(punchLevel);
                         }
 
-                        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
-                            arrowEntity.setFire(100);
+                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0) {
+                            arrowEntity.setSecondsOnFire(100);
                         }
 
-                        stack.damageItem(1, player, (p) -> p.sendBreakAnimation(p.getActiveHand()));
-                        if (flag1 || player.abilities.isCreativeMode && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
-                            arrowEntity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                        stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
+                        if (flag1 || player.abilities.instabuild && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
+                            arrowEntity.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                         }
 
-                        worldIn.addEntity(arrowEntity);
+                        worldIn.addFreshEntity(arrowEntity);
                     }
 
-                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    if (!flag1 && !player.abilities.isCreativeMode) {
+                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    if (!flag1 && !player.abilities.instabuild) {
                         ammoItem.shrink(1);
                         if (ammoItem.isEmpty()) {
-                            player.inventory.deleteStack(ammoItem);
+                            player.inventory.removeItem(ammoItem);
                         }
                     }
 
-                    player.addStat(Stats.ITEM_USED.get(this));
+                    player.awardStat(Stats.ITEM_USED.get(this));
                 }
             }
         }
@@ -168,7 +168,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -178,7 +178,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -188,7 +188,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -213,12 +213,12 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 

@@ -43,23 +43,23 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<UpgradeSmithingRecipe> {
         @Override
-        public UpgradeSmithingRecipe read(ResourceLocation recipeId, JsonObject json) {
-            ItemStack gearItem = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "gear"));
-            Ingredient upgradeItem = Ingredient.deserialize(JSONUtils.getJsonObject(json, "addition"));
+        public UpgradeSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            ItemStack gearItem = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "gear"));
+            Ingredient upgradeItem = Ingredient.fromJson(JSONUtils.getAsJsonObject(json, "addition"));
             return new UpgradeSmithingRecipe(recipeId, gearItem, upgradeItem);
         }
 
         @Override
-        public UpgradeSmithingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            ItemStack itemstack = buffer.readItemStack();
-            Ingredient ingredient1 = Ingredient.read(buffer);
+        public UpgradeSmithingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            ItemStack itemstack = buffer.readItem();
+            Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
             return new UpgradeSmithingRecipe(recipeId, itemstack, ingredient1);
         }
 
         @Override
-        public void write(PacketBuffer buffer, UpgradeSmithingRecipe recipe) {
-            buffer.writeItemStack(recipe.gearItem);
-            recipe.addition.write(buffer);
+        public void toNetwork(PacketBuffer buffer, UpgradeSmithingRecipe recipe) {
+            buffer.writeItem(recipe.gearItem);
+            recipe.addition.toNetwork(buffer);
         }
     }
 }

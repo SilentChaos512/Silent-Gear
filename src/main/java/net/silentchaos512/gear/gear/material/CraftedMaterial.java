@@ -100,9 +100,9 @@ public class CraftedMaterial extends AbstractMaterial {
         if (material != null) {
             IMaterialInstance base = getBaseMaterial(material);
             if (!gear.isEmpty()) {
-                return base.getDisplayName(type).copyRaw();
+                return base.getDisplayName(type).plainCopy();
             } else {
-                return material.getItem().getDisplayName().copyRaw();
+                return material.getItem().getHoverName().plainCopy();
             }
         }
         return super.getDisplayName(null, type, gear);

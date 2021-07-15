@@ -81,11 +81,11 @@ public final class StatGearKey {
 
     @Nullable
     public static StatGearKey read(PacketBuffer buffer) {
-        return read(buffer.readString());
+        return read(buffer.readUtf());
     }
 
     public void write(PacketBuffer buffer) {
-        buffer.writeString(this.key);
+        buffer.writeUtf(this.key);
     }
 
     @Override

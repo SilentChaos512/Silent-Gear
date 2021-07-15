@@ -26,9 +26,9 @@ public class FluffyBlock extends Block {
     private final DyeColor dyeColor;
 
     public FluffyBlock(DyeColor color) {
-        super(Properties.create(Material.WOOL)
-                .hardnessAndResistance(0.8f, 3)
-                .sound(SoundType.CLOTH));
+        super(Properties.of(Material.WOOL)
+                .strength(0.8f, 3)
+                .sound(SoundType.WOOL));
         this.dyeColor = color;
     }
 
@@ -37,43 +37,43 @@ public class FluffyBlock extends Block {
     }
 
     @Override
-    public void onFallenUpon(World world, BlockPos pos, Entity entity, float distance) {
-        if (distance < 2 || world.isRemote) return;
+    public void fallOn(World world, BlockPos pos, Entity entity, float distance) {
+        if (distance < 2 || world.isClientSide) return;
 
         // Count the number of fluffy blocks that are stacked up.
         int stackedBlocks = 0;
-        while (stackedBlocks < 10 && world.getBlockState(pos).isIn(ModTags.Blocks.FLUFFY_BLOCKS)) {
-            pos = pos.down();
+        while (stackedBlocks < 10 && world.getBlockState(pos).is(ModTags.Blocks.FLUFFY_BLOCKS)) {
+            pos = pos.below();
             ++stackedBlocks;
         }
 
         // Reduce fall distance per stacked block
         float newDistance = distance - Math.min(8 * stackedBlocks, distance);
         entity.fallDistance = 0f;
-        entity.onLivingFall(newDistance, 1f);
+        entity.causeFallDamage(newDistance, 1f);
     }
 
     @Override
-    public void onLanded(IBlockReader worldIn, Entity entityIn) {
+    public void updateEntityAfterFallOn(IBlockReader worldIn, Entity entityIn) {
         if (entityIn.isSuppressingBounce()) {
-            super.onLanded(worldIn, entityIn);
+            super.updateEntityAfterFallOn(worldIn, entityIn);
         } else {
             FluffyBlock.bounceEntity(entityIn);
         }
     }
 
     private static void bounceEntity(Entity entity) {
-        Vector3d vector3d = entity.getMotion();
+        Vector3d vector3d = entity.getDeltaMovement();
         if (vector3d.y < 0.0D) {
             double d0 = entity instanceof LivingEntity ? 1.0 : 0.8;
-            entity.setMotion(vector3d.x, -vector3d.y * (double) 0.5f * d0, vector3d.z);
+            entity.setDeltaMovement(vector3d.x, -vector3d.y * (double) 0.5f * d0, vector3d.z);
         }
     }
 
     private static void onGetBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ItemStack mainHand = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
+        ItemStack mainHand = event.getPlayer().getItemInHand(Hand.MAIN_HAND);
         if (!mainHand.isEmpty() && mainHand.getItem() instanceof ShearsItem) {
-            int efficiency = EnchantmentHelper.getEfficiencyModifier(event.getPlayer());
+            int efficiency = EnchantmentHelper.getBlockEfficiency(event.getPlayer());
 
             float speed = event.getNewSpeed() * 4;
             if (efficiency > 0) {

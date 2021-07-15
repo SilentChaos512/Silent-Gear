@@ -62,7 +62,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
     }
 
     private static void reloadMaterials(IResourceManager resourceManager) {
-        Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(PATH_MATERIALS, s -> s.endsWith(".json"));
+        Collection<ResourceLocation> resources = resourceManager.listResources(PATH_MATERIALS, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
 
         synchronized (MATERIALS) {
@@ -75,7 +75,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
                 try (IResource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getPackName();
+                    packName = iresource.getSourceName();
                     JsonObject json = JSONUtils.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
 
                     if (json == null) {
@@ -96,7 +96,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
     }
 
     private static void reloadParts(IResourceManager resourceManager) {
-        Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(PATH_PARTS, s -> s.endsWith(".json"));
+        Collection<ResourceLocation> resources = resourceManager.listResources(PATH_PARTS, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
 
         synchronized (PARTS) {
@@ -109,7 +109,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
                 try (IResource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getPackName();
+                    packName = iresource.getSourceName();
                     JsonObject json = JSONUtils.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
 
                     if (json == null) {

@@ -23,45 +23,45 @@ public class ChargerScreen extends ContainerScreen<ChargerContainer> {
     public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrix, mouseX, mouseY);
+        this.renderTooltip(matrix, mouseX, mouseY);
     }
 
     @Override
-    protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {
-        if (isPointInRegion(153, 17, 13, 51, x, y)) {
+    protected void renderTooltip(MatrixStack matrixStack, int x, int y) {
+        if (isHovering(153, 17, 13, 51, x, y)) {
             List<ITextComponent> text = ImmutableList.of(
                     TextUtil.translate("container", "material_charger.charge",
-                            String.format("%,d", container.getCharge()),
-                            String.format("%,d", container.getMaxCharge())),
+                            String.format("%,d", menu.getCharge()),
+                            String.format("%,d", menu.getMaxCharge())),
                     TextUtil.translate("container", "material_charger.charge.hint")
             );
-            func_243308_b(matrixStack, text, x, y);
+            renderComponentTooltip(matrixStack, text, x, y);
         }
-        super.renderHoveredTooltip(matrixStack, x, y);
+        super.renderTooltip(matrixStack, x, y);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
         ITextComponent text = TextUtil.translate("container", "material_charger");
-        font.drawString(matrixStack, text.getString(), 28, 6, 0x404040);
+        font.draw(matrixStack, text.getString(), 28, 6, 0x404040);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
         RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bindTexture(TEXTURE);
+        minecraft.getTextureManager().bind(TEXTURE);
 
-        int posX = (this.width - this.xSize) / 2;
-        int posY = (this.height - this.ySize) / 2;
-        blit(matrixStack, posX, posY, 0, 0, this.xSize, this.ySize);
+        int posX = (this.width - this.imageWidth) / 2;
+        int posY = (this.height - this.imageHeight) / 2;
+        blit(matrixStack, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
 
         // Progress arrow
-        blit(matrixStack, posX + 79, posY + 35, 176, 14, container.getProgressArrowScale() + 1, 16);
+        blit(matrixStack, posX + 79, posY + 35, 176, 14, menu.getProgressArrowScale() + 1, 16);
 
         // Charge meter
-        int chargeMeterHeight = container.getChargeMeterHeight();
+        int chargeMeterHeight = menu.getChargeMeterHeight();
         if (chargeMeterHeight > 0) {
             blit(matrixStack, posX + 154, posY + 68 - chargeMeterHeight, 176, 31, 12, chargeMeterHeight);
         }

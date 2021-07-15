@@ -64,7 +64,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, layer.getTexture(GearType.FRAGMENT, 0)));
+            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, layer.getTexture(GearType.FRAGMENT, 0)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -75,7 +75,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
             } else {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");
-                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
                 builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
             }
         }
@@ -91,7 +91,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
         IMaterialDisplay model = MaterialDisplayManager.get(mat);
         MaterialLayer exampleMain = model.getLayerList(GearType.FRAGMENT, PartType.MAIN, mat).getFirstLayer();
         if (exampleMain != null) {
-            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, exampleMain.getTexture(GearType.FRAGMENT, 0))), rotation, exampleMain.getColor()));
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, exampleMain.getTexture(GearType.FRAGMENT, 0))), rotation, exampleMain.getColor()));
         }
     }
 
@@ -99,7 +99,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
     public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
         Set<RenderMaterial> ret = new HashSet<>();
 
-        ret.add(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, SilentGear.getId("item/error")));
+        ret.add(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
 
         // Generic built-in textures
         ret.add(getTexture(PartTextures.CLOTH.getTexture()));
@@ -115,7 +115,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
 
         SilentGear.LOGGER.info("Textures for fragment model");
         for (RenderMaterial mat : ret) {
-            SilentGear.LOGGER.info("- {}", mat.getTextureLocation());
+            SilentGear.LOGGER.info("- {}", mat.texture());
         }
 
         return ret;
@@ -132,7 +132,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
     }
 
     private static RenderMaterial getMaterial(ResourceLocation tex) {
-        return new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, tex);
+        return new RenderMaterial(PlayerContainer.BLOCK_ATLAS, tex);
     }
 
     @Override

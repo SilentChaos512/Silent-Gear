@@ -93,11 +93,11 @@ public final class GearData {
         try {
             tryRecalculateStats(gear, player);
         } catch (Throwable ex) {
-            CrashReport report = CrashReport.makeCrashReport(ex, "Failed to recalculate gear properties");
+            CrashReport report = CrashReport.forThrowable(ex, "Failed to recalculate gear properties");
 
-            CrashReportCategory itemCategory = report.makeCategory("Gear Item");
-            itemCategory.addDetail("Name", gear.getDisplayName().getString() + " (" + NameUtils.fromItem(gear) + ")");
-            itemCategory.addDetail("Data", gear.getOrCreateTag().toString());
+            CrashReportCategory itemCategory = report.addCategory("Gear Item");
+            itemCategory.setDetail("Name", gear.getHoverName().getString() + " (" + NameUtils.fromItem(gear) + ")");
+            itemCategory.setDetail("Data", gear.getOrCreateTag().toString());
 
             throw new ReportedException(report);
         }
@@ -122,7 +122,7 @@ public final class GearData {
             propertiesCompound.putBoolean(NBT_LOCK_STATS, false);
 
         String playerName = player != null ? player.getScoreboardName() : "somebody";
-        String playersItemText = String.format("%s's %s", playerName, gear.getDisplayName().getString());
+        String playersItemText = String.format("%s's %s", playerName, gear.getHoverName().getString());
 
         final boolean statsUnlocked = !propertiesCompound.getBoolean(NBT_LOCK_STATS);
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
@@ -143,7 +143,7 @@ public final class GearData {
 
             // Calculate and write stats
             int maxDamage = gear.getMaxDamage() > 0 ? gear.getMaxDamage() : 1;
-            final float damageRatio = MathHelper.clamp((float) gear.getDamage() / maxDamage, 0f, 1f);
+            final float damageRatio = MathHelper.clamp((float) gear.getDamageValue() / maxDamage, 0f, 1f);
             CompoundNBT statsCompound = new CompoundNBT();
             for (ItemStat stat : stats.getStats()) {
                 StatGearKey key = StatGearKey.of(stat, item.getGearType());
@@ -178,7 +178,7 @@ public final class GearData {
             // Remove enchantments if mod is configured to. Must be done before traits add enchantments!
             if (gear.getOrCreateTag().contains("Enchantments") && Config.Common.forceRemoveEnchantments.get()) {
                 SilentGear.LOGGER.debug("Forcibly removing all enchantments from {} as per config settings", playersItemText);
-                gear.removeChildTag("Enchantments");
+                gear.removeTagKey("Enchantments");
             }
 
             // Remove trait-added enchantments then let traits re-add them
@@ -262,7 +262,7 @@ public final class GearData {
         nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
 
         // Remove old model keys
-        stack.getOrCreateChildTag(NBT_ROOT).remove("ModelKeys");
+        stack.getOrCreateTagElement(NBT_ROOT).remove("ModelKeys");
     }
 
     public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts) {
@@ -642,7 +642,7 @@ public final class GearData {
             ++removed;
             SilentGear.LOGGER.debug("Removed excess part '{}' from '{}'",
                     toRemove.getDisplayName(gear).getString(),
-                    gear.getDisplayName().getString());
+                    gear.getHoverName().getString());
         }
 
         if (removed > 0) {
@@ -680,18 +680,18 @@ public final class GearData {
         if (checkNonGearItem(gear, "getUUID")) return new UUID(0, 0);
 
         CompoundNBT tags = gear.getOrCreateTag();
-        if (!tags.hasUniqueId(NBT_UUID)) {
+        if (!tags.hasUUID(NBT_UUID)) {
             UUID uuid = UUID.randomUUID();
-            tags.putUniqueId(NBT_UUID, uuid);
+            tags.putUUID(NBT_UUID, uuid);
             return uuid;
         }
-        return tags.getUniqueId(NBT_UUID);
+        return tags.getUUID(NBT_UUID);
     }
 
     private static CompoundNBT getData(ItemStack gear, String compoundKey) {
         if (checkNonGearItem(gear, "getData")) return new CompoundNBT();
 
-        CompoundNBT rootTag = gear.getOrCreateChildTag(NBT_ROOT);
+        CompoundNBT rootTag = gear.getOrCreateTagElement(NBT_ROOT);
         if (!rootTag.contains(compoundKey))
             rootTag.put(compoundKey, new CompoundNBT());
         return rootTag.getCompound(compoundKey);

@@ -94,7 +94,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         }
 
         PartGearKey key = PartGearKey.of(this.gearType, this.partType);
-        text.append(TextUtil.misc("spaceBrackets", key.toString()).mergeStyle(TextFormatting.GRAY));
+        text.append(TextUtil.misc("spaceBrackets", key.toString()).withStyle(TextFormatting.GRAY));
 
         return Optional.of(TextUtil.translate("jei", "materialType", text));
     }
@@ -120,7 +120,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     }
 
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         Collection<IMaterial> materials = MaterialManager.getValues();
         if (!materials.isEmpty()) {
             return materials.stream()
@@ -128,11 +128,11 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
                     .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
                     .filter(mat -> categories.isEmpty() || mat.hasAnyCategory(categories))
                     .filter(mat -> tierMatches(mat.getTier(this.partType)))
-                    .flatMap(mat -> Stream.of(mat.get().getIngredient().getMatchingStacks()))
+                    .flatMap(mat -> Stream.of(mat.get().getIngredient().getItems()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
         }
-        return super.getMatchingStacks();
+        return super.getItems();
     }
 
     @Override
@@ -141,7 +141,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return false;
     }
 
@@ -151,7 +151,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     }
 
     @Override
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.NAME.toString());
         json.addProperty("part_type", this.partType.getName().toString());
@@ -186,7 +186,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
                 throw new JsonParseException("Unknown part type: " + typeName);
             }
 
-            GearType gearType = GearType.get(buffer.readString());
+            GearType gearType = GearType.get(buffer.readUtf());
             if (gearType.isInvalid()) {
                 throw new JsonParseException("Unknown gear type: " + typeName);
             }
@@ -194,7 +194,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
             int categoryCount = buffer.readByte();
             IMaterialCategory[] categories = new IMaterialCategory[categoryCount];
             for (int i = 0; i < categoryCount; ++i) {
-                categories[i] = MaterialCategories.get(buffer.readString());
+                categories[i] = MaterialCategories.get(buffer.readUtf());
             }
 
 
@@ -206,7 +206,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
 
         @Override
         public PartMaterialIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getString(json, "part_type", "");
+            String typeName = JSONUtils.getAsString(json, "part_type", "");
             if (typeName.isEmpty()) {
                 throw new JsonSyntaxException("'part_type' is missing");
             }
@@ -216,7 +216,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
                 throw new JsonSyntaxException("part_type " + typeName + " does not exist");
             }
 
-            String gearTypeName = JSONUtils.getString(json, "gear_type", "tool");
+            String gearTypeName = JSONUtils.getAsString(json, "gear_type", "tool");
             GearType gearType = GearType.get(gearTypeName);
             if (gearType.isInvalid()) {
                 throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
@@ -230,8 +230,8 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
                 }
             }
 
-            int minTier = JSONUtils.getInt(json, "min_tier", 0);
-            int maxTier = JSONUtils.getInt(json, "max_tier", Integer.MAX_VALUE);
+            int minTier = JSONUtils.getAsInt(json, "min_tier", 0);
+            int maxTier = JSONUtils.getAsInt(json, "max_tier", Integer.MAX_VALUE);
 
             PartMaterialIngredient ret = of(type, gearType, minTier, maxTier);
             ret.categories.addAll(categories);
@@ -241,9 +241,9 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         @Override
         public void write(PacketBuffer buffer, PartMaterialIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.partType.getName());
-            buffer.writeString(ingredient.gearType.getName());
+            buffer.writeUtf(ingredient.gearType.getName());
             buffer.writeByte(ingredient.categories.size());
-            ingredient.categories.forEach(cat -> buffer.writeString(cat.getName()));
+            ingredient.categories.forEach(cat -> buffer.writeUtf(cat.getName()));
             buffer.writeVarInt(ingredient.minTier);
             buffer.writeVarInt(ingredient.maxTier);
         }

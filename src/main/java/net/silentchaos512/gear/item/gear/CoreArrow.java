@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import net.minecraft.item.Item.Properties;
+
 public class CoreArrow extends ArrowItem implements ICoreItem {
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
@@ -110,7 +112,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
     @Override
     public ItemStack construct(Collection<? extends IPartData> parts) {
         ItemStack result = ICoreItem.super.construct(parts);
-        result.setDamage(result.getMaxDamage() - 64);
+        result.setDamageValue(result.getMaxDamage() - 64);
         return result;
     }
 
@@ -123,11 +125,11 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
         GearArrowEntity arrow = new GearArrowEntity(worldIn, shooter);
         arrow.setArrowStack(stack);
-        arrow.setDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
+        arrow.setBaseDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
 
-        if (shooter instanceof PlayerEntity && !((PlayerEntity) shooter).abilities.isCreativeMode) {
+        if (shooter instanceof PlayerEntity && !((PlayerEntity) shooter).abilities.instabuild) {
             // Consume an arrow
-            stack.setDamage(stack.getDamage() + 1);
+            stack.setDamageValue(stack.getDamageValue() + 1);
         }
 
         return arrow;
@@ -139,46 +141,46 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack usedStack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack usedStack = playerIn.getItemInHand(handIn);
 
         // Merge partial arrow stacks
         boolean used = false;
-        if (usedStack.getDamage() > 0) {
-            for (ItemStack stack : playerIn.inventory.mainInventory) {
-                if (stack.getItem() == this && stack.getDamage() > 0 && GearHelper.isEquivalent(usedStack, stack)) {
-                    int count = stack.getMaxDamage() - stack.getDamage();
-                    int merged = Math.min(usedStack.getDamage(), count);
-                    usedStack.setDamage(usedStack.getDamage() - merged);
-                    stack.setDamage(stack.getDamage() + merged);
-                    used |= usedStack.getDamage() != stack.getDamage();
+        if (usedStack.getDamageValue() > 0) {
+            for (ItemStack stack : playerIn.inventory.items) {
+                if (stack.getItem() == this && stack.getDamageValue() > 0 && GearHelper.isEquivalent(usedStack, stack)) {
+                    int count = stack.getMaxDamage() - stack.getDamageValue();
+                    int merged = Math.min(usedStack.getDamageValue(), count);
+                    usedStack.setDamageValue(usedStack.getDamageValue() - merged);
+                    stack.setDamageValue(stack.getDamageValue() + merged);
+                    used |= usedStack.getDamageValue() != stack.getDamageValue();
 
-                    if (stack.getDamage() >= stack.getMaxDamage()) {
-                        playerIn.inventory.deleteStack(stack);
+                    if (stack.getDamageValue() >= stack.getMaxDamage()) {
+                        playerIn.inventory.removeItem(stack);
                     }
-                    if (usedStack.getDamage() <= 0) {
+                    if (usedStack.getDamageValue() <= 0) {
                         break;
                     }
                 }
             }
         }
 
-        return used ? ActionResult.resultSuccess(usedStack) : ActionResult.resultPass(usedStack);
+        return used ? ActionResult.success(usedStack) : ActionResult.pass(usedStack);
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         return GearHelper.onItemUse(context);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (!KeyTracker.isDisplayStatsDown() && !KeyTracker.isDisplayTraitsDown() && !KeyTracker.isDisplayConstructionDown()) {
             tooltip.add(new StringTextComponent("Do not use with vanilla crossbows, see issue #270")
-                    .mergeStyle(TextFormatting.RED));
+                    .withStyle(TextFormatting.RED));
         }
 
-        tooltip.add(TextUtil.misc("ammo", stack.getMaxDamage() - stack.getDamage()));
+        tooltip.add(TextUtil.misc("ammo", stack.getMaxDamage() - stack.getDamageValue()));
 
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
@@ -194,7 +196,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -210,7 +212,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
 
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
-        return stack.getDamage() > 0;
+        return stack.getDamageValue() > 0;
     }
 
     @Override
@@ -219,12 +221,12 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 

@@ -42,7 +42,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<ICraftingR
         ResourceLocation location = SilentGear.getId("textures/gui/gear_crafting_jei.png");
         this.background = guiHelper.createDrawable(location, 0, 0, WIDTH, HEIGHT);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.BLUEPRINT_PACKAGE));
-        this.localizedName = I18n.format("gui.silentgear.category.gearCrafting");
+        this.localizedName = I18n.get("gui.silentgear.category.gearCrafting");
         this.craftingGridHelper = guiHelper.createCraftingGridHelper(1);
     }
 
@@ -116,7 +116,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<ICraftingR
 
     @Override
     public void setIngredients(ICraftingRecipe recipe, IIngredients ingredients) {
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
         ingredients.setInputIngredients(recipe.getIngredients());
     }
 
@@ -146,18 +146,18 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<ICraftingR
             }
         }
 
-        matrixStack.push();
+        matrixStack.pushPose();
         float scale = lines.size() > 5 ? 0.75f : 1f;
         matrixStack.scale(scale, scale, 1f);
 
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         int y = (int) (56 / scale);
 
         for (ITextComponent line : lines) {
-            font.func_238407_a_(matrixStack, line.func_241878_f(), 0, y, -1);
+            font.drawShadow(matrixStack, line.getVisualOrderText(), 0, y, -1);
             y += 10;
         }
 
-        matrixStack.pop();
+        matrixStack.popPose();
     }
 }

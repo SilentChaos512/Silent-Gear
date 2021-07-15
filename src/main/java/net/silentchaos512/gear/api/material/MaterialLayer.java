@@ -69,7 +69,7 @@ public class MaterialLayer {
     public static MaterialLayer deserialize(PartGearKey key, JsonElement json) {
         if (json.isJsonObject()) {
             JsonObject jo = json.getAsJsonObject();
-            ResourceLocation texture = new ResourceLocation(JSONUtils.getString(jo, "texture"));
+            ResourceLocation texture = new ResourceLocation(JSONUtils.getAsString(jo, "texture"));
             int color = Color.from(jo, "color", Color.VALUE_WHITE).getColor();
             return new MaterialLayer(texture, key.getPartType(), color, true);
         }

@@ -11,18 +11,20 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.OpenGuideBookPacket;
 
+import net.minecraft.item.Item.Properties;
+
 public class GuideBookItem extends Item {
     public GuideBookItem(Properties properties) {
         super(properties);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         if (playerIn instanceof ServerPlayerEntity) {
             Network.channel.sendTo(new OpenGuideBookPacket(),
-                    ((ServerPlayerEntity) playerIn).connection.netManager,
+                    ((ServerPlayerEntity) playerIn).connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 }

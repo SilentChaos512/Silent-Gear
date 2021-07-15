@@ -150,8 +150,8 @@ public enum MaterialGrade {
                 return grade != NONE ? new Range(grade, grade) : OPEN;
             }
             JsonObject jsonObject = json.getAsJsonObject();
-            String min = JSONUtils.getString(jsonObject, "min", "NONE");
-            String max = JSONUtils.getString(jsonObject, "max", "MAX");
+            String min = JSONUtils.getAsString(jsonObject, "min", "NONE");
+            String max = JSONUtils.getAsString(jsonObject, "max", "MAX");
             return new Range(MaterialGrade.fromString(min), MaterialGrade.fromString(max));
         }
     }

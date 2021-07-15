@@ -199,13 +199,13 @@ public abstract class AbstractMaterial implements IMaterial {
 
     @Override
     public ITextComponent getDisplayName(@Nullable IMaterialInstance material, PartType type, ItemStack gear) {
-        return displayName.deepCopy();
+        return displayName.copy();
     }
 
     @Nullable
     @Override
     public ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
-        return namePrefix != null ? namePrefix.deepCopy() : null;
+        return namePrefix != null ? namePrefix.copy() : null;
     }
 
     @Override
@@ -252,7 +252,7 @@ public abstract class AbstractMaterial implements IMaterial {
             T ret = factory.apply(id, packName);
 
             if (json.has("parent")) {
-                ret.parent = new ResourceLocation(JSONUtils.getString(json, "parent"));
+                ret.parent = new ResourceLocation(JSONUtils.getAsString(json, "parent"));
             }
 
             deserializeStats(json, ret);
@@ -328,18 +328,18 @@ public abstract class AbstractMaterial implements IMaterial {
         }
 
         private void deserializeAvailability(JsonObject json, T ret) {
-            ret.simple = JSONUtils.getBoolean(json, "simple", true);
+            ret.simple = JSONUtils.getAsBoolean(json, "simple", true);
 
             JsonElement elementAvailability = json.get("availability");
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
 
                 deserializeCategories(obj.get("categories"), ret);
-                ret.tier = JSONUtils.getInt(obj, "tier", ret.tier);
-                ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
-                ret.canSalvage = JSONUtils.getBoolean(obj, "can_salvage", ret.canSalvage);
+                ret.tier = JSONUtils.getAsInt(obj, "tier", ret.tier);
+                ret.visible = JSONUtils.getAsBoolean(obj, "visible", ret.visible);
+                ret.canSalvage = JSONUtils.getAsBoolean(obj, "can_salvage", ret.canSalvage);
 
-                JsonArray blacklist = JSONUtils.getJsonArray(obj, "gear_blacklist", null);
+                JsonArray blacklist = JSONUtils.getAsJsonArray(obj, "gear_blacklist", null);
                 if (blacklist != null) {
                     ret.blacklistedGearTypes.clear();
                     blacklist.forEach(e -> ret.blacklistedGearTypes.add(e.getAsString()));
@@ -383,7 +383,7 @@ public abstract class AbstractMaterial implements IMaterial {
             if (craftingItems != null && craftingItems.isJsonObject()) {
                 JsonElement main = craftingItems.getAsJsonObject().get("main");
                 if (main != null) {
-                    ret.ingredient = Ingredient.deserialize(main);
+                    ret.ingredient = Ingredient.fromJson(main);
                 }
 
                 JsonElement subs = craftingItems.getAsJsonObject().get("subs");
@@ -393,7 +393,7 @@ public abstract class AbstractMaterial implements IMaterial {
                     Map<PartType, Ingredient> map = new HashMap<>();
                     jo.entrySet().forEach(entry -> {
                         PartType partType = PartType.get(new ModResourceLocation(entry.getKey()));
-                        Ingredient ingredient = Ingredient.deserialize(entry.getValue());
+                        Ingredient ingredient = Ingredient.fromJson(entry.getValue());
                         map.put(partType, ingredient);
                     });
                     ret.partSubstitutes.putAll(map);
@@ -420,14 +420,14 @@ public abstract class AbstractMaterial implements IMaterial {
         }
 
         private static ITextComponent deserializeText(JsonElement json) {
-            return Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
         }
 
         //endregion
 
         @Override
         public T read(ResourceLocation id, PacketBuffer buffer) {
-            T material = factory.apply(id, buffer.readString(PACK_NAME_MAX_LENGTH));
+            T material = factory.apply(id, buffer.readUtf(PACK_NAME_MAX_LENGTH));
 
             readBasics(buffer, material);
             readCraftingItems(buffer, material);
@@ -451,20 +451,20 @@ public abstract class AbstractMaterial implements IMaterial {
             material.simple = buffer.readBoolean();
 
             // Name and Prefix
-            material.displayName = buffer.readTextComponent();
+            material.displayName = buffer.readComponent();
             if (buffer.readBoolean()) {
-                material.namePrefix = buffer.readTextComponent();
+                material.namePrefix = buffer.readComponent();
             }
         }
 
         private void readCraftingItems(PacketBuffer buffer, T material) {
-            material.ingredient = Ingredient.read(buffer);
+            material.ingredient = Ingredient.fromNetwork(buffer);
 
             // Part subs
             int subCount = buffer.readByte();
             for (int i = 0; i < subCount; ++i) {
                 PartType partType = PartType.get(buffer.readResourceLocation());
-                Ingredient ingredient = Ingredient.read(buffer);
+                Ingredient ingredient = Ingredient.fromNetwork(buffer);
                 material.partSubstitutes.put(partType, ingredient);
             }
         }
@@ -473,14 +473,14 @@ public abstract class AbstractMaterial implements IMaterial {
             // Categories
             int categoryCount = buffer.readByte();
             for (int i = 0; i < categoryCount; ++i) {
-                material.categories.add(MaterialCategories.get(buffer.readString()));
+                material.categories.add(MaterialCategories.get(buffer.readUtf()));
             }
 
             // Gear Type Blacklist
             material.blacklistedGearTypes.clear();
             int blacklistSize = buffer.readByte();
             for (int i = 0; i < blacklistSize; ++i) {
-                material.blacklistedGearTypes.add(buffer.readString());
+                material.blacklistedGearTypes.add(buffer.readUtf());
             }
         }
 
@@ -518,7 +518,7 @@ public abstract class AbstractMaterial implements IMaterial {
 
         @Override
         public void write(PacketBuffer buffer, T material) {
-            buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
+            buffer.writeUtf(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
 
             writeBasics(buffer, material);
             writeCraftingItems(buffer, material);
@@ -542,32 +542,32 @@ public abstract class AbstractMaterial implements IMaterial {
             buffer.writeBoolean(material.simple);
 
             // Text
-            buffer.writeTextComponent(material.displayName);
+            buffer.writeComponent(material.displayName);
             buffer.writeBoolean(material.namePrefix != null);
             if (material.namePrefix != null) {
-                buffer.writeTextComponent(material.namePrefix);
+                buffer.writeComponent(material.namePrefix);
             }
         }
 
         private void writeCraftingItems(PacketBuffer buffer, T material) {
-            material.ingredient.write(buffer);
+            material.ingredient.toNetwork(buffer);
 
             // Part subs
             buffer.writeByte(material.partSubstitutes.size());
             material.partSubstitutes.forEach((type, ing) -> {
                 buffer.writeResourceLocation(type.getName());
-                ing.write(buffer);
+                ing.toNetwork(buffer);
             });
         }
 
         private void writeRestrictions(PacketBuffer buffer, T material) {
             // Categories
             buffer.writeByte(material.categories.size());
-            material.categories.forEach(cat -> buffer.writeString(cat.getName()));
+            material.categories.forEach(cat -> buffer.writeUtf(cat.getName()));
 
             // Gear Type Blacklist
             buffer.writeByte(material.blacklistedGearTypes.size());
-            material.blacklistedGearTypes.forEach(buffer::writeString);
+            material.blacklistedGearTypes.forEach(buffer::writeUtf);
         }
 
         private void writeStats(PacketBuffer buffer, T material) {
@@ -577,7 +577,7 @@ public abstract class AbstractMaterial implements IMaterial {
                 buffer.writeResourceLocation(partType.getName());
                 buffer.writeByte(map.size());
                 map.forEach((key, mod) -> {
-                    buffer.writeString(key.toString());
+                    buffer.writeUtf(key.toString());
                     mod.write(buffer);
                 });
             });

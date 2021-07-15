@@ -266,15 +266,15 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     @Override
     public ITextComponent getDisplayName(@Nullable IMaterialInstance material, PartType type, ItemStack gear) {
         if (material != null) {
-            return material.getItem().getDisplayName();
+            return material.getItem().getHoverName();
         }
-        return displayName.deepCopy();
+        return displayName.copy();
     }
 
     @Nullable
     @Override
     public ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
-        return namePrefix != null ? namePrefix.deepCopy() : null;
+        return namePrefix != null ? namePrefix.copy() : null;
     }
 
     @Override
@@ -325,8 +325,8 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
                 JsonObject obj = elementAvailability.getAsJsonObject();
 
                 deserializeCategories(obj.get("categories"), ret);
-                ret.visible = JSONUtils.getBoolean(obj, "visible", ret.visible);
-                ret.canSalvage = JSONUtils.getBoolean(obj, "can_salvage", ret.canSalvage);
+                ret.visible = JSONUtils.getAsBoolean(obj, "visible", ret.visible);
+                ret.canSalvage = JSONUtils.getAsBoolean(obj, "can_salvage", ret.canSalvage);
             }
         }
 
@@ -350,7 +350,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
             if (craftingItems != null && craftingItems.isJsonObject()) {
                 JsonElement main = craftingItems.getAsJsonObject().get("main");
                 if (main != null) {
-                    ret.ingredient = Ingredient.deserialize(main);
+                    ret.ingredient = Ingredient.fromJson(main);
                 }
             } else {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
@@ -374,44 +374,44 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
         }
 
         private static ITextComponent deserializeText(JsonElement json) {
-            return Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(json));
+            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
         }
 
         @Override
         public CompoundMaterial read(ResourceLocation id, PacketBuffer buffer) {
-            CompoundMaterial material = new CompoundMaterial(id, buffer.readString(PACK_NAME_MAX_LENGTH));
+            CompoundMaterial material = new CompoundMaterial(id, buffer.readUtf(PACK_NAME_MAX_LENGTH));
 
             int categoryCount = buffer.readByte();
             for (int i = 0; i < categoryCount; ++i) {
-                material.categories.add(MaterialCategories.get(buffer.readString()));
+                material.categories.add(MaterialCategories.get(buffer.readUtf()));
             }
 
-            material.displayName = buffer.readTextComponent();
+            material.displayName = buffer.readComponent();
             if (buffer.readBoolean())
-                material.namePrefix = buffer.readTextComponent();
+                material.namePrefix = buffer.readComponent();
 
             material.visible = buffer.readBoolean();
             material.canSalvage = buffer.readBoolean();
-            material.ingredient = Ingredient.read(buffer);
+            material.ingredient = Ingredient.fromNetwork(buffer);
 
             return material;
         }
 
         @Override
         public void write(PacketBuffer buffer, CompoundMaterial material) {
-            buffer.writeString(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
+            buffer.writeUtf(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
 
             buffer.writeByte(material.categories.size());
-            material.categories.forEach(cat -> buffer.writeString(cat.getName()));
+            material.categories.forEach(cat -> buffer.writeUtf(cat.getName()));
 
-            buffer.writeTextComponent(material.displayName);
+            buffer.writeComponent(material.displayName);
             buffer.writeBoolean(material.namePrefix != null);
             if (material.namePrefix != null)
-                buffer.writeTextComponent(material.namePrefix);
+                buffer.writeComponent(material.namePrefix);
 
             buffer.writeBoolean(material.visible);
             buffer.writeBoolean(material.canSalvage);
-            material.ingredient.write(buffer);
+            material.ingredient.toNetwork(buffer);
         }
 
         @Override

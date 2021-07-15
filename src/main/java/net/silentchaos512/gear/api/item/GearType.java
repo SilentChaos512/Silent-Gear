@@ -150,7 +150,7 @@ public final class GearType {
     }
 
     public static GearType fromJson(JsonObject json, String key) {
-        String str = JSONUtils.getString(json, key);
+        String str = JSONUtils.getAsString(json, key);
         GearType type = get(str);
         if (type.isInvalid()) {
             throw new JsonSyntaxException("Unknown gear type: " + str);

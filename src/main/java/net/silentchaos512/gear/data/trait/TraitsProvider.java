@@ -198,7 +198,7 @@ public class TraitsProvider implements IDataProvider {
 
         ret.add(new EnchantmentTraitBuilder(Const.Traits.FIERY, 2)
                 .addEnchantments(GearType.MELEE_WEAPON, Enchantments.FIRE_ASPECT, 1, 2)
-                .addEnchantments(GearType.RANGED_WEAPON, Enchantments.FLAME, 1)
+                .addEnchantments(GearType.RANGED_WEAPON, Enchantments.FLAMING_ARROWS, 1)
                 .withGearTypeCondition(GearType.WEAPON)
         );
         ret.add(new EnchantmentTraitBuilder(Const.Traits.SILKY, 1)
@@ -209,7 +209,7 @@ public class TraitsProvider implements IDataProvider {
         // Wielder Effect (Potion)
 
         ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.RESISTANCE, 1, 1, 1, 2)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.AQUATIC, 5)
                 .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.WATER_BREATHING, 1)
@@ -226,14 +226,14 @@ public class TraitsProvider implements IDataProvider {
                 .withGearTypeCondition(GearType.HELMET, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
-                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.STRENGTH, 0, 0, 1, 1, 2)
-                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 1, 2, 3)
-                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.HASTE, 1, 1, 2, 2, 3)
+                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
+                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.DIG_SPEED, 1, 1, 1, 2, 3)
+                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.DIG_SPEED, 1, 1, 2, 2, 3)
                 .withGearTypeCondition(GearType.TOOL, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5, StellarTrait.SERIALIZER)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.SPEED, 0, 1, 2, 3)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.JUMP_BOOST, 1, 2, 3, 4)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.MOVEMENT_SPEED, 0, 1, 2, 3)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.JUMP, 1, 2, 3, 4)
                 .extraWikiLines(String.format("  - Has a %d%% chance per level to restore 1 durability each second",
                         (int) (100 * Const.Traits.STELLAR_REPAIR_CHANCE)))
         );
@@ -304,13 +304,13 @@ public class TraitsProvider implements IDataProvider {
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.FLOATSTONER, 1, Blocks.END_STONE, 3)
                 .withGearTypeCondition(GearType.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.IGNITE, 1, Blocks.FIRE, 1)
-                .sound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1f, 1f)
+                .sound(SoundEvents.FLINTANDSTEEL_USE, 1f, 1f)
                 .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3)
                 .withGearTypeCondition(GearType.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, ModBlocks.PHANTOM_LIGHT.get(), 5)
-                .sound(SoundEvents.ENTITY_ITEM_PICKUP, 0.75f, 0.5f)
+                .sound(SoundEvents.ITEM_PICKUP, 0.75f, 0.5f)
                 .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3)
@@ -328,9 +328,9 @@ public class TraitsProvider implements IDataProvider {
 
         // Misfits
 
-        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.fromTag(Tags.Items.NUGGETS))
+        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.of(Tags.Items.NUGGETS))
                 .withGearTypeCondition(GearType.HARVEST_TOOL));
-        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.fromTag(Tags.Items.GEMS))
+        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.of(Tags.Items.GEMS))
                 .withGearTypeCondition(GearType.HARVEST_TOOL));
 
         ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, Effects.POISON));
@@ -349,7 +349,7 @@ public class TraitsProvider implements IDataProvider {
                 .extraData(json -> {
                     json.addProperty("base_chance", chance);
                     json.addProperty("bonus_multiplier", multiplier);
-                    json.add("ingredient", ingredient.serialize());
+                    json.add("ingredient", ingredient.toJson());
                 });
     }
 
@@ -382,15 +382,15 @@ public class TraitsProvider implements IDataProvider {
     }
 
     @Override
-    public void act(DirectoryCache cache) {
+    public void run(DirectoryCache cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (TraitBuilder builder : getTraits()) {
             try {
                 String jsonStr = GSON.toJson(builder.serialize());
-                String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
                 Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", builder.traitId.getNamespace(), builder.traitId.getPath()));
-                if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
+                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
                     Files.createDirectories(path.getParent());
 
                     try (BufferedWriter writer = Files.newBufferedWriter(path)) {
@@ -398,7 +398,7 @@ public class TraitsProvider implements IDataProvider {
                     }
                 }
 
-                cache.recordHash(path, hashStr);
+                cache.putNew(path, hashStr);
             } catch (IOException ex) {
                 LOGGER.error("Could not save traits to {}", outputFolder, ex);
             }

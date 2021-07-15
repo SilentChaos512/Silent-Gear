@@ -48,15 +48,15 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
             Material.CACTUS,
             Material.LEAVES,
-            Material.PLANTS,
-            Material.TALL_PLANTS,
+            Material.PLANT,
+            Material.REPLACEABLE_PLANT,
             Material.WEB,
             Material.BAMBOO_SAPLING
     );
     private static final Map<Block, BlockState> HARVEST_STATES = new HashMap<>();
 
     static {
-        putHarvestState(Blocks.SWEET_BERRY_BUSH, Blocks.SWEET_BERRY_BUSH.getDefaultState().with(SweetBerryBushBlock.AGE, 1));
+        putHarvestState(Blocks.SWEET_BERRY_BUSH, Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 1));
     }
 
     /**
@@ -90,7 +90,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
         Block block = state.getBlock();
         IGrowable growable = (IGrowable) block;
 
-        if (!growable.canGrow(world, pos, state, world.isRemote)) {
+        if (!growable.isValidBonemealTarget(world, pos, state, world.isClientSide)) {
             // Fully grown crop
             NonNullList<ItemStack> drops = NonNullList.create();
             drops.addAll(Block.getDrops(state, world, pos, null, player, sickle));
@@ -103,12 +103,12 @@ public class CoreSickle extends ToolItem implements ICoreTool {
                 if (!foundSeed && item instanceof BlockItem && ((BlockItem) item).getBlock() == block) {
                     foundSeed = true;
                 } else {
-                    Block.spawnAsEntity(world, pos, drop);
+                    Block.popResource(world, pos, drop);
                 }
             }
 
             // Reset state
-            world.setBlockState(pos, HARVEST_STATES.getOrDefault(block, block.getDefaultState()), 2);
+            world.setBlock(pos, HARVEST_STATES.getOrDefault(block, block.defaultBlockState()), 2);
             return true;
         }
 
@@ -116,21 +116,21 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         // Sickles can right-click to harvest an area of plants
-        ItemStack sickle = context.getItem();
-        if (GearHelper.isBroken(sickle) || !(context.getWorld() instanceof ServerWorld))
+        ItemStack sickle = context.getItemInHand();
+        if (GearHelper.isBroken(sickle) || !(context.getLevel() instanceof ServerWorld))
             return ActionResultType.PASS;
 
-        ServerWorld world = (ServerWorld) context.getWorld();
-        BlockPos pos = context.getPos();
+        ServerWorld world = (ServerWorld) context.getLevel();
+        BlockPos pos = context.getClickedPos();
         BlockState state = world.getBlockState(pos);
         if (!canRightClickHarvestBlock(state)) return ActionResultType.PASS;
 
         PlayerEntity player = context.getPlayer();
         if (player == null) return ActionResultType.PASS;
 
-        int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, sickle);
+        int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, sickle);
         int harvestCount = 0;
         final int radius = HARVEST_RANGE;
 
@@ -147,7 +147,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
 
         if (harvestCount > 0) {
             GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player, context.getHand());
-            player.addExhaustion(0.02f);
+            player.causeFoodExhaustion(0.02f);
             return ActionResultType.SUCCESS;
         }
 
@@ -162,7 +162,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     boolean onSickleStartBreak(ItemStack sickle, BlockPos pos, PlayerEntity player, final int range, Set<Material> effectiveMaterials) {
         if (GearHelper.isBroken(sickle)) return false;
 
-        World world = player.world;
+        World world = player.level;
         BlockState state = world.getBlockState(pos);
 
         if (!effectiveMaterials.contains(state.getMaterial())) return false;
@@ -186,46 +186,46 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     private static boolean breakExtraBlock(ItemStack sickle, World world, BlockPos pos, PlayerEntity player, Set<Material> effectiveMaterials) {
-        if (world.isAirBlock(pos) || !(player instanceof ServerPlayerEntity)) return false;
+        if (world.isEmptyBlock(pos) || !(player instanceof ServerPlayerEntity)) return false;
 
         ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
-        BlockState state = player.world.getBlockState(pos);
+        BlockState state = player.level.getBlockState(pos);
         Block block = state.getBlock();
 
         if (!effectiveMaterials.contains(state.getMaterial())) return false;
 
-        int xpDropped = ForgeHooks.onBlockBreakEvent(world, playerMP.interactionManager.getGameType(), playerMP, pos);
+        int xpDropped = ForgeHooks.onBlockBreakEvent(world, playerMP.gameMode.getGameModeForPlayer(), playerMP, pos);
         boolean canceled = xpDropped == -1;
         if (canceled) return false;
 
-        if (playerMP.abilities.isCreativeMode) {
-            block.onBlockHarvested(world, pos, state, player);
+        if (playerMP.abilities.instabuild) {
+            block.playerWillDestroy(world, pos, state, player);
             if (block.removedByPlayer(state, world, pos, playerMP, false, state.getFluidState())) {
-                block.onPlayerDestroy(world, pos, state);
+                block.destroy(world, pos, state);
             }
-            if (!world.isRemote) {
-                playerMP.connection.sendPacket(new SChangeBlockPacket(world, pos));
+            if (!world.isClientSide) {
+                playerMP.connection.send(new SChangeBlockPacket(world, pos));
             }
             return true;
         }
 
-        if (!world.isRemote && world instanceof ServerWorld) {
-            block.onBlockHarvested(world, pos, state, playerMP);
+        if (!world.isClientSide && world instanceof ServerWorld) {
+            block.playerWillDestroy(world, pos, state, playerMP);
 
             if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
-                block.onPlayerDestroy(world, pos, state);
-                block.harvestBlock(world, player, pos, state, null, sickle);
-                block.dropXpOnBlockBreak((ServerWorld) world, pos, xpDropped);
+                block.destroy(world, pos, state);
+                block.playerDestroy(world, player, pos, state, null, sickle);
+                block.popExperience((ServerWorld) world, pos, xpDropped);
             }
 
-            playerMP.connection.sendPacket(new SChangeBlockPacket(world, pos));
+            playerMP.connection.send(new SChangeBlockPacket(world, pos));
         } else {
-            world.playEvent(2001, pos, Block.getStateId(state));
+            world.levelEvent(2001, pos, Block.getId(state));
             if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
-                block.onPlayerDestroy(world, pos, state);
+                block.destroy(world, pos, state);
             }
 
-            sickle.onBlockDestroyed(world, state, pos, playerMP);
+            sickle.mineBlock(world, state, pos, playerMP);
         }
 
         return true;
@@ -241,12 +241,12 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState state) {
+    public boolean isCorrectToolForDrops(BlockState state) {
         return state.getMaterial() == Material.WEB;
     }
 
@@ -272,7 +272,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
 //    }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -282,7 +282,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -307,22 +307,22 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return GearHelper.hitEntity(stack, target, attacker);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 

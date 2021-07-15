@@ -12,6 +12,8 @@ import net.silentchaos512.gear.api.part.PartType;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class ToolHeadItem extends CompoundPartItem { // TODO: Rename to MainPartItem?
     private final GearType gearType;
 
@@ -37,12 +39,12 @@ public class ToolHeadItem extends CompoundPartItem { // TODO: Rename to MainPart
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (this.gearType == GearType.ARMOR) {
             // Old armor body item
-            tooltip.add(new StringTextComponent("DEPRECATED").mergeStyle(TextFormatting.RED));
+            tooltip.add(new StringTextComponent("DEPRECATED").withStyle(TextFormatting.RED));
         }
 
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

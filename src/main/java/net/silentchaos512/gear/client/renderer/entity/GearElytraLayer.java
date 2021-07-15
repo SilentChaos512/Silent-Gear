@@ -37,23 +37,23 @@ public class GearElytraLayer<T extends PlayerEntity, M extends EntityModel<T>> e
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn,
                        int packedLightIn, T entityIn, float limbSwing, float limbSwingAmount, float partialTicks,
                        float ageInTicks, float netHeadYaw, float headPitch) {
-        ItemStack stack = entityIn.getItemStackFromSlot(EquipmentSlotType.CHEST);
+        ItemStack stack = entityIn.getItemBySlot(EquipmentSlotType.CHEST);
 
         if (stack.getItem() instanceof CoreElytra) {
             ResourceLocation resourcelocation;
 
             if (entityIn instanceof AbstractClientPlayerEntity) {
                 AbstractClientPlayerEntity abstractclientplayerentity = (AbstractClientPlayerEntity) entityIn;
-                boolean hasElytra = abstractclientplayerentity.isPlayerInfoSet()
-                        && abstractclientplayerentity.getLocationElytra() != null;
-                boolean hasCape = abstractclientplayerentity.hasPlayerInfo()
-                        && abstractclientplayerentity.getLocationCape() != null && abstractclientplayerentity
-                        .isWearing(PlayerModelPart.CAPE);
+                boolean hasElytra = abstractclientplayerentity.isElytraLoaded()
+                        && abstractclientplayerentity.getElytraTextureLocation() != null;
+                boolean hasCape = abstractclientplayerentity.isCapeLoaded()
+                        && abstractclientplayerentity.getCloakTextureLocation() != null && abstractclientplayerentity
+                        .isModelPartShown(PlayerModelPart.CAPE);
 
                 if (hasElytra) {
-                    resourcelocation = abstractclientplayerentity.getLocationElytra();
+                    resourcelocation = abstractclientplayerentity.getElytraTextureLocation();
                 } else if (hasCape) {
-                    resourcelocation = abstractclientplayerentity.getLocationCape();
+                    resourcelocation = abstractclientplayerentity.getCloakTextureLocation();
                 } else {
                     resourcelocation = TEXTURE;
                 }
@@ -61,24 +61,24 @@ public class GearElytraLayer<T extends PlayerEntity, M extends EntityModel<T>> e
                 resourcelocation = TEXTURE;
             }
 
-            matrixStackIn.push();
+            matrixStackIn.pushPose();
             matrixStackIn.translate(0.0D, 0.0D, 0.125D);
-            this.getEntityModel().copyModelAttributesTo(this.modelElytra);
+            this.getParentModel().copyPropertiesTo(this.modelElytra);
 
-            this.modelElytra.setRotationAngles(entityIn,
+            this.modelElytra.setupAnim(entityIn,
                     limbSwing,
                     limbSwingAmount,
                     ageInTicks,
                     netHeadYaw,
                     headPitch);
 
-            IVertexBuilder ivertexbuilder = ItemRenderer.getArmorVertexBuilder(bufferIn,
-                    this.modelElytra.getRenderType(resourcelocation),
+            IVertexBuilder ivertexbuilder = ItemRenderer.getArmorFoilBuffer(bufferIn,
+                    this.modelElytra.renderType(resourcelocation),
                     false,
                     stack.isEnchanted());
 
             Color color = new Color(GearClientHelper.getColor(stack, PartType.MAIN));
-            this.modelElytra.render(matrixStackIn,
+            this.modelElytra.renderToBuffer(matrixStackIn,
                     ivertexbuilder,
                     packedLightIn,
                     OverlayTexture.NO_OVERLAY,
@@ -87,7 +87,7 @@ public class GearElytraLayer<T extends PlayerEntity, M extends EntityModel<T>> e
                     color.getBlue(),
                     color.getAlpha());
 
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
     }
 }

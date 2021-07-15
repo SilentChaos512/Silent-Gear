@@ -32,15 +32,15 @@ public class GraderBlock extends Block implements IWaterLoggable {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    private static final VoxelShape SHAPE = Block.makeCuboidShape(1, 0, 0, 15, 12, 16);
+    private static final VoxelShape SHAPE = Block.box(1, 0, 0, 15, 12, 16);
 
     public GraderBlock(Properties properties) {
         super(properties);
-        setDefaultState(getDefaultState().with(FACING, Direction.SOUTH).with(LIT, false).with(WATERLOGGED, false));
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH).setValue(LIT, false).setValue(WATERLOGGED, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING, LIT, WATERLOGGED);
     }
 
@@ -58,32 +58,32 @@ public class GraderBlock extends Block implements IWaterLoggable {
     @SuppressWarnings("deprecation")
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileEntity tileEntity = worldIn.getBlockEntity(pos);
         if (tileEntity instanceof IInventory) {
             IInventory inventory = (IInventory) tileEntity;
-            InventoryHelper.dropInventoryItems(worldIn, pos, inventory);
+            InventoryHelper.dropContents(worldIn, pos, inventory);
         }
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        TileEntity tileEntity = worldIn.getBlockEntity(pos);
         if (tileEntity instanceof INamedContainerProvider) {
-            player.openContainer((INamedContainerProvider) tileEntity);
+            player.openMenu((INamedContainerProvider) tileEntity);
         }
         return ActionResultType.SUCCESS;
     }
@@ -91,9 +91,9 @@ public class GraderBlock extends Block implements IWaterLoggable {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
-        Direction facing = context.getPlacementHorizontalFacing().getOpposite();
-        return getDefaultState().with(FACING, facing).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        Direction facing = context.getHorizontalDirection().getOpposite();
+        return defaultBlockState().setValue(FACING, facing).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
     @SuppressWarnings("deprecation")

@@ -181,7 +181,7 @@ public final class ModItems {
     public static final ItemRegistryObject<ToolHeadItem> SLINGSHOT_LIMBS = registerCompoundPart("slingshot_limbs", () ->
             new ToolHeadItem(GearType.SLINGSHOT, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> SHIELD_PLATE = registerCompoundPart("shield_plate", () ->
-            new ToolHeadItem(GearType.SHIELD, new Item.Properties().maxStackSize(1)));
+            new ToolHeadItem(GearType.SHIELD, new Item.Properties().stacksTo(1)));
     @Deprecated public static final ItemRegistryObject<ToolHeadItem> ARMOR_BODY = registerCompoundPart("armor_body", () ->
             new ToolHeadItem(GearType.ARMOR, unstackableProps()));
     public static final ItemRegistryObject<ToolHeadItem> HELMET_PLATES = registerCompoundPart("helmet_plates", () ->
@@ -255,13 +255,13 @@ public final class ModItems {
 
     public static final ItemRegistryObject<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
-                    .food(new Food.Builder().hunger(5).saturation(0.4f).build())));
+                    .food(new Food.Builder().nutrition(5).saturationMod(0.4f).build())));
     public static final ItemRegistryObject<Item> GOLDEN_NETHER_BANANA = register("golden_nether_banana", () ->
             new Item(baseProps()
-                    .food(new Food.Builder().hunger(10).saturation(1.0f)
-                            .setAlwaysEdible()
+                    .food(new Food.Builder().nutrition(10).saturationMod(1.0f)
+                            .alwaysEat()
                             .effect(() -> new EffectInstance(Effects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
-                            .effect(() -> new EffectInstance(Effects.RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
+                            .effect(() -> new EffectInstance(Effects.DAMAGE_RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
                             .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
                             .build())));
     public static final ItemRegistryObject<Item> NETHERWOOD_CHARCOAL = register("netherwood_charcoal", () ->
@@ -313,11 +313,11 @@ public final class ModItems {
     static void register() {}
 
     private static Item.Properties baseProps() {
-        return new Item.Properties().group(SilentGear.ITEM_GROUP);
+        return new Item.Properties().tab(SilentGear.ITEM_GROUP);
     }
 
     private static Item.Properties unstackableProps() {
-        return baseProps().maxStackSize(1);
+        return baseProps().stacksTo(1);
     }
 
     private static <T extends Item> ItemRegistryObject<T> register(String name, Supplier<T> item) {

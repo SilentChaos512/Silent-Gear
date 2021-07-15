@@ -70,7 +70,7 @@ public class TargetEffectTrait extends SimpleTrait {
         trait.effects.clear();
         int mapSize = buffer.readByte();
         for (int i = 0; i < mapSize; ++i) {
-            String key = buffer.readString();
+            String key = buffer.readUtf();
             EffectMap list = EffectMap.read(buffer);
             trait.effects.put(key, list);
         }
@@ -79,7 +79,7 @@ public class TargetEffectTrait extends SimpleTrait {
     private static void write(TargetEffectTrait trait, PacketBuffer buffer) {
         buffer.writeByte(trait.effects.size());
         for (Map.Entry<String, EffectMap> entry : trait.effects.entrySet()) {
-            buffer.writeString(entry.getKey());
+            buffer.writeUtf(entry.getKey());
             entry.getValue().write(buffer);
         }
     }
@@ -105,7 +105,7 @@ public class TargetEffectTrait extends SimpleTrait {
             if (this.effects.containsKey(traitLevel)) {
                 for (EffectInstance effect : this.effects.get(traitLevel)) {
                     EffectInstance copy = new EffectInstance(effect);
-                    target.addPotionEffect(copy);
+                    target.addEffect(copy);
                 }
             }
         }
@@ -121,7 +121,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
                 for (EffectInstance inst : list) {
                     JsonObject obj = new JsonObject();
-                    obj.addProperty("effect", NameUtils.from(inst.getPotion()).toString());
+                    obj.addProperty("effect", NameUtils.from(inst.getEffect()).toString());
                     obj.addProperty("amplifier", inst.getAmplifier());
                     obj.addProperty("duration", inst.getDuration() / 20f);
                     array.add(obj);
@@ -162,13 +162,13 @@ public class TargetEffectTrait extends SimpleTrait {
             }
 
             JsonObject json = jsonElement.getAsJsonObject();
-            ResourceLocation effectId = new ResourceLocation(JSONUtils.getString(json, "effect"));
+            ResourceLocation effectId = new ResourceLocation(JSONUtils.getAsString(json, "effect"));
             Effect effect = ForgeRegistries.POTIONS.getValue(effectId);
             if (effect == null) {
                 throw new JsonParseException("Unknown effect ID: " + effectId);
             }
-            int level = JSONUtils.getInt(json, "amplifier", 0);
-            float duration = JSONUtils.getFloat(json, "duration", 5f);
+            int level = JSONUtils.getAsInt(json, "amplifier", 0);
+            float duration = JSONUtils.getAsFloat(json, "duration", 5f);
 
             return new EffectInstance(effect, (int) duration * 20, level);
         }
@@ -207,7 +207,7 @@ public class TargetEffectTrait extends SimpleTrait {
                 buffer.writeByte(entry.getValue().size());
 
                 for (EffectInstance effect : entry.getValue()) {
-                    buffer.writeResourceLocation(NameUtils.from(effect.getPotion()));
+                    buffer.writeResourceLocation(NameUtils.from(effect.getEffect()));
                     buffer.writeByte(effect.getAmplifier());
                     buffer.writeVarInt(effect.getDuration());
                 }

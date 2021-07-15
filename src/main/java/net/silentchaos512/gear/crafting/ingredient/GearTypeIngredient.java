@@ -17,6 +17,8 @@ import net.silentchaos512.gear.init.Registration;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.crafting.Ingredient.SingleItemList;
+
 public final class GearTypeIngredient extends Ingredient {
     private final GearType type;
 
@@ -51,7 +53,7 @@ public final class GearTypeIngredient extends Ingredient {
     }
 
     @Override
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.NAME.toString());
         json.addProperty("gear_type", this.type.getName());
@@ -66,7 +68,7 @@ public final class GearTypeIngredient extends Ingredient {
 
         @Override
         public GearTypeIngredient parse(PacketBuffer buffer) {
-            String typeName = buffer.readString();
+            String typeName = buffer.readUtf();
             GearType type = GearType.get(typeName);
             if (type.isInvalid()) throw new JsonParseException("Unknown gear type: " + typeName);
             return new GearTypeIngredient(type);
@@ -74,7 +76,7 @@ public final class GearTypeIngredient extends Ingredient {
 
         @Override
         public GearTypeIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getString(json, "gear_type", "");
+            String typeName = JSONUtils.getAsString(json, "gear_type", "");
             if (typeName.isEmpty())
                 throw new JsonSyntaxException("'gear_type' is missing");
 
@@ -87,7 +89,7 @@ public final class GearTypeIngredient extends Ingredient {
 
         @Override
         public void write(PacketBuffer buffer, GearTypeIngredient ingredient) {
-            buffer.writeString(ingredient.type.getName());
+            buffer.writeUtf(ingredient.type.getName());
         }
     }
 }

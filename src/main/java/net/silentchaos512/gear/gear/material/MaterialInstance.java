@@ -230,7 +230,7 @@ public final class MaterialInstance implements IMaterialInstance {
 
     @Nullable
     public static MaterialInstance read(CompoundNBT nbt) {
-        ResourceLocation id = ResourceLocation.tryCreate(nbt.getString("ID"));
+        ResourceLocation id = ResourceLocation.tryParse(nbt.getString("ID"));
         IMaterial material = MaterialManager.get(id);
         if (material == null) return null;
 
@@ -239,10 +239,10 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     private static ItemStack readOrGetDefaultItem(IMaterial material, CompoundNBT nbt) {
-        ItemStack stack = ItemStack.read(nbt.getCompound("Item"));
+        ItemStack stack = ItemStack.of(nbt.getCompound("Item"));
         if (stack.isEmpty()) {
             // Item is missing from NBT, so pick something from the ingredient
-            ItemStack[] array = material.getIngredient().getMatchingStacks();
+            ItemStack[] array = material.getIngredient().getItems();
             if (array.length > 0) {
                 return array[0].copy();
             }
@@ -253,7 +253,7 @@ public final class MaterialInstance implements IMaterialInstance {
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
         nbt.putString("ID", material.getId().toString());
-        nbt.put("Item", item.write(new CompoundNBT()));
+        nbt.put("Item", item.save(new CompoundNBT()));
         return nbt;
     }
 
@@ -284,7 +284,7 @@ public final class MaterialInstance implements IMaterialInstance {
     @Override
     public void write(PacketBuffer buffer) {
         buffer.writeResourceLocation(this.material.getId());
-        buffer.writeEnumValue(this.grade);
+        buffer.writeEnum(this.grade);
     }
 
     @Nullable

@@ -70,16 +70,16 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration reg) {
-        assert Minecraft.getInstance().world != null;
-        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+        assert Minecraft.getInstance().level != null;
+        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
         // Repair kit hints
         for (RepairKitItem item : Registration.getItems(RepairKitItem.class)) {
             String itemName = NameUtils.fromItem(item).getPath();
             reg.addRecipes(Collections.singleton(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
                             new ItemStack(item),
-                            NonNullList.from(Ingredient.EMPTY,
-                                    Ingredient.fromItems(item),
+                            NonNullList.of(Ingredient.EMPTY,
+                                    Ingredient.of(item),
                                     PartMaterialIngredient.of(PartType.MAIN),
                                     PartMaterialIngredient.of(PartType.MAIN),
                                     PartMaterialIngredient.of(PartType.MAIN)
@@ -87,11 +87,11 @@ public class SGearJeiPlugin implements IModPlugin {
                     VanillaRecipeCategoryUid.CRAFTING);
             reg.addRecipes(Collections.singleton(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint_frag"), "",
                             new ItemStack(item),
-                            NonNullList.from(Ingredient.EMPTY,
-                                    Ingredient.fromItems(item),
-                                    Ingredient.fromItems(ModItems.FRAGMENT),
-                                    Ingredient.fromItems(ModItems.FRAGMENT),
-                                    Ingredient.fromItems(ModItems.FRAGMENT)
+                            NonNullList.of(Ingredient.EMPTY,
+                                    Ingredient.of(item),
+                                    Ingredient.of(ModItems.FRAGMENT),
+                                    Ingredient.of(ModItems.FRAGMENT),
+                                    Ingredient.of(ModItems.FRAGMENT)
                             ))),
                     VanillaRecipeCategoryUid.CRAFTING);
         }

@@ -72,7 +72,7 @@ public final class TraitSerializers {
     }
 
     public static ITraitCondition deserializeCondition(JsonObject json) {
-        ResourceLocation type = new ResourceLocation(JSONUtils.getString(json, "type"));
+        ResourceLocation type = new ResourceLocation(JSONUtils.getAsString(json, "type"));
         ITraitConditionSerializer<?> serializer = CONDITIONS.get(type);
         if (serializer == null) {
             throw new JsonSyntaxException("Unknown trait condition type: " + type);
@@ -106,7 +106,7 @@ public final class TraitSerializers {
     }
 
     public static ITrait deserialize(ResourceLocation id, JsonObject json) {
-        String typeStr = JSONUtils.getString(json, "type");
+        String typeStr = JSONUtils.getAsString(json, "type");
         ResourceLocation type = SilentGear.getIdWithDefaultNamespace(typeStr);
         log(() -> "deserialize " + id + " (type " + type + ")");
 

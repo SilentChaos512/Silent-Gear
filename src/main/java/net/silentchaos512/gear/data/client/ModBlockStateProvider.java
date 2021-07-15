@@ -89,7 +89,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.WALL_STONE_TORCH.get())
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(wallTorch("wall_stone_torch", modLoc("block/stone_torch")))
-                        .rotationY((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 90)
+                        .rotationY((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 90)
                         .build());
 
         // Crafters and Machines
@@ -106,7 +106,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         // Plants
         getVariantBuilder(ModBlocks.FLAX_PLANT.get()).forAllStates(state -> {
-            int i = cropAgeToIndex(state.get(ModCropBlock.AGE));
+            int i = cropAgeToIndex(state.getValue(ModCropBlock.AGE));
             return ConfiguredModel.builder()
                     .modelFile(models().crop("flax_plant" + i, modLoc("block/flax_plant" + i)))
                     .build();
@@ -114,7 +114,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", modLoc("block/flax_plant3")));
 
         getVariantBuilder(ModBlocks.FLUFFY_PLANT.get()).forAllStates(state -> {
-            int i = cropAgeToIndex(state.get(ModCropBlock.AGE));
+            int i = cropAgeToIndex(state.getValue(ModCropBlock.AGE));
             return ConfiguredModel.builder()
                     .modelFile(models().crop("fluffy_plant" + i, modLoc("block/fluffy_plant" + i)))
                     .build();
@@ -130,11 +130,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModelFile.ExistingModelFile offModel = getExistingModel(name);
         ModelFile.ExistingModelFile onModel = getExistingModel(name + "_on");
         getVariantBuilder(block.asBlock()).forAllStates(state -> {
-            Direction facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
-            boolean lit = state.get(BlockStateProperties.LIT);
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            boolean lit = state.getValue(BlockStateProperties.LIT);
             return ConfiguredModel.builder()
                     .modelFile(lit ? onModel : offModel)
-                    .rotationY((int) facing.getOpposite().getHorizontalAngle())
+                    .rotationY((int) facing.getOpposite().toYRot())
                     .build();
         });
     }

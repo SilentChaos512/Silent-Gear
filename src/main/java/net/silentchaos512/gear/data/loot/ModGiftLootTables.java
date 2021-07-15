@@ -31,55 +31,55 @@ import java.util.function.BiConsumer;
 public class ModGiftLootTables extends GiftLootTables {
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> p_accept_1_) {
-        p_accept_1_.accept(ModItems.BLUEPRINT_PACKAGE.get().getDefaultLootTable(), LootTable.builder()
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.ROD_BLUEPRINT)))
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.PICKAXE_BLUEPRINT)))
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.SHOVEL_BLUEPRINT)))
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.AXE_BLUEPRINT)))
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.KNIFE_BLUEPRINT)))
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.SWORD_BLUEPRINT)
-                                .weight(11))
-                        .addEntry(ItemLootEntry.builder(ModItems.KATANA_BLUEPRINT)
-                                .weight(5))
-                        .addEntry(ItemLootEntry.builder(ModItems.MACHETE_BLUEPRINT)
-                                .weight(7))
-                        .addEntry(ItemLootEntry.builder(ModItems.SPEAR_BLUEPRINT)
-                                .weight(8)))
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.SHIELD_BLUEPRINT))));
+        p_accept_1_.accept(ModItems.BLUEPRINT_PACKAGE.get().getDefaultLootTable(), LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.ROD_BLUEPRINT)))
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.PICKAXE_BLUEPRINT)))
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.SHOVEL_BLUEPRINT)))
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.AXE_BLUEPRINT)))
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.KNIFE_BLUEPRINT)))
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.SWORD_BLUEPRINT)
+                                .setWeight(11))
+                        .add(ItemLootEntry.lootTableItem(ModItems.KATANA_BLUEPRINT)
+                                .setWeight(5))
+                        .add(ItemLootEntry.lootTableItem(ModItems.MACHETE_BLUEPRINT)
+                                .setWeight(7))
+                        .add(ItemLootEntry.lootTableItem(ModItems.SPEAR_BLUEPRINT)
+                                .setWeight(8)))
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.SHIELD_BLUEPRINT))));
 
         for (Item item : Registration.getItems(item -> item instanceof ICoreItem)) {
-            p_accept_1_.accept(SilentGear.getId("random_gear/" + NameUtils.from(item).getPath()), LootTable.builder()
-                    .addLootPool(LootPool.builder()
-                            .addEntry(ItemLootEntry.builder(item)
-                                    .weight(3)
-                                    .acceptFunction(SelectGearTierLootFunction.builder(1)))
-                            .addEntry(ItemLootEntry.builder(item)
-                                    .weight(5)
-                                    .acceptFunction(SelectGearTierLootFunction.builder(2)))
-                            .addEntry(ItemLootEntry.builder(item)
-                                    .weight(2)
-                                    .acceptFunction(SelectGearTierLootFunction.builder(3)))));
+            p_accept_1_.accept(SilentGear.getId("random_gear/" + NameUtils.from(item).getPath()), LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .add(ItemLootEntry.lootTableItem(item)
+                                    .setWeight(3)
+                                    .apply(SelectGearTierLootFunction.builder(1)))
+                            .add(ItemLootEntry.lootTableItem(item)
+                                    .setWeight(5)
+                                    .apply(SelectGearTierLootFunction.builder(2)))
+                            .add(ItemLootEntry.lootTableItem(item)
+                                    .setWeight(2)
+                                    .apply(SelectGearTierLootFunction.builder(3)))));
         }
 
         // FIXME
-        p_accept_1_.accept(SilentGear.getId("test/ldf_mallet"), LootTable.builder()
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(ModItems.HAMMER)
-                                .acceptFunction(SetPartsFunction.builder(ImmutableList.of(
+        p_accept_1_.accept(SilentGear.getId("test/ldf_mallet"), LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(ModItems.HAMMER)
+                                .apply(SetPartsFunction.builder(ImmutableList.of(
                                         new LazyPartData(SilentGear.getId("main/diamond")),
                                         new LazyPartData(SilentGear.getId("main/diamond")),
                                         new LazyPartData(SilentGear.getId("main/emerald")),
                                         new LazyPartData(SilentGear.getId("rod/blaze")),
                                         new LazyPartData(SilentGear.getId("tip/redstone")))))
-                                .acceptFunction(() -> setName(new StringTextComponent("Loliberty Defense Force Mallet")))
-                                .acceptFunction(() -> setLore(ImmutableList.of(
+                                .apply(() -> setName(new StringTextComponent("Loliberty Defense Force Mallet")))
+                                .apply(() -> setLore(ImmutableList.of(
                                         new StringTextComponent("Standard Issue"),
                                         new StringTextComponent("Protectors of Free Speech")))))));
     }

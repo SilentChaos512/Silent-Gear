@@ -18,21 +18,21 @@ public final class BonusDropsTrait extends SimpleTrait {
             SilentGear.getId("bonus_drops"),
             BonusDropsTrait::new,
             (trait, json) -> {
-                trait.baseChance = JSONUtils.getFloat(json, "base_chance", 0f);
-                trait.bonusMultiplier = JSONUtils.getFloat(json, "bonus_multiplier", 1f);
+                trait.baseChance = JSONUtils.getAsFloat(json, "base_chance", 0f);
+                trait.bonusMultiplier = JSONUtils.getAsFloat(json, "bonus_multiplier", 1f);
                 trait.readIngredient(json.get("ingredient"));
             },
             (trait, buffer) -> {
                 trait.baseChance = buffer.readFloat();
                 trait.bonusMultiplier = buffer.readFloat();
-                trait.ingredient = Ingredient.read(buffer);
-                trait.matchedItemsText = buffer.readString();
+                trait.ingredient = Ingredient.fromNetwork(buffer);
+                trait.matchedItemsText = buffer.readUtf();
             },
             (trait, buffer) -> {
                 buffer.writeFloat(trait.baseChance);
                 buffer.writeFloat(trait.bonusMultiplier);
-                trait.ingredient.write(buffer);
-                buffer.writeString(trait.matchedItemsText);
+                trait.ingredient.toNetwork(buffer);
+                buffer.writeUtf(trait.matchedItemsText);
             }
     );
 
@@ -46,7 +46,7 @@ public final class BonusDropsTrait extends SimpleTrait {
     }
 
     private void readIngredient(JsonElement json) {
-        this.ingredient = Ingredient.deserialize(json);
+        this.ingredient = Ingredient.fromJson(json);
 
         // For wiki output
         if (json.isJsonObject()) {

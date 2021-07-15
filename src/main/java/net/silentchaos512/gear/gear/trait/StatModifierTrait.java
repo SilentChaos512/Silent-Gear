@@ -65,7 +65,7 @@ public final class StatModifierTrait extends SimpleTrait {
         for (JsonElement element : json.get("stats").getAsJsonArray()) {
             if (element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
-                String statName = JSONUtils.getString(obj, "name", "");
+                String statName = JSONUtils.getAsString(obj, "name", "");
                 ItemStat stat = ItemStats.byName(statName);
 
                 if (stat != null) {
@@ -139,9 +139,9 @@ public final class StatModifierTrait extends SimpleTrait {
 
         private static StatMod fromJson(JsonObject json) {
             StatMod mod = new StatMod();
-            mod.multi = JSONUtils.getFloat(json, "value", 0);
-            mod.factorDamage = JSONUtils.getBoolean(json, "factor_damage", true);
-            mod.factorValue = JSONUtils.getBoolean(json, "factor_value", true);
+            mod.multi = JSONUtils.getAsFloat(json, "value", 0);
+            mod.factorDamage = JSONUtils.getAsBoolean(json, "factor_damage", true);
+            mod.factorValue = JSONUtils.getAsBoolean(json, "factor_value", true);
             return mod;
         }
 

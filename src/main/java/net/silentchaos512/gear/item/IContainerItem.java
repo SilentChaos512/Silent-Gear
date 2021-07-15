@@ -19,7 +19,7 @@ public interface IContainerItem {
                 return canStore(stack);
             }
         };
-        CompoundNBT nbt = stack.getOrCreateChildTag("Inventory");
+        CompoundNBT nbt = stack.getOrCreateTagElement("Inventory");
         // Allow older blueprint books to update to new size
         nbt.remove("Size");
         stackHandler.deserializeNBT(nbt);

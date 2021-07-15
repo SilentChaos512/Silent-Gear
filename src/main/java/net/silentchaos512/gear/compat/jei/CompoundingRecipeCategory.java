@@ -71,7 +71,7 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
     @Override
     public void setIngredients(R recipe, IIngredients ingredients) {
         ingredients.setInputIngredients(recipe.getIngredients());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
     }
 
     @Override
@@ -81,11 +81,11 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
             itemStacks.init(i, true, 18 * i + 16 - GUI_START_X, 34 - GUI_START_Y);
         }
         for (int i = 0; i < recipe.getIngredients().size(); ++i) {
-            List<ItemStack> list = Arrays.asList(recipe.getIngredients().get(i).getMatchingStacks());
+            List<ItemStack> list = Arrays.asList(recipe.getIngredients().get(i).getItems());
             itemStacks.set(i, shiftIngredients(list, 3 * i));
         }
         itemStacks.init(info.getInputSlotCount(), false, 125 - GUI_START_X, 34 - GUI_START_Y);
-        itemStacks.set(info.getInputSlotCount(), Collections.singletonList(recipe.getRecipeOutput()));
+        itemStacks.set(info.getInputSlotCount(), Collections.singletonList(recipe.getResultItem()));
     }
 
     private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {

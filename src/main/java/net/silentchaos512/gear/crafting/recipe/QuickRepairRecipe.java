@@ -58,8 +58,8 @@ public class QuickRepairRecipe extends SpecialRecipe {
         float repairKitEfficiency = Config.Common.missingRepairKitEfficiency.get().floatValue();
         List<ItemStack> materials = new ArrayList<>();
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 //noinspection ChainOfInstanceofChecks
                 if (stack.getItem() instanceof ICoreItem) {
@@ -100,7 +100,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
@@ -110,11 +110,11 @@ public class QuickRepairRecipe extends SpecialRecipe {
         repairWithLooseMaterials(gear, repairKit, mats);
 
         // Then use repair kit, if necessary
-        if (gear.getDamage() > 0 && repairKit.getItem() instanceof RepairKitItem) {
+        if (gear.getDamageValue() > 0 && repairKit.getItem() instanceof RepairKitItem) {
             RepairKitItem item = (RepairKitItem) repairKit.getItem();
             int value = item.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
             if (value > 0) {
-                gear.setDamage(gear.getDamage() - Math.round(value));
+                gear.setDamageValue(gear.getDamageValue() - Math.round(value));
             }
         }
 
@@ -127,7 +127,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
         float repairValue = getRepairValueFromMaterials(gear, mats);
         float kitEfficiency = getKitEfficiency(repairKit);
         float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
-        gear.setDamage(gear.getDamage() - Math.round(repairValue * kitEfficiency * gearRepairEfficiency));
+        gear.setDamageValue(gear.getDamageValue() - Math.round(repairValue * kitEfficiency * gearRepairEfficiency));
     }
 
     private static float getRepairValueFromMaterials(ItemStack gear, Collection<ItemStack> mats) {
@@ -151,13 +151,13 @@ public class QuickRepairRecipe extends SpecialRecipe {
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         StackList stackList = StackList.from(inv);
         ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
         ItemStack repairKit = stackList.uniqueMatch(s -> s.getItem() instanceof RepairKitItem);
 
         for (int i = 0; i < list.size(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+            ItemStack stack = inv.getItem(i);
 
             if (stack.getItem() instanceof RepairKitItem) {
                 repairWithLooseMaterials(gear, repairKit, stackList.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat)));
@@ -174,7 +174,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 
@@ -190,16 +190,16 @@ public class QuickRepairRecipe extends SpecialRecipe {
 
     public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<QuickRepairRecipe> {
         @Override
-        public QuickRepairRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public QuickRepairRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new QuickRepairRecipe(recipeId);
         }
 
         @Override
-        public QuickRepairRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public QuickRepairRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             return new QuickRepairRecipe(recipeId);
         }
 
         @Override
-        public void write(PacketBuffer buffer, QuickRepairRecipe recipe) {}
+        public void toNetwork(PacketBuffer buffer, QuickRepairRecipe recipe) {}
     }
 }

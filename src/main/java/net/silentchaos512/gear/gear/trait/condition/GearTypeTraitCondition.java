@@ -59,7 +59,7 @@ public class GearTypeTraitCondition implements ITraitCondition {
 
         @Override
         public GearTypeTraitCondition deserialize(JsonObject json) {
-            return new GearTypeTraitCondition(JSONUtils.getString(json, "gear_type"));
+            return new GearTypeTraitCondition(JSONUtils.getAsString(json, "gear_type"));
         }
 
         @Override
@@ -69,13 +69,13 @@ public class GearTypeTraitCondition implements ITraitCondition {
 
         @Override
         public GearTypeTraitCondition read(PacketBuffer buffer) {
-            String gearType = buffer.readString();
+            String gearType = buffer.readUtf();
             return new GearTypeTraitCondition(gearType);
         }
 
         @Override
         public void write(GearTypeTraitCondition condition, PacketBuffer buffer) {
-            buffer.writeString(condition.gearType);
+            buffer.writeUtf(condition.gearType);
         }
     }
 }

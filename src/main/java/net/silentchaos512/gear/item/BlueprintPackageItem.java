@@ -31,9 +31,11 @@ import net.silentchaos512.lib.item.LootContainerItem;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class BlueprintPackageItem extends LootContainerItem {
     public BlueprintPackageItem(ResourceLocation defaultLootTable) {
-        super(defaultLootTable, new Properties().group(SilentGear.ITEM_GROUP));
+        super(defaultLootTable, new Properties().tab(SilentGear.ITEM_GROUP));
     }
 
     public ResourceLocation getDefaultLootTable() {
@@ -41,9 +43,9 @@ public class BlueprintPackageItem extends LootContainerItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc1").mergeStyle(TextFormatting.ITALIC));
-        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc2").mergeStyle(TextFormatting.ITALIC));
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc1").withStyle(TextFormatting.ITALIC));
+        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc2").withStyle(TextFormatting.ITALIC));
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

@@ -62,8 +62,8 @@ public final class SilentGear {
     @Nullable
     public static ResourceLocation getIdWithDefaultNamespace(String name) {
         if (name.contains(":"))
-            return ResourceLocation.tryCreate(name);
-        return ResourceLocation.tryCreate(RESOURCE_PREFIX + name);
+            return ResourceLocation.tryParse(name);
+        return ResourceLocation.tryParse(RESOURCE_PREFIX + name);
     }
 
     public static String shortenId(@Nullable ResourceLocation id) {
@@ -76,7 +76,7 @@ public final class SilentGear {
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(CraftingItems.BLUEPRINT_PAPER);
         }
     };

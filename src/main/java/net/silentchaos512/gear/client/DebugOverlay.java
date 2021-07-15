@@ -64,17 +64,17 @@ public class DebugOverlay extends DebugRenderOverlay {
 
 //        addAttributeInfo(list, player, SharedMonsterAttributes.LUCK);
 
-        ItemStack heldItem = player.getHeldItem(Hand.MAIN_HAND);
+        ItemStack heldItem = player.getItemInHand(Hand.MAIN_HAND);
         if (heldItem.isEmpty()) return list;
 
         Item item = heldItem.getItem();
 
         // Crossbow debugging
         if (item instanceof CoreCrossbow) {
-            float pull = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pull"), mc.world, player);
-            float pulling = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pulling"), mc.world, player);
-            float charged = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("charged"), mc.world, player);
-            float firework = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("firework"), mc.world, player);
+            float pull = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pull"), mc.level, player);
+            float pulling = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pulling"), mc.level, player);
+            float charged = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("charged"), mc.level, player);
+            float firework = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("firework"), mc.level, player);
             list.add(String.format("pull=%.1f", pull));
             list.add(String.format("pulling=%.1f", pulling));
             list.add(String.format("charged=%.1f", charged));
@@ -84,13 +84,13 @@ public class DebugOverlay extends DebugRenderOverlay {
         }
 
         // Harvest level checks
-        RayTraceResult rt = mc.objectMouseOver;
+        RayTraceResult rt = mc.hitResult;
         if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK) {
             BlockRayTraceResult brt = (BlockRayTraceResult) rt;
-            Entity renderViewEntity = mc.getRenderViewEntity();
+            Entity renderViewEntity = mc.getCameraEntity();
             if (renderViewEntity != null) {
-                BlockPos pos = brt.getPos();
-                BlockState state = renderViewEntity.world.getBlockState(pos);
+                BlockPos pos = brt.getBlockPos();
+                BlockState state = renderViewEntity.level.getBlockState(pos);
 
                 if (item instanceof ICoreTool) {
                     ToolType toolClass = state.getBlock().getHarvestTool(state);
@@ -105,7 +105,7 @@ public class DebugOverlay extends DebugRenderOverlay {
                     final float destroySpeed = heldItem.getDestroySpeed(state);
                     if (canHarvest) {
                         int level = TraitHelper.getTraitLevel(heldItem, Const.Traits.LUSTROUS);
-                        int light = GearEvents.getLightForLustrousTrait(player.world, player.getPosition());
+                        int light = GearEvents.getLightForLustrousTrait(player.level, player.blockPosition());
                         final float newSpeed = destroySpeed + GearEvents.getLustrousSpeedBonus(level, light);
                         list.add(String.format("speed = %.1f", newSpeed));
                     } else {
@@ -127,7 +127,7 @@ public class DebugOverlay extends DebugRenderOverlay {
 
     private static void addAttributeInfo(List<String> list, PlayerEntity player, Attribute attribute) {
         ModifiableAttributeInstance attribute1 = player.getAttribute(attribute);
-        list.add(String.format("%s=%.1f (%dx mods)", attribute, attribute1.getValue(), attribute1.getModifierListCopy().size()));
+        list.add(String.format("%s=%.1f (%dx mods)", attribute, attribute1.getValue(), attribute1.getModifiers().size()));
     }
 
     @Override

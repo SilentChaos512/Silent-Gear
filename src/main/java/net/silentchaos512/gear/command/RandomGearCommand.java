@@ -26,27 +26,27 @@ import java.util.Collection;
 
 public final class RandomGearCommand {
     private static final SuggestionProvider<CommandSource> itemIdSuggestions = (context, builder) ->
-            ISuggestionProvider.func_212476_a(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ICoreItem).map(ForgeRegistryEntry::getRegistryName), builder);
+            ISuggestionProvider.suggestResource(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ICoreItem).map(ForgeRegistryEntry::getRegistryName), builder);
 
     private RandomGearCommand() {}
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(Commands.literal("sgear_random_gear")
-                .requires(source -> source.hasPermissionLevel(2))
+                .requires(source -> source.hasPermission(2))
                 .then(Commands.argument("players", EntityArgument.players())
-                        .then(Commands.argument("item", ResourceLocationArgument.resourceLocation())
+                        .then(Commands.argument("item", ResourceLocationArgument.id())
                                 .suggests(itemIdSuggestions)
                                 .executes(context -> run(
                                         context,
                                         EntityArgument.getPlayers(context, "players"),
-                                        ResourceLocationArgument.getResourceLocation(context, "item"),
+                                        ResourceLocationArgument.getId(context, "item"),
                                         3
                                 ))
                                 .then(Commands.argument("tier", IntegerArgumentType.integer())
                                         .executes(context -> run(
                                                 context,
                                                 EntityArgument.getPlayers(context, "players"),
-                                                ResourceLocationArgument.getResourceLocation(context, "item"),
+                                                ResourceLocationArgument.getId(context, "item"),
                                                 IntegerArgumentType.getInteger(context, "tier")
                                         ))
                                 )
@@ -58,14 +58,14 @@ public final class RandomGearCommand {
     private static int run(CommandContext<CommandSource> context, Collection<ServerPlayerEntity> players, ResourceLocation itemId, int tier) throws CommandSyntaxException {
         Item item = ForgeRegistries.ITEMS.getValue(itemId);
         if (!(item instanceof ICoreItem)) {
-            context.getSource().sendErrorMessage(new TranslationTextComponent("command.silentgear.randomGear.invalidItem"));
+            context.getSource().sendFailure(new TranslationTextComponent("command.silentgear.randomGear.invalidItem"));
             return 0;
         }
 
         for (ServerPlayerEntity player : players) {
             ItemStack stack = GearGenerator.create((ICoreItem) item, tier);
             if (!stack.isEmpty()) {
-                context.getSource().sendFeedback(new TranslationTextComponent("commands.give.success.single", 1, stack.getTextComponent(), player.getDisplayName()), true);
+                context.getSource().sendSuccess(new TranslationTextComponent("commands.give.success.single", 1, stack.getDisplayName(), player.getDisplayName()), true);
                 PlayerUtils.giveItem(player, stack.copy());
             }
         }

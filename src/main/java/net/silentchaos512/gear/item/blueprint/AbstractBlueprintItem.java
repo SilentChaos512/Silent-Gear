@@ -10,6 +10,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.gear.config.Config;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     final boolean singleUse;
 
@@ -45,14 +47,14 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (!this.isDisabled()) {
-            super.fillItemGroup(group, items);
+            super.fillItemCategory(group, items);
         }
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         String key = "item.silentgear." + (this.singleUse ? "template" : "blueprint");
         return new TranslationTextComponent(key, this.getCraftedName(stack));
     }

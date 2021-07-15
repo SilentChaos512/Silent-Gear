@@ -16,9 +16,9 @@ public class CompoundingRecipeProcessor implements IComponentProcessor {
     @Override
     public void setup(IVariableProvider variables) {
         ResourceLocation recipeId = new ResourceLocation(variables.get("recipe").asString());
-        ClientWorld world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().level;
         assert world != null;
-        this.recipe = (CompoundingRecipe) world.getRecipeManager().getRecipe(recipeId).orElse(null);
+        this.recipe = (CompoundingRecipe) world.getRecipeManager().byKey(recipeId).orElse(null);
     }
 
     @Override
@@ -26,16 +26,16 @@ public class CompoundingRecipeProcessor implements IComponentProcessor {
         if (key.startsWith("item")) {
             int index = Integer.parseInt(key.substring(4)) - 1;
             Ingredient ingredient = recipe.getIngredients().get(index);
-            ItemStack[] stacks = ingredient.getMatchingStacks();
+            ItemStack[] stacks = ingredient.getItems();
             ItemStack stack = stacks.length == 0 ? ItemStack.EMPTY : stacks[0];
             return IVariable.from(stack);
         } else if ("text".equals(key)) {
-            ItemStack out = recipe.getRecipeOutput();
-            return IVariable.wrap(out.getCount() + "x$(br)" + out.getDisplayName());
+            ItemStack out = recipe.getResultItem();
+            return IVariable.wrap(out.getCount() + "x$(br)" + out.getHoverName());
         } else if ("icount".equals(key)) {
-            return IVariable.wrap(recipe.getRecipeOutput().getCount());
+            return IVariable.wrap(recipe.getResultItem().getCount());
         } else if ("iname".equals(key)) {
-            return IVariable.wrap(recipe.getRecipeOutput().getDisplayName().getString());
+            return IVariable.wrap(recipe.getResultItem().getHoverName().getString());
         }
 
         return null;

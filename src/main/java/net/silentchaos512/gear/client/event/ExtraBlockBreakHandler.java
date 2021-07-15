@@ -75,9 +75,9 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
     }
 
     private void drawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder bufferBuilderIn, Entity entityIn, float partialTicks) {
-/*        double d3 = entityIn.lastTickPosX + (entityIn.func_226277_ct_() - entityIn.lastTickPosX) * (double) partialTicks;
-        double d4 = entityIn.lastTickPosY + (entityIn.func_226278_cu_() - entityIn.lastTickPosY) * (double) partialTicks;
-        double d5 = entityIn.lastTickPosZ + (entityIn.func_226281_cx_() - entityIn.lastTickPosZ) * (double) partialTicks;
+/*        double d3 = entityIn.lastTickPosX + (entityIn.getX() - entityIn.lastTickPosX) * (double) partialTicks;
+        double d4 = entityIn.lastTickPosY + (entityIn.getY() - entityIn.lastTickPosY) * (double) partialTicks;
+        double d5 = entityIn.lastTickPosZ + (entityIn.getZ() - entityIn.lastTickPosZ) * (double) partialTicks;
 
         if (this.mc.world.getGameTime() % 20 == 0) {
             this.cleanupExtraDamagedBlocks();
@@ -132,7 +132,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
             DestroyExtraBlocksProgress destroyblockprogress = entry.getValue();
             int k1 = destroyblockprogress.getCreationWorldTick();
 
-            if (this.mc.world.getGameTime() - k1 > 400) {
+            if (this.mc.level.getGameTime() - k1 > 400) {
                 this.extraDamagedBlocks.remove(entry.getKey());
             }
         }
@@ -154,7 +154,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
             this.extraDamagedBlocks.put(Integer.valueOf(breakerId), destroyextrablocksprogress);
 
             destroyextrablocksprogress.setPartialBlockDamage(progress);
-            destroyextrablocksprogress.setWorldTick((int) this.mc.world.getGameTime());
+            destroyextrablocksprogress.setWorldTick((int) this.mc.level.getGameTime());
         } else {
             this.extraDamagedBlocks.remove(breakerId);
         }

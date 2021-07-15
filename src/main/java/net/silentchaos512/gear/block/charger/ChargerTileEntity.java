@@ -95,7 +95,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -115,7 +115,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
 
     @Override
     public void encodeExtraData(PacketBuffer buffer) {
-        buffer.writeByte(this.fields.size());
+        buffer.writeByte(this.fields.getCount());
     }
 
     protected int getWorkTime(ItemStack input) {
@@ -136,7 +136,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
 
     public static int getStarlightChargerCatalystTier(ItemStack catalyst) {
         for (int i = ModTags.Items.STARLIGHT_CHARGER_TIERS.size() - 1; i >= 0; --i) {
-            if (catalyst.getItem().isIn(ModTags.Items.STARLIGHT_CHARGER_TIERS.get(i))) {
+            if (catalyst.getItem().is(ModTags.Items.STARLIGHT_CHARGER_TIERS.get(i))) {
                 return i + 1;
             }
         }
@@ -145,7 +145,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     protected int getMaterialChargeLevel(ItemStack stack) {
-        return EnchantmentHelper.getEnchantmentLevel(this.enchantment.get(), stack);
+        return EnchantmentHelper.getItemEnchantmentLevel(this.enchantment.get(), stack);
     }
 
     protected void chargeMaterial(ItemStack output, int level) {
@@ -156,7 +156,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
 
     @Override
     public void tick() {
-        if (world == null || world.isRemote) {
+        if (level == null || level.isClientSide) {
             return;
         }
 
@@ -165,14 +165,14 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         if (++updateTimer > UPDATE_FREQUENCY) {
             if (checkStructureLevel()) {
                 SilentGear.LOGGER.info("{}} at {}: structure level updated to {}",
-                        this.getBlockState().getBlock().getRegistryName(), this.pos, this.structureLevel);
+                        this.getBlockState().getBlock().getRegistryName(), this.worldPosition, this.structureLevel);
             }
             updateTimer = 0;
             //sendUpdate();
         }
 
-        ItemStack input = getStackInSlot(0);
-        ItemStack catalyst = getStackInSlot(1);
+        ItemStack input = getItem(0);
+        ItemStack catalyst = getItem(1);
         if (input.isEmpty() || catalyst.isEmpty() || !(GearApi.isMaterial(input))) {
             return;
         }
@@ -189,14 +189,14 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     protected void gatherEnergy() {
-        assert world != null;
-        if (charge < getMaxCharge() && world.isNightTime() && world.canBlockSeeSky(pos.up())) {
+        assert level != null;
+        if (charge < getMaxCharge() && level.isNight() && level.canSeeSkyFromBelowWater(worldPosition.above())) {
             charge += CHARGE_RATE;
         }
     }
 
     private void handleCharging(ItemStack input, ItemStack catalyst) {
-        assert world != null;
+        assert level != null;
         int chargeLevel = getChargingAgentTier(catalyst);
         int drainRate = getDrainRate(input, chargeLevel);
 
@@ -207,18 +207,18 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
                 this.workTime = getWorkTime(input);
 
                 if (this.progress >= this.workTime) {
-                    if (getStackInSlot(2).isEmpty()) {
+                    if (getItem(2).isEmpty()) {
                         ItemStack output = input.copy();
                         output.setCount(1);
                         chargeMaterial(output, chargeLevel);
-                        setInventorySlotContents(2, output);
+                        setItem(2, output);
                     } else {
-                        getStackInSlot(2).grow(1);
+                        getItem(2).grow(1);
                     }
 
                     this.progress = 0;
-                    decrStackSize(0, 1);
-                    decrStackSize(1, 1);
+                    removeItem(0, 1);
+                    removeItem(1, 1);
                 }
             }
 
@@ -227,13 +227,13 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     private boolean wouldFitInOutputSlot(ItemStack input, int chargeTier) {
-        ItemStack output = getStackInSlot(2);
+        ItemStack output = getItem(2);
         if (output.isEmpty()) {
             return true;
         }
 
         return output.getCount() < output.getMaxStackSize()
-                && input.isItemEqual(output)
+                && input.sameItem(output)
                 && getMaterialChargeLevel(output) == chargeTier
                 && getGrade(input) == getGrade(output);
     }
@@ -249,16 +249,16 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     protected boolean checkStructureLevel() {
         int oldValue = this.structureLevel;
         this.structureLevel = MathUtils.min(
-                this.getPillarLevel(this.pos.offset(Direction.NORTH, 3).offset(Direction.WEST, 3)),
-                this.getPillarLevel(this.pos.offset(Direction.NORTH, 3).offset(Direction.EAST, 3)),
-                this.getPillarLevel(this.pos.offset(Direction.SOUTH, 3).offset(Direction.WEST, 3)),
-                this.getPillarLevel(this.pos.offset(Direction.SOUTH, 3).offset(Direction.EAST, 3)));
+                this.getPillarLevel(this.worldPosition.relative(Direction.NORTH, 3).relative(Direction.WEST, 3)),
+                this.getPillarLevel(this.worldPosition.relative(Direction.NORTH, 3).relative(Direction.EAST, 3)),
+                this.getPillarLevel(this.worldPosition.relative(Direction.SOUTH, 3).relative(Direction.WEST, 3)),
+                this.getPillarLevel(this.worldPosition.relative(Direction.SOUTH, 3).relative(Direction.EAST, 3)));
         return this.structureLevel != oldValue;
     }
 
     protected int getPillarLevel(BlockPos pos) {
-        assert world != null;
-        BlockState state = this.world.getBlockState(pos.up(2));
+        assert level != null;
+        BlockState state = this.level.getBlockState(pos.above(2));
         if (state.getBlock() == ModBlocks.CRIMSON_STEEL_BLOCK.get()) return 1;
         if (state.getBlock() == ModBlocks.AZURE_ELECTRUM_BLOCK.get()) return 2;
         if (state.getBlock() == ModBlocks.TYRIAN_STEEL_BLOCK.get()) return 3;
@@ -282,31 +282,31 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return index > 1; // Not the material or catalyst slots
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         if (index == 0) return GearApi.isMaterial(stack);
-        if (index == 1) return stack.getItem().isIn(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS);
+        if (index == 1) return stack.getItem().is(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS);
         return false;
     }
 
     @Override
-    public void read(BlockState stateIn, CompoundNBT tags) {
-        super.read(stateIn, tags);
+    public void load(BlockState stateIn, CompoundNBT tags) {
+        super.load(stateIn, tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tags) {
-        CompoundNBT compoundTag = super.write(tags);
+    public CompoundNBT save(CompoundNBT tags) {
+        CompoundNBT compoundTag = super.save(tags);
         SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
         return compoundTag;
     }

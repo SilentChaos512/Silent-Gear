@@ -33,11 +33,11 @@ public final class ModTags {
         private Blocks() {}
 
         private static ITag.INamedTag<Block> forge(String path) {
-            return BlockTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
+            return BlockTags.bind(new ResourceLocation("forge", path).toString());
         }
 
         private static ITag.INamedTag<Block> mod(String path) {
-            return BlockTags.makeWrapperTag(SilentGear.getId(path).toString());
+            return BlockTags.bind(SilentGear.getId(path).toString());
         }
     }
 
@@ -135,15 +135,15 @@ public final class ModTags {
         private Items() {}
 
         private static ITag.INamedTag<Item> forge(String path) {
-            return ItemTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
+            return ItemTags.bind(new ResourceLocation("forge", path).toString());
         }
 
         private static ITag.INamedTag<Item> mod(String path) {
-            return ItemTags.makeWrapperTag(SilentGear.getId(path).toString());
+            return ItemTags.bind(SilentGear.getId(path).toString());
         }
 
         private static ITag.INamedTag<Item> silentsMechanisms(String path) {
-            return ItemTags.makeWrapperTag(new ResourceLocation("silents_mechanisms", path).toString());
+            return ItemTags.bind(new ResourceLocation("silents_mechanisms", path).toString());
         }
     }
 

@@ -46,11 +46,11 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     private static final int MIN_CHARGE_TIME = 5;
     private static final int MAX_CHARGE_TIME = 50;
 
-    private boolean field_220034_c = false;
-    private boolean field_220035_d = false;
+    private boolean startSoundPlayed = false;
+    private boolean midLoadSoundPlayed = false;
 
     public CoreCrossbow() {
-        super(GearHelper.getBuilder(null).defaultMaxDamage(100));
+        super(GearHelper.getBuilder(null).defaultDurability(100));
     }
 
     @Override
@@ -62,27 +62,27 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
 
     @Override
-    public boolean isCrossbow(ItemStack stack) {
+    public boolean useOnRelease(ItemStack stack) {
         return true;
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.CROSSBOW;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack itemstack = playerIn.getItemInHand(handIn);
         if (isCharged(itemstack)) {
-            fireProjectiles(worldIn, playerIn, handIn, itemstack, func_220013_l(itemstack), 1.0F);
+            fireProjectiles(worldIn, playerIn, handIn, itemstack, getShootingPower(itemstack), 1.0F);
             setCharged(itemstack, false);
             return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
-        } else if (!playerIn.findAmmo(itemstack).isEmpty()) {
+        } else if (!playerIn.getProjectile(itemstack).isEmpty()) {
             if (!isCharged(itemstack)) {
-                this.field_220034_c = false;
-                this.field_220035_d = false;
-                playerIn.setActiveHand(handIn);
+                this.startSoundPlayed = false;
+                this.midLoadSoundPlayed = false;
+                playerIn.startUsingItem(handIn);
             }
 
             return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
@@ -92,21 +92,21 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         int i = this.getUseDuration(stack) - timeLeft;
         float f = getCharge(i, stack);
         if (f >= 1.0F && !isCharged(stack) && hasAmmo(entityLiving, stack)) {
             setCharged(stack, true);
             SoundCategory soundcategory = entityLiving instanceof PlayerEntity ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
-            worldIn.playSound(null, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), SoundEvents.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (random.nextFloat() * 0.5F + 1.0F) + 0.2F);
+            worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (random.nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
     }
 
     private static boolean hasAmmo(LivingEntity shooter, ItemStack stack) {
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.MULTISHOT, stack);
+        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT, stack);
         int j = i == 0 ? 1 : 3;
-        boolean flag = shooter instanceof PlayerEntity && ((PlayerEntity) shooter).abilities.isCreativeMode;
-        ItemStack itemstack = shooter.findAmmo(stack);
+        boolean flag = shooter instanceof PlayerEntity && ((PlayerEntity) shooter).abilities.instabuild;
+        ItemStack itemstack = shooter.getProjectile(stack);
         ItemStack itemstack1 = itemstack.copy();
 
         for (int k = 0; k < j; ++k) {
@@ -119,7 +119,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
                 itemstack1 = itemstack.copy();
             }
 
-            if (!func_220023_a(shooter, stack, itemstack, k > 0, flag)) {
+            if (!loadProjectile(shooter, stack, itemstack, k > 0, flag)) {
                 return false;
             }
         }
@@ -127,7 +127,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         return true;
     }
 
-    private static boolean func_220023_a(LivingEntity entityIn, ItemStack crossbow, ItemStack ammo, boolean p_220023_3_, boolean p_220023_4_) {
+    private static boolean loadProjectile(LivingEntity entityIn, ItemStack crossbow, ItemStack ammo, boolean p_220023_3_, boolean p_220023_4_) {
         if (isAmmoInvalid(ammo)) {
             return false;
         } else {
@@ -136,7 +136,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
             if (!flag && !p_220023_4_ && !p_220023_3_) {
                 itemstack = splitOneAmmo(ammo);
                 if (ammo.isEmpty() && entityIn instanceof PlayerEntity) {
-                    ((PlayerEntity) entityIn).inventory.deleteStack(ammo);
+                    ((PlayerEntity) entityIn).inventory.removeItem(ammo);
                 }
             } else {
                 itemstack = ammo.copy();
@@ -156,8 +156,8 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         // Temp fix for https://github.com/SilentChaos512/Silent-Gear/issues/270
         if (ammo.getItem() instanceof CoreArrow) {
             ItemStack copy = ammo.copy();
-            ammo.setDamage(ammo.getDamage() + 1);
-            copy.setDamage(copy.getMaxDamage() - 1);
+            ammo.setDamageValue(ammo.getDamageValue() + 1);
+            copy.setDamageValue(copy.getMaxDamage() - 1);
             return copy;
         }
         return ammo.split(1);
@@ -173,7 +173,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         }
 
         CompoundNBT compoundnbt1 = new CompoundNBT();
-        projectile.write(compoundnbt1);
+        projectile.save(compoundnbt1);
         listnbt.add(compoundnbt1);
         compoundnbt.put("ChargedProjectiles", listnbt);
     }
@@ -187,7 +187,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
             if (listnbt != null) {
                 for (int i = 0; i < listnbt.size(); ++i) {
                     CompoundNBT compoundnbt1 = listnbt.getCompound(i);
-                    list.add(ItemStack.read(compoundnbt1));
+                    list.add(ItemStack.of(compoundnbt1));
                 }
             }
         }
@@ -211,16 +211,16 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         return 133700;
     }
 
-    private SoundEvent func_220025_a(int p_220025_1_) {
+    private SoundEvent getStartSound(int p_220025_1_) {
         switch(p_220025_1_) {
             case 1:
-                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_1;
+                return SoundEvents.CROSSBOW_QUICK_CHARGE_1;
             case 2:
-                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_2;
+                return SoundEvents.CROSSBOW_QUICK_CHARGE_2;
             case 3:
-                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_3;
+                return SoundEvents.CROSSBOW_QUICK_CHARGE_3;
             default:
-                return SoundEvents.ITEM_CROSSBOW_LOADING_START;
+                return SoundEvents.CROSSBOW_LOADING_START;
         }
     }
 
@@ -233,53 +233,53 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
         return f;
     }
 
-    private static void func_220016_a(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float p_220016_5_, boolean p_220016_6_, float p_220016_7_, float p_220016_8_, float p_220016_9_) {
-        if (!world.isRemote) {
+    private static void shootProjectile(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float p_220016_5_, boolean p_220016_6_, float p_220016_7_, float p_220016_8_, float p_220016_9_) {
+        if (!world.isClientSide) {
             boolean flag = projectile.getItem() == Items.FIREWORK_ROCKET;
             ProjectileEntity iprojectile;
             if (flag) {
-                iprojectile = new FireworkRocketEntity(world, projectile, shooter.getPosX(), shooter.getPosY() + (double)shooter.getEyeHeight() - (double)0.15F, shooter.getPosZ(), true);
+                iprojectile = new FireworkRocketEntity(world, projectile, shooter.getX(), shooter.getY() + (double)shooter.getEyeHeight() - (double)0.15F, shooter.getZ(), true);
             } else {
-                iprojectile = func_220024_a(world, shooter, crossbow, projectile);
+                iprojectile = getArrow(world, shooter, crossbow, projectile);
                 if (p_220016_6_ || p_220016_9_ != 0.0F) {
-                    ((AbstractArrowEntity)iprojectile).pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                    ((AbstractArrowEntity)iprojectile).pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                 }
             }
 
             if (shooter instanceof ICrossbowUser) {
                 ICrossbowUser icrossbowuser = (ICrossbowUser)shooter;
-                LivingEntity attackTarget = icrossbowuser.getAttackTarget();
+                LivingEntity attackTarget = icrossbowuser.getTarget();
                 if (attackTarget != null) {
-                    icrossbowuser.func_230284_a_(attackTarget, crossbow, iprojectile, p_220016_9_);
+                    icrossbowuser.shootCrossbowProjectile(attackTarget, crossbow, iprojectile, p_220016_9_);
                 }
             } else {
                 Vector3d vec3d1 = shooter.getUpVector(1.0F);
                 Quaternion quaternion = new Quaternion(new Vector3f(vec3d1), p_220016_9_, true);
-                Vector3d vec3d = shooter.getLook(1.0F);
+                Vector3d vec3d = shooter.getViewVector(1.0F);
                 Vector3f vector3f = new Vector3f(vec3d);
                 vector3f.transform(quaternion);
-                iprojectile.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), p_220016_7_, p_220016_8_);
+                iprojectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), p_220016_7_, p_220016_8_);
             }
 
-            crossbow.damageItem(flag ? 3 : 1, shooter, (p_220017_1_) -> {
-                p_220017_1_.sendBreakAnimation(hand);
+            crossbow.hurtAndBreak(flag ? 3 : 1, shooter, (p_220017_1_) -> {
+                p_220017_1_.broadcastBreakEvent(hand);
             });
-            world.addEntity(iprojectile);
-            world.playSound(null, shooter.getPosX(), shooter.getPosY(), shooter.getPosZ(), SoundEvents.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, p_220016_5_);
+            world.addFreshEntity(iprojectile);
+            world.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, p_220016_5_);
         }
     }
 
-    private static AbstractArrowEntity func_220024_a(World world, LivingEntity shooter, ItemStack crossbow, ItemStack projectile) {
+    private static AbstractArrowEntity getArrow(World world, LivingEntity shooter, ItemStack crossbow, ItemStack projectile) {
         ArrowItem arrowitem = (ArrowItem)(projectile.getItem() instanceof ArrowItem ? projectile.getItem() : Items.ARROW);
         AbstractArrowEntity arrowEntity = arrowitem.createArrow(world, projectile, shooter);
         if (shooter instanceof PlayerEntity) {
-            arrowEntity.setIsCritical(true);
+            arrowEntity.setCritArrow(true);
         }
-        arrowEntity.setDamage(arrowEntity.getDamage() - 2 + GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
+        arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() - 2 + GearData.getStat(crossbow, ItemStats.RANGED_DAMAGE));
 
-        arrowEntity.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
+        arrowEntity.setSoundEvent(SoundEvents.CROSSBOW_HIT);
         arrowEntity.setShotFromCrossbow(true);
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.PIERCING, crossbow);
+        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PIERCING, crossbow);
         if (i > 0) {
             arrowEntity.setPierceLevel((byte)i);
         }
@@ -289,68 +289,68 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     public static void fireProjectiles(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, float p_220014_4_, float p_220014_5_) {
         List<ItemStack> list = getChargedProjectiles(crossbow);
-        float[] afloat = func_220028_a(shooter.getRNG());
+        float[] afloat = getShotPitches(shooter.getRandom());
 
         for(int i = 0; i < list.size(); ++i) {
             ItemStack itemstack = list.get(i);
-            boolean flag = shooter instanceof PlayerEntity && ((PlayerEntity)shooter).abilities.isCreativeMode;
+            boolean flag = shooter instanceof PlayerEntity && ((PlayerEntity)shooter).abilities.instabuild;
             if (!itemstack.isEmpty()) {
                 if (i == 0) {
-                    func_220016_a(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 0.0F);
+                    shootProjectile(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 0.0F);
                 } else if (i == 1) {
-                    func_220016_a(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, -10.0F);
+                    shootProjectile(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, -10.0F);
                 } else if (i == 2) {
-                    func_220016_a(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 10.0F);
+                    shootProjectile(world, shooter, hand, crossbow, itemstack, afloat[i], flag, p_220014_4_, p_220014_5_, 10.0F);
                 }
             }
         }
 
-        func_220015_a(world, shooter, crossbow);
+        onCrossbowShot(world, shooter, crossbow);
     }
 
-    private static float[] func_220028_a(Random p_220028_0_) {
+    private static float[] getShotPitches(Random p_220028_0_) {
         boolean flag = p_220028_0_.nextBoolean();
-        return new float[]{1.0F, func_220032_a(flag), func_220032_a(!flag)};
+        return new float[]{1.0F, getRandomShotPitch(flag), getRandomShotPitch(!flag)};
     }
 
-    private static float func_220032_a(boolean p_220032_0_) {
+    private static float getRandomShotPitch(boolean p_220032_0_) {
         float f = p_220032_0_ ? 0.63F : 0.43F;
         return 1.0F / (random.nextFloat() * 0.5F + 1.8F) + f;
     }
 
-    private static void func_220015_a(World p_220015_0_, LivingEntity p_220015_1_, ItemStack p_220015_2_) {
+    private static void onCrossbowShot(World p_220015_0_, LivingEntity p_220015_1_, ItemStack p_220015_2_) {
         if (p_220015_1_ instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)p_220015_1_;
-            if (!p_220015_0_.isRemote) {
-                CriteriaTriggers.SHOT_CROSSBOW.test(serverplayerentity, p_220015_2_);
+            if (!p_220015_0_.isClientSide) {
+                CriteriaTriggers.SHOT_CROSSBOW.trigger(serverplayerentity, p_220015_2_);
             }
 
-            serverplayerentity.addStat(Stats.ITEM_USED.get(p_220015_2_.getItem()));
+            serverplayerentity.awardStat(Stats.ITEM_USED.get(p_220015_2_.getItem()));
         }
 
         clearProjectiles(p_220015_2_);
     }
 
     @Override
-    public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
-        if (!worldIn.isRemote) {
-            int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
-            SoundEvent soundevent = this.func_220025_a(i);
-            SoundEvent soundevent1 = i == 0 ? SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE : null;
+    public void onUseTick(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
+        if (!worldIn.isClientSide) {
+            int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+            SoundEvent soundevent = this.getStartSound(i);
+            SoundEvent soundevent1 = i == 0 ? SoundEvents.CROSSBOW_LOADING_MIDDLE : null;
             float f = (float)(stack.getUseDuration() - count) / getChargeTime(stack);
             if (f < 0.2F) {
-                this.field_220034_c = false;
-                this.field_220035_d = false;
+                this.startSoundPlayed = false;
+                this.midLoadSoundPlayed = false;
             }
 
-            if (f >= 0.2F && !this.field_220034_c) {
-                this.field_220034_c = true;
-                worldIn.playSound(null, livingEntityIn.getPosX(), livingEntityIn.getPosY(), livingEntityIn.getPosZ(), soundevent, SoundCategory.PLAYERS, 0.5F, 1.0F);
+            if (f >= 0.2F && !this.startSoundPlayed) {
+                this.startSoundPlayed = true;
+                worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), soundevent, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
 
-            if (f >= 0.5F && soundevent1 != null && !this.field_220035_d) {
-                this.field_220035_d = true;
-                worldIn.playSound(null, livingEntityIn.getPosX(), livingEntityIn.getPosY(), livingEntityIn.getPosZ(), soundevent1, SoundCategory.PLAYERS, 0.5F, 1.0F);
+            if (f >= 0.5F && soundevent1 != null && !this.midLoadSoundPlayed) {
+                this.midLoadSoundPlayed = true;
+                worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), soundevent1, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
         }
 
@@ -358,12 +358,12 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     public static int getChargeTime(ItemStack stack) {
         float baseTime = 25 / GearData.getStat(stack, ItemStats.RANGED_SPEED);
-        int quickCharge = EnchantmentHelper.getEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+        int quickCharge = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
         return Math.round(MathHelper.clamp(baseTime - 5 * quickCharge, MIN_CHARGE_TIME, MAX_CHARGE_TIME));
     }
 
-    private static float func_220013_l(ItemStack stack) {
-        return stack.getItem() instanceof CoreCrossbow && hasChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
+    private static float getShootingPower(ItemStack stack) {
+        return stack.getItem() instanceof CoreCrossbow && containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
     }
 
     //endregion
@@ -371,8 +371,8 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -382,7 +382,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -392,7 +392,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -417,12 +417,12 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 

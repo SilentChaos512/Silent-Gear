@@ -67,15 +67,15 @@ public final class ModContainers {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
-        ScreenManager.registerFactory(MATERIAL_GRADER.get(), GraderScreen::new);
-        ScreenManager.registerFactory(METAL_ALLOYER.get(), MetalAlloyerScreen::new);
-        ScreenManager.registerFactory(METAL_PRESS.get(), MetalPressScreen::new);
-        ScreenManager.registerFactory(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
-        ScreenManager.registerFactory(REFABRICATOR.get(), RefabricatorScreen::new);
-        ScreenManager.registerFactory(SALVAGER.get(), SalvagerScreen::new);
-        ScreenManager.registerFactory(STARLIGHT_CHARGER.get(), ChargerScreen::new);
+        ScreenManager.register(MATERIAL_GRADER.get(), GraderScreen::new);
+        ScreenManager.register(METAL_ALLOYER.get(), MetalAlloyerScreen::new);
+        ScreenManager.register(METAL_PRESS.get(), MetalPressScreen::new);
+        ScreenManager.register(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
+        ScreenManager.register(REFABRICATOR.get(), RefabricatorScreen::new);
+        ScreenManager.register(SALVAGER.get(), SalvagerScreen::new);
+        ScreenManager.register(STARLIGHT_CHARGER.get(), ChargerScreen::new);
 
-        ScreenManager.registerFactory(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
+        ScreenManager.register(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
     }
 
     private static <T extends Container> RegistryObject<ContainerType<T>> register(String name, IContainerFactory<T> factory) {

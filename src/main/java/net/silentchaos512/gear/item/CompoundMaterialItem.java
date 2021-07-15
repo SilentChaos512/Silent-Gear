@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     public CompoundMaterialItem(Properties properties) {
         super(properties);
@@ -42,7 +44,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
         if (!listNbt.isEmpty()) {
             for (INBT nbt : listNbt) {
-                IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getString()));
+                IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getAsString()));
                 if (mat != null) {
                     ret.add(MaterialInstance.of(mat));
                 }
@@ -81,7 +83,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
         if (!listNbt.isEmpty()) {
             INBT nbt = listNbt.get(0);
-            ResourceLocation id = ResourceLocation.tryCreate(nbt.getString());
+            ResourceLocation id = ResourceLocation.tryParse(nbt.getAsString());
             if (id != null) {
                 IMaterial material = MaterialManager.get(id);
                 if (material != null) {
@@ -124,14 +126,14 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         IMaterialInstance material = getPrimaryMaterial(stack);
         ITextComponent text = material != null ? material.getDisplayName(PartType.MAIN) : TextUtil.misc("unknown");
-        return new TranslationTextComponent(this.getTranslationKey(), text);
+        return new TranslationTextComponent(this.getDescriptionId(), text);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         TextUtil.addWipText(tooltip);
 
         Collection<IMaterialInstance> materials = getSubMaterials(stack);
@@ -139,14 +141,14 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         TextListBuilder statsBuilder = new TextListBuilder();
         for (IMaterialInstance material : materials) {
             int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
-            statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN).deepCopy(), nameColor));
+            statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN).copy(), nameColor));
         }
         tooltip.addAll(statsBuilder.build());
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
             items.add(create(MaterialList.of(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), 1));
         }
     }

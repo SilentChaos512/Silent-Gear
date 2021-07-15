@@ -40,7 +40,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
 
     @SuppressWarnings("OverlyLongMethod")
     @Override
-    public void registerTags() {
+    public void addTags() {
         // Forge
         copy(ModTags.Blocks.ORES_BORT, ModTags.Items.ORES_BORT);
         copy(ModTags.Blocks.ORES_CRIMSON_IRON, ModTags.Items.ORES_CRIMSON_IRON);
@@ -207,7 +207,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
                 .forEach(item -> blueprints.put(item.getItemTag().getName(), item));
         TagsProvider.Builder<Item> blueprintsBuilder = getBuilder(ModTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
-            ITag.INamedTag<Item> tag = ItemTags.makeWrapperTag(tagId.toString());
+            ITag.INamedTag<Item> tag = ItemTags.bind(tagId.toString());
             getBuilder(tag).add(blueprints.get(tagId).toArray(new Item[0]));
             blueprintsBuilder.addTag(tag);
         });
@@ -220,7 +220,7 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
     }
 
     private ITag.INamedTag<Item> makeWrapper(String namespace, String path) {
-        return ItemTags.makeWrapperTag(new ResourceLocation(namespace, path).toString());
+        return ItemTags.bind(new ResourceLocation(namespace, path).toString());
     }
 
     private void builder(ITag.INamedTag<Item> tag, IItemProvider... items) {
@@ -228,6 +228,6 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
     }
 
     protected TagsProvider.Builder<Item> getBuilder(ITag.INamedTag<Item> tag) {
-        return getOrCreateBuilder(tag);
+        return tag(tag);
     }
 }

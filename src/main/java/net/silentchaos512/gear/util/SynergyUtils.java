@@ -80,7 +80,7 @@ public final class SynergyUtils {
 
     public static ITextComponent getDisplayText(float synergy) {
         TextFormatting color = synergy < 1 ? TextFormatting.RED : synergy > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
-        ITextComponent value = new StringTextComponent(Math.round(100 * synergy) + "%").mergeStyle(color);
+        ITextComponent value = new StringTextComponent(Math.round(100 * synergy) + "%").withStyle(color);
         return TextUtil.translate("misc", "synergy", value);
     }
 

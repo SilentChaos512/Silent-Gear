@@ -25,7 +25,7 @@ public class BonusDropsTraitLootModifier extends LootModifier {
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         List<ItemStack> ret = new ArrayList<>(generatedLoot);
-        ItemStack tool = context.get(LootParameters.TOOL);
+        ItemStack tool = context.getParamOrNull(LootParameters.TOOL);
 
         if (tool != null && GearHelper.isGear(tool)) {
             //noinspection OverlyLongLambda

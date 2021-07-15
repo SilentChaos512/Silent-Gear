@@ -106,7 +106,7 @@ public class AttributeTrait extends SimpleTrait {
 
         for (int typeIndex = 0; typeIndex < gearTypeCount; ++typeIndex) {
             List<ModifierData> list = new ArrayList<>();
-            String gearType = buffer.readString();
+            String gearType = buffer.readUtf();
             int dataCount = buffer.readByte();
 
             for (int dataIndex = 0; dataIndex < dataCount; ++dataIndex) {
@@ -120,7 +120,7 @@ public class AttributeTrait extends SimpleTrait {
     private static void writeBuffer(AttributeTrait trait, PacketBuffer buffer) {
         buffer.writeByte(trait.modifiers.size());
         for (Map.Entry<String, List<ModifierData>> entry : trait.modifiers.entrySet()) {
-            buffer.writeString(entry.getKey());
+            buffer.writeUtf(entry.getKey());
             buffer.writeByte(entry.getValue().size());
 
             for (ModifierData data : entry.getValue()) {
@@ -164,7 +164,7 @@ public class AttributeTrait extends SimpleTrait {
             JsonObject json = new JsonObject();
 
             json.addProperty("attribute", name.toString());
-            json.addProperty("operation", operation.getId());
+            json.addProperty("operation", operation.toValue());
 
             JsonArray array = new JsonArray();
             for (float f : this.values) {
@@ -181,11 +181,11 @@ public class AttributeTrait extends SimpleTrait {
             if (!json.has("attribute")) {
                 throw new JsonParseException("attribute element not found, should be string");
             }
-            ret.name = new ResourceLocation(JSONUtils.getString(json, "attribute"));
+            ret.name = new ResourceLocation(JSONUtils.getAsString(json, "attribute"));
 
             JsonElement element = json.get("value");
             if (element.isJsonPrimitive()) {
-                ret.values = new float[]{JSONUtils.getFloat(json, "value")};
+                ret.values = new float[]{JSONUtils.getAsFloat(json, "value")};
             } else if (element.isJsonArray()) {
                 JsonArray array = element.getAsJsonArray();
                 ret.values = new float[array.size()];
@@ -196,7 +196,7 @@ public class AttributeTrait extends SimpleTrait {
                 throw new JsonParseException("value element not found, should be either float or array");
             }
 
-            ret.operation = AttributeModifier.Operation.byId(JSONUtils.getInt(json, "operation", 0));
+            ret.operation = AttributeModifier.Operation.fromValue(JSONUtils.getAsInt(json, "operation", 0));
 
             return ret;
         }
@@ -208,7 +208,7 @@ public class AttributeTrait extends SimpleTrait {
             for (int i = 0; i < ret.values.length; ++i) {
                 ret.values[i] = buffer.readFloat();
             }
-            ret.operation = buffer.readEnumValue(AttributeModifier.Operation.class);
+            ret.operation = buffer.readEnum(AttributeModifier.Operation.class);
             return ret;
         }
 
@@ -218,7 +218,7 @@ public class AttributeTrait extends SimpleTrait {
             for (float f : values) {
                 buffer.writeFloat(f);
             }
-            buffer.writeEnumValue(operation);
+            buffer.writeEnum(operation);
         }
 
         @Nullable

@@ -285,9 +285,9 @@ public class StatInstance {
                 return result;
             } else {
                 // Classic format
-                float value = JSONUtils.getFloat(jsonObj, "value", 0f);
+                float value = JSONUtils.getAsFloat(jsonObj, "value", 0f);
                 Operation op = jsonObj.has("op")
-                        ? Operation.byName(JSONUtils.getString(jsonObj, "op"))
+                        ? Operation.byName(JSONUtils.getAsString(jsonObj, "op"))
                         : defaultOp;
                 return new StatInstance(value, op, key);
             }
@@ -314,12 +314,12 @@ public class StatInstance {
 
     public static StatInstance read(@Nullable StatGearKey key, PacketBuffer buffer) {
         float value = buffer.readFloat();
-        Operation op = buffer.readEnumValue(Operation.class);
+        Operation op = buffer.readEnum(Operation.class);
         return new StatInstance(value, op, key != null ? key : DEFAULT_KEY);
     }
 
     public void write(PacketBuffer buffer) {
         buffer.writeFloat(this.value);
-        buffer.writeEnumValue(this.op);
+        buffer.writeEnum(this.op);
     }
 }

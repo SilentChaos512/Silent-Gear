@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.item.Item.Properties;
+
 public enum CraftingItems implements IItemProvider {
     BLUEPRINT_PAPER,
     TEMPLATE_BOARD,
@@ -118,14 +120,14 @@ public enum CraftingItems implements IItemProvider {
 
     private static final class ItemInternal extends Item {
         ItemInternal() {
-            super(new Properties().group(SilentGear.ITEM_GROUP));
+            super(new Properties().tab(SilentGear.ITEM_GROUP));
         }
 
         @Override
-        public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-            String descKey = this.getTranslationKey() + ".desc";
-            if (I18n.hasKey(descKey)) {
-                tooltip.add(new TranslationTextComponent(descKey).mergeStyle(TextFormatting.ITALIC));
+        public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+            String descKey = this.getDescriptionId() + ".desc";
+            if (I18n.exists(descKey)) {
+                tooltip.add(new TranslationTextComponent(descKey).withStyle(TextFormatting.ITALIC));
             }
         }
 

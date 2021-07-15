@@ -24,7 +24,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public List<ItemStack> getPossibleResults(IInventory inv) {
-        ItemStack input = inv.getStackInSlot(0);
+        ItemStack input = inv.getItem(0);
         List<ItemStack> ret = new ArrayList<>();
 
         PartDataList parts = GearData.getConstructionParts(input);
@@ -42,23 +42,23 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GearSalvagingRecipe> {
         @Override
-        public GearSalvagingRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public GearSalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             GearSalvagingRecipe recipe = new GearSalvagingRecipe(recipeId);
-            recipe.ingredient = Ingredient.deserialize(json.get("ingredient"));
+            recipe.ingredient = Ingredient.fromJson(json.get("ingredient"));
             return recipe;
         }
 
         @Nullable
         @Override
-        public GearSalvagingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public GearSalvagingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             GearSalvagingRecipe recipe = new GearSalvagingRecipe(recipeId);
-            recipe.ingredient = Ingredient.read(buffer);
+            recipe.ingredient = Ingredient.fromNetwork(buffer);
             return recipe;
         }
 
         @Override
-        public void write(PacketBuffer buffer, GearSalvagingRecipe recipe) {
-            recipe.ingredient.write(buffer);
+        public void toNetwork(PacketBuffer buffer, GearSalvagingRecipe recipe) {
+            recipe.ingredient.toNetwork(buffer);
         }
     }
 }

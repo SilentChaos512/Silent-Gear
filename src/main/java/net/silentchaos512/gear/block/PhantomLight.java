@@ -43,33 +43,33 @@ import java.util.Random;
 
 public class PhantomLight extends Block implements IWaterLoggable {
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    private static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(5, 5, 5, 11, 11, 11);
+    private static final VoxelShape VOXEL_SHAPE = Block.box(5, 5, 5, 11, 11, 11);
 
     public PhantomLight() {
-        super(Properties.create(Material.MISCELLANEOUS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.5f, 6000000.0f)
-                .setLightLevel(state -> 15)
+        super(Properties.of(Material.DECORATION)
+                .noCollission()
+                .strength(0.5f, 6000000.0f)
+                .lightLevel(state -> 15)
         );
-        setDefaultState(getDefaultState().with(WATERLOGGED, false));
+        registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
-        return getDefaultState().with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        return defaultBlockState().setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
     @SuppressWarnings("deprecation")
@@ -80,7 +80,7 @@ public class PhantomLight extends Block implements IWaterLoggable {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
+    public boolean canBeReplaced(BlockState state, BlockItemUseContext useContext) {
         return true;
     }
 
@@ -91,7 +91,7 @@ public class PhantomLight extends Block implements IWaterLoggable {
 
     @SuppressWarnings("deprecation")
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.INVISIBLE;
     }
 

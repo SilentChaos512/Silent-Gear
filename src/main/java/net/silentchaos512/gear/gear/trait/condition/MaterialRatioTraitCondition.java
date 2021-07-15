@@ -67,7 +67,7 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
 
         @Override
         public MaterialRatioTraitCondition deserialize(JsonObject json) {
-            return new MaterialRatioTraitCondition(JSONUtils.getFloat(json, "ratio"));
+            return new MaterialRatioTraitCondition(JSONUtils.getAsFloat(json, "ratio"));
         }
 
         @Override

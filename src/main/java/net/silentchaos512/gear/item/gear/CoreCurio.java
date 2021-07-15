@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import net.minecraft.item.Item.Properties;
+
 public class CoreCurio extends Item implements ICoreItem {
     private static final Collection<PartType> REQUIRED_PARTS = ImmutableList.of(
             PartType.MAIN,
@@ -103,9 +105,9 @@ public class CoreCurio extends Item implements ICoreItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (!ModList.get().isLoaded(Const.CURIOS)) {
-            tooltip.add(TextUtil.misc("curiosNotInstalled").mergeStyle(TextFormatting.RED));
+            tooltip.add(TextUtil.misc("curiosNotInstalled").withStyle(TextFormatting.RED));
         }
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
@@ -116,7 +118,7 @@ public class CoreCurio extends Item implements ICoreItem {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -126,7 +128,7 @@ public class CoreCurio extends Item implements ICoreItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -151,12 +153,12 @@ public class CoreCurio extends Item implements ICoreItem {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 

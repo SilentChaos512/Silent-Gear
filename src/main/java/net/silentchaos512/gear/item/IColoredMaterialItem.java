@@ -19,7 +19,7 @@ public interface IColoredMaterialItem {
     default IMaterialInstance getPrimarySubMaterial(ItemStack stack) {
         ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
         for (INBT nbt : listNbt) {
-            IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getString()));
+            IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getAsString()));
             if (mat != null) {
                 return MaterialInstance.of(mat);
             }

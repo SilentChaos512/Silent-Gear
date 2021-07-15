@@ -33,12 +33,12 @@ public final class ServerEvents {
 
         // Send crafting items packets to correct for registry changes
         SilentGear.LOGGER.debug("Sending materials crafting item correction packet");
-        Network.channel.sendTo(new SyncMaterialCraftingItemsPacket(MaterialManager.getValues()), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        Network.channel.sendTo(new SyncMaterialCraftingItemsPacket(MaterialManager.getValues()), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
-        Network.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        Network.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 
-        TraitManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.DUMMY_UUID));
-        MaterialManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.DUMMY_UUID));
-        PartManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.DUMMY_UUID));
+        TraitManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.NIL_UUID));
+        MaterialManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.NIL_UUID));
+        PartManager.getErrorMessages(playerMP).forEach(text -> playerMP.sendMessage(text, Util.NIL_UUID));
     }
 }

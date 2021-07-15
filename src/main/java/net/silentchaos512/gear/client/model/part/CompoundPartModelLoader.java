@@ -31,11 +31,11 @@ public class CompoundPartModelLoader implements IModelLoader<CompoundPartModel> 
     public CompoundPartModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
         ItemCameraTransforms cameraTransforms = deserializationContext.deserialize(modelContents.get("display"), ItemCameraTransforms.class);
         if (cameraTransforms == null) {
-            cameraTransforms = ItemCameraTransforms.DEFAULT;
+            cameraTransforms = ItemCameraTransforms.NO_TRANSFORMS;
         }
         GearType gearType = GearType.fromJson(modelContents, "gear_type");
         PartType partType = PartType.fromJson(modelContents, "part_type");
-        String subPath = JSONUtils.getString(modelContents, "texture_path", gearType.getName());
+        String subPath = JSONUtils.getAsString(modelContents, "texture_path", gearType.getName());
 
         List<ResourceLocation> extras = new ArrayList<>();
         if (modelContents.has("extra_layers") && modelContents.get("extra_layers").isJsonArray()) {

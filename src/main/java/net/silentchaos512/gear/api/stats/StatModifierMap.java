@@ -43,7 +43,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
 
         for (StatInstance inst : toSort) {
             if (!result.getSiblings().isEmpty()) {
-                result.appendString(", ");
+                result.append(", ");
             }
             result.append(inst.getFormattedText(stat, inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces), addModColors));
         }
@@ -230,7 +230,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         } else if (json.isJsonArray()) {
             for (JsonElement element : json.getAsJsonArray()) {
                 JsonObject jsonObj = element.getAsJsonObject();
-                StatGearKey key = StatGearKey.read(JSONUtils.getString(jsonObj, "name"));
+                StatGearKey key = StatGearKey.read(JSONUtils.getAsString(jsonObj, "name"));
                 if (key != null) {
                     map.put(key, StatInstance.read(key, element));
                 }

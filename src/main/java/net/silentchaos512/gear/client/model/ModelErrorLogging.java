@@ -17,7 +17,7 @@ public final class ModelErrorLogging {
             //noinspection ConstantConditions
             if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null) {
                 ClientPlayerEntity player = Minecraft.getInstance().player;
-                player.sendChatMessage(String.format("Error while rendering %s, please test without Optifine before reporting", modelType));
+                player.chat(String.format("Error while rendering %s, please test without Optifine before reporting", modelType));
             }
         }
 

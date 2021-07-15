@@ -33,6 +33,8 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class CompoundPartItem extends Item {
     private static final String NBT_CRAFTED_COUNT = "CraftedCount";
     private static final String NBT_MATERIALS = "Materials";
@@ -141,19 +143,19 @@ public class CompoundPartItem extends Item {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         PartData part = PartData.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
         if (part != null && material != null) {
-            TranslationTextComponent nameText = new TranslationTextComponent(this.getTranslationKey() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
+            TranslationTextComponent nameText = new TranslationTextComponent(this.getDescriptionId() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
             int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
             return TextUtil.withColor(nameText, nameColor);
         }
-        return super.getDisplayName(stack);
+        return super.getName(stack);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         PartData part = PartData.from(stack);
         if (part != null) {
             float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
@@ -169,8 +171,8 @@ public class CompoundPartItem extends Item {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (!isInGroup(group) || this == ModItems.ARMOR_BODY.get() || this == ModItems.SHIELD_PLATE.get()) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (!allowdedIn(group) || this == ModItems.ARMOR_BODY.get() || this == ModItems.SHIELD_PLATE.get()) {
             return;
         }
         items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));

@@ -49,8 +49,8 @@ public class FillRepairKitRecipe extends SpecialRecipe {
         boolean kitFound = false;
         int matsFound = 0;
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof RepairKitItem) {
                     if (kitFound) {
@@ -69,7 +69,7 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class).copy();
         repairKit.setCount(1);
@@ -104,7 +104,7 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 
@@ -120,16 +120,16 @@ public class FillRepairKitRecipe extends SpecialRecipe {
 
     public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FillRepairKitRecipe> {
         @Override
-        public FillRepairKitRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public FillRepairKitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new FillRepairKitRecipe(recipeId);
         }
 
         @Override
-        public FillRepairKitRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public FillRepairKitRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             return new FillRepairKitRecipe(recipeId);
         }
 
         @Override
-        public void write(PacketBuffer buffer, FillRepairKitRecipe recipe) {}
+        public void toNetwork(PacketBuffer buffer, FillRepairKitRecipe recipe) {}
     }
 }

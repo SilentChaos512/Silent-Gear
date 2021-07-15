@@ -44,7 +44,7 @@ public class CoreSlingshot extends CoreBow {
     }
 
     @Override
-    public Predicate<ItemStack> getInventoryAmmoPredicate() {
+    public Predicate<ItemStack> getAllSupportedProjectiles() {
         return stack -> stack.getItem() instanceof ISlingshotAmmo;
     }
 
@@ -77,15 +77,15 @@ public class CoreSlingshot extends CoreBow {
     }*/
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
-        if (worldIn.isRemote) {
+    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+        if (worldIn.isClientSide) {
 //            ToolModel.bowPull.remove(GearData.getUUID(stack));
         }
 
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityLiving;
-            boolean infiniteAmmo = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-            ItemStack ammoItem = player.findAmmo(stack);
+            boolean infiniteAmmo = player.abilities.instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
+            ItemStack ammoItem = player.getProjectile(stack);
 
             int i = this.getUseDuration(stack) - timeLeft;
             i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, player, i, !ammoItem.isEmpty() || infiniteAmmo);
@@ -96,49 +96,49 @@ public class CoreSlingshot extends CoreBow {
                     ammoItem = new ItemStack(ModItems.PEBBLE);
                 }
 
-                float f = getArrowVelocity(i);
+                float f = getPowerForTime(i);
                 if (!((double) f < 0.1D)) {
-                    boolean flag1 = player.abilities.isCreativeMode || (ammoItem.getItem() instanceof SlingshotAmmoItem && ((SlingshotAmmoItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
-                    if (!worldIn.isRemote) {
+                    boolean flag1 = player.abilities.instabuild || (ammoItem.getItem() instanceof SlingshotAmmoItem && ((SlingshotAmmoItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
+                    if (!worldIn.isClientSide) {
                         SlingshotAmmoItem slingshotAmmoItem = (SlingshotAmmoItem) (ammoItem.getItem() instanceof SlingshotAmmoItem ? ammoItem.getItem() : ModItems.PEBBLE.get());
                         AbstractArrowEntity shot = slingshotAmmoItem.createArrow(worldIn, ammoItem, player);
-                        shot.setDamage(shot.getDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
-                        shot.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+                        shot.setBaseDamage(shot.getBaseDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
+                        shot.shootFromRotation(player, player.xRot, player.yRot, 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1.0f)) {
-                            shot.setIsCritical(true);
+                            shot.setCritArrow(true);
                         }
 
-                        int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+                        int powerLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
                         if (powerLevel > 0) {
-                            shot.setDamage(shot.getDamage() + (double) powerLevel * POWER_SCALE + POWER_SCALE);
+                            shot.setBaseDamage(shot.getBaseDamage() + (double) powerLevel * POWER_SCALE + POWER_SCALE);
                         }
 
-                        int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+                        int punchLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
                         if (punchLevel > 0) {
-                            shot.setKnockbackStrength(punchLevel);
+                            shot.setKnockback(punchLevel);
                         }
 
-                        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
-                            shot.setFire(100);
+                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0) {
+                            shot.setSecondsOnFire(100);
                         }
 
-                        stack.damageItem(1, player, (p) -> p.sendBreakAnimation(p.getActiveHand()));
-                        if (flag1 || player.abilities.isCreativeMode && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
-                            shot.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                        stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
+                        if (flag1 || player.abilities.instabuild && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
+                            shot.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                         }
 
                         EntityHelper.spawnWithClientPacket(worldIn, shot);
                     }
 
-                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    if (!flag1 && !player.abilities.isCreativeMode) {
+                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    if (!flag1 && !player.abilities.instabuild) {
                         ammoItem.shrink(1);
                         if (ammoItem.isEmpty()) {
-                            player.inventory.deleteStack(ammoItem);
+                            player.inventory.removeItem(ammoItem);
                         }
                     }
 
-                    player.addStat(Stats.ITEM_USED.get(this));
+                    player.awardStat(Stats.ITEM_USED.get(this));
                 }
             }
         }

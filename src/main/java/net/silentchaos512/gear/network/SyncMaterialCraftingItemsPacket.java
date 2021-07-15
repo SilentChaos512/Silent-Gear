@@ -51,7 +51,7 @@ public class SyncMaterialCraftingItemsPacket {
         int count = buffer.readVarInt();
 
         for (int i = 0; i < count; ++i) {
-            packet.craftingItems.put(buffer.readResourceLocation(), Ingredient.read(buffer));
+            packet.craftingItems.put(buffer.readResourceLocation(), Ingredient.fromNetwork(buffer));
         }
 
         int subCount = buffer.readVarInt();
@@ -62,7 +62,7 @@ public class SyncMaterialCraftingItemsPacket {
 
             for (int j = 0; j < mapCount; ++j) {
                 PartType type = PartType.get(buffer.readResourceLocation());
-                Ingredient ingredient = Ingredient.read(buffer);
+                Ingredient ingredient = Ingredient.fromNetwork(buffer);
                 map.put(type, ingredient);
             }
 
@@ -76,7 +76,7 @@ public class SyncMaterialCraftingItemsPacket {
         buffer.writeVarInt(this.craftingItems.size());
         this.craftingItems.forEach((id, ingredient) -> {
             buffer.writeResourceLocation(id);
-            ingredient.write(buffer);
+            ingredient.toNetwork(buffer);
         });
 
         buffer.writeVarInt(this.partSubs.size());
@@ -87,7 +87,7 @@ public class SyncMaterialCraftingItemsPacket {
 
             map.forEach((type, ingredient) -> {
                 buffer.writeResourceLocation(type.getName());
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             });
         }
     }

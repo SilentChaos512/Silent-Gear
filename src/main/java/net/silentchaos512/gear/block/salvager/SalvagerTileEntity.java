@@ -65,7 +65,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 1;
         }
     };
@@ -76,20 +76,20 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
 
     @Nullable
     private SalvagingRecipe getRecipe() {
-        if (world == null) return null;
-        return world.getRecipeManager().getRecipe(ModRecipes.SALVAGING_TYPE, this, world).orElse(null);
+        if (level == null) return null;
+        return level.getRecipeManager().getRecipeFor(ModRecipes.SALVAGING_TYPE, this, level).orElse(null);
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
     @Override
     public void tick() {
-        if (world == null || world.isRemote) return;
+        if (level == null || level.isClientSide) return;
 
-        ItemStack input = getStackInSlot(0);
+        ItemStack input = getItem(0);
         SalvagingRecipe recipe = getRecipe();
         if (recipe != null) {
             if (progress < BASE_WORK_TIME) {
@@ -100,7 +100,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
                 for (ItemStack stack : getSalvagedPartsWithChance(recipe, input)) {
                     int slot = getFreeOutputSlot();
                     if (slot > 0) {
-                        setInventorySlotContents(slot, stack);
+                        setItem(slot, stack);
                     } else {
                         SilentGear.LOGGER.warn("Item lost in salvager: {}", stack);
                     }
@@ -109,7 +109,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
                 progress = 0;
                 input.shrink(1);
                 if (input.isEmpty()) {
-                    setInventorySlotContents(0, ItemStack.EMPTY);
+                    setItem(0, ItemStack.EMPTY);
                 }
             }
         } else {
@@ -149,13 +149,13 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         if (maxDamage == 0) {
             return min;
         }
-        double ratio = (double) stack.getDamage() / maxDamage;
+        double ratio = (double) stack.getDamageValue() / maxDamage;
         return min + ratio * (Config.Common.salvagerMaxLossRate.get() - min);
     }
 
     private int getFreeOutputSlot() {
         for (int slot : SLOTS_OUTPUT) {
-            if (getStackInSlot(slot).isEmpty()) {
+            if (getItem(slot).isEmpty()) {
                 return slot;
             }
         }
@@ -164,7 +164,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
 
     private boolean areAllOutputSlotsFree() {
         for (int slot : SLOTS_OUTPUT) {
-            if (!getStackInSlot(slot).isEmpty()) {
+            if (!getItem(slot).isEmpty()) {
                 return false;
             }
         }
@@ -192,24 +192,24 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         if (stack.isEmpty() || isOutputSlot(index))
             return false;
 
-        ItemStack current = getStackInSlot(index);
-        if (!current.isEmpty() && !current.isItemEqual(stack))
+        ItemStack current = getItem(index);
+        if (!current.isEmpty() && !current.sameItem(stack))
             return false;
 
-        return isInputSlot(index) || super.isItemValidForSlot(index, stack);
+        return isInputSlot(index) || super.canPlaceItem(index, stack);
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return isOutputSlot(index);
     }
 

@@ -51,7 +51,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return ItemStack.EMPTY;
@@ -90,13 +90,13 @@ public class GearPartSwapRecipe extends SpecialRecipe {
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         ItemStack gear = StackList.from(inv).uniqueMatch(s -> s.getItem() instanceof ICoreItem);
         PartDataList oldParts = GearData.getConstructionParts(gear);
         Map<PartType, Integer> removedCount = new HashMap<>();
 
         for (int i = 0; i < list.size(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+            ItemStack stack = inv.getItem(i);
 
             if (stack.getItem() instanceof ICoreItem) {
                 list.set(i, ItemStack.EMPTY);
@@ -125,7 +125,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 

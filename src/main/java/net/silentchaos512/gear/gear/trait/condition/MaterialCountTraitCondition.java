@@ -64,7 +64,7 @@ public class MaterialCountTraitCondition implements ITraitCondition {
 
         @Override
         public MaterialCountTraitCondition deserialize(JsonObject json) {
-            return new MaterialCountTraitCondition(JSONUtils.getInt(json, "count"));
+            return new MaterialCountTraitCondition(JSONUtils.getAsInt(json, "count"));
         }
 
         @Override

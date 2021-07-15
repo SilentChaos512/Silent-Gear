@@ -39,7 +39,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
                     GearData.addOrReplacePart(result, Objects.requireNonNull(PartData.from(partItem)));
                 });
 
-                result.setDamage(0);
+                result.setDamageValue(0);
                 GearData.removeExcessParts(result, PartType.COATING);
                 GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer()); // Crafting player is always null?
                 return result;
@@ -55,23 +55,23 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CoatingSmithingRecipe> {
         @Override
-        public CoatingSmithingRecipe read(ResourceLocation recipeId, JsonObject json) {
-            ItemStack gearItem = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "gear"));
-            Ingredient upgradeItem = Ingredient.deserialize(JSONUtils.getJsonObject(json, "addition"));
+        public CoatingSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            ItemStack gearItem = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "gear"));
+            Ingredient upgradeItem = Ingredient.fromJson(JSONUtils.getAsJsonObject(json, "addition"));
             return new CoatingSmithingRecipe(recipeId, gearItem, upgradeItem);
         }
 
         @Override
-        public CoatingSmithingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            ItemStack itemstack = buffer.readItemStack();
-            Ingredient ingredient1 = Ingredient.read(buffer);
+        public CoatingSmithingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            ItemStack itemstack = buffer.readItem();
+            Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
             return new CoatingSmithingRecipe(recipeId, itemstack, ingredient1);
         }
 
         @Override
-        public void write(PacketBuffer buffer, CoatingSmithingRecipe recipe) {
-            buffer.writeItemStack(recipe.gearItem);
-            recipe.addition.write(buffer);
+        public void toNetwork(PacketBuffer buffer, CoatingSmithingRecipe recipe) {
+            buffer.writeItem(recipe.gearItem);
+            recipe.addition.toNetwork(buffer);
         }
     }
 }

@@ -75,7 +75,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 2;
         }
     };
@@ -92,8 +92,8 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
 
     @Nullable
     public R getRecipe() {
-        if (world == null) return null;
-        return world.getRecipeManager().getRecipe(getRecipeType(), this, world).orElse(null);
+        if (level == null) return null;
+        return level.getRecipeManager().getRecipeFor(getRecipeType(), this, level).orElse(null);
     }
 
     protected CompoundMaterialItem getOutputItem(MaterialList materials) {
@@ -102,35 +102,35 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
 
     protected ItemStack getWorkOutput(@Nullable R recipe, MaterialList materials) {
         if (recipe != null) {
-            return recipe.getCraftingResult(this);
+            return recipe.assemble(this);
         }
         return getOutputItem(materials).create(materials);
     }
 
     public int getInputSlotCount() {
-        return getSizeInventory() - 2;
+        return getContainerSize() - 2;
     }
 
     public int getOutputSlotIndex() {
-        return getSizeInventory() - 2;
+        return getContainerSize() - 2;
     }
 
     public int getOutputHintSlotIndex() {
-        return getSizeInventory() - 1;
+        return getContainerSize() - 1;
     }
 
     public ItemStack getHintStack() {
-        return getStackInSlot(getOutputHintSlotIndex());
+        return getItem(getOutputHintSlotIndex());
     }
 
     public void encodeExtraData(PacketBuffer buffer) {
         buffer.writeByte(this.items.size());
-        buffer.writeByte(this.fields.size());
+        buffer.writeByte(this.fields.getCount());
     }
 
     private boolean areInputsEmpty() {
         for (int i = 0; i < this.getInputSlotCount(); ++i) {
-            if (!getStackInSlot(i).isEmpty()) {
+            if (!getItem(i).isEmpty()) {
                 return false;
             }
         }
@@ -139,7 +139,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
 
     @Override
     public void tick() {
-        if (world == null || world.isRemote || areInputsEmpty()) {
+        if (level == null || level.isClientSide || areInputsEmpty()) {
             // No point in doing anything on the client or when input slots are empty
             updateOutputHint(ItemStack.EMPTY);
             return;
@@ -162,9 +162,9 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     private void doWork(@Nullable R recipe, MaterialList materials) {
-        assert world != null;
+        assert level != null;
 
-        ItemStack current = getStackInSlot(getOutputSlotIndex());
+        ItemStack current = getItem(getOutputSlotIndex());
         ItemStack output = getWorkOutput(recipe, materials);
 
         updateOutputHint(output);
@@ -184,7 +184,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
                 ++progress;
             }
 
-            if (progress >= WORK_TIME && !world.isRemote) {
+            if (progress >= WORK_TIME && !level.isClientSide) {
                 finishWork(recipe, materials, current);
             }
         } else {
@@ -193,28 +193,28 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     private void updateOutputHint(ItemStack hintStack) {
-        setInventorySlotContents(getOutputHintSlotIndex(), hintStack);
+        setItem(getOutputHintSlotIndex(), hintStack);
     }
 
     private void stopWork(boolean clearHintItem) {
         progress = 0;
 
         if (clearHintItem) {
-            setInventorySlotContents(getOutputHintSlotIndex(), ItemStack.EMPTY);
+            setItem(getOutputHintSlotIndex(), ItemStack.EMPTY);
         }
     }
 
     private void finishWork(@Nullable R recipe, MaterialList materials, ItemStack current) {
         progress = 0;
         for (int i = 0; i < getInputSlotCount(); ++i) {
-            decrStackSize(i, 1);
+            removeItem(i, 1);
         }
 
         ItemStack output = getWorkOutput(recipe, materials);
         if (!current.isEmpty()) {
             current.grow(output.getCount());
         } else {
-            setInventorySlotContents(getOutputSlotIndex(), output);
+            setItem(getOutputSlotIndex(), output);
         }
     }
 
@@ -248,7 +248,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         boolean allEmpty = true;
 
         for (int i = 0; i < getInputSlotCount(); ++i) {
-            ItemStack stack = getStackInSlot(i);
+            ItemStack stack = getItem(i);
             if (!stack.isEmpty()) {
                 allEmpty = false;
                 break;
@@ -262,7 +262,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         MaterialList ret = MaterialList.empty();
 
         for (int i = 0; i < getInputSlotCount(); ++i) {
-            ItemStack stack = getStackInSlot(i);
+            ItemStack stack = getItem(i);
             if (!stack.isEmpty()) {
                 MaterialInstance material = MaterialInstance.from(stack);
                 if (material != null && material.get().isSimple()) {
@@ -280,8 +280,8 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     public NonNullList<ItemStack> getItemsToDrop() {
         // Gets the items dropped when the block is broken. Excludes the "hint stack"
         NonNullList<ItemStack> ret = NonNullList.create();
-        for (int i = 0; i < this.getSizeInventory() - 1; ++i) {
-            ItemStack stack = getStackInSlot(i);
+        for (int i = 0; i < this.getContainerSize() - 1; ++i) {
+            ItemStack stack = getItem(i);
             if (!stack.isEmpty()) {
                 ret.add(stack);
             }
@@ -290,8 +290,8 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        super.setInventorySlotContents(index, stack);
+    public void setItem(int index, ItemStack stack) {
+        super.setItem(index, stack);
     }
 
     @Override
@@ -300,23 +300,23 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         return index < getInputSlotCount()/* && isSimpleMaterial(stack)*/;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return index == getOutputSlotIndex();
     }
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Util.makeTranslationKey("container", this.info.getBlock().getRegistryName()));
+        return new TranslationTextComponent(Util.makeDescriptionId("container", this.info.getBlock().getRegistryName()));
     }
 
     @Override
@@ -330,14 +330,14 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tags) {
-        super.read(state, tags);
+    public void load(BlockState state, CompoundNBT tags) {
+        super.load(state, tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tags) {
-        CompoundNBT compoundTag = super.write(tags);
+    public CompoundNBT save(CompoundNBT tags) {
+        CompoundNBT compoundTag = super.save(tags);
         SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
         return compoundTag;
     }
@@ -352,7 +352,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         super.onDataPacket(net, packet);
-        CompoundNBT tags = packet.getNbtCompound();
+        CompoundNBT tags = packet.getTag();
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 }

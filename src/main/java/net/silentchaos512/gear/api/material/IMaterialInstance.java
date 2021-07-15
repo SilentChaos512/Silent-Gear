@@ -149,7 +149,7 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
     String getModelKey();
 
     default IFormattableTextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
-        IFormattableTextComponent displayName = getDisplayName(partType, gear).deepCopy();
+        IFormattableTextComponent displayName = getDisplayName(partType, gear).copy();
         MaterialGrade grade = getGrade();
         if (grade != MaterialGrade.NONE) {
             displayName.append(TextUtil.translate("misc", "spaceBrackets", grade.getDisplayName()));

@@ -74,7 +74,7 @@ public class GearModelOverrideList extends ItemOverrideList {
 
     @Nullable
     @Override
-    public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
+    public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
         int animationFrame = getAnimationFrame(stack, worldIn, entityIn);
         CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
@@ -92,7 +92,7 @@ public class GearModelOverrideList extends ItemOverrideList {
     private IBakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
         boolean broken = GearHelper.isBroken(stack);
         if (isDebugLoggingEnabled()) {
-            SilentGear.LOGGER.info("getOverrideModel for {} ({})", stack.getDisplayName().getString(), broken ? "broken" : "normal");
+            SilentGear.LOGGER.info("getOverrideModel for {} ({})", stack.getHoverName().getString(), broken ? "broken" : "normal");
             SilentGear.LOGGER.info("- model key {}", key.data);
         }
         List<MaterialLayer> layers = new ArrayList<>();
@@ -185,8 +185,8 @@ public class GearModelOverrideList extends ItemOverrideList {
 
     private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
         // TODO: Maybe should add an ICoreItem method to get additional layers?
-        IItemPropertyGetter chargedProperty = ItemModelsProperties.func_239417_a_(stack.getItem(), new ResourceLocation("charged"));
-        IItemPropertyGetter fireworkProperty = ItemModelsProperties.func_239417_a_(stack.getItem(), new ResourceLocation("firework"));
+        IItemPropertyGetter chargedProperty = ItemModelsProperties.getProperty(stack.getItem(), new ResourceLocation("charged"));
+        IItemPropertyGetter fireworkProperty = ItemModelsProperties.getProperty(stack.getItem(), new ResourceLocation("firework"));
 
         if (chargedProperty != null && fireworkProperty != null) {
             boolean charged = chargedProperty.call(stack, world, entity) > 0;

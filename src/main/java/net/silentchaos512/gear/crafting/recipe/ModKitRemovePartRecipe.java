@@ -27,8 +27,8 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
         boolean foundModKit = false;
         PartType type = PartType.NONE;
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 //noinspection ChainOfInstanceofChecks
                 if (gear.isEmpty() && stack.getItem() instanceof ICoreItem) {
@@ -49,7 +49,7 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         ItemStack modKit = list.uniqueOfType(ModKitItem.class);
@@ -65,20 +65,20 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         ItemStack gear = StackList.from(inv).uniqueOfType(ICoreItem.class);
         ItemStack modKit = StackList.from(inv).uniqueOfType(ModKitItem.class);
         PartType type = ModKitItem.getSelectedType(modKit);
         PartData part = GearData.getPartOfType(gear, type);
 
         for (int i = 0; i < list.size(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+            ItemStack stack = inv.getItem(i);
 
             if (stack.getItem() instanceof ICoreItem) {
                 list.set(i, part != null ? part.getItem() : ItemStack.EMPTY);

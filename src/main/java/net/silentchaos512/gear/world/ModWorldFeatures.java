@@ -40,10 +40,10 @@ public final class ModWorldFeatures {
     public static final Lazy<BaseTreeFeatureConfig> NETHERWOOD_TREE_CONFIG = Lazy.of(() -> new BaseTreeFeatureConfig.Builder(
             new SimpleBlockStateProvider(ModBlocks.NETHERWOOD_LOG.asBlockState()),
             new SimpleBlockStateProvider(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
-            new AcaciaFoliagePlacer(FeatureSpread.func_242252_a(2), FeatureSpread.func_242252_a(0)),
+            new AcaciaFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0)),
             new ForkyTrunkPlacer(5, 2, 2),
             new TwoLayerFeature(1, 0, 2))
-            .setIgnoreVines()
+            .ignoreVines()
             .build());
 
     public static final Lazy<NetherwoodTreeFeature> NETHERWOOD_TREE_FEATURE = Lazy.of(() -> new NetherwoodTreeFeature(BaseTreeFeatureConfig.CODEC));
@@ -55,58 +55,58 @@ public final class ModWorldFeatures {
         static final Map<String, Lazy<ConfiguredFeature<?, ?>>> TO_REGISTER = new LinkedHashMap<>();
 
         public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = createLazy("bort_ore_veins", () -> Feature.EMERALD_ORE
-                .withConfiguration(new ReplaceBlockConfig(Blocks.STONE.getDefaultState(), ModBlocks.BORT_ORE.asBlockState()))
-                .withPlacement(Placement.RANGE.configure(topSolidRange(4, 20)))
-                .square()
-                .func_242731_b(Config.Common.bortCount.get()));
+                .configured(new ReplaceBlockConfig(Blocks.STONE.defaultBlockState(), ModBlocks.BORT_ORE.asBlockState()))
+                .decorated(Placement.RANGE.configured(topSolidRange(4, 20)))
+                .squared()
+                .count(Config.Common.bortCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> CRIMSON_IRON_ORE_VEINS = createLazy("crimson_iron_ore_veins", () -> Feature.ORE
-                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
-                .square()
-                .func_242731_b(Config.Common.crimsonIronCount.get()));
+                .configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHER_ORE_REPLACEABLES, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
+                .decorated(Placement.RANGE.configured(topSolidRange(24, 120)))
+                .squared()
+                .count(Config.Common.crimsonIronCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> DOUBLE_CRIMSON_IRON_ORE_VEINS = createLazy("double_crimson_iron_ore_veins", () -> Feature.ORE
-                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .withPlacement(Placement.RANGE.configure(topSolidRange(24, 120)))
-                .square()
-                .func_242731_b(2 * Config.Common.crimsonIronCount.get()));
+                .configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHER_ORE_REPLACEABLES, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
+                .decorated(Placement.RANGE.configured(topSolidRange(24, 120)))
+                .squared()
+                .count(2 * Config.Common.crimsonIronCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> AZURE_SILVER_ORE_VEINS = createLazy("azure_silver_ore_veins", () -> Feature.ORE
-                .withConfiguration(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
-                .withPlacement(Placement.RANGE.configure(topSolidRange(16, 92)))
-                .square()
-                .func_242731_b(Config.Common.azureSilverCount.get()));
+                .configured(new OreFeatureConfig(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
+                .decorated(Placement.RANGE.configured(topSolidRange(16, 92)))
+                .squared()
+                .count(Config.Common.azureSilverCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLAX_PATCHES = createLazy("wild_flax_patches", () -> Feature.FLOWER
-                .withConfiguration(new BlockClusterFeatureConfig.Builder(
+                .configured(new BlockClusterFeatureConfig.Builder(
                         new SimpleBlockStateProvider(ModBlocks.WILD_FLAX_PLANT.asBlockState()),
-                        SimpleBlockPlacer.PLACER
+                        SimpleBlockPlacer.INSTANCE
                 ).tries(Config.Common.wildFlaxTryCount.get()).build())
-                .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
-                .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
-                .func_242731_b(Config.Common.wildFlaxPatchCount.get()));
+                .decorated(Features.Placements.ADD_32)
+                .decorated(Features.Placements.HEIGHTMAP_SQUARE)
+                .count(Config.Common.wildFlaxPatchCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLUFFY_PATCHES = createLazy("wild_fluffy_plant_patches", () -> Feature.FLOWER
-                .withConfiguration(new BlockClusterFeatureConfig.Builder(
+                .configured(new BlockClusterFeatureConfig.Builder(
                         new SimpleBlockStateProvider(ModBlocks.WILD_FLUFFY_PLANT.asBlockState()),
-                        SimpleBlockPlacer.PLACER
+                        SimpleBlockPlacer.INSTANCE
                 ).tries(Config.Common.wildFluffyTryCount.get()).build())
-                .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
-                .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
-                .func_242731_b(Config.Common.wildFluffyPatchCount.get()));
+                .decorated(Features.Placements.ADD_32)
+                .decorated(Features.Placements.HEIGHTMAP_SQUARE)
+                .count(Config.Common.wildFluffyPatchCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = createLazy("netherwood_trees", () -> Feature.RANDOM_SELECTOR
-                .withConfiguration(new MultipleRandomFeatureConfig(
+                .configured(new MultipleRandomFeatureConfig(
                         ImmutableList.of(
                                 NETHERWOOD_TREE_FEATURE.get()
-                                        .withConfiguration(NETHERWOOD_TREE_CONFIG.get())
-                                        .withChance(0.8F)
+                                        .configured(NETHERWOOD_TREE_CONFIG.get())
+                                        .weighted(0.8F)
                         ),
                         NETHERWOOD_TREE_FEATURE.get()
-                                .withConfiguration(NETHERWOOD_TREE_CONFIG.get())
+                                .configured(NETHERWOOD_TREE_CONFIG.get())
                 ))
-                .withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(8)))
+                .decorated(Placement.COUNT_MULTILAYER.configured(new FeatureSpreadConfig(8)))
                 .range(128)
                 .chance(2));
 
@@ -175,35 +175,35 @@ public final class ModWorldFeatures {
 
     private static void addWildFlax(BiomeLoadingEvent biome) {
         debugLog("Add wild flax to " + biome.getName());
-        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES.get());
+        biome.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLAX_PATCHES.get());
     }
 
     private static void addWildFluffyPlants(BiomeLoadingEvent biome) {
         debugLog("Add wild fluffy plants to " + biome.getName());
-        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLUFFY_PATCHES.get());
+        biome.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.WILD_FLUFFY_PATCHES.get());
     }
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
-        biome.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES.get());
+        biome.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES.get());
     }
 
     private static void addBortOre(BiomeLoadingEvent biome) {
-        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.BORT_ORE_VEINS.get());
+        biome.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.BORT_ORE_VEINS.get());
     }
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {
-        if (Biomes.BASALT_DELTAS.getLocation().equals(biome.getName()) || Biomes.SOUL_SAND_VALLEY.getLocation().equals(biome.getName())) {
+        if (Biomes.BASALT_DELTAS.location().equals(biome.getName()) || Biomes.SOUL_SAND_VALLEY.location().equals(biome.getName())) {
             debugLog("Add double crimson iron ores to " + biome.getName());
-            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.DOUBLE_CRIMSON_IRON_ORE_VEINS.get());
+            biome.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.DOUBLE_CRIMSON_IRON_ORE_VEINS.get());
         } else {
             debugLog("Add crimson iron ores to " + biome.getName());
-            biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS.get());
+            biome.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.CRIMSON_IRON_ORE_VEINS.get());
         }
     }
 
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
         debugLog("Add azure silver ores to " + biome.getName());
-        biome.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.AZURE_SILVER_ORE_VEINS.get());
+        biome.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Configured.AZURE_SILVER_ORE_VEINS.get());
     }
 
     private static void debugLog(String msg) {

@@ -28,13 +28,13 @@ public class CoreSaw extends CoreAxe {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
-        World world = player.world;
-        if (!world.isRemote) {
+        World world = player.level;
+        if (!world.isClientSide) {
             BlockState state = world.getBlockState(pos);
 
             if (isLog(state) && detectTree(world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock())) {
                 // Don't allow in creative mode.
-                if (player.abilities.isCreativeMode) {
+                if (player.abilities.instabuild) {
                     return false;
                 }
 
@@ -43,7 +43,7 @@ public class CoreSaw extends CoreAxe {
                 SilentGear.LOGGER.debug("{} chopped down a tree with {} blocks using {}. Max recursion depth: {}",
                         player.getScoreboardName(),
                         result.blocksBroken,
-                        stack.getDisplayName().getString(),
+                        stack.getHoverName().getString(),
                         result.maxDepth);
                 return true;
             }
@@ -58,7 +58,7 @@ public class CoreSaw extends CoreAxe {
         boolean foundTop = false;
         do {
             ++height;
-            if (!checkForLogs(world, pos.offset(Direction.UP, height - y))) {
+            if (!checkForLogs(world, pos.relative(Direction.UP, height - y))) {
                 --height;
                 foundTop = true;
             }
@@ -69,7 +69,7 @@ public class CoreSaw extends CoreAxe {
             for (int xPos = x - 1; xPos <= x + 1; xPos++) {
                 for (int yPos = height - 1; yPos <= height + 1; yPos++) {
                     for (int zPos = z - 1; zPos <= z + 1; zPos++) {
-                        BlockState leaves = world.getBlockState(pos.setPos(xPos, yPos, zPos));
+                        BlockState leaves = world.getBlockState(pos.set(xPos, yPos, zPos));
                         if (isFoliage(leaves)) {
                             ++foliageCount;
                         }
@@ -83,14 +83,14 @@ public class CoreSaw extends CoreAxe {
 
     private static boolean checkForLogs(IBlockReader world, BlockPos pos) {
         return isLog(world.getBlockState(pos))
-                || isLog(world.getBlockState(pos.offset(Direction.NORTH)))
-                || isLog(world.getBlockState(pos.offset(Direction.SOUTH)))
-                || isLog(world.getBlockState(pos.offset(Direction.EAST)))
-                || isLog(world.getBlockState(pos.offset(Direction.WEST)))
-                || isLog(world.getBlockState(pos.offset(Direction.NORTH).offset(Direction.EAST)))
-                || isLog(world.getBlockState(pos.offset(Direction.NORTH).offset(Direction.WEST)))
-                || isLog(world.getBlockState(pos.offset(Direction.SOUTH).offset(Direction.EAST)))
-                || isLog(world.getBlockState(pos.offset(Direction.SOUTH).offset(Direction.WEST)));
+                || isLog(world.getBlockState(pos.relative(Direction.NORTH)))
+                || isLog(world.getBlockState(pos.relative(Direction.SOUTH)))
+                || isLog(world.getBlockState(pos.relative(Direction.EAST)))
+                || isLog(world.getBlockState(pos.relative(Direction.WEST)))
+                || isLog(world.getBlockState(pos.relative(Direction.NORTH).relative(Direction.EAST)))
+                || isLog(world.getBlockState(pos.relative(Direction.NORTH).relative(Direction.WEST)))
+                || isLog(world.getBlockState(pos.relative(Direction.SOUTH).relative(Direction.EAST)))
+                || isLog(world.getBlockState(pos.relative(Direction.SOUTH).relative(Direction.WEST)));
     }
 
     private static boolean isLog(BlockState state) {
@@ -101,7 +101,7 @@ public class CoreSaw extends CoreAxe {
         if (result != null && result.firstLog != null) {
             return state.getBlock() == result.firstLog;
         }
-        return state.isIn(BlockTags.LOGS);
+        return state.is(BlockTags.LOGS);
     }
 
     private static boolean isFoliage(BlockState state) {
@@ -114,14 +114,14 @@ public class CoreSaw extends CoreAxe {
         }
 
         // Ignore player-placed leaves
-        if (state.hasProperty(LeavesBlock.PERSISTENT) && state.get(LeavesBlock.PERSISTENT)) {
+        if (state.hasProperty(LeavesBlock.PERSISTENT) && state.getValue(LeavesBlock.PERSISTENT)) {
             return false;
         }
 
         if (result != null && result.firstFoliage != null) {
             return state.getBlock() == result.firstFoliage;
         }
-        return state.isIn(BlockTags.LEAVES) || state.isIn(BlockTags.WART_BLOCKS);
+        return state.is(BlockTags.LEAVES) || state.is(BlockTags.WART_BLOCKS);
     }
 
     private void breakTree(TreeBreakResult result, World world, BlockPos pos, BlockPos startPos, int recursionDepth) {
@@ -151,7 +151,7 @@ public class CoreSaw extends CoreAxe {
                         }
 
                         int harvestLevel = localBlock.getHarvestLevel(localState);
-                        float localHardness = localState.getBlockHardness(world, localPos);
+                        float localHardness = localState.getDestroySpeed(world, localPos);
 
                         if (harvestLevel <= getHarvestLevel(result.tool, ToolType.AXE, result.player, localState) && localHardness >= 0) {
                             // Block break event
@@ -167,9 +167,9 @@ public class CoreSaw extends CoreAxe {
                                 if (cancel) {
                                     breakTree(result, world, localPos, startPos, recursionDepth + 1);
                                 } else {
-                                    if (!result.player.abilities.isCreativeMode) {
-                                        localBlock.harvestBlock(world, result.player, pos, localState, world.getTileEntity(pos), result.tool);
-                                        onBlockDestroyed(result.tool, world, localState, localPos, result.player);
+                                    if (!result.player.abilities.instabuild) {
+                                        localBlock.playerDestroy(world, result.player, pos, localState, world.getBlockEntity(pos), result.tool);
+                                        mineBlock(result.tool, world, localState, localPos, result.player);
                                         ++result.blocksBroken;
                                     }
 

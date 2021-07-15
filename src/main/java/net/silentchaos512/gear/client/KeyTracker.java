@@ -59,10 +59,10 @@ public class KeyTracker {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.KeyInputEvent event) {
-        if (event.getAction() == GLFW.GLFW_RELEASE && (event.getKey() == DISPLAY_STATS.getKey().getKeyCode())) {
+        if (event.getAction() == GLFW.GLFW_RELEASE && (event.getKey() == DISPLAY_STATS.getKey().getValue())) {
             materialCycleCount = 0;
         }
-        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_NEXT.getKey().getKeyCode()) {
+        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_NEXT.getKey().getValue()) {
             if (isDisplayStatsDown()) {
                 ++materialCycleCount;
             }
@@ -71,7 +71,7 @@ public class KeyTracker {
                 Network.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.CYCLE_NEXT, getHoveredSlot()));
             }
         }
-        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_BACK.getKey().getKeyCode()) {
+        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_BACK.getKey().getValue()) {
             if (isDisplayStatsDown()) {
                 --materialCycleCount;
             }
@@ -80,7 +80,7 @@ public class KeyTracker {
                 Network.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.CYCLE_BACK, getHoveredSlot()));
             }
         }
-        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == OPEN_ITEM.getKey().getKeyCode()) {
+        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == OPEN_ITEM.getKey().getValue()) {
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
                 Network.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.OPEN_ITEM, getHoveredSlot()));
@@ -89,66 +89,66 @@ public class KeyTracker {
     }
 
     private static ItemStack getHoveredItem() {
-        Screen currentScreen = Minecraft.getInstance().currentScreen;
+        Screen currentScreen = Minecraft.getInstance().screen;
         if (currentScreen instanceof ContainerScreen<?>) {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>) currentScreen;
             Slot slot = containerScreen.getSlotUnderMouse();
             if (slot != null) {
-                return slot.getStack();
+                return slot.getItem();
             }
         }
         return ItemStack.EMPTY;
     }
 
     private static int getHoveredSlot() {
-        Screen currentScreen = Minecraft.getInstance().currentScreen;
+        Screen currentScreen = Minecraft.getInstance().screen;
         if (currentScreen instanceof ContainerScreen<?>) {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>) currentScreen;
             Slot slot = containerScreen.getSlotUnderMouse();
             if (slot != null) {
-                return slot.slotNumber;
+                return slot.index;
             }
         }
         return -1;
     }
 
     public static boolean isDisplayStatsDown() {
-        int code = DISPLAY_STATS.getKey().getKeyCode();
-        if (code == GLFW.GLFW_KEY_LEFT_CONTROL || code == GLFW.GLFW_KEY_RIGHT_CONTROL || DISPLAY_STATS.isInvalid()) {
+        int code = DISPLAY_STATS.getKey().getValue();
+        if (code == GLFW.GLFW_KEY_LEFT_CONTROL || code == GLFW.GLFW_KEY_RIGHT_CONTROL || DISPLAY_STATS.isUnbound()) {
             // Maintain old behavior of checking both ctrl keys
             return isControlDown();
         }
-        return DISPLAY_STATS.isKeyDown();
+        return DISPLAY_STATS.isDown();
     }
 
     public static boolean isDisplayConstructionDown() {
-        int code = DISPLAY_CONSTRUCTION.getKey().getKeyCode();
-        if (code == GLFW.GLFW_KEY_LEFT_ALT || code == GLFW.GLFW_KEY_RIGHT_ALT || DISPLAY_CONSTRUCTION.isInvalid()) {
+        int code = DISPLAY_CONSTRUCTION.getKey().getValue();
+        if (code == GLFW.GLFW_KEY_LEFT_ALT || code == GLFW.GLFW_KEY_RIGHT_ALT || DISPLAY_CONSTRUCTION.isUnbound()) {
             return isAltDown();
         }
-        return DISPLAY_CONSTRUCTION.isKeyDown();
+        return DISPLAY_CONSTRUCTION.isDown();
     }
 
     public static boolean isDisplayTraitsDown() {
-        int code = DISPLAY_TRAITS.getKey().getKeyCode();
-        if (code == GLFW.GLFW_KEY_LEFT_SHIFT || code == GLFW.GLFW_KEY_RIGHT_SHIFT || DISPLAY_TRAITS.isInvalid()) {
+        int code = DISPLAY_TRAITS.getKey().getValue();
+        if (code == GLFW.GLFW_KEY_LEFT_SHIFT || code == GLFW.GLFW_KEY_RIGHT_SHIFT || DISPLAY_TRAITS.isUnbound()) {
             return isShiftDown();
         }
-        return DISPLAY_TRAITS.isKeyDown();
+        return DISPLAY_TRAITS.isDown();
     }
 
     public static boolean isShiftDown() {
-        long h = Minecraft.getInstance().getMainWindow().getHandle();
+        long h = Minecraft.getInstance().getWindow().getWindow();
         return InputMappings.isKeyDown(h, GLFW.GLFW_KEY_LEFT_SHIFT) || InputMappings.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     public static boolean isControlDown() {
-        long h = Minecraft.getInstance().getMainWindow().getHandle();
+        long h = Minecraft.getInstance().getWindow().getWindow();
         return InputMappings.isKeyDown(h, GLFW.GLFW_KEY_LEFT_CONTROL) || InputMappings.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_CONTROL);
     }
 
     public static boolean isAltDown() {
-        long h = Minecraft.getInstance().getMainWindow().getHandle();
+        long h = Minecraft.getInstance().getWindow().getWindow();
         return InputMappings.isKeyDown(h, GLFW.GLFW_KEY_LEFT_ALT) || InputMappings.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_ALT);
     }
 }

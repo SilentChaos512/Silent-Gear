@@ -26,7 +26,7 @@ public class StellarTrait extends PotionEffectTrait {
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         PlayerEntity player = context.getPlayer();
-        if (player != null && player.ticksExisted % 20 == 0) {
+        if (player != null && player.tickCount % 20 == 0) {
             float chance = Const.Traits.STELLAR_REPAIR_CHANCE * context.getTraitLevel();
             if (MathUtils.tryPercentage(chance)) {
                 GearHelper.attemptDamage(context.getGear(), -1, player, Hand.MAIN_HAND);

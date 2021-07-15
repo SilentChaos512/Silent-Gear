@@ -42,7 +42,7 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     );
 
     public CoreShears() {
-        super(GearHelper.getBuilder(null).maxDamage(100));
+        super(GearHelper.getBuilder(null).durability(100));
     }
 
     @Override
@@ -63,31 +63,31 @@ public class CoreShears extends ShearsItem implements ICoreTool {
 
         float speed = getStat(stack, ItemStats.HARVEST_SPEED);
 
-        if (!state.isIn(Blocks.COBWEB) && !state.isIn(BlockTags.LEAVES)) {
-            return state.isIn(BlockTags.WOOL) ? speed - 1 : 1;
+        if (!state.is(Blocks.COBWEB) && !state.is(BlockTags.LEAVES)) {
+            return state.is(BlockTags.WOOL) ? speed - 1 : 1;
         } else {
             return 2.5f * speed;
         }
     }
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
         if (GearHelper.isBroken(stack)) {
             return ActionResultType.PASS;
         }
-        return super.itemInteractionForEntity(stack, playerIn, entity, hand);
+        return super.interactLivingEntity(stack, playerIn, entity, hand);
     }
 
     @Override
     public int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
-        if (!state.getBlock().isIn(BlockTags.FIRE)) {
+        if (!state.getBlock().is(BlockTags.FIRE)) {
             return 1;
         }
         return ICoreTool.super.getDamageOnBlockBreak(gear, world, state, pos);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -97,7 +97,7 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -112,7 +112,7 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -140,22 +140,22 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return GearHelper.hitEntity(stack, target, attacker);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
@@ -170,31 +170,31 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
+    public ActionResultType useOn(ItemUseContext context) {
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
         BlockState state = world.getBlockState(pos);
         PlayerEntity player = context.getPlayer();
 
         if (player != null && getHoneyLevel(state) >= 5) {
-            world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            BeehiveBlock.dropHoneyComb(world, pos);
-            context.getItem().damageItem(1, player, (playerEntity) -> {
-                playerEntity.sendBreakAnimation(context.getHand());
+            world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            BeehiveBlock.dropHoneycomb(world, pos);
+            context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> {
+                playerEntity.broadcastBreakEvent(context.getHand());
             });
 
             BeehiveBlock block = (BeehiveBlock) state.getBlock();
-            if (!CampfireBlock.isSmokingBlockAt(world, pos)) {
-                if (block.hasBees(world, pos)) {
+            if (!CampfireBlock.isSmokeyPos(world, pos)) {
+                if (block.hiveContainsBees(world, pos)) {
                     block.angerNearbyBees(world, pos);
                 }
 
-                block.takeHoney(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
+                block.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
             } else {
-                block.takeHoney(world, state, pos);
+                block.resetHoneyLevel(world, state, pos);
             }
 
-            return ActionResultType.func_233537_a_(world.isRemote);
+            return ActionResultType.sidedSuccess(world.isClientSide);
         }
 
         return GearHelper.onItemUse(context);
@@ -202,7 +202,7 @@ public class CoreShears extends ShearsItem implements ICoreTool {
 
     private static int getHoneyLevel(BlockState state) {
         if (state.getBlock() instanceof BeehiveBlock && state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
-            return state.get(BeehiveBlock.HONEY_LEVEL);
+            return state.getValue(BeehiveBlock.HONEY_LEVEL);
         }
         return 0;
     }

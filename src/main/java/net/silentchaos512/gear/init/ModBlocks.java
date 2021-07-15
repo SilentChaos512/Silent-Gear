@@ -41,12 +41,12 @@ public final class ModBlocks {
     public static final BlockRegistryObject<OreBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
             getOre(2, SoundType.STONE));
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
-            getOre(2, SoundType.NETHER_GOLD));
+            getOre(2, SoundType.NETHER_GOLD_ORE));
     public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
             getOre(4, SoundType.STONE));
 
     public static final BlockRegistryObject<Block> RAW_CRIMSON_IRON_BLOCK = register("raw_crimson_iron_block", () ->
-            getRawOreBlock(1, SoundType.NETHER_GOLD));
+            getRawOreBlock(1, SoundType.NETHER_GOLD_ORE));
     public static final BlockRegistryObject<Block> RAW_AZURE_SILVER_BLOCK = register("raw_azure_silver_block", () ->
             getRawOreBlock(1, SoundType.STONE));
 
@@ -66,67 +66,67 @@ public final class ModBlocks {
             ModBlocks::getStorageBlock);
 
     public static final BlockRegistryObject<Block> GEAR_SMITHING_TABLE = register("gear_smithing_table", () ->
-            new GearSmithingTableBlock(AbstractBlock.Properties.create(Material.WOOD)
-                    .hardnessAndResistance(2.5F)
+            new GearSmithingTableBlock(AbstractBlock.Properties.of(Material.WOOD)
+                    .strength(2.5F)
                     .sound(SoundType.WOOD)));
 
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
-            new GraderBlock(AbstractBlock.Properties.create(Material.IRON)
-                    .hardnessAndResistance(5, 30)));
+            new GraderBlock(AbstractBlock.Properties.of(Material.METAL)
+                    .strength(5, 30)));
 
     public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", () ->
-            new SalvagerBlock(AbstractBlock.Properties.create(Material.IRON)
-                    .hardnessAndResistance(5, 30)));
+            new SalvagerBlock(AbstractBlock.Properties.of(Material.METAL)
+                    .strength(5, 30)));
 
     public static final BlockRegistryObject<StarlightChargerBlock> STARLIGHT_CHARGER = register("starlight_charger", () ->
             new StarlightChargerBlock((state, world) -> ChargerTileEntity.createStarlightCharger(),
-                    AbstractBlock.Properties.create(Material.IRON)
-                            .hardnessAndResistance(5, 30)));
+                    AbstractBlock.Properties.of(Material.METAL)
+                            .strength(5, 30)));
 
     public static final BlockRegistryObject<CompounderBlock> METAL_ALLOYER = register("metal_alloyer", () ->
             new CompounderBlock(Const.METAL_COMPOUNDER_INFO,
-                    AbstractBlock.Properties.create(Material.IRON)
-                            .hardnessAndResistance(4, 20)
+                    AbstractBlock.Properties.of(Material.METAL)
+                            .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<CompounderBlock> RECRYSTALLIZER = register("recrystallizer", () ->
             new CompounderBlock(Const.GEM_COMPOUNDER_INFO,
-                    AbstractBlock.Properties.create(Material.IRON)
-                            .hardnessAndResistance(4, 20)
+                    AbstractBlock.Properties.of(Material.METAL)
+                            .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<CompounderBlock> REFABRICATOR = register("refabricator", () ->
             new CompounderBlock(Const.FABRIC_COMPOUNDER_INFO,
-                    AbstractBlock.Properties.create(Material.IRON)
-                            .hardnessAndResistance(4, 20)
+                    AbstractBlock.Properties.of(Material.METAL)
+                            .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<MetalPressBlock> METAL_PRESS = register("metal_press", () ->
-            new MetalPressBlock(AbstractBlock.Properties.create(Material.IRON)
-                    .hardnessAndResistance(4, 20)
+            new MetalPressBlock(AbstractBlock.Properties.of(Material.METAL)
+                    .strength(4, 20)
                     .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<ModCropBlock> FLAX_PLANT = registerNoItem("flax_plant", () ->
-            new ModCropBlock(() -> ModItems.FLAX_SEEDS.get(), AbstractBlock.Properties.create(Material.PLANTS)
-                    .hardnessAndResistance(0)
-                    .doesNotBlockMovement()
-                    .tickRandomly()
+            new ModCropBlock(() -> ModItems.FLAX_SEEDS.get(), AbstractBlock.Properties.of(Material.PLANT)
+                    .strength(0)
+                    .noCollission()
+                    .randomTicks()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<BushBlock> WILD_FLAX_PLANT = registerNoItem("wild_flax_plant", () ->
-            new BushBlock(AbstractBlock.Properties.create(Material.PLANTS)
-                    .hardnessAndResistance(0)
-                    .doesNotBlockMovement()
+            new BushBlock(AbstractBlock.Properties.of(Material.PLANT)
+                    .strength(0)
+                    .noCollission()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<ModCropBlock> FLUFFY_PLANT = registerNoItem("fluffy_plant", () ->
-            new ModCropBlock(() -> ModItems.FLUFFY_SEEDS.get(), AbstractBlock.Properties.create(Material.PLANTS)
-                    .hardnessAndResistance(0)
-                    .doesNotBlockMovement()
-                    .tickRandomly()
+            new ModCropBlock(() -> ModItems.FLUFFY_SEEDS.get(), AbstractBlock.Properties.of(Material.PLANT)
+                    .strength(0)
+                    .noCollission()
+                    .randomTicks()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<BushBlock> WILD_FLUFFY_PLANT = registerNoItem("wild_fluffy_plant", () ->
-            new BushBlock(AbstractBlock.Properties.create(Material.PLANTS)
-                    .hardnessAndResistance(0)
-                    .doesNotBlockMovement()
+            new BushBlock(AbstractBlock.Properties.of(Material.PLANT)
+                    .strength(0)
+                    .noCollission()
                     .sound(SoundType.CROP)));
 
     public static final BlockRegistryObject<FluffyBlock> WHITE_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.WHITE);
@@ -147,27 +147,27 @@ public final class ModBlocks {
     public static final BlockRegistryObject<FluffyBlock> BLACK_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.BLACK);
 
     public static final BlockRegistryObject<TorchBlock> STONE_TORCH = register("stone_torch",
-            () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS)
-                    .doesNotBlockMovement()
-                    .hardnessAndResistance(0)
-                    .setLightLevel(state -> 14)
+            () -> new TorchBlock(AbstractBlock.Properties.of(Material.DECORATION)
+                    .noCollission()
+                    .strength(0)
+                    .lightLevel(state -> 14)
                     .sound(SoundType.STONE),
                     ParticleTypes.FLAME),
             bro -> getStoneTorchItem());
     public static final BlockRegistryObject<WallTorchBlock> WALL_STONE_TORCH = registerNoItem("wall_stone_torch", () ->
-            new WallTorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS)
-                    .doesNotBlockMovement()
-                    .hardnessAndResistance(0)
-                    .setLightLevel(state -> 14)
+            new WallTorchBlock(AbstractBlock.Properties.of(Material.DECORATION)
+                    .noCollission()
+                    .strength(0)
+                    .lightLevel(state -> 14)
                     .sound(SoundType.STONE)
-                    .lootFrom(STONE_TORCH.get()),
+                    .dropsLike(STONE_TORCH.get()),
                     ParticleTypes.FLAME));
 
     public static final BlockRegistryObject<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
-            () -> new Block(AbstractBlock.Properties.create(Material.ROCK)
-                    .setRequiresTool()
-                    .hardnessAndResistance(5, 6)),
-            bro -> () -> new BlockItem(bro.get(), new Item.Properties().group(SilentGear.ITEM_GROUP)) {
+            () -> new Block(AbstractBlock.Properties.of(Material.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(5, 6)),
+            bro -> () -> new BlockItem(bro.get(), new Item.Properties().tab(SilentGear.ITEM_GROUP)) {
                 @Override
                 public int getBurnTime(ItemStack itemStack) {
                     return 10 * Config.Common.netherwoodCharcoalBurnTime.get();
@@ -194,21 +194,21 @@ public final class ModBlocks {
     public static final BlockRegistryObject<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->
             new FenceGateBlock(netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<DoorBlock> NETHERWOOD_DOOR = register("netherwood_door", () ->
-            new DoorBlock(netherWoodProps(3f, 3f).notSolid()));
+            new DoorBlock(netherWoodProps(3f, 3f).noOcclusion()));
     public static final BlockRegistryObject<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
-            new TrapDoorBlock(netherWoodProps(3f, 3f).notSolid()));
+            new TrapDoorBlock(netherWoodProps(3f, 3f).noOcclusion()));
     public static final BlockRegistryObject<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
-            new LeavesBlock(AbstractBlock.Properties.create(Material.LEAVES)
-                    .hardnessAndResistance(0.2f)
-                    .tickRandomly()
-                    .notSolid()
-                    .sound(SoundType.PLANT)));
+            new LeavesBlock(AbstractBlock.Properties.of(Material.LEAVES)
+                    .strength(0.2f)
+                    .randomTicks()
+                    .noOcclusion()
+                    .sound(SoundType.GRASS)));
     public static final BlockRegistryObject<NetherwoodSapling> NETHERWOOD_SAPLING = register("netherwood_sapling", () ->
-            new NetherwoodSapling(AbstractBlock.Properties.create(Material.PLANTS)
-                    .hardnessAndResistance(0)
-                    .doesNotBlockMovement()
-                    .tickRandomly()
-                    .sound(SoundType.PLANT)));
+            new NetherwoodSapling(AbstractBlock.Properties.of(Material.PLANT)
+                    .strength(0)
+                    .noCollission()
+                    .randomTicks()
+                    .sound(SoundType.GRASS)));
 
     public static final BlockRegistryObject<FlowerPotBlock> POTTED_NETHERWOOD_SAPLING = registerNoItem("potted_netherwood_sapling", () ->
             makePottedPlant(NETHERWOOD_SAPLING));
@@ -221,22 +221,22 @@ public final class ModBlocks {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderTypes(FMLClientSetupEvent event) {
-        RenderTypeLookup.setRenderLayer(FLAX_PLANT.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(FLUFFY_PLANT.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(MATERIAL_GRADER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(METAL_ALLOYER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(METAL_PRESS.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(NETHERWOOD_DOOR.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(NETHERWOOD_SAPLING.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(NETHERWOOD_TRAPDOOR.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(POTTED_NETHERWOOD_SAPLING.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(RECRYSTALLIZER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SALVAGER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(STARLIGHT_CHARGER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(STONE_TORCH.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(WILD_FLUFFY_PLANT.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(FLAX_PLANT.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(FLUFFY_PLANT.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(MATERIAL_GRADER.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(METAL_ALLOYER.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(METAL_PRESS.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(NETHERWOOD_DOOR.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(NETHERWOOD_SAPLING.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(NETHERWOOD_TRAPDOOR.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(POTTED_NETHERWOOD_SAPLING.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(RECRYSTALLIZER.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(SALVAGER.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(STARLIGHT_CHARGER.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(STONE_TORCH.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(WILD_FLUFFY_PLANT.get(), RenderType.cutout());
     }
 
     @SubscribeEvent
@@ -246,26 +246,26 @@ public final class ModBlocks {
     }
 
     private static OreBlock getOre(int harvestLevel, SoundType soundType) {
-        return new ModOreBlock(AbstractBlock.Properties.create(Material.ROCK)
-                .hardnessAndResistance(4, 10)
-                .setRequiresTool()
+        return new ModOreBlock(AbstractBlock.Properties.of(Material.STONE)
+                .strength(4, 10)
+                .requiresCorrectToolForDrops()
                 .harvestLevel(harvestLevel)
                 .harvestTool(ToolType.PICKAXE)
                 .sound(soundType));
     }
 
     private static Block getRawOreBlock(int harvestLevel, SoundType soundType) {
-        return new ModOreBlock(AbstractBlock.Properties.create(Material.ROCK)
-                .hardnessAndResistance(4, 20)
-                .setRequiresTool()
+        return new ModOreBlock(AbstractBlock.Properties.of(Material.STONE)
+                .strength(4, 20)
+                .requiresCorrectToolForDrops()
                 .harvestLevel(harvestLevel)
                 .harvestTool(ToolType.PICKAXE)
                 .sound(soundType));
     }
 
     private static Block getStorageBlock() {
-        return new Block(AbstractBlock.Properties.create(Material.IRON)
-                .hardnessAndResistance(3.0f, 6.0f)
+        return new Block(AbstractBlock.Properties.of(Material.METAL)
+                .strength(3.0f, 6.0f)
                 .sound(SoundType.METAL));
     }
 
@@ -284,29 +284,29 @@ public final class ModBlocks {
     }
 
     private static BlockRegistryObject<FluffyBlock> registerFluffyBlock(DyeColor color) {
-        return register(color.getTranslationKey() + "_fluffy_block", () -> new FluffyBlock(color));
+        return register(color.getName() + "_fluffy_block", () -> new FluffyBlock(color));
     }
 
     private static <T extends Block> Supplier<BlockItem> defaultItem(BlockRegistryObject<T> block) {
-        return () -> new BlockItem(block.get(), new Item.Properties().group(SilentGear.ITEM_GROUP));
+        return () -> new BlockItem(block.get(), new Item.Properties().tab(SilentGear.ITEM_GROUP));
     }
 
     private static Supplier<BlockItem> getStoneTorchItem() {
-        return () -> new WallOrFloorItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), new Item.Properties().group(SilentGear.ITEM_GROUP));
+        return () -> new WallOrFloorItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), new Item.Properties().tab(SilentGear.ITEM_GROUP));
     }
 
     @SuppressWarnings("SameParameterValue")
     private static FlowerPotBlock makePottedPlant(Supplier<? extends Block> flower) {
-        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT.delegate.get(), flower, Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0));
+        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT.delegate.get(), flower, Block.Properties.of(Material.DECORATION).strength(0));
         ResourceLocation flowerId = Objects.requireNonNull(flower.get().getRegistryName());
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
         return potted;
     }
 
     private static AbstractBlock.Properties netherWoodProps(float hardnessIn, float resistanceIn) {
-        return AbstractBlock.Properties.create(Material.NETHER_WOOD)
+        return AbstractBlock.Properties.of(Material.NETHER_WOOD)
                 .harvestTool(ToolType.AXE)
-                .hardnessAndResistance(hardnessIn, resistanceIn)
+                .strength(hardnessIn, resistanceIn)
                 .sound(SoundType.WOOD);
     }
 }

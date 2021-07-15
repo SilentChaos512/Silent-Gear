@@ -59,7 +59,7 @@ public final class ModTileEntities {
         return Registration.TILE_ENTITIES.register(name, () -> {
             Block[] validBlocks = Arrays.stream(blocks).map(IBlockProvider::asBlock).toArray(Block[]::new);
             //noinspection ConstantConditions - null in build
-            return TileEntityType.Builder.create(factory, validBlocks).build(null);
+            return TileEntityType.Builder.of(factory, validBlocks).build(null);
         });
     }
 }

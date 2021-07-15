@@ -35,10 +35,10 @@ import java.util.stream.Collectors;
 
 public final class PartsCommand {
     private static final SuggestionProvider<CommandSource> partIdSuggestions = (ctx, builder) ->
-            ISuggestionProvider.func_212476_a(PartManager.getValues().stream().map(IGearPart::getId), builder);
+            ISuggestionProvider.suggestResource(PartManager.getValues().stream().map(IGearPart::getId), builder);
     private static final SuggestionProvider<CommandSource> partInGearSuggestions = (ctx, builder) -> {
         PartDataList parts = GearData.getConstructionParts(getGear(ctx));
-        return ISuggestionProvider.func_212476_a(parts.getUniqueParts(false).stream().map(part ->
+        return ISuggestionProvider.suggestResource(parts.getUniqueParts(false).stream().map(part ->
                 part.get().getId()), builder);
     };
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
@@ -69,12 +69,12 @@ public final class PartsCommand {
         String listStr = PartManager.getValues().stream()
                 .map(part -> part.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendFeedback(new StringTextComponent(listStr), true);
+        context.getSource().sendSuccess(new StringTextComponent(listStr), true);
 
         for (PartType type : PartType.getValues()) {
             int count = PartManager.getPartsOfType(type).size();
             String str = String.format("%s: %d", type.getName(), count);
-            context.getSource().sendFeedback(new StringTextComponent(str), true);
+            context.getSource().sendSuccess(new StringTextComponent(str), true);
         }
 
         return 1;
@@ -86,7 +86,7 @@ public final class PartsCommand {
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            context.getSource().sendErrorMessage(new StringTextComponent("Could not create directory: " + output.getParent()));
+            context.getSource().sendFailure(new StringTextComponent("Could not create directory: " + output.getParent()));
             return 0;
         }
 
@@ -102,7 +102,7 @@ public final class PartsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            context.getSource().sendFeedback(new StringTextComponent("Wrote to " + output.getAbsolutePath()), true);
+            context.getSource().sendSuccess(new StringTextComponent("Wrote to " + output.getAbsolutePath()), true);
         }
 
         return 1;
@@ -136,12 +136,12 @@ public final class PartsCommand {
 
     private static ItemStack getGear(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
         if (ctx.getSource().getEntity() instanceof ServerPlayerEntity) {
-            ItemStack gear = ctx.getSource().asPlayer().getHeldItemMainhand();
+            ItemStack gear = ctx.getSource().getPlayerOrException().getMainHandItem();
             if (gear.getItem() instanceof ICoreItem) {
                 return gear;
             }
         } else {
-            ctx.getSource().sendErrorMessage(text("sourceMustBePlayer"));
+            ctx.getSource().sendFailure(text("sourceMustBePlayer"));
         }
         return ItemStack.EMPTY;
     }

@@ -135,7 +135,7 @@ public final class GearClientHelper {
                 // Some stat-specific formatting...
                 // TODO: The stats should probably handle this instead
                 if (stat == ItemStats.DURABILITY) {
-                    int durabilityLeft = stack.getMaxDamage() - stack.getDamage();
+                    int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
                     int durabilityMax = stack.getMaxDamage();
                     textStat = statText("durabilityFormat", durabilityLeft, durabilityMax);
                 } else if (stat == ItemStats.HARVEST_LEVEL) {
@@ -205,9 +205,9 @@ public final class GearClientHelper {
         for (PartData part : parts) {
             if (part.get().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
-                IFormattableTextComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).deepCopy(), partNameColor);
+                IFormattableTextComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).copy(), partNameColor);
                 builder.add(flag.isAdvanced()
-                        ? partNameText.append(TextUtil.misc("spaceBrackets", part.getType().getName()).mergeStyle(TextFormatting.DARK_GRAY))
+                        ? partNameText.append(TextUtil.misc("spaceBrackets", part.getType().getName()).withStyle(TextFormatting.DARK_GRAY))
                         : partNameText);
 
                 // List materials for compound parts

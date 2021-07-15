@@ -28,7 +28,7 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
     }
 
     @Override
-    public void registerTags() {
+    public void addTags() {
         // Silent Gear
         getBuilder(ModTags.Blocks.FLUFFY_BLOCKS)
                 .add(Registration.getBlocks(FluffyBlock.class).toArray(new Block[0]));
@@ -88,6 +88,6 @@ public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
     }
 
     protected TagsProvider.Builder<Block> getBuilder(ITag.INamedTag<Block> tag) {
-        return getOrCreateBuilder(tag);
+        return tag(tag);
     }
 }

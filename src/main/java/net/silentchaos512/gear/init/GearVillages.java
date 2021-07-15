@@ -35,7 +35,7 @@ public class GearVillages {
             "gear_smithing_table", ModBlocks.GEAR_SMITHING_TABLE);
 
     public static final RegistryObject<VillagerProfession> PROF_GEAR_SMITH = registerProfession(
-            "gear_smith", POI_GEAR_SMITHING_TABLE, SoundEvents.ENTITY_VILLAGER_WORK_TOOLSMITH);
+            "gear_smith", POI_GEAR_SMITHING_TABLE, SoundEvents.VILLAGER_WORK_TOOLSMITH);
 
     private static RegistryObject<PointOfInterestType> registerPointOfInterest(String name, IBlockProvider block) {
         return Registration.POINTS_OF_INTEREST.register(name, () -> {

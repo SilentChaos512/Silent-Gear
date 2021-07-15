@@ -12,16 +12,18 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 
 // Copied from Simple Farming (https://github.com/cweckerl/simplefarming/blob/1.16/src/main/java/enemeez/simplefarming/item/SeedItem.java)
+import net.minecraft.item.Item.Properties;
+
 public class SeedItem extends BlockNamedItem {
     public SeedItem(Block blockIn, Properties properties) {
         super(blockIn, properties);
     }
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack itemstack, PlayerEntity player, LivingEntity entity, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResultType interactLivingEntity(ItemStack itemstack, PlayerEntity player, LivingEntity entity, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
 
-        if (!entity.world.isRemote && !entity.isChild() && entity instanceof AgeableEntity && (int) ((AgeableEntity) entity).getGrowingAge() == 0) {
+        if (!entity.level.isClientSide && !entity.isBaby() && entity instanceof AgeableEntity && (int) ((AgeableEntity) entity).getAge() == 0) {
             //noinspection ChainOfInstanceofChecks
             if (entity instanceof ChickenEntity) {
                 if (((ChickenEntity) entity).isInLove()) {
@@ -35,10 +37,10 @@ public class SeedItem extends BlockNamedItem {
             }
 
             if (entity instanceof ParrotEntity)
-                if (!entity.world.isRemote) {
-                    if (!((ParrotEntity) entity).isTamed())
+                if (!entity.level.isClientSide) {
+                    if (!((ParrotEntity) entity).isTame())
                         if (Math.random() <= 0.33) {
-                            ((ParrotEntity) entity).setTamedBy(player);
+                            ((ParrotEntity) entity).tame(player);
                             ((ParrotEntity) entity).setInLove(player);
                         }
                     if (!player.isCreative())
@@ -46,10 +48,10 @@ public class SeedItem extends BlockNamedItem {
                 }
         }
 
-        if (entity.isChild()) {
+        if (entity.isBaby()) {
             if (!player.isCreative())
                 stack.shrink(1);
-            ((AgeableEntity) entity).ageUp((int) ((float) (-((AgeableEntity) entity).getGrowingAge() / 20) * 0.1F), true);
+            ((AgeableEntity) entity).ageUp((int) ((float) (-((AgeableEntity) entity).getAge() / 20) * 0.1F), true);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;

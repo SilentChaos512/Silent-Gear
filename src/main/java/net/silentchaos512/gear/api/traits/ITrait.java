@@ -100,7 +100,7 @@ public interface ITrait {
 
         // Display name
         ITextComponent displayName = TextUtil.withColor(this.getDisplayName(level), isHidden() ? TextFormatting.DARK_GRAY : TextFormatting.GRAY);
-        displayName.getStyle().setFormatting(TextFormatting.ITALIC);
+        displayName.getStyle().withColor(TextFormatting.ITALIC);
         tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)

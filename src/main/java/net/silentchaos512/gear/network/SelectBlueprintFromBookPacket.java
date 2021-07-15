@@ -19,8 +19,8 @@ public class SelectBlueprintFromBookPacket {
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         ServerPlayerEntity player = context.get().getSender();
-        if (player != null && player.openContainer != null && this.bookSlot >= 0 && this.bookSlot < player.openContainer.inventorySlots.size()) {
-            ItemStack book = player.openContainer.getSlot(this.bookSlot).getStack();
+        if (player != null && player.containerMenu != null && this.bookSlot >= 0 && this.bookSlot < player.containerMenu.slots.size()) {
+            ItemStack book = player.containerMenu.getSlot(this.bookSlot).getItem();
 
             if (!book.isEmpty() && book.getItem() instanceof BlueprintBookItem) {
                 BlueprintBookItem.setSelectedSlot(book, this.slot);

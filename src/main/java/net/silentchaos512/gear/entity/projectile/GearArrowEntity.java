@@ -20,6 +20,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import net.minecraft.entity.projectile.AbstractArrowEntity.PickupStatus;
+
 public class GearArrowEntity extends ArrowEntity {
     private static final Cache<UUID, ItemStack> STACK_CACHE = CacheBuilder.newBuilder()
             .maximumSize(1000)
@@ -45,7 +47,7 @@ public class GearArrowEntity extends ArrowEntity {
     }
 
     private static boolean isSameArrowStack(UUID uuid, ItemStack other) {
-        return other.getDamage() > 0 && GearHelper.isGear(other) && GearData.getUUID(other).equals(uuid);
+        return other.getDamageValue() > 0 && GearHelper.isGear(other) && GearData.getUUID(other).equals(uuid);
     }
 
     public void setArrowStack(ItemStack stack) {
@@ -58,38 +60,38 @@ public class GearArrowEntity extends ArrowEntity {
 
     private static ItemStack getArrowClone(ItemStack stack) {
         ItemStack ret = stack.copy();
-        ret.setDamage(ret.getMaxDamage() - 1);
+        ret.setDamageValue(ret.getMaxDamage() - 1);
         return ret;
     }
 
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
-        Entity shooter = func_234616_v_();
-        if (shooter instanceof PlayerEntity && !((PlayerEntity) shooter).abilities.isCreativeMode) {
+        Entity shooter = getOwner();
+        if (shooter instanceof PlayerEntity && !((PlayerEntity) shooter).abilities.instabuild) {
             // Correct pickup status. Gear arrows are "infinite" so vanilla makes this creative only
-            this.pickupStatus = PickupStatus.ALLOWED;
+            this.pickup = PickupStatus.ALLOWED;
         }
     }
 
     @Override
-    public void func_234612_a_(Entity shooter, float x, float y, float z, float velocity, float inaccuracy) {
+    public void shootFromRotation(Entity shooter, float x, float y, float z, float velocity, float inaccuracy) {
         float speedMulti = GearData.getStat(arrowStack, ItemStats.PROJECTILE_SPEED);
         float accuracy = GearData.getStat(arrowStack, ItemStats.PROJECTILE_ACCURACY);
-        super.func_234612_a_(shooter, x, y, z, velocity * speedMulti, accuracy > 0f ? inaccuracy / accuracy : inaccuracy);
+        super.shootFromRotation(shooter, x, y, z, velocity * speedMulti, accuracy > 0f ? inaccuracy / accuracy : inaccuracy);
     }
 
     @SuppressWarnings("OverlyComplexMethod")
     @Override
-    public void onCollideWithPlayer(PlayerEntity entityIn) {
-        if (!this.world.isRemote && (this.inGround || this.getNoClip()) && this.arrowShake <= 0) {
-            boolean flag = this.pickupStatus == AbstractArrowEntity.PickupStatus.ALLOWED || this.pickupStatus == AbstractArrowEntity.PickupStatus.CREATIVE_ONLY && entityIn.abilities.isCreativeMode || this.getNoClip() && this.func_234616_v_().getUniqueID() == entityIn.getUniqueID();
-            if (this.pickupStatus == PickupStatus.ALLOWED && (!GearHelper.isGear(arrowStack) || !addArrowToPlayerInventory(entityIn))) {
+    public void playerTouch(PlayerEntity entityIn) {
+        if (!this.level.isClientSide && (this.inGround || this.isNoPhysics()) && this.shakeTime <= 0) {
+            boolean flag = this.pickup == AbstractArrowEntity.PickupStatus.ALLOWED || this.pickup == AbstractArrowEntity.PickupStatus.CREATIVE_ONLY && entityIn.abilities.instabuild || this.isNoPhysics() && this.getOwner().getUUID() == entityIn.getUUID();
+            if (this.pickup == PickupStatus.ALLOWED && (!GearHelper.isGear(arrowStack) || !addArrowToPlayerInventory(entityIn))) {
                 flag = false;
             }
 
             if (flag) {
-                entityIn.onItemPickup(this, 1);
+                entityIn.take(this, 1);
                 this.remove();
             }
         }
@@ -98,20 +100,20 @@ public class GearArrowEntity extends ArrowEntity {
     private boolean addArrowToPlayerInventory(PlayerEntity player) {
         UUID uuid = GearData.getUUID(arrowStack);
 
-        for (ItemStack stack : player.inventory.offHandInventory) {
+        for (ItemStack stack : player.inventory.offhand) {
             if (isSameArrowStack(uuid, stack)) {
-                stack.setDamage(stack.getDamage() - 1);
+                stack.setDamageValue(stack.getDamageValue() - 1);
                 return true;
             }
         }
-        for (ItemStack stack : player.inventory.mainInventory) {
+        for (ItemStack stack : player.inventory.items) {
             if (isSameArrowStack(uuid, stack)) {
-                stack.setDamage(stack.getDamage() - 1);
+                stack.setDamageValue(stack.getDamageValue() - 1);
                 return true;
             }
         }
 
-        return player.addItemStackToInventory(arrowStack);
+        return player.addItem(arrowStack);
     }
 
 }

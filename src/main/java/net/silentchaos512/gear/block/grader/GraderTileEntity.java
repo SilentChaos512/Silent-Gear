@@ -69,7 +69,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 2;
         }
     };
@@ -80,7 +80,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
 
     @Override
     public void tick() {
-        if (world == null) return;
+        if (level == null) return;
 
         // Don't waste time if there is no input or no free output slots
         ItemStack input = getInputStack();
@@ -99,7 +99,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
                 ++progress;
             }
 
-            if (progress >= BASE_ANALYZE_TIME && !world.isRemote) {
+            if (progress >= BASE_ANALYZE_TIME && !level.isClientSide) {
                 progress = 0;
                 catalyst.shrink(1);
                 tryGradeItem(input, catalystTier, material);
@@ -134,7 +134,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     private ItemStack getInputStack() {
-        ItemStack stack = getStackInSlot(INPUT_SLOT);
+        ItemStack stack = getItem(INPUT_SLOT);
         if (!stack.isEmpty()) {
             MaterialInstance material = MaterialInstance.from(stack);
             if (material != null && material.getGrade() != MaterialGrade.getMax()) {
@@ -145,12 +145,12 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     private ItemStack getCatalystStack() {
-        return getStackInSlot(CATALYST_SLOT);
+        return getItem(CATALYST_SLOT);
     }
 
     private int getFreeOutputSlot() {
         for (int slot : SLOTS_OUTPUT) {
-            if (getStackInSlot(slot).isEmpty()) {
+            if (getItem(slot).isEmpty()) {
                 return slot;
             }
         }
@@ -165,7 +165,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     public static int getCatalystTier(ItemStack stack) {
         if (!stack.isEmpty()) {
             for (int i = ModTags.Items.GRADER_CATALYSTS_TIERS.size() - 1; i >= 0; --i) {
-                if (stack.getItem().isIn(ModTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {
+                if (stack.getItem().is(ModTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {
                     return i + 1;
                 }
             }
@@ -174,14 +174,14 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tags) {
-        super.read(state, tags);
+    public void load(BlockState state, CompoundNBT tags) {
+        super.load(state, tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tags) {
-        CompoundNBT compoundTag = super.write(tags);
+    public CompoundNBT save(CompoundNBT tags) {
+        CompoundNBT compoundTag = super.save(tags);
         SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
         return compoundTag;
     }
@@ -196,7 +196,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
             tags.put("input_item", itemTags);
         }
 
-        return new SUpdateTileEntityPacket(pos, 0, tags);
+        return new SUpdateTileEntityPacket(worldPosition, 0, tags);
     }
 
     @Override
@@ -219,14 +219,14 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         super.onDataPacket(net, packet);
-        CompoundNBT tags = packet.getNbtCompound();
+        CompoundNBT tags = packet.getTag();
         SyncVariable.Helper.readSyncVars(this, tags);
 //        this.progress = tags.getInt("progress");
 
         if (tags.contains("input_item")) {
-            setInventorySlotContents(INPUT_SLOT, ItemStack.read(tags.getCompound("input_item")));
+            setItem(INPUT_SLOT, ItemStack.of(tags.getCompound("input_item")));
         } else {
-            setInventorySlotContents(INPUT_SLOT, ItemStack.EMPTY);
+            setItem(INPUT_SLOT, ItemStack.EMPTY);
         }
     }
 
@@ -244,13 +244,13 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         if (index != INPUT_SLOT && index != CATALYST_SLOT) {
             return false;
         }
 
-        ItemStack stackInSlot = getStackInSlot(index);
-        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !stackInSlot.isItemEqual(stack))) {
+        ItemStack stackInSlot = getItem(index);
+        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !stackInSlot.sameItem(stack))) {
             return false;
         }
 
@@ -262,12 +262,12 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return index != INPUT_SLOT && index != CATALYST_SLOT;
     }
 

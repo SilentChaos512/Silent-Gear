@@ -28,7 +28,7 @@ public final class SetPartsFunction extends LootFunction {
     }
 
     @Override
-    protected ItemStack doApply(ItemStack stack, LootContext context) {
+    protected ItemStack run(ItemStack stack, LootContext context) {
         if (!(stack.getItem() instanceof ICoreItem)) return stack;
         ItemStack result = stack.copy();
         List<PartData> parts = LazyPartData.createPartList(this.parts);
@@ -39,11 +39,11 @@ public final class SetPartsFunction extends LootFunction {
     }
 
     public static LootFunction.Builder<?> builder(List<LazyPartData> parts) {
-        return builder(conditions -> new SetPartsFunction(conditions, parts));
+        return simpleBuilder(conditions -> new SetPartsFunction(conditions, parts));
     }
 
     @Override
-    public LootFunctionType getFunctionType() {
+    public LootFunctionType getType() {
         return ModLootStuff.SET_PARTS;
     }
 
@@ -59,7 +59,7 @@ public final class SetPartsFunction extends LootFunction {
         @Override
         public SetPartsFunction deserialize(JsonObject json, JsonDeserializationContext context, ILootCondition[] conditionsIn) {
             List<LazyPartData> parts = new ArrayList<>();
-            JsonArray partsArray = Objects.requireNonNull(JSONUtils.getJsonArray(json, "parts", new JsonArray()));
+            JsonArray partsArray = Objects.requireNonNull(JSONUtils.getAsJsonArray(json, "parts", new JsonArray()));
             for (JsonElement jsonElement : partsArray) {
                 parts.add(LazyPartData.deserialize(jsonElement));
             }

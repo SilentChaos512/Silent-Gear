@@ -34,8 +34,8 @@ public class MagmaticTraitLootModifier extends LootModifier {
     }
 
     private static ItemStack smelt(ItemStack stack, LootContext context) {
-        return context.getWorld().getRecipeManager().getRecipe(IRecipeType.SMELTING, new Inventory(stack), context.getWorld())
-                .map(FurnaceRecipe::getRecipeOutput)
+        return context.getLevel().getRecipeManager().getRecipeFor(IRecipeType.SMELTING, new Inventory(stack), context.getLevel())
+                .map(FurnaceRecipe::getResultItem)
                 .filter(s -> !s.isEmpty())
                 .map(s -> ItemHandlerHelper.copyStackWithSize(s, stack.getCount() * s.getCount()))
                 .orElse(stack);

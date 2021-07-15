@@ -61,15 +61,15 @@ public class MaterialBuilder {
     private boolean hasModels = true;
 
     public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation ingredientTagName) {
-        this(id, tier, Ingredient.fromTag(ItemTags.makeWrapperTag(ingredientTagName.toString())));
+        this(id, tier, Ingredient.of(ItemTags.bind(ingredientTagName.toString())));
     }
 
     public MaterialBuilder(ResourceLocation id, int tier, ITag<Item> ingredient) {
-        this(id, tier, Ingredient.fromTag(ingredient));
+        this(id, tier, Ingredient.of(ingredient));
     }
 
     public MaterialBuilder(ResourceLocation id, int tier, IItemProvider... ingredients) {
-        this(id, tier, Ingredient.fromItems(ingredients));
+        this(id, tier, Ingredient.of(ingredients));
     }
 
     public MaterialBuilder(ResourceLocation id, int tier, Ingredient ingredient) {
@@ -113,11 +113,11 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder partSubstitute(PartType partType, IItemProvider item) {
-        return partSubstitute(partType, Ingredient.fromItems(item));
+        return partSubstitute(partType, Ingredient.of(item));
     }
 
     public MaterialBuilder partSubstitute(PartType partType, ITag<Item> tag) {
-        return partSubstitute(partType, Ingredient.fromTag(tag));
+        return partSubstitute(partType, Ingredient.of(tag));
     }
 
     public MaterialBuilder partSubstitute(PartType partType, Ingredient ingredient) {
@@ -454,11 +454,11 @@ public class MaterialBuilder {
 
         JsonObject craftingItems = new JsonObject();
         if (this.ingredient != Ingredient.EMPTY) {
-            craftingItems.add("main", this.ingredient.serialize());
+            craftingItems.add("main", this.ingredient.toJson());
         }
         if (!this.partSubstitutes.isEmpty()) {
             JsonObject subs = new JsonObject();
-            this.partSubstitutes.forEach((type, ing) -> subs.add(SilentGear.shortenId(type.getName()), ing.serialize()));
+            this.partSubstitutes.forEach((type, ing) -> subs.add(SilentGear.shortenId(type.getName()), ing.toJson()));
             craftingItems.add("subs", subs);
         }
         json.add("crafting_items", craftingItems);

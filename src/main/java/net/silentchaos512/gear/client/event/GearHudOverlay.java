@@ -32,10 +32,10 @@ public class GearHudOverlay extends AbstractGui {
 
     @SubscribeEvent
     public void renderOverlay(RenderGameOverlayEvent.Post event) {
-        this.scaledWidth = this.mc.getMainWindow().getScaledWidth();
-        this.scaledHeight = this.mc.getMainWindow().getScaledHeight();
+        this.scaledWidth = this.mc.getWindow().getGuiScaledWidth();
+        this.scaledHeight = this.mc.getWindow().getGuiScaledHeight();
 
-        if (!this.mc.gameSettings.hideGUI) {
+        if (!this.mc.options.hideGui) {
             renderAttackIndicator(event.getMatrixStack());
         }
     }
@@ -44,25 +44,25 @@ public class GearHudOverlay extends AbstractGui {
         // Renders an attack indicator if an entity is within extra reach distance of a gear weapon
 
 //        RenderSystem.defaultAlphaFunc();
-        this.mc.getTextureManager().bindTexture(GUI_ICONS_LOCATION);
+        this.mc.getTextureManager().bind(GUI_ICONS_LOCATION);
 //        RenderSystem.enableBlend();
 //        RenderSystem.enableAlphaTest();
 
-        GameSettings gamesettings = this.mc.gameSettings;
-        if (gamesettings.getPointOfView().func_243192_a()) {
-            PlayerController playerController = this.mc.playerController;
-            if (playerController != null && playerController.getCurrentGameType() != GameType.SPECTATOR && !isEntityTargeted(mc.objectMouseOver)) {
+        GameSettings gamesettings = this.mc.options;
+        if (gamesettings.getCameraType().isFirstPerson()) {
+            PlayerController playerController = this.mc.gameMode;
+            if (playerController != null && playerController.getPlayerMode() != GameType.SPECTATOR && !isEntityTargeted(mc.hitResult)) {
                 ClientPlayerEntity player = this.mc.player;
                 if (player == null) return;
 
-                if (!gamesettings.showDebugInfo || gamesettings.hideGUI || player.hasReducedDebug() || gamesettings.reducedDebugInfo) {
+                if (!gamesettings.renderDebug || gamesettings.hideGui || player.isReducedDebugInfo() || gamesettings.reducedDebugInfo) {
 //                    RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                    if (this.mc.gameSettings.attackIndicator == AttackIndicatorStatus.CROSSHAIR) {
-                        float f = player.getCooledAttackStrength(0.0F);
+                    if (this.mc.options.attackIndicator == AttackIndicatorStatus.CROSSHAIR) {
+                        float f = player.getAttackStrengthScale(0.0F);
                         boolean flag = false;
                         Entity entity = GearHelper.getAttackTargetWithExtraReach(player);
                         if (entity instanceof LivingEntity && f >= 1.0F) {
-                            flag = player.getCooldownPeriod() > 5.0F;
+                            flag = player.getCurrentItemAttackStrengthDelay() > 5.0F;
                             flag = flag & entity.isAlive();
                         }
 

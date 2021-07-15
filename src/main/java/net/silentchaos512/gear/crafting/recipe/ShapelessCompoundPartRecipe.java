@@ -24,7 +24,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
-        ItemStack output = recipe.getRecipeOutput();
+        ItemStack output = recipe.getResultItem();
         if (!(output.getItem() instanceof CompoundPartItem)) {
             throw new JsonParseException("result is not a compound part item: " + output);
         }
@@ -46,8 +46,8 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
 
         IMaterial first = null;
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             MaterialInstance mat = MaterialInstance.from(stack);
 
             if (mat != null) {
@@ -68,16 +68,16 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
-        int craftedCount = getBaseRecipe().getRecipeOutput().getCount();
+    public ItemStack assemble(CraftingInventory inv) {
+        int craftedCount = getBaseRecipe().getResultItem().getCount();
         return item.create(getMaterials(inv), craftedCount);
     }
 
     private static MaterialList getMaterials(IInventory inv) {
         MaterialList ret = MaterialList.empty();
 
-        for (int i = 0; i < inv.getSizeInventory(); i++) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 MaterialInstance material = MaterialInstance.from(stack.copy().split(1));
                 if (material != null) {
@@ -90,14 +90,14 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         // Create an example item, so we're not just showing a broken item
-        int craftedCount = getBaseRecipe().getRecipeOutput().getCount();
+        int craftedCount = getBaseRecipe().getResultItem().getCount();
         return item.create(MaterialList.of(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), craftedCount);
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
         return true;
     }
 }

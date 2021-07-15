@@ -19,7 +19,7 @@ public final class LootInjector {
     public static final class Tables {
         private static final Map<ResourceLocation, ResourceLocation> MAP = new HashMap<>();
 
-        public static final ResourceLocation CHESTS_NETHER_BRIDGE = inject(LootTables.CHESTS_NETHER_BRIDGE);
+        public static final ResourceLocation CHESTS_NETHER_BRIDGE = inject(LootTables.NETHER_BRIDGE);
         public static final ResourceLocation CHESTS_BASTION_TREASURE = inject(LootTables.BASTION_TREASURE);
         public static final ResourceLocation CHESTS_BASTION_OTHER = inject(LootTables.BASTION_OTHER);
         public static final ResourceLocation CHESTS_BASTION_BRIDGE = inject(LootTables.BASTION_BRIDGE);
@@ -52,9 +52,9 @@ public final class LootInjector {
         Tables.get(event.getName()).ifPresent(injectorName -> {
             SilentGear.LOGGER.info("Injecting loot table '{}' into '{}'", injectorName, event.getName());
             event.getTable().addPool(
-                    LootPool.builder()
+                    LootPool.lootPool()
                             .name("silentgear_injected")
-                            .addEntry(TableLootEntry.builder(injectorName))
+                            .add(TableLootEntry.lootTableReference(injectorName))
                             .build()
             );
         });

@@ -13,15 +13,15 @@ public final class DamageTypeTrait extends SimpleTrait {
             SERIALIZER_ID,
             DamageTypeTrait::new,
             (trait, json) -> {
-                trait.damageType = JSONUtils.getString(json, "damage_type", trait.getId().getPath());
-                trait.damageBonus = JSONUtils.getFloat(json, "damage_bonus", 0);
+                trait.damageType = JSONUtils.getAsString(json, "damage_type", trait.getId().getPath());
+                trait.damageBonus = JSONUtils.getAsFloat(json, "damage_bonus", 0);
             },
             (trait, buffer) -> {
-                trait.damageType = buffer.readString();
+                trait.damageType = buffer.readUtf();
                 trait.damageBonus = buffer.readFloat();
             },
             (trait, buffer) -> {
-                buffer.writeString(trait.damageType);
+                buffer.writeUtf(trait.damageType);
                 buffer.writeFloat(trait.damageBonus);
             }
     );
@@ -35,8 +35,8 @@ public final class DamageTypeTrait extends SimpleTrait {
 
     @Override
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
-        if (target.isEntityUndead() && "holy".equals(damageType)
-                || target.isImmuneToFire() && "chilled".equals(damageType)) {
+        if (target.isInvertedHealAndHarm() && "holy".equals(damageType)
+                || target.fireImmune() && "chilled".equals(damageType)) {
             return baseValue + damageBonus * context.getTraitLevel();
         }
 

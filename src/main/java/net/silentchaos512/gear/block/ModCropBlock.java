@@ -18,7 +18,7 @@ public class ModCropBlock extends CropsBlock {
     }
 
     @Override
-    protected IItemProvider getSeedsItem() {
+    protected IItemProvider getBaseSeedId() {
         return seedItem.get();
     }
 

@@ -46,7 +46,7 @@ public class GearTypeMatcher implements Predicate<GearType> {
     }
 
     public static GearTypeMatcher deserialize(JsonObject json) {
-        boolean matchParents = JSONUtils.getBoolean(json, "match_parents");
+        boolean matchParents = JSONUtils.getAsBoolean(json, "match_parents");
         GearTypeMatcher result = new GearTypeMatcher(matchParents);
         JsonArray array = json.getAsJsonArray("types");
         for (JsonElement e : array) {
@@ -63,7 +63,7 @@ public class GearTypeMatcher implements Predicate<GearType> {
         GearTypeMatcher result = new GearTypeMatcher(matchParents);
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
-            result.types.add(GearType.get(buffer.readString()));
+            result.types.add(GearType.get(buffer.readUtf()));
         }
         return result;
     }
@@ -71,6 +71,6 @@ public class GearTypeMatcher implements Predicate<GearType> {
     public void write(PacketBuffer buffer) {
         buffer.writeBoolean(this.matchParents);
         buffer.writeByte(this.types.size());
-        this.types.forEach(t -> buffer.writeString(t.getName()));
+        this.types.forEach(t -> buffer.writeUtf(t.getName()));
     }
 }

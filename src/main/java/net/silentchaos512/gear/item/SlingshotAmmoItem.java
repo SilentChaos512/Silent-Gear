@@ -15,6 +15,8 @@ import net.silentchaos512.gear.util.TextUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
     public SlingshotAmmoItem(Properties properties) {
         super(properties);
@@ -26,7 +28,7 @@ public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextUtil.translate("item", "slingshot_ammo.desc").mergeStyle(TextFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(TextUtil.translate("item", "slingshot_ammo.desc").withStyle(TextFormatting.ITALIC));
     }
 }

@@ -53,30 +53,30 @@ public class GearSmithingRecipeBuilder {
         }
 
         @Override
-        public void serialize(JsonObject json) {
-            json.add("gear", Ingredient.fromItems(builder.gearItem).serialize());
-            json.add("addition", builder.addition.serialize());
+        public void serializeRecipeData(JsonObject json) {
+            json.add("gear", Ingredient.of(builder.gearItem).toJson());
+            json.add("addition", builder.addition.toJson());
         }
 
         @Override
-        public ResourceLocation getID() {
+        public ResourceLocation getId() {
             return recipeId;
         }
 
         @Override
-        public IRecipeSerializer<?> getSerializer() {
+        public IRecipeSerializer<?> getType() {
             return builder.serializer;
         }
 
         @Nullable
         @Override
-        public JsonObject getAdvancementJson() {
+        public JsonObject serializeAdvancement() {
             return null;
         }
 
         @Nullable
         @Override
-        public ResourceLocation getAdvancementID() {
+        public ResourceLocation getAdvancementId() {
             return null;
         }
     }

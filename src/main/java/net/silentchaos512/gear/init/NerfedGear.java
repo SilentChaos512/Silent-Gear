@@ -30,7 +30,7 @@ public final class NerfedGear {
     public static void init() {
         Field itemDamageField;
         try {
-            itemDamageField = ObfuscationReflectionHelper.findField(Item.class, "field_77699_b");
+            itemDamageField = ObfuscationReflectionHelper.findField(Item.class, "maxDamage");
             itemDamageField.setAccessible(true);
         } catch (Exception ex) {
             SilentGear.LOGGER.error("Field to get Item damage field via reflection");
@@ -53,12 +53,12 @@ public final class NerfedGear {
     }
 
     private static boolean isNerfedItem(Item item) {
-        return item.isDamageable() && Config.Common.isNerfedItem(item);
+        return item.canBeDepleted() && Config.Common.isNerfedItem(item);
     }
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ItemStack heldItem = event.getPlayer().getHeldItemMainhand();
+        ItemStack heldItem = event.getPlayer().getMainHandItem();
         if (isNerfedItem(heldItem.getItem())) {
             float newSpeed = event.getNewSpeed() * Config.Common.nerfedItemHarvestSpeedMulti.get().floatValue();
             event.setNewSpeed(Math.max(newSpeed, 1));

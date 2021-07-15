@@ -25,10 +25,10 @@ public final class ClientEvents {
         if (event.isAttack()) {
             Minecraft mc = Minecraft.getInstance();
             PlayerEntity player = mc.player;
-            RayTraceResult raytrace = mc.objectMouseOver;
+            RayTraceResult raytrace = mc.hitResult;
 
             if (player != null && (raytrace == null || raytrace.getType() == RayTraceResult.Type.MISS)) {
-                ItemStack stack = player.getHeldItemMainhand();
+                ItemStack stack = player.getMainHandItem();
 
                 if (GearHelper.isGear(stack)) {
                     Network.channel.sendToServer(new GearLeftClickPacket());
@@ -40,6 +40,6 @@ public final class ClientEvents {
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerEntity player = event.getPlayer();
-        MaterialDisplayManager.getErrorMessages(player).forEach(text -> player.sendMessage(text, Util.DUMMY_UUID));
+        MaterialDisplayManager.getErrorMessages(player).forEach(text -> player.sendMessage(text, Util.NIL_UUID));
     }
 }

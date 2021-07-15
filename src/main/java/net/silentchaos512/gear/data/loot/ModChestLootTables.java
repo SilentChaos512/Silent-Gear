@@ -16,76 +16,76 @@ public class ModChestLootTables extends ChestLootTables {
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         consumer.accept(LootInjector.Tables.CHESTS_NETHER_BRIDGE, addNetherMetalsAndFlora());
         consumer.accept(LootInjector.Tables.CHESTS_BASTION_TREASURE, addNetherMetalsWithExtra());
-        consumer.accept(LootInjector.Tables.CHESTS_BASTION_OTHER, addNetherFlora(LootTable.builder()));
+        consumer.accept(LootInjector.Tables.CHESTS_BASTION_OTHER, addNetherFlora(LootTable.lootTable()));
         consumer.accept(LootInjector.Tables.CHESTS_BASTION_BRIDGE, addNetherMetalsAndFlora());
         consumer.accept(LootInjector.Tables.CHESTS_RUINED_PORTAL, addNetherMetalsAndFlora());
     }
 
     private static LootTable.Builder addNetherMetalsAndFlora() {
-        LootTable.Builder builder = LootTable.builder();
+        LootTable.Builder builder = LootTable.lootTable();
         addNetherMetals(builder);
         addNetherFlora(builder);
         return builder;
     }
 
     private static LootTable.Builder addNetherMetalsWithExtra() {
-        LootTable.Builder builder = LootTable.builder();
-        builder.addLootPool(LootPool.builder()
-                .rolls(ConstantRange.of(1))
+        LootTable.Builder builder = LootTable.lootTable();
+        builder.withPool(LootPool.lootPool()
+                .setRolls(ConstantRange.exactly(1))
                 .bonusRolls(0, 1)
-                .addEntry(ItemLootEntry.builder(CraftingItems.BLAZE_GOLD_INGOT)
-                        .weight(6)
-                        .acceptFunction(SetCount.builder(RandomValueRange.of(2, 5)))
+                .add(ItemLootEntry.lootTableItem(CraftingItems.BLAZE_GOLD_INGOT)
+                        .setWeight(6)
+                        .apply(SetCount.setCount(RandomValueRange.between(2, 5)))
                 )
-                .addEntry(ItemLootEntry.builder(CraftingItems.CRIMSON_STEEL_DUST)
-                        .weight(1)
-                        .acceptFunction(SetCount.builder(RandomValueRange.of(1, 2)))
+                .add(ItemLootEntry.lootTableItem(CraftingItems.CRIMSON_STEEL_DUST)
+                        .setWeight(1)
+                        .apply(SetCount.setCount(RandomValueRange.between(1, 2)))
                 )
         );
         return addNetherMetals(builder);
     }
 
     private static LootTable.Builder addNetherMetals(LootTable.Builder builder) {
-        builder.addLootPool(LootPool.builder()
-                .rolls(RandomValueRange.of(1, 2))
-                .addEntry(EmptyLootEntry.func_216167_a()
-                        .weight(20)
+        builder.withPool(LootPool.lootPool()
+                .setRolls(RandomValueRange.between(1, 2))
+                .add(EmptyLootEntry.emptyItem()
+                        .setWeight(20)
                 )
-                .addEntry(ItemLootEntry.builder(CraftingItems.CRIMSON_IRON_INGOT)
-                        .weight(35)
-                        .acceptFunction(SetCount.builder(RandomValueRange.of(1, 4)))
+                .add(ItemLootEntry.lootTableItem(CraftingItems.CRIMSON_IRON_INGOT)
+                        .setWeight(35)
+                        .apply(SetCount.setCount(RandomValueRange.between(1, 4)))
                 )
-                .addEntry(ItemLootEntry.builder(CraftingItems.BLAZE_GOLD_NUGGET)
-                        .weight(35)
-                        .acceptFunction(SetCount.builder(RandomValueRange.of(5, 10)))
+                .add(ItemLootEntry.lootTableItem(CraftingItems.BLAZE_GOLD_NUGGET)
+                        .setWeight(35)
+                        .apply(SetCount.setCount(RandomValueRange.between(5, 10)))
                 )
-                .addEntry(ItemLootEntry.builder(CraftingItems.BLAZE_GOLD_INGOT)
-                        .weight(15)
+                .add(ItemLootEntry.lootTableItem(CraftingItems.BLAZE_GOLD_INGOT)
+                        .setWeight(15)
                 )
-                .addEntry(ItemLootEntry.builder(CraftingItems.CRIMSON_STEEL_INGOT)
-                        .weight(1)
+                .add(ItemLootEntry.lootTableItem(CraftingItems.CRIMSON_STEEL_INGOT)
+                        .setWeight(1)
                 )
         );
         return builder;
     }
 
     private static LootTable.Builder addNetherFlora(LootTable.Builder builder) {
-        builder.addLootPool(LootPool.builder()
-                .rolls(RandomValueRange.of(1, 2))
+        builder.withPool(LootPool.lootPool()
+                .setRolls(RandomValueRange.between(1, 2))
                 .bonusRolls(0, 1)
-                .addEntry(EmptyLootEntry.func_216167_a()
-                        .weight(10)
+                .add(EmptyLootEntry.emptyItem()
+                        .setWeight(10)
                 )
-                .addEntry(ItemLootEntry.builder(ModBlocks.NETHERWOOD_SAPLING)
-                        .weight(20)
-                        .acceptFunction(SetCount.builder(RandomValueRange.of(1, 2)))
+                .add(ItemLootEntry.lootTableItem(ModBlocks.NETHERWOOD_SAPLING)
+                        .setWeight(20)
+                        .apply(SetCount.setCount(RandomValueRange.between(1, 2)))
                 )
-                .addEntry(ItemLootEntry.builder(ModItems.NETHER_BANANA)
-                        .weight(10)
-                        .acceptFunction(SetCount.builder(RandomValueRange.of(2, 4)))
+                .add(ItemLootEntry.lootTableItem(ModItems.NETHER_BANANA)
+                        .setWeight(10)
+                        .apply(SetCount.setCount(RandomValueRange.between(2, 4)))
                 )
-                .addEntry(ItemLootEntry.builder(ModItems.GOLDEN_NETHER_BANANA)
-                        .weight(1)
+                .add(ItemLootEntry.lootTableItem(ModItems.GOLDEN_NETHER_BANANA)
+                        .setWeight(1)
                 )
         );
         return builder;

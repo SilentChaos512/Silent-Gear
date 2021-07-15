@@ -107,17 +107,17 @@ public final class GearEvents {
     public static void onAttackEntity(LivingAttackEvent event) {
         // Check if already handled
         LivingEntity attacked = event.getEntityLiving();
-        if (attacked == null || attacked.world.isRemote || entityAttackedThisTick.contains(attacked.getUniqueID()))
+        if (attacked == null || attacked.level.isClientSide || entityAttackedThisTick.contains(attacked.getUUID()))
             return;
 
         DamageSource source = event.getSource();
-        if (source == null || !"player".equals(source.damageType)) return;
+        if (source == null || !"player".equals(source.msgId)) return;
 
-        Entity attacker = source.getTrueSource();
+        Entity attacker = source.getEntity();
         if (!(attacker instanceof PlayerEntity)) return;
 
         PlayerEntity player = (PlayerEntity) attacker;
-        ItemStack weapon = player.getHeldItemMainhand();
+        ItemStack weapon = player.getMainHandItem();
         if (!(weapon.getItem() instanceof ICoreTool)) return;
 
         final float baseDamage = event.getAmount();
@@ -126,8 +126,8 @@ public final class GearEvents {
 
         if (Math.abs(newDamage - baseDamage) > 0.0001f) {
             event.setCanceled(true);
-            entityAttackedThisTick.add(attacked.getUniqueID());
-            attacked.attackEntityFrom(source, newDamage);
+            entityAttackedThisTick.add(attacked.getUUID());
+            attacked.hurt(source, newDamage);
         }
     }
 
@@ -136,13 +136,13 @@ public final class GearEvents {
         LivingEntity attacked = event.getEntityLiving();
 
         DamageSource source = event.getSource();
-        if (source == null || !"player".equals(source.damageType)) return;
+        if (source == null || !"player".equals(source.msgId)) return;
 
-        Entity attacker = source.getTrueSource();
+        Entity attacker = source.getEntity();
         if (!(attacker instanceof PlayerEntity)) return;
 
         PlayerEntity player = (PlayerEntity) attacker;
-        ItemStack weapon = player.getHeldItemMainhand();
+        ItemStack weapon = player.getMainHandItem();
         if (!(weapon.getItem() instanceof ICoreTool)) return;
 
         // Traits that increase damage to specific mob types.
@@ -159,7 +159,7 @@ public final class GearEvents {
         }
 
         int chilled = TraitHelper.getTraitLevel(weapon, Const.Traits.CHILLED);
-        if (chilled > 0 && attacked.isImmuneToFire()) {
+        if (chilled > 0 && attacked.fireImmune()) {
             event.setAmount(event.getAmount() + 2 * chilled);
         }
     }
@@ -178,12 +178,12 @@ public final class GearEvents {
 
     private static void damageFlammableItems(LivingDamageEvent event) {
         for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-            ItemStack stack = event.getEntityLiving().getItemStackFromSlot(slot);
+            ItemStack stack = event.getEntityLiving().getItemBySlot(slot);
             if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
                 GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
                 if (GearHelper.isBroken(stack)) {
-                    event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getDisplayName()), Util.DUMMY_UUID);
-                    event.getEntityLiving().sendBreakAnimation(slot);
+                    event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName()), Util.NIL_UUID);
+                    event.getEntityLiving().broadcastBreakEvent(slot);
                     stack.shrink(1);
                 }
             }
@@ -207,14 +207,14 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onLivingHurtMagicArmor(LivingHurtEvent event) {
-        if (event.getSource().isMagicDamage()) {
+        if (event.getSource().isMagic()) {
             float magicArmor = getTotalMagicArmor(event.getEntityLiving());
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
             //SilentGear.LOGGER.debug("magic damage: {} x {} -> {}", event.getAmount(), scale, event.getAmount() * scale);
 
             if (event.getEntityLiving() instanceof PlayerEntity) {
                 // Damage player's armor
-                ((PlayerEntity) event.getEntityLiving()).inventory.func_234563_a_(event.getSource(), event.getAmount());
+                ((PlayerEntity) event.getEntityLiving()).inventory.hurtArmor(event.getSource(), event.getAmount());
             }
 
             event.setAmount(event.getAmount() * scale);
@@ -223,7 +223,7 @@ public final class GearEvents {
 
     private static float getTotalMagicArmor(LivingEntity entity) {
         float total = 0f;
-        for (ItemStack stack : entity.getArmorInventoryList()) {
+        for (ItemStack stack : entity.getArmorSlots()) {
             if (stack.getItem() instanceof CoreArmor) {
                 total += ((CoreArmor) stack.getItem()).getArmorMagicProtection(stack);
             }
@@ -245,7 +245,7 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
         final PlayerEntity player = event.getPlayer();
-        ItemStack tool = player.getHeldItemMainhand();
+        ItemStack tool = player.getMainHandItem();
 
         if (tool.getItem() instanceof ICoreItem) {
             final BlockState state = event.getState();
@@ -257,7 +257,7 @@ public final class GearEvents {
 
             if (canHarvest) {
                 int level = TraitHelper.getTraitLevel(tool, Const.Traits.LUSTROUS);
-                int light = getLightForLustrousTrait(player.world, player.getPosition());
+                int light = getLightForLustrousTrait(player.level, player.blockPosition());
                 //use getNewSpeed() instead of getOriginalSpeed() to support other mods that are changing the break speed with this event.
                 event.setNewSpeed(event.getNewSpeed() + getLustrousSpeedBonus(level, light));
             }
@@ -265,8 +265,8 @@ public final class GearEvents {
     }
 
     public static int getLightForLustrousTrait(IBlockDisplayReader world, BlockPos pos) {
-        int blockLight = world.getLightFor(LightType.BLOCK, pos);
-        int skyLight = world.getLightFor(LightType.SKY, pos);
+        int blockLight = world.getBrightness(LightType.BLOCK, pos);
+        int skyLight = world.getBrightness(LightType.SKY, pos);
         // Block light is less effective
         return Math.max(skyLight, blockLight * 3 / 4);
     }
@@ -281,7 +281,7 @@ public final class GearEvents {
     public static void onXpDrop(LivingExperienceDropEvent event) {
         if (event.getAttackingPlayer() == null) return;
 
-        ItemStack tool = event.getAttackingPlayer().getHeldItemMainhand();
+        ItemStack tool = event.getAttackingPlayer().getMainHandItem();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
         int ancientLevel = TraitHelper.getTraitLevel(tool, Const.Traits.ANCIENT);
@@ -305,7 +305,7 @@ public final class GearEvents {
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (event.getPlayer() == null) return;
 
-        ItemStack tool = event.getPlayer().getHeldItemMainhand();
+        ItemStack tool = event.getPlayer().getMainHandItem();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
         int ancientLevel = TraitHelper.getTraitLevel(tool, Const.Traits.ANCIENT);
@@ -314,9 +314,9 @@ public final class GearEvents {
             event.setExpToDrop(event.getExpToDrop() + bonusXp);
         }
 
-        if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().isIn(Tags.Blocks.ORES_DIAMOND) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool) == 0) {
-            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getPlayer().getEntityWorld());
-            entity.setPositionAndUpdate(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
+        if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) == 0) {
+            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getPlayer().getCommandSenderWorld());
+            entity.teleportTo(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
             EntityHelper.safeSpawn(entity);
         }
     }
@@ -369,12 +369,12 @@ public final class GearEvents {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDeath(LivingDeathEvent event) {
-        Entity killer = event.getSource().getTrueSource();
-        if (killer instanceof PlayerEntity && !killer.world.isRemote) {
+        Entity killer = event.getSource().getEntity();
+        if (killer instanceof PlayerEntity && !killer.level.isClientSide) {
             PlayerEntity player = (PlayerEntity) killer;
             if (TraitHelper.hasTraitEitherHand(player, Const.Traits.CONFETTI)) {
                 for (int i = 0; i < 3; ++i) {
-                    FireworkRocketEntity rocket = new FireworkRocketEntity(player.world, event.getEntity().getPosX(), event.getEntity().getPosYEye(), event.getEntity().getPosZ(), createRandomFirework());
+                    FireworkRocketEntity rocket = new FireworkRocketEntity(player.level, event.getEntity().getX(), event.getEntity().getEyeY(), event.getEntity().getZ(), createRandomFirework());
                     EntityHelper.safeSpawn(rocket);
                 }
             }
@@ -383,7 +383,7 @@ public final class GearEvents {
 
     private static ItemStack createRandomFirework() {
         ItemStack ret = new ItemStack(Items.FIREWORK_ROCKET);
-        CompoundNBT nbt = ret.getOrCreateChildTag("Fireworks");
+        CompoundNBT nbt = ret.getOrCreateTagElement("Fireworks");
         nbt.putByte("Flight", (byte) (SilentGear.RANDOM.nextInt(3) + 1));
         CompoundNBT explosion = new CompoundNBT();
         explosion.putByte("Type", (byte) SilentGear.RANDOM.nextInt(FireworkRocketItem.Shape.values().length));
@@ -402,7 +402,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.world.isRemote && event.phase == TickEvent.Phase.START) {
+        if (!event.player.level.isClientSide && event.phase == TickEvent.Phase.START) {
             int magnetic = Math.max(TraitHelper.getHighestLevelEitherHand(event.player, Const.Traits.MAGNETIC),
                     TraitHelper.getHighestLevelCurio(event.player, Const.Traits.MAGNETIC));
 
@@ -412,18 +412,18 @@ public final class GearEvents {
 
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
-            if (!event.player.areEyesInFluid(FluidTags.WATER) && TraitHelper.hasTrait(event.player.getItemStackFromSlot(EquipmentSlotType.HEAD), Const.Traits.TURTLE)) {
+            if (!event.player.isEyeInFluid(FluidTags.WATER) && TraitHelper.hasTrait(event.player.getItemBySlot(EquipmentSlotType.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
-                event.player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 210, 0, false, false, true));
+                event.player.addEffect(new EffectInstance(Effects.WATER_BREATHING, 210, 0, false, false, true));
             }
 
             // Void Ward trait
-            if (event.player.getPosY() < -64 && TraitHelper.hasTraitArmor(event.player, Const.Traits.VOID_WARD)) {
+            if (event.player.getY() < -64 && TraitHelper.hasTraitArmor(event.player, Const.Traits.VOID_WARD)) {
                 // A small boost to get the player out of the void, then levitation and slow falling
                 // to allow them to navigate back to safety
-                event.player.addVelocity(0, 10, 0);
-                event.player.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 400, 3, true, false));
-                event.player.addPotionEffect(new EffectInstance(Effects.LEVITATION, 200, 9, true, false));
+                event.player.push(0, 10, 0);
+                event.player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 400, 3, true, false));
+                event.player.addEffect(new EffectInstance(Effects.LEVITATION, 200, 9, true, false));
             }
         }
     }
@@ -432,30 +432,30 @@ public final class GearEvents {
         if (player.isCrouching()) return;
 
         final int range = magneticLevel * 3 + 1;
-        Vector3d target = new Vector3d(player.getPosX(), player.getPosYHeight(0.5), player.getPosZ());
+        Vector3d target = new Vector3d(player.getX(), player.getY(0.5), player.getZ());
 
-        AxisAlignedBB aabb = new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range + 1, player.getPosY() + range + 1, player.getPosZ() + range + 1);
-        for (ItemEntity entity : player.world.getEntitiesWithinAABB(ItemEntity.class, aabb, e -> e.getDistanceSq(player) < range * range)) {
+        AxisAlignedBB aabb = new AxisAlignedBB(player.getX() - range, player.getY() - range, player.getZ() - range, player.getX() + range + 1, player.getY() + range + 1, player.getZ() + range + 1);
+        for (ItemEntity entity : player.level.getEntitiesOfClass(ItemEntity.class, aabb, e -> e.distanceToSqr(player) < range * range)) {
             if (canMagneticPullItem(entity)) {
                 // Accelerate to target point
-                Vector3d vec = entity.func_230268_c_(player).subtractReverse(target);
+                Vector3d vec = entity.getDismountLocationForPassenger(player).vectorTo(target);
                 vec = vec.normalize().scale(0.06);
-                if (entity.getPosY() < target.y) {
-                    double xzDistanceSq = (entity.getPosX() - target.x) * (entity.getPosX() - target.x) + (entity.getPosZ() - target.z) * (entity.getPosZ() - target.z);
+                if (entity.getY() < target.y) {
+                    double xzDistanceSq = (entity.getX() - target.x) * (entity.getX() - target.x) + (entity.getZ() - target.z) * (entity.getZ() - target.z);
                     vec = vec.add(0, 0.005 + xzDistanceSq / 1000, 0);
                 }
-                entity.addVelocity(vec.x, vec.y, vec.z);
+                entity.push(vec.x, vec.y, vec.z);
             }
         }
     }
 
     private static boolean canMagneticPullItem(ItemEntity entity) {
-        return !entity.cannotPickup() && !entity.getPersistentData().getBoolean("PreventRemoteMovement");
+        return !entity.hasPickUpDelay() && !entity.getPersistentData().getBoolean("PreventRemoteMovement");
     }
 
     @SubscribeEvent
     public static void onLivingFall(LivingFallEvent event) {
-        ItemStack stack = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET);
+        ItemStack stack = event.getEntityLiving().getItemBySlot(EquipmentSlotType.FEET);
 
         if (event.getDistance() > 3 && GearHelper.isGear(stack) && !GearHelper.isBroken(stack)) {
             // Moonwalker fall damage canceling/reduction
@@ -480,7 +480,7 @@ public final class GearEvents {
                     if (damage > 0) {
                         GearHelper.attemptDamage(stack, damage, event.getEntityLiving(), EquipmentSlotType.FEET);
                     }
-                    event.getEntity().world.playSound(null, event.getEntity().getPosition(), SoundEvents.BLOCK_SLIME_BLOCK_FALL, SoundCategory.PLAYERS, 1f, 1f);
+                    event.getEntity().level.playSound(null, event.getEntity().blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundCategory.PLAYERS, 1f, 1f);
                     event.setCanceled(true);
                 }
             }
@@ -491,22 +491,22 @@ public final class GearEvents {
 
 //    @SubscribeEvent
     public static void onPlayerTickBouncing(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !event.player.isElytraFlying() && BOUNCE_TICKS.containsKey(event.player)) {
+        if (event.phase == TickEvent.Phase.END && !event.player.isFallFlying() && BOUNCE_TICKS.containsKey(event.player)) {
 //            event.player.moveForced(event.player.getPosX(), event.player.getPosY() + 0.1, event.player.getPosZ());
             Vector3d motion = BOUNCE_TICKS.get(event.player);
-            event.player.setMotion(motion.x, motion.y * 20, motion.z); // why * 20?
+            event.player.setDeltaMovement(motion.x, motion.y * 20, motion.z); // why * 20?
             event.player.setOnGround(false);
             BOUNCE_TICKS.remove(event.player);
             SilentGear.LOGGER.debug("bounce {}", motion);
 
-            if (event.player.getMotion().y < 0) {
+            if (event.player.getDeltaMovement().y < 0) {
                 bounceEntity(event.player);
             }
         }
     }
 
     private static void bounceEntity(Entity entity) {
-        Vector3d vector3d = entity.getMotion();
+        Vector3d vector3d = entity.getDeltaMovement();
         if (vector3d.y < 0) {
 //            entity.moveForced(entity.getPosX(), entity.getPosY() + 0.1, entity.getPosZ());
 //            entity.setOnGround(false);
@@ -520,15 +520,15 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onPlayerHurt(LivingHurtEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
-            Entity source = event.getSource().getImmediateSource();
+            Entity source = event.getSource().getDirectEntity();
             if (source instanceof LivingEntity) {
                 PlayerEntity player = (PlayerEntity) event.getEntityLiving();
                 int bounce = TraitHelper.getHighestLevelArmor(player, Const.Traits.BOUNCE);
                 if (bounce > 0) {
                     SilentGear.LOGGER.debug("knockback");
-                    ((LivingEntity) source).applyKnockback(2 * bounce,
-                            -MathHelper.sin(source.rotationYaw * ((float)Math.PI / 180F)),
-                            MathHelper.cos(source.rotationYaw * ((float)Math.PI / 180F)));
+                    ((LivingEntity) source).knockback(2 * bounce,
+                            -MathHelper.sin(source.yRot * ((float)Math.PI / 180F)),
+                            MathHelper.cos(source.yRot * ((float)Math.PI / 180F)));
                 }
             }
         }

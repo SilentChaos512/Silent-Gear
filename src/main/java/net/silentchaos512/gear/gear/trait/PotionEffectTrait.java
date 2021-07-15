@@ -48,7 +48,7 @@ public class PotionEffectTrait extends SimpleTrait {
 
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
-        if (!isEquipped || context.getPlayer() == null || context.getPlayer().ticksExisted % 10 != 0) return;
+        if (!isEquipped || context.getPlayer() == null || context.getPlayer().tickCount % 10 != 0) return;
 
         GearType gearType = ((ICoreItem) context.getGear().getItem()).getGearType();
 
@@ -70,7 +70,7 @@ public class PotionEffectTrait extends SimpleTrait {
             for (PotionData potionData : effects) {
                 EffectInstance effect = potionData.getEffect(context.getTraitLevel(), setPieceCount, hasFullSet);
                 if (effect != null) {
-                    player.addPotionEffect(effect);
+                    player.addEffect(effect);
                 }
             }
         }
@@ -80,7 +80,7 @@ public class PotionEffectTrait extends SimpleTrait {
         if (!"armor".equals(type)) return 1;
 
         int count = 0;
-        for (ItemStack stack : player.getArmorInventoryList()) {
+        for (ItemStack stack : player.getArmorSlots()) {
             if (stack.getItem() instanceof ICoreArmor && TraitHelper.hasTrait(stack, this)) {
                 ++count;
             }
@@ -126,7 +126,7 @@ public class PotionEffectTrait extends SimpleTrait {
 
         for (int typeIndex = 0; typeIndex < gearTypeCount; ++typeIndex) {
             List<PotionData> list = new ArrayList<>();
-            String gearType = buffer.readString();
+            String gearType = buffer.readUtf();
             int potionDataCount = buffer.readByte();
 
             for (int potionIndex = 0; potionIndex < potionDataCount; ++potionIndex) {
@@ -140,7 +140,7 @@ public class PotionEffectTrait extends SimpleTrait {
     static void writeToNetwork(PotionEffectTrait trait, PacketBuffer buffer) {
         buffer.writeByte(trait.potions.size());
         for (Map.Entry<String, List<PotionData>> entry : trait.potions.entrySet()) {
-            buffer.writeString(entry.getKey());
+            buffer.writeUtf(entry.getKey());
             buffer.writeByte(entry.getValue().size());
 
             for (PotionData potionData : entry.getValue()) {
@@ -196,9 +196,9 @@ public class PotionEffectTrait extends SimpleTrait {
             PotionData ret = new PotionData();
             ret.type = deserializeType(json);
             // Effect ID, get actual potion only when needed
-            ret.effectId = new ResourceLocation(JSONUtils.getString(json, "effect", "unknown"));
+            ret.effectId = new ResourceLocation(JSONUtils.getAsString(json, "effect", "unknown"));
             // Effects duration in seconds.
-            float durationInSeconds = JSONUtils.getFloat(json, "duration", getDefaultDuration(ret.effectId));
+            float durationInSeconds = JSONUtils.getAsFloat(json, "duration", getDefaultDuration(ret.effectId));
             ret.duration = TimeUtils.ticksFromSeconds(durationInSeconds);
 
             // Level int or array
@@ -208,7 +208,7 @@ public class PotionEffectTrait extends SimpleTrait {
             }
             if (elementLevel.isJsonPrimitive()) {
                 // Single level
-                ret.levels = new int[]{JSONUtils.getInt(json, "level", 1)};
+                ret.levels = new int[]{JSONUtils.getAsInt(json, "level", 1)};
             } else if (elementLevel.isJsonArray()) {
                 // Levels by piece count
                 JsonArray array = elementLevel.getAsJsonArray();
@@ -225,16 +225,16 @@ public class PotionEffectTrait extends SimpleTrait {
 
         private static LevelType deserializeType(JsonObject json) {
             if (json.has("type")) {
-                return EnumUtils.byName(JSONUtils.getString(json, "type"), LevelType.FULL_SET_ONLY);
+                return EnumUtils.byName(JSONUtils.getAsString(json, "type"), LevelType.FULL_SET_ONLY);
             } else if (json.has("full_set")) {
-                return JSONUtils.getBoolean(json, "full_set") ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT;
+                return JSONUtils.getAsBoolean(json, "full_set") ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT;
             }
             return LevelType.TRAIT_LEVEL;
         }
 
         static PotionData read(PacketBuffer buffer) {
             PotionData ret = new PotionData();
-            ret.type = buffer.readEnumValue(LevelType.class);
+            ret.type = buffer.readEnum(LevelType.class);
             ret.effectId = buffer.readResourceLocation();
             ret.duration = buffer.readVarInt();
             ret.levels = buffer.readVarIntArray();
@@ -242,7 +242,7 @@ public class PotionEffectTrait extends SimpleTrait {
         }
 
         void write(PacketBuffer buffer) {
-            buffer.writeEnumValue(type);
+            buffer.writeEnum(type);
             buffer.writeResourceLocation(effectId);
             buffer.writeVarInt(duration);
             buffer.writeVarIntArray(levels);

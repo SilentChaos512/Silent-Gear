@@ -56,7 +56,7 @@ public class ModAdvancementProvider implements IDataProvider {
     }
 
     @Override
-    public void act(DirectoryCache cache) {
+    public void run(DirectoryCache cache) {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
         //noinspection OverlyLongLambda
@@ -67,7 +67,7 @@ public class ModAdvancementProvider implements IDataProvider {
                 Path path1 = getPath(path, p_204017_3_);
 
                 try {
-                    IDataProvider.save(GSON, cache, p_204017_3_.copy().serialize(), path1);
+                    IDataProvider.save(GSON, cache, p_204017_3_.deconstruct().serializeToJson(), path1);
                 } catch (IOException ioexception) {
                     LOGGER.error("Couldn't save advancement {}", path1, ioexception);
                 }
@@ -99,65 +99,65 @@ public class ModAdvancementProvider implements IDataProvider {
                     LazyPartData.of(Const.Parts.GRIP, ModItems.GRIP.get(), Const.Materials.WOOL_BLACK),
                     LazyPartData.of(Const.Parts.BINDING, ModItems.BINDING.get(), Const.Materials.STRING)
             ));
-            Advancement root = Advancement.Builder.builder()
-                    .withDisplay(rootIcon, title("root"), description("root"), new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/adventure.png"), FrameType.TASK, false, false, false)
-                    .withCriterion("get_item", getItem(Items.CRAFTING_TABLE))
-                    .register(consumer, id("root"));
+            Advancement root = Advancement.Builder.advancement()
+                    .display(rootIcon, title("root"), description("root"), new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/adventure.png"), FrameType.TASK, false, false, false)
+                    .addCriterion("get_item", getItem(Items.CRAFTING_TABLE))
+                    .save(consumer, id("root"));
 
-            Advancement overworldPlants = Advancement.Builder.builder()
-                    .withParent(root)
-                    .withDisplay(CraftingItems.FLAX_FIBER, title("overworld_plants"), description("overworld_plants"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("flax_seeds", getItem(ModItems.FLAX_SEEDS))
-                    .withCriterion("flax_fibers", getItem(CraftingItems.FLAX_FIBER))
-                    .withCriterion("fluffy_seeds", getItem(ModItems.FLUFFY_SEEDS))
-                    .withCriterion("fluffy_puffs", getItem(CraftingItems.FLUFFY_PUFF))
-                    .withRequirementsStrategy(IRequirementsStrategy.AND)
-                    .register(consumer, id("overworld_plants"));
-            Advancement kachink1 = Advancement.Builder.builder()
-                    .withParent(root)
-                    .withDisplay(Items.IRON_NUGGET, title("kachink1"), description("kachink1"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("kachink", genericInt(GearHelper.DAMAGE_FACTOR_CHANGE, 1))
-                    .register(consumer, id("kachink1"));
-            Advancement kachink2 = Advancement.Builder.builder()
-                    .withParent(kachink1)
-                    .withDisplay(CraftingItems.DIAMOND_SHARD, title("kachink2"), description("kachink2"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("kachink", genericInt(DurabilityTrait.TRIGGER_BRITTLE, 1))
-                    .register(consumer, id("kachink2"));
+            Advancement overworldPlants = Advancement.Builder.advancement()
+                    .parent(root)
+                    .display(CraftingItems.FLAX_FIBER, title("overworld_plants"), description("overworld_plants"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("flax_seeds", getItem(ModItems.FLAX_SEEDS))
+                    .addCriterion("flax_fibers", getItem(CraftingItems.FLAX_FIBER))
+                    .addCriterion("fluffy_seeds", getItem(ModItems.FLUFFY_SEEDS))
+                    .addCriterion("fluffy_puffs", getItem(CraftingItems.FLUFFY_PUFF))
+                    .requirements(IRequirementsStrategy.AND)
+                    .save(consumer, id("overworld_plants"));
+            Advancement kachink1 = Advancement.Builder.advancement()
+                    .parent(root)
+                    .display(Items.IRON_NUGGET, title("kachink1"), description("kachink1"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("kachink", genericInt(GearHelper.DAMAGE_FACTOR_CHANGE, 1))
+                    .save(consumer, id("kachink1"));
+            Advancement kachink2 = Advancement.Builder.advancement()
+                    .parent(kachink1)
+                    .display(CraftingItems.DIAMOND_SHARD, title("kachink2"), description("kachink2"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("kachink", genericInt(DurabilityTrait.TRIGGER_BRITTLE, 1))
+                    .save(consumer, id("kachink2"));
 
-            Advancement crudeTool = Advancement.Builder.builder()
-                    .withParent(root)
-                    .withDisplay(CraftingItems.ROUGH_ROD, title("crude_tool"), description("crude_tool"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("tool_has_rough_rod", genericInt(GearEvents.CRAFTED_WITH_ROUGH_ROD, 1))
-                    .register(consumer, id("crude_tool"));
-            Advancement survivalTool = Advancement.Builder.builder()
-                    .withParent(crudeTool)
-                    .withDisplay(ModItems.KNIFE, title("survival_tool"), description("survival_tool"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("knife", getItem(ModItems.KNIFE))
-                    .withCriterion("dagger", getItem(ModItems.DAGGER))
-                    .withRequirementsStrategy(IRequirementsStrategy.OR)
-                    .register(consumer, id("survival_tool"));
+            Advancement crudeTool = Advancement.Builder.advancement()
+                    .parent(root)
+                    .display(CraftingItems.ROUGH_ROD, title("crude_tool"), description("crude_tool"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("tool_has_rough_rod", genericInt(GearEvents.CRAFTED_WITH_ROUGH_ROD, 1))
+                    .save(consumer, id("crude_tool"));
+            Advancement survivalTool = Advancement.Builder.advancement()
+                    .parent(crudeTool)
+                    .display(ModItems.KNIFE, title("survival_tool"), description("survival_tool"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("knife", getItem(ModItems.KNIFE))
+                    .addCriterion("dagger", getItem(ModItems.DAGGER))
+                    .requirements(IRequirementsStrategy.OR)
+                    .save(consumer, id("survival_tool"));
             Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, survivalTool);
 
             Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
             Advancement upgradeBase = simpleGetItem(consumer, CraftingItems.UPGRADE_BASE, templateBoard);
             Advancement repairKit;
             {
-                Advancement.Builder builder = Advancement.Builder.builder()
-                        .withParent(templateBoard)
-                        .withDisplay(ModItems.CRUDE_REPAIR_KIT, title("repair_kit"), description("repair_kit"), null, FrameType.TASK, true, true, false)
-                        .withRequirementsStrategy(IRequirementsStrategy.OR);
+                Advancement.Builder builder = Advancement.Builder.advancement()
+                        .parent(templateBoard)
+                        .display(ModItems.CRUDE_REPAIR_KIT, title("repair_kit"), description("repair_kit"), null, FrameType.TASK, true, true, false)
+                        .requirements(IRequirementsStrategy.OR);
                 Registration.getItems(RepairKitItem.class).forEach(item ->
-                        builder.withCriterion(NameUtils.fromItem(item).getPath(), getItem(item)));
-                repairKit = builder.register(consumer, id("repair_kit"));
+                        builder.addCriterion(NameUtils.fromItem(item).getPath(), getItem(item)));
+                repairKit = builder.save(consumer, id("repair_kit"));
             }
 
             Advancement crimsonRepairKit = simpleGetItem(consumer, ModItems.CRIMSON_REPAIR_KIT, repairKit);
             Advancement azureRepairKit = simpleGetItem(consumer, ModItems.AZURE_REPAIR_KIT, crimsonRepairKit);
-            Advancement repairFromBroken = Advancement.Builder.builder()
-                    .withParent(repairKit)
-                    .withDisplay(Items.FLINT, title("repair_from_broken"), description("repair_from_broken"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("repair", genericInt(GearEvents.REPAIR_FROM_BROKEN, 1))
-                    .register(consumer, id("repair_from_broken"));
+            Advancement repairFromBroken = Advancement.Builder.advancement()
+                    .parent(repairKit)
+                    .display(Items.FLINT, title("repair_from_broken"), description("repair_from_broken"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("repair", genericInt(GearEvents.REPAIR_FROM_BROKEN, 1))
+                    .save(consumer, id("repair_from_broken"));
 
             Advancement blueprintBook = simpleGetItem(consumer, ModItems.BLUEPRINT_BOOK, blueprintPaper);
 
@@ -165,52 +165,52 @@ public class ModAdvancementProvider implements IDataProvider {
 
             //region Gear
 
-            Advancement mixedMaterials = Advancement.Builder.builder()
-                    .withParent(blueprintPaper)
-                    .withDisplay(Items.EMERALD, title("mixed_materials"), description("mixed_materials"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("mixed_materials", genericInt(GearEvents.UNIQUE_MAIN_PARTS, 2))
-                    .register(consumer, id("mixed_materials"));
+            Advancement mixedMaterials = Advancement.Builder.advancement()
+                    .parent(blueprintPaper)
+                    .display(Items.EMERALD, title("mixed_materials"), description("mixed_materials"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("mixed_materials", genericInt(GearEvents.UNIQUE_MAIN_PARTS, 2))
+                    .save(consumer, id("mixed_materials"));
 
-            Advancement armor = Advancement.Builder.builder()
-                    .withParent(blueprintPaper)
-                    .withDisplay(ModItems.HELMET, title("armor"), description("armor"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("helmet", getItem(ModItems.HELMET))
-                    .withCriterion("chestplate", getItem(ModItems.CHESTPLATE))
-                    .withCriterion("leggings", getItem(ModItems.LEGGINGS))
-                    .withCriterion("boots", getItem(ModItems.BOOTS))
-                    .withRequirementsStrategy(IRequirementsStrategy.OR)
-                    .register(consumer, id("armor"));
+            Advancement armor = Advancement.Builder.advancement()
+                    .parent(blueprintPaper)
+                    .display(ModItems.HELMET, title("armor"), description("armor"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("helmet", getItem(ModItems.HELMET))
+                    .addCriterion("chestplate", getItem(ModItems.CHESTPLATE))
+                    .addCriterion("leggings", getItem(ModItems.LEGGINGS))
+                    .addCriterion("boots", getItem(ModItems.BOOTS))
+                    .requirements(IRequirementsStrategy.OR)
+                    .save(consumer, id("armor"));
 
-            Advancement bow = Advancement.Builder.builder()
-                    .withParent(blueprintPaper)
-                    .withDisplay(ModItems.BOW, title("bow"), description("bow"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_item", getItem(ModItems.BOW))
-                    .register(consumer, id("bow"));
-            Advancement standardTools = Advancement.Builder.builder()
-                    .withParent(blueprintPaper)
-                    .withDisplay(ModItems.PICKAXE, title("standard_tools"), description("standard_tools"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("pickaxe", getItem(ModItems.PICKAXE))
-                    .withCriterion("shovel", getItem(ModItems.SHOVEL))
-                    .withCriterion("axe", getItem(ModItems.AXE))
-                    .withRequirementsStrategy(IRequirementsStrategy.AND)
-                    .register(consumer, id("standard_tools"));
-            Advancement swords = Advancement.Builder.builder()
-                    .withParent(blueprintPaper)
-                    .withDisplay(ModItems.SWORD, title("swords"), description("swords"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("sword", getItem(ModItems.SWORD))
-                    .withCriterion("katana", getItem(ModItems.KATANA))
-                    .withCriterion("machete", getItem(ModItems.MACHETE))
-                    .withRequirementsStrategy(IRequirementsStrategy.AND)
-                    .register(consumer, id("swords"));
+            Advancement bow = Advancement.Builder.advancement()
+                    .parent(blueprintPaper)
+                    .display(ModItems.BOW, title("bow"), description("bow"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_item", getItem(ModItems.BOW))
+                    .save(consumer, id("bow"));
+            Advancement standardTools = Advancement.Builder.advancement()
+                    .parent(blueprintPaper)
+                    .display(ModItems.PICKAXE, title("standard_tools"), description("standard_tools"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("pickaxe", getItem(ModItems.PICKAXE))
+                    .addCriterion("shovel", getItem(ModItems.SHOVEL))
+                    .addCriterion("axe", getItem(ModItems.AXE))
+                    .requirements(IRequirementsStrategy.AND)
+                    .save(consumer, id("standard_tools"));
+            Advancement swords = Advancement.Builder.advancement()
+                    .parent(blueprintPaper)
+                    .display(ModItems.SWORD, title("swords"), description("swords"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("sword", getItem(ModItems.SWORD))
+                    .addCriterion("katana", getItem(ModItems.KATANA))
+                    .addCriterion("machete", getItem(ModItems.MACHETE))
+                    .requirements(IRequirementsStrategy.AND)
+                    .save(consumer, id("swords"));
 
-            Advancement bigJobTools = Advancement.Builder.builder()
-                    .withParent(standardTools)
-                    .withDisplay(ModItems.HAMMER, title("big_job_tools"), description("big_job_tools"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("hammer", getItem(ModItems.HAMMER))
-                    .withCriterion("excavator", getItem(ModItems.EXCAVATOR))
-                    .withCriterion("lumber_axe", getItem(ModItems.SAW))
-                    .withRequirementsStrategy(IRequirementsStrategy.AND)
-                    .register(consumer, id("big_job_tools"));
+            Advancement bigJobTools = Advancement.Builder.advancement()
+                    .parent(standardTools)
+                    .display(ModItems.HAMMER, title("big_job_tools"), description("big_job_tools"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("hammer", getItem(ModItems.HAMMER))
+                    .addCriterion("excavator", getItem(ModItems.EXCAVATOR))
+                    .addCriterion("lumber_axe", getItem(ModItems.SAW))
+                    .requirements(IRequirementsStrategy.AND)
+                    .save(consumer, id("big_job_tools"));
 
             Advancement crossbow = simpleGetItem(consumer, ModItems.CROSSBOW, bow);
 
@@ -222,85 +222,85 @@ public class ModAdvancementProvider implements IDataProvider {
 
             //region Nether
 
-            Advancement nether = Advancement.Builder.builder()
-                    .withParent(root)
-                    .withDisplay(Items.OBSIDIAN, title("nether"), description("nether"), null, FrameType.TASK, false, false, false)
-                    .withCriterion("entered_nether", ChangeDimensionTrigger.Instance.toWorld(World.THE_NETHER))
-                    .register(consumer, id("nether"));
+            Advancement nether = Advancement.Builder.advancement()
+                    .parent(root)
+                    .display(Items.OBSIDIAN, title("nether"), description("nether"), null, FrameType.TASK, false, false, false)
+                    .addCriterion("entered_nether", ChangeDimensionTrigger.Instance.changedDimensionTo(World.NETHER))
+                    .save(consumer, id("nether"));
 
-            Advancement netherPlants = Advancement.Builder.builder()
-                    .withParent(nether)
-                    .withDisplay(ModItems.NETHER_BANANA, title("nether_plants"), description("nether_plants"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("banana", getItem(ModItems.NETHER_BANANA))
-                    .withCriterion("sapling", getItem(ModBlocks.NETHERWOOD_SAPLING))
-                    .withRequirementsStrategy(IRequirementsStrategy.AND)
-                    .register(consumer, id("nether_plants"));
+            Advancement netherPlants = Advancement.Builder.advancement()
+                    .parent(nether)
+                    .display(ModItems.NETHER_BANANA, title("nether_plants"), description("nether_plants"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("banana", getItem(ModItems.NETHER_BANANA))
+                    .addCriterion("sapling", getItem(ModBlocks.NETHERWOOD_SAPLING))
+                    .requirements(IRequirementsStrategy.AND)
+                    .save(consumer, id("nether_plants"));
 
             Advancement blazeGold = simpleGetItem(consumer, CraftingItems.BLAZE_GOLD_INGOT, nether, "blaze_gold");
-            Advancement crimsonIron = Advancement.Builder.builder()
-                    .withParent(nether)
-                    .withDisplay(CraftingItems.CRIMSON_IRON_INGOT, title("crimson_iron"), description("crimson_iron"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_ore", getItem(ModBlocks.CRIMSON_IRON_ORE))
-                    .withCriterion("get_ingot", getItem(CraftingItems.CRIMSON_IRON_INGOT))
-                    .register(consumer, id("crimson_iron"));
+            Advancement crimsonIron = Advancement.Builder.advancement()
+                    .parent(nether)
+                    .display(CraftingItems.CRIMSON_IRON_INGOT, title("crimson_iron"), description("crimson_iron"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_ore", getItem(ModBlocks.CRIMSON_IRON_ORE))
+                    .addCriterion("get_ingot", getItem(CraftingItems.CRIMSON_IRON_INGOT))
+                    .save(consumer, id("crimson_iron"));
 
-            Advancement materialGrader = Advancement.Builder.builder()
-                    .withParent(blazeGold)
-                    .withDisplay(ModBlocks.MATERIAL_GRADER, title("material_grader"), description("material_grader"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_grader", getItem(ModBlocks.MATERIAL_GRADER))
-                    .withCriterion("get_catalyst", getItem(ModTags.Items.GRADER_CATALYSTS_TIER_1))
-                    .register(consumer, id("material_grader"));
+            Advancement materialGrader = Advancement.Builder.advancement()
+                    .parent(blazeGold)
+                    .display(ModBlocks.MATERIAL_GRADER, title("material_grader"), description("material_grader"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_grader", getItem(ModBlocks.MATERIAL_GRADER))
+                    .addCriterion("get_catalyst", getItem(ModTags.Items.GRADER_CATALYSTS_TIER_1))
+                    .save(consumer, id("material_grader"));
 
             Advancement crimsonSteel = simpleGetItem(consumer, CraftingItems.CRIMSON_STEEL_INGOT, crimsonIron, "crimson_steel");
             Advancement salvager = simpleGetItem(consumer, ModBlocks.SALVAGER, crimsonIron);
 
-            Advancement highDurability = Advancement.Builder.builder()
-                    .withParent(materialGrader)
-                    .withDisplay(ModItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("durability", genericInt(GearEvents.MAX_DURABILITY, 16_000))
-                    .register(consumer, id("high_durability"));
-            Advancement graderCatalyst2 = Advancement.Builder.builder()
-                    .withParent(materialGrader)
-                    .withDisplay(CraftingItems.BLAZING_DUST, title("grader_catalyst_2"), description("grader_catalyst_2"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_item", getItem(ModTags.Items.GRADER_CATALYSTS_TIER_2))
-                    .register(consumer, id("grader_catalyst_2"));
+            Advancement highDurability = Advancement.Builder.advancement()
+                    .parent(materialGrader)
+                    .display(ModItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("durability", genericInt(GearEvents.MAX_DURABILITY, 16_000))
+                    .save(consumer, id("high_durability"));
+            Advancement graderCatalyst2 = Advancement.Builder.advancement()
+                    .parent(materialGrader)
+                    .display(CraftingItems.BLAZING_DUST, title("grader_catalyst_2"), description("grader_catalyst_2"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_item", getItem(ModTags.Items.GRADER_CATALYSTS_TIER_2))
+                    .save(consumer, id("grader_catalyst_2"));
 
-            Advancement graderCatalyst3 = Advancement.Builder.builder()
-                    .withParent(graderCatalyst2)
-                    .withDisplay(CraftingItems.GLITTERY_DUST, title("grader_catalyst_3"), description("grader_catalyst_3"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_item", getItem(ModTags.Items.GRADER_CATALYSTS_TIER_3))
-                    .register(consumer, id("grader_catalyst_3"));
+            Advancement graderCatalyst3 = Advancement.Builder.advancement()
+                    .parent(graderCatalyst2)
+                    .display(CraftingItems.GLITTERY_DUST, title("grader_catalyst_3"), description("grader_catalyst_3"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_item", getItem(ModTags.Items.GRADER_CATALYSTS_TIER_3))
+                    .save(consumer, id("grader_catalyst_3"));
 
             //endregion
 
             //region The End
 
-            Advancement theEnd = Advancement.Builder.builder()
-                    .withParent(nether)
-                    .withDisplay(Items.END_STONE, title("the_end"), description("the_end"), null, FrameType.TASK, false, false, false)
-                    .withCriterion("entered_the_end", ChangeDimensionTrigger.Instance.toWorld(World.THE_END))
-                    .register(consumer, id("the_end"));
+            Advancement theEnd = Advancement.Builder.advancement()
+                    .parent(nether)
+                    .display(Items.END_STONE, title("the_end"), description("the_end"), null, FrameType.TASK, false, false, false)
+                    .addCriterion("entered_the_end", ChangeDimensionTrigger.Instance.changedDimensionTo(World.END))
+                    .save(consumer, id("the_end"));
 
-            Advancement azureSilver = Advancement.Builder.builder()
-                    .withParent(theEnd)
-                    .withDisplay(CraftingItems.AZURE_SILVER_INGOT, title("azure_silver"), description("azure_silver"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_ore", getItem(ModBlocks.AZURE_SILVER_ORE))
-                    .withCriterion("get_ingot", getItem(CraftingItems.AZURE_SILVER_INGOT))
-                    .register(consumer, id("azure_silver"));
+            Advancement azureSilver = Advancement.Builder.advancement()
+                    .parent(theEnd)
+                    .display(CraftingItems.AZURE_SILVER_INGOT, title("azure_silver"), description("azure_silver"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_ore", getItem(ModBlocks.AZURE_SILVER_ORE))
+                    .addCriterion("get_ingot", getItem(CraftingItems.AZURE_SILVER_INGOT))
+                    .save(consumer, id("azure_silver"));
 
-            Advancement azureElectrum = Advancement.Builder.builder()
-                    .withParent(azureSilver)
-                    .withDisplay(CraftingItems.AZURE_ELECTRUM_INGOT, title("azure_electrum"), description("azure_electrum"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_ingot", getItem(CraftingItems.AZURE_ELECTRUM_INGOT))
-                    .register(consumer, id("azure_electrum"));
+            Advancement azureElectrum = Advancement.Builder.advancement()
+                    .parent(azureSilver)
+                    .display(CraftingItems.AZURE_ELECTRUM_INGOT, title("azure_electrum"), description("azure_electrum"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_ingot", getItem(CraftingItems.AZURE_ELECTRUM_INGOT))
+                    .save(consumer, id("azure_electrum"));
 
             ItemStack azureSilverBoots = new ItemStack(ModItems.BOOTS);
             GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, ModItems.BOOT_PLATES.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
-            Advancement moonwalker = Advancement.Builder.builder()
-                    .withParent(azureSilver)
-                    .withDisplay(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, FrameType.TASK, true, true, false)
-                    .withCriterion("fall_with_moonwalker_boots", genericInt(GearEvents.FALL_WITH_MOONWALKER, 1))
-                    .register(consumer, id("moonwalker"));
+            Advancement moonwalker = Advancement.Builder.advancement()
+                    .parent(azureSilver)
+                    .display(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, FrameType.TASK, true, true, false)
+                    .addCriterion("fall_with_moonwalker_boots", genericInt(GearEvents.FALL_WITH_MOONWALKER, 1))
+                    .save(consumer, id("moonwalker"));
 
             //endregion
         }
@@ -314,11 +314,11 @@ public class ModAdvancementProvider implements IDataProvider {
         }
 
         private static Advancement simpleGetItem(Consumer<Advancement> consumer, IItemProvider item, ItemStack icon, Advancement parent, String key) {
-            return Advancement.Builder.builder()
-                    .withParent(parent)
-                    .withDisplay(icon, title(key), description(key), null, FrameType.TASK, true, true, false)
-                    .withCriterion("get_item", getItem(item))
-                    .register(consumer, id(key));
+            return Advancement.Builder.advancement()
+                    .parent(parent)
+                    .display(icon, title(key), description(key), null, FrameType.TASK, true, true, false)
+                    .addCriterion("get_item", getItem(item))
+                    .save(consumer, id(key));
         }
 
         private static String id(String path) {
@@ -326,11 +326,11 @@ public class ModAdvancementProvider implements IDataProvider {
         }
 
         private static ICriterionInstance getItem(IItemProvider... items) {
-            return InventoryChangeTrigger.Instance.forItems(items);
+            return InventoryChangeTrigger.Instance.hasItems(items);
         }
 
         private static ICriterionInstance getItem(ITag<Item> tag) {
-            return InventoryChangeTrigger.Instance.forItems(new ItemPredicate(tag, null, MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, EnchantmentPredicate.enchantments, EnchantmentPredicate.enchantments, null, NBTPredicate.ANY));
+            return InventoryChangeTrigger.Instance.hasItems(new ItemPredicate(tag, null, MinMaxBounds.IntBound.ANY, MinMaxBounds.IntBound.ANY, EnchantmentPredicate.NONE, EnchantmentPredicate.NONE, null, NBTPredicate.ANY));
         }
 
         private static ICriterionInstance genericInt(ResourceLocation id, int value) {

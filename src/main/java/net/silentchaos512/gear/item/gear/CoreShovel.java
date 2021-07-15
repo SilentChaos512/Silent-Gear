@@ -34,11 +34,11 @@ import java.util.function.Consumer;
 public class CoreShovel extends ShovelItem implements ICoreTool {
     private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
             Material.CLAY,
-            Material.SNOW_BLOCK,
-            Material.ORGANIC,
-            Material.EARTH,
+            Material.SNOW,
+            Material.GRASS,
+            Material.DIRT,
             Material.SAND,
-            Material.SNOW
+            Material.TOP_SNOW
     );
 
     public CoreShovel() {
@@ -59,7 +59,7 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState state) {
+    public boolean isCorrectToolForDrops(BlockState state) {
         // Vanilla version... Not good because we can't get the actual harvest level.
         // Assume a very high level since we can't get the actual value.
         return canHarvestBlock(state, 10);
@@ -72,19 +72,19 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
         // Included in base or extra materials?
         if (BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
             return true;
-        return super.canHarvestBlock(state);
+        return super.isCorrectToolForDrops(state);
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         // No action if broken or player is sneaking
-        if (GearHelper.isBroken(context.getItem()) || context.getPlayer() != null && context.getPlayer().isCrouching())
+        if (GearHelper.isBroken(context.getItemInHand()) || context.getPlayer() != null && context.getPlayer().isCrouching())
             return ActionResultType.PASS;
         // Try to let traits do their thing first
         ActionResultType result = GearHelper.onItemUse(context);
         // Make paths or whatever
         if (result == ActionResultType.PASS)
-            return GearHelper.useAndCheckBroken(context, super::onItemUse);
+            return GearHelper.useAndCheckBroken(context, super::useOn);
         return result;
     }
 
@@ -93,7 +93,7 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     //region Standard tool overrides
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -126,7 +126,7 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -136,7 +136,7 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -161,22 +161,22 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return GearHelper.hitEntity(stack, target, attacker);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 

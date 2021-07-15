@@ -87,7 +87,7 @@ public class CompoundPart extends AbstractGearPart {
     @Override
     public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
         if (part != null) {
-            return part.getItem().getDisplayName();
+            return part.getItem().getHoverName();
         }
         return super.getDisplayName(null, gear);
     }
@@ -206,7 +206,7 @@ public class CompoundPart extends AbstractGearPart {
 
     @Override
     public PartData randomizeData(GearType gearType, int tier) {
-        for (ItemStack stack : this.getIngredient().getMatchingStacks()) {
+        for (ItemStack stack : this.getIngredient().getItems()) {
             if (stack.getItem() instanceof CompoundPartItem) {
                 int materialCount = getRandomMaterialCount(partType);
                 List<MaterialInstance> materials = getRandomMaterials(gearType, materialCount, tier);
@@ -289,19 +289,19 @@ public class CompoundPart extends AbstractGearPart {
         @Override
         public CompoundPart read(ResourceLocation id, JsonObject json) {
             CompoundPart part = super.read(id, json, false);
-            String gearTypeStr = JSONUtils.getString(json, "gear_type");
+            String gearTypeStr = JSONUtils.getAsString(json, "gear_type");
             part.gearType = GearType.get(gearTypeStr);
             if (!part.gearType.isGear()) {
                 throw new JsonParseException("Unknown gear type: " + gearTypeStr);
             }
-            part.partType = PartType.get(new ResourceLocation(JSONUtils.getString(json, "part_type")));
+            part.partType = PartType.get(new ResourceLocation(JSONUtils.getAsString(json, "part_type")));
             return part;
         }
 
         @Override
         public CompoundPart read(ResourceLocation id, PacketBuffer buffer) {
             CompoundPart part = super.read(id, buffer);
-            part.gearType = GearType.get(buffer.readString());
+            part.gearType = GearType.get(buffer.readUtf());
             part.partType = PartType.get(buffer.readResourceLocation());
             return part;
         }
@@ -309,7 +309,7 @@ public class CompoundPart extends AbstractGearPart {
         @Override
         public void write(PacketBuffer buffer, CompoundPart part) {
             super.write(buffer, part);
-            buffer.writeString(part.gearType.getName());
+            buffer.writeUtf(part.gearType.getName());
             buffer.writeResourceLocation(part.partType.getName());
         }
     }

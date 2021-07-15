@@ -49,7 +49,7 @@ public class HasTraitCondition extends GearLootCondition {
     }
 
     @Override
-    public LootConditionType func_230419_b_() {
+    public LootConditionType getType() {
         return ModLootStuff.HAS_TRAIT;
     }
 
@@ -61,7 +61,7 @@ public class HasTraitCondition extends GearLootCondition {
 
         @Override
         public HasTraitCondition deserialize(JsonObject json, JsonDeserializationContext context) {
-            ResourceLocation traitId = new ResourceLocation(JSONUtils.getString(json, "trait"));
+            ResourceLocation traitId = new ResourceLocation(JSONUtils.getAsString(json, "trait"));
             int minLevel = 1;
             int maxLevel = Integer.MAX_VALUE;
             if (json.has("level")) {
@@ -69,8 +69,8 @@ public class HasTraitCondition extends GearLootCondition {
                 if (levelJson.isJsonPrimitive()) {
                     minLevel = levelJson.getAsInt();
                 } else {
-                    minLevel = JSONUtils.getInt(levelJson.getAsJsonObject(), "min", minLevel);
-                    maxLevel = JSONUtils.getInt(levelJson.getAsJsonObject(), "max", maxLevel);
+                    minLevel = JSONUtils.getAsInt(levelJson.getAsJsonObject(), "min", minLevel);
+                    maxLevel = JSONUtils.getAsInt(levelJson.getAsJsonObject(), "max", maxLevel);
                 }
             }
             return new HasTraitCondition(traitId, minLevel, maxLevel);

@@ -8,7 +8,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
 public class GearSmithingTableBlock extends Block {
-    private static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 2, 16, 16, 16);
+    private static final VoxelShape SHAPE = Block.box(0, 0, 2, 16, 16, 16);
 
     public GearSmithingTableBlock(Properties properties) {
         super(properties);

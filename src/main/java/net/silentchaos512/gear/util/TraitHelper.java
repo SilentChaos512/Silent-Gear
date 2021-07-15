@@ -193,14 +193,14 @@ public final class TraitHelper {
 
     @Deprecated
     public static int getHighestLevelEitherHand(PlayerEntity player, ResourceLocation traitId) {
-        ItemStack main = player.getHeldItemMainhand();
-        ItemStack off = player.getHeldItemOffhand();
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
         return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
     }
 
     public static int getHighestLevelArmor(PlayerEntity player, DataResource<ITrait> trait) {
         int max = 0;
-        for (ItemStack stack : player.inventory.armorInventory) {
+        for (ItemStack stack : player.inventory.armor) {
             max = Math.max(max, getTraitLevel(stack, trait));
         }
         return max;
@@ -219,13 +219,13 @@ public final class TraitHelper {
 
     @Deprecated
     public static boolean hasTraitEitherHand(PlayerEntity player, ResourceLocation traitId) {
-        ItemStack main = player.getHeldItemMainhand();
-        ItemStack off = player.getHeldItemOffhand();
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
         return hasTrait(main, traitId) || hasTrait(off, traitId);
     }
 
     public static boolean hasTraitArmor(PlayerEntity player, DataResource<ITrait> trait) {
-        for (ItemStack stack : player.inventory.armorInventory) {
+        for (ItemStack stack : player.inventory.armor) {
             if (hasTrait(stack, trait)) {
                 return true;
             }

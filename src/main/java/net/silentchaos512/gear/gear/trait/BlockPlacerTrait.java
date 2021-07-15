@@ -26,7 +26,7 @@ public class BlockPlacerTrait extends SimpleTrait {
     private Block block;
     private int damageOnUse;
     private int cooldown;
-    private SoundEvent sound = SoundEvents.ENTITY_ITEM_PICKUP;
+    private SoundEvent sound = SoundEvents.ITEM_PICKUP;
     private float soundVolume = 1.0f;
     private float soundPitch = 1.0f;
 
@@ -36,15 +36,15 @@ public class BlockPlacerTrait extends SimpleTrait {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context, int traitLevel) {
-        ItemStack stack = context.getItem();
+        ItemStack stack = context.getItemInHand();
 
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        if (!world.isRemote && (damageOnUse < 1 || stack.getDamage() < stack.getMaxDamage() - damageOnUse - 1)) {
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        if (!world.isClientSide && (damageOnUse < 1 || stack.getDamageValue() < stack.getMaxDamage() - damageOnUse - 1)) {
             // Try place block, damage tool if successful
             ItemStack fakeBlockStack = new ItemStack(block);
-            ActionResultType result = fakeBlockStack.onItemUse(new FakeItemUseContext(context, fakeBlockStack));
-            if (result.isSuccessOrConsume()) {
+            ActionResultType result = fakeBlockStack.useOn(new FakeItemUseContext(context, fakeBlockStack));
+            if (result.consumesAction()) {
                 if (damageOnUse > 0) {
                     GearHelper.attemptDamage(stack, damageOnUse, context.getPlayer(), context.getHand());
                 }
@@ -53,26 +53,26 @@ public class BlockPlacerTrait extends SimpleTrait {
                     world.playSound(null, pos, sound, SoundCategory.BLOCKS, soundVolume, pitch);
                 }
                 if (this.cooldown > 0 && context.getPlayer() != null) {
-                    context.getPlayer().getCooldownTracker().setCooldown(stack.getItem(), this.cooldown);
+                    context.getPlayer().getCooldowns().addCooldown(stack.getItem(), this.cooldown);
                 }
             }
             return result;
         }
 
         for (int i = 0; i < 5; i++) {
-            PhantomLight.spawnParticle(world, pos.offset(context.getFace()), SilentGear.RANDOM);
+            PhantomLight.spawnParticle(world, pos.relative(context.getClickedFace()), SilentGear.RANDOM);
         }
 
         return ActionResultType.SUCCESS;
     }
 
     private static void readJson(BlockPlacerTrait trait, JsonObject json) {
-        trait.block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getString(json, "block")));
-        trait.damageOnUse = JSONUtils.getInt(json, "damage_on_use");
-        trait.cooldown = JSONUtils.getInt(json, "cooldown", 0);
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getString(json, "sound")));
-        trait.soundVolume = JSONUtils.getFloat(json, "sound_volume");
-        trait.soundPitch = JSONUtils.getFloat(json, "sound_pitch");
+        trait.block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "block")));
+        trait.damageOnUse = JSONUtils.getAsInt(json, "damage_on_use");
+        trait.cooldown = JSONUtils.getAsInt(json, "cooldown", 0);
+        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "sound")));
+        trait.soundVolume = JSONUtils.getAsFloat(json, "sound_volume");
+        trait.soundPitch = JSONUtils.getAsFloat(json, "sound_pitch");
     }
 
     private static void read(BlockPlacerTrait trait, PacketBuffer buffer) {

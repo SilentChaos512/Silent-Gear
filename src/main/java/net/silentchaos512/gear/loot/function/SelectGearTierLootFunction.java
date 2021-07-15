@@ -41,17 +41,17 @@ public final class SelectGearTierLootFunction extends LootFunction {
     }
 
     @Override
-    protected ItemStack doApply(ItemStack stack, LootContext context) {
+    protected ItemStack run(ItemStack stack, LootContext context) {
         if (!(stack.getItem() instanceof ICoreItem)) return stack;
         return GearGenerator.create((ICoreItem) stack.getItem(), this.tier);
     }
 
     public static LootFunction.Builder<?> builder(int tier) {
-        return builder(conditions -> new SelectGearTierLootFunction(conditions, tier));
+        return simpleBuilder(conditions -> new SelectGearTierLootFunction(conditions, tier));
     }
 
     @Override
-    public LootFunctionType getFunctionType() {
+    public LootFunctionType getType() {
         return ModLootStuff.SELECT_TIER;
     }
 
@@ -63,7 +63,7 @@ public final class SelectGearTierLootFunction extends LootFunction {
 
         @Override
         public SelectGearTierLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
-            int tier = JSONUtils.getInt(object, "tier", 2);
+            int tier = JSONUtils.getAsInt(object, "tier", 2);
             return new SelectGearTierLootFunction(conditionsIn, tier);
         }
     }

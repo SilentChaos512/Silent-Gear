@@ -22,7 +22,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     public ShapelessGearRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
-        ItemStack output = recipe.getRecipeOutput();
+        ItemStack output = recipe.getResultItem();
         if (!(output.getItem() instanceof ICoreItem)) {
             throw new JsonParseException("result is not a gear item: " + output);
         }
@@ -55,7 +55,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         return item.construct(getParts(inv));
     }
 
@@ -65,12 +65,12 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return exampleOutput.get();
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
         return true;
     }
 }

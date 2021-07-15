@@ -72,7 +72,7 @@ public interface ICoreTool extends ICoreItem {
      * @return The amount of damage done (durability lost) to the item
      */
     default int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
-        return state.getMaterial() != Material.LEAVES && state.getBlockHardness(world, pos) > 0 ? 1 : 0;
+        return state.getMaterial() != Material.LEAVES && state.getDestroySpeed(world, pos) > 0 ? 1 : 0;
     }
 
     /**

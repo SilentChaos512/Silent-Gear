@@ -82,15 +82,15 @@ public interface IAoeTool {
     default List<BlockPos> getExtraBlocks(World world, @Nullable BlockRayTraceResult rt, PlayerEntity player, ItemStack stack) {
         List<BlockPos> positions = new ArrayList<>();
 
-        if (player.isCrouching() || rt == null || rt.getPos() == null || rt.getFace() == null)
+        if (player.isCrouching() || rt == null || rt.getBlockPos() == null || rt.getDirection() == null)
             return positions;
 
-        BlockPos pos = rt.getPos();
+        BlockPos pos = rt.getBlockPos();
         BlockState state = world.getBlockState(pos);
 
         if (isEffectiveOnBlock(stack, world, pos, state, player)) {
             Direction dir1, dir2;
-            switch (rt.getFace().getAxis()) {
+            switch (rt.getDirection().getAxis()) {
                 case Y:
                     dir1 = Direction.SOUTH;
                     dir2 = Direction.EAST;
@@ -109,7 +109,7 @@ public interface IAoeTool {
             for (int i = -r; i <= r; ++i) {
                 for (int j = -r; j <= r; ++j) {
                     if (!(i == 0 && j == 0)) {
-                        attemptAddExtraBlock(world, state, pos.offset(dir1, i).offset(dir2, j), stack, positions);
+                        attemptAddExtraBlock(world, state, pos.relative(dir1, i).relative(dir2, j), stack, positions);
                     }
                 }
             }
@@ -125,9 +125,9 @@ public interface IAoeTool {
     default void attemptAddExtraBlock(World world, BlockState state, BlockPos pos, ItemStack stack, List<BlockPos> list) {
         final BlockState state1 = world.getBlockState(pos);
         // Prevent breaking of unbreakable blocks, like bedrock
-        if (state1.getBlockHardness(world, pos) < 0) return;
+        if (state1.getDestroySpeed(world, pos) < 0) return;
 
-        if (!world.isAirBlock(pos)
+        if (!world.isEmptyBlock(pos)
                 && BreakHandler.areBlocksSimilar(state, state1)
                 && (state1.getBlock().isToolEffective(state1, getAoeToolType()) || stack.getItem().canHarvestBlock(stack, state1))) {
             list.add(pos);
@@ -146,8 +146,8 @@ public interface IAoeTool {
         private BreakHandler() {}
 
         public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, PlayerEntity player) {
-            World world = player.getEntityWorld();
-            if (world.isRemote || !(world instanceof ServerWorld) || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAoeTool))
+            World world = player.getCommandSenderWorld();
+            if (world.isClientSide || !(world instanceof ServerWorld) || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAoeTool))
                 return false;
 
             IAoeTool item = (IAoeTool) tool.getItem();
@@ -156,34 +156,34 @@ public interface IAoeTool {
 
             if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal, player)) {
                 BlockRayTraceResult brt = (BlockRayTraceResult) rt;
-                Direction side = brt.getFace();
+                Direction side = brt.getDirection();
                 List<BlockPos> extraBlocks = item.getExtraBlocks(world, brt, player, tool);
 
                 for (BlockPos pos2 : extraBlocks) {
                     BlockState state = world.getBlockState(pos2);
-                    if (!world.isBlockLoaded(pos2) || !player.canPlayerEdit(pos2, side, tool) || !(state.canHarvestBlock(world, pos2, player)))
+                    if (!world.hasChunkAt(pos2) || !player.mayUseItemAt(pos2, side, tool) || !(state.canHarvestBlock(world, pos2, player)))
                         continue;
 
-                    if (player.abilities.isCreativeMode) {
+                    if (player.abilities.instabuild) {
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState()))
-                            state.getBlock().onPlayerDestroy(world, pos2, state);
+                            state.getBlock().destroy(world, pos2, state);
                     } else {
-                        int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).interactionManager.getGameType(), (ServerPlayerEntity) player, pos2);
+                        int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).gameMode.getGameModeForPlayer(), (ServerPlayerEntity) player, pos2);
                         if (xp == -1) continue;
-                        tool.getItem().onBlockDestroyed(tool, world, state, pos2, player);
-                        TileEntity tileEntity = world.getTileEntity(pos2);
+                        tool.getItem().mineBlock(tool, world, state, pos2, player);
+                        TileEntity tileEntity = world.getBlockEntity(pos2);
 
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState())) {
-                            state.getBlock().onPlayerDestroy(world, pos2, state);
-                            state.getBlock().harvestBlock(world, player, pos2, state, tileEntity, tool);
-                            state.getBlock().dropXpOnBlockBreak((ServerWorld) world, pos2, xp);
+                            state.getBlock().destroy(world, pos2, state);
+                            state.getBlock().playerDestroy(world, player, pos2, state, tileEntity, tool);
+                            state.getBlock().popExperience((ServerWorld) world, pos2, xp);
                         }
                     }
 
                     // TODO: Maybe add a config? Unfortunately, this code is called only on the server...
                     //world.playEvent(2001, pos, Block.getStateId(state)); // Playing for each block gets very loud
 
-                    ((ServerPlayerEntity) player).connection.sendPacket(new SChangeBlockPacket(world, pos));
+                    ((ServerPlayerEntity) player).connection.send(new SChangeBlockPacket(world, pos));
                 }
             }
             return false;
@@ -220,7 +220,7 @@ public interface IAoeTool {
         }
 
         private static boolean isOre(BlockState state) {
-            return state.isIn(Tags.Blocks.ORES);
+            return state.is(Tags.Blocks.ORES);
         }
     }
 
@@ -231,7 +231,7 @@ public interface IAoeTool {
         @SubscribeEvent
         public static void onDrawBlockHighlight(DrawHighlightEvent event) {
             ActiveRenderInfo info = event.getInfo();
-            Entity entity = info.getRenderViewEntity();
+            Entity entity = info.getEntity();
             if (!(entity instanceof PlayerEntity)) return;
 
             PlayerEntity player = (PlayerEntity) entity;
@@ -239,17 +239,17 @@ public interface IAoeTool {
             RayTraceResult rt = event.getTarget();
 
             if (rt.getType() == RayTraceResult.Type.BLOCK) {
-                ItemStack stack = player.getHeldItemMainhand();
+                ItemStack stack = player.getMainHandItem();
 
                 if (stack.getItem() instanceof IAoeTool) {
-                    World world = player.getEntityWorld();
+                    World world = player.getCommandSenderWorld();
                     IAoeTool item = (IAoeTool) stack.getItem();
 
                     for (BlockPos pos : item.getExtraBlocks(world, (BlockRayTraceResult) rt, player, stack)) {
-                        IVertexBuilder vertexBuilder = event.getBuffers().getBuffer(RenderType.getLines());
-                        Vector3d vec = event.getInfo().getProjectedView();
+                        IVertexBuilder vertexBuilder = event.getBuffers().getBuffer(RenderType.lines());
+                        Vector3d vec = event.getInfo().getPosition();
                         BlockState blockState = world.getBlockState(pos);
-                        drawSelectionBox(event.getMatrix(), world, vertexBuilder, event.getInfo().getRenderViewEntity(), vec.x, vec.y, vec.z, pos, blockState);
+                        drawSelectionBox(event.getMatrix(), world, vertexBuilder, event.getInfo().getEntity(), vec.x, vec.y, vec.z, pos, blockState);
                     }
                 }
             }
@@ -258,16 +258,16 @@ public interface IAoeTool {
         // Copied from WorldRenderer
         @SuppressWarnings("MethodWithTooManyParameters")
         private static void drawSelectionBox(MatrixStack matrixStackIn, World world, IVertexBuilder bufferIn, Entity entityIn, double xIn, double yIn, double zIn, BlockPos blockPosIn, BlockState blockStateIn) {
-            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, ISelectionContext.forEntity(entityIn)), (double) blockPosIn.getX() - xIn, (double) blockPosIn.getY() - yIn, (double) blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
+            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, ISelectionContext.of(entityIn)), (double) blockPosIn.getX() - xIn, (double) blockPosIn.getY() - yIn, (double) blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
         }
 
         // Copied from WorldRenderer
         @SuppressWarnings("MethodWithTooManyParameters")
         private static void drawShape(MatrixStack matrixStackIn, IVertexBuilder bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
-            Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
-            shapeIn.forEachEdge((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
-                bufferIn.pos(matrix4f, (float) (p_230013_12_ + xIn), (float) (p_230013_14_ + yIn), (float) (p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
-                bufferIn.pos(matrix4f, (float) (p_230013_18_ + xIn), (float) (p_230013_20_ + yIn), (float) (p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
+            Matrix4f matrix4f = matrixStackIn.last().pose();
+            shapeIn.forAllEdges((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
+                bufferIn.vertex(matrix4f, (float) (p_230013_12_ + xIn), (float) (p_230013_14_ + yIn), (float) (p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
+                bufferIn.vertex(matrix4f, (float) (p_230013_18_ + xIn), (float) (p_230013_20_ + yIn), (float) (p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
             });
         }
     }

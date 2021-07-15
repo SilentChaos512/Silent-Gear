@@ -26,6 +26,8 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     private static final String NBT_MATERIAL = "Material";
 
@@ -71,22 +73,22 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         MaterialInstance material = getMaterial(stack);
         if (material != null) {
-            return new TranslationTextComponent(this.getTranslationKey(), material.getDisplayName(PartType.MAIN));
+            return new TranslationTextComponent(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
         }
-        return super.getDisplayName(stack);
+        return super.getName(stack);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         TextUtil.addWipText(tooltip);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
             items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
 
             for (IMaterial material : MaterialManager.getValues()) {

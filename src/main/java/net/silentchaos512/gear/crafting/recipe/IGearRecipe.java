@@ -21,8 +21,8 @@ interface IGearRecipe {
         List<MaterialInstance> materials = new ArrayList<>();
         List<PartData> parts = new ArrayList<>();
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 MaterialInstance mat = MaterialInstance.from(stack);
                 if (mat != null) {

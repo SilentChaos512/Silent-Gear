@@ -25,7 +25,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public List<ItemStack> getPossibleResults(IInventory inv) {
-        ItemStack input = inv.getStackInSlot(0);
+        ItemStack input = inv.getItem(0);
         List<ItemStack> ret = new ArrayList<>();
 
         PartData part = PartData.from(input);
@@ -38,15 +38,15 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public Ingredient getIngredient() {
-        return Ingredient.fromItems(Registration.getItems(CompoundPartItem.class).toArray(new CompoundPartItem[0]));
+        return Ingredient.of(Registration.getItems(CompoundPartItem.class).toArray(new CompoundPartItem[0]));
     }
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        if (!(inv.getStackInSlot(0).getItem() instanceof CompoundPartItem))
+        if (!(inv.getItem(0).getItem() instanceof CompoundPartItem))
             return false;
 
-        return PartData.from(inv.getStackInSlot(0)) != null;
+        return PartData.from(inv.getItem(0)) != null;
     }
 
     @Override
@@ -56,18 +56,18 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CompoundPartSalvagingRecipe> {
         @Override
-        public CompoundPartSalvagingRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public CompoundPartSalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new CompoundPartSalvagingRecipe(recipeId);
         }
 
         @Nullable
         @Override
-        public CompoundPartSalvagingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CompoundPartSalvagingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             return new CompoundPartSalvagingRecipe(recipeId);
         }
 
         @Override
-        public void write(PacketBuffer buffer, CompoundPartSalvagingRecipe recipe) {
+        public void toNetwork(PacketBuffer buffer, CompoundPartSalvagingRecipe recipe) {
         }
     }
 }

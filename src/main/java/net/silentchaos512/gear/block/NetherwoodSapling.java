@@ -31,7 +31,7 @@ public class NetherwoodSapling extends SaplingBlock {
     }
 
     @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.isIn(ModTags.Blocks.NETHERWOOD_SOIL);
+    protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return state.is(ModTags.Blocks.NETHERWOOD_SOIL);
     }
 }

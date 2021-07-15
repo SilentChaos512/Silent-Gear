@@ -21,6 +21,8 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
+import net.minecraft.item.crafting.Ingredient.SingleItemList;
+
 public class CustomCompoundIngredient extends Ingredient {
     private final CustomMaterialItem item;
     private final ResourceLocation material;
@@ -53,7 +55,7 @@ public class CustomCompoundIngredient extends Ingredient {
     }
 
     @Override
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.NAME.toString());
         json.addProperty("item", NameUtils.from(this.item).toString());
@@ -67,7 +69,7 @@ public class CustomCompoundIngredient extends Ingredient {
 
         @Override
         public CustomCompoundIngredient parse(JsonObject json) {
-            ResourceLocation itemId = new ResourceLocation(JSONUtils.getString(json, "item"));
+            ResourceLocation itemId = new ResourceLocation(JSONUtils.getAsString(json, "item"));
             Item item = ForgeRegistries.ITEMS.getValue(itemId);
             if (item == null) {
                 throw new JsonParseException("Unknown item: " + itemId);
@@ -75,7 +77,7 @@ public class CustomCompoundIngredient extends Ingredient {
                 throw new JsonParseException("Item '" + itemId + "' is not a CustomMaterialItem");
             }
 
-            ResourceLocation materialId = new ResourceLocation(JSONUtils.getString(json, "material"));
+            ResourceLocation materialId = new ResourceLocation(JSONUtils.getAsString(json, "material"));
 
             return new CustomCompoundIngredient((CustomMaterialItem) item, materialId);
         }

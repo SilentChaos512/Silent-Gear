@@ -51,7 +51,7 @@ public class HasPartCondition extends GearLootCondition {
     }
 
     @Override
-    public LootConditionType func_230419_b_() {
+    public LootConditionType getType() {
         return ModLootStuff.HAS_PART;
     }
 
@@ -63,7 +63,7 @@ public class HasPartCondition extends GearLootCondition {
 
         @Override
         public HasPartCondition deserialize(JsonObject json, JsonDeserializationContext context) {
-            ResourceLocation partId = new ResourceLocation(JSONUtils.getString(json, "part"));
+            ResourceLocation partId = new ResourceLocation(JSONUtils.getAsString(json, "part"));
             MaterialGrade.Range gradeRange = json.has("grade")
                     ? MaterialGrade.Range.deserialize(json.get("grade"))
                     : MaterialGrade.Range.OPEN;

@@ -18,6 +18,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class ModKitItem extends Item implements ICycleItem {
     private static final String NBT_SELECTED = "SelectedType";
 
@@ -66,10 +68,10 @@ public class ModKitItem extends Item implements ICycleItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         PartType selected = getSelectedType(stack);
         tooltip.add(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected"), Color.SKYBLUE)
-                .append(selected.getDisplayName(0).mergeStyle(TextFormatting.GRAY)));
+                .append(selected.getDisplayName(0).withStyle(TextFormatting.GRAY)));
 
         tooltip.add(TextUtil.translate("item", "mod_kit.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),

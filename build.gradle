@@ -53,7 +53,7 @@ def gpr_creds = { // Credentials for GitHub Packages, since this is used multipl
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: project.mcp_channel.toString(), version: project.mcp_mappings.toString()
+    mappings channel: project.mappings_channel.toString(), version: project.mappings_version.toString()
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -169,13 +169,15 @@ dependencies {
         runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
     }
 
-     runtimeOnly("net.silentchaos512:silents-mechanisms:1.16.5-1.+") {
-         exclude module: "cc-tweaked-1.16.3"
-         exclude module: "forge"
-         exclude module: "jei-1.16.5"
-         exclude module: "silent-gear-1.16.5"
-         exclude module: "silent-lib-1.16.3"
-     }
+    if (project.hasProperty('silmech_version')) {
+        runtimeOnly("net.silentchaos512:silents-mechanisms:${project.silmech_version}") {
+            exclude module: "cc-tweaked-1.16.3"
+            exclude module: "forge"
+            exclude module: "jei-1.16.5"
+            exclude module: "silent-gear-1.16.5"
+            exclude module: "silent-lib-1.16.3"
+        }
+    }
 
     // Curios
     if (project.hasProperty('curios_version')) {

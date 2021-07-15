@@ -39,7 +39,7 @@ public final class ModEntities {
     }
 
     private static <T extends Entity> RegistryObject<EntityType<T>> register(String name, EntityType.IFactory<T> factory, EntityClassification type, BiFunction<FMLPlayMessages.SpawnEntity, World, T> customClientFactory) {
-        return Registration.ENTITIES.register(name, () -> EntityType.Builder.create(factory, type)
+        return Registration.ENTITIES.register(name, () -> EntityType.Builder.of(factory, type)
                 .setCustomClientFactory(customClientFactory)
                 .build(SilentGear.getId(name).toString()));
     }

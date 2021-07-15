@@ -77,17 +77,17 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
     }
 
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         // Although gear parts are not available when the ingredient is constructed,
         // they are available later on
         Collection<IGearPart> parts = PartManager.getPartsOfType(this.type);
         if (!parts.isEmpty()) {
             return parts.stream()
-                    .flatMap(part -> Stream.of(part.getIngredient().getMatchingStacks()))
+                    .flatMap(part -> Stream.of(part.getIngredient().getItems()))
                     .filter(stack -> !stack.isEmpty())
                     .toArray(ItemStack[]::new);
         }
-        return super.getMatchingStacks();
+        return super.getItems();
     }
 
     @Override
@@ -96,7 +96,7 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return false;
     }
 
@@ -106,7 +106,7 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
     }
 
     @Override
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.NAME.toString());
         json.addProperty("part_type", this.type.getName().toString());
@@ -129,7 +129,7 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
 
         @Override
         public GearPartIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getString(json, "part_type", "");
+            String typeName = JSONUtils.getAsString(json, "part_type", "");
             if (typeName.isEmpty())
                 throw new JsonSyntaxException("'part_type' is missing");
 

@@ -10,8 +10,8 @@ public class CoreDagger extends CoreSword {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        target.hurtResistantTime *= 0.67f; // Make target vulnerable sooner
-        return super.hitEntity(stack, target, attacker);
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        target.invulnerableTime *= 0.67f; // Make target vulnerable sooner
+        return super.hurtEnemy(stack, target, attacker);
     }
 }

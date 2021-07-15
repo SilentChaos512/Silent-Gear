@@ -35,11 +35,11 @@ public class SynergyTrait extends SimpleTrait {
     }
 
     private static void deserialize(SynergyTrait trait, JsonObject json) {
-        trait.multi = JSONUtils.getFloat(json, "synergy_multi");
+        trait.multi = JSONUtils.getAsFloat(json, "synergy_multi");
         if (json.has("applicable_range")) {
             JsonObject range = json.get("applicable_range").getAsJsonObject();
-            trait.rangeMin = JSONUtils.getFloat(range, "min", trait.rangeMin);
-            trait.rangeMax = JSONUtils.getFloat(range, "max", trait.rangeMax);
+            trait.rangeMin = JSONUtils.getAsFloat(range, "min", trait.rangeMin);
+            trait.rangeMax = JSONUtils.getAsFloat(range, "max", trait.rangeMax);
         }
     }
 

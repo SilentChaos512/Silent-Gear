@@ -28,8 +28,8 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
     public boolean matches(CraftingInventory craftingInventory, World world) {
         // First, count the fragments. We want to fail fast.
         int fragmentCount = 0;
-        for (int i = 0; i < craftingInventory.getSizeInventory(); ++i) {
-            ItemStack stack = craftingInventory.getStackInSlot(i);
+        for (int i = 0; i < craftingInventory.getContainerSize(); ++i) {
+            ItemStack stack = craftingInventory.getItem(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() == ModItems.FRAGMENT.get()) {
                     ++fragmentCount;
@@ -61,7 +61,7 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory craftingInventory) {
+    public ItemStack assemble(CraftingInventory craftingInventory) {
         StackList list = StackList.from(craftingInventory);
         ItemStack stack = list.firstOfType(FragmentItem.class);
         if (stack.isEmpty()) return ItemStack.EMPTY;
@@ -75,7 +75,7 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
         }
 
         // Try to get an equivalent item from the material's ingredient
-        ItemStack[] matchingStacks = material.getIngredient().getMatchingStacks();
+        ItemStack[] matchingStacks = material.getIngredient().getItems();
         if (matchingStacks.length < 1) {
             if (material.getIngredient() instanceof ExclusionIngredient) {
                 // Get excluded ingredients if no others are available
@@ -91,7 +91,7 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 8;
     }
 }

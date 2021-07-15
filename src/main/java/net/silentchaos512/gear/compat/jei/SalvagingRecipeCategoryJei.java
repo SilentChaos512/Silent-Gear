@@ -84,7 +84,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
             itemStacks.init(i, false, x, y);
         }
 
-        itemStacks.set(0, Arrays.asList(recipe.getIngredient().getMatchingStacks()));
+        itemStacks.set(0, Arrays.asList(recipe.getIngredient().getItems()));
         List<ItemStack> results = recipe.getPossibleResults(new Inventory(1));
         for (int i = 0; i < 9 && i < results.size(); ++i) {
             itemStacks.set(i + 1, results.get(i));

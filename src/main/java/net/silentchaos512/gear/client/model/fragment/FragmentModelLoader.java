@@ -25,7 +25,7 @@ public class FragmentModelLoader implements IModelLoader<FragmentModel> {
     public FragmentModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
         ItemCameraTransforms cameraTransforms = deserializationContext.deserialize(modelContents.get("display"), ItemCameraTransforms.class);
         if (cameraTransforms == null) {
-            cameraTransforms = ItemCameraTransforms.DEFAULT;
+            cameraTransforms = ItemCameraTransforms.NO_TRANSFORMS;
         }
 
         FragmentModel model = new FragmentModel(cameraTransforms);

@@ -20,9 +20,9 @@ public class KeyPressOnItemPacket {
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         ServerPlayerEntity player = context.get().getSender();
-        if (player != null && player.openContainer != null && this.slot >= 0 && this.slot < player.openContainer.inventorySlots.size()) {
-            Slot inventorySlot = player.openContainer.getSlot(this.slot);
-            ItemStack stack = inventorySlot.getStack();
+        if (player != null && player.containerMenu != null && this.slot >= 0 && this.slot < player.containerMenu.slots.size()) {
+            Slot inventorySlot = player.containerMenu.getSlot(this.slot);
+            ItemStack stack = inventorySlot.getItem();
 
             if (!stack.isEmpty()) {
                 switch (this.type) {
@@ -31,7 +31,7 @@ public class KeyPressOnItemPacket {
                         if (stack.getItem() instanceof ICycleItem) {
                             ((ICycleItem) stack.getItem()).onCycleKeyPress(stack, this.type);
                             // Update crafting grids
-                            player.openContainer.onCraftMatrixChanged(inventorySlot.inventory);
+                            player.containerMenu.slotsChanged(inventorySlot.container);
                         }
                         break;
                     case OPEN_ITEM:
@@ -45,13 +45,13 @@ public class KeyPressOnItemPacket {
     }
 
     public static KeyPressOnItemPacket decode(PacketBuffer buffer) {
-        Type type = buffer.readEnumValue(Type.class);
+        Type type = buffer.readEnum(Type.class);
         int slot = buffer.readVarInt();
         return new KeyPressOnItemPacket(type, slot);
     }
 
     public static void encode(KeyPressOnItemPacket msg, PacketBuffer buffer) {
-        buffer.writeEnumValue(msg.type);
+        buffer.writeEnum(msg.type);
         buffer.writeVarInt(msg.slot);
     }
 

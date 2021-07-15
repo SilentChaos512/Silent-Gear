@@ -124,8 +124,8 @@ public final class Network {
     public static void init() {}
 
     static void writeModVersionInfoToNetwork(PacketBuffer buffer) {
-        buffer.writeString(Network.VERSION); // Change to test error message (dedicated server only)
-        buffer.writeString(SilentGear.getVersion());
+        buffer.writeUtf(Network.VERSION); // Change to test error message (dedicated server only)
+        buffer.writeUtf(SilentGear.getVersion());
     }
 
     static void verifyNetworkVersion(PacketBuffer buffer) {
@@ -148,7 +148,7 @@ public final class Network {
     }
 
     private static String readNetworkVersion(PacketBuffer buffer) {
-        String str = buffer.readString(16);
+        String str = buffer.readUtf(16);
         if (!NET_VERSION_PATTERN.matcher(str).matches()) {
             // Server is running a version that doesn't encode the net version
             return "UNKNOWN (received: " + str + ")";
@@ -157,7 +157,7 @@ public final class Network {
     }
 
     private static String readModVersion(PacketBuffer buffer) {
-        String str = buffer.readString(16);
+        String str = buffer.readUtf(16);
         if (!"NONE".equals(str) && !MOD_VERSION_PATTERN.matcher(str).matches()) {
             // Server is running a version that doesn't encode the mod version
             return "UNKNOWN (received: " + str + ")";

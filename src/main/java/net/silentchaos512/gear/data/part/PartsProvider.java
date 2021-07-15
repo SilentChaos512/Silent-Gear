@@ -291,15 +291,15 @@ public class PartsProvider implements IDataProvider {
     }
 
     @Override
-    public void act(DirectoryCache cache) {
+    public void run(DirectoryCache cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (PartBuilder builder : getParts()) {
             try {
                 String jsonStr = GSON.toJson(builder.serialize());
-                String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
                 Path path = outputFolder.resolve(String.format("data/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
+                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
                     Files.createDirectories(path.getParent());
 
                     try (BufferedWriter writer = Files.newBufferedWriter(path)) {
@@ -307,7 +307,7 @@ public class PartsProvider implements IDataProvider {
                     }
                 }
 
-                cache.recordHash(path, hashStr);
+                cache.putNew(path, hashStr);
             } catch (IOException ex) {
                 LOGGER.error("Could not save parts to {}", outputFolder, ex);
             }
@@ -317,17 +317,17 @@ public class PartsProvider implements IDataProvider {
                 JsonObject modelJson = builder.serializeModel();
                 if (!modelJson.entrySet().isEmpty()) {
                     String jsonStr = GSON.toJson(modelJson);
-                    String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                    String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
                     // TODO: change path?
                     Path path = outputFolder.resolve(String.format("assets/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                    if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
+                    if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
                         Files.createDirectories(path.getParent());
 
                         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
                             writer.write(jsonStr);
                         }
                     }
-                    cache.recordHash(path, hashStr);
+                    cache.putNew(path, hashStr);
                 }
             } catch (IOException ex) {
                 LOGGER.error("Could not save part models to {}", outputFolder, ex);

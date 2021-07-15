@@ -56,7 +56,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
     }
 
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         return ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof IBlueprint)
                 .map(ItemStack::new)
@@ -70,7 +70,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return false;
     }
 
@@ -80,7 +80,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
     }
 
     @Override
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.NAME.toString());
         if (this.partType != PartType.MAIN) {
@@ -124,7 +124,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
                 throw new JsonParseException("Unknown part type: " + typeName);
             }
 
-            GearType gearType = GearType.get(buffer.readString());
+            GearType gearType = GearType.get(buffer.readUtf());
             if (gearType.isInvalid()) {
                 throw new JsonParseException("Unknown gear type: " + typeName);
             }
@@ -134,13 +134,13 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
 
         @Override
         public BlueprintIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getString(json, "part_type", "main");
+            String typeName = JSONUtils.getAsString(json, "part_type", "main");
             PartType type = PartType.get(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(typeName)));
             if (type == null) {
                 throw new JsonSyntaxException("part_type " + typeName + " does not exist");
             }
 
-            String gearTypeName = JSONUtils.getString(json, "gear_type", "part");
+            String gearTypeName = JSONUtils.getAsString(json, "gear_type", "part");
             GearType gearType = GearType.get(gearTypeName);
             if (gearType.isInvalid()) {
                 throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
@@ -152,7 +152,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
         @Override
         public void write(PacketBuffer buffer, BlueprintIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.partType.getName());
-            buffer.writeString(ingredient.gearType.getName());
+            buffer.writeUtf(ingredient.gearType.getName());
         }
     }
 }

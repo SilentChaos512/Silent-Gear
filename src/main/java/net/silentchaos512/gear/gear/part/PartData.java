@@ -112,7 +112,7 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
         IGearPart part = PartManager.get(id);
         if (part == null) return null;
 
-        ItemStack craftingItem = ItemStack.read(tags.getCompound("Item"));
+        ItemStack craftingItem = ItemStack.of(tags.getCompound("Item"));
         return of(part, craftingItem);
     }
 
@@ -121,7 +121,7 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
         tags.putString(NBT_ID, part.getId().toString());
 
         CompoundNBT itemTag = new CompoundNBT();
-        this.craftingItem.write(itemTag);
+        this.craftingItem.save(itemTag);
         tags.put("Item", itemTag);
         return tags;
     }

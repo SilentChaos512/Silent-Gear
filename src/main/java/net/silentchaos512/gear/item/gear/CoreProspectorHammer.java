@@ -25,25 +25,25 @@ public class CoreProspectorHammer extends CorePickaxe {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         int range = Config.Common.prospectorHammerRange.get();
         PlayerEntity player = context.getPlayer();
-        Direction face = context.getFace();
+        Direction face = context.getClickedFace();
         if (range <= 0 || player == null || face.getAxis() == Direction.Axis.Y) {
             return GearHelper.onItemUse(context);
         }
 
-        if (context.getWorld().isRemote || !(player instanceof ServerPlayerEntity)) {
+        if (context.getLevel().isClientSide || !(player instanceof ServerPlayerEntity)) {
             return ActionResultType.SUCCESS;
         }
 
         Set<BlockState> matches = getTargetedBlocks(context, range, face);
 
         // List the ores found in chat, if any
-        Network.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayerEntity) player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        Network.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayerEntity) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 
-        GearHelper.attemptDamage(context.getItem(), 2, player, context.getHand());
-        player.getCooldownTracker().setCooldown(this, 20);
+        GearHelper.attemptDamage(context.getItemInHand(), 2, player, context.getHand());
+        player.getCooldowns().addCooldown(this, 20);
 
         return ActionResultType.SUCCESS;
     }
@@ -55,13 +55,13 @@ public class CoreProspectorHammer extends CorePickaxe {
         for (int i = 0; i < range; ++i) {
             for (int j = -1; j <= 1; ++j) {
                 for (int k = -1; k <= 1; ++k) {
-                    BlockPos pos = context.getPos()
-                            .offset(direction, i)
-                            .offset(direction.rotateYCCW(), j)
-                            .offset(Direction.DOWN, k);
+                    BlockPos pos = context.getClickedPos()
+                            .relative(direction, i)
+                            .relative(direction.getCounterClockWise(), j)
+                            .relative(Direction.DOWN, k);
 
-                    BlockState state = context.getWorld().getBlockState(pos);
-                    if (state.isIn(ModTags.Blocks.PROSPECTOR_HAMMER_TARGETS)) {
+                    BlockState state = context.getLevel().getBlockState(pos);
+                    if (state.is(ModTags.Blocks.PROSPECTOR_HAMMER_TARGETS)) {
                         matches.add(state);
                     }
                 }

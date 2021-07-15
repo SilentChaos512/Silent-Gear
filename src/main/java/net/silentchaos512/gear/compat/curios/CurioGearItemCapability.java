@@ -28,6 +28,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import top.theillusivec4.curios.api.type.capability.ICurio.DropRule;
+
 public class CurioGearItemCapability {
     public static void register() {
         CapabilityManager.INSTANCE.register(CurioGearItemWrapper.class, new Capability.IStorage<CurioGearItemWrapper>() {
@@ -54,13 +56,13 @@ public class CurioGearItemCapability {
         }) {
             @Override
             public void curioTick(String identifier, int index, LivingEntity livingEntity) {
-                if (livingEntity.world.isRemote || !ElytraItem.isUsable(stack)) {
+                if (livingEntity.level.isClientSide || !ElytraItem.isFlyEnabled(stack)) {
                     return;
                 }
-                Integer ticksFlying = ObfuscationReflectionHelper.getPrivateValue(LivingEntity.class, livingEntity, "field_184629_bo");
+                Integer ticksFlying = ObfuscationReflectionHelper.getPrivateValue(LivingEntity.class, livingEntity, "fallFlyTicks");
 
                 if (ticksFlying != null && (ticksFlying + 1) % 20 == 0) {
-                    stack.damageItem(1, livingEntity, entity -> entity.sendBreakAnimation(EquipmentSlotType.CHEST));
+                    stack.hurtAndBreak(1, livingEntity, entity -> entity.broadcastBreakEvent(EquipmentSlotType.CHEST));
                 }
             }
         });
@@ -101,7 +103,7 @@ public class CurioGearItemCapability {
 
         @Override
         public void curioTick(String identifier, int index, LivingEntity livingEntity) {
-            GearHelper.inventoryTick(stack, livingEntity.world, livingEntity, -1, true);
+            GearHelper.inventoryTick(stack, livingEntity.level, livingEntity, -1, true);
         }
 
         @Override
@@ -136,7 +138,7 @@ public class CurioGearItemCapability {
 
         @Override
         public void playRightClickEquipSound(LivingEntity livingEntity) {
-            livingEntity.world.playSound(null, new BlockPos(livingEntity.getPositionVec()), SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            livingEntity.level.playSound(null, new BlockPos(livingEntity.position()), SoundEvents.ARMOR_EQUIP_GOLD, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         }
     }
 }

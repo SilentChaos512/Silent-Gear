@@ -134,7 +134,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, CHARGEABILITY, 0.5f)
                 .trait(PartType.MAIN, Const.Traits.ADAMANT, 5)
                 .trait(PartType.MAIN, Const.Traits.HOLY, 5)
-                .name(new TranslationTextComponent(Items.BARRIER.getTranslationKey()))
+                .name(new TranslationTextComponent(Items.BARRIER.getDescriptionId()))
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
         );
 
@@ -931,7 +931,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0xE3DBB0)
         );
         // Red sandstone
-        ret.add(new MaterialBuilder(modId("sandstone/red"), -1, Ingredient.fromItems(
+        ret.add(new MaterialBuilder(modId("sandstone/red"), -1, Ingredient.of(
                 Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
                 .parent(sgSandstone)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xD97B30)
@@ -2247,15 +2247,15 @@ public class MaterialsProvider implements IDataProvider {
     }
 
     @Override
-    public void act(DirectoryCache cache) {
+    public void run(DirectoryCache cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (MaterialBuilder builder : getMaterials()) {
             try {
                 String jsonStr = GSON.toJson(builder.serialize());
-                String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
                 Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
+                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
                     Files.createDirectories(path.getParent());
 
                     try (BufferedWriter writer = Files.newBufferedWriter(path)) {
@@ -2263,7 +2263,7 @@ public class MaterialsProvider implements IDataProvider {
                     }
                 }
 
-                cache.recordHash(path, hashStr);
+                cache.putNew(path, hashStr);
             } catch (IOException ex) {
                 LOGGER.error("Could not save materials to {}", outputFolder, ex);
             }
@@ -2276,10 +2276,10 @@ public class MaterialsProvider implements IDataProvider {
                 }
 
                 String jsonStr = GSON.toJson(json);
-                String hashStr = HASH_FUNCTION.hashUnencodedChars(jsonStr).toString();
+                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
                 // TODO: change path?
                 Path path = outputFolder.resolve(String.format("assets/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                if (!Objects.equals(cache.getPreviousHash(outputFolder), hashStr) || !Files.exists(path)) {
+                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
                     Files.createDirectories(path.getParent());
 
                     try (BufferedWriter writer = Files.newBufferedWriter(path)) {
@@ -2287,7 +2287,7 @@ public class MaterialsProvider implements IDataProvider {
                     }
                 }
 
-                cache.recordHash(path, hashStr);
+                cache.putNew(path, hashStr);
             } catch (IOException ex) {
                 LOGGER.error("Could not save material models to {}", outputFolder, ex);
             }

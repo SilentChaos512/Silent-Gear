@@ -50,11 +50,11 @@ public class PartBuilder {
     private final List<ITraitInstance> traits = new ArrayList<>();
 
     public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, IItemProvider item) {
-        this(id, gearType, partType, Ingredient.fromItems(item));
+        this(id, gearType, partType, Ingredient.of(item));
     }
 
     public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, Tag<Item> tag) {
-        this(id, gearType, partType, Ingredient.fromTag(tag));
+        this(id, gearType, partType, Ingredient.of(tag));
     }
 
     public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, Ingredient ingredient) {
@@ -148,7 +148,7 @@ public class PartBuilder {
             json.add("gear_types", this.upgradeGearTypes.serialize());
         }
 
-        json.add("crafting_item", this.ingredient.serialize());
+        json.add("crafting_item", this.ingredient.toJson());
 
         json.add("name", ITextComponent.Serializer.toJsonTree(this.name));
 

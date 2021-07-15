@@ -21,7 +21,7 @@ public class GraderScreen extends ContainerScreen<GraderContainer> {
     public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrix, mouseX, mouseY);
+        this.renderTooltip(matrix, mouseX, mouseY);
     }
 
 /*    @Override
@@ -36,28 +36,28 @@ public class GraderScreen extends ContainerScreen<GraderContainer> {
     }*/
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        ITextComponent text = ModBlocks.MATERIAL_GRADER.asBlock().getTranslatedName();
-        font.drawString(matrixStack, text.getString(), 28, 6, 0x404040);
+    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+        ITextComponent text = ModBlocks.MATERIAL_GRADER.asBlock().getName();
+        font.draw(matrixStack, text.getString(), 28, 6, 0x404040);
 
-        MaterialGrade lastAttempt = this.container.getLastGradeAttempt();
+        MaterialGrade lastAttempt = this.menu.getLastGradeAttempt();
         if (lastAttempt != MaterialGrade.NONE) {
-            font.func_238407_a_(matrixStack, lastAttempt.getDisplayName().func_241878_f(), 50, 55, 0xFFFFFF);
+            font.drawShadow(matrixStack, lastAttempt.getDisplayName().getVisualOrderText(), 50, 55, 0xFFFFFF);
         }
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
         RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bindTexture(TEXTURE);
+        minecraft.getTextureManager().bind(TEXTURE);
 
-        int posX = (this.width - this.xSize) / 2;
-        int posY = (this.height - this.ySize) / 2;
-        blit(matrixStack, posX, posY, 0, 0, this.xSize, this.ySize);
+        int posX = (this.width - this.imageWidth) / 2;
+        int posY = (this.height - this.imageHeight) / 2;
+        blit(matrixStack, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
 
         // Progress arrow
-        blit(matrixStack, posX + 49, posY + 34, 176, 14, container.getProgressArrowScale() + 1, 16);
+        blit(matrixStack, posX + 49, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
     }
 }

@@ -64,13 +64,13 @@ public final class RepairHandler {
         // How many of materials to use?
         int materialCount = 1;
         float repaired = amount;
-        while (materialCount < event.getRight().getCount() && repaired < result.getDamage()) {
+        while (materialCount < event.getRight().getCount() && repaired < result.getDamageValue()) {
             ++materialCount;
             repaired += amount;
         }
 
         if (amount > 0) {
-            result.attemptDamageItem(-Math.round(amount * materialCount), SilentGear.RANDOM, null);
+            result.hurt(-Math.round(amount * materialCount), SilentGear.RANDOM, null);
             GearData.recalculateStats(result, null);
             event.setOutput(result);
             event.setCost(materialCount);
@@ -80,7 +80,7 @@ public final class RepairHandler {
 
     private static void applyName(AnvilUpdateEvent event, ItemStack stack) {
         if (!event.getName().isEmpty()) {
-            stack.setDisplayName(new StringTextComponent(event.getName()));
+            stack.setHoverName(new StringTextComponent(event.getName()));
         }
     }
 
@@ -112,14 +112,14 @@ public final class RepairHandler {
     }
 
     private static ItemStack copyCurses(ItemStack first, ItemStack second) {
-        // Copy of GrindstoneContainer#func_217011_b
+        // Copy of GrindstoneContainer#mergeEnchants
         ItemStack itemstack = first.copy();
         Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(second);
 
         for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
             Enchantment enchantment = entry.getKey();
-            if (!enchantment.isCurse() || EnchantmentHelper.getEnchantmentLevel(enchantment, itemstack) == 0) {
-                itemstack.addEnchantment(enchantment, entry.getValue());
+            if (!enchantment.isCurse() || EnchantmentHelper.getItemEnchantmentLevel(enchantment, itemstack) == 0) {
+                itemstack.enchant(enchantment, entry.getValue());
             }
         }
 
@@ -127,14 +127,14 @@ public final class RepairHandler {
     }
 
     private static ItemStack createGrindstoneResult(ItemStack stack, int newDamage) {
-        // Copy of GrindstoneContainer#func_217007_a
+        // Copy of GrindstoneContainer#removeNonCurses
         ItemStack itemstack = stack.copy();
-        itemstack.removeChildTag("Enchantments");
-        itemstack.removeChildTag("StoredEnchantments");
+        itemstack.removeTagKey("Enchantments");
+        itemstack.removeTagKey("StoredEnchantments");
         if (newDamage > 0) {
-            itemstack.setDamage(newDamage);
+            itemstack.setDamageValue(newDamage);
         } else {
-            itemstack.removeChildTag("Damage");
+            itemstack.removeTagKey("Damage");
         }
 
         Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack).entrySet().stream()
@@ -144,13 +144,13 @@ public final class RepairHandler {
         itemstack.setRepairCost(0);
         if (itemstack.getItem() == Items.ENCHANTED_BOOK && map.isEmpty()) {
             itemstack = new ItemStack(Items.BOOK);
-            if (stack.hasDisplayName()) {
-                itemstack.setDisplayName(stack.getDisplayName());
+            if (stack.hasCustomHoverName()) {
+                itemstack.setHoverName(stack.getHoverName());
             }
         }
 
         for (int i = 0; i < map.size(); ++i) {
-            itemstack.setRepairCost(RepairContainer.getNewRepairCost(itemstack.getRepairCost()));
+            itemstack.setRepairCost(RepairContainer.calculateIncreasedRepairCost(itemstack.getBaseRepairCost()));
         }
 
         return itemstack;

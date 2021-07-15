@@ -33,7 +33,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     private ConversionRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
-        ItemStack output = recipe.getRecipeOutput();
+        ItemStack output = recipe.getResultItem();
         if (!(output.getItem() instanceof ICoreItem)) {
             throw new JsonParseException("result is not a gear item: " + output);
         }
@@ -92,12 +92,12 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
         if (!original.isEmpty()) {
             // Copy relevant NBT
-            result.setDamage(original.getDamage());
+            result.setDamageValue(original.getDamageValue());
             if (original.isEnchanted()) {
                 // Copy enchantments
                 Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(original);
@@ -108,9 +108,9 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     private static ItemStack findOriginalItem(IInventory inv) {
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.isDamageable()) {
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
+            if (!stack.isEmpty() && stack.isDamageableItem()) {
                 return stack;
             }
         }
@@ -133,7 +133,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
         return true;
     }
 

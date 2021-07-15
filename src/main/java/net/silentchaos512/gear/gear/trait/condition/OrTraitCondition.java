@@ -71,7 +71,7 @@ public class OrTraitCondition implements ITraitCondition {
                 .map(ITraitCondition::getDisplayText)
                 .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "or")).append(t2))
                 .orElseGet(() -> new StringTextComponent(""));
-        return new StringTextComponent("(").append(text).appendString(")");
+        return new StringTextComponent("(").append(text).append(")");
     }
 
     public static class Serializer implements ITraitConditionSerializer<OrTraitCondition> {
@@ -84,7 +84,7 @@ public class OrTraitCondition implements ITraitCondition {
         @Override
         public OrTraitCondition deserialize(JsonObject json) {
             List<ITraitCondition> children = new ArrayList<>();
-            for (JsonElement j : JSONUtils.getJsonArray(json, "values")) {
+            for (JsonElement j : JSONUtils.getAsJsonArray(json, "values")) {
                 if (!j.isJsonObject()) {
                     throw new JsonSyntaxException("Or condition values must be array of objects");
                 }

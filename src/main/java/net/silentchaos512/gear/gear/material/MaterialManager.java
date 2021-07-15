@@ -46,7 +46,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        Collection<ResourceLocation> resources = resourceManager.getAllResourceLocations(DATA_PATH, s -> s.endsWith(".json"));
+        Collection<ResourceLocation> resources = resourceManager.listResources(DATA_PATH, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
 
         Multimap<String, IMaterial> ingredientConflicts = HashMultimap.create();
@@ -63,7 +63,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
 
                 String packName = "ERROR";
                 try (IResource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getPackName();
+                    packName = iresource.getSourceName();
                     JsonObject json = JSONUtils.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                     if (json == null) {
                         // Something is very wrong or the JSON is somehow empty

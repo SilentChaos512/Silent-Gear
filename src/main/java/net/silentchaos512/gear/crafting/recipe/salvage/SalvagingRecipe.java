@@ -45,24 +45,24 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        return ingredient.test(inv.getStackInSlot(0));
+        return ingredient.test(inv.getItem(0));
     }
 
     @Deprecated
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(IInventory inv) {
         // DO NOT USE
-        return getRecipeOutput();
+        return getResultItem();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Deprecated
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         // DO NOT USE
         return !results.isEmpty() ? results.get(0) : ItemStack.EMPTY;
     }
@@ -83,7 +83,7 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
         return true;
     }
 
@@ -131,17 +131,17 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SalvagingRecipe> {
         @Override
-        public SalvagingRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public SalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             SalvagingRecipe recipe = new SalvagingRecipe(recipeId);
-            recipe.ingredient = Ingredient.deserialize(json.get("ingredient"));
+            recipe.ingredient = Ingredient.fromJson(json.get("ingredient"));
             JsonArray resultsArray = json.getAsJsonArray("results");
             for (JsonElement element : resultsArray) {
                 if (element.isJsonObject()) {
-                    Item item = JSONUtils.getItem(element.getAsJsonObject(), "item");
-                    int count = JSONUtils.getInt(element.getAsJsonObject(), "count", 1);
+                    Item item = JSONUtils.getAsItem(element.getAsJsonObject(), "item");
+                    int count = JSONUtils.getAsInt(element.getAsJsonObject(), "count", 1);
                     recipe.results.add(new ItemStack(item, count));
                 } else {
-                    recipe.results.add(new ItemStack(JSONUtils.getItem(element, "item")));
+                    recipe.results.add(new ItemStack(JSONUtils.convertToItem(element, "item")));
                 }
             }
             return recipe;
@@ -149,21 +149,21 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
 
         @Nullable
         @Override
-        public SalvagingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public SalvagingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             SalvagingRecipe recipe = new SalvagingRecipe(recipeId);
-            recipe.ingredient = Ingredient.read(buffer);
+            recipe.ingredient = Ingredient.fromNetwork(buffer);
             int resultCount = buffer.readByte();
             for (int i = 0; i < resultCount; ++i) {
-                recipe.results.add(buffer.readItemStack());
+                recipe.results.add(buffer.readItem());
             }
             return recipe;
         }
 
         @Override
-        public void write(PacketBuffer buffer, SalvagingRecipe recipe) {
-            recipe.ingredient.write(buffer);
+        public void toNetwork(PacketBuffer buffer, SalvagingRecipe recipe) {
+            recipe.ingredient.toNetwork(buffer);
             buffer.writeByte(recipe.results.size());
-            recipe.results.forEach(buffer::writeItemStack);
+            recipe.results.forEach(buffer::writeItem);
         }
     }
 }

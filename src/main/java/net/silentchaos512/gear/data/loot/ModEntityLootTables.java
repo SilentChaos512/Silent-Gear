@@ -34,22 +34,22 @@ public class ModEntityLootTables extends EntityLootTables {
     }
 
     private static LootTable.Builder addFineSilk(float baseChance, float lootingBonus) {
-        return LootTable.builder()
-                .addLootPool(LootPool.builder()
-                        .rolls(ConstantRange.of(1))
-                        .addEntry(ItemLootEntry.builder(CraftingItems.FINE_SILK)
-                                .acceptCondition(KilledByPlayer.builder())
-                                .acceptCondition(RandomChanceWithLooting.builder(baseChance, lootingBonus))
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantRange.exactly(1))
+                        .add(ItemLootEntry.lootTableItem(CraftingItems.FINE_SILK)
+                                .when(KilledByPlayer.killedByPlayer())
+                                .when(RandomChanceWithLooting.randomChanceAndLootingBoost(baseChance, lootingBonus))
                         )
                 );
     }
 
     private static void heroOfTheVillage(BiConsumer<ResourceLocation, LootTable.Builder> consumer, ResourceLocation tableName, IItemProvider... items) {
-        LootPool.Builder pool = LootPool.builder()
-                .rolls(ConstantRange.of(1));
+        LootPool.Builder pool = LootPool.lootPool()
+                .setRolls(ConstantRange.exactly(1));
         for (IItemProvider item : items) {
-            pool.addEntry(ItemLootEntry.builder(item));
+            pool.add(ItemLootEntry.lootTableItem(item));
         }
-        consumer.accept(tableName, LootTable.builder().addLootPool(pool));
+        consumer.accept(tableName, LootTable.lootTable().withPool(pool));
     }
 }

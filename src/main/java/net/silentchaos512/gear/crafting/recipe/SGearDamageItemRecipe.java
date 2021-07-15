@@ -31,8 +31,8 @@ public class SGearDamageItemRecipe extends DamageItemRecipe {
     }
 
     private boolean gearItemsMatchForCrafting(IInventory inv) {
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (GearHelper.isGear(stack) && GearHelper.isBroken(stack) && GearData.getTier(stack) >= this.minGearTear) {
                 return false;
             }
@@ -42,22 +42,22 @@ public class SGearDamageItemRecipe extends DamageItemRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SGearDamageItemRecipe> {
         @Override
-        public SGearDamageItemRecipe read(ResourceLocation recipeId, JsonObject json) {
-            int tier = JSONUtils.getInt(json, "minGearTier", 0);
-            return new SGearDamageItemRecipe(DamageItemRecipe.SERIALIZER.read(recipeId, json), tier);
+        public SGearDamageItemRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            int tier = JSONUtils.getAsInt(json, "minGearTier", 0);
+            return new SGearDamageItemRecipe(DamageItemRecipe.SERIALIZER.fromJson(recipeId, json), tier);
         }
 
         @Nullable
         @Override
-        public SGearDamageItemRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            DamageItemRecipe read = DamageItemRecipe.SERIALIZER.read(recipeId, buffer);
+        public SGearDamageItemRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            DamageItemRecipe read = DamageItemRecipe.SERIALIZER.fromNetwork(recipeId, buffer);
             int tier = buffer.readVarInt();
             return read != null ? new SGearDamageItemRecipe(read, tier) : null;
         }
 
         @Override
-        public void write(PacketBuffer buffer, SGearDamageItemRecipe recipe) {
-            DamageItemRecipe.SERIALIZER.write(buffer, recipe);
+        public void toNetwork(PacketBuffer buffer, SGearDamageItemRecipe recipe) {
+            DamageItemRecipe.SERIALIZER.toNetwork(buffer, recipe);
             buffer.writeVarInt(recipe.minGearTear);
         }
     }

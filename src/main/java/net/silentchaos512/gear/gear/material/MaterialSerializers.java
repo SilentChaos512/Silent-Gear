@@ -35,7 +35,7 @@ public final class MaterialSerializers {
     }
 
     public static IMaterial deserialize(ResourceLocation id, String packName, JsonObject json) {
-        ResourceLocation type = SilentGear.getIdWithDefaultNamespace(JSONUtils.getString(json, "type", STANDARD.getName().toString()));
+        ResourceLocation type = SilentGear.getIdWithDefaultNamespace(JSONUtils.getAsString(json, "type", STANDARD.getName().toString()));
         IMaterialSerializer<?> serializer = REGISTRY.getOrDefault(type, STANDARD);
         return serializer.deserialize(id, packName, json);
     }

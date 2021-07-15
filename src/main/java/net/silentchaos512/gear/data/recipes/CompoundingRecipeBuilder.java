@@ -46,19 +46,19 @@ public class CompoundingRecipeBuilder {
     }
 
     public CompoundingRecipeBuilder addIngredient(IItemProvider item) {
-        return addIngredient(Ingredient.fromItems(item));
+        return addIngredient(Ingredient.of(item));
     }
 
     public CompoundingRecipeBuilder addIngredient(IItemProvider item, int count) {
-        return addIngredient(Ingredient.fromItems(item), count);
+        return addIngredient(Ingredient.of(item), count);
     }
 
     public CompoundingRecipeBuilder addIngredient(ITag<Item> tag) {
-        return addIngredient(Ingredient.fromTag(tag));
+        return addIngredient(Ingredient.of(tag));
     }
 
     public CompoundingRecipeBuilder addIngredient(ITag<Item> tag, int count) {
-        return addIngredient(Ingredient.fromTag(tag), count);
+        return addIngredient(Ingredient.of(tag), count);
     }
 
     public CompoundingRecipeBuilder addIngredient(Ingredient ingredient) {
@@ -92,7 +92,7 @@ public class CompoundingRecipeBuilder {
         }
 
         @Override
-        public void serialize(JsonObject json) {
+        public void serializeRecipeData(JsonObject json) {
             json.add("ingredients", serializeIngredients());
             json.add("result", serializeResult());
         }
@@ -100,7 +100,7 @@ public class CompoundingRecipeBuilder {
         private JsonArray serializeIngredients() {
             JsonArray ret = new JsonArray();
             for (Ingredient ingredient : ingredients) {
-                ret.add(ingredient.serialize());
+                ret.add(ingredient.toJson());
             }
             return ret;
         }
@@ -118,24 +118,24 @@ public class CompoundingRecipeBuilder {
         }
 
         @Override
-        public ResourceLocation getID() {
+        public ResourceLocation getId() {
             return recipeId;
         }
 
         @Override
-        public IRecipeSerializer<?> getSerializer() {
+        public IRecipeSerializer<?> getType() {
             return serializer;
         }
 
         @Nullable
         @Override
-        public JsonObject getAdvancementJson() {
+        public JsonObject serializeAdvancement() {
             return null;
         }
 
         @Nullable
         @Override
-        public ResourceLocation getAdvancementID() {
+        public ResourceLocation getAdvancementId() {
             return null;
         }
     }

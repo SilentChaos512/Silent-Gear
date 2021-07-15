@@ -97,7 +97,7 @@ public class LazyPartData implements IPartData {
     public CompoundNBT write(CompoundNBT tags) {
         tags.putString("ID", partId.toString());
         if (!this.craftingItem.isEmpty()) {
-            tags.put("Item", this.craftingItem.write(new CompoundNBT()));
+            tags.put("Item", this.craftingItem.save(new CompoundNBT()));
         }
         return tags;
     }
@@ -118,7 +118,7 @@ public class LazyPartData implements IPartData {
         }
 
         JsonObject jsonObject = json.getAsJsonObject();
-        String key = JSONUtils.getString(jsonObject, "part");
+        String key = JSONUtils.getAsString(jsonObject, "part");
         return new LazyPartData(new ResourceLocation(key));
     }
 

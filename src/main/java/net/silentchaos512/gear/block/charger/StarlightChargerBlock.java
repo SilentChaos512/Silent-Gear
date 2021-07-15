@@ -14,11 +14,11 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> 
     private static final VoxelShape SHAPE;
 
     static {
-        VoxelShape base1 = makeCuboidShape(3, 0, 3, 13, 2, 13);
-        VoxelShape base2 = VoxelShapes.or(base1, makeCuboidShape(4, 2, 4, 12, 4, 12));
-        VoxelShape base3 = VoxelShapes.or(base2, makeCuboidShape(5, 4, 5, 11, 10, 11));
-        VoxelShape base4 = VoxelShapes.or(base3, makeCuboidShape(1, 11, 1, 15, 12, 15));
-        VoxelShape top = makeCuboidShape(0, 12, 0, 16, 16, 16);
+        VoxelShape base1 = box(3, 0, 3, 13, 2, 13);
+        VoxelShape base2 = VoxelShapes.or(base1, box(4, 2, 4, 12, 4, 12));
+        VoxelShape base3 = VoxelShapes.or(base2, box(5, 4, 5, 11, 10, 11));
+        VoxelShape base4 = VoxelShapes.or(base3, box(1, 11, 1, 15, 12, 15));
+        VoxelShape top = box(0, 12, 0, 16, 16, 16);
         SHAPE = VoxelShapes.or(base4, top);
     }
 

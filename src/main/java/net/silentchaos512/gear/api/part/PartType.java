@@ -136,7 +136,7 @@ public final class PartType {
     }
 
     public static PartType fromJson(JsonObject json, String key) {
-        String str = JSONUtils.getString(json, key);
+        String str = JSONUtils.getAsString(json, key);
         PartType type = get(new ModResourceLocation(str));
         if (type == null) {
             throw new JsonSyntaxException("Unknown part type: " + str);

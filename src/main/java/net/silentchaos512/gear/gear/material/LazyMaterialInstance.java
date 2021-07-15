@@ -95,20 +95,20 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     public static LazyMaterialInstance deserialize(JsonObject json) {
-        ResourceLocation id = new ResourceLocation(JSONUtils.getString(json, "material"));
-        MaterialGrade grade = EnumUtils.byName(JSONUtils.getString(json, "grade", "NONE"), MaterialGrade.NONE);
+        ResourceLocation id = new ResourceLocation(JSONUtils.getAsString(json, "material"));
+        MaterialGrade grade = EnumUtils.byName(JSONUtils.getAsString(json, "grade", "NONE"), MaterialGrade.NONE);
         return new LazyMaterialInstance(id, grade);
     }
 
     public static LazyMaterialInstance read(PacketBuffer buffer) {
         ResourceLocation id = buffer.readResourceLocation();
-        MaterialGrade grade = buffer.readEnumValue(MaterialGrade.class);
+        MaterialGrade grade = buffer.readEnum(MaterialGrade.class);
         return new LazyMaterialInstance(id, grade);
     }
 
     @Override
     public void write(PacketBuffer buffer) {
         buffer.writeResourceLocation(this.materialId);
-        buffer.writeEnumValue(this.grade);
+        buffer.writeEnum(this.grade);
     }
 }

@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
 
 public final class TraitsCommand {
     private static final SuggestionProvider<CommandSource> TRAIT_ID_SUGGESTIONS = (ctx, builder) ->
-            ISuggestionProvider.func_212476_a(TraitManager.getValues().stream().map(ITrait::getId), builder);
+            ISuggestionProvider.suggestResource(TraitManager.getValues().stream().map(ITrait::getId), builder);
     private static final String TRAITS_DATA_PATH = "https://github.com/SilentChaos512/Silent-Gear/tree/1.16.x/src/generated/resources/data/silentgear/silentgear_traits/";
 
     private TraitsCommand() {}
@@ -58,9 +58,9 @@ public final class TraitsCommand {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(Commands.literal("sgear_traits")
                 .then(Commands.literal("describe")
-                        .then(Commands.argument("traitID", ResourceLocationArgument.resourceLocation())
+                        .then(Commands.argument("traitID", ResourceLocationArgument.id())
                                 .suggests(TRAIT_ID_SUGGESTIONS)
-                                .executes(context -> runDescribe(context, ResourceLocationArgument.getResourceLocation(context, "traitID")))
+                                .executes(context -> runDescribe(context, ResourceLocationArgument.getId(context, "traitID")))
                         )
                 )
                 .then(Commands.literal("dump_md")
@@ -74,15 +74,15 @@ public final class TraitsCommand {
     private static int runDescribe(CommandContext<CommandSource> context, ResourceLocation traitId) {
         ITrait trait = TraitManager.get(traitId);
         if (trait == null) {
-            context.getSource().sendErrorMessage(new TranslationTextComponent("command.silentgear.traits.traitNotFound", traitId));
+            context.getSource().sendFailure(new TranslationTextComponent("command.silentgear.traits.traitNotFound", traitId));
             return 0;
         }
 
-        context.getSource().sendFeedback(trait.getDisplayName(0), true);
-        context.getSource().sendFeedback(trait.getDescription(1), true);
-        context.getSource().sendFeedback(new TranslationTextComponent("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
-        context.getSource().sendFeedback(new StringTextComponent("Object: " + trait), true);
-        context.getSource().sendFeedback(new StringTextComponent("Serializer: " + trait.getSerializer()), true);
+        context.getSource().sendSuccess(trait.getDisplayName(0), true);
+        context.getSource().sendSuccess(trait.getDescription(1), true);
+        context.getSource().sendSuccess(new TranslationTextComponent("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
+        context.getSource().sendSuccess(new StringTextComponent("Object: " + trait), true);
+        context.getSource().sendSuccess(new StringTextComponent("Serializer: " + trait.getSerializer()), true);
 
         return 1;
     }
@@ -91,17 +91,17 @@ public final class TraitsCommand {
         String listStr = TraitManager.getValues().stream()
                 .map(trait -> trait.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendFeedback(new StringTextComponent(listStr), true);
-        context.getSource().sendFeedback(new StringTextComponent("Total: " + TraitManager.getValues().size()), true);
+        context.getSource().sendSuccess(new StringTextComponent(listStr), true);
+        context.getSource().sendSuccess(new StringTextComponent("Total: " + TraitManager.getValues().size()), true);
 
         return 1;
     }
 
     private static int runDumpMd(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().asPlayer();
+        ServerPlayerEntity player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send traits wiki dump packet to client {}", player.getScoreboardName());
         ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.TRAITS, true);
-        Network.channel.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        Network.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         return 1;
     }
 
@@ -117,7 +117,7 @@ public final class TraitsCommand {
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            player.sendMessage(new StringTextComponent("Could not create directory: " + output.getParent()), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("Could not create directory: " + output.getParent()), Util.NIL_UUID);
             return;
         }
 
@@ -192,9 +192,9 @@ public final class TraitsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).mergeStyle(TextFormatting.UNDERLINE).modifyStyle(style ->
-                    style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            player.sendMessage(new StringTextComponent("Wrote to ").append(fileNameText), Util.DUMMY_UUID);
+            ITextComponent fileNameText = (new StringTextComponent(output.getAbsolutePath())).withStyle(TextFormatting.UNDERLINE).withStyle(style ->
+                    style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
+            player.sendMessage(new StringTextComponent("Wrote to ").append(fileNameText), Util.NIL_UUID);
         }
     }
 

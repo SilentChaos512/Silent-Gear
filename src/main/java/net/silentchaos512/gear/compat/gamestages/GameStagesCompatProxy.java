@@ -75,7 +75,7 @@ public final class GameStagesCompatProxy {
             }
             ServerPlayerEntity foundPlayer = null;
             for (ServerPlayerEntity player : manager.getPlayers()) {
-                if (player.openContainer == container && container.canInteractWith(player) && container.getCanCraft(player)) {
+                if (player.containerMenu == container && container.stillValid(player) && container.isSynched(player)) {
                     if (foundPlayer != null) {
                         return null;
                     }

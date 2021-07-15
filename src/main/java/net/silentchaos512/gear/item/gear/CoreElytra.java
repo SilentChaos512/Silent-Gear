@@ -45,6 +45,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import net.minecraft.item.Item.Properties;
+
 public class CoreElytra extends ElytraItem implements ICoreArmor {
     private static final int DURABILITY_MULTIPLIER = 25;
     private static final UUID ARMOR_UUID = UUID.fromString("f099f401-82f6-4565-a0b5-fd464f2dc72c");
@@ -74,7 +76,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     );
 
     public CoreElytra(Properties builder) {
-        super(builder.maxDamage(100));
+        super(builder.durability(100));
     }
 
     @Override
@@ -151,7 +153,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
     }
 
@@ -166,7 +168,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
@@ -205,14 +207,14 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (!ModList.get().isLoaded(Const.CAELUS)) {
-            tooltip.add(TextUtil.misc("caelusNotInstalled").mergeStyle(TextFormatting.RED));
+            tooltip.add(TextUtil.misc("caelusNotInstalled").withStyle(TextFormatting.RED));
         }
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }

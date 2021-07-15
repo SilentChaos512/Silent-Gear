@@ -29,6 +29,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import net.minecraft.item.Item.Properties;
+
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
     private ITag.INamedTag<Item> itemTag;
@@ -57,7 +59,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         if (itemTag == null) {
             ResourceLocation id = this.getRegistryName();
             if (id != null) {
-                itemTag = ItemTags.makeWrapperTag(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()).toString());
+                itemTag = ItemTags.bind(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()).toString());
             }
         }
         return itemTag;
@@ -69,26 +71,26 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         if (id == null) {
             return new StringTextComponent("ERROR");
         }
-        return new TranslationTextComponent(Util.makeTranslationKey("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
+        return new TranslationTextComponent(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
         String itemClass = this.gearType.getName();
 
         // Flavor text
         if (!gearType.isArmor()) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
-            list.add(new TranslationTextComponent(key).mergeStyle(TextFormatting.ITALIC));
+            list.add(new TranslationTextComponent(key).withStyle(TextFormatting.ITALIC));
         }
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").mergeStyle(TextFormatting.DARK_RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").withStyle(TextFormatting.DARK_RED));
         } else if (this.singleUse) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").mergeStyle(TextFormatting.RED));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").withStyle(TextFormatting.RED));
         } else {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").mergeStyle(TextFormatting.GREEN));
+            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").withStyle(TextFormatting.GREEN));
         }
 
         addInformationSupportedPartTypes(list);
@@ -121,7 +123,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
             }
         } else {
             list.add(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD)
-                    .appendString(" ")
+                    .append(" ")
                     .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY)));
         }
     }

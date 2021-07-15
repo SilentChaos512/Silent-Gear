@@ -30,11 +30,11 @@ public final class SalvagingRecipeBuilder {
     }
 
     public static SalvagingRecipeBuilder builder(IItemProvider ingredient) {
-        return builder(Ingredient.fromItems(ingredient));
+        return builder(Ingredient.of(ingredient));
     }
 
     public static SalvagingRecipeBuilder builder(Tag<Item> ingredient) {
-        return builder(Ingredient.fromTag(ingredient));
+        return builder(Ingredient.of(ingredient));
     }
 
     public static SalvagingRecipeBuilder builder(Ingredient ingredient) {
@@ -42,7 +42,7 @@ public final class SalvagingRecipeBuilder {
     }
 
     public static SalvagingRecipeBuilder gearBuilder(ICoreItem item) {
-        return new SalvagingRecipeBuilder(Ingredient.fromItems(item), ModRecipes.SALVAGING_GEAR.get());
+        return new SalvagingRecipeBuilder(Ingredient.of(item), ModRecipes.SALVAGING_GEAR.get());
     }
 
     public SalvagingRecipeBuilder addResult(IItemProvider item) {
@@ -71,8 +71,8 @@ public final class SalvagingRecipeBuilder {
         }
 
         @Override
-        public void serialize(JsonObject json) {
-            json.add("ingredient", builder.ingredient.serialize());
+        public void serializeRecipeData(JsonObject json) {
+            json.add("ingredient", builder.ingredient.toJson());
 
             if (!builder.results.isEmpty()) {
                 JsonArray results = new JsonArray();
@@ -91,24 +91,24 @@ public final class SalvagingRecipeBuilder {
         }
 
         @Override
-        public ResourceLocation getID() {
+        public ResourceLocation getId() {
             return id;
         }
 
         @Override
-        public IRecipeSerializer<?> getSerializer() {
+        public IRecipeSerializer<?> getType() {
             return builder.serializer;
         }
 
         @Nullable
         @Override
-        public JsonObject getAdvancementJson() {
+        public JsonObject serializeAdvancement() {
             return null;
         }
 
         @Nullable
         @Override
-        public ResourceLocation getAdvancementID() {
+        public ResourceLocation getAdvancementId() {
             return null;
         }
     }

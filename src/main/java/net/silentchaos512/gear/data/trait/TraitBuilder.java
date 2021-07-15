@@ -47,8 +47,8 @@ public class TraitBuilder {
         this.type = serializer.getName();
         this.maxLevel = maxLevel;
 
-        this.name = new TranslationTextComponent(Util.makeTranslationKey("trait", traitId));
-        this.description = new TranslationTextComponent(Util.makeTranslationKey("trait", traitId) + ".desc");
+        this.name = new TranslationTextComponent(Util.makeDescriptionId("trait", traitId));
+        this.description = new TranslationTextComponent(Util.makeDescriptionId("trait", traitId) + ".desc");
     }
 
     public static TraitBuilder simple(DataResource<ITrait> trait, int maxLevel) {

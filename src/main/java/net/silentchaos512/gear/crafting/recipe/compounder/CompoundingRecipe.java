@@ -58,7 +58,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
         int inputs = 0;
 
         for (int i = 0; i < inv.getInputSlotCount(); ++i) {
-            if (!inv.getStackInSlot(i).isEmpty()) {
+            if (!inv.getItem(i).isEmpty()) {
                 ++inputs;
             }
         }
@@ -67,7 +67,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
             boolean found = false;
 
             for (int i = 0; i < inv.getInputSlotCount(); ++i) {
-                ItemStack stack = inv.getStackInSlot(i);
+                ItemStack stack = inv.getItem(i);
 
                 if (!stack.isEmpty() && ingredient.test(stack)) {
                     found = true;
@@ -85,17 +85,17 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
     }
 
     @Override
-    public ItemStack getCraftingResult(CompounderTileEntity<?> inv) {
+    public ItemStack assemble(CompounderTileEntity<?> inv) {
         return this.result.copy();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height <= this.ingredients.size();
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return this.result.copy();
     }
 
@@ -107,7 +107,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
         return true;
     }
 
@@ -134,24 +134,24 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
         }
 
         @Override
-        public T read(ResourceLocation recipeId, JsonObject json) {
+        public T fromJson(ResourceLocation recipeId, JsonObject json) {
             T ret = this.factory.apply(recipeId);
 
             JsonArray array = json.getAsJsonArray("ingredients");
             for (JsonElement je : array) {
-                ret.ingredients.add(Ingredient.deserialize(je));
+                ret.ingredients.add(Ingredient.fromJson(je));
             }
 
             JsonObject resultJson = json.getAsJsonObject("result");
-            ResourceLocation itemId = new ResourceLocation(JSONUtils.getString(resultJson, "item"));
+            ResourceLocation itemId = new ResourceLocation(JSONUtils.getAsString(resultJson, "item"));
             Item item = ForgeRegistries.ITEMS.getValue(itemId);
             if (item == null) {
                 throw new JsonParseException("Unknown item: " + itemId);
             }
-            int count = JSONUtils.getInt(resultJson, "count", 1);
+            int count = JSONUtils.getAsInt(resultJson, "count", 1);
 
             if (item instanceof CustomMaterialItem && resultJson.has("material")) {
-                ResourceLocation id = new ResourceLocation(JSONUtils.getString(resultJson, "material"));
+                ResourceLocation id = new ResourceLocation(JSONUtils.getAsString(resultJson, "material"));
                 ret.result = ((CustomMaterialItem) item).create(LazyMaterialInstance.of(id), count);
             }
 
@@ -164,24 +164,24 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
 
         @Nullable
         @Override
-        public T read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             T ret = this.factory.apply(recipeId);
 
             int count = buffer.readByte();
             for (int i = 0; i < count; ++i) {
-                ret.ingredients.add(Ingredient.read(buffer));
+                ret.ingredients.add(Ingredient.fromNetwork(buffer));
             }
 
-            ret.result = buffer.readItemStack();
+            ret.result = buffer.readItem();
 
             return ret;
         }
 
         @Override
-        public void write(PacketBuffer buffer, T recipe) {
+        public void toNetwork(PacketBuffer buffer, T recipe) {
             buffer.writeByte(recipe.ingredients.size());
-            recipe.ingredients.forEach(ingredient -> ingredient.write(buffer));
-            buffer.writeItemStack(recipe.result);
+            recipe.ingredients.forEach(ingredient -> ingredient.toNetwork(buffer));
+            buffer.writeItem(recipe.result);
         }
     }
 }

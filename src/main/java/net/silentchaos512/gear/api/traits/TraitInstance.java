@@ -85,9 +85,9 @@ public final class TraitInstance implements ITraitInstance {
     }
 
     public IFormattableTextComponent getDisplayName() {
-        IFormattableTextComponent text = this.trait.getDisplayName(this.level).deepCopy();
+        IFormattableTextComponent text = this.trait.getDisplayName(this.level).copy();
         if (!conditions.isEmpty()) {
-            text.appendString("*");
+            text.append("*");
         }
         return text;
     }
@@ -96,7 +96,7 @@ public final class TraitInstance implements ITraitInstance {
         if (!this.trait.showInTooltip(flag)) return;
 
         // Display name
-        IFormattableTextComponent displayName = this.getDisplayName().mergeStyle(TextFormatting.ITALIC);
+        IFormattableTextComponent displayName = this.getDisplayName().withStyle(TextFormatting.ITALIC);
         tooltip.add(trait.isHidden() ? TextUtil.withColor(displayName, TextFormatting.DARK_GRAY) : displayName);
 
         // Description (usually not shown)
@@ -108,14 +108,14 @@ public final class TraitInstance implements ITraitInstance {
 
     public static TraitInstance deserialize(JsonObject json) {
         // Trait; this should already exist
-        ResourceLocation traitId = new ResourceLocation(JSONUtils.getString(json, "name"));
+        ResourceLocation traitId = new ResourceLocation(JSONUtils.getAsString(json, "name"));
         ITrait trait = TraitManager.get(traitId);
         if (trait == null) {
             throw new JsonSyntaxException("Unknown trait: " + traitId);
         }
 
         // Level; clamp to valid values
-        int level = MathHelper.clamp(JSONUtils.getInt(json, "level", 1), 1, trait.getMaxLevel());
+        int level = MathHelper.clamp(JSONUtils.getAsInt(json, "level", 1), 1, trait.getMaxLevel());
 
         // Conditions (if available)
         List<ITraitCondition> conditions = new ArrayList<>();

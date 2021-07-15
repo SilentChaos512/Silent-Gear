@@ -35,7 +35,7 @@ public class CompounderContainer extends Container {
 
         //assertInventorySize(this.inventory, CompounderTileEntity.INVENTORY_SIZE);
 
-        for (int i = 0; i < this.inventory.getSizeInventory() - 2; ++i) {
+        for (int i = 0; i < this.inventory.getContainerSize() - 2; ++i) {
             addSlot(new Slot(this.inventory, i, 17 + 18 * i, 35) /*{
                 @Override
                 public boolean isItemValid(ItemStack stack) {
@@ -43,17 +43,17 @@ public class CompounderContainer extends Container {
                 }
             }*/);
         }
-        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getSizeInventory() - 2, 126, 35));
-        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getSizeInventory() - 1, 126, 60) {
+        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 2, 126, 35));
+        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 1, 126, 60) {
             @Override
-            public boolean canTakeStack(PlayerEntity playerIn) {
+            public boolean mayPickup(PlayerEntity playerIn) {
                 return false;
             }
         });
 
         InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
-        trackIntArray(this.fields);
+        addDataSlots(this.fields);
     }
 
     boolean getWorkEnabled() {
@@ -75,53 +75,53 @@ public class CompounderContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return inventory.isUsableByPlayer(playerIn);
+    public boolean stillValid(PlayerEntity playerIn) {
+        return inventory.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
+        Slot slot = slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack stack1 = slot.getItem();
             stack = stack1.copy();
-            final int inventorySize = inventory.getSizeInventory();
+            final int inventorySize = inventory.getContainerSize();
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotbarEnd = playerInventoryEnd + 9;
             int outputSlot = inventorySize - 2;
 
             if (index == outputSlot) {
                 // Move output to player
-                if (!this.mergeItemStack(stack1, inventorySize, playerHotbarEnd, true)) {
+                if (!this.moveItemStackTo(stack1, inventorySize, playerHotbarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(stack1, stack);
+                slot.onQuickCraft(stack1, stack);
             } else if (index >= inventorySize) {
                 if (isValidIngredient()) {
-                    if (!this.mergeItemStack(stack1, 0, outputSlot, false)) {
+                    if (!this.moveItemStackTo(stack1, 0, outputSlot, false)) {
                         // Move from player or hotbar to input slots
                         return ItemStack.EMPTY;
                     }
                 } else if (index < playerInventoryEnd) {
-                    if (!this.mergeItemStack(stack1, playerInventoryEnd, playerHotbarEnd, false)) {
+                    if (!this.moveItemStackTo(stack1, playerInventoryEnd, playerHotbarEnd, false)) {
                         // Move from player to hotbar
                         return ItemStack.EMPTY;
                     }
-                } else if (index < playerHotbarEnd && !this.mergeItemStack(stack1, inventorySize, playerInventoryEnd, false)) {
+                } else if (index < playerHotbarEnd && !this.moveItemStackTo(stack1, inventorySize, playerInventoryEnd, false)) {
                     // Move from hotbar to player
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(stack1, inventorySize, playerHotbarEnd, false)) {
+            } else if (!this.moveItemStackTo(stack1, inventorySize, playerHotbarEnd, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (stack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (stack1.getCount() == stack.getCount()) {

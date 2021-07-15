@@ -15,7 +15,7 @@ public interface IEarlySelectiveReloadListener extends IFutureReloadListener {
     default CompletableFuture<Void> reload(IFutureReloadListener.IStage stage, IResourceManager resourceManager, IProfiler preparationsProfiler, IProfiler reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
         return CompletableFuture.runAsync(() -> {
             this.onResourceManagerReload(resourceManager, SelectiveReloadStateHandler.INSTANCE.get());
-        }, backgroundExecutor).thenCompose(stage::markCompleteAwaitingOthers);
+        }, backgroundExecutor).thenCompose(stage::wait);
     }
 
     void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> predicate);

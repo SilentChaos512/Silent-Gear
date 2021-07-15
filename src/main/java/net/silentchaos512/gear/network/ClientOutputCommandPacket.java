@@ -22,13 +22,13 @@ public class ClientOutputCommandPacket {
     }
 
     public static ClientOutputCommandPacket decode(PacketBuffer buffer) {
-        Type type = buffer.readEnumValue(Type.class);
+        Type type = buffer.readEnum(Type.class);
         boolean includeChildren = buffer.readBoolean();
         return new ClientOutputCommandPacket(type, includeChildren);
     }
 
     public void encode(PacketBuffer buffer) {
-        buffer.writeEnumValue(this.type);
+        buffer.writeEnum(this.type);
         buffer.writeBoolean(this.includeChildren);
     }
 

@@ -68,7 +68,7 @@ public final class PartManager implements IResourceManagerReloadListener {
 
                 String packName = "ERROR";
                 try (IResource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getPackName();
+                    packName = iresource.getSourceName();
                     if (SilentGear.LOGGER.isTraceEnabled()) {
                         SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
                     }
@@ -81,7 +81,7 @@ public final class PartManager implements IResourceManagerReloadListener {
                     } else {
                         IGearPart part = PartSerializers.deserialize(name, json);
                         if (part instanceof AbstractGearPart) {
-                            ((AbstractGearPart) part).packName = iresource.getPackName();
+                            ((AbstractGearPart) part).packName = iresource.getSourceName();
                         }
                         addPart(part);
                         highestMainPartTier = Math.max(highestMainPartTier, part.getTier());
@@ -101,8 +101,8 @@ public final class PartManager implements IResourceManagerReloadListener {
 
     private static Collection<ResourceLocation> getAllResources(IResourceManager resourceManager) {
         Collection<ResourceLocation> list = new ArrayList<>();
-        list.addAll(resourceManager.getAllResourceLocations(DATA_PATH, s -> s.endsWith(".json")));
-        list.addAll(resourceManager.getAllResourceLocations(DATA_PATH_OLD, s -> s.endsWith(".json")));
+        list.addAll(resourceManager.listResources(DATA_PATH, s -> s.endsWith(".json")));
+        list.addAll(resourceManager.listResources(DATA_PATH_OLD, s -> s.endsWith(".json")));
         return list;
     }
 
@@ -181,7 +181,7 @@ public final class PartManager implements IResourceManagerReloadListener {
             String listStr = String.join(", ", ERROR_LIST);
             return ImmutableList.of(
                     new StringTextComponent("[Silent Gear] The following gear parts failed to load, check your log file:")
-                            .mergeStyle(TextFormatting.RED),
+                            .withStyle(TextFormatting.RED),
                     new StringTextComponent(listStr)
             );
         }
