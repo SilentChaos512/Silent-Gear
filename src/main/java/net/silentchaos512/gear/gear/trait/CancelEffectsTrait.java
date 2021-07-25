@@ -3,10 +3,10 @@ package net.silentchaos512.gear.gear.trait;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -26,7 +26,7 @@ public class CancelEffectsTrait extends SimpleTrait {
             CancelEffectsTrait::encode
     );
 
-    private final Collection<Effect> effects = new ArrayList<>();
+    private final Collection<MobEffect> effects = new ArrayList<>();
 
     public CancelEffectsTrait(ResourceLocation id) {
         super(id, SERIALIZER);
@@ -35,24 +35,24 @@ public class CancelEffectsTrait extends SimpleTrait {
     private static void deserialize(CancelEffectsTrait trait, JsonObject json) {
         JsonArray array = json.getAsJsonArray("effects");
         for (JsonElement element : array) {
-            Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(element.getAsString()));
+            MobEffect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(element.getAsString()));
             if (effect != null) {
                 trait.effects.add(effect);
             }
         }
     }
 
-    private static void decode(CancelEffectsTrait trait, PacketBuffer buffer) {
+    private static void decode(CancelEffectsTrait trait, FriendlyByteBuf buffer) {
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
-            Effect effect = ForgeRegistries.POTIONS.getValue(buffer.readResourceLocation());
+            MobEffect effect = ForgeRegistries.POTIONS.getValue(buffer.readResourceLocation());
             if (effect != null) {
                 trait.effects.add(effect);
             }
         }
     }
 
-    private static void encode(CancelEffectsTrait trait, PacketBuffer buffer) {
+    private static void encode(CancelEffectsTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.effects.size());
         trait.effects.forEach(effect -> buffer.writeResourceLocation(NameUtils.from(effect)));
     }
@@ -60,9 +60,9 @@ public class CancelEffectsTrait extends SimpleTrait {
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         if (isEquipped) {
-            PlayerEntity player = context.getPlayer();
+            Player player = context.getPlayer();
             if (player != null) {
-                for (Effect effect : this.effects) {
+                for (MobEffect effect : this.effects) {
                     player.removeEffect(effect);
                 }
             }

@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.MaterialList;
@@ -36,12 +36,12 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.COMPOUND_PART.get();
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
         IMaterial first = null;
@@ -68,12 +68,12 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         int craftedCount = getBaseRecipe().getResultItem().getCount();
         return item.create(getMaterials(inv), craftedCount);
     }
 
-    private static MaterialList getMaterials(IInventory inv) {
+    private static MaterialList getMaterials(Container inv) {
         MaterialList ret = MaterialList.empty();
 
         for (int i = 0; i < inv.getContainerSize(); i++) {

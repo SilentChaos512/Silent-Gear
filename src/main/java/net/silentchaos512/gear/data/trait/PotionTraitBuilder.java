@@ -2,8 +2,8 @@ package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -35,13 +35,13 @@ public class PotionTraitBuilder extends TraitBuilder {
     }
 
     @Deprecated
-    public PotionTraitBuilder addEffect(GearType gearType, boolean requiresFullSet, Effect effect, int... levels) {
+    public PotionTraitBuilder addEffect(GearType gearType, boolean requiresFullSet, MobEffect effect, int... levels) {
         this.potions.computeIfAbsent(gearType, gt -> new ArrayList<>())
                 .add(PotionEffectTrait.PotionData.of(requiresFullSet, effect, levels));
         return this;
     }
 
-    public PotionTraitBuilder addEffect(GearType gearType, PotionEffectTrait.LevelType type, Effect effect, int... levels) {
+    public PotionTraitBuilder addEffect(GearType gearType, PotionEffectTrait.LevelType type, MobEffect effect, int... levels) {
         this.potions.computeIfAbsent(gearType, gt -> new ArrayList<>())
                 .add(PotionEffectTrait.PotionData.of(type, effect, levels));
         return this;

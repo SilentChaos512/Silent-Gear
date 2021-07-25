@@ -7,14 +7,14 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.registration.*;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.crafting.*;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -46,6 +46,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 @JeiPlugin
 public class SGearJeiPlugin implements IModPlugin {
@@ -135,8 +141,8 @@ public class SGearJeiPlugin implements IModPlugin {
         }
     }
 
-    private static boolean isGearCraftingRecipe(IRecipe<?> recipe) {
-        IRecipeSerializer<?> serializer = recipe.getSerializer();
+    private static boolean isGearCraftingRecipe(Recipe<?> recipe) {
+        RecipeSerializer<?> serializer = recipe.getSerializer();
         return serializer == ModRecipes.SHAPED_GEAR.get() || serializer == ModRecipes.SHAPELESS_GEAR.get() || serializer == ModRecipes.COMPOUND_PART.get();
     }
 
@@ -174,19 +180,19 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.registerSubtypeInterpreter(ModItems.CUSTOM_INGOT.get(), customMaterials);
     }
 
-    private static void addInfoPage(IRecipeRegistration reg, IItemProvider item) {
+    private static void addInfoPage(IRecipeRegistration reg, ItemLike item) {
         String key = getDescKey(Objects.requireNonNull(item.asItem().getRegistryName()));
         ItemStack stack = new ItemStack(item);
         reg.addIngredientInfo(stack, VanillaTypes.ITEM, key);
     }
 
-    private static void addInfoPage(IRecipeRegistration reg, String name, Collection<IItemProvider> items) {
+    private static void addInfoPage(IRecipeRegistration reg, String name, Collection<ItemLike> items) {
         String key = getDescKey(SilentGear.getId(name));
         List<ItemStack> stacks = items.stream().map(ItemStack::new).collect(Collectors.toList());
         reg.addIngredientInfo(stacks, VanillaTypes.ITEM, key);
     }
 
-    private static void addInfoPage(IRecipeRegistration reg, IItemProvider item, Stream<ItemStack> variants) {
+    private static void addInfoPage(IRecipeRegistration reg, ItemLike item, Stream<ItemStack> variants) {
         String key = getDescKey(Objects.requireNonNull(item.asItem().getRegistryName()));
         reg.addIngredientInfo(variants.collect(Collectors.toList()), VanillaTypes.ITEM, key);
     }

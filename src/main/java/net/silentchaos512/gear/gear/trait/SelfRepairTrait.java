@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.gear.trait;
 
-import net.minecraft.util.Hand;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -16,8 +16,8 @@ public class SelfRepairTrait extends SimpleTrait {
             SilentGear.getId("self_repair"),
             SelfRepairTrait::new,
             (trait, json) -> {
-                trait.activationChance = JSONUtils.getAsFloat(json, "activation_chance");
-                trait.repairAmount = JSONUtils.getAsInt(json, "repair_amount", 1);
+                trait.activationChance = GsonHelper.getAsFloat(json, "activation_chance");
+                trait.repairAmount = GsonHelper.getAsInt(json, "repair_amount", 1);
             },
             (trait, buffer) -> {
                 trait.activationChance = buffer.readFloat();
@@ -40,7 +40,7 @@ public class SelfRepairTrait extends SimpleTrait {
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         if (shouldActivate(context)) {
             int amount = -repairAmount * context.getTraitLevel();
-            GearHelper.attemptDamage(context.getGear(), amount, context.getPlayer(), Hand.MAIN_HAND);
+            GearHelper.attemptDamage(context.getGear(), amount, context.getPlayer(), InteractionHand.MAIN_HAND);
         }
     }
 

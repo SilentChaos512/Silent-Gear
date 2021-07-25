@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.api.material;
 
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Handles serialization of {@link IMaterial}s. Custom serializers <em>should not be required in
@@ -13,9 +13,9 @@ import net.minecraft.util.ResourceLocation;
 public interface IMaterialSerializer<T extends IMaterial> {
     T deserialize(ResourceLocation id, String packName, JsonObject json);
 
-    T read(ResourceLocation id, PacketBuffer buffer);
+    T read(ResourceLocation id, FriendlyByteBuf buffer);
 
-    void write(PacketBuffer buffer, T material);
+    void write(FriendlyByteBuf buffer, T material);
 
     ResourceLocation getName();
 }

@@ -1,32 +1,32 @@
 package net.silentchaos512.gear.block.grader;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.init.ModContainers;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.utils.EnumUtils;
 
-public class GraderContainer extends Container {
-    private final IInventory inventory;
-    final IIntArray fields;
+public class GraderContainer extends AbstractContainerMenu {
+    private final Container inventory;
+    final ContainerData fields;
 
-    public GraderContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
-        this(id, playerInventory, new Inventory(GraderTileEntity.INVENTORY_SIZE), new IntArray(2));
+    public GraderContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
+        this(id, playerInventory, new SimpleContainer(GraderTileEntity.INVENTORY_SIZE), new SimpleContainerData(2));
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
-    public GraderContainer(int id, PlayerInventory playerInventory, IInventory inventory, IIntArray fields) {
+    public GraderContainer(int id, Inventory playerInventory, Container inventory, ContainerData fields) {
         super(ModContainers.MATERIAL_GRADER.get(), id);
         this.inventory = inventory;
         this.fields = fields;
@@ -65,18 +65,18 @@ public class GraderContainer extends Container {
     }
 
     @Override
-    public void addSlotListener(IContainerListener listener) {
+    public void addSlotListener(ContainerListener listener) {
         super.addSlotListener(listener);
         listener.refreshContainer(this, getItems());
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return inventory.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = slots.get(index);
 

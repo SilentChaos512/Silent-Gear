@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.loot.function;
 
 import com.google.gson.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.gear.part.LazyPartData;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class SetPartsFunction extends LootFunction {
+public final class SetPartsFunction extends LootItemConditionalFunction {
     public static final Serializer SERIALIZER = new Serializer();
 
     private final List<LazyPartData> parts;
 
-    private SetPartsFunction(ILootCondition[] conditions, List<LazyPartData> parts) {
+    private SetPartsFunction(LootItemCondition[] conditions, List<LazyPartData> parts) {
         super(conditions);
         this.parts = parts;
     }
@@ -38,16 +38,16 @@ public final class SetPartsFunction extends LootFunction {
         return result;
     }
 
-    public static LootFunction.Builder<?> builder(List<LazyPartData> parts) {
+    public static LootItemConditionalFunction.Builder<?> builder(List<LazyPartData> parts) {
         return simpleBuilder(conditions -> new SetPartsFunction(conditions, parts));
     }
 
     @Override
-    public LootFunctionType getType() {
+    public LootItemFunctionType getType() {
         return ModLootStuff.SET_PARTS;
     }
 
-    public static class Serializer extends LootFunction.Serializer<SetPartsFunction> {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<SetPartsFunction> {
         @Override
         public void serialize(JsonObject json, SetPartsFunction function, JsonSerializationContext context) {
             super.serialize(json, function, context);
@@ -57,9 +57,9 @@ public final class SetPartsFunction extends LootFunction {
         }
 
         @Override
-        public SetPartsFunction deserialize(JsonObject json, JsonDeserializationContext context, ILootCondition[] conditionsIn) {
+        public SetPartsFunction deserialize(JsonObject json, JsonDeserializationContext context, LootItemCondition[] conditionsIn) {
             List<LazyPartData> parts = new ArrayList<>();
-            JsonArray partsArray = Objects.requireNonNull(JSONUtils.getAsJsonArray(json, "parts", new JsonArray()));
+            JsonArray partsArray = Objects.requireNonNull(GsonHelper.getAsJsonArray(json, "parts", new JsonArray()));
             for (JsonElement jsonElement : partsArray) {
                 parts.add(LazyPartData.deserialize(jsonElement));
             }

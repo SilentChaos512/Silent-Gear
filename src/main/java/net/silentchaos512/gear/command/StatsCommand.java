@@ -3,14 +3,14 @@ package net.silentchaos512.gear.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -30,7 +30,7 @@ public final class StatsCommand {
     private StatsCommand() {
     }
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_stats")
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("info")
@@ -50,7 +50,7 @@ public final class StatsCommand {
         );
     }
 
-    private static int runInfo(CommandContext<CommandSource> context, ServerPlayerEntity player) {
+    private static int runInfo(CommandContext<CommandSourceStack> context, ServerPlayer player) {
         ItemStack stack = player.getMainHandItem();
 
         if (!GearHelper.isGear(stack)) {
@@ -60,7 +60,7 @@ public final class StatsCommand {
 
         context.getSource().sendSuccess(
                 TextUtil.translate("command", "stats.info.header", player.getName(), stack.getHoverName())
-                        .withStyle(TextFormatting.BOLD),
+                        .withStyle(ChatFormatting.BOLD),
                 true
         );
 
@@ -73,13 +73,13 @@ public final class StatsCommand {
             Collection<StatInstance> mods = stats.get(key);
 
             if (!mods.isEmpty()) {
-                ITextComponent name = TextUtil.withColor(stat.getDisplayName(), stat.getNameColor());
-                ITextComponent modsText = StatModifierMap.formatText(mods, stat, 5, true);
+                Component name = TextUtil.withColor(stat.getDisplayName(), stat.getNameColor());
+                Component modsText = StatModifierMap.formatText(mods, stat, 5, true);
                 float statValue = stat.compute(0f, true, item.getGearType(), mods);
-                ITextComponent valueText = TextUtil.withColor(
+                Component valueText = TextUtil.withColor(
                         StatInstance.of(statValue, StatInstance.Operation.AVG, key)
                                 .getFormattedText(stat, 5, false),
-                        TextFormatting.YELLOW);
+                        ChatFormatting.YELLOW);
 
                 context.getSource().sendSuccess(
                         TextUtil.translate("command", "stats.info.format", name, modsText, valueText),
@@ -89,8 +89,8 @@ public final class StatsCommand {
                 for (PartData part : parts) {
                     Collection<StatInstance> partMods = part.getStatModifiers(key, stack);
                     if (!partMods.isEmpty()) {
-                        ITextComponent partName = part.getDisplayName(stack);
-                        ITextComponent partModsText = StatModifierMap.formatText(partMods, stat, 5, true);
+                        Component partName = part.getDisplayName(stack);
+                        Component partModsText = StatModifierMap.formatText(partMods, stat, 5, true);
 
                         context.getSource().sendSuccess(
                                 TextUtil.translate("command", "stats.info.formatPart", partName, partModsText),
@@ -104,28 +104,28 @@ public final class StatsCommand {
         return 1;
     }
 
-    private static int runLockStats(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity playerMP = context.getSource().getPlayerOrException();
+    private static int runLockStats(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer playerMP = context.getSource().getPlayerOrException();
         ItemStack stack = playerMP.getMainHandItem();
         if (GearHelper.isGear(stack)) {
             boolean locked = !GearData.hasLockedStats(stack);
             GearData.setLockedStats(stack, locked);
             String translationKey = "command.silentgear.lock_stats." + (locked ? "locked" : "unlocked");
-            context.getSource().sendSuccess(new TranslationTextComponent(translationKey, stack.getHoverName()), true);
+            context.getSource().sendSuccess(new TranslatableComponent(translationKey, stack.getHoverName()), true);
         } else {
-            context.getSource().sendFailure(new TranslationTextComponent("command.silentgear.lock_stats.invalid"));
+            context.getSource().sendFailure(new TranslatableComponent("command.silentgear.lock_stats.invalid"));
         }
         return 1;
     }
 
-    private static int runRecalculate(CommandContext<CommandSource> context, Collection<ServerPlayerEntity> players) {
-        for (ServerPlayerEntity player : players) {
+    private static int runRecalculate(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players) {
+        for (ServerPlayer player : players) {
             for (ItemStack stack : PlayerUtils.getNonEmptyStacks(player)) {
                 if (GearHelper.isGear(stack)) {
                     GearData.recalculateStats(stack, player);
                 }
             }
-            context.getSource().sendSuccess(new TranslationTextComponent("command.silentgear.recalculate", player.getScoreboardName()), true);
+            context.getSource().sendSuccess(new TranslatableComponent("command.silentgear.recalculate", player.getScoreboardName()), true);
         }
         return 1;
     }

@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.api.part;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
@@ -80,7 +80,7 @@ public interface IGearPart extends IGearComponent<IPartData> {
     }
 
     @Override
-    default boolean isCraftingAllowed(IPartData part, PartType partType, GearType gearType, @Nullable IInventory inventory) {
+    default boolean isCraftingAllowed(IPartData part, PartType partType, GearType gearType, @Nullable Container inventory) {
 /*        if (!GameStagesCompatProxy.canCraft(gearType, inventory) || !GameStagesCompatProxy.canCraft(this, inventory)) {
             return false;
         }*/
@@ -99,18 +99,18 @@ public interface IGearPart extends IGearComponent<IPartData> {
 
     int getColor(PartData part, ItemStack gear, int layer, int animationFrame);
 
-    default ITextComponent getDisplayName(@Nullable PartData part) {
+    default Component getDisplayName(@Nullable PartData part) {
         return getDisplayName(part, ItemStack.EMPTY);
     }
 
-    ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear);
+    Component getDisplayName(@Nullable PartData part, ItemStack gear);
 
-    default ITextComponent getMaterialName(@Nullable PartData part, ItemStack gear) {
+    default Component getMaterialName(@Nullable PartData part, ItemStack gear) {
         return getDisplayName(part, gear);
     }
 
     @Nullable
-    default ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
+    default Component getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
         return null;
     }
 
@@ -119,7 +119,7 @@ public interface IGearPart extends IGearComponent<IPartData> {
     }
 
     @OnlyIn(Dist.CLIENT)
-    void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag);
+    void addInformation(PartData part, ItemStack gear, List<Component> tooltip, TooltipFlag flag);
 
     /**
      * Whether or not the part should be displayed in tooltips and such.

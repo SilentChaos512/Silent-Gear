@@ -3,18 +3,18 @@ package net.silentchaos512.gear.data.trait;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.api.item.GearType;
@@ -37,7 +37,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-public class TraitsProvider implements IDataProvider {
+public class TraitsProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
@@ -174,7 +174,7 @@ public class TraitsProvider implements IDataProvider {
                 values[i] = Const.Traits.MOONWALKER_GRAVITY_MOD * (i + 1);
             }
             ret.add(new AttributeTraitBuilder(Const.Traits.MOONWALKER, maxLevel)
-                    .addModifier(GearType.BOOTS, EquipmentSlotType.FEET,
+                    .addModifier(GearType.BOOTS, EquipmentSlot.FEET,
                             ForgeMod.ENTITY_GRAVITY.get(),
                             AttributeModifier.Operation.MULTIPLY_BASE,
                             values)
@@ -209,31 +209,31 @@ public class TraitsProvider implements IDataProvider {
         // Wielder Effect (Potion)
 
         ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.AQUATIC, 5)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.WATER_BREATHING, 1)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.FLAME_WARD, 1)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, Effects.FIRE_RESISTANCE, 1)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
                 .overridesTrait(Const.Traits.FLAMMABLE)
                 .withGearTypeCondition(GearType.ARMOR)
                 .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
         ret.add(new PotionTraitBuilder(Const.Traits.KITTY_VISION, 1)
-                .addEffect(GearType.HELMET, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
-                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.NIGHT_VISION, 1)
+                .addEffect(GearType.HELMET, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
+                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
                 .withGearTypeCondition(GearType.HELMET, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
-                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
-                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.DIG_SPEED, 1, 1, 1, 2, 3)
-                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, Effects.DIG_SPEED, 1, 1, 2, 2, 3)
+                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
+                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
+                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
                 .withGearTypeCondition(GearType.TOOL, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5, StellarTrait.SERIALIZER)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.MOVEMENT_SPEED, 0, 1, 2, 3)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, Effects.JUMP, 1, 2, 3, 4)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, MobEffects.MOVEMENT_SPEED, 0, 1, 2, 3)
+                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, MobEffects.JUMP, 1, 2, 3, 4)
                 .extraWikiLines(String.format("  - Has a %d%% chance per level to restore 1 durability each second",
                         (int) (100 * Const.Traits.STELLAR_REPAIR_CHANCE)))
         );
@@ -241,7 +241,7 @@ public class TraitsProvider implements IDataProvider {
         // Target Effect
 
         ret.add(new TargetEffectTraitBuilder(Const.Traits.VENOM, 5)
-                .withDurationByLevel(GearType.TOOL, Effects.POISON, 0, 4.0f)
+                .withDurationByLevel(GearType.TOOL, MobEffects.POISON, 0, 4.0f)
                 .withGearTypeCondition(GearType.TOOL)
         );
 
@@ -333,8 +333,8 @@ public class TraitsProvider implements IDataProvider {
         ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.of(Tags.Items.GEMS))
                 .withGearTypeCondition(GearType.HARVEST_TOOL));
 
-        ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, Effects.POISON));
-        ret.add(cancelEffectsTrait(Const.Traits.CURE_WITHER, Effects.WITHER));
+        ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, MobEffects.POISON));
+        ret.add(cancelEffectsTrait(Const.Traits.CURE_WITHER, MobEffects.WITHER));
 
         ret.add(damageTypeTrait(Const.Traits.CHILLED, 5, "chilled", 2)
                 .withGearTypeCondition(GearType.WEAPON));
@@ -353,9 +353,9 @@ public class TraitsProvider implements IDataProvider {
                 });
     }
 
-    protected static TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, Effect... effects) {
+    protected static TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, MobEffect... effects) {
         JsonArray array = new JsonArray();
-        for (Effect effect : effects) {
+        for (MobEffect effect : effects) {
             array.add(NameUtils.from(effect).toString());
         }
 
@@ -382,7 +382,7 @@ public class TraitsProvider implements IDataProvider {
     }
 
     @Override
-    public void run(DirectoryCache cache) {
+    public void run(HashCache cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (TraitBuilder builder : getTraits()) {

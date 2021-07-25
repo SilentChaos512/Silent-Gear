@@ -5,15 +5,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
@@ -84,38 +84,38 @@ public final class TraitInstance implements ITraitInstance {
         return conditions;
     }
 
-    public IFormattableTextComponent getDisplayName() {
-        IFormattableTextComponent text = this.trait.getDisplayName(this.level).copy();
+    public MutableComponent getDisplayName() {
+        MutableComponent text = this.trait.getDisplayName(this.level).copy();
         if (!conditions.isEmpty()) {
             text.append("*");
         }
         return text;
     }
 
-    public void addInformation(List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void addInformation(List<Component> tooltip, TooltipFlag flag) {
         if (!this.trait.showInTooltip(flag)) return;
 
         // Display name
-        IFormattableTextComponent displayName = this.getDisplayName().withStyle(TextFormatting.ITALIC);
-        tooltip.add(trait.isHidden() ? TextUtil.withColor(displayName, TextFormatting.DARK_GRAY) : displayName);
+        MutableComponent displayName = this.getDisplayName().withStyle(ChatFormatting.ITALIC);
+        tooltip.add(trait.isHidden() ? TextUtil.withColor(displayName, ChatFormatting.DARK_GRAY) : displayName);
 
         // Description (usually not shown)
         if (KeyTracker.isAltDown()) {
-            ITextComponent description = TextUtil.withColor(this.trait.getDescription(level), TextFormatting.DARK_GRAY);
-            tooltip.add(new StringTextComponent("    ").append(description));
+            Component description = TextUtil.withColor(this.trait.getDescription(level), ChatFormatting.DARK_GRAY);
+            tooltip.add(new TextComponent("    ").append(description));
         }
     }
 
     public static TraitInstance deserialize(JsonObject json) {
         // Trait; this should already exist
-        ResourceLocation traitId = new ResourceLocation(JSONUtils.getAsString(json, "name"));
+        ResourceLocation traitId = new ResourceLocation(GsonHelper.getAsString(json, "name"));
         ITrait trait = TraitManager.get(traitId);
         if (trait == null) {
             throw new JsonSyntaxException("Unknown trait: " + traitId);
         }
 
         // Level; clamp to valid values
-        int level = MathHelper.clamp(JSONUtils.getAsInt(json, "level", 1), 1, trait.getMaxLevel());
+        int level = Mth.clamp(GsonHelper.getAsInt(json, "level", 1), 1, trait.getMaxLevel());
 
         // Conditions (if available)
         List<ITraitCondition> conditions = new ArrayList<>();
@@ -129,7 +129,7 @@ public final class TraitInstance implements ITraitInstance {
         return of(trait, level, conditions.toArray(new ITraitCondition[0]));
     }
 
-    public static TraitInstance read(PacketBuffer buffer) {
+    public static TraitInstance read(FriendlyByteBuf buffer) {
         ResourceLocation traitId = buffer.readResourceLocation();
         ITrait trait = TraitManager.get(traitId);
         if (trait == null) {
@@ -145,7 +145,7 @@ public final class TraitInstance implements ITraitInstance {
         return of(trait, level, conditions);
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(this.getTraitId());
         buffer.writeByte(this.level);
         buffer.writeByte(this.conditions.size());

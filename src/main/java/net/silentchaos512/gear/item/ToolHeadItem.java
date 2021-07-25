@@ -1,18 +1,18 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class ToolHeadItem extends CompoundPartItem { // TODO: Rename to MainPartItem?
     private final GearType gearType;
@@ -39,10 +39,10 @@ public class ToolHeadItem extends CompoundPartItem { // TODO: Rename to MainPart
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (this.gearType == GearType.ARMOR) {
             // Old armor body item
-            tooltip.add(new StringTextComponent("DEPRECATED").withStyle(TextFormatting.RED));
+            tooltip.add(new TextComponent("DEPRECATED").withStyle(ChatFormatting.RED));
         }
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);

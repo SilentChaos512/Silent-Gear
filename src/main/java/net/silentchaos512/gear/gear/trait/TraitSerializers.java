@@ -3,9 +3,9 @@ package net.silentchaos512.gear.gear.trait;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -72,7 +72,7 @@ public final class TraitSerializers {
     }
 
     public static ITraitCondition deserializeCondition(JsonObject json) {
-        ResourceLocation type = new ResourceLocation(JSONUtils.getAsString(json, "type"));
+        ResourceLocation type = new ResourceLocation(GsonHelper.getAsString(json, "type"));
         ITraitConditionSerializer<?> serializer = CONDITIONS.get(type);
         if (serializer == null) {
             throw new JsonSyntaxException("Unknown trait condition type: " + type);
@@ -89,7 +89,7 @@ public final class TraitSerializers {
         return serializer.serialize(condition);
     }
 
-    public static ITraitCondition readCondition(PacketBuffer buffer) {
+    public static ITraitCondition readCondition(FriendlyByteBuf buffer) {
         ResourceLocation type = buffer.readResourceLocation();
         ITraitConditionSerializer<?> serializer = CONDITIONS.get(type);
         if (serializer == null) {
@@ -99,14 +99,14 @@ public final class TraitSerializers {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends ITraitCondition> void writeCondition(T condition, PacketBuffer buffer) {
+    public static <T extends ITraitCondition> void writeCondition(T condition, FriendlyByteBuf buffer) {
         ITraitConditionSerializer<T> serializer = (ITraitConditionSerializer<T>) condition.getSerializer();
         buffer.writeResourceLocation(serializer.getId());
         serializer.write(condition, buffer);
     }
 
     public static ITrait deserialize(ResourceLocation id, JsonObject json) {
-        String typeStr = JSONUtils.getAsString(json, "type");
+        String typeStr = GsonHelper.getAsString(json, "type");
         ResourceLocation type = SilentGear.getIdWithDefaultNamespace(typeStr);
         log(() -> "deserialize " + id + " (type " + type + ")");
 
@@ -117,7 +117,7 @@ public final class TraitSerializers {
         return serializer.read(id, json);
     }
 
-    public static ITrait read(PacketBuffer buffer) {
+    public static ITrait read(FriendlyByteBuf buffer) {
         ResourceLocation id = buffer.readResourceLocation();
         ResourceLocation type = buffer.readResourceLocation();
         log(() -> "read " + id + " (type " + type + ")");
@@ -129,7 +129,7 @@ public final class TraitSerializers {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends ITrait> void write(T trait, PacketBuffer buffer) {
+    public static <T extends ITrait> void write(T trait, FriendlyByteBuf buffer) {
         ResourceLocation id = trait.getId();
         ResourceLocation type = trait.getSerializer().getName();
         log(() -> "write " + id + " (type " + type + ")");

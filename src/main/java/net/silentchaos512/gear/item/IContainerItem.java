@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -19,7 +19,7 @@ public interface IContainerItem {
                 return canStore(stack);
             }
         };
-        CompoundNBT nbt = stack.getOrCreateTagElement("Inventory");
+        CompoundTag nbt = stack.getOrCreateTagElement("Inventory");
         // Allow older blueprint books to update to new size
         nbt.remove("Size");
         stackHandler.deserializeNBT(nbt);

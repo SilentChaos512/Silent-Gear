@@ -4,12 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -66,7 +66,7 @@ public class TargetEffectTrait extends SimpleTrait {
         }
     }
 
-    private static void read(TargetEffectTrait trait, PacketBuffer buffer) {
+    private static void read(TargetEffectTrait trait, FriendlyByteBuf buffer) {
         trait.effects.clear();
         int mapSize = buffer.readByte();
         for (int i = 0; i < mapSize; ++i) {
@@ -76,7 +76,7 @@ public class TargetEffectTrait extends SimpleTrait {
         }
     }
 
-    private static void write(TargetEffectTrait trait, PacketBuffer buffer) {
+    private static void write(TargetEffectTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.effects.size());
         for (Map.Entry<String, EffectMap> entry : trait.effects.entrySet()) {
             buffer.writeUtf(entry.getKey());
@@ -95,16 +95,16 @@ public class TargetEffectTrait extends SimpleTrait {
     }
 
     public static class EffectMap {
-        private final Map<Integer, List<EffectInstance>> effects = new LinkedHashMap<>();
+        private final Map<Integer, List<MobEffectInstance>> effects = new LinkedHashMap<>();
 
-        public EffectMap(Map<Integer, List<EffectInstance>> effects) {
+        public EffectMap(Map<Integer, List<MobEffectInstance>> effects) {
             this.effects.putAll(effects);
         }
 
         public void applyTo(LivingEntity target, int traitLevel) {
             if (this.effects.containsKey(traitLevel)) {
-                for (EffectInstance effect : this.effects.get(traitLevel)) {
-                    EffectInstance copy = new EffectInstance(effect);
+                for (MobEffectInstance effect : this.effects.get(traitLevel)) {
+                    MobEffectInstance copy = new MobEffectInstance(effect);
                     target.addEffect(copy);
                 }
             }
@@ -113,13 +113,13 @@ public class TargetEffectTrait extends SimpleTrait {
         public JsonObject serialize() {
             JsonObject json = new JsonObject();
 
-            for (Map.Entry<Integer, List<EffectInstance>> entry : this.effects.entrySet()) {
+            for (Map.Entry<Integer, List<MobEffectInstance>> entry : this.effects.entrySet()) {
                 int level = entry.getKey();
-                List<EffectInstance> list = entry.getValue();
+                List<MobEffectInstance> list = entry.getValue();
 
                 JsonArray array = new JsonArray();
 
-                for (EffectInstance inst : list) {
+                for (MobEffectInstance inst : list) {
                     JsonObject obj = new JsonObject();
                     obj.addProperty("effect", NameUtils.from(inst.getEffect()).toString());
                     obj.addProperty("amplifier", inst.getAmplifier());
@@ -134,14 +134,14 @@ public class TargetEffectTrait extends SimpleTrait {
         }
 
         static EffectMap deserialize(JsonObject json) {
-            Map<Integer, List<EffectInstance>> map = new LinkedHashMap<>();
+            Map<Integer, List<MobEffectInstance>> map = new LinkedHashMap<>();
 
             for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
                 int level = Integer.parseInt(entry.getKey());
                 JsonElement element = entry.getValue();
 
                 if (element.isJsonArray()) {
-                    List<EffectInstance> list = new ArrayList<>();
+                    List<MobEffectInstance> list = new ArrayList<>();
                     for (JsonElement effectJson : element.getAsJsonArray()) {
                         list.add(deserialize(effectJson));
                     }
@@ -156,41 +156,41 @@ public class TargetEffectTrait extends SimpleTrait {
             return new EffectMap(map);
         }
 
-        private static EffectInstance deserialize(JsonElement jsonElement) {
+        private static MobEffectInstance deserialize(JsonElement jsonElement) {
             if (!jsonElement.isJsonObject()) {
                 throw new JsonParseException("Expected effect instance element to be an object");
             }
 
             JsonObject json = jsonElement.getAsJsonObject();
-            ResourceLocation effectId = new ResourceLocation(JSONUtils.getAsString(json, "effect"));
-            Effect effect = ForgeRegistries.POTIONS.getValue(effectId);
+            ResourceLocation effectId = new ResourceLocation(GsonHelper.getAsString(json, "effect"));
+            MobEffect effect = ForgeRegistries.POTIONS.getValue(effectId);
             if (effect == null) {
                 throw new JsonParseException("Unknown effect ID: " + effectId);
             }
-            int level = JSONUtils.getAsInt(json, "amplifier", 0);
-            float duration = JSONUtils.getAsFloat(json, "duration", 5f);
+            int level = GsonHelper.getAsInt(json, "amplifier", 0);
+            float duration = GsonHelper.getAsFloat(json, "duration", 5f);
 
-            return new EffectInstance(effect, (int) duration * 20, level);
+            return new MobEffectInstance(effect, (int) duration * 20, level);
         }
 
-        public static EffectMap read(PacketBuffer buffer) {
+        public static EffectMap read(FriendlyByteBuf buffer) {
             int mapSize = buffer.readByte();
-            Map<Integer, List<EffectInstance>> result = new LinkedHashMap<>();
+            Map<Integer, List<MobEffectInstance>> result = new LinkedHashMap<>();
 
             for (int i = 0; i < mapSize; ++i) {
                 int level = buffer.readByte();
                 int listSize = buffer.readByte();
-                List<EffectInstance> list = new ArrayList<>(listSize);
+                List<MobEffectInstance> list = new ArrayList<>(listSize);
 
                 for (int j = 0; j < listSize; ++j) {
                     ResourceLocation effectId = buffer.readResourceLocation();
-                    Effect effect = ForgeRegistries.POTIONS.getValue(effectId);
+                    MobEffect effect = ForgeRegistries.POTIONS.getValue(effectId);
                     if (effect == null) {
                         throw new JsonParseException("Unknown effect ID: " + effectId);
                     }
                     int amplifier = buffer.readByte();
                     int duration = buffer.readVarInt();
-                    list.add(new EffectInstance(effect, duration, amplifier));
+                    list.add(new MobEffectInstance(effect, duration, amplifier));
                 }
 
                 result.put(level, list);
@@ -199,14 +199,14 @@ public class TargetEffectTrait extends SimpleTrait {
             return new EffectMap(result);
         }
 
-        public void write(PacketBuffer buffer) {
+        public void write(FriendlyByteBuf buffer) {
             buffer.writeByte(this.effects.size());
 
-            for (Map.Entry<Integer, List<EffectInstance>> entry : this.effects.entrySet()) {
+            for (Map.Entry<Integer, List<MobEffectInstance>> entry : this.effects.entrySet()) {
                 buffer.writeByte(entry.getKey());
                 buffer.writeByte(entry.getValue().size());
 
-                for (EffectInstance effect : entry.getValue()) {
+                for (MobEffectInstance effect : entry.getValue()) {
                     buffer.writeResourceLocation(NameUtils.from(effect.getEffect()));
                     buffer.writeByte(effect.getAmplifier());
                     buffer.writeVarInt(effect.getDuration());

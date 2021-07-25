@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.client.model;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.IModelConfiguration;
 
 import javax.annotation.Nullable;
@@ -13,18 +13,25 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
-public class BakedWrapper implements IBakedModel {
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+
+public class BakedWrapper implements BakedModel {
     private final TextureAtlasSprite particleTexture;
-    private final ItemOverrideList overrideList;
+    private final ItemOverrides overrideList;
 
     @SuppressWarnings("ConstructorWithTooManyParameters")
     public BakedWrapper(LayeredModel<?> model,
                         IModelConfiguration owner,
                         ModelBakery bakery,
-                        Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                        IModelTransform modelTransform,
+                        Function<Material, TextureAtlasSprite> spriteGetter,
+                        ModelState modelTransform,
                         ResourceLocation modelLocation,
-                        ItemOverrideList overrideList) {
+                        ItemOverrides overrideList) {
         this.particleTexture = spriteGetter.apply(owner.resolveTexture("particle"));
         this.overrideList = overrideList;
     }
@@ -60,7 +67,7 @@ public class BakedWrapper implements IBakedModel {
     }
 
     @Override
-    public ItemOverrideList getOverrides() {
+    public ItemOverrides getOverrides() {
         return overrideList;
     }
 }

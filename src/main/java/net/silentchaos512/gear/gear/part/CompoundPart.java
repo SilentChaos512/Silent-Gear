@@ -2,11 +2,11 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
@@ -85,7 +85,7 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
+    public Component getDisplayName(@Nullable PartData part, ItemStack gear) {
         if (part != null) {
             return part.getItem().getHoverName();
         }
@@ -93,7 +93,7 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
+    public Component getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
         if (part != null) {
             MaterialInstance material = getPrimaryMaterial(part);
             if (material != null) {
@@ -104,7 +104,7 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public ITextComponent getMaterialName(@Nullable PartData part, ItemStack gear) {
+    public Component getMaterialName(@Nullable PartData part, ItemStack gear) {
         if (part != null) {
             MaterialInstance material = getPrimaryMaterial(part);
             if (material != null) {
@@ -289,17 +289,17 @@ public class CompoundPart extends AbstractGearPart {
         @Override
         public CompoundPart read(ResourceLocation id, JsonObject json) {
             CompoundPart part = super.read(id, json, false);
-            String gearTypeStr = JSONUtils.getAsString(json, "gear_type");
+            String gearTypeStr = GsonHelper.getAsString(json, "gear_type");
             part.gearType = GearType.get(gearTypeStr);
             if (!part.gearType.isGear()) {
                 throw new JsonParseException("Unknown gear type: " + gearTypeStr);
             }
-            part.partType = PartType.get(new ResourceLocation(JSONUtils.getAsString(json, "part_type")));
+            part.partType = PartType.get(new ResourceLocation(GsonHelper.getAsString(json, "part_type")));
             return part;
         }
 
         @Override
-        public CompoundPart read(ResourceLocation id, PacketBuffer buffer) {
+        public CompoundPart read(ResourceLocation id, FriendlyByteBuf buffer) {
             CompoundPart part = super.read(id, buffer);
             part.gearType = GearType.get(buffer.readUtf());
             part.partType = PartType.get(buffer.readResourceLocation());
@@ -307,7 +307,7 @@ public class CompoundPart extends AbstractGearPart {
         }
 
         @Override
-        public void write(PacketBuffer buffer, CompoundPart part) {
+        public void write(FriendlyByteBuf buffer, CompoundPart part) {
             super.write(buffer, part);
             buffer.writeUtf(part.gearType.getName());
             buffer.writeResourceLocation(part.partType.getName());

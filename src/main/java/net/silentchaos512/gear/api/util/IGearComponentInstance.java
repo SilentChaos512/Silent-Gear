@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.api.util;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.MaterialList;
@@ -47,11 +47,11 @@ public interface IGearComponentInstance<T extends IGearComponent<?>> {
         return getTraits(partType, GearType.ALL, ItemStack.EMPTY);
     }
 
-    default ITextComponent getDisplayName(PartType type) {
+    default Component getDisplayName(PartType type) {
         return getDisplayName(type, ItemStack.EMPTY);
     }
 
-    ITextComponent getDisplayName(PartType type, ItemStack gear);
+    Component getDisplayName(PartType type, ItemStack gear);
 
     int getNameColor(PartType partType, GearType gearType);
 

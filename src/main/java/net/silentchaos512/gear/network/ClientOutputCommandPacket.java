@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.command.MaterialsCommand;
@@ -21,13 +21,13 @@ public class ClientOutputCommandPacket {
         this.includeChildren = includeChildren;
     }
 
-    public static ClientOutputCommandPacket decode(PacketBuffer buffer) {
+    public static ClientOutputCommandPacket decode(FriendlyByteBuf buffer) {
         Type type = buffer.readEnum(Type.class);
         boolean includeChildren = buffer.readBoolean();
         return new ClientOutputCommandPacket(type, includeChildren);
     }
 
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(this.type);
         buffer.writeBoolean(this.includeChildren);
     }

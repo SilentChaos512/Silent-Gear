@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -55,7 +55,7 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayText() {
+    public MutableComponent getDisplayText() {
         return TextUtil.translate("trait.condition", "material_ratio", Math.round(this.requiredRatio * 100));
     }
 
@@ -67,7 +67,7 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
 
         @Override
         public MaterialRatioTraitCondition deserialize(JsonObject json) {
-            return new MaterialRatioTraitCondition(JSONUtils.getAsFloat(json, "ratio"));
+            return new MaterialRatioTraitCondition(GsonHelper.getAsFloat(json, "ratio"));
         }
 
         @Override
@@ -76,13 +76,13 @@ public class MaterialRatioTraitCondition implements ITraitCondition {
         }
 
         @Override
-        public MaterialRatioTraitCondition read(PacketBuffer buffer) {
+        public MaterialRatioTraitCondition read(FriendlyByteBuf buffer) {
             float ratio = buffer.readFloat();
             return new MaterialRatioTraitCondition(ratio);
         }
 
         @Override
-        public void write(MaterialRatioTraitCondition condition, PacketBuffer buffer) {
+        public void write(MaterialRatioTraitCondition condition, FriendlyByteBuf buffer) {
             buffer.writeFloat(condition.requiredRatio);
         }
     }

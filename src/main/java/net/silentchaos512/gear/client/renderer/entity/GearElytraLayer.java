@@ -1,20 +1,20 @@
 package net.silentchaos512.gear.client.renderer.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
-import net.minecraft.client.renderer.entity.model.ElytraModel;
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.model.ElytraModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerModelPart;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerModelPart;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -24,26 +24,26 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nonnull;
 
 // Mostly copied from Caelus API's CaelusElytraLayer
-public class GearElytraLayer<T extends PlayerEntity, M extends EntityModel<T>> extends ElytraLayer<T, M> {
+public class GearElytraLayer<T extends Player, M extends EntityModel<T>> extends ElytraLayer<T, M> {
     private static final ResourceLocation TEXTURE = SilentGear.getId("textures/entity/elytra.png");
 
     private final ElytraModel<T> modelElytra = new ElytraModel<>();
 
-    public GearElytraLayer(IEntityRenderer<T, M> rendererIn) {
+    public GearElytraLayer(RenderLayerParent<T, M> rendererIn) {
         super(rendererIn);
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn,
+    public void render(@Nonnull PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn,
                        int packedLightIn, T entityIn, float limbSwing, float limbSwingAmount, float partialTicks,
                        float ageInTicks, float netHeadYaw, float headPitch) {
-        ItemStack stack = entityIn.getItemBySlot(EquipmentSlotType.CHEST);
+        ItemStack stack = entityIn.getItemBySlot(EquipmentSlot.CHEST);
 
         if (stack.getItem() instanceof CoreElytra) {
             ResourceLocation resourcelocation;
 
-            if (entityIn instanceof AbstractClientPlayerEntity) {
-                AbstractClientPlayerEntity abstractclientplayerentity = (AbstractClientPlayerEntity) entityIn;
+            if (entityIn instanceof AbstractClientPlayer) {
+                AbstractClientPlayer abstractclientplayerentity = (AbstractClientPlayer) entityIn;
                 boolean hasElytra = abstractclientplayerentity.isElytraLoaded()
                         && abstractclientplayerentity.getElytraTextureLocation() != null;
                 boolean hasCape = abstractclientplayerentity.isCapeLoaded()
@@ -72,7 +72,7 @@ public class GearElytraLayer<T extends PlayerEntity, M extends EntityModel<T>> e
                     netHeadYaw,
                     headPitch);
 
-            IVertexBuilder ivertexbuilder = ItemRenderer.getArmorFoilBuffer(bufferIn,
+            VertexConsumer ivertexbuilder = ItemRenderer.getArmorFoilBuffer(bufferIn,
                     this.modelElytra.renderType(resourcelocation),
                     false,
                     stack.isEnchanted());

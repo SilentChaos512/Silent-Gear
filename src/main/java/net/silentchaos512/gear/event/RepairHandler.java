@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.container.RepairContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -80,7 +80,7 @@ public final class RepairHandler {
 
     private static void applyName(AnvilUpdateEvent event, ItemStack stack) {
         if (!event.getName().isEmpty()) {
-            stack.setHoverName(new StringTextComponent(event.getName()));
+            stack.setHoverName(new TextComponent(event.getName()));
         }
     }
 
@@ -150,7 +150,7 @@ public final class RepairHandler {
         }
 
         for (int i = 0; i < map.size(); ++i) {
-            itemstack.setRepairCost(RepairContainer.calculateIncreasedRepairCost(itemstack.getBaseRepairCost()));
+            itemstack.setRepairCost(AnvilMenu.calculateIncreasedRepairCost(itemstack.getBaseRepairCost()));
         }
 
         return itemstack;

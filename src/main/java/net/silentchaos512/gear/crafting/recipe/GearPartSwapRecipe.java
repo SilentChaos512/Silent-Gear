@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
@@ -19,13 +19,13 @@ import net.silentchaos512.lib.collection.StackList;
 
 import java.util.*;
 
-public class GearPartSwapRecipe extends SpecialRecipe {
+public class GearPartSwapRecipe extends CustomRecipe {
     public GearPartSwapRecipe(ResourceLocation idIn) {
         super(idIn);
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return false;
@@ -51,7 +51,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return ItemStack.EMPTY;
@@ -89,7 +89,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         ItemStack gear = StackList.from(inv).uniqueMatch(s -> s.getItem() instanceof ICoreItem);
         PartDataList oldParts = GearData.getConstructionParts(gear);
@@ -130,7 +130,7 @@ public class GearPartSwapRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.SWAP_GEAR_PART.get();
     }
 }

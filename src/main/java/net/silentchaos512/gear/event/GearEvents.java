@@ -19,42 +19,42 @@
 package net.silentchaos512.gear.event;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.passive.RabbitEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.passive.fish.CodEntity;
-import net.minecraft.entity.passive.fish.PufferfishEntity;
-import net.minecraft.entity.passive.fish.SalmonEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.FireworkRocketItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.Cod;
+import net.minecraft.world.entity.animal.Pufferfish;
+import net.minecraft.world.entity.animal.Salmon;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
@@ -82,6 +82,12 @@ import net.silentchaos512.lib.util.EntityHelper;
 
 import java.util.*;
 import java.util.function.Function;
+
+import net.minecraft.Util;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 
 @Mod.EventBusSubscriber
 public final class GearEvents {
@@ -114,9 +120,9 @@ public final class GearEvents {
         if (source == null || !"player".equals(source.msgId)) return;
 
         Entity attacker = source.getEntity();
-        if (!(attacker instanceof PlayerEntity)) return;
+        if (!(attacker instanceof Player)) return;
 
-        PlayerEntity player = (PlayerEntity) attacker;
+        Player player = (Player) attacker;
         ItemStack weapon = player.getMainHandItem();
         if (!(weapon.getItem() instanceof ICoreTool)) return;
 
@@ -139,9 +145,9 @@ public final class GearEvents {
         if (source == null || !"player".equals(source.msgId)) return;
 
         Entity attacker = source.getEntity();
-        if (!(attacker instanceof PlayerEntity)) return;
+        if (!(attacker instanceof Player)) return;
 
-        PlayerEntity player = (PlayerEntity) attacker;
+        Player player = (Player) attacker;
         ItemStack weapon = player.getMainHandItem();
         if (!(weapon.getItem() instanceof ICoreTool)) return;
 
@@ -166,7 +172,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
-        if (event.getEntity() instanceof PlayerEntity)
+        if (event.getEntity() instanceof Player)
             if (isFireDamage(event.getSource())) {
                 damageFlammableItems(event);
             }
@@ -177,7 +183,7 @@ public final class GearEvents {
     }
 
     private static void damageFlammableItems(LivingDamageEvent event) {
-        for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack stack = event.getEntityLiving().getItemBySlot(slot);
             if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
                 GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
@@ -212,9 +218,9 @@ public final class GearEvents {
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
             //SilentGear.LOGGER.debug("magic damage: {} x {} -> {}", event.getAmount(), scale, event.getAmount() * scale);
 
-            if (event.getEntityLiving() instanceof PlayerEntity) {
+            if (event.getEntityLiving() instanceof Player) {
                 // Damage player's armor
-                ((PlayerEntity) event.getEntityLiving()).inventory.hurtArmor(event.getSource(), event.getAmount());
+                ((Player) event.getEntityLiving()).inventory.hurtArmor(event.getSource(), event.getAmount());
             }
 
             event.setAmount(event.getAmount() * scale);
@@ -244,7 +250,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        final PlayerEntity player = event.getPlayer();
+        final Player player = event.getPlayer();
         ItemStack tool = player.getMainHandItem();
 
         if (tool.getItem() instanceof ICoreItem) {
@@ -264,9 +270,9 @@ public final class GearEvents {
         }
     }
 
-    public static int getLightForLustrousTrait(IBlockDisplayReader world, BlockPos pos) {
-        int blockLight = world.getBrightness(LightType.BLOCK, pos);
-        int skyLight = world.getBrightness(LightType.SKY, pos);
+    public static int getLightForLustrousTrait(BlockAndTintGetter world, BlockPos pos) {
+        int blockLight = world.getBrightness(LightLayer.BLOCK, pos);
+        int skyLight = world.getBrightness(LightLayer.SKY, pos);
         // Block light is less effective
         return Math.max(skyLight, blockLight * 3 / 4);
     }
@@ -291,14 +297,14 @@ public final class GearEvents {
         event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
     }
 
-    private static final List<Function<World, Entity>> JABBERWOCKY_MOBS = ImmutableList.of(
-            world -> new WolfEntity(EntityType.WOLF, world),
-            world -> new CatEntity(EntityType.CAT, world),
-            world -> new RabbitEntity(EntityType.RABBIT, world),
-            world -> new ChickenEntity(EntityType.CHICKEN, world),
-            world -> new CodEntity(EntityType.COD, world),
-            world -> new SalmonEntity(EntityType.SALMON, world),
-            world -> new PufferfishEntity(EntityType.PUFFERFISH, world)
+    private static final List<Function<Level, Entity>> JABBERWOCKY_MOBS = ImmutableList.of(
+            world -> new Wolf(EntityType.WOLF, world),
+            world -> new Cat(EntityType.CAT, world),
+            world -> new Rabbit(EntityType.RABBIT, world),
+            world -> new Chicken(EntityType.CHICKEN, world),
+            world -> new Cod(EntityType.COD, world),
+            world -> new Salmon(EntityType.SALMON, world),
+            world -> new Pufferfish(EntityType.PUFFERFISH, world)
     );
 
     @SubscribeEvent
@@ -325,9 +331,9 @@ public final class GearEvents {
     public static void onGearCrafted(PlayerEvent.ItemCraftedEvent event) {
         ItemStack result = event.getCrafting();
 
-        if (GearHelper.isGear(result) && event.getPlayer() instanceof ServerPlayerEntity) {
+        if (GearHelper.isGear(result) && event.getPlayer() instanceof ServerPlayer) {
             // Try to trigger some advancments
-            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+            ServerPlayer player = (ServerPlayer) event.getPlayer();
 
             // Crude tool
             if (GearData.hasPart(result, PartType.ROD, p -> p.containsMaterial(Const.Materials.WOOD_ROUGH))) {
@@ -370,8 +376,8 @@ public final class GearEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDeath(LivingDeathEvent event) {
         Entity killer = event.getSource().getEntity();
-        if (killer instanceof PlayerEntity && !killer.level.isClientSide) {
-            PlayerEntity player = (PlayerEntity) killer;
+        if (killer instanceof Player && !killer.level.isClientSide) {
+            Player player = (Player) killer;
             if (TraitHelper.hasTraitEitherHand(player, Const.Traits.CONFETTI)) {
                 for (int i = 0; i < 3; ++i) {
                     FireworkRocketEntity rocket = new FireworkRocketEntity(player.level, event.getEntity().getX(), event.getEntity().getEyeY(), event.getEntity().getZ(), createRandomFirework());
@@ -383,18 +389,18 @@ public final class GearEvents {
 
     private static ItemStack createRandomFirework() {
         ItemStack ret = new ItemStack(Items.FIREWORK_ROCKET);
-        CompoundNBT nbt = ret.getOrCreateTagElement("Fireworks");
+        CompoundTag nbt = ret.getOrCreateTagElement("Fireworks");
         nbt.putByte("Flight", (byte) (SilentGear.RANDOM.nextInt(3) + 1));
-        CompoundNBT explosion = new CompoundNBT();
+        CompoundTag explosion = new CompoundTag();
         explosion.putByte("Type", (byte) SilentGear.RANDOM.nextInt(FireworkRocketItem.Shape.values().length));
-        ListNBT colors = new ListNBT();
+        ListTag colors = new ListTag();
         for (int i = 0; i < SilentGear.RANDOM.nextInt(4) + 1; ++i) {
             DyeColor dye = DyeColor.values()[SilentGear.RANDOM.nextInt(DyeColor.values().length)];
             SilentGear.LOGGER.debug(dye);
-            colors.add(IntNBT.valueOf(dye.getFireworkColor()));
+            colors.add(IntTag.valueOf(dye.getFireworkColor()));
         }
         explosion.put("Colors", colors);
-        ListNBT explosions = new ListNBT();
+        ListTag explosions = new ListTag();
         explosions.add(explosion);
         nbt.put("Explosions", explosions);
         return ret;
@@ -412,9 +418,9 @@ public final class GearEvents {
 
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
-            if (!event.player.isEyeInFluid(FluidTags.WATER) && TraitHelper.hasTrait(event.player.getItemBySlot(EquipmentSlotType.HEAD), Const.Traits.TURTLE)) {
+            if (!event.player.isEyeInFluid(FluidTags.WATER) && TraitHelper.hasTrait(event.player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
-                event.player.addEffect(new EffectInstance(Effects.WATER_BREATHING, 210, 0, false, false, true));
+                event.player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 210, 0, false, false, true));
             }
 
             // Void Ward trait
@@ -422,23 +428,23 @@ public final class GearEvents {
                 // A small boost to get the player out of the void, then levitation and slow falling
                 // to allow them to navigate back to safety
                 event.player.push(0, 10, 0);
-                event.player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 400, 3, true, false));
-                event.player.addEffect(new EffectInstance(Effects.LEVITATION, 200, 9, true, false));
+                event.player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 400, 3, true, false));
+                event.player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 9, true, false));
             }
         }
     }
 
-    private static void tickMagnetic(PlayerEntity player, int magneticLevel) {
+    private static void tickMagnetic(Player player, int magneticLevel) {
         if (player.isCrouching()) return;
 
         final int range = magneticLevel * 3 + 1;
-        Vector3d target = new Vector3d(player.getX(), player.getY(0.5), player.getZ());
+        Vec3 target = new Vec3(player.getX(), player.getY(0.5), player.getZ());
 
-        AxisAlignedBB aabb = new AxisAlignedBB(player.getX() - range, player.getY() - range, player.getZ() - range, player.getX() + range + 1, player.getY() + range + 1, player.getZ() + range + 1);
+        AABB aabb = new AABB(player.getX() - range, player.getY() - range, player.getZ() - range, player.getX() + range + 1, player.getY() + range + 1, player.getZ() + range + 1);
         for (ItemEntity entity : player.level.getEntitiesOfClass(ItemEntity.class, aabb, e -> e.distanceToSqr(player) < range * range)) {
             if (canMagneticPullItem(entity)) {
                 // Accelerate to target point
-                Vector3d vec = entity.getDismountLocationForPassenger(player).vectorTo(target);
+                Vec3 vec = entity.getDismountLocationForPassenger(player).vectorTo(target);
                 vec = vec.normalize().scale(0.06);
                 if (entity.getY() < target.y) {
                     double xzDistanceSq = (entity.getX() - target.x) * (entity.getX() - target.x) + (entity.getZ() - target.z) * (entity.getZ() - target.z);
@@ -455,7 +461,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onLivingFall(LivingFallEvent event) {
-        ItemStack stack = event.getEntityLiving().getItemBySlot(EquipmentSlotType.FEET);
+        ItemStack stack = event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET);
 
         if (event.getDistance() > 3 && GearHelper.isGear(stack) && !GearHelper.isBroken(stack)) {
             // Moonwalker fall damage canceling/reduction
@@ -464,8 +470,8 @@ public final class GearEvents {
                 float gravity = 1 + moonwalker * Const.Traits.MOONWALKER_GRAVITY_MOD;
                 event.setDistance(event.getDistance() * gravity);
 
-                if (event.getEntityLiving() instanceof ServerPlayerEntity) {
-                    LibTriggers.GENERIC_INT.trigger((ServerPlayerEntity) event.getEntityLiving(), FALL_WITH_MOONWALKER, 1);
+                if (event.getEntityLiving() instanceof ServerPlayer) {
+                    LibTriggers.GENERIC_INT.trigger((ServerPlayer) event.getEntityLiving(), FALL_WITH_MOONWALKER, 1);
                 }
             }
 
@@ -478,22 +484,22 @@ public final class GearEvents {
 //                    bounceEntity(event.getEntity());
                     int damage = (int) (event.getDistance() / 3) - 1;
                     if (damage > 0) {
-                        GearHelper.attemptDamage(stack, damage, event.getEntityLiving(), EquipmentSlotType.FEET);
+                        GearHelper.attemptDamage(stack, damage, event.getEntityLiving(), EquipmentSlot.FEET);
                     }
-                    event.getEntity().level.playSound(null, event.getEntity().blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundCategory.PLAYERS, 1f, 1f);
+                    event.getEntity().level.playSound(null, event.getEntity().blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.PLAYERS, 1f, 1f);
                     event.setCanceled(true);
                 }
             }
         }
     }
 
-    private static final Map<Entity, Vector3d> BOUNCE_TICKS = new HashMap<>();
+    private static final Map<Entity, Vec3> BOUNCE_TICKS = new HashMap<>();
 
 //    @SubscribeEvent
     public static void onPlayerTickBouncing(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.isFallFlying() && BOUNCE_TICKS.containsKey(event.player)) {
 //            event.player.moveForced(event.player.getPosX(), event.player.getPosY() + 0.1, event.player.getPosZ());
-            Vector3d motion = BOUNCE_TICKS.get(event.player);
+            Vec3 motion = BOUNCE_TICKS.get(event.player);
             event.player.setDeltaMovement(motion.x, motion.y * 20, motion.z); // why * 20?
             event.player.setOnGround(false);
             BOUNCE_TICKS.remove(event.player);
@@ -506,11 +512,11 @@ public final class GearEvents {
     }
 
     private static void bounceEntity(Entity entity) {
-        Vector3d vector3d = entity.getDeltaMovement();
+        Vec3 vector3d = entity.getDeltaMovement();
         if (vector3d.y < 0) {
 //            entity.moveForced(entity.getPosX(), entity.getPosY() + 0.1, entity.getPosZ());
 //            entity.setOnGround(false);
-            Vector3d vec = new Vector3d(vector3d.x, -vector3d.y * 0.75, vector3d.z);
+            Vec3 vec = new Vec3(vector3d.x, -vector3d.y * 0.75, vector3d.z);
 //            entity.setMotion(vec);
             SilentGear.LOGGER.debug("{} -> {}", vector3d, vec);
             BOUNCE_TICKS.put(entity, vec);
@@ -519,16 +525,16 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onPlayerHurt(LivingHurtEvent event) {
-        if (event.getEntityLiving() instanceof PlayerEntity) {
+        if (event.getEntityLiving() instanceof Player) {
             Entity source = event.getSource().getDirectEntity();
             if (source instanceof LivingEntity) {
-                PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+                Player player = (Player) event.getEntityLiving();
                 int bounce = TraitHelper.getHighestLevelArmor(player, Const.Traits.BOUNCE);
                 if (bounce > 0) {
                     SilentGear.LOGGER.debug("knockback");
                     ((LivingEntity) source).knockback(2 * bounce,
-                            -MathHelper.sin(source.yRot * ((float)Math.PI / 180F)),
-                            MathHelper.cos(source.yRot * ((float)Math.PI / 180F)));
+                            -Mth.sin(source.yRot * ((float)Math.PI / 180F)),
+                            Mth.cos(source.yRot * ((float)Math.PI / 180F)));
                 }
             }
         }

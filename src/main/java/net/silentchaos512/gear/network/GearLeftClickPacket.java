@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -13,7 +13,7 @@ public class GearLeftClickPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
-        ServerPlayerEntity player = context.get().getSender();
+        ServerPlayer player = context.get().getSender();
         if (player != null) {
             ItemStack stack = player.getMainHandItem();
             if (GearHelper.isGear(stack)) {
@@ -22,10 +22,10 @@ public class GearLeftClickPacket {
         }
     }
 
-    public static GearLeftClickPacket decode(PacketBuffer buffer) {
+    public static GearLeftClickPacket decode(FriendlyByteBuf buffer) {
         return new GearLeftClickPacket();
     }
 
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
     }
 }

@@ -2,7 +2,7 @@ package net.silentchaos512.gear.api.material;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -80,7 +80,7 @@ public class MaterialLayerList implements IMaterialLayerList {
         return props;
     }
 
-    public static MaterialLayerList read(PacketBuffer buffer) {
+    public static MaterialLayerList read(FriendlyByteBuf buffer) {
         MaterialLayerList props = new MaterialLayerList();
 
         int layerCount = buffer.readByte();
@@ -91,7 +91,7 @@ public class MaterialLayerList implements IMaterialLayerList {
         return props;
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeByte(this.layers.size());
         this.layers.forEach(layer -> layer.write(buffer));
     }

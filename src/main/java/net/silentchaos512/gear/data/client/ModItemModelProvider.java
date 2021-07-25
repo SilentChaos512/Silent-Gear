@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.data.client;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Items;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -136,16 +136,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private ItemModelBuilder builder(IItemProvider item) {
+    private ItemModelBuilder builder(ItemLike item) {
         return getBuilder(NameUtils.fromItem(item).getPath());
     }
 
-    private ItemModelBuilder builder(IItemProvider item, ModelFile parent) {
+    private ItemModelBuilder builder(ItemLike item, ModelFile parent) {
         String name = NameUtils.fromItem(item).getPath();
         return builder(item, parent, "item/" + name);
     }
 
-    private ItemModelBuilder builder(IItemProvider item, ModelFile parent, String texture) {
+    private ItemModelBuilder builder(ItemLike item, ModelFile parent, String texture) {
         return getBuilder(NameUtils.fromItem(item).getPath()).parent(parent).texture("layer0", texture);
     }
 }

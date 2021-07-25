@@ -3,13 +3,13 @@ package net.silentchaos512.gear.loot.condition;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.ILootSerializer;
-import net.minecraft.loot.LootConditionType;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.part.PartManager;
@@ -42,20 +42,20 @@ public class HasPartCondition extends GearLootCondition {
         return GearData.hasPart(tool, part);
     }
 
-    public static ILootCondition.IBuilder builder(ResourceLocation partId) {
+    public static LootItemCondition.Builder builder(ResourceLocation partId) {
         return builder(partId, MaterialGrade.Range.OPEN);
     }
 
-    public static ILootCondition.IBuilder builder(ResourceLocation partId, MaterialGrade.Range gradeRange) {
+    public static LootItemCondition.Builder builder(ResourceLocation partId, MaterialGrade.Range gradeRange) {
         return () -> new HasPartCondition(partId, gradeRange);
     }
 
     @Override
-    public LootConditionType getType() {
+    public LootItemConditionType getType() {
         return ModLootStuff.HAS_PART;
     }
 
-    public static class Serializer implements ILootSerializer<HasPartCondition> {
+    public static class Serializer implements Serializer<HasPartCondition> {
         @Override
         public void serialize(JsonObject json, HasPartCondition value, JsonSerializationContext context) {
             json.addProperty("part", value.partId.toString());
@@ -63,7 +63,7 @@ public class HasPartCondition extends GearLootCondition {
 
         @Override
         public HasPartCondition deserialize(JsonObject json, JsonDeserializationContext context) {
-            ResourceLocation partId = new ResourceLocation(JSONUtils.getAsString(json, "part"));
+            ResourceLocation partId = new ResourceLocation(GsonHelper.getAsString(json, "part"));
             MaterialGrade.Range gradeRange = json.has("grade")
                     ? MaterialGrade.Range.deserialize(json.get("grade"))
                     : MaterialGrade.Range.OPEN;

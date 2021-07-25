@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.util.TextUtil;
@@ -24,7 +24,7 @@ public class ProspectingResultPacket {
         this.blocksFound.addAll(blocksFound);
     }
 
-    public static ProspectingResultPacket decode(PacketBuffer buffer) {
+    public static ProspectingResultPacket decode(FriendlyByteBuf buffer) {
         int count = buffer.readVarInt();
         Set<BlockState> blocks = new HashSet<>();
 
@@ -38,15 +38,15 @@ public class ProspectingResultPacket {
         return new ProspectingResultPacket(blocks);
     }
 
-    public static void encode(ProspectingResultPacket packet, PacketBuffer buffer) {
+    public static void encode(ProspectingResultPacket packet, FriendlyByteBuf buffer) {
         buffer.writeVarInt(packet.blocksFound.size());
         packet.blocksFound.forEach(block -> buffer.writeResourceLocation(NameUtils.from(block.getBlock())));
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
-        ClientPlayerEntity player = Minecraft.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ITextComponent text = this.blocksFound.stream()
+            Component text = this.blocksFound.stream()
                     .map(state -> state.getBlock().getName())
                     .reduce((t1, t2) -> t1.append(", ").append(t2))
                     .orElseGet(() -> TextUtil.translate("item", "prospector_hammer.no_finds"));

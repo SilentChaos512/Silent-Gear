@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.item.blueprint.book;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.silentchaos512.gear.init.ModContainers;
@@ -14,16 +14,16 @@ import net.silentchaos512.gear.item.IContainerItem;
 
 import javax.annotation.Nonnull;
 
-public class BlueprintBookContainer extends Container {
+public class BlueprintBookContainer extends AbstractContainerMenu {
     final ItemStack item;
     private final IItemHandler itemHandler;
     int bookSlot = -1;
 
-    public BlueprintBookContainer(int id, PlayerInventory playerInventory, PacketBuffer data) {
+    public BlueprintBookContainer(int id, Inventory playerInventory, FriendlyByteBuf data) {
         this(id, playerInventory, data.readItem());
     }
 
-    BlueprintBookContainer(int id, PlayerInventory playerInventory, ItemStack stack) {
+    BlueprintBookContainer(int id, Inventory playerInventory, ItemStack stack) {
         super(ModContainers.BLUEPRINT_BOOK.get(), id);
         this.item = stack;
         IContainerItem containerItem = (IContainerItem) this.item.getItem();
@@ -54,7 +54,7 @@ public class BlueprintBookContainer extends Container {
         for (int x = 0; x < 9; ++x) {
             Slot slot = addSlot(new Slot(playerInventory, x, 8 + x * 18, 161 + yOffset) {
                 @Override
-                public boolean mayPickup(PlayerEntity playerIn) {
+                public boolean mayPickup(Player playerIn) {
                     return index != bookSlot;
                 }
             });
@@ -66,12 +66,12 @@ public class BlueprintBookContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot slot = this.getSlot(index);
 
         if (!slot.mayPickup(playerIn))
@@ -101,7 +101,7 @@ public class BlueprintBookContainer extends Container {
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
         if (slotId < 0 || slotId > slots.size())
             return super.clicked(slotId, dragType, clickTypeIn, player);
 
@@ -113,12 +113,12 @@ public class BlueprintBookContainer extends Container {
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
         super.removed(playerIn);
         ((IContainerItem) item.getItem()).saveInventory(item, itemHandler);
     }
 
-    public boolean canTake(int slotId, Slot slot, int button, PlayerEntity player, ClickType clickType) {
+    public boolean canTake(int slotId, Slot slot, int button, Player player, ClickType clickType) {
         if (slotId == bookSlot || slotId <= itemHandler.getSlots() - 1 && isContainerItem(player.inventory.getCarried()))
             return false;
 

@@ -1,17 +1,17 @@
 package net.silentchaos512.gear.client.event;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.GameSettings;
+import net.minecraft.client.Options;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.multiplayer.PlayerController;
-import net.minecraft.client.settings.AttackIndicatorStatus;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.GameType;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.AttackIndicatorStatus;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.GameType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -21,7 +21,7 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class GearHudOverlay extends AbstractGui {
+public class GearHudOverlay extends GuiComponent {
     private final Minecraft mc;
     private int scaledWidth;
     private int scaledHeight;
@@ -40,7 +40,7 @@ public class GearHudOverlay extends AbstractGui {
         }
     }
 
-    private void renderAttackIndicator(MatrixStack p_238456_1_) {
+    private void renderAttackIndicator(PoseStack p_238456_1_) {
         // Renders an attack indicator if an entity is within extra reach distance of a gear weapon
 
 //        RenderSystem.defaultAlphaFunc();
@@ -48,11 +48,11 @@ public class GearHudOverlay extends AbstractGui {
 //        RenderSystem.enableBlend();
 //        RenderSystem.enableAlphaTest();
 
-        GameSettings gamesettings = this.mc.options;
+        Options gamesettings = this.mc.options;
         if (gamesettings.getCameraType().isFirstPerson()) {
-            PlayerController playerController = this.mc.gameMode;
+            MultiPlayerGameMode playerController = this.mc.gameMode;
             if (playerController != null && playerController.getPlayerMode() != GameType.SPECTATOR && !isEntityTargeted(mc.hitResult)) {
-                ClientPlayerEntity player = this.mc.player;
+                LocalPlayer player = this.mc.player;
                 if (player == null) return;
 
                 if (!gamesettings.renderDebug || gamesettings.hideGui || player.isReducedDebugInfo() || gamesettings.reducedDebugInfo) {
@@ -83,7 +83,7 @@ public class GearHudOverlay extends AbstractGui {
 //        RenderSystem.disableBlend();
     }
 
-    private static boolean isEntityTargeted(@Nullable RayTraceResult rayTraceIn) {
-        return rayTraceIn != null && rayTraceIn.getType() == RayTraceResult.Type.ENTITY;
+    private static boolean isEntityTargeted(@Nullable HitResult rayTraceIn) {
+        return rayTraceIn != null && rayTraceIn.getType() == HitResult.Type.ENTITY;
     }
 }

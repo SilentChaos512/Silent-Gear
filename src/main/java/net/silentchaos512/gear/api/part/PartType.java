@@ -20,12 +20,12 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -136,7 +136,7 @@ public final class PartType {
     }
 
     public static PartType fromJson(JsonObject json, String key) {
-        String str = JSONUtils.getAsString(json, key);
+        String str = GsonHelper.getAsString(json, key);
         PartType type = get(new ModResourceLocation(str));
         if (type == null) {
             throw new JsonSyntaxException("Unknown part type: " + str);
@@ -184,8 +184,8 @@ public final class PartType {
         return maxPerItem.apply(gearType);
     }
 
-    public IFormattableTextComponent getDisplayName(int tier) {
-        return new TranslationTextComponent("part." + name.getNamespace() + ".type." + name.getPath());
+    public MutableComponent getDisplayName(int tier) {
+        return new TranslatableComponent("part." + name.getNamespace() + ".type." + name.getPath());
     }
 
     @SuppressWarnings("WeakerAccess")

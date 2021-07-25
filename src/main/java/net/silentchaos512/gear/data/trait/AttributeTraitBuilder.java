@@ -2,10 +2,10 @@ package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.AttributeTrait;
@@ -27,7 +27,7 @@ public class AttributeTraitBuilder extends TraitBuilder {
         super(traitId, maxLevel, AttributeTrait.SERIALIZER);
     }
 
-    public AttributeTraitBuilder addModifier(GearType gearType, EquipmentSlotType slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
+    public AttributeTraitBuilder addModifier(GearType gearType, EquipmentSlot slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
         return addModifier(gearType, slot.getName(), attribute, operation, values);
     }
 
@@ -38,16 +38,16 @@ public class AttributeTraitBuilder extends TraitBuilder {
     }
 
     public AttributeTraitBuilder addArmorModifier(Attribute attribute, AttributeModifier.Operation operation, float... values) {
-        addModifier(GearType.ARMOR, EquipmentSlotType.HEAD, attribute, operation, values);
-        addModifier(GearType.ARMOR, EquipmentSlotType.CHEST, attribute, operation, values);
-        addModifier(GearType.ARMOR, EquipmentSlotType.LEGS, attribute, operation, values);
-        addModifier(GearType.ARMOR, EquipmentSlotType.FEET, attribute, operation, values);
+        addModifier(GearType.ARMOR, EquipmentSlot.HEAD, attribute, operation, values);
+        addModifier(GearType.ARMOR, EquipmentSlot.CHEST, attribute, operation, values);
+        addModifier(GearType.ARMOR, EquipmentSlot.LEGS, attribute, operation, values);
+        addModifier(GearType.ARMOR, EquipmentSlot.FEET, attribute, operation, values);
         return this;
     }
 
     public AttributeTraitBuilder addModifiersEitherHand(GearType gearType, Attribute attribute, AttributeModifier.Operation operation, float... values) {
-        addModifier(gearType, EquipmentSlotType.MAINHAND, attribute, operation, values);
-        addModifier(gearType, EquipmentSlotType.OFFHAND, attribute, operation, values);
+        addModifier(gearType, EquipmentSlot.MAINHAND, attribute, operation, values);
+        addModifier(gearType, EquipmentSlot.OFFHAND, attribute, operation, values);
         return this;
     }
 

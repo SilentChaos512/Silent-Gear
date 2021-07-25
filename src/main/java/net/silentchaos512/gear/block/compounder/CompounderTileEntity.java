@@ -1,21 +1,21 @@
 package net.silentchaos512.gear.block.compounder;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.core.NonNullList;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("WeakerAccess")
-public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements ITickableTileEntity, IDroppableInventory {
+public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements TickableBlockEntity, IDroppableInventory {
     public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
@@ -49,7 +49,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     @SyncVariable(name = "WorkEnabled")
     private boolean workEnabled = true;
 
-    @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final IIntArray fields = new IIntArray() {
+    @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -86,7 +86,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         this.allSlots = IntStream.range(0, this.items.size()).toArray();
     }
 
-    protected IRecipeType<R> getRecipeType() {
+    protected RecipeType<R> getRecipeType() {
         return this.info.getRecipeType();
     }
 
@@ -123,7 +123,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         return getItem(getOutputHintSlotIndex());
     }
 
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf buffer) {
         buffer.writeByte(this.items.size());
         buffer.writeByte(this.fields.getCount());
     }
@@ -315,12 +315,12 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Util.makeDescriptionId("container", this.info.getBlock().getRegistryName()));
+    protected Component getDefaultName() {
+        return new TranslatableComponent(Util.makeDescriptionId("container", this.info.getBlock().getRegistryName()));
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new CompounderContainer(this.info.getContainerType(),
                 id,
                 player,
@@ -330,29 +330,29 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tags) {
+    public void load(BlockState state, CompoundTag tags) {
         super.load(state, tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tags) {
-        CompoundNBT compoundTag = super.save(tags);
+    public CompoundTag save(CompoundTag tags) {
+        CompoundTag compoundTag = super.save(tags);
         SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
         return compoundTag;
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT tags = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag tags = super.getUpdateTag();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
         return tags;
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         super.onDataPacket(net, packet);
-        CompoundNBT tags = packet.getTag();
+        CompoundTag tags = packet.getTag();
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 }

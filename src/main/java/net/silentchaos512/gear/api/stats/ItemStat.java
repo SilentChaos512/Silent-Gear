@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.api.stats;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
@@ -36,7 +36,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     private final DisplayFormat displayFormat;
     private final Function<Float, Float> missingRodFunction;
 
-    public ItemStat(float defaultValue, float minValue, float maxValue, TextFormatting nameColor, Properties properties) {
+    public ItemStat(float defaultValue, float minValue, float maxValue, ChatFormatting nameColor, Properties properties) {
         this(defaultValue, minValue, maxValue, new Color(nameColor.getColor() != null ? nameColor.getColor() : Color.VALUE_WHITE), properties);
     }
 
@@ -114,7 +114,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     }
 
     public float clampValue(float value) {
-        value = MathHelper.clamp(value, minimumValue, maximumValue);
+        value = Mth.clamp(value, minimumValue, maximumValue);
         return value;
     }
 
@@ -203,7 +203,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
 
     private static float getModifierWeight(StatInstance mod, float primaryMod, int count) {
         float weightBase = WEIGHT_BASE_MIN + WEIGHT_DEVIATION_COEFF * (mod.getValue() - primaryMod) / primaryMod;
-        float weightBaseClamped = MathHelper.clamp(weightBase, WEIGHT_BASE_MIN, WEIGHT_BASE_MAX);
+        float weightBaseClamped = Mth.clamp(weightBase, WEIGHT_BASE_MIN, WEIGHT_BASE_MAX);
         return (float) Math.pow(weightBaseClamped, -(count == 0 ? count : 0.5 + 0.5f * count));
     }
 
@@ -279,11 +279,11 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return String.format("ItemStat{%s}", getRegistryName());
     }
 
-    public IFormattableTextComponent getDisplayName() {
+    public MutableComponent getDisplayName() {
         ResourceLocation name = getRegistryName();
         if (name == null)
-            return new StringTextComponent("Unregistered stat: " + this);
-        return new TranslationTextComponent("stat." + name.getNamespace() + "." + name.getPath());
+            return new TextComponent("Unregistered stat: " + this);
+        return new TranslatableComponent("stat." + name.getNamespace() + "." + name.getPath());
     }
 
     @SuppressWarnings("WeakerAccess")

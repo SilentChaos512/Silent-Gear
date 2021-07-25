@@ -4,10 +4,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -165,7 +165,7 @@ public class StatInstance {
         return ret != null ? ret : DEFAULT_KEY;
     }
 
-    public IFormattableTextComponent getFormattedText(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+    public MutableComponent getFormattedText(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         switch (this.op) {
             case ADD:
                 // +/-v
@@ -189,14 +189,14 @@ public class StatInstance {
 
     //region Private formatted text methods
 
-    private IFormattableTextComponent formatAdd(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+    private MutableComponent formatAdd(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         String format = "%s" + ("%." + decimalPlaces + "f");
         Color color = getFormattedColor(this.value, 0f, addColor);
         String text = trimNumber(String.format(format, this.value < 0 ? "" : "+", this.value));
-        return TextUtil.withColor(new StringTextComponent(text), color);
+        return TextUtil.withColor(new TextComponent(text), color);
     }
 
-    private IFormattableTextComponent formatAvg(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+    private MutableComponent formatAvg(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         Color color = getFormattedColor(this.value, 0f, addColor);
         String text;
         if (stat.getDisplayFormat() == ItemStat.DisplayFormat.PERCENTAGE) {
@@ -207,28 +207,28 @@ public class StatInstance {
             String ret = trimNumber(String.format(format, "", this.value, ""));
             text = stat.getDisplayFormat() == ItemStat.DisplayFormat.MULTIPLIER ? ret + "x" : ret;
         }
-        return TextUtil.withColor(new StringTextComponent(text), color);
+        return TextUtil.withColor(new TextComponent(text), color);
     }
 
-    private IFormattableTextComponent formatMax(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+    private MutableComponent formatMax(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         String format = "%s" + ("%." + decimalPlaces + "f");
         String text = trimNumber(String.format(format, "\u2191", this.value));
-        return TextUtil.withColor(new StringTextComponent(text), Color.WHITE);
+        return TextUtil.withColor(new TextComponent(text), Color.WHITE);
     }
 
-    private IFormattableTextComponent formatMul1(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+    private MutableComponent formatMul1(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         int percent = Math.round(100 * this.value);
         Color color = getFormattedColor(percent, 0f, addColor);
         String text = trimNumber(String.format("%s%d%%", percent < 0 ? "" : "+", percent));
-        return TextUtil.withColor(new StringTextComponent(text), color);
+        return TextUtil.withColor(new TextComponent(text), color);
     }
 
-    private IFormattableTextComponent formatMul2(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
+    private MutableComponent formatMul2(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         String format = "%s" + ("%." + decimalPlaces + "f");
         float val = 1f + this.value;
         Color color = getFormattedColor(val, 1f, addColor);
         String text = trimNumber(String.format(format, "x", val));
-        return TextUtil.withColor(new StringTextComponent(text), color);
+        return TextUtil.withColor(new TextComponent(text), color);
     }
 
     private static String trimNumber(CharSequence str) {
@@ -285,9 +285,9 @@ public class StatInstance {
                 return result;
             } else {
                 // Classic format
-                float value = JSONUtils.getAsFloat(jsonObj, "value", 0f);
+                float value = GsonHelper.getAsFloat(jsonObj, "value", 0f);
                 Operation op = jsonObj.has("op")
-                        ? Operation.byName(JSONUtils.getAsString(jsonObj, "op"))
+                        ? Operation.byName(GsonHelper.getAsString(jsonObj, "op"))
                         : defaultOp;
                 return new StatInstance(value, op, key);
             }
@@ -312,13 +312,13 @@ public class StatInstance {
         return result;
     }
 
-    public static StatInstance read(@Nullable StatGearKey key, PacketBuffer buffer) {
+    public static StatInstance read(@Nullable StatGearKey key, FriendlyByteBuf buffer) {
         float value = buffer.readFloat();
         Operation op = buffer.readEnum(Operation.class);
         return new StatInstance(value, op, key != null ? key : DEFAULT_KEY);
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeFloat(this.value);
         buffer.writeEnum(this.op);
     }

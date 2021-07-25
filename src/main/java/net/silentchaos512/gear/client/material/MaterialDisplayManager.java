@@ -4,14 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.VanillaResourceType;
 import net.silentchaos512.gear.SilentGear;
@@ -49,7 +49,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
     private MaterialDisplayManager() {}
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> predicate) {
+    public void onResourceManagerReload(ResourceManager resourceManager, Predicate<IResourceType> predicate) {
         if (predicate.test(VanillaResourceType.MODELS)) {
             CompoundPartModelLoader.clearCaches();
             FragmentModelLoader.clearCaches();
@@ -61,7 +61,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         }
     }
 
-    private static void reloadMaterials(IResourceManager resourceManager) {
+    private static void reloadMaterials(ResourceManager resourceManager) {
         Collection<ResourceLocation> resources = resourceManager.listResources(PATH_MATERIALS, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
 
@@ -74,9 +74,9 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                 String path = id.getPath().substring(PATH_MATERIALS.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
-                try (IResource iresource = resourceManager.getResource(id)) {
+                try (Resource iresource = resourceManager.getResource(id)) {
                     packName = iresource.getSourceName();
-                    JsonObject json = JSONUtils.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    JsonObject json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
 
                     if (json == null) {
                         SilentGear.LOGGER.error("Could not load material model {} as it's null or empty", name);
@@ -95,7 +95,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         }
     }
 
-    private static void reloadParts(IResourceManager resourceManager) {
+    private static void reloadParts(ResourceManager resourceManager) {
         Collection<ResourceLocation> resources = resourceManager.listResources(PATH_PARTS, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
 
@@ -108,9 +108,9 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
                 String path = id.getPath().substring(PATH_PARTS.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
-                try (IResource iresource = resourceManager.getResource(id)) {
+                try (Resource iresource = resourceManager.getResource(id)) {
                     packName = iresource.getSourceName();
-                    JsonObject json = JSONUtils.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    JsonObject json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
 
                     if (json == null) {
                         SilentGear.LOGGER.error("Could not load part model {} as it's null or empty", name);
@@ -193,13 +193,13 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
         }
     }
 
-    public static Collection<ITextComponent> getErrorMessages(PlayerEntity player) {
-        Collection<ITextComponent> ret = new ArrayList<>();
+    public static Collection<Component> getErrorMessages(Player player) {
+        Collection<Component> ret = new ArrayList<>();
         if (!ERROR_LIST.isEmpty()) {
             String listStr = String.join(", ", ERROR_LIST);
-            ret.add(TextUtil.withColor(new StringTextComponent("[Silent Gear] The following part/material models failed to load, check your log file:"),
-                    TextFormatting.RED));
-            ret.add(new StringTextComponent(listStr));
+            ret.add(TextUtil.withColor(new TextComponent("[Silent Gear] The following part/material models failed to load, check your log file:"),
+                    ChatFormatting.RED));
+            ret.add(new TextComponent(listStr));
         }
         return ret;
     }

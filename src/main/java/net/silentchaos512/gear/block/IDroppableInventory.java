@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 /**
  * An inventory whose dropped items may not match their true inventory

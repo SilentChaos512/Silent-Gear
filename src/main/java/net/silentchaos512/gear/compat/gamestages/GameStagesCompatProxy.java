@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.compat.gamestages;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
+import net.minecraft.server.players.PlayerList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
@@ -21,11 +21,11 @@ import java.lang.reflect.Field;
 public final class GameStagesCompatProxy {
     private GameStagesCompatProxy() {throw new IllegalAccessError("Utility class");}
 
-    public static boolean canCraft(IGearPart part, CraftingInventory inv) {
+    public static boolean canCraft(IGearPart part, CraftingContainer inv) {
         if (!ModList.get().isLoaded("gamestages")) return true;
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            PlayerEntity player = SilentGear.PROXY.getClientPlayer();
+            Player player = SilentGear.PROXY.getClientPlayer();
             if (player == null || player instanceof FakePlayer) {
                 return true;
             }
@@ -34,11 +34,11 @@ public final class GameStagesCompatProxy {
         return canCraft(part, getPlayerUsingInventory(inv));
     }
 
-    public static boolean canCraft(GearType gearType, CraftingInventory inv) {
+    public static boolean canCraft(GearType gearType, CraftingContainer inv) {
         if (!ModList.get().isLoaded("gamestages")) return true;
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            PlayerEntity player = SilentGear.PROXY.getClientPlayer();
+            Player player = SilentGear.PROXY.getClientPlayer();
             if (player == null || player instanceof FakePlayer) {
                 return true;
             }
@@ -47,34 +47,34 @@ public final class GameStagesCompatProxy {
         return canCraft(gearType, getPlayerUsingInventory(inv));
     }
 
-    public static boolean canCraft(IGearPart part, PlayerEntity player) {
+    public static boolean canCraft(IGearPart part, Player player) {
         if (!ModList.get().isLoaded("gamestages")) return true;
         return GameStagesCompat.canCraft(part, player);
     }
 
-    public static boolean canCraft(@Nullable GearType gearType, PlayerEntity player) {
+    public static boolean canCraft(@Nullable GearType gearType, Player player) {
         if (!ModList.get().isLoaded("gamestages") || gearType == null) return true;
         return GameStagesCompat.canCraft(gearType, player);
     }
 
     @Nullable
-    private static ServerPlayerEntity getPlayerUsingInventory(CraftingInventory inv) {
+    private static ServerPlayer getPlayerUsingInventory(CraftingContainer inv) {
         MinecraftServer server = SilentGear.PROXY.getServer();
         if(server != null) {
             PlayerList manager = server.getPlayerList();
-            Field containerField = ObfuscationReflectionHelper.findField(CraftingInventory.class, "eventHandler");
+            Field containerField = ObfuscationReflectionHelper.findField(CraftingContainer.class, "eventHandler");
             containerField.setAccessible(true);
-            Container container = null;
+            AbstractContainerMenu container = null;
             try {
-                container = (Container) containerField.get(inv);
+                container = (AbstractContainerMenu) containerField.get(inv);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
             if(container == null) {
                 return null;
             }
-            ServerPlayerEntity foundPlayer = null;
-            for (ServerPlayerEntity player : manager.getPlayers()) {
+            ServerPlayer foundPlayer = null;
+            for (ServerPlayer player : manager.getPlayers()) {
                 if (player.containerMenu == container && container.stillValid(player) && container.isSynched(player)) {
                     if (foundPlayer != null) {
                         return null;

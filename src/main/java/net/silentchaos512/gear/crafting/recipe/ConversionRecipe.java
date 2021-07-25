@@ -3,15 +3,15 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -57,7 +57,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         }
     }
 
-    private static void readMaterials(PacketBuffer buffer, ConversionRecipe recipe) {
+    private static void readMaterials(FriendlyByteBuf buffer, ConversionRecipe recipe) {
         int typeCount = buffer.readByte();
         for (int i = 0; i < typeCount; ++i) {
             PartType partType = PartType.get(buffer.readResourceLocation());
@@ -72,7 +72,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         }
     }
 
-    private static void writeMaterials(PacketBuffer buffer, ConversionRecipe recipe) {
+    private static void writeMaterials(FriendlyByteBuf buffer, ConversionRecipe recipe) {
         buffer.writeByte(recipe.resultMaterials.size());
         recipe.resultMaterials.forEach((partType, list) -> {
             buffer.writeResourceLocation(partType.getName());
@@ -82,17 +82,17 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.CONVERSION.get();
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         return Config.Common.allowConversionRecipes.get() && getBaseRecipe().matches(inv, worldIn);
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
         if (!original.isEmpty()) {
@@ -107,7 +107,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         return result;
     }
 
-    private static ItemStack findOriginalItem(IInventory inv) {
+    private static ItemStack findOriginalItem(Container inv) {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.isDamageableItem()) {

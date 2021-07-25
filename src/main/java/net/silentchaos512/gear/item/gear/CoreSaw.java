@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.world.BlockEvent;
@@ -27,8 +27,8 @@ public class CoreSaw extends CoreAxe {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
-        World world = player.level;
+    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
+        Level world = player.level;
         if (!world.isClientSide) {
             BlockState state = world.getBlockState(pos);
 
@@ -52,8 +52,8 @@ public class CoreSaw extends CoreAxe {
         return false;
     }
 
-    private static boolean detectTree(IBlockReader world, int x, int y, int z, Block wood) {
-        BlockPos.Mutable pos = new BlockPos.Mutable(x, y, z);
+    private static boolean detectTree(BlockGetter world, int x, int y, int z, Block wood) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
         int height = y;
         boolean foundTop = false;
         do {
@@ -81,7 +81,7 @@ public class CoreSaw extends CoreAxe {
         return foliageCount > 3;
     }
 
-    private static boolean checkForLogs(IBlockReader world, BlockPos pos) {
+    private static boolean checkForLogs(BlockGetter world, BlockPos pos) {
         return isLog(world.getBlockState(pos))
                 || isLog(world.getBlockState(pos.relative(Direction.NORTH)))
                 || isLog(world.getBlockState(pos.relative(Direction.SOUTH)))
@@ -124,7 +124,7 @@ public class CoreSaw extends CoreAxe {
         return state.is(BlockTags.LEAVES) || state.is(BlockTags.WART_BLOCKS);
     }
 
-    private void breakTree(TreeBreakResult result, World world, BlockPos pos, BlockPos startPos, int recursionDepth) {
+    private void breakTree(TreeBreakResult result, Level world, BlockPos pos, BlockPos startPos, int recursionDepth) {
         result.maxDepth = recursionDepth;
 
         if (recursionDepth > Config.Common.sawRecursionDepth.get()) {
@@ -186,14 +186,14 @@ public class CoreSaw extends CoreAxe {
 
     private static final class TreeBreakResult {
         final ItemStack tool;
-        final PlayerEntity player;
+        final Player player;
 
         int blocksBroken;
         int maxDepth;
         Block firstLog;
         Block firstFoliage;
 
-        private TreeBreakResult(ItemStack tool, PlayerEntity player) {
+        private TreeBreakResult(ItemStack tool, Player player) {
             this.tool = tool;
             this.player = player;
         }

@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.util.GearHelper;

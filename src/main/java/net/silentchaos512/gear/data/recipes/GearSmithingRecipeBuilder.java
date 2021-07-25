@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.data.recipes;
 
 import com.google.gson.JsonObject;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
@@ -17,33 +17,33 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class GearSmithingRecipeBuilder {
-    private final IRecipeSerializer<?> serializer;
+    private final RecipeSerializer<?> serializer;
     private final Item gearItem;
     private final Ingredient addition;
 
-    public GearSmithingRecipeBuilder(IRecipeSerializer<?> serializer, Item gearItem, Ingredient addition) {
+    public GearSmithingRecipeBuilder(RecipeSerializer<?> serializer, Item gearItem, Ingredient addition) {
         this.serializer = serializer;
         this.gearItem = gearItem;
         this.addition = addition;
     }
 
-    public static GearSmithingRecipeBuilder coating(IItemProvider gearItem) {
+    public static GearSmithingRecipeBuilder coating(ItemLike gearItem) {
         return new GearSmithingRecipeBuilder(ModRecipes.SMITHING_COATING.get(), gearItem.asItem(), PartMaterialIngredient.of(PartType.COATING));
     }
 
-    public static GearSmithingRecipeBuilder upgrade(IItemProvider gearItem, PartType partType) {
+    public static GearSmithingRecipeBuilder upgrade(ItemLike gearItem, PartType partType) {
         return new GearSmithingRecipeBuilder(ModRecipes.SMITHING_UPGRADE.get(), gearItem.asItem(), GearPartIngredient.of(partType));
     }
 
-    public void build(Consumer<IFinishedRecipe> consumer) {
+    public void build(Consumer<FinishedRecipe> consumer) {
         build(consumer, new ResourceLocation(serializer.getRegistryName() + "/" + NameUtils.from(this.gearItem).getPath()));
     }
 
-    public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation recipeId) {
+    public void build(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
         consumer.accept(new GearSmithingRecipeBuilder.Result(recipeId, this));
     }
 
-    public class Result implements IFinishedRecipe {
+    public class Result implements FinishedRecipe {
         private final ResourceLocation recipeId;
         private final GearSmithingRecipeBuilder builder;
 
@@ -64,7 +64,7 @@ public class GearSmithingRecipeBuilder {
         }
 
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return builder.serializer;
         }
 

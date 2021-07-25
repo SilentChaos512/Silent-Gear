@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.gear.part;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class RepairContext {
     public enum Type {

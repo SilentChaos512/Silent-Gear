@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.util;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -67,7 +67,7 @@ public final class SynergyUtils {
             }
         }
 
-        return (float) MathHelper.clamp(synergy, MIN_VALUE, MAX_VALUE);
+        return (float) Mth.clamp(synergy, MIN_VALUE, MAX_VALUE);
     }
 
     public static Collection<IMaterialInstance> getUniques(Collection<? extends IMaterialInstance> materials) {
@@ -78,9 +78,9 @@ public final class SynergyUtils {
         return ret.values();
     }
 
-    public static ITextComponent getDisplayText(float synergy) {
-        TextFormatting color = synergy < 1 ? TextFormatting.RED : synergy > 1 ? TextFormatting.GREEN : TextFormatting.WHITE;
-        ITextComponent value = new StringTextComponent(Math.round(100 * synergy) + "%").withStyle(color);
+    public static Component getDisplayText(float synergy) {
+        ChatFormatting color = synergy < 1 ? ChatFormatting.RED : synergy > 1 ? ChatFormatting.GREEN : ChatFormatting.WHITE;
+        Component value = new TextComponent(Math.round(100 * synergy) + "%").withStyle(color);
         return TextUtil.translate("misc", "synergy", value);
     }
 

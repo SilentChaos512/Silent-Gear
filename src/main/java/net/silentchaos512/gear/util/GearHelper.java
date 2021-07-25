@@ -2,29 +2,29 @@ package net.silentchaos512.gear.util;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
@@ -53,6 +53,18 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import net.minecraft.Util;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.context.UseOnContext;
 
 /**
  * Contains various methods used by gear items. Many are delegates for item overrides, to cut down
@@ -114,27 +126,27 @@ public final class GearHelper {
         return speed;
     }
 
-    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         return getAttributeModifiers(slot, stack, true);
     }
 
-    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, boolean addStandardMainHandMods) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack, boolean addStandardMainHandMods) {
         // Need to use this version to prevent stack overflow
         @SuppressWarnings("deprecation") Multimap<Attribute, AttributeModifier> map = LinkedHashMultimap.create(stack.getItem().getDefaultAttributeModifiers(slot));
 
         return getAttributeModifiers(slot, stack, map, addStandardMainHandMods);
     }
 
-    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map) {
         return getAttributeModifiers(slot, stack, map, true);
     }
 
-    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map, boolean addStandardMainHandMods) {
+    public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map, boolean addStandardMainHandMods) {
         return getAttributeModifiers(slot.getName(), stack, map, addStandardMainHandMods);
     }
 
     public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(String slot, ItemStack stack, Multimap<Attribute, AttributeModifier> map, boolean addStandardMainHandMods) {
-        if (addStandardMainHandMods && isValidSlot(stack, slot) && slot.equals(EquipmentSlotType.MAINHAND.getName())) {
+        if (addStandardMainHandMods && isValidSlot(stack, slot) && slot.equals(EquipmentSlot.MAINHAND.getName())) {
             // Melee Damage
             replaceAttributeModifierInMap(map, Attributes.ATTACK_DAMAGE, getMeleeDamageModifier(stack));
 
@@ -194,15 +206,15 @@ public final class GearHelper {
         return getItem(gear).map(item -> item.getRepairModifier(gear)).orElse(1f);
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, Hand hand) {
-        attemptDamage(stack, amount, entity, hand == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
+    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, InteractionHand hand) {
+        attemptDamage(stack, amount, entity, hand == InteractionHand.OFF_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, EquipmentSlotType slot) {
-        if (isUnbreakable(stack) || (entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.instabuild))
+    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, EquipmentSlot slot) {
+        if (isUnbreakable(stack) || (entity instanceof Player && ((Player) entity).abilities.instabuild))
             return;
 
-        ServerPlayerEntity player = entity instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity : null;
+        ServerPlayer player = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
         final int preTraitAmount = amount;
         amount = (int) TraitHelper.activateTraits(stack, preTraitAmount, (trait, level, val) ->
                 trait.onDurabilityDamage(new TraitActionContext(player, level, stack), (int) val));
@@ -223,7 +235,7 @@ public final class GearHelper {
         handleBrokenItem(stack, player, slot);
     }
 
-    private static void handleBrokenItem(ItemStack stack, @Nullable PlayerEntity player, EquipmentSlotType slot) {
+    private static void handleBrokenItem(ItemStack stack, @Nullable Player player, EquipmentSlot slot) {
         if (isBroken(stack)) {
             // The item "broke" (can still be repaired)
             onBroken(stack, player, slot);
@@ -244,7 +256,7 @@ public final class GearHelper {
      * @param player The player
      * @param slot   The item/armor slot
      */
-    public static void onBroken(ItemStack stack, @Nullable PlayerEntity player, EquipmentSlotType slot) {
+    public static void onBroken(ItemStack stack, @Nullable Player player, EquipmentSlot slot) {
         GearData.incrementBrokenCount(stack);
         GearData.recalculateStats(stack, player);
         if (player != null) {
@@ -253,26 +265,26 @@ public final class GearHelper {
         }
     }
 
-    public static ActionResultType useAndCheckBroken(ItemUseContext context, Function<ItemUseContext, ActionResultType> useFunction) {
-        ActionResultType result = useFunction.apply(context);
-        if (context.getPlayer() instanceof ServerPlayerEntity)
-            handleBrokenItem(context.getItemInHand(), context.getPlayer(), context.getHand() == Hand.OFF_HAND ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND);
+    public static InteractionResult useAndCheckBroken(UseOnContext context, Function<UseOnContext, InteractionResult> useFunction) {
+        InteractionResult result = useFunction.apply(context);
+        if (context.getPlayer() instanceof ServerPlayer)
+            handleBrokenItem(context.getItemInHand(), context.getPlayer(), context.getHand() == InteractionHand.OFF_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
         return result;
     }
 
-    private static void onDamageFactorChange(ServerPlayerEntity player, int preDamageFactor, int newDamageFactor) {
+    private static void onDamageFactorChange(ServerPlayer player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
             if (Config.Client.playKachinkSound.get()) {
-                player.level.playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundCategory.PLAYERS, 0.5f, 2.0f);
+                player.level.playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 0.5f, 2.0f);
             }
             LibTriggers.GENERIC_INT.trigger(player, DAMAGE_FACTOR_CHANGE, 1);
         }
     }
 
-    private static void notifyPlayerOfBrokenGear(ItemStack stack, PlayerEntity player) {
+    private static void notifyPlayerOfBrokenGear(ItemStack stack, Player player) {
         if (Config.Common.sendGearBrokenMessage.get()) {
             // Notify player. Mostly for armor, but might help new players as well.
-            player.sendMessage(new TranslationTextComponent("misc.silentgear.notifyOnBreak", stack.getHoverName()), Util.NIL_UUID);
+            player.sendMessage(new TranslatableComponent("misc.silentgear.notifyOnBreak", stack.getHoverName()), Util.NIL_UUID);
         }
     }
 
@@ -327,7 +339,7 @@ public final class GearHelper {
         if (GearHelper.isUnbreakable(stack)) {
             preTraitValue = 0;
         } else if (!Config.Common.gearBreaksPermanently.get()) {
-            preTraitValue = MathHelper.clamp(amount, 0, stack.getMaxDamage() - stack.getDamageValue() - 1);
+            preTraitValue = Mth.clamp(amount, 0, stack.getMaxDamage() - stack.getDamageValue() - 1);
             if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
                 onBroken.accept(entity);
             }
@@ -431,10 +443,10 @@ public final class GearHelper {
         return 1f;
     }
 
-    public static boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public static boolean onBlockDestroyed(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (!isBroken(stack) && stack.getItem() instanceof ICoreTool) {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
-            attemptDamage(stack, damage, entityLiving, EquipmentSlotType.MAINHAND);
+            attemptDamage(stack, damage, entityLiving, EquipmentSlot.MAINHAND);
         }
 //        GearStatistics.incrementStat(stack, GearStatistics.BLOCKS_MINED);
 
@@ -447,26 +459,26 @@ public final class GearHelper {
         boolean isBroken = isBroken(stack);
         if (!isBroken && stack.getItem() instanceof ICoreTool) {
             int damage = ((ICoreTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
-            attemptDamage(stack, damage, attacker, EquipmentSlotType.MAINHAND);
+            attemptDamage(stack, damage, attacker, EquipmentSlot.MAINHAND);
         }
 
         return !isBroken;
     }
 
     // Formerly onUpdate
-    public static void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+    public static void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
         if (!world.isClientSide) {
-            @Nullable PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity) entity : null;
+            @Nullable Player player = entity instanceof Player ? (Player) entity : null;
             TraitHelper.tickTraits(world, player, stack, isSelected);
         }
     }
 
-    public static ActionResultType onItemUse(ItemUseContext context) {
-        ActionResultType ret = ActionResultType.PASS;
+    public static InteractionResult onItemUse(UseOnContext context) {
+        InteractionResult ret = InteractionResult.PASS;
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(context.getItemInHand());
         for (Map.Entry<ITrait, Integer> entry : traits.entrySet()) {
-            ActionResultType result = entry.getKey().onItemUse(context, entry.getValue());
-            if (result != ActionResultType.PASS) {
+            InteractionResult result = entry.getKey().onItemUse(context, entry.getValue());
+            if (result != InteractionResult.PASS) {
                 ret = result;
             }
         }
@@ -474,9 +486,9 @@ public final class GearHelper {
     }
 
     public static void onItemSwing(ItemStack stack, LivingEntity wielder) {
-        if (wielder instanceof PlayerEntity
+        if (wielder instanceof Player
                 && getType(stack).matches(GearType.MELEE_WEAPON)
-                && tryAttackWithExtraReach((PlayerEntity) wielder, false) != null) {
+                && tryAttackWithExtraReach((Player) wielder, false) != null) {
             // Player attacked something, ignore traits
             return;
         }
@@ -495,7 +507,7 @@ public final class GearHelper {
      * @return The targeted entity if a vulnerable entity is within range, null otherwise
      */
     @Nullable
-    public static Entity getAttackTargetWithExtraReach(PlayerEntity player) {
+    public static Entity getAttackTargetWithExtraReach(Player player) {
         if (getType(player.getMainHandItem()).matches(GearType.MELEE_WEAPON)) {
             return tryAttackWithExtraReach(player, true);
         }
@@ -510,22 +522,22 @@ public final class GearHelper {
      * @return The attacked entity if the attack was successful, null otherwise
      */
     @Nullable
-    public static Entity tryAttackWithExtraReach(PlayerEntity player) {
+    public static Entity tryAttackWithExtraReach(Player player) {
         return tryAttackWithExtraReach(player, false);
     }
 
     @Nullable
-    private static Entity tryAttackWithExtraReach(PlayerEntity player, boolean simulate) {
+    private static Entity tryAttackWithExtraReach(Player player, boolean simulate) {
         // Attempt to attack something if wielding a weapon with increased melee range
         double range = getAttackRange(player);
-        Vector3d vector3d = player.getEyePosition(0f);
+        Vec3 vector3d = player.getEyePosition(0f);
         double rangeSquared = range * range;
 
-        Vector3d vector3d1 = player.getViewVector(1.0F);
-        Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
-        AxisAlignedBB axisalignedbb = player.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1.0D, 1.0D, 1.0D);
+        Vec3 vector3d1 = player.getViewVector(1.0F);
+        Vec3 vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
+        AABB axisalignedbb = player.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1.0D, 1.0D, 1.0D);
 
-        EntityRayTraceResult rayTrace = rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (entity) -> {
+        EntityHitResult rayTrace = rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (entity) -> {
             return !entity.isSpectator() && entity.isPickable();
         }, rangeSquared);
 
@@ -547,7 +559,7 @@ public final class GearHelper {
                 : ItemStats.ATTACK_REACH.getBaseValue();
 
         // Also check Forge reach distance, to allow curios to add more reach
-        ModifiableAttributeInstance attribute = entity.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        AttributeInstance attribute = entity.getAttribute(ForgeMod.REACH_DISTANCE.get());
         if (attribute != null) {
             double reachBonus = attribute.getValue() - attribute.getBaseValue();
             return base + reachBonus;
@@ -558,16 +570,16 @@ public final class GearHelper {
 
     @SuppressWarnings({"MethodWithTooManyParameters", "OverlyComplexMethod"})
     @Nullable
-    private static EntityRayTraceResult rayTraceEntities(Entity shooter, Vector3d startVec, Vector3d endVec, AxisAlignedBB boundingBox, Predicate<Entity> filter, double distance) {
+    private static EntityHitResult rayTraceEntities(Entity shooter, Vec3 startVec, Vec3 endVec, AABB boundingBox, Predicate<Entity> filter, double distance) {
         // Copied from ProjectileHelper (getEntityHitResult)
-        World world = shooter.level;
+        Level world = shooter.level;
         double d0 = distance;
         Entity entity = null;
-        Vector3d vector3d = null;
+        Vec3 vector3d = null;
 
         for (Entity entity1 : world.getEntities(shooter, boundingBox, filter)) {
-            AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
-            Optional<Vector3d> optional = axisalignedbb.clip(startVec, endVec);
+            AABB axisalignedbb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
+            Optional<Vec3> optional = axisalignedbb.clip(startVec, endVec);
             if (axisalignedbb.contains(startVec)) {
                 if (d0 >= 0.0D) {
                     entity = entity1;
@@ -575,7 +587,7 @@ public final class GearHelper {
                     d0 = 0.0D;
                 }
             } else if (optional.isPresent()) {
-                Vector3d vector3d1 = optional.get();
+                Vec3 vector3d1 = optional.get();
                 double d1 = startVec.distanceToSqr(vector3d1);
                 if (d1 < d0 || d0 == 0.0D) {
                     if (entity1.getRootVehicle() == shooter.getRootVehicle() && !entity1.canRiderInteract()) {
@@ -592,7 +604,7 @@ public final class GearHelper {
             }
         }
 
-        return entity == null ? null : new EntityRayTraceResult(entity, vector3d);
+        return entity == null ? null : new EntityHitResult(entity, vector3d);
     }
 
     public static int getEnchantability(ItemStack stack) {
@@ -616,9 +628,9 @@ public final class GearHelper {
         return Rarity.EPIC;
     }
 
-    public static void fillItemGroup(ICoreItem item, ItemGroup group, Collection<ItemStack> items) {
+    public static void fillItemGroup(ICoreItem item, CreativeModeTab group, Collection<ItemStack> items) {
         boolean inTab = false;
-        for (ItemGroup tabInList : item.asItem().getCreativeTabs()) {
+        for (CreativeModeTab tabInList : item.asItem().getCreativeTabs()) {
             if (tabInList == group) {
                 inTab = true;
                 break;
@@ -650,37 +662,37 @@ public final class GearHelper {
         return result;
     }
 
-    public static ITextComponent getDisplayName(ItemStack gear) {
+    public static Component getDisplayName(ItemStack gear) {
         PartData part = GearData.getPrimaryPart(gear);
-        if (part == null) return new TranslationTextComponent(gear.getDescriptionId());
+        if (part == null) return new TranslatableComponent(gear.getDescriptionId());
 
-        ITextComponent partName = part.getMaterialName(gear);
+        Component partName = part.getMaterialName(gear);
         if (TimedEvents.isAprilFools()) {
-            partName = partName.copy().append(new StringTextComponent(" & Knuckles"));
+            partName = partName.copy().append(new TextComponent(" & Knuckles"));
         }
-        ITextComponent gearName = new TranslationTextComponent(gear.getDescriptionId() + ".nameProper", partName);
-        ITextComponent result = gearName;
+        Component gearName = new TranslatableComponent(gear.getDescriptionId() + ".nameProper", partName);
+        Component result = gearName;
 
         if (gear.getItem() instanceof ICoreTool) {
             ICoreItem item = (ICoreItem) gear.getItem();
             if (item.requiresPartOfType(PartType.ROD) && GearData.getPartOfType(gear, PartType.ROD) == null) {
-                result = new TranslationTextComponent(gear.getDescriptionId() + ".noRod", gearName);
+                result = new TranslatableComponent(gear.getDescriptionId() + ".noRod", gearName);
             } else if (item.requiresPartOfType(PartType.BOWSTRING) && GearData.getPartOfType(gear, PartType.BOWSTRING) == null) {
-                result = new TranslationTextComponent(gear.getDescriptionId() + ".unstrung", gearName);
+                result = new TranslatableComponent(gear.getDescriptionId() + ".unstrung", gearName);
             }
         }
 
         // Prefixes
         // TODO: Probably should cache this somehow...
-        for (ITextComponent t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
+        for (Component t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
             // TODO: Spaces are probably inappropriate for some languages?
-            result = t.copy().append(new StringTextComponent(" ")).append(result);
+            result = t.copy().append(new TextComponent(" ")).append(result);
         }
 
         return result;
     }
 
-    private static Collection<ITextComponent> getNamePrefixes(ItemStack gear, PartDataList parts) {
+    private static Collection<Component> getNamePrefixes(ItemStack gear, PartDataList parts) {
         GearNamePrefixesEvent event = new GearNamePrefixesEvent(gear, parts);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getPrefixes();

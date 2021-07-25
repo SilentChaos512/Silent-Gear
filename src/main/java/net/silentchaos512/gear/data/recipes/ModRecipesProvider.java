@@ -2,16 +2,16 @@ package net.silentchaos512.gear.data.recipes;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.block.Blocks;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -40,6 +40,20 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.Tiers;
+
 public class ModRecipesProvider extends LibRecipeProvider {
     public ModRecipesProvider(DataGenerator generatorIn) {
         super(generatorIn, SilentGear.MOD_ID);
@@ -51,7 +65,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
         metals(consumer, 0.5f, new Metals("blaze_gold", CraftingItems.BLAZE_GOLD_INGOT, ModTags.Items.INGOTS_BLAZE_GOLD)
                 .block(ModBlocks.BLAZE_GOLD_BLOCK, ModTags.Items.STORAGE_BLOCKS_BLAZE_GOLD)
                 .dust(CraftingItems.BLAZE_GOLD_DUST, ModTags.Items.DUSTS_BLAZE_GOLD)
@@ -96,15 +110,15 @@ public class ModRecipesProvider extends LibRecipeProvider {
         registerSalvaging(consumer);
     }
 
-    private void registerSpecialRecipes(Consumer<IFinishedRecipe> consumer) {
-        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.FILL_REPAIR_KIT.get());
-        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.SWAP_GEAR_PART.get());
-        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.QUICK_REPAIR.get());
-        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.COMBINE_FRAGMENTS.get());
-        special(consumer, (SpecialRecipeSerializer<?>) ModRecipes.MOD_KIT_REMOVE_PART.get());
+    private void registerSpecialRecipes(Consumer<FinishedRecipe> consumer) {
+        special(consumer, (SimpleRecipeSerializer<?>) ModRecipes.FILL_REPAIR_KIT.get());
+        special(consumer, (SimpleRecipeSerializer<?>) ModRecipes.SWAP_GEAR_PART.get());
+        special(consumer, (SimpleRecipeSerializer<?>) ModRecipes.QUICK_REPAIR.get());
+        special(consumer, (SimpleRecipeSerializer<?>) ModRecipes.COMBINE_FRAGMENTS.get());
+        special(consumer, (SimpleRecipeSerializer<?>) ModRecipes.MOD_KIT_REMOVE_PART.get());
     }
 
-    private void registerBlueprints(Consumer<IFinishedRecipe> consumer) {
+    private void registerBlueprints(Consumer<FinishedRecipe> consumer) {
         toolBlueprint(consumer, "sword", ModItems.SWORD_BLUEPRINT, ModItems.SWORD_TEMPLATE, "#", "#", "/");
         toolBlueprint(consumer, "katana", ModItems.KATANA_BLUEPRINT, ModItems.KATANA_TEMPLATE, "##", "# ", "/ ");
         toolBlueprint(consumer, "machete", ModItems.MACHETE_BLUEPRINT, ModItems.MACHETE_TEMPLATE, "  #", " ##", "/  ");
@@ -375,7 +389,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer);
     }
 
-    private void registerCompoundParts(Consumer<IFinishedRecipe> consumer) {
+    private void registerCompoundParts(Consumer<FinishedRecipe> consumer) {
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ADORNMENT)
                 .addIngredient(BlueprintIngredient.of(ModItems.JEWELER_TOOLS.get()))
                 .addIngredient(CraftingItems.BORT)
@@ -477,7 +491,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("part/coating2_alt"));
     }
 
-    private void registerGear(Consumer<IFinishedRecipe> consumer) {
+    private void registerGear(Consumer<FinishedRecipe> consumer) {
         toolRecipes(consumer, "sword", 2, ModItems.SWORD, ModItems.SWORD_BLADE, ModItems.SWORD_BLUEPRINT.get());
         toolRecipes(consumer, "katana", 3, ModItems.KATANA, ModItems.KATANA_BLADE, ModItems.KATANA_BLUEPRINT.get());
         toolRecipes(consumer, "machete", 3, ModItems.MACHETE, ModItems.MACHETE_BLADE, ModItems.MACHETE_BLUEPRINT.get());
@@ -581,7 +595,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         armorConversion(consumer, ModItems.BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
     }
 
-    private void registerModifierKits(Consumer<IFinishedRecipe> consumer) {
+    private void registerModifierKits(Consumer<FinishedRecipe> consumer) {
         ShapedRecipeBuilder.shaped(ModItems.MOD_KIT)
                 .define('#', ModTags.Items.TEMPLATE_BOARDS)
                 .define('/', Tags.Items.RODS_WOODEN)
@@ -650,7 +664,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
     }
 
-    private void registerMachines(Consumer<IFinishedRecipe> consumer) {
+    private void registerMachines(Consumer<FinishedRecipe> consumer) {
         ExtendedShapedRecipeBuilder.vanillaBuilder(ModBlocks.METAL_ALLOYER)
                 .key('/', ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .key('i', Tags.Items.STORAGE_BLOCKS_IRON)
@@ -702,7 +716,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer);
     }
 
-    private void registerCompounding(Consumer<IFinishedRecipe> consumer) {
+    private void registerCompounding(Consumer<FinishedRecipe> consumer) {
         CompoundingRecipeBuilder.gemBuilder(ModItems.CUSTOM_GEM, 1)
                 .withCustomMaterial(Const.Materials.DIMERALD)
                 .addIngredient(Tags.Items.GEMS_DIAMOND)
@@ -723,14 +737,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer);
     }
 
-    private void registerPressing(Consumer<IFinishedRecipe> consumer) {
+    private void registerPressing(Consumer<FinishedRecipe> consumer) {
         ExtendedSingleItemRecipeBuilder.builder(ModRecipes.PRESSING_MATERIAL.get(),
                 PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
                 ModItems.SHEET_METAL, 2)
                 .build(consumer);
     }
 
-    private void registerCraftingItems(Consumer<IFinishedRecipe> consumer) {
+    private void registerCraftingItems(Consumer<FinishedRecipe> consumer) {
         shapelessBuilder(ModItems.GUIDE_BOOK)
                 .addIngredient(Items.BOOK)
                 .addIngredient(ModTags.Items.TEMPLATE_BOARDS)
@@ -793,7 +807,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addCriterion("has_item", has(CraftingItems.UPGRADE_BASE))
                 .build(consumer);
 
-        CookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.NETHERWOOD_LOGS), ModItems.NETHERWOOD_CHARCOAL, 0.15f, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.NETHERWOOD_LOGS), ModItems.NETHERWOOD_CHARCOAL, 0.15f, 200)
                 .unlockedBy("has_item", has(ModTags.Items.NETHERWOOD_LOGS))
                 .save(consumer);
 
@@ -968,7 +982,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("###")
                 .unlockedBy("has_item", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer, SilentGear.getId("diamond_from_shards"));
-        CookingRecipeBuilder.smelting(Ingredient.of(CraftingItems.SINEW), CraftingItems.DRIED_SINEW, 0.35f, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(CraftingItems.SINEW), CraftingItems.DRIED_SINEW, 0.35f, 200)
                 .unlockedBy("has_item", has(CraftingItems.SINEW))
                 .save(consumer);
         // E
@@ -1159,7 +1173,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .save(consumer);
     }
 
-    private void dyeFluffyBlock(Consumer<IFinishedRecipe> consumer, IItemProvider block, ITag<Item> dye) {
+    private void dyeFluffyBlock(Consumer<FinishedRecipe> consumer, ItemLike block, Tag<Item> dye) {
 //        ShapedRecipeBuilder.shapedRecipe(block, 8)
 //                .patternLine("###")
 //                .patternLine("#d#")
@@ -1170,7 +1184,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 //                .build(consumer);
     }
 
-    private void registerSmithing(Consumer<IFinishedRecipe> consumer) {
+    private void registerSmithing(Consumer<FinishedRecipe> consumer) {
         Registration.getItems(item -> item instanceof ICoreItem).forEach(item -> {
             if (((ICoreItem) item).getGearType() != GearType.ELYTRA) {
                 GearSmithingRecipeBuilder.coating(item).build(consumer);
@@ -1179,7 +1193,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         });
     }
 
-    private void registerSalvaging(Consumer<IFinishedRecipe> consumer) {
+    private void registerSalvaging(Consumer<FinishedRecipe> consumer) {
         Registration.getItems(item -> item instanceof ICoreItem).forEach(item ->
                 gearSalvage(consumer, (ICoreItem) item));
 
@@ -1271,17 +1285,17 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("salvaging/compass"));
     }
 
-    private void special(Consumer<IFinishedRecipe> consumer, SpecialRecipeSerializer<?> serializer) {
-        CustomRecipeBuilder.special(serializer).save(consumer, NameUtils.from(serializer).toString());
+    private void special(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
+        SpecialRecipeBuilder.special(serializer).save(consumer, NameUtils.from(serializer).toString());
     }
 
-    private ExtendedShapelessRecipeBuilder damageGear(IItemProvider result, int count, int damage) {
+    private ExtendedShapelessRecipeBuilder damageGear(ItemLike result, int count, int damage) {
         return ExtendedShapelessRecipeBuilder.builder(ModRecipes.DAMAGE_ITEM.get(), result, count)
                 .addExtraData(json -> json.addProperty("damage", damage));
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    private static void toolRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, GearBlueprintItem blueprintItem) {
+    private static void toolRecipes(Consumer<FinishedRecipe> consumer, String name, int mainCount, ItemLike tool, ItemLike toolHead, GearBlueprintItem blueprintItem) {
         // Tool head
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), toolHead)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
@@ -1301,7 +1315,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    private static void bowRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider tool, IItemProvider toolHead, GearBlueprintItem blueprintItem) {
+    private static void bowRecipes(Consumer<FinishedRecipe> consumer, String name, int mainCount, ItemLike tool, ItemLike toolHead, GearBlueprintItem blueprintItem) {
         // Main part
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), toolHead)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
@@ -1322,7 +1336,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
 
-    private static void arrowRecipes(Consumer<IFinishedRecipe> consumer, String name, IItemProvider arrow, IItemProvider arrowHead, GearBlueprintItem blueprintItem) {
+    private static void arrowRecipes(Consumer<FinishedRecipe> consumer, String name, ItemLike arrow, ItemLike arrowHead, GearBlueprintItem blueprintItem) {
         BlueprintIngredient blueprint = BlueprintIngredient.of(blueprintItem);
         // Arrow head
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), arrowHead)
@@ -1344,7 +1358,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
 
-    private void armorRecipes(Consumer<IFinishedRecipe> consumer, int mainCount, CoreArmor armor, IItemProvider plates, GearBlueprintItem blueprintItem) {
+    private void armorRecipes(Consumer<FinishedRecipe> consumer, int mainCount, CoreArmor armor, ItemLike plates, GearBlueprintItem blueprintItem) {
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), plates)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, armor.getGearType()), mainCount)
@@ -1360,7 +1374,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(armor).getPath() + "_with_lining"));
     }
 
-    private static void curioRecipes(Consumer<IFinishedRecipe> consumer, String name, int mainCount, IItemProvider curioItem, IItemProvider curioMain, GearBlueprintItem blueprint) {
+    private static void curioRecipes(Consumer<FinishedRecipe> consumer, String name, int mainCount, ItemLike curioItem, ItemLike curioMain, GearBlueprintItem blueprint) {
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), curioMain)
                 .addIngredient(BlueprintIngredient.of(blueprint))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
@@ -1384,11 +1398,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("gear/" + name + "quick"));
     }
 
-    private void toolBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, String... pattern) {
+    private void toolBlueprint(Consumer<FinishedRecipe> consumer, String group, ItemLike blueprint, ItemLike template, String... pattern) {
         toolBlueprint(consumer, group, blueprint, template, Ingredient.EMPTY, pattern);
     }
 
-    private void toolBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, Ingredient extra, String... pattern) {
+    private void toolBlueprint(Consumer<FinishedRecipe> consumer, String group, ItemLike blueprint, ItemLike template, Ingredient extra, String... pattern) {
         ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shaped(blueprint)
                 .group("silentgear:blueprints/" + group)
                 .define('#', ModTags.Items.BLUEPRINT_PAPER)
@@ -1415,7 +1429,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builderTemplate.save(consumer);
     }
 
-    private void armorBlueprint(Consumer<IFinishedRecipe> consumer, String group, IItemProvider blueprint, IItemProvider template, String... pattern) {
+    private void armorBlueprint(Consumer<FinishedRecipe> consumer, String group, ItemLike blueprint, ItemLike template, String... pattern) {
         ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shaped(blueprint)
                 .group("silentgear:blueprints/" + group)
                 .define('#', ModTags.Items.BLUEPRINT_PAPER)
@@ -1435,21 +1449,21 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builderTemplate.save(consumer);
     }
 
-    private static final Map<IItemTier, ResourceLocation> TOOL_MATERIALS = ImmutableMap.<IItemTier, ResourceLocation>builder()
-            .put(ItemTier.DIAMOND, SilentGear.getId("diamond"))
-            .put(ItemTier.GOLD, SilentGear.getId("gold"))
-            .put(ItemTier.IRON, SilentGear.getId("iron"))
-            .put(ItemTier.STONE, SilentGear.getId("stone"))
-            .put(ItemTier.WOOD, SilentGear.getId("wood"))
+    private static final Map<Tier, ResourceLocation> TOOL_MATERIALS = ImmutableMap.<Tier, ResourceLocation>builder()
+            .put(Tiers.DIAMOND, SilentGear.getId("diamond"))
+            .put(Tiers.GOLD, SilentGear.getId("gold"))
+            .put(Tiers.IRON, SilentGear.getId("iron"))
+            .put(Tiers.STONE, SilentGear.getId("stone"))
+            .put(Tiers.WOOD, SilentGear.getId("wood"))
             .build();
-    private static final Map<IArmorMaterial, ResourceLocation> ARMOR_MATERIALS = ImmutableMap.<IArmorMaterial, ResourceLocation>builder()
-            .put(ArmorMaterial.DIAMOND, SilentGear.getId("diamond"))
-            .put(ArmorMaterial.GOLD, SilentGear.getId("gold"))
-            .put(ArmorMaterial.IRON, SilentGear.getId("iron"))
-            .put(ArmorMaterial.LEATHER, SilentGear.getId("leather"))
+    private static final Map<ArmorMaterial, ResourceLocation> ARMOR_MATERIALS = ImmutableMap.<ArmorMaterial, ResourceLocation>builder()
+            .put(ArmorMaterials.DIAMOND, SilentGear.getId("diamond"))
+            .put(ArmorMaterials.GOLD, SilentGear.getId("gold"))
+            .put(ArmorMaterials.IRON, SilentGear.getId("iron"))
+            .put(ArmorMaterials.LEATHER, SilentGear.getId("leather"))
             .build();
 
-    private static void toolConversion(Consumer<IFinishedRecipe> consumer, IItemProvider result, Item... toolItems) {
+    private static void toolConversion(Consumer<FinishedRecipe> consumer, ItemLike result, Item... toolItems) {
         for (Item input : toolItems) {
             assert input instanceof TieredItem;
             ExtendedShapelessRecipeBuilder.builder(ModRecipes.CONVERSION.get(), result)
@@ -1462,7 +1476,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
     }
 
-    private static void armorConversion(Consumer<IFinishedRecipe> consumer, IItemProvider result, Item... armorItems) {
+    private static void armorConversion(Consumer<FinishedRecipe> consumer, ItemLike result, Item... armorItems) {
         for (Item input : armorItems) {
             assert input instanceof ArmorItem;
             ExtendedShapelessRecipeBuilder.builder(ModRecipes.CONVERSION.get(), result)
@@ -1475,16 +1489,16 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
     }
 
-    private static void gearSalvage(Consumer<IFinishedRecipe> consumer, ICoreItem item) {
+    private static void gearSalvage(Consumer<FinishedRecipe> consumer, ICoreItem item) {
         SalvagingRecipeBuilder.gearBuilder(item)
                 .build(consumer, SilentGear.getId("salvaging/gear/" + NameUtils.fromItem(item).getPath()));
     }
 
-    private static void vanillaSalvage(Consumer<IFinishedRecipe> consumer, IItemProvider gear, IItemProvider main, int mainCount, int rodCount) {
+    private static void vanillaSalvage(Consumer<FinishedRecipe> consumer, ItemLike gear, ItemLike main, int mainCount, int rodCount) {
         vanillaSalvage(consumer, gear, main, mainCount, rodCount, null);
     }
 
-    private static void vanillaSalvage(Consumer<IFinishedRecipe> consumer, IItemProvider gear, IItemProvider main, int mainCount, int rodCount, @Nullable IItemProvider secondary) {
+    private static void vanillaSalvage(Consumer<FinishedRecipe> consumer, ItemLike gear, ItemLike main, int mainCount, int rodCount, @Nullable ItemLike secondary) {
         SalvagingRecipeBuilder builder = SalvagingRecipeBuilder.builder(gear).addResult(main, mainCount);
         if (secondary != null) {
             builder.addResult(secondary);
@@ -1505,28 +1519,28 @@ public class ModRecipesProvider extends LibRecipeProvider {
         return json;
     }
 
-    private void metals(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
+    private void metals(Consumer<FinishedRecipe> consumer, float smeltingXp, Metals metal) {
         if (metal.ore != null) {
-            CookingRecipeBuilder.blasting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(consumer, SilentGear.getId(metal.name + "_ore_blasting"));
-            CookingRecipeBuilder.smelting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(consumer, SilentGear.getId(metal.name + "_ore_smelting"));
         }
 
         if (metal.rawOre != null) {
-            CookingRecipeBuilder.blasting(Ingredient.of(metal.rawOre), metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(Ingredient.of(metal.rawOre), metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", has(metal.rawOre))
                     .save(consumer, SilentGear.getId(metal.name + "_raw_ore_blasting"));
-            CookingRecipeBuilder.smelting(Ingredient.of(metal.rawOre), metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(Ingredient.of(metal.rawOre), metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", has(metal.rawOre))
                     .save(consumer, SilentGear.getId(metal.name + "_raw_ore_smelting"));
 
             compressionRecipes(consumer, metal.rawOreBlock, metal.rawOre, null);
         }
 
-        InventoryChangeTrigger.Instance hasIngot = has(metal.ingotTag);
+        InventoryChangeTrigger.TriggerInstance hasIngot = has(metal.ingotTag);
 
         if (metal.block != null) {
             compressionRecipes(consumer, metal.block, metal.ingot, metal.nugget);
@@ -1534,12 +1548,12 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         if (metal.dustTag != null) {
             Ingredient dustOrChunks = metal.chunksTag != null
-                    ? Ingredient.fromValues(Stream.of(new Ingredient.TagList(metal.chunksTag), new Ingredient.TagList(metal.dustTag)))
+                    ? Ingredient.fromValues(Stream.of(new Ingredient.TagValue(metal.chunksTag), new Ingredient.TagValue(metal.dustTag)))
                     : Ingredient.of(metal.dustTag);
-            CookingRecipeBuilder.blasting(dustOrChunks, metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(dustOrChunks, metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", hasIngot)
                     .save(consumer, SilentGear.getId(metal.name + "_dust_blasting"));
-            CookingRecipeBuilder.smelting(dustOrChunks, metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(dustOrChunks, metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", hasIngot)
                     .save(consumer, SilentGear.getId(metal.name + "_dust_smelting"));
         }
@@ -1556,33 +1570,33 @@ public class ModRecipesProvider extends LibRecipeProvider {
     @SuppressWarnings("WeakerAccess")
     private static class Metals {
         private final String name;
-        private IItemProvider ore;
-        private ITag<Item> oreTag;
-        private IItemProvider rawOre;
-        private IItemProvider rawOreBlock;
-        private IItemProvider block;
-        private ITag<Item> blockTag;
-        private final IItemProvider ingot;
-        private final ITag<Item> ingotTag;
-        private IItemProvider nugget;
-        private ITag<Item> nuggetTag;
-        private IItemProvider dust;
-        private ITag<Item> dustTag;
-        private ITag<Item> chunksTag;
+        private ItemLike ore;
+        private Tag<Item> oreTag;
+        private ItemLike rawOre;
+        private ItemLike rawOreBlock;
+        private ItemLike block;
+        private Tag<Item> blockTag;
+        private final ItemLike ingot;
+        private final Tag<Item> ingotTag;
+        private ItemLike nugget;
+        private Tag<Item> nuggetTag;
+        private ItemLike dust;
+        private Tag<Item> dustTag;
+        private Tag<Item> chunksTag;
 
-        public Metals(String name, IItemProvider ingot, ITag<Item> ingotTag) {
+        public Metals(String name, ItemLike ingot, Tag<Item> ingotTag) {
             this.name = name;
             this.ingot = ingot;
             this.ingotTag = ingotTag;
         }
 
-        public Metals ore(IItemProvider item, ITag<Item> tag) {
+        public Metals ore(ItemLike item, Tag<Item> tag) {
             this.ore = item;
             this.oreTag = tag;
             return this;
         }
 
-        public Metals ore(IItemProvider oreBlockItem, ITag<Item> oreTag, IItemProvider rawOre, IItemProvider rawOreBlock) {
+        public Metals ore(ItemLike oreBlockItem, Tag<Item> oreTag, ItemLike rawOre, ItemLike rawOreBlock) {
             this.ore = oreBlockItem;
             this.oreTag = oreTag;
             this.rawOre = rawOre;
@@ -1590,25 +1604,25 @@ public class ModRecipesProvider extends LibRecipeProvider {
             return this;
         }
 
-        public Metals block(IItemProvider item, ITag<Item> tag) {
+        public Metals block(ItemLike item, Tag<Item> tag) {
             this.block = item;
             this.blockTag = tag;
             return this;
         }
 
-        public Metals nugget(IItemProvider item, ITag<Item> tag) {
+        public Metals nugget(ItemLike item, Tag<Item> tag) {
             this.nugget = item;
             this.nuggetTag = tag;
             return this;
         }
 
-        public Metals dust(IItemProvider item, ITag<Item> tag) {
+        public Metals dust(ItemLike item, Tag<Item> tag) {
             this.dust = item;
             this.dustTag = tag;
             return this;
         }
 
-        public Metals chunks(ITag<Item> tag) {
+        public Metals chunks(Tag<Item> tag) {
             this.chunksTag = tag;
             return this;
         }

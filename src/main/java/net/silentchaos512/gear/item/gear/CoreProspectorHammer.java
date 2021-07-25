@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
@@ -25,30 +25,30 @@ public class CoreProspectorHammer extends CorePickaxe {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         int range = Config.Common.prospectorHammerRange.get();
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         Direction face = context.getClickedFace();
         if (range <= 0 || player == null || face.getAxis() == Direction.Axis.Y) {
             return GearHelper.onItemUse(context);
         }
 
-        if (context.getLevel().isClientSide || !(player instanceof ServerPlayerEntity)) {
-            return ActionResultType.SUCCESS;
+        if (context.getLevel().isClientSide || !(player instanceof ServerPlayer)) {
+            return InteractionResult.SUCCESS;
         }
 
         Set<BlockState> matches = getTargetedBlocks(context, range, face);
 
         // List the ores found in chat, if any
-        Network.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayerEntity) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        Network.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 
         GearHelper.attemptDamage(context.getItemInHand(), 2, player, context.getHand());
         player.getCooldowns().addCooldown(this, 20);
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    public Set<BlockState> getTargetedBlocks(ItemUseContext context, int range, Direction face) {
+    public Set<BlockState> getTargetedBlocks(UseOnContext context, int range, Direction face) {
         Set<BlockState> matches = new HashSet<>();
 
         Direction direction = face.getOpposite();

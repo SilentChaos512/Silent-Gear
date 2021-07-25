@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.client.renderer.entity.TippedArrowRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.entity.TippableArrowRenderer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.RegistryObject;
@@ -21,11 +21,11 @@ import java.util.function.BiFunction;
 public final class ModEntities {
     public static final RegistryObject<EntityType<GearArrowEntity>> ARROW = register("arrow",
             GearArrowEntity::new,
-            EntityClassification.MISC,
+            MobCategory.MISC,
             GearArrowEntity::new);
     public static final RegistryObject<EntityType<SlingshotProjectile>> SLINGSHOT_PROJECTILE = register("slingshot_projectile",
             SlingshotProjectile::new,
-            EntityClassification.MISC,
+            MobCategory.MISC,
             SlingshotProjectile::new);
 
     private ModEntities() {throw new IllegalAccessError("Utility class");}
@@ -34,11 +34,11 @@ public final class ModEntities {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderers(FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(ARROW.get(), TippedArrowRenderer::new); // TODO: custom renderer
+        RenderingRegistry.registerEntityRenderingHandler(ARROW.get(), TippableArrowRenderer::new); // TODO: custom renderer
         RenderingRegistry.registerEntityRenderingHandler(SLINGSHOT_PROJECTILE.get(), RenderSlingshotProjectile::new);
     }
 
-    private static <T extends Entity> RegistryObject<EntityType<T>> register(String name, EntityType.IFactory<T> factory, EntityClassification type, BiFunction<FMLPlayMessages.SpawnEntity, World, T> customClientFactory) {
+    private static <T extends Entity> RegistryObject<EntityType<T>> register(String name, EntityType.EntityFactory<T> factory, MobCategory type, BiFunction<FMLPlayMessages.SpawnEntity, Level, T> customClientFactory) {
         return Registration.ENTITIES.register(name, () -> EntityType.Builder.of(factory, type)
                 .setCustomClientFactory(customClientFactory)
                 .build(SilentGear.getId(name).toString()));

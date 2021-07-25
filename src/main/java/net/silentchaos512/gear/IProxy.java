@@ -1,13 +1,13 @@
 package net.silentchaos512.gear;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
 
 import javax.annotation.Nullable;
 
 public interface IProxy {
     @Nullable
-    PlayerEntity getClientPlayer();
+    Player getClientPlayer();
 
     @Nullable
     MinecraftServer getServer();

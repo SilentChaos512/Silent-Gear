@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 
 /**
@@ -38,7 +38,7 @@ public interface IPartSerializer<T extends IGearPart> {
      * @param buffer The PacketBuffer
      * @return A new part
      */
-    T read(ResourceLocation id, PacketBuffer buffer);
+    T read(ResourceLocation id, FriendlyByteBuf buffer);
 
     /**
      * Writes the part for a server-to-client sync packet. All written information should be read in
@@ -49,7 +49,7 @@ public interface IPartSerializer<T extends IGearPart> {
      * @param buffer The PacketBuffer
      * @param part   The gear part
      */
-    void write(PacketBuffer buffer, T part);
+    void write(FriendlyByteBuf buffer, T part);
 
     /**
      * A unique ID for the serializer.

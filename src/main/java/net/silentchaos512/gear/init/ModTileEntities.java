@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.RegistryObject;
@@ -19,31 +19,31 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 public final class ModTileEntities {
-    public static final RegistryObject<TileEntityType<GraderTileEntity>> MATERIAL_GRADER = register("material_grader",
+    public static final RegistryObject<BlockEntityType<GraderTileEntity>> MATERIAL_GRADER = register("material_grader",
             GraderTileEntity::new,
             ModBlocks.MATERIAL_GRADER);
 
-    public static final RegistryObject<TileEntityType<CompounderTileEntity>> METAL_ALLOYER = register("metal_alloyer",
+    public static final RegistryObject<BlockEntityType<CompounderTileEntity>> METAL_ALLOYER = register("metal_alloyer",
             () -> new CompounderTileEntity<>(Const.METAL_COMPOUNDER_INFO),
             ModBlocks.METAL_ALLOYER);
 
-    public static final RegistryObject<TileEntityType<MetalPressTileEntity>> METAL_PRESS = register("metal_press",
+    public static final RegistryObject<BlockEntityType<MetalPressTileEntity>> METAL_PRESS = register("metal_press",
             () -> new MetalPressTileEntity(),
             ModBlocks.METAL_PRESS);
 
-    public static final RegistryObject<TileEntityType<CompounderTileEntity>> RECRYSTALLIZER = register("recrystallizer",
+    public static final RegistryObject<BlockEntityType<CompounderTileEntity>> RECRYSTALLIZER = register("recrystallizer",
             () -> new CompounderTileEntity<>(Const.GEM_COMPOUNDER_INFO),
             ModBlocks.RECRYSTALLIZER);
 
-    public static final RegistryObject<TileEntityType<CompounderTileEntity>> REFABRICATOR = register("refabricator",
+    public static final RegistryObject<BlockEntityType<CompounderTileEntity>> REFABRICATOR = register("refabricator",
             () -> new CompounderTileEntity<>(Const.FABRIC_COMPOUNDER_INFO),
             ModBlocks.REFABRICATOR);
 
-    public static final RegistryObject<TileEntityType<SalvagerTileEntity>> SALVAGER = register("salvager",
+    public static final RegistryObject<BlockEntityType<SalvagerTileEntity>> SALVAGER = register("salvager",
             SalvagerTileEntity::new,
             ModBlocks.SALVAGER);
 
-    public static final RegistryObject<TileEntityType<ChargerTileEntity>> STARLIGHT_CHARGER = register("starlight_charger",
+    public static final RegistryObject<BlockEntityType<ChargerTileEntity>> STARLIGHT_CHARGER = register("starlight_charger",
             ChargerTileEntity::createStarlightCharger,
             ModBlocks.STARLIGHT_CHARGER);
 
@@ -55,11 +55,11 @@ public final class ModTileEntities {
     public static void registerRenderers(FMLClientSetupEvent event) {
     }
 
-    private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, IBlockProvider... blocks) {
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, Supplier<T> factory, IBlockProvider... blocks) {
         return Registration.TILE_ENTITIES.register(name, () -> {
             Block[] validBlocks = Arrays.stream(blocks).map(IBlockProvider::asBlock).toArray(Block[]::new);
             //noinspection ConstantConditions - null in build
-            return TileEntityType.Builder.of(factory, validBlocks).build(null);
+            return BlockEntityType.Builder.of(factory, validBlocks).build(null);
         });
     }
 }

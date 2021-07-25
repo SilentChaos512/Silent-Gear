@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.IPartData;
@@ -28,7 +28,7 @@ import java.util.Set;
 /**
  * Interface for all equipment items, including tools and armor.
  */
-public interface ICoreItem extends IItemProvider, IStatItem {
+public interface ICoreItem extends ItemLike, IStatItem {
     //region Item properties and construction
 
     default ItemStack construct(Collection<? extends IPartData> parts) {
@@ -151,13 +151,13 @@ public interface ICoreItem extends IItemProvider, IStatItem {
     }
 
     @OnlyIn(Dist.CLIENT)
-    default int getAnimationFrame(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+    default int getAnimationFrame(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
         return 0;
     }
 
     @Deprecated
     @OnlyIn(Dist.CLIENT)
-    default IItemColor getItemColors() {
+    default ItemColor getItemColors() {
         return (stack, tintIndex) -> Color.VALUE_WHITE;
     }
 

@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.crafting.recipe.smithing;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
@@ -49,27 +49,27 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.SMITHING_COATING.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CoatingSmithingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CoatingSmithingRecipe> {
         @Override
         public CoatingSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            ItemStack gearItem = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "gear"));
-            Ingredient upgradeItem = Ingredient.fromJson(JSONUtils.getAsJsonObject(json, "addition"));
+            ItemStack gearItem = ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "gear"));
+            Ingredient upgradeItem = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "addition"));
             return new CoatingSmithingRecipe(recipeId, gearItem, upgradeItem);
         }
 
         @Override
-        public CoatingSmithingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CoatingSmithingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             ItemStack itemstack = buffer.readItem();
             Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
             return new CoatingSmithingRecipe(recipeId, itemstack, ingredient1);
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, CoatingSmithingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, CoatingSmithingRecipe recipe) {
             buffer.writeItem(recipe.gearItem);
             recipe.addition.toNetwork(buffer);
         }

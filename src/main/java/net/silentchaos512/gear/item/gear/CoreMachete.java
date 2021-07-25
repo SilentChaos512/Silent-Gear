@@ -20,11 +20,11 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.init.ModItems;
@@ -50,7 +50,7 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
         // Allow clearing vegetation, just like sickles but with a smaller range
         if (!player.isCrouching())
             return ModItems.SICKLE.get().onSickleStartBreak(itemstack, pos, player, BREAK_RANGE, EFFECTIVE_MATERIALS);
@@ -58,7 +58,7 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
         return GearHelper.getHarvestLevel(stack, tool, blockState, null);
     }
 

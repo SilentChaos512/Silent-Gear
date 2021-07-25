@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -23,7 +23,7 @@ import net.silentchaos512.gear.util.TextUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class FragmentItem extends Item {
     private static final String NBT_MATERIAL = "Material";
@@ -34,7 +34,7 @@ public class FragmentItem extends Item {
 
     public ItemStack create(IMaterialInstance material, int count) {
         ItemStack stack = new ItemStack(this, count);
-        stack.getOrCreateTag().put(NBT_MATERIAL, material.write(new CompoundNBT()));
+        stack.getOrCreateTag().put(NBT_MATERIAL, material.write(new CompoundTag()));
         return stack;
     }
 
@@ -64,16 +64,16 @@ public class FragmentItem extends Item {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         IMaterialInstance material = getMaterial(stack);
         if (material == null) {
-            return new TranslationTextComponent(this.getDescriptionId(stack) + ".invalid");
+            return new TranslatableComponent(this.getDescriptionId(stack) + ".invalid");
         }
-        return new TranslationTextComponent(this.getDescriptionId(stack), material.getDisplayName(PartType.MAIN));
+        return new TranslatableComponent(this.getDescriptionId(stack), material.getDisplayName(PartType.MAIN));
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (!this.allowdedIn(group)) return;
 
         items.add(new ItemStack(this));
@@ -86,7 +86,7 @@ public class FragmentItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextUtil.translate("item", "fragment.hint").withStyle(TextFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(TextUtil.translate("item", "fragment.hint").withStyle(ChatFormatting.ITALIC));
     }
 }

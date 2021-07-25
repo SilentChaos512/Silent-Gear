@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -77,13 +77,13 @@ public class CoreSlingshot extends CoreBow {
     }*/
 
     @Override
-    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
         if (worldIn.isClientSide) {
 //            ToolModel.bowPull.remove(GearData.getUUID(stack));
         }
 
-        if (entityLiving instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entityLiving;
+        if (entityLiving instanceof Player) {
+            Player player = (Player) entityLiving;
             boolean infiniteAmmo = player.abilities.instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
             ItemStack ammoItem = player.getProjectile(stack);
 
@@ -101,7 +101,7 @@ public class CoreSlingshot extends CoreBow {
                     boolean flag1 = player.abilities.instabuild || (ammoItem.getItem() instanceof SlingshotAmmoItem && ((SlingshotAmmoItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
                     if (!worldIn.isClientSide) {
                         SlingshotAmmoItem slingshotAmmoItem = (SlingshotAmmoItem) (ammoItem.getItem() instanceof SlingshotAmmoItem ? ammoItem.getItem() : ModItems.PEBBLE.get());
-                        AbstractArrowEntity shot = slingshotAmmoItem.createArrow(worldIn, ammoItem, player);
+                        AbstractArrow shot = slingshotAmmoItem.createArrow(worldIn, ammoItem, player);
                         shot.setBaseDamage(shot.getBaseDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
                         shot.shootFromRotation(player, player.xRot, player.yRot, 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1.0f)) {
@@ -124,13 +124,13 @@ public class CoreSlingshot extends CoreBow {
 
                         stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
                         if (flag1 || player.abilities.instabuild && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
-                            shot.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                            shot.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
                         EntityHelper.spawnWithClientPacket(worldIn, shot);
                     }
 
-                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !player.abilities.instabuild) {
                         ammoItem.shrink(1);
                         if (ammoItem.isEmpty()) {

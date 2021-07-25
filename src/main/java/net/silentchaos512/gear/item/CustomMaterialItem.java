@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -26,7 +26,7 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     private static final String NBT_MATERIAL = "Material";
@@ -40,7 +40,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     public ItemStack create(IMaterialInstance material, int count) {
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         tag.putString(NBT_MATERIAL, SilentGear.shortenId(material.getId()));
 
         ItemStack result = new ItemStack(this, count);
@@ -73,21 +73,21 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         MaterialInstance material = getMaterial(stack);
         if (material != null) {
-            return new TranslationTextComponent(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
+            return new TranslatableComponent(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
         }
         return super.getName(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         TextUtil.addWipText(tooltip);
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (allowdedIn(group)) {
             items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
 

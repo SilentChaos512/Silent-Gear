@@ -21,21 +21,21 @@ package net.silentchaos512.gear.loot.function;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearGenerator;
 
-public final class SelectGearTierLootFunction extends LootFunction {
+public final class SelectGearTierLootFunction extends LootItemConditionalFunction {
     public static final Serializer SERIALIZER = new Serializer();
     private final int tier;
 
-    private SelectGearTierLootFunction(ILootCondition[] conditions, int tier) {
+    private SelectGearTierLootFunction(LootItemCondition[] conditions, int tier) {
         super(conditions);
         this.tier = tier;
     }
@@ -46,24 +46,24 @@ public final class SelectGearTierLootFunction extends LootFunction {
         return GearGenerator.create((ICoreItem) stack.getItem(), this.tier);
     }
 
-    public static LootFunction.Builder<?> builder(int tier) {
+    public static LootItemConditionalFunction.Builder<?> builder(int tier) {
         return simpleBuilder(conditions -> new SelectGearTierLootFunction(conditions, tier));
     }
 
     @Override
-    public LootFunctionType getType() {
+    public LootItemFunctionType getType() {
         return ModLootStuff.SELECT_TIER;
     }
 
-    public static class Serializer extends LootFunction.Serializer<SelectGearTierLootFunction> {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<SelectGearTierLootFunction> {
         @Override
         public void serialize(JsonObject object, SelectGearTierLootFunction functionClazz, JsonSerializationContext serializationContext) {
             object.addProperty("tier", functionClazz.tier);
         }
 
         @Override
-        public SelectGearTierLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
-            int tier = JSONUtils.getAsInt(object, "tier", 2);
+        public SelectGearTierLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
+            int tier = GsonHelper.getAsInt(object, "tier", 2);
             return new SelectGearTierLootFunction(conditionsIn, tier);
         }
     }

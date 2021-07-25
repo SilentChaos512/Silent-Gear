@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -39,7 +39,7 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
     @Deprecated
     default ItemStack getCraftingItem() {return getItem();}
 
-    CompoundNBT write(CompoundNBT nbt);
+    CompoundTag write(CompoundTag nbt);
 
     default int getTier() {
         IGearPart part = get();

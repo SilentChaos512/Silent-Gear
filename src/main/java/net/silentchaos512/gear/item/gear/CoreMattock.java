@@ -2,21 +2,21 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -29,6 +29,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.context.UseOnContext;
 
 public class CoreMattock extends HoeItem implements ICoreTool {
     private static final Set<ToolType> TOOL_CLASSES = ImmutableSet.of(ToolType.HOE, ToolType.AXE, ToolType.SHOVEL);
@@ -46,7 +53,7 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     );
 
     public CoreMattock() {
-        super(ItemTier.DIAMOND, 0, 0f, GearHelper.getBuilder(null)
+        super(Tiers.DIAMOND, 0, 0f, GearHelper.getBuilder(null)
                 .addToolType(ToolType.HOE, 3)
                 .addToolType(ToolType.AXE, 3)
                 .addToolType(ToolType.SHOVEL, 3)
@@ -59,13 +66,13 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         ItemStack stack = context.getItemInHand();
-        if (GearHelper.isBroken(stack)) return ActionResultType.PASS;
+        if (GearHelper.isBroken(stack)) return InteractionResult.PASS;
 
         // Try to let traits do their thing first
-        ActionResultType result = GearHelper.onItemUse(context);
-        if (result == ActionResultType.PASS)
+        InteractionResult result = GearHelper.onItemUse(context);
+        if (result == InteractionResult.PASS)
             return super.useOn(context);
         return result;
     }
@@ -109,12 +116,12 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     //region Standard tool overrides
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 
@@ -124,7 +131,7 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
         return GearHelper.getHarvestLevel(stack, tool, blockState, EFFECTIVE_MATERIALS);
     }
 
@@ -145,7 +152,7 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -185,17 +192,17 @@ public class CoreMattock extends HoeItem implements ICoreTool {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 

@@ -1,14 +1,14 @@
 package net.silentchaos512.gear.api.material;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 @FunctionalInterface
 public interface IMaterialCategory {
     String getName();
 
-    default ITextComponent getDisplayName() {
-        return new StringTextComponent(getName()); // TODO: make translatable
+    default Component getDisplayName() {
+        return new TextComponent(getName()); // TODO: make translatable
     }
 
     default boolean matches(IMaterialCategory other) {

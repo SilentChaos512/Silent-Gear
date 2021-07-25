@@ -1,29 +1,29 @@
 package net.silentchaos512.gear.item.blueprint.book;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.SelectBlueprintFromBookPacket;
 import net.silentchaos512.utils.Color;
 
-public class BlueprintBookContainerScreen extends ContainerScreen<BlueprintBookContainer> {
+public class BlueprintBookContainerScreen extends AbstractContainerScreen<BlueprintBookContainer> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
 
-    private final PlayerInventory playerInventory;
+    private final Inventory playerInventory;
     private final int inventoryRows;
     private int selected;
 
-    public BlueprintBookContainerScreen(BlueprintBookContainer container, PlayerInventory playerInventory, ITextComponent title) {
+    public BlueprintBookContainerScreen(BlueprintBookContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
         this.playerInventory = playerInventory;
         ItemStack stack = container.item;
@@ -42,7 +42,7 @@ public class BlueprintBookContainerScreen extends ContainerScreen<BlueprintBookC
                 Network.channel.sendToServer(new SelectBlueprintFromBookPacket(this.menu.bookSlot, this.selected));
 
                 if (this.minecraft != null) {
-                    this.minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 }
 
                 return true;
@@ -53,20 +53,20 @@ public class BlueprintBookContainerScreen extends ContainerScreen<BlueprintBookC
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+    protected void renderLabels(PoseStack matrixStack, int x, int y) {
         this.font.draw(matrixStack, this.getTitle().getString(), 8, 6, 4210752);
         this.font.draw(matrixStack, playerInventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
         RenderSystem.color4f(1, 1, 1, 1);
         minecraft.getTextureManager().bind(TEXTURE);

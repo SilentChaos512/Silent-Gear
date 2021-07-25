@@ -18,28 +18,28 @@
 
 package net.silentchaos512.gear.util;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.ActiveRenderInfo;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SChangeBlockPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.math.Matrix4f;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.common.ForgeHooks;
@@ -77,9 +77,9 @@ public interface IAoeTool {
      * @return The ray trace result
      */
     @Nullable
-    RayTraceResult rayTraceBlocks(World world, PlayerEntity player);
+    HitResult rayTraceBlocks(Level world, Player player);
 
-    default List<BlockPos> getExtraBlocks(World world, @Nullable BlockRayTraceResult rt, PlayerEntity player, ItemStack stack) {
+    default List<BlockPos> getExtraBlocks(Level world, @Nullable BlockHitResult rt, Player player, ItemStack stack) {
         List<BlockPos> positions = new ArrayList<>();
 
         if (player.isCrouching() || rt == null || rt.getBlockPos() == null || rt.getDirection() == null)
@@ -118,11 +118,11 @@ public interface IAoeTool {
         return positions;
     }
 
-    default boolean isEffectiveOnBlock(ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    default boolean isEffectiveOnBlock(ItemStack stack, Level world, BlockPos pos, BlockState state, Player player) {
         return stack.getItem().canHarvestBlock(stack, state) || ForgeHooks.canHarvestBlock(state, player, world, pos);
     }
 
-    default void attemptAddExtraBlock(World world, BlockState state, BlockPos pos, ItemStack stack, List<BlockPos> list) {
+    default void attemptAddExtraBlock(Level world, BlockState state, BlockPos pos, ItemStack stack, List<BlockPos> list) {
         final BlockState state1 = world.getBlockState(pos);
         // Prevent breaking of unbreakable blocks, like bedrock
         if (state1.getDestroySpeed(world, pos) < 0) return;
@@ -145,17 +145,17 @@ public interface IAoeTool {
     final class BreakHandler {
         private BreakHandler() {}
 
-        public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, PlayerEntity player) {
-            World world = player.getCommandSenderWorld();
-            if (world.isClientSide || !(world instanceof ServerWorld) || !(player instanceof ServerPlayerEntity) || !(tool.getItem() instanceof IAoeTool))
+        public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, Player player) {
+            Level world = player.getCommandSenderWorld();
+            if (world.isClientSide || !(world instanceof ServerLevel) || !(player instanceof ServerPlayer) || !(tool.getItem() instanceof IAoeTool))
                 return false;
 
             IAoeTool item = (IAoeTool) tool.getItem();
-            RayTraceResult rt = item.rayTraceBlocks(world, player);
+            HitResult rt = item.rayTraceBlocks(world, player);
             BlockState stateOriginal = world.getBlockState(pos);
 
-            if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal, player)) {
-                BlockRayTraceResult brt = (BlockRayTraceResult) rt;
+            if (rt != null && rt.getType() == HitResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal, player)) {
+                BlockHitResult brt = (BlockHitResult) rt;
                 Direction side = brt.getDirection();
                 List<BlockPos> extraBlocks = item.getExtraBlocks(world, brt, player, tool);
 
@@ -168,22 +168,22 @@ public interface IAoeTool {
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState()))
                             state.getBlock().destroy(world, pos2, state);
                     } else {
-                        int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).gameMode.getGameModeForPlayer(), (ServerPlayerEntity) player, pos2);
+                        int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos2);
                         if (xp == -1) continue;
                         tool.getItem().mineBlock(tool, world, state, pos2, player);
-                        TileEntity tileEntity = world.getBlockEntity(pos2);
+                        BlockEntity tileEntity = world.getBlockEntity(pos2);
 
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState())) {
                             state.getBlock().destroy(world, pos2, state);
                             state.getBlock().playerDestroy(world, player, pos2, state, tileEntity, tool);
-                            state.getBlock().popExperience((ServerWorld) world, pos2, xp);
+                            state.getBlock().popExperience((ServerLevel) world, pos2, xp);
                         }
                     }
 
                     // TODO: Maybe add a config? Unfortunately, this code is called only on the server...
                     //world.playEvent(2001, pos, Block.getStateId(state)); // Playing for each block gets very loud
 
-                    ((ServerPlayerEntity) player).connection.send(new SChangeBlockPacket(world, pos));
+                    ((ServerPlayer) player).connection.send(new ClientboundBlockUpdatePacket(world, pos));
                 }
             }
             return false;
@@ -230,24 +230,24 @@ public interface IAoeTool {
 
         @SubscribeEvent
         public static void onDrawBlockHighlight(DrawHighlightEvent event) {
-            ActiveRenderInfo info = event.getInfo();
+            Camera info = event.getInfo();
             Entity entity = info.getEntity();
-            if (!(entity instanceof PlayerEntity)) return;
+            if (!(entity instanceof Player)) return;
 
-            PlayerEntity player = (PlayerEntity) entity;
+            Player player = (Player) entity;
 
-            RayTraceResult rt = event.getTarget();
+            HitResult rt = event.getTarget();
 
-            if (rt.getType() == RayTraceResult.Type.BLOCK) {
+            if (rt.getType() == HitResult.Type.BLOCK) {
                 ItemStack stack = player.getMainHandItem();
 
                 if (stack.getItem() instanceof IAoeTool) {
-                    World world = player.getCommandSenderWorld();
+                    Level world = player.getCommandSenderWorld();
                     IAoeTool item = (IAoeTool) stack.getItem();
 
-                    for (BlockPos pos : item.getExtraBlocks(world, (BlockRayTraceResult) rt, player, stack)) {
-                        IVertexBuilder vertexBuilder = event.getBuffers().getBuffer(RenderType.lines());
-                        Vector3d vec = event.getInfo().getPosition();
+                    for (BlockPos pos : item.getExtraBlocks(world, (BlockHitResult) rt, player, stack)) {
+                        VertexConsumer vertexBuilder = event.getBuffers().getBuffer(RenderType.lines());
+                        Vec3 vec = event.getInfo().getPosition();
                         BlockState blockState = world.getBlockState(pos);
                         drawSelectionBox(event.getMatrix(), world, vertexBuilder, event.getInfo().getEntity(), vec.x, vec.y, vec.z, pos, blockState);
                     }
@@ -257,13 +257,13 @@ public interface IAoeTool {
 
         // Copied from WorldRenderer
         @SuppressWarnings("MethodWithTooManyParameters")
-        private static void drawSelectionBox(MatrixStack matrixStackIn, World world, IVertexBuilder bufferIn, Entity entityIn, double xIn, double yIn, double zIn, BlockPos blockPosIn, BlockState blockStateIn) {
-            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, ISelectionContext.of(entityIn)), (double) blockPosIn.getX() - xIn, (double) blockPosIn.getY() - yIn, (double) blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
+        private static void drawSelectionBox(PoseStack matrixStackIn, Level world, VertexConsumer bufferIn, Entity entityIn, double xIn, double yIn, double zIn, BlockPos blockPosIn, BlockState blockStateIn) {
+            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, CollisionContext.of(entityIn)), (double) blockPosIn.getX() - xIn, (double) blockPosIn.getY() - yIn, (double) blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
         }
 
         // Copied from WorldRenderer
         @SuppressWarnings("MethodWithTooManyParameters")
-        private static void drawShape(MatrixStack matrixStackIn, IVertexBuilder bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
+        private static void drawShape(PoseStack matrixStackIn, VertexConsumer bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
             Matrix4f matrix4f = matrixStackIn.last().pose();
             shapeIn.forAllEdges((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
                 bufferIn.vertex(matrix4f, (float) (p_230013_12_ + xIn), (float) (p_230013_14_ + yIn), (float) (p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();

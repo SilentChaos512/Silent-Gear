@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.crafting.recipe.salvage;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
@@ -24,7 +24,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public List<ItemStack> getPossibleResults(IInventory inv) {
+    public List<ItemStack> getPossibleResults(Container inv) {
         ItemStack input = inv.getItem(0);
         List<ItemStack> ret = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         if (!(inv.getItem(0).getItem() instanceof CompoundPartItem))
             return false;
 
@@ -50,11 +50,11 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.SALVAGING_COMPOUND_PART.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CompoundPartSalvagingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CompoundPartSalvagingRecipe> {
         @Override
         public CompoundPartSalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new CompoundPartSalvagingRecipe(recipeId);
@@ -62,12 +62,12 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
         @Nullable
         @Override
-        public CompoundPartSalvagingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CompoundPartSalvagingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             return new CompoundPartSalvagingRecipe(recipeId);
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, CompoundPartSalvagingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, CompoundPartSalvagingRecipe recipe) {
         }
     }
 }

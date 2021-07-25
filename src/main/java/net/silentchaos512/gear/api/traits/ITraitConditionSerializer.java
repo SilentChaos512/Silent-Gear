@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.api.traits;
 
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * TODO: Update Javadoc!
@@ -25,7 +25,7 @@ public interface ITraitConditionSerializer<T extends ITraitCondition> {
         return json;
     }
 
-    T read(PacketBuffer buffer);
+    T read(FriendlyByteBuf buffer);
 
-    void write(T condition, PacketBuffer buffer);
+    void write(T condition, FriendlyByteBuf buffer);
 }

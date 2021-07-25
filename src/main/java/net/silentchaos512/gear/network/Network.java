@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -123,12 +123,12 @@ public final class Network {
 
     public static void init() {}
 
-    static void writeModVersionInfoToNetwork(PacketBuffer buffer) {
+    static void writeModVersionInfoToNetwork(FriendlyByteBuf buffer) {
         buffer.writeUtf(Network.VERSION); // Change to test error message (dedicated server only)
         buffer.writeUtf(SilentGear.getVersion());
     }
 
-    static void verifyNetworkVersion(PacketBuffer buffer) {
+    static void verifyNetworkVersion(FriendlyByteBuf buffer) {
         // Throws an exception if versions do not match and provides a less cryptic message to the player
         // NOTE: This hangs without displaying a message on SSP, but that can't happen without messing with the written
         // network version
@@ -147,7 +147,7 @@ public final class Network {
         }
     }
 
-    private static String readNetworkVersion(PacketBuffer buffer) {
+    private static String readNetworkVersion(FriendlyByteBuf buffer) {
         String str = buffer.readUtf(16);
         if (!NET_VERSION_PATTERN.matcher(str).matches()) {
             // Server is running a version that doesn't encode the net version
@@ -156,7 +156,7 @@ public final class Network {
         return str;
     }
 
-    private static String readModVersion(PacketBuffer buffer) {
+    private static String readModVersion(FriendlyByteBuf buffer) {
         String str = buffer.readUtf(16);
         if (!"NONE".equals(str) && !MOD_VERSION_PATTERN.matcher(str).matches()) {
             // Server is running a version that doesn't encode the mod version

@@ -4,14 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -107,9 +107,9 @@ public final class EnchantmentTrait extends SimpleTrait {
     private static Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> getEnchantmentsOnGear(ItemStack gear) {
         Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> map = new LinkedHashMap<>();
 
-        ListNBT tagList = gear.getEnchantmentTags();
+        ListTag tagList = gear.getEnchantmentTags();
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT nbt = tagList.getCompound(i);
+            CompoundTag nbt = tagList.getCompound(i);
             Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(nbt.getString("id")));
 
             if (enchantment != null) {
@@ -135,7 +135,7 @@ public final class EnchantmentTrait extends SimpleTrait {
     }
 
     private static void setEnchantmentsOnGear(ItemStack gear, Map<Enchantment, Triple<Integer, ResourceLocation, Integer>> map) {
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
 
         for (Map.Entry<Enchantment, Triple<Integer, ResourceLocation, Integer>> entry : map.entrySet()) {
             Enchantment enchantment = entry.getKey();
@@ -144,7 +144,7 @@ public final class EnchantmentTrait extends SimpleTrait {
                 ResourceLocation traitId = entry.getValue().getMiddle();
                 int traitLevel = entry.getValue().getRight();
 
-                CompoundNBT nbt = new CompoundNBT();
+                CompoundTag nbt = new CompoundTag();
                 nbt.putString("id", NameUtils.from(enchantment).toString());
                 nbt.putShort("lvl", (short) level);
                 if (traitLevel > 0) {
@@ -193,7 +193,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         }
     }
 
-    private static void readBuffer(EnchantmentTrait trait, PacketBuffer buffer) {
+    private static void readBuffer(EnchantmentTrait trait, FriendlyByteBuf buffer) {
         trait.enchantments.clear();
         int gearTypeCount = buffer.readByte();
 
@@ -210,7 +210,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         }
     }
 
-    private static void writeBuffer(EnchantmentTrait trait, PacketBuffer buffer) {
+    private static void writeBuffer(EnchantmentTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.enchantments.size());
         for (Map.Entry<String, List<EnchantmentData>> entry : trait.enchantments.entrySet()) {
             buffer.writeUtf(entry.getKey());
@@ -259,7 +259,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         static EnchantmentData from(JsonObject json) {
             EnchantmentData ret = new EnchantmentData();
             // Enchantment ID, get actual enchantment only when needed
-            ret.enchantmentId = new ResourceLocation(JSONUtils.getAsString(json, "enchantment", "unknown"));
+            ret.enchantmentId = new ResourceLocation(GsonHelper.getAsString(json, "enchantment", "unknown"));
 
             // Level int or array
             JsonElement elementLevel = json.get("level");
@@ -268,7 +268,7 @@ public final class EnchantmentTrait extends SimpleTrait {
             }
             if (elementLevel.isJsonPrimitive()) {
                 // Single level
-                ret.levels = new int[]{JSONUtils.getAsInt(json, "level", 1)};
+                ret.levels = new int[]{GsonHelper.getAsInt(json, "level", 1)};
             } else if (elementLevel.isJsonArray()) {
                 // Levels
                 JsonArray array = elementLevel.getAsJsonArray();
@@ -283,14 +283,14 @@ public final class EnchantmentTrait extends SimpleTrait {
             return ret;
         }
 
-        static EnchantmentData read(PacketBuffer buffer) {
+        static EnchantmentData read(FriendlyByteBuf buffer) {
             EnchantmentData ret = new EnchantmentData();
             ret.enchantmentId = buffer.readResourceLocation();
             ret.levels = buffer.readVarIntArray();
             return ret;
         }
 
-        void write(PacketBuffer buffer) {
+        void write(FriendlyByteBuf buffer) {
             buffer.writeResourceLocation(enchantmentId);
             buffer.writeVarIntArray(levels);
         }
@@ -301,7 +301,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         }
 
         int getLevel(int traitLevel) {
-            int index = MathHelper.clamp(traitLevel, 1, levels.length) - 1;
+            int index = Mth.clamp(traitLevel, 1, levels.length) - 1;
             return levels[index];
         }
 

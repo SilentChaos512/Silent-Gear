@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.stats;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;

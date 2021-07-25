@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
@@ -16,13 +16,13 @@ import net.silentchaos512.gear.item.ModKitItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
-public class ModKitRemovePartRecipe extends SpecialRecipe {
+public class ModKitRemovePartRecipe extends CustomRecipe {
     public ModKitRemovePartRecipe(ResourceLocation idIn) {
         super(idIn);
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         ItemStack gear = ItemStack.EMPTY;
         boolean foundModKit = false;
         PartType type = PartType.NONE;
@@ -49,7 +49,7 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         ItemStack modKit = list.uniqueOfType(ModKitItem.class);
@@ -70,7 +70,7 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         ItemStack gear = StackList.from(inv).uniqueOfType(ICoreItem.class);
         ItemStack modKit = StackList.from(inv).uniqueOfType(ModKitItem.class);
@@ -91,7 +91,7 @@ public class ModKitRemovePartRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.MOD_KIT_REMOVE_PART.get();
     }
 }

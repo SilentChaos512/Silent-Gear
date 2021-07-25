@@ -5,11 +5,11 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
@@ -28,8 +28,15 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-public class CompoundPartModelOverrideList extends ItemOverrideList {
-    private final Cache<CacheKey, IBakedModel> bakedModelCache = CacheBuilder.newBuilder()
+import net.minecraft.client.renderer.block.model.ItemOverride;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+
+public class CompoundPartModelOverrideList extends ItemOverrides {
+    private final Cache<CacheKey, BakedModel> bakedModelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
@@ -37,16 +44,16 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
     private final CompoundPartModel model;
     private final IModelConfiguration owner;
     private final ModelBakery bakery;
-    private final Function<RenderMaterial, TextureAtlasSprite> spriteGetter;
-    private final IModelTransform modelTransform;
+    private final Function<Material, TextureAtlasSprite> spriteGetter;
+    private final ModelState modelTransform;
     private final ResourceLocation modelLocation;
 
     @SuppressWarnings("ConstructorWithTooManyParameters")
     public CompoundPartModelOverrideList(CompoundPartModel model,
                                          IModelConfiguration owner,
                                          ModelBakery bakery,
-                                         Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                         IModelTransform modelTransform,
+                                         Function<Material, TextureAtlasSprite> spriteGetter,
+                                         ModelState modelTransform,
                                          ResourceLocation modelLocation) {
         this.model = model;
         this.owner = owner;
@@ -62,7 +69,7 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
 
     @Nullable
     @Override
-    public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
+    public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn) {
         CacheKey key = getKey(model, stack, worldIn, entityIn);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn));
@@ -72,7 +79,7 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
         return model;
     }
 
-    private IBakedModel getOverrideModel(ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
+    private BakedModel getOverrideModel(ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn) {
         List<MaterialLayer> layers = new ArrayList<>();
 
         PartData part = PartData.from(stack);
@@ -100,7 +107,7 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
         }
     }
 
-    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+    private static CacheKey getKey(BakedModel model, ItemStack stack, @Nullable Level world, @Nullable LivingEntity entity) {
         return new CacheKey(model, CompoundPartItem.getModelKey(stack));
     }
 
@@ -117,10 +124,10 @@ public class CompoundPartModelOverrideList extends ItemOverrideList {
     }
 
     static final class CacheKey {
-        final IBakedModel parent;
+        final BakedModel parent;
         final String data;
 
-        CacheKey(IBakedModel parent, String hash) {
+        CacheKey(BakedModel parent, String hash) {
             this.parent = parent;
             this.data = hash;
         }

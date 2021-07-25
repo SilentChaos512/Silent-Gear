@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.block.compounder;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.network.CompounderUpdatePacket;
 import net.silentchaos512.gear.network.Network;
@@ -19,16 +19,16 @@ import net.silentchaos512.lib.util.InventoryUtils;
 
 import java.util.Collection;
 
-public class CompounderContainer extends Container {
-    private final IInventory inventory;
-    private final IIntArray fields;
+public class CompounderContainer extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData fields;
 
-    public CompounderContainer(ContainerType<?> containerType, int id, PlayerInventory playerInventory, PacketBuffer buffer, Collection<IMaterialCategory> categories) {
-        this(containerType, id, playerInventory, new Inventory(buffer.readByte()), new IntArray(buffer.readByte()), categories);
+    public CompounderContainer(MenuType<?> containerType, int id, Inventory playerInventory, FriendlyByteBuf buffer, Collection<IMaterialCategory> categories) {
+        this(containerType, id, playerInventory, new SimpleContainer(buffer.readByte()), new SimpleContainerData(buffer.readByte()), categories);
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
-    public CompounderContainer(ContainerType<?> containerType, int id, PlayerInventory playerInventory, IInventory inventory, IIntArray fields, Collection<IMaterialCategory> categories) {
+    public CompounderContainer(MenuType<?> containerType, int id, Inventory playerInventory, Container inventory, ContainerData fields, Collection<IMaterialCategory> categories) {
         super(containerType, id);
         this.inventory = inventory;
         this.fields = fields;
@@ -46,7 +46,7 @@ public class CompounderContainer extends Container {
         addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 2, 126, 35));
         addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 1, 126, 60) {
             @Override
-            public boolean mayPickup(PlayerEntity playerIn) {
+            public boolean mayPickup(Player playerIn) {
                 return false;
             }
         });
@@ -75,12 +75,12 @@ public class CompounderContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return inventory.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = slots.get(index);
 

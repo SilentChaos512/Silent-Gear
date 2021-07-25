@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.item.blueprint;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.tags.Tag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.config.Config;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     final boolean singleUse;
@@ -20,9 +20,9 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
         this.singleUse = singleUse;
     }
 
-    public abstract ITag.INamedTag<Item> getItemTag();
+    public abstract Tag.Named<Item> getItemTag();
 
-    protected abstract ITextComponent getCraftedName(ItemStack stack);
+    protected abstract Component getCraftedName(ItemStack stack);
 
     public boolean isSingleUse() {
         return this.singleUse;
@@ -47,16 +47,16 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (!this.isDisabled()) {
             super.fillItemCategory(group, items);
         }
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         String key = "item.silentgear." + (this.singleUse ? "template" : "blueprint");
-        return new TranslationTextComponent(key, this.getCraftedName(stack));
+        return new TranslatableComponent(key, this.getCraftedName(stack));
     }
 
     @Override

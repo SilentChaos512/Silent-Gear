@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.api.stats;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;

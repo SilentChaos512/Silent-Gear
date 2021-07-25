@@ -1,14 +1,14 @@
 package net.silentchaos512.gear.block.press;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -21,13 +21,13 @@ import net.silentchaos512.lib.util.TimeUtils;
 
 import javax.annotation.Nullable;
 
-public class MetalPressTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
+public class MetalPressTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity {
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
     @SyncVariable(name = "Progress")
     private int progress = 0;
 
-    @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final IIntArray fields = new IIntArray() {
+    @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -155,16 +155,16 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
+    protected Component getDefaultName() {
         return TextUtil.translate("container", "metal_press");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new MetalPressContainer(id, player, this, this.fields);
     }
 
-    void encodeExtraData(PacketBuffer buffer) {
+    void encodeExtraData(FriendlyByteBuf buffer) {
         buffer.writeByte(this.fields.getCount());
     }
 }

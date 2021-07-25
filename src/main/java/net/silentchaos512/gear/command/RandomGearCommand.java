@@ -5,16 +5,16 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.command.arguments.ResourceLocationArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -25,12 +25,12 @@ import net.silentchaos512.lib.util.PlayerUtils;
 import java.util.Collection;
 
 public final class RandomGearCommand {
-    private static final SuggestionProvider<CommandSource> itemIdSuggestions = (context, builder) ->
-            ISuggestionProvider.suggestResource(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ICoreItem).map(ForgeRegistryEntry::getRegistryName), builder);
+    private static final SuggestionProvider<CommandSourceStack> itemIdSuggestions = (context, builder) ->
+            SharedSuggestionProvider.suggestResource(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ICoreItem).map(ForgeRegistryEntry::getRegistryName), builder);
 
     private RandomGearCommand() {}
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_random_gear")
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.argument("players", EntityArgument.players())
@@ -55,17 +55,17 @@ public final class RandomGearCommand {
         );
     }
 
-    private static int run(CommandContext<CommandSource> context, Collection<ServerPlayerEntity> players, ResourceLocation itemId, int tier) throws CommandSyntaxException {
+    private static int run(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, ResourceLocation itemId, int tier) throws CommandSyntaxException {
         Item item = ForgeRegistries.ITEMS.getValue(itemId);
         if (!(item instanceof ICoreItem)) {
-            context.getSource().sendFailure(new TranslationTextComponent("command.silentgear.randomGear.invalidItem"));
+            context.getSource().sendFailure(new TranslatableComponent("command.silentgear.randomGear.invalidItem"));
             return 0;
         }
 
-        for (ServerPlayerEntity player : players) {
+        for (ServerPlayer player : players) {
             ItemStack stack = GearGenerator.create((ICoreItem) item, tier);
             if (!stack.isEmpty()) {
-                context.getSource().sendSuccess(new TranslationTextComponent("commands.give.success.single", 1, stack.getDisplayName(), player.getDisplayName()), true);
+                context.getSource().sendSuccess(new TranslatableComponent("commands.give.success.single", 1, stack.getDisplayName(), player.getDisplayName()), true);
                 PlayerUtils.giveItem(player, stack.copy());
             }
         }

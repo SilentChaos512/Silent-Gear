@@ -1,17 +1,17 @@
 package net.silentchaos512.gear.item.blueprint;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -29,11 +29,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
-    private ITag.INamedTag<Item> itemTag;
+    private Tag.Named<Item> itemTag;
 
     public GearBlueprintItem(GearType gearType, boolean singleUse, Properties properties) {
         super(properties, singleUse);
@@ -55,7 +55,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public ITag.INamedTag<Item> getItemTag() {
+    public Tag.Named<Item> getItemTag() {
         if (itemTag == null) {
             ResourceLocation id = this.getRegistryName();
             if (id != null) {
@@ -66,37 +66,37 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    protected ITextComponent getCraftedName(ItemStack stack) {
+    protected Component getCraftedName(ItemStack stack) {
         ResourceLocation id = this.getRegistryName();
         if (id == null) {
-            return new StringTextComponent("ERROR");
+            return new TextComponent("ERROR");
         }
-        return new TranslationTextComponent(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
+        return new TranslatableComponent(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
         String itemClass = this.gearType.getName();
 
         // Flavor text
         if (!gearType.isArmor()) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
-            list.add(new TranslationTextComponent(key).withStyle(TextFormatting.ITALIC));
+            list.add(new TranslatableComponent(key).withStyle(ChatFormatting.ITALIC));
         }
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.disabled").withStyle(TextFormatting.DARK_RED));
+            list.add(new TranslatableComponent("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
         } else if (this.singleUse) {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.singleUse").withStyle(TextFormatting.RED));
+            list.add(new TranslatableComponent("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
         } else {
-            list.add(new TranslationTextComponent("item.silentgear.blueprint.multiUse").withStyle(TextFormatting.GREEN));
+            list.add(new TranslatableComponent("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
         }
 
         addInformationSupportedPartTypes(list);
     }
 
-    private void addInformationSupportedPartTypes(Collection<ITextComponent> list) {
+    private void addInformationSupportedPartTypes(Collection<Component> list) {
         if (KeyTracker.isDisplayStatsDown()) {
             Optional<ICoreItem> itemOptional = this.gearType.getItem();
 
@@ -115,7 +115,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
                     }
                 }
 
-                List<ITextComponent> lines = builder.build();
+                List<Component> lines = builder.build();
                 if (!lines.isEmpty()) {
                     list.add(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD));
                     list.addAll(lines);
@@ -124,7 +124,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         } else {
             list.add(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD)
                     .append(" ")
-                    .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY)));
+                    .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), ChatFormatting.GRAY)));
         }
     }
 }

@@ -4,16 +4,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -52,8 +52,8 @@ public abstract class AbstractGearPart implements IGearPart {
     List<TraitInstance> traits = new ArrayList<>();
 
     // Display
-    ITextComponent displayName;
-    @Nullable ITextComponent namePrefix = null;
+    Component displayName;
+    @Nullable Component namePrefix = null;
 
     public AbstractGearPart(ResourceLocation location) {
         this.name = location;
@@ -97,7 +97,7 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public boolean isCraftingAllowed(IPartData part, PartType partType, GearType gearType, @Nullable IInventory inventory) {
+    public boolean isCraftingAllowed(IPartData part, PartType partType, GearType gearType, @Nullable Container inventory) {
         if (!gearType.matches(GearType.ALL)) return true;
         for (String blacklistedGearType : blacklistedGearTypes) {
             if (gearType.matches(blacklistedGearType)) {
@@ -108,25 +108,25 @@ public abstract class AbstractGearPart implements IGearPart {
     }
 
     @Override
-    public ITextComponent getDisplayName(@Nullable PartData part, ItemStack gear) {
-        if (displayName == null) return new StringTextComponent("<error: missing name>");
+    public Component getDisplayName(@Nullable PartData part, ItemStack gear) {
+        if (displayName == null) return new TextComponent("<error: missing name>");
         return displayName.copy();
     }
 
     @Override
-    public ITextComponent getDisplayName(@Nullable IPartData part, PartType type, ItemStack gear) {
-        if (displayName == null) return new StringTextComponent("<error: missing name>");
+    public Component getDisplayName(@Nullable IPartData part, PartType type, ItemStack gear) {
+        if (displayName == null) return new TextComponent("<error: missing name>");
         return displayName.copy();
     }
 
     @Override
-    public ITextComponent getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
+    public Component getDisplayNamePrefix(@Nullable PartData part, ItemStack gear) {
         return namePrefix != null ? namePrefix.copy() : null;
     }
 
     @SuppressWarnings("NoopMethodInAbstractClass")
     @Override
-    public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) {}
+    public void addInformation(PartData part, ItemStack gear, List<Component> tooltip, TooltipFlag flag) {}
 
     /**
      * List of blacklisted {@link GearType}s, mostly used for part tooltips. To know whether of not
@@ -223,8 +223,8 @@ public abstract class AbstractGearPart implements IGearPart {
             JsonElement elementAvailability = json.get("availability");
             if (elementAvailability != null && elementAvailability.isJsonObject()) {
                 JsonObject obj = elementAvailability.getAsJsonObject();
-                part.tier = JSONUtils.getAsInt(obj, "tier", part.tier);
-                part.visible = JSONUtils.getAsBoolean(obj, "visible", part.visible);
+                part.tier = GsonHelper.getAsInt(obj, "tier", part.tier);
+                part.visible = GsonHelper.getAsBoolean(obj, "visible", part.visible);
 
                 JsonArray blacklist = getGearBlacklist(obj);
                 if (blacklist != null) {
@@ -236,29 +236,29 @@ public abstract class AbstractGearPart implements IGearPart {
             return part;
         }
 
-        private static ITextComponent deserializeText(JsonElement json) {
+        private static Component deserializeText(JsonElement json) {
             // Handle the old style
             if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
-                boolean translate = JSONUtils.getAsBoolean(json.getAsJsonObject(), "translate", false);
-                String name = JSONUtils.getAsString(json.getAsJsonObject(), "name");
-                return translate ? new TranslationTextComponent(name) : new StringTextComponent(name);
+                boolean translate = GsonHelper.getAsBoolean(json.getAsJsonObject(), "translate", false);
+                String name = GsonHelper.getAsString(json.getAsJsonObject(), "name");
+                return translate ? new TranslatableComponent(name) : new TextComponent(name);
             }
 
             // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
+            return Objects.requireNonNull(Component.Serializer.fromJson(json));
         }
 
         @Nullable
         private static JsonArray getGearBlacklist(JsonObject json) {
             if (json.has("gear_blacklist"))
-                return JSONUtils.getAsJsonArray(json, "gear_blacklist");
+                return GsonHelper.getAsJsonArray(json, "gear_blacklist");
             else if (json.has("tool_blacklist"))
-                return JSONUtils.getAsJsonArray(json, "tool_blacklist");
+                return GsonHelper.getAsJsonArray(json, "tool_blacklist");
             return null;
         }
 
         @Override
-        public T read(ResourceLocation id, PacketBuffer buffer) {
+        public T read(ResourceLocation id, FriendlyByteBuf buffer) {
             T part = function.apply(id);
 
             part.packName = buffer.readUtf();
@@ -284,7 +284,7 @@ public abstract class AbstractGearPart implements IGearPart {
         }
 
         @Override
-        public void write(PacketBuffer buffer, T part) {
+        public void write(FriendlyByteBuf buffer, T part) {
             buffer.writeUtf(part.packName);
             buffer.writeComponent(part.getDisplayName(null, ItemStack.EMPTY));
             buffer.writeBoolean(part.namePrefix != null);
@@ -302,7 +302,7 @@ public abstract class AbstractGearPart implements IGearPart {
             writeTraits(buffer, part);
         }
 
-        private void readTraits(PacketBuffer buffer, T part) {
+        private void readTraits(FriendlyByteBuf buffer, T part) {
             part.traits.clear();
             int traitCount = buffer.readVarInt();
             for (int i = 0; i < traitCount; ++i) {
@@ -310,7 +310,7 @@ public abstract class AbstractGearPart implements IGearPart {
             }
         }
 
-        private void writeTraits(PacketBuffer buffer, T part) {
+        private void writeTraits(FriendlyByteBuf buffer, T part) {
             buffer.writeVarInt(part.traits.size());
             part.traits.forEach(inst -> inst.write(buffer));
         }

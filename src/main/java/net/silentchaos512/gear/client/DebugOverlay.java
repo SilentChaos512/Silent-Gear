@@ -18,23 +18,23 @@
 
 package net.silentchaos512.gear.client;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -59,12 +59,12 @@ public class DebugOverlay extends DebugRenderOverlay {
         List<String> list = new ArrayList<>();
 
         Minecraft mc = Minecraft.getInstance();
-        ClientPlayerEntity player = mc.player;
+        LocalPlayer player = mc.player;
         if (player == null) return list;
 
 //        addAttributeInfo(list, player, SharedMonsterAttributes.LUCK);
 
-        ItemStack heldItem = player.getItemInHand(Hand.MAIN_HAND);
+        ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
         if (heldItem.isEmpty()) return list;
 
         Item item = heldItem.getItem();
@@ -84,9 +84,9 @@ public class DebugOverlay extends DebugRenderOverlay {
         }
 
         // Harvest level checks
-        RayTraceResult rt = mc.hitResult;
-        if (rt != null && rt.getType() == RayTraceResult.Type.BLOCK) {
-            BlockRayTraceResult brt = (BlockRayTraceResult) rt;
+        HitResult rt = mc.hitResult;
+        if (rt != null && rt.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult brt = (BlockHitResult) rt;
             Entity renderViewEntity = mc.getCameraEntity();
             if (renderViewEntity != null) {
                 BlockPos pos = brt.getBlockPos();
@@ -98,7 +98,7 @@ public class DebugOverlay extends DebugRenderOverlay {
                     final int toolLevel = item.getHarvestLevel(heldItem, toolClass, player, state);
 
                     final boolean canHarvest = toolLevel >= blockLevel;
-                    TextFormatting format = canHarvest ? TextFormatting.GREEN : TextFormatting.RED;
+                    ChatFormatting format = canHarvest ? ChatFormatting.GREEN : ChatFormatting.RED;
                     String name = toolClass == null ? "null" : toolClass.getName();
                     list.add(format + String.format("%s=%d (%d)", name, blockLevel, toolLevel));
 
@@ -113,8 +113,8 @@ public class DebugOverlay extends DebugRenderOverlay {
                     }
                 }
             }
-        } else if (rt != null && rt.getType() == RayTraceResult.Type.ENTITY) {
-            EntityRayTraceResult ert = (EntityRayTraceResult) rt;
+        } else if (rt != null && rt.getType() == HitResult.Type.ENTITY) {
+            EntityHitResult ert = (EntityHitResult) rt;
             Entity entity = ert.getEntity();
             if (entity instanceof LivingEntity) {
                 list.add(String.format("%s", entity.getScoreboardName()));
@@ -125,8 +125,8 @@ public class DebugOverlay extends DebugRenderOverlay {
         return list;
     }
 
-    private static void addAttributeInfo(List<String> list, PlayerEntity player, Attribute attribute) {
-        ModifiableAttributeInstance attribute1 = player.getAttribute(attribute);
+    private static void addAttributeInfo(List<String> list, Player player, Attribute attribute) {
+        AttributeInstance attribute1 = player.getAttribute(attribute);
         list.add(String.format("%s=%.1f (%dx mods)", attribute, attribute1.getValue(), attribute1.getModifiers().size()));
     }
 

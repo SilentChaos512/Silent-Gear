@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonObject;
-import net.minecraft.block.Block;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.BlockPlacerTrait;
 import net.silentchaos512.gear.util.DataResource;

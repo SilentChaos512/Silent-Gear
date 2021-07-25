@@ -1,27 +1,29 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 
-public class ModContainerBlock<T extends TileEntity & INamedContainerExtraData> extends Block {
-    private final BiFunction<BlockState, IBlockReader, ? extends T> tileFactory;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
-    public ModContainerBlock(BiFunction<BlockState, IBlockReader, ? extends T> tileFactory, Properties properties) {
+public class ModContainerBlock<T extends BlockEntity & INamedContainerExtraData> extends Block {
+    private final BiFunction<BlockState, BlockGetter, ? extends T> tileFactory;
+
+    public ModContainerBlock(BiFunction<BlockState, BlockGetter, ? extends T> tileFactory, Properties properties) {
         super(properties);
         this.tileFactory = tileFactory;
     }
@@ -33,17 +35,17 @@ public class ModContainerBlock<T extends TileEntity & INamedContainerExtraData> 
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
         return tileFactory.apply(state, world);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            TileEntity tile = worldIn.getBlockEntity(pos);
-            if (tile instanceof IInventory) {
-                InventoryHelper.dropContents(worldIn, pos, (IInventory) tile);
+            BlockEntity tile = worldIn.getBlockEntity(pos);
+            if (tile instanceof Container) {
+                Containers.dropContents(worldIn, pos, (Container) tile);
                 worldIn.updateNeighbourForOutputSignal(pos, this);
             }
             super.onRemove(state, worldIn, pos, newState, isMoving);
@@ -52,14 +54,14 @@ public class ModContainerBlock<T extends TileEntity & INamedContainerExtraData> 
 
     @SuppressWarnings("deprecation")
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!worldIn.isClientSide) {
-            TileEntity tile = worldIn.getBlockEntity(pos);
-            if (tile instanceof INamedContainerExtraData && player instanceof ServerPlayerEntity) {
+            BlockEntity tile = worldIn.getBlockEntity(pos);
+            if (tile instanceof INamedContainerExtraData && player instanceof ServerPlayer) {
                 INamedContainerExtraData te = (INamedContainerExtraData) tile;
-                NetworkHooks.openGui((ServerPlayerEntity) player, te, te::encodeExtraData);
+                NetworkHooks.openGui((ServerPlayer) player, te, te::encodeExtraData);
             }
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

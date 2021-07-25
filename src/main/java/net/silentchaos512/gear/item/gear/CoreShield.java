@@ -3,22 +3,22 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
@@ -34,6 +34,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.UseAnim;
 
 public class CoreShield extends ShieldItem implements ICoreItem {
     private static final float DURABILITY_MULTI = 337f / 15f;
@@ -66,8 +72,8 @@ public class CoreShield extends ShieldItem implements ICoreItem {
 
     @Override
     public boolean isValidSlot(String slot) {
-        return EquipmentSlotType.MAINHAND.getName().equalsIgnoreCase(slot)
-                || EquipmentSlotType.OFFHAND.getName().equalsIgnoreCase(slot);
+        return EquipmentSlot.MAINHAND.getName().equalsIgnoreCase(slot)
+                || EquipmentSlot.OFFHAND.getName().equalsIgnoreCase(slot);
     }
 
     @Override
@@ -97,17 +103,17 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
-    public IItemColor getItemColors() {
+    public ItemColor getItemColors() {
         return ColorHandlers::getShieldColor;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 
@@ -127,7 +133,7 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -165,17 +171,17 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
@@ -190,15 +196,15 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
-    public UseAction getUseAnimation(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? UseAction.NONE : super.getUseAnimation(stack);
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return GearHelper.isBroken(stack) ? UseAnim.NONE : super.getUseAnimation(stack);
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
         if (GearHelper.isBroken(stack)) {
-            return ActionResult.pass(stack);
+            return InteractionResultHolder.pass(stack);
         }
         return super.use(worldIn, playerIn, handIn);
     }

@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 import net.silentchaos512.gear.util.TextUtil;
@@ -15,7 +15,7 @@ import net.silentchaos512.gear.util.TextUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
     public SlingshotAmmoItem(Properties properties) {
@@ -23,12 +23,12 @@ public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
     }
 
     @Override
-    public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
+    public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
         return new SlingshotProjectile(shooter, worldIn);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextUtil.translate("item", "slingshot_ammo.desc").withStyle(TextFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(TextUtil.translate("item", "slingshot_ammo.desc").withStyle(ChatFormatting.ITALIC));
     }
 }

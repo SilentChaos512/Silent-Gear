@@ -19,15 +19,15 @@
 package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-public class SalvagerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
+public class SalvagerTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity {
     static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
@@ -53,7 +53,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
 
     @SyncVariable(name = "progress") int progress = 0;
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             return progress;
@@ -172,8 +172,8 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT tags = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag tags = super.getUpdateTag();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
         return tags;
     }
@@ -232,12 +232,12 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.silentgear.salvager");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("container.silentgear.salvager");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory playerInventory) {
+    protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new SalvagerContainer(id, playerInventory, this, fields);
     }
 }

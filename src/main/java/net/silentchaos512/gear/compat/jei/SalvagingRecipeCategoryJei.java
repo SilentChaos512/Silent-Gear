@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.compat.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -9,9 +9,9 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
@@ -71,7 +71,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     @Override
     public void setIngredients(SalvagingRecipe recipe, IIngredients ingredients) {
         ingredients.setInputIngredients(Collections.singletonList(recipe.getIngredient()));
-        ingredients.setOutputs(VanillaTypes.ITEM, new ArrayList<>(recipe.getPossibleResults(new Inventory(SalvagerTileEntity.INVENTORY_SIZE))));
+        ingredients.setOutputs(VanillaTypes.ITEM, new ArrayList<>(recipe.getPossibleResults(new SimpleContainer(SalvagerTileEntity.INVENTORY_SIZE))));
     }
 
     @Override
@@ -85,14 +85,14 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
         }
 
         itemStacks.set(0, Arrays.asList(recipe.getIngredient().getItems()));
-        List<ItemStack> results = recipe.getPossibleResults(new Inventory(1));
+        List<ItemStack> results = recipe.getPossibleResults(new SimpleContainer(1));
         for (int i = 0; i < 9 && i < results.size(); ++i) {
             itemStacks.set(i + 1, results.get(i));
         }
     }
 
     @Override
-    public void draw(SalvagingRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(SalvagingRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
         arrow.draw(matrixStack, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

@@ -20,9 +20,9 @@ package net.silentchaos512.gear.gear.trait;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -65,7 +65,7 @@ public final class StatModifierTrait extends SimpleTrait {
         for (JsonElement element : json.get("stats").getAsJsonArray()) {
             if (element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
-                String statName = JSONUtils.getAsString(obj, "name", "");
+                String statName = GsonHelper.getAsString(obj, "name", "");
                 ItemStat stat = ItemStats.byName(statName);
 
                 if (stat != null) {
@@ -75,7 +75,7 @@ public final class StatModifierTrait extends SimpleTrait {
         }
     }
 
-    private static void readBuffer(StatModifierTrait trait, PacketBuffer buffer) {
+    private static void readBuffer(StatModifierTrait trait, FriendlyByteBuf buffer) {
         trait.mods.clear();
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
@@ -84,7 +84,7 @@ public final class StatModifierTrait extends SimpleTrait {
         }
     }
 
-    private static void writeBuffer(StatModifierTrait trait, PacketBuffer buffer) {
+    private static void writeBuffer(StatModifierTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.mods.size());
         trait.mods.forEach((stat, mod) -> {
             buffer.writeResourceLocation(Objects.requireNonNull(stat.getRegistryName()));
@@ -139,13 +139,13 @@ public final class StatModifierTrait extends SimpleTrait {
 
         private static StatMod fromJson(JsonObject json) {
             StatMod mod = new StatMod();
-            mod.multi = JSONUtils.getAsFloat(json, "value", 0);
-            mod.factorDamage = JSONUtils.getAsBoolean(json, "factor_damage", true);
-            mod.factorValue = JSONUtils.getAsBoolean(json, "factor_value", true);
+            mod.multi = GsonHelper.getAsFloat(json, "value", 0);
+            mod.factorDamage = GsonHelper.getAsBoolean(json, "factor_damage", true);
+            mod.factorValue = GsonHelper.getAsBoolean(json, "factor_value", true);
             return mod;
         }
 
-        private static StatMod read(PacketBuffer buffer) {
+        private static StatMod read(FriendlyByteBuf buffer) {
             StatMod mod = new StatMod();
             mod.multi = buffer.readFloat();
             mod.factorDamage = buffer.readBoolean();
@@ -153,7 +153,7 @@ public final class StatModifierTrait extends SimpleTrait {
             return mod;
         }
 
-        private void write(PacketBuffer buffer) {
+        private void write(FriendlyByteBuf buffer) {
             buffer.writeFloat(multi);
             buffer.writeBoolean(factorDamage);
             buffer.writeBoolean(factorValue);

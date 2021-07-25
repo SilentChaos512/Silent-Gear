@@ -5,10 +5,10 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Transformation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.geometry.IModelGeometryPart;
@@ -38,8 +38,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+
 public class GearModel extends LayeredModel<GearModel> {
-    private final ItemCameraTransforms cameraTransforms;
+    private final ItemTransforms cameraTransforms;
     final GearType gearType;
     private final ICoreItem item;
     private GearModelOverrideList overrideList;
@@ -47,7 +56,7 @@ public class GearModel extends LayeredModel<GearModel> {
     private final String brokenTexturePath;
     private final Set<PartType> brokenTextureTypes = new HashSet<>();
 
-    GearModel(ItemCameraTransforms cameraTransforms,
+    GearModel(ItemTransforms cameraTransforms,
               GearType gearType,
               String texturePath,
               String brokenTexturePath,
@@ -75,32 +84,32 @@ public class GearModel extends LayeredModel<GearModel> {
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
         overrideList = new GearModelOverrideList(this, owner, bakery, spriteGetter, modelTransform, modelLocation);
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    public IBakedModel bake(ItemStack stack,
+    public BakedModel bake(ItemStack stack,
                             List<MaterialLayer> layers,
                             int animationFrame,
                             String transformVariant,
                             IModelConfiguration owner,
                             ModelBakery bakery,
-                            Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                            IModelTransform modelTransform,
-                            ItemOverrideList overrideList,
+                            Function<Material, TextureAtlasSprite> spriteGetter,
+                            ModelState modelTransform,
+                            ItemOverrides overrideList,
                             ResourceLocation modelLocation) {
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
-        TransformationMatrix rotation = modelTransform.getRotation();
-        ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
+        Transformation rotation = modelTransform.getRotation();
+        ImmutableMap<ItemTransforms.TransformType, Transformation> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
 
         boolean broken = GearHelper.isBroken(stack);
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            RenderMaterial renderMaterial = getTexture(layer, animationFrame, broken);
+            Material renderMaterial = getTexture(layer, animationFrame, broken);
             TextureAtlasSprite texture = spriteGetter.apply(renderMaterial);
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
 
@@ -116,7 +125,7 @@ public class GearModel extends LayeredModel<GearModel> {
             } else {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");
-                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
+                TextureAtlasSprite texture = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, SilentGear.getId("item/error")));
                 builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
             }
         }
@@ -126,36 +135,36 @@ public class GearModel extends LayeredModel<GearModel> {
         return new BakedPerspectiveModel(builder.build(), particle, transforms, overrideList, rotation.isIdentity(), owner.isSideLit(), getCameraTransforms(transformVariant));
     }
 
-    private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
+    private void buildFakeModel(Function<Material, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, Transformation rotation, IMaterial material) {
         // This method will display an example tool for items with no data (ie, for advancements)
         MaterialInstance mat = MaterialInstance.of(material);
         IMaterialDisplay model = MaterialDisplayManager.get(mat);
         if (!gearType.isArmor()) {
             MaterialLayer exampleRod = model.getLayerList(this.gearType, PartType.ROD, mat).getFirstLayer();
             if (exampleRod != null) {
-                builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, exampleRod.getTexture(gearType, 0))), rotation, exampleRod.getColor()));
+                builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, exampleRod.getTexture(gearType, 0))), rotation, exampleRod.getColor()));
             }
         }
 
         MaterialLayer exampleMain = model.getLayerList(this.gearType, PartType.MAIN, mat).getFirstLayer();
         if (exampleMain != null) {
-            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, exampleMain.getTexture(gearType, 0))), rotation, exampleMain.getColor()));
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, exampleMain.getTexture(gearType, 0))), rotation, exampleMain.getColor()));
         }
 
         if (gearType.matches(GearType.RANGED_WEAPON)) {
             MaterialLayer exampleBowstring = model.getLayerList(this.gearType, PartType.BOWSTRING, mat).getFirstLayer();
             if (exampleBowstring != null) {
-                builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, exampleBowstring.getTexture(gearType, 0))), rotation, exampleBowstring.getColor()));
+                builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, exampleBowstring.getTexture(gearType, 0))), rotation, exampleBowstring.getColor()));
             }
         }
     }
 
     @SuppressWarnings("OverlyComplexMethod")
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        Set<RenderMaterial> ret = new HashSet<>();
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        Set<Material> ret = new HashSet<>();
 
-        ret.add(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
+        ret.add(new Material(InventoryMenu.BLOCK_ATLAS, SilentGear.getId("item/error")));
 
         // Generic built-in textures
         for (PartTextures tex : PartTextures.getTextures(this.gearType)) {
@@ -189,7 +198,7 @@ public class GearModel extends LayeredModel<GearModel> {
 
         if (GearModelOverrideList.isDebugLoggingEnabled()) {
             SilentGear.LOGGER.info("Textures for gear model '{}' ({})", getTexturePath(false), this.gearType.getName());
-            for (RenderMaterial mat : ret) {
+            for (Material mat : ret) {
                 SilentGear.LOGGER.info("- {}", mat.texture());
             }
         }
@@ -197,13 +206,13 @@ public class GearModel extends LayeredModel<GearModel> {
         return ret;
     }
 
-    private Collection<RenderMaterial> getTexturesForAllFrames(MaterialLayer layer, int animationFrameCount, boolean broken) {
+    private Collection<Material> getTexturesForAllFrames(MaterialLayer layer, int animationFrameCount, boolean broken) {
         return IntStream.range(0, animationFrameCount)
                 .mapToObj(frame -> getTexture(layer, frame, broken))
                 .collect(Collectors.toList());
     }
 
-    private RenderMaterial getTexture(MaterialLayer layer, int animationFrame, boolean broken) {
+    private Material getTexture(MaterialLayer layer, int animationFrame, boolean broken) {
         ResourceLocation tex = layer.getTextureId();
         String path = "item/" + this.getTexturePath(broken) + "/" + tex.getPath();
         String suffix = animationFrame > 0 && layer.isAnimated() ? "_" + animationFrame : "";
@@ -218,8 +227,8 @@ public class GearModel extends LayeredModel<GearModel> {
         return this.brokenTextureTypes.contains(type);
     }
 
-    private static RenderMaterial getMaterial(ResourceLocation tex) {
-        return new RenderMaterial(PlayerContainer.BLOCK_ATLAS, tex);
+    private static Material getMaterial(ResourceLocation tex) {
+        return new Material(InventoryMenu.BLOCK_ATLAS, tex);
     }
 
     @Override
@@ -232,7 +241,7 @@ public class GearModel extends LayeredModel<GearModel> {
         return Optional.empty();
     }
 
-    private ItemCameraTransforms getCameraTransforms(String transformVariant) {
+    private ItemTransforms getCameraTransforms(String transformVariant) {
         return cameraTransforms;
     }
 }

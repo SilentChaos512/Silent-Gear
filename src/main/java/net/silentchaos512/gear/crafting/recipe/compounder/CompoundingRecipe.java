@@ -4,17 +4,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
+public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
     private final ResourceLocation recipeId;
     final List<Ingredient> ingredients = new ArrayList<>();
     ItemStack result = ItemStack.EMPTY;
@@ -53,7 +53,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
     }
 
     @Override
-    public boolean matches(CompounderTileEntity<?> inv, World worldIn) {
+    public boolean matches(CompounderTileEntity<?> inv, Level worldIn) {
         Set<Integer> matches = new HashSet<>();
         int inputs = 0;
 
@@ -117,16 +117,16 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.COMPOUNDING.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return ModRecipes.COMPOUNDING_TYPE;
     }
 
-    public static class Serializer<T extends CompoundingRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
+    public static class Serializer<T extends CompoundingRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<T> {
         private final Function<ResourceLocation, T> factory;
 
         public Serializer(Function<ResourceLocation, T> factory) {
@@ -143,15 +143,15 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
             }
 
             JsonObject resultJson = json.getAsJsonObject("result");
-            ResourceLocation itemId = new ResourceLocation(JSONUtils.getAsString(resultJson, "item"));
+            ResourceLocation itemId = new ResourceLocation(GsonHelper.getAsString(resultJson, "item"));
             Item item = ForgeRegistries.ITEMS.getValue(itemId);
             if (item == null) {
                 throw new JsonParseException("Unknown item: " + itemId);
             }
-            int count = JSONUtils.getAsInt(resultJson, "count", 1);
+            int count = GsonHelper.getAsInt(resultJson, "count", 1);
 
             if (item instanceof CustomMaterialItem && resultJson.has("material")) {
-                ResourceLocation id = new ResourceLocation(JSONUtils.getAsString(resultJson, "material"));
+                ResourceLocation id = new ResourceLocation(GsonHelper.getAsString(resultJson, "material"));
                 ret.result = ((CustomMaterialItem) item).create(LazyMaterialInstance.of(id), count);
             }
 
@@ -164,7 +164,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
 
         @Nullable
         @Override
-        public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public T fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             T ret = this.factory.apply(recipeId);
 
             int count = buffer.readByte();
@@ -178,7 +178,7 @@ public class CompoundingRecipe implements IRecipe<CompounderTileEntity<?>> {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, T recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, T recipe) {
             buffer.writeByte(recipe.ingredients.size());
             recipe.ingredients.forEach(ingredient -> ingredient.toNetwork(buffer));
             buffer.writeItem(recipe.result);

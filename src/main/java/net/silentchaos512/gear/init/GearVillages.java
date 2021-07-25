@@ -2,18 +2,18 @@ package net.silentchaos512.gear.init;
 
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MerchantOffer;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
@@ -31,21 +31,21 @@ public class GearVillages {
 
     public static final ResourceLocation HOTV_GEAR_SMITH = SilentGear.getId("gameplay/hero_of_the_village/gear_smith");
 
-    public static final RegistryObject<PointOfInterestType> POI_GEAR_SMITHING_TABLE = registerPointOfInterest(
+    public static final RegistryObject<PoiType> POI_GEAR_SMITHING_TABLE = registerPointOfInterest(
             "gear_smithing_table", ModBlocks.GEAR_SMITHING_TABLE);
 
     public static final RegistryObject<VillagerProfession> PROF_GEAR_SMITH = registerProfession(
             "gear_smith", POI_GEAR_SMITHING_TABLE, SoundEvents.VILLAGER_WORK_TOOLSMITH);
 
-    private static RegistryObject<PointOfInterestType> registerPointOfInterest(String name, IBlockProvider block) {
+    private static RegistryObject<PoiType> registerPointOfInterest(String name, IBlockProvider block) {
         return Registration.POINTS_OF_INTEREST.register(name, () -> {
-            PointOfInterestType type = new PointOfInterestType(SilentGear.MOD_ID + ":" + name, ImmutableSet.of(block.asBlockState()), 1, 1);
-            PointOfInterestType.registerBlockStates(type);
+            PoiType type = new PoiType(SilentGear.MOD_ID + ":" + name, ImmutableSet.of(block.asBlockState()), 1, 1);
+            PoiType.registerBlockStates(type);
             return type;
         });
     }
 
-    private static RegistryObject<VillagerProfession> registerProfession(String name, Supplier<PointOfInterestType> poi, SoundEvent sound) {
+    private static RegistryObject<VillagerProfession> registerProfession(String name, Supplier<PoiType> poi, SoundEvent sound) {
         return Registration.PROFESSIONS.register(name, () -> new VillagerProfession(
                 SilentGear.getId(name).toString(),
                 poi.get(),
@@ -67,7 +67,7 @@ public class GearVillages {
 
         @SubscribeEvent
         public static void registerTrades(VillagerTradesEvent event) {
-            Int2ObjectMap<List<VillagerTrades.ITrade>> trades = event.getTrades();
+            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
             if (GEAR_SMITH.equals(event.getType().getRegistryName())) {
                 trades.get(1).add(new BuyingItemTrade(CraftingItems.FLAX_FLOWERS, 24, 16, 2));
                 trades.get(1).add(new SellingItemTrade(CraftingItems.BLUEPRINT_PAPER, 1, 12, 12, 2));
@@ -85,14 +85,14 @@ public class GearVillages {
         }
     }
 
-    private static class BuyingItemTrade implements VillagerTrades.ITrade {
+    private static class BuyingItemTrade implements VillagerTrades.ItemListing {
         private final Item wantedItem;
         private final int count;
         private final int maxUses;
         private final int xpValue;
         private final float priceMultiplier;
 
-        public BuyingItemTrade(IItemProvider wantedItem, int countIn, int maxUsesIn, int xpValueIn) {
+        public BuyingItemTrade(ItemLike wantedItem, int countIn, int maxUsesIn, int xpValueIn) {
             this.wantedItem = wantedItem.asItem();
             this.count = countIn;
             this.maxUses = maxUsesIn;
@@ -111,7 +111,7 @@ public class GearVillages {
         }
     }
 
-    private static class SellingItemTrade implements VillagerTrades.ITrade {
+    private static class SellingItemTrade implements VillagerTrades.ItemListing {
         private final ItemStack givenItem;
         private final int emeraldCount;
         private final int sellingItemCount;
@@ -119,11 +119,11 @@ public class GearVillages {
         private final int xpValue;
         private final float priceMultiplier;
 
-        public SellingItemTrade(IItemProvider givenItem, int emeraldCount, int sellingItemCount, int xpValue) {
+        public SellingItemTrade(ItemLike givenItem, int emeraldCount, int sellingItemCount, int xpValue) {
             this(new ItemStack(givenItem), emeraldCount, sellingItemCount, 12, xpValue);
         }
 
-        public SellingItemTrade(IItemProvider givenItem, int emeraldCount, int sellingItemCount, int maxUses, int xpValue) {
+        public SellingItemTrade(ItemLike givenItem, int emeraldCount, int sellingItemCount, int maxUses, int xpValue) {
             this(new ItemStack(givenItem), emeraldCount, sellingItemCount, maxUses, xpValue);
         }
 

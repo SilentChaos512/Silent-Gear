@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.crafting.ingredient;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 
@@ -13,7 +13,7 @@ public interface IGearIngredient {
         return GearType.ALL;
     }
 
-    default Optional<ITextComponent> getJeiHint() {
+    default Optional<Component> getJeiHint() {
         return Optional.empty();
     }
 }

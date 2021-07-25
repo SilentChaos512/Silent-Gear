@@ -2,9 +2,9 @@ package net.silentchaos512.gear.api.material;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -69,7 +69,7 @@ public class MaterialLayer {
     public static MaterialLayer deserialize(PartGearKey key, JsonElement json) {
         if (json.isJsonObject()) {
             JsonObject jo = json.getAsJsonObject();
-            ResourceLocation texture = new ResourceLocation(JSONUtils.getAsString(jo, "texture"));
+            ResourceLocation texture = new ResourceLocation(GsonHelper.getAsString(jo, "texture"));
             int color = Color.from(jo, "color", Color.VALUE_WHITE).getColor();
             return new MaterialLayer(texture, key.getPartType(), color, true);
         }
@@ -87,14 +87,14 @@ public class MaterialLayer {
         return json;
     }
 
-    public static MaterialLayer read(PacketBuffer buffer) {
+    public static MaterialLayer read(FriendlyByteBuf buffer) {
         ResourceLocation texture = buffer.readResourceLocation();
         int color = buffer.readVarInt();
         PartType partType = PartType.getNonNull(buffer.readResourceLocation());
         return new MaterialLayer(texture, partType, color, true);
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(this.texture);
         buffer.writeVarInt(this.color);
         buffer.writeResourceLocation(this.partType.getName());

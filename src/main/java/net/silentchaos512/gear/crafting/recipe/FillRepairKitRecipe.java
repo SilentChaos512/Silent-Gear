@@ -19,13 +19,13 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -38,13 +38,13 @@ import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.collection.StackList;
 
-public class FillRepairKitRecipe extends SpecialRecipe {
+public class FillRepairKitRecipe extends CustomRecipe {
     public FillRepairKitRecipe(ResourceLocation idIn) {
         super(idIn);
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         // Need 1 repair kit and 1+ mats
         boolean kitFound = false;
         int matsFound = 0;
@@ -69,7 +69,7 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         StackList list = StackList.from(inv);
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class).copy();
         repairKit.setCount(1);
@@ -114,22 +114,22 @@ public class FillRepairKitRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.FILL_REPAIR_KIT.get();
     }
 
-    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FillRepairKitRecipe> {
+    public static final class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FillRepairKitRecipe> {
         @Override
         public FillRepairKitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new FillRepairKitRecipe(recipeId);
         }
 
         @Override
-        public FillRepairKitRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public FillRepairKitRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             return new FillRepairKitRecipe(recipeId);
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, FillRepairKitRecipe recipe) {}
+        public void toNetwork(FriendlyByteBuf buffer, FillRepairKitRecipe recipe) {}
     }
 }

@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -17,7 +17,7 @@ import java.util.Optional;
 interface IGearRecipe {
     ICoreItem getOutputItem();
 
-    default Collection<PartData> getParts(IInventory inv) {
+    default Collection<PartData> getParts(Container inv) {
         List<MaterialInstance> materials = new ArrayList<>();
         List<PartData> parts = new ArrayList<>();
 

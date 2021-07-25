@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.util.IAoeTool;
@@ -33,12 +33,12 @@ public class CoreHammer extends CorePickaxe implements IAoeTool {
 
     @Nullable
     @Override
-    public RayTraceResult rayTraceBlocks(World world, PlayerEntity player) {
-        return getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.NONE);
+    public HitResult rayTraceBlocks(Level world, Player player) {
+        return getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
         return IAoeTool.BreakHandler.onBlockStartBreak(itemstack, pos, player);
     }
 }

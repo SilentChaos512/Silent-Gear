@@ -18,12 +18,14 @@
 
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SaplingBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.silentchaos512.gear.block.trees.NetherwoodTree;
 import net.silentchaos512.gear.init.ModTags;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class NetherwoodSapling extends SaplingBlock {
     public NetherwoodSapling(Properties properties) {
@@ -31,7 +33,7 @@ public class NetherwoodSapling extends SaplingBlock {
     }
 
     @Override
-    protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
         return state.is(ModTags.Blocks.NETHERWOOD_SOIL);
     }
 }

@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -52,7 +52,7 @@ public class MaterialCountTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayText() {
+    public MutableComponent getDisplayText() {
         return TextUtil.translate("trait.condition", "material_count", this.requiredCount);
     }
 
@@ -64,7 +64,7 @@ public class MaterialCountTraitCondition implements ITraitCondition {
 
         @Override
         public MaterialCountTraitCondition deserialize(JsonObject json) {
-            return new MaterialCountTraitCondition(JSONUtils.getAsInt(json, "count"));
+            return new MaterialCountTraitCondition(GsonHelper.getAsInt(json, "count"));
         }
 
         @Override
@@ -73,13 +73,13 @@ public class MaterialCountTraitCondition implements ITraitCondition {
         }
 
         @Override
-        public MaterialCountTraitCondition read(PacketBuffer buffer) {
+        public MaterialCountTraitCondition read(FriendlyByteBuf buffer) {
             int count = buffer.readByte();
             return new MaterialCountTraitCondition(count);
         }
 
         @Override
-        public void write(MaterialCountTraitCondition condition, PacketBuffer buffer) {
+        public void write(MaterialCountTraitCondition condition, FriendlyByteBuf buffer) {
             buffer.writeByte(condition.requiredCount);
         }
     }

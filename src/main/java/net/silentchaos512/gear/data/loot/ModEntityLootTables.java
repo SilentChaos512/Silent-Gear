@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.data.loot.EntityLootTables;
+import net.minecraft.data.loot.EntityLoot;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.KilledByPlayer;
-import net.minecraft.loot.conditions.RandomChanceWithLooting;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.init.GearVillages;
 import net.silentchaos512.gear.init.LootInjector;
 import net.silentchaos512.gear.init.ModItems;
@@ -13,7 +13,12 @@ import net.silentchaos512.gear.item.CraftingItems;
 
 import java.util.function.BiConsumer;
 
-public class ModEntityLootTables extends EntityLootTables {
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+
+public class ModEntityLootTables extends EntityLoot {
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         consumer.accept(LootInjector.Tables.ENTITIES_CAVE_SPIDER, addFineSilk(0.04f, 0.01f));
@@ -36,19 +41,19 @@ public class ModEntityLootTables extends EntityLootTables {
     private static LootTable.Builder addFineSilk(float baseChance, float lootingBonus) {
         return LootTable.lootTable()
                 .withPool(LootPool.lootPool()
-                        .setRolls(ConstantRange.exactly(1))
-                        .add(ItemLootEntry.lootTableItem(CraftingItems.FINE_SILK)
-                                .when(KilledByPlayer.killedByPlayer())
-                                .when(RandomChanceWithLooting.randomChanceAndLootingBoost(baseChance, lootingBonus))
+                        .setRolls(ConstantIntValue.exactly(1))
+                        .add(LootItem.lootTableItem(CraftingItems.FINE_SILK)
+                                .when(LootItemKilledByPlayerCondition.killedByPlayer())
+                                .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(baseChance, lootingBonus))
                         )
                 );
     }
 
-    private static void heroOfTheVillage(BiConsumer<ResourceLocation, LootTable.Builder> consumer, ResourceLocation tableName, IItemProvider... items) {
+    private static void heroOfTheVillage(BiConsumer<ResourceLocation, LootTable.Builder> consumer, ResourceLocation tableName, ItemLike... items) {
         LootPool.Builder pool = LootPool.lootPool()
-                .setRolls(ConstantRange.exactly(1));
-        for (IItemProvider item : items) {
-            pool.add(ItemLootEntry.lootTableItem(item));
+                .setRolls(ConstantIntValue.exactly(1));
+        for (ItemLike item : items) {
+            pool.add(LootItem.lootTableItem(item));
         }
         consumer.accept(tableName, LootTable.lootTable().withPool(pool));
     }

@@ -1,27 +1,27 @@
 package net.silentchaos512.gear.block.press;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.init.ModContainers;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 
-public class MetalPressContainer extends Container {
-    private final IInventory inventory;
-    private final IIntArray fields;
+public class MetalPressContainer extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData fields;
 
-    public MetalPressContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
-        this(id, playerInventory, new MetalPressTileEntity(), new IntArray(buffer.readByte()));
+    public MetalPressContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
+        this(id, playerInventory, new MetalPressTileEntity(), new SimpleContainerData(buffer.readByte()));
     }
 
-    public MetalPressContainer(int id, PlayerInventory playerInventory, IInventory inventory, IIntArray fields) {
+    public MetalPressContainer(int id, Inventory playerInventory, Container inventory, ContainerData fields) {
         super(ModContainers.METAL_PRESS.get(), id);
         this.inventory = inventory;
         this.fields = fields;
@@ -40,12 +40,12 @@ public class MetalPressContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return inventory.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

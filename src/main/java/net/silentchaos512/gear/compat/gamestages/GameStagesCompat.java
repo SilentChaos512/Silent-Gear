@@ -6,13 +6,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 //import net.darkhax.gamestage.GameStageHelper;
 //import net.darkhax.gamestages.data.IStageData;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.resources.IFutureReloadListener;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -26,27 +26,27 @@ import java.util.*;
  * Do not use directly, use {@link GameStagesCompatProxy} instead.
  */
 @SuppressWarnings("deprecation")
-public class GameStagesCompat implements IResourceManagerReloadListener {
-    public static final IFutureReloadListener INSTANCE = new GameStagesCompat();
+public class GameStagesCompat implements ResourceManagerReloadListener {
+    public static final PreparableReloadListener INSTANCE = new GameStagesCompat();
 
     private static final Map<ResourceLocation, List<String>> PARTS = Collections.synchronizedMap(new HashMap<>());
     private static final Map<String, List<String>> GEAR_TYPES = Collections.synchronizedMap(new HashMap<>());
 
-    static boolean canCraft(IGearPart part, PlayerEntity player) {
+    static boolean canCraft(IGearPart part, Player player) {
         synchronized (PARTS) {
             List<String> stages = PARTS.getOrDefault(part.getId(), Collections.emptyList());
             return hasAnyStage(player, stages);
         }
     }
 
-    static boolean canCraft(GearType gearType, PlayerEntity player) {
+    static boolean canCraft(GearType gearType, Player player) {
         synchronized (GEAR_TYPES) {
             List<String> stages = GEAR_TYPES.getOrDefault(gearType.getName(), Collections.emptyList());
             return hasAnyStage(player, stages);
         }
     }
 
-    private static boolean hasAnyStage(PlayerEntity player, Collection<String> stages) {
+    private static boolean hasAnyStage(Player player, Collection<String> stages) {
         /*if (stages.isEmpty()) {
             return true;
         }
@@ -66,7 +66,7 @@ public class GameStagesCompat implements IResourceManagerReloadListener {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = resourceManager.listResources("silentgear_gamestages", s -> s.endsWith(".json"));
 
@@ -75,8 +75,8 @@ public class GameStagesCompat implements IResourceManagerReloadListener {
             ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
             if (name.equals(SilentGear.getId("parts"))) {
                 synchronized (PARTS) {
-                    try (IResource iresource = resourceManager.getResource(id)) {
-                        JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    try (Resource iresource = resourceManager.getResource(id)) {
+                        JsonObject json = GsonHelper.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                         if (json != null) {
                             PARTS.clear();
                             json.entrySet().forEach(entry -> PARTS.put(new ResourceLocation(entry.getKey()), parseStages(entry.getValue())));
@@ -87,8 +87,8 @@ public class GameStagesCompat implements IResourceManagerReloadListener {
                 }
             } else if (name.equals(SilentGear.getId("gear_types"))) {
                 synchronized (GEAR_TYPES) {
-                    try (IResource iresource = resourceManager.getResource(id)) {
-                        JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    try (Resource iresource = resourceManager.getResource(id)) {
+                        JsonObject json = GsonHelper.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                         if (json != null) {
                             GEAR_TYPES.clear();
                             json.entrySet().forEach(entry -> GEAR_TYPES.put(entry.getKey(), parseStages(entry.getValue())));

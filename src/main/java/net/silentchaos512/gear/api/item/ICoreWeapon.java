@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.ItemStat;
 

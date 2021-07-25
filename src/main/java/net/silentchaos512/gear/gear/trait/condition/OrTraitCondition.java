@@ -4,13 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -66,12 +66,12 @@ public class OrTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayText() {
-        ITextComponent text = Arrays.stream(this.children)
+    public MutableComponent getDisplayText() {
+        Component text = Arrays.stream(this.children)
                 .map(ITraitCondition::getDisplayText)
                 .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "or")).append(t2))
-                .orElseGet(() -> new StringTextComponent(""));
-        return new StringTextComponent("(").append(text).append(")");
+                .orElseGet(() -> new TextComponent(""));
+        return new TextComponent("(").append(text).append(")");
     }
 
     public static class Serializer implements ITraitConditionSerializer<OrTraitCondition> {
@@ -84,7 +84,7 @@ public class OrTraitCondition implements ITraitCondition {
         @Override
         public OrTraitCondition deserialize(JsonObject json) {
             List<ITraitCondition> children = new ArrayList<>();
-            for (JsonElement j : JSONUtils.getAsJsonArray(json, "values")) {
+            for (JsonElement j : GsonHelper.getAsJsonArray(json, "values")) {
                 if (!j.isJsonObject()) {
                     throw new JsonSyntaxException("Or condition values must be array of objects");
                 }
@@ -103,7 +103,7 @@ public class OrTraitCondition implements ITraitCondition {
         }
 
         @Override
-        public OrTraitCondition read(PacketBuffer buffer) {
+        public OrTraitCondition read(FriendlyByteBuf buffer) {
             List<ITraitCondition> children = new ArrayList<>();
             int count = buffer.readByte();
             for (int i = 0; i < count; ++i) {
@@ -113,7 +113,7 @@ public class OrTraitCondition implements ITraitCondition {
         }
 
         @Override
-        public void write(OrTraitCondition condition, PacketBuffer buffer) {
+        public void write(OrTraitCondition condition, FriendlyByteBuf buffer) {
             buffer.writeByte(condition.children.length);
             for (ITraitCondition child : condition.children) {
                 TraitSerializers.writeCondition(child, buffer);

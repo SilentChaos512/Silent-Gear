@@ -2,12 +2,12 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -88,16 +88,16 @@ public class LazyPartData implements IPartData {
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType type, ItemStack gear) {
+    public Component getDisplayName(PartType type, ItemStack gear) {
         IGearPart part = get();
-        return part != null ? part.getDisplayName(this, type, gear) : new StringTextComponent("INVALID");
+        return part != null ? part.getDisplayName(this, type, gear) : new TextComponent("INVALID");
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tags) {
+    public CompoundTag write(CompoundTag tags) {
         tags.putString("ID", partId.toString());
         if (!this.craftingItem.isEmpty()) {
-            tags.put("Item", this.craftingItem.save(new CompoundNBT()));
+            tags.put("Item", this.craftingItem.save(new CompoundTag()));
         }
         return tags;
     }
@@ -118,7 +118,7 @@ public class LazyPartData implements IPartData {
         }
 
         JsonObject jsonObject = json.getAsJsonObject();
-        String key = JSONUtils.getAsString(jsonObject, "part");
+        String key = GsonHelper.getAsString(jsonObject, "part");
         return new LazyPartData(new ResourceLocation(key));
     }
 

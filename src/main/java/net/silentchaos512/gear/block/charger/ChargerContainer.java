@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.block.charger;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.init.ModContainers;
 import net.silentchaos512.gear.init.ModTags;
@@ -18,15 +18,15 @@ import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TagUtils;
 import net.silentchaos512.utils.MathUtils;
 
-public class ChargerContainer extends Container {
-    private final IInventory inventory;
-    private final IIntArray fields;
+public class ChargerContainer extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData fields;
 
-    public ChargerContainer(ContainerType<?> type, int id, PlayerInventory inv, PacketBuffer data) {
-        this(type, id, inv, ChargerTileEntity.createStarlightCharger(), new IntArray(data.readByte()));
+    public ChargerContainer(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf data) {
+        this(type, id, inv, ChargerTileEntity.createStarlightCharger(), new SimpleContainerData(data.readByte()));
     }
 
-    public ChargerContainer(ContainerType<?> type, int id, PlayerInventory inv, IInventory blockInv, IIntArray fields) {
+    public ChargerContainer(MenuType<?> type, int id, Inventory inv, Container blockInv, ContainerData fields) {
         super(type, id);
         this.inventory = blockInv;
         this.fields = fields;
@@ -52,11 +52,11 @@ public class ChargerContainer extends Container {
         addDataSlots(this.fields);
     }
 
-    public static ChargerContainer createStarlightCharger(int id, PlayerInventory inv, PacketBuffer data) {
+    public static ChargerContainer createStarlightCharger(int id, Inventory inv, FriendlyByteBuf data) {
         return new ChargerContainer(ModContainers.STARLIGHT_CHARGER.get(), id, inv, data);
     }
 
-    public static ChargerContainer createStarlightCharger(int id, PlayerInventory inv, IInventory blockInv, IIntArray fields) {
+    public static ChargerContainer createStarlightCharger(int id, Inventory inv, Container blockInv, ContainerData fields) {
         return new ChargerContainer(ModContainers.STARLIGHT_CHARGER.get(), id, inv, blockInv, fields);
     }
 
@@ -97,12 +97,12 @@ public class ChargerContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return this.inventory.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = slots.get(index);
 

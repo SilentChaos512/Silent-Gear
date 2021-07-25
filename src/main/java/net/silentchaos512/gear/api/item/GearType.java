@@ -2,10 +2,10 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.Registration;
@@ -150,7 +150,7 @@ public final class GearType {
     }
 
     public static GearType fromJson(JsonObject json, String key) {
-        String str = JSONUtils.getAsString(json, key);
+        String str = GsonHelper.getAsString(json, key);
         GearType type = get(str);
         if (type.isInvalid()) {
             throw new JsonSyntaxException("Unknown gear type: " + str);
@@ -239,8 +239,8 @@ public final class GearType {
         return this == NONE;
     }
 
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gearType.silentgear." + this.name);
+    public Component getDisplayName() {
+        return new TranslatableComponent("gearType.silentgear." + this.name);
     }
 
     public Optional<ICoreItem> getItem() {

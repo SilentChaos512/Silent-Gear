@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -17,6 +17,12 @@ import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import java.util.function.Supplier;
+
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 
 @SuppressWarnings({"unused", "OverlyCoupledClass"})
 public final class ModItems {
@@ -248,21 +254,21 @@ public final class ModItems {
 
     public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
-    public static final ItemRegistryObject<BlockNamedItem> FLAX_SEEDS = register("flax_seeds", () ->
+    public static final ItemRegistryObject<ItemNameBlockItem> FLAX_SEEDS = register("flax_seeds", () ->
             new SeedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
-    public static final ItemRegistryObject<BlockNamedItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
+    public static final ItemRegistryObject<ItemNameBlockItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
             new SeedItem(ModBlocks.FLUFFY_PLANT.get(), baseProps()));
 
     public static final ItemRegistryObject<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
-                    .food(new Food.Builder().nutrition(5).saturationMod(0.4f).build())));
+                    .food(new FoodProperties.Builder().nutrition(5).saturationMod(0.4f).build())));
     public static final ItemRegistryObject<Item> GOLDEN_NETHER_BANANA = register("golden_nether_banana", () ->
             new Item(baseProps()
-                    .food(new Food.Builder().nutrition(10).saturationMod(1.0f)
+                    .food(new FoodProperties.Builder().nutrition(10).saturationMod(1.0f)
                             .alwaysEat()
-                            .effect(() -> new EffectInstance(Effects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
-                            .effect(() -> new EffectInstance(Effects.DAMAGE_RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
-                            .effect(() -> new EffectInstance(Effects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
+                            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
+                            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
+                            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
                             .build())));
     public static final ItemRegistryObject<Item> NETHERWOOD_CHARCOAL = register("netherwood_charcoal", () ->
             new Item(baseProps()) {
@@ -296,10 +302,10 @@ public final class ModItems {
     public static final ItemRegistryObject<CoreShield> SHIELD = register("shield", () -> new CoreShield());
     public static final ItemRegistryObject<CoreArrow> ARROW = register("arrow", () -> new CoreArrow(unstackableProps()));
 
-    public static final ItemRegistryObject<CoreArmor> HELMET = register("helmet", () -> new CoreArmor(EquipmentSlotType.HEAD));
-    public static final ItemRegistryObject<CoreArmor> CHESTPLATE = register("chestplate", () -> new CoreArmor(EquipmentSlotType.CHEST));
-    public static final ItemRegistryObject<CoreArmor> LEGGINGS = register("leggings", () -> new CoreArmor(EquipmentSlotType.LEGS));
-    public static final ItemRegistryObject<CoreArmor> BOOTS = register("boots", () -> new CoreArmor(EquipmentSlotType.FEET));
+    public static final ItemRegistryObject<CoreArmor> HELMET = register("helmet", () -> new CoreArmor(EquipmentSlot.HEAD));
+    public static final ItemRegistryObject<CoreArmor> CHESTPLATE = register("chestplate", () -> new CoreArmor(EquipmentSlot.CHEST));
+    public static final ItemRegistryObject<CoreArmor> LEGGINGS = register("leggings", () -> new CoreArmor(EquipmentSlot.LEGS));
+    public static final ItemRegistryObject<CoreArmor> BOOTS = register("boots", () -> new CoreArmor(EquipmentSlot.FEET));
 
     public static final ItemRegistryObject<CoreElytra> ELYTRA = register("elytra", () -> new CoreElytra(unstackableProps()));
 

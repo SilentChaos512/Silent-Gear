@@ -2,11 +2,11 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -59,12 +59,12 @@ public interface ICoreRangedWeapon extends ICoreTool {
     }
 
     @Override
-    default int getAnimationFrame(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
-        IItemPropertyGetter pullingProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pulling"));
+    default int getAnimationFrame(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
+        ItemPropertyFunction pullingProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pulling"));
         if (pullingProperty != null) {
             float pulling = pullingProperty.call(stack, world, entity);
             if (pulling > 0) {
-                IItemPropertyGetter pullProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pull"));
+                ItemPropertyFunction pullProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pull"));
                 if (pullProperty != null) {
                     float pull = pullProperty.call(stack, world, entity);
 

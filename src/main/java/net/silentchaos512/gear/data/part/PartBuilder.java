@@ -2,12 +2,12 @@ package net.silentchaos512.gear.data.part;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.SetTag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.material.MaterialLayer;
@@ -40,8 +40,8 @@ public class PartBuilder {
     private final GearType gearType;
     private final PartType partType;
     private final Ingredient ingredient;
-    private ITextComponent name;
-    @Nullable private ITextComponent namePrefix;
+    private Component name;
+    @Nullable private Component namePrefix;
     @Nullable private GearTypeMatcher upgradeGearTypes;
     private final Map<PartGearKey, MaterialLayerList> display = new LinkedHashMap<>();
     private final List<GearType> gearBlacklist = new ArrayList<>();
@@ -49,11 +49,11 @@ public class PartBuilder {
     private final StatModifierMap stats = new StatModifierMap();
     private final List<ITraitInstance> traits = new ArrayList<>();
 
-    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, IItemProvider item) {
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, ItemLike item) {
         this(id, gearType, partType, Ingredient.of(item));
     }
 
-    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, Tag<Item> tag) {
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, SetTag<Item> tag) {
         this(id, gearType, partType, Ingredient.of(tag));
     }
 
@@ -77,12 +77,12 @@ public class PartBuilder {
         return this;
     }
 
-    public PartBuilder name(ITextComponent text) {
+    public PartBuilder name(Component text) {
         this.name = text;
         return this;
     }
 
-    public PartBuilder namePrefix(ITextComponent text) {
+    public PartBuilder namePrefix(Component text) {
         this.namePrefix = text;
         return this;
     }
@@ -150,10 +150,10 @@ public class PartBuilder {
 
         json.add("crafting_item", this.ingredient.toJson());
 
-        json.add("name", ITextComponent.Serializer.toJsonTree(this.name));
+        json.add("name", Component.Serializer.toJsonTree(this.name));
 
         if (this.namePrefix != null) {
-            json.add("name_prefix", ITextComponent.Serializer.toJsonTree(this.namePrefix));
+            json.add("name_prefix", Component.Serializer.toJsonTree(this.namePrefix));
         }
 
         if (!this.stats.isEmpty()) {

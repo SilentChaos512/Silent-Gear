@@ -18,10 +18,10 @@
 
 package net.silentchaos512.gear.gear.trait;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -42,8 +42,8 @@ public final class DurabilityTrait extends SimpleTrait {
             SilentGear.getId("durability_trait"),
             DurabilityTrait::new,
             (trait, json) -> {
-                trait.activationChance = JSONUtils.getAsFloat(json, "activation_chance", 1);
-                trait.effectScale = JSONUtils.getAsInt(json, "effect_scale", 0);
+                trait.activationChance = GsonHelper.getAsFloat(json, "activation_chance", 1);
+                trait.effectScale = GsonHelper.getAsInt(json, "effect_scale", 0);
             },
             (trait, buffer) -> {
                 trait.activationChance = buffer.readFloat();
@@ -64,10 +64,10 @@ public final class DurabilityTrait extends SimpleTrait {
 
     @Override
     public float onDurabilityDamage(TraitActionContext context, int damageTaken) {
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         if (damageTaken != 0 && shouldActivate(context.getTraitLevel())) {
-            if (effectScale > 0 && player instanceof ServerPlayerEntity) {
-                LibTriggers.GENERIC_INT.trigger((ServerPlayerEntity) player, TRIGGER_BRITTLE, 1);
+            if (effectScale > 0 && player instanceof ServerPlayer) {
+                LibTriggers.GENERIC_INT.trigger((ServerPlayer) player, TRIGGER_BRITTLE, 1);
             }
             return Math.round(damageTaken + effectScale);
         }

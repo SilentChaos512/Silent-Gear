@@ -1,13 +1,15 @@
 package net.silentchaos512.gear.client.gui;
 
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.client.gui.components.Button.OnPress;
 
 @OnlyIn(Dist.CLIENT)
 public class TexturedButton extends Button {
@@ -16,12 +18,12 @@ public class TexturedButton extends Button {
     protected int texturePosX;
     protected int texturePosY;
 
-    public TexturedButton(ResourceLocation resLoc, int x, int y, int texturePosX, int texturePosY, int width, int height, IPressable action) {
+    public TexturedButton(ResourceLocation resLoc, int x, int y, int texturePosX, int texturePosY, int width, int height, OnPress action) {
         this(resLoc, x, y, texturePosX, texturePosY, width, height, new ArrayList<>(), action);
     }
 
-    public TexturedButton(ResourceLocation resLoc, int x, int y, int texturePosX, int texturePosY, int width, int height, List<String> hoverTextList, IPressable action) {
-        super(x, y, width, height, new StringTextComponent(""), action);
+    public TexturedButton(ResourceLocation resLoc, int x, int y, int texturePosX, int texturePosY, int width, int height, List<String> hoverTextList, OnPress action) {
+        super(x, y, width, height, new TextComponent(""), action);
         this.texturePosX = texturePosX;
         this.texturePosY = texturePosY;
         this.resLoc = resLoc;

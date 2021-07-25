@@ -1,17 +1,17 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.OpenGuideBookPacket;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class GuideBookItem extends Item {
     public GuideBookItem(Properties properties) {
@@ -19,10 +19,10 @@ public class GuideBookItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        if (playerIn instanceof ServerPlayerEntity) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+        if (playerIn instanceof ServerPlayer) {
             Network.channel.sendTo(new OpenGuideBookPacket(),
-                    ((ServerPlayerEntity) playerIn).connection.connection,
+                    ((ServerPlayer) playerIn).connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }
         return super.use(worldIn, playerIn, handIn);

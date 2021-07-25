@@ -1,23 +1,23 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.advancements.criterion.EnchantmentPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-import net.minecraft.block.Block;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.BlockStateProperty;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.conditions.MatchTool;
-import net.minecraft.loot.conditions.TableBonus;
-import net.minecraft.loot.functions.ApplyBonus;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -29,12 +29,18 @@ import javax.annotation.Nonnull;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ModBlockLootTables extends BlockLootTables {
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.RandomValueBounds;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+
+public class ModBlockLootTables extends BlockLoot {
     private static final float[] DEFAULT_SAPLING_DROP_RATES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
-    private static final ILootCondition.IBuilder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
-    private static final ILootCondition.IBuilder SHEARS = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS));
-    private static final ILootCondition.IBuilder SILK_TOUCH_OR_SHEARS = SHEARS.or(SILK_TOUCH);
-    private static final ILootCondition.IBuilder NOT_SILK_TOUCH_OR_SHEARS = SILK_TOUCH_OR_SHEARS.invert();
+    private static final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
+    private static final LootItemCondition.Builder SHEARS = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS));
+    private static final LootItemCondition.Builder SILK_TOUCH_OR_SHEARS = SHEARS.or(SILK_TOUCH);
+    private static final LootItemCondition.Builder NOT_SILK_TOUCH_OR_SHEARS = SILK_TOUCH_OR_SHEARS.invert();
 
     @Override
     protected void addTables() {
@@ -69,7 +75,7 @@ public class ModBlockLootTables extends BlockLootTables {
         add(ModBlocks.NETHERWOOD_DOOR.get(), block ->
                 createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
         dropSelf(ModBlocks.NETHERWOOD_TRAPDOOR.get());
-        add(ModBlocks.NETHERWOOD_SLAB.get(), BlockLootTables::createSlabItemTable);
+        add(ModBlocks.NETHERWOOD_SLAB.get(), BlockLoot::createSlabItemTable);
         dropSelf(ModBlocks.NETHERWOOD_STAIRS.get());
         dropSelf(ModBlocks.STONE_TORCH.get());
 
@@ -101,61 +107,61 @@ public class ModBlockLootTables extends BlockLootTables {
         dropSelf(ModBlocks.RED_FLUFFY_BLOCK.get());
         dropSelf(ModBlocks.BLACK_FLUFFY_BLOCK.get());
 
-        this.add(ModBlocks.FLAX_PLANT.get(), flaxPlant(BlockStateProperty.hasBlockStateProperties(ModBlocks.FLAX_PLANT.get())
+        this.add(ModBlocks.FLAX_PLANT.get(), flaxPlant(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FLAX_PLANT.get())
                 .setProperties(StatePropertiesPredicate.Builder.properties()
-                        .hasProperty(CropsBlock.AGE, 7))));
+                        .hasProperty(CropBlock.AGE, 7))));
         dropOther(ModBlocks.WILD_FLAX_PLANT.get(), ModItems.FLAX_SEEDS);
 
-        this.add(ModBlocks.FLUFFY_PLANT.get(), fluffyPlant(BlockStateProperty.hasBlockStateProperties(ModBlocks.FLUFFY_PLANT.get())
+        this.add(ModBlocks.FLUFFY_PLANT.get(), fluffyPlant(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FLUFFY_PLANT.get())
                 .setProperties(StatePropertiesPredicate.Builder.properties()
-                        .hasProperty(CropsBlock.AGE, 7))));
+                        .hasProperty(CropBlock.AGE, 7))));
         dropOther(ModBlocks.WILD_FLUFFY_PLANT.get(), ModItems.FLUFFY_SEEDS);
     }
 
     @Nonnull
-    private static Function<Block, LootTable.Builder> netherwoodLeaves(IItemProvider sapling, IItemProvider stick, float... chances) {
-        return (block) -> createSelfDropDispatchTable(block, SILK_TOUCH_OR_SHEARS, applyExplosionCondition(block, ItemLootEntry.lootTableItem(sapling))
-                .when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances)))
+    private static Function<Block, LootTable.Builder> netherwoodLeaves(ItemLike sapling, ItemLike stick, float... chances) {
+        return (block) -> createSelfDropDispatchTable(block, SILK_TOUCH_OR_SHEARS, applyExplosionCondition(block, LootItem.lootTableItem(sapling))
+                .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances)))
                 .withPool(LootPool.lootPool()
-                        .setRolls(ConstantRange.exactly(1))
+                        .setRolls(ConstantIntValue.exactly(1))
                         .when(NOT_SILK_TOUCH_OR_SHEARS)
-                        .add(applyExplosionDecay(block, ItemLootEntry.lootTableItem(stick)
-                                .apply(SetCount.setCount(RandomValueRange.between(1.0F, 2.0F))))
-                                .when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))))
+                        .add(applyExplosionDecay(block, LootItem.lootTableItem(stick)
+                                .apply(SetItemCountFunction.setCount(RandomValueBounds.between(1.0F, 2.0F))))
+                                .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))))
                 .withPool(LootPool.lootPool()
-                        .setRolls(ConstantRange.exactly(1))
+                        .setRolls(ConstantIntValue.exactly(1))
                         .when(NOT_SILK_TOUCH_OR_SHEARS)
-                        .add(applyExplosionCondition(block, ItemLootEntry.lootTableItem(ModItems.NETHER_BANANA))
-                                .when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
+                        .add(applyExplosionCondition(block, LootItem.lootTableItem(ModItems.NETHER_BANANA))
+                                .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
     }
 
-    private static LootTable.Builder flaxPlant(ILootCondition.IBuilder builder) {
+    private static LootTable.Builder flaxPlant(LootItemCondition.Builder builder) {
         return applyExplosionDecay(ModBlocks.FLAX_PLANT, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .when(builder)
-                        .add(ItemLootEntry.lootTableItem(CraftingItems.FLAX_FIBER)
-                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                        .add(LootItem.lootTableItem(CraftingItems.FLAX_FIBER)
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
                 .withPool(LootPool.lootPool()
                         .when(builder)
-                        .add(ItemLootEntry.lootTableItem(ModItems.FLAX_SEEDS)
-                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                        .add(LootItem.lootTableItem(ModItems.FLAX_SEEDS)
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
                 .withPool(LootPool.lootPool()
                         .when(builder)
-                        .add(ItemLootEntry.lootTableItem(CraftingItems.FLAX_FLOWERS)
-                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5f, 1))))
+                        .add(LootItem.lootTableItem(CraftingItems.FLAX_FLOWERS)
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5f, 1))))
         );
     }
 
-    private static LootTable.Builder fluffyPlant(ILootCondition.IBuilder builder) {
+    private static LootTable.Builder fluffyPlant(LootItemCondition.Builder builder) {
         return applyExplosionDecay(ModBlocks.FLUFFY_PLANT, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .when(builder)
-                        .add(ItemLootEntry.lootTableItem(CraftingItems.FLUFFY_PUFF)
-                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                        .add(LootItem.lootTableItem(CraftingItems.FLUFFY_PUFF)
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
                 .withPool(LootPool.lootPool()
                         .when(builder)
-                        .add(ItemLootEntry.lootTableItem(ModItems.FLUFFY_SEEDS)
-                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                        .add(LootItem.lootTableItem(ModItems.FLUFFY_SEEDS)
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
         );
     }
 

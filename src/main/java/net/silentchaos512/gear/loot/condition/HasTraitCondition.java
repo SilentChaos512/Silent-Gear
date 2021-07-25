@@ -4,13 +4,13 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.ILootSerializer;
-import net.minecraft.loot.LootConditionType;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -36,24 +36,24 @@ public class HasTraitCondition extends GearLootCondition {
         return level >= minLevel && level <= maxLevel;
     }
 
-    public static ILootCondition.IBuilder builder(ResourceLocation traitId) {
+    public static LootItemCondition.Builder builder(ResourceLocation traitId) {
         return builder(traitId, 1, Integer.MAX_VALUE);
     }
 
-    public static ILootCondition.IBuilder builder(ResourceLocation traitId, int minLevel) {
+    public static LootItemCondition.Builder builder(ResourceLocation traitId, int minLevel) {
         return builder(traitId, minLevel, Integer.MAX_VALUE);
     }
 
-    public static ILootCondition.IBuilder builder(ResourceLocation traitId, int minLevel, int maxLevel) {
+    public static LootItemCondition.Builder builder(ResourceLocation traitId, int minLevel, int maxLevel) {
         return () -> new HasTraitCondition(traitId, minLevel, maxLevel);
     }
 
     @Override
-    public LootConditionType getType() {
+    public LootItemConditionType getType() {
         return ModLootStuff.HAS_TRAIT;
     }
 
-    public static class Serializer implements ILootSerializer<HasTraitCondition> {
+    public static class Serializer implements Serializer<HasTraitCondition> {
         @Override
         public void serialize(JsonObject json, HasTraitCondition value, JsonSerializationContext context) {
             json.addProperty("trait", value.traitId.toString());
@@ -61,7 +61,7 @@ public class HasTraitCondition extends GearLootCondition {
 
         @Override
         public HasTraitCondition deserialize(JsonObject json, JsonDeserializationContext context) {
-            ResourceLocation traitId = new ResourceLocation(JSONUtils.getAsString(json, "trait"));
+            ResourceLocation traitId = new ResourceLocation(GsonHelper.getAsString(json, "trait"));
             int minLevel = 1;
             int maxLevel = Integer.MAX_VALUE;
             if (json.has("level")) {
@@ -69,8 +69,8 @@ public class HasTraitCondition extends GearLootCondition {
                 if (levelJson.isJsonPrimitive()) {
                     minLevel = levelJson.getAsInt();
                 } else {
-                    minLevel = JSONUtils.getAsInt(levelJson.getAsJsonObject(), "min", minLevel);
-                    maxLevel = JSONUtils.getAsInt(levelJson.getAsJsonObject(), "max", maxLevel);
+                    minLevel = GsonHelper.getAsInt(levelJson.getAsJsonObject(), "min", minLevel);
+                    maxLevel = GsonHelper.getAsInt(levelJson.getAsJsonObject(), "max", maxLevel);
                 }
             }
             return new HasTraitCondition(traitId, minLevel, maxLevel);

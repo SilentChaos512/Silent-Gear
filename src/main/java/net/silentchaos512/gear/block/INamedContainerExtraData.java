@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.network.FriendlyByteBuf;
 
-public interface INamedContainerExtraData extends INamedContainerProvider {
-    void encodeExtraData(PacketBuffer buffer);
+public interface INamedContainerExtraData extends MenuProvider {
+    void encodeExtraData(FriendlyByteBuf buffer);
 }

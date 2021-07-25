@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
@@ -35,12 +35,12 @@ public final class MaterialSerializers {
     }
 
     public static IMaterial deserialize(ResourceLocation id, String packName, JsonObject json) {
-        ResourceLocation type = SilentGear.getIdWithDefaultNamespace(JSONUtils.getAsString(json, "type", STANDARD.getName().toString()));
+        ResourceLocation type = SilentGear.getIdWithDefaultNamespace(GsonHelper.getAsString(json, "type", STANDARD.getName().toString()));
         IMaterialSerializer<?> serializer = REGISTRY.getOrDefault(type, STANDARD);
         return serializer.deserialize(id, packName, json);
     }
 
-    public static IMaterial read(PacketBuffer buffer) {
+    public static IMaterial read(FriendlyByteBuf buffer) {
         ResourceLocation id = buffer.readResourceLocation();
         ResourceLocation type = buffer.readResourceLocation();
         IMaterialSerializer<?> serializer = REGISTRY.get(type);
@@ -51,7 +51,7 @@ public final class MaterialSerializers {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends IMaterial> void write(T material, PacketBuffer buffer) {
+    public static <T extends IMaterial> void write(T material, FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(material.getId());
         buffer.writeResourceLocation(material.getSerializer().getName());
         IMaterialSerializer<T> serializer = (IMaterialSerializer<T>) material.getSerializer();

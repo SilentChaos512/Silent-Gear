@@ -3,11 +3,11 @@ package net.silentchaos512.gear.client.event;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.Entity;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.math.BlockPos;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -74,7 +74,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
         RenderSystem.popMatrix();
     }
 
-    private void drawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder bufferBuilderIn, Entity entityIn, float partialTicks) {
+    private void drawBlockDamageTexture(Tesselator tessellatorIn, BufferBuilder bufferBuilderIn, Entity entityIn, float partialTicks) {
 /*        double d3 = entityIn.lastTickPosX + (entityIn.getX() - entityIn.lastTickPosX) * (double) partialTicks;
         double d4 = entityIn.lastTickPosY + (entityIn.getY() - entityIn.lastTickPosY) * (double) partialTicks;
         double d5 = entityIn.lastTickPosZ + (entityIn.getZ() - entityIn.lastTickPosZ) * (double) partialTicks;
@@ -139,7 +139,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+    public void onResourceManagerReload(ResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
 /*        AtlasTexture texturemap = this.mc.getTextureMap();
         if (texturemap == null) return;
 

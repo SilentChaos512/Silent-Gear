@@ -2,13 +2,13 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -53,8 +53,8 @@ public interface ICoreTool extends ICoreItem {
 
     @Override
     default boolean isValidSlot(String slot) {
-        return EquipmentSlotType.MAINHAND.getName().equalsIgnoreCase(slot)
-                || EquipmentSlotType.OFFHAND.getName().equalsIgnoreCase(slot);
+        return EquipmentSlot.MAINHAND.getName().equalsIgnoreCase(slot)
+                || EquipmentSlot.OFFHAND.getName().equalsIgnoreCase(slot);
     }
 
     @Override
@@ -71,7 +71,7 @@ public interface ICoreTool extends ICoreItem {
      * @param pos   The position of the block
      * @return The amount of damage done (durability lost) to the item
      */
-    default int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
+    default int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
         return state.getMaterial() != Material.LEAVES && state.getDestroySpeed(world, pos) > 0 ? 1 : 0;
     }
 

@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.loot.modifier;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -21,7 +21,7 @@ import java.util.List;
  * enchantment example provided by Forge.
  */
 public class MagmaticTraitLootModifier extends LootModifier {
-    public MagmaticTraitLootModifier(ILootCondition[] conditionsIn) {
+    public MagmaticTraitLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
@@ -34,8 +34,8 @@ public class MagmaticTraitLootModifier extends LootModifier {
     }
 
     private static ItemStack smelt(ItemStack stack, LootContext context) {
-        return context.getLevel().getRecipeManager().getRecipeFor(IRecipeType.SMELTING, new Inventory(stack), context.getLevel())
-                .map(FurnaceRecipe::getResultItem)
+        return context.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(stack), context.getLevel())
+                .map(SmeltingRecipe::getResultItem)
                 .filter(s -> !s.isEmpty())
                 .map(s -> ItemHandlerHelper.copyStackWithSize(s, stack.getCount() * s.getCount()))
                 .orElse(stack);
@@ -43,7 +43,7 @@ public class MagmaticTraitLootModifier extends LootModifier {
 
     public static class Serializer extends GlobalLootModifierSerializer<MagmaticTraitLootModifier> {
         @Override
-        public MagmaticTraitLootModifier read(ResourceLocation name, JsonObject json, ILootCondition[] conditionsIn) {
+        public MagmaticTraitLootModifier read(ResourceLocation name, JsonObject json, LootItemCondition[] conditionsIn) {
             return new MagmaticTraitLootModifier(conditionsIn);
         }
 

@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.client.model;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.core.Direction;
+import com.mojang.math.Transformation;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public abstract class LayeredModel<T extends IModelGeometry<T>> implements IModelGeometry<T> {
     // Quad builders (credit to Tetra, https://github.com/mickelus/tetra/blob/master/src/main/java/se/mickelus/tetra/client/model/ModularItemModel.java)
-    public static List<BakedQuad> getQuadsForSprite(int tintIndex, TextureAtlasSprite sprite, TransformationMatrix transform, int color) {
+    public static List<BakedQuad> getQuadsForSprite(int tintIndex, TextureAtlasSprite sprite, Transformation transform, int color) {
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
         int uMax = sprite.getWidth();
@@ -50,7 +50,7 @@ public abstract class LayeredModel<T extends IModelGeometry<T>> implements IMode
     }
 
     @SuppressWarnings({"MethodWithTooManyParameters", "OverlyLongMethod"})
-    private static BakedQuad buildSideQuad(TransformationMatrix transform, Direction side, int tintIndex, int color, TextureAtlasSprite sprite, int u, int v, int size) {
+    private static BakedQuad buildSideQuad(Transformation transform, Direction side, int tintIndex, int color, TextureAtlasSprite sprite, int u, int v, int size) {
         int width = sprite.getWidth();
         int height = sprite.getHeight();
 
@@ -110,7 +110,7 @@ public abstract class LayeredModel<T extends IModelGeometry<T>> implements IMode
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    private static BakedQuad buildQuad(TransformationMatrix transform, Direction side, TextureAtlasSprite sprite, int tintIndex, int color,
+    private static BakedQuad buildQuad(Transformation transform, Direction side, TextureAtlasSprite sprite, int tintIndex, int color,
                                        float x0, float y0, float z0, float u0, float v0,
                                        float x1, float y1, float z1, float u1, float v1,
                                        float x2, float y2, float z2, float u2, float v2,

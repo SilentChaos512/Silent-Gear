@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.gear.material;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
 import net.silentchaos512.gear.api.part.PartType;

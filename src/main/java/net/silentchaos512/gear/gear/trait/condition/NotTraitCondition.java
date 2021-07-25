@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -43,7 +43,7 @@ public class NotTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayText() {
+    public MutableComponent getDisplayText() {
         return TextUtil.translate("trait.condition", "not", this.child.getDisplayText());
     }
 
@@ -56,7 +56,7 @@ public class NotTraitCondition implements ITraitCondition {
 
         @Override
         public NotTraitCondition deserialize(JsonObject json) {
-            return new NotTraitCondition(TraitSerializers.deserializeCondition(JSONUtils.getAsJsonObject(json, "value")));
+            return new NotTraitCondition(TraitSerializers.deserializeCondition(GsonHelper.getAsJsonObject(json, "value")));
         }
 
         @Override
@@ -65,12 +65,12 @@ public class NotTraitCondition implements ITraitCondition {
         }
 
         @Override
-        public NotTraitCondition read(PacketBuffer buffer) {
+        public NotTraitCondition read(FriendlyByteBuf buffer) {
             return new NotTraitCondition(TraitSerializers.readCondition(buffer));
         }
 
         @Override
-        public void write(NotTraitCondition condition, PacketBuffer buffer) {
+        public void write(NotTraitCondition condition, FriendlyByteBuf buffer) {
             TraitSerializers.writeCondition(condition.child, buffer);
         }
     }

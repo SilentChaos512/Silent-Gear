@@ -4,14 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
-public class MaterialsProvider implements IDataProvider {
+public class MaterialsProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     // Old SGems chargeability stat
@@ -134,7 +134,7 @@ public class MaterialsProvider implements IDataProvider {
                 .stat(PartType.MAIN, CHARGEABILITY, 0.5f)
                 .trait(PartType.MAIN, Const.Traits.ADAMANT, 5)
                 .trait(PartType.MAIN, Const.Traits.HOLY, 5)
-                .name(new TranslationTextComponent(Items.BARRIER.getDescriptionId()))
+                .name(new TranslatableComponent(Items.BARRIER.getDescriptionId()))
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
         );
 
@@ -2190,7 +2190,7 @@ public class MaterialsProvider implements IDataProvider {
     //endregion
 
     @SuppressWarnings("WeakerAccess")
-    protected MaterialBuilder compoundBuilder(ResourceLocation id, IItemProvider item) {
+    protected MaterialBuilder compoundBuilder(ResourceLocation id, ItemLike item) {
         return new MaterialBuilder(id, -1, item)
                 .type(MaterialSerializers.COMPOUND, false)
                 .categories(MaterialCategories.GEM);
@@ -2206,14 +2206,14 @@ public class MaterialsProvider implements IDataProvider {
         return new MaterialBuilder(SilentGear.getId(name), tier, tag).loadConditionTagExists(tag);
     }
 
-    private static MaterialBuilder terracotta(ResourceLocation parent, String suffix, IItemProvider item, int color) {
+    private static MaterialBuilder terracotta(ResourceLocation parent, String suffix, ItemLike item, int color) {
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, color)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, color);
     }
 
-    private static MaterialBuilder wood(String suffix, IItemProvider item, int color) {
+    private static MaterialBuilder wood(String suffix, ItemLike item, int color) {
         ResourceLocation parent = Const.Materials.WOOD.getId();
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
@@ -2222,7 +2222,7 @@ public class MaterialsProvider implements IDataProvider {
                 .displayFragment(PartTextures.WOOD, color);
     }
 
-    private static MaterialBuilder wool(String suffix, IItemProvider item, int color) {
+    private static MaterialBuilder wool(String suffix, ItemLike item, int color) {
         ResourceLocation parent = Const.Materials.WOOL.getId();
         return new MaterialBuilder(new ResourceLocation(parent.getNamespace(), parent.getPath() + "/" + suffix), -1, item)
                 .parent(parent)
@@ -2247,7 +2247,7 @@ public class MaterialsProvider implements IDataProvider {
     }
 
     @Override
-    public void run(DirectoryCache cache) {
+    public void run(HashCache cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (MaterialBuilder builder : getMaterials()) {

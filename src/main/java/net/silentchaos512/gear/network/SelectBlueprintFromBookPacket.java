@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 
@@ -18,7 +18,7 @@ public class SelectBlueprintFromBookPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
-        ServerPlayerEntity player = context.get().getSender();
+        ServerPlayer player = context.get().getSender();
         if (player != null && player.containerMenu != null && this.bookSlot >= 0 && this.bookSlot < player.containerMenu.slots.size()) {
             ItemStack book = player.containerMenu.getSlot(this.bookSlot).getItem();
 
@@ -30,13 +30,13 @@ public class SelectBlueprintFromBookPacket {
         context.get().setPacketHandled(true);
     }
 
-    public static SelectBlueprintFromBookPacket decode(PacketBuffer buffer) {
+    public static SelectBlueprintFromBookPacket decode(FriendlyByteBuf buffer) {
         int bookSlot = buffer.readVarInt();
         int slot = buffer.readVarInt();
         return new SelectBlueprintFromBookPacket(bookSlot, slot);
     }
 
-    public static void encode(SelectBlueprintFromBookPacket msg, PacketBuffer buffer) {
+    public static void encode(SelectBlueprintFromBookPacket msg, FriendlyByteBuf buffer) {
         buffer.writeVarInt(msg.bookSlot);
         buffer.writeVarInt(msg.slot);
     }

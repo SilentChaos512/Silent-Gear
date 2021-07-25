@@ -19,15 +19,15 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.ModList;
@@ -72,12 +72,12 @@ public final class TraitHelper {
             return inputValue;
         }
 
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
         float value = inputValue;
 
-        for (INBT nbt : tagList) {
-            if (nbt instanceof CompoundNBT) {
-                CompoundNBT tagCompound = (CompoundNBT) nbt;
+        for (Tag nbt : tagList) {
+            if (nbt instanceof CompoundTag) {
+                CompoundTag tagCompound = (CompoundTag) nbt;
                 String regName = tagCompound.getString("Name");
                 ITrait trait = TraitManager.get(regName);
 
@@ -127,11 +127,11 @@ public final class TraitHelper {
      */
     public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
-            for (INBT nbt : tagList) {
-                if (nbt instanceof CompoundNBT) {
-                    CompoundNBT tagCompound = (CompoundNBT) nbt;
+            for (Tag nbt : tagList) {
+                if (nbt instanceof CompoundTag) {
+                    CompoundTag tagCompound = (CompoundTag) nbt;
                     String regName = tagCompound.getString("Name");
                     if (regName.equals(traitId.toString())) {
                         return tagCompound.getByte("Level");
@@ -169,11 +169,11 @@ public final class TraitHelper {
      */
     public static boolean hasTrait(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
-            for (INBT nbt : tagList) {
-                if (nbt instanceof CompoundNBT) {
-                    CompoundNBT tagCompound = (CompoundNBT) nbt;
+            for (Tag nbt : tagList) {
+                if (nbt instanceof CompoundTag) {
+                    CompoundTag tagCompound = (CompoundTag) nbt;
                     String regName = tagCompound.getString("Name");
                     if (regName.equals(traitId.toString())) {
                         return true;
@@ -187,18 +187,18 @@ public final class TraitHelper {
         return false;
     }
 
-    public static int getHighestLevelEitherHand(PlayerEntity player, DataResource<ITrait> trait) {
+    public static int getHighestLevelEitherHand(Player player, DataResource<ITrait> trait) {
         return getHighestLevelEitherHand(player, trait.getId());
     }
 
     @Deprecated
-    public static int getHighestLevelEitherHand(PlayerEntity player, ResourceLocation traitId) {
+    public static int getHighestLevelEitherHand(Player player, ResourceLocation traitId) {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
         return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
     }
 
-    public static int getHighestLevelArmor(PlayerEntity player, DataResource<ITrait> trait) {
+    public static int getHighestLevelArmor(Player player, DataResource<ITrait> trait) {
         int max = 0;
         for (ItemStack stack : player.inventory.armor) {
             max = Math.max(max, getTraitLevel(stack, trait));
@@ -213,18 +213,18 @@ public final class TraitHelper {
         return 0;
     }
 
-    public static boolean hasTraitEitherHand(PlayerEntity player, DataResource<ITrait> trait) {
+    public static boolean hasTraitEitherHand(Player player, DataResource<ITrait> trait) {
         return hasTraitEitherHand(player, trait.getId());
     }
 
     @Deprecated
-    public static boolean hasTraitEitherHand(PlayerEntity player, ResourceLocation traitId) {
+    public static boolean hasTraitEitherHand(Player player, ResourceLocation traitId) {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
         return hasTrait(main, traitId) || hasTrait(off, traitId);
     }
 
-    public static boolean hasTraitArmor(PlayerEntity player, DataResource<ITrait> trait) {
+    public static boolean hasTraitArmor(Player player, DataResource<ITrait> trait) {
         for (ItemStack stack : player.inventory.armor) {
             if (hasTrait(stack, trait)) {
                 return true;
@@ -237,11 +237,11 @@ public final class TraitHelper {
         if (!GearHelper.isGear(gear)) return ImmutableMap.of();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
-        for (INBT nbt : tagList) {
-            if (nbt instanceof CompoundNBT) {
-                CompoundNBT tagCompound = (CompoundNBT) nbt;
+        for (Tag nbt : tagList) {
+            if (nbt instanceof CompoundTag) {
+                CompoundTag tagCompound = (CompoundTag) nbt;
                 String name = tagCompound.getString("Name");
                 ITrait trait = TraitManager.get(name);
                 int level = tagCompound.getByte("Level");
@@ -316,7 +316,7 @@ public final class TraitHelper {
             final int matsWithTrait = countMatsWithTrait.get(trait);
             final float divisor = Math.max(components.size() / 2f, matsWithTrait);
             final int value = Math.round(map.get(trait) / divisor);
-            map.put(trait, MathHelper.clamp(value, 1, trait.getMaxLevel()));
+            map.put(trait, Mth.clamp(value, 1, trait.getMaxLevel()));
         }
 
         cancelTraits(map, keys);
@@ -359,11 +359,11 @@ public final class TraitHelper {
         }
     }
 
-    static void tickTraits(World world, @Nullable PlayerEntity player, ItemStack gear, boolean isEquipped) {
-        ListNBT tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+    static void tickTraits(Level world, @Nullable Player player, ItemStack gear, boolean isEquipped) {
+        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tagList.size(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompound(i);
+            CompoundTag tagCompound = tagList.getCompound(i);
             String regName = tagCompound.getString("Name");
             ITrait trait = TraitManager.get(regName);
 

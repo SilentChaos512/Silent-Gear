@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.api;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -34,7 +34,7 @@ public final class GearApi {
 
     //region Gear
 
-    public static void recalculateStats(ItemStack gear, @Nullable PlayerEntity player) {
+    public static void recalculateStats(ItemStack gear, @Nullable Player player) {
         GearData.recalculateStats(gear, player);
     }
 
@@ -64,11 +64,11 @@ public final class GearApi {
         return GearData.getPrimaryPart(gear);
     }
 
-    public static void attemptDamageGear(ItemStack gear, int amount, @Nullable PlayerEntity player, Hand hand) {
+    public static void attemptDamageGear(ItemStack gear, int amount, @Nullable Player player, InteractionHand hand) {
         GearHelper.attemptDamage(gear, amount, player, hand);
     }
 
-    public static void attemptDamageGear(ItemStack gear, int amount, @Nullable PlayerEntity player, EquipmentSlotType slot) {
+    public static void attemptDamageGear(ItemStack gear, int amount, @Nullable Player player, EquipmentSlot slot) {
         GearHelper.attemptDamage(gear, amount, player, slot);
     }
 

@@ -7,10 +7,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.util.StatGearKey;
@@ -25,11 +25,11 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
 
     private final Multimap<StatGearKey, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
-    public static IFormattableTextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
+    public static MutableComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
         return formatText(mods, stat, maxDecimalPlaces, false);
     }
 
-    public static IFormattableTextComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces, boolean addModColors) {
+    public static MutableComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces, boolean addModColors) {
         if (mods.size() == 1) {
             StatInstance inst = mods.iterator().next();
             int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
@@ -37,7 +37,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         }
 
         // Sort modifiers by operation
-        IFormattableTextComponent result = new StringTextComponent("");
+        MutableComponent result = new TextComponent("");
         List<StatInstance> toSort = new ArrayList<>(mods);
         toSort.sort(Comparator.comparing(inst -> inst.getOp().ordinal()));
 
@@ -230,7 +230,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         } else if (json.isJsonArray()) {
             for (JsonElement element : json.getAsJsonArray()) {
                 JsonObject jsonObj = element.getAsJsonObject();
-                StatGearKey key = StatGearKey.read(JSONUtils.getAsString(jsonObj, "name"));
+                StatGearKey key = StatGearKey.read(GsonHelper.getAsString(jsonObj, "name"));
                 if (key != null) {
                     map.put(key, StatInstance.read(key, element));
                 }
@@ -241,7 +241,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         return map;
     }
 
-    public static StatModifierMap read(PacketBuffer buffer) {
+    public static StatModifierMap read(FriendlyByteBuf buffer) {
         StatModifierMap map = new StatModifierMap();
 
         int count = buffer.readVarInt();
@@ -254,7 +254,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         return map;
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeVarInt(this.size());
         this.forEach((key, instance) -> {
             key.write(buffer);

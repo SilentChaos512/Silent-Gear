@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.client.util;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
@@ -31,6 +31,12 @@ import net.silentchaos512.utils.Color;
 
 import java.util.*;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+
 @OnlyIn(Dist.CLIENT)
 public final class GearClientHelper {
     private GearClientHelper() {
@@ -44,14 +50,14 @@ public final class GearClientHelper {
         return Color.VALUE_WHITE;
     }
 
-    public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public static void addInformation(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
         GearTooltipFlag flagTC = flag instanceof GearTooltipFlag
                 ? (GearTooltipFlag) flag
                 : GearTooltipFlag.withModifierKeys(flag.isAdvanced(), true, true);
         addInformation(stack, world, tooltip, flagTC);
     }
 
-    public static void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, GearTooltipFlag flag) {
+    public static void addInformation(ItemStack stack, Level world, List<Component> tooltip, GearTooltipFlag flag) {
         /*
         LoaderState state = Loader.instance().getLoaderState();
         if (state == LoaderState.INITIALIZATION || state == LoaderState.SERVER_ABOUT_TO_START || state == LoaderState.SERVER_STOPPING) {
@@ -102,12 +108,12 @@ public final class GearClientHelper {
             tooltipListParts(stack, tooltip, constructionParts, flag);
         } else if (flag.showConstruction) {
             tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.construction"), Color.GOLD)
-                    .append(new StringTextComponent(" ")
-                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), TextFormatting.GRAY))));
+                    .append(new TextComponent(" ")
+                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), ChatFormatting.GRAY))));
         }
     }
 
-    public static void addStatsInfo(ItemStack stack, List<ITextComponent> tooltip, GearTooltipFlag flag, ICoreItem item) {
+    public static void addStatsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag, ICoreItem item) {
         if (KeyTracker.isDisplayStatsDown() && flag.showStats) {
             tooltip.add(TextUtil.withColor(misc("tooltip.stats"), Color.GOLD));
 
@@ -129,8 +135,8 @@ public final class GearClientHelper {
 
                 StatInstance inst = StatInstance.of(statValue, StatInstance.Operation.AVG, StatInstance.DEFAULT_KEY);
                 Color nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TooltipHandler.MC_DARK_GRAY;
-                ITextComponent textName = TextUtil.withColor(stat.getDisplayName(), nameColor);
-                IFormattableTextComponent textStat = inst.getFormattedText(stat, stat.isDisplayAsInt() ? 0 : 2, false);
+                Component textName = TextUtil.withColor(stat.getDisplayName(), nameColor);
+                MutableComponent textStat = inst.getFormattedText(stat, stat.isDisplayAsInt() ? 0 : 2, false);
 
                 // Some stat-specific formatting...
                 // TODO: The stats should probably handle this instead
@@ -148,12 +154,12 @@ public final class GearClientHelper {
             tooltip.addAll(builder.build());
         } else if (flag.showStats) {
             tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.stats"), Color.GOLD)
-                    .append(new StringTextComponent(" ")
-                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), TextFormatting.GRAY))));
+                    .append(new TextComponent(" ")
+                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), ChatFormatting.GRAY))));
         }
     }
 
-    private static void addTraitsInfo(ItemStack stack, List<ITextComponent> tooltip, GearTooltipFlag flag) {
+    private static void addTraitsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag) {
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
         List<ITrait> visibleTraits = new ArrayList<>();
         for (ITrait t : traits.keySet()) {
@@ -163,7 +169,7 @@ public final class GearClientHelper {
         }
 
         int traitIndex = getTraitDisplayIndex(visibleTraits.size(), flag);
-        IFormattableTextComponent textTraits = TextUtil.withColor(misc("tooltip.traits"), Color.GOLD);
+        MutableComponent textTraits = TextUtil.withColor(misc("tooltip.traits"), Color.GOLD);
         if (traitIndex < 0) {
             tooltip.add(textTraits);
         }
@@ -175,10 +181,10 @@ public final class GearClientHelper {
                 trait.addInformation(level, tooltip, flag, text -> {
                     if (traitIndex >= 0) {
                         return textTraits
-                                .append(TextUtil.withColor(new StringTextComponent(": "), TextFormatting.GRAY)
+                                .append(TextUtil.withColor(new TextComponent(": "), ChatFormatting.GRAY)
                                         .append(text));
                     }
-                    return new StringTextComponent(TextListBuilder.BULLETS[0] + " ").append(text);
+                    return new TextComponent(TextListBuilder.BULLETS[0] + " ").append(text);
                 });
             }
             ++i;
@@ -191,23 +197,23 @@ public final class GearClientHelper {
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 
-    private static IFormattableTextComponent misc(String key, Object... formatArgs) {
-        return new TranslationTextComponent("misc.silentgear." + key, formatArgs);
+    private static MutableComponent misc(String key, Object... formatArgs) {
+        return new TranslatableComponent("misc.silentgear." + key, formatArgs);
     }
 
-    private static IFormattableTextComponent statText(String key, Object... formatArgs) {
-        return new TranslationTextComponent("stat.silentgear." + key, formatArgs);
+    private static MutableComponent statText(String key, Object... formatArgs) {
+        return new TranslatableComponent("stat.silentgear." + key, formatArgs);
     }
 
-    public static void tooltipListParts(ItemStack gear, List<ITextComponent> tooltip, Collection<PartData> parts, GearTooltipFlag flag) {
+    public static void tooltipListParts(ItemStack gear, List<Component> tooltip, Collection<PartData> parts, GearTooltipFlag flag) {
         TextListBuilder builder = new TextListBuilder();
 
         for (PartData part : parts) {
             if (part.get().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
-                IFormattableTextComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).copy(), partNameColor);
+                MutableComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).copy(), partNameColor);
                 builder.add(flag.isAdvanced()
-                        ? partNameText.append(TextUtil.misc("spaceBrackets", part.getType().getName()).withStyle(TextFormatting.DARK_GRAY))
+                        ? partNameText.append(TextUtil.misc("spaceBrackets", part.getType().getName()).withStyle(ChatFormatting.DARK_GRAY))
                         : partNameText);
 
                 // List materials for compound parts

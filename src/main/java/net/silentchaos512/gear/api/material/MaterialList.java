@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.material;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 
 import javax.annotation.Nullable;
@@ -28,11 +28,11 @@ public final class MaterialList implements List<IMaterialInstance> {
         return ret;
     }
 
-    public static MaterialList deserializeNbt(ListNBT listNbt) {
+    public static MaterialList deserializeNbt(ListTag listNbt) {
         MaterialList ret = new MaterialList();
 
         for (int i = 0; i < listNbt.size(); ++i) {
-            CompoundNBT compoundNbt = listNbt.getCompound(i);
+            CompoundTag compoundNbt = listNbt.getCompound(i);
             MaterialInstance material = MaterialInstance.read(compoundNbt);
 
             if (material != null) {
@@ -46,8 +46,8 @@ public final class MaterialList implements List<IMaterialInstance> {
         return ret;
     }
 
-    public ListNBT serializeNbt() {
-        ListNBT ret = new ListNBT();
+    public ListTag serializeNbt() {
+        ListTag ret = new ListTag();
         IMaterialInstance last = null;
         int count = 0;
 
@@ -75,8 +75,8 @@ public final class MaterialList implements List<IMaterialInstance> {
         return ret;
     }
 
-    private static CompoundNBT serializeMaterialWithCount(IMaterialInstance material, int count) {
-        CompoundNBT ret = new CompoundNBT();
+    private static CompoundTag serializeMaterialWithCount(IMaterialInstance material, int count) {
+        CompoundTag ret = new CompoundTag();
         material.write(ret);
         if (count > 1) {
             ret.putByte("Count", (byte) count);
@@ -91,7 +91,7 @@ public final class MaterialList implements List<IMaterialInstance> {
      * @return The first valid material, or null if there are none in the list
      */
     @Nullable
-    public static IMaterialInstance deserializeFirst(ListNBT listNbt) {
+    public static IMaterialInstance deserializeFirst(ListTag listNbt) {
         for (int i = 0; i < listNbt.size(); i++) {
             MaterialInstance material = MaterialInstance.read(listNbt.getCompound(i));
             if (material != null) {

@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.network.KeyPressOnItemPacket;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class ModKitItem extends Item implements ICycleItem {
     private static final String NBT_SELECTED = "SelectedType";
@@ -68,18 +68,18 @@ public class ModKitItem extends Item implements ICycleItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         PartType selected = getSelectedType(stack);
         tooltip.add(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected"), Color.SKYBLUE)
-                .append(selected.getDisplayName(0).withStyle(TextFormatting.GRAY)));
+                .append(selected.getDisplayName(0).withStyle(ChatFormatting.GRAY)));
 
         tooltip.add(TextUtil.translate("item", "mod_kit.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
 
         if (flagIn.isAdvanced()) {
-            StringTextComponent text = new StringTextComponent("Removable types: " + getRemovableTypes().size());
-            tooltip.add(TextUtil.withColor(text, TextFormatting.DARK_GRAY));
+            TextComponent text = new TextComponent("Removable types: " + getRemovableTypes().size());
+            tooltip.add(TextUtil.withColor(text, ChatFormatting.DARK_GRAY));
         }
     }
 

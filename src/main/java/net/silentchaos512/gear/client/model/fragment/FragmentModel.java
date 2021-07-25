@@ -5,9 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Transformation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.geometry.IModelGeometryPart;
@@ -29,11 +29,20 @@ import net.silentchaos512.gear.util.Const;
 import java.util.*;
 import java.util.function.Function;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+
 public class FragmentModel extends LayeredModel<FragmentModel> {
-    private final ItemCameraTransforms cameraTransforms;
+    private final ItemTransforms cameraTransforms;
     private FragmentModelOverrideList overrideList;
 
-    public FragmentModel(ItemCameraTransforms cameraTransforms) {
+    public FragmentModel(ItemTransforms cameraTransforms) {
         this.cameraTransforms = cameraTransforms;
     }
 
@@ -44,27 +53,27 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
         overrideList = new FragmentModelOverrideList(this, owner, bakery, spriteGetter, modelTransform, modelLocation);
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    public IBakedModel bake(List<MaterialLayer> layers,
+    public BakedModel bake(List<MaterialLayer> layers,
                             IModelConfiguration owner,
                             ModelBakery bakery,
-                            Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                            IModelTransform modelTransform,
+                            Function<Material, TextureAtlasSprite> spriteGetter,
+                            ModelState modelTransform,
                             FragmentModelOverrideList fragmentModelOverrideList,
                             ResourceLocation modelLocation) {
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
-        TransformationMatrix rotation = modelTransform.getRotation();
-        ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
+        Transformation rotation = modelTransform.getRotation();
+        ImmutableMap<ItemTransforms.TransformType, Transformation> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, layer.getTexture(GearType.FRAGMENT, 0)));
+            TextureAtlasSprite texture = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, layer.getTexture(GearType.FRAGMENT, 0)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -75,7 +84,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
             } else {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");
-                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
+                TextureAtlasSprite texture = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, SilentGear.getId("item/error")));
                 builder.addAll(getQuadsForSprite(0, texture, rotation, 0xFFFFFF));
             }
         }
@@ -85,21 +94,21 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
         return new BakedPerspectiveModel(builder.build(), particle, transforms, overrideList, rotation.isIdentity(), owner.isSideLit(), cameraTransforms);
     }
 
-    private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
+    private void buildFakeModel(Function<Material, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, Transformation rotation, IMaterial material) {
         // This method will display an example item for items with no data (ie, for advancements)
         MaterialInstance mat = MaterialInstance.of(material);
         IMaterialDisplay model = MaterialDisplayManager.get(mat);
         MaterialLayer exampleMain = model.getLayerList(GearType.FRAGMENT, PartType.MAIN, mat).getFirstLayer();
         if (exampleMain != null) {
-            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, exampleMain.getTexture(GearType.FRAGMENT, 0))), rotation, exampleMain.getColor()));
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, exampleMain.getTexture(GearType.FRAGMENT, 0))), rotation, exampleMain.getColor()));
         }
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        Set<RenderMaterial> ret = new HashSet<>();
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        Set<Material> ret = new HashSet<>();
 
-        ret.add(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
+        ret.add(new Material(InventoryMenu.BLOCK_ATLAS, SilentGear.getId("item/error")));
 
         // Generic built-in textures
         ret.add(getTexture(PartTextures.CLOTH.getTexture()));
@@ -114,25 +123,25 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
         }
 
         SilentGear.LOGGER.info("Textures for fragment model");
-        for (RenderMaterial mat : ret) {
+        for (Material mat : ret) {
             SilentGear.LOGGER.info("- {}", mat.texture());
         }
 
         return ret;
     }
 
-    private RenderMaterial getTexture(MaterialLayer layer) {
+    private Material getTexture(MaterialLayer layer) {
         return getMaterial(layer.getTexture(GearType.FRAGMENT, 0));
     }
 
-    private RenderMaterial getTexture(ResourceLocation tex) {
+    private Material getTexture(ResourceLocation tex) {
         String path = "item/" + GearType.FRAGMENT.getName() + "/" + tex.getPath();
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path);
         return getMaterial(location);
     }
 
-    private static RenderMaterial getMaterial(ResourceLocation tex) {
-        return new RenderMaterial(PlayerContainer.BLOCK_ATLAS, tex);
+    private static Material getMaterial(ResourceLocation tex) {
+        return new Material(InventoryMenu.BLOCK_ATLAS, tex);
     }
 
     @Override

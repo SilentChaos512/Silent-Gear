@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -23,10 +23,10 @@ public class OpenGuideBookPacket {
         Minecraft mc = Minecraft.getInstance();
 //        mc.displayGuiScreen(new GuideBookScreen(new StringTextComponent("Guide Book Temp")));
         if (mc.player != null) {
-            mc.player.sendMessage(new StringTextComponent("Guide book is work-in-progress (probably gonna take a long time...)"), Util.NIL_UUID);
-            mc.player.sendMessage(new StringTextComponent("Check the wiki instead: ")
-                    .append(new StringTextComponent(WIKI_URL)
-                            .withStyle(TextFormatting.UNDERLINE)
+            mc.player.sendMessage(new TextComponent("Guide book is work-in-progress (probably gonna take a long time...)"), Util.NIL_UUID);
+            mc.player.sendMessage(new TextComponent("Check the wiki instead: ")
+                    .append(new TextComponent(WIKI_URL)
+                            .withStyle(ChatFormatting.UNDERLINE)
                             .withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                                     WIKI_URL)))), Util.NIL_UUID);
         }

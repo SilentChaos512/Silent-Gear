@@ -1,19 +1,19 @@
 package net.silentchaos512.gear.item.blueprint;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class PartBlueprintItem extends AbstractBlueprintItem {
     private final PartType partType;
-    private final ITag.INamedTag<Item> itemTag;
+    private final Tag.Named<Item> itemTag;
 
     public PartBlueprintItem(PartType partType, boolean singleUse, Properties properties) {
         super(properties, singleUse);
@@ -36,12 +36,12 @@ public class PartBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public ITag.INamedTag<Item> getItemTag() {
+    public Tag.Named<Item> getItemTag() {
         return itemTag;
     }
 
     @Override
-    protected ITextComponent getCraftedName(ItemStack stack) {
+    protected Component getCraftedName(ItemStack stack) {
         return this.partType.getDisplayName(0);
     }
 }

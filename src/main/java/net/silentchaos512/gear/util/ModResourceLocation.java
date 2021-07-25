@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.util;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 
 public class ModResourceLocation extends ResourceLocation {

@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.api.traits;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
 public class TraitActionContext {
-    @Nullable private final PlayerEntity player;
+    @Nullable private final Player player;
     private final int traitLevel;
     private final ItemStack gear;
 
-    public TraitActionContext(@Nullable PlayerEntity player, int traitLevel, ItemStack gear) {
+    public TraitActionContext(@Nullable Player player, int traitLevel, ItemStack gear) {
         this.player = player;
         this.traitLevel = traitLevel;
         this.gear = gear;
@@ -22,7 +22,7 @@ public class TraitActionContext {
      * @return The user of the gear item, or null if not available
      */
     @Nullable
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

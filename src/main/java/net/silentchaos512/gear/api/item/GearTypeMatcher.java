@@ -3,8 +3,8 @@ package net.silentchaos512.gear.api.item;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +46,7 @@ public class GearTypeMatcher implements Predicate<GearType> {
     }
 
     public static GearTypeMatcher deserialize(JsonObject json) {
-        boolean matchParents = JSONUtils.getAsBoolean(json, "match_parents");
+        boolean matchParents = GsonHelper.getAsBoolean(json, "match_parents");
         GearTypeMatcher result = new GearTypeMatcher(matchParents);
         JsonArray array = json.getAsJsonArray("types");
         for (JsonElement e : array) {
@@ -58,7 +58,7 @@ public class GearTypeMatcher implements Predicate<GearType> {
         return result;
     }
 
-    public static GearTypeMatcher read(PacketBuffer buffer) {
+    public static GearTypeMatcher read(FriendlyByteBuf buffer) {
         boolean matchParents = buffer.readBoolean();
         GearTypeMatcher result = new GearTypeMatcher(matchParents);
         int count = buffer.readByte();
@@ -68,7 +68,7 @@ public class GearTypeMatcher implements Predicate<GearType> {
         return result;
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeBoolean(this.matchParents);
         buffer.writeByte(this.types.size());
         this.types.forEach(t -> buffer.writeUtf(t.getName()));

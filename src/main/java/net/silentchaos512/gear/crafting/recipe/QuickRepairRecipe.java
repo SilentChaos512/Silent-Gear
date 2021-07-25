@@ -19,14 +19,14 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -45,13 +45,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class QuickRepairRecipe extends SpecialRecipe {
+public class QuickRepairRecipe extends CustomRecipe {
     public QuickRepairRecipe(ResourceLocation idIn) {
         super(idIn);
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         // Need 1 gear, 1 repair kit, and optional materials
         ItemStack gear = ItemStack.EMPTY;
         boolean foundKit = false;
@@ -100,7 +100,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
@@ -150,7 +150,7 @@ public class QuickRepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         StackList stackList = StackList.from(inv);
         ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
@@ -184,22 +184,22 @@ public class QuickRepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.QUICK_REPAIR.get();
     }
 
-    public static final class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<QuickRepairRecipe> {
+    public static final class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<QuickRepairRecipe> {
         @Override
         public QuickRepairRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new QuickRepairRecipe(recipeId);
         }
 
         @Override
-        public QuickRepairRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public QuickRepairRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             return new QuickRepairRecipe(recipeId);
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, QuickRepairRecipe recipe) {}
+        public void toNetwork(FriendlyByteBuf buffer, QuickRepairRecipe recipe) {}
     }
 }

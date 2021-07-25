@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -14,18 +14,18 @@ import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.lib.util.InventoryUtils;
 
-public class CombineFragmentsRecipe extends SpecialRecipe {
+public class CombineFragmentsRecipe extends CustomRecipe {
     public CombineFragmentsRecipe(ResourceLocation idIn) {
         super(idIn);
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.COMBINE_FRAGMENTS.get();
     }
 
     @Override
-    public boolean matches(CraftingInventory craftingInventory, World world) {
+    public boolean matches(CraftingContainer craftingInventory, Level world) {
         // First, count the fragments. We want to fail fast.
         int fragmentCount = 0;
         for (int i = 0; i < craftingInventory.getContainerSize(); ++i) {
@@ -61,7 +61,7 @@ public class CombineFragmentsRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory craftingInventory) {
+    public ItemStack assemble(CraftingContainer craftingInventory) {
         StackList list = StackList.from(craftingInventory);
         ItemStack stack = list.firstOfType(FragmentItem.class);
         if (stack.isEmpty()) return ItemStack.EMPTY;

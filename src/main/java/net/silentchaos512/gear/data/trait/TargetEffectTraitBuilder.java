@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonObject;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.TargetEffectTrait;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TargetEffectTraitBuilder extends TraitBuilder {
-    private final Map<GearType, Map<Integer, List<EffectInstance>>> potions = new LinkedHashMap<>();
+    private final Map<GearType, Map<Integer, List<MobEffectInstance>>> potions = new LinkedHashMap<>();
 
     public TargetEffectTraitBuilder(DataResource<ITrait> trait, int maxLevel) {
         this(trait.getId(), maxLevel);
@@ -26,15 +26,15 @@ public class TargetEffectTraitBuilder extends TraitBuilder {
         super(traitId, maxLevel, TargetEffectTrait.SERIALIZER);
     }
 
-    public TargetEffectTraitBuilder addEffect(GearType gearType, int traitLevel, Effect effect, int amplifier, float durationInSeconds) {
+    public TargetEffectTraitBuilder addEffect(GearType gearType, int traitLevel, MobEffect effect, int amplifier, float durationInSeconds) {
         this.potions
                 .computeIfAbsent(gearType, t -> new LinkedHashMap<>())
                 .computeIfAbsent(traitLevel, l -> new ArrayList<>())
-                .add(new EffectInstance(effect, TimeUtils.ticksFromSeconds(durationInSeconds), amplifier));
+                .add(new MobEffectInstance(effect, TimeUtils.ticksFromSeconds(durationInSeconds), amplifier));
         return this;
     }
 
-    public TargetEffectTraitBuilder withDurationByLevel(GearType gearType, Effect effect, int amplifier, float baseDurationInSeconds) {
+    public TargetEffectTraitBuilder withDurationByLevel(GearType gearType, MobEffect effect, int amplifier, float baseDurationInSeconds) {
         for (int i = 1; i <= this.maxLevel; ++i) {
             this.addEffect(gearType, i, effect, amplifier, i * baseDurationInSeconds);
         }

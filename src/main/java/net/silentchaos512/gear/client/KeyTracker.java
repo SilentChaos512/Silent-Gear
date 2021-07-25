@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.KeyMapping;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -23,12 +23,12 @@ import javax.annotation.Nonnull;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public class KeyTracker {
-    public static final KeyBinding DISPLAY_STATS = createKeyBinding("displayStats", GLFW.GLFW_KEY_LEFT_CONTROL);
-    public static final KeyBinding DISPLAY_TRAITS = createKeyBinding("displayTraits", GLFW.GLFW_KEY_LEFT_SHIFT);
-    public static final KeyBinding DISPLAY_CONSTRUCTION = createKeyBinding("displayConstruction", GLFW.GLFW_KEY_LEFT_ALT);
-    public static final KeyBinding OPEN_ITEM = createKeyBinding("openItem", GLFW.GLFW_KEY_X);
-    public static final KeyBinding CYCLE_BACK = createKeyBinding("cycle.back", GLFW.GLFW_KEY_Z);
-    public static final KeyBinding CYCLE_NEXT = createKeyBinding("cycle.next", GLFW.GLFW_KEY_C);
+    public static final KeyMapping DISPLAY_STATS = createKeyBinding("displayStats", GLFW.GLFW_KEY_LEFT_CONTROL);
+    public static final KeyMapping DISPLAY_TRAITS = createKeyBinding("displayTraits", GLFW.GLFW_KEY_LEFT_SHIFT);
+    public static final KeyMapping DISPLAY_CONSTRUCTION = createKeyBinding("displayConstruction", GLFW.GLFW_KEY_LEFT_ALT);
+    public static final KeyMapping OPEN_ITEM = createKeyBinding("openItem", GLFW.GLFW_KEY_X);
+    public static final KeyMapping CYCLE_BACK = createKeyBinding("cycle.back", GLFW.GLFW_KEY_Z);
+    public static final KeyMapping CYCLE_NEXT = createKeyBinding("cycle.next", GLFW.GLFW_KEY_C);
 
     private static int materialCycleCount = 0;
 
@@ -42,11 +42,11 @@ public class KeyTracker {
     }
 
     @Nonnull
-    private static KeyBinding createKeyBinding(String description, int key) {
-        return new KeyBinding(
+    private static KeyMapping createKeyBinding(String description, int key) {
+        return new KeyMapping(
                 "key.silentgear." + description,
                 KeyConflictContext.GUI,
-                InputMappings.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 key,
                 "key.categories.silentgear"
         );
@@ -90,8 +90,8 @@ public class KeyTracker {
 
     private static ItemStack getHoveredItem() {
         Screen currentScreen = Minecraft.getInstance().screen;
-        if (currentScreen instanceof ContainerScreen<?>) {
-            ContainerScreen<?> containerScreen = (ContainerScreen<?>) currentScreen;
+        if (currentScreen instanceof AbstractContainerScreen<?>) {
+            AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) currentScreen;
             Slot slot = containerScreen.getSlotUnderMouse();
             if (slot != null) {
                 return slot.getItem();
@@ -102,8 +102,8 @@ public class KeyTracker {
 
     private static int getHoveredSlot() {
         Screen currentScreen = Minecraft.getInstance().screen;
-        if (currentScreen instanceof ContainerScreen<?>) {
-            ContainerScreen<?> containerScreen = (ContainerScreen<?>) currentScreen;
+        if (currentScreen instanceof AbstractContainerScreen<?>) {
+            AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) currentScreen;
             Slot slot = containerScreen.getSlotUnderMouse();
             if (slot != null) {
                 return slot.index;
@@ -139,16 +139,16 @@ public class KeyTracker {
 
     public static boolean isShiftDown() {
         long h = Minecraft.getInstance().getWindow().getWindow();
-        return InputMappings.isKeyDown(h, GLFW.GLFW_KEY_LEFT_SHIFT) || InputMappings.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        return InputConstants.isKeyDown(h, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     public static boolean isControlDown() {
         long h = Minecraft.getInstance().getWindow().getWindow();
-        return InputMappings.isKeyDown(h, GLFW.GLFW_KEY_LEFT_CONTROL) || InputMappings.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_CONTROL);
+        return InputConstants.isKeyDown(h, GLFW.GLFW_KEY_LEFT_CONTROL) || InputConstants.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_CONTROL);
     }
 
     public static boolean isAltDown() {
         long h = Minecraft.getInstance().getWindow().getWindow();
-        return InputMappings.isKeyDown(h, GLFW.GLFW_KEY_LEFT_ALT) || InputMappings.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_ALT);
+        return InputConstants.isKeyDown(h, GLFW.GLFW_KEY_LEFT_ALT) || InputConstants.isKeyDown(h, GLFW.GLFW_KEY_RIGHT_ALT);
     }
 }

@@ -5,12 +5,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -40,8 +40,15 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-public class GearModelOverrideList extends ItemOverrideList {
-    private final Cache<CacheKey, IBakedModel> bakedModelCache = CacheBuilder.newBuilder()
+import net.minecraft.client.renderer.block.model.ItemOverride;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+
+public class GearModelOverrideList extends ItemOverrides {
+    private final Cache<CacheKey, BakedModel> bakedModelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
@@ -49,16 +56,16 @@ public class GearModelOverrideList extends ItemOverrideList {
     private final GearModel model;
     private final IModelConfiguration owner;
     private final ModelBakery bakery;
-    private final Function<RenderMaterial, TextureAtlasSprite> spriteGetter;
-    private final IModelTransform modelTransform;
+    private final Function<Material, TextureAtlasSprite> spriteGetter;
+    private final ModelState modelTransform;
     private final ResourceLocation modelLocation;
 
     @SuppressWarnings("ConstructorWithTooManyParameters")
     public GearModelOverrideList(GearModel model,
                                  IModelConfiguration owner,
                                  ModelBakery bakery,
-                                 Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                 IModelTransform modelTransform,
+                                 Function<Material, TextureAtlasSprite> spriteGetter,
+                                 ModelState modelTransform,
                                  ResourceLocation modelLocation) {
         this.model = model;
         this.owner = owner;
@@ -74,7 +81,7 @@ public class GearModelOverrideList extends ItemOverrideList {
 
     @Nullable
     @Override
-    public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
+    public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn) {
         int animationFrame = getAnimationFrame(stack, worldIn, entityIn);
         CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
@@ -85,11 +92,11 @@ public class GearModelOverrideList extends ItemOverrideList {
         return model;
     }
 
-    private static int getAnimationFrame(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+    private static int getAnimationFrame(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
         return ((ICoreItem) stack.getItem()).getAnimationFrame(stack, world, entity);
     }
 
-    private IBakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
+    private BakedModel getOverrideModel(CacheKey key, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int animationFrame) {
         boolean broken = GearHelper.isBroken(stack);
         if (isDebugLoggingEnabled()) {
             SilentGear.LOGGER.info("getOverrideModel for {} ({})", stack.getHoverName().getString(), broken ? "broken" : "normal");
@@ -183,10 +190,10 @@ public class GearModelOverrideList extends ItemOverrideList {
                 colorStr);
     }
 
-    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+    private static Optional<MaterialLayer> getCrossbowCharge(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
         // TODO: Maybe should add an ICoreItem method to get additional layers?
-        IItemPropertyGetter chargedProperty = ItemModelsProperties.getProperty(stack.getItem(), new ResourceLocation("charged"));
-        IItemPropertyGetter fireworkProperty = ItemModelsProperties.getProperty(stack.getItem(), new ResourceLocation("firework"));
+        ItemPropertyFunction chargedProperty = ItemProperties.getProperty(stack.getItem(), new ResourceLocation("charged"));
+        ItemPropertyFunction fireworkProperty = ItemProperties.getProperty(stack.getItem(), new ResourceLocation("firework"));
 
         if (chargedProperty != null && fireworkProperty != null) {
             boolean charged = chargedProperty.call(stack, world, entity) > 0;
@@ -202,7 +209,7 @@ public class GearModelOverrideList extends ItemOverrideList {
         return Optional.empty();
     }
 
-    private static CacheKey getKey(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int animationFrame) {
+    private static CacheKey getKey(BakedModel model, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int animationFrame) {
         String brokenSuffix = GearHelper.isBroken(stack) ? "broken" : "";
         String chargeSuffix = getCrossbowCharge(stack, world, entity)
                 .map(l -> ";" + l.getTextureId().getPath())
@@ -221,10 +228,10 @@ public class GearModelOverrideList extends ItemOverrideList {
     }
 
     static final class CacheKey {
-        final IBakedModel parent;
+        final BakedModel parent;
         final String data;
 
-        CacheKey(IBakedModel parent, String hash) {
+        CacheKey(BakedModel parent, String hash) {
             this.parent = parent;
             this.data = hash;
         }

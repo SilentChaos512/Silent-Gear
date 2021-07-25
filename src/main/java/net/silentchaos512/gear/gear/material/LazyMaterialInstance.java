@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
@@ -75,7 +75,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
         nbt.putString("ID", materialId.toString());
         if (grade != MaterialGrade.NONE) {
             nbt.putString("Grade", grade.name());
@@ -84,9 +84,9 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+    public Component getDisplayName(PartType partType, ItemStack gear) {
         IMaterial material = get();
-        return material != null ? material.getDisplayName(this, partType, gear) : new StringTextComponent("INVALID");
+        return material != null ? material.getDisplayName(this, partType, gear) : new TextComponent("INVALID");
     }
 
     @Override
@@ -95,19 +95,19 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     public static LazyMaterialInstance deserialize(JsonObject json) {
-        ResourceLocation id = new ResourceLocation(JSONUtils.getAsString(json, "material"));
-        MaterialGrade grade = EnumUtils.byName(JSONUtils.getAsString(json, "grade", "NONE"), MaterialGrade.NONE);
+        ResourceLocation id = new ResourceLocation(GsonHelper.getAsString(json, "material"));
+        MaterialGrade grade = EnumUtils.byName(GsonHelper.getAsString(json, "grade", "NONE"), MaterialGrade.NONE);
         return new LazyMaterialInstance(id, grade);
     }
 
-    public static LazyMaterialInstance read(PacketBuffer buffer) {
+    public static LazyMaterialInstance read(FriendlyByteBuf buffer) {
         ResourceLocation id = buffer.readResourceLocation();
         MaterialGrade grade = buffer.readEnum(MaterialGrade.class);
         return new LazyMaterialInstance(id, grade);
     }
 
     @Override
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(this.materialId);
         buffer.writeEnum(this.grade);
     }

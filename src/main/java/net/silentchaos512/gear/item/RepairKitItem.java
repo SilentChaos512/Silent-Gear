@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.item;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class RepairKitItem extends Item {
     private static final String NBT_STORAGE = "Storage";
@@ -51,7 +51,7 @@ public class RepairKitItem extends Item {
             }
 
             String key = getShorthandKey(mat);
-            CompoundNBT storageTag = repairKit.getOrCreateTagElement(NBT_STORAGE);
+            CompoundTag storageTag = repairKit.getOrCreateTagElement(NBT_STORAGE);
             float current = storageTag.getFloat(key);
             storageTag.putFloat(key, current + value);
             return true;
@@ -86,7 +86,7 @@ public class RepairKitItem extends Item {
     }
 
     private static float getStoredAmount(ItemStack stack, MaterialInstance material) {
-        CompoundNBT nbt = stack.getOrCreateTagElement(NBT_STORAGE);
+        CompoundTag nbt = stack.getOrCreateTagElement(NBT_STORAGE);
         return nbt.getFloat(getShorthandKey(material));
     }
 
@@ -99,7 +99,7 @@ public class RepairKitItem extends Item {
     }
 
     private static Map<MaterialInstance, Float> getStoredMaterials(ItemStack stack) {
-        CompoundNBT nbt = stack.getOrCreateTagElement(NBT_STORAGE);
+        CompoundTag nbt = stack.getOrCreateTagElement(NBT_STORAGE);
         List<MaterialInstance> list = nbt.getAllKeys().stream()
                 .map(MaterialInstance::readShorthand)
                 .filter(Objects::nonNull)
@@ -162,7 +162,7 @@ public class RepairKitItem extends Item {
     }
 
     public void removeRepairMaterials(ItemStack repairKit, Map<MaterialInstance, Float> toRemove) {
-        CompoundNBT nbt = repairKit.getOrCreateTagElement(NBT_STORAGE);
+        CompoundTag nbt = repairKit.getOrCreateTagElement(NBT_STORAGE);
         for (Map.Entry<MaterialInstance, Float> entry : toRemove.entrySet()) {
             MaterialInstance mat = entry.getKey();
             Float amount = entry.getValue();
@@ -179,7 +179,7 @@ public class RepairKitItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(TextUtil.translate("item", "repair_kit.efficiency",
                 (int) (this.getRepairEfficiency(RepairContext.Type.QUICK) * 100)));
         tooltip.add(TextUtil.translate("item", "repair_kit.capacity",
@@ -188,9 +188,9 @@ public class RepairKitItem extends Item {
 
         Map<MaterialInstance, Float> storedMaterials = getStoredMaterials(stack);
         if (storedMaterials.isEmpty()) {
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").withStyle(TextFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").withStyle(TextFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").withStyle(TextFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").withStyle(ChatFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").withStyle(ChatFormatting.ITALIC));
+            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").withStyle(ChatFormatting.ITALIC));
             return;
         }
 
@@ -213,7 +213,7 @@ public class RepairKitItem extends Item {
 
     @Override
     public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return MathHelper.hsvToRgb(Math.max(0.0F, (float) (1.0F - getDurabilityForDisplay(stack))) / 3f + 0.5f, 1f, 1f);
+        return Mth.hsvToRgb(Math.max(0.0F, (float) (1.0F - getDurabilityForDisplay(stack))) / 3f + 0.5f, 1f, 1f);
     }
 
     private static String format(float f) {

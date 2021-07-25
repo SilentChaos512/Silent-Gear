@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.gear.part;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialList;
@@ -66,12 +66,12 @@ public final class FakePartData implements IPartData {
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType type, ItemStack gear) {
-        return new StringTextComponent("fake part");
+    public Component getDisplayName(PartType type, ItemStack gear) {
+        return new TextComponent("fake part");
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
         return nbt;
     }
 

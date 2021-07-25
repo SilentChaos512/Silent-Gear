@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class CompoundPartItem extends Item {
     private static final String NBT_CRAFTED_COUNT = "CraftedCount";
@@ -90,9 +90,9 @@ public class CompoundPartItem extends Item {
     }
 
     public ItemStack create(MaterialList materials, int craftedCount) {
-        ListNBT materialListNbt = materials.serializeNbt();
+        ListTag materialListNbt = materials.serializeNbt();
 
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         tag.put(NBT_MATERIALS, materialListNbt);
         if (craftedCount > 0) {
             tag.putInt(NBT_CRAFTED_COUNT, craftedCount);
@@ -104,17 +104,17 @@ public class CompoundPartItem extends Item {
     }
 
     public static MaterialList getMaterials(ItemStack stack) {
-        ListNBT materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND);
+        ListTag materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND);
         return MaterialList.deserializeNbt(materialListNbt);
     }
 
     @Nullable
     public static MaterialInstance getPrimaryMaterial(ItemStack stack) {
-        ListNBT listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, 10);
+        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, 10);
         if (!listNbt.isEmpty()) {
-            INBT nbt = listNbt.get(0);
-            if (nbt instanceof CompoundNBT) {
-                return MaterialInstance.read((CompoundNBT) nbt);
+            Tag nbt = listNbt.get(0);
+            if (nbt instanceof CompoundTag) {
+                return MaterialInstance.read((CompoundTag) nbt);
             }
         }
         return null;
@@ -143,11 +143,11 @@ public class CompoundPartItem extends Item {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         PartData part = PartData.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
         if (part != null && material != null) {
-            TranslationTextComponent nameText = new TranslationTextComponent(this.getDescriptionId() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
+            TranslatableComponent nameText = new TranslatableComponent(this.getDescriptionId() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
             int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
             return TextUtil.withColor(nameText, nameColor);
         }
@@ -155,7 +155,7 @@ public class CompoundPartItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         PartData part = PartData.from(stack);
         if (part != null) {
             float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
@@ -171,7 +171,7 @@ public class CompoundPartItem extends Item {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (!allowdedIn(group) || this == ModItems.ARMOR_BODY.get() || this == ModItems.SHIELD_PLATE.get()) {
             return;
         }

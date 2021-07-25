@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -37,12 +37,12 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.SHAPELESS_GEAR.get();
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
@@ -55,7 +55,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         return item.construct(getParts(inv));
     }
 

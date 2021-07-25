@@ -2,17 +2,15 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
 plugins {
-    id 'maven'
     id 'maven-publish'
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
@@ -20,6 +18,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'idea'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 repositories {
     flatDir {
@@ -27,7 +26,6 @@ repositories {
         dirs "repo"
     }
     mavenLocal()
-    jcenter()
 }
 
 tasks.withType(JavaCompile) {
@@ -53,7 +51,7 @@ def gpr_creds = { // Credentials for GitHub Packages, since this is used multipl
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: project.mappings_channel.toString(), version: project.mappings_version.toString()
+    mappings channel: 'official', version: mc_version
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -112,7 +110,6 @@ sourceSets.main.resources {
 }
 
 repositories {
-    jcenter()
     mavenLocal()
     maven {
         url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
@@ -157,7 +154,10 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 
-    compile fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
+    compileOnly fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
+        exclude module: "forge"
+    }
+    runtimeOnly fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
 

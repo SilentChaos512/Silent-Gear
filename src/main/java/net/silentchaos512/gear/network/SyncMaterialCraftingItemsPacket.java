@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -46,7 +46,7 @@ public class SyncMaterialCraftingItemsPacket {
         return partSubs.getOrDefault(materialId, Collections.emptyMap());
     }
 
-    public static SyncMaterialCraftingItemsPacket decode(PacketBuffer buffer) {
+    public static SyncMaterialCraftingItemsPacket decode(FriendlyByteBuf buffer) {
         SyncMaterialCraftingItemsPacket packet = new SyncMaterialCraftingItemsPacket();
         int count = buffer.readVarInt();
 
@@ -72,7 +72,7 @@ public class SyncMaterialCraftingItemsPacket {
         return packet;
     }
 
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeVarInt(this.craftingItems.size());
         this.craftingItems.forEach((id, ingredient) -> {
             buffer.writeResourceLocation(id);

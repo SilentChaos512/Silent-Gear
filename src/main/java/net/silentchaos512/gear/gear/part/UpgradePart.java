@@ -20,11 +20,11 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
@@ -57,7 +57,7 @@ public class UpgradePart extends AbstractGearPart {
     }
 
     @Override
-    public void addInformation(PartData part, ItemStack gear, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void addInformation(PartData part, ItemStack gear, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(1, part.getDisplayName(gear));
     }
 
@@ -82,14 +82,14 @@ public class UpgradePart extends AbstractGearPart {
         }
 
         @Override
-        public UpgradePart read(ResourceLocation id, PacketBuffer buffer) {
+        public UpgradePart read(ResourceLocation id, FriendlyByteBuf buffer) {
             UpgradePart part = super.read(id, buffer);
             part.gearTypes = GearTypeMatcher.read(buffer);
             return part;
         }
 
         @Override
-        public void write(PacketBuffer buffer, UpgradePart part) {
+        public void write(FriendlyByteBuf buffer, UpgradePart part) {
             super.write(buffer, part);
             part.gearTypes.write(buffer);
         }

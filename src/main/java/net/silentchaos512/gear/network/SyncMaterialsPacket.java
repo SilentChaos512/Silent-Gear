@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -22,7 +22,7 @@ public class SyncMaterialsPacket extends LoginPacket {
         this.materials = new ArrayList<>(materials);
     }
 
-    public static SyncMaterialsPacket fromBytes(PacketBuffer buf) {
+    public static SyncMaterialsPacket fromBytes(FriendlyByteBuf buf) {
         SilentGear.LOGGER.debug("Materials packet: {} bytes", buf.readableBytes());
         SyncMaterialsPacket packet = new SyncMaterialsPacket(Collections.emptyList());
 
@@ -38,7 +38,7 @@ public class SyncMaterialsPacket extends LoginPacket {
         return packet;
     }
 
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         Network.writeModVersionInfoToNetwork(buf);
         buf.writeVarInt(this.materials.size());
         this.materials.forEach(mat -> MaterialSerializers.write(mat, buf));

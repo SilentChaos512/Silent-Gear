@@ -2,7 +2,7 @@ package net.silentchaos512.gear.api.util;
 
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.IItemStat;
@@ -80,11 +80,11 @@ public final class StatGearKey {
     }
 
     @Nullable
-    public static StatGearKey read(PacketBuffer buffer) {
+    public static StatGearKey read(FriendlyByteBuf buffer) {
         return read(buffer.readUtf());
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeUtf(this.key);
     }
 

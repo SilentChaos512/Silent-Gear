@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.gear.material;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
@@ -96,7 +96,7 @@ public class CraftedMaterial extends AbstractMaterial {
     }
 
     @Override
-    public ITextComponent getDisplayName(@Nullable IMaterialInstance material, PartType type, ItemStack gear) {
+    public Component getDisplayName(@Nullable IMaterialInstance material, PartType type, ItemStack gear) {
         if (material != null) {
             IMaterialInstance base = getBaseMaterial(material);
             if (!gear.isEmpty()) {

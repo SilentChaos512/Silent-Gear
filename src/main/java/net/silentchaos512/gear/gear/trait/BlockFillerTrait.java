@@ -1,17 +1,17 @@
 package net.silentchaos512.gear.gear.trait;
 
 import com.google.gson.JsonObject;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -22,6 +22,13 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+
 public class BlockFillerTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("block_filler");
     public static final ITraitSerializer<BlockFillerTrait> SERIALIZER = new Serializer<>(SERIALIZER_ID,
@@ -31,7 +38,7 @@ public class BlockFillerTrait extends SimpleTrait {
             BlockFillerTrait::write);
 
     @Nullable private Block targetBlock;
-    @Nullable private ITag.INamedTag<Block> targetBlockTag;
+    @Nullable private Tag.Named<Block> targetBlockTag;
     private Block fillBlock;
     private boolean replaceTileEntities;
     private int fillRangeX;
@@ -50,17 +57,17 @@ public class BlockFillerTrait extends SimpleTrait {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context, int traitLevel) {
-        PlayerEntity player = context.getPlayer();
+    public InteractionResult onItemUse(UseOnContext context, int traitLevel) {
+        Player player = context.getPlayer();
 
         if (player != null) {
             if (player.isShiftKeyDown() && sneakMode == SneakMode.PASS) {
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
         }
 
         ItemStack stack = context.getItemInHand();
-        World world = context.getLevel();
+        Level world = context.getLevel();
         BlockPos center = context.getClickedPos();
 
         // Constrain area on facing axis to behave similar to AOE tools
@@ -75,7 +82,7 @@ public class BlockFillerTrait extends SimpleTrait {
 
         if (player != null && player.level.isClientSide) {
             // Bale out here on client
-            return replaceCount > 0 && hasEnoughDurability ? ActionResultType.SUCCESS : ActionResultType.PASS;
+            return replaceCount > 0 && hasEnoughDurability ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
 
         if (hasEnoughDurability) {
@@ -90,20 +97,20 @@ public class BlockFillerTrait extends SimpleTrait {
             }
             if (sound != null) {
                 float pitch = (float) (soundPitch * (1 + 0.05 * SilentGear.RANDOM.nextGaussian()));
-                world.playSound(null, center, sound, SoundCategory.BLOCKS, soundVolume, pitch);
+                world.playSound(null, center, sound, SoundSource.BLOCKS, soundVolume, pitch);
             }
             if (this.cooldown > 0 && player != null) {
                 player.getCooldowns().addCooldown(stack.getItem(), this.cooldown);
             }
 
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    private int replaceBlocks(ItemUseContext context, ItemStack stack, World world, BlockPos center, int rangeX, int rangeY, int rangeZ, boolean simulate) {
+    private int replaceBlocks(UseOnContext context, ItemStack stack, Level world, BlockPos center, int rangeX, int rangeY, int rangeZ, boolean simulate) {
         int count = 0;
         for (int x = center.getX() - rangeX; x <= center.getX() + rangeX; ++x) {
             for (int y = center.getY() - rangeY; y <= center.getY() + rangeY; ++y) {
@@ -123,7 +130,7 @@ public class BlockFillerTrait extends SimpleTrait {
         return count;
     }
 
-    private boolean shouldConstrain(ItemUseContext context, Direction.Axis axis) {
+    private boolean shouldConstrain(UseOnContext context, Direction.Axis axis) {
         if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown() && sneakMode == SneakMode.CONSTRAIN) {
             return true;
         }
@@ -136,28 +143,28 @@ public class BlockFillerTrait extends SimpleTrait {
     }
 
     private static void readJson(BlockFillerTrait trait, JsonObject json) {
-        JsonObject targetJson = JSONUtils.getAsJsonObject(json, "target");
+        JsonObject targetJson = GsonHelper.getAsJsonObject(json, "target");
         if (targetJson.has("tag")) {
-            trait.targetBlockTag = BlockTags.bind(JSONUtils.getAsString(targetJson, "tag"));
+            trait.targetBlockTag = BlockTags.bind(GsonHelper.getAsString(targetJson, "tag"));
         }
         if (targetJson.has("block")) {
-            trait.targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getAsString(targetJson, "block")));
+            trait.targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(GsonHelper.getAsString(targetJson, "block")));
         }
-        trait.fillBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "fill_block")));
-        trait.replaceTileEntities = JSONUtils.getAsBoolean(json, "replace_tile_entities", false);
-        trait.fillRangeX = JSONUtils.getAsInt(json, "fill_spread_x", 0);
-        trait.fillRangeY = JSONUtils.getAsInt(json, "fill_spread_y", 0);
-        trait.fillRangeZ = JSONUtils.getAsInt(json, "fill_spread_z", 0);
-        trait.fillFacingPlaneOnly = JSONUtils.getAsBoolean(json, "fill_facing_plane_only", false);
-        trait.sneakMode = SneakMode.byName(JSONUtils.getAsString(json, "sneak_mode", "pass"));
-        trait.damageOnUse = JSONUtils.getAsFloat(json, "damage_on_use");
-        trait.cooldown = JSONUtils.getAsInt(json, "cooldown", 0);
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "sound")));
-        trait.soundVolume = JSONUtils.getAsFloat(json, "sound_volume");
-        trait.soundPitch = JSONUtils.getAsFloat(json, "sound_pitch");
+        trait.fillBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "fill_block")));
+        trait.replaceTileEntities = GsonHelper.getAsBoolean(json, "replace_tile_entities", false);
+        trait.fillRangeX = GsonHelper.getAsInt(json, "fill_spread_x", 0);
+        trait.fillRangeY = GsonHelper.getAsInt(json, "fill_spread_y", 0);
+        trait.fillRangeZ = GsonHelper.getAsInt(json, "fill_spread_z", 0);
+        trait.fillFacingPlaneOnly = GsonHelper.getAsBoolean(json, "fill_facing_plane_only", false);
+        trait.sneakMode = SneakMode.byName(GsonHelper.getAsString(json, "sneak_mode", "pass"));
+        trait.damageOnUse = GsonHelper.getAsFloat(json, "damage_on_use");
+        trait.cooldown = GsonHelper.getAsInt(json, "cooldown", 0);
+        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "sound")));
+        trait.soundVolume = GsonHelper.getAsFloat(json, "sound_volume");
+        trait.soundPitch = GsonHelper.getAsFloat(json, "sound_pitch");
     }
 
-    private static void read(BlockFillerTrait trait, PacketBuffer buffer) {
+    private static void read(BlockFillerTrait trait, FriendlyByteBuf buffer) {
         if (buffer.readBoolean()) {
             trait.targetBlockTag = BlockTags.bind(buffer.readResourceLocation().toString());
         }
@@ -178,7 +185,7 @@ public class BlockFillerTrait extends SimpleTrait {
         trait.soundPitch = buffer.readFloat();
     }
 
-    private static void write(BlockFillerTrait trait, PacketBuffer buffer) {
+    private static void write(BlockFillerTrait trait, FriendlyByteBuf buffer) {
         buffer.writeBoolean(trait.targetBlockTag != null);
         if (trait.targetBlockTag != null) {
             buffer.writeResourceLocation(trait.targetBlockTag.getName());

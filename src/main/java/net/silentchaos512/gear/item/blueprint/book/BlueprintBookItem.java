@@ -1,21 +1,21 @@
 package net.silentchaos512.gear.item.blueprint.book;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.silentchaos512.gear.api.item.GearType;
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class BlueprintBookItem extends Item implements IBlueprint, IContainerItem, ICycleItem {
     private static final String NBT_SELECTED = "Selected";
@@ -45,7 +45,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     private static int clampSelectedSlot(int slot) {
-        return MathHelper.clamp(slot, 0, INVENTORY_SIZE - 1);
+        return Mth.clamp(slot, 0, INVENTORY_SIZE - 1);
     }
 
     public static int getSelectedSlot(ItemStack book) {
@@ -89,10 +89,10 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         return item instanceof AbstractBlueprintItem && !((AbstractBlueprintItem) item).isSingleUse();
     }
 
-    public static void openContainer(ServerPlayerEntity playerIn, ItemStack stack) {
+    public static void openContainer(ServerPlayer playerIn, ItemStack stack) {
         NetworkHooks.openGui(playerIn,
-                new SimpleNamedContainerProvider((id, inv, z) -> new BlueprintBookContainer(id, inv, stack),
-                        new TranslationTextComponent("container.silentgear.blueprint_book")),
+                new SimpleMenuProvider((id, inv, z) -> new BlueprintBookContainer(id, inv, stack),
+                        new TranslatableComponent("container.silentgear.blueprint_book")),
                 buf -> buf.writeItem(stack));
     }
 
@@ -119,16 +119,16 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
         if (!worldIn.isClientSide) {
-            openContainer((ServerPlayerEntity) playerIn, stack);
+            openContainer((ServerPlayer) playerIn, stack);
         }
-        return ActionResult.success(stack);
+        return InteractionResultHolder.success(stack);
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (allowdedIn(group)) {
             super.fillItemCategory(group, items);
 
@@ -140,17 +140,17 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
                 inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
             }
             this.saveInventory(filled, inventory);
-            filled.setHoverName(new StringTextComponent("Fully-Loaded Blueprint Book"));
+            filled.setHoverName(new TextComponent("Fully-Loaded Blueprint Book"));
             items.add(filled);
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         ItemStack selected = getSelectedItem(stack);
         if (!selected.isEmpty()) {
             tooltip.add(TextUtil.withColor(TextUtil.translate("item", "blueprint_book.selected"), Color.SKYBLUE)
-                    .append(selected.getHoverName().copy().withStyle(TextFormatting.GRAY)));
+                    .append(selected.getHoverName().copy().withStyle(ChatFormatting.GRAY)));
         }
 
         tooltip.add(TextUtil.translate("item", "blueprint_book.keyHint",

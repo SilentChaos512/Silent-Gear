@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.gear.part.PartManager;
@@ -22,7 +22,7 @@ public class SyncGearPartsPacket extends LoginPacket {
         this.parts = new ArrayList<>(parts);
     }
 
-    public static SyncGearPartsPacket fromBytes(PacketBuffer buf) {
+    public static SyncGearPartsPacket fromBytes(FriendlyByteBuf buf) {
         SilentGear.LOGGER.debug("Gear parts packet: {} bytes", buf.readableBytes());
         SyncGearPartsPacket packet = new SyncGearPartsPacket(Collections.emptyList());
 
@@ -38,7 +38,7 @@ public class SyncGearPartsPacket extends LoginPacket {
         return packet;
     }
 
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         Network.writeModVersionInfoToNetwork(buf);
         buf.writeVarInt(this.parts.size());
         this.parts.forEach(part -> PartSerializers.write(part, buf));

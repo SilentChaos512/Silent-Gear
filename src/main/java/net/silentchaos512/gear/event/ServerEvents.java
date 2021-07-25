@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Util;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.Util;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,10 +26,10 @@ public final class ServerEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {
-        PlayerEntity player = event.getPlayer();
-        if (!(player instanceof ServerPlayerEntity)) return;
+        Player player = event.getPlayer();
+        if (!(player instanceof ServerPlayer)) return;
 
-        ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
+        ServerPlayer playerMP = (ServerPlayer) player;
 
         // Send crafting items packets to correct for registry changes
         SilentGear.LOGGER.debug("Sending materials crafting item correction packet");

@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.client;
 
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -45,7 +45,7 @@ public final class ColorHandlers {
         });
     }
 
-    private static void register(ItemColors colors, IItemColor itemColor, ItemRegistryObject<? extends Item> item) {
+    private static void register(ItemColors colors, ItemColor itemColor, ItemRegistryObject<? extends Item> item) {
         if (item.getRegistryObject().isPresent()) {
             colors.register(itemColor, item.get());
         } else {

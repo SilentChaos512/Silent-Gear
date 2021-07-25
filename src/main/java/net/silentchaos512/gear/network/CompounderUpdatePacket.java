@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.block.compounder.CompounderContainer;
 
@@ -15,22 +15,22 @@ public class CompounderUpdatePacket {
         this.workEnabled = workEnabled;
     }
 
-    public static CompounderUpdatePacket decode(PacketBuffer buffer) {
+    public static CompounderUpdatePacket decode(FriendlyByteBuf buffer) {
         boolean workEnabled = buffer.readBoolean();
         return new CompounderUpdatePacket(workEnabled);
     }
 
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeBoolean(this.workEnabled);
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
-        ServerPlayerEntity player = context.get().getSender();
+        ServerPlayer player = context.get().getSender();
         context.get().enqueueWork(() -> handlePacket(player));
         context.get().setPacketHandled(true);
     }
 
-    private void handlePacket(@Nullable ServerPlayerEntity player) {
+    private void handlePacket(@Nullable ServerPlayer player) {
         if (player != null && player.containerMenu instanceof CompounderContainer) {
             CompounderContainer container = (CompounderContainer) player.containerMenu;
             container.setWorkEnabled(this.workEnabled);

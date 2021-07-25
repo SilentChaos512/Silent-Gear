@@ -5,13 +5,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -50,7 +50,7 @@ public class AttributeTrait extends SimpleTrait {
                     Attribute attribute = mod.getAttribute();
                     if (attribute != null) {
                         String modName = String.format("%s_%s_%d_%s_%s", this.getId().getNamespace(), this.getId().getPath(), traitLevel, mod.name, key);
-                        float modValue = mod.values[MathHelper.clamp(traitLevel - 1, 0, mod.values.length - 1)];
+                        float modValue = mod.values[Mth.clamp(traitLevel - 1, 0, mod.values.length - 1)];
                         map.put(attribute, new AttributeModifier(mod.getUuid(slot), modName, modValue, mod.operation));
                     }
                 }
@@ -100,7 +100,7 @@ public class AttributeTrait extends SimpleTrait {
         }
     }
 
-    private static void readBuffer(AttributeTrait trait, PacketBuffer buffer) {
+    private static void readBuffer(AttributeTrait trait, FriendlyByteBuf buffer) {
         trait.modifiers.clear();
         int gearTypeCount = buffer.readByte();
 
@@ -117,7 +117,7 @@ public class AttributeTrait extends SimpleTrait {
         }
     }
 
-    private static void writeBuffer(AttributeTrait trait, PacketBuffer buffer) {
+    private static void writeBuffer(AttributeTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.modifiers.size());
         for (Map.Entry<String, List<ModifierData>> entry : trait.modifiers.entrySet()) {
             buffer.writeUtf(entry.getKey());
@@ -181,11 +181,11 @@ public class AttributeTrait extends SimpleTrait {
             if (!json.has("attribute")) {
                 throw new JsonParseException("attribute element not found, should be string");
             }
-            ret.name = new ResourceLocation(JSONUtils.getAsString(json, "attribute"));
+            ret.name = new ResourceLocation(GsonHelper.getAsString(json, "attribute"));
 
             JsonElement element = json.get("value");
             if (element.isJsonPrimitive()) {
-                ret.values = new float[]{JSONUtils.getAsFloat(json, "value")};
+                ret.values = new float[]{GsonHelper.getAsFloat(json, "value")};
             } else if (element.isJsonArray()) {
                 JsonArray array = element.getAsJsonArray();
                 ret.values = new float[array.size()];
@@ -196,12 +196,12 @@ public class AttributeTrait extends SimpleTrait {
                 throw new JsonParseException("value element not found, should be either float or array");
             }
 
-            ret.operation = AttributeModifier.Operation.fromValue(JSONUtils.getAsInt(json, "operation", 0));
+            ret.operation = AttributeModifier.Operation.fromValue(GsonHelper.getAsInt(json, "operation", 0));
 
             return ret;
         }
 
-        static ModifierData read(PacketBuffer buffer) {
+        static ModifierData read(FriendlyByteBuf buffer) {
             ModifierData ret = new ModifierData();
             ret.name = buffer.readResourceLocation();
             ret.values = new float[(int) buffer.readByte()];
@@ -212,7 +212,7 @@ public class AttributeTrait extends SimpleTrait {
             return ret;
         }
 
-        void write(PacketBuffer buffer) {
+        void write(FriendlyByteBuf buffer) {
             buffer.writeResourceLocation(name);
             buffer.writeByte(values.length);
             for (float f : values) {

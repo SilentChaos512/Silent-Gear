@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.gear.material;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
@@ -229,7 +229,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Nullable
-    public static MaterialInstance read(CompoundNBT nbt) {
+    public static MaterialInstance read(CompoundTag nbt) {
         ResourceLocation id = ResourceLocation.tryParse(nbt.getString("ID"));
         IMaterial material = MaterialManager.get(id);
         if (material == null) return null;
@@ -238,7 +238,7 @@ public final class MaterialInstance implements IMaterialInstance {
         return of(material, stack);
     }
 
-    private static ItemStack readOrGetDefaultItem(IMaterial material, CompoundNBT nbt) {
+    private static ItemStack readOrGetDefaultItem(IMaterial material, CompoundTag nbt) {
         ItemStack stack = ItemStack.of(nbt.getCompound("Item"));
         if (stack.isEmpty()) {
             // Item is missing from NBT, so pick something from the ingredient
@@ -251,9 +251,9 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
         nbt.putString("ID", material.getId().toString());
-        nbt.put("Item", item.save(new CompoundNBT()));
+        nbt.put("Item", item.save(new CompoundTag()));
         return nbt;
     }
 
@@ -267,7 +267,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType partType, ItemStack gear) {
+    public Component getDisplayName(PartType partType, ItemStack gear) {
         return material.getDisplayName(this, partType, gear);
     }
 
@@ -282,7 +282,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(this.material.getId());
         buffer.writeEnum(this.grade);
     }

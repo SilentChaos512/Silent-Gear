@@ -22,14 +22,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -63,9 +63,9 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
     }
 
     @Override
-    public Optional<ITextComponent> getJeiHint() {
-        IFormattableTextComponent typeText = new StringTextComponent(this.type.getShortName());
-        IFormattableTextComponent text = TextUtil.withColor(typeText, Color.GOLD);
+    public Optional<Component> getJeiHint() {
+        MutableComponent typeText = new TextComponent(this.type.getShortName());
+        MutableComponent text = TextUtil.withColor(typeText, Color.GOLD);
         return Optional.of(TextUtil.translate("jei", "partType", text));
     }
 
@@ -120,7 +120,7 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
         private Serializer() {}
 
         @Override
-        public GearPartIngredient parse(PacketBuffer buffer) {
+        public GearPartIngredient parse(FriendlyByteBuf buffer) {
             ResourceLocation typeName = buffer.readResourceLocation();
             PartType type = PartType.get(typeName);
             if (type == null) throw new JsonParseException("Unknown part type: " + typeName);
@@ -129,7 +129,7 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
 
         @Override
         public GearPartIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getAsString(json, "part_type", "");
+            String typeName = GsonHelper.getAsString(json, "part_type", "");
             if (typeName.isEmpty())
                 throw new JsonSyntaxException("'part_type' is missing");
 
@@ -144,7 +144,7 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
         }
 
         @Override
-        public void write(PacketBuffer buffer, GearPartIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, GearPartIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.type.getName());
         }
     }

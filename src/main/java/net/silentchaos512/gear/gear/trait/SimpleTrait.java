@@ -6,20 +6,20 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -41,10 +41,10 @@ public class SimpleTrait implements ITrait {
     int maxLevel;
     ImmutableList<ITraitCondition> conditions = ImmutableList.of();
     Set<String> cancelsWith = new HashSet<>();
-    ITextComponent displayName;
-    ITextComponent description;
+    Component displayName;
+    Component description;
     boolean hidden;
-    final Collection<ITextComponent> wikiLines = new ArrayList<>();
+    final Collection<Component> wikiLines = new ArrayList<>();
 
     @Deprecated
     public SimpleTrait(ResourceLocation id) {
@@ -89,16 +89,16 @@ public class SimpleTrait implements ITrait {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayName(int level) {
-        IFormattableTextComponent text = displayName.copy();
+    public MutableComponent getDisplayName(int level) {
+        MutableComponent text = displayName.copy();
         if (level > 0 && maxLevel > 1) {
-            text.append(" ").append(new TranslationTextComponent("enchantment.level." + level));
+            text.append(" ").append(new TranslatableComponent("enchantment.level." + level));
         }
         return text;
     }
 
     @Override
-    public IFormattableTextComponent getDescription(int level) {
+    public MutableComponent getDescription(int level) {
         return description.copy();
     }
 
@@ -145,12 +145,12 @@ public class SimpleTrait implements ITrait {
 
     @Deprecated
     @Override
-    public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot) {
+    public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlot slot) {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context, int traitLevel) {
-        return ActionResultType.PASS;
+    public InteractionResult onItemUse(UseOnContext context, int traitLevel) {
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -169,7 +169,7 @@ public class SimpleTrait implements ITrait {
     @Override
     public Collection<String> getExtraWikiLines() {
         return this.wikiLines.stream()
-                .map(ITextComponent::getString)
+                .map(Component::getString)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -192,8 +192,8 @@ public class SimpleTrait implements ITrait {
         private final ResourceLocation serializerId;
         private final Function<ResourceLocation, T> factory;
         @Nullable private final BiConsumer<T, JsonObject> deserializeJson;
-        @Nullable private final BiConsumer<T, PacketBuffer> readFromNetwork;
-        @Nullable private final BiConsumer<T, PacketBuffer> writeToNetwork;
+        @Nullable private final BiConsumer<T, FriendlyByteBuf> readFromNetwork;
+        @Nullable private final BiConsumer<T, FriendlyByteBuf> writeToNetwork;
 
         public Serializer(ResourceLocation serializerId, Function<ResourceLocation, T> factory) {
             this(serializerId, factory, null, null, null);
@@ -202,8 +202,8 @@ public class SimpleTrait implements ITrait {
         public Serializer(ResourceLocation serializerId,
                           Function<ResourceLocation, T> factory,
                           @Nullable BiConsumer<T, JsonObject> deserializeJson,
-                          @Nullable BiConsumer<T, PacketBuffer> readFromNetwork,
-                          @Nullable BiConsumer<T, PacketBuffer> writeToNetwork) {
+                          @Nullable BiConsumer<T, FriendlyByteBuf> readFromNetwork,
+                          @Nullable BiConsumer<T, FriendlyByteBuf> writeToNetwork) {
             this.serializerId = serializerId;
             this.factory = factory;
             this.deserializeJson = deserializeJson;
@@ -214,10 +214,10 @@ public class SimpleTrait implements ITrait {
         @Override
         public T read(ResourceLocation id, JsonObject json) {
             T trait = factory.apply(id);
-            trait.maxLevel = JSONUtils.getAsInt(json, "max_level", 1);
+            trait.maxLevel = GsonHelper.getAsInt(json, "max_level", 1);
             trait.displayName = deserializeText(json.get("name"));
             trait.description = deserializeText(json.get("description"));
-            trait.hidden = JSONUtils.getAsBoolean(json, "hidden", false);
+            trait.hidden = GsonHelper.getAsBoolean(json, "hidden", false);
 
             if (json.has("conditions")) {
                 List<ITraitCondition> conditions = new ArrayList<>();
@@ -238,7 +238,7 @@ public class SimpleTrait implements ITrait {
             if (json.has("extra_wiki_lines")) {
                 JsonArray array = json.getAsJsonArray("extra_wiki_lines");
                 for (JsonElement elem : array) {
-                    trait.wikiLines.add(ITextComponent.Serializer.fromJson(elem));
+                    trait.wikiLines.add(Component.Serializer.fromJson(elem));
                 }
             }
 
@@ -250,7 +250,7 @@ public class SimpleTrait implements ITrait {
         }
 
         @Override
-        public T read(ResourceLocation id, PacketBuffer buffer) {
+        public T read(ResourceLocation id, FriendlyByteBuf buffer) {
             T trait = factory.apply(id);
             trait.maxLevel = buffer.readByte();
             trait.displayName = buffer.readComponent();
@@ -276,7 +276,7 @@ public class SimpleTrait implements ITrait {
         }
 
         @Override
-        public void write(PacketBuffer buffer, T trait) {
+        public void write(FriendlyByteBuf buffer, T trait) {
             buffer.writeByte(trait.maxLevel);
             buffer.writeComponent(trait.displayName);
             buffer.writeComponent(trait.description);
@@ -300,27 +300,27 @@ public class SimpleTrait implements ITrait {
             return serializerId;
         }
 
-        private static ITextComponent deserializeText(JsonElement json) {
+        private static Component deserializeText(JsonElement json) {
             // Handle the old style
             if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
-                boolean translate = JSONUtils.getAsBoolean(json.getAsJsonObject(), "translate", false);
-                String name = JSONUtils.getAsString(json.getAsJsonObject(), "name");
-                return translate ? new TranslationTextComponent(name) : new StringTextComponent(name);
+                boolean translate = GsonHelper.getAsBoolean(json.getAsJsonObject(), "translate", false);
+                String name = GsonHelper.getAsString(json.getAsJsonObject(), "name");
+                return translate ? new TranslatableComponent(name) : new TextComponent(name);
             }
 
             // Deserialize use vanilla serializer
-            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
+            return Objects.requireNonNull(Component.Serializer.fromJson(json));
         }
 
-        private static ITextComponent readTextComponent(JsonObject json, String name) {
+        private static Component readTextComponent(JsonObject json, String name) {
             JsonElement element = json.get(name);
             if (element != null && element.isJsonObject()) {
                 JsonObject obj = element.getAsJsonObject();
-                final boolean translate = JSONUtils.getAsBoolean(obj, "translate", false);
-                final String value = JSONUtils.getAsString(obj, "name");
+                final boolean translate = GsonHelper.getAsBoolean(obj, "translate", false);
+                final String value = GsonHelper.getAsString(obj, "name");
                 return translate
-                        ? new TranslationTextComponent(value)
-                        : new StringTextComponent(value);
+                        ? new TranslatableComponent(value)
+                        : new TextComponent(value);
             } else if (element != null) {
                 throw new JsonParseException("Expected '" + name + "' to be an object");
             } else {

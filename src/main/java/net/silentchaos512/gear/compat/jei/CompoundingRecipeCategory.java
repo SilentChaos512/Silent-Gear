@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.compat.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -9,8 +9,8 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.block.compounder.CompounderScreen;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
@@ -102,7 +102,7 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
     }
 
     @Override
-    public void draw(R recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(R recipe, PoseStack matrixStack, double mouseX, double mouseY) {
         arrow.draw(matrixStack, 93 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

@@ -1,18 +1,18 @@
 package net.silentchaos512.gear.block.grader;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
@@ -28,7 +28,7 @@ import net.silentchaos512.utils.EnumUtils;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class GraderTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity {
+public class GraderTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity {
     static final int BASE_ANALYZE_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 1 : 5);
 
     static final int INPUT_SLOT = 0;
@@ -43,7 +43,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     private MaterialGrade lastGradeAttempt = MaterialGrade.NONE;
     private boolean requireClientSync = false;
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -174,41 +174,41 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tags) {
+    public void load(BlockState state, CompoundTag tags) {
         super.load(state, tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tags) {
-        CompoundNBT compoundTag = super.save(tags);
+    public CompoundTag save(CompoundTag tags) {
+        CompoundTag compoundTag = super.save(tags);
         SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
         return compoundTag;
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT tags = getUpdateTag();
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag tags = getUpdateTag();
 
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
-            CompoundNBT itemTags = input.serializeNBT();
+            CompoundTag itemTags = input.serializeNBT();
             tags.put("input_item", itemTags);
         }
 
-        return new SUpdateTileEntityPacket(worldPosition, 0, tags);
+        return new ClientboundBlockEntityDataPacket(worldPosition, 0, tags);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT tags = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag tags = super.getUpdateTag();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
 //        tags.putInt("progress", this.progress);
 
-        ListNBT tagList = new ListNBT();
+        ListTag tagList = new ListTag();
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
-            CompoundNBT itemTags = input.serializeNBT();
+            CompoundTag itemTags = input.serializeNBT();
             itemTags.putByte("Slot", (byte) INPUT_SLOT);
             tagList.add(itemTags);
         }
@@ -217,9 +217,9 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         super.onDataPacket(net, packet);
-        CompoundNBT tags = packet.getTag();
+        CompoundTag tags = packet.getTag();
         SyncVariable.Helper.readSyncVars(this, tags);
 //        this.progress = tags.getInt("progress");
 
@@ -272,12 +272,12 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.silentgear.material_grader");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("container.silentgear.material_grader");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory playerInventory) {
+    protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new GraderContainer(id, playerInventory, this, fields);
     }
 }

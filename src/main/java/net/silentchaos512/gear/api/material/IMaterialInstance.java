@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.api.material;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
@@ -144,12 +144,12 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         return Color.VALUE_WHITE;
     }
 
-    CompoundNBT write(CompoundNBT nbt);
+    CompoundTag write(CompoundTag nbt);
 
     String getModelKey();
 
-    default IFormattableTextComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
-        IFormattableTextComponent displayName = getDisplayName(partType, gear).copy();
+    default MutableComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
+        MutableComponent displayName = getDisplayName(partType, gear).copy();
         MaterialGrade grade = getGrade();
         if (grade != MaterialGrade.NONE) {
             displayName.append(TextUtil.translate("misc", "spaceBrackets", grade.getDisplayName()));
@@ -167,7 +167,7 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         return json;
     }
 
-    void write(PacketBuffer buffer);
+    void write(FriendlyByteBuf buffer);
 
     default boolean allowedInPart(PartType partType) {
         IMaterial material = get();

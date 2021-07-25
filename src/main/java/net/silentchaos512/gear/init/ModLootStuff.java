@@ -18,9 +18,9 @@
 
 package net.silentchaos512.gear.init;
 
-import net.minecraft.loot.LootConditionType;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.core.Registry;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.fml.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
@@ -34,10 +34,10 @@ import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 import java.util.function.Supplier;
 
 public final class ModLootStuff {
-    public static final LootConditionType HAS_PART = new LootConditionType(HasPartCondition.SERIALIZER);
-    public static final LootConditionType HAS_TRAIT = new LootConditionType(HasTraitCondition.SERIALIZER);
-    public static final LootFunctionType SELECT_TIER = new LootFunctionType(SelectGearTierLootFunction.SERIALIZER);
-    public static final LootFunctionType SET_PARTS = new LootFunctionType(SetPartsFunction.SERIALIZER);
+    public static final LootItemConditionType HAS_PART = new LootItemConditionType(HasPartCondition.SERIALIZER);
+    public static final LootItemConditionType HAS_TRAIT = new LootItemConditionType(HasTraitCondition.SERIALIZER);
+    public static final LootItemFunctionType SELECT_TIER = new LootItemFunctionType(SelectGearTierLootFunction.SERIALIZER);
+    public static final LootItemFunctionType SET_PARTS = new LootItemFunctionType(SetPartsFunction.SERIALIZER);
 
     public static final RegistryObject<GlobalLootModifierSerializer<?>> BONUS_DROPS_TRAIT = register("bonus_drops_trait", BonusDropsTraitLootModifier.Serializer::new);
     public static final RegistryObject<GlobalLootModifierSerializer<?>> MAGMATIC_SMELTING = register("magmatic_smelting", MagmaticTraitLootModifier.Serializer::new);

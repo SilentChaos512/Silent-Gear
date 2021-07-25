@@ -6,21 +6,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.event.GearEvents;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
@@ -46,7 +46,14 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class ModAdvancementProvider implements IDataProvider {
+import net.minecraft.advancements.critereon.ChangeDimensionTrigger;
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.NbtPredicate;
+
+public class ModAdvancementProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
@@ -56,7 +63,7 @@ public class ModAdvancementProvider implements IDataProvider {
     }
 
     @Override
-    public void run(DirectoryCache cache) {
+    public void run(HashCache cache) {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
         //noinspection OverlyLongLambda
@@ -67,7 +74,7 @@ public class ModAdvancementProvider implements IDataProvider {
                 Path path1 = getPath(path, p_204017_3_);
 
                 try {
-                    IDataProvider.save(GSON, cache, p_204017_3_.deconstruct().serializeToJson(), path1);
+                    DataProvider.save(GSON, cache, p_204017_3_.deconstruct().serializeToJson(), path1);
                 } catch (IOException ioexception) {
                     LOGGER.error("Couldn't save advancement {}", path1, ioexception);
                 }
@@ -111,7 +118,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .addCriterion("flax_fibers", getItem(CraftingItems.FLAX_FIBER))
                     .addCriterion("fluffy_seeds", getItem(ModItems.FLUFFY_SEEDS))
                     .addCriterion("fluffy_puffs", getItem(CraftingItems.FLUFFY_PUFF))
-                    .requirements(IRequirementsStrategy.AND)
+                    .requirements(RequirementsStrategy.AND)
                     .save(consumer, id("overworld_plants"));
             Advancement kachink1 = Advancement.Builder.advancement()
                     .parent(root)
@@ -134,7 +141,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .display(ModItems.KNIFE, title("survival_tool"), description("survival_tool"), null, FrameType.TASK, true, true, false)
                     .addCriterion("knife", getItem(ModItems.KNIFE))
                     .addCriterion("dagger", getItem(ModItems.DAGGER))
-                    .requirements(IRequirementsStrategy.OR)
+                    .requirements(RequirementsStrategy.OR)
                     .save(consumer, id("survival_tool"));
             Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, survivalTool);
 
@@ -145,7 +152,7 @@ public class ModAdvancementProvider implements IDataProvider {
                 Advancement.Builder builder = Advancement.Builder.advancement()
                         .parent(templateBoard)
                         .display(ModItems.CRUDE_REPAIR_KIT, title("repair_kit"), description("repair_kit"), null, FrameType.TASK, true, true, false)
-                        .requirements(IRequirementsStrategy.OR);
+                        .requirements(RequirementsStrategy.OR);
                 Registration.getItems(RepairKitItem.class).forEach(item ->
                         builder.addCriterion(NameUtils.fromItem(item).getPath(), getItem(item)));
                 repairKit = builder.save(consumer, id("repair_kit"));
@@ -178,7 +185,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .addCriterion("chestplate", getItem(ModItems.CHESTPLATE))
                     .addCriterion("leggings", getItem(ModItems.LEGGINGS))
                     .addCriterion("boots", getItem(ModItems.BOOTS))
-                    .requirements(IRequirementsStrategy.OR)
+                    .requirements(RequirementsStrategy.OR)
                     .save(consumer, id("armor"));
 
             Advancement bow = Advancement.Builder.advancement()
@@ -192,7 +199,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .addCriterion("pickaxe", getItem(ModItems.PICKAXE))
                     .addCriterion("shovel", getItem(ModItems.SHOVEL))
                     .addCriterion("axe", getItem(ModItems.AXE))
-                    .requirements(IRequirementsStrategy.AND)
+                    .requirements(RequirementsStrategy.AND)
                     .save(consumer, id("standard_tools"));
             Advancement swords = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
@@ -200,7 +207,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .addCriterion("sword", getItem(ModItems.SWORD))
                     .addCriterion("katana", getItem(ModItems.KATANA))
                     .addCriterion("machete", getItem(ModItems.MACHETE))
-                    .requirements(IRequirementsStrategy.AND)
+                    .requirements(RequirementsStrategy.AND)
                     .save(consumer, id("swords"));
 
             Advancement bigJobTools = Advancement.Builder.advancement()
@@ -209,7 +216,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .addCriterion("hammer", getItem(ModItems.HAMMER))
                     .addCriterion("excavator", getItem(ModItems.EXCAVATOR))
                     .addCriterion("lumber_axe", getItem(ModItems.SAW))
-                    .requirements(IRequirementsStrategy.AND)
+                    .requirements(RequirementsStrategy.AND)
                     .save(consumer, id("big_job_tools"));
 
             Advancement crossbow = simpleGetItem(consumer, ModItems.CROSSBOW, bow);
@@ -225,7 +232,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement nether = Advancement.Builder.advancement()
                     .parent(root)
                     .display(Items.OBSIDIAN, title("nether"), description("nether"), null, FrameType.TASK, false, false, false)
-                    .addCriterion("entered_nether", ChangeDimensionTrigger.Instance.changedDimensionTo(World.NETHER))
+                    .addCriterion("entered_nether", ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(Level.NETHER))
                     .save(consumer, id("nether"));
 
             Advancement netherPlants = Advancement.Builder.advancement()
@@ -233,7 +240,7 @@ public class ModAdvancementProvider implements IDataProvider {
                     .display(ModItems.NETHER_BANANA, title("nether_plants"), description("nether_plants"), null, FrameType.TASK, true, true, false)
                     .addCriterion("banana", getItem(ModItems.NETHER_BANANA))
                     .addCriterion("sapling", getItem(ModBlocks.NETHERWOOD_SAPLING))
-                    .requirements(IRequirementsStrategy.AND)
+                    .requirements(RequirementsStrategy.AND)
                     .save(consumer, id("nether_plants"));
 
             Advancement blazeGold = simpleGetItem(consumer, CraftingItems.BLAZE_GOLD_INGOT, nether, "blaze_gold");
@@ -278,7 +285,7 @@ public class ModAdvancementProvider implements IDataProvider {
             Advancement theEnd = Advancement.Builder.advancement()
                     .parent(nether)
                     .display(Items.END_STONE, title("the_end"), description("the_end"), null, FrameType.TASK, false, false, false)
-                    .addCriterion("entered_the_end", ChangeDimensionTrigger.Instance.changedDimensionTo(World.END))
+                    .addCriterion("entered_the_end", ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(Level.END))
                     .save(consumer, id("the_end"));
 
             Advancement azureSilver = Advancement.Builder.advancement()
@@ -305,15 +312,15 @@ public class ModAdvancementProvider implements IDataProvider {
             //endregion
         }
 
-        private static Advancement simpleGetItem(Consumer<Advancement> consumer, IItemProvider item, Advancement parent) {
+        private static Advancement simpleGetItem(Consumer<Advancement> consumer, ItemLike item, Advancement parent) {
             return simpleGetItem(consumer, item, parent, NameUtils.fromItem(item).getPath());
         }
 
-        private static Advancement simpleGetItem(Consumer<Advancement> consumer, IItemProvider item, Advancement parent, String key) {
+        private static Advancement simpleGetItem(Consumer<Advancement> consumer, ItemLike item, Advancement parent, String key) {
             return simpleGetItem(consumer, item, new ItemStack(item), parent, key);
         }
 
-        private static Advancement simpleGetItem(Consumer<Advancement> consumer, IItemProvider item, ItemStack icon, Advancement parent, String key) {
+        private static Advancement simpleGetItem(Consumer<Advancement> consumer, ItemLike item, ItemStack icon, Advancement parent, String key) {
             return Advancement.Builder.advancement()
                     .parent(parent)
                     .display(icon, title(key), description(key), null, FrameType.TASK, true, true, false)
@@ -325,24 +332,24 @@ public class ModAdvancementProvider implements IDataProvider {
             return SilentGear.getId(path).toString();
         }
 
-        private static ICriterionInstance getItem(IItemProvider... items) {
-            return InventoryChangeTrigger.Instance.hasItems(items);
+        private static CriterionTriggerInstance getItem(ItemLike... items) {
+            return InventoryChangeTrigger.TriggerInstance.hasItems(items);
         }
 
-        private static ICriterionInstance getItem(ITag<Item> tag) {
-            return InventoryChangeTrigger.Instance.hasItems(new ItemPredicate(tag, null, MinMaxBounds.IntBound.ANY, MinMaxBounds.IntBound.ANY, EnchantmentPredicate.NONE, EnchantmentPredicate.NONE, null, NBTPredicate.ANY));
+        private static CriterionTriggerInstance getItem(Tag<Item> tag) {
+            return InventoryChangeTrigger.TriggerInstance.hasItems(new ItemPredicate(tag, null, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, EnchantmentPredicate.NONE, EnchantmentPredicate.NONE, null, NbtPredicate.ANY));
         }
 
-        private static ICriterionInstance genericInt(ResourceLocation id, int value) {
+        private static CriterionTriggerInstance genericInt(ResourceLocation id, int value) {
             return GenericIntTrigger.Instance.instance(id, value);
         }
 
-        private static ITextComponent title(String key) {
-            return new TranslationTextComponent("advancements.silentgear." + key + ".title");
+        private static Component title(String key) {
+            return new TranslatableComponent("advancements.silentgear." + key + ".title");
         }
 
-        private static ITextComponent description(String key) {
-            return new TranslationTextComponent("advancements.silentgear." + key + ".description");
+        private static Component description(String key) {
+            return new TranslatableComponent("advancements.silentgear." + key + ".description");
         }
     }
 }

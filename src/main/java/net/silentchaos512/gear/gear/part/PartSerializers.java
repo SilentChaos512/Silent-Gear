@@ -2,9 +2,9 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartSerializer;
@@ -37,7 +37,7 @@ public final class PartSerializers {
     }
 
     public static IGearPart deserialize(ResourceLocation id, JsonObject json) {
-        String typeStr = JSONUtils.getAsString(json, "type");
+        String typeStr = GsonHelper.getAsString(json, "type");
         ResourceLocation type = SilentGear.getIdWithDefaultNamespace(typeStr);
         log(() -> "deserialize " + id + " (type " + type + ")");
 
@@ -48,7 +48,7 @@ public final class PartSerializers {
         return serializer.read(id, json);
     }
 
-    public static IGearPart read(PacketBuffer buffer) {
+    public static IGearPart read(FriendlyByteBuf buffer) {
         ResourceLocation id = buffer.readResourceLocation();
         ResourceLocation type = buffer.readResourceLocation();
         log(() -> "read " + id + " (type " + type + ")");
@@ -60,7 +60,7 @@ public final class PartSerializers {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends IGearPart> void write(T part, PacketBuffer buffer) {
+    public static <T extends IGearPart> void write(T part, FriendlyByteBuf buffer) {
         ResourceLocation id = part.getId();
         ResourceLocation type = part.getSerializer().getName();
         log(() -> "write " + id + " (type " + type + ")");

@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -44,7 +44,7 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayText() {
+    public MutableComponent getDisplayText() {
         return TextUtil.translate("trait.condition", "primary");
     }
 
@@ -65,12 +65,12 @@ public class PrimaryMaterialTraitCondition implements ITraitCondition {
         }
 
         @Override
-        public PrimaryMaterialTraitCondition read(PacketBuffer buffer) {
+        public PrimaryMaterialTraitCondition read(FriendlyByteBuf buffer) {
             return new PrimaryMaterialTraitCondition();
         }
 
         @Override
-        public void write(PrimaryMaterialTraitCondition condition, PacketBuffer buffer) {
+        public void write(PrimaryMaterialTraitCondition condition, FriendlyByteBuf buffer) {
             // NO-OP
         }
     }

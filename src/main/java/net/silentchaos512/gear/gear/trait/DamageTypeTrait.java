@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.gear.trait;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -13,8 +13,8 @@ public final class DamageTypeTrait extends SimpleTrait {
             SERIALIZER_ID,
             DamageTypeTrait::new,
             (trait, json) -> {
-                trait.damageType = JSONUtils.getAsString(json, "damage_type", trait.getId().getPath());
-                trait.damageBonus = JSONUtils.getAsFloat(json, "damage_bonus", 0);
+                trait.damageType = GsonHelper.getAsString(json, "damage_type", trait.getId().getPath());
+                trait.damageBonus = GsonHelper.getAsFloat(json, "damage_bonus", 0);
             },
             (trait, buffer) -> {
                 trait.damageType = buffer.readUtf();

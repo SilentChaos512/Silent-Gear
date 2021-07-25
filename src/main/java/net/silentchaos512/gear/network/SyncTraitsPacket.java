@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
@@ -21,7 +21,7 @@ public class SyncTraitsPacket extends LoginPacket {
         this.traits = new ArrayList<>(traits);
     }
 
-    public static SyncTraitsPacket fromBytes(PacketBuffer buf) {
+    public static SyncTraitsPacket fromBytes(FriendlyByteBuf buf) {
         SyncTraitsPacket packet = new SyncTraitsPacket(Collections.emptyList());
 
         // Verify network version
@@ -35,7 +35,7 @@ public class SyncTraitsPacket extends LoginPacket {
         return packet;
     }
 
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         Network.writeModVersionInfoToNetwork(buf);
         buf.writeVarInt(this.traits.size());
         this.traits.forEach(trait -> TraitSerializers.write(trait, buf));

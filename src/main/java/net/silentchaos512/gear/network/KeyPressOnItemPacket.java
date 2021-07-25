@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.item.ICycleItem;
 
@@ -19,7 +19,7 @@ public class KeyPressOnItemPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
-        ServerPlayerEntity player = context.get().getSender();
+        ServerPlayer player = context.get().getSender();
         if (player != null && player.containerMenu != null && this.slot >= 0 && this.slot < player.containerMenu.slots.size()) {
             Slot inventorySlot = player.containerMenu.getSlot(this.slot);
             ItemStack stack = inventorySlot.getItem();
@@ -44,13 +44,13 @@ public class KeyPressOnItemPacket {
         context.get().setPacketHandled(true);
     }
 
-    public static KeyPressOnItemPacket decode(PacketBuffer buffer) {
+    public static KeyPressOnItemPacket decode(FriendlyByteBuf buffer) {
         Type type = buffer.readEnum(Type.class);
         int slot = buffer.readVarInt();
         return new KeyPressOnItemPacket(type, slot);
     }
 
-    public static void encode(KeyPressOnItemPacket msg, PacketBuffer buffer) {
+    public static void encode(KeyPressOnItemPacket msg, FriendlyByteBuf buffer) {
         buffer.writeEnum(msg.type);
         buffer.writeVarInt(msg.slot);
     }

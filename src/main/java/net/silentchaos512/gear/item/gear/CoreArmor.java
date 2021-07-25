@@ -4,20 +4,20 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
@@ -45,6 +45,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeableArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
 public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     // Just copied from ArmorItem, access transformers are too flaky
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
@@ -59,12 +66,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
 
-    public CoreArmor(EquipmentSlotType slot) {
-        super(ArmorMaterial.DIAMOND, slot, GearHelper.getBuilder(null));
+    public CoreArmor(EquipmentSlot slot) {
+        super(ArmorMaterials.DIAMOND, slot, GearHelper.getBuilder(null));
     }
 
     @Deprecated
-    public CoreArmor(EquipmentSlotType slot, String name) {
+    public CoreArmor(EquipmentSlot slot, String name) {
         this(slot);
     }
 
@@ -130,7 +137,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
 
     @Nonnull
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = LinkedHashMultimap.create();
         if (slot == this.getSlot()) {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
@@ -160,14 +167,14 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         if (GearHelper.isUnbreakable(stack))
             return;
         if (!Config.Common.gearBreaksPermanently.get())
-            damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
+            damage = Mth.clamp(damage, 0, getMaxDamage(stack));
         super.setDamage(stack, damage);
     }
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, t -> {
-            GearHelper.onBroken(stack, t instanceof PlayerEntity ? (PlayerEntity) t : null, this.getSlot());
+            GearHelper.onBroken(stack, t instanceof Player ? (Player) t : null, this.getSlot());
             onBroken.accept(t);
         });
     }
@@ -183,17 +190,17 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
+    public void onArmorTick(ItemStack stack, Level world, Player player) {
         GearHelper.inventoryTick(stack, world, player, 0, true);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
@@ -207,7 +214,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     //region Client-side methods and rendering horrors
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         // In order for colors to work, it seems the following must be true:
         // 1. Armor texture must be named using the vanilla convention
         // 2. Return value of this may NOT be cached... wat? Not a big deal I guess.
@@ -217,7 +224,7 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
         if (GearHelper.isBroken(stack))
             return SilentGear.MOD_ID + ":textures/models/armor/empty.png";
 
-        int layer = slot == EquipmentSlotType.LEGS ? 2 : 1;
+        int layer = slot == EquipmentSlot.LEGS ? 2 : 1;
         // Overlay - default to a blank texture
         if ("overlay".equals(type))
             return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
@@ -278,12 +285,12 @@ public class CoreArmor extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 

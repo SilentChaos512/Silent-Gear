@@ -1,21 +1,21 @@
 package net.silentchaos512.gear.api.traits;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.util.TextUtil;
@@ -39,8 +39,8 @@ public interface ITrait {
         if (willCancelWith(other)) {
             final int diff = level - otherLevel;
             return diff < 0
-                    ? MathHelper.clamp(diff, -other.getMaxLevel(), 0)
-                    : MathHelper.clamp(diff, 0, this.getMaxLevel());
+                    ? Mth.clamp(diff, -other.getMaxLevel(), 0)
+                    : Mth.clamp(diff, 0, this.getMaxLevel());
         }
         return level;
     }
@@ -52,20 +52,20 @@ public interface ITrait {
      */
     default void retainData(@Nullable ITrait oldTrait) {}
 
-    IFormattableTextComponent getDisplayName(int level);
+    MutableComponent getDisplayName(int level);
 
-    IFormattableTextComponent getDescription(int level);
+    MutableComponent getDescription(int level);
 
     default boolean isHidden() {
         return false;
     }
 
-    default boolean showInTooltip(ITooltipFlag flag) {
+    default boolean showInTooltip(TooltipFlag flag) {
         return !isHidden() || flag.isAdvanced();
     }
 
     @Deprecated
-    default void addInformation(int level, List<ITextComponent> tooltip) {
+    default void addInformation(int level, List<Component> tooltip) {
         addInformation(level, tooltip, () -> false);
     }
 
@@ -79,7 +79,7 @@ public interface ITrait {
      * @param tooltip The tooltip list
      * @param flag    The tooltip flag
      */
-    default void addInformation(int level, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    default void addInformation(int level, List<Component> tooltip, TooltipFlag flag) {
         addInformation(level, tooltip, flag, t -> t);
     }
 
@@ -95,18 +95,18 @@ public interface ITrait {
      * @param affixFirst A function which can be used to make additional changes to the first line
      *                   (display name)
      */
-    default void addInformation(int level, List<ITextComponent> tooltip, ITooltipFlag flag, Function<ITextComponent, ITextComponent> affixFirst) {
+    default void addInformation(int level, List<Component> tooltip, TooltipFlag flag, Function<Component, Component> affixFirst) {
         if (!showInTooltip(flag)) return;
 
         // Display name
-        ITextComponent displayName = TextUtil.withColor(this.getDisplayName(level), isHidden() ? TextFormatting.DARK_GRAY : TextFormatting.GRAY);
-        displayName.getStyle().withColor(TextFormatting.ITALIC);
+        Component displayName = TextUtil.withColor(this.getDisplayName(level), isHidden() ? ChatFormatting.DARK_GRAY : ChatFormatting.GRAY);
+        displayName.getStyle().withColor(ChatFormatting.ITALIC);
         tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)
         if (KeyTracker.isDisplayTraitsDown()) {
-            ITextComponent description = TextUtil.withColor(this.getDescription(level), TextFormatting.DARK_GRAY);
-            tooltip.add(new StringTextComponent("    ").append(description));
+            Component description = TextUtil.withColor(this.getDescription(level), ChatFormatting.DARK_GRAY);
+            tooltip.add(new TextComponent("    ").append(description));
         }
     }
 
@@ -127,11 +127,11 @@ public interface ITrait {
     void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, String slot);
 
     @Deprecated
-    default void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlotType slot) {
+    default void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> modifiers, EquipmentSlot slot) {
         onGetAttributeModifiers(context, modifiers, slot.getName());
     }
 
-    ActionResultType onItemUse(ItemUseContext context, int traitLevel);
+    InteractionResult onItemUse(UseOnContext context, int traitLevel);
 
     /**
      * Called when the player left-clicks with the item in their hand without targeting a block or
@@ -147,8 +147,8 @@ public interface ITrait {
 
     ItemStack addLootDrops(TraitActionContext context, ItemStack stack);
 
-    default CompoundNBT write(int level) {
-        CompoundNBT tag = new CompoundNBT();
+    default CompoundTag write(int level) {
+        CompoundTag tag = new CompoundTag();
         tag.putString("Name", this.getId().toString());
         tag.putByte("Level", (byte) level);
         return tag;

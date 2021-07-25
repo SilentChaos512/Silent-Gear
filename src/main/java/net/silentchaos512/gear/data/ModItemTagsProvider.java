@@ -2,16 +2,16 @@ package net.silentchaos512.gear.data;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.TagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeItemTagsProvider;
@@ -205,9 +205,9 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
                 .map(item -> (AbstractBlueprintItem) item)
                 .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().getName()))
                 .forEach(item -> blueprints.put(item.getItemTag().getName(), item));
-        TagsProvider.Builder<Item> blueprintsBuilder = getBuilder(ModTags.Items.BLUEPRINTS);
+        TagsProvider.TagAppender<Item> blueprintsBuilder = getBuilder(ModTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
-            ITag.INamedTag<Item> tag = ItemTags.bind(tagId.toString());
+            Tag.Named<Item> tag = ItemTags.bind(tagId.toString());
             getBuilder(tag).add(blueprints.get(tagId).toArray(new Item[0]));
             blueprintsBuilder.addTag(tag);
         });
@@ -219,15 +219,15 @@ public class ModItemTagsProvider extends ForgeItemTagsProvider {
         builder(makeWrapper(Const.CURIOS, "back"), ModItems.ELYTRA);
     }
 
-    private ITag.INamedTag<Item> makeWrapper(String namespace, String path) {
+    private Tag.Named<Item> makeWrapper(String namespace, String path) {
         return ItemTags.bind(new ResourceLocation(namespace, path).toString());
     }
 
-    private void builder(ITag.INamedTag<Item> tag, IItemProvider... items) {
-        getBuilder(tag).add(Arrays.stream(items).map(IItemProvider::asItem).toArray(Item[]::new));
+    private void builder(Tag.Named<Item> tag, ItemLike... items) {
+        getBuilder(tag).add(Arrays.stream(items).map(ItemLike::asItem).toArray(Item[]::new));
     }
 
-    protected TagsProvider.Builder<Item> getBuilder(ITag.INamedTag<Item> tag) {
+    protected TagsProvider.TagAppender<Item> getBuilder(Tag.Named<Item> tag) {
         return tag(tag);
     }
 }

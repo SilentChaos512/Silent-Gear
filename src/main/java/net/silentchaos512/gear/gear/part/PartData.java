@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.gear.part;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -105,7 +105,7 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
     }
 
     @Nullable
-    public static PartData read(CompoundNBT tags) {
+    public static PartData read(CompoundTag tags) {
         ResourceLocation id = SilentGear.getIdWithDefaultNamespace(tags.getString(NBT_ID));
         if (id == null) return null;
 
@@ -117,10 +117,10 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
     }
 
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT tags) {
+    public CompoundTag write(@Nonnull CompoundTag tags) {
         tags.putString(NBT_ID, part.getId().toString());
 
-        CompoundNBT itemTag = new CompoundNBT();
+        CompoundTag itemTag = new CompoundTag();
         this.craftingItem.save(itemTag);
         tags.put("Item", itemTag);
         return tags;
@@ -163,20 +163,20 @@ public final class PartData implements IPartData { // TODO: move to api.part pac
         return part.getStatModifiers(this, this.getType(), key, gear);
     }
 
-    public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInventory inventory) {
+    public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingContainer inventory) {
         return part.isCraftingAllowed(this, this.getType(), gearType, inventory);
     }
 
     @Override
-    public ITextComponent getDisplayName(PartType type, ItemStack gear) {
+    public Component getDisplayName(PartType type, ItemStack gear) {
         return part.getDisplayName(this, type, gear);
     }
 
-    public ITextComponent getDisplayName(ItemStack gear) {
+    public Component getDisplayName(ItemStack gear) {
         return part.getDisplayName(this, gear);
     }
 
-    public ITextComponent getMaterialName(ItemStack gear) {
+    public Component getMaterialName(ItemStack gear) {
         return part.getMaterialName(this, gear);
     }
 

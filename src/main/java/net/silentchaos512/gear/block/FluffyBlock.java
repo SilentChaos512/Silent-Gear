@@ -1,22 +1,24 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.init.ModTags;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class FluffyBlock extends Block {
     static {
@@ -37,7 +39,7 @@ public class FluffyBlock extends Block {
     }
 
     @Override
-    public void fallOn(World world, BlockPos pos, Entity entity, float distance) {
+    public void fallOn(Level world, BlockPos pos, Entity entity, float distance) {
         if (distance < 2 || world.isClientSide) return;
 
         // Count the number of fluffy blocks that are stacked up.
@@ -54,7 +56,7 @@ public class FluffyBlock extends Block {
     }
 
     @Override
-    public void updateEntityAfterFallOn(IBlockReader worldIn, Entity entityIn) {
+    public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
         if (entityIn.isSuppressingBounce()) {
             super.updateEntityAfterFallOn(worldIn, entityIn);
         } else {
@@ -63,7 +65,7 @@ public class FluffyBlock extends Block {
     }
 
     private static void bounceEntity(Entity entity) {
-        Vector3d vector3d = entity.getDeltaMovement();
+        Vec3 vector3d = entity.getDeltaMovement();
         if (vector3d.y < 0.0D) {
             double d0 = entity instanceof LivingEntity ? 1.0 : 0.8;
             entity.setDeltaMovement(vector3d.x, -vector3d.y * (double) 0.5f * d0, vector3d.z);
@@ -71,7 +73,7 @@ public class FluffyBlock extends Block {
     }
 
     private static void onGetBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ItemStack mainHand = event.getPlayer().getItemInHand(Hand.MAIN_HAND);
+        ItemStack mainHand = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
         if (!mainHand.isEmpty() && mainHand.getItem() instanceof ShearsItem) {
             int efficiency = EnchantmentHelper.getBlockEfficiency(event.getPlayer());
 

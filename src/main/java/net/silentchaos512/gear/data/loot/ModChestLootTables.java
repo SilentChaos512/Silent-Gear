@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.data.loot.ChestLootTables;
+import net.minecraft.data.loot.ChestLoot;
 import net.minecraft.loot.*;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.init.LootInjector;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
@@ -11,7 +11,14 @@ import net.silentchaos512.gear.item.CraftingItems;
 
 import java.util.function.BiConsumer;
 
-public class ModChestLootTables extends ChestLootTables {
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.RandomValueBounds;
+import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+
+public class ModChestLootTables extends ChestLoot {
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         consumer.accept(LootInjector.Tables.CHESTS_NETHER_BRIDGE, addNetherMetalsAndFlora());
@@ -31,15 +38,15 @@ public class ModChestLootTables extends ChestLootTables {
     private static LootTable.Builder addNetherMetalsWithExtra() {
         LootTable.Builder builder = LootTable.lootTable();
         builder.withPool(LootPool.lootPool()
-                .setRolls(ConstantRange.exactly(1))
+                .setRolls(ConstantIntValue.exactly(1))
                 .bonusRolls(0, 1)
-                .add(ItemLootEntry.lootTableItem(CraftingItems.BLAZE_GOLD_INGOT)
+                .add(LootItem.lootTableItem(CraftingItems.BLAZE_GOLD_INGOT)
                         .setWeight(6)
-                        .apply(SetCount.setCount(RandomValueRange.between(2, 5)))
+                        .apply(SetItemCountFunction.setCount(RandomValueBounds.between(2, 5)))
                 )
-                .add(ItemLootEntry.lootTableItem(CraftingItems.CRIMSON_STEEL_DUST)
+                .add(LootItem.lootTableItem(CraftingItems.CRIMSON_STEEL_DUST)
                         .setWeight(1)
-                        .apply(SetCount.setCount(RandomValueRange.between(1, 2)))
+                        .apply(SetItemCountFunction.setCount(RandomValueBounds.between(1, 2)))
                 )
         );
         return addNetherMetals(builder);
@@ -47,22 +54,22 @@ public class ModChestLootTables extends ChestLootTables {
 
     private static LootTable.Builder addNetherMetals(LootTable.Builder builder) {
         builder.withPool(LootPool.lootPool()
-                .setRolls(RandomValueRange.between(1, 2))
-                .add(EmptyLootEntry.emptyItem()
+                .setRolls(RandomValueBounds.between(1, 2))
+                .add(EmptyLootItem.emptyItem()
                         .setWeight(20)
                 )
-                .add(ItemLootEntry.lootTableItem(CraftingItems.CRIMSON_IRON_INGOT)
+                .add(LootItem.lootTableItem(CraftingItems.CRIMSON_IRON_INGOT)
                         .setWeight(35)
-                        .apply(SetCount.setCount(RandomValueRange.between(1, 4)))
+                        .apply(SetItemCountFunction.setCount(RandomValueBounds.between(1, 4)))
                 )
-                .add(ItemLootEntry.lootTableItem(CraftingItems.BLAZE_GOLD_NUGGET)
+                .add(LootItem.lootTableItem(CraftingItems.BLAZE_GOLD_NUGGET)
                         .setWeight(35)
-                        .apply(SetCount.setCount(RandomValueRange.between(5, 10)))
+                        .apply(SetItemCountFunction.setCount(RandomValueBounds.between(5, 10)))
                 )
-                .add(ItemLootEntry.lootTableItem(CraftingItems.BLAZE_GOLD_INGOT)
+                .add(LootItem.lootTableItem(CraftingItems.BLAZE_GOLD_INGOT)
                         .setWeight(15)
                 )
-                .add(ItemLootEntry.lootTableItem(CraftingItems.CRIMSON_STEEL_INGOT)
+                .add(LootItem.lootTableItem(CraftingItems.CRIMSON_STEEL_INGOT)
                         .setWeight(1)
                 )
         );
@@ -71,20 +78,20 @@ public class ModChestLootTables extends ChestLootTables {
 
     private static LootTable.Builder addNetherFlora(LootTable.Builder builder) {
         builder.withPool(LootPool.lootPool()
-                .setRolls(RandomValueRange.between(1, 2))
+                .setRolls(RandomValueBounds.between(1, 2))
                 .bonusRolls(0, 1)
-                .add(EmptyLootEntry.emptyItem()
+                .add(EmptyLootItem.emptyItem()
                         .setWeight(10)
                 )
-                .add(ItemLootEntry.lootTableItem(ModBlocks.NETHERWOOD_SAPLING)
+                .add(LootItem.lootTableItem(ModBlocks.NETHERWOOD_SAPLING)
                         .setWeight(20)
-                        .apply(SetCount.setCount(RandomValueRange.between(1, 2)))
+                        .apply(SetItemCountFunction.setCount(RandomValueBounds.between(1, 2)))
                 )
-                .add(ItemLootEntry.lootTableItem(ModItems.NETHER_BANANA)
+                .add(LootItem.lootTableItem(ModItems.NETHER_BANANA)
                         .setWeight(10)
-                        .apply(SetCount.setCount(RandomValueRange.between(2, 4)))
+                        .apply(SetItemCountFunction.setCount(RandomValueBounds.between(2, 4)))
                 )
-                .add(ItemLootEntry.lootTableItem(ModItems.GOLDEN_NETHER_BANANA)
+                .add(LootItem.lootTableItem(ModItems.GOLDEN_NETHER_BANANA)
                         .setWeight(1)
                 )
         );

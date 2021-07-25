@@ -2,8 +2,8 @@ package net.silentchaos512.gear.client.model.fragment;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.client.model.IModelLoader;
 
 import java.util.ArrayList;
@@ -17,15 +17,15 @@ public class FragmentModelLoader implements IModelLoader<FragmentModel> {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         MODELS.clear();
     }
 
     @Override
     public FragmentModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-        ItemCameraTransforms cameraTransforms = deserializationContext.deserialize(modelContents.get("display"), ItemCameraTransforms.class);
+        ItemTransforms cameraTransforms = deserializationContext.deserialize(modelContents.get("display"), ItemTransforms.class);
         if (cameraTransforms == null) {
-            cameraTransforms = ItemCameraTransforms.NO_TRANSFORMS;
+            cameraTransforms = ItemTransforms.NO_TRANSFORMS;
         }
 
         FragmentModel model = new FragmentModel(cameraTransforms);

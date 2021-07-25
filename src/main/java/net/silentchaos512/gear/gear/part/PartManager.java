@@ -6,16 +6,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
-public final class PartManager implements IResourceManagerReloadListener {
+public final class PartManager implements ResourceManagerReloadListener {
     public static final PartManager INSTANCE = new PartManager();
 
     public static final Marker MARKER = MarkerManager.getMarker("PartManager");
@@ -52,7 +52,7 @@ public final class PartManager implements IResourceManagerReloadListener {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = getAllResources(resourceManager);
         if (resources.isEmpty()) return;
@@ -67,13 +67,13 @@ public final class PartManager implements IResourceManagerReloadListener {
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
                 String packName = "ERROR";
-                try (IResource iresource = resourceManager.getResource(id)) {
+                try (Resource iresource = resourceManager.getResource(id)) {
                     packName = iresource.getSourceName();
                     if (SilentGear.LOGGER.isTraceEnabled()) {
                         SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
                     }
 
-                    JsonObject json = JSONUtils.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    JsonObject json = GsonHelper.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                     if (json == null) {
                         SilentGear.LOGGER.error(MARKER, "Could not load part {} as it's null or empty", name);
                     } else if (!CraftingHelper.processConditions(json, "conditions")) {
@@ -99,7 +99,7 @@ public final class PartManager implements IResourceManagerReloadListener {
         }
     }
 
-    private static Collection<ResourceLocation> getAllResources(IResourceManager resourceManager) {
+    private static Collection<ResourceLocation> getAllResources(ResourceManager resourceManager) {
         Collection<ResourceLocation> list = new ArrayList<>();
         list.addAll(resourceManager.listResources(DATA_PATH, s -> s.endsWith(".json")));
         list.addAll(resourceManager.listResources(DATA_PATH_OLD, s -> s.endsWith(".json")));
@@ -176,13 +176,13 @@ public final class PartManager implements IResourceManagerReloadListener {
         context.get().setPacketHandled(true);
     }
 
-    public static Collection<ITextComponent> getErrorMessages(ServerPlayerEntity player) {
+    public static Collection<Component> getErrorMessages(ServerPlayer player) {
         if (!ERROR_LIST.isEmpty()) {
             String listStr = String.join(", ", ERROR_LIST);
             return ImmutableList.of(
-                    new StringTextComponent("[Silent Gear] The following gear parts failed to load, check your log file:")
-                            .withStyle(TextFormatting.RED),
-                    new StringTextComponent(listStr)
+                    new TextComponent("[Silent Gear] The following gear parts failed to load, check your log file:")
+                            .withStyle(ChatFormatting.RED),
+                    new TextComponent(listStr)
             );
         }
         return ImmutableList.of();

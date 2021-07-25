@@ -4,23 +4,23 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ElytraItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ElytraItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.api.item.GearType;
@@ -45,7 +45,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class CoreElytra extends ElytraItem implements ICoreArmor {
     private static final int DURABILITY_MULTIPLIER = 25;
@@ -96,7 +96,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
 
     @Override
     public boolean isValidSlot(String slot) {
-        return EquipmentSlotType.CHEST.getName().equalsIgnoreCase(slot) || "back".equalsIgnoreCase(slot);
+        return EquipmentSlot.CHEST.getName().equalsIgnoreCase(slot) || "back".equalsIgnoreCase(slot);
     }
 
     @Override
@@ -126,8 +126,8 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
 
     @Nullable
     @Override
-    public EquipmentSlotType getEquipmentSlot(ItemStack stack) {
-        return EquipmentSlotType.CHEST;
+    public EquipmentSlot getEquipmentSlot(ItemStack stack) {
+        return EquipmentSlot.CHEST;
     }
 
     @Override
@@ -140,14 +140,14 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
         if (GearHelper.isUnbreakable(stack))
             return;
         if (!Config.Common.gearBreaksPermanently.get())
-            damage = MathHelper.clamp(damage, 0, getMaxDamage(stack));
+            damage = Mth.clamp(damage, 0, getMaxDamage(stack));
         super.setDamage(stack, damage);
     }
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, t -> {
-            GearHelper.onBroken(stack, t instanceof PlayerEntity ? (PlayerEntity) t : null, this.getEquipmentSlot(stack));
+            GearHelper.onBroken(stack, t instanceof Player ? (Player) t : null, this.getEquipmentSlot(stack));
             onBroken.accept(t);
         });
     }
@@ -158,17 +158,17 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
+    public void onArmorTick(ItemStack stack, Level world, Player player) {
         GearHelper.inventoryTick(stack, world, player, 0, true);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
@@ -179,7 +179,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         if (ModList.get().isLoaded(Const.CURIOS)) {
             return CuriosCompat.createElytraProvider(stack, this);
         }
@@ -187,7 +187,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = LinkedHashMultimap.create();
 
         if (isValidSlot(slot.getName())) {
@@ -207,14 +207,14 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (!ModList.get().isLoaded(Const.CAELUS)) {
-            tooltip.add(TextUtil.misc("caelusNotInstalled").withStyle(TextFormatting.RED));
+            tooltip.add(TextUtil.misc("caelusNotInstalled").withStyle(ChatFormatting.RED));
         }
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }

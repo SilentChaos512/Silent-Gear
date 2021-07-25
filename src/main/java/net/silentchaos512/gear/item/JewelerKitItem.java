@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class JewelerKitItem extends PartBlueprintItem {
     public JewelerKitItem(PartType partType, boolean singleUse, Properties properties) {
@@ -14,8 +14,8 @@ public class JewelerKitItem extends PartBlueprintItem {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
-        return new TranslationTextComponent(this.getDescriptionId(stack));
+    public Component getName(ItemStack stack) {
+        return new TranslatableComponent(this.getDescriptionId(stack));
     }
 
     @Override

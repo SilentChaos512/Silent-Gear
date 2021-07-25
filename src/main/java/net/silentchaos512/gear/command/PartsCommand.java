@@ -5,14 +5,14 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -34,11 +34,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class PartsCommand {
-    private static final SuggestionProvider<CommandSource> partIdSuggestions = (ctx, builder) ->
-            ISuggestionProvider.suggestResource(PartManager.getValues().stream().map(IGearPart::getId), builder);
-    private static final SuggestionProvider<CommandSource> partInGearSuggestions = (ctx, builder) -> {
+    private static final SuggestionProvider<CommandSourceStack> partIdSuggestions = (ctx, builder) ->
+            SharedSuggestionProvider.suggestResource(PartManager.getValues().stream().map(IGearPart::getId), builder);
+    private static final SuggestionProvider<CommandSourceStack> partInGearSuggestions = (ctx, builder) -> {
         PartDataList parts = GearData.getConstructionParts(getGear(ctx));
-        return ISuggestionProvider.suggestResource(parts.getUniqueParts(false).stream().map(part ->
+        return SharedSuggestionProvider.suggestResource(parts.getUniqueParts(false).stream().map(part ->
                 part.get().getId()), builder);
     };
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
@@ -46,8 +46,8 @@ public final class PartsCommand {
     private PartsCommand() {
     }
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sgear_parts");
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("sgear_parts");
 
         // List
         builder.then(Commands.literal("list")
@@ -65,28 +65,28 @@ public final class PartsCommand {
         dispatcher.register(builder);
     }
 
-    private static int runList(CommandContext<CommandSource> context) {
+    private static int runList(CommandContext<CommandSourceStack> context) {
         String listStr = PartManager.getValues().stream()
                 .map(part -> part.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(new StringTextComponent(listStr), true);
+        context.getSource().sendSuccess(new TextComponent(listStr), true);
 
         for (PartType type : PartType.getValues()) {
             int count = PartManager.getPartsOfType(type).size();
             String str = String.format("%s: %d", type.getName(), count);
-            context.getSource().sendSuccess(new StringTextComponent(str), true);
+            context.getSource().sendSuccess(new TextComponent(str), true);
         }
 
         return 1;
     }
 
-    private static int runDump(CommandContext<CommandSource> context) {
+    private static int runDump(CommandContext<CommandSourceStack> context) {
         String fileName = "part_export.tsv";
         String dirPath = "output/silentgear";
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            context.getSource().sendFailure(new StringTextComponent("Could not create directory: " + output.getParent()));
+            context.getSource().sendFailure(new TextComponent("Could not create directory: " + output.getParent()));
             return 0;
         }
 
@@ -102,7 +102,7 @@ public final class PartsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            context.getSource().sendSuccess(new StringTextComponent("Wrote to " + output.getAbsolutePath()), true);
+            context.getSource().sendSuccess(new TextComponent("Wrote to " + output.getAbsolutePath()), true);
         }
 
         return 1;
@@ -134,8 +134,8 @@ public final class PartsCommand {
         builder.append(value).append("\t");
     }
 
-    private static ItemStack getGear(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        if (ctx.getSource().getEntity() instanceof ServerPlayerEntity) {
+    private static ItemStack getGear(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        if (ctx.getSource().getEntity() instanceof ServerPlayer) {
             ItemStack gear = ctx.getSource().getPlayerOrException().getMainHandItem();
             if (gear.getItem() instanceof ICoreItem) {
                 return gear;
@@ -146,7 +146,7 @@ public final class PartsCommand {
         return ItemStack.EMPTY;
     }
 
-    private static ITextComponent text(String key, Object... args) {
-        return new TranslationTextComponent("command.silentgear.parts." + key, args);
+    private static Component text(String key, Object... args) {
+        return new TranslatableComponent("command.silentgear.parts." + key, args);
     }
 }

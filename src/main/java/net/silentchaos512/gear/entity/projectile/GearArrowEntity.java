@@ -2,14 +2,14 @@ package net.silentchaos512.gear.entity.projectile;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.ModEntities;
@@ -20,9 +20,9 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.minecraft.entity.projectile.AbstractArrowEntity.PickupStatus;
+import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 
-public class GearArrowEntity extends ArrowEntity {
+public class GearArrowEntity extends Arrow {
     private static final Cache<UUID, ItemStack> STACK_CACHE = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
@@ -30,19 +30,19 @@ public class GearArrowEntity extends ArrowEntity {
 
     private ItemStack arrowStack = ItemStack.EMPTY;
 
-    public GearArrowEntity(EntityType<? extends ArrowEntity> type, World worldIn) {
+    public GearArrowEntity(EntityType<? extends Arrow> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public GearArrowEntity(World worldIn, double x, double y, double z) {
+    public GearArrowEntity(Level worldIn, double x, double y, double z) {
         super(worldIn, x, y, z);
     }
 
-    public GearArrowEntity(World worldIn, LivingEntity shooter) {
+    public GearArrowEntity(Level worldIn, LivingEntity shooter) {
         super(worldIn, shooter);
     }
 
-    public GearArrowEntity(FMLPlayMessages.SpawnEntity message, World world) {
+    public GearArrowEntity(FMLPlayMessages.SpawnEntity message, Level world) {
         this(ModEntities.ARROW.get(), world);
     }
 
@@ -68,9 +68,9 @@ public class GearArrowEntity extends ArrowEntity {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         Entity shooter = getOwner();
-        if (shooter instanceof PlayerEntity && !((PlayerEntity) shooter).abilities.instabuild) {
+        if (shooter instanceof Player && !((Player) shooter).abilities.instabuild) {
             // Correct pickup status. Gear arrows are "infinite" so vanilla makes this creative only
-            this.pickup = PickupStatus.ALLOWED;
+            this.pickup = Pickup.ALLOWED;
         }
     }
 
@@ -83,10 +83,10 @@ public class GearArrowEntity extends ArrowEntity {
 
     @SuppressWarnings("OverlyComplexMethod")
     @Override
-    public void playerTouch(PlayerEntity entityIn) {
+    public void playerTouch(Player entityIn) {
         if (!this.level.isClientSide && (this.inGround || this.isNoPhysics()) && this.shakeTime <= 0) {
-            boolean flag = this.pickup == AbstractArrowEntity.PickupStatus.ALLOWED || this.pickup == AbstractArrowEntity.PickupStatus.CREATIVE_ONLY && entityIn.abilities.instabuild || this.isNoPhysics() && this.getOwner().getUUID() == entityIn.getUUID();
-            if (this.pickup == PickupStatus.ALLOWED && (!GearHelper.isGear(arrowStack) || !addArrowToPlayerInventory(entityIn))) {
+            boolean flag = this.pickup == AbstractArrow.Pickup.ALLOWED || this.pickup == AbstractArrow.Pickup.CREATIVE_ONLY && entityIn.abilities.instabuild || this.isNoPhysics() && this.getOwner().getUUID() == entityIn.getUUID();
+            if (this.pickup == Pickup.ALLOWED && (!GearHelper.isGear(arrowStack) || !addArrowToPlayerInventory(entityIn))) {
                 flag = false;
             }
 
@@ -97,7 +97,7 @@ public class GearArrowEntity extends ArrowEntity {
         }
     }
 
-    private boolean addArrowToPlayerInventory(PlayerEntity player) {
+    private boolean addArrowToPlayerInventory(Player player) {
         UUID uuid = GearData.getUUID(arrowStack);
 
         for (ItemStack stack : player.inventory.offhand) {

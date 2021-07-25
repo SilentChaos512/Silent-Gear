@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.api.util;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 
 import java.util.Collection;

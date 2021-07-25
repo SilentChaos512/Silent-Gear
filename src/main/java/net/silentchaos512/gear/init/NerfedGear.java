@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.init;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.Mth;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,7 +43,7 @@ public final class NerfedGear {
                 SilentGear.LOGGER.debug("Try nerf durability of {}", item.getRegistryName());
                 try {
                     int maxDamage = (int) itemDamageField.get(item);
-                    int newMax = MathHelper.clamp((int) (maxDamage * Config.Common.nerfedItemDurabilityMulti.get()), 1, maxDamage);
+                    int newMax = Mth.clamp((int) (maxDamage * Config.Common.nerfedItemDurabilityMulti.get()), 1, maxDamage);
                     itemDamageField.set(item, newMax);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();

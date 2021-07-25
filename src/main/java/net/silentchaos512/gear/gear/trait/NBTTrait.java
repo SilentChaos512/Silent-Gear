@@ -2,12 +2,12 @@ package net.silentchaos512.gear.gear.trait;
 
 import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -81,7 +81,7 @@ public final class NBTTrait extends SimpleTrait {
         }
     }
 
-    private static void readBuffer(NBTTrait trait, PacketBuffer buffer) {
+    private static void readBuffer(NBTTrait trait, FriendlyByteBuf buffer) {
         trait.data.clear();
         int gearTypeCount = buffer.readByte();
 
@@ -98,7 +98,7 @@ public final class NBTTrait extends SimpleTrait {
         }
     }
 
-    private static void writeBuffer(NBTTrait trait, PacketBuffer buffer) {
+    private static void writeBuffer(NBTTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.data.size());
         trait.data.forEach((type, list) -> {
             buffer.writeUtf(type);
@@ -109,31 +109,31 @@ public final class NBTTrait extends SimpleTrait {
 
     public static class DataEntry {
         private int level;
-        private CompoundNBT data = new CompoundNBT();
+        private CompoundTag data = new CompoundTag();
 
         static DataEntry from(JsonObject json) {
             DataEntry ret = new DataEntry();
-            ret.level = JSONUtils.getAsInt(json, "level", 1);
+            ret.level = GsonHelper.getAsInt(json, "level", 1);
             try {
                 JsonElement element = json.get("data");
                 if (element.isJsonObject())
-                    ret.data = JsonToNBT.parseTag(GSON.toJson(element));
+                    ret.data = TagParser.parseTag(GSON.toJson(element));
                 else
-                    ret.data = JsonToNBT.parseTag(JSONUtils.getAsString(json, "data"));
+                    ret.data = TagParser.parseTag(GsonHelper.getAsString(json, "data"));
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }
             return ret;
         }
 
-        static DataEntry read(PacketBuffer buffer) {
+        static DataEntry read(FriendlyByteBuf buffer) {
             DataEntry ret = new DataEntry();
             ret.level = buffer.readByte();
             ret.data = buffer.readNbt();
             return ret;
         }
 
-        void write(PacketBuffer buffer) {
+        void write(FriendlyByteBuf buffer) {
             buffer.writeByte(this.level);
             buffer.writeNbt(this.data);
         }

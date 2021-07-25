@@ -3,25 +3,25 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.network.play.server.SChangeBlockPacket;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
@@ -39,7 +39,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class CoreSickle extends ToolItem implements ICoreTool {
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+
+public class CoreSickle extends DiggerItem implements ICoreTool {
     public static final ToolType TOOL_TYPE = ToolType.get("sickle");
 
     private static final int DURABILITY_USAGE = 3;
@@ -71,7 +85,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     public CoreSickle() {
-        super(0, 0, ItemTier.DIAMOND, ImmutableSet.of(), GearHelper.getBuilder(TOOL_TYPE));
+        super(0, 0, Tiers.DIAMOND, ImmutableSet.of(), GearHelper.getBuilder(TOOL_TYPE));
     }
 
     @Override
@@ -83,12 +97,12 @@ public class CoreSickle extends ToolItem implements ICoreTool {
 
     private static boolean canRightClickHarvestBlock(BlockState state) {
         Block block = state.getBlock();
-        return block instanceof IPlantable && block instanceof IGrowable;
+        return block instanceof IPlantable && block instanceof BonemealableBlock;
     }
 
-    private static boolean tryHarvest(ServerWorld world, BlockPos pos, BlockState state, PlayerEntity player, ItemStack sickle, int fortune) {
+    private static boolean tryHarvest(ServerLevel world, BlockPos pos, BlockState state, Player player, ItemStack sickle, int fortune) {
         Block block = state.getBlock();
-        IGrowable growable = (IGrowable) block;
+        BonemealableBlock growable = (BonemealableBlock) block;
 
         if (!growable.isValidBonemealTarget(world, pos, state, world.isClientSide)) {
             // Fully grown crop
@@ -116,19 +130,19 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         // Sickles can right-click to harvest an area of plants
         ItemStack sickle = context.getItemInHand();
-        if (GearHelper.isBroken(sickle) || !(context.getLevel() instanceof ServerWorld))
-            return ActionResultType.PASS;
+        if (GearHelper.isBroken(sickle) || !(context.getLevel() instanceof ServerLevel))
+            return InteractionResult.PASS;
 
-        ServerWorld world = (ServerWorld) context.getLevel();
+        ServerLevel world = (ServerLevel) context.getLevel();
         BlockPos pos = context.getClickedPos();
         BlockState state = world.getBlockState(pos);
-        if (!canRightClickHarvestBlock(state)) return ActionResultType.PASS;
+        if (!canRightClickHarvestBlock(state)) return InteractionResult.PASS;
 
-        PlayerEntity player = context.getPlayer();
-        if (player == null) return ActionResultType.PASS;
+        Player player = context.getPlayer();
+        if (player == null) return InteractionResult.PASS;
 
         int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, sickle);
         int harvestCount = 0;
@@ -148,21 +162,21 @@ public class CoreSickle extends ToolItem implements ICoreTool {
         if (harvestCount > 0) {
             GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player, context.getHand());
             player.causeFoodExhaustion(0.02f);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         return GearHelper.onItemUse(context);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack sickle, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockStartBreak(ItemStack sickle, BlockPos pos, Player player) {
         return onSickleStartBreak(sickle, pos, player, BREAK_RANGE, EFFECTIVE_MATERIALS);
     }
 
-    boolean onSickleStartBreak(ItemStack sickle, BlockPos pos, PlayerEntity player, final int range, Set<Material> effectiveMaterials) {
+    boolean onSickleStartBreak(ItemStack sickle, BlockPos pos, Player player, final int range, Set<Material> effectiveMaterials) {
         if (GearHelper.isBroken(sickle)) return false;
 
-        World world = player.level;
+        Level world = player.level;
         BlockState state = world.getBlockState(pos);
 
         if (!effectiveMaterials.contains(state.getMaterial())) return false;
@@ -185,10 +199,10 @@ public class CoreSickle extends ToolItem implements ICoreTool {
         return super.onBlockStartBreak(sickle, pos, player);
     }
 
-    private static boolean breakExtraBlock(ItemStack sickle, World world, BlockPos pos, PlayerEntity player, Set<Material> effectiveMaterials) {
-        if (world.isEmptyBlock(pos) || !(player instanceof ServerPlayerEntity)) return false;
+    private static boolean breakExtraBlock(ItemStack sickle, Level world, BlockPos pos, Player player, Set<Material> effectiveMaterials) {
+        if (world.isEmptyBlock(pos) || !(player instanceof ServerPlayer)) return false;
 
-        ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
+        ServerPlayer playerMP = (ServerPlayer) player;
         BlockState state = player.level.getBlockState(pos);
         Block block = state.getBlock();
 
@@ -204,21 +218,21 @@ public class CoreSickle extends ToolItem implements ICoreTool {
                 block.destroy(world, pos, state);
             }
             if (!world.isClientSide) {
-                playerMP.connection.send(new SChangeBlockPacket(world, pos));
+                playerMP.connection.send(new ClientboundBlockUpdatePacket(world, pos));
             }
             return true;
         }
 
-        if (!world.isClientSide && world instanceof ServerWorld) {
+        if (!world.isClientSide && world instanceof ServerLevel) {
             block.playerWillDestroy(world, pos, state, playerMP);
 
             if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
                 block.destroy(world, pos, state);
                 block.playerDestroy(world, player, pos, state, null, sickle);
-                block.popExperience((ServerWorld) world, pos, xpDropped);
+                block.popExperience((ServerLevel) world, pos, xpDropped);
             }
 
-            playerMP.connection.send(new SChangeBlockPacket(world, pos));
+            playerMP.connection.send(new ClientboundBlockUpdatePacket(world, pos));
         } else {
             world.levelEvent(2001, pos, Block.getId(state));
             if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
@@ -232,7 +246,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public int getDamageOnBlockBreak(ItemStack gear, World world, BlockState state, BlockPos pos) {
+    public int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
         return DURABILITY_USAGE;
     }
 
@@ -241,7 +255,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     //region Standard tool overrides
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -251,7 +265,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
     }
 
@@ -261,7 +275,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
         return GearHelper.getHarvestLevel(stack, tool, blockState, EFFECTIVE_MATERIALS);
     }
 
@@ -282,7 +296,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
@@ -307,7 +321,7 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         GearHelper.fillItemGroup(this, group, items);
     }
 
@@ -322,12 +336,12 @@ public class CoreSickle extends ToolItem implements ICoreTool {
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 

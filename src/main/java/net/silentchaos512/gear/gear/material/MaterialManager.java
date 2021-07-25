@@ -4,17 +4,17 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.gson.*;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
-public class MaterialManager implements IResourceManagerReloadListener {
+public class MaterialManager implements ResourceManagerReloadListener {
     public static final MaterialManager INSTANCE = new MaterialManager();
 
     private static final Gson GSON = (new GsonBuilder()).disableHtmlEscaping().create();
@@ -45,7 +45,7 @@ public class MaterialManager implements IResourceManagerReloadListener {
     private static final Collection<String> INGREDIENT_CONFLICT_LIST = new ArrayList<>();
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         Collection<ResourceLocation> resources = resourceManager.listResources(DATA_PATH, s -> s.endsWith(".json"));
         if (resources.isEmpty()) return;
 
@@ -62,9 +62,9 @@ public class MaterialManager implements IResourceManagerReloadListener {
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
                 String packName = "ERROR";
-                try (IResource iresource = resourceManager.getResource(id)) {
+                try (Resource iresource = resourceManager.getResource(id)) {
                     packName = iresource.getSourceName();
-                    JsonObject json = JSONUtils.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    JsonObject json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
                     if (json == null) {
                         // Something is very wrong or the JSON is somehow empty
                         SilentGear.LOGGER.error(MARKER, "Could not load material {} as it's null or empty", name);
@@ -184,17 +184,17 @@ public class MaterialManager implements IResourceManagerReloadListener {
         ctx.get().setPacketHandled(true);
     }
 
-    public static Collection<ITextComponent> getErrorMessages(ServerPlayerEntity player) {
-        Collection<ITextComponent> ret = new ArrayList<>();
+    public static Collection<Component> getErrorMessages(ServerPlayer player) {
+        Collection<Component> ret = new ArrayList<>();
         if (!ERROR_LIST.isEmpty()) {
             String listStr = String.join(", ", ERROR_LIST);
-            ret.add(TextUtil.withColor(new StringTextComponent("[Silent Gear] The following materials failed to load, check your log file:"),
-                    TextFormatting.RED));
-            ret.add(new StringTextComponent(listStr));
+            ret.add(TextUtil.withColor(new TextComponent("[Silent Gear] The following materials failed to load, check your log file:"),
+                    ChatFormatting.RED));
+            ret.add(new TextComponent(listStr));
         }
         INGREDIENT_CONFLICT_LIST.forEach(line -> {
-            IFormattableTextComponent text = TextUtil.withColor(new StringTextComponent(line), TextFormatting.YELLOW);
-            ret.add(new StringTextComponent("[Silent Gear] ").append(text));
+            MutableComponent text = TextUtil.withColor(new TextComponent(line), ChatFormatting.YELLOW);
+            ret.add(new TextComponent("[Silent Gear] ").append(text));
         });
         return ret;
     }

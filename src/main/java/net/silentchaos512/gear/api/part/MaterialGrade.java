@@ -7,13 +7,13 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.utils.EnumUtils;
 
@@ -89,7 +89,7 @@ public enum MaterialGrade {
      */
     public static MaterialGrade selectRandom(Random random, MaterialGrade median, double stdDev, MaterialGrade maxGrade) {
         int val = (int) Math.round(stdDev * random.nextGaussian() + median.ordinal());
-        val = MathHelper.clamp(val, 1, maxGrade.ordinal());
+        val = Mth.clamp(val, 1, maxGrade.ordinal());
         return values()[val];
     }
 
@@ -103,8 +103,8 @@ public enum MaterialGrade {
         }
     }
 
-    public IFormattableTextComponent getDisplayName() {
-        return new TranslationTextComponent("stat.silentgear.grade." + name());
+    public MutableComponent getDisplayName() {
+        return new TranslatableComponent("stat.silentgear.grade." + name());
     }
 
     @Deprecated
@@ -116,10 +116,10 @@ public enum MaterialGrade {
 
         @Override
         public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-            return ISuggestionProvider.suggest(Arrays.stream(values()).map(MaterialGrade::name), builder);
+            return SharedSuggestionProvider.suggest(Arrays.stream(values()).map(MaterialGrade::name), builder);
         }
 
-        public static MaterialGrade getGrade(CommandContext<CommandSource> context, String name) {
+        public static MaterialGrade getGrade(CommandContext<CommandSourceStack> context, String name) {
             return context.getArgument(name, MaterialGrade.class);
         }
     }
@@ -150,8 +150,8 @@ public enum MaterialGrade {
                 return grade != NONE ? new Range(grade, grade) : OPEN;
             }
             JsonObject jsonObject = json.getAsJsonObject();
-            String min = JSONUtils.getAsString(jsonObject, "min", "NONE");
-            String max = JSONUtils.getAsString(jsonObject, "max", "MAX");
+            String min = GsonHelper.getAsString(jsonObject, "min", "NONE");
+            String max = GsonHelper.getAsString(jsonObject, "max", "MAX");
             return new Range(MaterialGrade.fromString(min), MaterialGrade.fromString(max));
         }
     }

@@ -2,13 +2,13 @@ package net.silentchaos512.gear.data.recipes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.DataResource;
@@ -20,23 +20,23 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class CompoundingRecipeBuilder {
-    private final IRecipeSerializer<?> serializer;
+    private final RecipeSerializer<?> serializer;
     private final List<Ingredient> ingredients = new ArrayList<>();
     private final Item resultItem;
     private final int resultCount;
     private DataResource<IMaterial> resultMaterial;
 
-    public CompoundingRecipeBuilder(IRecipeSerializer<?> serializer, Item resultItem, int count) {
+    public CompoundingRecipeBuilder(RecipeSerializer<?> serializer, Item resultItem, int count) {
         this.serializer = serializer;
         this.resultItem = resultItem;
         this.resultCount = count;
     }
 
-    public static CompoundingRecipeBuilder metalBuilder(IItemProvider result, int count) {
+    public static CompoundingRecipeBuilder metalBuilder(ItemLike result, int count) {
         return new CompoundingRecipeBuilder(ModRecipes.COMPOUNDING_METAL.get(), result.asItem(), count);
     }
 
-    public static CompoundingRecipeBuilder gemBuilder(IItemProvider result, int count) {
+    public static CompoundingRecipeBuilder gemBuilder(ItemLike result, int count) {
         return new CompoundingRecipeBuilder(ModRecipes.COMPOUNDING_GEM.get(), result.asItem(), count);
     }
 
@@ -45,19 +45,19 @@ public class CompoundingRecipeBuilder {
         return this;
     }
 
-    public CompoundingRecipeBuilder addIngredient(IItemProvider item) {
+    public CompoundingRecipeBuilder addIngredient(ItemLike item) {
         return addIngredient(Ingredient.of(item));
     }
 
-    public CompoundingRecipeBuilder addIngredient(IItemProvider item, int count) {
+    public CompoundingRecipeBuilder addIngredient(ItemLike item, int count) {
         return addIngredient(Ingredient.of(item), count);
     }
 
-    public CompoundingRecipeBuilder addIngredient(ITag<Item> tag) {
+    public CompoundingRecipeBuilder addIngredient(Tag<Item> tag) {
         return addIngredient(Ingredient.of(tag));
     }
 
-    public CompoundingRecipeBuilder addIngredient(ITag<Item> tag, int count) {
+    public CompoundingRecipeBuilder addIngredient(Tag<Item> tag, int count) {
         return addIngredient(Ingredient.of(tag), count);
     }
 
@@ -72,7 +72,7 @@ public class CompoundingRecipeBuilder {
         return this;
     }
 
-    public void build(Consumer<IFinishedRecipe> consumer) {
+    public void build(Consumer<FinishedRecipe> consumer) {
         String name = NameUtils.from(this.resultItem).getPath();
         if (resultMaterial != null) {
             name = name + "." + resultMaterial.getId().getPath();
@@ -80,11 +80,11 @@ public class CompoundingRecipeBuilder {
         build(consumer, new ResourceLocation(serializer.getRegistryName() + "/" + name));
     }
 
-    public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation recipeId) {
+    public void build(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
         consumer.accept(new Result(recipeId));
     }
 
-    public class Result implements IFinishedRecipe {
+    public class Result implements FinishedRecipe {
         private final ResourceLocation recipeId;
 
         public Result(ResourceLocation recipeId) {
@@ -123,7 +123,7 @@ public class CompoundingRecipeBuilder {
         }
 
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return serializer;
         }
 

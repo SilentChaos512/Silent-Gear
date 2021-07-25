@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.gear.trait.condition;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -47,7 +47,7 @@ public class GearTypeTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public IFormattableTextComponent getDisplayText() {
+    public MutableComponent getDisplayText() {
         return TextUtil.translate("trait.condition", "gear_type", this.gearType);
     }
 
@@ -59,7 +59,7 @@ public class GearTypeTraitCondition implements ITraitCondition {
 
         @Override
         public GearTypeTraitCondition deserialize(JsonObject json) {
-            return new GearTypeTraitCondition(JSONUtils.getAsString(json, "gear_type"));
+            return new GearTypeTraitCondition(GsonHelper.getAsString(json, "gear_type"));
         }
 
         @Override
@@ -68,13 +68,13 @@ public class GearTypeTraitCondition implements ITraitCondition {
         }
 
         @Override
-        public GearTypeTraitCondition read(PacketBuffer buffer) {
+        public GearTypeTraitCondition read(FriendlyByteBuf buffer) {
             String gearType = buffer.readUtf();
             return new GearTypeTraitCondition(gearType);
         }
 
         @Override
-        public void write(GearTypeTraitCondition condition, PacketBuffer buffer) {
+        public void write(GearTypeTraitCondition condition, FriendlyByteBuf buffer) {
             buffer.writeUtf(condition.gearType);
         }
     }

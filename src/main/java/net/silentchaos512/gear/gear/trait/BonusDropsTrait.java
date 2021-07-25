@@ -2,10 +2,10 @@ package net.silentchaos512.gear.gear.trait;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -18,8 +18,8 @@ public final class BonusDropsTrait extends SimpleTrait {
             SilentGear.getId("bonus_drops"),
             BonusDropsTrait::new,
             (trait, json) -> {
-                trait.baseChance = JSONUtils.getAsFloat(json, "base_chance", 0f);
-                trait.bonusMultiplier = JSONUtils.getAsFloat(json, "bonus_multiplier", 1f);
+                trait.baseChance = GsonHelper.getAsFloat(json, "base_chance", 0f);
+                trait.bonusMultiplier = GsonHelper.getAsFloat(json, "bonus_multiplier", 1f);
                 trait.readIngredient(json.get("ingredient"));
             },
             (trait, buffer) -> {

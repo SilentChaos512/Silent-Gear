@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.enchantment;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
 import net.silentchaos512.gear.api.stats.ChargedProperties;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -14,10 +14,10 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 
 public class StatModifierEnchantment extends Enchantment implements IStatModifierEnchantment {
-    public StatModifierEnchantment(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
+    public StatModifierEnchantment(Rarity rarityIn, EnchantmentCategory typeIn, EquipmentSlot[] slots) {
         super(rarityIn, typeIn, slots);
     }
 

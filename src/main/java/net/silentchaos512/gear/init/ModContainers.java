@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -25,40 +25,40 @@ import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainer;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerScreen;
 
 public final class ModContainers {
-    public static final RegistryObject<ContainerType<GraderContainer>> MATERIAL_GRADER = register("material_grader",
+    public static final RegistryObject<MenuType<GraderContainer>> MATERIAL_GRADER = register("material_grader",
             GraderContainer::new);
 
-    public static final RegistryObject<ContainerType<MetalPressContainer>> METAL_PRESS = register("metal_press",
+    public static final RegistryObject<MenuType<MetalPressContainer>> METAL_PRESS = register("metal_press",
             MetalPressContainer::new);
 
-    public static final RegistryObject<ContainerType<CompounderContainer>> METAL_ALLOYER = register("metal_alloyer",
+    public static final RegistryObject<MenuType<CompounderContainer>> METAL_ALLOYER = register("metal_alloyer",
             (id, playerInventory, buffer) -> new CompounderContainer(getMetalAlloyer(),
                     id,
                     playerInventory,
                     buffer,
                     ModBlocks.METAL_ALLOYER.get().getCategories()));
 
-    public static final RegistryObject<ContainerType<CompounderContainer>> RECRYSTALLIZER = register("recrystallizer",
+    public static final RegistryObject<MenuType<CompounderContainer>> RECRYSTALLIZER = register("recrystallizer",
             (id, playerInventory, buffer) -> new CompounderContainer(getRecrystallizer(),
                     id,
                     playerInventory,
                     buffer,
                     ModBlocks.RECRYSTALLIZER.get().getCategories()));
 
-    public static final RegistryObject<ContainerType<CompounderContainer>> REFABRICATOR = register("refabricator",
+    public static final RegistryObject<MenuType<CompounderContainer>> REFABRICATOR = register("refabricator",
             (id, playerInventory, buffer) -> new CompounderContainer(getRefabricator(),
                     id,
                     playerInventory,
                     buffer,
                     ModBlocks.REFABRICATOR.get().getCategories()));
 
-    public static final RegistryObject<ContainerType<SalvagerContainer>> SALVAGER = register("salvager",
+    public static final RegistryObject<MenuType<SalvagerContainer>> SALVAGER = register("salvager",
             SalvagerContainer::new);
 
-    public static final RegistryObject<ContainerType<ChargerContainer>> STARLIGHT_CHARGER = register("starlight_charger",
+    public static final RegistryObject<MenuType<ChargerContainer>> STARLIGHT_CHARGER = register("starlight_charger",
             ChargerContainer::createStarlightCharger);
 
-    public static final RegistryObject<ContainerType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book",
+    public static final RegistryObject<MenuType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book",
             BlueprintBookContainer::new);
 
     private ModContainers() {}
@@ -67,30 +67,30 @@ public final class ModContainers {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
-        ScreenManager.register(MATERIAL_GRADER.get(), GraderScreen::new);
-        ScreenManager.register(METAL_ALLOYER.get(), MetalAlloyerScreen::new);
-        ScreenManager.register(METAL_PRESS.get(), MetalPressScreen::new);
-        ScreenManager.register(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
-        ScreenManager.register(REFABRICATOR.get(), RefabricatorScreen::new);
-        ScreenManager.register(SALVAGER.get(), SalvagerScreen::new);
-        ScreenManager.register(STARLIGHT_CHARGER.get(), ChargerScreen::new);
+        MenuScreens.register(MATERIAL_GRADER.get(), GraderScreen::new);
+        MenuScreens.register(METAL_ALLOYER.get(), MetalAlloyerScreen::new);
+        MenuScreens.register(METAL_PRESS.get(), MetalPressScreen::new);
+        MenuScreens.register(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
+        MenuScreens.register(REFABRICATOR.get(), RefabricatorScreen::new);
+        MenuScreens.register(SALVAGER.get(), SalvagerScreen::new);
+        MenuScreens.register(STARLIGHT_CHARGER.get(), ChargerScreen::new);
 
-        ScreenManager.register(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
+        MenuScreens.register(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
     }
 
-    private static <T extends Container> RegistryObject<ContainerType<T>> register(String name, IContainerFactory<T> factory) {
+    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> register(String name, IContainerFactory<T> factory) {
         return Registration.CONTAINERS.register(name, () -> IForgeContainerType.create(factory));
     }
 
-    private static ContainerType<?> getMetalAlloyer() {
+    private static MenuType<?> getMetalAlloyer() {
         return METAL_ALLOYER.get();
     }
 
-    private static ContainerType<?> getRecrystallizer() {
+    private static MenuType<?> getRecrystallizer() {
         return RECRYSTALLIZER.get();
     }
 
-    private static ContainerType<?> getRefabricator() {
+    private static MenuType<?> getRefabricator() {
         return REFABRICATOR.get();
     }
 }

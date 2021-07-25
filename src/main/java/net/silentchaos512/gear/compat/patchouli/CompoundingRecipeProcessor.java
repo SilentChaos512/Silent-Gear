@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.compat.patchouli;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
@@ -16,7 +16,7 @@ public class CompoundingRecipeProcessor implements IComponentProcessor {
     @Override
     public void setup(IVariableProvider variables) {
         ResourceLocation recipeId = new ResourceLocation(variables.get("recipe").asString());
-        ClientWorld world = Minecraft.getInstance().level;
+        ClientLevel world = Minecraft.getInstance().level;
         assert world != null;
         this.recipe = (CompoundingRecipe) world.getRecipeManager().byKey(recipeId).orElse(null);
     }

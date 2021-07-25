@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
-public class PartsProvider implements IDataProvider {
+public class PartsProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
@@ -100,12 +100,12 @@ public class PartsProvider implements IDataProvider {
         return ret;
     }
 
-    private static PartBuilder part(String name, GearType gearType, PartType partType, IItemProvider item) {
+    private static PartBuilder part(String name, GearType gearType, PartType partType, ItemLike item) {
         return new PartBuilder(SilentGear.getId(name), gearType, partType, item)
-                .name(new TranslationTextComponent("part.silentgear." + name.replace('/', '.')));
+                .name(new TranslatableComponent("part.silentgear." + name.replace('/', '.')));
     }
 
-    private static PartBuilder upgradePart(String name, IItemProvider item) {
+    private static PartBuilder upgradePart(String name, ItemLike item) {
         return part(name, GearType.ALL, PartType.MISC_UPGRADE, item)
                 .serializerType(PartSerializers.UPGRADE_PART);
     }
@@ -284,14 +284,14 @@ public class PartsProvider implements IDataProvider {
         throw new IllegalArgumentException("Stats for " + builder.id + " are missing!");
     }
 
-    private static boolean isMainPart(PartBuilder builder, IItemProvider item) {
+    private static boolean isMainPart(PartBuilder builder, ItemLike item) {
         if (!(item.asItem() instanceof ToolHeadItem))
             throw new IllegalArgumentException("Item " + NameUtils.fromItem(item) + " is not a main part item!");
         return builder.id.equals(NameUtils.fromItem(item));
     }
 
     @Override
-    public void run(DirectoryCache cache) {
+    public void run(HashCache cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (PartBuilder builder : getParts()) {

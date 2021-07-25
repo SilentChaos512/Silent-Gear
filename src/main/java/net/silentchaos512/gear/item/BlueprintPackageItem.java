@@ -18,20 +18,20 @@
 
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.item.LootContainerItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class BlueprintPackageItem extends LootContainerItem {
     public BlueprintPackageItem(ResourceLocation defaultLootTable) {
@@ -43,9 +43,9 @@ public class BlueprintPackageItem extends LootContainerItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc1").withStyle(TextFormatting.ITALIC));
-        tooltip.add(new TranslationTextComponent("item.silentgear.blueprint_package.desc2").withStyle(TextFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(new TranslatableComponent("item.silentgear.blueprint_package.desc1").withStyle(ChatFormatting.ITALIC));
+        tooltip.add(new TranslatableComponent("item.silentgear.blueprint_package.desc2").withStyle(ChatFormatting.ITALIC));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

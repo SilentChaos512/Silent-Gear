@@ -19,7 +19,7 @@
 package net.silentchaos512.gear.api.part;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.part.PartData;

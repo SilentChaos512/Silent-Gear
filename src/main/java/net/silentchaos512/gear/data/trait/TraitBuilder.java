@@ -2,11 +2,11 @@ package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -28,13 +28,13 @@ public class TraitBuilder {
     protected final int maxLevel;
     protected final ResourceLocation type;
 
-    private ITextComponent name;
-    private ITextComponent description;
+    private Component name;
+    private Component description;
 
     private final Collection<ITraitCondition> conditions = new ArrayList<>();
     private final Collection<ResourceLocation> cancelsList = new ArrayList<>();
     private final Collection<ResourceLocation> overridesList = new ArrayList<>();
-    private final Collection<ITextComponent> extraWikiLines = new ArrayList<>();
+    private final Collection<Component> extraWikiLines = new ArrayList<>();
 
     private Consumer<JsonObject> extraData = json -> {};
 
@@ -47,8 +47,8 @@ public class TraitBuilder {
         this.type = serializer.getName();
         this.maxLevel = maxLevel;
 
-        this.name = new TranslationTextComponent(Util.makeDescriptionId("trait", traitId));
-        this.description = new TranslationTextComponent(Util.makeDescriptionId("trait", traitId) + ".desc");
+        this.name = new TranslatableComponent(Util.makeDescriptionId("trait", traitId));
+        this.description = new TranslatableComponent(Util.makeDescriptionId("trait", traitId) + ".desc");
     }
 
     public static TraitBuilder simple(DataResource<ITrait> trait, int maxLevel) {
@@ -59,12 +59,12 @@ public class TraitBuilder {
         return new TraitBuilder(traitId, maxLevel, SimpleTrait.SERIALIZER);
     }
 
-    public TraitBuilder setName(ITextComponent text) {
+    public TraitBuilder setName(Component text) {
         this.name = text;
         return this;
     }
 
-    public TraitBuilder setDescription(ITextComponent text) {
+    public TraitBuilder setDescription(Component text) {
         this.description = text;
         return this;
     }
@@ -109,12 +109,12 @@ public class TraitBuilder {
 
     public TraitBuilder extraWikiLines(String... lines) {
         for (String line : lines) {
-            this.extraWikiLines.add(new StringTextComponent(line));
+            this.extraWikiLines.add(new TextComponent(line));
         }
         return this;
     }
 
-    public TraitBuilder extraWikiLines(ITextComponent... lines) {
+    public TraitBuilder extraWikiLines(Component... lines) {
         this.extraWikiLines.addAll(Arrays.asList(lines));
         return this;
     }
@@ -143,8 +143,8 @@ public class TraitBuilder {
             json.add("conditions", array);
         }
 
-        json.add("name", ITextComponent.Serializer.toJsonTree(this.name));
-        json.add("description", ITextComponent.Serializer.toJsonTree(this.description));
+        json.add("name", Component.Serializer.toJsonTree(this.name));
+        json.add("description", Component.Serializer.toJsonTree(this.description));
 
         if (!this.cancelsList.isEmpty()) {
             JsonArray cancelsArray = new JsonArray();
@@ -160,7 +160,7 @@ public class TraitBuilder {
 
         if (!this.extraWikiLines.isEmpty()) {
             JsonArray array = new JsonArray();
-            this.extraWikiLines.forEach(t -> array.add(ITextComponent.Serializer.toJsonTree(t)));
+            this.extraWikiLines.forEach(t -> array.add(Component.Serializer.toJsonTree(t)));
             json.add("extra_wiki_lines", array);
         }
 

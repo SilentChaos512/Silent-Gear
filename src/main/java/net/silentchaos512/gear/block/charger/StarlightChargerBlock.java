@@ -1,34 +1,36 @@
 package net.silentchaos512.gear.block.charger;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
 import net.silentchaos512.gear.block.ModContainerBlock;
 
 import java.util.function.BiFunction;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> {
     private static final VoxelShape SHAPE;
 
     static {
         VoxelShape base1 = box(3, 0, 3, 13, 2, 13);
-        VoxelShape base2 = VoxelShapes.or(base1, box(4, 2, 4, 12, 4, 12));
-        VoxelShape base3 = VoxelShapes.or(base2, box(5, 4, 5, 11, 10, 11));
-        VoxelShape base4 = VoxelShapes.or(base3, box(1, 11, 1, 15, 12, 15));
+        VoxelShape base2 = Shapes.or(base1, box(4, 2, 4, 12, 4, 12));
+        VoxelShape base3 = Shapes.or(base2, box(5, 4, 5, 11, 10, 11));
+        VoxelShape base4 = Shapes.or(base3, box(1, 11, 1, 15, 12, 15));
         VoxelShape top = box(0, 12, 0, 16, 16, 16);
-        SHAPE = VoxelShapes.or(base4, top);
+        SHAPE = Shapes.or(base4, top);
     }
 
-    public StarlightChargerBlock(BiFunction<BlockState, IBlockReader, ? extends ChargerTileEntity> tileFactory, Properties properties) {
+    public StarlightChargerBlock(BiFunction<BlockState, BlockGetter, ? extends ChargerTileEntity> tileFactory, Properties properties) {
         super(tileFactory, properties);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 }

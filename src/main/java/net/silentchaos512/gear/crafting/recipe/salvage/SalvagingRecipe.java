@@ -3,17 +3,17 @@ package net.silentchaos512.gear.crafting.recipe.salvage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -26,7 +26,7 @@ import net.silentchaos512.gear.item.CompoundPartItem;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class SalvagingRecipe implements IRecipe<IInventory> {
+public class SalvagingRecipe implements Recipe<Container> {
     private final ResourceLocation recipeId;
     protected Ingredient ingredient;
     private final List<ItemStack> results = new ArrayList<>();
@@ -39,18 +39,18 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
         return ingredient;
     }
 
-    public List<ItemStack> getPossibleResults(IInventory inv) {
+    public List<ItemStack> getPossibleResults(Container inv) {
         return new ArrayList<>(results);
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         return ingredient.test(inv.getItem(0));
     }
 
     @Deprecated
     @Override
-    public ItemStack assemble(IInventory inv) {
+    public ItemStack assemble(Container inv) {
         // DO NOT USE
         return getResultItem();
     }
@@ -73,12 +73,12 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.SALVAGING.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return ModRecipes.SALVAGING_TYPE;
     }
 
@@ -129,7 +129,7 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
         return Collections.singletonList(part.getItem());
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SalvagingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SalvagingRecipe> {
         @Override
         public SalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             SalvagingRecipe recipe = new SalvagingRecipe(recipeId);
@@ -137,11 +137,11 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
             JsonArray resultsArray = json.getAsJsonArray("results");
             for (JsonElement element : resultsArray) {
                 if (element.isJsonObject()) {
-                    Item item = JSONUtils.getAsItem(element.getAsJsonObject(), "item");
-                    int count = JSONUtils.getAsInt(element.getAsJsonObject(), "count", 1);
+                    Item item = GsonHelper.getAsItem(element.getAsJsonObject(), "item");
+                    int count = GsonHelper.getAsInt(element.getAsJsonObject(), "count", 1);
                     recipe.results.add(new ItemStack(item, count));
                 } else {
-                    recipe.results.add(new ItemStack(JSONUtils.convertToItem(element, "item")));
+                    recipe.results.add(new ItemStack(GsonHelper.convertToItem(element, "item")));
                 }
             }
             return recipe;
@@ -149,7 +149,7 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
 
         @Nullable
         @Override
-        public SalvagingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public SalvagingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             SalvagingRecipe recipe = new SalvagingRecipe(recipeId);
             recipe.ingredient = Ingredient.fromNetwork(buffer);
             int resultCount = buffer.readByte();
@@ -160,7 +160,7 @@ public class SalvagingRecipe implements IRecipe<IInventory> {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, SalvagingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, SalvagingRecipe recipe) {
             recipe.ingredient.toNetwork(buffer);
             buffer.writeByte(recipe.results.size());
             recipe.results.forEach(buffer::writeItem);

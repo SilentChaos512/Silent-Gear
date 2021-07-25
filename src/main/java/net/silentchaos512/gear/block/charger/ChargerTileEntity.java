@@ -1,19 +1,19 @@
 package net.silentchaos512.gear.block.charger;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements ITickableTileEntity, INamedContainerExtraData {
+public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity, INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
     private static final int CHARGE_RATE = 30 * (SilentGear.isDevBuild() ? 10 : 1);
     private static final int UPDATE_FREQUENCY = TimeUtils.ticksFromSeconds(15);
@@ -52,7 +52,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     private int updateTimer = 0;
 
     @SuppressWarnings("OverlyComplexAnonymousInnerClass")
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -100,7 +100,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         }
     };
 
-    public ChargerTileEntity(TileEntityType<?> tileEntityTypeIn, Supplier<Enchantment> enchantment) {
+    public ChargerTileEntity(BlockEntityType<?> tileEntityTypeIn, Supplier<Enchantment> enchantment) {
         super(tileEntityTypeIn, INVENTORY_SIZE);
         this.enchantment = enchantment;
     }
@@ -114,7 +114,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     @Override
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf buffer) {
         buffer.writeByte(this.fields.getCount());
     }
 
@@ -267,12 +267,12 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
+    protected Component getDefaultName() {
         return TextUtil.translate("container", "material_charger");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return ChargerContainer.createStarlightCharger(id, player, this, fields);
     }
 
@@ -299,21 +299,21 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     @Override
-    public void load(BlockState stateIn, CompoundNBT tags) {
+    public void load(BlockState stateIn, CompoundTag tags) {
         super.load(stateIn, tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tags) {
-        CompoundNBT compoundTag = super.save(tags);
+    public CompoundTag save(CompoundTag tags) {
+        CompoundTag compoundTag = super.save(tags);
         SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
         return compoundTag;
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT tags = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag tags = super.getUpdateTag();
         SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
         return tags;
     }

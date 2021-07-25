@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -29,7 +29,7 @@ public class SyncGearCraftingItemsPacket {
         this.craftingItems.putAll(craftingItems);
     }
 
-    public static SyncGearCraftingItemsPacket fromBytes(PacketBuffer buffer) {
+    public static SyncGearCraftingItemsPacket fromBytes(FriendlyByteBuf buffer) {
         SilentGear.LOGGER.debug("Gear parts crafting items packet: {} bytes", buffer.readableBytes());
         SyncGearCraftingItemsPacket packet = new SyncGearCraftingItemsPacket();
         int count = buffer.readVarInt();
@@ -41,7 +41,7 @@ public class SyncGearCraftingItemsPacket {
         return packet;
     }
 
-    public void toBytes(PacketBuffer buffer) {
+    public void toBytes(FriendlyByteBuf buffer) {
         buffer.writeVarInt(this.craftingItems.size());
         this.craftingItems.forEach((id, material) -> {
             buffer.writeResourceLocation(id);

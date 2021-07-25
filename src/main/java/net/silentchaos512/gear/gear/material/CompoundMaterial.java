@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.gson.*;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
@@ -40,8 +40,8 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     private Ingredient ingredient = Ingredient.EMPTY;
     private boolean visible = true;
     private boolean canSalvage = true;
-    private ITextComponent displayName;
-    @Nullable private ITextComponent namePrefix = null;
+    private Component displayName;
+    @Nullable private Component namePrefix = null;
 
     public CompoundMaterial(ResourceLocation id, String packName) {
         this.materialId = id;
@@ -250,7 +250,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     }
 
     @Override
-    public boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType, @Nullable IInventory inventory) {
+    public boolean isCraftingAllowed(IMaterialInstance material, PartType partType, GearType gearType, @Nullable Container inventory) {
         if (!allowedInPart(material, partType)) {
             return false;
         }
@@ -264,7 +264,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     }
 
     @Override
-    public ITextComponent getDisplayName(@Nullable IMaterialInstance material, PartType type, ItemStack gear) {
+    public Component getDisplayName(@Nullable IMaterialInstance material, PartType type, ItemStack gear) {
         if (material != null) {
             return material.getItem().getHoverName();
         }
@@ -273,7 +273,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
 
     @Nullable
     @Override
-    public ITextComponent getDisplayNamePrefix(ItemStack gear, PartType partType) {
+    public Component getDisplayNamePrefix(ItemStack gear, PartType partType) {
         return namePrefix != null ? namePrefix.copy() : null;
     }
 
@@ -325,8 +325,8 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
                 JsonObject obj = elementAvailability.getAsJsonObject();
 
                 deserializeCategories(obj.get("categories"), ret);
-                ret.visible = JSONUtils.getAsBoolean(obj, "visible", ret.visible);
-                ret.canSalvage = JSONUtils.getAsBoolean(obj, "can_salvage", ret.canSalvage);
+                ret.visible = GsonHelper.getAsBoolean(obj, "visible", ret.visible);
+                ret.canSalvage = GsonHelper.getAsBoolean(obj, "can_salvage", ret.canSalvage);
             }
         }
 
@@ -373,12 +373,12 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
             }
         }
 
-        private static ITextComponent deserializeText(JsonElement json) {
-            return Objects.requireNonNull(ITextComponent.Serializer.fromJson(json));
+        private static Component deserializeText(JsonElement json) {
+            return Objects.requireNonNull(Component.Serializer.fromJson(json));
         }
 
         @Override
-        public CompoundMaterial read(ResourceLocation id, PacketBuffer buffer) {
+        public CompoundMaterial read(ResourceLocation id, FriendlyByteBuf buffer) {
             CompoundMaterial material = new CompoundMaterial(id, buffer.readUtf(PACK_NAME_MAX_LENGTH));
 
             int categoryCount = buffer.readByte();
@@ -398,7 +398,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
         }
 
         @Override
-        public void write(PacketBuffer buffer, CompoundMaterial material) {
+        public void write(FriendlyByteBuf buffer, CompoundMaterial material) {
             buffer.writeUtf(material.packName.substring(0, Math.min(PACK_NAME_MAX_LENGTH, material.packName.length())), PACK_NAME_MAX_LENGTH);
 
             buffer.writeByte(material.categories.size());

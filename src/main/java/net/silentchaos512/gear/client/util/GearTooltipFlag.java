@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.client.util;
 
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.client.KeyTracker;
 
-public class GearTooltipFlag implements ITooltipFlag {
+public class GearTooltipFlag implements TooltipFlag {
     public final boolean ctrlDown;
     public final boolean altDown;
     public final boolean shiftDown;

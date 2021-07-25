@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.crafting.ingredient;
 
 import com.google.gson.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -80,21 +80,21 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     }
 
     @Override
-    public Optional<ITextComponent> getJeiHint() {
-        IFormattableTextComponent text;
+    public Optional<Component> getJeiHint() {
+        MutableComponent text;
         if (!this.categories.isEmpty()) {
-            IFormattableTextComponent cats = new StringTextComponent(categories.stream()
+            MutableComponent cats = new TextComponent(categories.stream()
                     .map(IMaterialCategory::getName)
                     .collect(Collectors.joining(", "))
             );
             text = TextUtil.withColor(cats, Color.INDIANRED);
         } else {
-            IFormattableTextComponent any = new StringTextComponent("any");
+            MutableComponent any = new TextComponent("any");
             text = TextUtil.withColor(any, Color.LIGHTGREEN);
         }
 
         PartGearKey key = PartGearKey.of(this.gearType, this.partType);
-        text.append(TextUtil.misc("spaceBrackets", key.toString()).withStyle(TextFormatting.GRAY));
+        text.append(TextUtil.misc("spaceBrackets", key.toString()).withStyle(ChatFormatting.GRAY));
 
         return Optional.of(TextUtil.translate("jei", "materialType", text));
     }
@@ -179,7 +179,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         private Serializer() {}
 
         @Override
-        public PartMaterialIngredient parse(PacketBuffer buffer) {
+        public PartMaterialIngredient parse(FriendlyByteBuf buffer) {
             ResourceLocation typeName = buffer.readResourceLocation();
             PartType partType = PartType.get(typeName);
             if (partType == null) {
@@ -206,7 +206,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
 
         @Override
         public PartMaterialIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getAsString(json, "part_type", "");
+            String typeName = GsonHelper.getAsString(json, "part_type", "");
             if (typeName.isEmpty()) {
                 throw new JsonSyntaxException("'part_type' is missing");
             }
@@ -216,7 +216,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
                 throw new JsonSyntaxException("part_type " + typeName + " does not exist");
             }
 
-            String gearTypeName = JSONUtils.getAsString(json, "gear_type", "tool");
+            String gearTypeName = GsonHelper.getAsString(json, "gear_type", "tool");
             GearType gearType = GearType.get(gearTypeName);
             if (gearType.isInvalid()) {
                 throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
@@ -230,8 +230,8 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
                 }
             }
 
-            int minTier = JSONUtils.getAsInt(json, "min_tier", 0);
-            int maxTier = JSONUtils.getAsInt(json, "max_tier", Integer.MAX_VALUE);
+            int minTier = GsonHelper.getAsInt(json, "min_tier", 0);
+            int maxTier = GsonHelper.getAsInt(json, "max_tier", Integer.MAX_VALUE);
 
             PartMaterialIngredient ret = of(type, gearType, minTier, maxTier);
             ret.categories.addAll(categories);
@@ -239,7 +239,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         }
 
         @Override
-        public void write(PacketBuffer buffer, PartMaterialIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, PartMaterialIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.partType.getName());
             buffer.writeUtf(ingredient.gearType.getName());
             buffer.writeByte(ingredient.categories.size());

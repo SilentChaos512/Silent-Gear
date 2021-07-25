@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 
 public class CoreDagger extends CoreSword {

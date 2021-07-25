@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;

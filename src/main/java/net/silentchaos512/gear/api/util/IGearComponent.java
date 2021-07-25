@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.api.util;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -36,11 +36,11 @@ public interface IGearComponent<D> extends IStatModProvider<D>, ITraitProvider<D
      * @param inventory The inventory the item is in (crafting grid, etc.)
      * @return True if and only if crafting should be allowed
      */
-    boolean isCraftingAllowed(D instance, PartType partType, GearType gearType, @Nullable IInventory inventory);
+    boolean isCraftingAllowed(D instance, PartType partType, GearType gearType, @Nullable Container inventory);
 
     default boolean isCraftingAllowed(D instance, PartType partType, GearType gearType) {
         return isCraftingAllowed(instance, partType, gearType, null);
     }
 
-    ITextComponent getDisplayName(@Nullable D instance, PartType type, ItemStack gear);
+    Component getDisplayName(@Nullable D instance, PartType type, ItemStack gear);
 }

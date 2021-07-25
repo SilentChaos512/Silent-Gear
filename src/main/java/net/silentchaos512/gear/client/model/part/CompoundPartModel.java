@@ -5,9 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Transformation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.geometry.IModelGeometryPart;
@@ -33,17 +33,26 @@ import net.silentchaos512.utils.Color;
 import java.util.*;
 import java.util.function.Function;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+
 public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     private static final ModResourceLocation PART_MARKER_TEXTURE = SilentGear.getId("part_marker");
 
-    private final ItemCameraTransforms cameraTransforms;
+    private final ItemTransforms cameraTransforms;
     final GearType gearType;
     final PartType partType;
     final String texturePath;
     private final List<ResourceLocation> extraLayers;
     private CompoundPartModelOverrideList overrideList;
 
-    CompoundPartModel(ItemCameraTransforms cameraTransforms, GearType gearType, PartType partType, String texturePath, List<ResourceLocation> extraLayers) {
+    CompoundPartModel(ItemTransforms cameraTransforms, GearType gearType, PartType partType, String texturePath, List<ResourceLocation> extraLayers) {
         this.cameraTransforms = cameraTransforms;
         this.gearType = gearType;
         this.partType = partType;
@@ -58,28 +67,28 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
         overrideList = new CompoundPartModelOverrideList(this, owner, bakery, spriteGetter, modelTransform, modelLocation);
         return new BakedWrapper(this, owner, bakery, spriteGetter, modelTransform, modelLocation, overrideList);
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    public IBakedModel bake(List<MaterialLayer> layers,
+    public BakedModel bake(List<MaterialLayer> layers,
                             String transformVariant,
                             IModelConfiguration owner,
                             ModelBakery bakery,
-                            Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                            IModelTransform modelTransform,
-                            ItemOverrideList overrideList,
+                            Function<Material, TextureAtlasSprite> spriteGetter,
+                            ModelState modelTransform,
+                            ItemOverrides overrideList,
                             ResourceLocation modelLocation) {
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
-        TransformationMatrix rotation = modelTransform.getRotation();
-        ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
+        Transformation rotation = modelTransform.getRotation();
+        ImmutableMap<ItemTransforms.TransformType, Transformation> transforms = PerspectiveMapWrapper.getTransforms(modelTransform);
 
         for (int i = 0; i < layers.size(); i++) {
             MaterialLayer layer = layers.get(i);
-            TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, layer.getTexture(this.texturePath, 0)));
+            TextureAtlasSprite texture = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, layer.getTexture(this.texturePath, 0)));
             builder.addAll(getQuadsForSprite(i, texture, rotation, layer.getColor()));
         }
 
@@ -90,7 +99,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
             } else {
                 // Shouldn't happen, but...
                 SilentGear.LOGGER.error("Example material is missing?");
-                TextureAtlasSprite texture = spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
+                TextureAtlasSprite texture = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, SilentGear.getId("item/error")));
                 builder.addAll(getQuadsForSprite(0, texture, rotation, Color.VALUE_WHITE));
             }
         }
@@ -99,13 +108,13 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         for (int i = 0; i < this.extraLayers.size(); i++) {
             ResourceLocation texture = this.extraLayers.get(i);
             builder.addAll(getQuadsForSprite(layers.size() + i,
-                    spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new StaticLayer(texture).getTexture())),
+                    spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, new StaticLayer(texture).getTexture())),
                     rotation,
                     Color.VALUE_WHITE));
         }
 
         builder.addAll(getQuadsForSprite(layers.size(),
-                spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new StaticLayer(PART_MARKER_TEXTURE).getTexture())),
+                spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, new StaticLayer(PART_MARKER_TEXTURE).getTexture())),
                 rotation,
                 Color.LIGHTSKYBLUE.getColor()));
 
@@ -114,20 +123,20 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         return new BakedPerspectiveModel(builder.build(), particle, transforms, overrideList, rotation.isIdentity(), owner.isSideLit(), getCameraTransforms(transformVariant));
     }
 
-    private void buildFakeModel(Function<RenderMaterial, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, TransformationMatrix rotation, IMaterial material) {
+    private void buildFakeModel(Function<Material, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, Transformation rotation, IMaterial material) {
         // This method will display an example item for items with no data (ie, for advancements)
         MaterialInstance mat = MaterialInstance.of(material);
         IMaterialDisplay model = MaterialDisplayManager.get(mat);
         MaterialLayer exampleMain = model.getLayerList(this.gearType, this.partType, mat).getFirstLayer();
         if (exampleMain != null) {
-            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, exampleMain.getTexture(this.texturePath, 0))), rotation, exampleMain.getColor()));
+            builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, exampleMain.getTexture(this.texturePath, 0))), rotation, exampleMain.getColor()));
         }
-        builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new StaticLayer(PART_MARKER_TEXTURE).getTexture(this.gearType, 0))), rotation, Color.VALUE_WHITE));
+        builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, new StaticLayer(PART_MARKER_TEXTURE).getTexture(this.gearType, 0))), rotation, Color.VALUE_WHITE));
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        Set<RenderMaterial> ret = new HashSet<>();
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        Set<Material> ret = new HashSet<>();
         if (this.gearType == GearType.SHIELD) {
             // Unobtainable part items, no need for textures
             return ret;
@@ -150,11 +159,11 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         }
 
         ret.add(getTexture(new StaticLayer(PART_MARKER_TEXTURE)));
-        ret.add(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, SilentGear.getId("item/error")));
+        ret.add(new Material(InventoryMenu.BLOCK_ATLAS, SilentGear.getId("item/error")));
 
         if (CompoundPartModelOverrideList.isDebugLoggingEnabled()) {
             SilentGear.LOGGER.info("Textures for compound part model '{}'", PartGearKey.of(this.gearType, this.partType));
-            for (RenderMaterial mat : ret) {
+            for (Material mat : ret) {
                 SilentGear.LOGGER.info("- {}", mat.texture());
             }
         }
@@ -162,18 +171,18 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         return ret;
     }
 
-    private RenderMaterial getTexture(MaterialLayer layer) {
+    private Material getTexture(MaterialLayer layer) {
         return getMaterial(layer.getTexture(this.texturePath, 0));
     }
 
-    private RenderMaterial getTexture(ResourceLocation tex) {
+    private Material getTexture(ResourceLocation tex) {
         String path = "item/" + this.texturePath + "/" + tex.getPath();
         ResourceLocation location = new ResourceLocation(tex.getNamespace(), path);
         return getMaterial(location);
     }
 
-    private static RenderMaterial getMaterial(ResourceLocation tex) {
-        return new RenderMaterial(PlayerContainer.BLOCK_ATLAS, tex);
+    private static Material getMaterial(ResourceLocation tex) {
+        return new Material(InventoryMenu.BLOCK_ATLAS, tex);
     }
 
     @Override
@@ -186,7 +195,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         return Optional.empty();
     }
 
-    private ItemCameraTransforms getCameraTransforms(String transformVariant) {
+    private ItemTransforms getCameraTransforms(String transformVariant) {
         return cameraTransforms;
     }
 }

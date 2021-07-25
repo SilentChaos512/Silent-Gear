@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.crafting.recipe.salvage;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -23,7 +23,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public List<ItemStack> getPossibleResults(IInventory inv) {
+    public List<ItemStack> getPossibleResults(Container inv) {
         ItemStack input = inv.getItem(0);
         List<ItemStack> ret = new ArrayList<>();
 
@@ -36,11 +36,11 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.SALVAGING_GEAR.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GearSalvagingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GearSalvagingRecipe> {
         @Override
         public GearSalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             GearSalvagingRecipe recipe = new GearSalvagingRecipe(recipeId);
@@ -50,14 +50,14 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
         @Nullable
         @Override
-        public GearSalvagingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public GearSalvagingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             GearSalvagingRecipe recipe = new GearSalvagingRecipe(recipeId);
             recipe.ingredient = Ingredient.fromNetwork(buffer);
             return recipe;
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, GearSalvagingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, GearSalvagingRecipe recipe) {
             recipe.ingredient.toNetwork(buffer);
         }
     }

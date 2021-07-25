@@ -2,14 +2,14 @@ package net.silentchaos512.gear.data.material;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
@@ -50,8 +50,8 @@ public class MaterialBuilder {
     private final Collection<ICondition> loadConditions = new ArrayList<>();
     @Nullable private ResourceLocation parent;
     private final Collection<IMaterialCategory> categories = new ArrayList<>();
-    private ITextComponent name;
-    @Nullable private ITextComponent namePrefix;
+    private Component name;
+    @Nullable private Component namePrefix;
     private IMaterialSerializer<?> serializer = MaterialSerializers.STANDARD;
     private boolean simple = true;
 
@@ -64,11 +64,11 @@ public class MaterialBuilder {
         this(id, tier, Ingredient.of(ItemTags.bind(ingredientTagName.toString())));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, ITag<Item> ingredient) {
+    public MaterialBuilder(ResourceLocation id, int tier, Tag<Item> ingredient) {
         this(id, tier, Ingredient.of(ingredient));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, IItemProvider... ingredients) {
+    public MaterialBuilder(ResourceLocation id, int tier, ItemLike... ingredients) {
         this(id, tier, Ingredient.of(ingredients));
     }
 
@@ -77,7 +77,7 @@ public class MaterialBuilder {
         this.tier = tier;
         this.ingredient = ingredient;
         //noinspection DynamicRegexReplaceableByCompiledPattern
-        this.name = new TranslationTextComponent(String.format("material.%s.%s",
+        this.name = new TranslatableComponent(String.format("material.%s.%s",
                 this.id.getNamespace(),
                 this.id.getPath().replace("/", ".")));
     }
@@ -112,11 +112,11 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder partSubstitute(PartType partType, IItemProvider item) {
+    public MaterialBuilder partSubstitute(PartType partType, ItemLike item) {
         return partSubstitute(partType, Ingredient.of(item));
     }
 
-    public MaterialBuilder partSubstitute(PartType partType, ITag<Item> tag) {
+    public MaterialBuilder partSubstitute(PartType partType, Tag<Item> tag) {
         return partSubstitute(partType, Ingredient.of(tag));
     }
 
@@ -139,12 +139,12 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder name(ITextComponent text) {
+    public MaterialBuilder name(Component text) {
         this.name = text;
         return this;
     }
 
-    public MaterialBuilder namePrefix(ITextComponent text) {
+    public MaterialBuilder namePrefix(Component text) {
         this.namePrefix = text;
         return this;
     }
@@ -464,11 +464,11 @@ public class MaterialBuilder {
         json.add("crafting_items", craftingItems);
 
         if (this.name != null) {
-            json.add("name", ITextComponent.Serializer.toJsonTree(this.name));
+            json.add("name", Component.Serializer.toJsonTree(this.name));
         }
 
         if (this.namePrefix != null) {
-            json.add("name_prefix", ITextComponent.Serializer.toJsonTree(this.namePrefix));
+            json.add("name_prefix", Component.Serializer.toJsonTree(this.namePrefix));
         }
 
         /*if (!this.display.isEmpty()) {

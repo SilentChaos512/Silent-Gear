@@ -4,11 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -17,7 +17,7 @@ import net.silentchaos512.gear.init.Registration;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.crafting.Ingredient.SingleItemList;
+import net.minecraft.world.item.crafting.Ingredient.ItemValue;
 
 public final class GearTypeIngredient extends Ingredient {
     private final GearType type;
@@ -27,7 +27,7 @@ public final class GearTypeIngredient extends Ingredient {
                 .filter(iro -> iro.isPresent() && iro.get() instanceof ICoreItem)
                 .map(iro -> (ICoreItem) iro.get())
                 .filter(item -> item.getGearType().matches(type))
-                .map(item -> new SingleItemList(new ItemStack(item))));
+                .map(item -> new ItemValue(new ItemStack(item))));
         this.type = type;
     }
 
@@ -67,7 +67,7 @@ public final class GearTypeIngredient extends Ingredient {
         private Serializer() {}
 
         @Override
-        public GearTypeIngredient parse(PacketBuffer buffer) {
+        public GearTypeIngredient parse(FriendlyByteBuf buffer) {
             String typeName = buffer.readUtf();
             GearType type = GearType.get(typeName);
             if (type.isInvalid()) throw new JsonParseException("Unknown gear type: " + typeName);
@@ -76,7 +76,7 @@ public final class GearTypeIngredient extends Ingredient {
 
         @Override
         public GearTypeIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getAsString(json, "gear_type", "");
+            String typeName = GsonHelper.getAsString(json, "gear_type", "");
             if (typeName.isEmpty())
                 throw new JsonSyntaxException("'gear_type' is missing");
 
@@ -88,7 +88,7 @@ public final class GearTypeIngredient extends Ingredient {
         }
 
         @Override
-        public void write(PacketBuffer buffer, GearTypeIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, GearTypeIngredient ingredient) {
             buffer.writeUtf(ingredient.type.getName());
         }
     }

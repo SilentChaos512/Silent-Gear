@@ -4,14 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -60,7 +60,7 @@ public class PotionEffectTrait extends SimpleTrait {
     }
 
     private void applyEffects(TraitActionContext context, GearType gearType, String type, Iterable<PotionData> effects) {
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         assert player != null; // checked in onUpdate
 
         if (gearType.matches(type) || "all".equals(type)) {
@@ -68,7 +68,7 @@ public class PotionEffectTrait extends SimpleTrait {
             boolean hasFullSet = !"armor".equals(type) || setPieceCount >= 4;
 
             for (PotionData potionData : effects) {
-                EffectInstance effect = potionData.getEffect(context.getTraitLevel(), setPieceCount, hasFullSet);
+                MobEffectInstance effect = potionData.getEffect(context.getTraitLevel(), setPieceCount, hasFullSet);
                 if (effect != null) {
                     player.addEffect(effect);
                 }
@@ -76,7 +76,7 @@ public class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    private int getSetPieceCount(String type, PlayerEntity player) {
+    private int getSetPieceCount(String type, Player player) {
         if (!"armor".equals(type)) return 1;
 
         int count = 0;
@@ -120,7 +120,7 @@ public class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    static void readFromNetwork(PotionEffectTrait trait, PacketBuffer buffer) {
+    static void readFromNetwork(PotionEffectTrait trait, FriendlyByteBuf buffer) {
         trait.potions.clear();
         int gearTypeCount = buffer.readByte();
 
@@ -137,7 +137,7 @@ public class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    static void writeToNetwork(PotionEffectTrait trait, PacketBuffer buffer) {
+    static void writeToNetwork(PotionEffectTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.potions.size());
         for (Map.Entry<String, List<PotionData>> entry : trait.potions.entrySet()) {
             buffer.writeUtf(entry.getKey());
@@ -168,11 +168,11 @@ public class PotionEffectTrait extends SimpleTrait {
         private int[] levels;
 
         @Deprecated
-        public static PotionData of(boolean requiresFullSet, Effect effect, int... levels) {
+        public static PotionData of(boolean requiresFullSet, MobEffect effect, int... levels) {
             return of(requiresFullSet ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT, effect, levels);
         }
 
-        public static PotionData of(LevelType type, Effect effect, int... levels) {
+        public static PotionData of(LevelType type, MobEffect effect, int... levels) {
             PotionData ret = new PotionData();
             ret.type = type;
             ret.effectId = Objects.requireNonNull(effect.getRegistryName());
@@ -196,9 +196,9 @@ public class PotionEffectTrait extends SimpleTrait {
             PotionData ret = new PotionData();
             ret.type = deserializeType(json);
             // Effect ID, get actual potion only when needed
-            ret.effectId = new ResourceLocation(JSONUtils.getAsString(json, "effect", "unknown"));
+            ret.effectId = new ResourceLocation(GsonHelper.getAsString(json, "effect", "unknown"));
             // Effects duration in seconds.
-            float durationInSeconds = JSONUtils.getAsFloat(json, "duration", getDefaultDuration(ret.effectId));
+            float durationInSeconds = GsonHelper.getAsFloat(json, "duration", getDefaultDuration(ret.effectId));
             ret.duration = TimeUtils.ticksFromSeconds(durationInSeconds);
 
             // Level int or array
@@ -208,7 +208,7 @@ public class PotionEffectTrait extends SimpleTrait {
             }
             if (elementLevel.isJsonPrimitive()) {
                 // Single level
-                ret.levels = new int[]{JSONUtils.getAsInt(json, "level", 1)};
+                ret.levels = new int[]{GsonHelper.getAsInt(json, "level", 1)};
             } else if (elementLevel.isJsonArray()) {
                 // Levels by piece count
                 JsonArray array = elementLevel.getAsJsonArray();
@@ -225,14 +225,14 @@ public class PotionEffectTrait extends SimpleTrait {
 
         private static LevelType deserializeType(JsonObject json) {
             if (json.has("type")) {
-                return EnumUtils.byName(JSONUtils.getAsString(json, "type"), LevelType.FULL_SET_ONLY);
+                return EnumUtils.byName(GsonHelper.getAsString(json, "type"), LevelType.FULL_SET_ONLY);
             } else if (json.has("full_set")) {
-                return JSONUtils.getAsBoolean(json, "full_set") ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT;
+                return GsonHelper.getAsBoolean(json, "full_set") ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT;
             }
             return LevelType.TRAIT_LEVEL;
         }
 
-        static PotionData read(PacketBuffer buffer) {
+        static PotionData read(FriendlyByteBuf buffer) {
             PotionData ret = new PotionData();
             ret.type = buffer.readEnum(LevelType.class);
             ret.effectId = buffer.readResourceLocation();
@@ -241,7 +241,7 @@ public class PotionEffectTrait extends SimpleTrait {
             return ret;
         }
 
-        void write(PacketBuffer buffer) {
+        void write(FriendlyByteBuf buffer) {
             buffer.writeEnum(type);
             buffer.writeResourceLocation(effectId);
             buffer.writeVarInt(duration);
@@ -254,24 +254,24 @@ public class PotionEffectTrait extends SimpleTrait {
         }
 
         @Nullable
-        EffectInstance getEffect(int traitLevel, int pieceCount, boolean hasFullSet) {
+        MobEffectInstance getEffect(int traitLevel, int pieceCount, boolean hasFullSet) {
             if (this.type == LevelType.FULL_SET_ONLY && !hasFullSet) return null;
 
-            Effect potion = ForgeRegistries.POTIONS.getValue(effectId);
+            MobEffect potion = ForgeRegistries.POTIONS.getValue(effectId);
             if (potion == null) return null;
 
             int effectLevel = getEffectLevel(traitLevel, pieceCount, hasFullSet);
             if (effectLevel < 1) return null;
 
-            return new EffectInstance(potion, duration, effectLevel - 1, true, false);
+            return new MobEffectInstance(potion, duration, effectLevel - 1, true, false);
         }
 
         int getEffectLevel(int traitLevel, int pieceCount, boolean hasFullSet) {
             switch (this.type) {
                 case TRAIT_LEVEL:
-                    return this.levels[MathHelper.clamp(traitLevel - 1, 0, this.levels.length - 1)];
+                    return this.levels[Mth.clamp(traitLevel - 1, 0, this.levels.length - 1)];
                 case PIECE_COUNT:
-                    return this.levels[MathHelper.clamp(pieceCount - 1, 0, this.levels.length - 1)];
+                    return this.levels[Mth.clamp(pieceCount - 1, 0, this.levels.length - 1)];
                 case FULL_SET_ONLY:
                     return this.levels[0];
                 default:
@@ -285,7 +285,7 @@ public class PotionEffectTrait extends SimpleTrait {
                 levelsText[i] = Integer.toString(levels[i]);
             }
 
-            Effect effect = ForgeRegistries.POTIONS.getValue(effectId);
+            MobEffect effect = ForgeRegistries.POTIONS.getValue(effectId);
             String effectName;
             if (effect != null) {
                 effectName = effect.getDisplayName().getString();

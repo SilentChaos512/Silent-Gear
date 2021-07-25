@@ -4,15 +4,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -103,10 +103,10 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
     }
 
     @Override
-    public Optional<ITextComponent> getJeiHint() {
+    public Optional<Component> getJeiHint() {
         PartGearKey key = PartGearKey.of(this.gearType, this.partType);
-        IFormattableTextComponent keyText = new StringTextComponent(key.toString());
-        ITextComponent text = TextUtil.withColor(keyText, Color.DODGERBLUE);
+        MutableComponent keyText = new TextComponent(key.toString());
+        Component text = TextUtil.withColor(keyText, Color.DODGERBLUE);
         return Optional.of(TextUtil.translate("jei", "blueprintType", text));
     }
 
@@ -117,7 +117,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
         private Serializer() {}
 
         @Override
-        public BlueprintIngredient parse(PacketBuffer buffer) {
+        public BlueprintIngredient parse(FriendlyByteBuf buffer) {
             ResourceLocation typeName = buffer.readResourceLocation();
             PartType partType = PartType.get(typeName);
             if (partType == null) {
@@ -134,13 +134,13 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
 
         @Override
         public BlueprintIngredient parse(JsonObject json) {
-            String typeName = JSONUtils.getAsString(json, "part_type", "main");
+            String typeName = GsonHelper.getAsString(json, "part_type", "main");
             PartType type = PartType.get(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(typeName)));
             if (type == null) {
                 throw new JsonSyntaxException("part_type " + typeName + " does not exist");
             }
 
-            String gearTypeName = JSONUtils.getAsString(json, "gear_type", "part");
+            String gearTypeName = GsonHelper.getAsString(json, "gear_type", "part");
             GearType gearType = GearType.get(gearTypeName);
             if (gearType.isInvalid()) {
                 throw new JsonSyntaxException("gear_type " + gearTypeName + " does not exist");
@@ -150,7 +150,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
         }
 
         @Override
-        public void write(PacketBuffer buffer, BlueprintIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, BlueprintIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.partType.getName());
             buffer.writeUtf(ingredient.gearType.getName());
         }

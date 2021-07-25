@@ -2,18 +2,18 @@ package net.silentchaos512.gear.compat.curios;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ElytraItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ElytraItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -34,12 +34,12 @@ public class CurioGearItemCapability {
     public static void register() {
         CapabilityManager.INSTANCE.register(CurioGearItemWrapper.class, new Capability.IStorage<CurioGearItemWrapper>() {
             @Override
-            public INBT writeNBT(Capability<CurioGearItemWrapper> capability, CurioGearItemWrapper instance, Direction side) {
-                return new CompoundNBT();
+            public Tag writeNBT(Capability<CurioGearItemWrapper> capability, CurioGearItemWrapper instance, Direction side) {
+                return new CompoundTag();
             }
 
             @Override
-            public void readNBT(Capability<CurioGearItemWrapper> capability, CurioGearItemWrapper instance, Direction side, INBT nbt) {
+            public void readNBT(Capability<CurioGearItemWrapper> capability, CurioGearItemWrapper instance, Direction side, Tag nbt) {
             }
         }, CurioGearItemWrapper::new);
     }
@@ -62,7 +62,7 @@ public class CurioGearItemCapability {
                 Integer ticksFlying = ObfuscationReflectionHelper.getPrivateValue(LivingEntity.class, livingEntity, "fallFlyTicks");
 
                 if (ticksFlying != null && (ticksFlying + 1) % 20 == 0) {
-                    stack.hurtAndBreak(1, livingEntity, entity -> entity.broadcastBreakEvent(EquipmentSlotType.CHEST));
+                    stack.hurtAndBreak(1, livingEntity, entity -> entity.broadcastBreakEvent(EquipmentSlot.CHEST));
                 }
             }
         });
@@ -138,7 +138,7 @@ public class CurioGearItemCapability {
 
         @Override
         public void playRightClickEquipSound(LivingEntity livingEntity) {
-            livingEntity.level.playSound(null, new BlockPos(livingEntity.position()), SoundEvents.ARMOR_EQUIP_GOLD, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            livingEntity.level.playSound(null, new BlockPos(livingEntity.position()), SoundEvents.ARMOR_EQUIP_GOLD, SoundSource.NEUTRAL, 1.0F, 1.0F);
         }
     }
 }

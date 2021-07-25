@@ -1,17 +1,17 @@
 package net.silentchaos512.gear;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.command.arguments.ArgumentSerializer;
-import net.minecraft.command.arguments.ArgumentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -76,14 +76,14 @@ class SideProxy implements IProxy {
         modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
-        modEventBus.addGenericListener(Placement.class, ModWorldFeatures::registerPlacements);
+        modEventBus.addGenericListener(FeatureDecorator.class, ModWorldFeatures::registerPlacements);
 
         MinecraftForge.EVENT_BUS.addListener(ModCommands::registerAll);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
 
-        ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new ArgumentSerializer<>(MaterialGrade.Argument::new));
+        ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new EmptyArgumentSerializer<>(MaterialGrade.Argument::new));
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {
@@ -150,7 +150,7 @@ class SideProxy implements IProxy {
 
     @Nullable
     @Override
-    public PlayerEntity getClientPlayer() {
+    public Player getClientPlayer() {
         return null;
     }
 
@@ -181,9 +181,9 @@ class SideProxy implements IProxy {
                 ModelLoaderRegistry.registerLoader(Const.FRAGMENT_MODEL_LOADER, new FragmentModelLoader());
                 ModelLoaderRegistry.registerLoader(Const.GEAR_MODEL_LOADER, new GearModelLoader());
 
-                IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-                if (resourceManager instanceof IReloadableResourceManager) {
-                    ((IReloadableResourceManager) resourceManager).registerReloadListener(MaterialDisplayManager.INSTANCE);
+                ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+                if (resourceManager instanceof ReloadableResourceManager) {
+                    ((ReloadableResourceManager) resourceManager).registerReloadListener(MaterialDisplayManager.INSTANCE);
                 }
             } else {
                 SilentGear.LOGGER.warn("MC instance is null? Must be running data generators! Not registering model loaders...");
@@ -200,7 +200,7 @@ class SideProxy implements IProxy {
         }
 
         private static void postSetup(FMLLoadCompleteEvent event) {
-            EntityRendererManager rendererManager = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderDispatcher rendererManager = Minecraft.getInstance().getEntityRenderDispatcher();
             rendererManager.getSkinMap().values().forEach(renderer ->
                     renderer.addLayer(new GearElytraLayer<>(renderer)));
         }
@@ -223,7 +223,7 @@ class SideProxy implements IProxy {
 
         @Nullable
         @Override
-        public PlayerEntity getClientPlayer() {
+        public Player getClientPlayer() {
             return Minecraft.getInstance().player;
         }
     }
@@ -237,13 +237,13 @@ class SideProxy implements IProxy {
     }
 
     @Nullable
-    public static ITextComponent detectDataLoadingFailure(PlayerEntity player) {
+    public static Component detectDataLoadingFailure(Player player) {
         // Check if parts/traits have loaded. If not, a mod has likely broken the data loading process.
         // We should inform the user and tell them what to look for in the log.
         if (MaterialManager.getValues().isEmpty() || PartManager.getValues().isEmpty() || TraitManager.getValues().isEmpty()) {
             String msg = "Materials, parts, and/or traits have not loaded! This may be caused by a broken mod, even those not related to Silent Gear. Search your log for \"Failed to reload data packs\" to find the error.";
             SilentGear.LOGGER.error(msg);
-            return new StringTextComponent(msg);
+            return new TextComponent(msg);
         }
         return null;
     }

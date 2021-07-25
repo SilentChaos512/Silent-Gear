@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -26,11 +26,11 @@ public class SGearDamageItemRecipe extends DamageItemRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         return super.matches(inv, worldIn) && gearItemsMatchForCrafting(inv);
     }
 
-    private boolean gearItemsMatchForCrafting(IInventory inv) {
+    private boolean gearItemsMatchForCrafting(Container inv) {
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (GearHelper.isGear(stack) && GearHelper.isBroken(stack) && GearData.getTier(stack) >= this.minGearTear) {
@@ -40,23 +40,23 @@ public class SGearDamageItemRecipe extends DamageItemRecipe {
         return true;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SGearDamageItemRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SGearDamageItemRecipe> {
         @Override
         public SGearDamageItemRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            int tier = JSONUtils.getAsInt(json, "minGearTier", 0);
+            int tier = GsonHelper.getAsInt(json, "minGearTier", 0);
             return new SGearDamageItemRecipe(DamageItemRecipe.SERIALIZER.fromJson(recipeId, json), tier);
         }
 
         @Nullable
         @Override
-        public SGearDamageItemRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public SGearDamageItemRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             DamageItemRecipe read = DamageItemRecipe.SERIALIZER.fromNetwork(recipeId, buffer);
             int tier = buffer.readVarInt();
             return read != null ? new SGearDamageItemRecipe(read, tier) : null;
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, SGearDamageItemRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, SGearDamageItemRecipe recipe) {
             DamageItemRecipe.SERIALIZER.toNetwork(buffer, recipe);
             buffer.writeVarInt(recipe.minGearTear);
         }

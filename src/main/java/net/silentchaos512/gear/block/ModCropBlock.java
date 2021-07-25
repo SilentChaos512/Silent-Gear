@@ -1,15 +1,17 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.block.CropsBlock;
-import net.minecraft.item.Item;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.common.PlantType;
 
 import java.util.function.Supplier;
 
-public class ModCropBlock extends CropsBlock {
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+public class ModCropBlock extends CropBlock {
     private final Supplier<Item> seedItem;
 
     public ModCropBlock(Supplier<Item> seedItem, Properties builder) {
@@ -18,12 +20,12 @@ public class ModCropBlock extends CropsBlock {
     }
 
     @Override
-    protected IItemProvider getBaseSeedId() {
+    protected ItemLike getBaseSeedId() {
         return seedItem.get();
     }
 
     @Override
-    public PlantType getPlantType(IBlockReader world, BlockPos pos) {
+    public PlantType getPlantType(BlockGetter world, BlockPos pos) {
         return PlantType.CROP;
     }
 }

@@ -3,12 +3,12 @@ package net.silentchaos512.gear.crafting.ingredient;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -21,14 +21,14 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-import net.minecraft.item.crafting.Ingredient.SingleItemList;
+import net.minecraft.world.item.crafting.Ingredient.ItemValue;
 
 public class CustomCompoundIngredient extends Ingredient {
     private final CustomMaterialItem item;
     private final ResourceLocation material;
 
     protected CustomCompoundIngredient(CustomMaterialItem item, ResourceLocation materialId) {
-        super(Stream.of(new SingleItemList(item.create(LazyMaterialInstance.of(materialId)))));
+        super(Stream.of(new ItemValue(item.create(LazyMaterialInstance.of(materialId)))));
         this.item = item;
         this.material = materialId;
     }
@@ -69,7 +69,7 @@ public class CustomCompoundIngredient extends Ingredient {
 
         @Override
         public CustomCompoundIngredient parse(JsonObject json) {
-            ResourceLocation itemId = new ResourceLocation(JSONUtils.getAsString(json, "item"));
+            ResourceLocation itemId = new ResourceLocation(GsonHelper.getAsString(json, "item"));
             Item item = ForgeRegistries.ITEMS.getValue(itemId);
             if (item == null) {
                 throw new JsonParseException("Unknown item: " + itemId);
@@ -77,13 +77,13 @@ public class CustomCompoundIngredient extends Ingredient {
                 throw new JsonParseException("Item '" + itemId + "' is not a CustomMaterialItem");
             }
 
-            ResourceLocation materialId = new ResourceLocation(JSONUtils.getAsString(json, "material"));
+            ResourceLocation materialId = new ResourceLocation(GsonHelper.getAsString(json, "material"));
 
             return new CustomCompoundIngredient((CustomMaterialItem) item, materialId);
         }
 
         @Override
-        public CustomCompoundIngredient parse(PacketBuffer buffer) {
+        public CustomCompoundIngredient parse(FriendlyByteBuf buffer) {
             ResourceLocation itemId = buffer.readResourceLocation();
             Item item = ForgeRegistries.ITEMS.getValue(itemId);
             if (item == null) {
@@ -98,7 +98,7 @@ public class CustomCompoundIngredient extends Ingredient {
         }
 
         @Override
-        public void write(PacketBuffer buffer, CustomCompoundIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, CustomCompoundIngredient ingredient) {
             buffer.writeResourceLocation(NameUtils.from(ingredient.item));
             buffer.writeResourceLocation(ingredient.material);
         }

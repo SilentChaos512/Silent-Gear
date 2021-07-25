@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.loot.modifier;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BonusDropsTraitLootModifier extends LootModifier {
-    public BonusDropsTraitLootModifier(ILootCondition[] conditionsIn) {
+    public BonusDropsTraitLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
@@ -25,7 +25,7 @@ public class BonusDropsTraitLootModifier extends LootModifier {
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         List<ItemStack> ret = new ArrayList<>(generatedLoot);
-        ItemStack tool = context.getParamOrNull(LootParameters.TOOL);
+        ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
 
         if (tool != null && GearHelper.isGear(tool)) {
             //noinspection OverlyLongLambda
@@ -45,7 +45,7 @@ public class BonusDropsTraitLootModifier extends LootModifier {
 
     public static class Serializer extends GlobalLootModifierSerializer<BonusDropsTraitLootModifier> {
         @Override
-        public BonusDropsTraitLootModifier read(ResourceLocation name, JsonObject json, ILootCondition[] conditionsIn) {
+        public BonusDropsTraitLootModifier read(ResourceLocation name, JsonObject json, LootItemCondition[] conditionsIn) {
             return new BonusDropsTraitLootModifier(conditionsIn);
         }
 
