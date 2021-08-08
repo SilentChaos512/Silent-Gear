@@ -3,9 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.7.0] - 2021-08-08
 ### Changed
-- Updated to official Mojang mappings. This requires Silent Lib 4.10.x!
+- Updated for Minecraft 1.17.1. This version is _not_ complete! Some changes for 1.17 still need to be done and the mod has not been tested. Use with caution!
 
 ## [2.6.30] - 2021-07-12
 This version _does NOT_ load with Silent Lib 4.10.x! Continue using 4.9.6 for now.

@@ -7,7 +7,7 @@ import net.silentchaos512.gear.gear.part.AbstractGearPart;
 
 /**
  * Used for loading parts from JSON, and for encoding/decoding the information sent from the server
- * to clients. Very similar to {@link net.minecraft.item.crafting.IRecipeSerializer}.
+ * to clients.
  * <p>
  * In most cases, {@link AbstractGearPart.Serializer} should be used. But if you do need something
  * more specific, implement this.

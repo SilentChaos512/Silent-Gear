@@ -108,7 +108,7 @@ public final class PartDataList implements List<PartData> {
      * parts and parts without a unique crafting stack.
      *
      * @param part The gear part
-     * @return <tt>true</tt> (as specified by {@link Collection#add})
+     * @return {@code true} (as specified by {@link Collection#add})
      */
     @SuppressWarnings("UnusedReturnValue")
     public boolean addPart(IGearPart part) {
